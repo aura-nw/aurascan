@@ -1,6 +1,6 @@
 {
     "HEADER": {
-        "SEARCH": "Search by Block, Txn Hash,...",
+        "SEARCH": "Search by Address, Block Height, Tx Hash,...",
         "MEGA_MENU": "Mega Menu",
         "NOTIFICATIONS": {
             "TITLE": "Notifications",
@@ -82,34 +82,24 @@
         }
     },
     "MENUITEMS": {
-        "DASHBOARDS": {
-            "TEXT": "Dashboard",
-            "BADGE": "04"
-        },
-        "VALIDATORS": {
-            "TEXT": "Validators",
-            "BADGE": "03"
-        },
-        "BLOCKS": {
-            "TEXT": "Blocks",
-            "BADGE": "02"
-        },
-        "TRANSACTION": {
-            "TEXT": "Transaction",
-            "BADGE": "01"
-        },
-        "CHAINCODE": {
-            "TEXT": "Chaincodes",
-            "BADGE": "04"
-        },
-        "CHANEL": {
-            "TEXT": "Chanels",
-            "BADGE": "04"
-        },
-        "USER_MANAGEMENT": {
-            "TEXT": "User management",
-            "BADGE": "04"
-        },
+        "CODE-LIST": "Code IDs",
+        "CHART-STATS": "Chart & Stats",
+        "TOP-STATISTICS": "Top Statistics",
+        "MULTI-SEND": "Multi-send",
+        "FEE-GRANT": "Fee Grant",
+        "RESOURCES": "Resources",
+        "BLOCKCHAIN": "Blockchain",
+        "TOKEN": "Tokens",
+        "CONTRACT": "Contracts",
+        "DASHBOARDS": "Dashboard",
+        "VALIDATORS": "Validators",
+        "BLOCKS": "Blocks",
+        "TRANSACTION": "Transactions",
+        "PROPOSAL": "Votings",
+        "CHANEL": "Chanels",
+        "USER_MANAGEMENT": "User management",
+        "MORE": "More",
+        "STATISTICS": "Statistics",
         "APPS": {
             "TEXT": "Apps",
             "LIST": {
@@ -241,6 +231,50 @@
                     }
                 }
             }
+        },
+        "ACCOUNT": {
+            "TEXT": "My account"
         }
+    },
+    "PAGES": {
+        "PROPOSAL": {
+            "yes": "Yes",
+            "no": "No",
+            "noWithVeto": "NoWithVeto",
+            "abstain": "Abstain"
+        }
+    },
+    "WALLET": {
+        "SCAN_QR": "Scan QR code",
+        "MSG_CONNECT": "Connect with one wallet provider or create a new one",
+        "MSG_CONNECT_DISABLED": "The wallet connection feature on mobile web is temporarily pending. Please visit the Aurascan website on desktop to use this feature.",
+        "MSG_PENDING_STAKE_REWARD": "Pending Staking Reward",
+        "MSG_EARN": "Earn up to 20% per year",
+        "STAKE": "Stake",
+        "CLAIM": "Claim",
+        "DEPOSIT": "Deposit"
+    },
+    "NOTICE": {
+        "REDELEGATE_WAITING": "You must wait {{ timeStaking }} day(s) in order to be able to redelegate from the selected validator.",
+        "NUMBER_REDELEGATE": "You can redelegate from and to the same validator set only up to 7 times.",
+        "ERROR_REDELEGATE_TIME": "You can only redelegate from and to this validator up to 7 times.",
+        "ERROR_REDELEGATE_INPROGRESS": "You must wait {{ timeStaking }} day(s) in order to be able to redelegate from the selected validator.",
+        "ERROR_UNDELEGATE_TIME": "You can undelegate from the same validator only up to 7 times.",
+        "SUCCESS_TRANSACTION": "Successful transaction!",
+        "SUBMIT_FORM_SUCCESS": "Submit form successfully!",
+        "CHART_WAIT_DATA": "Please wait for chart info"
+    },
+    "VERIFY_CODE_ID": {
+        "E001": "Code ID not found",
+        "E002": "Wrong compiler image",
+        "E003": "Code ID is currently being verified",
+        "E004": "Cannot get data hash of Code ID",
+        "E005A": "Cannot find github repository of this contract. Maybe your project is Private",
+        "E005B": "Commit not found",
+        "E005C": "Source code is missing Cargo.lock file",
+        "E006": "Smart contract source code or compiler version is incorrect",
+        "E007A": "Incorrect wasm file",
+        "E007B": "Data hash mismatch. Maybe your compiler version or commit is incorrect",
+        "E008": "Internal server error"
     }
 }

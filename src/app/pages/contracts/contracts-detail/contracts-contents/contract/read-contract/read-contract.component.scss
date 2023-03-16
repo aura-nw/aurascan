@@ -1,0 +1,67 @@
+mat-expansion-panel {
+  border: 1px solid var(--aura-gray-9);
+  margin-bottom: var(--spacer-5);
+
+  mat-expansion-panel-header {
+    height: 40px;
+    background-color: var(--aura-gray-9);
+    border-color: var(--aura-gray-9);
+    padding: 10px var(--spacer-4);
+    &:hover, &:focus {
+      background-color: var(--aura-gray-9);
+    }
+
+    &::after {
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 700;
+      content: '\f077';
+      color: var(--aura-gray-1);
+      font-size: 12px;
+    }
+
+    &[aria-expanded='true']::after {
+      content: '\f078';
+    }
+
+    &[aria-expanded='true'] {
+      border-bottom: 1px solid var(--aura-gray-9);
+    }
+  }
+
+  ::ng-deep .mat-expansion-panel-body {
+    background-color: var(--aura-gray-10);
+    padding: var(--spacer-4);
+  }
+
+  .txt-response {
+    white-space: pre-line;
+    word-break: break-all;
+  }
+}
+
+.mat-expansion-panel-header {
+  font-size: 14px;
+
+  &.mat-expanded {
+    height: 48px;
+  }
+}
+.overflow-scroll-x {
+  overflow-x: scroll;
+  ::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+  }
+}
+.contract__title {
+  min-height: 32px;
+}
+.divider.divider-vertical {
+  height: 10px;
+}
+input.form-check-input {
+  color: var(--aura-gray-1);
+}
+.error-null {
+  border: 2px solid var(--aura-red-3) !important;
+}

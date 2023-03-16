@@ -1,38 +1,99 @@
-<app-pagetitle title="Blocks" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
-<table mat-table [dataSource]="dataSource" class="table-reponsive" matSort>
-    <ng-container *ngFor="let template of templates; index as i">
-        <ng-container [matColumnDef]="template.matColumnDef">
+<app-pagetitle title="Blocks" [displayInfo]="true"></app-pagetitle>
+<section *ngIf="!loading">
+  <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
+    <div class="card mt-4 mt-md-6">
+      <div class="card-body">
+        <div class="table-responsive d-none d-lg-block">
+          <table mat-table [dataSource]="dataSource" class="aura-table">
+            <ng-container *ngFor="let template of templates; index as i">
+              <ng-container [matColumnDef]="template.matColumnDef">
+                <th mat-header-cell *matHeaderCellDef class="col-per-20">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
 
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-
-            <td mat-cell *matCellDef="let data">
-                <div>
-                    <ng-container [ngSwitch]="template.matColumnDef ">
-                        <div *ngSwitchCase="'height'" class="g-blue">
-                            {{ data[template.matColumnDef]}}
-                        </div>
-                        <div *ngSwitchCase="'timestamp'">
-                            <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{ data[template.matColumnDef] | calDate}} ago
-                        </div>
-                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
-                        </div>
+                <td mat-cell *matCellDef="let data" style="max-width: 300px">
+                  <div>
+                    <ng-container [ngSwitch]="template.matColumnDef">
+                      <a
+                          *ngSwitchCase="'height'"
+                          class="text--primary cursor-pointer block-link"
+                          [routerLink]="['/blocks', data[template.matColumnDef]]">
+                        {{ data[template.matColumnDef] }}
+                      </a>
+                      <a
+                          *ngSwitchCase="'block_hash'"
+                          class="text--primary cursor-pointer block-link"
+                          [routerLink]="['/blocks', data['height']]">
+                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                      </a>
+                      <a
+                          *ngSwitchCase="'proposer'"
+                          class="text-clamp text--primary cursor-pointer validator-link"
+                          [routerLink]="['/validators', data['operator_address']]">
+                        {{ data[template.matColumnDef] }}
+                      </a>
+                      <div *ngSwitchCase="'timestamp'">
+                        {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                      </div>
+                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                     </ng-container>
-                </div>
-            </td>
-        </ng-container>
-    </ng-container>
+                  </div>
+                </td>
+              </ng-container>
+            </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openBlockDetail(row)"></tr>
-    <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell g-no-data" colspan="9999">
-            {{"NO DATA" | translate}}
-        </td>
-    </tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{ 'NO DATA' | translate }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="d-lg-none" *ngIf="dataSource && dataSource?.data?.length > 0">
+          <app-card-mob-simple
+              *ngFor="let data of dataSource?.data"
+              [link]="'/blocks/' + data.height"
+              [title]="{
+              size: 'md',
+              titleClass: 'h6-mob',
+              label: data.height,
+              subLabelContent: commonService.getDateValue(data.timestamp)[0],
+              subLabelClass: 'text--gray-1 h6-mob w-time'
+            }"
+              [content]="[
+              {
+                label: 'Proposer',
+                info:
+                  '<a class=text--primary href=' +
+                  ('/validators/' + data.operator_address) +
+                  '>' +
+                  data.proposer +
+                  '</a>'
+              },
+              { label: 'Txs', class: 'body-01-mob text--gray-1', info: data.num_txs.toString() },
+              {
+                label: 'Time',
+                class: 'body-01-mob text--gray-1 card__date',
+                info:
+                  '<span>' +
+                  (data.timestamp | customDate: 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.timestamp | customDate: 'HH:mm:ss') +
+                  '</span>'
+              }
+            ]"></app-card-mob-simple>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noValues>
+    <app-table-no-data></app-table-no-data>
+  </ng-template>
+</section>
 
-</table>
-
-<mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">
-</mat-paginator>
+<div *ngIf="loading">
+  <app-loading-sprint></app-loading-sprint>
+</div>

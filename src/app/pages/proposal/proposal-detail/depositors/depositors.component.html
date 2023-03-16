@@ -1,0 +1,20 @@
+<div class="card" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div class="card-body">
+    <div class="h2 mb-0 text--white mb-6">Depositors</div>
+    <div class="mt-8" *ngIf="loading">
+      <app-loading-sprint></app-loading-sprint>
+    </div>
+    <div *ngIf="!loading">
+      <app-proposal-table
+        *ngIf="depositorsList.length > 0"
+        [type]="proposalDeposit"
+        [data]="depositorsList"
+        [length]="dataLength"
+        (loadMore)="loadMore($event)">
+      </app-proposal-table>
+      <div *ngIf="depositorsList.length === 0">
+        <app-table-no-data></app-table-no-data>
+      </div>
+    </div>
+  </div>
+</div>

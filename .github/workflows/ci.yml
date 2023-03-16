@@ -2,11 +2,12 @@ name: Continuous integration
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [develop, staging, serenity, halo, euphoria]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # runs-on: self-hosted
 
     steps:
       - uses: actions/checkout@v2
@@ -17,13 +18,17 @@ jobs:
           echo REPO_MANIFEST_NAME=gitops >> $GITHUB_ENV
           echo REPO_MANIFEST_URL=github.com/aura-nw/gitops.git >> $GITHUB_ENV
           echo REPO_MANIFEST_BRANCH=master >> $GITHUB_ENV
-          echo REPO_MANIFEST_ENV_DEV=./clusters/k8s-dev >> $GITHUB_ENV
-          echo REPO_MANIFEST_ENV_MAIN=./clusters/k8s-main >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_DEV=./clusters/k8s-dev/explorer >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_STAGING=./clusters/k8s-prod/explorer >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_MAIN=./clusters/k8s-prod/explorer >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_EUPHORIA=./clusters/k8s-testnet-euphoria/explorer >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_SERENITY=./clusters/k8s-testnet-serenity/explorer >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_HALO=./clusters/k8s-testnet-halo/explorer >> $GITHUB_ENV
           echo REPO_MANIFEST_TAG_IMAGE=image_explorer_frontend >> $GITHUB_ENV
       - name: Build the Docker image and push it to the registry
         env:
-          GITHUB_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
-          GITHUB_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod 777 -R ./ci
           ./ci/build.sh

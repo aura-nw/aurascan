@@ -72,12 +72,12 @@ body[data-layout-mode="dark"] {
         }
     }
 
-    .apexcharts-xaxis line,
-    .apexcharts-treemap-rect,
-    .apexcharts-heatmap-rect,
-    .apexcharts-pie-area {
-        stroke: lighten($gray-dark-300,2.5%);
-    }
+    // .apexcharts-xaxis line,
+    // .apexcharts-treemap-rect,
+    // .apexcharts-heatmap-rect,
+    // .apexcharts-pie-area {
+    //     stroke: lighten($gray-dark-300,2.5%);
+    // }
 
     .apexcharts-radialbar-track.apexcharts-track {
         path {

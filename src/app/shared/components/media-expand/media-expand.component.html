@@ -1,0 +1,19 @@
+<div class="dialog-container">
+  <div class="dialog-body">
+    <div class="media-wrapper" #card>
+      <img *ngIf="modalData?.mediaType === MEDIA_TYPE.IMG" [src]="modalData?.mediaSrc" />
+      <video
+        *ngIf="modalData?.mediaType === MEDIA_TYPE.VIDEO"
+        controls
+        controlsList="nodownload"
+        [src]="modalData?.mediaSrc"
+        poster="{{ modalData.mediaPoster }}"></video>
+      <app-audio-player
+        *ngIf="modalData?.mediaType === MEDIA_TYPE.AUDIO"
+        [src]="modalData?.mediaSrc"
+        [previewImg]="modalData.mediaPoster">
+      </app-audio-player>
+      <app-model-view *ngIf="modalData?.mediaType === MEDIA_TYPE._3D" [modelUrl]="modalData?.mediaSrc"></app-model-view>
+    </div>
+  </div>
+</div>

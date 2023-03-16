@@ -1,0 +1,128 @@
+<div class="card box-token-info">
+  <table class="aura-basic-table w-100 body-02">
+        <tr>
+          <td colspan="2">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="h6 h3-mob mb-0">
+                <span class="text--white">Profile Summary </span>
+                <!-- <a class="text--primary" href="javascript:void(0)">[Edit]</a> -->
+              </div>
+              <div class="dropdown aura-dropdown">
+                <!-- <button
+                  class="button button-chart button-outline button-outline__in-card -small"
+                  type="button"
+                  id="token-summary-more"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <span class="text-white small-text mr-4">More</span>
+                  <img [src]="'assets/images/icons/arrow-move-down.svg' | imageS3" alt="" width="24px" />
+                </button> -->
+                <ul
+                  class="dropdown-menu aura-dropdown-menu token-summary-more"
+                  *ngIf="!tokenDetail.isNFTContract"
+                  aria-labelledby="token-summary-more">
+                  <li class="dropdown-item cursor-pointer">Add token to Web3</li>
+                  <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+                  <!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
+                </ul>
+                <ul
+                  class="dropdown-menu aura-dropdown-menu token-summary-more"
+                  *ngIf="tokenDetail.isNFTContract"
+                  aria-labelledby="token-summary-more">
+                  <li class="dropdown-item cursor-pointer">Add token to Web3</li>
+                  <li class="dropdown-item cursor-pointer">Update Token Info</li>
+                  <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+                  <!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
+                </ul>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div class="d-flex align-items-center py-2">
+              <div class="first-col text--gray-5">Contract:</div>
+              <div class="break-word">
+                <a class="text--primary" [routerLink]="['/contracts', tokenDetail.contract_address]">{{
+                  tokenDetail.contract_address
+                }}</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!tokenDetail.isNFTContract">
+          <td colspan="2">
+            <div class="d-flex align-items-center py-2">
+              <div class="first-col text--gray-5">Decimals:</div>
+              <div class="text--white">{{ tokenDetail.decimals }}</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div class="d-flex align-items-center py-2">
+              <div class="first-col text--gray-5">Official Site:</div>
+              <div>
+                -
+                 <!-- <a class="text--primary break-word" *ngIf="projectDetail && projectDetail.official_project_website"
+                    [href]="sanitize(projectDetail.official_project_website)">{{projectDetail.official_project_website}}</a>
+                <span *ngIf="!projectDetail || (projectDetail && !projectDetail.official_project_website)">-</span> -->
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div class="d-flex align-items-center py-2">
+              <div class="first-col text--gray-5 mb-1">Social Profiles:</div>
+              <div>
+                -
+                <!-- <span *ngIf="!projectDetail">-</span> -->
+                <!-- <div class="d-flex flex-wrap social-group">
+                  <a href="{{projectDetail.whitepaper}}" *ngIf="projectDetail?.whitepaper" target="_blank">
+                    <i class="ph-file-pdf"></i>
+                  </a>
+                  <a href="{{projectDetail.medium}}" *ngIf="projectDetail?.medium" target="_blank">
+                    <i class="ph-medium-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.github}}" *ngIf="projectDetail?.github" target="_blank">
+                    <i class="ph-github-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.reddit}}" *ngIf="projectDetail?.reddit" target="_blank">
+                    <i class="ph-reddit-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.telegram}}" *ngIf="projectDetail?.telegram" target="_blank">
+                    <i class="ph-telegram-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.slack}}" *ngIf="projectDetail?.slack" target="_blank">
+                    <i class="ph-slack-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.wechat}}" *ngIf="projectDetail?.wechat" target="_blank">
+                    <i class="ph-chats-circle"></i>
+                  </a>
+                  <a href="{{projectDetail.facebook}}" *ngIf="projectDetail?.facebook" target="_blank">
+                    <i class="ph-facebook-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.linkedin}}" *ngIf="projectDetail?.linkedin" target="_blank">
+                    <i class="ph-linkedin-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.twitter}}" *ngIf="projectDetail?.twitter" target="_blank">
+                    <i class="ph-twitter-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.discord}}" *ngIf="projectDetail?.discord" target="_blank">
+                    <i class="ph-discord-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.bitcointalk}}" *ngIf="projectDetail?.bitcointalk" target="_blank">
+                    <i class="ph-currency-btc"></i>
+                  </a>
+                </div> -->
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+</div>

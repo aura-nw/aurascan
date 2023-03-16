@@ -1,0 +1,93 @@
+<ng-container *ngIf="data.dialogMode === dialogMode.Delegate">
+  <div class="box-notice">
+    <div class="warning-icon mr-3"></div>
+    <div>
+      <div class="h6 mb-1 fw-semibold text--white">Staking will lock your funds for {{ timeStaking }}+ day(s)</div>
+      <div class="small-body mt-2 text--gray-5">
+        You will need to undelegate in order for your staked assets to be liquid again. This process will take
+        {{ timeStaking }} day(s) to complete.
+      </div>
+    </div>
+  </div>
+  <div class="box-token mt-8 body-02">
+    <div class="d-lg-flex mb-4 mb-xl-6">
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5">My delegation</div>
+      <div class="body-01 text--gray-1">
+        {{ data?.validatorDetail?.amount_staked || 0 | mask: 'separator.6' }}
+        <span class="text--primary"> {{ denom }}</span>
+      </div>
+    </div>
+    <div class="d-lg-flex mb-4 mb-xl-6">
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5">Delegable Balance</div>
+      <div class="body-01 text--gray-1">
+        {{ availableToken || 0 | mask: 'separator.6' }}
+        <span class="text--primary"> {{ denom }}</span>
+      </div>
+    </div>
+    <div class="fw-500 text--gray-5">Amount to Delegate</div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="data.dialogMode === dialogMode.Manage">
+  <div class="box-notice box-notice--manage mb-6 pr-8" [class.show]="boxNoticeShow" (click)="boxNoticeShow = !boxNoticeShow">
+    <div class="warning-icon mr-3"></div>
+    <div class="text--gray-5">
+      <div class="mb-2 box-notice__info">You can <span class="fw-bold text--white">"Delegate"</span> more to this validator</div>
+      <div class="mb-2 box-notice__info">
+        Or use <span class="fw-bold text--white">"Redelagate"</span> to switch your assets to another validator.
+      </div>
+      <div class=" box-notice__info">Or use <span class="fw-bold text--white">"Undelegate"</span> to start the unbonding period.</div>
+    </div>
+  </div>
+  <div class="body-01 text--white">
+    <div class="d-lg-flex mb-3 mb-xl-6">
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">My delegation</div>
+      <div class="text--gray-1">
+        {{ data?.validatorDetail?.amount_staked || 0 | mask: 'separator.6' }}
+        <span class="text--primary"> {{ denom }}</span>
+      </div>
+    </div>
+    <div class="d-lg-flex mb-3 mb-xl-6">
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Pending Reward</div>
+      <div class="text--gray-1">
+        {{ data?.validatorDetail?.pending_reward || 0 | mask: 'separator.6' }}
+        <span class="text--primary"> {{ denom }}</span>
+      </div>
+    </div>
+    <div class="d-lg-flex mb-3 mb-xl-6">
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Total Reward</div>
+      <div class="text--gray-1">
+        {{ data?.validatorDetail?.reward || 0 | mask: 'separator.6' }}
+        <span class="text--primary"> {{ denom }}</span>
+      </div>
+    </div>
+    <div class="d-lg-flex">
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Delegable Balance</div>
+      <div class="text--gray-1">
+        {{ availableToken || 0 | mask: 'separator.6' }} <span class="text--primary"> {{ denom }}</span>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="data.dialogMode === dialogMode.Undelegate">
+  <div class="box-notice">
+    <div class="warning-icon mr-3"></div>
+    <div class="text--gray-5">
+      <div class="text--white h6 mb-2">Once the unbonding period begins you will:</div>
+      <div>- not receive staking rewards</div>
+      <div>- not be able to cancel the unbonding</div>
+      <div>- need to wait {{ timeStaking }} day(s) for the amount to be liquid</div>
+    </div>
+  </div>
+
+  <div class="box-notice mt-3 mb-5">
+    <div class="warning-icon mr-3"></div>
+    <div>
+      <div class="text--white h6 mb-2">Trying to switch validators?</div>
+      <div class="text--gray-5">
+        Use the 'Redelegate' feature to instantly stake your assets to another validator.
+      </div>
+    </div>
+  </div>
+</ng-container>

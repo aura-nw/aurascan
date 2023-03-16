@@ -1,0 +1,12 @@
+section {
+  background-color: var(--aura-black);
+  min-height: 100vh;
+  p, pre {
+    color: var(--aura-white);
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+  pre {
+    white-space: pre-wrap;
+  }
+}

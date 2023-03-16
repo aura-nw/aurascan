@@ -1,0 +1,18 @@
+.label-circle {
+  background-color: var(--aura-gray-9);
+  color: var(--aura-primary);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host::ng-deep app-card-mob-simple {
+  .align-items-center.d-flex.justify-content-between.mt-3.small-body:last-child {
+    .body-01.text--gray-4 {
+      align-self: start;
+    }
+  }
+}

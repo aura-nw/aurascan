@@ -1,0 +1,16 @@
+.mobile-tab {
+    overflow: hidden;
+    overflow-x: auto;
+    &.nav-tabs-custom .nav-item {
+        min-width: 180px;
+    }
+}
+
+:host::ng-deep app-proposal-table {
+    table.aura-table th:first-child {
+        width: 8%;
+    }
+    table.aura-table th:not(:first-child) {
+        width: 23%;
+    }
+}

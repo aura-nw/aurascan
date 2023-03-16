@@ -1,0 +1,72 @@
+.card.card-grant {
+  @media (min-width: 992px) {
+    width: 575px;
+  }
+  .card-header {
+    background-color: var(--aura-gray-9);
+  }
+  .card-body {
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+}
+.aura-form.grant-form {
+  .form-check-input {
+    background-color: transparent !important;
+  }
+  i.ph-calendar-blank-fill {
+    display: block;
+    font-size: 2.2rem;
+    color: var(--aura-white);
+  }
+}
+::ng-deep {
+  .cdk-overlay-container--grant {
+    z-index: 2500 !important;
+  }
+  .mat-datepicker-content {
+    background-color: var(--aura-gray-10);
+    border: 1px solid #9DA1AC;
+    border-radius: 8px !important;
+  }
+  .mat-calendar-body-cell-content {
+    border-radius: 8px !important;
+  }
+  .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    background-color: #2BBBA3 !important;
+    border: none;
+  }
+  .mat-calendar-body-selected {
+    border: 1px solid #FFFFFF;
+    background-color: transparent;
+    color: var(--aura-white);
+  }
+  .mat-datepicker-popup {
+    left: 50%!important;
+    transform: translate(-50%, 10px);
+    @media (min-width: 992px) {
+      left: 50% !important;
+      right: 0;
+      transform: translate(calc(-32px), 19px);
+    }
+  }
+}
+.card-explain {
+  padding: var(--spacer-6);
+  background-color: #1C1D23;
+  border: 1px solid #363843;
+  border-radius: 10px;
+  .input-group.form-check-input {
+    background-color: #24262E !important;
+  }
+}
+.card-note {
+  padding: var(--spacer-4);
+  background-color: rgba(255, 200, 0, 0.16);
+  border-radius: 8px;
+}
+.button-add {
+  i.ph-plus-fill {
+    font-size: 1.8rem;
+  }
+}

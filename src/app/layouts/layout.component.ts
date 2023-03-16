@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import { EventService } from '../core/services/event.service';
 import {
-  LAYOUT_VERTICAL, LAYOUT_HORIZONTAL, LAYOUT_MODE, LAYOUT_WIDTH,
+  LAYOUT_HORIZONTAL, LAYOUT_MODE, LAYOUT_WIDTH,
   LAYOUT_POSITION, SIDEBAR_SIZE, SIDEBAR_COLOR, TOPBAR
 } from './layouts.model';
+import {ViewportScroller} from "@angular/common";
 
 @Component({
   selector: 'app-layout',
@@ -25,7 +26,16 @@ export class LayoutComponent implements OnInit {
   sidebarcolor!: string;
   sidebarsize!: string;
 
-  constructor(private eventService: EventService) { }
+  pageYOffset = 0;
+  scrolling = false;
+  @HostListener('window:scroll', ['$event']) onScroll(event){
+    this.pageYOffset = window.pageYOffset;
+  }
+
+  constructor(
+      private eventService: EventService,
+      private scroll: ViewportScroller
+  ) { }
 
   ngOnInit() {
 
@@ -83,13 +93,6 @@ export class LayoutComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-  }
-
-  /**
-   * Check if the vertical layout is requested
-   */
-  isVerticalLayoutRequested() {
-    return this.layoutType === LAYOUT_VERTICAL;
   }
 
   /**
@@ -205,6 +208,12 @@ export class LayoutComponent implements OnInit {
         document.body.setAttribute('data-sidebar-size', 'lg');
         break;
     }
+  }
+
+  scrollToTop(){
+    this.scroll.scrollToPosition([0, 0]);
+    this.scrolling = true;
+    setTimeout(() => {this.scrolling = !this.scrolling; }, 500);
   }
 
 }

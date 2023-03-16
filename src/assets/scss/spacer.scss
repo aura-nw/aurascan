@@ -1,0 +1,167 @@
+/* spacer (basic: 4px) */
+$spacer: 4px !default;
+
+$spacers: (
+        0: 0,
+        "half": ($spacer * 0.5),
+        1: ($spacer * 1),
+        2: ($spacer * 2),
+        3: ($spacer * 3),
+        4: ($spacer * 4),
+        5: ($spacer * 5),
+        6: ($spacer * 6),
+        7: ($spacer * 7),
+        8: ($spacer * 8),
+        9: ($spacer * 9),
+        10: ($spacer * 10),
+        11: ($spacer * 11),
+        12: ($spacer * 12),
+        13: ($spacer * 13),
+        14: ($spacer * 14),
+        15: ($spacer * 15),
+        16: ($spacer * 16),
+        17: ($spacer * 17),
+        18: ($spacer * 18),
+        19: ($spacer * 19),
+        20: ($spacer * 20),
+) !default;
+
+@mixin spacer-variables($spacer-configs: $spacers) {
+  @each $spacer-name, $spacer-value in $spacers {
+    --spacer-#{$spacer-name}: #{$spacer-value};
+  }
+}
+// breakpoints
+
+$sides: (
+  "": "",
+  "t": "top",
+  "b": "bottom",
+  "l": "left",
+  "r": "right",
+  "x": ("right","left"),
+  "y": ("top","bottom"),
+) !default;
+
+$breakpoints: (
+  "": "",
+  "xs": 576px,
+  "sm": 768px,
+  "md": 992px,
+  "lg": 1200px,
+  "xl": 1400px,
+) !default;
+
+@each $breakName, $breakValue in $breakpoints {
+  @each $sideName, $sideValue in $sides {
+    @for $i from 0 through 21 {
+
+      $property: if($sideName == '' and $sideName == 'x' and $sideName == 'y', '', -#{$sideValue});
+      $space: $i * 4;
+      $selector: '';
+      @if $breakName != "" {
+        $selector: if($i != 21, #{$sideName}-#{$breakName}-#{$i}, #{$sideName}-#{$breakName}-auto);
+      } @else {
+        $selector: if($i != 21, #{$sideName}-#{$i}, #{$sideName}-auto);
+      }
+
+      @if ($i == 21) {
+        // check if spacer is auto
+        @if $breakName != "" {
+          @media (min-width: $breakValue) {
+            @if $sideName == 'x' {
+              .m#{$selector} {
+                margin-left: auto !important;
+                margin-right: auto !important;
+              }
+            } @else if $sideName == 'y' {
+              .m#{$selector} {
+                margin-top: auto !important;
+                margin-bottom: auto !important;
+              }
+            } @else {
+              .m#{$selector} {
+                margin#{$property}: auto !important;
+              }
+            }
+          }
+        } @else {
+          @if $sideName == 'x' {
+            .m#{$selector} {
+              margin-left: auto !important;
+              margin-right: auto !important;
+            }
+          } @else if $sideName == 'y' {
+            .m#{$selector} {
+              margin-top: auto !important;
+              margin-bottom: auto !important;
+            }
+          } @else {
+            .m#{$selector} {
+              margin#{$property}: auto !important;
+            }
+          }
+        }
+      } @else {
+        // check if spacer is number
+        @if $breakName != "" {
+          @media (min-width: $breakValue) {
+            @if $sideName == 'x' {
+              .m#{$selector} {
+                margin-left: #{$space}px !important;
+                margin-right: #{$space}px !important;
+              }
+              .p#{$selector} {
+                padding-left: #{$space}px !important;
+                padding-right: #{$space}px !important;
+              }
+            } @else if $sideName == 'y' {
+              .m#{$selector} {
+                margin-top: #{$space}px !important;
+                margin-bottom: #{$space}px !important;
+              }
+              .p#{$selector} {
+                padding-top: #{$space}px !important;
+                padding-bottom: #{$space}px !important;
+              }
+            } @else {
+              .m#{$selector} {
+                margin#{$property}: #{$space}px !important;
+              }
+              .p#{$selector} {
+                padding#{$property}: #{$space}px !important;
+              }
+            }
+          }
+        } @else {
+          @if $sideName == 'x' {
+            .m#{$selector} {
+              margin-left: #{$space}px !important;
+              margin-right: #{$space}px !important;
+            }
+            .p#{$selector} {
+              padding-left: #{$space}px !important;
+              padding-right: #{$space}px !important;
+            }
+          } @else if $sideName == 'y' {
+            .m#{$selector} {
+              margin-top: #{$space}px !important;
+              margin-bottom: #{$space}px !important;
+            }
+            .p#{$selector} {
+              padding-top: #{$space}px !important;
+              padding-bottom: #{$space}px !important;
+            }
+          } @else {
+            .m#{$selector} {
+              margin#{$property}: #{$space}px !important;
+            }
+            .p#{$selector} {
+              padding#{$property}: #{$space}px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}

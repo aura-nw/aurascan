@@ -1,0 +1,34 @@
+.aura-basic-table tr td:not(:last-child) {
+  border-right: 1px solid var(--aura-dark-gray);
+}
+
+.aura-nav-tabs.nav-tabs .nav-link {
+  font-weight: 500;
+  font-size: 14px;
+  @media (min-width: 992px) {
+    font-weight: 600;
+  }
+}
+
+.tab-contract {
+  width: 100%;
+  ul.aura-nav-tabs {
+    flex-wrap: nowrap;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    overflow: hidden;
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .nav-item {
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: 180px;
+    @media (max-width: 414px) {
+      width: 50%;
+      min-width: 50%;
+    }
+  }
+}

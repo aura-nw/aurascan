@@ -1,0 +1,33 @@
+<div class="card" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div class="card-body">
+    <div class="h2 mb-0 text--white mb-4">Votes</div>
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="0"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap"
+      [class.mobile-tab]="breakpoint.value.matches">
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a ngbNavLink (click)="changeTab(tab.key)">
+            <span class="h5 mb-0" [class.text--white]="customNav.activeId === index"
+              >{{ tab.value }} ({{ countVote.get(tab.key) }})
+            </span>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+    <div class="mt-3">
+      <app-proposal-table
+        [tabId]="countCurrent"
+        [type]="proposalVote"
+        [length]="countVote.get(countCurrent)"
+        [data]="voteDataList"
+        (loadMore)="loadMore($event)">
+      </app-proposal-table>
+      <div *ngIf="voteDataListLoading">
+        <app-loading-sprint></app-loading-sprint>
+      </div>
+    </div>
+  </div>
+</div>

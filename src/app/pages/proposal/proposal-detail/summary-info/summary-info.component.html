@@ -1,0 +1,350 @@
+<ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div class="card" *ngIf="proposalDetail">
+    <div class="card-header bg-transparent pb-0" *ngIf="!breakpoint.value.matches">
+      <div class="d-flex justify-content-between">
+        <h2>
+          <div class="text--gray-3">#{{ proposalId }}</div>
+          <div class="text--white">{{ proposalDetail.content.title }}</div>
+        </h2>
+        <div class="card__status d-flex align-items-center flex-shrink-0">
+          <div class="text--gray-5 mr-6 d-flex flex-column align-items-center" *ngIf="proposalVotes">
+            <span> You voted "{{ proposalVotes }}" </span>
+            <span>for this proposal</span>
+          </div>
+          <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.status)?.key }}">
+            <span>{{ getStatus(proposalDetail.status)?.value }}</span>
+          </div>
+          <div class="divider divider-vertical mx-6"></div>
+          <button
+            [disabled]="proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+            (click)="openVoteDialog(proposalDetail)"
+            class="button button--sm button-outline button-outline--gradient button-pill button-outline__in-card body flex-shrink-0 fw-semibold">
+            <span>
+              {{
+                proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                  ? 'Voting Ended'
+                  : 'Vote'
+              }}
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-header bg-transparent pb-0 px-3" *ngIf="breakpoint.value.matches">
+      <div class="d-flex justify-content-between">
+        <div>
+          <div class="h3 mb-0">
+            <span class="text--gray-3 mr-2">#{{ proposalId }}</span>
+            <span class="text--white v-ellipsis">{{ proposalDetail.content.title }}</span>
+          </div>
+        </div>
+        <div class="ml-3 flex-shrink-0 text-end">
+          <div class="d-inline-block">
+            <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.status)?.key }} mb-2">
+              <span class="small-body-mob fw-semibold">{{ getStatus(proposalDetail.status)?.value }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text--gray-5 mt-1" *ngIf="proposalVotes">You voted "{{ proposalVotes }}" for this proposal</div>
+      <div class="divider divider-horizontal mt-3"></div>
+    </div>
+    <div class="card-body pt-3 pt-lg-0 px-3 px-lg-6">
+      <div class="text--gray-1">
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Proposer</div>
+          <div class="col-8 col-md-10 text-end text-lg-start">
+            <a class="text--primary h6" [routerLink]="['/account', proposalDetail.proposer_address]">
+              <span class="d-none d-lg-block">
+                {{ proposalDetail.proposer_name ? proposalDetail.proposer_name : proposalDetail.proposer_address }}
+              </span>
+              <span class="d-lg-none">
+                {{
+                  proposalDetail.proposer_name
+                    ? proposalDetail.proposer_name
+                    : (proposalDetail.proposer_address | cutStringPipe: 8:8)
+                }}
+              </span>
+            </a>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Initial Deposit</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
+            {{ proposalDetail.initial_deposit | mask: 'separator.6' }}
+            <span class="text--primary">{{ denom }}</span>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Total Deposit</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
+            {{ proposalDetail.pro_total_deposits | mask: 'separator.6' }}
+            <span class="text--primary"> {{ denom }}</span>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Voting Start</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.voting_start_time | customDate: 'HH:mm:ss' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Voting End</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.voting_end_time | customDate: 'HH:mm:ss' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Type</div>
+          <div class="col-auto col-md-10 mt-0 fw-500 g-ellipsis__type text--gray-1">{{ proposalDetail.pro_type }}</div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Submit Time</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.submit_time | customDate: 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.submit_time | customDate: 'HH:mm:ss' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Deposit End Time</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.deposit_end_time | customDate: 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.deposit_end_time | customDate: 'HH:mm:ss' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-12 col-md-2 text--gray-4">Details</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0" *ngIf="proposalDetail?.content.description">
+            <div class="editorial-container p-4">
+              <div id="marked" class="editorial"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob" *ngIf="proposalDetail.request_amount">
+          <div class="col-auto col-md-2 text--gray-5">Request Amount</div>
+          <div class="col-auto col-md-10 mt-0">
+            {{ proposalDetail.request_amount | mask: 'separator.6' }}
+            <span class="text--primary"> {{ denom }}</span>
+          </div>
+        </div>
+        <div class="divider divider-horizontal mt-3 mt-lg-5"></div>
+      </div>
+    </div>
+    <div class="card-footer pt-0 pb-0 px-3 px-lg-10">
+      <div
+        class="proposal__summary-total"
+        *ngIf="!votingBarLoading && proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD'">
+        <div
+          class="row justify-content-between align-items-center mb-3"
+          *ngIf="proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+          <div class="col-6 col-md-2 body-03 h6-mob text--gray-1">Final Status:</div>
+          <div class="col-6 col-md-10 body-02 text-end text-md-start">
+            <div
+              class="aura-status-inline
+                 {{ getStatus(proposalDetail.status)?.value === 'passed' ? 'text--green-3' : 'text--red-3' }}">
+              <span class="status">{{ getStatus(proposalDetail.status)?.value | titlecase }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-2 mb-3 body-03 text--gray-7" *ngIf="proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+          {{ finalSubTitle }}
+        </div>
+        <div class="row justify-content-between align-items-center mb-3 body-03 h6-mob text--gray-1">
+          <div class="col-auto col-md-2">Total:</div>
+          <div class="col-auto col-md-10 mt-2 mt-lg-0">
+            {{ proposalDetail.pro_total_vote | mask: 'separator.6' }}
+            <span class="text--primary">{{ denom }}</span>
+          </div>
+        </div>
+        <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
+          <ul class="vote-bar-ul">
+            <li
+              class="bg--primary"
+              [style.width]="proposalDetail.yesPercent + '%'"
+              matTooltip="Yes {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%"
+              [matTooltipPosition]="'above'"></li>
+            <li
+              class="bg--danger"
+              [style.width]="proposalDetail.noPercent + '%'"
+              matTooltip="No {{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%"
+              [matTooltipPosition]="'above'"></li>
+            <li
+              class="bg--info"
+              [style.width]="proposalDetail.noWithVetoPercent + '%'"
+              matTooltip="No with veto {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%"
+              [matTooltipPosition]="'above'"></li>
+            <li
+              class="bg--secondary"
+              [style.width]="proposalDetail.abstainPercent + '%'"
+              matTooltip="Abstain {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%"
+              [matTooltipPosition]="'above'"></li>
+          </ul>
+        </div>
+        <div class="mt-4 text--gray-1" *ngIf="breakpoint.value.matches">
+          <div class="d-flex align-items-center">
+            <div class="vote status--primary"></div>
+            <div class="row align-items-center flex-grow-1">
+              <div class="col-4 col-lg-5">
+                <span class="body-03"> Yes </span>
+              </div>
+              <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
+                {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
+              </div>
+              <div class="col-5 col-lg-4 body-02-mob text-end h6 mb-0 fw-normal text--gray-5">
+                {{ proposalDetail.pro_votes_yes | mask: 'separator.6' }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <div class="vote status--danger flex-grow-0"></div>
+            <div class="row align-items-center flex-grow-1">
+              <div class="col-4 col-lg-5">
+                <span class="body-03"> No </span>
+              </div>
+              <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
+                {{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
+              </div>
+              <div class="col-5 col-lg-4 body-02-mob flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
+                {{ proposalDetail.pro_votes_no | mask: 'separator.6' }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <div class="vote status--info"></div>
+            <div class="row align-items-center flex-grow-1">
+              <div class="col-4 col-lg-5">
+                <span class="body-03"> NoWithVeto</span>
+              </div>
+              <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
+                {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
+              </div>
+              <div class="col-5 col-lg-4 body-02-mob flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
+                {{ proposalDetail.pro_votes_no_with_veto | mask: 'separator.6' }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center mt-2 pb-3">
+            <div class="vote status--secondary"></div>
+            <div class="row align-items-center flex-grow-1">
+              <div class="col-4 col-lg-5">
+                <span class="body-03"> Abstain</span>
+              </div>
+              <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
+                {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
+              </div>
+              <div class="col-5 col-lg-4 body-02-mob flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
+                {{ proposalDetail.pro_votes_abstain | mask: 'separator.6' }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="vote-legend" *ngIf="!breakpoint.value.matches">
+          <ul>
+            <li data-style="primary">
+              <div class="item-box">
+                <span class="item item-label text--gray-1">Yes</span>
+                <span class="item item-percent">
+                  {{ this.proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
+                </span>
+              </div>
+              <p class="item item-amount">
+                <span>{{ this.proposalDetail.pro_votes_yes || 0 | mask: 'separator.6' }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
+              </p>
+            </li>
+            <li data-style="danger">
+              <div class="item-box">
+                <span class="item item-label text--gray-1">No</span>
+                <span class="item item-percent">
+                  {{ this.proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
+                </span>
+              </div>
+              <p class="item item-amount">
+                <span>{{ this.proposalDetail.pro_votes_no || 0 | mask: 'separator.6' }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
+              </p>
+            </li>
+            <li data-style="info">
+              <div class="item-box">
+                <span class="item item-label text--gray-1">NoWithVeto</span>
+                <span class="item item-percent">
+                  {{ this.proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
+                </span>
+              </div>
+              <p class="item item-amount">
+                <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | mask: 'separator.6' }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
+              </p>
+            </li>
+            <li data-style="secondary">
+              <div class="item-box">
+                <span class="item item-label text--gray-1">Abstain</span>
+                <span class="item item-percent">
+                  {{ this.proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
+                </span>
+              </div>
+              <p class="item item-amount">
+                <span>{{ this.proposalDetail.pro_votes_abstain || 0 | mask: 'separator.6' }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <ng-container *ngIf="proposalDetail.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+        <div class="row proposal__summary-total pb-3">
+          <div class="col-12 col-lg-6 pr-lg-8 border-right" [class.border-right]="!breakpoint.value.matches">
+            <app-current-turnout
+              [proposalDetail]="proposalDetail"
+              [isNotReached]="isNotReached"
+              [quorumStatus]="quorumStatus"></app-current-turnout>
+          </div>
+          <div *ngIf="breakpoint.value.matches" class="divider divider-horizontal mt-4 mt-lg-5"></div>
+          <div class="col-12 col-lg-6 pl-lg-8 mt-3 mt-lg-0">
+            <app-current-status
+              [proposalDetail]="proposalDetail"
+              [currentSubTitle]="currentSubTitle"
+              [currentStatus]="getCurrentStatus(currentStatus)">
+            </app-current-status>
+          </div>
+          <div *ngIf="breakpoint.value.matches" class="divider divider-horizontal mt-4 mt-lg-5"></div>
+          <div class="mt-3">
+            <button
+              *ngIf="breakpoint.value.matches"
+              [disabled]="proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+              (click)="openVoteDialog(proposalDetail)"
+              class="button button--md button-fixed button-pill button-outline button-outline--gradient button-outline__in-card body d-block flex-shrink-0 h5-mob">
+              <span>
+                {{
+                  proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                  proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                    ? 'Voting Ended'
+                    : 'Vote'
+                }}
+              </span>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <div *ngIf="votingBarLoading" class="">
+        <app-loading-sprint></app-loading-sprint>
+      </div>
+    </div>
+  </div>
+</ng-container>

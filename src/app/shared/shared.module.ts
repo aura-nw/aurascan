@@ -1,17 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { WidgetModule } from './widget/widget.module';
-import { PagetitleComponent } from './pagetitle/pagetitle.component';
+import { NgModule } from '@angular/core';
+import { CardMobSimpleComponent } from './components/cards/card-mob-simple/card-mob-simple.component';
+import { CardMobSimpleModule } from './components/cards/card-mob-simple/card-mob-simple.module';
+import { LoadingSprintComponent } from './components/loading-sprint/loading-sprint.component';
+import { PagetitleComponent } from './components/pagetitle/pagetitle.component';
+import { SoulboundFeatureTokensModule } from './components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 
 @NgModule({
-  declarations: [
-    PagetitleComponent
-  ],
-  imports: [
-    CommonModule,
-    WidgetModule
-  ],
-  exports: [PagetitleComponent]
+  declarations: [PagetitleComponent, LoadingSprintComponent],
+  imports: [CommonModule, CardMobSimpleModule, SoulboundFeatureTokensModule],
+  exports: [PagetitleComponent, LoadingSprintComponent, CardMobSimpleComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

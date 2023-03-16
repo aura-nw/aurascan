@@ -1,0 +1,2 @@
+<img *ngIf="isError" [src]="defaultImgToken" alt="" />
+<img *ngIf="!isError" (error)="error()" [src]="previewImg" alt="" />

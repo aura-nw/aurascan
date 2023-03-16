@@ -1,353 +1,442 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  ApexChart,
-  ApexAxisChartSeries,
-  ApexDataLabels,
-  ApexXAxis,
-  ApexTooltip,
-  ChartType,
-  ApexStroke
-} from 'ng-apexcharts';
-import { CommonService } from '../../../app/core/services/common.service';
-import { TableTemplate } from '../../../app/core/models/common.model';
-import { MatTableDataSource } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
-import { Router } from '@angular/router';
-import { AuthenticationService } from '../../../app/core/services/auth.service';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
+import * as moment from 'moment';
+import { MaskPipe } from 'ngx-mask';
+import { Subject, Subscription, timer } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { timeToUnix } from 'src/app/core/helpers/date';
+import { exportChart } from 'src/app/core/helpers/export';
+import { ProposalService } from 'src/app/core/services/proposal.service';
+import { TokenService } from 'src/app/core/services/token.service';
+import { getInfo } from 'src/app/core/utils/common/info-common';
+import { RangeType, TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
+import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  xaxis: ApexXAxis;
-  stroke: ApexStroke;
-  tooltip: ApexTooltip;
-  dataLabels: ApexDataLabels;
-};
+import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
+import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
+import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
+export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+  chartRange = CHART_RANGE.M_60;
+  chartRangeData = CHART_RANGE;
+  PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
+  // public chartOptions: Partial<ChartOptions> = DASHBOARD_CHART_OPTIONS;
 
-export class DashboardComponent implements OnInit {
-  block_height;
-  total_txs_num;
-  total_validator_num;
-  breadCrumbItems!: Array<{}>;
-  title!: string;
-  chart = '30d';
-  chart1 = '30d';
-  chart2 = '30d';
-
-  walletOverview!: ChartType | any;
-  investedOverview!: ChartType | any;
-  marketOverview!: ChartType | any;
-  walletlineChart!: ChartType | any;
-  tradeslineChart!: ChartType | any;
-  investedlineChart!: ChartType | any;
-  profitlineChart!: ChartType | any;
-  recentActivity: any;
-  News: any;
-  transactionsAll: any;
-  transactionsBuy: any;
-  transactionsSell: any;
-
-  public chartTxs: any;
-  public chartBlock: any;
-  public chartOptions: Partial<ChartOptions>;
-
-  templates: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Block Height' },
-    { matColumnDef: 'block_hash', headerCellDef: 'Block Hash' },
+  templatesBlock: Array<TableTemplate> = [
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' }
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any>;
+  displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
+  dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
 
-  templates2: Array<TableTemplate> = [
+  templatesTx: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
-    { matColumnDef: 'height', headerCellDef: 'Block Height' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' }
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
-  displayedColumns2: string[] = this.templates2.map((dta) => dta.matColumnDef);
-  dataSource2: MatTableDataSource<any>;
-  currentUser;
+  displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
+  dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
+  dataTx: any[];
+  timerUnSub: Subscription;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+
+  chart: IChartApi = null;
+  areaSeries: ISeriesApi<'Area'> = null;
+  chartDataExp = [];
+
+  toolTipWidth = 80;
+  toolTipHeight = 80;
+  toolTipMargin = 15;
+
+  min = 0;
+  max = 1000;
+  currDate;
+  isPrice = true;
+
+  curr_voting_Period;
+  voting_Period_arr = [];
+
+  staking_APR = 0;
+  tokenIdGetPrice = TOKEN_ID_GET_PRICE;
+  tokenInfo: {
+    coinId: string;
+    current_price: number;
+    market_cap: number;
+    max_supply: number;
+    price_change_percentage_24h: number;
+    timestamp: string;
+    total_volume: number;
+  };
+
+  originalData = [];
+  originalDataArr = [];
+  logicalRangeChange$ = new Subject<{ from: number; to: number }>();
+  endData = false;
+
+  destroy$ = new Subject();
 
   constructor(
-    private commonService: CommonService,
-    private datePipe: DatePipe,
-    private router: Router,
-    private authenticationService: AuthenticationService,
+    public commonService: CommonService,
     private blockService: BlockService,
-    private transactionService: TransactionService
-  ) {
-  }
+    private transactionService: TransactionService,
+    public global: Globals,
+    private environmentService: EnvironmentService,
+    private cdr: ChangeDetectorRef,
+    public datepipe: DatePipe,
+    private proposalService: ProposalService,
+    private maskService: MaskPipe,
+    private token: TokenService,
+  ) {}
 
   ngOnInit(): void {
-    this.breadCrumbItems = [
-      // { label: 'Dashboard' },
-      // { label: 'Dashboard', active: true }
-    ];
-    this.chartOptions = {
-      series: [
-        {
-          name: "blocks",
-          type: "area",
-          data: []
-        },
-        {
-          name: "transactions",
-          type: "line",
-          data: []
-        }
-      ],
-      chart: {
-        height: 300,
-        type: "area"
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        width: 3,
-        curve: "smooth"
-      },
-      xaxis: {
-        type: "datetime",
-        categories: []
-      },
-      tooltip: {
-        x: {
-          format: "dd/MM/yy HH:mm"
-        }
+    this.getInfoData();
+    const period = 60000;
+    this.timerUnSub = timer(period, period)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.getInfoData());
+
+    this.initChart();
+
+    this.getCoinInfo(this.chartRange);
+    this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
+    this.getVotingPeriod();
+  }
+
+  // config chart
+  initChart() {
+    this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
+    this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
+    this.initTooltip();
+
+    this.subscribeVisibleLogicalRangeChange();
+  }
+
+  subscribeVisibleLogicalRangeChange() {
+    this.logicalRangeChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(({ from, to }) => {
+      if (from <= 0 && !this.endData) {
+        const { value, unit } = CHART_CONFIG[this.chartRange];
+
+        const max = moment(this.originalData[0].timestamp)
+          .subtract(1, unit as any)
+          .valueOf();
+
+        const min = moment(this.originalData[0].timestamp)
+          .subtract(1, unit as any)
+          .subtract(value, unit as any)
+          .valueOf();
+
+        const payload = {
+          coinId: this.tokenIdGetPrice.AURA,
+          rangeType: CHART_CONFIG[this.chartRange].type,
+          min,
+          max,
+        };
+
+        this.token.getTokenMetrics(payload).subscribe((res) => {
+          //update data common
+          if (res?.data?.length > 0) {
+            const { dataX, dataY } = this.parseDataFromApi(res.data);
+            const chartData = this.makeChartData(dataX, dataY);
+
+            this.originalData = [...res?.data, ...this.originalData];
+            this.originalDataArr = [...chartData, ...this.originalDataArr];
+            this.areaSeries.setData(this.originalDataArr);
+          } else {
+            this.endData = true;
+          }
+        });
       }
+    });
+  }
+
+  chartEvent() {
+    this.chart.timeScale().subscribeVisibleLogicalRangeChange(({ from, to }) => {
+      this.logicalRangeChange$.next({ from, to });
+    });
+  }
+
+  makeChartData(data: number[], time: any[]) {
+    return time.map((el, index) => ({
+      value: data[index],
+      time: timeToUnix(el, 25200), // 2520s GMT+7
+    }));
+  }
+
+  parseDataFromApi(dta: any[]) {
+    const parseData = dta.map((el) => ({
+      dataX: this.isPrice ? el.current_price : el.total_volume,
+      dataY: el.timestamp,
+    }));
+    return {
+      dataX: parseData.map((el) => el.dataX),
+      dataY: parseData.map((el) => el.dataY),
     };
-    this.getInfo();
+  }
+
+  drawChartFirstTime(data, dateTime) {
+    this.chartDataExp = [];
+    let arr = []; // drawing chart array
+
+    arr = this.makeChartData(data, dateTime);
+
+    this.originalDataArr = arr;
+
+    this.areaSeries.applyOptions({
+      priceFormat: {
+        type: this.isPrice ? 'price' : 'volume',
+      },
+    });
+
+    this.areaSeries.setData(arr);
+
+    const chartLength = arr.length - 1;
+
+    if (chartLength <= CHART_CONFIG[this.chartRange].initRange) {
+      this.chart.timeScale().fitContent();
+    } else {
+      this.chart.timeScale().setVisibleLogicalRange({
+        from: chartLength - CHART_CONFIG[this.chartRange].initRange,
+        to: chartLength,
+      });
+    }
+
+    this.chart.priceScale().applyOptions({
+      autoScale: true,
+    });
+  }
+
+  //get all data for dashboard
+  getInfoData() {
+    this.getMarketInfo();
     this.getListBlock();
     this.getListTransaction();
+    this.cdr.detectChanges();
+  }
 
-    setTimeout(() => {
-      this.updateBlockAndTxs(this.chart);
-    }, 1000);
+  getMarketInfo() {
+    this.token.getTokenMarket().subscribe((res) => {
+      const { data } = res;
+      if (data) {
+        this.tokenInfo = data;
+      }
+    });
+  }
 
-    setInterval(() => {
-      this.getInfo();
-      this.getListBlock();
-      this.getListTransaction();
-      this.updateBlockAndTxs(this.chart);
-      // this.getBlockPer(this.chart1);
-      // this.getTxsPer(this.chart2);
-    }, 60000);
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getListBlock(): void {
-    this.blockService
-      .blocks(5, 0)
-      .subscribe(res => {
-        this.dataSource = new MatTableDataSource(res.data);
+    this.blockService.blocksIndexer(this.PAGE_SIZE).subscribe((res) => {
+      const { code, data } = res;
+      if (code === 200) {
+        const blocks = convertDataBlock(data);
+        this.dataSourceBlock = new MatTableDataSource(blocks);
       }
-      );
+    });
   }
 
   getListTransaction(): void {
-    this.transactionService
-      .txs(5, 0)
-      .subscribe(res => {
-        this.dataSource2 = new MatTableDataSource(res.data);
-      }
-      );
-  }
+    this.transactionService.txsIndexer(this.PAGE_SIZE, 0).subscribe((res) => {
+      this.dataSourceTx.data = [];
+      const { code, data } = res;
+      if (code === 200) {
+        const txs = convertDataTransaction(data, this.coinInfo);
 
-  getInfo(): void {
-    this.commonService
-      .status()
-      .subscribe(res => {
-        this.block_height = res.data.block_height;
-        this.total_txs_num = res.data.total_txs_num;
-        this.total_validator_num = res.data.total_validator_num;
+        if (this.dataSourceTx.data.length > 0) {
+          this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
+        } else {
+          this.dataSourceTx.data = [...txs];
+        }
+        this.dataTx = txs;
       }
-      );
+    });
   }
-  // getBlockAndTxs(type: string): void {
-  //   this.chart = type;
-  //   this.commonService.getBlockAndTxs(type)
-  //     .subscribe(res => {
-  //       const data0 = res[0].data.map(i => i.count);
-  //       const data1 = res[1].data.map(i => i.count);
-  //       let categories = res[0].data.map(i => i.timestamp);
-  //     });
-
-  // }
 
   updateBlockAndTxs(type: string): void {
-    this.chart = type;
-    this.blockService.getBlockAndTxs(type)
-      .subscribe(res => {
-        const data0 = res[0].data.map(i => i.count);
-        const data1 = res[1].data.map(i => i.count);
-        let categories = res[0].data.map(i => i.timestamp);
-        let missing1 = data0.filter(item => this.chartOptions.series[0].data.indexOf(item) < 0);
-        let missing2 = data1.filter(item => this.chartOptions.series[1].data.indexOf(item) < 0);
-        // this.chartOptions.xaxis = {
-        //   type: "datetime",
-        //   categories: []
-        // }
-        // if (missing1?.length > 0 || missing2?.length > 0) {
-        this.chartOptions.series = [
-          {
-            name: "blocks",
-            type: "area",
-            data: data0
-          },
-          {
-            name: "transactions",
-            type: "line",
-            data: data1
-          }
-        ];
-
-        this.chartOptions.xaxis = {
-          type: "datetime",
-          categories: categories
-        }
-        // }
-      });
+    this.chartRange = type;
+    this.blockService.getBlockAndTxs(type).subscribe((res) => {
+      //update data common
+      this.getInfoCommon();
+      const data1 = res.data.map((i) => i.total);
+      let categories = res.data.map((i) => i.timestamp);
+      this.drawChartFirstTime(data1, categories);
+    });
   }
 
-  getBlockPer(type: string): void {
-    this.chart1 = type;
-    this.blockService
-      .getBlocksPer(type)
-      .subscribe(res => {
-        const data = res.data.map(i => i.count);
-        let categories = [];
-        switch (type) {
-          case '60m':
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'm'));
-            break;
-          case '24h':
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'h'));
-            break;
-          case '30d':
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'd'));
-            break;
-          case '12M':
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'M'));
-            break;
-          default:
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'm'));
-            break;
-        }
-        this.chartBlock = {
-          series: [
-            {
-              name: 'count',
-              data: data
-            }
-          ],
-          chart: {
-            height: 350,
-            type: 'line',
-            zoom: {
-              enabled: false
-            }
-          },
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            curve: 'straight'
-          },
-          title: {
-            text: 'Block per' + type,
-            align: 'left'
-          },
-          grid: {
-            row: {
-              colors: ['#f3f3f3', 'transparent'],
-              opacity: 0.5
-            }
-          },
-          xaxis: {
-            categories: categories
-          }
-        };
+  getCoinInfo(type: string) {
+    this.originalData = [];
+    this.originalDataArr = [];
+    this.endData = false;
+
+    this.initTooltip();
+    this.chartRange = type;
+
+    const { value, unit } = CHART_CONFIG[this.chartRange];
+    const max = moment().valueOf();
+    const min = moment()
+      .subtract(value, unit as any)
+      .valueOf();
+
+    const payload = {
+      coinId: this.tokenIdGetPrice.AURA,
+      rangeType: CHART_CONFIG[this.chartRange].type,
+      min,
+      max,
+    };
+
+    this.token.getTokenMetrics(payload).subscribe((res) => {
+      //update data common
+      this.getInfoCommon();
+      if (res?.data?.length > 0) {
+        const { dataX, dataY } = this.parseDataFromApi(res.data);
+
+        this.originalData = [...this.originalData, ...res?.data];
+        this.drawChartFirstTime(dataX, dataY);
+        this.chartEvent();
       }
-      );
+    });
   }
 
-  getTxsPer(type): void {
-    this.chart2 = type;
-    this.transactionService
-      .getTxsPer(type)
-      .subscribe(res => {
-        const data = res.data.map(i => i.count);
-        let categories = [];
-        switch (type) {
-          case '60m':
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'm'));
-            break;
-          case '24h':
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'h'));
-            break;
-          case '30d':
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'd'));
-            break;
-          case '12M':
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'M'));
-            break;
-          default:
-            categories = res.data.map(i => this.datePipe.transform(i.timestamp, 'm'));
-            break;
+  getInfoCommon(): void {
+    this.commonService.status().subscribe((res) => {
+      getInfo(this.global, res.data);
+    });
+  }
+
+  exportChart() {
+    const exportData = this.originalData.map((item) => {
+      const dateF = this.datepipe.transform(new Date(item.timestamp), 'dd-MM-yyyy:HH-mm-ss');
+      return {
+        date: dateF,
+        value: this.isPrice ? item.current_price : item.total_volume,
+      };
+    });
+
+    exportChart(
+      [
+        {
+          table1: exportData,
+        },
+      ],
+      this.chartRange,
+      this.isPrice,
+      this.currDate,
+    );
+  }
+
+  initTooltip() {
+    const container = document.getElementById('chart');
+    const toolTip = document.createElement('div');
+    const label = this.isPrice ? 'Price' : 'Volume';
+    toolTip.className = 'floating-tooltip-2';
+    container.appendChild(toolTip);
+
+    // update tooltip
+    this.chart.subscribeCrosshairMove((param) => {
+      if (
+        param.point === undefined ||
+        !param.time ||
+        param.point.x < 0 ||
+        param.point.x > container.clientWidth ||
+        param.point.y < 0 ||
+        param.point.y > container.clientHeight
+      ) {
+        toolTip.style.display = 'none';
+      } else {
+        const timestamp = moment.unix((param.time as number) - 25200); // GMT+7
+        const dateStr = timestamp.format('DD/MM/YYYY HH:mm:ss');
+        toolTip.style.display = 'block';
+        const price = param.seriesPrices.get(this.areaSeries);
+        toolTip.innerHTML =
+          '' +
+          '<div class="floating-tooltip__header">' +
+          label +
+          '</div>' +
+          '<div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0;">' +
+          this.maskService.transform(price as number, 'separator') +
+          '</div><div>' +
+          dateStr +
+          '' +
+          '</div></div>';
+        const coordinate = this.areaSeries.priceToCoordinate(price as number);
+        let shiftedCoordinate = param.point.x - 50;
+        if (coordinate === null) {
+          return;
         }
-        this.chartTxs = {
-          series: [
-            {
-              name: 'count',
-              data: data
-            }
-          ],
-          chart: {
-            height: 350,
-            type: 'line',
-            zoom: {
-              enabled: false
-            }
-          },
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            curve: 'straight'
-          },
-          title: {
-            text: 'Txs per' + type,
-            align: 'left'
-          },
-          grid: {
-            row: {
-              colors: ['#f3f3f3', 'transparent'],
-              opacity: 0.5
-            }
-          },
-          xaxis: {
-            categories: categories
-          }
-        };
+        shiftedCoordinate = Math.max(0, Math.min(container.clientWidth - this.toolTipWidth, shiftedCoordinate));
+        const coordinateY =
+          coordinate - this.toolTipHeight - this.toolTipMargin > 0
+            ? coordinate - this.toolTipHeight - this.toolTipMargin
+            : Math.max(
+                0,
+                Math.min(
+                  container.clientHeight - this.toolTipHeight - this.toolTipMargin,
+                  coordinate + this.toolTipMargin,
+                ),
+              );
+        toolTip.style.left = shiftedCoordinate + 'px';
+        toolTip.style.top = coordinateY + 'px';
       }
-      );
+    });
   }
 
-  openBlockDetail(data) {
-    this.router.navigate(['blocks', data.height]);
+  getVotingPeriod() {
+    this.proposalService.getProposalList(20, null).subscribe((res) => {
+      if (res?.data?.proposals) {
+        let tempDta = res.data.proposals;
+        this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
+
+        this.voting_Period_arr.forEach((pro, index) => {
+          if (pro?.tally) {
+            const { yes, no, no_with_veto, abstain } = pro?.tally;
+            let totalVote = +yes + +no + +no_with_veto + +abstain;
+            if (this.voting_Period_arr[index].tally) {
+              this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;
+              this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
+              this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
+              this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
+            }
+          }
+        });
+        this.curr_voting_Period = this.voting_Period_arr[0];
+      }
+    });
   }
 
-  openTxsDetail(data) {
-    this.router.navigate(['transaction', data.tx_hash]);
+  getDataHeader() {
+    return this.global.dataHeader;
+  }
+
+  async ngAfterViewInit() {
+    const communityTaxRq = await this.commonService.getCommunityTax();
+    const communityTax = communityTaxRq?.data?.params?.community_tax;
+    let inflation;
+    let bonded_tokens;
+    let supply;
+    setInterval(() => {
+      if (!inflation && !bonded_tokens && !supply) {
+        inflation = this.getDataHeader().inflation.slice(0, -1);
+        bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
+        supply = this.getDataHeader().supply.toString().slice(0, -1);
+        this.staking_APR = ((inflation * (1 - communityTax)) / (bonded_tokens / supply));
+      }
+    }, 500);
   }
 }

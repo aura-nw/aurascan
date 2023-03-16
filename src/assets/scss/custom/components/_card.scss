@@ -4,6 +4,8 @@
 
 .card {
     margin-bottom: $grid-gutter-width;
+    border-radius: 12px;
+    overflow: visible;
 }
 
 .card-drop {
@@ -21,23 +23,66 @@
     font-size: 13px;
 }
 
+.card-header {
+    padding: var(--spacer-4);
+    background-color: var(--aura-gray-10);
+    border-radius: 12px 12px 0 0 !important;
+    border-bottom: none;
+    &-gray {
+        background-color: var(--aura-gray-9);
+    }
+    &--has-border {
+        border-bottom: 1px solid var(--aura-gray-9);
+    }
+}
 
 .card-header-tabs {
     margin-top: -$card-cap-padding-y;
 }
 
-.card-header-pills {
-    margin: -$card-cap-padding-y / 2;
+.card-body {
+    padding: var(--spacer-4);
+}
+
+.card-footer {
+    padding: 0 var(--spacer-5) var(--spacer-3) var(--spacer-5);
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
 }
 
 body[data-layout-mode="dark"] {
-    .card, .card-header,
-    .modal-content, .offcanvas {
-        background-color: $gray-dark-200;
-        border-color: lighten($gray-dark-200,4%);
+
+    .card,
+    .card-footer,
+    .card-header.card-header-dark,
+    .modal-content,
+    .offcanvas {
+        background-color: var(--aura-gray-10);
+        border-color: var(--aura-gray-10);
     }
 
-    .card-title-desc{
+    .card-title-desc {
         color: $gray-dark-400;
     }
+}
+
+
+@media (min-width: 992px) {
+    .card-header {
+        padding: var(--spacer-6);
+    }
+
+    .card-body {
+        padding: var(--spacer-6);
+    }
+
+    body[data-layout-mode="dark"] {
+        .card-header.card-header-gray-des {
+            background-color: var(--aura-gray-9);
+        }
+    }
+}
+// Card Height 100
+.card-h-100 {
+    height: calc(100% - #{$grid-gutter-width});
 }

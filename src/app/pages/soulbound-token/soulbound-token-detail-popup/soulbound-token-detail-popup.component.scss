@@ -1,0 +1,94 @@
+::ng-deep .TokenSoulboundDetailPopup .mat-dialog-container {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.card-header {
+  background-color: var(--aura-gray-9);
+}
+
+.card {
+  .nft__img {
+    background-color: var(--aura-gray-9);
+
+    app-model-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  @media (max-width: 992px) {
+    max-height: 80vh;
+
+    &-body {
+      overflow-y: scroll;
+    }
+  }
+
+  @media (min-width: 991.98px) {
+    width: 800px;
+  }
+}
+
+.box-desc {
+  overflow-y: scroll;
+  max-height: 130px;
+
+  @media (min-width: 991.98px) {
+    max-height: fit-content;
+  }
+}
+
+.nft {
+  &__img {
+    background: var(--aura-gray-9);
+    border: 0.717647px solid var(--aura-gray-9);
+    border-radius: 11.4824px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacer-2);
+    width: 100%;
+    height: 234px;
+
+    @media (min-width: 991.98px) {
+      width: 300px;
+      height: 244px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__desc {
+    letter-spacing: 0.01em;
+
+    @media (min-width: 991.98px) {
+      overflow-y: auto;
+      max-height: 244px;
+    }
+  }
+
+  &__prop {
+    background-color: var(--aura-gray-9);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--aura-white);
+    padding: var(--spacer-2) 0;
+  }
+}

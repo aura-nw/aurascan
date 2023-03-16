@@ -1,0 +1,48 @@
+.nft-cards__item-border {
+  position: relative;
+  .nft-cards__item {
+    padding: 0;
+    app-model-view,
+    app-audio-player,
+    app-custom-video-player {
+      height: 100%;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: translateY(-50%);
+    }
+    .token-cards__img {
+      min-height: unset;
+      height: auto;
+      max-height: unset;
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      ::ng-deep.control-container {
+        bottom: 6px;
+      }
+    }
+  }
+  .token__bookmark {
+    cursor: pointer;
+    z-index: 12;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    font-size: 2.4rem;
+    color: var(--aura-aqua-2);
+    @media (min-width: 992px) {
+      font-size: 3.6rem;
+    }
+  }
+  .box-nft-info {
+    background-color: var(--aura-gray-10);
+    padding: 8px 0px 16px 8px;
+    position: relative;
+    z-index: 1;
+  }
+}

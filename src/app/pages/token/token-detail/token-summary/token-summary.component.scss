@@ -1,0 +1,44 @@
+.box-token-info {
+  table.aura-basic-table {
+    tr,
+    td {
+      color: var(--aura-contract);
+      height: 56px;
+      padding: 0 var(--spacer-4);
+    }
+  }
+}
+.first-col {
+  min-width: 120px;
+  @media (min-width: 992px) {
+    min-width: 150px;
+  }
+}
+
+.break-word {
+  word-break: break-word;
+}
+.social-group {
+  a {
+    display: flex;
+    align-items: center;
+    color: var(--aura-white);
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-right: 8px;
+    margin-bottom: 4px;
+    @media (min-width: 992px) {
+      margin-right: 16px;
+    }
+    &:hover {
+      color: var(--aura-primary);
+    }
+  }
+}
+.token-summary-more {
+  min-width: 130px;
+  margin-top: 5px !important;
+}
+.g-ellipsis {
+  width: 160px;
+}

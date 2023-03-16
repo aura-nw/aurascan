@@ -1,0 +1,100 @@
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: var(--aura-light-gray);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  background-color: var(--aura-light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #FFF;
+  background-image: var(--aura-gradient-general)
+}
+h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
+  margin-bottom: 0;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+button, .button {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+a {
+  color: var(--aura-light-gray);
+  text-decoration: none;
+  transition: color .35s ease-in-out;
+  &:hover {
+    color: var(--aura-white);
+  }
+}
+
+#progressBar {
+  .ng-spinner-icon {
+    display: none !important;
+  }
+  .ng-bar-placeholder {
+    height: 4px;
+  }
+  .ng-bar {
+    background: var(--aura-gradient-general) !important;
+  }
+}
+// @media (min-width: 1400px) {
+//   .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+//     max-width: 1920px;
+//   }
+// }
+.container, .container-fluid, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm {
+  padding-right: var(--bs-gutter-x, 6px) !important;
+  padding-left: var(--bs-gutter-x, 6px) !important;
+  @media (min-width: 992px) {
+    padding-right: var(--bs-gutter-x, 30px) !important;
+    padding-left: var(--bs-gutter-x, 30px) !important;
+  }
+}
+
+.apexcharts-tooltip-series-group.apexcharts-active,
+.apexcharts-tooltip-title
+{
+  color: var(--aura-white) !important;
+}
+
+.aura-tab mat-tab-body.mat-tab-body, .mat-tab-body-content {
+  overflow: unset !important;
+}
+
+.label__status {
+  background: var(--aura-gray-8);
+  color: var(--aura-gray-light);
+  border-radius: 4px;
+  height: 34px;
+  padding: 0 16px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @media (min-width: 992px) {
+    background: var(--aura-gray-9);
+    padding: 8px 16px;
+  }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+app-paginator {
+  overflow: hidden;
+}
+.hover-link, a.text--primary {
+  cursor: pointer;
+  transition: all .35s ease-in-out;
+  &:hover {
+    color: var(--aura-green-3) !important;
+  }
+}

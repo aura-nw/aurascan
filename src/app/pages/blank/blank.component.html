@@ -1,0 +1,10 @@
+<section class="py-8 px-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <p *ngIf="data && data.type === 'text'">{{content}}</p>
+                <pre *ngIf="data && data.type === 'json'" [innerHTML]="content"></pre>
+            </div>
+        </div>
+    </div>
+</section>

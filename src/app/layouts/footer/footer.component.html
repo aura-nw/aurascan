@@ -1,14 +1,103 @@
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                {{year}} © Aura EXPLORER.
-            </div>
-            <div class="col-sm-6">
-                <div class="text-sm-end d-none d-sm-block">
-                    Design & Develop by <a href="#!" class="text-decoration-underline">Themesbrand</a>
-                </div>
-            </div>
+<footer>
+  <section class="container-fluid container-lg footer">
+    <div class="row">
+      <div class="col-12 col-lg-2">
+        <div class="footer__menu pt-10 pt-md-0">
+          <a routerLink="" class="footer__logo aura-logo ml-2 ml-md-0">
+            <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100"/>
+          </a>
         </div>
+      </div>
+      <div class="col-12 col-lg-7">
+        <div class="footer__contact py-8 pt-lg-14 pb-lg-9">
+          <div class="row">
+            <div class="col-4 col-sm-4">
+              <div class="body contact__title text--white">Features</div>
+              <div class="body mt-2 mt-md-10">
+                <div class="mb-4"><a target="_blank" href="{{ getUrl(dashboardURL) }}">Dashboard</a></div>
+                <div class="mb-4"><a target="_blank" href="{{ getUrl(blocksURL) }}">Blocks</a></div>
+                <div class="mb-4">
+                  <a target="_blank" href="{{ getUrl(transactionURL) }}">Transactions</a>
+                </div>
+                <div class="mb-4">
+                  <a target="_blank" href="{{ getUrl(validatorURL) }}">Validators</a>
+                </div>
+                <div class="mb-4"><a target="_blank" href="{{ getUrl(governanceURL) }}">Governance</a></div>
+              </div>
+            </div>
+            <div class="col-4 col-sm-4">
+              <div class="body contact__title text--white">Resources</div>
+              <div class="body mt-2 mt-md-10">
+                <div class="mb-4"><a target="_blank" href="https://aura.network/">Landing page</a></div>
+                <div class="mb-4"><a target="_blank" href="https://insight.aura.network/">Insights</a></div>
+                <div class="mb-4"><a target="_blank" href="https://docs.aura.network/">Docs</a></div>
+                <div class="mb-4">
+                  <a
+                      target="_blank"
+                      href="https://github.com/aura-nw/whitepaper/blob/main/release/Aura_Network___whitepaper.pdf"
+                  >Whitepaper</a
+                  >
+                </div>
+                <div class="mb-4"><a target="_blank" href="https://docs.aura.network/blog">Research</a></div>
+              </div>
+            </div>
+            <div class="col-4 col-sm-4">
+              <div class="body contact__title text--white">About us</div>
+              <div class="body mt-2 mt-md-10">
+                <div class="mb-4">
+                  <a
+                      target="_blank"
+                      href="https://aura-network.notion.site/Aura-Job-Board-172bb39a89d844b0a0e1d8871026dc23"
+                  >Careers</a
+                  >
+                </div>
+                <div class="mb-4">
+                  <a target="_blank" href="https://discord.gg/bzm3dyxJxR">Contact us</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-3">
+        <div class="footer__cta">
+          <div class="footer__cta-contain">
+            <div>
+              <div class="h4-heading text-gradient d-inline fw-semibold">Let's Talk!</div>
+              <div class="small-text mt-2 text--gray-5">
+                We’d love to hear from you, we’re here<br/>to answer all your questions.
+              </div>
+            </div>
+            <a href="mailto:support@aura.network" class="small-body text--primary mt-lg-5">support@aura.network</a>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
+  <section class="bottom-bar pt-lg-6 pb-lg-5 pt-8">
+    <div class="container-fluid d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-center">
+      <div class="caption-2 mt-6 mt-md-0">Copyright © 2022 Aura Network. All rights reserved</div>
+      <div class="d-flex">
+        <a href="https://discord.gg/bzm3dyxJxR" target="_blank">
+          <i class="mr-3 aura-icon icon--switch-stage icon-discord"></i>
+        </a>
+        <a href="https://twitter.com/AuraNetworkHQ" target="_blank">
+          <i class="mx-3 aura-icon icon--switch-stage icon-twitter"></i>
+        </a>
+        <a href="https://t.me/auranw" target="_blank">
+          <i class="mx-3 aura-icon icon--switch-stage icon-telegram"></i>
+        </a>
+        <a href="https://www.facebook.com/AuraNetworkHQ/" target="_blank">
+          <i class="mx-3 aura-icon icon--switch-stage icon-fb-circle"></i>
+        </a>
+        <a href="https://www.linkedin.com/company/auranetwork/about/" target="_blank">
+          <i class="mx-3 aura-icon icon--switch-stage icon-linkedIn"></i>
+        </a>
+        <a href="https://github.com/aura-nw" target="_blank">
+          <i class="ml-3 aura-icon icon--switch-stage icon-github"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+  <app-menu-bottom-bar></app-menu-bottom-bar>
 </footer>

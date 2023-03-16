@@ -1,0 +1,41 @@
+<div class="card">
+  <div class="card-header card-header-gray">
+    <div class="d-flex justify-content-between align-items-center">
+      <i class="ph-warning-fill icon-warning"></i>
+      <div class="h1 mb-0 ml-2 text--white w-100 fw-700">Warning</div>
+      <img
+        class="icon-close"
+        [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
+        alt=""
+        (click)="closeDialog()" />
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="body-01">
+      There is an expired grant allowance between you and this grantee’s address. Need to revoke the expired allowance
+      in order to grant fee to the former grantee. Please note that it takes some times await “revoke” transaction be
+      successful before conducting the next grant action.
+    </div>
+    <div class="mt-6 d-flex align-items-center justify-content-end">
+      <button
+        type="button"
+        class="button button--md button-pill button-outline mr-4"
+        (click)="closeDialog()">
+        <span>Cancel</span>
+      </button>
+      <button
+        type="button"
+        class="button button--md button-pill button-flat d-flex"
+        (click)="closeDialog(true)">
+        <img
+          class="mr-2"
+          [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+          alt=""
+          width="20"
+          height="20"
+          *ngIf="isLoading" />
+        <span>Revoke</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,21 +1,18 @@
-
-import { Component, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-
-import { MENU } from './menu';
-import { MenuItem } from './menu.model';
-
+import { AfterViewInit, Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
-
-import { LanguageService } from '../../core/services/language.service';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
+import { ResponseDto } from '../../core/models/common.model';
 import { EventService } from '../../core/services/event.service';
-import { AuthenticationService } from '../../core/services/auth.service';
-import { LAYOUT_MODE } from "../layouts.model";
-import { NETWORK } from '../../../app/core/constants/common.constant';
-import { CommonService } from '../../../app/core/services/common.service';
-import { EnvironmentService } from '../../../app/core/data-services/environment.service';
-import { first } from 'rxjs/operators';
+import { LanguageService } from '../../core/services/language.service';
+import { TransactionService } from '../../core/services/transaction.service';
+import { WalletService } from '../../core/services/wallet.service';
+import { LAYOUT_MODE } from '../layouts.model';
+import { MENU, MenuName } from './menu';
+import { MenuItem } from './menu.model';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -27,20 +24,27 @@ import { first } from 'rxjs/operators';
  * Horizontal-Topbar Component
  */
 export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
-
   mode: string | undefined;
   layoutMode!: string;
-  menuItems: MenuItem[] = [];
+  menuItems: MenuItem[] = MENU;
   element: any;
   flagvalue: any;
   cookieValue: any;
   countryName: any;
   valueset: any;
   networks = NETWORK;
-  listChannel;
   currentNetwork = JSON.parse(localStorage.getItem('currentNetwork')) || NETWORK[1];
   currentChanel = JSON.parse(localStorage.getItem('currentChanel')) || null;
   searchValue = null;
+  env = null;
+  pageTitle = null;
+  innerWidth;
+  menuName = MenuName;
+  menuLink = [];
+  wallet = null;
+  lengthSBT = 0;
+  prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
+  prefixNormalAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
   /**
    * Language Listing
@@ -56,25 +60,47 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   @Output() settingsButtonClicked = new EventEmitter();
   @Output() mobileMenuButtonClicked = new EventEmitter();
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+    this.checkEnv();
+  }
+
   constructor(
-    private router: Router,
+    public router: Router,
     public translate: TranslateService,
     public languageService: LanguageService,
     public _cookiesService: CookieService,
     private eventService: EventService,
-    private authService: AuthenticationService,
-    private commonService: CommonService,
-    private environmentService: EnvironmentService
+    private walletService: WalletService,
+    private transactionService: TransactionService,
+    private environmentService: EnvironmentService,
+    private soulboundService: SoulboundService,
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.activateMenu();
       }
     });
-    // if (this.currentChanel?.channel_genesis_hash) {
-    //   this.authService.change({ channel_genesis_hash: this.currentChanel.channel_genesis_hash });
-    // }
 
+    this.walletService.wallet$.subscribe((wallet) => {
+      this.wallet = wallet;
+      if (wallet) {
+        this.getListSmartContract(wallet.bech32Address);
+        this.menuItems.forEach((item) => {
+          if (item.name === this.menuName.Account) {
+            // check if item is account
+            item.link = `/account/${wallet.bech32Address}`;
+          }
+        });
+      } else {
+        this.menuItems.forEach((item) => {
+          if (item.name === this.menuName.Account) {
+            item.link = null;
+          }
+        });
+      }
+    });
   }
 
   /***
@@ -88,43 +114,42 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.getMenuLink();
     this.element = document.documentElement;
     this.layoutMode = LAYOUT_MODE;
-    this.initialize();
+    this.checkEnv();
     /***
      * Language value cookies wise set
      */
     this.cookieValue = this._cookiesService.get('lang');
-    const val = this.listLang.filter(x => x.lang === this.cookieValue);
-    this.countryName = val.map(element => element.text);
+    const val = this.listLang.filter((x) => x.lang === this.cookieValue);
+    this.countryName = val.map((element) => element.text);
     if (val.length === 0) {
-      if (this.flagvalue === undefined) { this.valueset = 'assets/images/flags/us.jpg'; }
+      if (this.flagvalue === undefined) {
+        this.valueset = 'assets/images/flags/us.jpg';
+      }
     } else {
-      this.flagvalue = val.map(element => element.flag);
+      this.flagvalue = val.map((element) => element.flag);
     }
   }
 
-  /**
-   * Initialize
-   */
-  initialize(): void {
-    this.menuItems = MENU;
-    // this.getList();
-  }
-
-  getList(): void {
-    this.commonService
-      .channels(1000, 0)
-      .subscribe(res => {
-        this.listChannel = res.data;
-        if (!this.currentChanel) {
-          const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-          if (currentUser) {
-            this.currentChanel = this.listChannel.find(i => i.channel_genesis_hash === currentUser.data.channel_genesis_hash);
-          }
-        }
-      }
-      );
+  checkEnv() {
+    this.env = this.environmentService.configValue.env;
+    this.innerWidth = window.innerWidth;
+    switch (this.env) {
+      case 'serenity':
+        this.pageTitle = this.innerWidth > 992 ? 'Serenity Testnet Network' : 'Serenity Testnet';
+        break;
+      case 'halo':
+        this.pageTitle = this.innerWidth > 992 ? 'Halo Testnet Network' : 'Halo Testnet';
+        break;
+      case 'euphoria':
+        this.pageTitle = this.innerWidth > 992 ? 'Euphoria Testnet Network' : 'Euphoria Testnet';
+        break;
+      default:
+        this.pageTitle = this.innerWidth > 992 ? 'Develop Testnet Network' : 'Develop Testnet';
+        break;
+    }
   }
 
   /**
@@ -170,6 +195,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
       els[0].classList.remove(className);
     }
   }
+
   /**
    * Topbar Light-Dark Mode Change
    */
@@ -180,8 +206,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   /**
-    * Toggle the menu bar when having mobile screen
-    */
+   * Toggle the menu bar when having mobile screen
+   */
   toggleMobileMenu(event: any) {
     event.preventDefault();
     this.mobileMenuButtonClicked.emit();
@@ -216,14 +242,10 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
               const parent5 = parent4.parentElement;
               if (parent5) {
                 parent5.classList.remove('active');
-                const menuelement = document.getElementById(
-                  'topnav-menu-content'
-                );
+                const menuelement = document.getElementById('topnav-menu-content');
                 if (menuelement !== null)
                   if (menuelement.classList.contains('show'))
-                    document
-                      .getElementById('topnav-menu-content')!
-                      .classList.remove('show');
+                    document.getElementById('topnav-menu-content')!.classList.remove('show');
               }
             }
           }
@@ -276,48 +298,135 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     }
   }
 
-  /**
-   * Logout the user
-   */
-  logout() {
-    this.authService.logout();
-    // this.router.navigate(['/account/login']);
-  }
-
-  onSelectNetwork(item) {
-    this.currentNetwork = item;
-    localStorage.setItem('currentNetwork', JSON.stringify(item));
-    this.commonService.setNetwork = item.value;
-    window.location.reload();
-  }
-
-  onSelectChanel(item) {
-    this.currentChanel = item;
-    localStorage.setItem('currentChanel', JSON.stringify(item));
-    this.authService.change({ channel_genesis_hash: this.currentChanel.channel_genesis_hash })
-      .pipe(first())
-      .subscribe(
-        data => {
-          // this.router.navigate(['/']);
-          // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-          //   this.router.navigate(['/']));
-            window.location.reload();
-        },
-        error => {
-        });
-
-
-  }
-
-  handleSearch() {
-    if (this.searchValue.length > 20) {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['transaction', this.searchValue]);
-      });
-    } else {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['blocks', this.searchValue]);
-      });
+  async handleSearch() {
+    const VALIDATORS = {
+      HASHRULE: /^[A-Za-z0-9]/,
+    };
+    const regexRule = VALIDATORS.HASHRULE;
+    if (this.searchValue) {
+      this.searchValue = this.searchValue.trim();
+      let isNumber = /^\d+$/.test(this.searchValue);
+      if (regexRule.test(this.searchValue)) {
+        //check is start with 'aura' and length >= normal address
+        if (this.searchValue.startsWith(this.prefixNormalAdd) && this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
+          if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['contracts', this.searchValue]);
+            });
+          } else {
+            let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate([urlLink, this.searchValue]);
+            });
+          }
+        } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
+          this.getTxhDetail(this.searchValue);
+        } else if (isNumber) {
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['blocks', this.searchValue]);
+          });
+        }
+      } else {
+        this.searchValue = '';
+      }
     }
+  }
+
+  getTxhDetail(value): void {
+    this.transactionService.txsIndexer(1, 0, decodeURI(value)).subscribe(
+      (res: ResponseDto) => {
+        if (res.data) {
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['transaction', this.searchValue]);
+          });
+        } else {
+          this.searchValue = '';
+        }
+      },
+      (error) => {
+        this.searchValue = '';
+      },
+    );
+  }
+
+  getMenuLink() {
+    for (let menu of this.menuItems) {
+      if (!menu.subItems) {
+        this.menuLink.push(menu.link);
+      } else {
+        let arr = '';
+        for (let subMenu of menu.subItems) {
+          arr += subMenu.link;
+        }
+        this.menuLink.push(arr);
+      }
+    }
+  }
+
+  getListSmartContract(currentAddress) {
+    const payload = {
+      limit: 10,
+      offset: 0,
+      minterAddress: currentAddress,
+    };
+
+    this.lengthSBT = 0;
+    this.soulboundService.getListSoulbound(payload).subscribe((res) => {
+      if (res.data.length > 0) {
+        this.lengthSBT = res.meta.count;
+      }
+    });
+  }
+
+  checkMenuActive(menuLink: string) {
+    if ((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
+      return true;
+    }
+
+    if (!menuLink.includes('/tokens')) {
+      if (menuLink === '/' + this.router.url.split('/')[1] && this.router.url.includes(menuLink)) {
+        return true;
+      }
+    }
+
+    if (menuLink === '/tokens' && (this.router.url == '/tokens' || this.router.url.includes('/tokens/token/'))) {
+      return true;
+    }
+
+    if (
+      menuLink === '/tokens/tokens-nft' &&
+      (this.router.url == '/tokens/tokens-nft' || this.router.url.includes('/tokens/token-nft'))
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/tokens/token-abt' &&
+      (this.router.url == '/tokens/token-abt' || this.router.url.includes('/tokens/token-abt'))
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/statistics/charts-stats' &&
+      (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
+    ) {
+      return true;
+    }
+
+    if (menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
+      return true;
+    }
+
+    if (
+      menuLink === '/code-ids/list' &&
+      (this.router.url == '/code-ids/list' ||
+        this.router.url.includes('/code-ids/detail/') ||
+        this.router.url.includes('/code-ids/verify/'))
+    ) {
+      return true;
+    }
+
+    return false;
   }
 }

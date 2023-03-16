@@ -1,0 +1,126 @@
+<div class="card box-token-info">
+  <div class="table-responsive">
+    <table class="aura-basic-table w-100">
+      <tr class="body">
+        <td class="h6 h3-mob mb-0">
+          <span class="text--white">Overview </span>
+          <span class="text--gray-light">
+            <ng-container *ngIf="tokenDetail.type === contractType.CW20">[CW-20]</ng-container>
+            <ng-container *ngIf="tokenDetail.type=== contractType.CW721">[CW-721]</ng-container>
+            <ng-container *ngIf="tokenDetail.type === contractType.CW4973">[CW-4973]</ng-container>
+          </span>
+        </td>
+        <td class="">
+          <!-- <div class="d-flex justify-content-end" *ngIf="!tokenDetail.isNFTContract">
+              <button class="button button-pill button--sm button-gradient">
+                <img [src]="'assets/images/icons/token-chart.svg' | imageS3" alt="" width="16px" />
+                <span class="ml-2">Chart</span>
+              </button>
+            </div> -->
+        </td>
+      </tr>
+
+      <tr *ngIf="!tokenDetail.isNFTContract">
+        <td colspan="2" class="py-2">
+          <div class="d-flex">
+            <div class="flex-item">
+              <div class="text--gray-5 body-02 fixed-col">
+                <span>Price:</span>
+              </div>
+              <div class="body-02">
+                <div class="text--gray-1">
+                  <span class="small-body">${{ +tokenDetail.price | mask : 'separator.6' }}</span>
+                  <span class="caption fw-normal text--gray-5">
+                    <ng-container *ngIf="global.price.aura">
+                      @{{ +tokenDetail.price / +global.price.aura || 0 | mask : 'separator.2' }}
+                    </ng-container>
+                    <ng-container *ngIf="!global.price.aura">-</ng-container>
+                    {{ denom }}
+                  </span>
+
+                  <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
+                    (<span class=""
+                      >{{ tokenDetail.isValueUp ? '+' : '-'
+                      }}{{ tokenDetail.change | number : global.formatNumber2Decimal }}%</span
+                    >)
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
+              <div class="text--gray-5 body-02">CIRCULATING SUPPLY MARKET CAP</div>
+              <div class="body-02 text--gray-1">
+                ${{ tokenDetail.circulating_market_cap | number : global.formatNumber2Decimal }}
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" class="py-2">
+          <div class="d-flex align-item-center">
+            <div
+              [class.flex-item]="!tokenDetail.isNFTContract"
+              [ngClass]="{ 'd-flex': tokenDetail.isNFTContract, 'align-items-center': tokenDetail.isNFTContract }">
+              <span class="text--gray-5 body-02 fixed-col">Max Total Supply:</span>
+              <div class="body-02 text--gray-1">
+                <ng-container *ngIf="!tokenDetail.isNFTContract">
+                  <ng-container *ngIf="+tokenDetail.max_total_supply === 0">-</ng-container>
+                  <ng-container *ngIf="+tokenDetail.max_total_supply !== 0">
+                    {{ +tokenDetail.max_total_supply | mask : 'separator.6' }}
+                    <span class="ml-1">{{ tokenDetail.symbol || tokenDetail.name }}</span>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="tokenDetail.isNFTContract">
+                  {{ tokenDetail.num_tokens | number : global.formatNumberOnlyDecimal }}
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
+              <div class="text--gray-5 body-02">FULLY DILUTED MARKET CAP</div>
+              <div class="body-02 text--gray-1">
+                ${{
+                  +tokenDetail.max_total_supply === 0
+                    ? (tokenDetail.circulating_market_cap | number : global.formatNumber2Decimal)
+                    : (tokenDetail.fully_diluted_market_cap | number : global.formatNumber2Decimal)
+                }}
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" [ngClass]="params ? 'border_none' : ''">
+          <div class="d-flex">
+            <div class="body-02 text--gray-5 fixed-col">Holders:</div>
+            <div class="body-02 text--gray-1">
+              {{ tokenDetail?.holder || 0 }}
+              <span
+                class="ml-1 {{ tokenDetail.isHolderUp ? 'text--green-3' : 'text--red-3' }}"
+                *ngIf="!tokenDetail.isNFTContract">
+                (<span class=""
+                  >{{ tokenDetail.isHolderUp ? '+' : '-'
+                  }}{{ tokenDetail.holderChange | number : global.formatNumber2Decimal }}%</span
+                >)
+              </span>
+            </div>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" *ngIf="!params">
+          <div class="d-flex">
+            <div class="body-02 text--gray-5 fixed-col">Transfers:</div>
+            <div class="body-02 text--gray-1">
+              <span *ngIf="tokenDetail.hasMoreTx">More than </span>{{ tokenDetail.totalTransfer || 0 }}
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
