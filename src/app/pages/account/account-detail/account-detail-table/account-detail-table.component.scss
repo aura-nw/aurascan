@@ -1,0 +1,24 @@
+.aura-table {
+  th.mat-header-cell {
+    border-top: none;
+  }
+}
+
+.box-title-validator {
+  min-height: 35px;
+  overflow: visible;
+
+  @media (max-width: 991.99px) {
+    .text-jailed {
+      min-width: 30px;
+    }
+    .label-jailed span {
+      margin-left: 10px;
+    }
+  }
+}
+.ellipsis-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

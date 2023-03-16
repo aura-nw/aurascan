@@ -1,0 +1,194 @@
+{
+  "auraPrice": {
+    "series": [
+      {
+        "name": "transactions",
+        "type": "line",
+        "data": [],
+        "color": "#5EE6D0"
+      }
+    ],
+    "chart": {
+      "height": 280,
+      "type": "area",
+      "toolbar": {
+        "tools": {
+          "selection": false,
+          "download": "<i class=icon icon-download></i>",
+          "zoom": false,
+          "zoomin": false,
+          "zoomout": false,
+          "pan": false,
+          "reset": false
+        }
+      }
+    },
+    "dataLabels": {
+      "enabled": false
+    },
+    "stroke": {
+      "width": 2,
+      "curve": "smooth"
+    },
+    "xAxis": {
+      "type": "datetime",
+      "categories": [],
+      "labels": {
+        "datetimeUTC": false
+      },
+      "axisBorder": {
+        "show": true,
+        "color": "#FFA741"
+      }
+    },
+    "tooltip": {
+      "x": {
+        "format": "MM/dd/yyyy"
+      }
+    }
+  },
+  "auraDailyTransaction": {
+    "series": [
+      {
+        "name": "transactions",
+        "type": "line",
+        "data": [],
+        "color": "#5EE6D0"
+      }
+    ],
+    "chart": {
+      "height": 400,
+      "type": "area",
+      "toolbar": {
+        "tools": {
+          "selection": false,
+          "download": "<i class=icon icon-download></i>",
+          "zoom": false,
+          "zoomin": false,
+          "zoomout": false,
+          "pan": false,
+          "reset": false
+        }
+      }
+    },
+    "dataLabels": {
+      "enabled": false
+    },
+    "stroke": {
+      "width": 2,
+      "curve": "smooth"
+    },
+    "xAxis": {
+      "type": "datetime",
+      "categories": [],
+      "labels": {
+        "datetimeUTC": false
+      },
+      "axisBorder": {
+        "show": true,
+        "color": "#FFA741"
+      }
+    },
+    "tooltip": {
+      "x": {
+        "format": "MM/dd/yyyy"
+      }
+    }
+  },
+  "auraUniqueAddress": {
+    "series": [
+      {
+        "name": "transactions",
+        "type": "line",
+        "data": [],
+        "color": "#5EE6D0"
+      }
+    ],
+    "chart": {
+      "height": 400,
+      "type": "area",
+      "toolbar": {
+        "tools": {
+          "selection": false,
+          "download": "<i class=icon icon-download></i>",
+          "zoom": false,
+          "zoomin": false,
+          "zoomout": false,
+          "pan": false,
+          "reset": false
+        }
+      }
+    },
+    "dataLabels": {
+      "enabled": false
+    },
+    "stroke": {
+      "width": 2,
+      "curve": "smooth"
+    },
+    "xAxis": {
+      "type": "datetime",
+      "categories": [],
+      "labels": {
+        "datetimeUTC": false
+      },
+      "axisBorder": {
+        "show": true,
+        "color": "#FFA741"
+      }
+    },
+    "tooltip": {
+      "x": {
+        "format": "MM/dd/yyyy"
+      }
+    }
+  },
+  "auraActiveAddress": {
+    "series": [
+      {
+        "name": "transactions",
+        "type": "line",
+        "data": [],
+        "color": "#5EE6D0"
+      }
+    ],
+    "chart": {
+      "height": 400,
+      "type": "area",
+      "toolbar": {
+        "tools": {
+          "selection": false,
+          "download": "<i class=icon icon-download></i>",
+          "zoom": false,
+          "zoomin": false,
+          "zoomout": false,
+          "pan": false,
+          "reset": false
+        }
+      }
+    },
+    "dataLabels": {
+      "enabled": false
+    },
+    "stroke": {
+      "width": 2,
+      "curve": "smooth"
+    },
+    "xAxis": {
+      "type": "datetime",
+      "categories": [],
+      "labels": {
+        "datetimeUTC": false
+      },
+      "axisBorder": {
+        "show": true,
+        "color": "#FFA741"
+      }
+    },
+    "tooltip": {
+      "x": {
+        "format": "MM/dd/yyyy"
+      }
+    }
+  }
+}

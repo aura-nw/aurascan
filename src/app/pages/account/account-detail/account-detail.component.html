@@ -1,0 +1,386 @@
+<div class="mb-4 mb-md-6">
+  <app-pagetitle title="Account Details"></app-pagetitle>
+</div>
+<section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <!-- Summary info -->
+  <div class="card">
+    <div class="d-flex px-4 py-4 pt-lg-6 pb-lg-6 px-lg-0 flex-wrap flex-lg-nowrap">
+      <div class="d-none d-lg-block">
+        <div class="qr-code d-inline-block pl-6 pr-6">
+          <app-qr [address]="currentAddress || ''"> </app-qr>
+        </div>
+      </div>
+      <div class="d-flex flex-column py-lg-6 col-lg-4 col-12 px-md-6">
+        <div class="">
+          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Address</div>
+          <div class="d-flex align-items-center">
+            <div class="body text--gray-1" id="currentAddress">
+              <span class="d-md-flex d-none">{{ currentAddress }}</span>
+              <span class="d-md-none d-flex">{{ currentAddress | cutStringPipe: 8:8 }}</span>
+            </div>
+            <div class="button button--xxs button-circle ml-2" id="popupCopy">
+              <img
+                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                class=""
+                alt=""
+                width="12px"
+                height="12px"
+                matTooltip="Copied!"
+                #tooltip="matTooltip"
+                (mouseenter)="$event.stopImmediatePropagation()"
+                (mouseleave)="$event.stopImmediatePropagation()"
+                (click)="copyMessage(currentAddress); tooltip.toggle()" />
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 mt-lg-4">
+          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Total Value</div>
+          <div class="d-flex justify-content-between align-items-center d-lg-block">
+            <span class="h1 mb-0 fw-bold mb-0 text-gradient d-inline" *ngIf="!isNoData"
+              >$ {{ totalValueToken + totalValueNft || 0 | number : global.formatNumber2Decimal }}</span
+            >
+            <img
+              [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+              alt=""
+              class="ml-10"
+              width="20"
+              height="20"
+              *ngIf="isNoData" />
+            <div class="button button--md button-circle ml-1 d-lg-none">
+              <img
+                [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
+                alt=""
+                width="30px"
+                height="30px"
+                (click)="viewQrAddress(modalManage)" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 mt-lg-0 {{ totalSBT > 0 ? 'soulbound-feature-tokens' : '' }}" >
+        <app-soulbound-feature-tokens
+          [extend]="true"
+          (totalPick)="totalSBT = $event"
+          [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
+      </div>
+    </div>
+  </div>
+  <!-- Main info -->
+  <div class="mt-4 mt-lg-6">
+    <!-- Tab List-->
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="0"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
+      [class.mobile-tab]="breakpoint.value.matches">
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a
+            class="account__tab-item"
+            ngbNavLink
+            (click)="currentTab = tab.label; currentStake = stakeMode.Delegations">
+            <span class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--gray-light' }}">{{
+              tab.label
+            }}</span>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+    <!-- Assets-->
+    <ng-container *ngIf="currentTab === tabsData.Assets">
+      <!-- Coin & Token-->
+      <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ totalAssets || 0 }})</h2>
+      <app-token-table
+        [address]="currentAddress"
+        (totalAssets)="totalAssets = $event"
+        (totalValue)="totalValueToken = $event"
+        *ngIf="!isNoData"></app-token-table>
+      <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
+
+      <!-- NFT -->
+      <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
+    </ng-container>
+    <!-- Transaction -->
+    <ng-container *ngIf="currentTab === tabsData.Transactions">
+      <div class="card" *ngIf="!isNoData">
+        <div class="card-body p-4 p-lg-6">
+          <ngx-simplebar *ngIf="dataSource && dataSource.data">
+            <ng-container *ngIf="dataSource.data.length > 0; else noValues">
+              <div class="table-responsive aura-table-contain">
+                <ng-container>
+                  <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
+                    <ng-container *ngFor="let template of templates; index as i">
+                      <ng-container [matColumnDef]="template.matColumnDef">
+                        <th
+                          mat-header-cell
+                          *matHeaderCellDef
+                          class="{{
+                            template.headerCellDef === 'Time' ||
+                            template.headerCellDef === 'Result' ||
+                            template.headerCellDef === 'Tx Hash'
+                              ? 'col-per-15'
+                              : 'col-per-13'
+                          }}">
+                          <div [innerHTML]="template.headerCellDef | translate"></div>
+                        </th>
+
+                        <td mat-cell *matCellDef="let data">
+                          <div>
+                            <ng-container [ngSwitch]="template.matColumnDef">
+                              <div *ngSwitchCase="'timestamp'">
+                                {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                              </div>
+                              <a
+                                *ngSwitchCase="'tx_hash'"
+                                class="text--primary cursor-pointer hash-link"
+                                [routerLink]="['/transaction', data['tx_hash']]">
+                                {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                              </a>
+                              <a
+                                *ngSwitchCase="'height'"
+                                class="text--primary cursor-pointer block-link"
+                                [routerLink]="['/blocks', data['height']]">
+                                {{ data[template.matColumnDef] }}
+                              </a>
+                              <div *ngSwitchCase="'type'">
+                                <div class="aura-status">
+                                  <div class="status">
+                                    {{ data[template.matColumnDef] }}
+                                  </div>
+                                </div>
+                              </div>
+                              <div *ngSwitchCase="'status'">
+                                <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                                  <div *ngSwitchCase="'Success'" class="text--green-3">
+                                    {{ data[template.matColumnDef] }}
+                                  </div>
+                                  <div *ngSwitchCase="'Fail'" class="text--red-3">
+                                    {{ data[template.matColumnDef] }}
+                                  </div>
+                                  <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                                    {{ data[template.matColumnDef] }}
+                                  </div>
+                                </div>
+                              </div>
+                              <div *ngSwitchCase="'fee'">
+                                {{ +data[template.matColumnDef] | mask : 'separator.6' }}
+                                <span class="text--primary">{{ denom }}</span>
+                              </div>
+                              <div *ngSwitchCase="'amount'">
+                                <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
+                                  {{ +data[template.matColumnDef] | mask : 'separator.6' }}
+                                  <span class="text--primary">{{ commonService.mappingNameIBC(data?.denom) }}</span>
+                                </ng-container>
+                                <ng-template #displayNonNumber>
+                                  <span *ngIf="!data[template.matColumnDef]"> - </span>
+                                  <a
+                                    *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
+                                    class="text--primary cursor-pointer"
+                                    [routerLink]="['/transaction', data['tx_hash']]">
+                                    More
+                                  </a>
+                                </ng-template>
+                              </div>
+                              <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                            </ng-container>
+                          </div>
+                        </td>
+                      </ng-container>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                      <td class="mat-cell g-no-data pt-8" colspan="9999">
+                        <app-loading-sprint></app-loading-sprint>
+                      </td>
+                    </tr>
+                  </table>
+                </ng-container>
+              </div>
+              <app-paginator
+                [length]="pageData.length"
+                [pageSize]="pageData.pageSize"
+                (paginator)="paginatorEmit($event)"
+                (pageEvent)="pageEvent($event)">
+              </app-paginator>
+            </ng-container>
+            <ng-template #noValues>
+              <app-table-no-data *ngIf="!transactionLoading"></app-table-no-data>
+            </ng-template>
+          </ngx-simplebar>
+          <div *ngIf="transactionLoading" class="">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
+    </ng-container>
+    <!-- Stake -->
+    <ng-container *ngIf="currentTab === tabsData.Stake">
+      <div class="row row-eq-height" *ngIf="!isNoData">
+        <div class="col-12 col-lg-8">
+          <div class="card card-h-100 px-lg-6 py-lg-6">
+            <div class="card-body article-2">
+              <div *ngIf="!accDetailLoading">
+                <!-- Tab List-->
+                <ul
+                  ngbNav
+                  #customNav2="ngbNav"
+                  [activeId]="0"
+                  class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
+                  [class.mobile-tab]="breakpoint.value.matches">
+                  <ng-container *ngFor="let tab of TABS_STAKE; index as index">
+                    <li [ngbNavItem]="index">
+                      <a class="account__tab-item" ngbNavLink (click)="currentStake = tab.key">
+                        <span
+                          class="h5 text--white text-uppercase mb-0
+                          {{ customNav2.activeId === index ? 'text--white' : 'text--gray-light' }}">
+                          {{ tab.label }}
+                        </span>
+                      </a>
+                    </li>
+                  </ng-container>
+                </ul>
+                <!-- Delegations-->
+                <app-account-detail-table
+                  *ngIf="currentStake === stakeMode.Delegations"
+                  [dataSource]="dataSourceDelegation"
+                  [templates]="templatesDelegation"
+                  [displayedColumns]="displayedColumnsDelegation"
+                  [pageData]="pageDataDelegation"
+                  [pageEventType]="pageEventType.Delegation"
+                  (pageEvent)="changePage($event)">
+                </app-account-detail-table>
+                <!-- Unbondings-->
+                <app-account-detail-table
+                  *ngIf="currentStake === stakeMode.Unbondings"
+                  [dataSource]="dataSourceUnBonding"
+                  [templates]="templatesUnBonding"
+                  [displayedColumns]="displayedColumnsUnBonding"
+                  [pageData]="pageDataUnbonding"
+                  [pageEventType]="pageEventType.Unbonding"
+                  (pageEvent)="changePage($event)">
+                </app-account-detail-table>
+                <!-- Redelegations-->
+                <div *ngIf="currentStake === stakeMode.Redelegations">
+                  <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
+                    1. {{ 'NOTICE.REDELEGATE_WAITING' | translate : { timeStaking: timeStaking } }}<br />
+                    2. {{ 'NOTICE.NUMBER_REDELEGATE' | translate }}
+                  </div>
+                  <app-account-detail-table
+                    [dataSource]="dataSourceReDelegation"
+                    [templates]="templatesReDelegation"
+                    [displayedColumns]="displayedColumnsReDelegation"
+                    [pageData]="pageDataRedelegation"
+                    [pageEventType]="pageEventType.Redelegation"
+                    (pageEvent)="changePage($event)"></app-account-detail-table>
+                </div>
+                <!-- Vestings-->
+                <app-account-detail-table
+                  *ngIf="currentStake === stakeMode.Vestings"
+                  [dataSource]="dataSourceVesting"
+                  [templates]="templatesVesting"
+                  [displayedColumns]="displayedColumnsVesting"
+                  [pageData]="pageDataVesting"
+                  [pageEventType]="pageEventType.Vestings"
+                  (pageEvent)="changePage($event)">
+                </app-account-detail-table>
+              </div>
+              <div class="mt-20" *ngIf="accDetailLoading">
+                <app-loading-sprint></app-loading-sprint>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="card card-h-100">
+            <div class="article-2 py-4 py-lg-6 px-4 px-lg-6 d-flex flex-column justify-content-between">
+              <ng-container *ngIf="!chartLoading">
+                <div id="walletChart" class="my-0 mx-auto">
+                  <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
+                    <apx-chart
+                      [series]="chartOptions.series"
+                      [chart]="chartOptions.chart"
+                      [labels]="chartOptions.labels"
+                      [fill]="chartOptions.fill"
+                      [dataLabels]="chartOptions.dataLabels"
+                      [responsive]="chartOptions.responsive"
+                      [plotOptions]="chartOptions.plotOptions"
+                      [legend]="chartOptions.legend"
+                      [colors]="chartOptions.colors"
+                      [tooltip]="chartOptions.tooltip"
+                      [stroke]="{show: false}">
+                    </apx-chart>
+                  </ng-container>
+                  <ng-template #chartNoValue>
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                      <div class="box-chart d-flex align-items-center justify-content-center">
+                        <div></div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
+                <div>
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="h2 h3-mob mb-0 text--gray-1">{{ denom }}</span>
+                    <span class="h5 h6-mob mb-0 text--gray-1">{{
+                      +currentAccountDetail?.total | mask : 'separator.6'
+                    }}</span>
+                  </div>
+                  <ng-container *ngFor="let item of chartCustomOptions; let last = last">
+                    <div
+                      class="d-flex justify-content-between align-items-center body-02 body-01-mob chart-legend-item py-3 px-0">
+                      <div class="d-flex align-items-center">
+                        <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
+                        <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
+                      </div>
+                      <span class="text--gray-1 body body-01-mob fw-500 fw-normal-mob">{{
+                        +item.amount | mask : 'separator.6'
+                      }}</span>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
+              <div *ngIf="chartLoading" class="mt-14">
+                <app-loading-sprint></app-loading-sprint>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
+    </ng-container>
+  </div>
+
+  <!-- QR code popup-->
+  <div class="col-lg-6">
+    <ng-template #modalManage let-modal>
+      <div class="box-address">
+        <div class="txt-right mb-4">
+          <img
+            [src]="'assets/images/icons/close-popup.png' | imageS3"
+            alt=""
+            width="14"
+            height="14"
+            (click)="closePopup()" />
+        </div>
+        <app-qr [address]="currentAddress || ''"> </app-qr>
+      </div>
+    </ng-template>
+  </div>
+</section>
+
+<ng-template #reloadTemplate>
+  <div class="card p-5 d-flex justify-content-between align-items-center" *ngIf="isNoData">
+    <div class="text-center">
+      <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="mr-2" width="40" height="40" />
+      <div class="small-text text--light-gray mt-4">
+        Fetching data, might take longer than usual. <br />
+        Please come back later or
+        <span class="link-reset-data" (click)="reloadData()">refresh the page</span>
+      </div>
+    </div>
+  </div>
+</ng-template>

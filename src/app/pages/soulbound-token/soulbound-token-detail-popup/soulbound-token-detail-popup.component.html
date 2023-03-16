@@ -1,0 +1,102 @@
+<div class="card">
+  <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
+    <div class="h2 h4-mob mb-0 fw-bold text--white">{{ soulboundDetail?.ipfs?.name ?? 'Token detail' }}</div>
+    <img
+      src="assets/icons/icons-svg/white/close.svg"
+      alt=""
+      width="24px"
+      height="24px"
+      class="cursor-pointer"
+      (click)="closeDialog()" />
+  </div>
+  <div class="card-body body-01">
+    <div class="row">
+      <div class="col-12 col-lg-5">
+        <div class="nft-cards__img nft__img">
+          <img
+            *ngIf="
+              (getTypeFile(soulboundDetail) !== MEDIA_TYPE.IMG && !soulboundDetail?.ipfs?.animation_url) || isError
+            "
+            [src]="commonService.getDefaultImg()" />
+          <img
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG && isError === false"
+            (error)="error()"
+            src="{{ imageUrl && animationUrl ? animationUrl : imageUrl }}"
+            alt="{{ soulboundDetail.token_name }}" />
+          <video
+            [src]="animationUrl"
+            controlslist="nodownload noplaybackrate"
+            controls
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.VIDEO && soulboundDetail?.ipfs?.animation_url"
+            poster="{{ imageUrl }}"></video>
+          <app-model-view
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE._3D && soulboundDetail?.ipfs?.animation_url"
+            [link]=""
+            [modelUrl]="animationUrl"
+            [disablePan]="false"
+            [previewImg]="imageUrl">
+          </app-model-view>
+          <app-audio-player
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.AUDIO && soulboundDetail?.ipfs?.animation_url"
+            [link]=""
+            [src]="animationUrl"
+            [nftId]=""
+            [previewImg]="imageUrl">
+          </app-audio-player>
+        </div>
+      </div>
+      <div class="col-12 col-lg-7 mt-4 mt-lg-0">
+        <div class="nft__desc">
+          <div class="h5 text--white">Description</div>
+          <div class="mt-4 mt-lg-2 body text--gray-1 box-desc">
+            {{ soulboundDetail.ipfs?.description || '-' }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider divider-horizontal my-6"></div>
+    <div class="h5 mb-4 text--white">Properties</div>
+    <div class="row">
+      <ng-container *ngIf="soulboundDetail.ipfs?.attributes">
+        <span *ngIf="!isObject(soulboundDetail.ipfs?.attributes)" class="px-1 px-lg-2">-</span>
+        <ng-container *ngIf="isObject(soulboundDetail.ipfs?.attributes)">
+          <div class="col-6 col-lg-3 mb-2 mb-lg-4 px-1 px-lg-2" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
+            <div class="nft__prop">
+              <div class="caption fw-normal">
+                <span class="d-none d-lg-flex">
+                  {{ prop.trait_type | stringEllipsis : 18 }}
+                </span>
+                <span class="d-flex d-lg-none">
+                  {{ prop.trait_type | stringEllipsis : 13 }}
+                </span>
+              </div>
+              <div class="h5 body-mob fw-semibold mb-0 text--white">
+                <span class="d-none d-lg-flex">
+                  {{ prop.trait_type | stringEllipsis : 13 }}
+                </span>
+                <span class="d-flex d-lg-none">
+                  {{ prop.trait_type | stringEllipsis : 10 }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <span *ngIf="!soulboundDetail.ipfs?.attributes" class="px-1 px-lg-2">-</span>
+    </div>
+  </div>
+  <div class="divider divider-horizontal"></div>
+  <!-- Button group -->
+  <div class="d-flex align-items-center justify-content-end px-6 py-6">
+    <button class="button button-pill button-outline button--md" type="button" (click)="closeDialog()">
+      <span>Cancel</span>
+    </button>
+    <button
+      class="button button-pill button-flat button--md ml-4"
+      type="button"
+      [disabled]="isLoading"
+      (click)="equipSB()">
+      <span>Equip</span>
+    </button>
+  </div>
+</div>

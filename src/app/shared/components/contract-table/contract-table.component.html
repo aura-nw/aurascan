@@ -1,0 +1,117 @@
+<section class="contract-table">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="text--gray-5 caption-mob fw-normal">
+      <span *ngIf="!nextKey">A total of</span>
+      <span *ngIf="nextKey">More than</span>
+      {{ contractInfo.count | mask: 'separator.6' }}
+      <div class="d-inline-flex align-items-center aura-status" *ngIf="label">
+        <div class="status px-2" [ngClass]="parseLabel(label)">{{ parseLabel(label) }}</div>
+      </div>
+      transaction{{ contractInfo.count > 1 ? 's' : '' }} found
+    </div>
+    <div class="d-flex align-items-center flex-shrink-0 ml-4">
+      <button
+        class="button button--xs button--sm-mob button-pill button-outline button-outline__in-card mr-4"
+        *ngIf="contractInfo.viewAll"
+        [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
+        <span>View all</span>
+      </button>
+      <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)" [currentLabel]="label"> </app-dropdown>
+    </div>
+  </div>
+  <div *ngIf="isLoading">
+    <app-loading-sprint></app-loading-sprint>
+  </div>
+  <ng-container *ngIf="pageData?.length > 0 && dataSource; else noValues">
+    <div class="table-responsive aura-table-contain">
+      <table mat-table [dataSource]="dataSource" class="aura-table">
+        <ng-container *ngFor="let template of templates; index as i">
+          <ng-container [matColumnDef]="template.matColumnDef">
+            <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
+              <div [innerHTML]="template.headerCellDef"></div>
+            </th>
+            <td mat-cell *matCellDef="let data">
+              <ng-container [ngSwitch]="template.type">
+                <ng-container *ngSwitchCase="'popover'">
+                  <button
+                    mat-icon-button
+                    aria-label="Contract Transaction Detail"
+                    placement="right"
+                    [ngbPopover]="popContent"
+                    popoverClass="custom-popover">
+                    <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
+                  </button>
+                  <ng-template #popContent class="popContent">
+                    <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
+                  </ng-template>
+                </ng-container>
+                <ng-container *ngSwitchCase="'hash-url-se'">
+                  <a class="text--primary cursor-pointer hash-link">
+                    {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                  </a>
+                </ng-container>
+                <ng-container *ngSwitchCase="'hash-url'">
+                  <a
+                    *ngIf="data[template.matColumnDef]"
+                    class="text--primary cursor-pointer hash-link"
+                    [routerLink]="[
+                      template?.isUrl,
+                      template?.paramField ? data[template?.paramField] : data[template.matColumnDef]
+                    ]">
+                    {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                  </a>
+                  <div class="" *ngIf="!data[template.matColumnDef]">-</div>
+                </ng-container>
+                <ng-container *ngSwitchCase="'status'">
+                  <div
+                    class="aura-status"
+                    [style.justify-content]="template?.justify || 'flex-start'"
+                    *ngIf="data[template.matColumnDef]">
+                    <div class="status text-capitalize" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="'result'">
+                  <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                    <div *ngSwitchCase="'Success'" class="text--green-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Fail'" class="text--red-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="'numb'">
+                  {{ data[template.matColumnDef] | mask: 'separator.6' }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'time-distance'">
+                  {{ data[template.matColumnDef] | dfnsFormatDistanceToNowStrictPure }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'short-string'">
+                  {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                </ng-container>
+                <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+              </ng-container>
+              <div class="d-inline" *ngIf="template?.suffix" [innerHTML]="template.suffix"></div>
+            </td>
+          </ng-container>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <app-paginator
+      [length]="length || dataList.length"
+      [pageSize]="pageData.pageSize"
+      (paginator)="paginatorEmit($event)"
+      (pageEvent)="pageEvent($event)">
+    </app-paginator>
+  </ng-container>
+  <ng-template #noValues>
+    <app-table-no-data *ngIf="!isLoading"></app-table-no-data>
+  </ng-template>
+</section>

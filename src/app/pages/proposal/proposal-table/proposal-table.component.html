@@ -1,0 +1,268 @@
+<div class="proposal-table-container" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <ng-container *ngIf="data?.length > 0; else noValues">
+    <ng-container *ngIf="!breakpoint.value.matches">
+      <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
+        <ng-container *ngFor="let template of template; index as i">
+          <ng-container [matColumnDef]="template.matColumnDef">
+            <th mat-header-cell *matHeaderCellDef>
+              <div [innerHTML]="template.headerCellDef | translate"></div>
+            </th>
+            <td mat-cell *matCellDef="let data; index as j">
+              <div [classList]="[template.cssClass]" ngClass="d-flex align-items-center">
+                <span *ngIf="template.prefix" class="cursor-pointer">
+                  <ng-container *ngIf="template.prefix === 'operator_address'">
+                    <div class="avatar-wrapper">
+                      <span
+                        class="validator-avatar d-inline-flex"
+                        [routerLink]="[template.isUrl, data['operator_address']]">
+                        <app-loading-image
+                          [appClass]="data['jailed'] ? 'jailed' : ''"
+                          [identity]="data['validator_identity']"
+                          [srcImg]="getValidatorAvatar(data.operator_address)">
+                        </app-loading-image>
+                      </span>
+                    </div>
+                  </ng-container>
+                </span>
+                <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
+                  <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
+                    {{
+                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                        '-'
+                    }}
+                  </a>
+                </ng-container>
+                <ng-container *ngIf="template.isUrl && template.isShort">
+                  <a
+                    [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                    [class.disabled-link]="!data[template.matColumnDef]">
+                    {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                  </a>
+                </ng-container>
+                <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <ng-container *ngSwitchCase="'amount'">
+                      {{
+                        (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])
+                          | mask: 'separator.6' || '-'
+                      }}
+                      <span class="text--primary ml-1">{{ denom }}</span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'answer'">
+                      {{ getVoteValue(data[template.matColumnDef]) }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'option'">
+                      {{ getVoteValue(data[template.matColumnDef]) }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'rank'">
+                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{
+                        data[template.matColumnDef]
+                      }}</span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'updated_at'">
+                      <div *ngIf="data[template.matColumnDef]">
+                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
+                        <div class="text--gray-5 body-02 d-flex align-items-center">
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <div class="divider divider-vertical mx-2"></div>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                        </div>
+                      </div>
+                      <div *ngIf="!data[template.matColumnDef]">-</div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'created_at'">
+                      <div *ngIf="data[template.matColumnDef]">
+                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
+                        <div class="text--gray-5 body-02 d-flex align-items-center">
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <div class="divider divider-vertical mx-2"></div>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                        </div>
+                      </div>
+                      <div *ngIf="!data[template.matColumnDef]">-</div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'timestamp'">
+                      <div *ngIf="data[template.matColumnDef]">
+                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
+                        <div class="text--gray-5 body-02 d-flex align-items-center">
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <div class="divider divider-vertical mx-2"></div>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                        </div>
+                      </div>
+                      <div *ngIf="!data[template.matColumnDef]">-</div>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell g-no-data" colspan="9999">
+            {{ 'NO DATA' | translate }}
+          </td>
+        </tr>
+      </table>
+    </ng-container>
+    <ng-container *ngIf="breakpoint.value.matches">
+      <div>
+        <ng-container *ngFor="let data of getListData(); index as i">
+          <!-- VOTES -->
+          <ng-container *ngIf="type === proposalMode.VOTES">
+            <app-card-mob-simple
+              [content]="[
+                {
+                  label: 'Voter',
+                  class: 'h5 mb-0 text--primary',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/account/' + data.voter_address) +
+                    '>' +
+                    (data.voter_address ? shortenAddress(data.voter_address) : '-') +
+                    '</a>'
+                },
+                {
+                  label: 'TxHash',
+                  class: 'body-01',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/transaction/' + data.txhash) +
+                    '>' +
+                    (data.txhash ? shortenAddress(data.txhash) : '-') +
+                    '</a>'
+                },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.answer) },
+                {
+                  label: 'Time',
+                  class: 'card__date text--gray-1 body-01',
+                  info:
+                    '<div class=text-end>' +
+                    commonService.getDateValue(data.timestamp, false)[0] +
+                    '</div><div class=text--gray-5><span>' +
+                    (data.timestamp | customDate: 'yyyy-MM-dd') +
+                    '</span>' +
+                    '<span>' +
+                    (data.timestamp | customDate: 'HH:mm:ss') +
+                    '</span></div>'
+                }
+              ]"></app-card-mob-simple>
+          </ng-container>
+          <!-- VALIDATORS_VOTES -->
+          <ng-container *ngIf="type === proposalMode.VALIDATORS_VOTES">
+            <app-card-mob-simple
+              [validatorData]="{
+                imgUrl: getValidatorAvatar(data.operator_address),
+                validatorName: data.validator_name,
+                validatorAddress: data.validator_address,
+                validatorNumber: data.rank,
+                validatorIdentity: data.validator_identity
+              }"
+              [content]="[
+                {
+                  label: 'TxHash',
+                  class: 'body-01',
+                  info: data.tx_hash
+                    ? '<a class=text--primary href=' +
+                      ('/transaction/' + data.tx_hash) +
+                      '>' +
+                      shortenAddress(data.tx_hash) +
+                      '</a>'
+                    : '<span class=text--gray-1>-</span>'
+                },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.answer) },
+                {
+                  label: 'Time',
+                  class: 'card__date text--gray-1 body-01',
+                  info: data.timestamp
+                    ? '<div class=text-end>' +
+                      commonService.getDateValue(data.timestamp, false)[0] +
+                      '</div>' +
+                      '<div class=text--gray-5><span>' +
+                      (data.timestamp | customDate: 'yyyy-MM-dd') +
+                      '</span>' +
+                      '<span>' +
+                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      '</span></div>'
+                    : '-'
+                }
+              ]"></app-card-mob-simple>
+          </ng-container>
+          <!-- DEPOSITORS -->
+          <ng-container *ngIf="type === proposalMode.DEPOSITORS">
+            <app-card-mob-simple
+              [content]="[
+                {
+                  label: 'Depositor',
+                  class: 'h5 mb-0',
+                  info: data.depositors
+                    ? '<a class=text--primary href=' +
+                      ('/account/' + data.depositors) +
+                      '>' +
+                      shortenAddress(data.depositors) +
+                      '</a>'
+                    : '<span class=text--gray-1>-</span>'
+                },
+                {
+                  label: 'TxHash',
+                  class: 'body-01',
+                  info: data.txhash
+                    ? '<a class=text--primary href=' +
+                      ('/transaction/' + data.txhash) +
+                      '>' +
+                      shortenAddress(data.txhash) +
+                      '</a>'
+                    : '<span class=text--gray-1>-</span>'
+                },
+                {
+                  label: 'Amount',
+                  class: 'h6 mb-0 text--gray-1',
+                  info: data.amount
+                    ? '<span class=mr-1>' +
+                      (data.amount | mask: 'separator.6') +
+                      '</span><span class=text--primary>' +
+                      denom +
+                      '</span>'
+                    : '-'
+                },
+                {
+                  label: 'Time',
+                  class: 'card__date text--gray-1 body-01',
+                  info: data.timestamp
+                    ? '<div class=text-end>' +
+                      commonService.getDateValue(data.timestamp, false)[0] +
+                      '</div>' +
+                      '<div class=text--gray-5><span>' +
+                      (data.timestamp | customDate: 'yyyy-MM-dd') +
+                      '</span>' +
+                      '<span>' +
+                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      '</span></div>'
+                    : '-'
+                }
+              ]"></app-card-mob-simple>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell g-no-data" colspan="9999">
+              {{ 'NO DATA' | translate }}
+            </td>
+          </tr>
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-container>
+  <app-paginator
+    [length]="length"
+    [pageSize]="pageSize"
+    (paginator)="paginatorEmit($event)"
+    (pageEvent)="pageEvent($event)">
+  </app-paginator>
+  <ng-template #noValues>
+    <app-table-no-data></app-table-no-data>
+  </ng-template>
+</div>

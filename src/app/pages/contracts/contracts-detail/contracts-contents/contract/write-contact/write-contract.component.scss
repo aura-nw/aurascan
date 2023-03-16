@@ -1,0 +1,74 @@
+mat-expansion-panel {
+  border: 1px solid var(--aura-gray-9);
+  margin-bottom: var(--spacer-5);
+
+  mat-expansion-panel-header {
+    height: 40px;
+    background-color: var(--aura-gray-9);
+    border-color: var(--aura-gray-9);
+    padding: 10px var(--spacer-4);
+    &:hover,
+    &:focus {
+      background-color: var(--aura-gray-9);
+    }
+
+    &::after {
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 700;
+      content: '\f077';
+      color: var(--aura-gray-1);
+    }
+
+    &[aria-expanded='true']::after {
+      content: '\f078';
+    }
+
+    &[aria-expanded='true'] {
+      border-bottom: 1px solid var(--aura-gray-9);
+    }
+  }
+
+  ::ng-deep .mat-expansion-panel-body {
+    background-color: var(--aura-gray-10);
+    padding: var(--spacer-3) var(--spacer-4);
+  }
+}
+
+.icon-connect {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  background-color: var(--aura-danger);
+
+  &.connected {
+    background-color: var(--aura-green-3);
+  }
+}
+
+.mat-expansion-panel-header {
+  font-size: 14px;
+
+  &.mat-expanded {
+    height: 48px;
+  }
+}
+.divider.divider-vertical {
+  min-height: 16px;
+  margin: 0 16px;
+}
+input.form-check-input {
+  color: var(--aura-gray-1);
+}
+.error-null {
+  border: 2px solid var(--aura-red-3) !important;
+}
+
+.btn-add-zero {
+  width: 25px;
+  height: 25px;
+  .icon-add-zero {
+    font-size: 15px;
+    color: var(--aura-white);
+  }
+}

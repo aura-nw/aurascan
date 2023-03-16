@@ -1,0 +1,19 @@
+<div class="audio-player audio-player--has-link" [class.isoClass]="browserEnv === 'ios' && !link">
+  <img [src]="previewImg || defaultImgToken" *ngIf="link && !isError" (error)="error()" />
+  <img [src]="defaultImgToken" *ngIf="link && isError"/>
+  <a href="{{ link }}" *ngIf="link" [class.disable-link]="disableLink"></a>
+  <audio id="{{ nftId }}" [controls]="!link" #audio loop>
+    <source *ngIf="src" [src]="src" />
+    Your browser does not support the audio element.
+  </audio>
+  <div *ngIf="showCustomControl && link" class="control-container">
+    <button class="button control__button" *ngIf="paused" (click)="playAudio(audio)">
+      <i class="ph-play"></i>
+    </button>
+    <button class="button control__button" *ngIf="!paused" (click)="pauseAudio(audio)">
+      <i class="ph-pause"></i>
+    </button>
+  </div>
+</div>
+<img [src]="previewImg" *ngIf="!link && !isError" (error)="error()" width="100%" class="img-audio" />
+<img [src]="defaultImgToken" *ngIf="!link && isError" width="100%" class="img-audio" />

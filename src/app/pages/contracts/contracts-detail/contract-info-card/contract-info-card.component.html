@@ -1,0 +1,80 @@
+<div class="card box-contract-info">
+  <div>
+    <div class="table-responsive">
+      <table class="aura-basic-table w-100 body-02 body-mob">
+        <tr>
+          <td colspan="2" class="h6 h3-mob mb-0">More Info</td>
+          <td>
+            <!-- <div class="d-flex justify-content-end">
+              <button class="button button--sm button-circle">
+                <img [src]="'assets/icons/icons-svg/basic/heart.svg' | imageS3" alt="" width="16px" height="16px" />
+              </button>
+              <button class="ml-3 button button--sm button-pill button-outline button-outline__in-card button-dropdown">
+                <span>More</span>
+              </button>
+            </div> -->
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text--gray-5 body-02-mob">My Name Tag:</td>
+<!--          <td colspan="2">-->
+<!--            <span class="mr-2">Not Available, </span>-->
+<!--            <img [src]="'assets/icons/icons-svg/basic/edit.svg' | imageS3" alt="" width="16px" height="16px" />-->
+<!--          </td>-->
+          <td colspan="2">Not Available
+            <!-- , <span class="text--primary ml-1">Update?</span> -->
+          </td>
+        </tr>
+
+        <tr class="d-lg-none">
+          <td colspan="3">
+            <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
+            <div>
+              <a class="text--primary mr-1 mr-lg-2" [routerLink]="['/account', contractDetail?.creator_address]">
+                {{ contractDetail?.creator_address | cutStringPipe: 8:8 }}
+              </a>
+              at txn
+              <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+                {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
+              </a>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="d-none d-lg-table-row">
+          <td class="text--gray-5 body-02-mob">Contract Creator:</td>
+          <td colspan="2">
+            <a class="text--primary" [routerLink]="['/account', contractDetail?.creator_address]">
+              {{ contractDetail?.creator_address | cutStringPipe: 8:8 }}
+            </a>
+            at txn
+            <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+              {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
+            </a>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text--gray-5">Token Tracker:</td>
+          <td colspan="2">
+            <ng-container *ngIf="contractDetail.token_name && contractDetail.token_symbol">
+              <a class="text--primary break-word" [routerLink]="['/token', contractDetail?.contract_address]"
+                *ngIf="contractDetail.type === contractRegisterType.CW20"
+                [routerLink]="['/tokens/token', contractDetail?.contract_address]">
+                {{ contractDetail?.token_name }} ({{ contractDetail?.token_symbol }})
+              </a>
+              <a
+                *ngIf="contractDetail.type !== contractRegisterType.CW20"
+                class="text--primary break-word"
+                [routerLink]="['/tokens/' + linkNft, contractDetail?.contract_address]">
+                {{ contractDetail?.token_name }} ({{ contractDetail?.token_symbol }})
+              </a>
+              <!-- <span class="ml-1 text--light-gray">(@$1)</span> -->
+            </ng-container>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

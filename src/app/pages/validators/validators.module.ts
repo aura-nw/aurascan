@@ -1,21 +1,37 @@
+import { LayoutModule } from '@angular/cdk/layout';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../../../app/app.module';
-import { NgxMaskModule } from 'ngx-mask';
-import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxMaskModule } from 'ngx-mask';
+import { SimplebarAngularModule } from 'simplebar-angular';
+import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
+import { MaterialModule } from '../../../app/app.module';
+import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
+import { AccountService } from '../../../app/core/services/account.service';
+import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
+import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
 import { SharedModule } from '../../../app/shared/shared.module';
-import { ValidatorsComponent } from './validators.component';
+import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
+import { PopupDelegateModule } from './popup-delegate/popup-delegate.module';
+import { UserWalletInfoComponent } from './user-wallet-info/user-wallet-info.component';
+import { DelegateItemComponent } from './validators-detail/delegate-item/delegate-item.component';
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
-import { ValidatorService } from '../../../app/core/services/validator.service';
+import { ValidatorsComponent } from './validators.component';
+import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 
 @NgModule({
   declarations: [
     ValidatorsComponent,
-    ValidatorsDetailComponent
+    ValidatorsDetailComponent,
+    UserWalletInfoComponent,
+    DelegateItemComponent,
   ],
   imports: [
     CommonModule,
@@ -26,8 +42,17 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    SharedModule
+    SharedModule,
+    SimplebarAngularModule,
+    TableNoDataModule,
+    PopupDelegateModule,
+    PaginatorModule,
+    LayoutModule,
+    MatTooltipModule,
+    LoadingImageModule,
+    NgbNavModule,
+    SoulboundFeatureTokensModule
   ],
-  providers: [CommonService, ValidatorService]
+  providers: [CommonService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe],
 })
-export class ValidatorsModule { }
+export class ValidatorsModule {}

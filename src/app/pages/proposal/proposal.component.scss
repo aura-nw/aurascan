@@ -1,0 +1,135 @@
+.proposal-lasted {
+  margin-bottom: 20px;
+  color: var(--aura-white);
+
+  .title-mob {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .title-desk {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  &__content {
+    .content-body {
+      min-width: 140px;
+      color: var(--aura-gray-5);
+    }
+  }
+
+  .vote-bar {
+    margin-right: 20px;
+
+    ul {
+      background-color: var(--aura-gray-8);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+  }
+
+  .most-vote {
+    @media (min-width: 992px) {
+      margin-left: 20px;
+      width: 205px;
+    }
+
+    .value {
+      position: relative;
+      padding-left: 16px;
+
+      @media (min-width: 992px) {
+        padding-left: 24px;
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 100%;
+
+        @media (min-width: 992px) {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      &.primary:before {
+        background-color: var(--aura-green-3);
+      }
+
+      &.danger:before {
+        background-color: var(--aura-danger);
+      }
+
+      &.info:before {
+        background-color: var(--aura-red-2);
+      }
+
+      &.secondary:before {
+        background-color: var(--aura-gray-8);
+      }
+    }
+  }
+}
+
+.card {
+  &-footer-mobile {
+    padding: 0 var(--spacer-3) var(--spacer-3) var(--spacer-3);
+  }
+
+  .proposal-status-mobile {
+    border-radius: 4px;
+    text-transform: capitalize;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--spacer-4);
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    font-weight: 600;
+  }
+
+  .border-bottom-mobile {
+    border-bottom: 1px solid var(--aura-gray-9);
+  }
+}
+
+.vote-bar {
+  width: 60%;
+  @media (max-width: 991.98px) {
+    width: 80%;
+    height: 20px;
+  }
+}
+
+table {
+  min-width: 800px;
+}
+
+.title-cell {
+  padding-right: 24px;
+  max-width: 500px;
+}
+
+.divider.divider-vertical {
+  height: 10px;
+}
+
+:host::ng-deep app-card-mob-simple {
+  .g-ellipsis {
+    width: 170px;
+  }
+}

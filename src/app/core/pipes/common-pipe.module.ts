@@ -1,17 +1,40 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { pipeCalDate } from './common.pipe';
-
+import { NgModule } from '@angular/core';
+import {
+  BalanceOf,
+  CustomDate,
+  ImageURL,
+  pipeCalDate,
+  PipeCutString,
+  StringEllipsis,
+  ReplaceIpfs,
+  ConvertUauraToAura,
+} from './common.pipe';
+import { JsonPipe } from './json.pipe';
 
 @NgModule({
   declarations: [
-    pipeCalDate
+    pipeCalDate,
+    JsonPipe,
+    PipeCutString,
+    ImageURL,
+    CustomDate,
+    StringEllipsis,
+    BalanceOf,
+    ReplaceIpfs,
+    ConvertUauraToAura,
   ],
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   exports: [
-    pipeCalDate
-  ]
+    pipeCalDate,
+    JsonPipe,
+    PipeCutString,
+    ImageURL,
+    CustomDate,
+    StringEllipsis,
+    BalanceOf,
+    ReplaceIpfs,
+    ConvertUauraToAura,
+  ],
 })
-export class CommonPipeModule { }
+export class CommonPipeModule {}

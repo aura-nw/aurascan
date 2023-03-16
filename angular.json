@@ -6,7 +6,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "minia": {
+        "aura": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -24,7 +24,13 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "allowedCommonJsDependencies": [
-                            "rxjs", "core-js", "chart.js", "chartist"
+                            "rxjs", 
+                            "core-js",
+                            "qrcode",
+                            "@cosmjs/stargate",
+                            "simplebar",
+                            "simplebar-angular",
+                            "@cosmjs/cosmwasm-stargate"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",
@@ -39,14 +45,17 @@
                         ],
                         "styles": [
                             "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-                            "src/styles.scss",
                             "src/assets/scss/bootstrap.scss",
                             "src/assets/scss/app.scss",
                             "src/assets/scss/custom-material.scss",
-                            "src/assets/scss/icons.scss"
+                            "src/assets/scss/icons.scss",
+                            "src/styles.scss"
                         ],
                         "scripts": [
-                            "node_modules/apexcharts/dist/apexcharts.min.js"
+                            "node_modules/apexcharts/dist/apexcharts.min.js",
+                            "./node_modules/@popperjs/core/dist/umd/popper.min.js",
+                            "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+                            "./node_modules/jquery/dist/jquery.min.js"
                         ],
                         "serviceWorker": true,
                         "ngswConfigPath": "ngsw-config.json"
@@ -56,12 +65,12 @@
                             "budgets": [{
                                     "type": "initial",
                                     "maximumWarning": "5mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "8mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "2kb",
-                                    "maximumError": "4kb"
+                                    "maximumWarning": "4kb",
+                                    "maximumError": "6kb"
                                 }
                             ],
                             "fileReplacements": [{
@@ -85,10 +94,10 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
                         "production": {
-                            "browserTarget": "minia:build:production"
+                            "browserTarget": "aura:build:production"
                         },
                         "development": {
-                            "browserTarget": "minia:build:development"
+                            "browserTarget": "aura:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -96,7 +105,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "minia:build"
+                        "browserTarget": "aura:build"
                     }
                 },
                 "test": {
@@ -122,5 +131,5 @@
             }
         }
     },
-    "defaultProject": "minia"
+    "defaultProject": "aura"
 }

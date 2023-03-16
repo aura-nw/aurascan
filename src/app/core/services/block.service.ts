@@ -1,41 +1,54 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class BlockService extends CommonService {
-  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
+  apiUrl = `${this.environmentService.configValue.beUri}`;
+  chainInfo = this.environmentService.configValue.chain_info;
+  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
 
-  constructor(
-    private http: HttpClient,
-    private environmentService: EnvironmentService
-  ) {
+  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
 
-  blocks(limit, offset): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks?limit=${limit}&offset=${offset}`);
+  blocksIndexer(pageLimit: string | number, blockHeight = null): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      pageLimit,
+      blockHeight,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${this.indexerUrl}/block`, {
+      params,
+    });
   }
 
-  blockDetail(height): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks/${height}`);
+  blockWithOperator(pageLimit: string | number, operatorAddress: string, nextKey = null): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      pageLimit,
+      operatorAddress,
+      nextKey,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${this.indexerUrl}/block`, {
+      params,
+    });
   }
 
-  getBlocksPer(type): Observable<any> {
+  getBlockAndTxs(type: string): Observable<any> {
     this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-  }
-
-  getBlockAndTxs(type): Observable<any> {
-    this.setURL();
-    // return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-    let character = this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-    let characterHomeworld = this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}`);
-
-    return forkJoin([character, characterHomeworld]);
+    const date = new Date();
+    return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`);
   }
 }

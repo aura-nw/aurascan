@@ -1,0 +1,10 @@
+.qr-container {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    ::ng-deep.qr-code {
+        display: flex;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+}

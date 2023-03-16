@@ -1,0 +1,153 @@
+footer {
+  background-color: var(--aura-black);
+  border-top: 1px solid var(--aura-gray-9);
+
+  .footer {
+    &__menu {
+      color: var(--aura-white);
+      @media (min-width: 992px) {
+        border: none;
+        margin-top: 96px;
+        .title {
+          font-weight: 600;
+          margin-bottom: var(--spacer-2);
+        }
+      }
+
+      @media (min-width: 1200px) {
+        margin-top: 90px;
+      }
+      ul {
+        li {
+          margin-bottom: var(--spacer-2);
+        }
+      }
+    }
+
+    &__logo {
+      display: block;
+      width: 184px;
+      @media (min-width: 992px) {
+        width: 180px;
+      }
+    }
+  }
+
+  .footer__contact {
+    margin-left: 8px;
+    border-bottom: 1px solid var(--aura-gray-9);
+    @media (min-width: 992px) {
+      margin-left: 32px;
+      padding: var(--spacer-14) var(--spacer-15);
+      border-left: 1px solid var(--aura-gray-9);
+      border-right: 1px solid var(--aura-gray-9);
+      border-bottom: none;
+    }
+    a {
+      color: var(--aura-gray-5) !important;
+      text-decoration: none;
+      transition: color 0.35s ease-in-out;
+      &:hover {
+        color: var(--aura-white) !important;
+      }
+    }
+  }
+  .footer__cta {
+    margin: 32px 8px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    &-contain {
+      background: url('../../../assets/images/cta_mailbox.png') center left no-repeat;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 0 16px 24px;
+      width: calc(100% - 16px);
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
+    }
+    &:before {
+      content: '';
+      display: block;
+      padding-top: 49.56268221%;
+    }
+
+    @media (min-width: 414px) {
+      .footer__cta-contain {
+        padding: 24px 0 24px 48px;
+      }
+    }
+
+    @media (min-width: 480px) {
+      height: 100%;
+      padding: var(--spacer-8) 0;
+      margin: 0;
+      margin-left: 8px;
+      &:before {
+        display: none;
+      }
+      .footer__cta-contain {
+        background: url('../../../assets/images/cta_mailbox.png') center left no-repeat;
+        background-size: contain;
+        height: 170px;
+        padding: 24px 0 24px 24px;
+        position: static;
+        width: 100%;
+      }
+    }
+    @media (min-width: 992px) {
+      padding: var(--spacer-4) 0;
+      .footer__cta-contain {
+        padding: 24px 0 32px 16px;
+      }
+    }
+    @media (min-width: 1200px) {
+      padding: var(--spacer-13) 0;
+      .footer__cta-contain {
+        padding: 24px 0 24px 24px;
+      }
+    }
+    @media (min-width: 1440px) {
+      .footer__cta-contain {
+        padding: 24px 0 16px 24px;
+      }
+    }
+  }
+  .bottom-bar {
+    border-top: 1px solid var(--aura-gray-9);
+    padding-bottom: 82px;
+    .caption-2 {
+      font-size: 12px;
+      line-height: 20px;
+      color: var(--aura-gray-5);
+      font-family: Inter;
+    }
+    i.icon {
+      margin: 0 var(--spacer-3);
+    }
+  }
+  button {
+    text-align: left;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    color: var(--aura-gray-5);
+    transition: color 0.35s ease-in-out;
+    &:hover {
+      color: var(--aura-white);
+    }
+  }
+}
+.h4-heading {
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 4rem;
+  font-family: BigShouldersDisplay;
+}

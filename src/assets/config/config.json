@@ -1,4 +1,68 @@
 {
-    "fabric": "",
-    "cosmos": "https://explorer-api.aura.network/api/v1"
+  "fabric": "",
+  "cosmos": "https://explorer-api.dev.aura.network/api/v1",
+  "chainId": "aura-testnet-2",
+  "timeStaking": "86400",
+  "env": "dev",
+  "urlSocket": "https://explorer-ws.dev.aura.network",
+  "validator_s3": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
+  "coins": [
+    {
+      "name": "Serenity Aura",
+      "display": "AURA",
+      "denom": "ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20",
+      "decimal": 6,
+      "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
+    }
+  ],
+  "chain_info": {
+    "chainId": "aura-testnet-2",
+    "chainName": "aura devnet",
+    "rpc": "https://rpc.dev.aura.network",
+    "rest": "https://lcd.dev.aura.network",
+    "bip44": {
+      "coinType": 118
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "aura",
+      "bech32PrefixAccPub": "aurapub",
+      "bech32PrefixValAddr": "auravaloper",
+      "bech32PrefixValPub": "auravaloperpub",
+      "bech32PrefixConsAddr": "auravalcons",
+      "bech32PrefixConsPub": "auravalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "TAURA",
+        "coinMinimalDenom": "utaura",
+        "coinDecimals": 6
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "TAURA",
+        "coinMinimalDenom": "utaura",
+        "coinDecimals": 6
+      }
+    ],
+    "stakeCurrency": {
+      "coinDenom": "TAURA",
+      "coinMinimalDenom": "utaura",
+      "coinDecimals": 6
+    },
+    "coinType": 118,
+    "gasPriceStep": {
+      "low": 0.001,
+      "average": 0.0025,
+      "high": 0.004
+    },
+    "features": [
+      "ibc-transfer"
+    ],
+    "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
+    "logo": "https://i.imgur.com/zi0mTYb.png",
+    "explorer": "https://explorer.dev.aura.network/"
+  },
+  "image_s3": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
+  "urlIndexer": "https://indexer.dev.aurascan.io/api/v1"
 }

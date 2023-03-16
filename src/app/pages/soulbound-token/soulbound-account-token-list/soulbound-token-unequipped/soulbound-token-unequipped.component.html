@@ -1,0 +1,97 @@
+<section class="mt-4 mt-lg-6">
+  <h2 class="text--white">Un-equipped ABT</h2>
+  <div class="card">
+    <div class="card-body">
+      <!-- Title -->
+      <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mb-4">
+        <div class="body text--gray-4 mt-4 mt-lg-0">
+          A total of {{ pageData.length }} record{{ pageData.length > 1 ? 's' : '' }} found
+        </div>
+        <form (ngSubmit)="searchToken()" class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search for Token Name"
+              [(ngModel)]="searchValue"
+              [maxLength]="maxLengthSearch"
+              (keyup.enter)="searchToken()"
+              name="search"
+              autocomplete="off" />
+            <button
+              type="submit"
+              class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}"
+              (click)="searchToken()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+            <button
+              type="reset"
+              class="btn-reset cursor-pointer {{
+                !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
+              }}"
+              (click)="resetSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="loading" class="m-auto mt-10">
+        <app-loading-sprint></app-loading-sprint>
+      </div>
+      <div *ngIf="!loading">
+        <!-- Token list -->
+        <div
+          id="nft-cards"
+          class="nft-cards nft__unclaimed token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
+          *ngIf="soulboundData.data.length > 0; else noValues">
+          <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
+            <div class="nft-cards__item-border">
+              <div class="nft-cards__item nft-cards__item--unclaimed">
+                <div class="token-cards__img">
+                  <app-nft-card
+                    [nftLink]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
+                    [nftItem]="token"
+                    [disableLink]="true"
+                    nftId="{{ 'nft#' + i }}"
+                    [nftType]="getTypeFile(token)">
+                  </app-nft-card>
+                  <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
+                    {{ sbType.UNCLAIMED }}
+                  </div>
+                </div>
+                <div class="box-nft-info">
+                  <div class="nft__info">
+                    <span class="body mr-1 text--gray-1">Token:</span>
+                    <span>{{ token.token_name }}</span>
+                  </div>
+                </div>
+                <div class="px-2 d-lg-none position-relative">
+                  <button
+                    class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card button-fixed button-review--mob mb-2"
+                    (click)="getSBTDetail(token.contract_address, token.token_id)">
+                    <span class="caption fw-normal">Preview</span>
+                  </button>
+                </div>
+                <button
+                  class="button button-pill button--lg button-flat btn-preview border_none fw-semibold d-none d-lg-block"
+                  (click)="getSBTDetail(token.contract_address, token.token_id)"
+                  [disabled]="isClick">
+                  <span>Preview</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-paginator
+          [length]="pageData?.length"
+          [pageSize]="pageData?.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
+        <ng-template #noValues>
+          <app-table-no-data *ngIf="!loading"></app-table-no-data>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</section>

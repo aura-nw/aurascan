@@ -1,0 +1,58 @@
+<div class="wallet-connect-container">
+  <ng-container *ngIf="{ wallet: wallet$ | async } as ng">
+    <button
+      #connectButton
+      *ngIf="!ng.wallet"
+      type="button"
+      class="button button--md button--sm-mob button-pill button-flat border-radius--sm body-01 fw-semibold button-wallet-menu"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasWallet"
+      aria-controls="offcanvasWallet"
+    >
+      <span class="d-lg-none body-mob">Connect</span>
+      <span class="d-none d-lg-block">Connect Wallet</span>
+    </button>
+
+    <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
+      <button
+        class="button button--md button--sm-mob button-pill button-flat border-radius--sm body-01 fw-semibold button-dropdown button-wallet-menu"
+        type="button"
+        id="walletMenu"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <span class="button__title d-lg-none body-mob">{{ ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) + '...' : ng.wallet?.name}}</span>
+        <span class="button__title d-none d-lg-block body-mob">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
+      </button>
+      <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
+        <li class="dropdown-item caption-mob" [routerLink]="['/account', ng.wallet?.bech32Address]">
+          <a>Account Details</a>
+        </li>
+        <li class="dropdown-item caption-mob" [routerLink]="['/contracts/register']">
+          <a>Register Code ID</a>
+        </li>
+        <li class="dropdown-item caption-mob" (click)="disconnect()">
+          <button type="button" class="button p-0">Log out</button>
+        </li>
+      </ul>
+    </div>
+    <div
+      class="offcanvas offcanvas-wallet offcanvas-end"
+      tabindex="-1"
+      id="offcanvasWallet"
+      #offcanvasWallet
+      aria-labelledby="offcanvasWalletLabel"
+    >
+      <div class="offcanvas-body p-0">
+        <div class="wallet-container">
+          <div class="card border-0">
+            <div class="card-body" *ngIf="{ b: breakpoint$ | async} as breakpoint">
+              <app-wallet-list [disabled]="breakpoint.b.matches" (onConnect)="connectWallet($event)" (onDismiss)="dismiss()"></app-wallet-list>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button #buttonDismiss class="d-none" data-bs-dismiss="offcanvas"></button>
+    </div>
+  </ng-container>
+</div>

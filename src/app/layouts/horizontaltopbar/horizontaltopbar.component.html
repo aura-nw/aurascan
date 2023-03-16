@@ -1,195 +1,146 @@
 <header id="page-topbar">
-    <div class="navbar-header">
-        <div class="d-flex">
-            <!-- LOGO -->
-            <div class="navbar-brand-box">
-                <a routerLink="/" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="assets/images/logo/Logo1.svg" alt="" height="24">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="assets/images/logo/Logo1.svg" alt="" height="24"> <span class="logo-txt">Aura EXPLORER</span>
-                    </span>
-                </a>
+  <div class="navbar-header">
+    <div class="d-flex align-items-center">
+      <!-- LOGO -->
+      <div class="d-flex align-items-center">
+        <div class="navbar-brand-box">
+          <!-- <a routerLink="/" class="logo logo-dark">
+            <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100" />
+          </a> -->
+          <a routerLink="/" class="logo logo-light">
+            <figure class="my-0">
+              <picture>
+                <source media="(min-width: 992px)" [srcset]="'assets/images/logo/aura-explorer-logo.png' | imageS3" />
+                <source
+                  media="(min-width: 320px)"
+                  [srcset]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" />
+                <img [src]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" alt="" loading="lazy" />
+              </picture>
+            </figure>
+          </a>
+        </div>
+        <div class="page-title ml-1 ml-lg-2 fw-500" *ngIf="pageTitle">{{ pageTitle }}</div>
+      </div>
 
-                <a routerLink="/" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="assets/images/logo/Logo1.svg" alt="" height="24">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="assets/images/logo/Logo1.svg" alt="" height="24"> <span class="logo-txt">Aura EXPLORER</span>
-                    </span>
-                </a>
-            </div>
-
-            <button type="button" class="btn btn-sm px-3 font-size-16 header-item d-lg-none" id="vertical-menu-btn" (click)="toggleMobileMenu($event)">
-                <i class="fa fa-fw fa-bars"></i>
+      <div class="divider divider-vertical mx-6 mx-xl-12 d-none d-lg-block"></div>
+      <!-- App Search desktop-->
+      <div class="app-search d-none d-lg-block">
+        <form class="aura-form single-input-field">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="{{ 'HEADER.SEARCH' | translate }}"
+              [(ngModel)]="searchValue"
+              (keyup.enter)="handleSearch()"
+              [ngModelOptions]="{ standalone: true }"
+              name="inputEmail"
+              autocomplete="off" />
+            <button
+              type="submit"
+              class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
+              (click)="handleSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
-
-            <!-- App Search-->
-            <form class="app-search d-none d-lg-block">
-                <div class="d-flex">
-                    <div class="position-relative">
-                        <input type="text" class="form-control" placeholder="{{'HEADER.SEARCH' | translate}}" [(ngModel)]="searchValue" [ngModelOptions]="{standalone: true}" (keyup.enter)="handleSearch()">
-                        <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle" (click)="handleSearch()"></i></button>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-
-        <div class="d-flex">
-
-            <!-- <div class="dropdown d-none d-lg-inline-block ms-1" ngbDropdown>
-                <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-                    <img [src]="currentNetwork.icon" height="15" alt="Github"> {{currentNetwork.label}} <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end" ngbDropdownMenu>
-                    <div class="p-2">
-                        <div class="row g-0">
-                            <div class="col" *ngFor="let item of networks; index as i" (click)="onSelectNetwork(item)">
-                                <a class="dropdown-icon-item" href="javascript:void(0)">
-                                    <img [src]="item.icon" alt="logo" height="15">
-                                    <span>{{item.label}}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-            <!-- <div class="dropdown d-none d-lg-inline-block ms-1" ngbDropdown>
-                <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-                 {{currentChanel?.name}} <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end" ngbDropdownMenu>
-                    <div class="p-2">
-                        <div class="row g-0">
-                            <div class="col-6" *ngFor="let item of listChannel; index as i" (click)="onSelectChanel(item)">
-                                <a class="dropdown-icon-item" href="javascript:void(0)">
-                                    <span>{{item?.name}}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-            <div class="dropdown d-inline-block d-lg-none ms-2" ngbDropdown>
-                <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-                    <i-feather name="search" class="icon-lg"></i-feather>
-                </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown" ngbDropdownMenu>
-                    <form class="p-3">
-                        <div class="form-group m-0">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="{{'HEADER.SEARCH' | translate}}" aria-label="Search Result">
-                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-            <!-- <div class="dropdown d-none d-sm-inline-block" ngbDropdown>
-                <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-                    <img *ngIf="flagvalue !== undefined" src="{{flagvalue}}" alt="Header Language" height="16">
-                    <img *ngIf="flagvalue === undefined" src="{{valueset}}" alt="Header Language" height="16"> ENG
-                </button>
-                <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-                    <a href="javascript:void(0);" class="dropdown-item notify-item" *ngFor="let item of listLang" (click)="setLanguage(item.text, item.lang, item.flag)" [ngClass]="{'active': cookieValue === item.lang}">
-                        <img src="{{item.flag}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">{{item.text}}</span>
-                    </a>
-                </div>
-            </div> -->
-
-            <!-- <div class="dropdown d-none d-sm-inline-block">
-                <button type="button" class="btn header-item" id="mode-setting-btn">
-                    <ng-container *ngIf="layoutMode == 'light'">
-                        <i-feather name="moon" class="icon-lg" (click)="changeMode('dark')"></i-feather>
-                    </ng-container>
-                    <ng-container *ngIf="layoutMode == 'dark'">
-                        <i-feather name="sun" class="icon-lg" (click)="changeMode('light')"></i-feather>
-                    </ng-container>
-                </button>
-            </div> -->
-
-
-            <!-- <div class="dropdown d-inline-block" ngbDropdown>
-                <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-                    <img class="rounded-circle header-profile-user" src="https://picsum.photos/200/200"
-                        alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1 fw-medium">Shawn L.</span>
-                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
-                    Login
-                </button>
-                <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-                    <a class="dropdown-item" routerLink=".apps/profile"><i
-                            class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
-                    <a class="dropdown-item" routerLink="account/lock-screen"><i
-                            class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i
-                            class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span
-                            class="align-middle" key="t-logout">{{ 'MENUITEMS.AUTHENTICATION.LIST.LOGOUT' | translate}}</span></a>
-                </div>
-            </div> -->
-            <!-- <button type="button" class="btn header-item bg-soft-light border-start border-end" [routerLink]="'/account/login'">
-                Login
-            </button> -->
-        </div>
+            <button
+              type="reset"
+              class="btn-reset cursor-pointer {{
+                !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
+              }}"
+              (click)="searchValue = null">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+    <div class="wallet-connect">
+      <app-wallet-connect></app-wallet-connect>
+    </div>
+  </div>
+  <!-- App Search mobile-->
+  <div class="app-search d-lg-none px-4 mt-4 pb-3">
+    <form (ngSubmit)="handleSearch()" class="aura-form single-input-field">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="{{ 'HEADER.SEARCH' | translate }}"
+          [(ngModel)]="searchValue"
+          (keyup.enter)="handleSearch()"
+          [ngModelOptions]="{ standalone: true }"
+          name="inputEmail"
+          autocomplete="off" />
+        <button
+          type="submit"
+          class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
+          (click)="handleSearch()">
+          <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+        </button>
+        <button
+          type="reset"
+          class="btn-reset cursor-pointer {{
+            !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
+          }}"
+          (click)="searchValue = null">
+          <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+        </button>
+      </div>
+    </form>
+  </div>
 </header>
-<div class="topnav">
-    <div class="container-fluid">
-        <nav class="navbar navbar-light navbar-expand-lg topnav-menu active">
-            <div class="collapse navbar-collapse active" id="topnav-menu-content">
-                <ul class="navbar-nav">
-                    <ng-container *ngFor="let item of menuItems">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle arrow-none" *ngIf="!item.subItems" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components" [routerLink]="item.link" [routerLinkActive]="['active']" role="button">
-                                <i-feather name="{{ item.icon }}"></i-feather>{{ item.label | translate}}
-                                <div class="arrow-down" *ngIf="hasItems(item)"></div>
-                            </a>
-
-                            <a *ngIf="item.subItems" class="nav-link dropdown-toggle arrow-none" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components" role="button">
-                                <i-feather name="{{ item.icon }}"></i-feather>
-                                {{item.label | translate }}
-                                <div class="arrow-down"></div>
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="topnav-dashboard" *ngIf="hasItems(item)">
-                                <ng-template ngFor let-i="index" let-subitem [ngForOf]="item.subItems">
-                                    <a class="col dropdown-item side-nav-link-ref" *ngIf="!hasItems(subitem)" href="javascript: void(0);" [routerLink]="subitem.link" routerLinkActive="active">{{subitem.label | translate }}</a>
-
-                                    <div class="dropdown" *ngIf="hasItems(subitem)">
-                                        <a class="dropdown-item dropdown-toggle" href="javascript: void(0);" (click)="onMenuClick($event)">{{ subitem.label | translate }}
-                                            <div class="arrow-down"></div>
-                                        </a>
-                                        <div class="dropdown-menu">
-                                            <ng-template ngFor let-subSubitem [ngForOf]="subitem.subItems">
-                                                <a class="dropdown-item side-nav-link-ref" *ngIf="!hasItems(subSubitem)" href="javascript: void(0);" [routerLink]="subSubitem.link" routerLinkActive="active">{{ subSubitem.label | translate }}</a>
-                                                <div class="dropdown" *ngIf="hasItems(subSubitem)">
-
-                                                    <a class="dropdown-item dropdown-toggle" href="javascript: void(0);" (click)="onMenuClick($event)">{{ subSubitem.label | translate }}
-                                                        <div class="arrow-down"></div>
-                                                    </a>
-                                                    <div class="dropdown-menu">
-                                                        <ng-template ngFor let-subSubSubitem [ngForOf]="subSubitem.subItems">
-                                                            <a class="dropdown-item side-nav-link-ref" href="javascript: void(0);" [routerLink]="subSubSubitem.link" routerLinkActive="active">{{ subSubSubitem.label | translate }}</a>
-                                                        </ng-template>
-                                                    </div>
-                                                </div>
-                                            </ng-template>
-                                        </div>
-                                    </div>
-                                </ng-template>
-                            </div>
-                        </li>
+<div class="topnav d-none d-lg-flex align-items-center">
+  <div class="container-fluid">
+    <nav class="navbar navbar-light navbar-expand-lg topnav-menu active">
+      <div class="collapse navbar-collapse active" id="topnav-menu-content">
+        <ul class="navbar-nav w-100 align-items-center">
+          <ng-container *ngFor="let item of menuItems; let i = index">
+            <li class="nav-item dropdown mr-5 mr-lg-8 mr-xl-12" *ngIf="i === 0">
+              <a
+                class="nav-link d-flex align-items-center mb-0"
+                [routerLink]="item.link"
+                [class.active]="checkMenuActive(item.link)"
+                role="button">
+                <i class="ph-{{ item.icon }}"></i>
+                <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
+              </a>
+            </li>
+            <li class="nav-item dropdown mx-5 mx-lg-8 mx-xl-12" *ngIf="i > 0">
+              <ng-container *ngIf="(item.name === 'More' && wallet) || item.name !== 'More'">
+                <button
+                  (click)="onMenuClick($event)"
+                  class="button nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0">
+                  <div class="nav-link__item d-flex align-items-center mb-0 py-0">
+                    <i class="ph-{{ item.icon }}"></i>
+                    <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
+                  </div>
+                  <span class="nav-link__panel nav-link__panel-more" *ngIf="menuLink.length > 0">
+                    <ng-container *ngFor="let subMenu of item.subItems">
+                      <a
+                        *ngIf="
+                          subMenu.label !== 'Account Bound Token' ||
+                          (subMenu.label === 'Account Bound Token' && lengthSBT > 0)
+                        "
+                        [routerLink]="subMenu.link"
+                        class="d-flex align-items-center mb-0 nav-link__item nav-link__sub-item py-0"
+                        [class.active]="checkMenuActive(subMenu.link)">
+                        <!-- Menu token has special icon -->
+                        <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721"></i>
+                        <i class="icon icon-bound-token" *ngIf="subMenu.name === menuName.TokenCW4973"></i>
+                        <!-- . -->
+                        <i
+                          class="ph-{{ subMenu.icon }}"
+                          *ngIf="subMenu.name !== menuName.TokenCW721 && subMenu.name !== menuName.TokenCW4973"></i>
+                        <span class="ml-2">{{ subMenu.label | translate }}</span>
+                      </a>
                     </ng-container>
-                </ul>
-            </div>
-        </nav>
-    </div>
+                  </span>
+                </button>
+              </ng-container>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </nav>
+  </div>
 </div>

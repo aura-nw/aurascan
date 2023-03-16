@@ -1,0 +1,48 @@
+.app-dialog-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1075;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+
+  display: none;
+  visibility: hidden;
+
+  &[show='true'] {
+    visibility: visible;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: opacity 0.15s linear;
+  }
+
+  .app-dialog {
+    @media (max-width: 768px) {
+      margin: auto 32px;
+    }
+    @media (max-width: 576px) {
+      margin: auto 16px;
+    }
+    padding: var(--spacer-6);
+    background: var(--aura-black);
+    box-shadow: 0 10px 30px 20px rgba(0, 0, 0, 0.24);
+    border-radius: 12px;
+    color: var(--aura-white);
+
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+
+    &__header {
+      .warning-icon {
+        height: 24px;
+        width: 24px;
+      }
+    }
+  }
+}

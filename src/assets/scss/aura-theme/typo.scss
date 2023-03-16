@@ -1,0 +1,165 @@
+@mixin mono-font-size($font-size, $line-height, $font-weight, $font: "Inter") {
+  font-size: #{$font-size}rem !important;
+  line-height: #{$line-height}rem !important;
+  font-weight: $font-weight !important;
+  font-family: $font !important;
+}
+html,
+body {
+  font-size: 10px;
+}
+h1,
+.h1 {
+  @include mono-font-size(2.4, 2.6, 600);
+  display: inline-block;
+}
+h2,
+.h2 {
+  @include mono-font-size(2.2, 2.6, 600);
+  display: inline-block;
+}
+h3,
+.h3 {
+  @include mono-font-size(2, 2.6, 500);
+}
+h4,
+.h4 {
+  @include mono-font-size(1.6, 2, 600);
+}
+h5,
+.h5 {
+  @include mono-font-size(1.6, 1.9, 600);
+}
+h6,
+.h6 {
+  @include mono-font-size(1.6, 2.4, 500);
+}
+.body {
+  @include mono-font-size(1.4, 1.6, 400);
+}
+.body-01 {
+  @include mono-font-size(1.6, 2, 400);
+}
+.body-02 {
+  @include mono-font-size(1.4, 1.8, 500);
+}
+.body-03 {
+  @include mono-font-size(1.4, 1.6, 400);
+}
+.caption {
+  @include mono-font-size(1.2, 1.6, 600);
+}
+
+@media (max-width: 991.98px) {
+  .h1-mob {
+    @include mono-font-size(2.4, 2.6, 600);
+    display: inline-block;
+  }
+  .h2-mob {
+    @include mono-font-size(2.2, 2.6, 600);
+    display: inline-block;
+  }
+  .h3-mob {
+    @include mono-font-size(2, 2.6, 500);
+  }
+  .h4-mob {
+    @include mono-font-size(1.6, 2, 600);
+  }
+  .h5-mob {
+    @include mono-font-size(1.6, 1.9, 600);
+  }
+  .h6-mob {
+    @include mono-font-size(1.6, 2.4, 500);
+  }
+  .body-mob {
+    @include mono-font-size(1.4, 1.6, 400);
+  }
+  .body-01-mob {
+    @include mono-font-size(1.6, 2, 400);
+  }
+  .body-02-mob {
+    @include mono-font-size(1.4, 1.6, 500);
+  }
+  .body-03-mob {
+    @include mono-font-size(1.4, 1.6, 400);
+  }
+  .caption-mob {
+    @include mono-font-size(1.2, 1.6, 600);
+  }
+
+}
+$textColors: (
+  "primary",
+  "danger",
+  "info",
+  "warning",
+  "white",
+  "black",
+  "gray-light",
+  "gray-1",
+  "gray-2",
+  "gray-3",
+  "gray-4",
+  "gray-5",
+  "gray-6",
+  "gray-7",
+  "green-4",
+  "green-3",
+  "green-2",
+  "red-3",
+  "yellow-3",
+  "blue-2",
+  "blue-3link",
+  "yellow-4"
+);
+@each $color in $textColors {
+  .text--#{$color} {
+    color: var(--aura-#{$color}) !important;
+  }
+}
+.fw-700 {
+  font-weight: 700 !important;
+}
+.fw-semibold {
+  font-weight: 600 !important;
+}
+
+.fw-500 {
+  font-weight: 500 !important;
+}
+
+.fw-normal {
+  font-weight: 400 !important;
+}
+
+.font-italic {
+  font-style: italic;
+}
+
+@media (max-width: 991.98px) {
+  .fw-700-mob {
+    font-weight: 700 !important;
+  }
+  .fw-semibold-mob {
+    font-weight: 600 !important;
+  }
+
+  .fw-500-mob {
+    font-weight: 500 !important;
+  }
+
+  .fw-normal-mob {
+    font-weight: 400 !important;
+  }
+}
+
+
+.text-gradient {
+  background: var(--aura-gradient-general);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-hover-gray{
+  color: #9DA2AF;
+}

@@ -1,0 +1,37 @@
+a.text-link:hover {
+  color: var(--aura-green-3) !important;
+}
+section.chart-stats .chart-contain {
+  .chart__name {
+    z-index: 10;
+    @media (min-width: 992px) {
+      display: none;
+    }
+  }
+}
+.card-info {
+  @media (min-width: 991.98px) {
+    border: 1px solid transparent;
+    &:hover {
+      border: 1px solid var(--aura-gray-7);
+    }
+  }
+}
+
+::ng-deep {
+  .tv-lightweight-charts table tr:last-child {
+    //border-top: 1.5px solid #FFA741;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 1.5px;
+      z-index: 2;
+      background: linear-gradient(113.1deg, #5ee6d0 13.45%, #bfc6ff 50.33%, #ffba69 85.05%);
+    }
+  }
+}

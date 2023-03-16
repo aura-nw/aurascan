@@ -1,22 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import { Router} from '@angular/router';
+import {EnvironmentService} from '../../core/data-services/environment.service';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+  styleUrls: ['./footer.component.scss'],
 })
 
 /**
  * Footer Component
  */
 export class FooterComponent implements OnInit {
+  chainId = this.environmentService.configValue.chainId;
 
-   // set the currenr year
-   year: number = new Date().getFullYear();
+  dashboardURL = 'dashboard';
+  blocksURL = 'blocks';
+  transactionURL = 'transaction';
+  validatorURL = 'validators';
+  governanceURL = 'proposal';
 
-  constructor() { }
+  constructor(
+      private environmentService: EnvironmentService,
+      public router: Router,
+  ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  getUrl(url: string): string {
+    return this.router.serializeUrl(this.router.createUrlTree([url]));
   }
-
 }

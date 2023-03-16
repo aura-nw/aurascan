@@ -1,0 +1,24 @@
+.contract-verify {
+  @media (min-width: 992px) {
+    padding-top: 16px;
+    padding-bottom: 56px;
+  }
+  ul.aura-nav-tabs li {
+    min-width: 100px;
+    text-align: center;
+    @media (min-width: 992px) {
+      min-width: 200px;
+    }
+  }
+  .aura-form .form-group {
+    input.form-control,
+    .select-input--flat {
+      height: 40px;
+      margin-top: 0;
+    }
+  }
+  button.button {
+    height: 48px;
+    padding: 0 24px;
+  }
+}

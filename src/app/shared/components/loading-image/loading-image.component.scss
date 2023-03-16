@@ -1,0 +1,128 @@
+@keyframes loading-24px {
+    0% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0
+    }
+}
+
+.loading-wrapper {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #54545454;
+    border-radius: 1000px;
+
+
+    .loading-24px div {
+        left: 46.5px;
+        top: 10px;
+        position: absolute;
+        animation: loading-24px linear 1.1764705882352942s infinite;
+        background: #ffffff;
+        width: 7px;
+        height: 18px;
+        border-radius: 0px / 0px;
+        transform-origin: 3.5px 40px;
+    }
+
+    .loading-24px div:nth-child(1) {
+        transform: rotate(0deg);
+        animation-delay: -1.0695187165775402s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(2) {
+        transform: rotate(32.72727272727273deg);
+        animation-delay: -0.9625668449197862s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(3) {
+        transform: rotate(65.45454545454545deg);
+        animation-delay: -0.8556149732620321s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(4) {
+        transform: rotate(98.18181818181819deg);
+        animation-delay: -0.7486631016042781s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(5) {
+        transform: rotate(130.9090909090909deg);
+        animation-delay: -0.6417112299465241s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(6) {
+        transform: rotate(163.63636363636363deg);
+        animation-delay: -0.5347593582887701s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(7) {
+        transform: rotate(196.36363636363637deg);
+        animation-delay: -0.42780748663101603s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(8) {
+        transform: rotate(229.0909090909091deg);
+        animation-delay: -0.32085561497326204s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(9) {
+        transform: rotate(261.8181818181818deg);
+        animation-delay: -0.21390374331550802s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(10) {
+        transform: rotate(294.54545454545456deg);
+        animation-delay: -0.10695187165775401s;
+        background: #ffffff;
+    }
+
+    .loading-24px div:nth-child(11) {
+        transform: rotate(327.27272727272725deg);
+        animation-delay: 0s;
+        background: #ffffff;
+    }
+
+    .loading-spinner {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        overflow: hidden;
+        background: none;
+    }
+
+    .loading-24px {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(0.24);
+        backface-visibility: hidden;
+        transform-origin: 0 0;
+        /* see note above */
+    }
+
+    .loading-24px div {
+        box-sizing: content-box;
+    }
+}
+
+img.image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}

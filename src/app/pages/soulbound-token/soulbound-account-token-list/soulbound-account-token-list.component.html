@@ -1,0 +1,95 @@
+<div class="mb-4 mb-md-6">
+  <app-pagetitle title="Account Bound Token (ABT)"></app-pagetitle>
+</div>
+<section class="soulbound-list text--white">
+  <!-- Summary info -->
+  <div class="card">
+    <div class="d-flex px-4 py-4 pt-lg-6 pb-lg-6 px-lg-0 flex-wrap flex-lg-nowrap">
+      <div class="d-none d-lg-block">
+        <div class="qr-code d-inline-block pl-6 pr-6">
+          <app-qr [address]="userAddress || ''"></app-qr>
+        </div>
+      </div>
+      <div class="d-flex flex-column py-lg-6 col-lg-4 col-12 px-md-6">
+        <div class="">
+          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Address</div>
+          <div class="d-flex align-items-center">
+            <div class="body text--gray-1" id="userAddress">
+              <span class="d-md-flex d-none">{{ userAddress }}</span>
+              <span class="d-md-none d-flex">{{ userAddress | cutStringPipe : 8 : 8 }}</span>
+            </div>
+            <div class="button button--xxs button-circle ml-2" id="popupCopy">
+              <img
+                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                class=""
+                alt=""
+                width="12px"
+                height="12px"
+                matTooltip="Copied!"
+                #tooltip="matTooltip"
+                (mouseenter)="$event.stopImmediatePropagation()"
+                (mouseleave)="$event.stopImmediatePropagation()"
+                (click)="copyMessage(userAddress); tooltip.toggle()" />
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 mt-lg-4">
+          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">
+            <ng-container *ngIf="activeId !== 1">Total Equipped Badges</ng-container>
+            <ng-container *ngIf="activeId === 1">Total Un-equipped Badges</ng-container>
+          </div>
+          <div class="d-flex justify-content-between align-items-center d-lg-block">
+            <span class="h1 h2-mob mb-0 fw-bold mb-0 text-gradient d-inline">{{ totalSBT }} ABT</span>
+            <div class="button button--md button-circle ml-1 d-lg-none">
+              <img
+                [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
+                alt=""
+                width="30px"
+                height="30px"
+                (click)="viewQrAddress(modalManage)" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="soulbound-feature-tokens mt-6 mt-lg-0" *ngIf="userAddress">
+        <app-soulbound-feature-tokens [extend]="false" [accountAddress]="userAddress" (closeDlg)="reloadAPI = true"></app-soulbound-feature-tokens>
+      </div>
+    </div>
+  </div>
+  <!-- Main -->
+  <div class="d-flex justify-content-between tab-wrapper tab-contract">
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="activeId"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-12">
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a ngbNavLink (click)="changeTab(tab.key)">
+            <span class="tab-title h5 body-mob fw-semibold mb-0 text-capitalize">{{ tab.value }}</span>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <app-soulbound-token-equipped *ngIf="activeId === 0" (totalSBT)="totalSBT = $event" [reloadAPI]="reloadAPI"></app-soulbound-token-equipped>
+  <app-soulbound-token-unequipped
+    [reloadAPI]="reloadAPI"
+    *ngIf="activeId === 1"
+    (totalUnEquip)="totalSBT = $event"></app-soulbound-token-unequipped>
+</section>
+
+<!-- QR code popup-->
+<ng-template #modalManage let-modal>
+  <div class="box-address">
+    <div class="txt-right mb-4">
+      <img
+        [src]="'assets/images/icons/close-popup.png' | imageS3"
+        alt=""
+        width="14"
+        height="14"
+        (click)="closePopup()" />
+    </div>
+    <app-qr [address]="userAddress || ''"></app-qr>
+  </div>
+</ng-template>

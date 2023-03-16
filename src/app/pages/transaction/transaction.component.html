@@ -1,38 +1,137 @@
-<app-pagetitle title="Transaction" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
-<table mat-table [dataSource]="dataSource" class="table-reponsive" matSort>
-    <ng-container *ngFor="let template of templates; index as i">
-        <ng-container [matColumnDef]="template.matColumnDef">
+<app-pagetitle title="Transactions" [displayInfo]="true"></app-pagetitle>
+<section *ngIf="!loading" class="mt-4 mt-md-6">
+  <ng-container *ngIf="dataTx?.length > 0; else noValues">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive d-none d-lg-block">
+          <table mat-table [dataSource]="dataSource" class="aura-table">
+            <ng-container *ngFor="let template of templates; index as i">
+              <ng-container [matColumnDef]="template.matColumnDef">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  [class.col-per-13]="template.headerCellDef === 'Height' || template.headerCellDef === 'Result'">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
 
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-
-            <td mat-cell *matCellDef="let data">
-                <div>
-                    <ng-container [ngSwitch]="template.matColumnDef ">
-                        <div *ngSwitchCase="'timestamp'">
-                            <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{ data[template.matColumnDef] | calDate}} ago
+                <td mat-cell *matCellDef="let data">
+                  <div>
+                    <ng-container [ngSwitch]="template.matColumnDef">
+                      <div *ngSwitchCase="'timestamp'">
+                        {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                      </div>
+                      <a
+                        *ngSwitchCase="'tx_hash'"
+                        class="text--primary cursor-pointer hash-link"
+                        [routerLink]="['/transaction', data['tx_hash']]">
+                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                      </a>
+                      <a
+                        *ngSwitchCase="'height'"
+                        class="text--primary cursor-pointer block-link"
+                        [routerLink]="['/blocks', data['height']]">
+                        {{ data[template.matColumnDef] }}
+                      </a>
+                      <div *ngSwitchCase="'type'" class="aura-status">
+                        <div class="status">
+                          {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'tx_hash'" class="g-blue">
+                      </div>
+                      <div *ngSwitchCase="'status'">
+                        <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                          <div *ngSwitchCase="'Success'" class="text--green-3">
                             {{ data[template.matColumnDef] }}
+                          </div>
+                          <div *ngSwitchCase="'Fail'" class="text--red-3">
+                            {{ data[template.matColumnDef] }}
+                          </div>
+                          <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                            {{ data[template.matColumnDef] }}
+                          </div>
                         </div>
-                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
-                        </div>
+                      </div>
+                      <div *ngSwitchCase="'fee'">
+                        {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                        <span class="text--primary">{{ denom }}</span>
+                      </div>
+                      <div *ngSwitchCase="'amount'">
+                        <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
+                          {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                          <span class="text--primary">{{ commonService.mappingNameIBC(data?.denom) }}</span>
+                        </ng-container>
+                        <ng-template #displayNonNumber>
+                          <span *ngIf="!data[template.matColumnDef]"> - </span>
+                          <a
+                            *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/transaction', data['tx_hash']]">
+                            More
+                          </a>
+                        </ng-template>
+                      </div>
+                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                     </ng-container>
-                </div>
-            </td>
-        </ng-container>
-    </ng-container>
+                  </div>
+                </td>
+              </ng-container>
+            </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail(row)"></tr>
-    <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell g-no-data" colspan="9999">
-            {{"NO DATA" | translate}}
-        </td>
-    </tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{ 'NO DATA' | translate }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
+          <app-card-mob-simple
+            *ngFor="let data of dataTx"
+            [link]="'/transaction/' + data.tx_hash"
+            [title]="{
+              size: 'md',
+              titleClass: 'h6-mob',
+              label: data.tx_hash | cutStringPipe: 6:6,
+              subLabelContent: data.type,
+              subLabelClass: 'label__status',
+              status: data.code
+            }"
+            [content]="[
+              {
+                label: 'Amount',
+                class: 'body-01-mob text--gray-1',
+                info:
+                  data.amount > 0
+                    ? (+data.amount | mask: 'separator.6') + '<span class=text--primary> ' + commonService.mappingNameIBC(data?.denom) + '</span>'
+                    : checkAmountValue(data.amount, data.tx_hash)
+              },
+              {
+                label: 'Fee',
+                class: 'body-01-mob text--gray-1',
+                info: (+data.fee | mask: 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
+              },
+              {
+                label: 'Time',
+                class: 'body-01-mob text--gray-1 card__date',
+                info:
+                  '<span>' +
+                  (data.timestamp | customDate: 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.timestamp | customDate: 'HH:mm:ss') +
+                  '</span>'
+              }
+            ]"></app-card-mob-simple>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noValues>
+    <app-table-no-data></app-table-no-data>
+  </ng-template>
+</section>
 
-</table>
-
-<mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">
-</mat-paginator>
+<div *ngIf="loading">
+  <app-loading-sprint></app-loading-sprint>
+</div>

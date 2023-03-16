@@ -1,0 +1,67 @@
+@import "../spacer";
+:root {
+  /* Single Basic color */
+  --aura-white: #FFFFFF;
+  --aura-black: #131419;
+  /* Level Basic color */
+  --aura-gray-light: #F2F3F5;
+  --aura-gray-1: #E5E7EA;
+  --aura-gray-2: #CCD0D5;
+  --aura-gray-3: #B4B8C0;
+  --aura-gray-4: #9DA1AC;
+  --aura-gray-5: #868A97;
+  --aura-gray-6: #717582;
+  --aura-gray-7: #5C606D;
+  --aura-gray-8: #494C58;
+  --aura-gray-9: #363843;
+  --aura-gray-10: #24262E;
+
+  --aura-aqua-1: #A4F1E4;
+  --aura-aqua-2: #82ECDA;
+  --aura-aqua-3: #5EE6D0;
+  --aura-aqua-4: #38E0C4;
+  --aura-aqua-5: #1CB69C;
+
+  --aura-yellow-1: #FEDCA2;
+  --aura-yellow-2: #FFCD76;
+  --aura-yellow-3: #F5B73C;
+  --aura-yellow-4: #BC872A;
+  --aura-yellow-5: #89662A;
+
+  --aura-blue-1: #B0E2FF;
+  --aura-blue-2: #7DC8FA;
+  --aura-blue-3: #22AEF5;
+  --aura-blue-4: #0F82C5;
+  --aura-blue-5: #18699E;
+  --aura-blue-6: #7482B6;
+  --aura-blue-3link: #2CB1F5;
+
+  --aura-red-1: #FAB6B4;
+  --aura-red-2: #FA8684;
+  --aura-red-3: #D5625E;
+  --aura-red-4: #AF4F4C;
+  --aura-red-5: #904242;
+
+  --aura-green-1: #C5E5D3;
+  --aura-green-2: #9EDBB8;
+  --aura-green-3: #67C091;
+  --aura-green-4: #49996F;
+  --aura-green-5: #397856;
+  /* Custom Aura theme color */
+  --aura-primary: #5EE6D0;
+  --aura-secondary: #9DA8FF;
+  --aura-danger: #D5625E;
+  --aura-info: #7DC8FA;
+  --aura-warning: #FFCD76;
+  --aura-bg-form: #131419;
+
+  /* Gradient color */
+  --aura-gradient-general: linear-gradient(108.46deg, #5EE6D0 12.51%, #BFC6FF 51.13%, #FFBA69 87.49%);
+  --aura-gradient-black: linear-gradient(110.97deg, #262838 0%, #2E2E38 97.13%);
+  --video-timeline: linear-gradient(108.46deg, #00ffff 12.51%, #a070ff 51.13%, #ffb35c 87.49%);
+
+  /* Opacity color */
+  --transparent-bg-2: rgba(255, 255, 255, 0.3);
+  --transparent-bg-3: rgba(255, 255, 255, 0.8);
+  @include spacer-variables();
+}

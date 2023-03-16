@@ -1,0 +1,15 @@
+.aura-form.single-input-field {
+  min-width: 420px;
+  .input-group {
+    height: 36px;
+    padding: 0 16px;
+    input {
+      font-size: 1.4rem;
+      line-height: 1.9rem;
+    }
+    button.btn-search img, button.btn-reset img {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}

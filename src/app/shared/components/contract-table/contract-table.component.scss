@@ -1,0 +1,43 @@
+.contract-table {
+  .aura-status {
+    .TO,
+    .IN {
+      background: rgba(84, 206, 140, 0.2);
+      color: var(--aura-green-3);
+    }
+
+    .OUT {
+      background: rgba(213, 98, 94, 0.2);
+      color: var(--aura-red-3);
+    }
+
+    .TO,
+    .IN,
+    .OUT,
+    .CREATION {
+      font-weight: 500;
+    }
+  }
+}
+
+:host::ng-deep table.aura-table {
+  td.mat-cell:first-of-type {
+    padding-left: var(--spacer-4);
+  }
+
+  @media (max-width: 991.99px) {
+    tbody tr {
+      & td:not(:first-child) {
+        min-width: 150px;
+      }
+
+      & td:nth-child(2) {
+        min-width: 200px;
+      }
+    }
+  }
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}

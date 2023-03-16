@@ -1,64 +1,72 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { TransactionService } from '../../../app/core/services/transaction.service';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
+import { convertDataTransaction, Globals } from '../../../app/global/global';
 
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
-  styleUrls: ['./transaction.component.scss']
+  styleUrls: ['./transaction.component.scss'],
 })
 export class TransactionComponent implements OnInit {
-  @ViewChild(MatSort) sort: MatSort;
-  // bread crumb items
-  breadCrumbItems!: Array<{}>;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Block Height' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'Transaction Hash' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' }
+    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'fee', headerCellDef: 'Fee' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any>;
-  length;
-  pageSize = 10;
-  pageIndex = 0;
-  pageSizeOptions = [10, 25, 50, 100];
+  dataSource: MatTableDataSource<any> = new MatTableDataSource();
+  dataTx: any[];
+
+  pageSize = 20;
+  typeTransaction = TYPE_TRANSACTION;
+  loading = true;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+
   constructor(
-    private commonService: CommonService,
-    private router: Router,
-    private transactionService: TransactionService
-  ) { }
+    private transactionService: TransactionService,
+    public global: Globals,
+    public commonService: CommonService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
-    this.breadCrumbItems = [
-      { label: 'Transaction' },
-      { label: 'List', active: true }
-    ];
-    this.getList();
-  }
-  changePage(page: PageEvent): void {
-    this.dataSource = null;
-    this.pageIndex = page.pageIndex;
     this.getList();
   }
 
   getList(): void {
-    this.transactionService
-      .txs(this.pageSize, this.pageIndex)
-      .subscribe(res => {
-        this.dataSource = new MatTableDataSource(res.data);
-        this.length = res.meta.count;
-        this.dataSource.sort = this.sort;
+    this.transactionService.txsIndexer(this.pageSize, 0).subscribe((res) => {
+      this.loading = true;
+
+      const { code, data } = res;
+      if (code === 200) {
+        const txs = convertDataTransaction(data, this.coinInfo);
+        if (this.dataSource.data.length > 0) {
+          this.dataSource.data = [...this.dataSource.data, ...txs];
+        } else {
+          this.dataSource.data = [...txs];
+        }
+        this.dataTx = txs;
       }
-      );
+      this.loading = false;
+    });
   }
 
-  openTxsDetail(data) {
-    this.router.navigate(['transaction', data.tx_hash]);
+  checkAmountValue(amount: number, txHash: string) {
+    if (amount === 0) {
+      return '-';
+    } else {
+      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
+    }
   }
 }

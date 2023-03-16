@@ -1,0 +1,36 @@
+<div class="text-end" *ngIf="soulboundList && soulboundList?.length > 0">
+  <div class="soulbound-list">
+    <ng-container *ngFor="let token of soulboundList; let last = last">
+      <div class="soulbound__item">
+        <ng-container *ngIf="token.picked">
+          <a
+            href="javascript:void(0)"
+            class="nft-card d-block"
+            (click)="linkSBDetail(token.contract_address, token.token_id)">
+            <app-sb-img [token]="token"></app-sb-img>
+          </a>
+        </ng-container>
+        <ng-container *ngIf="!token.picked">
+          <div class="nft-card nft__unclaimed">
+            <div class="position-relative text-center">
+              <app-sb-img [token]="token"></app-sb-img>
+              <button
+                class="button button-pill button--sm button-flat btn-preview border_none px-3 px-lg-4"
+                (click)="getSBTDetail(token.contract_address, token.token_id)">
+                <span>Preview</span>
+              </button>
+            </div>
+
+            <div class="text-center text--yellow-3 mt-3">{{ token.status }}</div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+  <a
+    href="/accountbound/account/{{ accountAddress }}"
+    class="button button-pill button-outline button-outline--gradient button-outline__in-card button--sm mt-3"
+    *ngIf="extend && accountAddress">
+    <span>See more</span>
+  </a>
+</div>

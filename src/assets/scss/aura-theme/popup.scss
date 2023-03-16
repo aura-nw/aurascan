@@ -1,0 +1,47 @@
+.modal {
+  .modal-dialog {
+    @media (max-width: 768px) {
+      margin: auto var(--spacer-8);
+    }
+    @media (max-width: 414px) {
+      margin: auto var(--spacer-4);
+    }
+
+    .modal-content {
+      padding: var(--spacer-4);
+      background: var(--aura-black);
+      box-shadow: 0 10px 30px 20px rgba(0, 0, 0, 0.24);
+      border-radius: 12px;
+      color: var(--aura-white);
+      @media (max-width: 575.98px) {
+        overflow-y: auto;
+        padding-bottom: 120px;
+      }
+      @media (min-width: 992px) {
+        padding: var(--spacer-6);
+      }
+    }
+  }
+
+  &.fit-modal {
+    .modal-dialog {
+      width: fit-content;
+    }
+  }
+  &.modal-holder.fade.show {
+    z-index: 1090;
+  }
+}
+.grant-overlay-panel {
+  @media (max-width: 567px) {
+    max-width: 100vw !important;
+  }
+  .mat-dialog-container {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}

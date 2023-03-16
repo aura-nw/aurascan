@@ -179,6 +179,9 @@ body[data-layout-mode="dark"] {
   .form-check-input {
     background-color: $gray-dark-300;
     border-color: rgba($white, 0.25);
+    &:focus {
+      border-color: 1px solid var(--aura-white) !important;
+    }
     &:checked {
       background-color: $form-check-input-checked-bg-color;
       border-color: $form-check-input-checked-border-color;
@@ -219,5 +222,25 @@ body[data-layout-mode="dark"] {
     &::-moz-range-track {
       background-color: $gray-dark-300 !important;
     }
+  }
+}
+
+
+.form-check-input {
+  margin-left: 0;
+  background-color: var(--aura-gray-9) !important;
+  border: 1px solid var(--aura-gray-8) !important;
+  color: var(--aura-white);
+  width: 100%;
+  height: 32px;
+  border-radius: var(--spacer-1);
+  border: none;
+  cursor: text !important;
+  padding: 0 var(--spacer-3);
+  @media (min-width: 992px) {
+    height: 40px;    
+  }
+  &::placeholder {
+    color: var(--aura-gray-5);
   }
 }

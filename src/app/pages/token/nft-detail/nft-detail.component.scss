@@ -1,0 +1,206 @@
+.aura-status {
+  display: flex;
+  align-items: center;
+  .status {
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: #7b7b7b33;
+    color: var(--aura-gray-light);
+  }
+}
+
+.burnt-tag {
+  padding: var(--spacer-1) var(--spacer-3);
+  background-color: var(--aura-red-3);
+  border-radius: 4px;
+}
+
+.card-header {
+  border-bottom-color: var(--aura-gray-9);
+}
+
+.card-info {
+  padding: var(--spacer-1);
+}
+
+.content-transfer {
+  min-width: 170px;
+  display: inline-block;
+}
+.nft-img__contain {
+  padding: var(--spacer-2);
+  @media (min-width: 1200px) {
+    padding: var(--spacer-3);
+  }
+  border: 1px solid var(--aura-gray-9);
+  border-radius: 16px;
+  .nft__img {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    ::ng-deep {
+      app-audio-player {
+        .img-audio {
+          height: 100%;
+        }
+      }
+    }
+    &:before {
+      content: '';
+      display: block;
+      padding-top: 100%;
+    }
+    * {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: contain;
+    }
+    &.nft-soulbound__img {
+      &:before {
+        padding-top: 73.426573%;
+      }
+    }
+  }
+  @media (max-width: 991.98px) {
+    * {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+    }
+  }
+  @media (max-width: 575.98px) {
+    * {
+      max-height: unset;
+      aspect-ratio: 1 / 1;
+    }
+  }
+}
+.object-fit--none {
+  object-fit: none;
+}
+.card__ntf-detail {
+  &-item {
+    display: flex;
+    padding: var(--spacer-4);
+    margin: 0;
+    border-top: 1px solid var(--aura-gray-9);
+    &:first-child {
+      border-top: none;
+    }
+    .label-detail {
+      min-width: 140px;
+    }
+    .g-ellipsis {
+      width: unset;
+      max-width: 100px;
+      @media (min-width: 576px) {
+        max-width: 200px;
+      }
+      @media (min-width: 768px) {
+        max-width: 300px;
+      }
+      @media (min-width: 1200px) {
+        max-width: 100%;
+      }
+    }
+  }
+}
+::ng-deep {
+  .nft-detail-table.aura-table {
+    position: relative;
+    thead {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+}
+
+.btn-share {
+  padding: 0px;
+  &:hover {
+    border-radius: 10px;
+    background-color: var(--aura-gray-9);
+  }
+}
+.box-prop {
+  padding: 16px 0px 20px 16px;
+  @media (min-width: 991.98px) {
+    padding: 24px 0px 16px 24px;
+  }
+}
+.box-prop-item {
+  padding: 16px 16px 0px 16px;
+  @media (min-width: 991.98px) {
+    padding: 24px 24px 0px 24px;
+    max-height: 130px;
+    overflow-y: auto;
+    .btn-share {
+      padding: 0px;
+      &:hover {
+        border-radius: 10px;
+        background-color: var(--aura-gray-9);
+      }
+    }
+  }
+  &__row {
+    margin: 0 -4px;
+    @media (min-width: 992px) {
+      margin: 0 -8px;
+    }
+
+  }
+  &__col {
+    padding: 0 4px;
+    @media (min-width: 992px) {
+      padding: 0 8px;
+    }
+  }
+}
+
+.nft-detail-table.aura-table th.mat-header-cell:nth-child(5) {
+  min-width: 150px;
+}
+@media (max-width: 991.99px) {
+  .nft-detail-table.aura-table th.mat-header-cell:nth-child(1) {
+    min-width: 200px;
+  }
+  .nft-detail-table.aura-table th.mat-header-cell:not(:nth-child(1)) {
+    min-width: 180px;
+  }
+  .nft-detail-table.aura-table th.mat-header-cell:nth-child(4) {
+    min-width: 220px;
+  }
+  .nft-detail-table.aura-table th.mat-header-cell:nth-child(5) {
+    min-width: 270px;
+  }
+}
+.btn-copy {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  @media (min-width: 992px) {
+    width: 16px;
+    height: 16px;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--aura-gray-9);
+}
+
+.card--sb-information {
+  @media (min-width: 991.98px) {
+    height: 100%;
+  }
+}
+
+.sb-props {
+  max-height: 130px;
+  overflow-y: scroll;
+}
