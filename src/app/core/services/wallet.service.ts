@@ -15,7 +15,6 @@ import { EAccountType } from 'src/app/core/constants/account.enum';
 import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
-import { MESSAGES_CODE_CONTRACT } from '../constants/messages.constant';
 import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
@@ -314,16 +313,16 @@ export class WalletService implements OnDestroy {
     return this.http.get(`${this.urlIndexer}/account-info?address=${address}&chainId=${signDoc.chain_id}`).pipe(
       map((res) => {
         let accountAuth;
-        accountAuth = _.get(res, 'data.account_auth.result');
+        accountAuth = _.get(res, 'data.account_auth.account');
         let account: {
           account_number: number | string;
           sequence: number | string;
         };
 
-        if (accountAuth && accountAuth.type === EAccountType.BaseAccount) {
-          account = accountAuth.value;
+        if (accountAuth && accountAuth['@type'] === EAccountType.BaseAccount) {
+          account = accountAuth;
         } else {
-          account = _.get(accountAuth, 'value.base_vesting_account.base_account');
+          account = _.get(accountAuth, 'base_vesting_account.base_account');
         }
 
         if (!account.account_number) {
