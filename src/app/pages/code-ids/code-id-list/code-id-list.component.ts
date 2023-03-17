@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -16,7 +17,7 @@ import { shortenAddress } from '../../../core/utils/common/shorten';
   templateUrl: './code-id-list.component.html',
   styleUrls: ['./code-id-list.component.scss'],
 })
-export class CodeIdListComponent implements OnInit {
+export class CodeIdListComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -41,7 +42,7 @@ export class CodeIdListComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractResult = CONTRACT_RESULT;
   isLoading = true;
-
+  contractVerifyType = ContractVerifyType;
   constructor(private contractService: ContractService) {}
 
   ngOnInit(): void {
@@ -56,6 +57,12 @@ export class CodeIdListComponent implements OnInit {
           this.pageChange.selectPage(0);
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onKeyUp() {

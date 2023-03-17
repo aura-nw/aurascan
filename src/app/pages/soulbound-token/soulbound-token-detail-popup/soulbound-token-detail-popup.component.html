@@ -19,7 +19,7 @@
             "
             [src]="commonService.getDefaultImg()" />
           <img
-            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG"
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG && isError === false"
             (error)="error()"
             src="{{ imageUrl && animationUrl ? animationUrl : imageUrl }}"
             alt="{{ soulboundDetail.token_name }}" />
@@ -28,20 +28,20 @@
             controlslist="nodownload noplaybackrate"
             controls
             *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.VIDEO && soulboundDetail?.ipfs?.animation_url"
-            poster="{{ previewImg }}"></video>
+            poster="{{ imageUrl }}"></video>
           <app-model-view
             *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE._3D && soulboundDetail?.ipfs?.animation_url"
             [link]=""
             [modelUrl]="animationUrl"
             [disablePan]="false"
-            [previewImg]="previewImg">
+            [previewImg]="imageUrl">
           </app-model-view>
           <app-audio-player
             *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.AUDIO && soulboundDetail?.ipfs?.animation_url"
             [link]=""
             [src]="animationUrl"
             [nftId]=""
-            [previewImg]="previewImg">
+            [previewImg]="imageUrl">
           </app-audio-player>
         </div>
       </div>

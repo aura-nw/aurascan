@@ -24,7 +24,7 @@
     [src]="animationUrl"
     [id]="nftId"
     #video
-    poster="{{ this.imageUrl }}"
+    poster="{{ imageUrl }}"
     *ngIf="
       getTypeFile(nftItem) === MEDIA_TYPE.VIDEO && (nftItem.animation?.link_s3 || this.nftItem.animation_url)
     "></video>

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -9,7 +9,7 @@ import { checkTypeFile } from 'src/app/core/utils/common/info-common';
   templateUrl: './nft-card.component.html',
   styleUrls: ['./nft-card.component.scss'],
 })
-export class NftCardComponent implements OnInit {
+export class NftCardComponent implements OnInit, AfterViewInit {
   @Input() nftItem: any;
   @Input() nftType: string;
   @Input() nftLink: string;
@@ -25,34 +25,50 @@ export class NftCardComponent implements OnInit {
   animationUrl: string;
   imageUrl: string;
 
-  constructor(private environmentService: EnvironmentService, private router: Router) {}
+  constructor(private environmentService: EnvironmentService, private router: Router, private cdr: ChangeDetectorRef) {}
+
+  ngAfterViewInit(): void {
+    if (this.video) {
+      this.video.nativeElement.onpause = () => {
+        this.paused = this.video.nativeElement.paused;
+      };
+    }
+  }
 
   ngOnInit(): void {
     // CW721
-    if (this.nftItem.animation && this.nftItem.animation?.content_type) {
-      if (this.nftItem.animation?.content_type === 'image/gif') {
-        if (!this.nftItem.image?.link_s3) {
-          this.imageUrl = this.nftItem.animation?.link_s3 || '';
-        }
-      } else {
-        this.animationUrl = this.nftItem.animation?.link_s3 || '';
-      }
+    if (this.nftItem?.image?.link_s3) {
+      this.imageUrl = this.nftItem.image?.link_s3;
     }
-    if (this.nftItem.image) {
-      this.imageUrl = this.nftItem.image?.link_s3 || '';
+    if (this.nftItem.animation?.link_s3) {
+      if (!this.nftItem?.image?.link_s3) {
+        if (this.nftItem.animation?.content_type === 'image/gif') {
+          this.imageUrl = this.nftItem.animation?.link_s3;
+        } else {
+          this.animationUrl = this.nftItem.animation?.link_s3;
+        }
+      } else if (this.getTypeFile(this.nftItem) !== MEDIA_TYPE.IMG) {
+        this.animationUrl = this.nftItem.animation?.link_s3;
+      } else {
+        this.imageUrl = this.nftItem?.image?.link_s3;
+      }
     }
     // account bound token
-    if (this.nftItem.animation_url && this.nftItem.img_type) {
-      if (this.nftItem.img_type === 'image/gif') {
-        if (!this.nftItem.token_img) {
-          this.imageUrl = this.replaceImgIpfs(this.nftItem.animation_url) || '';
-        }
-      } else {
-        this.animationUrl = this.replaceImgIpfs(this.nftItem.animation_url) || '';
-      }
+    if (this.nftItem?.token_img) {
+      this.imageUrl = this.replaceImgIpfs(this.nftItem?.token_img);
     }
-    if (this.nftItem.token_img) {
-      this.imageUrl = this.replaceImgIpfs(this.nftItem.token_img) || '';
+    if (this.nftItem?.animation_url) {
+      if (!this.nftItem?.token_img) {
+        if (this.nftItem.img_type === 'image/gif') {
+          this.imageUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
+        } else {
+          this.animationUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
+        }
+      } else if (this.getTypeFile(this.nftItem) !== MEDIA_TYPE.IMG) {
+        this.animationUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
+      } else {
+        this.imageUrl = this.replaceImgIpfs(this.nftItem?.token_img);
+      }
     }
   }
 
@@ -69,6 +85,7 @@ export class NftCardComponent implements OnInit {
         }
       }
     }
+    this.cdr.markForCheck();
   }
 
   pauseVideo(element) {
