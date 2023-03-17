@@ -63,7 +63,7 @@
                 {{
                   proposalDetail.proposer_name
                     ? proposalDetail.proposer_name
-                    : (proposalDetail.proposer_address | cutStringPipe: 8:8)
+                    : (proposalDetail.proposer_address | cutStringPipe : 8 : 8)
                 }}
               </span>
             </a>
@@ -72,34 +72,40 @@
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Initial Deposit</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
-            {{ proposalDetail.initial_deposit | mask: 'separator.6' }}
+            {{ proposalDetail.initial_deposit | mask : 'separator.6' }}
             <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Total Deposit</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
-            {{ proposalDetail.pro_total_deposits | mask: 'separator.6' }}
+            {{ proposalDetail.pro_total_deposits | mask : 'separator.6' }}
             <span class="text--primary"> {{ denom }}</span>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Voting Start</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
-            <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
+            <div class="d-flex align-items-center" *ngIf="proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+              <span>{{ proposalDetail.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.voting_start_time | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ proposalDetail.voting_start_time | customDate : 'HH:mm:ss' }}</span>
+            </div>
+            <div class="d-flex align-items-center" *ngIf="proposalDetail.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+              <span>-</span>
             </div>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Voting End</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
-            <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
+            <div class="d-flex align-items-center" *ngIf="proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+              <span>{{ proposalDetail.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.voting_end_time | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ proposalDetail.voting_end_time | customDate : 'HH:mm:ss' }}</span>
+            </div>
+            <div class="d-flex align-items-center" *ngIf="proposalDetail.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+              <span>-</span>
             </div>
           </div>
         </div>
@@ -111,9 +117,9 @@
           <div class="col-auto col-md-2 text--gray-4">Submit Time</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.submit_time | customDate: 'yyyy-MM-dd' }}</span>
+              <span>{{ proposalDetail.submit_time | customDate : 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.submit_time | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ proposalDetail.submit_time | customDate : 'HH:mm:ss' }}</span>
             </div>
           </div>
         </div>
@@ -121,9 +127,9 @@
           <div class="col-auto col-md-2 text--gray-4">Deposit End Time</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.deposit_end_time | customDate: 'yyyy-MM-dd' }}</span>
+              <span>{{ proposalDetail.deposit_end_time | customDate : 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.deposit_end_time | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ proposalDetail.deposit_end_time | customDate : 'HH:mm:ss' }}</span>
             </div>
           </div>
         </div>
@@ -138,7 +144,7 @@
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob" *ngIf="proposalDetail.request_amount">
           <div class="col-auto col-md-2 text--gray-5">Request Amount</div>
           <div class="col-auto col-md-10 mt-0">
-            {{ proposalDetail.request_amount | mask: 'separator.6' }}
+            {{ proposalDetail.request_amount | mask : 'separator.6' }}
             <span class="text--primary"> {{ denom }}</span>
           </div>
         </div>
@@ -167,7 +173,7 @@
         <div class="row justify-content-between align-items-center mb-3 body-03 h6-mob text--gray-1">
           <div class="col-auto col-md-2">Total:</div>
           <div class="col-auto col-md-10 mt-2 mt-lg-0">
-            {{ proposalDetail.pro_total_vote | mask: 'separator.6' }}
+            {{ proposalDetail.pro_total_vote | mask : 'separator.6' }}
             <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
@@ -176,22 +182,22 @@
             <li
               class="bg--primary"
               [style.width]="proposalDetail.yesPercent + '%'"
-              matTooltip="Yes {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%"
+              matTooltip="Yes {{ proposalDetail.yesPercent | number : global.formatNumber2Decimal }}%"
               [matTooltipPosition]="'above'"></li>
             <li
               class="bg--danger"
               [style.width]="proposalDetail.noPercent + '%'"
-              matTooltip="No {{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%"
+              matTooltip="No {{ proposalDetail.noPercent | number : global.formatNumber2Decimal }}%"
               [matTooltipPosition]="'above'"></li>
             <li
               class="bg--info"
               [style.width]="proposalDetail.noWithVetoPercent + '%'"
-              matTooltip="No with veto {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%"
+              matTooltip="No with veto {{ proposalDetail.noWithVetoPercent | number : global.formatNumber2Decimal }}%"
               [matTooltipPosition]="'above'"></li>
             <li
               class="bg--secondary"
               [style.width]="proposalDetail.abstainPercent + '%'"
-              matTooltip="Abstain {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%"
+              matTooltip="Abstain {{ proposalDetail.abstainPercent | number : global.formatNumber2Decimal }}%"
               [matTooltipPosition]="'above'"></li>
           </ul>
         </div>
@@ -203,10 +209,10 @@
                 <span class="body-03"> Yes </span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
-                {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
+                {{ proposalDetail.yesPercent | number : global.formatNumber2Decimal }}%
               </div>
               <div class="col-5 col-lg-4 body-02-mob text-end h6 mb-0 fw-normal text--gray-5">
-                {{ proposalDetail.pro_votes_yes | mask: 'separator.6' }}
+                {{ proposalDetail.pro_votes_yes | mask : 'separator.6' }}
               </div>
             </div>
           </div>
@@ -217,10 +223,10 @@
                 <span class="body-03"> No </span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
-                {{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
+                {{ proposalDetail.noPercent | number : global.formatNumber2Decimal }}%
               </div>
               <div class="col-5 col-lg-4 body-02-mob flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
-                {{ proposalDetail.pro_votes_no | mask: 'separator.6' }}
+                {{ proposalDetail.pro_votes_no | mask : 'separator.6' }}
               </div>
             </div>
           </div>
@@ -231,10 +237,10 @@
                 <span class="body-03"> NoWithVeto</span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
-                {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
+                {{ proposalDetail.noWithVetoPercent | number : global.formatNumber2Decimal }}%
               </div>
               <div class="col-5 col-lg-4 body-02-mob flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
-                {{ proposalDetail.pro_votes_no_with_veto | mask: 'separator.6' }}
+                {{ proposalDetail.pro_votes_no_with_veto | mask : 'separator.6' }}
               </div>
             </div>
           </div>
@@ -245,10 +251,10 @@
                 <span class="body-03"> Abstain</span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
-                {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
+                {{ proposalDetail.abstainPercent | number : global.formatNumber2Decimal }}%
               </div>
               <div class="col-5 col-lg-4 body-02-mob flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
-                {{ proposalDetail.pro_votes_abstain | mask: 'separator.6' }}
+                {{ proposalDetail.pro_votes_abstain | mask : 'separator.6' }}
               </div>
             </div>
           </div>
@@ -259,11 +265,11 @@
               <div class="item-box">
                 <span class="item item-label text--gray-1">Yes</span>
                 <span class="item item-percent">
-                  {{ this.proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
+                  {{ this.proposalDetail.yesPercent | number : global.formatNumber2Decimal }}%
                 </span>
               </div>
               <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_yes || 0 | mask: 'separator.6' }}</span>
+                <span>{{ this.proposalDetail.pro_votes_yes || 0 | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
@@ -271,11 +277,11 @@
               <div class="item-box">
                 <span class="item item-label text--gray-1">No</span>
                 <span class="item item-percent">
-                  {{ this.proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
+                  {{ this.proposalDetail.noPercent | number : global.formatNumber2Decimal }}%
                 </span>
               </div>
               <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_no || 0 | mask: 'separator.6' }}</span>
+                <span>{{ this.proposalDetail.pro_votes_no || 0 | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
@@ -283,11 +289,11 @@
               <div class="item-box">
                 <span class="item item-label text--gray-1">NoWithVeto</span>
                 <span class="item item-percent">
-                  {{ this.proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
+                  {{ this.proposalDetail.noWithVetoPercent | number : global.formatNumber2Decimal }}%
                 </span>
               </div>
               <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | mask: 'separator.6' }}</span>
+                <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
@@ -295,11 +301,11 @@
               <div class="item-box">
                 <span class="item item-label text--gray-1">Abstain</span>
                 <span class="item item-percent">
-                  {{ this.proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
+                  {{ this.proposalDetail.abstainPercent | number : global.formatNumber2Decimal }}%
                 </span>
               </div>
               <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_abstain || 0 | mask: 'separator.6' }}</span>
+                <span>{{ this.proposalDetail.pro_votes_abstain || 0 | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
