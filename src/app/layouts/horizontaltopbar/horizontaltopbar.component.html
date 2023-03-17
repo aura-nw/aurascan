@@ -1,57 +1,63 @@
 <header id="page-topbar">
   <div class="navbar-header">
-    <div class="d-flex align-items-center">
+    <div class="row align-items-center">
       <!-- LOGO -->
-      <div class="d-flex align-items-center">
-        <div class="navbar-brand-box">
-          <!-- <a routerLink="/" class="logo logo-dark">
-            <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100" />
-          </a> -->
-          <a routerLink="/" class="logo logo-light">
-            <figure class="my-0">
-              <picture>
-                <source media="(min-width: 992px)" [srcset]="'assets/images/logo/aura-explorer-logo.png' | imageS3" />
-                <source
-                  media="(min-width: 320px)"
-                  [srcset]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" />
-                <img [src]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" alt="" loading="lazy" />
-              </picture>
-            </figure>
-          </a>
-        </div>
-        <div class="page-title ml-1 ml-lg-2 fw-500" *ngIf="pageTitle">{{ pageTitle }}</div>
-      </div>
-
-      <div class="divider divider-vertical mx-6 mx-xl-12 d-none d-lg-block"></div>
-      <!-- App Search desktop-->
-      <div class="app-search d-none d-lg-block">
-        <form class="aura-form single-input-field">
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="{{ 'HEADER.SEARCH' | translate }}"
-              [(ngModel)]="searchValue"
-              (keyup.enter)="handleSearch()"
-              [ngModelOptions]="{ standalone: true }"
-              name="inputEmail"
-              autocomplete="off" />
-            <button
-              type="submit"
-              class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
-              (click)="handleSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
-            <button
-              type="reset"
-              class="btn-reset cursor-pointer {{
-                !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
-              }}"
-              (click)="searchValue = null">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
+      
+      <div class="{{ !pageTitle ? 'col-lg-7' : 'col-lg-6'}}">
+        <div class="d-flex align-items-center">
+          <div class="navbar-brand-box">
+            <!-- <a routerLink="/" class="logo logo-dark">
+              <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100" />
+            </a> -->
+            <a routerLink="/" class="logo logo-light">
+              <figure class="my-0">
+                <picture>
+                  <source media="(min-width: 992px)" [srcset]="'assets/images/logo/aura-explorer-logo.png' | imageS3" />
+                  <source
+                    media="(min-width: 320px)"
+                    [srcset]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" />
+                  <img [src]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" alt="" loading="lazy" />
+                </picture>
+              </figure>
+            </a>
           </div>
-        </form>
+          <div>
+            <div class="page-title ml-1 ml-lg-2 fw-500" *ngIf="pageTitle">{{ pageTitle }}</div>
+          </div>
+          <div class="divider divider-vertical mx-6 ml-xl-12 mr-xl-0  d-none d-lg-block" *ngIf="pageTitle"></div>     
+        </div>   
+      </div>
+      <!-- App Search desktop-->
+      <div class="{{ !pageTitle ? 'col-lg-5' : 'col-lg-6'}}">
+        <div class="app-search d-none d-lg-block">
+          <form class="aura-form single-input-field">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="{{ 'HEADER.SEARCH' | translate }}"
+                [(ngModel)]="searchValue"
+                (keyup.enter)="handleSearch()"
+                [ngModelOptions]="{ standalone: true }"
+                name="inputEmail"
+                autocomplete="off" />
+              <button
+                type="submit"
+                class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
+                (click)="handleSearch()">
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+              <button
+                type="reset"
+                class="btn-reset cursor-pointer {{
+                  !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="searchValue = null">
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
     <div class="wallet-connect">
