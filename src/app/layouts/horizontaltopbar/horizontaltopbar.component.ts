@@ -146,6 +146,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
       case 'euphoria':
         this.pageTitle = this.innerWidth > 992 ? 'Euphoria Testnet Network' : 'Euphoria Testnet';
         break;
+      case 'mainnet':
+        this.pageTitle = '';
+        break;
       default:
         this.pageTitle = this.innerWidth > 992 ? 'Develop Testnet Network' : 'Develop Testnet';
         break;
