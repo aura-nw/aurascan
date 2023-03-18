@@ -11,6 +11,12 @@
   @media (min-width: 991.98px) {
     width: 620px;
   }
+  &.sb-create-card {
+    @media (max-width: 380px) {
+      max-height: 500px;
+      overflow: auto;
+    }
+  }
 }
 .address-text {
   white-space: nowrap;

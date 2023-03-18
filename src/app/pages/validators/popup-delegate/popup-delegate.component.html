@@ -50,7 +50,11 @@
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Pending Reward</div>
       <div class="text--gray-1">
-        {{ data?.validatorDetail?.pending_reward || 0 | mask: 'separator.6' }}
+        {{
+          data.validatorDetail?.pending_reward < 0.000001
+            ? '0'
+            : data.validatorDetail?.pending_reward | mask : 'separator.6'
+        }}
         <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
