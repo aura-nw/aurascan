@@ -12,8 +12,9 @@ import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportChart } from 'src/app/core/helpers/export';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
-import { RangeType, TableTemplate } from '../../../app/core/models/common.model';
+import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
@@ -85,6 +86,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   originalData = [];
   originalDataArr = [];
+  cacheData = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
 
@@ -101,6 +103,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private proposalService: ProposalService,
     private maskService: MaskPipe,
     private token: TokenService,
+    private walletService: WalletService,
   ) {}
 
   ngOnInit(): void {
@@ -115,6 +118,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getCoinInfo(this.chartRange);
     this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
     this.getVotingPeriod();
+    // re-draw chart when connect coin98 app in mobile
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (this.originalData.length === 0) {
+        this.originalData = this.cacheData;
+        this.chart.remove();
+        this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
+        this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
+        this.subscribeVisibleLogicalRangeChange();
+      }
+    });
   }
 
   // config chart
@@ -122,7 +135,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
     this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
     this.initTooltip();
-
     this.subscribeVisibleLogicalRangeChange();
   }
 
@@ -155,6 +167,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
             this.originalData = [...res?.data, ...this.originalData];
             this.originalDataArr = [...chartData, ...this.originalDataArr];
+            if (this.originalData.length > 0) {
+              this.cacheData = this.originalData;
+            }
             this.areaSeries.setData(this.originalDataArr);
           } else {
             this.endData = true;
@@ -308,6 +323,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         const { dataX, dataY } = this.parseDataFromApi(res.data);
 
         this.originalData = [...this.originalData, ...res?.data];
+        if (this.originalData.length > 0) {
+          this.cacheData = this.originalData;
+        }
         this.drawChartFirstTime(dataX, dataY);
         this.chartEvent();
       }
