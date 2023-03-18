@@ -1,7 +1,9 @@
 import { Client } from '@coin98-com/connect-sdk';
 import { requestParameter } from '@coin98-com/connect-sdk/dist/types/client';
 import { StdSignDoc } from '@cosmjs/amino';
+import { calculateFee } from '@cosmjs/stargate';
 import { ChainInfo } from '@keplr-wallet/types';
+import { getFee } from './signing/fee';
 
 export type ConnectResponse = {
   result: any;
@@ -164,5 +166,22 @@ export class Coin98Client {
         },
       ],
     });
+  }
+
+  getGasEstimateMobile(network, messageType, validatorsCount) {
+    const gasPrice = network.gasPriceStep.average.toString() + network.currencies[0].coinMinimalDenom;
+    const gasEstimate = validatorsCount ? getFee(messageType, validatorsCount) : getFee(messageType);
+    const calGasPrice = calculateFee(Math.round(+gasEstimate), gasPrice);
+    let result = {
+      amount: [
+        {
+          denom: network.currencies[0].coinMinimalDenom,
+          amount: (calGasPrice?.amount[0]?.amount || network.gasPriceStep.average)?.toString(),
+        },
+      ],
+      gas: validatorsCount ? getFee(messageType, validatorsCount) : getFee(messageType),
+    };
+
+    return result;
   }
 }
