@@ -18,7 +18,8 @@
 }
 
 @media (max-width: 992px) {
-  .aura-table.blocks, .aura-table.transaction {
+  .aura-table.blocks,
+  .aura-table.transaction {
     th {
       min-width: 140px;
       &:last-child {
@@ -72,20 +73,15 @@
     background-color: var(--aura-gray-9);
     padding: 8px;
   }
-  .tv-lightweight-charts table tr:last-child {
-    //border-top: 1.5px solid #FFA741;
-    position: relative;
-    &::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      width: 100%;
-      height: 1.5px;
-      z-index: 2;
-      background: linear-gradient(113.1deg, #5EE6D0 13.45%, #BFC6FF 50.33%, #FFBA69 85.05%);
-    }
+  .line-chart {
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    height: 1.5px;
+    background: linear-gradient(113.1deg, #5ee6d0 13.45%, #bfc6ff 50.33%, #ffba69 85.05%);
+    width: 100%;
   }
 }
 .button-switch-stage {
@@ -212,18 +208,22 @@ ul {
     bottom: 0;
   }
   &:before {
-    background: url("../../../assets/icons/icons-svg/basic/github-2.svg") no-repeat center;
+    background: url('../../../assets/icons/icons-svg/basic/github-2.svg') no-repeat center;
     background-size: contain;
     opacity: 1;
   }
   &:after {
-    background: url("../../../assets/icons/icons-svg/white/github-2.svg") no-repeat center;
+    background: url('../../../assets/icons/icons-svg/white/github-2.svg') no-repeat center;
     background-size: contain;
     opacity: 0;
   }
   &:hover {
-    &:before { opacity: 0; }
-    &:after { opacity: 1; }
+    &:before {
+      opacity: 0;
+    }
+    &:after {
+      opacity: 1;
+    }
   }
 }
 i.icon-info {
@@ -252,7 +252,7 @@ img.icon-brand {
   font-weight: 400;
   font-size: 14px;
   line-height: 18px;
-  border: 1px solid #494C58;
+  border: 1px solid #494c58;
   border-radius: 8px;
   max-width: 100%;
   text-overflow: ellipsis;
