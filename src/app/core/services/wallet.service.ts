@@ -262,7 +262,12 @@ export class WalletService implements OnDestroy {
     let signingClient;
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       const msgs = messageCreators[messageType](senderAddress, message, network);
-      const fee: StdFee = await getNetworkFee(network, senderAddress, msgs, '');
+      let fee;
+      if (this.coin98Client) {
+        fee = this.coin98Client.getGasEstimateMobile(network, messageType, validatorsCount);
+      } else {
+        fee = await getNetworkFee(network, senderAddress, msgs, '');
+      }
 
       return this.makeSignDocData(senderAddress, {
         msgs,
