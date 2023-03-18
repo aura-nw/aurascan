@@ -131,7 +131,7 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
 
-      if (arrayMsg?.length > 1 || itemMessage.msg['batch_mint']) {
+      if (arrayMsg?.length > 1 || itemMessage.msg['batch_mint'] || arrayMsg[0]?.msg?.mint?.amount > 1) {
         tokenId = 'More';
       } else {
         tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
