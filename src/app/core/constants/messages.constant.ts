@@ -2,6 +2,7 @@ export const MESSAGES_CODE = {
   SUCCESSFUL: { Code: 'SUCCESSFUL', Message: 'Successfully!' },
 };
 
+//v0.45.11
 export const MESSAGES_CODE_STAKING = {
   2: { Code: 2, Message: 'empty validator address' },
   3: { Code: 3, Message: 'validator does not exist' },
@@ -50,6 +51,7 @@ export const MESSAGES_CODE_STAKING = {
   39: { Code: 39, Message: 'empty validator public key' },
 };
 
+//v0.45.11
 export const MESSAGES_CODE_PROPOSAL = {
   2: { Code: 2, Message: 'unknown proposal' },
   3: { Code: 3, Message: 'inactive proposal' },
@@ -64,6 +66,7 @@ export const MESSAGES_CODE_PROPOSAL = {
   9: { Code: 9, Message: 'no handler exists for proposal type' },
 };
 
+//v0.45.11
 export const MESSAGES_CODE_CONTRACT = {
   2: { Code: 2, Message: 'create wasm contract failed' },
   3: { Code: 3, Message: 'contract account already exists' },
