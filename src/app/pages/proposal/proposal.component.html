@@ -33,18 +33,32 @@
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body fw-500">Voting Start</div>
-                    <div class="text--gray-1 body-02 d-flex align-items-center">
+                    <div
+                      class="text--gray-1 body-02 d-flex align-items-center"
+                      *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>{{ lastedItem.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
                       <span>{{ lastedItem.voting_start_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
+                    <div
+                      class="text--gray-1 body-02 d-flex align-items-center"
+                      *ngIf="lastedItem.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                      <span>-</span>
+                    </div>
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body fw-500">Voting End</div>
-                    <div class="text--gray-1 body-02 d-flex align-items-center">
+                    <div
+                      class="text--gray-1 body-02 d-flex align-items-center"
+                      *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>{{ lastedItem.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
                       <span>{{ lastedItem.voting_end_time | customDate : 'HH:mm:ss' }}</span>
+                    </div>
+                    <div
+                      class="text--gray-1 body-02 d-flex align-items-center"
+                      *ngIf="lastedItem.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                      <span>-</span>
                     </div>
                   </div>
                 </div>
@@ -185,18 +199,36 @@
                   </div>
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Voting Start</div>
-                    <div class="text--white d-flex align-items-center">
-                      <span>{{ lastedItem.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
+                    <div
+                      class="text--white d-flex align-items-center"
+                      *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                      <span *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{
+                        lastedItem.voting_start_time | customDate : 'yyyy-MM-dd'
+                      }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ lastedItem.voting_start_time | customDate : 'HH:mm:ss' }}</span>
+                      <span *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{
+                        lastedItem.voting_start_time | customDate : 'HH:mm:ss'
+                      }}</span>
+                    </div>
+                    <div
+                      class="text--white d-flex align-items-center"
+                      *ngIf="lastedItem.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                      <span>-</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between small-body">
                     <div class="text--gray-4">Voting End</div>
-                    <div class="text--white d-flex align-items-center">
+                    <div
+                      class="text--white d-flex align-items-center"
+                      *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>{{ lastedItem.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
                       <span>{{ lastedItem.voting_end_time | customDate : 'HH:mm:ss' }}</span>
+                    </div>
+                    <div
+                      class="text--white d-flex align-items-center"
+                      *ngIf="lastedItem.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                      <span>-</span>
                     </div>
                   </div>
                 </div>
@@ -328,10 +360,15 @@
           <ng-container matColumnDef="votingStart">
             <th mat-header-cell *matHeaderCellDef>Voting Start</th>
             <td mat-cell *matCellDef="let element">
-              <div class="body-02 d-flex align-items-center">
+              <div class="body-02 d-flex align-items-center" *ngIf="element.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                 <span>{{ element.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
                 <div class="divider divider-vertical mx-2"></div>
                 <span>{{ element.voting_start_time | customDate : 'HH:mm:ss' }}</span>
+              </div>
+              <div
+                class="body-02 d-flex align-items-center"
+                *ngIf="element.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                <span>-</span>
               </div>
             </td>
           </ng-container>
@@ -403,22 +440,24 @@
                 label: 'Voting Start',
                 class: 'card__date text--gray-1 body-01',
                 info:
-                  '<span>' +
-                  (data.voting_start_time | customDate : 'yyyy-MM-dd') +
-                  '</span>' +
-                  '<span>' +
-                  (data.voting_start_time | customDate : 'HH:mm:ss') +
-                  '</span>'
+                  data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                    ? '<span>' +
+                      (data.voting_start_time | customDate : 'yyyy-MM-dd') +
+                      '</span>' +
+                      '<span>' +
+                      (data.voting_start_time | customDate : 'HH:mm:ss') +
+                      '</span>'
+                    : '-'
               },
               {
                 label: 'Submit Time',
                 class: 'card__date text--gray-1 body-01',
                 info:
                   '<span>' +
-                  (data.voting_end_time | customDate : 'yyyy-MM-dd') +
+                  (data.submit_time | customDate : 'yyyy-MM-dd') +
                   '</span>' +
                   '<span>' +
-                  (data.voting_end_time | customDate : 'HH:mm:ss') +
+                  (data.submit_time | customDate : 'HH:mm:ss') +
                   '</span>'
               }
             ]"></app-card-mob-simple>
