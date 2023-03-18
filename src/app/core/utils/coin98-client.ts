@@ -172,7 +172,7 @@ export class Coin98Client {
     const gasPrice = network.gasPriceStep.average.toString() + network.currencies[0].coinMinimalDenom;
     const gasEstimate = validatorsCount ? getFee(messageType, validatorsCount) : getFee(messageType);
     const calGasPrice = calculateFee(Math.round(+gasEstimate), gasPrice);
-    let result = {
+    const result = {
       amount: [
         {
           denom: network.currencies[0].coinMinimalDenom,
