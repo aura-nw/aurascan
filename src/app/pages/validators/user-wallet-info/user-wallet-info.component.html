@@ -169,7 +169,13 @@
                     *ngIf="!template?.desktopOnly">
                     <span>{{ template['headerCellDef'] }}</span>
                     <div>
-                      <span class="text--white"> {{ validator[template.matColumnDef] | mask : 'separator.6' }}</span>
+                      <span class="text--white">
+                        {{
+                          validator[template.matColumnDef] < 0.000001
+                            ? '0'
+                            : validator[template.matColumnDef] | mask : 'separator.6'
+                        }}
+                      </span>
                       <span *ngIf="template['headerCellDef']" class="ml-2 text--primary">
                         {{ denom }}
                       </span>

@@ -3,6 +3,7 @@ import { calculateFee, DeliverTxResponse, SigningStargateClient, StdFee } from '
 import { ChainInfo } from '@keplr-wallet/types';
 import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 import { KEPLR_ERRORS } from '../../constants/wallet.constant';
+import { getFee } from './fee';
 import { messageCreators } from './messages';
 import { getSigner } from './signer';
 
@@ -24,15 +25,17 @@ export async function createSignBroadcast(
   } else {
     // success
     const messagesSend = messageCreators[messageType](senderAddress, message, network);
-    const fee: StdFee = await getNetworkFee(network, senderAddress, messagesSend, '');
+    let fee;
     let client;
 
     if (coin98Client) {
       client = coin98Client;
+      fee = client.getGasEstimateMobile(network, messageType, validatorsCount);
     } else {
       const signer = await getSigner(signingType, chainId);
 
       client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
+      fee = await getNetworkFee(network, senderAddress, messagesSend, '');
     }
 
     try {

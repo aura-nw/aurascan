@@ -353,7 +353,7 @@
           </div>
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
-              type="number"
+              mask="separator.6"
               [max]="globals.maxNumberInput"
               [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
               [(ngModel)]="amountFormat"
@@ -371,7 +371,11 @@
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-            <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
+            <input
+              [max]="globals.maxNumberInput"
+              mask="separator.6"
+              [(ngModel)]="amountFormat"
+              (blur)="resetCheck()" />
             <div class="d-flex align-items-center py-1 mr-4">
               <button
                 class="button button-primary active button-flat button--sm button-max fw-semibold"
@@ -433,7 +437,11 @@
               <span class="text--primary"> {{ denom }} </span>
             </div>
             <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-              <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
+              <input
+                [(ngModel)]="amountFormat"
+                [max]="globals.maxNumberInput"
+                mask="separator.6"
+                (blur)="resetCheck()" />
               <div class="d-flex align-items-center py-1 mr-4">
                 <button
                   class="button button-primary active button-flat button--sm button-max fw-semibold"
