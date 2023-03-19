@@ -118,16 +118,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getCoinInfo(this.chartRange);
     this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
     this.getVotingPeriod();
-    // re-draw chart when connect coin98 app in mobile
-    this.walletService.wallet$.subscribe((wallet) => {
-      if (this.originalData.length === 0) {
-        this.originalData = this.cacheData;
-        this.chart.remove();
-        this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
-        this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
-        this.subscribeVisibleLogicalRangeChange();
-      }
-    });
   }
 
   // config chart
@@ -456,5 +446,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.staking_APR = ((inflation * (1 - communityTax)) / (bonded_tokens / supply));
       }
     }, 500);
+
+    // re-draw chart when connect coin98 app in mobile
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (this.originalData.length === 0) {
+        this.originalData = this.cacheData;
+        this.chart.remove();
+        this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
+        this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
+        this.subscribeVisibleLogicalRangeChange();
+      }
+    });
   }
 }
