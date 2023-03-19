@@ -135,6 +135,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
   checkEnv() {
     this.env = this.environmentService.configValue.env;
+    
     this.innerWidth = window.innerWidth;
     switch (this.env) {
       case 'serenity':
@@ -147,7 +148,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         this.pageTitle = this.innerWidth > 992 ? 'Euphoria Testnet Network' : 'Euphoria Testnet';
         break;
       case 'mainnet':
-        this.pageTitle = '';
+        this.pageTitle = this.environmentService.configValue.chainId;
         break;
       default:
         this.pageTitle = this.innerWidth > 992 ? 'Develop Testnet Network' : 'Develop Testnet';
