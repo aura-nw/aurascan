@@ -273,6 +273,11 @@
                               {{ validator[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
                             </div>
                           </ng-container>
+                          <ng-container *ngSwitchCase="'Participation'">
+                            <div class="text--gray-1">
+                              {{ validator[template.matColumnDef] + '/' + validator['target_count'] }}
+                            </div>
+                          </ng-container>
                           <ng-container *ngSwitchCase="'Uptime'">
                             <ng-container *ngIf="validator['status'] === statusValidator.Active">
                               <div class="text--gray-1">{{ calculatorUpTime(validator['cons_address']) }}%</div>
