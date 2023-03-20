@@ -13,14 +13,18 @@
     <div class="d-lg-flex mb-4 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5">My delegation</div>
       <div class="body-01 text--gray-1">
-        {{ data?.validatorDetail?.amount_staked || 0 | mask: 'separator.6' }}
+        {{
+          !data.validatorDetail?.amount_staked || +data.validatorDetail?.amount_staked < 0.000001
+            ? '0'
+            : (+data.validatorDetail?.amount_staked | mask : 'separator.6')
+        }}
         <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
     <div class="d-lg-flex mb-4 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5">Delegable Balance</div>
       <div class="body-01 text--gray-1">
-        {{ availableToken || 0 | mask: 'separator.6' }}
+        {{ !availableToken || +availableToken < 0.000001 ? '0' : (+availableToken | mask : 'separator.6') }}
         <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
@@ -29,21 +33,32 @@
 </ng-container>
 
 <ng-container *ngIf="data.dialogMode === dialogMode.Manage">
-  <div class="box-notice box-notice--manage mb-6 pr-8" [class.show]="boxNoticeShow" (click)="boxNoticeShow = !boxNoticeShow">
+  <div
+    class="box-notice box-notice--manage mb-6 pr-8"
+    [class.show]="boxNoticeShow"
+    (click)="boxNoticeShow = !boxNoticeShow">
     <div class="warning-icon mr-3"></div>
     <div class="text--gray-5">
-      <div class="mb-2 box-notice__info">You can <span class="fw-bold text--white">"Delegate"</span> more to this validator</div>
+      <div class="mb-2 box-notice__info">
+        You can <span class="fw-bold text--white">"Delegate"</span> more to this validator
+      </div>
       <div class="mb-2 box-notice__info">
         Or use <span class="fw-bold text--white">"Redelagate"</span> to switch your assets to another validator.
       </div>
-      <div class=" box-notice__info">Or use <span class="fw-bold text--white">"Undelegate"</span> to start the unbonding period.</div>
+      <div class="box-notice__info">
+        Or use <span class="fw-bold text--white">"Undelegate"</span> to start the unbonding period.
+      </div>
     </div>
   </div>
   <div class="body-01 text--white">
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">My delegation</div>
       <div class="text--gray-1">
-        {{ data?.validatorDetail?.amount_staked || 0 | mask: 'separator.6' }}
+        {{
+          !data.validatorDetail?.amount_staked || +data.validatorDetail?.amount_staked < 0.000001
+            ? '0'
+            : (+data.validatorDetail?.amount_staked | mask : 'separator.6')
+        }}
         <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
@@ -51,9 +66,9 @@
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Pending Reward</div>
       <div class="text--gray-1">
         {{
-          data.validatorDetail?.pending_reward < 0.000001
+          !data.validatorDetail?.pending_reward || +data.validatorDetail?.pending_reward < 0.000001
             ? '0'
-            : data.validatorDetail?.pending_reward | mask : 'separator.6'
+            : (+data.validatorDetail?.pending_reward | mask : 'separator.6')
         }}
         <span class="text--primary"> {{ denom }}</span>
       </div>
@@ -61,14 +76,19 @@
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Total Reward</div>
       <div class="text--gray-1">
-        {{ data?.validatorDetail?.reward || 0 | mask: 'separator.6' }}
+        {{
+          !data?.validatorDetail?.reward || +data?.validatorDetail?.reward < 0.000001
+            ? '0'
+            : (+data?.validatorDetail?.reward | mask : 'separator.6')
+        }}
         <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
     <div class="d-lg-flex">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Delegable Balance</div>
       <div class="text--gray-1">
-        {{ availableToken || 0 | mask: 'separator.6' }} <span class="text--primary"> {{ denom }}</span>
+        {{ !availableToken || +availableToken < 0.000001 ? '0' : (+availableToken | mask : 'separator.6') }}
+        <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
   </div>
@@ -89,9 +109,7 @@
     <div class="warning-icon mr-3"></div>
     <div>
       <div class="text--white h6 mb-2">Trying to switch validators?</div>
-      <div class="text--gray-5">
-        Use the 'Redelegate' feature to instantly stake your assets to another validator.
-      </div>
+      <div class="text--gray-5">Use the 'Redelegate' feature to instantly stake your assets to another validator.</div>
     </div>
   </div>
 </ng-container>
