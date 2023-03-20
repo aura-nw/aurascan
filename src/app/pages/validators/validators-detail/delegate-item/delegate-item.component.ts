@@ -168,7 +168,7 @@ export class DelegateItemComponent implements OnInit {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
             to: [this.currentValidatorDetail?.operator_address],
@@ -210,6 +210,7 @@ export class DelegateItemComponent implements OnInit {
   }
 
   checkStatusExecuteBlock(hash, error, msg) {
+    this.checkHashAction(hash);
     if (error) {
       if (error != 'Request rejected') {
         this.toastr.error(error);
@@ -221,6 +222,17 @@ export class DelegateItemComponent implements OnInit {
         this.resetData();
       }, TIME_OUT_CALL_API);
     }
+  }
+
+  checkHashAction(hash) {
+    const myInterval = setInterval(() => {
+      if (hash) {
+        this.toastr.loading(hash);
+        this.isLoading = false;
+        this.modalReference?.close();
+        clearInterval(myInterval);
+      }
+    }, 500);
   }
 
   resetData() {
@@ -237,11 +249,11 @@ export class DelegateItemComponent implements OnInit {
     message = this.mappingErrorService.checkMappingError(message, numberCode);
     if (numberCode !== undefined) {
       if (!!!numberCode && numberCode === CodeTransaction.Success) {
-        this.toastr.success(message);
         setTimeout(() => {
           // location.reload();
           this.reloadData.emit();
-        }, 2000);
+        }, TIME_OUT_CALL_API);
+        this.toastr.success(message);
       } else {
         this.toastr.error(message);
       }
