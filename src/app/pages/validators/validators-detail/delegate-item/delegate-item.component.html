@@ -30,7 +30,7 @@
         <div class="body-01 text--gray-5">
           <div class="mb-1">
             <span>Voting power - {{ currentValidatorDetail?.percent_power }}%</span>&nbsp;
-            <span>({{ currentValidatorDetail?.power | number: globals.formatNumberToken }}</span>
+            <span>({{ currentValidatorDetail?.power | mask : 'separator.6' }}</span>
             <span class="text--primary ml-1">{{ denom }}</span
             >)
           </div>
