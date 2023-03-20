@@ -23,7 +23,6 @@
         "@angular/platform-browser": "~12.0.2",
         "@angular/platform-browser-dynamic": "~12.0.2",
         "@angular/router": "~12.0.2",
-        "@angular/service-worker": "~12.0.2",
         "@coin98-com/connect-sdk": "^1.0.9",
         "@cosmjs/cosmwasm-stargate": "^0.28.13",
         "@cosmjs/encoding": "^0.28.13",
