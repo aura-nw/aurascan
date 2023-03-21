@@ -340,21 +340,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  checkAmountStaking(amount, isStakeMode) {
-    if (isStakeMode) {
-      return (
-        '<span class=text--info>' + '+ ' + this.numberPipe.transform(amount, this.global.formatNumberToken) + '</span>'
-      );
-    } else {
-      return (
-        '<span class=text--danger>' +
-        '- ' +
-        this.numberPipe.transform(amount, this.global.formatNumberToken) +
-        '</span>'
-      );
-    }
-  }
-
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
   }

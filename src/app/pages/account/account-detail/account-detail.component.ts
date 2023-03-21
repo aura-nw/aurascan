@@ -155,7 +155,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   accDetailLoading = true;
   chartLoading = true;
   userAddress = '';
-  lstBalanceAcount = undefined;
   modalReference: any;
   isNoData = false;
 
@@ -356,7 +355,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getAccountDetail(): void {
     this.isNoData = false;
-    const halftime = 30000;
+    const halftime = 15000;
     this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
       this.chartLoading = true;
       this.accDetailLoading = true;
@@ -423,7 +422,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           f.token_name = f.name;
         });
 
-        this.lstBalanceAcount = this.currentAccountDetail?.balances;
         this.dataSourceToken.data = this.currentAccountDetail?.balances;
         this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
         this.dataSourceTokenBk = this.dataSourceToken;
@@ -466,7 +464,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.searchNullData = true;
       }
       this.dataSourceToken = this.dataSourceTokenBk;
-      this.lstBalanceAcount = data;
       this.dataSourceToken = new MatTableDataSource(data);
     } else {
       this.dataSourceToken = this.dataSourceTokenBk;
