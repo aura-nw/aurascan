@@ -56,9 +56,7 @@
                             "./node_modules/@popperjs/core/dist/umd/popper.min.js",
                             "./node_modules/bootstrap/dist/js/bootstrap.min.js",
                             "./node_modules/jquery/dist/jquery.min.js"
-                        ],
-                        "serviceWorker": true,
-                        "ngswConfigPath": "ngsw-config.json"
+                        ]
                     },
                     "configurations": {
                         "production": {

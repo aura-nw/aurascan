@@ -139,7 +139,7 @@
             <div class="col-6">Voting Power</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
-                <span class="text--gray-1">{{ currentValidatorDetail?.power | mask : 'separator.6' }}</span>
+                <span class="text--gray-1">{{ +currentValidatorDetail?.power | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
               </div>
               <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_power }}%)</span>
@@ -157,7 +157,7 @@
             <div class="col-6">Self Bonded</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
-                <span class="text--gray-1">{{ currentValidatorDetail?.self_bonded | mask : 'separator.6' }}</span>
+                <span class="text--gray-1">{{ +currentValidatorDetail?.self_bonded | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
               </div>
               <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
@@ -480,7 +480,12 @@
                             (data.tx_hash | cutStringPipe : 6 : 6) +
                             '</a>'
                         },
-                        { label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode) },
+                        {
+                          label: 'Amount',
+                          info: data.isStakeMode
+                            ? '<span class=text--info>' + '+ ' + (data.amount | mask : 'separator.6') + '</span>'
+                            : '<span class=text--danger>' + '- ' + (data.amount | mask : 'separator.6') + '</span>'
+                        },
                         {
                           label: 'Time',
                           class: 'card__date text--gray-1 body-01-mob',

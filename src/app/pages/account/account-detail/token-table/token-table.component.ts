@@ -67,43 +67,48 @@ export class TokenTableComponent implements OnChanges {
   }
 
   getListToken() {
-    this.assetsLoading = true;
     const payload = {
       account_address: this.address,
       limit: this.pageData.pageSize,
       offset: this.pageData.pageSize * this.pageData.pageIndex,
       keyword: this.textSearch,
     };
-    this.accountService.getAssetCW20ByOwner(payload).subscribe((res: ResponseDto) => {
-      let data: any;
-      if (res?.data?.length > 0) {
-        let lstToken = _.get(res, 'data').map((element) => {
-          data = element;
-          if (data) {
-            data.change = data.price_change_percentage_24h;
-            data.isValueUp = true;
-            if (data.change !== '-' && data.change < 0) {
-              data.isValueUp = false;
-              data.change = Number(data.change.toString().substring(1));
+    this.accountService.getAssetCW20ByOwner(payload).subscribe(
+      (res: ResponseDto) => {
+        let data: any;
+        if (res?.data?.length > 0) {
+          let lstToken = _.get(res, 'data').map((element) => {
+            data = element;
+            if (data) {
+              data.change = data.price_change_percentage_24h;
+              data.isValueUp = true;
+              data['balance'] = data['balance'] || 0;
+              if (data.change !== '-' && data.change < 0) {
+                data.isValueUp = false;
+                data.change = Number(data.change.toString().substring(1));
+              }
+              if (data.contract_address !== '-') {
+                const tempConvert = +data.balance / Math.pow(10, data.decimals || 0);
+                data.balance = tempConvert < 0.000001 ? 0 : tempConvert;
+              }
             }
-            if (data.contract_address !== '-') {
-              const tempConvert = +data.balance / Math.pow(10, data.decimals || 0);
-              data.balance = tempConvert < 0.000001 ? 0 : tempConvert;
-            }
-          }
-          return data;
-        });
+            return data;
+          });
 
-        lstToken = lstToken.filter((k) => k?.symbol);
-        this.dataSource = new MatTableDataSource<any>(lstToken);
-        this.pageData.length = res.meta.count;
-        this.totalAssets.emit(this.pageData.length);
-      } else {
-        this.pageData.length = 0;
-        this.dataSource.data = [];
-      }
-      this.assetsLoading = false;
-    });
+          lstToken = lstToken.filter((k) => k?.symbol);
+          this.dataSource = new MatTableDataSource<any>(lstToken);
+          this.pageData.length = res.meta.count;
+          this.totalAssets.emit(this.pageData.length);
+        } else {
+          this.pageData.length = 0;
+          this.dataSource.data = [];
+        }
+      },
+      () => {},
+      () => {
+        this.assetsLoading = false;
+      },
+    );
   }
 
   convertValue(value: any, decimal: number) {
