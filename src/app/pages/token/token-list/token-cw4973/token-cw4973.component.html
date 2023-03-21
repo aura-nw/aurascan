@@ -45,7 +45,7 @@
               <th mat-header-cell *matHeaderCellDef>Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <a href="/tokens/token-abt/{{ element.contract_address }}" class="text--primary">
+                  <a [routerLink]="['/tokens/token-abt', element.contract_address]" class="text--primary">
                     <span *ngIf="element.token_name"
                       >{{ element.token_name | stringEllipsis : 30 }}
                       <span *ngIf="element.token_symbol">({{ element.token_symbol }})</span></span
