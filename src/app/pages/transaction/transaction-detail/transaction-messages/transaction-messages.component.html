@@ -371,17 +371,49 @@
       <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
       </ng-container>
       <app-messages-item
-        [label]="'To Address'"
-        [value]="transactionDetail?.messages[0]?.to_address"
-        [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-01">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator</div>
-        <div class="col-12 col-lg-9 text--gray-1">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
-      </div>
-      <app-messages-item
         [label]="'Validator Address'"
         [value]="transactionDetail?.messages[0]?.validator_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Details'"
+        [value]="transactionDetail?.messages[0]?.description?.details || '-'"></app-messages-item>
+      <app-messages-item
+        [label]="'Moniker'"
+        [value]="transactionDetail?.messages[0]?.description?.moniker || '-'"></app-messages-item>
+      <div class="row mb-3 body-01">
+        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Website</div>
+        <div class="col-9">
+          <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website; else noValues">
+            <a
+              class="text--primary"
+              *ngIf="transactionDetail?.messages[0]?.description?.website !== '[do-not-modify]'"
+              [href]="transactionDetail?.messages[0]?.description?.website">
+              {{ transactionDetail?.messages[0]?.description?.website }}
+            </a>
+            <span *ngIf="transactionDetail?.messages[0]?.description?.website === '[do-not-modify]'">{{
+              transactionDetail?.messages[0]?.description?.website
+            }}</span>
+          </ng-container>
+        </div>
+      </div>
+      <app-messages-item
+        [label]="'Identity'"
+        [value]="transactionDetail?.messages[0]?.description?.identity || '-'"></app-messages-item>
+      <app-messages-item
+        [label]="'Commission Rate'"
+        [value]="
+          checkRateFloatNumber(transactionDetail?.messages[0]?.commission_rate) || 0
+            | percent : global.formatNumber2Decimal
+        "></app-messages-item>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Min Self Delegation</div>
+        <div class="col-12 col-lg-9 text--gray-1">
+          <ng-container *ngIf="transactionDetail?.messages[0]?.min_self_delegation > 0; else noValues">
+            {{ transactionDetail?.messages[0]?.min_self_delegation | balanceOf | mask : 'separator.6' }}
+            <span class="text--primary">{{ denom }}</span>
+          </ng-container>
+        </div>
+      </div>
     </div>
   </ng-container>
 
@@ -485,19 +517,28 @@
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Rate</div>
         <div class="col-9">
-          {{ checkRateFloatNumber(transactionDetail?.messages[0]?.commission?.rate) || 0 | percent : global.formatNumber2Decimal }}
+          {{
+            checkRateFloatNumber(transactionDetail?.messages[0]?.commission?.rate) || 0
+              | percent : global.formatNumber2Decimal
+          }}
         </div>
       </div>
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Max Rate</div>
         <div class="col-9">
-          {{ checkRateFloatNumber(transactionDetail?.messages[0]?.commission?.max_rate) || 0 | percent : global.formatNumber2Decimal }}
+          {{
+            checkRateFloatNumber(transactionDetail?.messages[0]?.commission?.max_rate) || 0
+              | percent : global.formatNumber2Decimal
+          }}
         </div>
       </div>
       <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Commission Max Change Rate</div>
         <div class="col-12 col-lg-9">
-          {{ checkRateFloatNumber(transactionDetail?.messages[0]?.commission?.max_change_rate) || 0 | percent : global.formatNumber2Decimal }}
+          {{
+            checkRateFloatNumber(transactionDetail?.messages[0]?.commission?.max_change_rate) || 0
+              | percent : global.formatNumber2Decimal
+          }}
         </div>
       </div>
       <app-messages-item
