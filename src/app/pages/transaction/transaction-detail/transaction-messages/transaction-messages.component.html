@@ -385,21 +385,6 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
-    <div class="card-info">
-      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
-      </ng-container>
-      <app-messages-item
-        [label]="'Validator'"
-        [value]="transactionDetail?.messages[0]?.description?.moniker"
-        [dataLink]="{ url: '/account' }"></app-messages-item>
-      <app-messages-item
-        [label]="'Validator'"
-        [value]="transactionDetail?.messages[0]?.validator_address"
-        [dataLink]="{ url: '/account' }"></app-messages-item>
-    </div>
-  </ng-container>
-
   <ng-container *ngIf="transactionDetail?.type === eTransType.StoreCode">
     <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
       <div class="card-info">
