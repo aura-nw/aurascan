@@ -356,7 +356,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getAccountDetail(): void {
     this.isNoData = false;
-    const halftime = 30000;
+    const halftime = 15000;
     this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
       this.chartLoading = true;
       this.accDetailLoading = true;
