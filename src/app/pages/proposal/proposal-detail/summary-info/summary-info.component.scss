@@ -163,28 +163,6 @@
     }
   }
 
-  .vote-legend-mobile {
-    ul {
-      grid-template-rows: 9rem 9rem 9rem 9rem;
-      grid-template-columns: 1fr;
-
-      li {
-
-        .item-percent,
-        .item-label {
-          font-size: 16px;
-          font-weight: 700;
-          color: var(--aura-gray-1);
-        }
-
-        .item-amount {
-          font-size: 14px;
-          color: var(--aura-gray-1);
-        }
-      }
-    }
-  }
-
   .vote-status {
     position: relative;
     height: 24px;
@@ -223,12 +201,6 @@
     &.status--secondary {
       background-color: var(--aura-gray-7);
     }
-  }
-}
-
-.spacer-custom {
-  @media (min-width: 576px) {
-    margin-left: 16px;
   }
 }
 
