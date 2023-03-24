@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-blank',
-  templateUrl: './blank.component.html',
-  styleUrls: ['./blank.component.scss'],
+  selector: 'app-schema-viewer',
+  templateUrl: './schema-viewer.component.html',
+  styleUrls: ['./schema-viewer.component.scss'],
 })
-export class BlankComponent implements OnInit {
+export class SchemaViewerComponent implements OnInit {
   data;
   content;
   constructor() {}

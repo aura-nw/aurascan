@@ -57,7 +57,7 @@ import { SoulboundService } from './core/services/soulbound.service';
 import { TokenService } from './core/services/token.service';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
-import { BlankModule } from './pages/blank/blank.module';
+import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
 
 export function createTranslateLoader(http: HttpClient): any {
@@ -113,7 +113,7 @@ export const MY_FORMATS = {
     MatTooltipModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    BlankModule,
+    SchemaViewerModule,
   ],
   declarations: [],
 })
