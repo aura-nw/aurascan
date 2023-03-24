@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,7 +42,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { NgProgressModule } from 'ngx-progressbar';
 import { ToastrModule } from 'ngx-toastr';
-import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EnvironmentService } from './core/data-services/environment.service';
@@ -71,14 +70,14 @@ const maskConfig: Partial<IConfig> = {
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: "YYYY-MM-DD"
+    dateInput: 'YYYY-MM-DD',
   },
   display: {
-    dateInput: "YYYY-MM-DD",
-    monthYearLabel: "MMM YYYY",
-    dateA11yLabel: "YYYY-MM-DD",
-    monthYearA11yLabel: "MMMM YYYY"
-  }
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'YYYY-MM-DD',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
 };
 
 @NgModule({
@@ -150,7 +149,7 @@ export class MaterialModule {}
     FormsModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MediaExpandModule
+    MediaExpandModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -158,7 +157,6 @@ export class MaterialModule {}
     { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
     { provide: DEFAULT_TIMEOUT, useValue: 60000 },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
-    // { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     EnvironmentService,
     DatePipe,
     Globals,

@@ -248,7 +248,6 @@ export class NFTDetailComponent implements OnInit {
       price: 0,
       status: data?.status,
       symbol: this.denom,
-      // tokenAddress: this.contractInfo?.contractsAddress,
       tokenAddress: '',
       tx_hash: data?.tx_hash || '',
       gas_used: data?.tx_response?.gas_used,

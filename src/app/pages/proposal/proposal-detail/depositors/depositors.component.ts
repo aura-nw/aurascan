@@ -18,9 +18,7 @@ export class DepositorsComponent implements OnInit {
   loading = true;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  nextKey = '';
   dataLength = 0;
-  isNextPage = false;
   proposalDeposit = PROPOSAL_TABLE_MODE.DEPOSITORS;
 
   constructor(
@@ -37,11 +35,11 @@ export class DepositorsComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.getDepositorsList(true);
+    this.getDepositorsList();
     this.loading = false;
   }
 
-  getDepositorsList(isInit = false): void {
+  getDepositorsList(): void {
     const payload = {
       proposalId: this.proposalId,
       pageLimit: 100,
