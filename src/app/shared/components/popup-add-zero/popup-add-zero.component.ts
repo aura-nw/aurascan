@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { LIST_ZEROES, REGISTER_CONTRACT } from 'src/app/core/constants/contract.constant';
+import { LIST_ZEROES } from 'src/app/core/constants/contract.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 

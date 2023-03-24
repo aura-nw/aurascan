@@ -47,7 +47,6 @@ export class ValidatorsVotesComponent implements OnInit {
   voteDataListLoading = true;
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
-  isFirstChange = false;
   tabAll = 0;
   proposalValidatorVote = PROPOSAL_TABLE_MODE.VALIDATORS_VOTES;
 

@@ -181,7 +181,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.lstValidator = dataFilter;
         }
 
-        // this.dataSource.data = dataFilter;
         Object.keys(dataFilter).forEach((key) => {
           if (this.dataSource.data[key]) {
             Object.assign(this.dataSource.data[key], dataFilter[key]);
@@ -470,7 +469,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeStaking = async () => {
         this.isLoading = true;
-        // const { hash, error } = await createSignBroadcast({
         const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
@@ -486,7 +484,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
 
@@ -499,7 +496,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       const executeClaim = async () => {
         this.isLoading = true;
         this.isClaimRewardLoading = true;
-        // const { hash, error } = await createSignBroadcast({
         const { hash, error } = await this.walletService.signAndBroadcast(
           {
             messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
@@ -525,7 +521,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeUnStaking = async () => {
         this.isLoading = true;
-        // const { hash, error } = await createSignBroadcast({
         const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.UNSTAKE,
           message: {
@@ -541,7 +536,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
       executeUnStaking();
@@ -569,7 +563,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
       executeReStaking();
@@ -668,7 +661,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   resetData() {
     this.isLoading = false;
-    // this.modalReference?.close();
     this.isHandleStake = false;
     this.isClaimRewardLoading = false;
   }

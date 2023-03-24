@@ -61,7 +61,7 @@ const routes: Routes = [
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
   {
     path: 'raw-data',
-    loadChildren: () => import('./pages/blank/blank.module').then((m) => m.BlankModule),
+    loadChildren: () => import('./pages/schema-viewer/schema-viewer.module').then((m) => m.SchemaViewerModule),
     pathMatch: 'full',
   },
   { path: '**', redirectTo: '' },
