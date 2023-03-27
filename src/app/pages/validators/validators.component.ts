@@ -98,6 +98,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   pageYOffset = 0;
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
+  staking_APR = 0;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -121,10 +122,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
+    public global: Globals,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.getBlocksMiss();
+    await this.getStakingAPR();
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -156,6 +159,26 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (this.timerUnSub) {
       this.timerUnSub.unsubscribe();
     }
+  }
+
+  async getStakingAPR() {
+    const communityTaxRq = await this.commonService.getCommunityTax();
+    const communityTax = communityTaxRq?.data?.params?.community_tax;
+    let inflation;
+    let bonded_tokens;
+    let supply;
+    setInterval(() => {
+      if (!inflation && !bonded_tokens && !supply) {
+        inflation = this.getDataHeader().inflation.slice(0, -1);
+        bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
+        supply = this.getDataHeader().supply.toString().slice(0, -1);
+        this.staking_APR = (inflation * (1 - communityTax)) / (bonded_tokens / supply);
+      }
+    }, 500);
+  }
+
+  getDataHeader() {
+    return this.global.dataHeader;
   }
 
   getList(): void {

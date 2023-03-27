@@ -3,11 +3,7 @@
   <button
     type="button"
     class="button button-pill button-flat button--lg button--sm-mob ml-6 fw-semibold text--black"
-    *ngIf="
-      currentValidatorDetail &&
-      !currentValidatorDetail?.jailed &&
-      currentValidatorDetail?.status === statusValidator.Active
-    "
+    *ngIf="currentValidatorDetail && !currentValidatorDetail?.jailed"
     (click)="openDialog()">
     Delegate
   </button>
