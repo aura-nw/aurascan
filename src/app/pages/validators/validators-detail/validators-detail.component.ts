@@ -4,6 +4,7 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { fromBase64 } from '@cosmjs/encoding';
 import * as _ from 'lodash';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
 import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
@@ -18,8 +19,9 @@ import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
+import { encodeSecp256k1Pubkey, pubkeyToAddress, serializeSignDoc } from '@cosmjs/amino';
 const marked = require('marked');
-
+const encode = require('@cosmjs/encoding');
 @Component({
   selector: 'app-validators-detail',
   templateUrl: './validators-detail.component.html',
@@ -73,7 +75,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   blocksMissDetail: any;
   numberLastBlock = 100;
   timerGetUpTime: any;
-  timerGetBlockMiss: any;
+  timeGetLastBlock: any;
   nextKey = null;
   currentNextKey = null;
   nextKeyBlock = null;
@@ -89,6 +91,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   prefixConsAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixConsAddr;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   soulboundList = [];
+  arrBlockUptime = [];
+  arrLastHeight = 0;
+  lastedHeight = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -98,7 +103,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     public commonService: CommonService,
     public global: Globals,
     private layout: BreakpointObserver,
-    private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
     private walletService: WalletService,
@@ -107,12 +111,12 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.loadData();
-    this.timerGetUpTime = setInterval(() => {
-      this.getListUpTime();
-    }, 30000);
-    this.timerGetBlockMiss = setInterval(() => {
-      this.getBlocksMiss(this.currentAddress);
-    }, 10000);
+    // this.timerGetUpTime = setInterval(() => {
+    //   this.getListUpTime();
+    // }, 30000);
+    this.timeGetLastBlock = setInterval(() => {
+      this.getLastBlock();
+    }, 500);
   }
 
   loadData() {
@@ -124,7 +128,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   ngOnDestroy() {
     clearInterval(this.timerGetUpTime);
-    clearInterval(this.timerGetBlockMiss);
+    clearInterval(this.timeGetLastBlock);
   }
 
   getDetail(): void {
@@ -144,7 +148,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         };
 
         this.getTotalSBT(this.currentValidatorDetail.acc_address);
-        this.getBlocksMiss(this.currentAddress);
+        this.getBlocksMiss();
       },
       (error) => {
         this.router.navigate(['/']);
@@ -176,34 +180,107 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  getListUpTime(): void {
-    this.blockService.blocksIndexer(this.numberLastBlock).subscribe((res) => {
-      const { code, data } = res;
-      if (code === 200) {
-        const block = _.get(data, 'blocks').map((element) => {
-          const height = _.get(element, 'block.header.height');
-          const block_hash = _.get(element, 'block_id.hash');
-          const isMissed = 0;
-          return { height, block_hash, isMissed };
-        });
-        this.arrayUpTime = block;
-      }
-      this.lastBlockLoading = false;
-    });
-  }
+  // getListUpTime(): void {
+  //   this.blockService.blocksIndexer(this.numberLastBlock).subscribe((res) => {
+  //     const { code, data } = res;
+  //     if (code === 200) {
+  //       const block = _.get(data, 'blocks').map((element) => {
+  //         const height = _.get(element, 'block.header.height');
+  //         this.lastHeight = height;
+  //         const block_hash = _.get(element, 'block_id.hash');
+  //         const isMissed = 0;
+  //         return { height, block_hash, isMissed };
+  //       });
 
-  getBlocksMiss(operatorAddress) {
+  //       this.arrayUpTime = block;
+  //       // console.log(this.arrayUpTime);
+  //     }
+  //     this.lastBlockLoading = false;
+  //   });
+  // }
+
+  async getBlocksMiss(height = null) {
     //check is active validator
-    if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
-      this.validatorService.validatorsFromIndexer(operatorAddress).subscribe((res) => {
-        //cal percent if exit arr block miss
-        if (Number(res.data?.validators?.val_signing_info?.missed_blocks_counter) > 0) {
-          this.blocksMissDetail = res.data?.validators?.val_signing_info;
-          this.calculatorUpTime();
-        }
-      });
+    if (this.currentValidatorDetail?.status !== this.statusValidator.Active) {
+      return;
     }
-    this.getListUpTime();
+
+    // this.arrBlockUptime && this.arrBlockUptime[0] < this.global?.dataHeader?.block_height
+    // console.log(this.arrBlockUptime[0]);
+    console.log('height', height);
+    console.log('lastedHeight', this.lastedHeight);
+
+    if (height + 1 < this.lastedHeight) {
+      height = this.lastedHeight;
+    }
+    const res = await this.validatorService.getUptimeLCD(height);
+    const listBlock = _.get(res, 'data.block.last_commit.signatures');
+    let currentHeight;
+    if (listBlock) {
+      listBlock.forEach((temp) => {
+        let address = encode.toHex(encode.fromBase64(temp.validator_address));
+        if (address === this.currentValidatorDetail.cons_address.toLowerCase()) {
+          this.arrLastHeight = _.get(res, 'data.block.header.height');
+          height = this.arrLastHeight || 0;
+          temp['height'] = this.arrLastHeight || 0;
+          currentHeight = _.get(res, 'data.block.header.height');
+          let element = [temp];
+          // console.log('element ne', element);
+
+          // if (this.arrBlockUptime?.length < 10) {
+          if (this.arrBlockUptime && this.arrBlockUptime?.length > 0) {
+            // const firstItem = this.arrBlockUptime[0];
+            // const lastItem = this.arrBlockUptime[this.arrBlockUptime.length - 1];
+            let temp = this.arrBlockUptime.find((k) => k.height === currentHeight);
+            if (!temp) {
+              console.log('current element', element);
+              console.log('arrBlockUptime', this.arrBlockUptime);
+              // this.arrBlockUptime[1] = element;
+              // .splice(1, 0, element);
+              console.log(this.arrBlockUptime);
+              // this.arrBlockUptime = [...element, ...this.arrBlockUptime];
+              if (this.arrBlockUptime.length > 1) {
+                // this.arrBlockUptime[1] = element[0];
+                // const isLargeNumber = (element) => element > 13;
+                const index = this.arrBlockUptime.findIndex((element) => element.height < currentHeight);
+                console.log(index);
+
+                this.arrBlockUptime.splice(index, 0, element[0]);
+              } else {
+                this.arrBlockUptime = [...this.arrBlockUptime, ...element];
+              }
+
+              currentHeight = this.arrBlockUptime[this.arrBlockUptime.length - 1]?.height;
+
+              // if (+firstItem?.height < +currentHeight) {
+              //   this.arrBlockUptime = [...element, ...this.arrBlockUptime];
+              //   currentHeight = +firstItem?.height;
+              // } else if (+lastItem?.height < +currentHeight) {
+              //   this.arrBlockUptime = [...this.arrBlockUptime, ...element];
+              //   currentHeight = +lastItem?.height;
+              // }
+            }
+          } else {
+            this.arrBlockUptime = [...element];
+          }
+          // else {
+          //   this.getBlocksMiss(this.lastHeight - 1);
+          // }
+          // }
+        }
+        // console.log(this.arrBlockUptime);
+      });
+      // const resNew = await this.validatorService.getUptimeLCD(+this.lastHeight - 1);
+      // console.log('res2', resNew);
+    }
+
+    let timerGetUpTime = setInterval(() => {
+      this.getBlocksMiss(height - 1);
+      clearInterval(timerGetUpTime);
+    }, 500);
+
+    this.lastBlockLoading = false;
+    // this.getListUpTime();
   }
 
   calculatorUpTime() {
@@ -371,9 +448,17 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       receiverAddress: address,
       limit: LIMIT_NUM_SBT,
     };
-    
+
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      this.soulboundList = res.data.filter(k => k.picked);
+      this.soulboundList = res.data.filter((k) => k.picked);
+    });
+  }
+
+  getLastBlock(): void {
+    this.blockService.blocksIndexer(1).subscribe((res) => {
+      this.lastedHeight = _.get(res, 'data.blocks[0].block.header.height') || this.global?.dataHeader?.block_height;
+      console.log('lastedHeight', this.lastedHeight);
+      
     });
   }
 }
