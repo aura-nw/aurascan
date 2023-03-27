@@ -98,7 +98,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   pageYOffset = 0;
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
-  scrollIndex = 20;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
