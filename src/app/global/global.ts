@@ -10,7 +10,6 @@ import {
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
-import { toBase64, toUtf8, fromBase64, fromUtf8 } from '@cosmjs/encoding';
 Injectable();
 
 export class Globals {

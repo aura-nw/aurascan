@@ -89,7 +89,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   cacheData = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
-
   destroy$ = new Subject();
 
   constructor(

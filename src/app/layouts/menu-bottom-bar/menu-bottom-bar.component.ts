@@ -1,10 +1,10 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
-import { MENU, MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
 import { Router } from '@angular/router';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { WalletService } from 'src/app/core/services/wallet.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { MenuName, MENU_MOB } from 'src/app/layouts/horizontaltopbar/menu';
+import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
 
 @Component({
   selector: 'app-menu-bottom-bar',
