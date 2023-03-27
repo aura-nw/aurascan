@@ -15,21 +15,21 @@
                   <div>
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <a
-                          *ngSwitchCase="'height'"
-                          class="text--primary cursor-pointer block-link"
-                          [routerLink]="['/blocks', data[template.matColumnDef]]">
+                        *ngSwitchCase="'height'"
+                        class="text--primary cursor-pointer block-link"
+                        [routerLink]="['/blocks', data[template.matColumnDef]]">
                         {{ data[template.matColumnDef] }}
                       </a>
                       <a
-                          *ngSwitchCase="'block_hash'"
-                          class="text--primary cursor-pointer block-link"
-                          [routerLink]="['/blocks', data['height']]">
-                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                        *ngSwitchCase="'block_hash'"
+                        class="text--primary cursor-pointer block-link"
+                        [routerLink]="['/blocks', data['height']]">
+                        {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                       </a>
                       <a
-                          *ngSwitchCase="'proposer'"
-                          class="text-clamp text--primary cursor-pointer validator-link"
-                          [routerLink]="['/validators', data['operator_address']]">
+                        *ngSwitchCase="'proposer'"
+                        class="text-clamp text--primary cursor-pointer validator-link"
+                        [routerLink]="['/validators', data['operator_address']]">
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'timestamp'">
@@ -53,16 +53,16 @@
         </div>
         <div class="d-lg-none" *ngIf="dataSource && dataSource?.data?.length > 0">
           <app-card-mob-simple
-              *ngFor="let data of dataSource?.data"
-              [link]="'/blocks/' + data.height"
-              [title]="{
+            *ngFor="let data of dataSource?.data"
+            [link]="'/blocks/' + data.height"
+            [title]="{
               size: 'md',
               titleClass: 'h6-mob',
               label: data.height,
               subLabelContent: commonService.getDateValue(data.timestamp)[0],
               subLabelClass: 'text--gray-1 h6-mob w-time'
             }"
-              [content]="[
+            [content]="[
               {
                 label: 'Proposer',
                 info:
@@ -78,10 +78,10 @@
                 class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +
-                  (data.timestamp | customDate: 'yyyy-MM-dd') +
+                  (data.timestamp | customDate : 'yyyy-MM-dd') +
                   '</span>' +
                   '<span>' +
-                  (data.timestamp | customDate: 'HH:mm:ss') +
+                  (data.timestamp | customDate : 'HH:mm:ss') +
                   '</span>'
               }
             ]"></app-card-mob-simple>

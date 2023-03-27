@@ -214,7 +214,7 @@
               </div>
             </div>
             <div class="card__ntf-detail-item body" *ngIf="isSoulBound">
-              <div class="label-detail text--gray-5">Atlestor:</div>
+              <div class="label-detail text--gray-5">Attestor:</div>
               <div class="d-flex align-items-center">
                 <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.minter_address]">
                   {{ nftDetail?.minter_address }}</a
@@ -224,10 +224,10 @@
                   class="ml-2 cursor-pointer btn-copy"
                   alt=""
                   matTooltip="Copied!"
-                  #atlestor="matTooltip"
+                  #attestor="matTooltip"
                   (mouseenter)="$event.stopImmediatePropagation()"
                   (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.minter_address); atlestor.toggle()" />
+                  (click)="copyData(nftDetail?.minter_address); attestor.toggle()" />
               </div>
             </div>
             <div class="card__ntf-detail-item body" *ngIf="!isSoulBound">

@@ -1,22 +1,21 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsComponent } from './validators.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ValidatorsComponent
+    component: ValidatorsComponent,
   },
   {
     path: ':id',
-    component: ValidatorsDetailComponent
-  }
+    component: ValidatorsDetailComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-
-export class ValidatorsRoutingModule { }
+export class ValidatorsRoutingModule {}
