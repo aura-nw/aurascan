@@ -8,7 +8,7 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -28,6 +28,7 @@ export class LoadingImageComponent implements OnInit, OnChanges, OnDestroy {
   isError = false;
   isLoading = true;
   observer!: IntersectionObserver;
+  isReady = false;
 
   constructor(
     private commonService: CommonService,
@@ -50,8 +51,11 @@ export class LoadingImageComponent implements OnInit, OnChanges, OnDestroy {
     this.ngZone.runOutsideAngular(() => {
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting) {
-            this.getImage();
+          if (!this.isReady) {
+            if (e.isIntersecting) {
+              this.isReady = true;
+              this.getImage();
+            }
           }
         });
       });
@@ -74,7 +78,7 @@ export class LoadingImageComponent implements OnInit, OnChanges, OnDestroy {
     this.cdr.markForCheck();
     this.isLoading = false;
   }
-  
+
   ngOnDestroy(): void {
     this.observer.disconnect();
   }
