@@ -1,11 +1,14 @@
 import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    Input,
-    OnChanges,
-    OnInit,
-    SimpleChanges
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
 } from '@angular/core';
 import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -16,7 +19,7 @@ import { CommonService } from 'src/app/core/services/common.service';
   styleUrls: ['./loading-image.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadingImageComponent implements OnInit, OnChanges {
+export class LoadingImageComponent implements OnInit, OnChanges, OnDestroy {
   @Input() srcImg = '';
   @Input() identity = '';
   @Input() appClass = '';
@@ -24,8 +27,14 @@ export class LoadingImageComponent implements OnInit, OnChanges {
   df = VALIDATOR_AVATAR_DF;
   isError = false;
   isLoading = true;
+  observer!: IntersectionObserver;
 
-  constructor(private commonService: CommonService, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private commonService: CommonService,
+    private cdr: ChangeDetectorRef,
+    private el: ElementRef<HTMLElement>,
+    private ngZone: NgZone,
+  ) {}
 
   load(): void {
     this.isLoading = false;
@@ -38,6 +47,18 @@ export class LoadingImageComponent implements OnInit, OnChanges {
   async ngOnInit() {}
 
   async ngOnChanges(changes: SimpleChanges) {
+    this.ngZone.runOutsideAngular(() => {
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          console.log('loaf img');
+          // this.getImage();
+        });
+      });
+      this.observer.observe(this.el.nativeElement);
+    });
+  }
+
+  async getImage() {
     if (this.identity && this.identity !== '') {
       const req = await this.commonService.getValidatorImg(this.identity);
       if (req?.data['them'] && req?.data['them'][0]?.pictures?.primary?.url) {
@@ -51,5 +72,8 @@ export class LoadingImageComponent implements OnInit, OnChanges {
     }
     this.cdr.markForCheck();
     this.isLoading = false;
+  }
+  ngOnDestroy(): void {
+    this.observer.disconnect();
   }
 }
