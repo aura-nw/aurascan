@@ -173,7 +173,7 @@
                         {{
                           validator[template.matColumnDef] < 0.000001
                             ? '0'
-                            : validator[template.matColumnDef] | mask : 'separator.6'
+                            : (validator[template.matColumnDef] | mask : 'separator.6')
                         }}
                       </span>
                       <span *ngIf="template['headerCellDef']" class="ml-2 text--primary">
