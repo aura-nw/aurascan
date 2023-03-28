@@ -122,13 +122,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
-    public global: Globals,
+    private global: Globals,
   ) {}
 
   async ngOnInit() {
     this.getBlocksMiss();
-    await this.getStakingAPR();
-
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.arrayDelegate = null;
@@ -141,12 +139,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }
     });
     this.getList();
-
     this._routerSubscription = this.router.events.subscribe(() => {
       if (this.modalReference) {
         this.modalReference.close();
       }
     });
+    await this.getStakingAPR();
   }
 
   /**

@@ -25,29 +25,20 @@
         </div>
         <div
           class="col-12 col-lg-8 mt-1 mt-lg-0 d-flex align-items-center justify-content-center justify-content-lg-end">
-          <div class="d-flex flex-column justify-content-lg-between claim-btn-group">
-            <div class="caption fw-normal text--gray-3 mb-2 mb-lg-0">
-              To prevent spam transactions, you can claim the staking reward every 1 day.
-            </div>
-            <div class="text-lg-end">
-              <button
-                class="button button-outline button--sm button-pill button-flat text--black fw-semibold button-fixed"
-                type="button"
-                [disabled]="isDisableClaim || isLoading"
-                (click)="viewDialog(true)">
-                <img
-                  [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                  alt=""
-                  width="20"
-                  height="20"
-                  *ngIf="isLoading" />
-                <span class="text--black"
-                  >Claim Reward: {{ +dataDelegate.stakingToken || 0 | mask : 'separator.6' }}</span
-                >
-                <span class="ml-1 text--black">{{ denom }}</span>
-              </button>
-            </div>
-          </div>
+          <button
+            class="button button-outline button--sm button-pill button-flat d-flex text--black fw-semibold"
+            type="button"
+            [disabled]="isDisableClaim || isLoading"
+            (click)="viewDialog(true)">
+            <img
+              [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+              alt=""
+              width="20"
+              height="20"
+              *ngIf="isLoading" />
+            <span class="text--black">Claim Reward: {{ +dataDelegate.stakingToken || 0 | mask : 'separator.6' }}</span>
+            <span class="ml-1 text--black">{{ denom }}</span>
+          </button>
         </div>
       </div>
     </div>
