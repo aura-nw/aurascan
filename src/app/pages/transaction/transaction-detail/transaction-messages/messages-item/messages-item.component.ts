@@ -15,11 +15,8 @@ export class MessagesItemComponent implements OnInit {
   @Input() pipeType: string = '';
 
   pipeTypeData = pipeTypeData;
-  
-  constructor(
-    public global: Globals,
-  ) {}
 
-  ngOnInit(): void {
-  }
+  constructor(public global: Globals) {}
+
+  ngOnInit(): void {}
 }

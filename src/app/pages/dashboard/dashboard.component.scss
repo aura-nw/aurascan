@@ -29,14 +29,6 @@
   }
 }
 
-.card-highlight {
-  .card-highlight__content {
-    @media (min-width: 992px) {
-      font-weight: 700 !important;
-      line-height: 2.8rem !important;
-    }
-  }
-}
 .divider.divider-vertical {
   min-height: 16px;
 }
@@ -197,35 +189,7 @@ ul {
     }
   }
 }
-.icon-github-2 {
-  font-size: 2rem;
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  &:before {
-    background: url('../../../assets/icons/icons-svg/basic/github-2.svg') no-repeat center;
-    background-size: contain;
-    opacity: 1;
-  }
-  &:after {
-    background: url('../../../assets/icons/icons-svg/white/github-2.svg') no-repeat center;
-    background-size: contain;
-    opacity: 0;
-  }
-  &:hover {
-    &:before {
-      opacity: 0;
-    }
-    &:after {
-      opacity: 1;
-    }
-  }
-}
+
 i.icon-info {
   font-size: 40px;
 }

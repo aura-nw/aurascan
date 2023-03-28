@@ -1,14 +1,16 @@
 <div id="layout-wrapper">
-    <!-- Top bar -->
-    <app-horizontaltopbar (mobileMenuButtonClicked)="onToggleMobileMenu()" (settingsButtonClicked)="onSettingsButtonClicked()"></app-horizontaltopbar>
-    <div class="main-content">
-        <div class="page-content">
-            <div class="container-fluid">
-                <!-- content -->
-                <router-outlet></router-outlet>
-            </div>
-        </div>
-        <!-- footer -->
-         <app-footer></app-footer>
+  <!-- Top bar -->
+  <app-horizontaltopbar
+    (mobileMenuButtonClicked)="onToggleMobileMenu()"
+    (settingsButtonClicked)="onSettingsButtonClicked()"></app-horizontaltopbar>
+  <div class="main-content">
+    <div class="page-content">
+      <div class="container-fluid">
+        <!-- content -->
+        <router-outlet></router-outlet>
+      </div>
     </div>
+    <!-- footer -->
+    <app-footer></app-footer>
+  </div>
 </div>
