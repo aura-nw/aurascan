@@ -16,9 +16,8 @@
   white-space: pre-wrap;
   flex-wrap: wrap;
   display: flex;
-  width: 77%;
-  margin: 0px auto;
-  // align-items: center;
+  width: 71%;
+  align-items: center;
   // flex-direction: row;
 
   .block-uptime {
@@ -57,14 +56,9 @@
     }
   }
 
-  @media (max-width: 1199.99px) {
-    min-height: 300px;
-  }
-
   @media (max-width: 767.99px) {
     width: 100%;
     max-width: fit-content;
-    min-height: 230px;
 
     .block-uptime {
       margin: 0 5px 7px 5px;

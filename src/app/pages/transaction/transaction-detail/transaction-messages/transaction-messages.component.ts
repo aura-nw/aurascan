@@ -366,8 +366,6 @@ export class TransactionMessagesComponent implements OnInit {
     }
     this.transactionService.getListIBCSequence(sequence).subscribe((res) => {
       const { code, data } = res;
-      console.log(res);
-      
       if (code === 200) {
         let typeTx;
         this.listIBCProgress = [];
@@ -399,8 +397,6 @@ export class TransactionMessagesComponent implements OnInit {
           txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
         }
         this.listIBCProgress = txs;
-        console.log(txs);
-        
       }
     });
   }
