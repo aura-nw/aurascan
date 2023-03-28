@@ -64,7 +64,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="attestor">
-              <th mat-header-cell *matHeaderCellDef>Attestor</th>
+              <th mat-header-cell *matHeaderCellDef>Creator</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <a [routerLink]="['/account/', element.minter_address]" class="text-clamp">{{
                   element.minter_address | cutStringPipe : 8 : 8

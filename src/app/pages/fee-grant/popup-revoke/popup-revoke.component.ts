@@ -32,9 +32,7 @@ export class PopupRevokeComponent implements OnInit {
   }
 
   executeRevoke() {
-    //TODO
     const granter = this.walletService.wallet?.bech32Address;
-
     const executeRevoke = async () => {
       const { hash, error } = await this.walletService.signAndBroadcast({
         messageType: SIGNING_MESSAGE_TYPES.REVOKE_ALLOWANCE,

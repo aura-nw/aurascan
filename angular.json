@@ -51,7 +51,8 @@
                             "src/assets/scss/app.scss",
                             "src/assets/scss/custom-material.scss",
                             "src/assets/scss/icons.scss",
-                            "src/styles.scss"
+                            "src/styles.scss",
+                            "./node_modules/phosphor-icons/src/css/icons.css"
                         ],
                         "scripts": [
                             "node_modules/apexcharts/dist/apexcharts.min.js",
@@ -64,12 +65,12 @@
                         "production": {
                             "budgets": [{
                                     "type": "initial",
-                                    "maximumWarning": "5mb",
-                                    "maximumError": "8mb"
+                                    "maximumWarning": "10mb",
+                                    "maximumError": "10mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "4kb",
+                                    "maximumWarning": "6kb",
                                     "maximumError": "6kb"
                                 }
                             ],
