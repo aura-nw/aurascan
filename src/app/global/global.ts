@@ -163,6 +163,8 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
       } else if (method === ModeExecuteTransaction.UnEquip) {
         toAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.UnEquip;
+      } else if (method === ModeExecuteTransaction.AcceptOffer) {
+        toAddress = itemMessage?.msg?.accept_nft_offer?.offerer;
       } else if (method === ModeExecuteTransaction.Buy) {
         fromAddress = null;
         toAddress = itemMessage.sender;
