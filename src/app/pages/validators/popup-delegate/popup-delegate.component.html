@@ -73,17 +73,6 @@
         <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
-    <div class="d-lg-flex mb-3 mb-xl-6">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Total Reward</div>
-      <div class="text--gray-1">
-        {{
-          !data?.validatorDetail?.reward || +data?.validatorDetail?.reward < 0.000001
-            ? '0'
-            : (+data?.validatorDetail?.reward | mask : 'separator.6')
-        }}
-        <span class="text--primary"> {{ denom }}</span>
-      </div>
-    </div>
     <div class="d-lg-flex">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Delegable Balance</div>
       <div class="text--gray-1">
