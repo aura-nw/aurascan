@@ -3,17 +3,16 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-horizontal',
   templateUrl: './horizontal.component.html',
-  styleUrls: ['./horizontal.component.scss']
+  styleUrls: ['./horizontal.component.scss'],
 })
 
 /**
  * Horizontal Component
  */
 export class HorizontalComponent implements OnInit {
-
   isCondensed = false;
-  
-  constructor() { }
+
+  constructor() {}
 
   ngOnInit(): void {
     document.body.setAttribute('data-layout', 'horizontal');
@@ -23,7 +22,7 @@ export class HorizontalComponent implements OnInit {
   /**
    * on settings button clicked from topbar
    */
-   onSettingsButtonClicked() {
+  onSettingsButtonClicked() {
     document.body.classList.toggle('right-bar-enabled');
   }
 
@@ -34,5 +33,4 @@ export class HorizontalComponent implements OnInit {
     const element = document.getElementById('topnav-menu-content');
     element?.classList.toggle('show');
   }
-
 }

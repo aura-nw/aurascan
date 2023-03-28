@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { ClickOutsideModule } from 'ng-click-outside';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -24,7 +23,6 @@ import { CodeIdsRoutingModule } from './code-ids-routing.module';
     CodeIdsRoutingModule,
     FormsModule,
     CommonPipeModule,
-    ClickOutsideModule,
     TableNoDataModule,
     PaginatorModule,
     MaterialModule,

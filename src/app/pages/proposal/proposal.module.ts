@@ -1,22 +1,11 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  NgbAccordionModule,
-  NgbAlertModule,
-  NgbCarouselModule,
-  NgbCollapseModule,
-  NgbDropdownModule,
-  NgbNavModule,
-  NgbPaginationModule,
-  NgbPopoverModule,
-  NgbProgressbarModule,
-  NgbTooltipModule
-} from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { ClickOutsideModule } from 'ng-click-outside';
-import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskModule } from 'ngx-mask';
+import { ValidatorService } from 'src/app/core/services/validator.service';
+import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { MaterialModule } from '../../app.module';
 import { MappingErrorService } from '../../core/services/mapping-error.service';
@@ -35,8 +24,6 @@ import { ProposalRoutingModule } from './proposal-routing.module';
 import { ProposalTableComponent } from './proposal-table/proposal-table.component';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
-import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 
 @NgModule({
   declarations: [
@@ -59,22 +46,12 @@ import { ValidatorService } from 'src/app/core/services/validator.service';
     TranslateModule,
     FormsModule,
     CommonPipeModule,
-    NgbDropdownModule,
-    NgbAlertModule,
-    NgbCarouselModule,
     NgbProgressbarModule,
     NgbNavModule,
-    NgbCollapseModule,
-    NgbAccordionModule,
-    NgbPopoverModule,
-    NgbTooltipModule,
-    NgbPaginationModule,
     NgxMaskModule,
     TableNoDataModule,
-    DateFnsModule,
     PaginatorModule,
-    ClickOutsideModule,
-    LoadingImageModule
+    LoadingImageModule,
   ],
   providers: [ProposalService, MappingErrorService, DecimalPipe, ValidatorService],
 })

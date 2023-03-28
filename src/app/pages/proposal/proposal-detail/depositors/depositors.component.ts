@@ -18,9 +18,7 @@ export class DepositorsComponent implements OnInit {
   loading = true;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  nextKey = '';
   dataLength = 0;
-  isNextPage = false;
   proposalDeposit = PROPOSAL_TABLE_MODE.DEPOSITORS;
 
   constructor(
@@ -36,44 +34,44 @@ export class DepositorsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loading = true;
-    this.getDepositorsList(true);
-    this.loading = false;
+    this.getDepositorsList();
   }
 
-  getDepositorsList(isInit = false): void {
+  getDepositorsList(): void {
     const payload = {
       proposalId: this.proposalId,
       pageLimit: 100,
     };
-    this.proposalService.getDepositors(payload).subscribe((res) => {
-      let dataList: any[] = [];
-      if (res?.data?.transactions?.length > 0) {
-        this.dataLength = res.data.count || 0;
-        dataList = res?.data?.transactions?.filter(
-          (transaction) =>
-            transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
-            (transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
-              transaction?.tx_response?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
-        );
+    this.proposalService.getDepositors(payload).subscribe(
+      (res) => {
+        let dataList: any[] = [];
+        if (res?.data?.transactions?.length > 0) {
+          this.dataLength = res.data.count || 0;
+          dataList = res?.data?.transactions?.filter(
+            (transaction) =>
+              transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
+              (transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
+                transaction?.tx_response?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
+          );
 
-        dataList.forEach((item) => {
-          if (item.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
-            item.depositors = item.tx_response?.tx?.body?.messages[0]?.proposer;
-            item.amount = balanceOf(item.tx_response?.tx?.body?.messages[0].initial_deposit[0].amount);
-          } else {
-            item.depositors = item.tx_response?.tx?.body?.messages[0]?.depositor;
-            item.amount = balanceOf(item.tx_response?.tx?.body?.messages[0].amount[0].amount);
-          }
-          item.txhash = item?.tx_response?.txhash;
-          item.timestamp = item?.tx_response?.timestamp;
-        });
-        this.depositorsList = dataList;
-      }
-    });
-  }
-
-  loadMore($event): void {
-    this.getDepositorsList();
+          dataList.forEach((item) => {
+            if (item.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
+              item.depositors = item.tx_response?.tx?.body?.messages[0]?.proposer;
+              item.amount = balanceOf(item.tx_response?.tx?.body?.messages[0].initial_deposit[0].amount);
+            } else {
+              item.depositors = item.tx_response?.tx?.body?.messages[0]?.depositor;
+              item.amount = balanceOf(item.tx_response?.tx?.body?.messages[0].amount[0].amount);
+            }
+            item.txhash = item?.tx_response?.txhash;
+            item.timestamp = item?.tx_response?.timestamp;
+          });
+          this.depositorsList = dataList;
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 }

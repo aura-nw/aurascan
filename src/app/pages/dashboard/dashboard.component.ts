@@ -21,6 +21,7 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -89,7 +90,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   cacheData = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
-
   destroy$ = new Subject();
 
   constructor(
@@ -104,6 +104,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private maskService: MaskPipe,
     private token: TokenService,
     private walletService: WalletService,
+    private validatorService: ValidatorService,
   ) {}
 
   ngOnInit(): void {
@@ -428,24 +429,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getDataHeader() {
-    return this.global.dataHeader;
-  }
-
   async ngAfterViewInit() {
-    const communityTaxRq = await this.commonService.getCommunityTax();
-    const communityTax = communityTaxRq?.data?.params?.community_tax;
-    let inflation;
-    let bonded_tokens;
-    let supply;
-    setInterval(() => {
-      if (!inflation && !bonded_tokens && !supply) {
-        inflation = this.getDataHeader().inflation.slice(0, -1);
-        bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
-        supply = this.getDataHeader().supply.toString().slice(0, -1);
-        this.staking_APR = ((inflation * (1 - communityTax)) / (bonded_tokens / supply));
-      }
-    }, 500);
+    this.validatorService.stakingAPRSubject.subscribe((res) => {
+      this.staking_APR = res ?? 0;
+    });
 
     // re-draw chart when connect coin98 app in mobile
     this.walletService.wallet$.subscribe((wallet) => {
