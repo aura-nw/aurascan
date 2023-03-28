@@ -310,7 +310,7 @@
                         <ng-container [ngSwitch]="template['headerCellDef']">
                           <ng-container *ngSwitchCase="'Voting Power'">
                             <h5 class="mb-1 text--gray-1">
-                              {{ validator.power | number : globals.formatNumberOnlyDecimal }}
+                              {{ validator.power | number }}
                             </h5>
                             <div>{{ validator['percent_power'] + '%' }}</div>
                           </ng-container>
