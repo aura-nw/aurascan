@@ -98,6 +98,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   pageYOffset = 0;
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
+  staking_APR = 0;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -121,11 +122,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
+    private global: Globals,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.getBlocksMiss();
-
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.arrayDelegate = null;
@@ -138,11 +139,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }
     });
     this.getList();
-
     this._routerSubscription = this.router.events.subscribe(() => {
       if (this.modalReference) {
         this.modalReference.close();
       }
+    });
+    this.validatorService.stakingAPRSubject.subscribe((res) => {
+      this.staking_APR = res ?? 0;
     });
   }
 
