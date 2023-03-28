@@ -34,7 +34,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   lengthPower: number;
 
   pageSize = 5;
-  pageIndexBlock = 0;
   pageIndexDelegator = 0;
   pageIndexPower = 0;
   statusValidator = STATUS_VALIDATOR;
@@ -46,7 +45,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
-
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
 
   dataSourceDelegator: MatTableDataSource<any> = new MatTableDataSource();
@@ -371,9 +369,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       receiverAddress: address,
       limit: LIMIT_NUM_SBT,
     };
-    
+
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      this.soulboundList = res.data.filter(k => k.picked);
+      this.soulboundList = res.data.filter((k) => k.picked);
     });
   }
 }

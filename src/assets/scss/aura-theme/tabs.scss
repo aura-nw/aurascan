@@ -1,23 +1,4 @@
-.aura-tab {
-  .mat-tab-labels {
-    .mat-tab-label-content {
-      font-size: 1.6rem;
-      line-height: 2rem;
-      font-weight: 600;
-    }
-    .mat-tab-label.mat-tab-label-active {
-      opacity: 1 !important;
-    }
-  }
-  mat-tab-body.mat-tab-body {
-    padding: var(--spacer-4);
-  }
-  mat-ink-bar.mat-ink-bar {
-    background-color: var(--aura-white) !important;
-  }
-}
-
-.mobile-tab{
+.mobile-tab {
   display: flex;
   width: 100%;
   flex-wrap: nowrap;
@@ -25,6 +6,6 @@
   overflow-y: hidden;
 }
 
-.mobile-tab::-webkit-scrollbar{
+.mobile-tab::-webkit-scrollbar {
   display: none;
 }
