@@ -125,7 +125,7 @@ form.aura-form.single-input-field {
           }
         }
         &__sub-item {
-          min-height: 48px;
+          min-height: 44px;
         }
       }
       &:hover,
@@ -150,9 +150,6 @@ form.aura-form.single-input-field {
     }
     i {
       font-size: 2rem;
-      @media (min-width: 1200px) {
-        font-size: 2.4rem;
-      }
     }
     .nav-link__panel {
       position: absolute;
@@ -173,17 +170,17 @@ form.aura-form.single-input-field {
           font-size: 1.4rem;
         }
         color: var(--aura-white);
-        padding: 8px 16px;
+        padding: 12px 8px;
         transition: all 0.35s ease-in-out;
+        border-radius: 4px;
         &:first-child {
           padding-top: 16px;
-          border-top-left-radius: 8px;
-          border-top-right-radius: 8px;
+        }
+        &:not(:first-child) {
+          margin-top: 4px;
         }
         &:last-child {
           padding-bottom: 16px;
-          border-bottom-left-radius: 8px;
-          border-bottom-right-radius: 8px;
         }
         &:hover,
         &.active {
@@ -198,6 +195,7 @@ form.aura-form.single-input-field {
     }
     .nav-item.dropdown:hover {
       .nav-link__panel {
+        padding: var(--spacer-2);
         min-width: 240px;
         max-height: 900px;
         background-color: var(--aura-black);
