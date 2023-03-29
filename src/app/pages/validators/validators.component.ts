@@ -75,6 +75,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   numberCode = 0;
   arrBlocksMiss = [];
   lstValidatorOrigin = [];
+  lstUptime = [];
   TABS = [
     {
       key: 3,
@@ -203,31 +204,17 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   getBlocksMiss() {
     this.validatorService.validatorsFromIndexer(null).subscribe((res) => {
-      let arrTemp = res.data.validators.filter((k) => Number(k.val_signing_info.missed_blocks_counter) > 0);
-      if (arrTemp?.length > 0) {
-        arrTemp.forEach((block) => {
-          block['hex_address'] = toHex(fromBech32(block?.val_signing_info?.address).data);
-        });
-        this.arrBlocksMiss = arrTemp;
-      }
+      this.lstUptime = res.data.validators;
     });
   }
 
   calculatorUpTime(address) {
-    let percent = '100.00';
-    if (address && this.arrBlocksMiss) {
-      const data = this.arrBlocksMiss?.filter((k) => k.hex_address.toLowerCase() === address.toLowerCase());
-      if (data) {
-        let total = 0;
-        data.forEach((h) => {
-          total += Number(h.missed_blocks_counter);
-        });
-        if (total > 0) {
-          percent = (100 - total / NUM_BLOCK)?.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
-        }
-      }
+    const itemUptime = this.lstUptime.find((k) => k.account_address === address);
+    let result = NUM_BLOCK;
+    if (itemUptime) {
+      result = NUM_BLOCK - +itemUptime.val_signing_info.missed_blocks_counter;
     }
-    return percent;
+    return result / 100;
   }
 
   changeType(type): void {

@@ -102,7 +102,8 @@ export enum ModeExecuteTransaction {
   Burn = 'burn',
   Buy = 'buy',
   Take = 'take',
-  UnEquip = 'unequip'
+  UnEquip = 'unequip',
+  AcceptOffer = 'accept_nft_offer'
 }
 
 export enum pipeTypeData {
