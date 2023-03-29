@@ -185,7 +185,7 @@
         <div class="card-body article-1 pt-4">
           <ngx-simplebar>
             <ng-container *ngIf="lengthBlock > 0; else noValues">
-              <div class="table-responsive aura-table-contain">
+              <div class="table-responsive aura-table-contain pb-1">
                 <table mat-table [dataSource]="dataSourceBlock" class="aura-table" *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesBlock; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
@@ -286,30 +286,34 @@
           </div>
           <div class="body-01 text--gray-5 mt-1 mt-lg-0">Last {{ numberLastBlock }} Blocks</div>
         </div>
-        <div class="text-center">
-          <div class="card-body article-1 uptime-content pt-4">
-            <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
-            <ng-container *ngIf="!lastBlockLoading">
-              <ng-container *ngFor="let itemBlock of arrayUpTime; let index = index">
-                <a
-                  class="block-uptime tool-tip"
-                  [ngStyle]="{
-                    'background-color':
-                      (checkMissed(itemBlock?.height) && blocksMissDetail) ||
-                      currentValidatorDetail?.status !== statusValidator.Active
-                        ? 'none'
-                        : '#5EE6D0'
-                  }"
-                  [routerLink]="['/blocks', itemBlock?.height]"
-                  currentitem="false"
-                  matTooltip="{{ itemBlock?.height || 0 }}"
-                  [matTooltipPosition]="'above'">
-                  <div class="d-flex">
-                    <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
-                  </div>
-                </a>
+        <div class="text-center box-uptime">
+          <div class="card-body article-1 pt-4">
+            <div class="uptime-content m-lg-auto">
+              <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
+              <ng-container *ngIf="!lastBlockLoading">
+                <ng-container *ngFor="let itemBlock of arrBlockUptime; let index = index">
+                  <ng-container *ngIf="index < 100">
+                    <a
+                      class="block-uptime tool-tip"
+                      [ngStyle]="{
+                        'background-color':
+                          currentValidatorDetail?.status !== statusValidator.Active
+                          || itemBlock.isSyncFail
+                            ? 'none'
+                            : '#5EE6D0'
+                      }"
+                      [routerLink]="['/blocks', itemBlock?.height]"
+                      currentitem="false"
+                      matTooltip="{{ itemBlock?.height || 0 }}"
+                      [matTooltipPosition]="'above'">
+                      <div class="d-flex">
+                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                      </div>
+                    </a>
+                  </ng-container>
+                </ng-container>
               </ng-container>
-            </ng-container>
+            </div>  
           </div>
         </div>
       </div>
