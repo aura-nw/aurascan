@@ -108,4 +108,11 @@ export class ValidatorService extends CommonService {
   getStakeInfo(delegatorAddress: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/validators/delegations/delegator/${delegatorAddress}`);
   }
+
+  getUptimeLCD(block = null) {
+    if(!block){
+      block = 'latest'
+    }
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BLOCK}/${block}`);
+  }
 }
