@@ -6,7 +6,7 @@
           <span class="text--white">Overview </span>
           <span class="text--gray-light">
             <ng-container *ngIf="tokenDetail.type === contractType.CW20">[CW-20]</ng-container>
-            <ng-container *ngIf="tokenDetail.type=== contractType.CW721">[CW-721]</ng-container>
+            <ng-container *ngIf="tokenDetail.type === contractType.CW721">[CW-721]</ng-container>
             <ng-container *ngIf="tokenDetail.type === contractType.CW4973">[CW-4973]</ng-container>
           </span>
         </td>
@@ -63,7 +63,9 @@
             <div
               [class.flex-item]="!tokenDetail.isNFTContract"
               [ngClass]="{ 'd-flex': tokenDetail.isNFTContract, 'align-items-center': tokenDetail.isNFTContract }">
-              <span class="text--gray-5 body-02 fixed-col">Max Total Supply:</span>
+              <span class="text--gray-5 body-02 fixed-col"
+                ><ng-container *ngIf="tokenDetail.type === contractType.CW20">Max </ng-container>Total Supply:</span
+              >
               <div class="body-02 text--gray-1">
                 <ng-container *ngIf="!tokenDetail.isNFTContract">
                   <ng-container *ngIf="+tokenDetail.max_total_supply === 0">-</ng-container>

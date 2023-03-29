@@ -75,6 +75,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   numberCode = 0;
   arrBlocksMiss = [];
   lstValidatorOrigin = [];
+  lstUptime = [];
   TABS = [
     {
       key: 3,
@@ -98,6 +99,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   pageYOffset = 0;
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
+  staking_APR = 0;
+  numberProposal = 0;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -121,11 +124,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
+    private global: Globals,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.getBlocksMiss();
-
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.arrayDelegate = null;
@@ -138,11 +141,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }
     });
     this.getList();
-
     this._routerSubscription = this.router.events.subscribe(() => {
       if (this.modalReference) {
         this.modalReference.close();
       }
+    });
+    this.validatorService.stakingAPRSubject.subscribe((res) => {
+      this.staking_APR = res ?? 0;
     });
   }
 
@@ -163,6 +168,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       if (res?.data?.length > 0) {
         this.lstValidatorOrigin = res.data;
         this.rawData = res.data;
+        this.numberProposal = res.data[0]?.target_count;
         res.data.forEach((val) => {
           val.vote_count = val.vote_count || 0;
           val.participation = val.vote_count;
@@ -181,7 +187,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.lstValidator = dataFilter;
         }
 
-        // this.dataSource.data = dataFilter;
         Object.keys(dataFilter).forEach((key) => {
           if (this.dataSource.data[key]) {
             Object.assign(this.dataSource.data[key], dataFilter[key]);
@@ -199,31 +204,17 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   getBlocksMiss() {
     this.validatorService.validatorsFromIndexer(null).subscribe((res) => {
-      let arrTemp = res.data.validators.filter((k) => Number(k.val_signing_info.missed_blocks_counter) > 0);
-      if (arrTemp?.length > 0) {
-        arrTemp.forEach((block) => {
-          block['hex_address'] = toHex(fromBech32(block?.val_signing_info?.address).data);
-        });
-        this.arrBlocksMiss = arrTemp;
-      }
+      this.lstUptime = res.data.validators;
     });
   }
 
   calculatorUpTime(address) {
-    let percent = '100.00';
-    if (address && this.arrBlocksMiss) {
-      const data = this.arrBlocksMiss?.filter((k) => k.hex_address.toLowerCase() === address.toLowerCase());
-      if (data) {
-        let total = 0;
-        data.forEach((h) => {
-          total += Number(h.missed_blocks_counter);
-        });
-        if (total > 0) {
-          percent = (100 - total / NUM_BLOCK)?.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
-        }
-      }
+    const itemUptime = this.lstUptime.find((k) => k.account_address === address);
+    let result = NUM_BLOCK;
+    if (itemUptime) {
+      result = NUM_BLOCK - +itemUptime.val_signing_info.missed_blocks_counter;
     }
-    return percent;
+    return result / 100;
   }
 
   changeType(type): void {
@@ -470,7 +461,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeStaking = async () => {
         this.isLoading = true;
-        // const { hash, error } = await createSignBroadcast({
         const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
@@ -486,7 +476,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
 
@@ -499,7 +488,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       const executeClaim = async () => {
         this.isLoading = true;
         this.isClaimRewardLoading = true;
-        // const { hash, error } = await createSignBroadcast({
         const { hash, error } = await this.walletService.signAndBroadcast(
           {
             messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
@@ -525,7 +513,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeUnStaking = async () => {
         this.isLoading = true;
-        // const { hash, error } = await createSignBroadcast({
         const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.UNSTAKE,
           message: {
@@ -541,7 +528,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
       executeUnStaking();
@@ -569,7 +555,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
       executeReStaking();
@@ -668,7 +653,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   resetData() {
     this.isLoading = false;
-    // this.modalReference?.close();
     this.isHandleStake = false;
     this.isClaimRewardLoading = false;
   }

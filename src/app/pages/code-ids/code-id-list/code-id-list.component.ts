@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -41,7 +42,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractResult = CONTRACT_RESULT;
   timerGetUpTime: any;
-
+  contractVerifyType = ContractVerifyType;
   constructor(private contractService: ContractService) {}
 
   ngOnInit(): void {

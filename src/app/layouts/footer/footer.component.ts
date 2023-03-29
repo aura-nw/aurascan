@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import { Router} from '@angular/router';
-import {EnvironmentService} from '../../core/data-services/environment.service';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { EnvironmentService } from '../../core/data-services/environment.service';
 
 @Component({
   selector: 'app-footer',
@@ -20,10 +20,7 @@ export class FooterComponent implements OnInit {
   validatorURL = 'validators';
   governanceURL = 'proposal';
 
-  constructor(
-      private environmentService: EnvironmentService,
-      public router: Router,
-  ) { }
+  constructor(private environmentService: EnvironmentService, public router: Router) {}
 
   ngOnInit(): void {}
 

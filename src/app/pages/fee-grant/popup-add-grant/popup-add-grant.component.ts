@@ -31,7 +31,6 @@ export class PopupAddGrantComponent implements OnInit {
   isSubmit = false;
   isRevoking = false;
   dayConvert = 24 * 60 * 60;
-
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
   constructor(

@@ -3,11 +3,7 @@
   <button
     type="button"
     class="button button-pill button-flat button--lg button--sm-mob ml-6 fw-semibold text--black"
-    *ngIf="
-      currentValidatorDetail &&
-      !currentValidatorDetail?.jailed &&
-      currentValidatorDetail?.status === statusValidator.Active
-    "
+    *ngIf="currentValidatorDetail && !currentValidatorDetail?.jailed"
     (click)="openDialog()">
     Delegate
   </button>
@@ -47,7 +43,7 @@
                   </div>
                 </div>
               </div>
-              <h5 class="mb-0 text--primary">{{ currentValidatorDetail?.title }}</h5>
+              <h5 class="mb-0 text--primary text-break">{{ currentValidatorDetail?.title }}</h5>
             </div>
             <div
               class="valid-status caption"
@@ -140,7 +136,7 @@
             <div class="col-6">Voting Power</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
-                <span class="text--gray-1">{{ currentValidatorDetail?.power | mask : 'separator.6' }}</span>
+                <span class="text--gray-1">{{ +currentValidatorDetail?.power | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
               </div>
               <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_power }}%)</span>
@@ -158,7 +154,7 @@
             <div class="col-6">Self Bonded</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
-                <span class="text--gray-1">{{ currentValidatorDetail?.self_bonded | mask : 'separator.6' }}</span>
+                <span class="text--gray-1">{{ +currentValidatorDetail?.self_bonded | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
               </div>
               <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
@@ -189,7 +185,7 @@
         <div class="card-body article-1 pt-4">
           <ngx-simplebar>
             <ng-container *ngIf="lengthBlock > 0; else noValues">
-              <div class="table-responsive aura-table-contain">
+              <div class="table-responsive aura-table-contain pb-1">
                 <table mat-table [dataSource]="dataSourceBlock" class="aura-table" *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesBlock; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
@@ -290,30 +286,34 @@
           </div>
           <div class="body-01 text--gray-5 mt-1 mt-lg-0">Last {{ numberLastBlock }} Blocks</div>
         </div>
-        <div class="text-center">
-          <div class="card-body article-1 uptime-content pt-4">
-            <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
-            <ng-container *ngIf="!lastBlockLoading">
-              <ng-container *ngFor="let itemBlock of arrayUpTime; let index = index">
-                <a
-                  class="block-uptime tool-tip"
-                  [ngStyle]="{
-                    'background-color':
-                      (checkMissed(itemBlock?.height) && blocksMissDetail) ||
-                      currentValidatorDetail?.status !== statusValidator.Active
-                        ? 'none'
-                        : '#5EE6D0'
-                  }"
-                  [routerLink]="['/blocks', itemBlock?.height]"
-                  currentitem="false"
-                  matTooltip="{{ itemBlock?.height || 0 }}"
-                  [matTooltipPosition]="'above'">
-                  <div class="d-flex">
-                    <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
-                  </div>
-                </a>
+        <div class="text-center box-uptime">
+          <div class="card-body article-1 pt-4">
+            <div class="uptime-content m-lg-auto">
+              <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
+              <ng-container *ngIf="!lastBlockLoading">
+                <ng-container *ngFor="let itemBlock of arrBlockUptime; let index = index">
+                  <ng-container *ngIf="index < 100">
+                    <a
+                      class="block-uptime tool-tip"
+                      [ngStyle]="{
+                        'background-color':
+                          currentValidatorDetail?.status !== statusValidator.Active
+                          || itemBlock.isSyncFail
+                            ? 'none'
+                            : '#5EE6D0'
+                      }"
+                      [routerLink]="['/blocks', itemBlock?.height]"
+                      currentitem="false"
+                      matTooltip="{{ itemBlock?.height || 0 }}"
+                      [matTooltipPosition]="'above'">
+                      <div class="d-flex">
+                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                      </div>
+                    </a>
+                  </ng-container>
+                </ng-container>
               </ng-container>
-            </ng-container>
+            </div>  
           </div>
         </div>
       </div>
@@ -325,7 +325,7 @@
       <div class="card text--white">
         <div class="card-header d-lg-flex align-items-center justify-content-between header-mob pb-0">
           <h3 class="h2-mob mb-0 text--gray-1">Delegators</h3>
-          <div class="box-info d-flex align-items-center mt-1 mt-lg-0" *ngIf="lengthDelegator">
+          <div class="d-flex align-items-center mt-1 mt-lg-0" *ngIf="lengthDelegator">
             <img [src]="'assets/icons/icons-svg/white/user.svg' | imageS3" class="img-valid mr-2" />
             <span class="body-01 text--gray-5 mt-1 mt-lg-0">{{ lengthDelegator | number }}</span>
           </div>
@@ -481,7 +481,12 @@
                             (data.tx_hash | cutStringPipe : 6 : 6) +
                             '</a>'
                         },
-                        { label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode) },
+                        {
+                          label: 'Amount',
+                          info: data.isStakeMode
+                            ? '<span class=text--info>' + '+ ' + (data.amount | mask : 'separator.6') + '</span>'
+                            : '<span class=text--danger>' + '- ' + (data.amount | mask : 'separator.6') + '</span>'
+                        },
                         {
                           label: 'Time',
                           class: 'card__date text--gray-1 body-01-mob',
@@ -516,4 +521,5 @@
   [currentValidatorDetail]="currentValidatorDetail"
   [isOpenDialog]="isOpenDialog"
   (changeStatus)="updateStatus($event)"
-  (reloadData)="loadData()"></app-delegate-item>
+  (reloadData)="loadData()">
+</app-delegate-item>

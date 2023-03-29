@@ -12,14 +12,16 @@ import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportChart } from 'src/app/core/helpers/export';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
-import { RangeType, TableTemplate } from '../../../app/core/models/common.model';
+import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -85,9 +87,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   originalData = [];
   originalDataArr = [];
+  cacheData = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
-
   destroy$ = new Subject();
 
   constructor(
@@ -101,6 +103,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private proposalService: ProposalService,
     private maskService: MaskPipe,
     private token: TokenService,
+    private walletService: WalletService,
+    private validatorService: ValidatorService,
   ) {}
 
   ngOnInit(): void {
@@ -122,7 +126,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
     this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
     this.initTooltip();
-
     this.subscribeVisibleLogicalRangeChange();
   }
 
@@ -155,6 +158,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
             this.originalData = [...res?.data, ...this.originalData];
             this.originalDataArr = [...chartData, ...this.originalDataArr];
+            if (this.originalData.length > 0) {
+              this.cacheData = this.originalData;
+            }
             this.areaSeries.setData(this.originalDataArr);
           } else {
             this.endData = true;
@@ -308,6 +314,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         const { dataX, dataY } = this.parseDataFromApi(res.data);
 
         this.originalData = [...this.originalData, ...res?.data];
+        if (this.originalData.length > 0) {
+          this.cacheData = this.originalData;
+        }
         this.drawChartFirstTime(dataX, dataY);
         this.chartEvent();
       }
@@ -420,23 +429,20 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getDataHeader() {
-    return this.global.dataHeader;
-  }
-
   async ngAfterViewInit() {
-    const communityTaxRq = await this.commonService.getCommunityTax();
-    const communityTax = communityTaxRq?.data?.params?.community_tax;
-    let inflation;
-    let bonded_tokens;
-    let supply;
-    setInterval(() => {
-      if (!inflation && !bonded_tokens && !supply) {
-        inflation = this.getDataHeader().inflation.slice(0, -1);
-        bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
-        supply = this.getDataHeader().supply.toString().slice(0, -1);
-        this.staking_APR = (inflation * (1 - communityTax)) / (bonded_tokens / supply);
+    this.validatorService.stakingAPRSubject.subscribe((res) => {
+      this.staking_APR = res ?? 0;
+    });
+
+    // re-draw chart when connect coin98 app in mobile
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (this.originalData.length === 0) {
+        this.originalData = this.cacheData;
+        this.chart.remove();
+        this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
+        this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
+        this.subscribeVisibleLogicalRangeChange();
       }
-    }, 500);
+    });
   }
 }

@@ -19,13 +19,10 @@ $minia-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$minia-theme: mat.define-dark-theme((
-  color: (
-    primary: $minia-primary,
-    accent: $minia-accent,
-    warn: $minia-warn,
-  )
-));
+$minia-theme: mat.define-dark-theme((color: (primary: $minia-primary,
+        accent: $minia-accent,
+        warn: $minia-warn,
+      )));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -36,13 +33,11 @@ $minia-theme: mat.define-dark-theme((
 
 // Custom Aura Theme
 @import "assets/fonts/AuraIcon/aura-icon.css";
-@import "assets/fonts/Redig/Redig.css";
 @import "assets/fonts/SFPro/SfPro.css";
 @import "assets/fonts/Inter/Inter.css";
 @import "assets/fonts/BigShouldersDisplay/BigShouldersDisplay.css";
 @import "assets/scss/aura-theme/variables";
 @import "assets/scss/aura-theme/reboot";
-//@import "assets/scss/aura-theme/spacer";
 @import "assets/scss/aura-theme/button";
 @import "assets/scss/aura-theme/typo";
 @import "assets/scss/aura-theme/divider";
@@ -60,5 +55,12 @@ $minia-theme: mat.define-dark-theme((
 
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: "SFPro", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "SFPro", sans-serif;
+}

@@ -14,7 +14,21 @@
 
   <div class="card box-validators">
     <div class="card-header card-header-dark d-lg-flex justify-content-between pb-2">
-      <h2 class="h3-mob mb-0 text--white">Validators</h2>
+      <div>
+        <h2 class="h3-mob mb-0 text--white">Validators</h2>
+        <div class="d-flex body mt-2 text--gray-1">
+          <div>
+            <span>Staking APR:</span>
+            <span class="fw-semibold ml-1">{{ staking_APR.toFixed(2) || 0 }}%</span>
+          </div>
+          <a
+            href="https://docs.aura.network/product/aurascan/getting-started/stake/choose-a-trust-validator"
+            target="_blank"
+            class="text--primary ml-2"
+            >How to stake?</a
+          >
+        </div>
+      </div>
       <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches">
         <div class="input-group">
           <input
@@ -107,7 +121,12 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'rank'">
                     <th mat-header-cell *matHeaderCellDef class="col-per-5">
-                      <div class="fw-500 text-center" [innerHTML]="template.headerCellDef | translate"></div>
+                      <div
+                        class="fw-500 text-center"
+                        [innerHTML]="template.headerCellDef | translate"
+                        matTooltipPosition="above"
+                        matTooltip="Ranking based on validators' voting power."
+                        #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'title'">
@@ -125,7 +144,34 @@
                       <div
                         [innerHTML]="template.headerCellDef | translate"
                         matTooltipPosition="above"
-                        matTooltip="Signed Blocks Window for the last {{ numBlock }} Blocks"
+                        matTooltip="Validator's availability in the last {{ numBlock }} blocks."
+                        #tooltip="matTooltip"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'power'" class="col-per-25">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        matTooltipPosition="above"
+                        matTooltip="The more AURA delegated to a validator, the higher the validator's voting power."
+                        #tooltip="matTooltip"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'commission'" class="col-per-25">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        matTooltipPosition="above"
+                        matTooltip="The proportion of staking reward being taken by the validator as a commission."
+                        #tooltip="matTooltip"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'participation'" class="col-per-25">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        matTooltipPosition="above"
+                        matTooltip="Vote participation stat for the last {{ numberProposal || 0 }} proposals."
                         #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
@@ -152,7 +198,7 @@
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ calculatorUpTime(data['cons_address']) | number : globals.formatNumber2Decimal }}%
+                            {{ calculatorUpTime(data['acc_address']) | number : globals.formatNumber2Decimal }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
@@ -186,7 +232,7 @@
                             type="button"
                             class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
                             [disabled]="clicked"
-                            *ngIf="data['status'] === statusValidator.Active"
+                            *ngIf="!data['jailed']"
                             (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)">
                             <span class="fw-500 body-02 text--gray-1">Delegate</span>
                           </button>
@@ -235,7 +281,7 @@
                           </div>
                         </div>
                         <h5
-                          class="text--primary mb-0"
+                          class="text--primary mb-0 text-break"
                           [class.text-title]="validator?.jailed && validator['status'] !== statusValidator.Active">
                           {{ validator.title }}
                         </h5>
@@ -247,7 +293,7 @@
                       type="button"
                       class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
                       [disabled]="clicked"
-                      *ngIf="validator['status'] === statusValidator.Active"
+                      *ngIf="!validator?.jailed"
                       (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
                       <span class="text--gray-1 body-02-mob">Delegate</span>
                     </button>
@@ -264,13 +310,18 @@
                         <ng-container [ngSwitch]="template['headerCellDef']">
                           <ng-container *ngSwitchCase="'Voting Power'">
                             <h5 class="mb-1 text--gray-1">
-                              {{ validator.power | number : globals.formatNumberOnlyDecimal }}
+                              {{ validator.power | number }}
                             </h5>
                             <div>{{ validator['percent_power'] + '%' }}</div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Commission'">
                             <div class="text--gray-1">
                               {{ validator[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
+                            </div>
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'Participation'">
+                            <div class="text--gray-1">
+                              {{ validator[template.matColumnDef] + '/' + validator['target_count'] }}
                             </div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Uptime'">
@@ -324,7 +375,7 @@
           </div>
           <div class="ml-2">
             <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
-              <span class="modal__title">{{ dataModal?.title }}</span>
+              <span class="modal__title text-break">{{ dataModal?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
               Commission - {{ dataModal?.commission | percent : globals.formatNumber2Decimal }}
@@ -353,7 +404,7 @@
           </div>
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
-              type="number"
+              mask="separator.6"
               [max]="globals.maxNumberInput"
               [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
               [(ngModel)]="amountFormat"
@@ -371,7 +422,7 @@
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-            <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
+            <input [max]="globals.maxNumberInput" mask="separator.6" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
             <div class="d-flex align-items-center py-1 mr-4">
               <button
                 class="button button-primary active button-flat button--sm button-max fw-semibold"
@@ -433,7 +484,11 @@
               <span class="text--primary"> {{ denom }} </span>
             </div>
             <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-              <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
+              <input
+                [(ngModel)]="amountFormat"
+                [max]="globals.maxNumberInput"
+                mask="separator.6"
+                (blur)="resetCheck()" />
               <div class="d-flex align-items-center py-1 mr-4">
                 <button
                   class="button button-primary active button-flat button--sm button-max fw-semibold"
@@ -485,6 +540,7 @@
               </ul>
             </div>
             <button
+              *ngIf="!dataModal['jailed']"
               type="button"
               class="button button--sm button--md-mob button-pill button-outline button-outline--gradient d-flex btn-item"
               (click)="changeTypePopup(dialogMode.Delegate)">

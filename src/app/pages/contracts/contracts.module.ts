@@ -2,10 +2,9 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
-import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
@@ -49,7 +48,6 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
   imports: [
     CommonModule,
     ContractsRoutingModule,
-    NgbPopoverModule,
     PaginatorModule,
     TableNoDataModule,
     TranslateModule,
@@ -59,7 +57,6 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     MatTableModule,
     NgbNavModule,
     CommonPipeModule,
-    DateFnsModule,
     NgxMaskModule,
     ContractTableModule,
     ReactiveFormsModule,

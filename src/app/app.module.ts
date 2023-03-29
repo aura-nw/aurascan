@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,14 +36,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule, NgbNavModule, NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { NgProgressModule } from 'ngx-progressbar';
 import { ToastrModule } from 'ngx-toastr';
-import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EnvironmentService } from './core/data-services/environment.service';
@@ -59,7 +57,7 @@ import { SoulboundService } from './core/services/soulbound.service';
 import { TokenService } from './core/services/token.service';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
-import { BlankModule } from './pages/blank/blank.module';
+import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
 
 export function createTranslateLoader(http: HttpClient): any {
@@ -72,14 +70,14 @@ const maskConfig: Partial<IConfig> = {
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: "YYYY-MM-DD"
+    dateInput: 'YYYY-MM-DD',
   },
   display: {
-    dateInput: "YYYY-MM-DD",
-    monthYearLabel: "MMM YYYY",
-    dateA11yLabel: "YYYY-MM-DD",
-    monthYearA11yLabel: "MMMM YYYY"
-  }
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'YYYY-MM-DD',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
 };
 
 @NgModule({
@@ -115,7 +113,7 @@ export const MY_FORMATS = {
     MatTooltipModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    BlankModule,
+    SchemaViewerModule,
   ],
   declarations: [],
 })
@@ -145,19 +143,13 @@ export class MaterialModule {}
     NgbTooltipModule,
     NgbPopoverModule,
     NgbNavModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      // Register the ServiceWorker as soon as the app is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000',
-    }),
     ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
     NgxMaskModule.forRoot(maskConfig),
     ReactiveFormsModule,
     FormsModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MediaExpandModule
+    MediaExpandModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -165,7 +157,6 @@ export class MaterialModule {}
     { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
     { provide: DEFAULT_TIMEOUT, useValue: 60000 },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
-    // { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     EnvironmentService,
     DatePipe,
     Globals,

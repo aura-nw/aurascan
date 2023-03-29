@@ -167,10 +167,6 @@ form.search-form-validators {
   }
 }
 
-.text-blur {
-  opacity: 0.5;
-}
-
 .box-title-validator {
   position: relative;
   min-height: 35px;
@@ -187,9 +183,6 @@ form.search-form-validators {
     }
   }
 }
-// .avatar-wrapper.validator-avatar-wrapper .jailed {
-//   left: unset;
-// }
 
 @media (max-width: 991.99px) {
   .validator-container {
@@ -226,7 +219,7 @@ form.search-form-validators {
 }
 .modal__title {
   display: inline-block;
-  white-space: nowrap;
+  // white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
   font-weight: 600;
