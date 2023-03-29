@@ -67,7 +67,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   lengthBlockLoading = true;
   isLoadingPower = true;
   lastBlockLoading = true;
-  blocksMissDetail: any;
   numberLastBlock = 100;
   timerGetUpTime: any;
   timerGetBlock: any;
@@ -76,20 +75,16 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   nextKeyBlock = null;
   currentNextKeyBlock = null;
   isOpenDialog = false;
-  totalSBT = 0;
-  up_time_origin = 0;
+  upTimeOrigin = 0;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.configValue.chain_info;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  prefixConsAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixConsAddr;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   timeInterval = this.environmentService.configValue.timeInterval;
   soulboundList = [];
   arrBlockUptime = [];
   isLeftPage = false;
-  blockSyncSuccess = 'BLOCK_ID_FLAG_COMMIT';
   addressBase64 = null;
 
   constructor(
@@ -211,19 +206,12 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       }
     }
     let lstSyncFail = this.arrBlockUptime.filter((k) => k.isSyncFail)?.length || 0;
-    this.currentValidatorDetail.up_time = this.up_time_origin - +lstSyncFail / 100;
+    this.currentValidatorDetail.up_time = this.upTimeOrigin - +lstSyncFail / 100;
 
     this.timerGetUpTime = setInterval(() => {
       this.getBlocksMiss(height - 1);
       clearInterval(this.timerGetUpTime);
     }, 500);
-  }
-
-  checkMissed(height) {
-    if (Number(this.blocksMissDetail?.index_offset) === Number(height)) {
-      return true;
-    }
-    return false;
   }
 
   async getListDelegator() {
@@ -412,7 +400,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     this.validatorService.validatorsFromIndexer(this.currentValidatorDetail.operator_address).subscribe((res) => {
       this.currentValidatorDetail.up_time =
         (NUM_BLOCK - +res.data.validators[0].val_signing_info.missed_blocks_counter) / 100;
-      this.up_time_origin = this.currentValidatorDetail.up_time;
+      this.upTimeOrigin = this.currentValidatorDetail.up_time;
     });
   }
 
