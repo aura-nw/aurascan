@@ -100,6 +100,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
   staking_APR = 0;
+  numberProposal = 0;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -167,6 +168,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       if (res?.data?.length > 0) {
         this.lstValidatorOrigin = res.data;
         this.rawData = res.data;
+        this.numberProposal = res.data[0]?.target_count;
         res.data.forEach((val) => {
           val.vote_count = val.vote_count || 0;
           val.participation = val.vote_count;

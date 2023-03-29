@@ -19,7 +19,7 @@
         <div class="d-flex body mt-2 text--gray-1">
           <div>
             <span>Staking APR:</span>
-            <span class="fw-600 ml-1">{{ staking_APR.toFixed(2) || 0 }}%</span>
+            <span class="fw-semibold ml-1">{{ staking_APR.toFixed(2) || 0 }}%</span>
           </div>
           <a
             href="https://docs.aura.network/product/aurascan/getting-started/stake/choose-a-trust-validator"
@@ -171,7 +171,7 @@
                       <div
                         [innerHTML]="template.headerCellDef | translate"
                         matTooltipPosition="above"
-                        matTooltip="Vote participation stat for the last 150 proposals."
+                        matTooltip="Vote participation stat for the last {{ numberProposal || 0 }} proposals."
                         #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
@@ -281,7 +281,7 @@
                           </div>
                         </div>
                         <h5
-                          class="text--primary mb-0"
+                          class="text--primary mb-0 text-break"
                           [class.text-title]="validator?.jailed && validator['status'] !== statusValidator.Active">
                           {{ validator.title }}
                         </h5>
@@ -293,7 +293,7 @@
                       type="button"
                       class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
                       [disabled]="clicked"
-                      *ngIf="validator['status'] === statusValidator.Active"
+                      *ngIf="!validator?.jailed"
                       (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
                       <span class="text--gray-1 body-02-mob">Delegate</span>
                     </button>
