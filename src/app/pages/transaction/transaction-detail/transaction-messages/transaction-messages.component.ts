@@ -62,7 +62,7 @@ export class TransactionMessagesComponent implements OnInit {
   typeGrantAllowance = 'Basic';
   denomIBC = '';
   seeLessArr = [false];
-
+  totalAmountExecute = 0;
   listIBCProgress = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -92,7 +92,7 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MultiDelegate
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
     ) {
       this.getListValidator();
       this.checkGetReward();
@@ -219,8 +219,9 @@ export class TransactionMessagesComponent implements OnInit {
               }
 
               if (this.transactionDetail?.messages[0]?.msgs?.length > 1) {
-                let data = jsonData[0].events.find((k) => k.type === this.typeGetData.WithdrawRewards)?.attributes;
-                this.listAmountClaim = data?.filter((k) => k.key === 'amount');
+                this.transactionDetail?.messages[0]?.msgs.forEach((element) => {
+                  this.totalAmountExecute += +element?.amount?.amount || 0;
+                });
               } else {
                 this.transactionDetail?.messages.forEach((message) => {
                   const validator = data.find((trans) => trans.key === 'validator')?.value;
@@ -482,7 +483,7 @@ export class TransactionMessagesComponent implements OnInit {
     return value;
   }
 
-  replaceDenomValue(value){
+  replaceDenomValue(value) {
     return value?.replace(this.coinMinimalDenom, '');
   }
 }
