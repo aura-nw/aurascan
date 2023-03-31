@@ -105,7 +105,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
     this.timerGetUpTime = setInterval(() => {
       this.getListTransactionToken();
-    }, 3000);
+    }, 5000);
   }
 
   ngOnDestroy(): void {

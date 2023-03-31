@@ -76,7 +76,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   nextKeyBlock = null;
   currentNextKeyBlock = null;
   isOpenDialog = false;
-  upTimeOrigin = 0;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.configValue.chain_info;
@@ -104,13 +103,18 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.loadData();
+    this.getDetail(true);
     this.timerGetUpTime = setInterval(() => {
       this.getLastHeight();
     }, this.timeInterval);
+
+    this.timerGetUpTime = setInterval(() => {
+      this.getDetail();
+      this.loadData();
+    }, 5000);
   }
 
   loadData() {
-    this.getDetail();
     this.getListBlockWithOperator();
     this.getListDelegator();
     this.getListPower();
@@ -122,7 +126,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     clearInterval(this.timerGetBlock);
   }
 
-  getDetail(): void {
+  getDetail(isInit = false): void {
     this.validatorService.validatorsDetail(this.currentAddress).subscribe(
       (res) => {
         if (res.status === 404) {
@@ -139,10 +143,12 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         };
         this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
         this.getDetailValidatorIndexer();
-        if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
-          this.getLastHeight();
-        } else {
-          this.getListUpTime();
+        if (isInit) {
+          if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
+            this.getLastHeight();
+          } else {
+            this.getListUpTime();
+          }
         }
 
         this.getTotalSBT(this.currentValidatorDetail.acc_address);
@@ -209,8 +215,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         }
       }
     }
-    let lstSyncFail = this.arrBlockUptime.filter((k) => k.isSyncFail)?.length || 0;
-    this.currentValidatorDetail.up_time = this.upTimeOrigin - +lstSyncFail / 100;
 
     this.timerGetUpTime = setInterval(() => {
       this.getBlocksMiss(height - 1);
@@ -401,7 +405,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     this.validatorService.validatorsFromIndexer(this.currentValidatorDetail.operator_address).subscribe((res) => {
       this.currentValidatorDetail.up_time =
         (NUM_BLOCK - +res.data.validators[0].val_signing_info.missed_blocks_counter) / 100;
-      this.upTimeOrigin = this.currentValidatorDetail.up_time;
     });
   }
 

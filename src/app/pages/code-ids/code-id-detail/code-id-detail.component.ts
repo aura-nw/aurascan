@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractService } from 'src/app/core/services/contract.service';
-
 @Component({
   selector: 'app-code-id-detail',
   templateUrl: './code-id-detail.component.html',
@@ -23,7 +22,6 @@ export class CodeIdDetailComponent implements OnInit {
   ];
   codeIdDetail;
   contractResult = CONTRACT_RESULT;
-  timerGetUpTime: any;
 
   constructor(private router: ActivatedRoute, public route: Router, private contractService: ContractService) {}
 
@@ -38,16 +36,6 @@ export class CodeIdDetailComponent implements OnInit {
       this.route.navigate(['/']);
     } else {
       this.getCodeIdDetail();
-    }
-
-    this.timerGetUpTime = setInterval(() => {
-      this.getCodeIdDetail();
-    }, 30000);
-  }
-
-  ngOnDestroy(): void {
-    if (this.timerGetUpTime) {
-      clearInterval(this.timerGetUpTime);
     }
   }
 

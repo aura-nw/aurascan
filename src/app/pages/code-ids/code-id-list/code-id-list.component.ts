@@ -41,7 +41,6 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractResult = CONTRACT_RESULT;
-  timerGetUpTime: any;
   contractVerifyType = ContractVerifyType;
   constructor(private contractService: ContractService) {}
 
@@ -57,20 +56,12 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
           this.pageChange.selectPage(0);
         }
       });
-
-    this.timerGetUpTime = setInterval(() => {
-      this.getListCodeIds();
-    }, 30000);
   }
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
     this.destroy$.next();
     this.destroy$.complete();
-
-    if (this.timerGetUpTime) {
-      clearInterval(this.timerGetUpTime);
-    }
   }
 
   onKeyUp() {

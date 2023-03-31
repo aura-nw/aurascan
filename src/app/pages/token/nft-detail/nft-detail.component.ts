@@ -127,7 +127,7 @@ export class NFTDetailComponent implements OnInit {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
     this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
-      if (res.data === null) {
+      if (!res?.data || res.data === null) {
         this.toastr.error('Token invalid');
         this.loading = false;
         return;

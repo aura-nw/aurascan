@@ -37,6 +37,11 @@ export class ContractsTransactionsComponent implements OnInit {
   label = null;
   nextKey = null;
   currentKey = null;
+  timerGetUpTime: any;
+  isLoadingTX = true;
+  lengthTxsExecute = 0;
+  isLoadInstantiate = false;
+  txsInstantiate = [];
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
@@ -62,79 +67,96 @@ export class ContractsTransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
+    this.getData();
+    this.timerGetUpTime = setInterval(() => {
+      this.getData(true);
+    }, 5000);
+  }
 
+  getData(isReload = false) {
     this.route.queryParams.subscribe((params) => {
       if (params['label']) {
         this.label = params['label'] || 0;
       }
-      this.contractTransaction['data'] = [];
-      this.contractTransaction['count'] = 0;
       switch (+this.label) {
         case 1:
-          this.getDataTable();
+          this.getDataTable(null, isReload);
           break;
         case 2:
           this.getDataInstantiate();
           break;
         default:
-          this.getDataTable();
+          this.getDataTable(null, isReload);
       }
     });
   }
 
-  getDataTable(nextKey = null) {
+  getDataTable(nextKey = null, isReload = false) {
     if (!this.label || +this.label == 1) {
-      this.contractService
-        .getTransactionsIndexer(100, this.contractAddress, 'execute', nextKey)
-        .subscribe((dataExecute) => {
+      this.contractService.getTransactionsIndexer(100, this.contractAddress, 'execute', nextKey).subscribe(
+        (dataExecute) => {
           const { code, data } = dataExecute;
           if (code === 200) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
+            this.lengthTxsExecute = txsExecute.length;
             if (dataExecute.data.count > 0) {
               this.nextKey = dataExecute.data.nextKey;
 
-              if (this.contractTransaction['data']?.length > 0) {
+              if (this.contractTransaction['data']?.length > 0 && !isReload) {
                 this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
-              } else {
+              } else if (!this.contractTransaction['data']?.length || this.contractTransaction['data']?.length < this.pageSize * 5) {
                 this.contractTransaction['data'] = txsExecute;
               }
 
               if (this.nextKey === null) {
                 this.getDataInstantiate();
+              } else {
+                this.contractTransaction['count'] = this.contractTransaction['data']?.length;
               }
-              this.contractTransaction['count'] = this.contractTransaction['data']?.length;
             } else {
               this.getDataInstantiate();
             }
           }
-        });
+        },
+        () => {},
+        () => {
+          this.isLoadingTX = false;
+        },
+      );
     }
   }
 
   getDataInstantiate(): void {
-    this.contractService.getTransactionsIndexer(1, this.contractAddress, 'instantiate').subscribe((dataInstantiate) => {
-      if (dataInstantiate.data.count > 0) {
-        const txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
-        if (txsInstantiate.length > 0) {
-          txsInstantiate[0]['type'] = dataInstantiate.data?.transactions[0]?.tx_response?.tx?.body.messages[0]['@type'];
-          txsInstantiate[0]['contract_address'] = this.contractAddress;
-          if (+this.label == 2) {
-            this.contractTransaction['data'] = txsInstantiate;
-            this.contractTransaction['count'] = txsInstantiate.length || 0;
-            return;
-          }
-          if (!this.label) {
-            if (this.contractTransaction['data']?.length > 0) {
-              this.contractTransaction['data'].push(txsInstantiate[0]);
-            } else {
-              this.contractTransaction['data'] = txsInstantiate;
+    this.contractService.getTransactionsIndexer(1, this.contractAddress, 'instantiate').subscribe(
+      (dataInstantiate) => {
+        if (dataInstantiate.data.count > 0) {
+          this.txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
+          if (this.txsInstantiate.length > 0) {
+            this.txsInstantiate[0]['type'] =
+              dataInstantiate.data?.transactions[0]?.tx_response?.tx?.body.messages[0]['@type'];
+            this.txsInstantiate[0]['contract_address'] = this.contractAddress;
+            if (+this.label == 2) {
+              this.contractTransaction['data'] = this.txsInstantiate;
+              this.contractTransaction['count'] = this.txsInstantiate.length || 0;
+              return;
             }
-            this.contractTransaction['count'] = this.contractTransaction['data']?.length || 0;
-            return;
+            if (!this.label) {
+              if (this.contractTransaction['data']?.length > 0) {
+                this.contractTransaction['data'].push(this.txsInstantiate[0]);
+              } else {
+                this.contractTransaction['data'] = this.txsInstantiate;
+              }
+              this.contractTransaction['count'] = this.contractTransaction['data']?.length || 0;
+              return;
+            }
           }
         }
-      }
-    });
+      },
+      () => {},
+      () => {
+        this.isLoadingTX = false;
+      },
+    );
   }
 
   onChangePage(event) {

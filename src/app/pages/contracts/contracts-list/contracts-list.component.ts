@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -45,7 +45,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   filterButtons = [];
   searchSubject = new Subject();
   destroy$ = new Subject();
-  timerGetUpTime: any;
   contractRegisterType = ContractRegisterType;
 
   constructor(
@@ -60,10 +59,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     // throw new Error('Method not implemented.');
     this.destroy$.next();
     this.destroy$.complete();
-
-    if (this.timerGetUpTime) {
-      clearInterval(this.timerGetUpTime);
-    }
   }
 
   ngOnInit(): void {
@@ -75,10 +70,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.pageChange.selectPage(0);
       });
-
-    this.timerGetUpTime = setInterval(() => {
-      this.getListContract();
-    }, 30000);
   }
 
   onKeyUp() {
