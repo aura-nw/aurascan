@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
 import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -42,6 +43,8 @@ export class ContractsTransactionsComponent implements OnInit {
   lengthTxsExecute = 0;
   isLoadInstantiate = false;
   txsInstantiate = [];
+  currentPage = 0;
+  destroyed$ = new Subject();
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
@@ -69,8 +72,20 @@ export class ContractsTransactionsComponent implements OnInit {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.getData();
     this.timerGetUpTime = setInterval(() => {
-      this.getData(true);
+      // reload when page = 0
+      if (this.currentPage === 0) {
+        this.getData(true);
+      }
     }, 5000);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+
+    if (this.timerGetUpTime) {
+      clearInterval(this.timerGetUpTime);
+    }
   }
 
   getData(isReload = false) {
@@ -104,7 +119,7 @@ export class ContractsTransactionsComponent implements OnInit {
 
               if (this.contractTransaction['data']?.length > 0 && !isReload) {
                 this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
-              } else if (!this.contractTransaction['data']?.length || this.contractTransaction['data']?.length < this.pageSize * 5) {
+              } else {
                 this.contractTransaction['data'] = txsExecute;
               }
 
@@ -161,6 +176,7 @@ export class ContractsTransactionsComponent implements OnInit {
 
   onChangePage(event) {
     const { pageIndex, pageSize } = event;
+    this.currentPage = pageIndex;
     const next = event.length <= (pageIndex + 2) * pageSize;
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getDataTable(this.nextKey);
