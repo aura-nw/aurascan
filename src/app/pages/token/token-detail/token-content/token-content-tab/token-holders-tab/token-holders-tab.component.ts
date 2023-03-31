@@ -51,7 +51,6 @@ export class TokenHoldersTabComponent implements OnInit {
   totalQuantity = 0;
   numberTop = 0;
   totalHolder = 0;
-  timerGetUpTime: any;
 
   chainInfo = this.environmentService.configValue.chain_info;
 
@@ -69,16 +68,6 @@ export class TokenHoldersTabComponent implements OnInit {
     }
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
-
-    this.timerGetUpTime = setInterval(() => {
-      this.getListTokenHolder();
-    }, 3000);
-  }
-
-  ngOnDestroy(): void {
-    if (this.timerGetUpTime) {
-      clearInterval(this.timerGetUpTime);
-    }
   }
 
   getListTokenHolder() {

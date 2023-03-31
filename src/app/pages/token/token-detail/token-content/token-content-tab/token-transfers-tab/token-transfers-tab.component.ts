@@ -104,7 +104,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     }
 
     this.timerGetUpTime = setInterval(() => {
-      this.getListTransactionToken();
+      if (this.pageData.pageIndex === 0) {
+        this.getListTransactionToken(null, null, true);
+      }
     }, 5000);
   }
 
@@ -114,7 +116,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async getListTransactionToken(dataSearch = '', nextKey = null) {
+  async getListTransactionToken(dataSearch = '', nextKey = null, isReload = false) {
     if (!this.dataSource.data) {
       this.loading = true;
     }
@@ -136,11 +138,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         trans.amountToken = tempConvert < 0.000001 ? 0 : tempConvert;
       });
 
-      if (
-        this.dataSource.data.length > 0 &&
-        this.dataSource.data.length !== res.data.data.transactions.length &&
-        this.pageData.pageIndex != 0
-      ) {
+      if (this.dataSource.data.length > 0 && !isReload) {
         this.dataSource.data = [...this.dataSource.data, ...res.data.data.transactions];
       } else {
         this.dataSource.data = [...res.data.data.transactions];
