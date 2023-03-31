@@ -40,5 +40,7 @@ export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.PeriodicAllowance, value: TypeTransaction.PeriodicAllowance },
   { label: TRANSACTION_TYPE_ENUM.MsgGrantAllowance, value: TypeTransaction.MsgGrantAllowance },
   { label: TRANSACTION_TYPE_ENUM.MsgRevokeAllowance, value: TypeTransaction.MsgRevokeAllowance },
+  { label: TRANSACTION_TYPE_ENUM.MultiDelegate, value: TypeTransaction.MultiDelegate },
+  { label: TRANSACTION_TYPE_ENUM.GrantAuthz, value: TypeTransaction.GrantAuthz },
   { label: TRANSACTION_TYPE_ENUM.Fail, value: TypeTransaction.Fail },
 ];

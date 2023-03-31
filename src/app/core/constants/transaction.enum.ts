@@ -39,6 +39,8 @@ export enum TypeTransaction {
   PeriodicAllowance = 'Periodic',
   MsgGrantAllowance = 'Grant Allowance',
   MsgRevokeAllowance = 'Revoke Allowance',
+  MultiDelegate = 'Delegate',
+  GrantAuthz = 'Grant Authz',
   Fail = 'Fail',
 }
 
@@ -84,6 +86,8 @@ export enum TRANSACTION_TYPE_ENUM {
   MsgRevokeAllowance = '/cosmos.feegrant.v1beta1.MsgRevokeAllowance',
   AllowedMsgAllowance = '/cosmos.feegrant.v1beta1.AllowedMsgAllowance',
   AllowedContractAllowance = '/cosmos.feegrant.v1beta1.AllowedContractAllowance',
+  MultiDelegate = '/cosmos.authz.v1beta1.MsgExec',
+  GrantAuthz = '/cosmos.authz.v1beta1.MsgGrant',
   Fail = 'FAILED',
 }
 
