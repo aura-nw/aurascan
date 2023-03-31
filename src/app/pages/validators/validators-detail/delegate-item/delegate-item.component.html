@@ -23,7 +23,7 @@
               <span class="modal__title text-break">{{ currentValidatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ currentValidatorDetail?.commission | percent: globals.formatNumber2Decimal }}
+              Commission - {{ currentValidatorDetail?.commission | percent : globals.formatNumber2Decimal }}
             </div>
           </div>
         </div>
@@ -55,13 +55,16 @@
         <div *ngIf="errorExceedAmount" class="text--danger mt-3">
           Insufficient available balance for transaction fee
         </div>
+        <div *ngIf="isValidatorJail" class="text--danger mt-3">
+          This validator is currently jailed so you can not delegate to this validator.
+        </div>
 
         <div class="mt-6 d-flex align-items-center justify-content-center justify-content-lg-end">
           <button
             type="button"
             class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient d-flex"
             (click)="handleStaking()"
-            [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
+            [disabled]="isExceedAmount || isValidatorJail || !(amountFormat && amountFormat > 0) || isHandleStake">
             <img
               class="mr-2"
               [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"

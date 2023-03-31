@@ -126,7 +126,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
   }
 
   getListContractTransaction(): void {
-    this.isLoading = true;
     this.contractInfo.count = this.dataList?.count || 0;
     const ret = this.dataList?.data?.map((contract) => {
       let value = 0;
