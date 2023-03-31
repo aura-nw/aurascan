@@ -74,6 +74,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   nextKey = null;
   currentKey = null;
   contractType = ContractRegisterType;
+  timerGetUpTime: any;
 
   coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -101,9 +102,21 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     if (this.typeContract !== this.contractType.CW20) {
       this.linkToken = this.typeContract === this.contractType.CW721 ? 'token-nft' : 'token-abt';
     }
+
+    this.timerGetUpTime = setInterval(() => {
+      if (this.pageData.pageIndex === 0) {
+        this.getListTransactionToken(null, null, true);
+      }
+    }, 5000);
   }
 
-  async getListTransactionToken(dataSearch = '', nextKey = null) {
+  ngOnDestroy(): void {
+    if (this.timerGetUpTime) {
+      clearInterval(this.timerGetUpTime);
+    }
+  }
+
+  async getListTransactionToken(dataSearch = '', nextKey = null, isReload = false) {
     if (!this.dataSource.data) {
       this.loading = true;
     }
@@ -125,7 +138,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         trans.amountToken = tempConvert < 0.000001 ? 0 : tempConvert;
       });
 
-      if (this.dataSource.data.length > 0) {
+      if (this.dataSource.data.length > 0 && !isReload) {
         this.dataSource.data = [...this.dataSource.data, ...res.data.data.transactions];
       } else {
         this.dataSource.data = [...res.data.data.transactions];
