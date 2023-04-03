@@ -39,6 +39,9 @@ export enum TypeTransaction {
   PeriodicAllowance = 'Periodic',
   MsgGrantAllowance = 'Grant Allowance',
   MsgRevokeAllowance = 'Revoke Allowance',
+  GrantAuthz = 'Grant Authz',
+  ExecuteAuthz = 'Execute Authz',
+  RevokeAuthz = 'Revoke Authz',
   Fail = 'Fail',
 }
 
@@ -84,6 +87,9 @@ export enum TRANSACTION_TYPE_ENUM {
   MsgRevokeAllowance = '/cosmos.feegrant.v1beta1.MsgRevokeAllowance',
   AllowedMsgAllowance = '/cosmos.feegrant.v1beta1.AllowedMsgAllowance',
   AllowedContractAllowance = '/cosmos.feegrant.v1beta1.AllowedContractAllowance',
+  GrantAuthz = '/cosmos.authz.v1beta1.MsgGrant',
+  ExecuteAuthz = '/cosmos.authz.v1beta1.MsgExec',
+  RevokeAuthz = '/cosmos.authz.v1beta1.MsgRevoke',
   Fail = 'FAILED',
 }
 
@@ -102,7 +108,8 @@ export enum ModeExecuteTransaction {
   Burn = 'burn',
   Buy = 'buy',
   Take = 'take',
-  UnEquip = 'unequip'
+  UnEquip = 'unequip',
+  AcceptOffer = 'accept_nft_offer'
 }
 
 export enum pipeTypeData {
