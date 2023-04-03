@@ -345,10 +345,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
-  }
-
   ngAfterViewChecked(): void {
     const editor = document.getElementById('marked');
     if (editor && this.currentValidatorDetail) {
