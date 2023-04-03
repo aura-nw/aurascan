@@ -198,7 +198,7 @@
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ calculatorUpTime(data['cons_address']) | number : globals.formatNumber2Decimal }}%
+                            {{ calculatorUpTime(data['acc_address']) | number : globals.formatNumber2Decimal }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
@@ -375,7 +375,7 @@
           </div>
           <div class="ml-2">
             <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
-              <span class="modal__title">{{ dataModal?.title }}</span>
+              <span class="modal__title text-break">{{ dataModal?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
               Commission - {{ dataModal?.commission | percent : globals.formatNumber2Decimal }}
