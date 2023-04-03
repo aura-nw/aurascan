@@ -345,10 +345,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
-  }
-
   ngAfterViewChecked(): void {
     const editor = document.getElementById('marked');
     if (editor && this.currentValidatorDetail) {
@@ -395,7 +391,10 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         }
         let element = [{ height, isSyncFail }];
         if (this.arrBlockUptime && this.arrBlockUptime?.length > 0) {
-          this.arrBlockUptime = [...element, ...this.arrBlockUptime];
+          const temp = this.arrBlockUptime.find((k) => k.height === height);
+          if (!temp) {
+            this.arrBlockUptime = [...element, ...this.arrBlockUptime];
+          }
         } else {
           this.arrBlockUptime = [...element];
           this.getBlocksMiss(height);

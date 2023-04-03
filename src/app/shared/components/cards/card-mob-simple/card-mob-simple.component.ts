@@ -39,11 +39,7 @@ export class CardMobSimpleComponent implements OnInit {
 
   statusTransaction = CodeTransaction;
 
-  constructor(private validatorService: ValidatorService) {}
+  constructor() {}
 
   ngOnInit(): void {}
-
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
-  }
 }

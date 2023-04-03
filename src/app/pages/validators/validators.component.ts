@@ -40,7 +40,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
     { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
-    // { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
     { matColumnDef: 'action', headerCellDef: '' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -101,6 +100,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
   staking_APR = 0;
   numberProposal = 0;
+  validatorImgArr;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -645,10 +645,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.toastr.error(message);
       }
     }
-  }
-
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 
   resetData() {

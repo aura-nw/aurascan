@@ -2,16 +2,12 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   Input,
-  NgZone,
   OnChanges,
-  OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
 import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-loading-image',
@@ -19,23 +15,17 @@ import { CommonService } from 'src/app/core/services/common.service';
   styleUrls: ['./loading-image.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadingImageComponent implements OnInit, OnChanges, OnDestroy {
+export class LoadingImageComponent implements OnInit, OnChanges {
   @Input() srcImg = '';
   @Input() identity = '';
   @Input() appClass = '';
-  imgByIdentity = '';
   df = VALIDATOR_AVATAR_DF;
   isError = false;
   isLoading = true;
   observer!: IntersectionObserver;
   isReady = false;
 
-  constructor(
-    private commonService: CommonService,
-    private cdr: ChangeDetectorRef,
-    private el: ElementRef<HTMLElement>,
-    private ngZone: NgZone,
-  ) {}
+  constructor(private cdr: ChangeDetectorRef) {}
 
   load(): void {
     this.isLoading = false;
@@ -47,39 +37,11 @@ export class LoadingImageComponent implements OnInit, OnChanges, OnDestroy {
 
   async ngOnInit() {}
 
-  async ngOnChanges(changes: SimpleChanges) {
-    this.ngZone.runOutsideAngular(() => {
-      this.observer = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (!this.isReady) {
-            if (e.isIntersecting) {
-              this.isReady = true;
-              this.getImage();
-            }
-          }
-        });
-      });
-      this.observer.observe(this.el.nativeElement);
-    });
-  }
-
-  async getImage() {
-    if (this.identity && this.identity !== '') {
-      const req = await this.commonService.getValidatorImg(this.identity);
-      if (req?.data['them'] && req?.data['them'][0]?.pictures?.primary?.url) {
-        this.imgByIdentity = req.data['them'][0]?.pictures?.primary?.url;
-        this.isError = false;
-      } else {
-        this.isError = true;
-      }
-    } else {
-      this.isError = true;
+  ngOnChanges(changes: SimpleChanges): void {
+    this.isError = false;
+    if (!this.identity) {
+      this.srcImg = this.df;
     }
     this.cdr.markForCheck();
-    this.isLoading = false;
-  }
-
-  ngOnDestroy(): void {
-    this.observer.disconnect();
   }
 }
