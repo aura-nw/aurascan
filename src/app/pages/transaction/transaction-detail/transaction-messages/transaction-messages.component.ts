@@ -62,7 +62,7 @@ export class TransactionMessagesComponent implements OnInit {
   typeGrantAllowance = 'Basic';
   denomIBC = '';
   seeLessArr = [false];
-
+  totalAmountExecute = 0;
   listIBCProgress = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -91,7 +91,8 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.CreateValidator
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
     ) {
       this.getListValidator();
       this.checkGetReward();
@@ -174,6 +175,11 @@ export class TransactionMessagesComponent implements OnInit {
                 message.validatorName =
                   this.listValidator.find((f) => f.operator_address === message?.validator_address)?.title || '';
               });
+            } else if (messages[0]?.msgs?.length > 1) {
+              messages[0]?.msgs.forEach((message) => {
+                message.validatorName =
+                  this.listValidator.find((f) => f.operator_address === message?.validator_address)?.title || '';
+              });
             }
           }
         }
@@ -211,14 +217,21 @@ export class TransactionMessagesComponent implements OnInit {
                   }
                 }
               }
-              this.transactionDetail?.messages.forEach((message) => {
-                const validator = data.find((trans) => trans.key === 'validator')?.value;
-                if (validator === message.validator_address && 'delegator_address' in message) {
-                  let amount = data.find((k) => k.key === 'amount')?.value?.replace(this.coinMinimalDenom, '');
-                  amount = balanceOf(amount) || 0;
-                  this.listAmountClaim.push(amount);
-                }
-              });
+
+              if (this.transactionDetail?.messages[0]?.msgs?.length > 1) {
+                this.transactionDetail?.messages[0]?.msgs.forEach((element) => {
+                  this.totalAmountExecute += +element?.amount?.amount || 0;
+                });
+              } else {
+                this.transactionDetail?.messages.forEach((message) => {
+                  const validator = data.find((trans) => trans.key === 'validator')?.value;
+                  if (validator === message.validator_address && 'delegator_address' in message) {
+                    let amount = data.find((k) => k.key === 'amount')?.value?.replace(this.coinMinimalDenom, '');
+                    amount = balanceOf(amount) || 0;
+                    this.listAmountClaim.push(amount);
+                  }
+                });
+              }
             }
           }
 
@@ -468,5 +481,9 @@ export class TransactionMessagesComponent implements OnInit {
       value = temp;
     }
     return value;
+  }
+
+  replaceDenomValue(value) {
+    return value?.replace(this.coinMinimalDenom, '');
   }
 }
