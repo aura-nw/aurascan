@@ -104,7 +104,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.loadData();
     this.getDetail(true);
-    this.timerGetUpTime = setInterval(() => {
+    this.timerGetBlock = setInterval(() => {
       this.getLastHeight();
     }, this.timeInterval);
 
@@ -115,9 +115,11 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   loadData() {
-    this.getListBlockWithOperator();
-    this.getListDelegator();
-    this.getListPower();
+    if (!this.isLeftPage) {
+      this.getListBlockWithOperator();
+      this.getListDelegator();
+      this.getListPower();
+    }
   }
 
   ngOnDestroy() {
@@ -127,36 +129,38 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getDetail(isInit = false): void {
-    this.validatorService.validatorsDetail(this.currentAddress).subscribe(
-      (res) => {
-        if (res.status === 404) {
-          this.router.navigate(['/']);
-          return;
-        }
-
-        this.currentValidatorDetail = {
-          ...res.data,
-          self_bonded: balanceOf(res.data.self_bonded),
-          power: balanceOf(res.data.power),
-          identity: res?.data?.identity,
-          up_time: 100,
-        };
-        this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
-        this.getDetailValidatorIndexer();
-        if (isInit) {
-          if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
-            this.getLastHeight();
-          } else {
-            this.getListUpTime();
+    if (!this.isLeftPage) {
+      this.validatorService.validatorsDetail(this.currentAddress).subscribe(
+        (res) => {
+          if (res.status === 404) {
+            this.router.navigate(['/']);
+            return;
           }
-        }
 
-        this.getTotalSBT(this.currentValidatorDetail.acc_address);
-      },
-      (error) => {
-        this.router.navigate(['/']);
-      },
-    );
+          this.currentValidatorDetail = {
+            ...res.data,
+            self_bonded: balanceOf(res.data.self_bonded),
+            power: balanceOf(res.data.power),
+            identity: res?.data?.identity,
+            up_time: 100,
+          };
+          this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
+          this.getDetailValidatorIndexer();
+          if (isInit) {
+            if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
+              this.getLastHeight();
+            } else {
+              this.getListUpTime();
+            }
+          }
+
+          this.getTotalSBT(this.currentValidatorDetail.acc_address);
+        },
+        (error) => {
+          this.router.navigate(['/']);
+        },
+      );
+    }
   }
 
   getListBlockWithOperator(nextKeyBlock = null): void {
