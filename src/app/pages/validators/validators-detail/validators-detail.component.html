@@ -16,9 +16,7 @@
       <div class="d-flex align-items-center">
         <div class="avatar-wrapper flex-shrink-0 mr-2" *ngIf="!breakpoint.value.matches">
           <div class="validator-avatar medium">
-            <app-loading-image
-              [identity]="currentValidatorDetail.identity"
-              [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
+            <app-loading-image [identity]="currentValidatorDetail.identity" [srcImg]="currentValidatorDetail.image_url">
             </app-loading-image>
           </div>
           <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
@@ -34,7 +32,7 @@
                 <div class="validator-avatar small">
                   <app-loading-image
                     [identity]="currentValidatorDetail.identity"
-                    [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
+                    [srcImg]="currentValidatorDetail.image_url">
                   </app-loading-image>
                 </div>
                 <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
@@ -297,8 +295,7 @@
                       class="block-uptime tool-tip"
                       [ngStyle]="{
                         'background-color':
-                          currentValidatorDetail?.status !== statusValidator.Active
-                          || itemBlock.isSyncFail
+                          currentValidatorDetail?.status !== statusValidator.Active || itemBlock.isSyncFail
                             ? 'none'
                             : '#5EE6D0'
                       }"
@@ -313,7 +310,7 @@
                   </ng-container>
                 </ng-container>
               </ng-container>
-            </div>  
+            </div>
           </div>
         </div>
       </div>

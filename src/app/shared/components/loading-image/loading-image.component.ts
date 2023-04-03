@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-loading-image',
@@ -23,7 +24,6 @@ export class LoadingImageComponent implements OnInit, OnChanges, OnDestroy {
   @Input() srcImg = '';
   @Input() identity = '';
   @Input() appClass = '';
-  imgByIdentity = '';
   df = VALIDATOR_AVATAR_DF;
   isError = false;
   isLoading = true;
@@ -32,6 +32,7 @@ export class LoadingImageComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private commonService: CommonService,
+    private environmentService: EnvironmentService,
     private cdr: ChangeDetectorRef,
     private el: ElementRef<HTMLElement>,
     private ngZone: NgZone,
@@ -48,33 +49,26 @@ export class LoadingImageComponent implements OnInit, OnChanges, OnDestroy {
   async ngOnInit() {}
 
   async ngOnChanges(changes: SimpleChanges) {
-    this.ngZone.runOutsideAngular(() => {
-      this.observer = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (!this.isReady) {
-            if (e.isIntersecting) {
-              this.isReady = true;
-              this.getImage();
-            }
-          }
-        });
-      });
-      this.observer.observe(this.el.nativeElement);
-    });
+    // this.ngZone.runOutsideAngular(() => {
+    //   this.observer = new IntersectionObserver((entries) => {
+    //     entries.forEach((e) => {
+    //       if (!this.isReady) {
+    //         if (e.isIntersecting) {
+    //           this.isReady = true;
+    //           this.getImage();
+    //         }
+    //       }
+    //     });
+    //   });
+    //   this.observer.observe(this.el.nativeElement);
+    // });
   }
 
   async getImage() {
-    if (this.identity && this.identity !== '') {
-      const req = await this.commonService.getValidatorImg(this.identity);
-      if (req?.data['them'] && req?.data['them'][0]?.pictures?.primary?.url) {
-        this.imgByIdentity = req.data['them'][0]?.pictures?.primary?.url;
-        this.isError = false;
-      } else {
-        this.isError = true;
-      }
-    } else {
-      this.isError = true;
-    }
+    this.isError = false;
+    // if (!this.identity || (this.identity && this.identity === '')) {
+    //   this.srcImg = this.environmentService.configValue.validator_s3 + '/' + this.srcImg;
+    // }
     this.cdr.markForCheck();
     this.isLoading = false;
   }

@@ -18,7 +18,7 @@
                         <app-loading-image
                           [appClass]="data['jailed'] ? 'jailed' : ''"
                           [identity]="data['validator_identity']"
-                          [srcImg]="getValidatorAvatar(data.operator_address)">
+                          [srcImg]="data['image_url']">
                         </app-loading-image>
                       </span>
                     </div>
@@ -44,7 +44,7 @@
                     <ng-container *ngSwitchCase="'amount'">
                       {{
                         (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])
-                          | mask: 'separator.6' || '-'
+                          | mask : 'separator.6' || '-'
                       }}
                       <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>
@@ -63,9 +63,9 @@
                       <div *ngIf="data[template.matColumnDef]">
                         <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -74,9 +74,9 @@
                       <div *ngIf="data[template.matColumnDef]">
                         <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -85,9 +85,9 @@
                       <div *ngIf="data[template.matColumnDef]">
                         <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -143,10 +143,10 @@
                     '<div class=text-end>' +
                     commonService.getDateValue(data.timestamp, false)[0] +
                     '</div><div class=text--gray-5><span>' +
-                    (data.timestamp | customDate: 'yyyy-MM-dd') +
+                    (data.timestamp | customDate : 'yyyy-MM-dd') +
                     '</span>' +
                     '<span>' +
-                    (data.timestamp | customDate: 'HH:mm:ss') +
+                    (data.timestamp | customDate : 'HH:mm:ss') +
                     '</span></div>'
                 }
               ]"></app-card-mob-simple>
@@ -182,10 +182,10 @@
                       commonService.getDateValue(data.timestamp, false)[0] +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDate: 'yyyy-MM-dd') +
+                      (data.timestamp | customDate : 'yyyy-MM-dd') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      (data.timestamp | customDate : 'HH:mm:ss') +
                       '</span></div>'
                     : '-'
                 }
@@ -222,7 +222,7 @@
                   class: 'h6 mb-0 text--gray-1',
                   info: data.amount
                     ? '<span class=mr-1>' +
-                      (data.amount | mask: 'separator.6') +
+                      (data.amount | mask : 'separator.6') +
                       '</span><span class=text--primary>' +
                       denom +
                       '</span>'
@@ -236,10 +236,10 @@
                       commonService.getDateValue(data.timestamp, false)[0] +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDate: 'yyyy-MM-dd') +
+                      (data.timestamp | customDate : 'yyyy-MM-dd') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      (data.timestamp | customDate : 'HH:mm:ss') +
                       '</span></div>'
                     : '-'
                 }

@@ -101,6 +101,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   ) {}
 
   ngOnInit(): void {
+    console.log('detail');
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.loadData();
     this.timerGetUpTime = setInterval(() => {
@@ -334,10 +335,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       default:
         break;
     }
-  }
-
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 
   ngAfterViewChecked(): void {

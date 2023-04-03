@@ -43,6 +43,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
   @Output() isNextPage = new EventEmitter<boolean>();
+  validatorImgArr;
 
   votesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'voter_address', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
@@ -110,6 +111,18 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       );
       this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
     } else if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
+      const operatorAddArr = [];
+      // get ValidatorAddressArr
+      this.data.forEach((d) => {
+        operatorAddArr.push(d.operator_address);
+      });
+      // get validator logo
+      this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
+        if (res?.data) {
+          this.validatorImgArr = res?.data;
+        }
+      });
+
       minus = this.getUpdatePage(
         changes.data.currentValue?.length,
         this.proposalService.pageIndexObj[this.type][this.tabId],
@@ -202,7 +215,11 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     );
   }
 
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
+  getValidatorAvatar(operatorAddress: string): string {
+    let data;
+    setTimeout(() => {
+      data = this.validatorImgArr.find((validator) => validator.operator_address === operatorAddress).image_url;
+    }, 500);
+    return data ? data : '';
   }
 }
