@@ -101,7 +101,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   ) {}
 
   ngOnInit(): void {
-    console.log('detail');
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.loadData();
     this.timerGetUpTime = setInterval(() => {
@@ -146,6 +145,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         }
 
         this.getTotalSBT(this.currentValidatorDetail.acc_address);
+        console.log(this.currentValidatorDetail);
       },
       (error) => {
         this.router.navigate(['/']);

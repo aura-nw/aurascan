@@ -155,7 +155,7 @@
           <ng-container *ngIf="type === proposalMode.VALIDATORS_VOTES">
             <app-card-mob-simple
               [validatorData]="{
-                imgUrl: getValidatorAvatar(data.operator_address),
+                imgUrl: data.image_url,
                 validatorName: data.validator_name,
                 validatorAddress: data.validator_address,
                 validatorNumber: data.rank,

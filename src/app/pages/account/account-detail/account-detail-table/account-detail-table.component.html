@@ -21,7 +21,7 @@
                           <app-loading-image
                             [appClass]="data['jailed'] ? 'jailed' : ''"
                             [identity]="data.validator_identity"
-                            [srcImg]="getValidatorAvatar(data.validator_address)"></app-loading-image>
+                            [srcImg]="data.image_url"></app-loading-image>
                         </div>
                       </div>
                       <span [class.text-jailed]="data['jailed']">
@@ -29,24 +29,24 @@
                       </span>
                     </a>
                     <div *ngSwitchCase="'amount'">
-                      {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                      {{ +data[template.matColumnDef] | mask : 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'token_amount'">
-                      {{ data[template.matColumnDef] | mask: 'separator.6' }}
+                      {{ data[template.matColumnDef] | mask : 'separator.6' }}
                     </div>
                     <div *ngSwitchCase="'token_name'" class="text--primary">
                       {{ data[template.matColumnDef] }}
                     </div>
                     <div *ngSwitchCase="'reward'">
-                      {{ data[template.matColumnDef] | mask: 'separator.6' }}
+                      {{ data[template.matColumnDef] | mask : 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'completion_time'">
                       <div class="d-flex align-items-center">
-                        <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                        <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
                         <div class="divider divider-vertical divider-lighter mx-2"></div>
-                        <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                        <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
                       </div>
                       <div class="small-body">
                         ({{ commonService.getDateValue(data[template.matColumnDef], false)[1] }})
@@ -58,7 +58,7 @@
                       }})
                     </div>
                     <div *ngSwitchCase="'total_value'">
-                      $ {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
+                      $ {{ data[template.matColumnDef] | number : global.formatNumber2Decimal }}
                     </div>
                     <a
                       *ngSwitchCase="'validator_src_name'"
@@ -69,7 +69,7 @@
                           <app-loading-image
                             [identity]="data.validator_src_identity"
                             [appClass]="data['validator_src_jailed'] ? 'jailed' : ''"
-                            [srcImg]="getValidatorAvatar(data.validator_src_address)"></app-loading-image>
+                            [srcImg]="data.src_image_url"></app-loading-image>
                         </div>
                       </div>
                       <span [class.text-jailed]="data['validator_src_jailed']">
@@ -85,7 +85,7 @@
                           <app-loading-image
                             [identity]="data.validator_dst_identity"
                             [appClass]="data['validator_dst_jailed'] ? 'jailed' : ''"
-                            [srcImg]="getValidatorAvatar(data.validator_dst_address)"></app-loading-image>
+                            [srcImg]="data.dst_image_url"></app-loading-image>
                         </div>
                       </div>
                       <span [class.text-jailed]="data['validator_dst_jailed']">
@@ -122,24 +122,26 @@
                         <app-loading-image
                           [appClass]="item['jailed'] ? 'jailed' : ''"
                           [identity]="item['validator_identity']"
-                          [srcImg]="getValidatorAvatar(item['validator_address'])">
+                          [srcImg]="item['image_url']">
                         </app-loading-image>
                       </span>
                     </div>
-                    <span class="h5 mb-0 text--primary" [class.text-jailed]="item['jailed']"> {{ item.validator_name }} </span>
+                    <span class="h5 mb-0 text--primary" [class.text-jailed]="item['jailed']">
+                      {{ item.validator_name }}
+                    </span>
                   </a>
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ +item.amount | mask: 'separator.6' }}
+                      {{ +item.amount | mask : 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Reward</div>
                     <div class="txt-right">
-                      {{ +item.reward | mask: 'separator.6' }}
+                      {{ +item.reward | mask : 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
@@ -154,11 +156,13 @@
                           <app-loading-image
                             [appClass]="item['jailed'] ? 'jailed' : ''"
                             [identity]="item['validator_identity']"
-                            [srcImg]="getValidatorAvatar(item['validator_address'])">
+                            [srcImg]="item['image_url']">
                           </app-loading-image>
                         </span>
                       </div>
-                      <span class="h5 mb-0 text--primary" [class.text-jailed]="item['jailed']"> {{ item.validator_name }} </span>
+                      <span class="h5 mb-0 text--primary" [class.text-jailed]="item['jailed']">
+                        {{ item.validator_name }}
+                      </span>
                     </div>
                     <div class="text--white">{{ commonService.getDateValue(item.completion_time, false)[1] }}</div>
                   </a>
@@ -166,16 +170,16 @@
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ +item.amount | mask: 'separator.6' }}
+                      {{ +item.amount | mask : 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Completion Time</div>
                     <div class="d-flex align-items-center body-mob">
-                      <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ item.completion_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-1"></div>
-                      <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ item.completion_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
@@ -190,11 +194,15 @@
                             <app-loading-image
                               [appClass]="item['validator_src_jailed'] ? 'jailed' : ''"
                               [identity]="item['validator_src_identity']"
-                              [srcImg]="getValidatorAvatar(item['validator_src_address'])">
+                              [srcImg]="item['src_image_url']">
                             </app-loading-image>
                           </span>
                         </div>
-                        <span class="h5 mb-0 text--primary ellipsis-text" [class.text-jailed]="item['validator_src_jailed']"> {{ item.validator_src_name }} </span>
+                        <span
+                          class="h5 mb-0 text--primary ellipsis-text"
+                          [class.text-jailed]="item['validator_src_jailed']">
+                          {{ item.validator_src_name }}
+                        </span>
                       </div>
                     </a>
                     <a
@@ -206,11 +214,15 @@
                             <app-loading-image
                               [appClass]="item['validator_dst_jailed'] ? 'jailed' : ''"
                               [identity]="item['validator_dst_identity']"
-                              [srcImg]="getValidatorAvatar(item['validator_dst_address'])">
+                              [srcImg]="item['dst_image_url']">
                             </app-loading-image>
                           </span>
                         </div>
-                        <span class="h5 mb-0 text--primary ellipsis-text" [class.text-jailed]="item['validator_dst_jailed']"> {{ item.validator_dst_name }} </span>
+                        <span
+                          class="h5 mb-0 text--primary ellipsis-text"
+                          [class.text-jailed]="item['validator_dst_jailed']">
+                          {{ item.validator_dst_name }}
+                        </span>
                       </div>
                     </a>
                   </div>
@@ -218,16 +230,16 @@
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ +item.amount | mask: 'separator.6' }}
+                      {{ +item.amount | mask : 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Time</div>
                     <div class="d-flex align-items-center">
-                      <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ item.completion_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ item.completion_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
@@ -237,16 +249,16 @@
                   <div class="d-flex justify-content-between">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ +item.amount | mask: 'separator.6' }}
+                      {{ +item.amount | mask : 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between mt-3">
                     <div class="text--gray-4">Vesting Schedule</div>
                     <div class="d-flex align-items-center">
-                      <span>{{ item.date_format | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ item.date_format | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.date_format | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ item.date_format | customDate : 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>

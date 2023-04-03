@@ -100,6 +100,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
   staking_APR = 0;
   numberProposal = 0;
+  validatorImgArr;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;

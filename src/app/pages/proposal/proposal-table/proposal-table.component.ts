@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -91,6 +92,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
     private proposalService: ProposalService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -120,6 +122,15 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
         if (res?.data) {
           this.validatorImgArr = res?.data;
+          // push image into validator array
+          this.dataSource.data.forEach((item) => {
+            this.validatorImgArr.forEach((imgObj) => {
+              if (imgObj.operator_address == item.operator_address) {
+                item['image_url'] = imgObj.image_url;
+              }
+            });
+          });
+          this.cdr.markForCheck();
         }
       });
 
@@ -213,13 +224,5 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
     );
-  }
-
-  getValidatorAvatar(operatorAddress: string): string {
-    let data;
-    setTimeout(() => {
-      data = this.validatorImgArr.find((validator) => validator.operator_address === operatorAddress).image_url;
-    }, 500);
-    return data ? data : '';
   }
 }

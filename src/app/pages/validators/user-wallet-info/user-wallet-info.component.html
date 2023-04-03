@@ -108,7 +108,7 @@
                               <app-loading-image
                                 [identity]="data['validator_identity']"
                                 [appClass]="data['jailed'] ? 'jailed' : ''"
-                                [srcImg]="getValidatorAvatar(data['validator_address'])">
+                                [srcImg]="data['image_url']">
                               </app-loading-image>
                             </div>
                           </div>
@@ -143,7 +143,7 @@
                         <app-loading-image
                           [appClass]="validator['jailed'] ? 'jailed' : ''"
                           [identity]="validator['validator_identity']"
-                          [srcImg]="getValidatorAvatar(validator['validator_address'])">
+                          [srcImg]="validator['image_url']">
                         </app-loading-image>
                       </span>
                     </div>
@@ -207,7 +207,7 @@
                   <app-loading-image
                     [appClass]="validator['jailed'] ? 'jailed' : ''"
                     [identity]="validator['validator_identity']"
-                    [srcImg]="getValidatorAvatar(validator['validator_address'])">
+                    [srcImg]="validator['image_url']">
                   </app-loading-image>
                 </div>
               </div>
@@ -241,7 +241,7 @@
                     <app-loading-image
                       [appClass]="validator['jailed'] ? 'jailed' : ''"
                       [identity]="validator['validator_identity']"
-                      [srcImg]="getValidatorAvatar(validator['validator_address'])">
+                      [srcImg]="validator['image_url']">
                     </app-loading-image>
                   </div>
                 </div>
