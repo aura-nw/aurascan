@@ -90,6 +90,9 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/workspace-optimizer:0.12.8', value: 'cosmwasm/workspace-optimizer:0.12.8' },
   { label: 'cosmwasm/workspace-optimizer:0.12.9', value: 'cosmwasm/workspace-optimizer:0.12.9' },
   { label: 'cosmwasm/workspace-optimizer:0.12.10', value: 'cosmwasm/workspace-optimizer:0.12.10' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.11', value: 'cosmwasm/workspace-optimizer:0.12.11' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.12', value: 'cosmwasm/workspace-optimizer:0.12.12' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.13', value: 'cosmwasm/workspace-optimizer:0.12.13' },
 
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.4', value: 'cosmwasm/workspace-optimizer-arm64:0.12.4' },
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.5', value: 'cosmwasm/workspace-optimizer-arm64:0.12.5' },
