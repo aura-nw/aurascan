@@ -35,6 +35,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   pageSize = 5;
   pageIndexDelegator = 0;
   pageIndexPower = 0;
+  pageIndexBlock = 0;
   statusValidator = STATUS_VALIDATOR;
 
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
@@ -75,7 +76,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   nextKeyBlock = null;
   currentNextKeyBlock = null;
   isOpenDialog = false;
-  upTimeOrigin = 0;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.configValue.chain_info;
@@ -103,16 +103,23 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.loadData();
-    this.timerGetUpTime = setInterval(() => {
+    this.getDetail(true);
+    this.timerGetBlock = setInterval(() => {
       this.getLastHeight();
     }, this.timeInterval);
+
+    this.timerGetUpTime = setInterval(() => {
+      this.getDetail();
+      this.loadData();
+    }, 5000);
   }
 
   loadData() {
-    this.getDetail();
-    this.getListBlockWithOperator();
-    this.getListDelegator();
-    this.getListPower();
+    if (!this.isLeftPage) {
+      this.getListBlockWithOperator();
+      this.getListDelegator();
+      this.getListPower();
+    }
   }
 
   ngOnDestroy() {
@@ -121,35 +128,39 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     clearInterval(this.timerGetBlock);
   }
 
-  getDetail(): void {
-    this.validatorService.validatorsDetail(this.currentAddress).subscribe(
-      (res) => {
-        if (res.status === 404) {
+  getDetail(isInit = false): void {
+    if (!this.isLeftPage) {
+      this.validatorService.validatorsDetail(this.currentAddress).subscribe(
+        (res) => {
+          if (res.status === 404) {
+            this.router.navigate(['/']);
+            return;
+          }
+
+          this.currentValidatorDetail = {
+            ...res.data,
+            self_bonded: balanceOf(res.data.self_bonded),
+            power: balanceOf(res.data.power),
+            identity: res?.data?.identity,
+            up_time: 100,
+          };
+          this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
+          this.getDetailValidatorIndexer();
+          if (isInit) {
+            if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
+              this.getLastHeight();
+            } else {
+              this.getListUpTime();
+            }
+          }
+
+          this.getTotalSBT(this.currentValidatorDetail.acc_address);
+        },
+        (error) => {
           this.router.navigate(['/']);
-          return;
-        }
-
-        this.currentValidatorDetail = {
-          ...res.data,
-          self_bonded: balanceOf(res.data.self_bonded),
-          power: balanceOf(res.data.power),
-          identity: res?.data?.identity,
-          up_time: 100,
-        };
-        this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
-        this.getDetailValidatorIndexer();
-        if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
-          this.getLastHeight();
-        } else {
-          this.getListUpTime();
-        }
-
-        this.getTotalSBT(this.currentValidatorDetail.acc_address);
-      },
-      (error) => {
-        this.router.navigate(['/']);
-      },
-    );
+        },
+      );
+    }
   }
 
   getListBlockWithOperator(nextKeyBlock = null): void {
@@ -159,19 +170,22 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         this.nextKeyBlock = data.nextKey || null;
         if (code === 200) {
           const blocks = convertDataBlock(data);
-          if (this.dataSourceBlock.data.length > 0) {
+          if (
+            this.dataSourceBlock.data.length > 0 &&
+            this.dataSourceBlock.data.length !== blocks.length &&
+            this.pageIndexBlock != 0
+          ) {
             this.dataSourceBlock.data = [...this.dataSourceBlock.data, ...blocks];
           } else {
             this.dataSourceBlock.data = [...blocks];
           }
 
           this.dataSourceBlockMob = this.dataSourceBlock?.data.slice(
-            this.pageIndexPower * this.pageSize,
-            this.pageIndexPower * this.pageSize + this.pageSize,
+            this.pageIndexBlock * this.pageSize,
+            this.pageIndexBlock * this.pageSize + this.pageSize,
           );
 
           this.lengthBlock = this.dataSourceBlock.data.length;
-          this.isLoadingPower = false;
         }
       },
       () => {},
@@ -205,8 +219,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         }
       }
     }
-    let lstSyncFail = this.arrBlockUptime.filter((k) => k.isSyncFail)?.length || 0;
-    this.currentValidatorDetail.up_time = this.upTimeOrigin - +lstSyncFail / 100;
 
     this.timerGetUpTime = setInterval(() => {
       this.getBlocksMiss(height - 1);
@@ -232,9 +244,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getListPower(nextKey = null): void {
-    if (!this.dataSourcePower.data) {
-      this.isLoadingPower = true;
-    }
     this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe(
       (res) => {
         const { code, data } = res;
@@ -312,7 +321,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           this.getListBlockWithOperator(this.nextKeyBlock);
           this.currentNextKeyBlock = this.nextKeyBlock;
         }
-        this.pageIndexPower = page.pageIndex;
+        this.pageIndexBlock = page.pageIndex;
         break;
       case 'delegator':
         this.pageIndexDelegator = page.pageIndex;
@@ -400,7 +409,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     this.validatorService.validatorsFromIndexer(this.currentValidatorDetail.operator_address).subscribe((res) => {
       this.currentValidatorDetail.up_time =
         (NUM_BLOCK - +res.data.validators[0].val_signing_info.missed_blocks_counter) / 100;
-      this.upTimeOrigin = this.currentValidatorDetail.up_time;
     });
   }
 
