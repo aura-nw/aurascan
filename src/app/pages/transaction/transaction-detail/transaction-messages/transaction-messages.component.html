@@ -651,6 +651,91 @@
     </div>
   </ng-container>
 
+  <ng-container *ngIf="transactionDetail?.type === eTransType.GrantAuthz">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      <app-messages-item
+        [label]="'Granter'"
+        [value]="transactionDetail?.messages[0]?.granter"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Grantee'"
+        [value]="transactionDetail?.messages[0]?.grantee"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Authorization Type'"
+        [value]="transactionDetail?.messages[0]?.grant?.authorization?.authorization_type || '-'"></app-messages-item>
+      <app-messages-item
+        [label]="'Expiration'"
+        [value]="getDateValue(transactionDetail?.messages[0]?.grant?.expiration) || '-'"></app-messages-item>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Max Tokens</div>
+        <div class="col-12 col-lg-9">
+          <ng-container
+            *ngIf="+transactionDetail?.messages[0]?.grant?.authorization?.max_tokens?.amount > 0; else noValues">
+            {{
+              transactionDetail?.messages[0]?.grant?.authorization?.max_tokens?.amount
+                | balanceOf
+                | mask : 'separator.6'
+            }}
+            <span class="text--primary">{{ denom }}</span>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteAuthz">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      <app-messages-item
+        [label]="'Grantee'"
+        [value]="transactionDetail?.messages[0]?.grantee"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Authorization Type'"
+        [value]="transactionDetail?.messages[0]?.msgs[0]['@type']"></app-messages-item>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Total Amount Execute</div>
+        <div class="col-12 col-lg-9 text--gray-1">
+          <ng-container *ngIf="+totalAmountExecute > 0; else noValues">
+            {{ +totalAmountExecute | balanceOf | mask : 'separator.6' }}
+            <span class="text--primary">{{ denom }}</span>
+          </ng-container>
+        </div>
+      </div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Json</div>
+        <div class="col-12 col-lg-9">
+          <pre
+            id="json"
+            class="raw-content text--white px-4"
+            [innerHtml]="transactionDetail?.messages[0]?.msgs | appJson"></pre>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.RevokeAuthz">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      <app-messages-item
+        [label]="'Granter'"
+        [value]="transactionDetail?.messages[0]?.granter"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Grantee'"
+        [value]="transactionDetail?.messages[0]?.grantee"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="' Message Type Url'"
+        [value]="transactionDetail?.messages[0]?.msg_type_url"></app-messages-item>
+    </div>
+  </ng-container>
+
   <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1">
     <ng-container *ngFor="let item of transactionDetail?.messages; index as i">
       <div class="card-info">
