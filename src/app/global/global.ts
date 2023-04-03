@@ -235,7 +235,7 @@ export function convertDataTransaction(data, coinInfo) {
         }
       });
     }
-    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
+    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value || 'TBD';
 
     const status =
       _.get(element, 'tx_response.code') == CodeTransaction.Success
