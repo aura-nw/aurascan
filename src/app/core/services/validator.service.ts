@@ -105,13 +105,17 @@ export class ValidatorService extends CommonService {
     return `${this.environmentService.configValue.validator_s3}/${validatorAddress}.png`;
   }
 
+  getValidatorInfoByList(addressList: string[]): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/validators/validator-info?address=${addressList}`);
+  }
+
   getStakeInfo(delegatorAddress: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/validators/delegations/delegator/${delegatorAddress}`);
   }
 
   getUptimeLCD(block = null) {
-    if(!block){
-      block = 'latest'
+    if (!block) {
+      block = 'latest';
     }
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BLOCK}/${block}`);
   }
