@@ -39,6 +39,9 @@ export class LoadingImageComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.isError = false;
+    if (!this.identity) {
+      this.srcImg = this.df;
+    }
     this.cdr.markForCheck();
   }
 }

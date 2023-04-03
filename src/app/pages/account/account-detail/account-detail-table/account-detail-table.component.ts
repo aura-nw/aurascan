@@ -62,7 +62,6 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
       );
 
       const operatorAddArr = [];
-      const operatorReArr = [];
       this.dataSource.data.forEach((f) => {
         if (f.vesting_schedule) {
           f.date_format = new Date(Number(f.vesting_schedule) * 1000);
@@ -80,30 +79,32 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
         }
         if (this.pageEventType === 'Redelegation') {
           operatorAddArr.push(f.validator_src_address);
-          operatorReArr.push(f.validator_dst_address);
+          operatorAddArr.push(f.validator_dst_address);
         }
       });
-      // get validator logo
-      this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
-        if (res?.data) {
-          this.validatorImgArr = res?.data;
-          // push image into validator array
-          this.dataSource.data.forEach((item) => {
-            this.validatorImgArr.forEach((imgObj) => {
-              if (this.pageEventType !== 'Redelegation' && imgObj.operator_address == item.validator_address) {
-                item['image_url'] = imgObj.image_url;
-              }
-              if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_src_address) {
-                item['src_image_url'] = imgObj.image_url;
-              }
-              if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_dst_address) {
-                item['dst_image_url'] = imgObj.image_url;
-              }
+      if (operatorAddArr.length > 0 && operatorAddArr[0]) {
+        // get validator logo
+        this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
+          if (res?.data) {
+            this.validatorImgArr = res?.data;
+            // push image into validator array
+            this.dataSource.data.forEach((item) => {
+              this.validatorImgArr.forEach((imgObj) => {
+                if (this.pageEventType !== 'Redelegation' && imgObj.operator_address == item.validator_address) {
+                  item['image_url'] = imgObj.image_url;
+                }
+                if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_src_address) {
+                  item['src_image_url'] = imgObj.image_url;
+                }
+                if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_dst_address) {
+                  item['dst_image_url'] = imgObj.image_url;
+                }
+              });
             });
-          });
-          this.cdr.markForCheck();
-        }
-      });
+            this.cdr.markForCheck();
+          }
+        });
+      }
     }
   }
 

@@ -118,21 +118,23 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.data.forEach((d) => {
         operatorAddArr.push(d.operator_address);
       });
-      // get validator logo
-      this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
-        if (res?.data) {
-          this.validatorImgArr = res?.data;
-          // push image into validator array
-          this.dataSource.data.forEach((item) => {
-            this.validatorImgArr.forEach((imgObj) => {
-              if (imgObj.operator_address == item.operator_address) {
-                item['image_url'] = imgObj.image_url;
-              }
+      if (operatorAddArr.length > 0) {
+        // get validator logo
+        this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
+          if (res?.data) {
+            this.validatorImgArr = res?.data;
+            // push image into validator array
+            this.dataSource.data.forEach((item) => {
+              this.validatorImgArr.forEach((imgObj) => {
+                if (imgObj.operator_address == item.operator_address) {
+                  item['image_url'] = imgObj.image_url;
+                }
+              });
             });
-          });
-          this.cdr.markForCheck();
-        }
-      });
+            this.cdr.markForCheck();
+          }
+        });
+      }
 
       minus = this.getUpdatePage(
         changes.data.currentValue?.length,
