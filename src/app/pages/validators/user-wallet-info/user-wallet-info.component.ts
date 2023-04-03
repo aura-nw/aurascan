@@ -29,6 +29,7 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
   @Input() denom: any;
   @Output() onViewDialog: EventEmitter<any> = new EventEmitter();
   @Input() isLoading: boolean;
+  validatorImgArr;
 
   dataSourceWallet = new MatTableDataSource<any>();
   templatesWallet: Array<TableTemplate> = [
@@ -61,6 +62,10 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
           }
         });
       }
+      if (changes.arrayDelegate.currentValue?.length > 0) {
+        // get ValidatorAddressArr
+        this.getValidatorAvatar(changes.arrayDelegate.currentValue);
+      }
     }
 
     if (changes.dataDelegate) {
@@ -79,15 +84,15 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
         }
       });
       this.lstUndelegate = lstUndelegateTemp;
+
+      if (this.lstUndelegate?.length > 0) {
+        // get ValidatorAddressArr
+        this.getValidatorAvatar(this.lstUndelegate);
+      }
     }
-    this.cdr.markForCheck();
   }
 
   ngOnInit(): void {}
-
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
-  }
 
   viewDialog(isClaimMode = false, modal: any = '', address: any = ''): void {
     setTimeout(() => {
@@ -100,5 +105,30 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
       isClaimMode: isClaimMode,
     };
     this.onViewDialog.emit(dataModal);
+  }
+
+  getValidatorAvatar(validatorArr) {
+    if (validatorArr.length > 0) {
+      const operatorAddArr = [];
+      // get ValidatorAddressArr
+      validatorArr.forEach((d) => {
+        operatorAddArr.push(d.validator_address);
+      });
+      // get validator logo
+      this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
+        if (res?.data) {
+          this.validatorImgArr = res?.data;
+          // push image into validator array
+          validatorArr.forEach((item) => {
+            this.validatorImgArr.forEach((imgObj) => {
+              if (imgObj.operator_address == item.validator_address) {
+                item['image_url'] = imgObj.image_url;
+              }
+            });
+          });
+          this.cdr.markForCheck();
+        }
+      });
+    }
   }
 }

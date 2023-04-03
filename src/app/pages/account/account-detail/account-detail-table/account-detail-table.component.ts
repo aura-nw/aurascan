@@ -1,5 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -23,6 +32,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   @Input() pageEventType: string;
   @Input() textNull: string = 'NO DATA';
   @Output() pageEvent = new EventEmitter<PageEvent>();
+  validatorImgArr;
 
   pageType = PageEventType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -37,6 +47,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private validatorService: ValidatorService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {}
@@ -50,6 +61,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
 
+      const operatorAddArr = [];
       this.dataSource.data.forEach((f) => {
         if (f.vesting_schedule) {
           f.date_format = new Date(Number(f.vesting_schedule) * 1000);
@@ -61,7 +73,38 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
             f.type_format = 'Delayed';
           }
         }
+        // get ValidatorAddressArr
+        if (this.pageEventType !== 'Redelegation') {
+          operatorAddArr.push(f.validator_address);
+        }
+        if (this.pageEventType === 'Redelegation') {
+          operatorAddArr.push(f.validator_src_address);
+          operatorAddArr.push(f.validator_dst_address);
+        }
       });
+      if (operatorAddArr.length > 0 && operatorAddArr[0]) {
+        // get validator logo
+        this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
+          if (res?.data) {
+            this.validatorImgArr = res?.data;
+            // push image into validator array
+            this.dataSource.data.forEach((item) => {
+              this.validatorImgArr.forEach((imgObj) => {
+                if (this.pageEventType !== 'Redelegation' && imgObj.operator_address == item.validator_address) {
+                  item['image_url'] = imgObj.image_url;
+                }
+                if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_src_address) {
+                  item['src_image_url'] = imgObj.image_url;
+                }
+                if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_dst_address) {
+                  item['dst_image_url'] = imgObj.image_url;
+                }
+              });
+            });
+            this.cdr.markForCheck();
+          }
+        });
+      }
     }
   }
 
@@ -74,13 +117,5 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
       event.pageIndex * event.pageSize,
       event.pageIndex * event.pageSize + event.pageSize,
     );
-  }
-
-  showPageEvent(event): void {
-    this.currentPage = event?.target.innerText - 1;
-  }
-
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 }
