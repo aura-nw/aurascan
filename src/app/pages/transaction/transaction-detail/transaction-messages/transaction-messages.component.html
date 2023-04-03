@@ -670,7 +670,7 @@
         [label]="'Expiration'"
         [value]="getDateValue(transactionDetail?.messages[0]?.grant?.expiration) || '-'"></app-messages-item>
       <div class="row mb-3 body-01">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Max Tokens</div>
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Limit</div>
         <div class="col-12 col-lg-9">
           <ng-container
             *ngIf="+transactionDetail?.messages[0]?.grant?.authorization?.max_tokens?.amount > 0; else noValues">

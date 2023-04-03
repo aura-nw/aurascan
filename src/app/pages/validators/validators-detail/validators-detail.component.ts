@@ -391,7 +391,10 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         }
         let element = [{ height, isSyncFail }];
         if (this.arrBlockUptime && this.arrBlockUptime?.length > 0) {
-          this.arrBlockUptime = [...element, ...this.arrBlockUptime];
+          const temp = this.arrBlockUptime.find((k) => k.height === height);
+          if (!temp) {
+            this.arrBlockUptime = [...element, ...this.arrBlockUptime];
+          }
         } else {
           this.arrBlockUptime = [...element];
           this.getBlocksMiss(height);
