@@ -1,5 +1,4 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DecimalPipe } from '@angular/common';
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -19,7 +18,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 const marked = require('marked');
-
+const encode = require('@cosmjs/encoding');
 @Component({
   selector: 'app-validators-detail',
   templateUrl: './validators-detail.component.html',
@@ -36,6 +35,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   pageSize = 5;
   pageIndexDelegator = 0;
   pageIndexPower = 0;
+  pageIndexBlock = 0;
   statusValidator = STATUS_VALIDATOR;
 
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
@@ -68,25 +68,24 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   lengthBlockLoading = true;
   isLoadingPower = true;
   lastBlockLoading = true;
-  blocksMissDetail: any;
   numberLastBlock = 100;
   timerGetUpTime: any;
-  timerGetBlockMiss: any;
+  timerGetBlock: any;
   nextKey = null;
   currentNextKey = null;
   nextKeyBlock = null;
   currentNextKeyBlock = null;
   isOpenDialog = false;
-  totalSBT = 0;
 
-  arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.configValue.chain_info;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  prefixConsAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixConsAddr;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  timeInterval = this.environmentService.configValue.timeInterval;
   soulboundList = [];
+  arrBlockUptime = [];
+  isLeftPage = false;
+  addressBase64 = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -96,7 +95,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     public commonService: CommonService,
     public global: Globals,
     private layout: BreakpointObserver,
-    private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
     private walletService: WalletService,
@@ -105,120 +103,126 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.loadData();
+    this.getDetail(true);
+    this.timerGetBlock = setInterval(() => {
+      this.getLastHeight();
+    }, this.timeInterval);
+
     this.timerGetUpTime = setInterval(() => {
-      this.getListUpTime();
-    }, 30000);
-    this.timerGetBlockMiss = setInterval(() => {
-      this.getBlocksMiss(this.currentAddress);
-    }, 10000);
+      this.getDetail();
+      this.loadData();
+    }, 5000);
   }
 
   loadData() {
-    this.getDetail();
-    this.getListBlockWithOperator();
-    this.getListDelegator();
-    this.getListPower();
+    if (!this.isLeftPage) {
+      this.getListBlockWithOperator();
+      this.getListDelegator();
+      this.getListPower();
+    }
   }
 
   ngOnDestroy() {
+    this.isLeftPage = true;
     clearInterval(this.timerGetUpTime);
-    clearInterval(this.timerGetBlockMiss);
+    clearInterval(this.timerGetBlock);
   }
 
-  getDetail(): void {
-    this.validatorService.validatorsDetail(this.currentAddress).subscribe(
-      (res) => {
-        if (res.status === 404) {
+  getDetail(isInit = false): void {
+    if (!this.isLeftPage) {
+      this.validatorService.validatorsDetail(this.currentAddress).subscribe(
+        (res) => {
+          if (res.status === 404) {
+            this.router.navigate(['/']);
+            return;
+          }
+
+          this.currentValidatorDetail = {
+            ...res.data,
+            self_bonded: balanceOf(res.data.self_bonded),
+            power: balanceOf(res.data.power),
+            identity: res?.data?.identity
+          };
+          this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
+          this.getDetailValidatorIndexer();
+          if (isInit) {
+            if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
+              this.getLastHeight();
+            } else {
+              this.getListUpTime();
+            }
+          }
+
+          this.getTotalSBT(this.currentValidatorDetail.acc_address);
+        },
+        (error) => {
           this.router.navigate(['/']);
-          return;
+        },
+      );
+    }
+  }
+
+  getListBlockWithOperator(nextKeyBlock = null): void {
+    this.blockService.blockWithOperator(100, this.currentAddress, nextKeyBlock).subscribe(
+      (res) => {
+        const { code, data } = res;
+        this.nextKeyBlock = data.nextKey || null;
+        if (code === 200) {
+          const blocks = convertDataBlock(data);
+          if (
+            this.dataSourceBlock.data.length > 0 &&
+            this.dataSourceBlock.data.length !== blocks.length &&
+            this.pageIndexBlock != 0
+          ) {
+            this.dataSourceBlock.data = [...this.dataSourceBlock.data, ...blocks];
+          } else {
+            this.dataSourceBlock.data = [...blocks];
+          }
+
+          this.dataSourceBlockMob = this.dataSourceBlock?.data.slice(
+            this.pageIndexBlock * this.pageSize,
+            this.pageIndexBlock * this.pageSize + this.pageSize,
+          );
+
+          this.lengthBlock = this.dataSourceBlock.data.length;
         }
-
-        this.currentValidatorDetail = {
-          ...res.data,
-          self_bonded: balanceOf(res.data.self_bonded),
-          power: balanceOf(res.data.power),
-          identity: res?.data?.identity,
-          up_time: 100,
-        };
-
-        this.getTotalSBT(this.currentValidatorDetail.acc_address);
-        this.getBlocksMiss(this.currentAddress);
       },
-      (error) => {
-        this.router.navigate(['/']);
+      () => {},
+      () => {
+        this.lengthBlockLoading = false;
       },
     );
   }
 
-  getListBlockWithOperator(nextKeyBlock = null): void {
-    this.blockService.blockWithOperator(100, this.currentAddress, nextKeyBlock).subscribe((res) => {
-      const { code, data } = res;
-      this.nextKeyBlock = data.nextKey || null;
-      if (code === 200) {
-        const blocks = convertDataBlock(data);
-        if (this.dataSourceBlock.data.length > 0) {
-          this.dataSourceBlock.data = [...this.dataSourceBlock.data, ...blocks];
-        } else {
-          this.dataSourceBlock.data = [...blocks];
+  async getBlocksMiss(height = null) {
+    if (this.arrBlockUptime && this.arrBlockUptime?.length >= 100) {
+      return;
+    }
+
+    const res = await this.validatorService.getUptimeLCD(height);
+    const currentHeight = Number(_.get(res, 'data.block.header.height')) || 0;
+    const temp = this.arrBlockUptime.find((k) => k.height === currentHeight);
+    if (!temp) {
+      const listBlock = _.get(res, 'data.block.last_commit.signatures');
+      if (listBlock) {
+        let height = Number(_.get(res, 'data.block.header.height')) || 0;
+        let isSyncFail = false;
+        const address = listBlock.find((k) => k.validator_address === this.addressBase64);
+        if (!address) {
+          isSyncFail = true;
         }
 
-        this.dataSourceBlockMob = this.dataSourceBlock?.data.slice(
-          this.pageIndexPower * this.pageSize,
-          this.pageIndexPower * this.pageSize + this.pageSize,
-        );
-
-        this.lengthBlock = this.dataSourceBlock.data.length;
-        this.isLoadingPower = false;
-      }
-      this.lengthBlockLoading = false;
-    });
-  }
-
-  getListUpTime(): void {
-    this.blockService.blocksIndexer(this.numberLastBlock).subscribe((res) => {
-      const { code, data } = res;
-      if (code === 200) {
-        const block = _.get(data, 'blocks').map((element) => {
-          const height = _.get(element, 'block.header.height');
-          const block_hash = _.get(element, 'block_id.hash');
-          const isMissed = 0;
-          return { height, block_hash, isMissed };
-        });
-        this.arrayUpTime = block;
-      }
-      this.lastBlockLoading = false;
-    });
-  }
-
-  getBlocksMiss(operatorAddress) {
-    //check is active validator
-    if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
-      this.validatorService.validatorsFromIndexer(operatorAddress).subscribe((res) => {
-        //cal percent if exit arr block miss
-        if (Number(res.data?.validators?.val_signing_info?.missed_blocks_counter) > 0) {
-          this.blocksMissDetail = res.data?.validators?.val_signing_info;
-          this.calculatorUpTime();
+        let element = [{ height, isSyncFail }];
+        if (this.arrBlockUptime && this.arrBlockUptime?.length > 0) {
+          this.arrBlockUptime = [...this.arrBlockUptime, ...element];
         }
-      });
+      }
     }
-    this.getListUpTime();
-  }
 
-  calculatorUpTime() {
-    let percent = '100.00';
-    if (this.blocksMissDetail) {
-      percent = (100 - Number(this.blocksMissDetail['missed_blocks_counter']) / NUM_BLOCK)
-        ?.toString()
-        .match(/^-?\d+(?:\.\d{0,2})?/)[0];
-    }
-    this.currentValidatorDetail.up_time = percent;
-  }
-
-  checkMissed(height) {
-    if (Number(this.blocksMissDetail?.index_offset) === Number(height)) {
-      return true;
-    }
-    return false;
+    this.timerGetUpTime = setInterval(() => {
+      this.getBlocksMiss(height - 1);
+      clearInterval(this.timerGetUpTime);
+    }, 500);
   }
 
   async getListDelegator() {
@@ -239,51 +243,53 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getListPower(nextKey = null): void {
-    if (!this.dataSourcePower.data) {
-      this.isLoadingPower = true;
-    }
-    this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe((res) => {
-      const { code, data } = res;
-      this.nextKey = data.nextKey || null;
+    this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe(
+      (res) => {
+        const { code, data } = res;
+        this.nextKey = data.nextKey || null;
 
-      if (code === 200) {
-        const txs = _.get(data, 'transactions').map((element) => {
-          let isStakeMode = false;
-          const tx_hash = _.get(element, 'tx_response.txhash');
-          const address = _.get(element, 'tx_response.tx.body.messages[0].validator_dst_address');
-          const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
-          if (
-            _type === TRANSACTION_TYPE_ENUM.Delegate ||
-            (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
-            _type === TRANSACTION_TYPE_ENUM.CreateValidator
-          ) {
-            isStakeMode = true;
+        if (code === 200) {
+          const txs = _.get(data, 'transactions').map((element) => {
+            let isStakeMode = false;
+            const tx_hash = _.get(element, 'tx_response.txhash');
+            const address = _.get(element, 'tx_response.tx.body.messages[0].validator_dst_address');
+            const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
+            if (
+              _type === TRANSACTION_TYPE_ENUM.Delegate ||
+              (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
+              _type === TRANSACTION_TYPE_ENUM.CreateValidator
+            ) {
+              isStakeMode = true;
+            }
+            const amount = getAmount(
+              _.get(element, 'tx_response.tx.body.messages'),
+              _type,
+              _.get(element, 'tx_response.tx.body.raw_log'),
+            );
+            const height = _.get(element, 'tx_response.height');
+            const timestamp = _.get(element, 'tx_response.timestamp');
+
+            return { tx_hash, amount, isStakeMode, height, timestamp };
+          });
+          if (this.dataSourcePower.data.length > 0 && this.pageIndexPower != 0) {
+            this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
+          } else {
+            this.dataSourcePower.data = [...txs];
           }
-          const amount = getAmount(
-            _.get(element, 'tx_response.tx.body.messages'),
-            _type,
-            _.get(element, 'tx_response.tx.body.raw_log'),
+
+          this.dataSourcePowerMob = this.dataSourcePower?.data.slice(
+            this.pageIndexPower * this.pageSize,
+            this.pageIndexPower * this.pageSize + this.pageSize,
           );
-          const height = _.get(element, 'tx_response.height');
-          const timestamp = _.get(element, 'tx_response.timestamp');
 
-          return { tx_hash, amount, isStakeMode, height, timestamp };
-        });
-        if (this.dataSourcePower.data.length > 0 && this.pageIndexPower != 0) {
-          this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
-        } else {
-          this.dataSourcePower.data = [...txs];
+          this.lengthPower = this.dataSourcePower.data.length;
         }
-
-        this.dataSourcePowerMob = this.dataSourcePower?.data.slice(
-          this.pageIndexPower * this.pageSize,
-          this.pageIndexPower * this.pageSize + this.pageSize,
-        );
-
-        this.lengthPower = this.dataSourcePower.data.length;
+      },
+      () => {},
+      () => {
         this.isLoadingPower = false;
-      }
-    });
+      },
+    );
   }
 
   paginatorEmit(event, type: 'block' | 'delegator' | 'power'): void {
@@ -314,7 +320,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           this.getListBlockWithOperator(this.nextKeyBlock);
           this.currentNextKeyBlock = this.nextKeyBlock;
         }
-        this.pageIndexPower = page.pageIndex;
+        this.pageIndexBlock = page.pageIndex;
         break;
       case 'delegator':
         this.pageIndexDelegator = page.pageIndex;
@@ -336,10 +342,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       default:
         break;
     }
-  }
-
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 
   ngAfterViewChecked(): void {
@@ -373,5 +375,58 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
       this.soulboundList = res.data.filter((k) => k.picked);
     });
+  }
+
+  async getLastHeight() {
+    if (!this.isLeftPage) {
+      const res = await this.validatorService.getUptimeLCD();
+      const listBlock = _.get(res, 'data.block.last_commit.signatures');
+      if (listBlock) {
+        let height = Number(_.get(res, 'data.block.header.height')) || 0;
+        let isSyncFail = false;
+        const address = listBlock.find((k) => k.validator_address === this.addressBase64);
+        if (!address) {
+          isSyncFail = true;
+        }
+        let element = [{ height, isSyncFail }];
+        if (this.arrBlockUptime && this.arrBlockUptime?.length > 0) {
+          const temp = this.arrBlockUptime.find((k) => k.height === height);
+          if (!temp) {
+            this.arrBlockUptime = [...element, ...this.arrBlockUptime];
+          }
+        } else {
+          this.arrBlockUptime = [...element];
+          this.getBlocksMiss(height);
+        }
+      }
+      this.lastBlockLoading = false;
+    }
+  }
+
+  getDetailValidatorIndexer() {
+    this.validatorService.validatorsFromIndexer(this.currentValidatorDetail.operator_address).subscribe((res) => {
+      this.currentValidatorDetail['up_time'] =
+        (NUM_BLOCK - +res.data.validators[0].val_signing_info.missed_blocks_counter) / 100;
+    });
+  }
+
+  getListUpTime(): void {
+    this.blockService.blocksIndexer(this.numberLastBlock).subscribe(
+      (res) => {
+        const { code, data } = res;
+        if (code === 200) {
+          const block = _.get(data, 'blocks').map((element) => {
+            const height = _.get(element, 'block.header.height');
+            const isSyncFail = true;
+            return { height, isSyncFail };
+          });
+          this.arrBlockUptime = block;
+        }
+      },
+      () => {},
+      () => {
+        this.lastBlockLoading = false;
+      },
+    );
   }
 }

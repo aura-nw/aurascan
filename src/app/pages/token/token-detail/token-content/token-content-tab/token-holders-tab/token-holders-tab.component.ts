@@ -51,6 +51,7 @@ export class TokenHoldersTabComponent implements OnInit {
   totalQuantity = 0;
   numberTop = 0;
   totalHolder = 0;
+
   chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(
@@ -70,10 +71,8 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getListTokenHolder() {
-    this.loading = true;
-    this.tokenService
-      .getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress)
-      .subscribe((res) => {
+    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress).subscribe(
+      (res) => {
         if (res && res.data?.resultAsset?.length > 0) {
           this.totalHolder = res.data?.resultCount;
           if (this.totalHolder > this.numberTopHolder) {
@@ -98,8 +97,12 @@ export class TokenHoldersTabComponent implements OnInit {
           }
           this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
         }
+      },
+      () => {},
+      () => {
         this.loading = false;
-      });
+      },
+    );
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {

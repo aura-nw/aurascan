@@ -50,6 +50,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   };
 
   destroyed$ = new Subject();
+  timerGetUpTime: any;
 
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
@@ -73,6 +74,10 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+
+    if (this.timerGetUpTime) {
+      clearInterval(this.timerGetUpTime);
+    }
   }
 
   ngOnInit(): void {
@@ -98,6 +103,10 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         this.activeId = 0;
       }
     });
+
+    this.timerGetUpTime = setInterval(() => {
+      this.getTransaction();
+    }, 5000);
   }
 
   changeTab(tabId): void {

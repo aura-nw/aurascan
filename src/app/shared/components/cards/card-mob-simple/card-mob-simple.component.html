@@ -21,7 +21,7 @@
         <app-loading-image
           [appClass]="validatorData['jailed'] ? 'jailed' : ''"
           [identity]="validatorData.validatorIdentity"
-          [srcImg]="getValidatorAvatar(validatorData.validatorAddress)">
+          [srcImg]="validatorData.imgUrl">
         </app-loading-image>
         <span class="avt__num">{{ validatorData.validatorNumber }}</span>
       </div>
@@ -61,7 +61,7 @@
         <app-loading-image
           [appClass]="validatorData['jailed'] ? 'jailed' : ''"
           [identity]="validatorData.validatorIdentity"
-          [srcImg]="getValidatorAvatar(validatorData.validatorAddress)">
+          [srcImg]="validatorData.imgUrl">
         </app-loading-image>
         <span class="avt__num">{{ validatorData.validatorNumber }}</span>
       </div>

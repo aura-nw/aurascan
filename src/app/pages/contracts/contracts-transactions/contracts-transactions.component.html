@@ -10,8 +10,10 @@
   </div>
   <section>
     <div class="card mt-6">
-      <div class="card-body" *ngIf="contractTransaction['data']">
+      <div class="card-body">
+        <app-loading-sprint *ngIf="isLoadingTX"></app-loading-sprint>
         <app-contract-table
+          *ngIf="!isLoadingTX && contractTransaction['data'].length > 0"
           [length]="contractTransaction['count']"
           [pageSize]="pageSize"
           [label]="label?.toString()"
