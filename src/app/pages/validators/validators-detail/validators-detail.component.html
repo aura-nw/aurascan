@@ -121,7 +121,7 @@
             <div class="col-6">Uptime</div>
             <div class="col-6 text--gray-1 text-end text-lg-start">
               <ng-container *ngIf="currentValidatorDetail['status'] === statusValidator.Active">
-                {{ currentValidatorDetail?.up_time | number : global.formatNumber2Decimal }}%
+                {{ currentValidatorDetail['up_time'] || 100 | number : global.formatNumber2Decimal }}%
               </ng-container>
               <ng-container *ngIf="currentValidatorDetail['status'] !== statusValidator.Active"> 0.00% </ng-container>
             </div>
