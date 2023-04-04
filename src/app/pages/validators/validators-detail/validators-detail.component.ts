@@ -141,8 +141,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
             ...res.data,
             self_bonded: balanceOf(res.data.self_bonded),
             power: balanceOf(res.data.power),
-            identity: res?.data?.identity,
-            up_time: 100,
+            identity: res?.data?.identity
           };
           this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
           this.getDetailValidatorIndexer();
@@ -406,7 +405,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   getDetailValidatorIndexer() {
     this.validatorService.validatorsFromIndexer(this.currentValidatorDetail.operator_address).subscribe((res) => {
-      this.currentValidatorDetail.up_time =
+      this.currentValidatorDetail['up_time'] =
         (NUM_BLOCK - +res.data.validators[0].val_signing_info.missed_blocks_counter) / 100;
     });
   }
