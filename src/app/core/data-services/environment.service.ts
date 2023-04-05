@@ -15,6 +15,7 @@ export interface IConfiguration {
   coins: any;
   env: string;
   indexerUri: string;
+  timeInterval: number;
 }
 
 @Injectable()
@@ -31,6 +32,7 @@ export class EnvironmentService {
     coins: '',
     env: '',
     indexerUri: '',
+    timeInterval: null
   });
 
   get configValue(): IConfiguration {
@@ -59,6 +61,7 @@ export class EnvironmentService {
           coins: config['coins'],
           env: config['env'],
           indexerUri: config['urlIndexer'],
+          timeInterval: config['timeInterval'] || 4000,
         };
 
         this.config.next(data);

@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractTransactionType } from 'src/app/core/constants/contract.enum';
-import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { ModeExecuteTransaction, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { DROPDOWN_ELEMENT, IContractPopoverData, ITableContract } from 'src/app/core/models/contract.model';
@@ -126,7 +126,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
   }
 
   getListContractTransaction(): void {
-    this.isLoading = true;
     this.contractInfo.count = this.dataList?.count || 0;
     const ret = this.dataList?.data?.map((contract) => {
       let value = 0;
@@ -152,11 +151,18 @@ export class ContractTableComponent implements OnInit, OnChanges {
           to = contract.messages[0].contract;
           break;
         default:
-          method = 'mint';
+          if (contract.messages[0]?.msg?.accept_nft_offer?.funds_amount) {
+            method = ModeExecuteTransaction.AcceptOffer;
+            // value = +contract.messages[0]?.msg?.accept_nft_offer?.funds_amount;
+          } else {
+            method = 'mint';
+          }
+          if (contract.messages[0]?.funds) {
+            value = +contract.messages[0]?.funds[0]?.amount;
+          }
           if (contract.messages[0]?.msg) {
             method = Object.keys(contract.messages[0]?.msg)[0];
           }
-          value = 0;
           from = contract.messages[0].sender;
           to = contract.messages[0].contract;
           break;
