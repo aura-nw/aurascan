@@ -49,6 +49,8 @@ export const MESSAGES_CODE_STAKING = {
   37: { Code: 37, Message: 'invalid historical info' },
   38: { Code: 38, Message: 'no historical info found' },
   39: { Code: 39, Message: 'empty validator public key' },
+  40: { Code: 40, Message: 'unbonding operation not found' },
+  41: { Code: 41, Message: 'cannot un-hold unbonding operation that is not on hold' },
 };
 
 //v0.45.11

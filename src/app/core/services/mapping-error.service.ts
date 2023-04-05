@@ -30,11 +30,21 @@ export class MappingErrorService extends CommonService {
       message = this.translate.instant('NOTICE.SUCCESS_TRANSACTION');
       return message;
     }
-    let temp = MESSAGES_CODE_STAKING[code]?.Message || 'error';
-    if (isProposal) {
-      temp = MESSAGES_CODE_PROPOSAL[code]?.Message || 'error';
+
+    let codeTemp = code;
+    if (code !== parseInt(code, 10)) {
+      const index = code.indexOf('code');
+      if (index) {
+        //get value of code from string
+        codeTemp = code.slice(index + 5, index + 8).trim();
+      }
     }
-    message = temp ? temp.charAt(0).toUpperCase() + temp.slice(1) : 'Error';
+    let temp = MESSAGES_CODE_STAKING[codeTemp]?.Message;
+    if (isProposal) {
+      temp = MESSAGES_CODE_PROPOSAL[codeTemp]?.Message;
+    }
+
+    message = temp ? temp.charAt(0).toUpperCase() + temp.slice(1) : code;
     return message;
   }
 
@@ -69,8 +79,7 @@ export class MappingErrorService extends CommonService {
       if (!!!numberCode && numberCode === CodeTransaction.Success) {
         message = this.translate.instant('NOTICE.SUCCESS_TRANSACTION');
         this.toastr.success(message);
-        setTimeout(() => {
-        }, TIME_OUT_CALL_API);
+        setTimeout(() => {}, TIME_OUT_CALL_API);
       } else {
         this.toastr.error(message);
       }
