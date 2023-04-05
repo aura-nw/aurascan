@@ -198,7 +198,7 @@
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ calculatorUpTime(data['cons_address']) | number : globals.formatNumber2Decimal }}%
+                            {{ calculatorUpTime(data['acc_address']) | number : globals.formatNumber2Decimal }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
@@ -211,7 +211,7 @@
                               <app-loading-image
                                 [appClass]="data['jailed'] ? 'jailed' : ''"
                                 [identity]="data.identity"
-                                [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
+                                [srcImg]="data.image_url"></app-loading-image>
                             </div>
                           </div>
                           <span [class.text-jailed]="data['jailed']">
@@ -268,7 +268,7 @@
                             <app-loading-image
                               [identity]="validator['identity']"
                               [appClass]="validator['jailed'] ? 'jailed' : ''"
-                              [srcImg]="getValidatorAvatar(validator['operator_address'])">
+                              [srcImg]="validator['image_url']">
                             </app-loading-image>
                           </span>
                           <div
@@ -369,13 +369,13 @@
               <app-loading-image
                 [appClass]="dataModal['jailed'] ? 'jailed' : ''"
                 [identity]="dataModal.identity"
-                [srcImg]="getValidatorAvatar(dataModal.operator_address)">
+                [srcImg]="dataModal.image_url">
               </app-loading-image>
             </div>
           </div>
           <div class="ml-2">
             <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
-              <span class="modal__title">{{ dataModal?.title }}</span>
+              <span class="modal__title text-break">{{ dataModal?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
               Commission - {{ dataModal?.commission | percent : globals.formatNumber2Decimal }}
@@ -462,7 +462,7 @@
                         <app-loading-image
                           [appClass]="item['jailed'] ? 'jailed' : ''"
                           [identity]="item.identity"
-                          [srcImg]="getValidatorAvatar(item.operator_address)">
+                          [srcImg]="item.image_url">
                         </app-loading-image>
                       </div>
                     </div>

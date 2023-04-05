@@ -219,7 +219,7 @@ form.search-form-validators {
 }
 .modal__title {
   display: inline-block;
-  white-space: nowrap;
+  // white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
   font-weight: 600;
@@ -237,7 +237,4 @@ form.search-form-validators {
       flex-grow: 0;
     }
   }
-}
-.text-break {
-  word-break: break-all;
 }

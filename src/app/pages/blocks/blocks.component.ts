@@ -42,14 +42,19 @@ export class BlocksComponent implements OnInit {
   }
 
   getList(): void {
-    this.blockService.blocksIndexer(this.pageSize).subscribe((res) => {
-      const { code, data } = res;
-      if (code === 200) {
-        const blocks = convertDataBlock(data);
-        this.dataSource = new MatTableDataSource(blocks);
-      }
-      this.loading = false;
-    });
+    this.blockService.blocksIndexer(this.pageSize).subscribe(
+      (res) => {
+        const { code, data } = res;
+        if (code === 200) {
+          const blocks = convertDataBlock(data);
+          this.dataSource = new MatTableDataSource(blocks);
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   getInfoCommon(): void {

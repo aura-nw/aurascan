@@ -40,6 +40,8 @@ export class DelegateItemComponent implements OnInit {
   isHandleStake = false;
   isLoading = false;
   totalDelegator = 0;
+  dialogOpen = false;
+  isValidatorJail = false;
 
   chainInfo = this.environmentService.configValue.chain_info;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -87,20 +89,23 @@ export class DelegateItemComponent implements OnInit {
   }
 
   viewPopupDetail(staticDataModal: any) {
-    const view = async () => {
-      const account = this.walletService.getAccount();
-      if (account && account.bech32Address) {
-        this.amountFormat = null;
-        this.resetCheck();
-        this.modalReference = this.modalService.open(staticDataModal, {
-          keyboard: false,
-          centered: true,
-          size: 'lg',
-          windowClass: 'modal-holder validator-modal',
-        });
-      }
-    };
-    view();
+    if (!this.dialogOpen) {
+      const view = async () => {
+        const account = this.walletService.getAccount();
+        if (account && account.bech32Address) {
+          this.amountFormat = null;
+          this.resetCheck();
+          this.modalReference = this.modalService.open(staticDataModal, {
+            keyboard: false,
+            centered: true,
+            size: 'lg',
+            windowClass: 'modal-holder validator-modal',
+          });
+          this.dialogOpen = true;
+        }
+      };
+      view();
+    }
   }
 
   //Get data for wallet info and list staking
@@ -137,6 +142,7 @@ export class DelegateItemComponent implements OnInit {
 
   resetCheck() {
     this.isExceedAmount = false;
+    this.isValidatorJail = false;
     this.errorExceedAmount = false;
   }
 
@@ -158,6 +164,7 @@ export class DelegateItemComponent implements OnInit {
 
   closeDialog() {
     if (this.modalReference) {
+      this.dialogOpen = false;
       this.changeStatus.emit(false);
       this.modalReference.close('Close click');
     }
@@ -165,7 +172,7 @@ export class DelegateItemComponent implements OnInit {
 
   handleStaking() {
     this.isValidAmount();
-    if (!this.isExceedAmount && this.amountFormat > 0) {
+    if (!this.isExceedAmount && !this.isValidatorJail && this.amountFormat > 0) {
       const executeStaking = async () => {
         this.isLoading = true;
         const { hash, error } = await this.walletService.signAndBroadcast({
@@ -184,6 +191,7 @@ export class DelegateItemComponent implements OnInit {
         });
 
         this.isOpenDialog = false;
+        this.dialogOpen = false;
         this.changeStatus.emit(false);
         this.checkStatusExecuteBlock(hash, error, '');
       };
@@ -200,8 +208,11 @@ export class DelegateItemComponent implements OnInit {
         (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT || 0
     ).toFixed(6);
     this.isExceedAmount = false;
-
-    if (this.amountFormat > +amountCheck) {
+    this.isValidatorJail = false;
+    if (this.currentValidatorDetail?.jailed !== 0) {
+      this.isValidatorJail = true;
+      return;
+    } else if (this.amountFormat > +amountCheck) {
       this.isExceedAmount = true;
       return;
     } else {

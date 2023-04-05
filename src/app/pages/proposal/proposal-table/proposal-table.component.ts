@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -43,6 +44,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
   @Output() isNextPage = new EventEmitter<boolean>();
+  validatorImgArr;
 
   votesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'voter_address', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
@@ -90,6 +92,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
     private proposalService: ProposalService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -110,6 +113,29 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       );
       this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
     } else if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
+      const operatorAddArr = [];
+      // get ValidatorAddressArr
+      this.data.forEach((d) => {
+        operatorAddArr.push(d.operator_address);
+      });
+      if (operatorAddArr.length > 0) {
+        // get validator logo
+        this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
+          if (res?.data) {
+            this.validatorImgArr = res?.data;
+            // push image into validator array
+            this.dataSource.data.forEach((item) => {
+              this.validatorImgArr.forEach((imgObj) => {
+                if (imgObj.operator_address == item.operator_address) {
+                  item['image_url'] = imgObj.image_url;
+                }
+              });
+            });
+            this.cdr.markForCheck();
+          }
+        });
+      }
+
       minus = this.getUpdatePage(
         changes.data.currentValue?.length,
         this.proposalService.pageIndexObj[this.type][this.tabId],
@@ -200,9 +226,5 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
     );
-  }
-
-  getValidatorAvatar(validatorAddress: string): string {
-    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 }
