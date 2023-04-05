@@ -153,11 +153,11 @@ export class ContractTableComponent implements OnInit, OnChanges {
         default:
           if (contract.messages[0]?.msg?.accept_nft_offer?.funds_amount) {
             method = ModeExecuteTransaction.AcceptOffer;
+            value = +contract.messages[0]?.funds[0]?.amount;
             // value = +contract.messages[0]?.msg?.accept_nft_offer?.funds_amount;
           } else {
             method = 'mint';
           }
-          value = +contract.messages[0]?.funds[0]?.amount;
           if (contract.messages[0]?.msg) {
             method = Object.keys(contract.messages[0]?.msg)[0];
           }
