@@ -141,7 +141,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
                       dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
                     txsInstantiate[0]['contract_address'] = this.contractsAddress;
                     let data = [];
-                    if (this.contractTransaction['data']?.length > 0) {
+                    if (this.contractTransaction['data']?.length > 1) {
                       data = [...this.contractTransaction['data'], txsInstantiate[0]];
                     } else {
                       data = txsInstantiate;
