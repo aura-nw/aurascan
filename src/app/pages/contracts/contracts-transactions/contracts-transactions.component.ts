@@ -156,7 +156,7 @@ export class ContractsTransactionsComponent implements OnInit {
               return;
             }
             if (!this.label) {
-              if (this.contractTransaction['data']?.length > 0) {
+              if (this.contractTransaction['data']?.length > 1) {
                 this.contractTransaction['data'].push(this.txsInstantiate[0]);
               } else {
                 this.contractTransaction['data'] = this.txsInstantiate;
