@@ -32,7 +32,6 @@ export class TransactionMessagesComponent implements OnInit {
   amountClaim = 0;
   amountCommission = 0;
   commissionAutoClaim = 0;
-  storeCodeId = 0;
   dateVesting: string;
   validatorName = '';
   validatorNameDes = '';
@@ -64,6 +63,7 @@ export class TransactionMessagesComponent implements OnInit {
   seeLessArr = [false];
   totalAmountExecute = 0;
   listIBCProgress = [];
+  isTransactionTypeDefault = true;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -80,6 +80,11 @@ export class TransactionMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // check if contract type not belongTo TypeTransaction enum
+    if (Object.values(TRANSACTION_TYPE_ENUM).includes(this.transactionDetail?.type)) {
+      this.isTransactionTypeDefault = false;
+    }
+
     if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Vesting) {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
@@ -98,7 +103,8 @@ export class TransactionMessagesComponent implements OnInit {
       this.checkGetReward();
     } else if (
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract2
     ) {
       this.displayMsgRaw();
     } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MsgGrantAllowance) {
