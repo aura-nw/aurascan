@@ -202,6 +202,7 @@ export class WriteContractComponent implements OnInit {
         .catch((error) => {
           msg.isLoading = false;
           if (!error.toString().includes('Request rejected')) {
+            msgError = error.toString().includes('out of gas') ? 'out of gas' : msgError;
             this.toastr.error(msgError);
           }
         });
