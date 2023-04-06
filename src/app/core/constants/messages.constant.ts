@@ -49,6 +49,8 @@ export const MESSAGES_CODE_STAKING = {
   37: { Code: 37, Message: 'invalid historical info' },
   38: { Code: 38, Message: 'no historical info found' },
   39: { Code: 39, Message: 'empty validator public key' },
+  40: { Code: 40, Message: 'unbonding operation not found' },
+  41: { Code: 41, Message: 'cannot un-hold unbonding operation that is not on hold' },
 };
 
 //v0.45.11
@@ -95,3 +97,54 @@ export const MESSAGES_CODE_CONTRACT = {
   26: { Code: 26, Message: 'top-level key is not allowed' },
   27: { Code: 27, Message: 'max query stack size exceeded' },
 };
+
+//v0.45.11
+export const MESSAGES_CODE_SDK = {
+  1: { Code: 1, Message: 'internal' },
+  2: { Code: 2, Message: 'tx parse error' },
+  3: { Code: 3, Message: 'invalid sequence' },
+  4: { Code: 4, Message: 'unauthorized', },
+  5: { Code: 5, Message: 'insufficient funds' },
+  6: { Code: 6, Message: 'unknown request' },
+  7: { Code: 7, Message: 'invalid address' },
+  8: { Code: 8, Message: 'invalid pubkey' },
+  9: { Code: 9, Message: 'unknown address' },
+  10: { Code: 10, Message: 'invalid coins' },
+  11: { Code: 11, Message: 'out of gas' },
+  12: { Code: 12, Message: 'memo too large' },
+  13: { Code: 13, Message: 'insufficient fee' },
+  14: { Code: 14, Message: 'maximum number of signatures exceeded' },
+  15: { Code: 15, Message: 'no signatures supplied' },
+  16: { Code: 16, Message: 'failed to marshal JSON bytes' },
+  17: { Code: 17, Message: 'failed to unmarshal JSON bytes' },
+  18: { Code: 18, Message: 'invalid request' },
+  19: { Code: 19, Message: 'tx already in mempool' },
+  20: { Code: 20, Message: 'mempool is full' },
+  21: { Code: 21, Message: 'tx too large' },
+  22: { Code: 22, Message: 'key not found' },
+  23: { Code: 23, Message: 'invalid account password' },
+  24: { Code: 24, Message: 'tx intended signer does not match the given signer' },
+  25: { Code: 25, Message: 'invalid gas adjustment' },
+  26: { Code: 26, Message: 'invalid height' },
+  27: { Code: 27, Message: 'invalid version' },
+  28: { Code: 28, Message: 'invalid chain-id' },
+  29: { Code: 29, Message: 'invalid type' },
+  30: { Code: 30, Message: 'tx timeout height' },
+  31: { Code: 31, Message: 'unknown extension options' },
+  32: { Code: 32, Message: 'incorrect account sequence' },
+  33: { Code: 33, Message: 'failed packing protobuf message to Any' },
+  34: { Code: 34, Message: 'failed unpacking protobuf message from Any' },
+  35: { Code: 35, Message: 'internal logic error' },
+  36: { Code: 36, Message: 'conflict' },
+  37: { Code: 37, Message: 'feature not supported' },
+  38: { Code: 38, Message: 'not found' },
+  39: { Code: 39, Message: 'Internal IO error' },
+  40: { Code: 40, Message: 'error in app.toml' },
+  111222: { Code: 111222, Message: 'panic' },
+};
+
+export enum TYPE_CODE_SPACE {
+  SDK = 'sdk',
+  STAKING = 'staking',
+  GOV = 'gov',
+}
