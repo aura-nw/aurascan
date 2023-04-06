@@ -175,6 +175,10 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
               (k) => k.key === 'receiver' && k.value.length <= LENGTH_CHARACTER.ADDRESS,
             )?.value || null;
         } catch (e) {}
+      } else if (method === ModeExecuteTransaction.Send) {
+        toAddress = itemMessage?.msg?.send?.contract;
+      } else if (method === ModeExecuteTransaction.ProvideLiquidity) {
+        toAddress = itemMessage?.contract;
       }
       break;
     case eTransType.Deposit:
