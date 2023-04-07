@@ -435,11 +435,14 @@
                               [routerLink]="['/transaction', data['tx_hash']]">
                               {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
-                            <div
-                              *ngSwitchCase="'amount'"
-                              [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
-                              {{ data['isStakeMode'] ? '+' : '-' }}
-                              {{ data[template.matColumnDef] | mask : 'separator.6' }}
+                            <div *ngSwitchCase="'amount'">
+                              <ng-container *ngIf="data['amount']">
+                                <span [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
+                                  {{ data['isStakeMode'] ? '+' : '-' }}
+                                  {{ data[template.matColumnDef] | mask : 'separator.6' }}
+                                </span>
+                              </ng-container>
+                              <ng-container *ngIf="!data['amount']">0</ng-container>
                             </div>
                             <a
                               *ngSwitchCase="'height'"

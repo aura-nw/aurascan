@@ -110,15 +110,19 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
     this.timerGetUpTime = setInterval(() => {
       this.getDetail();
-      this.loadData();
+      this.loadData(false);
     }, 5000);
   }
 
-  loadData() {
+  loadData(isInit = true) {
     if (!this.isLeftPage) {
-      this.getListBlockWithOperator();
+      if (this.pageIndexBlock === 0) {
+        this.getListBlockWithOperator(null, isInit);
+      }
       this.getListDelegator();
-      this.getListPower();
+      if (this.pageIndexPower === 0) {
+        this.getListPower(null, isInit);
+      }
     }
   }
 
@@ -141,7 +145,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
             ...res.data,
             self_bonded: balanceOf(res.data.self_bonded),
             power: balanceOf(res.data.power),
-            identity: res?.data?.identity
+            identity: res?.data?.identity,
           };
           this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
           this.getDetailValidatorIndexer();
@@ -162,18 +166,14 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  getListBlockWithOperator(nextKeyBlock = null): void {
+  getListBlockWithOperator(nextKeyBlock = null, isInit = true): void {
     this.blockService.blockWithOperator(100, this.currentAddress, nextKeyBlock).subscribe(
       (res) => {
         const { code, data } = res;
         this.nextKeyBlock = data.nextKey || null;
         if (code === 200) {
           const blocks = convertDataBlock(data);
-          if (
-            this.dataSourceBlock.data.length > 0 &&
-            this.dataSourceBlock.data.length !== blocks.length &&
-            this.pageIndexBlock != 0
-          ) {
+          if (this.dataSourceBlock.data.length > 0 && isInit) {
             this.dataSourceBlock.data = [...this.dataSourceBlock.data, ...blocks];
           } else {
             this.dataSourceBlock.data = [...blocks];
@@ -242,7 +242,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  getListPower(nextKey = null): void {
+  getListPower(nextKey = null, isInit = true): void {
     this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe(
       (res) => {
         const { code, data } = res;
@@ -257,7 +257,8 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
             if (
               _type === TRANSACTION_TYPE_ENUM.Delegate ||
               (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
-              _type === TRANSACTION_TYPE_ENUM.CreateValidator
+              _type === TRANSACTION_TYPE_ENUM.CreateValidator ||
+              _type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
             ) {
               isStakeMode = true;
             }
@@ -271,7 +272,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
             return { tx_hash, amount, isStakeMode, height, timestamp };
           });
-          if (this.dataSourcePower.data.length > 0 && this.pageIndexPower != 0) {
+          if (this.dataSourcePower.data.length > 0 && isInit) {
             this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
           } else {
             this.dataSourcePower.data = [...txs];
