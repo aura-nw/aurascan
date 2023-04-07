@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DATE_TIME_WITH_MILLISECOND, TIME_OUT_CALL_API } from '../constants/common.constant';
-import { MESSAGES_CODE_PROPOSAL, MESSAGES_CODE_STAKING } from '../constants/messages.constant';
+import { MESSAGES_CODE_PROPOSAL, MESSAGES_CODE_SDK, MESSAGES_CODE_STAKING, TYPE_CODE_SPACE } from '../constants/messages.constant';
 import { CodeTransaction } from '../constants/transaction.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
@@ -25,16 +25,35 @@ export class MappingErrorService extends CommonService {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
   }
 
-  checkMappingError(message, code, isProposal = false) {
+  checkMappingError(message, code, codeSpace = TYPE_CODE_SPACE.SDK) {
     if (code === CodeTransaction.Success) {
       message = this.translate.instant('NOTICE.SUCCESS_TRANSACTION');
       return message;
     }
-    let temp = MESSAGES_CODE_STAKING[code]?.Message || 'error';
-    if (isProposal) {
-      temp = MESSAGES_CODE_PROPOSAL[code]?.Message || 'error';
+
+    let codeTemp = code;
+    if (+code !== parseInt(code, 10)) {
+      const index = code.indexOf('code');
+      if (index) {
+        // get value of code from string
+        codeTemp = code.slice(index + 5, index + 8).trim();
+      }
     }
-    message = temp ? temp.charAt(0).toUpperCase() + temp.slice(1) : 'Error';
+
+    let temp = 'Error';
+    switch (codeSpace) {
+      case TYPE_CODE_SPACE.GOV:
+        temp = MESSAGES_CODE_STAKING[codeTemp]?.Message;
+        break;
+      case TYPE_CODE_SPACE.STAKING:
+        temp = MESSAGES_CODE_STAKING[codeTemp]?.Message;
+        break;
+      default:
+        temp = MESSAGES_CODE_SDK[codeTemp]?.Message;
+        break;
+    }
+
+    message = temp ? temp.charAt(0).toUpperCase() + temp.slice(1) : code;
     return message;
   }
 
@@ -65,12 +84,12 @@ export class MappingErrorService extends CommonService {
     const res = await this.transactionService.txsDetailLcd(id);
     let numberCode = res?.data?.tx_response?.code;
     let message = res?.data?.tx_response?.raw_log;
+    message = this.checkMappingError(message, numberCode, res?.data?.tx_response?.codespace);
     if (numberCode !== undefined) {
       if (!!!numberCode && numberCode === CodeTransaction.Success) {
         message = this.translate.instant('NOTICE.SUCCESS_TRANSACTION');
         this.toastr.success(message);
-        setTimeout(() => {
-        }, TIME_OUT_CALL_API);
+        setTimeout(() => {}, TIME_OUT_CALL_API);
       } else {
         this.toastr.error(message);
       }
