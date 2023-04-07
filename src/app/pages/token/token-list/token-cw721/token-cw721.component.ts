@@ -25,7 +25,7 @@ export class TokenCw721Component implements OnInit {
     { matColumnDef: 'id', headerCellDef: 'id' },
     { matColumnDef: 'token', headerCellDef: 'name' },
     { matColumnDef: 'tokenContract', headerCellDef: 'tokenContract' },
-    { matColumnDef: 'total_tx', headerCellDef: 'totalTx' },
+    { matColumnDef: 'total_tx', headerCellDef: 'total_tx' },
     { matColumnDef: 'transfers_24h', headerCellDef: 'transfer' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
