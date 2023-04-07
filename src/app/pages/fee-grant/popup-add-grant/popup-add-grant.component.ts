@@ -43,7 +43,7 @@ export class PopupAddGrantComponent implements OnInit {
     private feeGrantService: FeeGrantService,
     private dialog: MatDialog,
     public translate: TranslateService,
-    private mappingErrorService: MappingErrorService
+    private mappingErrorService: MappingErrorService,
   ) {}
 
   ngOnInit(): void {
@@ -176,7 +176,8 @@ export class PopupAddGrantComponent implements OnInit {
         this.closeDialog(hash);
       } else {
         if (error != 'Request rejected') {
-          this.toastr.error(error);
+          let errorMessage = this.mappingErrorService.checkMappingError('', error);
+          this.toastr.error(errorMessage);
         }
       }
     };
@@ -194,7 +195,8 @@ export class PopupAddGrantComponent implements OnInit {
 
   checkFormValid(): boolean {
     const granter = this.walletService.wallet?.bech32Address;
-    const { grantee_address, expiration_time, period_amount, period_day, amount, isExecute, execute_contract } = this.grantForm.value;
+    const { grantee_address, expiration_time, period_amount, period_day, amount, isExecute, execute_contract } =
+      this.grantForm.value;
 
     this.formValid = false;
     this.isInvalidAddress = false;

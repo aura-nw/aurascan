@@ -68,6 +68,7 @@ export enum TRANSACTION_TYPE_ENUM {
   Unjail = '/cosmos.slashing.v1beta1.MsgUnjail',
   StoreCode = '/cosmwasm.wasm.v1.MsgStoreCode',
   InstantiateContract = '/cosmwasm.wasm.v1.MsgInstantiateContract',
+  InstantiateContract2 = '/cosmwasm.wasm.v1.MsgInstantiateContract2',
   ExecuteContract = '/cosmwasm.wasm.v1.MsgExecuteContract',
   ModifyWithdrawAddress = '/cosmos.distribution.v1beta1.MsgSetWithdrawAddress',
   JoinPool = '/osmosis.gamm.v1beta1.MsgJoinPool',
@@ -109,7 +110,9 @@ export enum ModeExecuteTransaction {
   Buy = 'buy',
   Take = 'take',
   UnEquip = 'unequip',
-  AcceptOffer = 'accept_nft_offer'
+  AcceptOffer = 'accept_nft_offer',
+  Send = 'send',
+  ProvideLiquidity = 'provide_liquidity',
 }
 
 export enum pipeTypeData {
