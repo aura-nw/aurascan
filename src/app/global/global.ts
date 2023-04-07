@@ -68,6 +68,10 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
         0;
     } else if (type === eTransType.CreateValidator) {
       amount = itemMessage?.value?.amount || 0;
+    } else if (type === eTransType.ExecuteAuthz) {
+      itemMessage?.msgs.forEach((element) => {
+        amount += +element?.amount?.amount;
+      });
     }
   } catch {}
 
