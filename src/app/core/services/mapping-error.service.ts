@@ -32,7 +32,7 @@ export class MappingErrorService extends CommonService {
     }
 
     let codeTemp = code;
-    if (code !== parseInt(code, 10)) {
+    if (+code !== parseInt(code, 10)) {
       const index = code.indexOf('code');
       if (index) {
         // get value of code from string
