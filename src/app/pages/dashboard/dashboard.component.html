@@ -1,131 +1,143 @@
 <section>
-  <div class="row">
-    <div class="col-12 col-lg-8">
-      <div class="card card-h-100">
-        <div class="card-body">
-          <div class="card-info card-info--gradient-black mb-0 card-summary-info p-0">
-            <div
-              class="d-flex flex-column align-items-start flex-xl-row align-items-xl-center justify-content-lg-between">
-              <div class="d-flex align-items-center justify-content-center py-4 px-2 pb-md-0 pb-lg-4 py-xl-6">
-                <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
-                <div class="h1 h2-mob mb-0 ml-4 ml-xl-0 text--white fw-700 fw-semibold-mob">AURA</div>
-                <a
-                  href="https://www.coingecko.com/en/coins/aura-network"
-                  target="_blank"
-                  class="ml-2 button button--sm button-ghost button-ghost--sm"
-                  matTooltip="Open CoinGecko"
-                  [matTooltipPosition]="'above'"
-                  [matTooltipClass]="'dashboard-tooltip'">
-                  <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
-                </a>
-              </div>
-              <div class="divider divider-vertical d-none d-xl-block"></div>
-              <div class="divider divider-horizontal d-lg-none"></div>
+  <div class="row d-lg-none mb-4">
+    <div class="col">
+      <div class="carousel">
+        <ngb-carousel [showNavigationArrows]="false">
+          <ng-template ngbSlide>
+            <div class="picsum-img-wrapper">
+              <img src="assets/images/pages/dashboard_mainnet-lauch--des.png" alt="Random first slide" class="carousel__img" />
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-lg-6">
+    <div class="col-12 col-lg-8 mb-4 mb-lg-0">
+      <div class="card mb-0 h-100">
+        <div class="card-body p-0">
+          <div class="row h-100">
+            <div class="col-12 col-lg-4">
               <div
-                class="d-flex flex-column align-items-start flex-lg-row align-items-lg-center justify-content-lg-between flex-shrink-0 flex-grow-1 w-md-100">
-                <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
-                  <i class="ph-coins-thin icon-info text--gray-3"></i>
-                  <div class="ml-4">
-                    <div class="mb-2 body-03 text--gray-1">Price</div>
-                    <div class="text--white h4 mb-0 fw-semibold">
-                      <span>{{ tokenInfo ? '$' + (tokenInfo?.current_price | number : '1.2-4') : '-' }}</span>
-                      <span
-                        *ngIf="tokenInfo"
-                        class="ml-1 body
+                class="card-info card-info--gradient-black mb-0 card-summary-info p-0 h-100 d-flex align-items-center">
+                <div class="d-flex flex-column px-lg-4 flex-shrink-0 flex-grow-1">
+                  <div class="d-flex align-items-center py-4 px-2 pb-md-0 pb-lg-4 py-xl-6">
+                    <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
+                    <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">AURA</div>
+                    <a
+                      href="https://www.coingecko.com/en/coins/aura-network"
+                      target="_blank"
+                      class="ml-2 button button--sm button-ghost button-ghost--sm"
+                      matTooltip="Open CoinGecko"
+                      [matTooltipPosition]="'above'"
+                      [matTooltipClass]="'dashboard-tooltip'">
+                      <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
+                    </a>
+                  </div>
+                  <div class="divider divider-horizontal"></div>
+                  <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
+                    <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
+                      <i class="ph-coins-thin icon-info text--gray-3"></i>
+                      <div class="ml-4">
+                        <div class="mb-2 body-03 text--gray-1">Price</div>
+                        <div class="text--white h4 mb-0 fw-semibold">
+                          <span>{{ tokenInfo ? '$' + (tokenInfo?.current_price | number : '1.2-4') : '-' }}</span>
+                          <span
+                            *ngIf="tokenInfo"
+                            class="ml-1 body
                       {{ tokenInfo.price_change_percentage_24h > 0 ? 'text--green-3' : 'text--red-3' }}">
-                        {{
-                          tokenInfo.price_change_percentage_24h
-                            ? '(' +
-                              (tokenInfo.price_change_percentage_24h > 0 ? '+' : '') +
-                              (tokenInfo.price_change_percentage_24h | number : '1.2-2') +
-                              '%)'
-                            : ''
-                        }}
-                      </span>
+                            {{
+                              tokenInfo.price_change_percentage_24h
+                                ? '(' +
+                                  (tokenInfo.price_change_percentage_24h > 0 ? '+' : '') +
+                                  (tokenInfo.price_change_percentage_24h | number : '1.2-2') +
+                                  '%)'
+                                : ''
+                            }}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="divider divider-vertical d-none d-lg-block"></div>
-                <div class="divider divider-horizontal d-lg-none"></div>
-                <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
-                  <i class="ph-chart-line-up-thin icon-info text--gray-3"></i>
-                  <div class="ml-4">
-                    <div class="mb-2 body-03 text--gray-1">Market Cap</div>
-                    <div class="text--white h4 mb-0 fw-semibold">
-                      <span>{{ tokenInfo ? '$' + (tokenInfo.market_cap | number : '1.0-0') : '-' }}</span>
+                    <div class="divider divider-horizontal"></div>
+                    <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
+                      <i class="ph-chart-line-up-thin icon-info text--gray-3"></i>
+                      <div class="ml-4">
+                        <div class="mb-2 body-03 text--gray-1">Market Cap</div>
+                        <div class="text--white h4 mb-0 fw-semibold">
+                          <span>{{ tokenInfo ? '$' + (tokenInfo.market_cap | number : '1.0-0') : '-' }}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="divider divider-vertical d-none d-lg-block"></div>
-                <div class="divider divider-horizontal d-lg-none"></div>
-                <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
-                  <i class="ph-arrows-down-up-thin icon-info text--gray-3"></i>
-                  <div class="ml-4">
-                    <div class="mb-2 body-03 text--gray-1">24h Vol Trading</div>
-                    <div class="text--white h4 mb-0 fw-semibold">
-                      <span>{{ tokenInfo ? '$' + (tokenInfo.total_volume | number : '1.0-0') : '-' }}</span>
+                    <div class="divider divider-horizontal"></div>
+                    <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
+                      <i class="ph-arrows-down-up-thin icon-info text--gray-3"></i>
+                      <div class="ml-4">
+                        <div class="mb-2 body-03 text--gray-1">24h Vol Trading</div>
+                        <div class="text--white h4 mb-0 fw-semibold">
+                          <span>{{ tokenInfo ? '$' + (tokenInfo.total_volume | number : '1.0-0') : '-' }}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="align-items-center mt-6 mb-3">
-            <div class="d-lg-flex flex-wrap mb-4">
-              <!-- Tabs -->
-              <div class="button-switch-stage button-switch-stage__1">
-                <button type="button" [class.active]="isPrice" (click)="isPrice = true; getCoinInfo(chartRange)">
-                  <span>Price</span>
-                </button>
-                <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
-                  <span>Volume</span>
-                </button>
-              </div>
-              <div class="ms-auto mt-4 mt-md-0">
-                <div class="d-flex align-items-center chart__options">
-                  <div class="button-switch-stage button-switch-stage__2">
-                    <button
-                      type="button"
-                      [class.active]="chartRange === chartRangeData.M_60"
-                      (click)="getCoinInfo(chartRangeData.M_60)">
-                      <span>60m</span>
+            <div class="col-12 col-lg-8">
+              <div class="align-items-center pt-6 pr-6 pl-2">
+                <div class="d-lg-flex flex-wrap mb-4">
+                  <!-- Tabs -->
+                  <div class="button-switch-stage button-switch-stage__1">
+                    <button type="button" [class.active]="isPrice" (click)="isPrice = true; getCoinInfo(chartRange)">
+                      <span>Price</span>
                     </button>
-                    <button
-                      type="button"
-                      [class.active]="chartRange === chartRangeData.H_24"
-                      (click)="getCoinInfo(chartRangeData.H_24)">
-                      <span>24H</span>
-                    </button>
-                    <button
-                      type="button"
-                      [class.active]="chartRange === chartRangeData.D_30"
-                      (click)="getCoinInfo(chartRangeData.D_30)">
-                      <span>30D</span>
-                    </button>
-                    <button
-                      type="button"
-                      [class.active]="chartRange === chartRangeData.MONTH_12"
-                      (click)="getCoinInfo(chartRangeData.MONTH_12)">
-                      <span>12M</span>
+                    <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
+                      <span>Volume</span>
                     </button>
                   </div>
-                  <!--                  <div class="divider divider-vertical mx-3 mx-md-4"></div>-->
-                  <!--                  <button class="button" (click)="exportChart()">-->
-                  <!--                    <i class="ph-download-simple-fill h3 mb-0 text&#45;&#45;gray-1"></i>-->
-                  <!--                  </button>-->
+                  <div class="ms-auto mt-4 mt-md-0">
+                    <div class="d-flex align-items-center chart__options">
+                      <div class="button-switch-stage button-switch-stage__2">
+                        <button
+                          type="button"
+                          [class.active]="chartRange === chartRangeData.M_60"
+                          (click)="getCoinInfo(chartRangeData.M_60)">
+                          <span>60m</span>
+                        </button>
+                        <button
+                          type="button"
+                          [class.active]="chartRange === chartRangeData.H_24"
+                          (click)="getCoinInfo(chartRangeData.H_24)">
+                          <span>24H</span>
+                        </button>
+                        <button
+                          type="button"
+                          [class.active]="chartRange === chartRangeData.D_30"
+                          (click)="getCoinInfo(chartRangeData.D_30)">
+                          <span>30D</span>
+                        </button>
+                        <button
+                          type="button"
+                          [class.active]="chartRange === chartRangeData.MONTH_12"
+                          (click)="getCoinInfo(chartRangeData.MONTH_12)">
+                          <span>12M</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w-100 position-relative">
+                  <div id="chart"></div>
+                  <div class="line-chart"></div>
                 </div>
               </div>
-            </div>
-            <div class="w-100 position-relative">
-              <div id="chart"></div>
-              <div class="line-chart"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="col-12 col-lg-4 d-lg-flex flex-column justify-content-between">
-      <div class="card mb-4 mb-md-0 card__item">
+      <div class="card mb-4 mb-md-6 card__item">
         <div class="card-body px-4 py-4 px-lg-6 card-body--gradient-black d-flex flex-column justify-content-between">
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
@@ -201,90 +213,108 @@
           </div>
         </div>
       </div>
-      <div class="card card__item">
-        <div class="card-body">
-          <div class="h2 h3-mob fw-semibold mb-0 text--white">Voting Period</div>
-          <div class="mt-4 d-flex align-items-center">
-            <div class="flex-shrink-0 flex-grow-1 d-flex w-25">
-              <div class="dropdown aura-dropdown w-100" *ngIf="voting_Period_arr.length > 0">
-                <button
-                  class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-lg-8 d-none d-lg-block">
+      <div class="mb-4 mb-lg-6 carousel">
+        <ngb-carousel [showNavigationArrows]="false">
+          <ng-template ngbSlide>
+            <div class="picsum-img-wrapper">
+              <img src="assets/images/pages/dashboard_mainnet-lauch--des.png" alt="Random first slide" class="carousel__img" />
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4 mb-4 mb-lg-6">
+      <div class="card card__item h-100">
+        <div class="card-body d-flex flex-column justify-content-center voting-card {{voting_Period_arr.length === 0 ? 'py-4 py-lg-6' : ''}}">
+          <div class="h2 h3-mob fw-semibold mb-0 text--white">Voting</div>
+          <div *ngIf="voting_Period_arr.length > 0">
+            <div class="mt-4 d-flex align-items-center">
+              <div class="flex-shrink-0 flex-grow-1 d-flex w-25">
+                <div class="dropdown aura-dropdown w-100">
+                  <button
+                      class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false">
                   <span class="body text-start">{{
-                    curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
-                  }}</span>
-                </button>
-                <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light">
-                  <ng-container *ngFor="let item of voting_Period_arr">
-                    <li class="dropdown-item cursor-pointer">
-                      <button type="button" class="button p-0 body-03" (click)="curr_voting_Period = item">
-                        {{ item.content.title }}
-                      </button>
-                    </li>
-                  </ng-container>
-                </ul>
+                      curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
+                    }}</span>
+                  </button>
+                  <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light">
+                    <ng-container *ngFor="let item of voting_Period_arr">
+                      <li class="dropdown-item cursor-pointer">
+                        <button type="button" class="button p-0 body-03" (click)="curr_voting_Period = item">
+                          {{ item.content.title }}
+                        </button>
+                      </li>
+                    </ng-container>
+                  </ul>
+                </div>
               </div>
-              <div class="voting-period-btn--disable" *ngIf="voting_Period_arr.length === 0">
-                No proposal within the voting period
+              <div class="ml-2">
+                <button
+                    *ngIf="!curr_voting_Period"
+                    [disabled]="true"
+                    class="button button--sm button-outline button-pill px-4">
+                  <span class="caption fw-normal">View detail</span>
+                </button>
+                <a
+                    *ngIf="curr_voting_Period"
+                    href="/votings/{{ curr_voting_Period.proposal_id }}"
+                    class="button button--sm button-outline button-pill px-4">
+                  <span class="caption fw-normal">View detail</span>
+                </a>
               </div>
             </div>
-            <div class="ml-2">
-              <button
-                *ngIf="!curr_voting_Period"
-                [disabled]="true"
-                class="button button--sm button-outline button-pill px-4">
-                <span class="caption fw-normal">View detail</span>
-              </button>
-              <a
-                *ngIf="curr_voting_Period"
-                href="/votings/{{ curr_voting_Period.proposal_id }}"
-                class="button button--sm button-outline button-pill px-4">
-                <span class="caption fw-normal">View detail</span>
-              </a>
+            <div class="mt-3 card-child">
+              <div class="d-flex align-items-center justify-content-between body-03">
+                <div>
+                  <div class="text--gray-2">Yes</div>
+                  <div class="text--gray-1 fw-semibold mt-1">
+                    {{
+                      curr_voting_Period ? (curr_voting_Period.tally.yes | number : global.formatNumber2Decimal) : '0,0'
+                    }}%
+                  </div>
+                </div>
+                <div>
+                  <div class="text--gray-2">No</div>
+                  <div class="text--gray-1 fw-semibold mt-1">
+                    {{
+                      curr_voting_Period ? (curr_voting_Period.tally.no | number : global.formatNumber2Decimal) : '0,0'
+                    }}%
+                  </div>
+                </div>
+                <div>
+                  <div class="text--gray-2">Veto</div>
+                  <div class="text--gray-1 fw-semibold mt-1">
+                    {{
+                      curr_voting_Period
+                          ? (curr_voting_Period.tally.no_with_veto | number : global.formatNumber2Decimal)
+                          : '0,0'
+                    }}%
+                  </div>
+                </div>
+                <div>
+                  <div class="text--gray-2">Abstain</div>
+                  <div class="text--gray-1 fw-semibold mt-1">
+                    {{
+                      curr_voting_Period
+                          ? (curr_voting_Period.tally.abstain | number : global.formatNumber2Decimal)
+                          : '0,0'
+                    }}%
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div class="mt-3 card-child">
-            <div class="d-flex align-items-center justify-content-between body-03">
-              <div>
-                <div class="text--gray-2">Yes</div>
-                <div class="text--gray-1 fw-semibold mt-1">
-                  {{
-                    curr_voting_Period ? (curr_voting_Period.tally.yes | number : global.formatNumber2Decimal) : '0,0'
-                  }}%
-                </div>
-              </div>
-              <div>
-                <div class="text--gray-2">No</div>
-                <div class="text--gray-1 fw-semibold mt-1">
-                  {{
-                    curr_voting_Period ? (curr_voting_Period.tally.no | number : global.formatNumber2Decimal) : '0,0'
-                  }}%
-                </div>
-              </div>
-              <div>
-                <div class="text--gray-2">Veto</div>
-                <div class="text--gray-1 fw-semibold mt-1">
-                  {{
-                    curr_voting_Period
-                      ? (curr_voting_Period.tally.no_with_veto | number : global.formatNumber2Decimal)
-                      : '0,0'
-                  }}%
-                </div>
-              </div>
-              <div>
-                <div class="text--gray-2">Abstain</div>
-                <div class="text--gray-1 fw-semibold mt-1">
-                  {{
-                    curr_voting_Period
-                      ? (curr_voting_Period.tally.abstain | number : global.formatNumber2Decimal)
-                      : '0,0'
-                  }}%
-                </div>
-              </div>
-            </div>
+          <div class="d-flex flex-column align-items-center justify-content-center h-100" *ngIf="voting_Period_arr.length === 0">
+            <img src="assets/images/icons/empty_state_illus.svg" alt="">
+            <div class="text--gray-3">No proposal within the voting period</div>
           </div>
         </div>
       </div>
