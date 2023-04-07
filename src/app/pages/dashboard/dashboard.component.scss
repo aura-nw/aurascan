@@ -98,6 +98,10 @@
   .divider-vertical {
     min-height: 64px;
   }
+  @media (min-width: 991.98px) {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
 }
 .card-body--gradient-black {
   background: var(--aura-gradient-black);
@@ -140,7 +144,7 @@ ul {
   &.aura-dropdown-menu.aura-dropdown-menu--light {
     padding: var(--spacer-2);
     li.dropdown-item {
-      border-radius: 0;
+      border-radius: 4px;
       padding: var(--spacer-3) var(--spacer-2);
       button {
         display: block;
@@ -226,4 +230,29 @@ img.icon-brand {
 }
 .summary-info {
   line-height: 1.8rem !important;
+}
+.carousel {
+  height: 150px;
+  @media (min-width: 991.98px) {
+    height: 196px;
+  }
+  ngb-carousel {
+    height: 100%;
+  }
+  &__img {
+    height: 150px;
+    @media (min-width: 991.98px) {
+      height: 196px;
+    }
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+}
+.voting-card {
+  @media (min-width: 991.98px) {
+    max-height: 196px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
