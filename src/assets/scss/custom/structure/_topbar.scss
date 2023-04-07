@@ -228,7 +228,7 @@ body[data-layout='horizontal'] {
   }
   .page-content {
     margin-top: $header-height;
-    padding: 126px calc(#{$grid-gutter-width} / 2) 0 calc(#{$grid-gutter-width} / 2);
+    padding: 110px calc(#{$grid-gutter-width} / 2) 0 calc(#{$grid-gutter-width} / 2);
     @media (min-width: 992px) {
       padding: 88px calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
     }
