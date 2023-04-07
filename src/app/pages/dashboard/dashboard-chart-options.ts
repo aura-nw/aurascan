@@ -61,7 +61,7 @@ import { RangeType } from 'src/app/core/models/common.model';
 // };
 
 export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
-  height: 380,
+  height: 300,
   crosshair: {
     horzLine: {
       visible: false,
