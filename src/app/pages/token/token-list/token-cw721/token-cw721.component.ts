@@ -25,8 +25,8 @@ export class TokenCw721Component implements OnInit {
     { matColumnDef: 'id', headerCellDef: 'id' },
     { matColumnDef: 'token', headerCellDef: 'name' },
     { matColumnDef: 'tokenContract', headerCellDef: 'tokenContract' },
+    { matColumnDef: 'total_tx', headerCellDef: 'total_tx' },
     { matColumnDef: 'transfers_24h', headerCellDef: 'transfer' },
-    { matColumnDef: 'transfers_3d', headerCellDef: 'transfer3d' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -39,7 +39,7 @@ export class TokenCw721Component implements OnInit {
   sort: MatSort;
   typeSortBy = {
     transfers24h: 'transfers_24h',
-    transfers3d: 'transfers_3d',
+    totalTx: 'total_tx',
   };
   sortBy = this.typeSortBy.transfers24h;
   sortOrder = 'desc';
@@ -128,8 +128,8 @@ export class TokenCw721Component implements OnInit {
             this.sortOrder = sort.direction;
             this.getTokenData();
             return 0;
-          case 'transfers_3d':
-            this.sortBy = this.typeSortBy.transfers3d;
+          case 'total_tx':
+            this.sortBy = this.typeSortBy.totalTx;
             this.sortOrder = sort.direction;
             this.getTokenData();
             return 0;
