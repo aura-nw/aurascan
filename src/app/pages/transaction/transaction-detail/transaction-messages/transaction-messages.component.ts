@@ -171,17 +171,14 @@ export class TransactionMessagesComponent implements OnInit {
                 (f) => f.operator_address === messages[0]?.validator_dst_address,
               );
               this.validatorNameDes = validatorDstAddress?.title || '';
-            } else {
-              this.validatorName =
-                this.listValidator.find((f) => f.operator_address === messages[0]?.validator_address)?.title || '';
             }
 
-            if (messages?.length > 1) {
+            if (messages?.length >= 1) {
               messages.forEach((message) => {
                 message.validatorName =
                   this.listValidator.find((f) => f.operator_address === message?.validator_address)?.title || '';
               });
-            } else if (messages[0]?.msgs?.length > 1) {
+            } else if (messages[0]?.msgs?.length >= 1) {
               messages[0]?.msgs.forEach((message) => {
                 message.validatorName =
                   this.listValidator.find((f) => f.operator_address === message?.validator_address)?.title || '';
@@ -215,12 +212,6 @@ export class TransactionMessagesComponent implements OnInit {
                   arrayAmount.forEach((element) => {
                     this.amountClaim += balanceOf(Number(element.value?.replace(this.coinMinimalDenom, ''))) || 0;
                   });
-                } else {
-                  let amount = data.find((k) => k.key === 'amount')?.value;
-                  let recipient = data.find((k) => k.key === 'recipient')?.value || '';
-                  if (recipient === this.transactionDetail?.messages[0]?.delegator_address) {
-                    this.amountClaim = balanceOf(amount?.replace(this.coinMinimalDenom, '')) || 0;
-                  }
                 }
               }
 
@@ -229,14 +220,24 @@ export class TransactionMessagesComponent implements OnInit {
                   this.totalAmountExecute += +element?.amount?.amount || 0;
                 });
               } else {
-                this.transactionDetail?.messages.forEach((message) => {
-                  const validator = data.find((trans) => trans.key === 'validator')?.value;
-                  if (validator === message.validator_address && 'delegator_address' in message) {
-                    let amount = data.find((k) => k.key === 'amount')?.value?.replace(this.coinMinimalDenom, '');
-                    amount = balanceOf(amount) || 0;
-                    this.listAmountClaim.push(amount);
-                  }
-                });
+                if (
+                  this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
+                  this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate
+                ) {
+                  const amount =
+                    balanceOf(data.find((data) => data.key === 'amount')?.value?.replace(this.coinMinimalDenom, '')) ||
+                    0;
+                  this.listAmountClaim.push(amount);
+                } else {
+                  this.transactionDetail?.messages.forEach((message) => {
+                    const validator = data.find((trans) => trans.key === 'validator')?.value;
+                    if (validator === message.validator_address && 'delegator_address' in message) {
+                      let amount = data.find((k) => k.key === 'amount')?.value?.replace(this.coinMinimalDenom, '');
+                      amount = balanceOf(amount) || 0;
+                      this.listAmountClaim.push(amount);
+                    }
+                  });
+                }
               }
             }
           }

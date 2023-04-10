@@ -50,7 +50,6 @@
               <th mat-header-cell *matHeaderCellDef>Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <!-- <img [src]="element.image || defaultLogoToken" width="18" height="18" /> -->
                   <div>
                     <a [routerLink]="['/tokens/token-nft', element.contract_address]" class="text--primary">
                       {{ element.name | stringEllipsis : 16 }}
@@ -71,6 +70,14 @@
                 }}</a>
               </td>
             </ng-container>
+            <ng-container matColumnDef="total_tx">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Transactions</th>
+              <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
+                <ng-container *ngIf="element.total_tx; else noData">
+                  {{ element.total_tx | number }}
+                </ng-container>
+              </td>
+            </ng-container>
             <ng-container matColumnDef="transfers_24h">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Transfers (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
@@ -79,15 +86,6 @@
                 </ng-container>
               </td>
             </ng-container>
-            <ng-container matColumnDef="transfers_3d">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Transfers (3D)</th>
-              <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <ng-container *ngIf="element.transfers_3d; else noData">
-                  {{ element.transfers_3d | number }}
-                </ng-container>
-              </td>
-            </ng-container>
-
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
