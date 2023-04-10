@@ -23,6 +23,7 @@ export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.Unjail, value: TypeTransaction.Unjail },
   { label: TRANSACTION_TYPE_ENUM.StoreCode, value: TypeTransaction.StoreCode },
   { label: TRANSACTION_TYPE_ENUM.InstantiateContract, value: TypeTransaction.InstantiateContract },
+  { label: TRANSACTION_TYPE_ENUM.InstantiateContract2, value: TypeTransaction.InstantiateContract },
   { label: TRANSACTION_TYPE_ENUM.ExecuteContract, value: TypeTransaction.ExecuteContract },
   { label: TRANSACTION_TYPE_ENUM.ModifyWithdrawAddress, value: TypeTransaction.ModifyWithdrawAddress },
   { label: TRANSACTION_TYPE_ENUM.JoinPool, value: TypeTransaction.JoinPool },

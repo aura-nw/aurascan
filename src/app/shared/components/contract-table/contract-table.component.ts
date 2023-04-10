@@ -134,6 +134,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       let method = '';
       switch (contract.type) {
         case TRANSACTION_TYPE_ENUM.InstantiateContract:
+        case TRANSACTION_TYPE_ENUM.InstantiateContract2:
           method = 'instantiate';
           from = contract.messages[0].sender;
           to = contract.contract_address;
