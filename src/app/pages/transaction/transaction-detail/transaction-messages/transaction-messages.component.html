@@ -126,10 +126,10 @@
       *ngIf="
         transactionDetail?.type === eTransType.GetReward ||
         transactionDetail?.type === eTransType.Delegate ||
-        transactionDetail?.type === this.eTransType.Undelegate
+        transactionDetail?.type === eTransType.Undelegate
       ">
-      <ng-container
-        *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
+      <!-- <ng-container
+        *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1"> -->
         <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
           <ng-container *ngIf="item['@type'] !== eTransType.GetRewardCommission">
             <div class="card-info">
@@ -166,11 +166,18 @@
                   </ng-container>
                 </div>
               </div>
+              <div class="row mb-3 body-01" *ngIf="listAmountClaim?.length > 0">
+                <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Auto Claim Reward</div>
+                <div class="col-12 col-lg-9 text--gray-1">
+                  {{ listAmountClaim[i] | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+                </div>
+              </div>
             </div>
           </ng-container>
         </ng-container>
       </ng-container>
-      <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
+
+      <!-- <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
         <div class="card-info">
           <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
           </ng-container>
@@ -207,7 +214,7 @@
             </div>
           </div>
         </div>
-      </ng-container>
+      </ng-container> -->
       <ng-container *ngIf="commissionAutoClaim > 0">
         <div class="card-info">
           <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: 'Get Commission' } }">
@@ -233,7 +240,7 @@
           </div>
         </div>
       </ng-container>
-    </ng-container>
+    <!-- </ng-container> -->
 
     <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
       <div class="card-info">

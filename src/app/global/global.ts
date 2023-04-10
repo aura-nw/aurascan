@@ -79,7 +79,8 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
     amount = amount / NUMBER_CONVERT || 0;
     amountFormat = amount;
     if (
-      (type === TRANSACTION_TYPE_ENUM.GetReward && arrayMsg?.length > 1) ||
+      ((type === TRANSACTION_TYPE_ENUM.GetReward || type === TRANSACTION_TYPE_ENUM.Undelegate) &&
+        arrayMsg?.length > 1) ||
       type === TRANSACTION_TYPE_ENUM.MultiSend ||
       type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount
     ) {
@@ -243,7 +244,7 @@ export function convertDataTransaction(data, coinInfo) {
         }
       });
     }
-    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value || 'TBD';
+    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value || 'Execute';
 
     const status =
       _.get(element, 'tx_response.code') == CodeTransaction.Success
