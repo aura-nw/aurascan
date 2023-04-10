@@ -73,9 +73,7 @@
             <ng-container matColumnDef="total_tx">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Transactions</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <ng-container *ngIf="element.total_tx; else noData">
-                  {{ element.total_tx | number }}
-                </ng-container>
+                {{ element.total_tx | number }}
               </td>
             </ng-container>
             <ng-container matColumnDef="transfers_24h">
