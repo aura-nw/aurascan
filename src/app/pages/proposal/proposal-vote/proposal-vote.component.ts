@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
+import { TYPE_CODE_SPACE } from 'src/app/core/constants/messages.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -55,25 +56,12 @@ export class ProposalVoteComponent implements OnInit {
       this.toastr.loading(hash);
       this.dialogRef.close();
       setTimeout(() => {
-        this.checkDetailTx(hash, 'Error Voting');
+        this.mappingErrorService.checkDetailTx(hash);
       }, TIME_OUT_CALL_API);
     } else if (error) {
-      this.toastr.error(error);
+      let errorMessage = this.mappingErrorService.checkMappingError('', error);
+      this.toastr.error(errorMessage);
       this.closeVoteForm();
-    }
-  }
-
-  async checkDetailTx(id, message) {
-    const res = await this.transactionService.txsDetailLcd(id);
-    let numberCode = res?.data?.tx_response?.code;
-    message = res?.data?.tx_response?.raw_log || message;
-    message = this.mappingErrorService.checkMappingError(message, numberCode, true);
-    if (numberCode !== undefined) {
-      if (numberCode === CodeTransaction.Success) {
-        this.toastr.success(message);
-      } else {
-        this.toastr.error(message);
-      }
     }
   }
 

@@ -55,7 +55,6 @@ export class DelegateItemComponent implements OnInit {
     private modalService: NgbModal,
     private accountService: AccountService,
     private toastr: NgxToastrService,
-    private transactionService: TransactionService,
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
   ) {}
@@ -193,7 +192,7 @@ export class DelegateItemComponent implements OnInit {
         this.isOpenDialog = false;
         this.dialogOpen = false;
         this.changeStatus.emit(false);
-        this.checkStatusExecuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error);
       };
 
       executeStaking();
@@ -220,7 +219,7 @@ export class DelegateItemComponent implements OnInit {
     }
   }
 
-  checkStatusExecuteBlock(hash, error, msg) {
+  checkStatusExecuteBlock(hash, error) {
     this.checkHashAction(hash);
     if (error) {
       if (error != 'Request rejected') {
@@ -229,7 +228,7 @@ export class DelegateItemComponent implements OnInit {
       this.resetData();
     } else {
       setTimeout(() => {
-        this.checkDetailTx(hash, msg);
+        this.mappingErrorService.checkDetailTx(hash).then(() => this.reloadData.emit());
         this.resetData();
       }, TIME_OUT_CALL_API);
     }
@@ -251,23 +250,5 @@ export class DelegateItemComponent implements OnInit {
     this.modalReference?.close();
     this.isHandleStake = false;
     this.changeStatus.emit(false);
-  }
-
-  async checkDetailTx(id, message) {
-    const res = await this.transactionService.txsDetailLcd(id);
-    let numberCode = res?.data?.tx_response?.code;
-    message = res?.data?.tx_response?.raw_log || message;
-    message = this.mappingErrorService.checkMappingError(message, numberCode);
-    if (numberCode !== undefined) {
-      if (!!!numberCode && numberCode === CodeTransaction.Success) {
-        setTimeout(() => {
-          // location.reload();
-          this.reloadData.emit();
-        }, TIME_OUT_CALL_API);
-        this.toastr.success(message);
-      } else {
-        this.toastr.error(message);
-      }
-    }
   }
 }

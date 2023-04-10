@@ -2,7 +2,7 @@ import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgbCarouselModule, NgbDropdownModule, NgbNavModule} from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaskPipe, NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from 'src/app/app.module';
@@ -32,6 +32,7 @@ import { DashboardComponent } from './dashboard.component';
     ReactiveFormsModule,
     TranslateModule,
     TableNoDataModule,
+    NgbCarouselModule,
   ],
   providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService, CommonService, MaskPipe],
 })

@@ -476,7 +476,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        this.checkStatusExecuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error);
       };
 
       executeStaking();
@@ -502,7 +502,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.listStakingValidator?.length,
         );
 
-        this.checkStatusExecuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error);
       };
       executeClaim();
     }
@@ -528,7 +528,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        this.checkStatusExecuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error);
       };
       executeUnStaking();
     }
@@ -555,7 +555,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        this.checkStatusExecuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error);
       };
       executeReStaking();
     }
@@ -613,7 +613,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.commissionLabel = label;
   }
 
-  checkStatusExecuteBlock(hash, error, msg) {
+  checkStatusExecuteBlock(hash, error) {
     this.checkHashAction(hash);
     if (error) {
       if (error != 'Request rejected') {
@@ -623,27 +623,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.resetData();
     } else {
       setTimeout(() => {
-        this.checkDetailTx(hash, msg);
-        this.resetData();
-      }, TIME_OUT_CALL_API);
-    }
-  }
-
-  async checkDetailTx(id, message) {
-    const res = await this.transactionService.txsDetailLcd(id);
-    let numberCode = res?.data?.tx_response?.code;
-    message = res?.data?.tx_response?.raw_log || message;
-    message = this.mappingErrorService.checkMappingError(message, numberCode);
-    if (numberCode !== undefined) {
-      if (!!!numberCode && numberCode === CodeTransaction.Success) {
-        setTimeout(() => {
+        this.mappingErrorService.checkDetailTx(hash).then(() => {
           this.getList();
           this.getDataWallet();
-        }, TIME_OUT_CALL_API);
-        this.toastr.success(message);
-      } else {
-        this.toastr.error(message);
-      }
+        });
+        this.resetData();
+      }, TIME_OUT_CALL_API);
     }
   }
 
