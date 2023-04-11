@@ -14,9 +14,7 @@ import { WalletService } from '../../../core/services/wallet.service';
 })
 export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   wallet$: Observable<any> = this.walletService.wallet$;
-
   @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
-  @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.configValue.chainId;
@@ -40,7 +38,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
       if (state === 'open') {
         this.connectButton?.nativeElement.click();
       } else {
-        this.buttonDismiss?.nativeElement.click();
+        this.dismiss();
       }
     });
   }
@@ -67,7 +65,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
             content: 'Please set up override Keplr in settings of Coin98 wallet',
           });
         }
-        this.buttonDismiss.nativeElement.click();
+        this.dismiss();
       };
 
       connect();
@@ -77,7 +75,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   }
 
   dismiss(): void {
-    this.buttonDismiss.nativeElement.click();
+    document.getElementById('walletModal')?.click();
   }
 
   disconnect(): void {
