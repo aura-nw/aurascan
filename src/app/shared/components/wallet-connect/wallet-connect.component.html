@@ -13,8 +13,8 @@
 
       <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="walletModal" aria-hidden="true">
         <div class="modal-dialog wallet-modal__dialog">
-          <div class="modal-content">
-            <app-wallet-list (onConnect)="connectWallet($event)" (onDismiss)="dismiss()"></app-wallet-list>
+          <div class="modal-content"  *ngIf="{ b: breakpoint$ | async} as breakpoint">
+            <app-wallet-list  [disabled]="breakpoint.b.matches" (onConnect)="connectWallet($event)" (onDismiss)="dismiss()"></app-wallet-list>
           </div>
         </div>
       </div>

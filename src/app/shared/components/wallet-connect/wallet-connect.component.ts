@@ -12,10 +12,8 @@ import { WalletService } from '../../../core/services/wallet.service';
   templateUrl: './wallet-connect.component.html',
   styleUrls: ['./wallet-connect.component.scss'],
 })
-export class WalletConnectComponent implements AfterViewInit, OnDestroy {
+export class WalletConnectComponent implements OnDestroy {
   wallet$: Observable<any> = this.walletService.wallet$;
-  @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
-  @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.configValue.chainId;
   isMobileMatched = false;
@@ -33,24 +31,9 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     private envService: EnvironmentService,
     private dlgService: DialogService,
     private layout: BreakpointObserver,
-  ) {
-    this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
-      if (state === 'open') {
-        this.connectButton?.nativeElement.click();
-      } else {
-        this.dismiss();
-      }
-    });
-  }
-
-  ngAfterViewInit(): void {
-    this.offcanvasWallet.nativeElement.addEventListener('hide.bs.offcanvas', () => {
-      this.walletService.setDialogState('close');
-    });
-  }
+  ) {}
 
   ngOnDestroy(): void {
-    document.removeAllListeners('hide.bs.offcanvas');
     this.destroy$.next();
     this.destroy$.complete();
   }
