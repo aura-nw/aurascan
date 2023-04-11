@@ -108,9 +108,11 @@ export class WalletService implements OnDestroy {
 
   mobileConnect(): Promise<any> {
     if (!this.coin98Client) {
+      
+      
       this.coin98Client = new Coin98Client(this.chainInfo);
     }
-
+    console.log(this.coin98Client);
     return this.coin98Client
       .connect()
       .then((id) => id && this.coin98Client.getAccount())
@@ -122,6 +124,8 @@ export class WalletService implements OnDestroy {
         return undefined;
       })
       .catch((err) => {
+        console.log(err);
+        
         this.catchErrors(err, true);
         return { errors: err };
       });
@@ -135,13 +139,17 @@ export class WalletService implements OnDestroy {
         return Promise.resolve(true);
 
       case WALLET_PROVIDER.COIN98:
+        console.log('here');
+        
         const _coin98 = this.checkExistedCoin98();
 
-        if (_coin98) {
+        if (_coin98) {          
           this.connectCoin98(this.chainInfo);
           return Promise.resolve(true);
         } else {
           if (this.isMobileMatched) {
+            console.log(this.isMobileMatched);
+            
             return this.mobileConnect();
             // return Promise.resolve(true);
           }
@@ -217,10 +225,15 @@ export class WalletService implements OnDestroy {
   }
 
   checkExistedCoin98(): Keplr | null | undefined {
-    if (window.coin98) {
+    if (window?.coin98) {
+      console.log("999");
       if (window.coin98.keplr) {
+        console.log("123");
+        
         return window.coin98.keplr;
       } else {
+        console.log("321");
+        
         return undefined; // c98 not override keplr
       }
     }
