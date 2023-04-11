@@ -39,6 +39,8 @@ export class WalletConnectComponent implements OnDestroy {
   }
 
   connectWallet(provider: WALLET_PROVIDER): void {
+    const elem = document.getElementsByClassName('modal-backdrop fade show')[0];
+    (<HTMLElement>elem).remove();
     try {
       const connect = async () => {
         const connect = await this.walletService.connect(provider);

@@ -48,10 +48,7 @@ export class Coin98Client {
   }
 
   async connect(): Promise<string> {
-    console.log('connect');
-    
     if (this.connectionId) {
-      console.log(this.connectionId);
       return this.connectionId;
     }
 
@@ -69,8 +66,6 @@ export class Coin98Client {
       }
       return undefined;
     } catch (error) {
-      console.log(error);
-      
       throw new Error(`Can not connect to ${this.chainInfo.chainId}`);
     }
   }
