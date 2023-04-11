@@ -435,13 +435,14 @@
                               {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
-                              <ng-container *ngIf="data['amount']">
+                              <ng-container *ngIf="data['amount'] === 'More'"> More </ng-container>
+                              <ng-container *ngIf="!data['amount']">0</ng-container>
+                              <ng-container *ngIf="data['amount'] !== 'More' && data['amount'] > 0">
                                 <span [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
                                   {{ data['isStakeMode'] ? '+' : '-' }}
                                   {{ data[template.matColumnDef] | mask : 'separator.6' }}
                                 </span>
                               </ng-container>
-                              <ng-container *ngIf="!data['amount']">0</ng-container>
                             </div>
                             <a
                               *ngSwitchCase="'height'"
@@ -482,9 +483,12 @@
                         },
                         {
                           label: 'Amount',
-                          info: data.isStakeMode
-                            ? '<span class=text--info>' + '+ ' + (data.amount | mask : 'separator.6') + '</span>'
-                            : '<span class=text--danger>' + '- ' + (data.amount | mask : 'separator.6') + '</span>'
+                          info:
+                            (!data.amount || data.amount === 0 || data.amount === 'More')
+                              ? data.amount.toString()
+                              : data.isStakeMode
+                              ? '<span class=text--info>' + '+ ' + (data.amount | mask : 'separator.6') + '</span>'
+                              : '<span class=text--danger>' + '- ' + (data.amount | mask : 'separator.6') + '</span>'
                         },
                         {
                           label: 'Time',
