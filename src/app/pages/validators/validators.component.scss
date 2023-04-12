@@ -238,3 +238,13 @@ form.search-form-validators {
     }
   }
 }
+
+.percentage-bar {
+  width: 100%;
+  max-width: 350px;
+  height: 12px;
+  background-color: #67C091;
+  position: relative;
+  margin: 0px 8px 0px 16px;
+  border-radius: var(--spacer-4);
+}

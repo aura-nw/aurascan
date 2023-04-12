@@ -189,9 +189,14 @@
                         <div *ngSwitchCase="'commission'" class="">
                           {{ data[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
                         </div>
-                        <div *ngSwitchCase="'power'" class="py-4">
-                          {{ data[template.matColumnDef] | number }}<br />
-                          <span class="percent-vote text--gray-5 mt-1">{{ data['percent_power'] + '%' }}</span>
+                        <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center">
+                          <div [style.min-width]="'100px'" class="txt-right">
+                            {{ data[template.matColumnDef] | number }}
+                          </div>
+                          <div class="percentage-bar mx-2" [style.width]="(data.percent_power || 0) + '%'">
+                            <!-- <div class="percentage-bar__process"></div> -->
+                          </div>
+                          <span class="percent-vote">{{ data['percent_power'] + '%' }}</span>
                         </div>
                         <div *ngSwitchCase="'participation'">
                           {{ data[template.matColumnDef] + '/' + data['target_count'] }}
