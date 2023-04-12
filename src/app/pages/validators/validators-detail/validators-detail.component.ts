@@ -233,6 +233,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     );
     if (res?.data?.delegation_responses?.length > 0 && res?.data?.pagination?.total) {
       this.lengthDelegator = Number(res?.data?.pagination?.total);
+      console.log(res?.data?.delegation_responses);
 
       let data = [];
       res.data?.delegation_responses.forEach((k) => {

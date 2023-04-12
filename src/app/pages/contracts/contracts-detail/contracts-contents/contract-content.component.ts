@@ -126,7 +126,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
           this.nextKey = dataExecute.data.nextKey;
           if (code === 200) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
-            if (dataExecute?.data.count > 0) {
+            if (dataExecute?.data?.transactions?.length > 0) {
               this.contractTransaction['data'] = txsExecute;
               this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
             }

@@ -4,7 +4,7 @@ import { CommonService } from './core/services/common.service';
 import { TokenService } from './core/services/token.service';
 import { getInfo } from './core/utils/common/info-common';
 import { Globals } from './global/global';
-import eruda from 'eruda';
+// import eruda from 'eruda';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
@@ -13,16 +13,16 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  chainInfo = this.env.configValue.chain_info;
-  TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
-  isTestnet = this.TESTNET.includes(
-    this.chainInfo?.chainId || ''
-  );
+  // chainInfo = this.env.configValue.chain_info;
+  // TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
+  // isTestnet = this.TESTNET.includes(
+  //   this.chainInfo?.chainId || ''
+  // );
   constructor(
-    private commonService: CommonService, 
-    private globals: Globals, 
+    private commonService: CommonService,
+    private globals: Globals,
     private tokenService: TokenService,
-    private env: EnvironmentService
+    // private env: EnvironmentService
     ) {}
   ngOnInit(): void {
     this.getInfoCommon();
@@ -34,15 +34,15 @@ export class AppComponent implements OnInit {
     }, 60000);
 
 
-    if (this.isTestnet) {
-      let el = document.createElement('div');
-      document.body.appendChild(el);
-
-      eruda.init({
-        container: el,
-        tool: ['console', 'elements', 'resources', 'network'],
-      });
-    }
+    // if (this.isTestnet) {
+    //   let el = document.createElement('div');
+    //   document.body.appendChild(el);
+    //
+    //   eruda.init({
+    //     container: el,
+    //     tool: ['console', 'elements', 'resources', 'network'],
+    //   });
+    // }
   }
 
   getInfoCommon(): void {
