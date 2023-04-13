@@ -64,6 +64,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   displayedColumnsPower: string[] = this.templatesPower.map((dta) => dta.matColumnDef);
   dataSourcePowerMob: any[];
   dataSourceBlockMob: any[];
+  dataSourceDelegatorMob: any[];
 
   lengthBlockLoading = true;
   isLoadingPower = true;
@@ -247,6 +248,12 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     } else {
       this.dataSourceDelegator.data = [...data];
     }
+
+    this.dataSourceDelegatorMob = this.dataSourceDelegator?.data.slice(
+      this.pageIndexDelegator * this.pageSize,
+      this.pageIndexDelegator * this.pageSize + this.pageSize,
+    );
+
     this.lengthDelegator = Number(this.dataSourceDelegator.data?.length);
   }
 
@@ -332,7 +339,10 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         this.pageIndexBlock = page.pageIndex;
         break;
       case 'delegator':
-        this.pageIndexDelegator = page.pageIndex;
+        this.dataSourceDelegatorMob = this.dataSourcePower.data.slice(
+          page.pageIndex * page.pageSize,
+          page.pageIndex * page.pageSize + page.pageSize,
+        );
         const nextDelegator = page.length <= (page.pageIndex + 2) * page.pageSize;
         if (nextDelegator && this.nextKeyDelegator && this.currentNextKeyDelegator !== this.nextKeyDelegator) {
           this.getListDelegator(this.nextKeyDelegator);
