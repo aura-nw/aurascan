@@ -150,7 +150,7 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'power'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-power">
-                      <div
+                      <div class="pl-5"
                         [innerHTML]="template.headerCellDef | translate"
                         matTooltipPosition="above"
                         matTooltip="The more AURA delegated to a validator, the higher the validator's voting power."
@@ -190,11 +190,10 @@
                           {{ data[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
-                          <div [style.min-width]="'120px'">
+                          <div [style.min-width]="'120px'" class="text-end">
                             {{ data[template.matColumnDef] | number }}
                           </div>
-                          <div class="percentage-bar mx-2"
-                               [class.percentage--primary]="data['voting_power_level'] === votingPowerStatus.VOTING_POWER_NORMAL"
+                          <div class="percentage-bar ml-4 mr-2"
                                [class.percentage--warning]="data['voting_power_level'] === votingPowerStatus.VOTING_POWER_MEDIUM"
                                [class.percentage--danger]="data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH"
                                [style.width]="(data.percent_power || 0) + '%'">
