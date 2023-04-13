@@ -79,7 +79,7 @@ export class TokenInventoryComponent implements OnInit {
 
     this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
       const asset = _.get(res, `data.assets[${this.typeContract}]`);
-      this.pageData.length = _.get(res, `data.assets[${this.typeContract}].count`);
+      this.pageData.length = _.get(res, `data.assets[${this.typeContract}].asset.length`);
 
       if (this.nftData.data.length > 0) {
         this.nftData.data = [...this.nftData.data, ...asset.asset];

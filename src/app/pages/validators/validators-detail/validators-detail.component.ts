@@ -71,10 +71,8 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   numberLastBlock = 100;
   timerGetUpTime: any;
   timerGetBlock: any;
-
   nextKey = null;
   currentNextKey = null;
-
   nextKeyBlock = null;
   currentNextKeyBlock = null;
 

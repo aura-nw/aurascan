@@ -19,8 +19,8 @@ export class AppComponent implements OnInit {
   //   this.chainInfo?.chainId || ''
   // );
   constructor(
-    private commonService: CommonService, 
-    private globals: Globals, 
+    private commonService: CommonService,
+    private globals: Globals,
     private tokenService: TokenService,
     // private env: EnvironmentService
     ) {}

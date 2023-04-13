@@ -114,7 +114,7 @@ export class ContractsTransactionsComponent implements OnInit {
           if (code === 200) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
             this.lengthTxsExecute = txsExecute.length;
-            if (dataExecute.data.count > 0) {
+            if (dataExecute.data.transactions?.length > 0) {
               this.nextKey = dataExecute.data.nextKey;
 
               if (this.contractTransaction['data']?.length > 0 && !isReload) {
@@ -148,7 +148,7 @@ export class ContractsTransactionsComponent implements OnInit {
   getDataInstantiate(): void {
     this.contractService.getTransactionsIndexer(1, this.contractAddress, 'instantiate').subscribe(
       (dataInstantiate) => {
-        if (dataInstantiate.data.count > 0) {
+        if (dataInstantiate.data.transactions?.length > 0) {
           this.txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
           if (this.txsInstantiate.length > 0) {
             this.txsInstantiate[0]['type'] =
