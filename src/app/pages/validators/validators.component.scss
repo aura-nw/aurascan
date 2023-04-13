@@ -246,9 +246,7 @@ form.search-form-validators {
   position: relative;
   margin: 0px 8px 0px 16px;
   border-radius: var(--spacer-4);
-  &.percentage--primary {
-    background-color: var(--aura-green-3);
-  }
+  background-color: var(--aura-green-3);
   &.percentage--danger {
     background-color: var(--aura-red-3);
   }
