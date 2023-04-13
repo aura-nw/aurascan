@@ -56,7 +56,7 @@ export class ProposalService extends CommonService {
       searchKey: 'proposal_id',
       pageLimit: payload.pageLimit,
       nextKey: payload.nextKey,
-      countTotal: true,
+      // countTotal: true,
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)

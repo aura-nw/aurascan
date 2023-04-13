@@ -1,34 +1,4 @@
 .wallet-connect-container {
-  .text {
-    font-size: 16px;
-  }
-
-  .img-wallet {
-    width: 32px;
-    cursor: pointer;
-    height: auto;
-  }
-
-  .wallet-avatar {
-    width: 26px;
-    height: 26px;
-    border: 1px solid #d2d2d2;
-    border-radius: 100%;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-
-  .account-button {
-    white-space: nowrap;
-    @media (min-width: 992px) {
-      width: 192px;
-    }
-  }
-
   .walletMenu {
     &.aura-dropdown .dropdown-menu.aura-dropdown-menu {
       border: 1px solid var(--aura-gray-9);
@@ -49,46 +19,6 @@
 
     li {
       cursor: pointer;
-    }
-  }
-
-  .offcanvas-wallet {
-    background: #141416;
-    box-shadow: -2px 0px 18px rgba(0, 0, 0, 0.25);
-    border: none;
-
-    .card {
-      background: #141416;
-    }
-  }
-
-  .wallet-container {
-    position: relative;
-
-    .qr-modal {
-      position: absolute;
-      top: 0px;
-      width: 100%;
-      height: 100%;
-      z-index: 1552;
-
-      display: flex;
-      justify-content: center;
-
-      background-color: rgba(255, 255, 255, 0.75);
-
-      .modal-content {
-        margin-top: 80px;
-        height: fit-content;
-        width: 80%;
-        box-shadow: 1px 1px 1px 1px rgba(219, 219, 225, 0.5);
-        border: 1px solid rgb(204, 204, 204);
-        background: rgb(255, 255, 255);
-        overflow: auto;
-        border-radius: 4px;
-        outline: none;
-        padding: 20px;
-      }
     }
   }
 }
@@ -118,5 +48,11 @@
   }
   &::after {
     background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
+  }
+}
+.wallet-modal__dialog {
+  margin-top: 140px;
+  .modal-content {
+    padding-bottom: 16px;
   }
 }

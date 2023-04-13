@@ -60,11 +60,12 @@
               titleClass: 'h6-mob',
               label: data.height,
               subLabelContent: commonService.getDateValue(data.timestamp)[0],
-              subLabelClass: 'text--gray-1 h6-mob w-time'
+              subLabelClass: 'text--gray-1 h6-mob w-time justify-content-end'
             }"
             [content]="[
               {
                 label: 'Proposer',
+                class: 'w-50 text-end',
                 info:
                   '<a class=text--primary href=' +
                   ('/validators/' + data.operator_address) +
