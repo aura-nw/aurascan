@@ -95,9 +95,9 @@ export class ValidatorService extends CommonService {
     );
   }
 
-  delegators(limit: string | number, offset: string | number, address: string) {
+  delegators(pageLimit = 100, address: string,  nextKey = null) {
     return axios.get(
-      `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.offset=${offset}&pagination.limit=${limit}&pagination.countTotal=true&pagination.reverse=true`,
+      `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.limit=${pageLimit}&pagination.key=${nextKey}&pagination.reverse=true`,
     );
   }
 

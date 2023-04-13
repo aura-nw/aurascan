@@ -233,6 +233,7 @@ export class WalletService implements OnDestroy {
     if (account) {
       return account;
     }
+
     document.getElementById('walletModalBtn')?.click();
 
     return null;
