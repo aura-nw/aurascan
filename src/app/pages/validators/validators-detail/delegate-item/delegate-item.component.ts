@@ -112,7 +112,7 @@ export class DelegateItemComponent implements OnInit {
     if (this.userAddress) {
       this.accountService.getAccountDetail(this.userAddress).subscribe((res) => {
         if (res) {
-          this.getListDelegators(this.currentValidatorDetail?.operator_address);
+          // this.getListDelegators(this.currentValidatorDetail?.operator_address);
 
           this.dataDelegate = {
             ...this.dataDelegate,
@@ -134,10 +134,10 @@ export class DelegateItemComponent implements OnInit {
     }
   }
 
-  async getListDelegators(address) {
-    const res = await this.validatorService.delegators(5, 0, address);
-    this.totalDelegator = res?.data?.pagination?.total || 0;
-  }
+  // async getListDelegators(address) {
+  //   const res = await this.validatorService.delegators(5, 0, address);
+  //   this.totalDelegator = res?.data?.pagination?.total || 0;
+  // }
 
   resetCheck() {
     this.isExceedAmount = false;

@@ -108,8 +108,6 @@ export class WalletService implements OnDestroy {
 
   mobileConnect(): Promise<any> {
     if (!this.coin98Client) {
-      
-      
       this.coin98Client = new Coin98Client(this.chainInfo);
     }
     return this.coin98Client
@@ -136,10 +134,9 @@ export class WalletService implements OnDestroy {
         return Promise.resolve(true);
 
       case WALLET_PROVIDER.COIN98:
-
         const _coin98 = this.checkExistedCoin98();
 
-        if (_coin98) {          
+        if (_coin98) {
           this.connectCoin98(this.chainInfo);
           return Promise.resolve(true);
         } else {
@@ -237,7 +234,7 @@ export class WalletService implements OnDestroy {
       return account;
     }
 
-    this.setDialogState('open');
+    document.getElementById('walletModalBtn')?.click();
 
     return null;
   }
