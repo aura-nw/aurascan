@@ -110,7 +110,6 @@ export class WalletService implements OnDestroy {
     if (!this.coin98Client) {
       this.coin98Client = new Coin98Client(this.chainInfo);
     }
-
     return this.coin98Client
       .connect()
       .then((id) => id && this.coin98Client.getAccount())
@@ -217,7 +216,7 @@ export class WalletService implements OnDestroy {
   }
 
   checkExistedCoin98(): Keplr | null | undefined {
-    if (window.coin98) {
+    if (window?.coin98) {
       if (window.coin98.keplr) {
         return window.coin98.keplr;
       } else {
@@ -235,7 +234,7 @@ export class WalletService implements OnDestroy {
       return account;
     }
 
-    this.setDialogState('open');
+    document.getElementById('walletModalBtn')?.click();
 
     return null;
   }
@@ -371,6 +370,13 @@ export class WalletService implements OnDestroy {
       },
     };
 
+    let fund = [];
+    const key = Object.keys(msg)[0];
+    if (msg[key]?.fund) {
+      fund = JSON.parse(msg[key]?.fund);
+      delete msg[key]?.fund;
+    }
+
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
@@ -378,7 +384,7 @@ export class WalletService implements OnDestroy {
     }
 
     return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
-      client.execute(userAddress, contract_address, msg, feeGas || 'auto'),
+      client.execute(userAddress, contract_address, msg, feeGas || 'auto', '', fund || []),
     );
   }
 

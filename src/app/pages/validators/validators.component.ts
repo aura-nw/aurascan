@@ -24,6 +24,7 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
+import {VOTING_POWER_STATUS} from "src/app/core/constants/validator.constant";
 
 @Component({
   selector: 'app-validators',
@@ -32,9 +33,10 @@ import { Globals } from '../../../app/global/global';
   encapsulation: ViewEncapsulation.None,
 })
 export class ValidatorsComponent implements OnInit, OnDestroy {
+  votingPowerStatus = VOTING_POWER_STATUS;
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly: true },
+    // { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly: true },
     { matColumnDef: 'title', headerCellDef: 'Validator', desktopOnly: true },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
@@ -118,13 +120,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
-    private transactionService: TransactionService,
     private mappingErrorService: MappingErrorService,
     private router: Router,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
-    private environmentService: EnvironmentService,
-    private global: Globals,
+    private environmentService: EnvironmentService
   ) {}
 
   async ngOnInit() {
@@ -174,6 +174,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           val.participation = val.vote_count;
           val.power = val.power / NUMBER_CONVERT;
           val.up_time = Number(val.up_time.replace('%', ''));
+          val.width_chart = val.up_time / 100;
         });
 
         let dataFilter = res.data.filter((event) =>
@@ -326,7 +327,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         }
         this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
         this.dataDelegate.validatorDetail = this.validatorDetail;
-        this.getListDelegators(address);
+        // this.getListDelegators(address);
 
         this.clicked = false;
         this.isExceedAmount = false;
@@ -428,10 +429,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async getListDelegators(address) {
-    const res = await this.validatorService.delegators(5, 0, address);
-    this.totalDelegator = res?.data?.pagination?.total;
-  }
+  // async getListDelegators(address) {
+  //   const res = await this.validatorService.delegators(5, 0, address);
+  //   this.totalDelegator = res?.data?.pagination?.total;
+  // }
 
   checkAmountStaking(): void {
     let amountCheck;

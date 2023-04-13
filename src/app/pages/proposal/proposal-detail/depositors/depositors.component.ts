@@ -46,7 +46,7 @@ export class DepositorsComponent implements OnInit {
       (res) => {
         let dataList: any[] = [];
         if (res?.data?.transactions?.length > 0) {
-          this.dataLength = res.data.count || 0;
+          this.dataLength = res.data?.transactions?.length || 0;
           dataList = res?.data?.transactions?.filter(
             (transaction) =>
               transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||

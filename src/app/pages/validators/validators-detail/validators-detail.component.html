@@ -322,10 +322,10 @@
       <div class="card text--white">
         <div class="card-header d-lg-flex align-items-center justify-content-between header-mob pb-0">
           <h3 class="h2-mob mb-0 text--gray-1">Delegators</h3>
-          <div class="d-flex align-items-center mt-1 mt-lg-0" *ngIf="lengthDelegator">
+          <!-- <div class="d-flex align-items-center mt-1 mt-lg-0" *ngIf="lengthDelegator">
             <img [src]="'assets/icons/icons-svg/white/user.svg' | imageS3" class="img-valid mr-2" />
             <span class="body-01 text--gray-5 mt-1 mt-lg-0">{{ lengthDelegator | number }}</span>
-          </div>
+          </div> -->
         </div>
         <div class="card-body article-1 pt-4">
           <ngx-simplebar>
@@ -333,7 +333,7 @@
               <div class="table-responsive aura-table-contain">
                 <table
                   mat-table
-                  [dataSource]="dataSourceDelegator.data"
+                  [dataSource]="dataSourceDelegator"
                   class="aura-table"
                   *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesDelegator; index as i">

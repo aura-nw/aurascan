@@ -238,3 +238,27 @@ form.search-form-validators {
     }
   }
 }
+
+.percentage-bar {
+  width: 100%;
+  max-width: 350px;
+  height: 12px;
+  position: relative;
+  margin: 0px 8px 0px 16px;
+  border-radius: var(--spacer-4);
+  &.percentage--primary {
+    background-color: var(--aura-green-3);
+  }
+  &.percentage--danger {
+    background-color: var(--aura-red-3);
+  }
+  &.percentage--warning {
+    background-color: var(--aura-yellow-3);
+  }
+}
+.col-power {
+  width: 25%;
+  @media (min-width: 991.98px) {
+    width: 30%;
+  }
+}
