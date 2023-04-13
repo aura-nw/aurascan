@@ -130,17 +130,17 @@
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'title'">
-                    <th mat-header-cell *matHeaderCellDef class="pl-5 col-per-25">
+                    <th mat-header-cell *matHeaderCellDef class="pl-5 col-per-20">
                       <div class="pl-5" [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'action'">
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef class="">
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
-                  <ng-container *ngSwitchCase="'up_time'" class="pr-5 col-per-25">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <ng-container *ngSwitchCase="'up_time'">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
                       <div
                         [innerHTML]="template.headerCellDef | translate"
                         matTooltipPosition="above"
@@ -148,8 +148,8 @@
                         #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
-                  <ng-container *ngSwitchCase="'power'" class="col-per-25">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <ng-container *ngSwitchCase="'power'">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-power">
                       <div
                         [innerHTML]="template.headerCellDef | translate"
                         matTooltipPosition="above"
@@ -157,8 +157,8 @@
                         #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
-                  <ng-container *ngSwitchCase="'commission'" class="col-per-25">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <ng-container *ngSwitchCase="'commission'">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
                       <div
                         [innerHTML]="template.headerCellDef | translate"
                         matTooltipPosition="above"
@@ -166,8 +166,8 @@
                         #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
-                  <ng-container *ngSwitchCase="'participation'" class="col-per-25">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <ng-container *ngSwitchCase="'participation'">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
                       <div
                         [innerHTML]="template.headerCellDef | translate"
                         matTooltipPosition="above"
@@ -176,7 +176,7 @@
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchDefault>
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-per-25">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
@@ -189,9 +189,21 @@
                         <div *ngSwitchCase="'commission'" class="">
                           {{ data[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
                         </div>
-                        <div *ngSwitchCase="'power'" class="py-4">
-                          {{ data[template.matColumnDef] | number }}<br />
-                          <span class="percent-vote text--gray-5 mt-1">{{ data['percent_power'] + '%' }}</span>
+                        <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
+                          <div [style.min-width]="'120px'">
+                            {{ data[template.matColumnDef] | number }}
+                          </div>
+                          <div class="percentage-bar mx-2"
+                               [class.percentage--primary]="data['voting_power_level'] === votingPowerStatus.VOTING_POWER_NORMAL"
+                               [class.percentage--warning]="data['voting_power_level'] === votingPowerStatus.VOTING_POWER_MEDIUM"
+                               [class.percentage--danger]="data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH"
+                               [style.width]="(data.percent_power || 0) + '%'">
+                          </div>
+                          <span class="percent-vote fw-normal">{{ data['percent_power'] + '%' }}</span>
+                          <i class="ph-warning-fill cursor-pointer ml-1" *ngIf="data['voting_power_level'] === '3'"
+                             matTooltip="Validators with too much voting power will lessen the security and decentralization of the network"
+                             [matTooltipPosition]="'above'"
+                          ></i>
                         </div>
                         <div *ngSwitchCase="'participation'">
                           {{ data[template.matColumnDef] + '/' + data['target_count'] }}
@@ -206,7 +218,7 @@
                           *ngSwitchCase="'title'"
                           class="text--primary cursor-pointer text-clamp box-title-validator pl-5"
                           [routerLink]="['/validators', data.operator_address]">
-                          <div class="avatar-wrapper validator-avatar-wrapper pl-5">
+                          <div class="avatar-wrapper validator-avatar-wrapper">
                             <div class="validator-avatar">
                               <app-loading-image
                                 [appClass]="data['jailed'] ? 'jailed' : ''"
@@ -389,7 +401,7 @@
             <span class="text--primary ml-1">{{ denom }}</span
             >)
           </div>
-          <div>Delegators - {{ totalDelegator }}</div>
+<!--          <div>Delegators - {{ totalDelegator }}</div>-->
         </div>
       </div>
       <div>
