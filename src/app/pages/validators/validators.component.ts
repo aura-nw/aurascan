@@ -24,6 +24,7 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
+import {VOTING_POWER_STATUS} from "src/app/core/constants/validator.constant";
 
 @Component({
   selector: 'app-validators',
@@ -32,6 +33,7 @@ import { Globals } from '../../../app/global/global';
   encapsulation: ViewEncapsulation.None,
 })
 export class ValidatorsComponent implements OnInit, OnDestroy {
+  votingPowerStatus = VOTING_POWER_STATUS;
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
     // { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly: true },
