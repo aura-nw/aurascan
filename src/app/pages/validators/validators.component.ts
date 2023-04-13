@@ -327,7 +327,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         }
         this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
         this.dataDelegate.validatorDetail = this.validatorDetail;
-        this.getListDelegators(address);
+        // this.getListDelegators(address);
 
         this.clicked = false;
         this.isExceedAmount = false;
@@ -429,10 +429,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async getListDelegators(address) {
-    const res = await this.validatorService.delegators(5, 0, address);
-    this.totalDelegator = res?.data?.pagination?.total;
-  }
+  // async getListDelegators(address) {
+  //   const res = await this.validatorService.delegators(5, 0, address);
+  //   this.totalDelegator = res?.data?.pagination?.total;
+  // }
 
   checkAmountStaking(): void {
     let amountCheck;
