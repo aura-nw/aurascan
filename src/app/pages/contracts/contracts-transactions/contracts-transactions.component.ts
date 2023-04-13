@@ -122,14 +122,18 @@ export class ContractsTransactionsComponent implements OnInit {
               } else {
                 this.contractTransaction['data'] = txsExecute;
               }
+            }
 
+            if (isReload) {
+              this.contractTransaction['data'] = [...this.contractTransaction['data'], this.txsInstantiate[0]];
+            }
+
+            if (!isReload) {
               if (this.nextKey === null) {
                 this.getDataInstantiate();
               } else {
                 this.contractTransaction['count'] = this.contractTransaction['data']?.length;
               }
-            } else {
-              this.getDataInstantiate();
             }
           }
         },
@@ -156,7 +160,7 @@ export class ContractsTransactionsComponent implements OnInit {
               return;
             }
             if (!this.label) {
-              if (this.contractTransaction['data']?.length > 1) {
+              if (this.contractTransaction['data']?.length >= 1) {
                 this.contractTransaction['data'].push(this.txsInstantiate[0]);
               } else {
                 this.contractTransaction['data'] = this.txsInstantiate;

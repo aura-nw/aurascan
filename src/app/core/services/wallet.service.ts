@@ -108,8 +108,6 @@ export class WalletService implements OnDestroy {
 
   mobileConnect(): Promise<any> {
     if (!this.coin98Client) {
-      
-      
       this.coin98Client = new Coin98Client(this.chainInfo);
     }
     return this.coin98Client
@@ -136,10 +134,9 @@ export class WalletService implements OnDestroy {
         return Promise.resolve(true);
 
       case WALLET_PROVIDER.COIN98:
-
         const _coin98 = this.checkExistedCoin98();
 
-        if (_coin98) {          
+        if (_coin98) {
           this.connectCoin98(this.chainInfo);
           return Promise.resolve(true);
         } else {
@@ -373,6 +370,13 @@ export class WalletService implements OnDestroy {
       },
     };
 
+    let fund = [];
+    const key = Object.keys(msg)[0];
+    if (msg[key]?.fund) {
+      fund = JSON.parse(msg[key]?.fund);
+      delete msg[key]?.fund;
+    }
+
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
@@ -380,7 +384,7 @@ export class WalletService implements OnDestroy {
     }
 
     return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
-      client.execute(userAddress, contract_address, msg, feeGas || 'auto'),
+      client.execute(userAddress, contract_address, msg, feeGas || 'auto', '', fund || []),
     );
   }
 
