@@ -42,7 +42,7 @@ export class TokenService extends CommonService {
       needFullLog: true,
       pageLimit,
       nextKey,
-      countTotal: true,
+      // countTotal: true,
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)
@@ -72,7 +72,7 @@ export class TokenService extends CommonService {
       contractAddress: payload.contractAddress,
       pageLimit: payload.pageLimit,
       pageOffset: payload.pageOffset,
-      countTotal: true,
+      // countTotal: true,
       contractType: payload.contractType,
       isBurned: false,
     })

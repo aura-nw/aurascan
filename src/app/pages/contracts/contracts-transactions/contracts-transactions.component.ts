@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
@@ -114,22 +115,28 @@ export class ContractsTransactionsComponent implements OnInit {
           if (code === 200) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
             this.lengthTxsExecute = txsExecute.length;
-            if (dataExecute.data.count > 0) {
+            if (dataExecute.data.transactions?.length > 0) {
               this.nextKey = dataExecute.data.nextKey;
 
               if (this.contractTransaction['data']?.length > 0 && !isReload) {
                 this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
-              } else {
+              } else if (txsExecute.length > 0){
                 this.contractTransaction['data'] = txsExecute;
               }
+            }
 
-              if (this.nextKey === null) {
-                this.getDataInstantiate();
-              } else {
+            this.contractTransaction['count'] = this.contractTransaction['data']?.length;
+            if (this.label != 1) {
+              if (isReload && txsExecute?.length > 0) {
+                this.contractTransaction['data'] = [...this.contractTransaction['data'], this.txsInstantiate[0]];
                 this.contractTransaction['count'] = this.contractTransaction['data']?.length;
               }
-            } else {
-              this.getDataInstantiate();
+            }
+
+            if (!isReload) {
+              if (this.nextKey === null) {
+                this.getDataInstantiate();
+              }
             }
           }
         },
@@ -138,13 +145,15 @@ export class ContractsTransactionsComponent implements OnInit {
           this.isLoadingTX = false;
         },
       );
+    } else {
+      this.isLoadingTX = false;
     }
   }
 
   getDataInstantiate(): void {
     this.contractService.getTransactionsIndexer(1, this.contractAddress, 'instantiate').subscribe(
       (dataInstantiate) => {
-        if (dataInstantiate.data.count > 0) {
+        if (dataInstantiate.data.transactions?.length > 0) {
           this.txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
           if (this.txsInstantiate.length > 0) {
             this.txsInstantiate[0]['type'] =
@@ -156,7 +165,7 @@ export class ContractsTransactionsComponent implements OnInit {
               return;
             }
             if (!this.label) {
-              if (this.contractTransaction['data']?.length > 1) {
+              if (this.contractTransaction['data']?.length >= 1) {
                 this.contractTransaction['data'].push(this.txsInstantiate[0]);
               } else {
                 this.contractTransaction['data'] = this.txsInstantiate;

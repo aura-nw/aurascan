@@ -321,10 +321,10 @@
       <div class="card text--white">
         <div class="card-header d-lg-flex align-items-center justify-content-between header-mob pb-0">
           <h3 class="h2-mob mb-0 text--gray-1">Delegators</h3>
-          <div class="d-flex align-items-center mt-1 mt-lg-0" *ngIf="lengthDelegator">
+          <!-- <div class="d-flex align-items-center mt-1 mt-lg-0" *ngIf="lengthDelegator">
             <img [src]="'assets/icons/icons-svg/white/user.svg' | imageS3" class="img-valid mr-2" />
             <span class="body-01 text--gray-5 mt-1 mt-lg-0">{{ lengthDelegator | number }}</span>
-          </div>
+          </div> -->
         </div>
         <div class="card-body article-1 pt-4">
           <ngx-simplebar>
@@ -332,7 +332,7 @@
               <div class="table-responsive aura-table-contain">
                 <table
                   mat-table
-                  [dataSource]="dataSourceDelegator.data"
+                  [dataSource]="dataSourceDelegator"
                   class="aura-table"
                   *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesDelegator; index as i">
@@ -371,7 +371,7 @@
                 <ng-container *ngIf="breakpoint.value.matches">
                   <div class="custom-card-mob-simple">
                     <app-card-mob-simple
-                      *ngFor="let data of dataSourceDelegator.data"
+                      *ngFor="let data of dataSourceDelegatorMob"
                       [link]="'/account/' + data.delegator_address"
                       [content]="[
                         {
@@ -435,13 +435,14 @@
                               {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
-                              <ng-container *ngIf="data['amount']">
+                              <ng-container *ngIf="data['amount'] === 'More'"> More </ng-container>
+                              <ng-container *ngIf="!data['amount']">0</ng-container>
+                              <ng-container *ngIf="data['amount'] !== 'More' && data['amount'] > 0">
                                 <span [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
                                   {{ data['isStakeMode'] ? '+' : '-' }}
                                   {{ data[template.matColumnDef] | mask : 'separator.6' }}
                                 </span>
                               </ng-container>
-                              <ng-container *ngIf="!data['amount']">0</ng-container>
                             </div>
                             <a
                               *ngSwitchCase="'height'"
@@ -482,9 +483,12 @@
                         },
                         {
                           label: 'Amount',
-                          info: data.isStakeMode
-                            ? '<span class=text--info>' + '+ ' + (data.amount | mask : 'separator.6') + '</span>'
-                            : '<span class=text--danger>' + '- ' + (data.amount | mask : 'separator.6') + '</span>'
+                          info:
+                            (!data.amount || data.amount === 0 || data.amount === 'More')
+                              ? data.amount.toString()
+                              : data.isStakeMode
+                              ? '<span class=text--info>' + '+ ' + (data.amount | mask : 'separator.6') + '</span>'
+                              : '<span class=text--danger>' + '- ' + (data.amount | mask : 'separator.6') + '</span>'
                         },
                         {
                           label: 'Time',
