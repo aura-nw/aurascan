@@ -120,14 +120,14 @@ export class ContractsTransactionsComponent implements OnInit {
 
               if (this.contractTransaction['data']?.length > 0 && !isReload) {
                 this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
-              } else {
+              } else if (txsExecute.length > 0){
                 this.contractTransaction['data'] = txsExecute;
               }
             }
 
             this.contractTransaction['count'] = this.contractTransaction['data']?.length;
             if (this.label != 1) {
-              if (isReload && this.contractTransaction['data'].length >= 1) {
+              if (isReload && txsExecute?.length > 0) {
                 this.contractTransaction['data'] = [...this.contractTransaction['data'], this.txsInstantiate[0]];
                 this.contractTransaction['count'] = this.contractTransaction['data']?.length;
               }

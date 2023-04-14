@@ -333,7 +333,7 @@
     <div class="text--gray-5 body-02 caption-mob fw-normal-mob mt-3">
       A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
-    <div class="table-responsive aura-table-contain mt-2 mt-lg-3" style="max-height: 600px">
+    <div class="table-responsive aura-table-contain mt-2 mt-lg-3">
       <table
         *ngIf="dataSource?.data?.length > 0; else noValues"
         mat-table
