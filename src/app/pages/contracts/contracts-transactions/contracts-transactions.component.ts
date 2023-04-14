@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
@@ -124,15 +125,17 @@ export class ContractsTransactionsComponent implements OnInit {
               }
             }
 
-            if (isReload) {
-              this.contractTransaction['data'] = [...this.contractTransaction['data'], this.txsInstantiate[0]];
+            this.contractTransaction['count'] = this.contractTransaction['data']?.length;
+            if (this.label != 1) {
+              if (isReload && this.contractTransaction['data'].length >= 1) {
+                this.contractTransaction['data'] = [...this.contractTransaction['data'], this.txsInstantiate[0]];
+                this.contractTransaction['count'] = this.contractTransaction['data']?.length;
+              }
             }
 
             if (!isReload) {
               if (this.nextKey === null) {
                 this.getDataInstantiate();
-              } else {
-                this.contractTransaction['count'] = this.contractTransaction['data']?.length;
               }
             }
           }
@@ -142,6 +145,8 @@ export class ContractsTransactionsComponent implements OnInit {
           this.isLoadingTX = false;
         },
       );
+    } else {
+      this.isLoadingTX = false;
     }
   }
 

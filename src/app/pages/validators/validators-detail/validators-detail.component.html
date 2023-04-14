@@ -372,7 +372,7 @@
                 <ng-container *ngIf="breakpoint.value.matches">
                   <div class="custom-card-mob-simple">
                     <app-card-mob-simple
-                      *ngFor="let data of dataSourceDelegator.data"
+                      *ngFor="let data of dataSourceDelegatorMob"
                       [link]="'/account/' + data.delegator_address"
                       [content]="[
                         {
