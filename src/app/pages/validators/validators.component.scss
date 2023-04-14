@@ -244,9 +244,12 @@ form.search-form-validators {
   max-width: 167px;
   height: 12px;
   position: relative;
-  margin: 0px 8px 0px 16px;
+  margin: 0 8px 0 16px;
   border-radius: var(--spacer-4);
   background-color: var(--aura-green-3);
+  &.percentage-bar--min-width {
+    min-width: 1px;
+  }
   &.percentage--danger {
     background-color: var(--aura-red-3);
   }

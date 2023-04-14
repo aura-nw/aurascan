@@ -196,7 +196,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.dataSource.data[key] = dataFilter[key];
           }
         });
-        this.maxPercentPower = this.dataSource?.data[0]?.percent_power;
+        if (this.typeValidator === this.statusValidator.Active) {
+          this.maxPercentPower = this.dataSource?.data[0]?.percent_power;
+        }
 
         this.dataSourceBk = this.dataSource;
         this.dataSource.sort = this.sort;
