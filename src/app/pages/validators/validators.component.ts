@@ -103,6 +103,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   staking_APR = 0;
   numberProposal = 0;
   validatorImgArr;
+  maxPercentPower = 0;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -195,6 +196,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.dataSource.data[key] = dataFilter[key];
           }
         });
+        this.maxPercentPower = this.dataSource?.data[0]?.percent_power;
 
         this.dataSourceBk = this.dataSource;
         this.dataSource.sort = this.sort;
