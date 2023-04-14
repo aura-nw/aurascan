@@ -194,9 +194,10 @@
                             {{ data[template.matColumnDef] | number }}
                           </div>
                           <div class="percentage-bar ml-4 mr-2"
+                               [class.percentage-bar--min-width]="data['percent_power'] >= 0.01"
                                [class.percentage--warning]="data['voting_power_level'] === votingPowerStatus.VOTING_POWER_MEDIUM"
                                [class.percentage--danger]="data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH"
-                               [style.width]="i === 0 ? '167px' : ((data.percent_power * 100 / maxPercentPower) * 167 / 100 + 'px')">
+                               [style.width]="(i === 0 && typeValidator === statusValidator.Active) ? '167px' : ((data.percent_power * 100 / maxPercentPower) * 167 / 100 + 'px')">
                           </div>
                           <span class="percent-vote fw-normal">{{ data['percent_power'] + '%' }}</span>
                           <i class="ph-warning-fill cursor-pointer ml-1" *ngIf="data['voting_power_level'] === '3'"
