@@ -339,7 +339,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         this.pageIndexBlock = page.pageIndex;
         break;
       case 'delegator':
-        this.dataSourceDelegatorMob = this.dataSourcePower.data.slice(
+        this.dataSourceDelegatorMob = this.dataSourceDelegator.data.slice(
           page.pageIndex * page.pageSize,
           page.pageIndex * page.pageSize + page.pageSize,
         );
