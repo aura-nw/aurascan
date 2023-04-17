@@ -121,12 +121,15 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   loadData(isInit = true) {
     if (!this.isLeftPage) {
       if (this.pageIndexBlock === 0) {
+        this.currentNextKeyBlock = null;
         this.getListBlockWithOperator(null, isInit);
       }
       if (this.pageIndexDelegator === 0) {
+        this.currentNextKeyDelegator = null;
         this.getListDelegator(null, isInit);
       }
       if (this.pageIndexPower === 0) {
+        this.currentNextKey = null;
         this.getListPower(null, isInit);
       }
     }

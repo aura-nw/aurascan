@@ -75,6 +75,7 @@ export class ContractsTransactionsComponent implements OnInit {
     this.timerGetUpTime = setInterval(() => {
       // reload when page = 0
       if (this.currentPage === 0) {
+        this.currentKey = null;
         this.getData(true);
       }
     }, 5000);
@@ -117,17 +118,16 @@ export class ContractsTransactionsComponent implements OnInit {
             this.lengthTxsExecute = txsExecute.length;
             if (dataExecute.data.transactions?.length > 0) {
               this.nextKey = dataExecute.data.nextKey;
-
               if (this.contractTransaction['data']?.length > 0 && !isReload) {
                 this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
-              } else if (txsExecute.length > 0){
+              } else if (txsExecute.length > 0) {
                 this.contractTransaction['data'] = txsExecute;
               }
             }
 
             this.contractTransaction['count'] = this.contractTransaction['data']?.length;
             if (this.label != 1) {
-              if (isReload && txsExecute?.length > 0) {
+              if (isReload && txsExecute?.length > 0 && txsExecute?.length < 100) {
                 this.contractTransaction['data'] = [...this.contractTransaction['data'], this.txsInstantiate[0]];
                 this.contractTransaction['count'] = this.contractTransaction['data']?.length;
               }
@@ -187,7 +187,7 @@ export class ContractsTransactionsComponent implements OnInit {
     const { pageIndex, pageSize } = event;
     this.currentPage = pageIndex;
     const next = event.length <= (pageIndex + 2) * pageSize;
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
+    if (next && this.nextKey && this.currentKey !== this.nextKey ) {
       this.getDataTable(this.nextKey);
       this.currentKey = this.nextKey;
     }
