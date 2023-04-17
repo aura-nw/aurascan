@@ -242,6 +242,7 @@ form.search-form-validators {
 .percentage-bar {
   width: 100%;
   max-width: 167px;
+  flex-shrink: 0;
   height: 12px;
   position: relative;
   margin: 0 8px 0 16px;
