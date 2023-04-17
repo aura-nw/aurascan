@@ -188,8 +188,6 @@ export class ContractsTransactionsComponent implements OnInit {
     this.currentPage = pageIndex;
     const next = event.length <= (pageIndex + 2) * pageSize;
     if (next && this.nextKey && this.currentKey !== this.nextKey ) {
-      console.log(this.contractTransaction);
-      
       this.getDataTable(this.nextKey);
       this.currentKey = this.nextKey;
     }
