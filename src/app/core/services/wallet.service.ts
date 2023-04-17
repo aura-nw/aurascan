@@ -110,7 +110,6 @@ export class WalletService implements OnDestroy {
     if (!this.coin98Client) {
       this.coin98Client = new Coin98Client(this.chainInfo);
     }
-
     return this.coin98Client
       .connect()
       .then((id) => id && this.coin98Client.getAccount())
@@ -217,7 +216,7 @@ export class WalletService implements OnDestroy {
   }
 
   checkExistedCoin98(): Keplr | null | undefined {
-    if (window.coin98) {
+    if (window?.coin98) {
       if (window.coin98.keplr) {
         return window.coin98.keplr;
       } else {
@@ -235,7 +234,7 @@ export class WalletService implements OnDestroy {
       return account;
     }
 
-    this.setDialogState('open');
+    document.getElementById('walletModalBtn')?.click();
 
     return null;
   }

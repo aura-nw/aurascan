@@ -224,10 +224,16 @@ export class TransactionMessagesComponent implements OnInit {
                   this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
                   this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate
                 ) {
-                  const amount =
-                    balanceOf(data.find((data) => data.key === 'amount')?.value?.replace(this.coinMinimalDenom, '')) ||
-                    0;
-                  this.listAmountClaim.push(amount);
+                  const temp = j?.events.filter((f) => f.type === this.typeGetData.WithdrawRewards);
+                  if (temp?.length > 0) {
+                    const amount =
+                      balanceOf(
+                        temp[0]?.attributes
+                          .find((data) => data.key === 'amount')
+                          ?.value?.replace(this.coinMinimalDenom, ''),
+                      ) || 0;
+                    this.listAmountClaim.push(amount);
+                  }
                 } else {
                   this.transactionDetail?.messages.forEach((message) => {
                     const validator = data.find((trans) => trans.key === 'validator')?.value;
@@ -492,5 +498,15 @@ export class TransactionMessagesComponent implements OnInit {
 
   replaceDenomValue(value) {
     return value?.replace(this.coinMinimalDenom, '');
+  }
+
+  getValidatorUnjail() {
+    try {
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+      const result = jsonData[0].events[0].attributes.find((f) => f.key === 'sender')?.value;
+      return result;
+    } catch (e) {
+      return null;
+    }
   }
 }
