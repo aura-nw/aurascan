@@ -15,9 +15,11 @@ import { shortenAddress } from '../../../../core/utils/common/shorten';
 })
 export class CodeIdContractsTabComponent implements OnInit {
   @Input() codeId: string;
-  pageData: PageEvent;
-  pageSize = 20;
-  pageIndex = 0;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   dataSource: MatTableDataSource<any>;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'contract_address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contracts' },
@@ -45,24 +47,20 @@ export class CodeIdContractsTabComponent implements OnInit {
   }
 
   pageEvent(e: PageEvent): void {
-    this.pageIndex = e.pageIndex;
+    this.pageData.pageIndex = e.pageIndex;
     this.getListContract();
   }
 
   getListContract() {
     let payload = {
-      limit: this.pageSize,
-      offset: this.pageIndex * this.pageSize,
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: this.codeId.toString(),
       contractType: [],
     };
 
     this.contractService.getListContract(payload).subscribe((res) => {
-      this.pageData = {
-        length: res?.meta?.count,
-        pageSize: 20,
-        pageIndex: PAGE_EVENT.PAGE_INDEX,
-      };
+      this.pageData.length = res?.meta?.count;
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
           item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
