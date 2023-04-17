@@ -105,6 +105,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
     this.timerGetUpTime = setInterval(() => {
       if (this.pageData.pageIndex === 0) {
+        this.currentKey = null;
         this.getListTransactionToken(null, null, true);
       }
     }, 5000);
