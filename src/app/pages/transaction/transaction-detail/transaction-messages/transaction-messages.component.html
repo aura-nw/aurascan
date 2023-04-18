@@ -437,7 +437,7 @@
         </ng-container>
         <app-messages-item
           [label]="'Validator Address'"
-          [value]="getValidatorUnjail()"
+          [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.validator_addr"
           [dataLink]="{ url: '/validators' }"></app-messages-item>
       </div>
     </ng-container>
