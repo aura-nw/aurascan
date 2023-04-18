@@ -218,7 +218,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       this.contractService
         .getTransactionsIndexer(1, this.contractInfo?.contractsAddress, 'instantiate')
         .subscribe((res) => {
-          if (res.data.transactions.length > 0) {
+          if (res?.data?.transactions?.length > 0) {
             this.isMoreTx = true;
           }
         });
