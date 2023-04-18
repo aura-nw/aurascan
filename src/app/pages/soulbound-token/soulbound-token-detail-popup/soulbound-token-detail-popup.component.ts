@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
@@ -7,6 +7,8 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import {ABTActionType} from "src/app/core/constants/token.enum";
+import {AbtRejectPopupComponent} from "src/app/pages/soulbound-token/abt-reject-popup/abt-reject-popup.component";
 
 @Component({
   selector: 'app-soulbound-token-detail-popup',
@@ -20,14 +22,16 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   MEDIA_TYPE = MEDIA_TYPE;
   imageUrl = '';
   animationUrl = '';
+  ABT_ACTION = ABTActionType;  currentABTAction = ABTActionType.Reject;
 
-  constructor(
+    constructor(
     @Inject(MAT_DIALOG_DATA) public soulboundDetail: any,
     public dialogRef: MatDialogRef<SoulboundTokenDetailPopupComponent>,
     public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     public translate: TranslateService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +51,25 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
         this.imageUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
       }
     }
+  }
+
+  handleRejectABT() {
+    let dialogRef = this.dialog.open(AbtRejectPopupComponent, {
+      panelClass: 'AbtRejectPopup',
+      data: {
+        type: 'single'
+      },
+    });
+  }
+
+  handleRejectAllABT() {
+    let dialogRef = this.dialog.open(AbtRejectPopupComponent, {
+      panelClass: 'AbtRejectPopup',
+      data: {
+        type: 'all',
+        address: this.soulboundDetail?.minter_address,
+      },
+    });
   }
 
   replaceImgIpfs(value) {

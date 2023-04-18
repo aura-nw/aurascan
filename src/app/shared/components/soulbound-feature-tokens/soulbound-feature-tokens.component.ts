@@ -24,6 +24,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
   isClick = false;
   soulboundList = [];
+  soulboundUnclaimedNum = 900;
   wallet = null;
   userAddress = null;
   timerGetUpTime: any;

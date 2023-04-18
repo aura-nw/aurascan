@@ -14,9 +14,15 @@
   .soulbound__item {
     .nft-card {
       min-height: 120px;
-      max-width: 100px;
+      max-width: 90px;
     }
-    padding: var(--spacer-2) var(--spacer-4);
+    padding: var(--spacer-2) var(--spacer-3);
+    @media (min-width: 413.98px) {
+      padding: var(--spacer-2) var(--spacer-4);
+      .nft-card {
+        max-width: 100px;
+      }
+    }
     &:not(:last-child) {
       @media (min-width: 1200px) {
         margin-right: var(--spacer-1);
@@ -44,5 +50,24 @@
       border: solid 1px var(--aura-gray-8);
       background-image: unset;
     }
+  }
+}
+.nft__unclaimed-noti {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--aura-red-3);
+  color: white;
+  transform: translate(50%, -50%);
+  &.noti--pill {
+    width: auto;
+    border-radius: 24px;
+    padding: 4px 8px;
   }
 }

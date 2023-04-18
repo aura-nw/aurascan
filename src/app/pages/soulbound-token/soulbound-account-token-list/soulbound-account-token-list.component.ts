@@ -32,6 +32,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     },
   ];
   reloadAPI = false;
+  unClaimedNum = 3;
 
   constructor(
     private route: ActivatedRoute,
