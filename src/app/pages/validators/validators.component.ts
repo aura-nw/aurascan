@@ -24,7 +24,7 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
-import {VOTING_POWER_STATUS} from "src/app/core/constants/validator.constant";
+import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 
 @Component({
   selector: 'app-validators',
@@ -46,7 +46,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource = new MatTableDataSource<any>();
-  dataSourceBk = new MatTableDataSource<any>();
 
   arrayDelegate = [];
   textSearch = '';
@@ -125,7 +124,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private router: Router,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   async ngOnInit() {
@@ -200,7 +199,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.maxPercentPower = this.dataSource?.data[0]?.percent_power;
         }
 
-        this.dataSourceBk = this.dataSource;
         this.dataSource.sort = this.sort;
         this.searchValidator();
       }
@@ -224,13 +222,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   changeType(type): void {
     this.typeValidator = type;
-    let data = this.rawData.filter((event) =>
-      type === this.statusValidator.Active
-        ? event.status === this.statusValidator.Active
-        : event.status !== this.statusValidator.Active,
-    );
-    this.dataSource.data = data;
-    this.dataSourceBk = this.dataSource;
     this.searchValidator();
   }
 
@@ -258,12 +249,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }
     });
 
-    let dataFilter = this.sortedData.filter((event) =>
-      this.typeValidator === this.statusValidator.Active
-        ? event.status === this.statusValidator.Active
-        : event.status !== this.statusValidator.Active,
-    );
-    this.dataSource.data = dataFilter;
+    this.dataSource.data = this.sortedData;
     this.dataSource.sort = this.sort;
   }
 
@@ -272,19 +258,18 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   searchValidator(): void {
-    this.searchNullData = false;
-    let data;
-    if (this.textSearch?.length > 0 || this.typeValidator !== STATUS_VALIDATOR.Active) {
-      data = this.dataSourceBk.data.filter(
+    let result = this.rawData.filter((event) =>
+      this.typeValidator === this.statusValidator.Active
+        ? event.status === this.statusValidator.Active
+        : event.status !== this.statusValidator.Active,
+    );
+
+    if (this.textSearch?.length > 0) {
+      this.dataSource.data = result?.filter(
         (f) => f.title.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
-      this.dataSource = this.dataSourceBk;
-      this.dataSource.data = data;
-      if (data === undefined || data?.length === 0) {
-        this.searchNullData = true;
-      }
     } else {
-      this.dataSource = this.dataSourceBk;
+      this.dataSource.data = result;
     }
   }
 
