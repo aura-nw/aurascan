@@ -188,10 +188,7 @@
                             {{ data[template.matColumnDef] | number }}
                           </div>
                           <div
-                            *ngIf="
-                              data['status'] === statusValidator.Active ||
-                              (data['status'] !== statusValidator.Active && !data['jailed'])
-                            "
+                            *ngIf="data['status'] === statusValidator.Active"
                             class="percentage-bar ml-4 mr-2"
                             [class.percentage-bar--min-width]="data['percent_power'] >= 0.01"
                             [class.percentage--warning]="
@@ -205,7 +202,7 @@
                                 ? '167px'
                                 : (((data.percent_power * 100) / maxPercentPower) * 167) / 100 + 'px'
                             "></div>
-                          <div class="mx-3" *ngIf="data['status'] !== statusValidator.Active && data['jailed']"></div>
+                          <div class="mx-3" *ngIf="data['status'] !== statusValidator.Active"></div>
                           <span class="percent-vote fw-normal">{{ data['percent_power'] + '%' }}</span>
                           <i
                             class="ph-warning-fill cursor-pointer ml-1"
