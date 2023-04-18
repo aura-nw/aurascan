@@ -499,14 +499,4 @@ export class TransactionMessagesComponent implements OnInit {
   replaceDenomValue(value) {
     return value?.replace(this.coinMinimalDenom, '');
   }
-
-  getValidatorUnjail() {
-    try {
-      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
-      const result = jsonData[0].events[0].attributes.find((f) => f.key === 'sender')?.value;
-      return result;
-    } catch (e) {
-      return null;
-    }
-  }
 }
