@@ -231,7 +231,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.sortedData = this.dataSource?.data.sort((a, b) => {
+    this.sortedData = this.dataSource?.data?.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'title':

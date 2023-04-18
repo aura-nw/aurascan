@@ -188,6 +188,10 @@
                             {{ data[template.matColumnDef] | number }}
                           </div>
                           <div
+                            *ngIf="
+                              data['status'] === statusValidator.Active ||
+                              (data['status'] !== statusValidator.Active && !data['jailed'])
+                            "
                             class="percentage-bar ml-4 mr-2"
                             [class.percentage-bar--min-width]="data['percent_power'] >= 0.01"
                             [class.percentage--warning]="
@@ -201,10 +205,15 @@
                                 ? '167px'
                                 : (((data.percent_power * 100) / maxPercentPower) * 167) / 100 + 'px'
                             "></div>
+                          <div class="mx-3" *ngIf="data['status'] !== statusValidator.Active && data['jailed']"></div>
                           <span class="percent-vote fw-normal">{{ data['percent_power'] + '%' }}</span>
                           <i
                             class="ph-warning-fill cursor-pointer ml-1"
-                            *ngIf="data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH"
+                            *ngIf="
+                              (data['status'] === statusValidator.Active ||
+                                (data['status'] !== statusValidator.Active && !data['jailed'])) &&
+                              data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH
+                            "
                             matTooltip="Validators with too much voting power will lessen the security and decentralization of the network."
                             [matTooltipPosition]="'above'"></i>
                         </div>
