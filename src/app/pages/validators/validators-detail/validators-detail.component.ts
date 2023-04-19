@@ -64,6 +64,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   displayedColumnsPower: string[] = this.templatesPower.map((dta) => dta.matColumnDef);
   dataSourcePowerMob: any[];
   dataSourceBlockMob: any[];
+  dataSourceDelegatorMob: any[];
 
   lengthBlockLoading = true;
   isLoadingPower = true;
@@ -75,8 +76,11 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   currentNextKey = null;
   nextKeyBlock = null;
   currentNextKeyBlock = null;
-  isOpenDialog = false;
 
+  nextKeyDelegator = null;
+  currentNextKeyDelegator = null;
+
+  isOpenDialog = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.configValue.chain_info;
 
@@ -117,10 +121,15 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   loadData(isInit = true) {
     if (!this.isLeftPage) {
       if (this.pageIndexBlock === 0) {
+        this.currentNextKeyBlock = null;
         this.getListBlockWithOperator(null, isInit);
       }
-      this.getListDelegator();
+      if (this.pageIndexDelegator === 0) {
+        this.currentNextKeyDelegator = null;
+        this.getListDelegator(null, isInit);
+      }
       if (this.pageIndexPower === 0) {
+        this.currentNextKey = null;
         this.getListPower(null, isInit);
       }
     }
@@ -225,21 +234,30 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }, 500);
   }
 
-  async getListDelegator() {
-    const res = await this.validatorService.delegators(
-      this.pageSize,
-      this.pageIndexDelegator * this.pageSize,
-      this.currentAddress,
-    );
-    if (res?.data?.delegation_responses?.length > 0 && res?.data?.pagination?.total) {
-      this.lengthDelegator = Number(res?.data?.pagination?.total);
+  async getListDelegator(nextKey = null, isInit = true) {
+    const res = await this.validatorService.delegators(100, this.currentAddress, nextKey);
 
-      let data = [];
-      res.data?.delegation_responses.forEach((k) => {
-        data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
-      });
-      this.dataSourceDelegator.data = data;
+    if (res.data?.pagination?.next_key) {
+      this.nextKeyDelegator = encodeURIComponent(res.data?.pagination?.next_key);
     }
+
+    let data = [];
+    res.data?.delegation_responses.forEach((k) => {
+      data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
+    });
+
+    if (this.dataSourceDelegator.data.length > 0 && isInit) {
+      this.dataSourceDelegator.data = [...this.dataSourceDelegator.data, ...data];
+    } else {
+      this.dataSourceDelegator.data = [...data];
+    }
+
+    this.dataSourceDelegatorMob = this.dataSourceDelegator?.data.slice(
+      this.pageIndexDelegator * this.pageSize,
+      this.pageIndexDelegator * this.pageSize + this.pageSize,
+    );
+
+    this.lengthDelegator = Number(this.dataSourceDelegator.data?.length);
   }
 
   getListPower(nextKey = null, isInit = true): void {
@@ -324,8 +342,16 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         this.pageIndexBlock = page.pageIndex;
         break;
       case 'delegator':
+        this.dataSourceDelegatorMob = this.dataSourceDelegator.data.slice(
+          page.pageIndex * page.pageSize,
+          page.pageIndex * page.pageSize + page.pageSize,
+        );
+        const nextDelegator = page.length <= (page.pageIndex + 2) * page.pageSize;
+        if (nextDelegator && this.nextKeyDelegator && this.currentNextKeyDelegator !== this.nextKeyDelegator) {
+          this.getListDelegator(this.nextKeyDelegator);
+          this.currentNextKeyDelegator = this.nextKeyDelegator;
+        }
         this.pageIndexDelegator = page.pageIndex;
-        this.getListDelegator();
         break;
       case 'power':
         this.dataSourcePowerMob = this.dataSourcePower.data.slice(

@@ -187,7 +187,7 @@ form.search-form-validators {
 @media (max-width: 991.99px) {
   .validator-container {
     .button-outline__in-card {
-      box-shadow: 2px 1000px 1px #38383d inset;
+      box-shadow: 2px 1000px 1px #38383d inset !important;
     }
   }
 }
@@ -236,5 +236,31 @@ form.search-form-validators {
       flex-shrink: 0;
       flex-grow: 0;
     }
+  }
+}
+
+.percentage-bar {
+  width: 100%;
+  max-width: 167px;
+  flex-shrink: 0;
+  height: 12px;
+  position: relative;
+  margin: 0 8px 0 16px;
+  border-radius: var(--spacer-4);
+  background-color: var(--aura-green-3);
+  &.percentage-bar--min-width {
+    min-width: 1px;
+  }
+  &.percentage--danger {
+    background-color: var(--aura-red-3);
+  }
+  &.percentage--warning {
+    background-color: var(--aura-yellow-3);
+  }
+}
+.col-power {
+  width: 25%;
+  @media (min-width: 991.98px) {
+    width: 30%;
   }
 }

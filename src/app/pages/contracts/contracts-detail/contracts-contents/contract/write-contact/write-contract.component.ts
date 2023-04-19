@@ -118,11 +118,14 @@ export class WriteContractComponent implements OnInit {
 
     if (childProps) {
       fieldList = Object.keys(childProps).map((e) => ({
-        isAddButtonZero: e === 'amount', //button add zero for amount field
+        isAddButtonZero: e === 'amount', // button add zero for amount field
         fieldName: e,
         isRequired: (props.required as string[])?.includes(e),
         ...getType(this.jsValidator.schemas, childProps[e]),
       }));
+
+      // add fund for all item write contract
+      fieldList.push({ fieldName: 'fund', isRequired: false, type: 'json' });
     }
 
     return {
@@ -203,7 +206,7 @@ export class WriteContractComponent implements OnInit {
           msg.isLoading = false;
           if (!error.toString().includes('Request rejected')) {
             msgError = error.toString().includes('out of gas') ? 'out of gas' : msgError;
-            this.toastr.error(msgError);
+            this.toastr.error(error.toString().substring(0, 200) + '...' || msgError);
           }
         });
     } catch (error) {

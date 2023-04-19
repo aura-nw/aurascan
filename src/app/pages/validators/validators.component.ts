@@ -24,6 +24,7 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
+import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 
 @Component({
   selector: 'app-validators',
@@ -32,9 +33,10 @@ import { Globals } from '../../../app/global/global';
   encapsulation: ViewEncapsulation.None,
 })
 export class ValidatorsComponent implements OnInit, OnDestroy {
+  votingPowerStatus = VOTING_POWER_STATUS;
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly: true },
+    // { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly: true },
     { matColumnDef: 'title', headerCellDef: 'Validator', desktopOnly: true },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
@@ -44,7 +46,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource = new MatTableDataSource<any>();
-  dataSourceBk = new MatTableDataSource<any>();
 
   arrayDelegate = [];
   textSearch = '';
@@ -101,6 +102,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   staking_APR = 0;
   numberProposal = 0;
   validatorImgArr;
+  maxPercentPower = 0;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -118,13 +120,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
-    private transactionService: TransactionService,
     private mappingErrorService: MappingErrorService,
     private router: Router,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
-    private global: Globals,
   ) {}
 
   async ngOnInit() {
@@ -174,6 +174,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           val.participation = val.vote_count;
           val.power = val.power / NUMBER_CONVERT;
           val.up_time = Number(val.up_time.replace('%', ''));
+          val.width_chart = val.up_time / 100;
         });
 
         let dataFilter = res.data.filter((event) =>
@@ -194,8 +195,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.dataSource.data[key] = dataFilter[key];
           }
         });
+        if (this.typeValidator === this.statusValidator.Active) {
+          this.maxPercentPower = this.dataSource?.data[0]?.percent_power;
+        }
 
-        this.dataSourceBk = this.dataSource;
         this.dataSource.sort = this.sort;
         this.searchValidator();
       }
@@ -219,24 +222,16 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   changeType(type): void {
     this.typeValidator = type;
-    let data = this.rawData.filter((event) =>
-      type === this.statusValidator.Active
-        ? event.status === this.statusValidator.Active
-        : event.status !== this.statusValidator.Active,
-    );
-    this.dataSource.data = data;
-    this.dataSourceBk = this.dataSource;
     this.searchValidator();
   }
 
   sortData(sort: Sort) {
-    let data = this.rawData.slice();
     if (!sort.active || sort.direction === '') {
-      this.sortedData = data;
+      this.sortedData = this.dataSource;
       return;
     }
 
-    this.sortedData = data.sort((a, b) => {
+    this.sortedData = this.dataSource?.data?.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'title':
@@ -254,12 +249,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }
     });
 
-    let dataFilter = this.sortedData.filter((event) =>
-      this.typeValidator === this.statusValidator.Active
-        ? event.status === this.statusValidator.Active
-        : event.status !== this.statusValidator.Active,
-    );
-    this.dataSource.data = dataFilter;
+    this.dataSource.data = this.sortedData;
     this.dataSource.sort = this.sort;
   }
 
@@ -268,19 +258,18 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   searchValidator(): void {
-    this.searchNullData = false;
-    let data;
-    if (this.textSearch?.length > 0 || this.typeValidator !== STATUS_VALIDATOR.Active) {
-      data = this.dataSourceBk.data.filter(
+    let result = this.rawData.filter((event) =>
+      this.typeValidator === this.statusValidator.Active
+        ? event.status === this.statusValidator.Active
+        : event.status !== this.statusValidator.Active,
+    );
+
+    if (this.textSearch?.length > 0) {
+      this.dataSource.data = result?.filter(
         (f) => f.title.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
-      this.dataSource = this.dataSourceBk;
-      this.dataSource.data = data;
-      if (data === undefined || data?.length === 0) {
-        this.searchNullData = true;
-      }
     } else {
-      this.dataSource = this.dataSourceBk;
+      this.dataSource.data = result;
     }
   }
 
@@ -326,7 +315,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         }
         this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
         this.dataDelegate.validatorDetail = this.validatorDetail;
-        this.getListDelegators(address);
+        // this.getListDelegators(address);
 
         this.clicked = false;
         this.isExceedAmount = false;
@@ -428,10 +417,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async getListDelegators(address) {
-    const res = await this.validatorService.delegators(5, 0, address);
-    this.totalDelegator = res?.data?.pagination?.total;
-  }
+  // async getListDelegators(address) {
+  //   const res = await this.validatorService.delegators(5, 0, address);
+  //   this.totalDelegator = res?.data?.pagination?.total;
+  // }
 
   checkAmountStaking(): void {
     let amountCheck;
