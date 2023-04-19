@@ -234,7 +234,7 @@ export class WalletService implements OnDestroy {
       return account;
     }
 
-    document.getElementById('walletModalBtn')?.click();
+    this.setDialogState('open');
 
     return null;
   }

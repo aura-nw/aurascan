@@ -12,8 +12,12 @@ import { WalletService } from '../../../core/services/wallet.service';
   templateUrl: './wallet-connect.component.html',
   styleUrls: ['./wallet-connect.component.scss'],
 })
-export class WalletConnectComponent implements OnDestroy {
+export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   wallet$: Observable<any> = this.walletService.wallet$;
+
+  @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
+  @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
+  @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.configValue.chainId;
   isMobileMatched = false;
@@ -31,16 +35,29 @@ export class WalletConnectComponent implements OnDestroy {
     private envService: EnvironmentService,
     private dlgService: DialogService,
     private layout: BreakpointObserver,
-  ) {}
+  ) {
+    this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
+      if (state === 'open') {
+        this.connectButton?.nativeElement.click();
+      } else {
+        this.buttonDismiss?.nativeElement.click();
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.offcanvasWallet.nativeElement.addEventListener('hide.bs.offcanvas', () => {
+      this.walletService.setDialogState('close');
+    });
+  }
 
   ngOnDestroy(): void {
+    document.removeAllListeners('hide.bs.offcanvas');
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   connectWallet(provider: WALLET_PROVIDER): void {
-    const elem = document.getElementsByClassName('modal-backdrop fade show')[0];
-    (<HTMLElement>elem).remove();
     try {
       const connect = async () => {
         const connect = await this.walletService.connect(provider);
@@ -50,7 +67,7 @@ export class WalletConnectComponent implements OnDestroy {
             content: 'Please set up override Keplr in settings of Coin98 wallet',
           });
         }
-        this.dismiss();
+        this.buttonDismiss.nativeElement.click();
       };
 
       connect();
@@ -60,7 +77,7 @@ export class WalletConnectComponent implements OnDestroy {
   }
 
   dismiss(): void {
-    document.getElementById('walletModal')?.click();
+    this.buttonDismiss.nativeElement.click();
   }
 
   disconnect(): void {
