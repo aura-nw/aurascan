@@ -334,7 +334,9 @@
                             <h5 class="mb-1 text--gray-1">
                               {{ validator.power | number }}
                             </h5>
-                            <div>{{ validator['percent_power'] + '%' }}</div>
+                            <div *ngIf="validator['status'] === statusValidator.Active">
+                              {{ validator['percent_power'] + '%' }}
+                            </div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Commission'">
                             <div class="text--gray-1">
