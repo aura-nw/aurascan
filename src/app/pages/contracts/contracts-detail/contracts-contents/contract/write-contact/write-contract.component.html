@@ -40,25 +40,29 @@
         <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
           <!-- {{ msg.fieldList | json}} -->
           <ng-container *ngFor="let item of msg.fieldList">
-            <div class="d-flex align-items-center mb-2">
-              <span class="px-0 text--gray-1 body-02" [class.input-require]="item.isRequired">
-                {{ item.fieldName }} ({{ item.type }})
-              </span>
-              <button
-                class="button button--xxs button--sm-mob button-circle ml-2 btn-add-zero"
-                *ngIf="item.isAddButtonZero"
-                (click)="showAddZero(msg)">
-                <i class="ph ph-gear icon-add-zero"></i>
-              </button>
+            <div [class.d-none]="item.fieldName === 'fund'" class="d-lg-block">
+              <div class="d-flex align-items-center mb-2">
+                <span class="px-0 text--gray-1 body-02" [class.input-require]="item.isRequired">
+                  {{ item.fieldName }} ({{ item.type }})
+                </span>
+                <button
+                  class="button button--xxs button--sm-mob button-circle ml-2 btn-add-zero"
+                  *ngIf="item.isAddButtonZero"
+                  (click)="showAddZero(msg)">
+                  <i class="ph ph-gear icon-add-zero"></i>
+                </button>
+              </div>
+              <textarea
+                rows="3"
+                matInput
+                [(ngModel)]="item.value"
+                [class.input-require]="item.isRequired"
+                (keyup)="resetError(msg)"
+                [class.error-null]="item.isError"
+                placeholder="{{ item.fieldName }} ({{ item.type }})"
+                class="form-check-input {{ item.isRequired }} {{ item.fieldName }} col-12 mb-4"
+                style="height: auto"></textarea>
             </div>
-            <input
-              class="form-check-input {{ item.isRequired }} {{ item.fieldName }} col-12 mb-4"
-              [class.input-require]="item.isRequired"
-              [type]="item.type"
-              (keyup)="resetError(msg)"
-              [(ngModel)]="item.value"
-              [class.error-null]="item.isError"
-              placeholder="{{ item.fieldName }} ({{ item.type }})" />
           </ng-container>
 
           <div class="px-0">

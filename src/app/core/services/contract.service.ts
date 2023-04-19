@@ -43,7 +43,7 @@ export class ContractService extends CommonService {
       searchValue: contractAddress,
       pageLimit,
       nextKey,
-      countTotal: true,
+      // countTotal: true,
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)

@@ -13,7 +13,7 @@
       <div class="card-body">
         <app-loading-sprint *ngIf="isLoadingTX"></app-loading-sprint>
         <app-contract-table
-          *ngIf="!isLoadingTX && contractTransaction['data'].length > 0"
+          *ngIf="!isLoadingTX"
           [length]="contractTransaction['count']"
           [pageSize]="pageSize"
           [label]="label?.toString()"
@@ -21,6 +21,7 @@
           [dataList]="contractTransaction"
           [templates]="templates"
           [contractInfo]="contractInfo"
+          [viewAll]="true"
           (onChangePage)="onChangePage($event)"
           (onViewSelected)="filterTransaction($event)"></app-contract-table>
       </div>

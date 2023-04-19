@@ -8,6 +8,7 @@ import { ModeExecuteTransaction, TRANSACTION_TYPE_ENUM } from 'src/app/core/cons
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { DROPDOWN_ELEMENT, IContractPopoverData, ITableContract } from 'src/app/core/models/contract.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
@@ -41,6 +42,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   @Input() templates!: Array<TableTemplate>;
   @Input() label!: string;
   @Input() nextKey: string;
+  @Input() viewAll = false;
   @Output() onViewSelected: EventEmitter<DropdownElement> = new EventEmitter();
   @Output() onChangePage: EventEmitter<any> = new EventEmitter();
 
@@ -48,27 +50,36 @@ export class ContractTableComponent implements OnInit, OnChanges {
   displayedColumns: string[] = [];
   transactionTableData: TableData[];
 
-  pageData: PageEvent = null;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   isLoading = true;
+  isMoreTx = false;
 
   constructor(
     public translate: TranslateService,
     public global: Globals,
     private environmentService: EnvironmentService,
+    private contractService: ContractService,
   ) {}
 
   ngOnChanges(): void {
     if (this.dataList?.data) {
       this.getListContractTransaction();
       this.loadTableData();
+    } else {
+      this.isLoading = false;
     }
   }
 
   ngOnInit(): void {
     this.displayedColumns = this.templates?.map((dta) => dta.matColumnDef);
+    this.checkTotal();
   }
 
   loadTableData() {
@@ -199,6 +210,18 @@ export class ContractTableComponent implements OnInit, OnChanges {
       setTimeout(() => {
         this.isLoading = false;
       }, 2000);
+    }
+  }
+
+  checkTotal() {
+    if (!this.viewAll && this.dataList?.data?.length === this.pageSize) {
+      this.contractService
+        .getTransactionsIndexer(1, this.contractInfo?.contractsAddress, 'instantiate')
+        .subscribe((res) => {
+          if (res?.data?.transactions?.length > 0) {
+            this.isMoreTx = true;
+          }
+        });
     }
   }
 }
