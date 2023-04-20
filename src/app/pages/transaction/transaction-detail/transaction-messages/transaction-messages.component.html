@@ -128,8 +128,6 @@
         transactionDetail?.type === eTransType.Delegate ||
         transactionDetail?.type === eTransType.Undelegate
       ">
-      <!-- <ng-container
-        *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1"> -->
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
         <ng-container *ngIf="item['@type'] !== eTransType.GetRewardCommission">
           <div class="card-info">
@@ -200,7 +198,6 @@
         </div>
       </div>
     </ng-container>
-    <!-- </ng-container> -->
 
     <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
       <div class="card-info">
@@ -236,6 +233,17 @@
           [value]="transactionDetail?.messages[0]?.to_address"
           [dataLink]="{ url: '/account' }"></app-messages-item>
         <app-messages-item [label]="'Vesting Schedule'" [value]="dateVesting"></app-messages-item>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="transactionDetail?.type === eTransType.GetRewardCommission">
+      <div class="card-info">
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+        </ng-container>
+        <app-messages-item
+          [label]="'Validator Address'"
+          [value]="transactionDetail?.messages[0]?.validator_address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
       </div>
     </ng-container>
 
@@ -716,6 +724,21 @@
         <app-messages-item
           [label]="' Message Type Url'"
           [value]="transactionDetail?.messages[0]?.msg_type_url"></app-messages-item>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="transactionDetail?.type === eTransType.ModifyWithdrawAddress">
+      <div class="card-info">
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+        </ng-container>
+        <app-messages-item
+          [label]="'Delegator Address'"
+          [value]="transactionDetail?.messages[0]?.delegator_address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
+        <app-messages-item
+          [label]="'Withdraw Address'"
+          [value]="transactionDetail?.messages[0]?.withdraw_address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
       </div>
     </ng-container>
 
