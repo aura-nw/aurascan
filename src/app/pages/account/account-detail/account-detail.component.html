@@ -146,7 +146,7 @@
                               <div *ngSwitchCase="'type'">
                                 <div class="aura-status">
                                   <div class="status">
-                                    {{ data[template.matColumnDef] }}
+                                    {{ data[template.matColumnDef] | stringEllipsis : 11 }}
                                   </div>
                                 </div>
                               </div>
