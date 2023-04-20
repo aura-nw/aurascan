@@ -20,8 +20,10 @@ export class TokenContentComponent implements OnInit {
   @Output() resultLength = new EventEmitter<any>();
   @Output() hasMore = new EventEmitter<any>();
 
-  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
-  tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
+  // tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
+  // tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
+  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract];
+  tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Contract];
   TABS = [];
   paramQuery = '';
   textSearch: string = '';
