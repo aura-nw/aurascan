@@ -145,7 +145,10 @@
                               </a>
                               <div *ngSwitchCase="'type'">
                                 <div class="aura-status">
-                                  <div class="status">
+                                  <div class="status cursor-pointer"
+                                       [matTooltipClass]="'transaction-type-tooltip'"
+                                       matTooltip="{{ data[template.matColumnDef] }}"
+                                       [matTooltipPosition]="'above'">
                                     {{ data[template.matColumnDef] | stringEllipsis : 11 }}
                                   </div>
                                 </div>
