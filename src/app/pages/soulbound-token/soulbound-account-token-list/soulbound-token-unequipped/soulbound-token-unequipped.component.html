@@ -45,7 +45,7 @@
           class="nft-cards nft__unclaimed token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
           *ngIf="soulboundData.data.length > 0; else noValues">
           <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
-            <div class="nft-cards__item-border">
+            <div class="nft-cards__item-border" [class.notify]="token.is_notify">
               <div class="nft-cards__item nft-cards__item--unclaimed">
                 <div class="token-cards__img">
                   <app-nft-card

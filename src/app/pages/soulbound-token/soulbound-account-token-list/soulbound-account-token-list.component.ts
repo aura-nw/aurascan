@@ -13,6 +13,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   totalSBT = 0;
+  totalPick = 0;
   activeId = 0;
   TABS = [];
   TAB_EQUIPPED = [
@@ -32,7 +33,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     },
   ];
   reloadAPI = false;
-  unClaimedNum = 3;
+  totalNotify = 100;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +57,11 @@ export class SoulboundAccountTokenListComponent implements OnInit {
         }
       }
     });
+
+    if (localStorage.getItem('tabUnEquip') == 'true') {
+      this.activeId = 1;
+      localStorage.setItem('tabUnEquip', null);
+    }
   }
 
   viewQrAddress(staticDataModal: any): void {

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
@@ -7,8 +7,9 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
-import {ABTActionType} from "src/app/core/constants/token.enum";
-import {AbtRejectPopupComponent} from "src/app/pages/soulbound-token/abt-reject-popup/abt-reject-popup.component";
+import { ABTActionType } from 'src/app/core/constants/token.enum';
+import { AbtRejectPopupComponent } from 'src/app/pages/soulbound-token/abt-reject-popup/abt-reject-popup.component';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 
 @Component({
   selector: 'app-soulbound-token-detail-popup',
@@ -22,9 +23,10 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   MEDIA_TYPE = MEDIA_TYPE;
   imageUrl = '';
   animationUrl = '';
-  ABT_ACTION = ABTActionType;  currentABTAction = ABTActionType.Reject;
+  ABT_ACTION = ABTActionType;
+  currentABTAction = ABTActionType.Reject;
 
-    constructor(
+  constructor(
     @Inject(MAT_DIALOG_DATA) public soulboundDetail: any,
     public dialogRef: MatDialogRef<SoulboundTokenDetailPopupComponent>,
     public commonService: CommonService,
@@ -32,6 +34,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     private toastr: NgxToastrService,
     public translate: TranslateService,
     private dialog: MatDialog,
+    private soulboundService: SoulboundService,
   ) {}
 
   ngOnInit(): void {
@@ -53,22 +56,45 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     }
   }
 
-  handleRejectABT() {
+  handleRejectABT(rejectAll = false) {
     let dialogRef = this.dialog.open(AbtRejectPopupComponent, {
       panelClass: 'AbtRejectPopup',
       data: {
-        type: 'single'
+        rejectAll: rejectAll,
       },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== 'canceled') {
+        this.rejectABT(result);
+      }
     });
   }
 
-  handleRejectAllABT() {
-    let dialogRef = this.dialog.open(AbtRejectPopupComponent, {
-      panelClass: 'AbtRejectPopup',
-      data: {
-        type: 'all',
-        address: this.soulboundDetail?.minter_address,
-      },
+  rejectABT(rejectAll = false) {
+    const payload = {
+      tokenId: this.soulboundDetail.token_id,
+      contractAddress: this.soulboundDetail.contract_address,
+      receiverAddress: this.soulboundDetail.receiver_address,
+      rejectAll: rejectAll,
+    };
+
+    this.soulboundService.rejectABT(payload).subscribe((res) => {
+      if (res?.data?.affected) {
+        let message = `ABT '${this.soulboundDetail.token_name_ipfs}' has been removed from your unclaimed list`;
+        if (rejectAll) {
+          const firstChar = this.soulboundDetail.minter_address.substring(0, 8);
+          const lastChar = this.soulboundDetail.minter_address.substring(
+            this.soulboundDetail.minter_address.length - 8,
+          );
+          let value = firstChar + '...' + lastChar;
+          message = `All ABTs from creator ${value} have been removed from your unclaimed list`;
+        }
+        this.toastr.warning(message);
+      } else {
+        this.toastr.error('Error when execute');
+      }
+      this.dialogRef.close('reject');
     });
   }
 

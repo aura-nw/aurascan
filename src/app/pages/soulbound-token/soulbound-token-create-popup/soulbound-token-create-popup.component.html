@@ -75,7 +75,7 @@
         </button>
         <button
           class="button button-pill button-outline button-outline--gradient button-outline__in-card button--md ml-4"
-          [disabled]="!createSBTokenForm.valid || isAddressInvalid || isCurrentAddress"
+          [disabled]="!createSBTokenForm.valid || isAddressInvalid || isCurrentAddress || isReject"
           type="submit">
           <span>Create</span>
         </button>

@@ -104,7 +104,7 @@
       <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--outline"
           #dropdownList
           aria-labelledby="dropdownAction">
-        <li class="dropdown-item cursor-pointer" (click)="handleRejectAllABT()" *ngIf="currentABTAction === ABT_ACTION.Reject">
+        <li class="dropdown-item cursor-pointer" (click)="handleRejectABT(true)" *ngIf="currentABTAction === ABT_ACTION.Reject">
           <button type="button" class="button p-0">{{ABT_ACTION.RejectAll}}</button>
         </li>
       </ul>
