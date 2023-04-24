@@ -50,7 +50,7 @@ export class NgxToastrService {
     });
   }
 
-  warning(message: string, title = '', configTimeOut = 3000): void {
+  warning(message: string, title = '', configTimeOut = 5000): void {
     this.toastrService.warning(message, title, {
       positionClass: this.POSITION_CLASS,
       timeOut: configTimeOut,

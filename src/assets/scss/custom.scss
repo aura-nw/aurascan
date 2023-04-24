@@ -618,6 +618,9 @@ body {
 .toast-container .ngx-toastr {
   width: 350px;
 }
+.toast-warning {
+  background-color: var(--aura-yellow-4);
+}
 .toast-container a {
   text-decoration: underline !important;
 }

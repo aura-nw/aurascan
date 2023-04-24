@@ -4,64 +4,67 @@
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!-- Summary info -->
   <div class="card">
-    <div class="d-flex px-4 py-4 pt-lg-6 pb-lg-6 px-lg-0 flex-wrap flex-lg-nowrap">
-      <div class="d-none d-lg-block">
-        <div class="qr-code d-inline-block pl-6 pr-6">
-          <app-qr [address]="currentAddress || ''"> </app-qr>
+    <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
+      <div class="d-flex flex-wrap flex-xl-nowrap">
+        <div class="d-none d-xl-block">
+          <div class="qr-code d-inline-block pl-6 pr-6">
+            <app-qr [address]="currentAddress || ''"> </app-qr>
+          </div>
         </div>
-      </div>
-      <div class="d-flex flex-column py-lg-6 col-lg-4 col-12 px-md-6">
-        <div class="">
-          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Address</div>
-          <div class="d-flex align-items-center">
-            <div class="body text--gray-1" id="currentAddress">
-              <span class="d-md-flex d-none">{{ currentAddress }}</span>
-              <span class="d-md-none d-flex">{{ currentAddress | cutStringPipe: 8:8 }}</span>
+        <div class="d-flex flex-column py-xl-6 px-md-6">
+          <div class="">
+            <div class="body-01 fw-semibold mb-1 mb-xl-2 text--white">Address</div>
+            <div class="d-flex align-items-center">
+              <div class="body text--gray-1" id="currentAddress">
+                <span class="d-sm-flex d-none">{{ currentAddress }}</span>
+                <span class="d-sm-none d-flex">{{ currentAddress | cutStringPipe : 8 : 8 }}</span>
+              </div>
+              <div class="button button--xxs button-circle ml-2" id="popupCopy">
+                <img
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class=""
+                  alt=""
+                  width="12px"
+                  height="12px"
+                  matTooltip="Copied!"
+                  #tooltip="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyMessage(currentAddress); tooltip.toggle()" />
+              </div>
             </div>
-            <div class="button button--xxs button-circle ml-2" id="popupCopy">
+          </div>
+          <div class="mt-6 mt-xl-4">
+            <div class="body-01 fw-semibold mb-1 mb-xl-2 text--white">Total Value</div>
+            <div class="d-flex justify-content-between align-items-center d-xl-block">
+              <span class="h1 mb-0 fw-bold mb-0 text-gradient d-inline" *ngIf="!isNoData"
+                >$ {{ totalValueToken + totalValueNft || 0 | number : global.formatNumber2Decimal }}</span
+              >
               <img
-                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                class=""
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                 alt=""
-                width="12px"
-                height="12px"
-                matTooltip="Copied!"
-                #tooltip="matTooltip"
-                (mouseenter)="$event.stopImmediatePropagation()"
-                (mouseleave)="$event.stopImmediatePropagation()"
-                (click)="copyMessage(currentAddress); tooltip.toggle()" />
+                class="ml-10"
+                width="20"
+                height="20"
+                *ngIf="isNoData" />
+              <div class="button button--md button-circle ml-1 d-xl-none">
+                <img
+                  [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
+                  alt=""
+                  width="30px"
+                  height="30px"
+                  (click)="viewQrAddress(modalManage)" />
+              </div>
             </div>
           </div>
         </div>
-        <div class="mt-6 mt-lg-4">
-          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Total Value</div>
-          <div class="d-flex justify-content-between align-items-center d-lg-block">
-            <span class="h1 mb-0 fw-bold mb-0 text-gradient d-inline" *ngIf="!isNoData"
-              >$ {{ totalValueToken + totalValueNft || 0 | number : global.formatNumber2Decimal }}</span
-            >
-            <img
-              [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-              alt=""
-              class="ml-10"
-              width="20"
-              height="20"
-              *ngIf="isNoData" />
-            <div class="button button--md button-circle ml-1 d-lg-none">
-              <img
-                [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
-                alt=""
-                width="30px"
-                height="30px"
-                (click)="viewQrAddress(modalManage)" />
-            </div>
-          </div>
+        <div class="mt-6 mt-xl-0 box-manage-abt {{ totalSBT > 0 ? 'soulbound-feature-tokens' : '' }}">
+          <app-soulbound-feature-tokens
+            [extend]="true"
+            (totalPick)="totalSBT = $event"
+            [displayManage]="true"
+            [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
         </div>
-      </div>
-      <div class="mt-6 mt-lg-0 {{ totalSBT > 0 ? 'soulbound-feature-tokens' : '' }}" >
-        <app-soulbound-feature-tokens
-          [extend]="true"
-          (totalPick)="totalSBT = $event"
-          [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
       </div>
     </div>
   </div>
@@ -311,7 +314,7 @@
                       [legend]="chartOptions.legend"
                       [colors]="chartOptions.colors"
                       [tooltip]="chartOptions.tooltip"
-                      [stroke]="{show: false}">
+                      [stroke]="{ show: false }">
                     </apx-chart>
                   </ng-container>
                   <ng-template #chartNoValue>

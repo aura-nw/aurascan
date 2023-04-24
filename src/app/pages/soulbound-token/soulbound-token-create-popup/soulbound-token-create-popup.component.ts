@@ -16,6 +16,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
   createSBTokenForm: FormGroup;
   isAddressInvalid = false;
   isCurrentAddress = false;
+  isReject = false;
   network = this.environmentService.configValue.chain_info;
 
   constructor(
@@ -45,6 +46,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
   resetCheck() {
     this.isAddressInvalid = false;
     this.isCurrentAddress = false;
+    this.isReject = false;
   }
 
   async onSubmit() {
@@ -63,21 +65,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
       return;
     }
 
-    const AGREEMENT = 'Agreement(string chain_id,address active,address passive,string tokenURI)';
-    const message = AGREEMENT + this.network.chainId + receiverAddress + minter + soulboundTokenURI;
-    let dataWallet = await this.walletService.getWalletSign(minter, message);
-
-    const payload = {
-      signature: dataWallet['signature'],
-      msg: message,
-      pubKey: dataWallet['pub_key']?.value,
-      contract_address: this.data.contractAddress,
-      receiver_address: receiverAddress,
-      token_uri: soulboundTokenURI,
-    };
-
-    this.dialogRef.close();
-    this.executeCreate(payload);
+    this.checkReject(receiverAddress, minter, soulboundTokenURI);
   }
 
   executeCreate(payload) {
@@ -94,5 +82,40 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
         this.toastr.error(error);
       },
     );
+  }
+
+  checkReject(receiverAddress, minterAddress, soulboundTokenURI) {
+    this.soulboundService.checkReject(receiverAddress, minterAddress).subscribe(
+      (res) => {
+        if (res?.code) {
+          let msgError = res?.message.toString() || 'Error';
+          this.toastr.error(msgError);
+          this.isReject = true;
+        } else {
+          this.signWalletABT(receiverAddress, minterAddress, soulboundTokenURI);
+        }
+      },
+      (error) => {
+        this.toastr.error(error);
+      },
+    );
+  }
+
+  async signWalletABT(receiverAddress, minter, soulboundTokenURI) {
+    const AGREEMENT = 'Agreement(string chain_id,address active,address passive,string tokenURI)';
+    const message = AGREEMENT + this.network.chainId + receiverAddress + minter + soulboundTokenURI;
+    let dataWallet = await this.walletService.getWalletSign(minter, message);
+
+    const payload = {
+      signature: dataWallet['signature'],
+      msg: message,
+      pubKey: dataWallet['pub_key']?.value,
+      contract_address: this.data.contractAddress,
+      receiver_address: receiverAddress,
+      token_uri: soulboundTokenURI,
+    };
+
+    this.dialogRef.close();
+    this.executeCreate(payload);
   }
 }
