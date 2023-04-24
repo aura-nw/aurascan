@@ -88,11 +88,29 @@
   <div class="divider divider-horizontal"></div>
   <!-- Button group -->
   <div class="d-flex align-items-center justify-content-end px-6 py-6">
-    <button class="button button-pill button-outline button--md" type="button" (click)="closeDialog()">
-      <span>Cancel</span>
-    </button>
+    <div class="dropdown aura-dropdown mr-lg-4 btn-item">
+      <button
+          class="button button--xlg button--md-mob button-pill button-outline w-100 button-dropdown-split px-0"
+          type="button">
+        <span class="px-6" (click)="handleRejectABT()">{{ ABT_ACTION.Reject }}</span>
+        <span class="dropdown-split__arrow"
+              [clickOutsideEnabled]="true"
+              (clickOutside)="dropdownList.classList.remove('show')"
+              (click)="dropdownList.classList.add('show')"
+        >
+          <img [src]="'assets/icons/icons-svg/white/chevron-down.svg' | imageS3" alt="" width="20px">
+        </span>
+      </button>
+      <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--outline"
+          #dropdownList
+          aria-labelledby="dropdownAction">
+        <li class="dropdown-item cursor-pointer" (click)="handleRejectABT(true)" *ngIf="currentABTAction === ABT_ACTION.Reject">
+          <button type="button" class="button p-0">{{ABT_ACTION.RejectAll}}</button>
+        </li>
+      </ul>
+    </div>
     <button
-      class="button button-pill button-flat button--md ml-4"
+      class="button button-pill button-flat button--xlg ml-4"
       type="button"
       [disabled]="isLoading"
       (click)="equipSB()">

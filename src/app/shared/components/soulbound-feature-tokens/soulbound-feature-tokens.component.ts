@@ -6,6 +6,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { WSService } from 'src/app/core/services/ws.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { SoulboundTokenDetailPopupComponent } from 'src/app/pages/soulbound-token/soulbound-token-detail-popup/soulbound-token-detail-popup.component';
 
@@ -18,12 +19,15 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   @Input() extend = true;
   @Input() accountAddress = null;
   @Input() soulboundListData = null;
+  @Input() displayManage = false;
   @Output() totalSBT = new EventEmitter<number>();
   @Output() totalPick = new EventEmitter<number>();
   @Output() closeDlg = new EventEmitter<number>();
+  @Output() totalNotify = new EventEmitter<number>();
 
   isClick = false;
   soulboundList = [];
+  soulboundUnclaimedNum = 0;
   wallet = null;
   userAddress = null;
   timerGetUpTime: any;
@@ -35,16 +39,22 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     private walletService: WalletService,
     private router: ActivatedRoute,
     private contractService: ContractService,
+    private wSService: WSService,
   ) {}
 
   ngOnInit(): void {
     this.userAddress = this.router.snapshot.paramMap.get('address');
     this.walletService.wallet$.subscribe((wallet) => {
       this.wallet = wallet?.bech32Address;
+      this.getABTNotify();
       this.getData();
       this.timerGetUpTime = setInterval(() => {
         this.getData();
       }, 30000);
+    });
+    this.wSService.getNotifyValue.subscribe((res) => {
+      this.soulboundUnclaimedNum = res;
+      this.totalNotify.emit(this.soulboundUnclaimedNum);
     });
   }
 
@@ -106,5 +116,23 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;
+  }
+
+  getABTNotify(): void {
+    this.soulboundService.getNotify(this.wallet).subscribe((res) => {
+      this.soulboundUnclaimedNum = res.data.notify;
+      this.totalNotify.emit(this.soulboundUnclaimedNum);
+    });
+
+    this.wSService.subscribeABTNotify(
+      () => {},
+      () => {},
+    );
+  }
+
+  setLinkTab() {
+    if (this.soulboundUnclaimedNum > 0) {
+      localStorage.setItem('tabUnEquip', 'true');
+    }
   }
 }

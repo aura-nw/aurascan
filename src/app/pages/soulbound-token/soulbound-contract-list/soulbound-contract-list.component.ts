@@ -55,6 +55,7 @@ export class SoulboundContractListComponent implements OnInit {
       .subscribe((wallet) => {
         if (wallet) {
           this.currentAddress = this.walletService.wallet?.bech32Address;
+          this.checkWL();
           this.getListSmartContract();
         } else {
           this.currentAddress = null;
@@ -112,6 +113,14 @@ export class SoulboundContractListComponent implements OnInit {
         setTimeout(() => {
           this.getListSmartContract();
         }, 2000);
+      }
+    });
+  }
+
+  checkWL() {
+    this.soulboundService.getListWL().subscribe((res) => {
+      if (!res?.data?.find((k) => k.account_address === this.currentAddress)) {
+        this.router.navigate(['/']);
       }
     });
   }
