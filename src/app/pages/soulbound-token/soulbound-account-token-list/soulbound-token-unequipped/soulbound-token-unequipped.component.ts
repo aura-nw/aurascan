@@ -20,6 +20,8 @@ import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail
 export class SoulboundTokenUnequippedComponent implements OnInit {
   @Input() reloadAPI: boolean = false;
   @Output() totalUnEquip = new EventEmitter<number>();
+  @Output() totalNotify = new EventEmitter<number>();
+
   textSearch = '';
   searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -106,6 +108,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
     this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
       if (res?.data) {
         this.openDialogDetail(res.data);
+        this.updateNotify(contractAddress, tokenID);
       }
       this.isClick = false;
     });
@@ -133,5 +136,20 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
 
   error(): void {
     this.isError = true;
+  }
+
+  updateNotify(contractAddress, tokenID) {
+    this.soulboundService.updateNotify(contractAddress, tokenID).subscribe((res) => {
+      setTimeout(() => {
+        this.getListSB();
+        this.getABTNotify();
+      }, 1000);
+    });
+  }
+
+  getABTNotify(): void {
+    this.soulboundService.getNotify(this.currentAddress).subscribe((res) => {
+      this.totalNotify.emit(res.data.notify);
+    });
   }
 }
