@@ -1,7 +1,7 @@
 img {
   width: 50px;
   height: 50px;
-  object-fit: contain;
+  object-fit: cover;
   @media (min-width: 375px) {
     width: 60px;
     height: 60px;
