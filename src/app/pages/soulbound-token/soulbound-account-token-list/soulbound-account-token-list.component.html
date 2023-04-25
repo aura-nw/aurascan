@@ -51,7 +51,7 @@
           </div>
         </div>
       </div>
-      <div class=" mt-6 mt-lg-0 {{ totalPick > 0 ? 'soulbound-feature-tokens' : '' }}" *ngIf="userAddress">
+      <div class="mt-6 mt-lg-0 ml-auto px-6 {{ totalPick > 0 ? 'soulbound-feature-tokens' : '' }}" *ngIf="userAddress">
         <app-soulbound-feature-tokens
           [extend]="false"
           [accountAddress]="userAddress"
