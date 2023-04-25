@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
@@ -33,13 +33,15 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     },
   ];
   reloadAPI = false;
-  totalNotify = 100;
+  totalNotify = 0;
+
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
     private walletService: WalletService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -94,5 +96,11 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   changeTab(key) {
     this.activeId = key;
     this.reloadAPI = false;
+  }
+
+  totalNotifyEmitHandle(evt) {
+    this.totalNotify = evt;
+    this.reloadAPI = true;
+    this.cdr.markForCheck();
   }
 }
