@@ -20,7 +20,6 @@ import {WSService} from "src/app/core/services/ws.service";
 })
 export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   @Input() reloadAPI: boolean = false;
-  @Input() reloadTimeCall = 0;
   @Output() totalUnEquip = new EventEmitter<number>();
   @Output() totalNotify = new EventEmitter<number>();
 
@@ -40,7 +39,6 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   isClick = false;
   MEDIA_TYPE = MEDIA_TYPE;
   isError = false;
-  countTime = 0;
 
   constructor(
     public dialog: MatDialog,

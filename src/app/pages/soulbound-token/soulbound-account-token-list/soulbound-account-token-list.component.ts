@@ -33,7 +33,6 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     },
   ];
   reloadAPI = false;
-  reloadAPIRandomNum = 0;
   totalNotify = 0;
 
 
@@ -102,7 +101,6 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   totalNotifyEmitHandle(evt) {
     this.totalNotify = evt;
     this.reloadAPI = true;
-    this.reloadAPIRandomNum = Math.floor(50 * Math.random());
     this.cdr.markForCheck();
   }
 }
