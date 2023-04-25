@@ -12,13 +12,11 @@
       (click)="closeDialog()" />
   </div>
   <div class="card-body body-01">
-    <div *ngIf="!abtDetail.rejectAll">
+    <div *ngIf="abtDetail.rejectAll">
       You will no longer receive ABTs from this Creator and this process cannot be reverted.
     </div>
-    <div *ngIf="abtDetail.rejectAll">
-      Are you sure to reject all new ABTs from Creator:
-      <span class="text--primary">{{ abtDetail.address ? abtDetail.address : '' }}</span> ?<br />
-      You will no longer receive ABTs from this Creator and this process cannot be reverted.
+    <div *ngIf="!abtDetail.rejectAll">
+      Are you sure to reject this ABT? It will be removed from your unclaimed list and this process cannot be reverted.
     </div>
   </div>
   <div class="divider divider-horizontal"></div>

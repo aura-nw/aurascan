@@ -71,7 +71,7 @@
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)">
             <span class="tab-title h5 body-mob fw-semibold mb-0 text-capitalize">{{ tab.value }}</span>
-            <span class="nft__unclaimed-noti text--white" *ngIf="index === 1" [class.noti--pill]="totalNotify > 9">{{
+            <span class="nft__unclaimed-noti text--white" *ngIf="index > 1" [class.noti--pill]="totalNotify > 9">{{
               totalNotify > 99 ? '99+' : totalNotify
             }}</span>
           </a>
