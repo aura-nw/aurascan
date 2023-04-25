@@ -89,6 +89,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
       this.pageData.length = res.meta.count;
       this.totalUnEquip.emit(this.pageData.length);
     });
+
     this.loading = false;
   }
 
@@ -103,12 +104,14 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
     this.getListSB();
   }
 
-  getSBTDetail(contractAddress, tokenID) {
+  getSBTDetail(contractAddress, tokenID, isNotify) {
     this.isClick = true;
     this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
       if (res?.data) {
         this.openDialogDetail(res.data);
-        this.updateNotify(contractAddress, tokenID);
+        if (isNotify) {
+          this.updateNotify(contractAddress, tokenID);
+        }
       }
       this.isClick = false;
     });
