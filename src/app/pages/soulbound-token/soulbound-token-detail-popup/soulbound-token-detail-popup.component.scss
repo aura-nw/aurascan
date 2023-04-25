@@ -81,8 +81,12 @@
     letter-spacing: 0.01em;
 
     @media (min-width: 991.98px) {
-      overflow-y: auto;
       max-height: 244px;
+      .__description {
+      overflow-y: auto;
+      height: 80px;
+      }
+
     }
   }
 
