@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,14 +11,16 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail-popup/soulbound-token-detail-popup.component';
+import {WSService} from "src/app/core/services/ws.service";
 
 @Component({
   selector: 'app-soulbound-token-unequipped',
   templateUrl: './soulbound-token-unequipped.component.html',
   styleUrls: ['./soulbound-token-unequipped.component.scss'],
 })
-export class SoulboundTokenUnequippedComponent implements OnInit {
+export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   @Input() reloadAPI: boolean = false;
+  @Input() reloadTimeCall = 0;
   @Output() totalUnEquip = new EventEmitter<number>();
   @Output() totalNotify = new EventEmitter<number>();
 
@@ -38,13 +40,16 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   isClick = false;
   MEDIA_TYPE = MEDIA_TYPE;
   isError = false;
+  countTime = 0;
 
   constructor(
     public dialog: MatDialog,
     private soulboundService: SoulboundService,
     private route: ActivatedRoute,
     public commonService: CommonService,
+    private cdr: ChangeDetectorRef,
     private contractService: ContractService,
+    private wSService: WSService,
   ) {}
 
   ngOnInit(): void {
@@ -56,12 +61,8 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
     });
   }
 
-  ngOnChanges(): void {
-    if (this.reloadAPI) {
-      setTimeout(() => {
-        this.getListSB();
-      }, 4000);
-    }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.getListSB();
   }
 
   searchToken() {
@@ -76,6 +77,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   }
 
   getListSB() {
+    this.reloadAPI = false;
     this.loading = true;
     const payload = {
       limit: this.pageData.pageSize,
@@ -150,6 +152,15 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   getABTNotify(): void {
     this.soulboundService.getNotify(this.currentAddress).subscribe((res) => {
       this.totalNotify.emit(res.data.notify);
+      this.getListSB();
+      this.cdr.markForCheck();
     });
+
+    this.wSService.subscribeABTNotify(
+      () => {
+        this.getListSB();
+      },
+      () => {},
+    );
   }
 }

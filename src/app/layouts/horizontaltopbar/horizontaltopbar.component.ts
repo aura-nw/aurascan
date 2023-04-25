@@ -13,6 +13,8 @@ import { WalletService } from '../../core/services/wallet.service';
 import { LAYOUT_MODE } from '../layouts.model';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
+import {from} from "rxjs";
+import {delay, mergeMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -45,6 +47,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   lengthSBT = 0;
   prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  currentAddress;
+  isAllowInABTWhiteList = true;
+
 
   /**
    * Language Listing
@@ -131,6 +136,31 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     } else {
       this.flagvalue = val.map((element) => element.flag);
     }
+
+    // check account is in whitelist (Account Bound Token)
+    from([1])
+      .pipe(
+        delay(800),
+        mergeMap((_) => this.walletService.wallet$),
+      )
+      .subscribe((wallet) => {
+        if (wallet) {
+          this.currentAddress = this.walletService.wallet?.bech32Address;
+          this.checkWL();
+        } else {
+          this.currentAddress = null;
+          this.isAllowInABTWhiteList = false;
+        }
+      });
+
+  }
+
+  checkWL() {
+    this.soulboundService.getListWL().subscribe((res) => {
+      if (!res?.data?.find((k) => k.account_address === this.currentAddress)) {
+        this.isAllowInABTWhiteList = false;
+      }
+    });
   }
 
   checkEnv() {

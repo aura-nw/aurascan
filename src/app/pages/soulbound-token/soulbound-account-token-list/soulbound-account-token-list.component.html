@@ -56,7 +56,7 @@
           [extend]="false"
           [accountAddress]="userAddress"
           (closeDlg)="reloadAPI = true"
-          (totalNotify)="totalNotify = $event"></app-soulbound-feature-tokens>
+          (totalNotify)="totalNotifyEmitHandle($event)"></app-soulbound-feature-tokens>
       </div>
     </div>
   </div>
@@ -81,12 +81,13 @@
   </div>
   <app-soulbound-token-equipped
     *ngIf="activeId === 0"
-    (totalSBT)="totalSBT = totalPick = $event"
+    (totalSBT)="totalSBT = $event"
     [reloadAPI]="reloadAPI"></app-soulbound-token-equipped>
   <app-soulbound-token-unequipped
     [reloadAPI]="reloadAPI"
+    [reloadTimeCall]="reloadAPIRandomNum"
     *ngIf="activeId === 1"
-    (totalNotify)="totalNotify = $event"
+    (totalNotify)="totalNotifyEmitHandle($event)"
     (totalUnEquip)="totalSBT = $event"></app-soulbound-token-unequipped>
 </section>
 
