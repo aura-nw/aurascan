@@ -5,6 +5,8 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { MenuName, MENU_MOB } from 'src/app/layouts/horizontaltopbar/menu';
 import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
+import {from} from "rxjs";
+import {delay, mergeMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-menu-bottom-bar',
@@ -18,6 +20,8 @@ export class MenuBottomBarComponent implements OnInit {
   overlayPanel = false;
   wallet = null;
   lengthSBT = 0;
+  isAllowInABTWhiteList = true;
+  currentAddress;
   @ViewChild('popover') public popover: NgbPopover;
 
   constructor(
@@ -50,6 +54,22 @@ export class MenuBottomBarComponent implements OnInit {
       // or
       return true;
     };
+
+    // check account is in whitelist (Account Bound Token)
+    from([1])
+      .pipe(
+        delay(800),
+        mergeMap((_) => this.walletService.wallet$),
+      )
+      .subscribe((wallet) => {
+        if (wallet) {
+          this.currentAddress = this.walletService.wallet?.bech32Address;
+          this.checkWL();
+        } else {
+          this.currentAddress = null;
+          this.isAllowInABTWhiteList = false;
+        }
+      });
   }
 
   @HostListener('body:click', ['$event'])
@@ -77,6 +97,14 @@ export class MenuBottomBarComponent implements OnInit {
         }
       }
     }
+  }
+
+  checkWL() {
+    this.soulboundService.getListWL().subscribe((res) => {
+      if (!res?.data?.find((k) => k.account_address === this.currentAddress)) {
+        this.isAllowInABTWhiteList = false;
+      }
+    });
   }
 
   overLayClickEvent() {

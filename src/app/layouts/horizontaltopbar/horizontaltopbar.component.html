@@ -124,7 +124,7 @@
                       <a
                         *ngIf="
                           subMenu.label !== 'Account Bound Token' ||
-                          (subMenu.label === 'Account Bound Token' && lengthSBT > 0 &&  !isAllowInABTWhiteList)
+                          (subMenu.label === 'Account Bound Token' && lengthSBT > 0 && isAllowInABTWhiteList)
                         "
                         [routerLink]="subMenu.link"
                         class="d-flex align-items-center mb-0 nav-link__item nav-link__sub-item py-0"
