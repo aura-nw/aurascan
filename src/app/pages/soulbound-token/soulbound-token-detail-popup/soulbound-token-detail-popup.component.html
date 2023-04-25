@@ -47,8 +47,16 @@
       </div>
       <div class="col-12 col-lg-7 mt-4 mt-lg-0">
         <div class="nft__desc">
+          <div class="h5 text--white">Contract</div>
+          <div class="mt-4 mb-4 mt-lg-2 body text--gray-1 box-desc">
+            {{ soulboundDetail.contract_address || '-' }}
+          </div>
+          <div class="h5 text--white">Creator</div>
+          <div class="mt-4 mb-4 mt-lg-2 body text--gray-1 box-desc">
+            {{ soulboundDetail.minter_address || '-' }}
+          </div>
           <div class="h5 text--white">Description</div>
-          <div class="mt-4 mt-lg-2 body text--gray-1 box-desc">
+          <div class="mt-4 mt-lg-2 body text--gray-1 box-desc __description">
             {{ soulboundDetail.ipfs?.description || '-' }}
           </div>
         </div>
@@ -88,7 +96,7 @@
   <div class="divider divider-horizontal"></div>
   <!-- Button group -->
   <div class="d-flex align-items-center justify-content-end px-6 py-6">
-    <div class="dropdown aura-dropdown mr-lg-4 btn-item">
+    <div class="dropdown aura-dropdown mr-lg-4 btn-item" *ngIf="soulboundDetail.status === abtType.UNCLAIMED">
       <button
           class="button button--xlg button--md-mob button-pill button-outline w-100 button-dropdown-split px-0"
           type="button">
