@@ -96,7 +96,7 @@
   <div class="divider divider-horizontal"></div>
   <!-- Button group -->
   <div class="d-flex align-items-center justify-content-end px-6 py-6">
-    <div class="dropdown aura-dropdown mr-lg-4 btn-item">
+    <div class="dropdown aura-dropdown mr-lg-4 btn-item" *ngIf="soulboundDetail.status === abtType.UNCLAIMED">
       <button
           class="button button--xlg button--md-mob button-pill button-outline w-100 button-dropdown-split px-0"
           type="button">

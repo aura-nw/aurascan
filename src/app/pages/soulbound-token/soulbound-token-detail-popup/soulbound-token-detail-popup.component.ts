@@ -10,6 +10,7 @@ import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { ABTActionType } from 'src/app/core/constants/token.enum';
 import { AbtRejectPopupComponent } from 'src/app/pages/soulbound-token/abt-reject-popup/abt-reject-popup.component';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 
 @Component({
   selector: 'app-soulbound-token-detail-popup',
@@ -25,6 +26,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   animationUrl = '';
   ABT_ACTION = ABTActionType;
   currentABTAction = ABTActionType.Reject;
+  abtType = SB_TYPE;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public soulboundDetail: any,
