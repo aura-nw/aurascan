@@ -24,6 +24,10 @@ export const SOUL_BOUND_TYPE = [
     key: SB_TYPE.UNEQUIPPED,
     value: SB_TYPE.UNEQUIPPED,
   },
+  {
+    key: SB_TYPE.REJECTED,
+    value: SB_TYPE.REJECTED,
+  },
 ];
 
 export const LIMIT_NUM_SBT = 5;
