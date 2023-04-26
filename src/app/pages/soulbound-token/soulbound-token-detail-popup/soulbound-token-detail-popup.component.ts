@@ -67,7 +67,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result && result !== 'canceled') {
+      if (result !== 'canceled') {
         this.rejectABT(result);
       }
     });
