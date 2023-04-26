@@ -89,7 +89,8 @@
           (pageEvent)="pageEvent($event)">
         </app-paginator>
         <ng-template #noValues>
-          <app-table-no-data textNull="This account doesn't have any un-claimed/un-equipped ABT to equip" *ngIf="!loading"></app-table-no-data>
+          <app-table-no-data textNull="This account doesn't have any un-claimed/un-equipped ABT to equip" *ngIf="!loading && !searchValue"></app-table-no-data>
+          <app-table-no-data *ngIf="!loading && searchValue"></app-table-no-data>
         </ng-template>
       </div>
     </div>

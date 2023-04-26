@@ -1,4 +1,13 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,7 +20,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail-popup/soulbound-token-detail-popup.component';
-import {WSService} from "src/app/core/services/ws.service";
+import { WSService } from 'src/app/core/services/ws.service';
 
 @Component({
   selector: 'app-soulbound-token-unequipped',
@@ -22,11 +31,13 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   @Input() reloadAPI: boolean = false;
   @Output() totalUnEquip = new EventEmitter<number>();
   @Output() totalNotify = new EventEmitter<number>();
+  @Output() resetReload = new EventEmitter<boolean>();
+  @Output() updateChangeNotify = new EventEmitter<any>();
 
   textSearch = '';
   searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  loading = false;
+  loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
@@ -51,16 +62,16 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
         this.getListSB();
       }
     });
-    if(this.reloadAPI) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes?.reloadAPI?.currentValue) {
       this.getListSB();
     }
   }
@@ -77,8 +88,6 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   }
 
   getListSB() {
-    this.reloadAPI = false;
-    this.loading = true;
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
@@ -90,6 +99,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
       this.soulboundData.data = res.data;
       this.pageData.length = res.meta.count;
       this.totalUnEquip.emit(this.pageData.length);
+      this.resetReload.emit(false);
     });
 
     this.loading = false;
@@ -125,13 +135,9 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
       data: SBT,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && result !== 'canceled') {
-        setTimeout(() => {
-          this.getABTNotify();
-        }, 4000);
-      }
-    });
+    setTimeout(() => {
+      this.getABTNotify();
+    }, 500);
   }
 
   getTypeFile(nft: any) {
@@ -146,7 +152,6 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   updateNotify(contractAddress, tokenID) {
     this.soulboundService.updateNotify(contractAddress, tokenID).subscribe((res) => {
       setTimeout(() => {
-        this.getListSB();
         this.getABTNotify();
       }, 1000);
     });
