@@ -30,7 +30,7 @@
     [routerLink]="['/accountbound/account', accountAddress]"
     class="button button-pill button-outline button-outline--gradient button-outline__in-card button--sm mt-md-3 mt-lg-0 mt-xl-3 position-relative mr-5"
     (click)="setLinkTab()"
-    *ngIf="wallet === accountAddress && displayManage">
+    *ngIf="wallet === accountAddress && displayManage && !isLoading">
     <span>Manage your ABTs</span>
     <span
       class="nft__unclaimed-noti caption"

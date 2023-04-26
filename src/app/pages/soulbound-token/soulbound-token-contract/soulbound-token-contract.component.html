@@ -119,7 +119,7 @@
             <!-- STATUS -->
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef class="">STATUS</th>
-              <td mat-cell *matCellDef="let element" class="py-4 pl-5 fw-normal">
+              <td mat-cell *matCellDef="let element" class="py-4 pl-4 fw-normal">
                 <div [ngSwitch]="element.status">
                   <div *ngSwitchCase="sbType.EQUIPPED" class="text--green-3 token-status">
                     {{ element.status }}
