@@ -8,7 +8,6 @@ section.account-detail {
     border-top: 1px solid var(--aura-gray-9);
     padding-top: var(--spacer-6);
     @media (min-width: 1199.98px) {
-      padding-top: 0;
       flex: 0 1 auto;
       display: flex;
       align-items: center;
@@ -152,8 +151,11 @@ section.account-detail {
 .aura-table.transaction-table th.mat-header-cell:nth-child(7) {
   min-width: 200px;
 }
-.box-manage-abt{
+.box-manage-abt {
   margin-left: auto;
   display: flex;
   align-items: flex-end;
+}
+app-soulbound-feature-tokens {
+  width: 100%;
 }
