@@ -51,16 +51,18 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
         this.getListSB();
       }
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.getListSB();
+    if(this.reloadAPI) {
+      this.getListSB();
+    }
   }
 
   searchToken() {
