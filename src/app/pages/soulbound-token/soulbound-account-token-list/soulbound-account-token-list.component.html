@@ -88,8 +88,10 @@
     [reloadAPI]="reloadAPI"></app-soulbound-token-equipped>
   <app-soulbound-token-unequipped
     [reloadAPI]="reloadAPI"
+    (resetReload)="reloadAPI = $event"
     *ngIf="activeId === 1"
-    (totalNotify)="totalNotifyEmitHandle($event)"
+    (updateChangeNotify)="getABTNotify()"
+    (totalNotify)="totalNotify = $event"
     (totalUnEquip)="totalSBT = $event"></app-soulbound-token-unequipped>
 </section>
 
