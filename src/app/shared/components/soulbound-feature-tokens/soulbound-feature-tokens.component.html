@@ -1,5 +1,5 @@
-<div class="text-end" *ngIf="soulboundList && soulboundList?.length > 0">
-  <div class="soulbound-list">
+<div class="text-end">
+  <div class="soulbound-list" *ngIf="soulboundList && soulboundList?.length > 0">
     <ng-container *ngFor="let token of soulboundList; let last = last">
       <div class="soulbound__item">
         <ng-container *ngIf="token.picked">
@@ -20,7 +20,6 @@
                 <span>Preview</span>
               </button>
             </div>
-
             <div class="text-center text--yellow-3 mt-3">{{ token.status }}</div>
           </div>
         </ng-container>
@@ -28,9 +27,18 @@
     </ng-container>
   </div>
   <a
-    href="/accountbound/account/{{ accountAddress }}"
-    class="button button-pill button-outline button-outline--gradient button-outline__in-card button--sm mt-3"
-    *ngIf="extend && accountAddress">
-    <span>See more</span>
+    [routerLink]="['/accountbound/account', accountAddress]"
+    class="button button-pill button-outline button-outline--gradient button-outline__in-card button--sm mt-md-3 mt-lg-0 mt-xl-3 position-relative mr-5"
+    (click)="setLinkTab()"
+    *ngIf="wallet === accountAddress && displayManage && !isLoading">
+    <span>Manage your ABTs</span>
+    <span
+      class="nft__unclaimed-noti caption"
+      matTooltip="You have new un-claimed Account Bound Token(s) (ABTs). Kindly check and manage your ABTs in your account."
+      [matTooltipPosition]="'above'"
+      *ngIf="soulboundUnclaimedNum > 0"
+      [class.noti--pill]="soulboundUnclaimedNum > 9"
+      >{{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}</span
+    >
   </a>
 </div>

@@ -10,7 +10,7 @@
           <app-qr [address]="userAddress || ''"></app-qr>
         </div>
       </div>
-      <div class="d-flex flex-column py-lg-6 col-lg-4 col-12 px-md-6">
+      <div class="d-flex flex-column py-lg-6 col-lg-auto col-12 px-md-6">
         <div class="">
           <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Address</div>
           <div class="d-flex align-items-center">
@@ -51,8 +51,12 @@
           </div>
         </div>
       </div>
-      <div class="soulbound-feature-tokens mt-6 mt-lg-0" *ngIf="userAddress">
-        <app-soulbound-feature-tokens [extend]="false" [accountAddress]="userAddress" (closeDlg)="reloadAPI = true"></app-soulbound-feature-tokens>
+      <div class="mt-6 mt-lg-0 ml-auto px-6 {{ totalPick > 0 ? 'soulbound-feature-tokens' : '' }}" *ngIf="userAddress">
+        <app-soulbound-feature-tokens
+          [extend]="false"
+          [accountAddress]="userAddress"
+          (closeDlg)="reloadAPI = true"
+          (totalNotify)="totalNotifyEmitHandle($event)"></app-soulbound-feature-tokens>
       </div>
     </div>
   </div>
@@ -67,15 +71,27 @@
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)">
             <span class="tab-title h5 body-mob fw-semibold mb-0 text-capitalize">{{ tab.value }}</span>
+            <span
+              class="nft__unclaimed-noti text--white"
+              *ngIf="totalNotify >= 1 && index === 1"
+              [class.noti--pill]="totalNotify > 9"
+              >{{ totalNotify > 99 ? '99+' : totalNotify }}</span
+            >
           </a>
         </li>
       </ng-container>
     </ul>
   </div>
-  <app-soulbound-token-equipped *ngIf="activeId === 0" (totalSBT)="totalSBT = $event" [reloadAPI]="reloadAPI"></app-soulbound-token-equipped>
+  <app-soulbound-token-equipped
+    *ngIf="activeId === 0"
+    (totalSBT)="totalSBT = $event"
+    [reloadAPI]="reloadAPI"></app-soulbound-token-equipped>
   <app-soulbound-token-unequipped
     [reloadAPI]="reloadAPI"
+    (resetReload)="reloadAPI = $event"
     *ngIf="activeId === 1"
+    (updateChangeNotify)="getABTNotify()"
+    (totalNotify)="totalNotify = $event"
     (totalUnEquip)="totalSBT = $event"></app-soulbound-token-unequipped>
 </section>
 
