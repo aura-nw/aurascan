@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import {LIMIT_NUM_SBT, SB_TYPE} from 'src/app/core/constants/soulbound.constant';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
@@ -65,6 +65,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
       this.activeId = 1;
       localStorage.setItem('tabUnEquip', null);
     }
+    this.getSBTPick();
   }
 
   viewQrAddress(staticDataModal: any): void {
@@ -108,6 +109,17 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   getABTNotify(): void {
     this.soulboundService.getNotify(this.walletService.wallet?.bech32Address).subscribe((res) => {
       this.totalNotify = res.data.notify || 0;
+    });
+  }
+
+  getSBTPick() {
+    const payload = {
+      receiverAddress: this.userAddress,
+      limit: LIMIT_NUM_SBT,
+    };
+
+    this.soulboundService.getSBTPick(payload).subscribe((res) => {
+      this.totalPick = res.data.length;
     });
   }
 }

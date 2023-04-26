@@ -16,6 +16,7 @@ import { SoulboundTokenDetailPopupComponent } from 'src/app/pages/soulbound-toke
   styleUrls: ['./soulbound-feature-tokens.component.scss'],
 })
 export class SoulboundFeatureTokensComponent implements OnInit {
+  @Input() reloadAPI: boolean = false;
   @Input() extend = true;
   @Input() accountAddress = null;
   @Input() soulboundListData = null;
