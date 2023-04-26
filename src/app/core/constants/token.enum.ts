@@ -24,3 +24,8 @@ export enum TokenType {
   Token = 'Token',
   NFT = 'NFT'
 }
+
+export enum ABTActionType {
+  Reject = 'Reject this ABT',
+  RejectAll = 'Reject all ABTs from this Creator'
+}

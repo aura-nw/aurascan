@@ -1,7 +1,12 @@
-::ng-deep .TokenSoulboundDetailPopup .mat-dialog-container {
-  background: transparent;
-  box-shadow: none;
-  padding: 0;
+::ng-deep .TokenSoulboundDetailPopup {
+  max-width: 90vw !important;
+  transform: translateY(-50px);
+  .mat-dialog-container {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    overflow: visible;
+  }
 }
 
 .card-header {
@@ -76,8 +81,12 @@
     letter-spacing: 0.01em;
 
     @media (min-width: 991.98px) {
-      overflow-y: auto;
       max-height: 244px;
+      .__description {
+      overflow-y: auto;
+      height: 80px;
+      }
+
     }
   }
 

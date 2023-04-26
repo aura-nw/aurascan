@@ -11,6 +11,10 @@
       height: 44px;
       padding: 0 24px;
     }
+    &--xlg {
+      height: 40px;
+      padding: 0 24px;
+    }
     &--md {
       height: 36px;
       padding: 0 24px;
@@ -390,5 +394,19 @@
   justify-content: center;
   &:hover {
     background-color: var(--aura-gray-9);
+  }
+}
+.button-dropdown-split {
+  span {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .dropdown-split__arrow {
+    padding: 0 10px;
+    border-left: 2px solid var(--aura-gray-6);
+    background-color: var(--aura-black);
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
   }
 }
