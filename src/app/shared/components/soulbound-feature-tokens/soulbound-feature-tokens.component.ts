@@ -31,6 +31,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   wallet = null;
   userAddress = null;
   timerGetUpTime: any;
+  isLoading = true;
 
   constructor(
     private soulboundService: SoulboundService,
@@ -119,10 +120,16 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   }
 
   getABTNotify(): void {
-    this.soulboundService.getNotify(this.wallet).subscribe((res) => {
-      this.soulboundUnclaimedNum = res.data.notify;
-      this.totalNotify.emit(this.soulboundUnclaimedNum);
-    });
+    this.soulboundService.getNotify(this.wallet).subscribe(
+      (res) => {
+        this.soulboundUnclaimedNum = res.data.notify;
+        this.totalNotify.emit(this.soulboundUnclaimedNum);
+      },
+      () => {},
+      () => {
+        this.isLoading = false;
+      },
+    );
 
     this.wSService.subscribeABTNotify(
       () => {},
