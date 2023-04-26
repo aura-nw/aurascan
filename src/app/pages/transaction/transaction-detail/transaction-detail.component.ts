@@ -11,6 +11,7 @@ import { MappingErrorService } from '../../../core/services/mapping-error.servic
 import { TransactionService } from '../../../core/services/transaction.service';
 import { convertDataTransaction, Globals } from '../../../global/global';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -42,6 +43,7 @@ export class TransactionDetailComponent implements OnInit {
   env = this.environmentService.configValue.env;
   loading = true;
   isReload = false;
+  listValidator = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -53,6 +55,7 @@ export class TransactionDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private clipboard: Clipboard,
+    private validatorService: ValidatorService
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +63,7 @@ export class TransactionDetailComponent implements OnInit {
     if (!this.txHash || this.txHash === 'null') {
       this.router.navigate(['/']);
     }
+    this.getListValidator();
     this.getDetail();
   }
 
@@ -103,6 +107,14 @@ export class TransactionDetailComponent implements OnInit {
     } else {
       this.loading = false;
     }
+  }
+
+  getListValidator(): void {
+    this.validatorService.validators().subscribe((res) => {
+      if (res.data?.length > 0) {
+        this.listValidator = res.data;
+      }
+    });
   }
 
   changeType(type: boolean): void {

@@ -12,6 +12,7 @@ export class MessagesItemComponent implements OnInit {
   @Input() label: string;
   @Input() value: any;
   @Input() dataLink: any;
+  @Input() denom: string = '';
   @Input() pipeType: string = '';
 
   pipeTypeData = pipeTypeData;
