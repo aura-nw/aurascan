@@ -47,7 +47,6 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     this.userAddress = this.router.snapshot.paramMap.get('address');
     this.walletService.wallet$.subscribe((wallet) => {
       this.wallet = wallet?.bech32Address;
-      this.getABTNotify();
       this.getData();
       this.timerGetUpTime = setInterval(() => {
         this.getData();
@@ -57,6 +56,12 @@ export class SoulboundFeatureTokensComponent implements OnInit {
       this.soulboundUnclaimedNum = res;
       this.totalNotify.emit(this.soulboundUnclaimedNum);
     });
+
+    setTimeout(() => {
+      if (this.wallet) {
+        this.getABTNotify();
+      }
+    }, 1000);
   }
 
   getData() {
