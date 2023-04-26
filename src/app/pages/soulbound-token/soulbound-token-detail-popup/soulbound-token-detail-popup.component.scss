@@ -14,6 +14,11 @@
 }
 
 .card {
+  .card-body {
+    @media (max-width: 414px) {
+      height: 450px;
+    }
+  }
   .nft__img {
     background-color: var(--aura-gray-9);
 
@@ -63,7 +68,10 @@
     justify-content: center;
     padding: var(--spacer-2);
     width: 100%;
-    height: 234px;
+    height: 160px;
+    @media (min-width: 414.98px) {
+      height: 234px;
+    }
 
     @media (min-width: 991.98px) {
       width: 300px;
