@@ -67,7 +67,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result !== 'canceled') {
+      if (result && result !== 'canceled') {
         this.rejectABT(result);
       }
     });
@@ -80,7 +80,6 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
       receiverAddress: this.soulboundDetail.receiver_address,
       rejectAll: rejectAll,
     };
-
     this.soulboundService.rejectABT(payload).subscribe((res) => {
       if (res?.data?.affected) {
         let message = `ABT '${this.soulboundDetail.token_name_ipfs}' has been removed from your unclaimed list`;
