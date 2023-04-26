@@ -4,6 +4,8 @@ import { take } from 'rxjs/operators';
 import io, { Socket } from 'socket.io-client';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { SoulboundService } from './soulbound.service';
+import { WalletService } from './wallet.service';
 
 interface RedisResponse {
   Code: string;
@@ -11,6 +13,7 @@ interface RedisResponse {
   ContractAddress: string;
   Verified: boolean;
   CodeId: number;
+  ReceiverAddress: string;
 }
 @Injectable({
   providedIn: 'root',
@@ -21,6 +24,7 @@ export class WSService {
   public wsData: BehaviorSubject<any>;
   public data$: Observable<any>;
   private codeStatus = new BehaviorSubject<any>(null);
+  private notifyValue = new BehaviorSubject<any>(null);
 
   socket: Socket;
 
@@ -28,7 +32,12 @@ export class WSService {
 
   codeId: number;
 
-  constructor(private environmentService: EnvironmentService, private toastr: NgxToastrService) {
+  constructor(
+    private environmentService: EnvironmentService,
+    private toastr: NgxToastrService,
+    private soulboundService: SoulboundService,
+    private walletService: WalletService,
+  ) {
     this.wsData = new BehaviorSubject<any>(null);
     this.data$ = this.wsData.asObservable();
   }
@@ -37,8 +46,12 @@ export class WSService {
     return this.wsData.value;
   }
 
-  public get getCodeStatus(){
+  public get getCodeStatus() {
     return this.codeStatus.asObservable();
+  }
+
+  public get getNotifyValue() {
+    return this.notifyValue.asObservable();
   }
 
   public connect(): void {
@@ -114,6 +127,32 @@ export class WSService {
       if (redisResponse.CodeId === this.codeId && this.codeId) {
         callBack && callBack();
         this.codeStatus.next(redisResponse.Code);
+      }
+    });
+  }
+
+  subscribeABTNotify(callBack?: () => void, tabCallBack?: () => void) {
+    this.connect();
+
+    const wsData = { event: 'eventABTNotify' };
+
+    const register = this.on('register', wsData);
+
+    if (register === undefined) {
+      return;
+    }
+
+    register.subscribe((data: any) => {
+      const redisResponse: RedisResponse = (data && JSON.parse(data)) || {
+        ReceiverAddress: '',
+      };
+
+      const currentWallet = this.walletService.wallet?.bech32Address;
+      if (currentWallet && redisResponse.ReceiverAddress === currentWallet) {
+        callBack && callBack();
+        this.soulboundService.getNotify(currentWallet).subscribe((res) => {
+          this.notifyValue.next(res.data.notify);
+        });
       }
     });
   }

@@ -7,8 +7,7 @@
     flex: 1 0 100%;
     border-top: 1px solid var(--aura-gray-9);
     padding-top: var(--spacer-6);
-    @media (min-width: 991.98px) {
-      padding-top: 0;
+    @media (min-width: 1199.98px) {
       flex: 0 1 auto;
       display: flex;
       align-items: center;
@@ -56,5 +55,23 @@
   min-width: 100%;
   @media (min-width: 992px) {
     min-width: 364px;
+  }
+}
+
+.nft__unclaimed-noti {
+  margin-left: var(--spacer-1);
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--aura-red-3);
+  font-size: 10px;
+  font-weight: 600;
+  &.noti--pill {
+    width: auto;
+    border-radius: 24px;
+    padding: 4px 8px;
   }
 }
