@@ -15,7 +15,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
+import { Globals, convertDataBlock, getAmount } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 const marked = require('marked');
 const encode = require('@cosmjs/encoding');
@@ -438,12 +438,11 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getListUpTime(): void {
-    this.blockService.blocksIndexer(this.numberLastBlock).subscribe(
+    this.blockService.getListBlock(this.numberLastBlock).subscribe(
       (res) => {
-        const { code, data } = res;
-        if (code === 200) {
-          const block = _.get(data, 'blocks').map((element) => {
-            const height = _.get(element, 'block.header.height');
+        if (res?.block?.length > 0) {
+          const block = _.get(res, 'block').map((element) => {
+            const height = _.get(element, 'height');
             const isSyncFail = true;
             return { height, isSyncFail };
           });
