@@ -138,6 +138,14 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.getABTNotify();
     }, 500);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== 'canceled') {
+        setTimeout(() => {
+          this.getABTNotify();
+        }, 4000);
+      }
+    });
   }
 
   getTypeFile(nft: any) {
