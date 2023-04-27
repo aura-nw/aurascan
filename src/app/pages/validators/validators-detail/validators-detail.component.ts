@@ -75,7 +75,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   nextKey = null;
   currentNextKey = null;
   nextKeyBlock = null;
-  currentNextKeyBlock = null;
 
   nextKeyDelegator = null;
   currentNextKeyDelegator = null;
@@ -121,7 +120,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   loadData(isInit = true) {
     if (!this.isLeftPage) {
       if (this.pageIndexBlock === 0) {
-        this.currentNextKeyBlock = null;
         this.getListBlockWithOperator(null, isInit);
       }
       if (this.pageIndexDelegator === 0) {
@@ -341,9 +339,8 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           page.pageIndex * page.pageSize + page.pageSize,
         );
         const nextBlock = page.length <= (page.pageIndex + 2) * page.pageSize;
-        if (nextBlock && this.nextKeyBlock && this.currentNextKeyBlock !== this.nextKeyBlock) {
+        if (nextBlock && this.nextKeyBlock) {
           this.getListBlockWithOperator(this.nextKeyBlock);
-          //this.currentNextKeyBlock = this.nextKeyBlock;
         }
         this.pageIndexBlock = page.pageIndex;
         break;
