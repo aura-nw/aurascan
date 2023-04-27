@@ -7,8 +7,7 @@
     flex: 1 0 100%;
     border-top: 1px solid var(--aura-gray-9);
     padding-top: var(--spacer-6);
-    @media (min-width: 991.98px) {
-      padding-top: 0;
+    @media (min-width: 1199.98px) {
       flex: 0 1 auto;
       display: flex;
       align-items: center;
