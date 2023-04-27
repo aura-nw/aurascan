@@ -176,12 +176,18 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getListBlockWithOperator(nextKeyBlock = null, isInit = true): void {
-    this.blockService.blockWithOperator(100, this.currentAddress, nextKeyBlock).subscribe(
+    let payload = {
+      address: this.currentAddress,
+      nextHeight: null,
+    };
+    if (nextKeyBlock !== null) {
+      payload.nextHeight = nextKeyBlock;
+    }
+    this.blockService.getBlockWithOperator(payload).subscribe(
       (res) => {
-        const { code, data } = res;
-        this.nextKeyBlock = data.nextKey || null;
-        if (code === 200) {
-          const blocks = convertDataBlock(data);
+        this.nextKeyBlock = res.block[res.block.length - 1].height;
+        if (res.block.length > 0) {
+          const blocks = convertDataBlock(res);
           if (this.dataSourceBlock.data.length > 0 && isInit) {
             this.dataSourceBlock.data = [...this.dataSourceBlock.data, ...blocks];
           } else {
@@ -337,7 +343,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         const nextBlock = page.length <= (page.pageIndex + 2) * page.pageSize;
         if (nextBlock && this.nextKeyBlock && this.currentNextKeyBlock !== this.nextKeyBlock) {
           this.getListBlockWithOperator(this.nextKeyBlock);
-          this.currentNextKeyBlock = this.nextKeyBlock;
+          //this.currentNextKeyBlock = this.nextKeyBlock;
         }
         this.pageIndexBlock = page.pageIndex;
         break;

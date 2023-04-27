@@ -40,12 +40,18 @@ export class BlockService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`);
   }
 
-  getBlockWithOperator(height) {
+  getBlockWithOperator(payload) {
+    const address = payload.address;
+    const nextHeight = payload.nextHeight;
+    let updateQuery = '';
+    if (nextHeight !== null) {
+      updateQuery = ', height: {_lt: ' + nextHeight + ', _lte:' + (nextHeight - 100) + '}';
+    }
     const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
-    query getBlockDetail($height: Int) {
+    query getBlockWithOperator($address: String) {
       ${envDB} {
-        block(where: {validator: {operator_address: {_eq: $address}}}, order_by: {time: desc}, limit: 100) {
+        block(where: {validator: {operator_address: {_eq: $address}} ${updateQuery}} , order_by: {time: desc}, limit: 100) {
           height
           hash
           time
@@ -66,14 +72,14 @@ export class BlockService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          height: height,
+          address: address,
         },
-        operationName: 'getBlockDetail',
+        operationName: 'getBlockWithOperator',
       })
       .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
   }
 
-  getListBlock(limit) {
+  getListBlock(limit: number) {
     const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
     query getListBlocks($limit: Int) {
@@ -102,7 +108,7 @@ export class BlockService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
   }
 
-  getBlockDetail(height) {
+  getBlockDetail(height: string | number) {
     const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
     query getBlockDetail($height: Int) {
