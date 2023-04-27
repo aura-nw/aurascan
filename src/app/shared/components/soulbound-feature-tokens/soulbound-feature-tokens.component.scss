@@ -10,10 +10,12 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
+  @media (min-width: 991.98px) {
+    justify-content: flex-end;
+  }
   .soulbound__item {
     .nft-card {
-      min-height: 120px;
+      //min-height: 120px;
       max-width: 90px;
     }
     padding: var(--spacer-2) var(--spacer-3);
