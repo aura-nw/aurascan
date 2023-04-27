@@ -69,4 +69,28 @@ export class SoulboundService extends CommonService {
       params
     });
   }
+
+  updateNotify(contractAddress: string, tokenId): Observable<any> {
+    const payload = {
+      tokenId: tokenId,
+      contractAddress: contractAddress,
+    };
+    return this.http.put<any>(`${this.apiUrl}/soulbound-token/update-notify`, payload);
+  }
+
+  rejectABT(payload): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/soulbound-token/reject-token`, payload);
+  }
+
+  getListWL(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/soulbound-token/white-list`);
+  }
+
+  checkReject(receiveAddress, minterAddress): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/soulbound-token/check-reject/${receiveAddress}/${minterAddress}`);
+  }
+
+  getNotify(receiveAddress): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/soulbound-token/notify/${receiveAddress}`);
+  }
 }

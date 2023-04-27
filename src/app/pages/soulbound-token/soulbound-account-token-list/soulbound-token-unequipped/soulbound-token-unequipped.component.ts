@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,19 +20,24 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail-popup/soulbound-token-detail-popup.component';
+import { WSService } from 'src/app/core/services/ws.service';
 
 @Component({
   selector: 'app-soulbound-token-unequipped',
   templateUrl: './soulbound-token-unequipped.component.html',
   styleUrls: ['./soulbound-token-unequipped.component.scss'],
 })
-export class SoulboundTokenUnequippedComponent implements OnInit {
+export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   @Input() reloadAPI: boolean = false;
   @Output() totalUnEquip = new EventEmitter<number>();
+  @Output() totalNotify = new EventEmitter<number>();
+  @Output() resetReload = new EventEmitter<boolean>();
+  @Output() updateChangeNotify = new EventEmitter<any>();
+
   textSearch = '';
   searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  loading = false;
+  loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
@@ -42,7 +56,9 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
     private soulboundService: SoulboundService,
     private route: ActivatedRoute,
     public commonService: CommonService,
+    private cdr: ChangeDetectorRef,
     private contractService: ContractService,
+    private wSService: WSService,
   ) {}
 
   ngOnInit(): void {
@@ -54,11 +70,9 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
     });
   }
 
-  ngOnChanges(): void {
-    if (this.reloadAPI) {
-      setTimeout(() => {
-        this.getListSB();
-      }, 4000);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes?.reloadAPI?.currentValue) {
+      this.getListSB();
     }
   }
 
@@ -74,7 +88,6 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   }
 
   getListSB() {
-    this.loading = true;
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
@@ -86,7 +99,9 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
       this.soulboundData.data = res.data;
       this.pageData.length = res.meta.count;
       this.totalUnEquip.emit(this.pageData.length);
+      this.resetReload.emit(false);
     });
+
     this.loading = false;
   }
 
@@ -101,11 +116,14 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
     this.getListSB();
   }
 
-  getSBTDetail(contractAddress, tokenID) {
+  getSBTDetail(contractAddress, tokenID, isNotify) {
     this.isClick = true;
     this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
       if (res?.data) {
         this.openDialogDetail(res.data);
+        if (isNotify) {
+          this.updateNotify(contractAddress, tokenID);
+        }
       }
       this.isClick = false;
     });
@@ -117,10 +135,14 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
       data: SBT,
     });
 
+    setTimeout(() => {
+      this.getABTNotify();
+    }, 500);
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'canceled') {
         setTimeout(() => {
-          this.getListSB();
+          this.getABTNotify();
         }, 4000);
       }
     });
@@ -133,5 +155,28 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
 
   error(): void {
     this.isError = true;
+  }
+
+  updateNotify(contractAddress, tokenID) {
+    this.soulboundService.updateNotify(contractAddress, tokenID).subscribe((res) => {
+      setTimeout(() => {
+        this.getABTNotify();
+      }, 1000);
+    });
+  }
+
+  getABTNotify(): void {
+    this.soulboundService.getNotify(this.currentAddress).subscribe((res) => {
+      this.totalNotify.emit(res.data.notify);
+      this.getListSB();
+      this.cdr.markForCheck();
+    });
+
+    this.wSService.subscribeABTNotify(
+      () => {
+        this.getListSB();
+      },
+      () => {},
+    );
   }
 }

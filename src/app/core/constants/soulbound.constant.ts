@@ -3,7 +3,8 @@ export enum SB_TYPE {
   UNCLAIMED = 'Unclaimed',
   EQUIPPED = 'Equipped',
   UNEQUIPPED = 'Unequipped',
-  PENDING = 'Pending'
+  PENDING = 'Pending',
+  REJECTED = 'Rejected'
 }
 
 export const SOUL_BOUND_TYPE = [
@@ -22,6 +23,10 @@ export const SOUL_BOUND_TYPE = [
   {
     key: SB_TYPE.UNEQUIPPED,
     value: SB_TYPE.UNEQUIPPED,
+  },
+  {
+    key: SB_TYPE.REJECTED,
+    value: SB_TYPE.REJECTED,
   },
 ];
 
