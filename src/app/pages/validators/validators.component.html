@@ -236,8 +236,8 @@
                                 [srcImg]="data.image_url"></app-loading-image>
                             </div>
                           </div>
-                          <span [class.text-jailed]="data['jailed']">
-                            {{ data[template.matColumnDef] }}
+                          <span [class.text-jailed]="data['jailed']" class="break-word">
+                            {{ data[template.matColumnDef] | stringEllipsis : 15 }}
                           </span>
                         </a>
                         <div *ngSwitchCase="'percent_power'" class="box-percent-power">

@@ -24,6 +24,8 @@ import { SoulboundTokenContractComponent } from './soulbound-token-contract/soul
 import { SoulboundTokenCreatePopupComponent } from './soulbound-token-create-popup/soulbound-token-create-popup.component';
 import { SoulboundTokenDetailPopupComponent } from './soulbound-token-detail-popup/soulbound-token-detail-popup.component';
 import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
+import {ClickOutsideModule} from "ng-click-outside";
+import { AbtRejectPopupComponent } from './abt-reject-popup/abt-reject-popup.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     SoulboundTokenEquippedComponent,
     SoulboundTokenCreatePopupComponent,
     SoulboundTokenDetailPopupComponent,
+    AbtRejectPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +58,7 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     SoulboundFeatureTokensModule,
     ModelViewModule,
     AudioPlayerModule,
+    ClickOutsideModule,
   ],
   providers: [FormBuilder, SoulboundService],
 })

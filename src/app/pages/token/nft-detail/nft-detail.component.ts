@@ -127,7 +127,7 @@ export class NFTDetailComponent implements OnInit {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
     this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
-      if (!res?.data || res.data === null) {
+      if (!res?.data || res.data === null || res?.data.status === SB_TYPE.UNEQUIPPED) {
         this.toastr.error('Token invalid');
         this.loading = false;
         return;
@@ -334,7 +334,7 @@ export class NFTDetailComponent implements OnInit {
 
   async updateStatusSBT(payload: any, address) {
     this.soulboundService.updatePickSBToken(payload).subscribe((res) => {
-      window.location.href = '/account/' + address;
+      this.route.navigate(['/account/', address]);
     });
   }
 

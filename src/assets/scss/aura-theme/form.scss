@@ -376,6 +376,16 @@
         }
       }
     }
+    &.aura-dropdown-menu--outline {
+      top: calc(100% + 8px) !important;
+      right: unset !important;
+      border: 1px solid var(--aura-gray-6);
+      padding: var(--spacer-2);
+      li.dropdown-item {
+        border-radius: 4px;
+      }
+    }
+
   }
 }
 
