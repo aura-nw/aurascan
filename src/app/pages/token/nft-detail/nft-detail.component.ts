@@ -349,7 +349,7 @@ export class NFTDetailComponent implements OnInit {
   }
 
   replaceImgIpfs(value) {
-    return 'https://ipfs.io/' + value.replace('://', '/');
+    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
   }
 
   expandMedia(): void {
