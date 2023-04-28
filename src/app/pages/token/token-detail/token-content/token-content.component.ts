@@ -8,6 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
+import { amountOf } from 'src/app/core/utils/common/info-common';
 
 @Component({
   selector: 'app-token-content',
@@ -40,7 +41,6 @@ export class TokenContentComponent implements OnInit {
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   linkToken = 'token-nft';
   activeTabID = 0;
-  decimalValue = 1;
   textPlaceHolder = 'Filter Address/ TX Hash';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -75,10 +75,6 @@ export class TokenContentComponent implements OnInit {
       this.currentTab = this.tokenTab.Contract;
       this.activeTabID = this.TABS.findIndex((k) => k.key === this.tokenTab.Contract);
       localStorage.setItem('isVerifyTab', null);
-    }
-
-    if (this.tokenDetail.decimals > 0) {
-      this.decimalValue = Math.pow(10, this.tokenDetail.decimals);
     }
   }
 
@@ -158,8 +154,10 @@ export class TokenContentComponent implements OnInit {
       if (this.tokenDetail.isNFTContract) {
         this.infoSearch['balance'] = data?.tokens?.length;
       } else {
-        const tempConvert = data?.balance / this.decimalValue;
-        this.infoSearch['balance'] = tempConvert < 0.000001 ? 0 : tempConvert;
+        this.infoSearch['balance'] =
+          amountOf(data?.balance, this.tokenDetail.decimals) < 0.000001
+            ? 0
+            : amountOf(data?.balance, this.tokenDetail.decimals);
       }
     } catch (error) {}
   }

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
-import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
+import { amountOf, parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import {
   LENGTH_CHARACTER,
   LIST_TYPE_CONTRACT_ADDRESS,
@@ -135,8 +135,10 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       this.nextKey = res.data.data.nextKey || null;
       res?.data?.data?.transactions.forEach((trans) => {
         trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-        const tempConvert = trans.amountToken / this.decimalValue;
-        trans.amountToken = tempConvert < 0.000001 ? 0 : tempConvert;
+        trans.amountToken =
+          amountOf(trans.amountToken, this.decimalValue) < 0.000001
+            ? 0
+            : amountOf(trans.amountToken, this.decimalValue);
       });
 
       if (this.dataSource.data.length > 0 && !isReload) {

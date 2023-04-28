@@ -6,6 +6,7 @@ import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { amountOf } from 'src/app/core/utils/common/info-common';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { Globals } from '../../../../../../global/global';
 
@@ -85,8 +86,7 @@ export class TokenHoldersTabComponent implements OnInit {
           this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
           res.data?.resultAsset.forEach((element) => {
             element['value'] = 0;
-            const tempConvert = element['balance'] / this.decimalValue;
-            element['balance'] = tempConvert < 0.000001 ? 0 : tempConvert;
+            element['balance'] = amountOf(element['balance'], this.decimalValue);
           });
 
           if (this.totalQuantity) {

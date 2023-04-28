@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { getAmount, getDataInfo } from 'src/app/global/global';
 import { MEDIA_TYPE, NUMBER_CONVERT } from '../../constants/common.constant';
@@ -116,3 +117,9 @@ export function checkTypeFile(nft: any) {
   }
   return content_type;
 }
+
+export function amountOf(value, decimal) {
+  const newAmount = new BigNumber(value);
+  const powValue = new BigNumber(10).pow(decimal);
+  value = newAmount.dividedBy(powValue).lt(0.000001) ? 0 : newAmount.dividedBy(powValue).toFixed(6);
+  return value;
