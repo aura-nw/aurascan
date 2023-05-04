@@ -123,3 +123,4 @@ export function amountOf(value, decimal) {
   const powValue = new BigNumber(10).pow(decimal);
   value = newAmount.dividedBy(powValue).lt(0.000001) ? 0 : newAmount.dividedBy(powValue).toFixed(6);
   return value;
+}
