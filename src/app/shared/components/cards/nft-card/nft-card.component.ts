@@ -109,6 +109,6 @@ export class NftCardComponent implements OnInit, AfterViewInit {
   }
 
   replaceImgIpfs(value) {
-    return 'https://ipfs.io/' + value.replace('://', '/');
+    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
   }
 }
