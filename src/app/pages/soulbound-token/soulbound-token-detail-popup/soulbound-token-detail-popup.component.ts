@@ -11,6 +11,7 @@ import { ABTActionType } from 'src/app/core/constants/token.enum';
 import { AbtRejectPopupComponent } from 'src/app/pages/soulbound-token/abt-reject-popup/abt-reject-popup.component';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-soulbound-token-detail-popup',
@@ -37,6 +38,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     public translate: TranslateService,
     private dialog: MatDialog,
     private soulboundService: SoulboundService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -100,7 +102,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   }
 
   replaceImgIpfs(value) {
-    return 'https://ipfs.io/' + value.replace('://', '/');
+    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
   }
 
   error(): void {
