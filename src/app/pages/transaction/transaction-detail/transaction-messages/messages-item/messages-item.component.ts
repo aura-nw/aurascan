@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { pipeTypeData } from 'src/app/core/constants/transaction.enum';
 import { Globals } from 'src/app/global/global';
 
@@ -17,7 +18,15 @@ export class MessagesItemComponent implements OnInit {
 
   pipeTypeData = pipeTypeData;
 
-  constructor(public global: Globals) {}
+  constructor(public global: Globals, public router: Router) {}
 
   ngOnInit(): void {}
+
+  executeLink(linkUrl, data) {
+    if (linkUrl.indexOf('http') > -1) {
+      this.router.navigate([linkUrl, data]);
+    } else {
+      window.open(linkUrl, '_blank');
+    }
+  }
 }

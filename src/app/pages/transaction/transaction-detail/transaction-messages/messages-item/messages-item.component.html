@@ -4,12 +4,17 @@
     <ng-container *ngIf="dataLink">
       <ng-container *ngIf="value?.length > 0 && value !== '-'; else noValues">
         <span *ngIf="value === '[do-not-modify]'">{{ value }}</span>
-        <a
-          class="text--primary"
-          [routerLink]="[dataLink?.url || '/account', dataLink?.data || value]"
-          *ngIf="value !== '[do-not-modify]'">
-          {{ dataLink?.data || value || '-' }}
-        </a>
+        <ng-container *ngIf="value !== '[do-not-modify]'">
+          <a
+            *ngIf="dataLink.url.indexOf('http') === -1"
+            class="text--primary"
+            [routerLink]="[dataLink?.url || '/account', dataLink?.data || value]">
+            {{ dataLink?.data || value || '-' }}
+          </a>
+          <a class="text--primary" [href]="dataLink?.url" *ngIf="dataLink.url.indexOf('http') > -1" target="_blank">
+            {{ dataLink?.data || value || '-' }}
+          </a>
+        </ng-container>
       </ng-container>
     </ng-container>
     <ng-container [ngSwitch]="pipeType" *ngIf="!dataLink">

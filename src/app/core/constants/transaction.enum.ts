@@ -23,7 +23,7 @@ export enum TypeTransaction {
   StoreCode = 'Store Code',
   InstantiateContract = 'Instantiate Contract',
   ExecuteContract = 'Execute Contract',
-  ModifyWithdrawAddress = 'Withdraw Address',
+  ModifyWithdrawAddress = 'Set Withdraw Address',
   JoinPool = 'Join pool',
   LockTokens = 'Lock Tokens (Start Farming)',
   JoinSwapExternAmountIn = 'Join Swap Extern Amount In',

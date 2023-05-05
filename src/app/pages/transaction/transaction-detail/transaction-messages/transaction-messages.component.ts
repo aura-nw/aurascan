@@ -35,8 +35,6 @@ export class TransactionMessagesComponent implements OnInit {
   amountCommission = 0;
   commissionAutoClaim = 0;
   dateVesting: string;
-  validatorName = '';
-  validatorNameDes = '';
   listAmountClaim = [];
   objMsgContract: any;
   ibcData: any;
@@ -57,7 +55,6 @@ export class TransactionMessagesComponent implements OnInit {
     TimeOut: 'timeout_packet',
   };
   numberListSend = 5;
-  dataTimeOut = {};
   spendLimitAmount = 0;
   typeGrantAllowance = 'Basic';
   denomIBC = '';
@@ -72,22 +69,21 @@ export class TransactionMessagesComponent implements OnInit {
     MultiSend: 'MultiSend',
   };
   currentIndex = 0;
+  transactionTypeArr = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+
   constructor(
     public global: Globals,
     private datePipe: DatePipe,
-    private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private transactionService: TransactionService,
     private proposalService: ProposalService,
-  ) {
-    console.log(this.listValidator);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.currentIndex = 0;
@@ -172,15 +168,13 @@ export class TransactionMessagesComponent implements OnInit {
       if (this.currentIndex !== index) {
         return;
       }
-      console.log('transactionDetail?.messages', this.transactionDetail?.messages);
       this.currentIndex++;
       let result = [];
 
       const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
-      this.transactionDetailType = typeTrans?.value;
+      this.transactionTypeArr.push(typeTrans?.value || data['@type'].split('.').pop());
       switch (data['@type']) {
         case this.eTransType.Send:
-          console.log(data);
           result.push({ key: 'From Address', value: data?.from_address, link: { url: '/account' } });
           result.push({ key: 'To Address', value: data?.to_address, link: { url: '/account' } });
           result.push({
@@ -212,7 +206,6 @@ export class TransactionMessagesComponent implements OnInit {
           // get amount
           let amount = data.amount?.amount;
           let pipeType = pipeTypeData.BalanceOf;
-          console.log(this.listAmountClaim);
           if (data['@type'] === this.eTransType.GetReward) {
             amount = this.listAmountClaim[index];
             pipeType = pipeTypeData.Number;
@@ -340,7 +333,8 @@ export class TransactionMessagesComponent implements OnInit {
         case this.eTransType.PeriodicVestingAccount:
           result.push({ key: 'From Address', value: data.from_address, link: { url: '/account' } });
           result.push({ key: 'To Address', value: data.to_address, link: { url: '/account' } });
-          result.push({ key: 'Option', value: this.parsingOptionVote(data?.option) });
+          result.push({ key: 'Start Time', value: this.dateVesting });
+          result.push({ key: 'Vesting Periods', value: data.vesting_periods, pipeType: pipeTypeData.Json });
           break;
 
         case this.eTransType.Vesting:
@@ -356,7 +350,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Website',
             value: data.description?.website,
-            link: { url: data.description?.website },
+            link: { url: data.description?.website, target: true },
           });
           result.push({ key: 'Security Contact', value: data.description?.security_contact });
           result.push({ key: 'Identity', value: data.description?.identity });
@@ -419,7 +413,6 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.SubmitProposalTx:
-          console.log(data);
           result.push({
             key: 'Amount',
             value: data.initial_deposit[0].amount,
@@ -526,7 +519,27 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.GetRewardCommission:
-          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators' } });
+          result.push({
+            key: 'Validator Address',
+            value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
+            link: { url: '/validators' },
+          });
+
+          if (this.commissionAutoClaim > 0) {
+            result.push({
+              key: 'Amount',
+              value: this.commissionAutoClaim,
+              denom: this.denom,
+              pipeType: pipeTypeData.Number,
+            });
+          }
+
+          if (this.transactionDetail?.messages[0]['@type'] === this.eTransType.GetReward) {
+            result.push({
+              key: 'header',
+              value: 'Get Commission',
+            });
+          }
           break;
 
         default:
@@ -793,14 +806,6 @@ export class TransactionMessagesComponent implements OnInit {
       return statusObj.value;
     }
     return null;
-  }
-
-  getRewardLength(arr): number {
-    let count = 0;
-    arr.forEach((element) => {
-      if (element.hasOwnProperty('delegator_address')) count++;
-    });
-    return count;
   }
 
   filterIBCType(type) {
