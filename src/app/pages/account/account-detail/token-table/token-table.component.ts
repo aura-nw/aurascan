@@ -8,7 +8,6 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
-import { amountOf } from 'src/app/core/utils/common/info-common';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
@@ -87,9 +86,6 @@ export class TokenTableComponent implements OnChanges {
               if (data.change !== '-' && data.change < 0) {
                 data.isValueUp = false;
                 data.change = Number(data.change.toString().substring(1));
-              }
-              if (data.contract_address !== '-') {
-                data.balance = amountOf(data.balance, data.decimals);
               }
             }
             return data;

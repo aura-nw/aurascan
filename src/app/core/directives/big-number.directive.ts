@@ -1,6 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import { MaskPipe } from 'ngx-mask';
+import { Globals } from 'src/app/global/global';
 @Directive({
   selector: 'div[appBigNumber]',
   providers: [MaskPipe],
@@ -9,9 +10,10 @@ export class BigNumberDirective implements AfterViewInit {
   @Input() decimal: number = 6;
   @Input() appBigNumber: any;
   @Input() tokenPrice: any;
+  @Input() auraValue: boolean = false;
 
   element: HTMLElement;
-  constructor(private mask: MaskPipe, public elRef: ElementRef) {
+  constructor(private mask: MaskPipe, public elRef: ElementRef, public global: Globals) {
     this.element = elRef.nativeElement;
   }
 
@@ -24,8 +26,14 @@ export class BigNumberDirective implements AfterViewInit {
     const powValue = new BigNumber(10).pow(this.decimal);
     let amountValue = newAmount.dividedBy(powValue);
 
+    //value
     if (this.tokenPrice) {
       amountValue = amountValue.multipliedBy(this.tokenPrice);
+    }
+
+    // price with Aura
+    if (this.auraValue) {
+      amountValue = amountValue.dividedBy(this.global.price.aura);
     }
 
     if (amountValue.lt(0.000001)) {

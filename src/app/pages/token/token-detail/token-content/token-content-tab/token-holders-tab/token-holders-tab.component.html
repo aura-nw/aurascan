@@ -98,7 +98,6 @@
                       </ng-container>
                     </ng-container>
                     <ng-container *ngSwitchCase="'value'">
-                      <!-- ${{ data['balance'] * tokenDetail?.price || 0 | number : global.formatNumber2Decimal }} -->
                       <div [appBigNumber]=" data['balance']" [decimal]="decimalValue" [tokenPrice]="tokenDetail?.price"></div>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
