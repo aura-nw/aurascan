@@ -116,3 +116,22 @@ export function checkTypeFile(nft: any) {
   }
   return content_type;
 }
+
+export function checkEnvQuery(envValue){
+  let envDB;
+  switch (envValue) {
+    case 'serenity':
+      envDB = 'serenity';
+      break;
+    case 'euphoria':
+      envDB = 'euphoria';
+      break;
+    case 'mainnet':
+      envDB = 'xstaxy';
+      break;
+    default:
+      envDB = 'auratestnet';
+      break;
+  }
+  return envDB;
+}

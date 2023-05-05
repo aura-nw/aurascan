@@ -249,10 +249,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getListBlock(): void {
-    this.blockService.blocksIndexer(this.PAGE_SIZE).subscribe((res) => {
-      const { code, data } = res;
-      if (code === 200) {
-        const blocks = convertDataBlock(data);
+    this.blockService.getListBlock(this.PAGE_SIZE).subscribe((res) => {
+      if (res?.block?.length > 0) {
+        const blocks = convertDataBlock(res);
         this.dataSourceBlock = new MatTableDataSource(blocks);
       }
     });

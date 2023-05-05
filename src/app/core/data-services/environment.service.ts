@@ -15,6 +15,7 @@ export interface IConfiguration {
   coins: any;
   env: string;
   indexerUri: string;
+  graphUrl: string;
   timeInterval: number;
   ipfsDomain: string;
 }
@@ -35,6 +36,7 @@ export class EnvironmentService {
     indexerUri: '',
     timeInterval: null,
     ipfsDomain: '',
+    graphUrl:'',
   });
 
   get configValue(): IConfiguration {
@@ -63,6 +65,7 @@ export class EnvironmentService {
           coins: config['coins'],
           env: config['env'],
           indexerUri: config['urlIndexer'],
+          graphUrl: config['graphUrl'],
           timeInterval: config['timeInterval'] || 4000,
           ipfsDomain: config['ipfsDomain']
         };
