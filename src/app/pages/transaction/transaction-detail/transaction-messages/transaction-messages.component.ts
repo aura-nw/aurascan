@@ -6,7 +6,6 @@ import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
 import { pipeTypeData, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
-import { ValidatorService } from '../../../../core/services/validator.service';
 import { getAmount, Globals } from '../../../../global/global';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -14,7 +13,6 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 import * as _ from 'lodash';
 import { formatWithSchema } from '../../../../core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
-import { sha256 } from 'js-sha256';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -99,20 +97,11 @@ export class TransactionMessagesComponent implements OnInit {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.start_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
     } else if (
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
     ) {
       this.checkGetReward();
-    } else if (
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract2
-    ) {
-      this.displayMsgRaw();
     } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MsgGrantAllowance) {
       let type;
       if (this.transactionDetail?.messages[0]?.allowance?.allowance?.allowance) {
@@ -304,6 +293,7 @@ export class TransactionMessagesComponent implements OnInit {
 
         case this.eTransType.InstantiateContract:
         case this.eTransType.InstantiateContract2:
+          this.displayMsgRaw();
           result.push({
             key: 'Contract',
             value: this.getDataJson('_contract_address'),
@@ -623,15 +613,6 @@ export class TransactionMessagesComponent implements OnInit {
     } catch (e) {}
   }
 
-  getRawLog() {
-    try {
-      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
-      return jsonData;
-    } catch (e) {
-      return null;
-    }
-  }
-
   displayMsgRaw(): void {
     this.objMsgContract = _.get(this.transactionDetail.tx.tx.body, 'messages').map((element) => {
       let msg = _.get(element, 'msg');
@@ -858,9 +839,5 @@ export class TransactionMessagesComponent implements OnInit {
       value = temp;
     }
     return value;
-  }
-
-  replaceDenomValue(value) {
-    return value?.replace(this.coinMinimalDenom, '');
   }
 }
