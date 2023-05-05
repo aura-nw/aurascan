@@ -105,7 +105,7 @@
           <div class="row">
             <div class="col-6">Website</div>
             <div class="col-6 text-end text-lg-start">
-              <a class="text--primary cursor-pointer" href="{{ currentValidatorDetail?.website }}">
+              <a class="text--primary cursor-pointer" href="{{ currentValidatorDetail?.website }}" target="_blank">
                 {{ currentValidatorDetail?.website }}
               </a>
             </div>
@@ -485,7 +485,7 @@
                         {
                           label: 'Amount',
                           info:
-                            (!data.amount || data.amount === 0 || data.amount === 'More')
+                            !data.amount || data.amount === 0 || data.amount === 'More'
                               ? data.amount.toString()
                               : data.isStakeMode
                               ? '<span class=text--info>' + '+ ' + (data.amount | mask : 'separator.6') + '</span>'
