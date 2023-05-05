@@ -8,7 +8,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
-import { amountOf } from 'src/app/core/utils/common/info-common';
 
 @Component({
   selector: 'app-token-content',
@@ -154,10 +153,7 @@ export class TokenContentComponent implements OnInit {
       if (this.tokenDetail.isNFTContract) {
         this.infoSearch['balance'] = data?.tokens?.length;
       } else {
-        this.infoSearch['balance'] =
-          amountOf(data?.balance, this.tokenDetail.decimals) < 0.000001
-            ? 0
-            : amountOf(data?.balance, this.tokenDetail.decimals);
+        this.infoSearch['balance'] = data?.balance;
       }
     } catch (error) {}
   }

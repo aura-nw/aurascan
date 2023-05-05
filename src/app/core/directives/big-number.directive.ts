@@ -3,12 +3,12 @@ import BigNumber from 'bignumber.js';
 import { MaskPipe } from 'ngx-mask';
 import { Globals } from 'src/app/global/global';
 @Directive({
-  selector: 'div[appBigNumber]',
+  selector: 'span[appBigNumber],div[appBigNumber]',
   providers: [MaskPipe],
 })
 export class BigNumberDirective implements AfterViewInit {
   @Input() decimal: number = 6;
-  @Input() appBigNumber: any;
+  @Input() appBigNumber: string;
   @Input() tokenPrice: any;
   @Input() auraValue: boolean = false;
 

@@ -110,14 +110,13 @@
                 <span
                   class="text--gray-5"
                   *ngIf="global.price.aura && element.price > 0 && coinMiniDenom !== element.denom">
-                  (
-                  <div
+                  (<div
                     class="d-inline"
                     *ngIf="element.contract_address !== '-'"
                     [appBigNumber]="element.price"
                     [auraValue]="true"
                     [decimal]="0"></div>
-                  <span> {{ denom }} </span>)
+                  <span> {{ denom }}</span>)
                 </span>
               </td>
             </ng-container>
@@ -153,15 +152,14 @@
                 <span
                   class="text--gray-5"
                   *ngIf="global.price.aura && element.price > 0 && coinMiniDenom !== element.denom">
-                  (
-                  <div
+                  (<div
                     class="d-inline"
                     *ngIf="element.contract_address !== '-'"
                     [appBigNumber]="element.balance"
                     [tokenPrice]="element.price"
                     [auraValue]="true"
                     [decimal]="element.decimals"></div>
-                  <span> {{ denom }} </span>)
+                  <span> {{ denom }}</span>)
                 </span>
               </td>
             </ng-container>
