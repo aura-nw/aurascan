@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import { CodeTransaction } from '../../../core/constants/transaction.enum';
+import { CodeTransaction, TRANSACTION_TYPE_ENUM } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
@@ -55,7 +55,7 @@ export class TransactionDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private clipboard: Clipboard,
-    private validatorService: ValidatorService
+    private validatorService: ValidatorService,
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +63,6 @@ export class TransactionDetailComponent implements OnInit {
     if (!this.txHash || this.txHash === 'null') {
       this.router.navigate(['/']);
     }
-    this.getListValidator();
     this.getDetail();
   }
 
@@ -91,6 +90,17 @@ export class TransactionDetailComponent implements OnInit {
                 this.errorMessage,
                 this.transaction.code,
               );
+            }
+
+            if (
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.Delegate ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.GetReward ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
+            ) {
+              this.getListValidator();
             }
           } else {
             setTimeout(() => {
