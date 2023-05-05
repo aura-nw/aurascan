@@ -185,7 +185,13 @@
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
                           <div [style.min-width]="'120px'" class="text-end">
-                            {{ data[template.matColumnDef] | number }}
+                            <span
+                              class="cursor-pointer"
+                              matTooltipPosition="above"
+                              matTooltip="{{ data[template.matColumnDef] }}"
+                              #tooltip="matTooltip"
+                              [appBigNumber]="data[template.matColumnDef]"
+                              [decimal]="0"></span>
                           </div>
                           <div
                             *ngIf="data['status'] === statusValidator.Active"
