@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxMaskModule } from 'ngx-mask';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { MaterialModule } from '../../../app.module';
@@ -44,6 +45,7 @@ import { TokenTableComponent } from './token-table/token-table.component';
     NftCardModule,
     NgxMaskModule,
     SoulboundFeatureTokensModule,
+    CommonDirectiveModule
   ],
   providers: [TransactionService, AccountService, DecimalPipe],
 })
