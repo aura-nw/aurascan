@@ -1,17 +1,17 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import { CodeTransaction, TRANSACTION_TYPE_ENUM } from '../../../core/constants/transaction.enum';
+import { CodeTransaction } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { convertDataTransaction, Globals } from '../../../global/global';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { ValidatorService } from 'src/app/core/services/validator.service';
+import { Globals, convertDataTransaction } from '../../../global/global';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -44,7 +44,6 @@ export class TransactionDetailComponent implements OnInit {
   loading = true;
   isReload = false;
   listValidator = [];
-  isGetListValidator = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -93,17 +92,7 @@ export class TransactionDetailComponent implements OnInit {
               );
             }
 
-            if (
-              this.transaction?.type === TRANSACTION_TYPE_ENUM.Delegate ||
-              this.transaction?.type === TRANSACTION_TYPE_ENUM.GetReward ||
-              this.transaction?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
-              this.transaction?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
-              this.transaction?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
-              this.transaction?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
-            ) {
-              this.isGetListValidator = true;
-              this.getListValidator();
-            }
+            this.getListValidator();
           } else {
             setTimeout(() => {
               this.getDetail();
