@@ -57,6 +57,8 @@ export class SoulboundAccountTokenListComponent implements OnInit {
       if (wallet) {
         if (wallet?.bech32Address === this.userAddress) {
           this.TABS = this.TAB_ALL;
+        } else {
+          this.router.navigate(['/']);
         }
       }
     });
