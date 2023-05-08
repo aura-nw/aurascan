@@ -114,7 +114,8 @@
     <div class="card text--white" *ngIf="!isRawData && transaction?.messages">
       <app-transaction-messages
         [transactionDetail]="transaction"
-        [listValidator]="listValidator || []">
+        [listValidator]="listValidator || []"
+        *ngIf="!isGetListValidator || (isGetListValidator && listValidator?.length > 0)">
       </app-transaction-messages>
     </div>
 

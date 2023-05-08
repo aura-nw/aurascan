@@ -162,6 +162,7 @@ export class TransactionMessagesComponent implements OnInit {
 
       const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
       this.transactionTypeArr.push(typeTrans?.value || data['@type'].split('.').pop());
+      const denom = data?.amount?.length > 0 ? data?.amount[0]?.denom : this.denom;
       switch (data['@type']) {
         case this.eTransType.Send:
           result.push({ key: 'From Address', value: data?.from_address, link: { url: '/account' } });
@@ -169,7 +170,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: data?.amount[0]?.amount,
-            denom: this.commonService.mappingNameIBC(data?.amount[0]?.denom),
+            denom: this.commonService.mappingNameIBC(denom),
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -240,14 +241,14 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: data.amount?.amount,
-            denom: this.commonService.mappingNameIBC(data?.amount[0]?.denom),
+            denom: this.commonService.mappingNameIBC(denom),
             pipeType: pipeTypeData.BalanceOf,
           });
           if (this.amountClaim > 0) {
             result.push({
               key: 'Auto Claim Reward',
               value: this.amountClaim,
-              denom: this.commonService.mappingNameIBC(data?.amount[0]?.denom),
+              denom: this.commonService.mappingNameIBC(denom),
               pipeType: pipeTypeData.Number,
             });
           }
@@ -481,7 +482,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: data?.amount[0]?.amount,
-            denom: this.commonService.mappingNameIBC(data?.amount[0]?.denom),
+            denom: this.commonService.mappingNameIBC(denom),
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -492,7 +493,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: data?.amount[0]?.amount,
-            denom: this.commonService.mappingNameIBC(data?.amount[0]?.denom),
+            denom: this.commonService.mappingNameIBC(denom),
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
