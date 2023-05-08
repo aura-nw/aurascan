@@ -115,7 +115,7 @@
       <app-transaction-messages
         [transactionDetail]="transaction"
         [listValidator]="listValidator || []"
-        *ngIf="!isGetListValidator || (isGetListValidator && listValidator?.length > 0)">
+        *ngIf="listValidator?.length > 0">
       </app-transaction-messages>
     </div>
 
