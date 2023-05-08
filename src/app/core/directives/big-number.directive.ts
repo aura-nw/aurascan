@@ -2,8 +2,7 @@ import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import { MaskPipe } from 'ngx-mask';
 import { Globals } from 'src/app/global/global';
-import { IntlFormat } from '../utils/common/parsing';
-import { log } from 'console';
+
 @Directive({
   selector: 'span[appBigNumber],div[appBigNumber]',
   providers: [MaskPipe],
