@@ -14,8 +14,3 @@ export function parseLabel(label: number) {
   );
 }
 
-export function IntlFormat(num: number | string, decimal: number) {
-  return Intl.NumberFormat('en', { maximumFractionDigits: decimal }).format(
-    Number(num)
-  );
-}
