@@ -185,7 +185,13 @@
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
                           <div [style.min-width]="'120px'" class="text-end">
-                            {{ data[template.matColumnDef] | number }}
+                            <span
+                              class="cursor-pointer"
+                              matTooltipPosition="above"
+                              matTooltip="{{ data[template.matColumnDef] | number }}"
+                              #tooltip="matTooltip"
+                              [appBigNumber]="data[template.matColumnDef]"
+                              [decimal]="0"></span>
                           </div>
                           <div
                             *ngIf="data['status'] === statusValidator.Active"
@@ -332,7 +338,7 @@
                         <ng-container [ngSwitch]="template['headerCellDef']">
                           <ng-container *ngSwitchCase="'Voting Power'">
                             <h5 class="mb-1 text--gray-1">
-                              {{ validator.power | number }}
+                              <span [appBigNumber]="validator[template.matColumnDef]" [decimal]="0"></span>
                             </h5>
                             <div *ngIf="validator['status'] === statusValidator.Active">
                               {{ validator['percent_power'] + '%' }}
