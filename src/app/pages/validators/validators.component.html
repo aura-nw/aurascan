@@ -188,7 +188,7 @@
                             <span
                               class="cursor-pointer"
                               matTooltipPosition="above"
-                              matTooltip="{{ data[template.matColumnDef] }}"
+                              matTooltip="{{ data[template.matColumnDef] | number }}"
                               #tooltip="matTooltip"
                               [appBigNumber]="data[template.matColumnDef]"
                               [decimal]="0"></span>
