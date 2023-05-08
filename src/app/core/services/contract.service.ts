@@ -54,9 +54,9 @@ export class ContractService extends CommonService {
     });
   }
 
-  getContractDetail(contractAddress): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`);
-  }
+  // getContractDetail(contractAddress): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`);
+  // }
 
   verifyCodeID(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contracts/verify-code-id`, data);

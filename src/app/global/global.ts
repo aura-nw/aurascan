@@ -275,6 +275,67 @@ export function convertDataTransaction(data, coinInfo) {
   return txs;
 }
 
+export function convertDataTransactionV2(data, coinInfo) {
+  const txs = _.get(data, 'transaction').map((element) => {
+    console.log(element);
+    if (!element['data']['body']) {
+      element['data']['body'] = element['data']['tx']['body'];
+    }
+    const code = _.get(element, 'code');
+    const tx_hash = _.get(element, 'hash');
+    const messages = _.get(element, 'data.body.messages');
+
+    let _type = _.get(element, 'data.body.messages[0].@type');
+    let lstType = _.get(element, 'data.body.messages');
+    let denom = coinInfo.coinDenom;
+
+    // check send token ibc same chain
+    if (_type === TRANSACTION_TYPE_ENUM.Send && messages[0].amount[0].denom !== denom) {
+      denom = messages[0].amount[0].denom;
+    }
+
+    if (lstType?.length > 1) {
+      lstType.forEach((type) => {
+        if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && type['@type'].indexOf('ibc') > -1) {
+          _type = type['@type'];
+          try {
+            let dataEncode = atob(type?.packet?.data);
+            const data = JSON.parse(dataEncode);
+            denom = data.denom;
+          } catch (e) {
+            denom = coinInfo.coinDenom;
+          }
+          return;
+        }
+      });
+    }
+    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value || 'Execute';
+
+    const status =
+      _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+
+    const _amount = getAmount(
+      _.get(element, 'data.body.messages'),
+      _type,
+      _.get(element, 'data.body.raw_log'),
+      coinInfo.coinMinimalDenom,
+    );
+
+    const amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
+
+    const fee = balanceOf(_.get(element, 'data.auth_info.fee.amount[0].amount') || 0, coinInfo.coinDecimals).toFixed(
+      coinInfo.coinDecimals,
+    );
+    const height = _.get(element, 'height');
+    const timestamp = _.get(element, 'timestamp');
+    const gas_used = _.get(element, 'gas_used');
+    const gas_wanted = _.get(element, 'gas_wanted');
+
+    return { code, tx_hash, type, status, amount, fee, height, timestamp, gas_used, gas_wanted, denom, messages };
+  });
+  return txs;
+}
+
 export function convertDataBlock(data) {
   const block = _.get(data, 'block').map((element) => {
     const height = _.get(element, 'height');
