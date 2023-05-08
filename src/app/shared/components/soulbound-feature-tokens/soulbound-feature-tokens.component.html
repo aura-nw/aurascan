@@ -43,4 +43,6 @@
       >{{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}</span
     >
   </a>
+  <!-- Placeholder space for flex position -->
+  <div class="button button--sm mt-md-3 mt-lg-0 mt-xl-3" *ngIf="wallet !== accountAddress || !displayManage || isLoading"></div>
 </div>

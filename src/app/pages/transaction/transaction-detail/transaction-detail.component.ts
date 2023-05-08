@@ -44,6 +44,7 @@ export class TransactionDetailComponent implements OnInit {
   loading = true;
   isReload = false;
   listValidator = [];
+  isGetListValidator = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -100,6 +101,7 @@ export class TransactionDetailComponent implements OnInit {
               this.transaction?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
               this.transaction?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
             ) {
+              this.isGetListValidator = true;
               this.getListValidator();
             }
           } else {
