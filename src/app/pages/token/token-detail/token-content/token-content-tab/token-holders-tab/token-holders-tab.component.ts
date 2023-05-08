@@ -85,8 +85,6 @@ export class TokenHoldersTabComponent implements OnInit {
           this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
           res.data?.resultAsset.forEach((element) => {
             element['value'] = 0;
-            const tempConvert = element['balance'] / this.decimalValue;
-            element['balance'] = tempConvert < 0.000001 ? 0 : tempConvert;
           });
 
           if (this.totalQuantity) {

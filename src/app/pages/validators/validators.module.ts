@@ -7,7 +7,9 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskModule } from 'ngx-mask';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
+import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { AccountService } from '../../../app/core/services/account.service';
@@ -24,7 +26,6 @@ import { DelegateItemComponent } from './validators-detail/delegate-item/delegat
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
 import { ValidatorsComponent } from './validators.component';
-import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulboun
     MatTooltipModule,
     LoadingImageModule,
     NgbNavModule,
-    SoulboundFeatureTokensModule
+    SoulboundFeatureTokensModule,
+    CommonDirectiveModule
   ],
   providers: [CommonService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe],
 })
