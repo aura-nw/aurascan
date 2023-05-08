@@ -2,6 +2,7 @@ import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import { MaskPipe } from 'ngx-mask';
 import { Globals } from 'src/app/global/global';
+import { IntlFormat } from '../utils/common/parsing';
 @Directive({
   selector: 'span[appBigNumber],div[appBigNumber]',
   providers: [MaskPipe],
@@ -18,10 +19,10 @@ export class BigNumberDirective implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.calc();
+    this.convertNumber();
   }
 
-  calc() {
+  convertNumber() {
     const newAmount = new BigNumber(this.appBigNumber);
     const powValue = new BigNumber(10).pow(this.decimal);
     let amountValue = newAmount.dividedBy(powValue);
@@ -62,20 +63,22 @@ export class BigNumberDirective implements AfterViewInit {
       for (let i = 0; i < powers.length; i++) {
         let reduced = amountValue.dividedBy(powers[i].value);
         if (reduced.gte(1)) {
-          abs = reduced.toFixed(2);
+          abs = reduced.toString();
           key = powers[i].key;
           break;
         }
       }
 
       if (key === '') {
-        this.element.textContent =
-          (this.tokenPrice ? '$' : '') + this.mask.transform(amountValue.toString(), 'separator.6');
+        if (this.tokenPrice) {
+          this.element.textContent = '$' + IntlFormat(amountValue.toString(), 2);
+        } else {
+          this.element.textContent = IntlFormat(amountValue.toString(), 6);
+        }
         return;
       }
 
-      this.element.textContent =
-        (this.tokenPrice ? '$' : '') + this.mask.transform(abs.toString(), 'separator.2') + key;
+      this.element.textContent = (this.tokenPrice ? '$' : '') + IntlFormat(abs.toString(), 2) + key;
       return;
     }
   }
