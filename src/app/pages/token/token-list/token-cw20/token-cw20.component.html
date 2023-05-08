@@ -82,7 +82,11 @@
                     BTC
                   </div>
                   <div class="body-02 fw-normal text--gray-5" *ngIf="global.price.aura">
-                    {{ element.price / global.price.aura || 0 | mask : 'separator.6' }} {{ denom }}
+                    <span
+                    [appBigNumber]="element.price"
+                    [auraValue]="true"
+                    [decimal]="0"></span> {{ denom }}
+                    <!-- {{ element.price / global.price.aura || 0 | mask : 'separator.6' }} {{ denom }} -->
                   </div>
                 </ng-container>
               </td>
@@ -107,7 +111,7 @@
               <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Volume (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.volume; else noData">
-                  $<span [appBigNumber]="element.volume" [decimal]="0"></span>
+                  ${{ element.volume | number : global.formatNumber2Decimal }}
                 </ng-container>
               </td>
             </ng-container>
@@ -117,7 +121,7 @@
               <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Circulating Market Cap</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.circulating_market_cap >= 0; else noData">
-                  $<span [appBigNumber]="element.circulating_market_cap" [decimal]="0"></span>
+                  ${{ element.circulating_market_cap | number : global.formatNumber2Decimal }}
                 </ng-container>
               </td>
             </ng-container>
@@ -127,7 +131,7 @@
               <th mat-header-cell *matHeaderCellDef class="">On-Chain Market Cap</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.onChainMarketCap >= 0; else noData">
-                  $<span [appBigNumber]="element.onChainMarketCap" [decimal]="0"></span>
+                  ${{ element.onChainMarketCap | number : global.formatNumber2Decimal }}
                 </ng-container>
               </td>
             </ng-container>

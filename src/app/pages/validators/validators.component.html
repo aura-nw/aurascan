@@ -338,7 +338,7 @@
                         <ng-container [ngSwitch]="template['headerCellDef']">
                           <ng-container *ngSwitchCase="'Voting Power'">
                             <h5 class="mb-1 text--gray-1">
-                              {{ validator.power | number }}
+                              <span [appBigNumber]="validator[template.matColumnDef]" [decimal]="0"></span>
                             </h5>
                             <div *ngIf="validator['status'] === statusValidator.Active">
                               {{ validator['percent_power'] + '%' }}
