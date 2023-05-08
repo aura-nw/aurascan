@@ -5,12 +5,13 @@ import * as _ from 'lodash';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import { CodeTransaction } from '../../../core/constants/transaction.enum';
+import { CodeTransaction, TRANSACTION_TYPE_ENUM } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { convertDataTransaction, convertDataTransactionV2, Globals } from '../../../global/global';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -42,6 +43,8 @@ export class TransactionDetailComponent implements OnInit {
   env = this.environmentService.configValue.env;
   loading = true;
   isReload = false;
+  listValidator = [];
+  isGetListValidator = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,6 +56,7 @@ export class TransactionDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private clipboard: Clipboard,
+    private validatorService: ValidatorService,
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +93,18 @@ export class TransactionDetailComponent implements OnInit {
                 this.transaction.code,
               );
             }
+
+            if (
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.Delegate ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.GetReward ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
+              this.transaction?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
+            ) {
+              this.isGetListValidator = true;
+              this.getListValidator();
+            }
           } else {
             setTimeout(() => {
               this.getDetail();
@@ -104,6 +120,14 @@ export class TransactionDetailComponent implements OnInit {
     } else {
       this.loading = false;
     }
+  }
+
+  getListValidator(): void {
+    this.validatorService.validators().subscribe((res) => {
+      if (res.data?.length > 0) {
+        this.listValidator = res.data;
+      }
+    });
   }
 
   changeType(type: boolean): void {

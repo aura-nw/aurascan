@@ -37,6 +37,7 @@ import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component
 import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { TokenRoutingModule } from './token-routing.module';
     ModelViewModule,
     NftCardModule,
     AudioPlayerModule,
-    ContractsModule
+    ContractsModule,
+    CommonDirectiveModule
   ],
   providers: [TokenService, AccountService],
 })

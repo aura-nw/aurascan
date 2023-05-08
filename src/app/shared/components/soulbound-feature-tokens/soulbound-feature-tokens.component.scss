@@ -73,3 +73,12 @@
     padding: 4px 8px;
   }
 }
+@media (min-width: 991.98px) {
+  .sbt-contain {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    min-height: 162px;
+    align-items: end;
+  }
+}
