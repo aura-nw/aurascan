@@ -62,15 +62,18 @@ export class BigNumberDirective implements AfterViewInit {
       for (let i = 0; i < powers.length; i++) {
         let reduced = amountValue.dividedBy(powers[i].value);
         if (reduced.gte(1)) {
-          abs = reduced.toFixed(2)
+          abs = reduced.toFixed(2);
           key = powers[i].key;
           break;
         }
       }
 
       if (key === '') {
-        this.element.textContent =
-          (this.tokenPrice ? '$' : '') + this.mask.transform(amountValue.toString(), 'separator.6');
+        if (this.tokenPrice) {
+          this.element.textContent = '$' + this.mask.transform(amountValue.toString(), 'separator.2');
+        } else {
+          this.element.textContent = this.mask.transform(amountValue.toString(), 'separator.6');
+        }
         return;
       }
 
