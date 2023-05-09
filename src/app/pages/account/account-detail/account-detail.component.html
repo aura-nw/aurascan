@@ -58,7 +58,9 @@
             </div>
           </div>
         </div>
-        <div class="divider divider-horizontal mt-6 d-lg-none" *ngIf="totalSBT === 0 && userAddress === currentAddress"></div>
+        <div
+          class="divider divider-horizontal mt-6 d-lg-none"
+          *ngIf="totalSBT === 0 && userAddress === currentAddress"></div>
         <div class="mt-6 mt-lg-0 box-manage-abt col {{ totalSBT > 0 ? 'soulbound-feature-tokens' : '' }}">
           <app-soulbound-feature-tokens
             [extend]="true"
@@ -149,10 +151,11 @@
                               </a>
                               <div *ngSwitchCase="'type'">
                                 <div class="aura-status">
-                                  <div class="status cursor-pointer"
-                                       [matTooltipClass]="'transaction-type-tooltip'"
-                                       matTooltip="{{ data[template.matColumnDef] }}"
-                                       [matTooltipPosition]="'above'">
+                                  <div
+                                    class="status cursor-pointer"
+                                    [matTooltipClass]="'transaction-type-tooltip'"
+                                    matTooltip="{{ data[template.matColumnDef] }}"
+                                    [matTooltipPosition]="'above'">
                                     {{ data[template.matColumnDef] | stringEllipsis : 11 }}
                                   </div>
                                 </div>
@@ -332,9 +335,10 @@
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-3">
                     <span class="h2 h3-mob mb-0 text--gray-1">{{ denom }}</span>
-                    <span class="h5 h6-mob mb-0 text--gray-1">{{
-                      +currentAccountDetail?.total | mask : 'separator.6'
-                    }}</span>
+                    <span
+                      class="h5 h6-mob mb-0 text--gray-1"
+                      [appBigNumber]="currentAccountDetail?.total"
+                      [decimal]="0"></span>
                   </div>
                   <ng-container *ngFor="let item of chartCustomOptions; let last = last">
                     <div
@@ -343,9 +347,10 @@
                         <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
                         <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
                       </div>
-                      <span class="text--gray-1 body body-01-mob fw-500 fw-normal-mob">{{
-                        +item.amount | mask : 'separator.6'
-                      }}</span>
+                      <span
+                        class="text--gray-1 body body-01-mob fw-500 fw-normal-mob"
+                        [appBigNumber]="item.amount"
+                        [decimal]="0"></span>
                     </div>
                   </ng-container>
                 </div>
