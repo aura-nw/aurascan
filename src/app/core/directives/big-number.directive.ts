@@ -64,9 +64,9 @@ export class BigNumberDirective implements AfterViewInit {
       ];
 
       for (let i = 0; i < powers.length; i++) {
-        let reduced = amountValue.dividedBy(powers[i].value);
+        let reduced = amountValue.dividedBy(powers[i].value).precision(3);
         if (reduced.gte(1)) {
-          abs = reduced.precision(3).toFixed(2, 1);
+          abs = reduced.toFixed(2, 1);
           key = powers[i].key;
           break;
         }
