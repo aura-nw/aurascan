@@ -2,6 +2,7 @@ import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import { MaskPipe } from 'ngx-mask';
 import { Globals } from 'src/app/global/global';
+import { IntlFormat } from '../utils/common/parsing';
 @Directive({
   selector: 'span[appBigNumber],div[appBigNumber]',
   providers: [MaskPipe],
@@ -74,15 +75,15 @@ export class BigNumberDirective implements AfterViewInit {
       }
 
       if (key === '') {
-        if (this.tokenPrice) {
-          this.element.textContent = '$' + this.mask.transform(amountValue.toString(), 'separator.2');
+        if (this.tokenPrice && this.auraValue !== true) {
+          this.element.textContent = '$' + IntlFormat(amountValue.toString(), 2);
         } else {
-          this.element.textContent = this.mask.transform(amountValue.toString(), 'separator.6');
+          this.element.textContent = IntlFormat(amountValue.toString(), 6);
         }
         return;
       }
 
-      this.element.textContent = (this.tokenPrice ? '$' : '') + this.mask.transform(abs, 'separator.2') + key;
+      this.element.textContent = (this.tokenPrice && this.auraValue !== true ? '$' : '') + this.mask.transform(abs, 'separator.2') + key;
       return;
     }
   }
