@@ -47,7 +47,7 @@ export class BigNumberDirective implements AfterViewInit {
       return;
     } else {
       const powNum = new BigNumber(10).pow(15);
-      if (amountValue.gte(powNum)) {
+      if (amountValue.gt(powNum)) {
         if (!this.tokenPrice) {
           this.element.textContent = '> 1,000T';
         } else {
