@@ -61,13 +61,12 @@ export class BigNumberDirective implements AfterViewInit {
         { key: 'T', value: new BigNumber(10).pow(12) },
         { key: 'B', value: new BigNumber(10).pow(9) },
         { key: 'M', value: new BigNumber(10).pow(6) },
-        { key: 'K', value: new BigNumber(10).pow(3) },
       ];
 
       for (let i = 0; i < powers.length; i++) {
         let reduced = amountValue.dividedBy(powers[i].value);
         if (reduced.gte(1)) {
-          abs = reduced.toFixed(2, 1);
+          abs = reduced.precision(3).toFixed(2, 1);
           key = powers[i].key;
           break;
         }
