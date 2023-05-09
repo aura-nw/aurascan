@@ -6,7 +6,6 @@ import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
 import { pipeTypeData, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
-import { ValidatorService } from '../../../../core/services/validator.service';
 import { getAmount, Globals } from '../../../../global/global';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -23,6 +22,7 @@ import { ProposalService } from 'src/app/core/services/proposal.service';
 })
 export class TransactionMessagesComponent implements OnInit {
   @Input() transactionDetail: any;
+  @Input() listValidator: any;
 
   typeTransaction = TYPE_TRANSACTION;
   voteConstant = PROPOSAL_VOTE;
@@ -33,9 +33,6 @@ export class TransactionMessagesComponent implements OnInit {
   amountCommission = 0;
   commissionAutoClaim = 0;
   dateVesting: string;
-  validatorName = '';
-  validatorNameDes = '';
-  listValidator: any[];
   listAmountClaim = [];
   objMsgContract: any;
   ibcData: any;
@@ -56,7 +53,6 @@ export class TransactionMessagesComponent implements OnInit {
     TimeOut: 'timeout_packet',
   };
   numberListSend = 5;
-  dataTimeOut = {};
   spendLimitAmount = 0;
   typeGrantAllowance = 'Basic';
   denomIBC = '';
@@ -65,13 +61,21 @@ export class TransactionMessagesComponent implements OnInit {
   listIBCProgress = [];
   isTransactionTypeDefault = true;
 
+  currentData = [];
+  specialCase = {
+    ByteCode: 'ByteCode',
+    MultiSend: 'MultiSend',
+  };
+  currentIndex = 0;
+  transactionTypeArr = [];
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+
   constructor(
     public global: Globals,
     private datePipe: DatePipe,
-    private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     public commonService: CommonService,
@@ -80,6 +84,7 @@ export class TransactionMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.currentIndex = 0;
     // check if contract type not belongTo TypeTransaction enum
     if (Object.values(TRANSACTION_TYPE_ENUM).includes(this.transactionDetail?.type)) {
       this.isTransactionTypeDefault = false;
@@ -92,21 +97,11 @@ export class TransactionMessagesComponent implements OnInit {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.start_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
     } else if (
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
     ) {
-      this.getListValidator();
       this.checkGetReward();
-    } else if (
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract2
-    ) {
-      this.displayMsgRaw();
     } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MsgGrantAllowance) {
       let type;
       if (this.transactionDetail?.messages[0]?.allowance?.allowance?.allowance) {
@@ -153,42 +148,401 @@ export class TransactionMessagesComponent implements OnInit {
     this.transactionDetailType = typeTrans?.value;
   }
 
-  getListValidator(): void {
-    this.validatorService.validators().subscribe(
-      (res) => {
-        if (res.data?.length > 0) {
-          this.listValidator = res.data;
-          if (this.transactionDetail) {
-            const { type, messages } = this.transactionDetail;
+  displayTitleTX() {
+    return this.transactionDetail?.type.split('.').pop();
+  }
 
-            if (type === TRANSACTION_TYPE_ENUM.Redelegate) {
-              const validatorSrcAddress = this.listValidator.find(
-                (f) => f.operator_address === messages[0]?.validator_src_address,
-              );
-              this.validatorName = validatorSrcAddress?.title || '';
+  checkTypeMessage() {
+    this.transactionDetail?.messages.forEach((data, index) => {
+      if (this.currentIndex !== index) {
+        return;
+      }
+      this.currentIndex++;
+      let result = [];
 
-              const validatorDstAddress = this.listValidator.find(
-                (f) => f.operator_address === messages[0]?.validator_dst_address,
-              );
-              this.validatorNameDes = validatorDstAddress?.title || '';
-            }
+      const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
+      this.transactionTypeArr.push(typeTrans?.value || data['@type'].split('.').pop());
+      const denom = data?.amount?.length > 0 ? data?.amount[0]?.denom : this.denom;
+      switch (data['@type']) {
+        case this.eTransType.Send:
+          result.push({ key: 'From Address', value: data?.from_address, link: { url: '/account' } });
+          result.push({ key: 'To Address', value: data?.to_address, link: { url: '/account' } });
+          result.push({
+            key: 'Amount',
+            value: data?.amount[0]?.amount,
+            denom: this.commonService.mappingNameIBC(denom),
+            pipeType: pipeTypeData.BalanceOf,
+          });
+          break;
 
-            if (messages?.length >= 1) {
-              messages.forEach((message) => {
-                message.validatorName =
-                  this.listValidator.find((f) => f.operator_address === message?.validator_address)?.title || '';
-              });
-            } else if (messages[0]?.msgs?.length >= 1) {
-              messages[0]?.msgs.forEach((message) => {
-                message.validatorName =
-                  this.listValidator.find((f) => f.operator_address === message?.validator_address)?.title || '';
-              });
-            }
+        case this.eTransType.MultiSend:
+          result.push({ value: data.wasm_byte_code, specialCase: this.specialCase.MultiSend });
+          break;
+
+        case this.eTransType.Delegate:
+        case this.eTransType.Undelegate:
+        case this.eTransType.GetReward:
+          this.checkGetReward();
+          result.push({
+            key: 'Delegator Address',
+            value: data?.delegator_address,
+            link: { url: '/account' },
+          });
+          result.push({
+            key: 'Validator Address',
+            value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
+            link: { url: '/validators' },
+          });
+          // get amount
+          let amount = data.amount?.amount;
+          let pipeType = pipeTypeData.BalanceOf;
+          if (data['@type'] === this.eTransType.GetReward) {
+            amount = this.listAmountClaim[index];
+            pipeType = pipeTypeData.Number;
           }
-        }
-      },
-      (_) => {},
-    );
+          result.push({
+            key: 'Amount',
+            value: amount || '-',
+            denom: amount ? this.denom : null,
+            pipeType: pipeType,
+          });
+
+          // check present Auto Claim Reward
+          if (
+            data['@type'] !== this.eTransType.GetReward &&
+            this.listAmountClaim?.length > 0 &&
+            this.listAmountClaim[index] > 0
+          ) {
+            result.push({
+              key: 'Auto Claim Reward',
+              value: this.listAmountClaim[index],
+              denom: this.denom,
+              pipeType: pipeTypeData.Number,
+            });
+          }
+          break;
+
+        case this.eTransType.Redelegate:
+          result.push({
+            key: 'Delegator Address',
+            value: data?.delegator_address,
+            link: { url: '/account' },
+          });
+          result.push({
+            key: 'Source Validator Address',
+            value: `${data?.validator_src_address} (${this.getNameValidator(data?.validator_src_address)})`,
+            link: { url: '/validators' },
+          });
+          result.push({
+            key: 'Destination Validator Address',
+            value: `${data?.validator_dst_address} (${this.getNameValidator(data?.validator_dst_address)})`,
+            link: { url: '/validators' },
+          });
+          result.push({
+            key: 'Amount',
+            value: data.amount?.amount,
+            denom: this.commonService.mappingNameIBC(denom),
+            pipeType: pipeTypeData.BalanceOf,
+          });
+          if (this.amountClaim > 0) {
+            result.push({
+              key: 'Auto Claim Reward',
+              value: this.amountClaim,
+              denom: this.commonService.mappingNameIBC(denom),
+              pipeType: pipeTypeData.Number,
+            });
+          }
+          break;
+
+        case this.eTransType.GrantAuthz:
+          result.push({ key: 'Granter', value: data?.granter, link: { url: '/account' } });
+          result.push({ key: 'Grantee', value: data?.grantee, link: { url: '/account' } });
+          result.push({ key: 'Authorization Type', value: data?.grant?.authorization?.authorization_type });
+          result.push({ key: 'Expiration', value: this.getDateValue(data?.grant?.expiration) || '-' });
+          result.push({
+            key: 'Limit',
+            value: data?.grant?.authorization?.max_tokens?.amount,
+            denom: this.denom,
+            pipeType: pipeTypeData.BalanceOf,
+          });
+          break;
+
+        case this.eTransType.ExecuteAuthz:
+          result.push({ key: 'Grantee', value: data?.grantee, link: { url: '/account' } });
+          result.push({ key: 'Authorization Type', value: data?.msgs[0]['@type'] });
+          result.push({
+            key: 'Total Amount Execute',
+            value: this.totalAmountExecute || '-',
+            denom: this.denom,
+            pipeType: pipeTypeData.BalanceOf,
+          });
+          result.push({ key: 'Json', value: data?.msgs, pipeType: pipeTypeData.Json });
+          break;
+
+        case this.eTransType.RevokeAuthz:
+          result.push({ key: 'Granter', value: data?.granter, link: { url: '/account' } });
+          result.push({ key: 'Grantee', value: data?.grantee, link: { url: '/account' } });
+          result.push({ key: 'Message Type Url', value: data.msg_type_url });
+          break;
+
+        case this.eTransType.ExecuteContract:
+          this.displayMsgRaw();
+          result.push({ key: 'Contract', value: data?.contract, link: { url: '/contracts' } });
+          result.push({ key: 'Sender', value: data?.sender, link: { url: '/account' } });
+          result.push({ key: 'Messages', value: this.objMsgContract, pipeType: pipeTypeData.Json });
+          break;
+
+        case this.eTransType.InstantiateContract:
+        case this.eTransType.InstantiateContract2:
+          this.displayMsgRaw();
+          result.push({
+            key: 'Contract',
+            value: this.getDataJson('_contract_address'),
+            link: { url: '/contracts' },
+          });
+          result.push({ key: 'Label', value: data?.label });
+          result.push({ key: 'Sender', value: data?.sender, link: { url: '/account' } });
+          result.push({ key: 'Messages', value: this.objMsgContract, pipeType: pipeTypeData.Json });
+          break;
+
+        case this.eTransType.StoreCode:
+          result.push({
+            key: 'Sender',
+            value: data.sender || data.validator_address,
+            link: { url: '/account' },
+          });
+          result.push({ key: 'Code Id', value: this.getStoreCode(index), link: { url: '/code-ids/detail' } });
+          result.push({ value: data.wasm_byte_code, specialCase: this.specialCase.ByteCode });
+          break;
+
+        case this.eTransType.Vote:
+          result.push({ key: 'Proposal Id', value: data.proposal_id, link: { url: '/votings' } });
+          result.push({ key: 'Voter', value: data.voter, link: { url: '/account' } });
+          result.push({ key: 'Option', value: this.parsingOptionVote(data?.option) });
+          break;
+
+        case this.eTransType.PeriodicVestingAccount:
+          result.push({ key: 'From Address', value: data.from_address, link: { url: '/account' } });
+          result.push({ key: 'To Address', value: data.to_address, link: { url: '/account' } });
+          result.push({ key: 'Start Time', value: this.dateVesting });
+          result.push({ key: 'Vesting Periods', value: data.vesting_periods, pipeType: pipeTypeData.Json });
+          break;
+
+        case this.eTransType.Vesting:
+          result.push({ key: 'From Address', value: data.from_address, link: { url: '/account' } });
+          result.push({ key: 'To Address', value: data.to_address, link: { url: '/account' } });
+          result.push({ key: 'Vesting Schedule', value: this.dateVesting });
+          break;
+
+        case this.eTransType.EditValidator:
+          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/account' } });
+          result.push({ key: 'Details', value: data.description?.details });
+          result.push({ key: 'Moniker', value: data.description?.moniker });
+          result.push({
+            key: 'Website',
+            value: data.description?.website,
+            link: { url: data.description?.website, target: true },
+          });
+          result.push({ key: 'Security Contact', value: data.description?.security_contact });
+          result.push({ key: 'Identity', value: data.description?.identity });
+          result.push({ key: 'Commission Rate', value: data.commission_rate });
+          result.push({
+            key: 'Min Self Delegation',
+            value: data.min_self_delegation,
+            denom: data.min_self_delegation > 0 ? this.denom : null,
+            pipeType: pipeTypeData.BalanceOf,
+          });
+          break;
+
+        case this.eTransType.CreateValidator:
+          result.push({
+            key: 'Min Self Delegation',
+            value: data.min_self_delegation,
+            denom: data.min_self_delegation > 0 ? this.denom : null,
+            pipeType: pipeTypeData.BalanceOf,
+          });
+          result.push({ key: 'Delegator Address', value: data.delegator_address, link: { url: '/account' } });
+          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators' } });
+          result.push({
+            key: 'Amount',
+            value: data.value?.amount,
+            denom: this.denom,
+            pipeType: pipeTypeData.BalanceOf,
+          });
+          result.push({ key: 'Details', value: data.description?.details });
+          result.push({ key: 'Moniker', value: data.description?.moniker });
+          result.push({
+            key: 'Website',
+            value: data.description?.website || '-',
+            link: { url: data.description?.website },
+          });
+          result.push({ key: 'Identity', value: data.description?.identity });
+          result.push({
+            key: 'Commission Rate',
+            value: this.checkRateFloatNumber(data?.commission?.rate) || 0,
+            pipeType: pipeTypeData.Percent,
+          });
+          result.push({
+            key: 'Commission Max Rate',
+            value: this.checkRateFloatNumber(data?.commission?.max_rate) || 0,
+            pipeType: pipeTypeData.Percent,
+          });
+          result.push({
+            key: 'Commission Max Change Rate',
+            value: this.checkRateFloatNumber(data?.commission?.max_change_rate) || 0,
+            pipeType: pipeTypeData.Percent,
+          });
+          result.push({ key: 'Public Key', value: data?.pubkey?.value || data?.pubkey?.key });
+          break;
+
+        case this.eTransType.Unjail:
+          result.push({
+            key: 'Validator Address',
+            value: this.transactionDetail?.tx?.tx?.body?.messages[0]?.validator_addr,
+            link: { url: '/account' },
+          });
+          break;
+
+        case this.eTransType.SubmitProposalTx:
+          result.push({
+            key: 'Amount',
+            value: data.initial_deposit[0].amount,
+            pipeType: pipeTypeData.BalanceOf,
+            denom: data.initial_deposit[0].amount > 0 ? this.denom : null,
+          });
+          result.push({ key: 'Proposer', value: data.proposer, link: { url: '/account' } });
+          if (this.transactionDetail?.tx?.logs?.length > 0) {
+            result.push({
+              key: 'Proposal Id',
+              value: this.transactionDetail?.tx?.logs[0].events[4].attributes[0].value,
+              link: { url: '/votings' },
+            });
+            result.push({
+              key: 'Proposal Type',
+              value: this.transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value,
+            });
+          }
+          result.push({ key: 'Title', value: data.content.title });
+          break;
+
+        case this.eTransType.MsgGrantAllowance:
+          result.push({ key: 'Granter', value: data.granter, link: { url: '/account' } });
+          result.push({ key: 'Grantee', value: data.grantee, link: { url: '/account' } });
+          result.push({ key: 'Type', value: this.typeGrantAllowance });
+          result.push({
+            key: 'Spend Limit',
+            value: this.spendLimitAmount,
+            pipeType: pipeTypeData.BalanceOf,
+            denom: this.spendLimitAmount > 0 ? this.denom : null,
+          });
+          result.push({
+            key: 'Expiration',
+            value:
+              this.getDateValue(
+                data?.allowance?.basic?.expiration ||
+                  data?.allowance?.expiration ||
+                  data?.allowance?.allowance?.allowance?.expiration ||
+                  data?.allowance?.allowance?.expiration ||
+                  data?.allowance?.allowance?.allowance?.basic?.expiration ||
+                  data?.allowance?.allowance?.basic?.expiration,
+              ) || '-',
+          });
+          if (this.typeGrantAllowance === 'Periodic') {
+            result.push({
+              key: 'Period Spend Limit',
+              value:
+                data?.allowance?.allowance?.allowance?.period_spend_limit[0]?.amount ||
+                data?.allowance?.allowance?.period_spend_limit[0]?.amount ||
+                data?.allowance?.period_spend_limit[0].amount ||
+                0,
+              pipeType: pipeTypeData.BalanceOf,
+              denom: this.denom,
+            });
+            result.push({
+              key: 'Period',
+              value:
+                data?.allowance?.period?.seconds ||
+                data?.allowance?.allowance?.period?.seconds ||
+                data?.allowance?.allowance?.allowance?.period?.seconds ||
+                data?.allowance?.period ||
+                data?.allowance?.allowance?.period ||
+                data?.allowance?.allowance?.allowance?.period,
+            });
+          }
+          break;
+
+        case this.eTransType.MsgRevokeAllowance:
+          result.push({ key: 'Granter', value: data.granter, link: { url: '/account' } });
+          result.push({ key: 'Grantee', value: data.grantee, link: { url: '/account' } });
+          break;
+
+        case this.eTransType.Deposit:
+          result.push({ key: 'Proposal Id', value: data.proposal_id, link: { url: '/votings' } });
+          result.push({ key: 'Depositor', value: data.depositor, link: { url: '/account' } });
+          result.push({
+            key: 'Amount',
+            value: data?.amount[0]?.amount,
+            denom: this.commonService.mappingNameIBC(denom),
+            pipeType: pipeTypeData.BalanceOf,
+          });
+          break;
+
+        case this.eTransType.Deposit:
+          result.push({ key: 'Proposal Id', value: data.proposal_id, link: { url: '/votings' } });
+          result.push({ key: 'Depositor', value: data.depositor, link: { url: '/account' } });
+          result.push({
+            key: 'Amount',
+            value: data?.amount[0]?.amount,
+            denom: this.commonService.mappingNameIBC(denom),
+            pipeType: pipeTypeData.BalanceOf,
+          });
+          break;
+
+        case this.eTransType.MsgMigrateContract:
+          result.push({ key: 'Sender', value: data.sender, link: { url: '/account' } });
+          result.push({ key: 'Contract', value: data.contract, link: { url: '/contracts' } });
+          result.push({ key: 'Code ID', value: data.code_id, link: { url: '/code-ids/detail' } });
+          break;
+
+        case this.eTransType.ModifyWithdrawAddress:
+          result.push({ key: 'Delegator Address', value: data.delegator_address, link: { url: '/account' } });
+          result.push({ key: 'Withdraw Address', value: data.withdraw_address, link: { url: '/account' } });
+          break;
+
+        case this.eTransType.GetRewardCommission:
+          result.push({
+            key: 'Validator Address',
+            value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
+            link: { url: '/validators' },
+          });
+
+          if (this.commissionAutoClaim > 0) {
+            result.push({
+              key: 'Amount',
+              value: this.commissionAutoClaim,
+              denom: this.denom,
+              pipeType: pipeTypeData.Number,
+            });
+          }
+
+          if (this.transactionDetail?.messages[0]['@type'] === this.eTransType.GetReward) {
+            result.push({
+              key: 'header',
+              value: 'Get Commission',
+            });
+          }
+          break;
+
+        default:
+          break;
+      }
+      this.currentData.push(result);
+    });
+  }
+
+  getNameValidator(address) {
+    const validatorSrcAddress = this.listValidator?.find((f) => f.operator_address === address);
+    return validatorSrcAddress?.title || '';
   }
 
   checkGetReward(): void {
@@ -436,14 +790,6 @@ export class TransactionMessagesComponent implements OnInit {
     return null;
   }
 
-  getRewardLength(arr): number {
-    let count = 0;
-    arr.forEach((element) => {
-      if (element.hasOwnProperty('delegator_address')) count++;
-    });
-    return count;
-  }
-
   filterIBCType(type) {
     let arr = [];
     arr = this.listIBCProgress.filter((f) => f.typeTx === type);
@@ -494,9 +840,5 @@ export class TransactionMessagesComponent implements OnInit {
       value = temp;
     }
     return value;
-  }
-
-  replaceDenomValue(value) {
-    return value?.replace(this.coinMinimalDenom, '');
   }
 }

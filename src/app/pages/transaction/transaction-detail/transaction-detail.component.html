@@ -13,7 +13,7 @@
     </div>
 
     <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-      <div class="pt-4 pl-4 pt-lg-6 pl-lg-6" *ngIf="env === 'serenity'">
+      <div class="pt-4 px-4 pt-lg-6 px-lg-6" *ngIf="env === 'serenity'">
         <span class="text--yellow-4 body-01"
           >[This is a Serenity <span class="fw-semibold">Testnet</span> transaction only]</span
         >
@@ -112,7 +112,11 @@
     </div>
 
     <div class="card text--white" *ngIf="!isRawData && transaction?.messages">
-      <app-transaction-messages [transactionDetail]="transaction"> </app-transaction-messages>
+      <app-transaction-messages
+        [transactionDetail]="transaction"
+        [listValidator]="listValidator || []"
+        *ngIf="listValidator?.length > 0">
+      </app-transaction-messages>
     </div>
 
     <div class="card text--white" *ngIf="!isRawData && transaction?.read_set">

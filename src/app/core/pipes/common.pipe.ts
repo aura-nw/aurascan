@@ -82,8 +82,9 @@ export class BalanceOf implements PipeTransform {
 
 @Pipe({ name: 'replaceIpfs' })
 export class ReplaceIpfs implements PipeTransform {
+  constructor(private environmentService: EnvironmentService) {}
   transform(value: string): string {
-    return 'https://ipfs.io/' + value.replace('://', '/');
+    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
   }
 }
 
