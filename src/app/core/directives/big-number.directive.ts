@@ -2,8 +2,6 @@ import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import { MaskPipe } from 'ngx-mask';
 import { Globals } from 'src/app/global/global';
-import { IntlFormat } from '../utils/common/parsing';
-import { log } from 'console';
 @Directive({
   selector: 'span[appBigNumber],div[appBigNumber]',
   providers: [MaskPipe],
@@ -40,6 +38,11 @@ export class BigNumberDirective implements AfterViewInit {
 
     if (amountValue.lt(0.000001)) {
       this.element.textContent = '0';
+      if (this.tokenPrice) {
+        this.element.textContent = '$' + this.mask.transform(amountValue.toString(), 'separator.2');
+      } else {
+        this.element.textContent = this.mask.transform(amountValue.toString(), 'separator.6');
+      }
       return;
     } else {
       const powNum = new BigNumber(10).pow(15);

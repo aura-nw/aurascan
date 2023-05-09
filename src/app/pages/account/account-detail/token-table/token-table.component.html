@@ -156,7 +156,8 @@
                     *ngIf="element.contract_address !== '-'"
                     [appBigNumber]="element.balance"
                     [auraValue]="true"
-                    [decimal]="element.decimals"></span>
+                    [tokenPrice]="element.price"
+                    [decimal]="0"></span>
                   <span> {{ denom }}</span
                   >)
                 </span>
