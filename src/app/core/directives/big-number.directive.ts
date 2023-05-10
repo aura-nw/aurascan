@@ -12,6 +12,7 @@ export class BigNumberDirective implements AfterViewInit {
   @Input() appBigNumber: string;
   @Input() tokenPrice: any;
   @Input() auraValue: boolean = false;
+  @Input() votingPower: boolean = false;
 
   element: HTMLElement;
   constructor(private mask: MaskPipe, public elRef: ElementRef, public global: Globals) {
@@ -76,6 +77,9 @@ export class BigNumberDirective implements AfterViewInit {
         if (this.tokenPrice && this.auraValue !== true) {
           this.element.textContent =
             '$' + (IntlFormat(amountValue.toString(), 2) === '0' ? '0.00' : IntlFormat(amountValue.toString(), 2));
+        } else if (this.votingPower) {
+          this.element.textContent =
+            IntlFormat(amountValue.toString(), 2) === '0' ? '0.00' : IntlFormat(amountValue.toString(), 2);
         } else {
           this.element.textContent = IntlFormat(amountValue.toString(), 6);
         }
