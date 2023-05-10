@@ -111,15 +111,14 @@
   </div>
 
   <div *ngIf="isTransactionTypeDefault">
-    <div class="row mb-3 body-01">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
-      <div class="col-12 col-lg-9">
-        <pre
-          id="json"
-          class="raw-content text--white px-4"
-          [innerHtml]="transactionDetail?.messages[0] | appJson"></pre>
+    <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
+        <div class="col-12 col-lg-9">
+          <pre id="json" class="raw-content text--white px-4" [innerHtml]="item | appJson"></pre>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 
   <ng-template #ibcTransfer let-data="data">
@@ -146,7 +145,7 @@
     </div>
     <app-messages-item
       [label]="'Origin Amount'"
-      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount || transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount"
+      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <app-messages-item
       [label]="'Origin Denom'"
@@ -400,8 +399,7 @@
   <ng-template #multiSend>
     <ng-container *ngFor="let item of transactionDetail?.messages[0]?.outputs; let i = index">
       <div class="card-info" *ngIf="i < numberListSend">
-        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: 'Send' } }">
-        </ng-container>
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: 'Send' } }"> </ng-container>
         <app-messages-item
           [label]="'From Address'"
           [value]="transactionDetail?.messages[0]?.inputs[0]?.address"
