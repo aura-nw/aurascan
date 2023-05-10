@@ -270,8 +270,12 @@ export function convertDataTransaction(data, coinInfo) {
       if (lstType[0]['@type'].indexOf('ibc') == -1) {
         if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.GetReward) {
           type = TypeTransaction.GetReward;
-        } else if (lstType?.length > 1 && lstType[0]['@type'] !== lstType[1]['@type']) {
-          type = 'Multiple';
+        } else if (lstType?.length > 1) {
+          if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+            type = TypeTransaction.MultiSend;
+          } else {
+            type = 'Multiple';
+          }
           amount = 'More';
         }
       }

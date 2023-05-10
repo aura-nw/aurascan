@@ -1,13 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { DataDelegateDto, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -19,7 +10,7 @@ import { Globals } from 'src/app/global/global';
   templateUrl: './user-wallet-info.component.html',
   styleUrls: ['./user-wallet-info.component.scss'],
 })
-export class UserWalletInfoComponent implements OnInit, OnChanges {
+export class UserWalletInfoComponent implements OnChanges {
   @Input() breakpoint: any;
   @Input() userAddress: string;
   @Input() arrayDelegate: any[] = [];
@@ -36,7 +27,7 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
     { matColumnDef: 'validator_name', headerCellDef: 'Name', desktopOnly: true },
     { matColumnDef: 'amount_staked', headerCellDef: 'Amount Staked' },
     { matColumnDef: 'pending_reward', headerCellDef: 'Pending Reward' },
-    { matColumnDef: 'action', headerCellDef: '' },
+    { matColumnDef: 'action', headerCellDef: '', desktopOnly: true },
   ];
   displayedColumnsWallet: string[] = this.templatesWallet.map((dta) => dta.matColumnDef);
   clicked = false;
@@ -91,8 +82,6 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
       }
     }
   }
-
-  ngOnInit(): void {}
 
   viewDialog(isClaimMode = false, modal: any = '', address: any = ''): void {
     setTimeout(() => {
