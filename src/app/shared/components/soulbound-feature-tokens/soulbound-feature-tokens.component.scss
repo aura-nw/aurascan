@@ -77,8 +77,8 @@
   .sbt-contain {
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: flex-end;
     min-height: 162px;
-    align-items: end;
+    align-items: flex-end;
   }
 }
