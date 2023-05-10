@@ -1,4 +1,4 @@
-<div class="text-end">
+<div class="text-end sbt-contain">
   <div class="soulbound-list" *ngIf="soulboundList && soulboundList?.length > 0">
     <ng-container *ngFor="let token of soulboundList; let last = last">
       <div class="soulbound__item">
@@ -43,4 +43,6 @@
       >{{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}</span
     >
   </a>
+  <!-- Placeholder space for flex position -->
+  <div class="button button--sm mt-md-3 mt-lg-0 mt-xl-3" *ngIf="wallet !== accountAddress || !displayManage || isLoading"></div>
 </div>

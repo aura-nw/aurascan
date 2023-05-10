@@ -51,10 +51,6 @@ export class SoulboundService extends CommonService {
     });
   }
 
-  getSBTDetail(tokenID): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/soulbound-token/tokens-detail/${tokenID}`);
-  }
-
   createSBToken(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/soulbound-token`, payload);
   }

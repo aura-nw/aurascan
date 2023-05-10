@@ -82,7 +82,11 @@
                     BTC
                   </div>
                   <div class="body-02 fw-normal text--gray-5" *ngIf="global.price.aura">
-                    {{ element.price / global.price.aura || 0 | mask : 'separator.6' }} {{ denom }}
+                    <span
+                    [appBigNumber]="element.price"
+                    [auraValue]="true"
+                    [decimal]="0"></span> {{ denom }}
+                    <!-- {{ element.price / global.price.aura || 0 | mask : 'separator.6' }} {{ denom }} -->
                   </div>
                 </ng-container>
               </td>
