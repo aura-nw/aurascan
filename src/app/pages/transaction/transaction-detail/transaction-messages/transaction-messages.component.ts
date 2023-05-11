@@ -272,7 +272,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({ key: 'Authorization Type', value: data?.msgs[0]['@type'] });
           result.push({
             key: 'Total Amount Execute',
-            value: this.totalAmountExecute || '-',
+            value: this.totalAmountExecute,
             denom: this.denom,
             pipeType: pipeTypeData.BalanceOf,
           });
