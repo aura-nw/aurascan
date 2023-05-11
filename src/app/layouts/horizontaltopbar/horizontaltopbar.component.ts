@@ -165,8 +165,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     this.innerWidth = window.innerWidth;
     this.pageTitle =
       this.innerWidth > 992
-        ? this.environmentService.configValue.evnLabel[0].desktop
-        : this.environmentService.configValue.evnLabel[0].mobile;
+        ? this.environmentService.configValue.evnLabel.desktop
+        : this.environmentService.configValue.evnLabel.mobile;
   }
 
   /**
