@@ -13,8 +13,8 @@ import { WalletService } from '../../core/services/wallet.service';
 import { LAYOUT_MODE } from '../layouts.model';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-import {from} from "rxjs";
-import {delay, mergeMap} from "rxjs/operators";
+import { from } from 'rxjs';
+import { delay, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -49,7 +49,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   prefixNormalAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
   currentAddress;
   isAllowInABTWhiteList = true;
-
 
   /**
    * Language Listing
@@ -152,7 +151,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
           this.isAllowInABTWhiteList = false;
         }
       });
-
   }
 
   checkWL() {
@@ -164,26 +162,11 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   checkEnv() {
-    this.env = this.environmentService.configValue.env;
-    
     this.innerWidth = window.innerWidth;
-    switch (this.env) {
-      case 'serenity':
-        this.pageTitle = this.innerWidth > 992 ? 'Serenity Testnet Network' : 'Serenity Testnet';
-        break;
-      case 'halo':
-        this.pageTitle = this.innerWidth > 992 ? 'Halo Testnet Network' : 'Halo Testnet';
-        break;
-      case 'euphoria':
-        this.pageTitle = this.innerWidth > 992 ? 'Euphoria Testnet Network' : 'Euphoria Testnet';
-        break;
-      case 'mainnet':
-        this.pageTitle = this.environmentService.configValue.chainId;
-        break;
-      default:
-        this.pageTitle = this.innerWidth > 992 ? 'Develop Testnet Network' : 'Develop Testnet';
-        break;
-    }
+    this.pageTitle =
+      this.innerWidth > 992
+        ? this.environmentService.configValue.evnLabel.desktop
+        : this.environmentService.configValue.evnLabel.mobile;
   }
 
   /**
