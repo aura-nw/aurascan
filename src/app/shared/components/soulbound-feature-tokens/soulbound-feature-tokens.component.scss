@@ -10,6 +10,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  gap: 20px;
+  flex-grow: 1;
   @media (min-width: 991.98px) {
     justify-content: flex-end;
   }
@@ -20,7 +22,7 @@
     }
     padding: var(--spacer-2) var(--spacer-3);
     @media (min-width: 413.98px) {
-      padding: var(--spacer-2) var(--spacer-4);
+      padding: var(--spacer-2);
       .nft-card {
         max-width: 100px;
       }
@@ -78,7 +80,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    min-height: 162px;
+    min-height: 190px;
     align-items: flex-end;
+    padding: 0px 24px;
   }
 }
