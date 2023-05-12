@@ -775,6 +775,7 @@ export class TransactionMessagesComponent implements OnInit {
           this.denomIBC = data.transactions[0].indexes.denomination_trace_denom[0];
         } else {
           txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
+          this.denomIBC = this.transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom
         }
         this.listIBCProgress = txs;
       }
