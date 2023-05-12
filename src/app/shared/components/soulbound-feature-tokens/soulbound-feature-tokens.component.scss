@@ -11,6 +11,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 20px;
+  flex-grow: 1;
   @media (min-width: 991.98px) {
     justify-content: flex-end;
   }
