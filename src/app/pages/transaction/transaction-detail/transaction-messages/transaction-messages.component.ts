@@ -191,7 +191,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Validator Address',
             value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
-            link: { url: '/validators' },
+            link: { url: '/validators', data: data?.validator_address },
           });
           // get amount
           let amount = data.amount?.amount;
@@ -231,12 +231,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Source Validator Address',
             value: `${data?.validator_src_address} (${this.getNameValidator(data?.validator_src_address)})`,
-            link: { url: '/validators' },
+            link: { url: '/validators', data: data?.validator_src_address },
           });
           result.push({
             key: 'Destination Validator Address',
             value: `${data?.validator_dst_address} (${this.getNameValidator(data?.validator_dst_address)})`,
-            link: { url: '/validators' },
+            link: { url: '/validators', data: data?.validator_dst_address },
           });
           result.push({
             key: 'Amount',
@@ -366,7 +366,7 @@ export class TransactionMessagesComponent implements OnInit {
             pipeType: pipeTypeData.BalanceOf,
           });
           result.push({ key: 'Delegator Address', value: data.delegator_address, link: { url: '/account' } });
-          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators' } });
+          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators'} });
           result.push({
             key: 'Amount',
             value: data.value?.amount,
@@ -517,7 +517,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Validator Address',
             value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
-            link: { url: '/validators' },
+            link: { url: '/validators', data: data?.validator_address },
           });
 
           if (this.commissionAutoClaim > 0) {
