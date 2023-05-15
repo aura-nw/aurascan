@@ -345,7 +345,11 @@ export class TransactionMessagesComponent implements OnInit {
           });
           result.push({ key: 'Security Contact', value: data.description?.security_contact });
           result.push({ key: 'Identity', value: data.description?.identity });
-          result.push({ key: 'Commission Rate', value: data.commission_rate });
+          result.push({
+            key: 'Commission Rate',
+            value: this.checkRateFloatNumber(data?.commission_rate) || 0,
+            pipeType: pipeTypeData.Percent,
+          });
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
@@ -775,7 +779,7 @@ export class TransactionMessagesComponent implements OnInit {
           this.denomIBC = data.transactions[0].indexes.denomination_trace_denom[0];
         } else {
           txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
-          this.denomIBC = this.transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom
+          this.denomIBC = this.transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom;
         }
         this.listIBCProgress = txs;
       }
