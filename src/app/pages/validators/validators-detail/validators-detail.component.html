@@ -105,7 +105,7 @@
           <div class="row">
             <div class="col-6">Website</div>
             <div class="col-6 text-end text-lg-start">
-              <a class="text--primary cursor-pointer" href="{{ currentValidatorDetail?.website }}">
+              <a class="text--primary cursor-pointer" href="{{ currentValidatorDetail?.website }}" target="_blank">
                 {{ currentValidatorDetail?.website }}
               </a>
             </div>
@@ -436,7 +436,13 @@
                               {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
-                              <ng-container *ngIf="data['amount'] === 'More'"> More </ng-container>
+                              <ng-container *ngIf="data['amount'] === 'More'">
+                                <a
+                                  class="text--primary cursor-pointer hash-link"
+                                  [routerLink]="['/transaction', data['tx_hash']]">
+                                  More
+                                </a>
+                              </ng-container>
                               <ng-container *ngIf="!data['amount']">0</ng-container>
                               <ng-container *ngIf="data['amount'] !== 'More' && data['amount'] > 0">
                                 <span [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
@@ -485,7 +491,7 @@
                         {
                           label: 'Amount',
                           info:
-                            (!data.amount || data.amount === 0 || data.amount === 'More')
+                            !data.amount || data.amount === 0 || data.amount === 'More'
                               ? data.amount.toString()
                               : data.isStakeMode
                               ? '<span class=text--info>' + '+ ' + (data.amount | mask : 'separator.6') + '</span>'

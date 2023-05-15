@@ -14,6 +14,7 @@ import { CommonPipeModule } from '../../../../core/pipes/common-pipe.module';
 import { PaginatorModule } from '../../../../shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../../shared/components/table-no-data/table-no-data.module';
 import { AccountDetailTableComponent } from './account-detail-table.component';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [AccountDetailTableComponent],
@@ -32,6 +33,7 @@ import { AccountDetailTableComponent } from './account-detail-table.component';
     PaginatorModule,
     LoadingImageModule,
     NgxMaskModule,
+    CommonDirectiveModule
   ],
   exports: [AccountDetailTableComponent],
 })

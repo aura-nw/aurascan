@@ -284,11 +284,16 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
             ) {
               isStakeMode = true;
             }
-            const amount = getAmount(
+            let amount = getAmount(
               _.get(element, 'tx_response.tx.body.messages'),
               _type,
               _.get(element, 'tx_response.tx.body.raw_log'),
             );
+
+            if (amount === 0 && element?.tx_response?.tx?.body?.messages.length > 0) {
+              amount = 'More';
+            }
+
             const height = _.get(element, 'tx_response.height');
             const timestamp = _.get(element, 'tx_response.timestamp');
 

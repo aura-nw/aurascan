@@ -2,7 +2,7 @@
   <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
     <div class="table-responsive aura-table-contain">
       <ng-container *ngIf="!breakpoint.value.matches">
-        <table mat-table [dataSource]="dataSource" class="aura-table d-none d-lg-table">
+        <table mat-table [dataSource]="dataSource" class="aura-table d-lg-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
               <th mat-header-cell *matHeaderCellDef>
@@ -14,7 +14,7 @@
                   <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
                     <a
                       *ngSwitchCase="'validator_name'"
-                      class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
+                      class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative text-break"
                       [routerLink]="['/validators', data['validator_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
@@ -29,18 +29,12 @@
                       </span>
                     </a>
                     <div *ngSwitchCase="'amount'">
-                      {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                      <span class="text--primary">{{ denom }}</span>
-                    </div>
-                    <div *ngSwitchCase="'token_amount'">
-                      {{ data[template.matColumnDef] | mask : 'separator.6' }}
-                    </div>
-                    <div *ngSwitchCase="'token_name'" class="text--primary">
-                      {{ data[template.matColumnDef] }}
+                      <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
+                      <span class="text--primary"> {{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'reward'">
-                      {{ data[template.matColumnDef] | mask : 'separator.6' }}
-                      <span class="text--primary">{{ denom }}</span>
+                      <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
+                      <span class="text--primary"> {{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'completion_time'">
                       <div class="d-flex align-items-center">
@@ -56,9 +50,6 @@
                       {{ commonService.getDateValue(data['date_format'], false)[1] }} <br />({{
                         commonService.getDateValue(data['date_format'], false)[0]
                       }})
-                    </div>
-                    <div *ngSwitchCase="'total_value'">
-                      $ {{ data[template.matColumnDef] | number : global.formatNumber2Decimal }}
                     </div>
                     <a
                       *ngSwitchCase="'validator_src_name'"
@@ -134,15 +125,15 @@
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ +item.amount | mask : 'separator.6' }}
-                      <span class="text--primary">{{ denom }}</span>
+                      <span [appBigNumber]="item.amount" [decimal]="0"></span>
+                      <span class="text--primary"> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Reward</div>
                     <div class="txt-right">
-                      {{ +item.reward | mask : 'separator.6' }}
-                      <span class="text--primary">{{ denom }}</span>
+                      <span [appBigNumber]="item.reward" [decimal]="0"></span>
+                      <span class="text--primary"> {{ denom }}</span>
                     </div>
                   </div>
                 </div>
@@ -170,8 +161,8 @@
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ +item.amount | mask : 'separator.6' }}
-                      <span class="text--primary">{{ denom }}</span>
+                      <span [appBigNumber]="item.amount" [decimal]="0"></span>
+                      <span class="text--primary"> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
@@ -230,8 +221,8 @@
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ +item.amount | mask : 'separator.6' }}
-                      <span class="text--primary">{{ denom }}</span>
+                      <span [appBigNumber]="item.amount" [decimal]="0"></span>
+                      <span class="text--primary"> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
@@ -249,8 +240,8 @@
                   <div class="d-flex justify-content-between">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ +item.amount | mask : 'separator.6' }}
-                      <span class="text--primary">{{ denom }}</span>
+                      <span [appBigNumber]="item.amount" [decimal]="0"></span>
+                      <span class="text--primary"> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between mt-3">

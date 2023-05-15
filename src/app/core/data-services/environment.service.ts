@@ -17,6 +17,8 @@ export interface IConfiguration {
   indexerUri: string;
   graphUrl: string;
   timeInterval: number;
+  ipfsDomain: string;
+  evnLabel: any;
 }
 
 @Injectable()
@@ -34,7 +36,9 @@ export class EnvironmentService {
     env: '',
     indexerUri: '',
     graphUrl:'',
-    timeInterval: null
+    timeInterval: null,
+    ipfsDomain: '',
+    evnLabel: '',
   });
 
   get configValue(): IConfiguration {
@@ -65,6 +69,8 @@ export class EnvironmentService {
           indexerUri: config['urlIndexer'],
           graphUrl: config['graphUrl'],
           timeInterval: config['timeInterval'] || 4000,
+          ipfsDomain: config['ipfsDomain'],
+          evnLabel: config['evnLabel']
         };
 
         this.config.next(data);

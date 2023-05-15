@@ -1,7 +1,7 @@
+import { formatDate } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
-import { EnvironmentService } from '../data-services/environment.service';
-import { DatePipe, formatDate } from '@angular/common';
 import BigNumber from 'bignumber.js';
+import { EnvironmentService } from '../data-services/environment.service';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -82,8 +82,9 @@ export class BalanceOf implements PipeTransform {
 
 @Pipe({ name: 'replaceIpfs' })
 export class ReplaceIpfs implements PipeTransform {
+  constructor(private environmentService: EnvironmentService) {}
   transform(value: string): string {
-    return 'https://ipfs.io/' + value.replace('://', '/');
+    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
   }
 }
 

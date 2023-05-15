@@ -23,7 +23,7 @@ export enum TypeTransaction {
   StoreCode = 'Store Code',
   InstantiateContract = 'Instantiate Contract',
   ExecuteContract = 'Execute Contract',
-  ModifyWithdrawAddress = 'Withdraw Address',
+  ModifyWithdrawAddress = 'Set Withdraw Address',
   JoinPool = 'Join pool',
   LockTokens = 'Lock Tokens (Start Farming)',
   JoinSwapExternAmountIn = 'Join Swap Extern Amount In',
@@ -42,6 +42,7 @@ export enum TypeTransaction {
   GrantAuthz = 'Grant Authz',
   ExecuteAuthz = 'Execute Authz',
   RevokeAuthz = 'Revoke Authz',
+  MsgMigrateContract = 'Migrate Contract',
   Fail = 'Fail',
 }
 
@@ -91,6 +92,7 @@ export enum TRANSACTION_TYPE_ENUM {
   GrantAuthz = '/cosmos.authz.v1beta1.MsgGrant',
   ExecuteAuthz = '/cosmos.authz.v1beta1.MsgExec',
   RevokeAuthz = '/cosmos.authz.v1beta1.MsgRevoke',
+  MsgMigrateContract = '/cosmwasm.wasm.v1.MsgMigrateContract',
   Fail = 'FAILED',
 }
 
@@ -116,5 +118,8 @@ export enum ModeExecuteTransaction {
 }
 
 export enum pipeTypeData {
-  Number = 'number',
+  Number = 'Number',
+  BalanceOf = 'BalanceOf',
+  Json = 'Json',
+  Percent = 'Percent'
 }

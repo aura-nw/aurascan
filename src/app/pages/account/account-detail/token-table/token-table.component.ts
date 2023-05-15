@@ -87,10 +87,6 @@ export class TokenTableComponent implements OnChanges {
                 data.isValueUp = false;
                 data.change = Number(data.change.toString().substring(1));
               }
-              if (data.contract_address !== '-') {
-                const tempConvert = +data.balance / Math.pow(10, data.decimals || 0);
-                data.balance = tempConvert < 0.000001 ? 0 : tempConvert;
-              }
             }
             return data;
           });
