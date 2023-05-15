@@ -6,7 +6,6 @@ section.account-detail {
   .soulbound-feature-tokens {
     flex: 1 0 100%;
     border-top: 1px solid var(--aura-gray-9);
-    padding-top: var(--spacer-6);
     @media (min-width: 1199.98px) {
       flex: 0 1 auto;
       display: flex;
@@ -16,7 +15,6 @@ section.account-detail {
       flex-grow: 1;
       border-top: none;
       border-left: 1px solid var(--aura-gray-9);
-      padding: 0 var(--spacer-6);
     }
   }
   form.search-form {
@@ -154,7 +152,7 @@ section.account-detail {
 .box-manage-abt {
   margin-left: auto;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 }
 app-soulbound-feature-tokens {
   width: 100%;

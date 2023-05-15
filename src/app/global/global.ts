@@ -7,6 +7,7 @@ import {
   ModeExecuteTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
+  TypeTransaction,
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
@@ -244,12 +245,6 @@ export function convertDataTransaction(data, coinInfo) {
         }
       });
     }
-    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value || 'Execute';
-
-    const status =
-      _.get(element, 'tx_response.code') == CodeTransaction.Success
-        ? StatusTransaction.Success
-        : StatusTransaction.Fail;
 
     const _amount = getAmount(
       _.get(element, 'tx_response.tx.body.messages'),
@@ -258,16 +253,38 @@ export function convertDataTransaction(data, coinInfo) {
       coinInfo.coinMinimalDenom,
     );
 
-    const amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
-
     const fee = balanceOf(
       _.get(element, 'tx_response.tx.auth_info.fee.amount[0].amount') || 0,
       coinInfo.coinDecimals,
     ).toFixed(coinInfo.coinDecimals);
+
     const height = _.get(element, 'tx_response.height');
     const timestamp = _.get(element, 'tx_response.timestamp');
     const gas_used = _.get(element, 'tx_response.gas_used');
     const gas_wanted = _.get(element, 'tx_response.gas_wanted');
+
+    let amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
+
+    let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
+    try {
+      if (lstType[0]['@type'].indexOf('ibc') == -1) {
+        if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.GetReward) {
+          type = TypeTransaction.GetReward;
+        } else if (lstType?.length > 1) {
+          if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+            type = TypeTransaction.MultiSend;
+          } else {
+            type = 'Multiple';
+          }
+          amount = 'More';
+        }
+      }
+    } catch (e) {}
+
+    const status =
+      _.get(element, 'tx_response.code') == CodeTransaction.Success
+        ? StatusTransaction.Success
+        : StatusTransaction.Fail;
 
     return { code, tx_hash, type, status, amount, fee, height, timestamp, gas_used, gas_wanted, denom, messages };
   });

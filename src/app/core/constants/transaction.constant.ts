@@ -44,5 +44,6 @@ export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.GrantAuthz, value: TypeTransaction.GrantAuthz },
   { label: TRANSACTION_TYPE_ENUM.ExecuteAuthz, value: TypeTransaction.ExecuteAuthz },
   { label: TRANSACTION_TYPE_ENUM.RevokeAuthz, value: TypeTransaction.RevokeAuthz },
+  { label: TRANSACTION_TYPE_ENUM.MsgMigrateContract, value: TypeTransaction.MsgMigrateContract },
   { label: TRANSACTION_TYPE_ENUM.Fail, value: TypeTransaction.Fail },
 ];
