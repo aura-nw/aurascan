@@ -116,3 +116,4 @@ export function checkTypeFile(nft: any) {
   }
   return content_type;
 }
+
