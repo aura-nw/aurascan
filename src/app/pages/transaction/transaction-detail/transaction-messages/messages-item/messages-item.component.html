@@ -9,7 +9,7 @@
             *ngIf="dataLink.url.indexOf('http') === -1"
             class="text--primary"
             [routerLink]="[dataLink?.url || '/account', dataLink?.data || value]">
-            {{ dataLink?.data || value || '-' }}
+            {{ value || dataLink?.data || '-' }}
           </a>
           <a class="text--primary" [href]="dataLink?.url" *ngIf="dataLink.url.indexOf('http') > -1" target="_blank">
             {{ dataLink?.data || value || '-' }}
