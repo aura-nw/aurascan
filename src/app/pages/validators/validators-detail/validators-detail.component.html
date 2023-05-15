@@ -436,7 +436,13 @@
                               {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
-                              <ng-container *ngIf="data['amount'] === 'More'"> More </ng-container>
+                              <ng-container *ngIf="data['amount'] === 'More'">
+                                <a
+                                  class="text--primary cursor-pointer hash-link"
+                                  [routerLink]="['/transaction', data['tx_hash']]">
+                                  More
+                                </a>
+                              </ng-container>
                               <ng-container *ngIf="!data['amount']">0</ng-container>
                               <ng-container *ngIf="data['amount'] !== 'More' && data['amount'] > 0">
                                 <span [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
