@@ -4,14 +4,13 @@ import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulatio
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { fromBech32, toHex } from '@cosmjs/encoding';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, forkJoin } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import { NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
-import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
 import { DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -19,12 +18,10 @@ import { AccountService } from '../../../app/core/services/account.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
-import { TransactionService } from '../../../app/core/services/transaction.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
-import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 
 @Component({
   selector: 'app-validators',
@@ -206,8 +203,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getBlocksMiss() {
-    this.validatorService.validatorsFromIndexer(null).subscribe((res) => {
-      this.lstUptime = res.data.validators;
+    this.validatorService.getMissedBlockCounter('').subscribe((res) => {
+      this.lstUptime = res.validator;
     });
   }
 
@@ -215,7 +212,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     const itemUptime = this.lstUptime.find((k) => k.account_address === address);
     let result = NUM_BLOCK;
     if (itemUptime) {
-      result = NUM_BLOCK - +itemUptime.val_signing_info.missed_blocks_counter;
+      result = NUM_BLOCK - +itemUptime.missed_blocks_counter;
     }
     return result / 100;
   }

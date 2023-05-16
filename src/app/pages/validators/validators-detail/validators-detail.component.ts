@@ -155,7 +155,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
             identity: res?.data?.identity,
           };
           this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
-          this.getDetailValidatorIndexer();
+          this.getMissedBlockCounter();
           if (isInit) {
             if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
               this.getLastHeight();
@@ -438,10 +438,10 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  getDetailValidatorIndexer() {
-    this.validatorService.validatorsFromIndexer(this.currentValidatorDetail.operator_address).subscribe((res) => {
+  getMissedBlockCounter() {
+    this.validatorService.getMissedBlockCounter(this.currentValidatorDetail.operator_address).subscribe((res) => {
       this.currentValidatorDetail['up_time'] =
-        (NUM_BLOCK - +res.data.validators[0].val_signing_info.missed_blocks_counter) / 100;
+        (NUM_BLOCK - +res.validator[0].missed_blocks_counter) / 100;
     });
   }
 
