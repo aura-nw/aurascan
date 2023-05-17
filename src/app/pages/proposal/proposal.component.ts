@@ -83,32 +83,26 @@ export class ProposalComponent implements OnInit {
   }
 
   getFourLastedProposal() {
-    this.proposalService.getProposalList(4, null).subscribe((res) => {
-      if (res?.data?.proposals) {
+    let payload = {
+      limit: 4,
+      nextKey: null,
+    };
+    this.proposalService.getProposalList(payload).subscribe((res) => {
+      if (res?.proposal) {
         const addr = this.walletService.wallet?.bech32Address || null;
-        this.proposalData = res.data.proposals;
+        this.proposalData = res.proposal;
         if (this.proposalData?.length > 0) {
           this.proposalData.forEach((pro, index) => {
             if (pro?.tally) {
               const { yes, no, no_with_veto, abstain } = pro?.tally;
               let totalVote = +yes + +no + +no_with_veto + +abstain;
-
               if (this.proposalData[index].tally) {
                 this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
                 this.proposalData[index].tally.no = (+no * 100) / totalVote;
                 this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
                 this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
               }
-            } else if (pro?.final_tally_result) {
-              const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
-              let totalVote = +yes + +no + +no_with_veto + +abstain;
-              this.proposalData[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
-              this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
-              this.proposalData[index].tally.no = (+no * 100) / totalVote;
-              this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-              this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
             }
-
             const getVoted = async () => {
               if (addr) {
                 const payload = {
@@ -133,19 +127,16 @@ export class ProposalComponent implements OnInit {
   }
 
   getListProposal(nextKey = null) {
-    this.proposalService.getProposalList(40, nextKey).subscribe((res) => {
-      this.nextKey = res.data.nextKey ? res.data.nextKey : null;
-      if (res?.data?.proposals) {
-        let tempDta = res.data.proposals;
-        tempDta.forEach((pro, index) => {
+    let payload = {
+      limit: 40,
+      nextKey: nextKey,
+    };
+    this.proposalService.getProposalList(payload).subscribe((res) => {
+      this.nextKey = res.proposal[res.proposal.length - 1].proposal_id;
+      if (res?.proposal) {
+        let tempDta = res.proposal;
+        tempDta.forEach((pro) => {
           pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
-          const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
-          let totalVote = +yes + +no + +no_with_veto + +abstain;
-          tempDta[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
-          tempDta[index].tally.yes = (+yes * 100) / totalVote;
-          tempDta[index].tally.no = (+no * 100) / totalVote;
-          tempDta[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-          tempDta[index].tally.abstain = (+abstain * 100) / totalVote;
         });
         if (this.dataSource.data.length > 0) {
           this.dataSource.data = [...this.dataSource.data, ...tempDta];
