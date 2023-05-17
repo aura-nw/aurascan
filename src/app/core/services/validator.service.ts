@@ -44,7 +44,6 @@ export class ValidatorService extends CommonService {
   }
 
   validators(): Observable<any> {
-    this.setURL();
     return this.http.get<any>(`${this.apiUrl}/validators`);
   }
 
@@ -64,7 +63,6 @@ export class ValidatorService extends CommonService {
   }
 
   validatorsDetail(address: string): Observable<any> {
-    this.setURL();
     return this.http.get<any>(`${this.apiUrl}/validators/${address}`);
   }
 
@@ -85,7 +83,6 @@ export class ValidatorService extends CommonService {
   }
 
   validatorsDetailWallet(address: string): Observable<any> {
-    this.setURL();
     return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
   }
 

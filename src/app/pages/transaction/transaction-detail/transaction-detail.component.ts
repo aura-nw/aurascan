@@ -71,10 +71,8 @@ export class TransactionDetailComponent implements OnInit {
     if (this.txHash?.length === LENGTH_CHARACTER.TRANSACTION) {
       this.transactionService.getListTx(1, 0, this.txHash).subscribe(
         (res) => {
-          console.log('res dash')
           if (res?.transaction?.length > 0) {
             const txs = convertDataTransactionV2(res, this.coinInfo);
-            console.log(txs);
             this.transaction = txs[0];
             this.transaction = {
               ...this.transaction,
@@ -82,8 +80,7 @@ export class TransactionDetailComponent implements OnInit {
               gas_used: _.get(res?.transaction[0], 'gas_used'),
               gas_wanted: _.get(res?.transaction[0], 'gas_wanted'),
               raw_log: _.get(res?.transaction[0], 'data.tx_response.raw_log'),
-              type: _.get(res?.transaction[0], 'data.body.messages[0].@type'),
-              tx: _.get(res?.transaction[0], 'tx_hash'),
+              type: _.get(res?.transaction[0], 'data.tx.body.messages[0].@type'),
             };
 
             if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {

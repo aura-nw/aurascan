@@ -13,29 +13,13 @@ export class BlockService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
+  envDB = checkEnvQuery(this.environmentService.configValue.env);
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
 
-  blockWithOperator(pageLimit: string | number, operatorAddress: string, nextKey = null): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      pageLimit,
-      operatorAddress,
-      nextKey,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/block`, {
-      params,
-    });
-  }
-
   getBlockAndTxs(type: string): Observable<any> {
-    this.setURL();
     const date = new Date();
     return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`);
   }
@@ -47,10 +31,9 @@ export class BlockService extends CommonService {
     if (nextHeight !== null) {
       updateQuery = ', height: {_lt: ' + nextHeight + ', _lte:' + (nextHeight - 100) + '}';
     }
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
     query getBlockWithOperator($address: String) {
-      ${envDB} {
+      ${this.envDB} {
         block(where: {validator: {operator_address: {_eq: $address}} ${updateQuery}} , order_by: {time: desc}, limit: 100) {
           height
           hash
@@ -76,14 +59,13 @@ export class BlockService extends CommonService {
         },
         operationName: 'getBlockWithOperator',
       })
-      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListBlock(limit: number) {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
     query getListBlocks($limit: Int) {
-      ${envDB} {
+      ${this.envDB} {
         block(limit: $limit, order_by: {time: desc}) {
           height
           hash
@@ -105,14 +87,13 @@ export class BlockService extends CommonService {
         },
         operationName: 'getListBlocks',
       })
-      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getBlockDetail(height: string | number) {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
     query getBlockDetail($height: Int) {
-      ${envDB} {
+      ${this.envDB} {
         block(where: {height: {_eq: $height}}) {
           height
           hash
@@ -138,6 +119,6 @@ export class BlockService extends CommonService {
         },
         operationName: 'getBlockDetail',
       })
-      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 }

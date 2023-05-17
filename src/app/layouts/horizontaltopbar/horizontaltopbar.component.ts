@@ -13,8 +13,8 @@ import { WalletService } from '../../core/services/wallet.service';
 import { LAYOUT_MODE } from '../layouts.model';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-import {from} from "rxjs";
-import {delay, mergeMap} from "rxjs/operators";
+import { from } from 'rxjs';
+import { delay, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -49,7 +49,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   prefixNormalAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
   currentAddress;
   isAllowInABTWhiteList = true;
-
 
   /**
    * Language Listing
@@ -152,7 +151,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
           this.isAllowInABTWhiteList = false;
         }
       });
-
   }
 
   checkWL() {
@@ -165,7 +163,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
   checkEnv() {
     this.env = this.environmentService.configValue.env;
-    
+
     this.innerWidth = window.innerWidth;
     switch (this.env) {
       case 'serenity':
@@ -367,9 +365,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   getTxhDetail(value): void {
-    this.transactionService.txsIndexer(1, 0, decodeURI(value)).subscribe(
-      (res: ResponseDto) => {
-        if (res.data) {
+    this.transactionService.getListTx(1, 0, decodeURI(value)).subscribe(
+      (res) => {
+        if (res?.transaction?.length > 0) {
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate(['transaction', this.searchValue]);
           });

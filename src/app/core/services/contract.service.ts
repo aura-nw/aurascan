@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
@@ -7,6 +7,8 @@ import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { DeployContractListReq, SmartContractListReq } from 'src/app/core/models/contract.model';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { checkEnvQuery } from '../utils/common/info-common';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -15,6 +17,7 @@ export class ContractService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   apiUrl = `${this.environmentService.configValue.beUri}`;
+  graphUrl = `${this.environmentService.configValue.graphUrl}`;
 
   get contract() {
     return this.contract$.value;
@@ -30,33 +33,56 @@ export class ContractService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
   }
 
-  getTransactionsIndexer(
+  getTransactionsIndexerV2(
     pageLimit: string | number,
     contractAddress = '',
     type: string,
+    hashIns = '',
     nextKey = null,
-  ): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      searchType: type,
-      searchKey: '_contract_address',
-      searchValue: contractAddress,
-      pageLimit,
-      nextKey,
-      // countTotal: true,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
+  ) {
+    const envDB = checkEnvQuery(this.environmentService.configValue.env);
+    let filterQuery = '';
+    if (type) {
+      if (type === 'execute' && hashIns) {
+        filterQuery = `, hash: {_neq: ${hashIns}}`;
+      } else if (type === 'instantiate') {
+        filterQuery = `, events : {type: {_eq: "${type}" }}`;
+      }
+    }
+    if (nextKey) {
+      filterQuery = filterQuery.concat(', id: {_lt: ' + `${nextKey}` + '}');
+    }
 
-    return this.http.get<any>(`${this.indexerUrl}/transaction`, {
-      params,
-    });
+    const operationsDoc = `
+    query getListTx($limit: Int, $event_attr_val: String, $tx_msg_val: jsonb) {
+      ${envDB} {
+        transaction(limit: $limit, order_by: {timestamp: desc}, where: {_and: {_or: [{events: {event_attributes: {key: {_eq: "_contract_address"}, value: {_eq: $event_attr_val}}}}, {transaction_messages: {content: {_contains: $tx_msg_val}}}] ${filterQuery} }}) {
+          id
+          height
+          hash
+          timestamp
+          code
+          gas_used
+          gas_wanted
+          data(path: "tx")
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: pageLimit,
+          event_attr_val: contractAddress,
+          tx_msg_val: {
+            contract: contractAddress,
+          },
+        },
+        operationName: 'getListTx',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
   }
-
-  // getContractDetail(contractAddress): Observable<any> {
-  //   return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`);
-  // }
 
   verifyCodeID(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contracts/verify-code-id`, data);

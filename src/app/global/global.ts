@@ -11,7 +11,6 @@ import {
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
-import { log } from 'console';
 Injectable();
 
 export class Globals {
@@ -126,6 +125,12 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
     case eTransType.ExecuteContract:
       method = 'mint';
       itemMessage.msg = itemMessage.msg || '';
+      if (typeof itemMessage.msg === 'string') {
+        try {
+          itemMessage.msg = JSON.parse(itemMessage.msg);
+        } catch (e) {}
+      }
+
       if (itemMessage.msg) {
         method = Object.keys(itemMessage.msg)[0];
       }
@@ -290,10 +295,11 @@ export function convertDataTransaction(data, coinInfo) {
 
 export function convertDataTransactionV2(data, coinInfo) {
   const txs = _.get(data, 'transaction').map((element) => {
-    console.log(element);
     if (!element['data']['body']) {
       element['data']['body'] = element['data']['tx']['body'];
+      element['data']['auth_info'] = element['data']['tx']['auth_info'];
     }
+
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
     const messages = _.get(element, 'data.body.messages');
@@ -322,7 +328,8 @@ export function convertDataTransactionV2(data, coinInfo) {
         }
       });
     }
-    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value || 'Execute';
+    const typeOrigin = _type;
+    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
 
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
@@ -343,8 +350,27 @@ export function convertDataTransactionV2(data, coinInfo) {
     const timestamp = _.get(element, 'timestamp');
     const gas_used = _.get(element, 'gas_used');
     const gas_wanted = _.get(element, 'gas_wanted');
+    let tx = _.get(element, 'data.tx_response');
+    if (tx) {
+      tx['tx'] = _.get(element, 'data.tx');
+    }
 
-    return { code, tx_hash, type, status, amount, fee, height, timestamp, gas_used, gas_wanted, denom, messages };
+    return {
+      code,
+      tx_hash,
+      type,
+      status,
+      amount,
+      fee,
+      height,
+      timestamp,
+      gas_used,
+      gas_wanted,
+      denom,
+      messages,
+      tx,
+      typeOrigin,
+    };
   });
   return txs;
 }

@@ -35,7 +35,6 @@ export class CommonService {
   }
 
   status(): Observable<any> {
-    this.setURL();
     return this._http.get<any>(`${this.apiUrl}/status`);
   }
 
@@ -51,15 +50,6 @@ export class CommonService {
     return this._http.get<any>(`${this.indexerUrl}/param`, {
       params,
     });
-  }
-
-  setURL() {
-    if (this.networkQuerySubject.value === 1) {
-      this.apiUrl = `${this._environmentService.configValue.fabric}`;
-    }
-    if (this.networkQuerySubject.value === 2) {
-      this.apiUrl = `${this._environmentService.configValue.beUri}`;
-    }
   }
 
   getDateValue(time, isCustom = true) {
@@ -117,7 +107,6 @@ export class CommonService {
   }
 
   getTokenByCoinId(range: string, id: string) {
-    this.setURL();
     return this._http.get<any>(`${this.apiUrl}/metrics/token?range=${range}&coidId=${id}`);
   }
 

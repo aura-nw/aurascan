@@ -190,24 +190,31 @@ export class NFTDetailComponent implements OnInit {
     let filterData = {};
     filterData['keyWord'] = this.nftId;
 
-    const res = await this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey);
-    if (res?.data?.code === 200) {
-      res?.data?.data?.transactions.forEach((trans) => {
-        trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-      });
-      let txs = [];
-      res.data?.data?.transactions.forEach((element, index) => {
-        txs.push(element);
-        if (element.type === 'buy') {
-          let txTransfer = { ...element };
-          txTransfer['type'] = 'transfer';
-          txTransfer['price'] = 0;
-          txs.push(txTransfer);
+    this.tokenService.getListTokenTransferIndexerV2(100, this.contractAddress, filterData).subscribe(
+      (res) => {
+        if (res) {
+          res?.transaction.forEach((trans) => {
+            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+          });
+          let txs = [];
+          res?.transaction.forEach((element, index) => {
+            txs.push(element);
+            if (element.type === 'buy') {
+              let txTransfer = { ...element };
+              txTransfer['type'] = 'transfer';
+              txTransfer['price'] = 0;
+              txs.push(txTransfer);
+            }
+          });
+          this.dataSource.data = txs;
+          this.pageData.length = txs?.length;
         }
-      });
-      this.dataSource.data = txs;
-      this.pageData.length = txs?.length;
-    }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   paginatorEmit(event): void {
