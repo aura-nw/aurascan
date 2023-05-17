@@ -101,12 +101,6 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
   }
 
-  validatorsListUndelegateWallet(address: string): Observable<any> {
-    return this.http.get<any>(
-      `${this.indexerUrl}/account-unbonds?chainid=${this.chainInfo.chainId}&address=${address}`,
-    );
-  }
-
   delegators(pageLimit = 100, address: string, nextKey = null) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.limit=${pageLimit}&pagination.key=${nextKey}&pagination.reverse=true`,
@@ -130,5 +124,9 @@ export class ValidatorService extends CommonService {
       block = 'latest';
     }
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BLOCK}/${block}`);
+  }
+
+  getListUndelegateLCD(address) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/delegators/${address}/unbonding_delegations`);
   }
 }
