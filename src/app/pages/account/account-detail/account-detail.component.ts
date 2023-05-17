@@ -45,7 +45,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     }
   }
   public chartOptions: Partial<ChartOptions>;
-
   @ViewChild('walletChart') chart: ChartComponent;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -53,6 +52,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   currentKey = null;
   currentAccountDetail: IAccountDetail;
   textSearch = '';
+  dataSourceToken: MatTableDataSource<any>;
+  dataSourceTokenBk: MatTableDataSource<any>;
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
@@ -63,15 +64,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
-
-  templatesToken: Array<TableTemplate> = [
-    { matColumnDef: 'token_name', headerCellDef: 'Name' },
-    { matColumnDef: 'token_amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'total_value', headerCellDef: 'Total Value' },
-  ];
-  displayedColumnsToken: string[] = this.templatesToken.map((dta) => dta.matColumnDef);
-  dataSourceToken: MatTableDataSource<any>;
-  dataSourceTokenBk: MatTableDataSource<any>;
 
   templatesDelegation: Array<TableTemplate> = [
     { matColumnDef: 'validator_name', headerCellDef: 'Validator' },
@@ -406,20 +398,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           f.amount = f.amount || '0';
           this.chartOptions.series.push(Number(f.amount));
         });
-
-        this.currentAccountDetail?.balances?.forEach((token) => {
-          token.price = 0;
-          if (token.name === this.denom) {
-            token.amount = this.currentAccountDetail.total;
-          }
-          token.total_value = token.price * Number(token.amount);
-        });
-
-        this.currentAccountDetail?.balances?.forEach((f) => {
-          f.token_amount = f.amount;
-          f.token_name = f.name;
-        });
-
         this.dataSourceToken.data = this.currentAccountDetail?.balances;
         this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
         this.dataSourceTokenBk = this.dataSourceToken;
