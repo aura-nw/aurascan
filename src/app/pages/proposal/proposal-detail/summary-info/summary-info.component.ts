@@ -4,6 +4,7 @@ import { AfterViewChecked, Component, EventEmitter, Input, OnInit, Output } from
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { from } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
 import {
@@ -45,7 +46,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   isNotReached = true;
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
   timerGetUpTime: any;
-
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
@@ -89,19 +89,19 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
                     this.proposalDetail.pro_turnout = this.proposalDetail.turnout;
                   }
                 }
-                return this.commonService.getParamFromIndexer();
+                return from(this.commonService.getParamTallyingFromLCD());
               }),
             );
           } else {
             throw new Error('');
           }
         }),
-        map((paramFromIndexer) => paramFromIndexer.data?.result[0]),
+        map((paramFromIndexer) => paramFromIndexer?.data?.tally_params),
         map((result) => {
           if (!result) {
             return;
           }
-          const { quorum, threshold, veto_threshold } = result.params?.tallying_param;
+          const { quorum, threshold, veto_threshold } = result;
           if (this.proposalDetail) {
             const { pro_votes_yes, pro_total_vote, pro_votes_abstain, pro_votes_no_with_veto } = this.proposalDetail;
 
