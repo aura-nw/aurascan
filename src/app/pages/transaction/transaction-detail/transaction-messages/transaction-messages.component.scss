@@ -69,3 +69,30 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.box-multisend {
+  .card-text {
+    padding-bottom: var(--spacer-3);
+    border-bottom: 1px solid var(--aura-gray-8);
+  }
+  .body-multisend {
+    max-height: 440px;
+    overflow-y: scroll;
+    .txt-label {
+      min-width: 75px;
+    }
+    .txt-address {
+      min-width: 365px;
+    }
+    .txt-amount {
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      text-align: right;
+    }
+  }
+
+  @media (max-width: 1366px) {
+    overflow: scroll;
+  }
+}

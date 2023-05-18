@@ -53,7 +53,6 @@ export class TransactionMessagesComponent implements OnInit {
     Ack: 'acknowledge_packet',
     TimeOut: 'timeout_packet',
   };
-  numberListSend = 5;
   spendLimitAmount = 0;
   typeGrantAllowance = 'Basic';
   denomIBC = '';
@@ -818,10 +817,6 @@ export class TransactionMessagesComponent implements OnInit {
   displayTitle(type) {
     const typeTrans = this.typeTransaction?.find((f) => f.label.toLowerCase() === type.toLowerCase());
     return typeTrans?.value;
-  }
-
-  loadMoreSend() {
-    this.numberListSend += 5;
   }
 
   getDataJson(key) {
