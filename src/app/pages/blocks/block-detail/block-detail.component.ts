@@ -14,7 +14,7 @@ import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { convertDataBlock, convertDataTransaction, Globals } from '../../../../app/global/global';
+import { Globals, convertDataBlock, convertDataTransaction, convertDataTransactionV2 } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -102,25 +102,24 @@ export class BlockDetailComponent implements OnInit {
   }
 
   getDetailByHeight() {
-    this.blockService.blocksIndexer(1, this.id).subscribe(
+    this.blockService.getBlockDetail(this.id).subscribe(
       async (res) => {
-        const { code, data } = res;
-        if (code === 200 && data?.blocks?.length > 0) {
-          const block = convertDataBlock(data)[0];
-          block['round'] = _.get(data.blocks[0], 'block.last_commit.round');
-          block['chainid'] = _.get(data.blocks[0], 'block.header.chain_id');
-          block['json_data'] = _.get(data.blocks[0], 'block');
+        if (res?.block?.length > 0) {
+          const block = convertDataBlock(res)[0];
+          block['round'] = _.get(res.block[0], 'data.last_commit.round');
+          block['chainid'] = _.get(res.block[0], 'data.header.chain_id');
+          block['json_data'] = _.get(res.block[0], 'data');
           block['gas_used'] = block['gas_wanted'] = 0;
           this.blockDetail = block;
 
           //get list tx detail
           let txs = [];
-          for (const key in data.blocks[0]?.block?.data?.txs) {
-            const element = data.blocks[0].block?.data?.txs[key];
+          for (const key in res.block[0]?.data?.data?.txs) {
+            const element = res.block[0]?.data?.data?.txs[key];
             const tx = sha256(Buffer.from(element, 'base64')).toUpperCase();
-            this.transactionService.txsIndexer(1, 0, tx).subscribe((res) => {
-              if (res.data.transactions[0]) {
-                txs.push(res.data.transactions[0]);
+            this.transactionService.getListTx(1, 0, tx).subscribe((res) => {
+              if (res?.transaction[0]) {
+                txs.push(res?.transaction[0]);
               }
             });
           }
@@ -129,9 +128,9 @@ export class BlockDetailComponent implements OnInit {
           setTimeout(() => {
             if (txs?.length > 0) {
               let dataTempTx = {};
-              dataTempTx['transactions'] = txs;
+              dataTempTx['transaction'] = txs;
               if (txs.length > 0) {
-                txs = convertDataTransaction(dataTempTx, this.coinInfo);
+                txs = convertDataTransactionV2(dataTempTx, this.coinInfo);
                 txs.forEach((k) => {
                   this.blockDetail['gas_used'] += +k.gas_used;
                   this.blockDetail['gas_wanted'] += +k.gas_wanted;

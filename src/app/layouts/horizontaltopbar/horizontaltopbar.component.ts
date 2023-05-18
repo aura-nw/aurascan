@@ -162,6 +162,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   checkEnv() {
+    this.env = this.environmentService.configValue.env;
     this.innerWidth = window.innerWidth;
     this.pageTitle =
       this.innerWidth > 992
@@ -350,9 +351,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   getTxhDetail(value): void {
-    this.transactionService.txsIndexer(1, 0, decodeURI(value)).subscribe(
-      (res: ResponseDto) => {
-        if (res.data) {
+    this.transactionService.getListTx(1, 0, decodeURI(value)).subscribe(
+      (res) => {
+        if (res?.transaction?.length > 0) {
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate(['transaction', this.searchValue]);
           });

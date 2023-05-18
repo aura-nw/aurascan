@@ -45,25 +45,25 @@ export class DepositorsComponent implements OnInit {
     this.proposalService.getDepositors(payload).subscribe(
       (res) => {
         let dataList: any[] = [];
-        if (res?.data?.transactions?.length > 0) {
-          this.dataLength = res.data?.transactions?.length || 0;
-          dataList = res?.data?.transactions?.filter(
+        if (res?.transaction?.length > 0) {
+          this.dataLength = res.transaction?.length || 0;
+          dataList = res?.transaction?.filter(
             (transaction) =>
-              transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
-              (transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
-                transaction?.tx_response?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
+              transaction?.data?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
+              (transaction?.data?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
+                transaction?.data?.body?.messages[0]?.initial_deposit?.length > 0),
           );
 
           dataList.forEach((item) => {
-            if (item.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
-              item.depositors = item.tx_response?.tx?.body?.messages[0]?.proposer;
-              item.amount = balanceOf(item.tx_response?.tx?.body?.messages[0].initial_deposit[0].amount);
+            if (item.data?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
+              item.depositors = item.data?.body?.messages[0]?.proposer;
+              item.amount = balanceOf(item.data?.body?.messages[0].initial_deposit[0].amount);
             } else {
-              item.depositors = item.tx_response?.tx?.body?.messages[0]?.depositor;
-              item.amount = balanceOf(item.tx_response?.tx?.body?.messages[0].amount[0].amount);
+              item.depositors = item.data?.body?.messages[0]?.depositor;
+              item.amount = balanceOf(item.data?.body?.messages[0].amount[0].amount);
             }
-            item.txhash = item?.tx_response?.txhash;
-            item.timestamp = item?.tx_response?.timestamp;
+            item.txhash = item?.hash;
+            item.timestamp = item?.timestamp;
           });
           this.depositorsList = dataList;
         }

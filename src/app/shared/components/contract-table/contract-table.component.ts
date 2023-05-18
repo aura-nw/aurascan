@@ -2,13 +2,14 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractTransactionType } from 'src/app/core/constants/contract.enum';
-import { ModeExecuteTransaction, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { DROPDOWN_ELEMENT, IContractPopoverData, ITableContract } from 'src/app/core/models/contract.model';
-import { ContractService } from 'src/app/core/services/contract.service';
 import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
@@ -65,7 +66,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
     public translate: TranslateService,
     public global: Globals,
     private environmentService: EnvironmentService,
-    private contractService: ContractService,
   ) {}
 
   ngOnChanges(): void {
@@ -79,7 +79,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.displayedColumns = this.templates?.map((dta) => dta.matColumnDef);
-    this.checkTotal();
   }
 
   loadTableData() {
@@ -143,12 +142,19 @@ export class ContractTableComponent implements OnInit, OnChanges {
       let from = '';
       let to = '';
       let method = '';
-      switch (contract.type) {
+      let msg = contract.messages[0]?.msg;
+      if (typeof msg === 'string') {
+        try {
+          msg = JSON.parse(contract.messages[0]?.msg);
+        } catch (e) {}
+      }
+
+      switch (contract.typeOrigin) {
         case TRANSACTION_TYPE_ENUM.InstantiateContract:
         case TRANSACTION_TYPE_ENUM.InstantiateContract2:
           method = 'instantiate';
           from = contract.messages[0].sender;
-          to = contract.contract_address;
+          to = contract.contract_address || this.contractInfo.contractsAddress;
           break;
         case TRANSACTION_TYPE_ENUM.Send:
           method = 'transfer';
@@ -157,23 +163,20 @@ export class ContractTableComponent implements OnInit, OnChanges {
           to = contract.messages[0].to_address;
           break;
         case TRANSACTION_TYPE_ENUM.ExecuteContract:
-          method = Object.keys(contract.messages[0].msg)[0];
+          method = Object.keys(msg)[0];
           value = +contract.messages[0].funds[0]?.amount;
           from = contract.messages[0].sender;
           to = contract.messages[0].contract;
           break;
         default:
-          if (contract.messages[0]?.msg?.accept_nft_offer?.funds_amount) {
-            method = ModeExecuteTransaction.AcceptOffer;
-            // value = +contract.messages[0]?.msg?.accept_nft_offer?.funds_amount;
+          if (Object.keys(msg)[0]?.length > 1) {
+            method = Object.keys(msg)[0];
           } else {
-            method = 'mint';
+            const typeTemp = contract.messages[0]['@type'];
+            method = _.find(TYPE_TRANSACTION, { label: typeTemp })?.value || typeTemp.split('.').pop();
           }
           if (contract.messages[0]?.funds) {
             value = +contract.messages[0]?.funds[0]?.amount;
-          }
-          if (contract.messages[0]?.msg) {
-            method = Object.keys(contract.messages[0]?.msg)[0];
           }
           from = contract.messages[0].sender;
           to = contract.messages[0].contract;
@@ -210,18 +213,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
       setTimeout(() => {
         this.isLoading = false;
       }, 2000);
-    }
-  }
-
-  checkTotal() {
-    if (!this.viewAll && this.dataList?.data?.length === this.pageSize) {
-      this.contractService
-        .getTransactionsIndexer(1, this.contractInfo?.contractsAddress, 'instantiate')
-        .subscribe((res) => {
-          if (res?.data?.transactions?.length > 0) {
-            this.isMoreTx = true;
-          }
-        });
     }
   }
 }

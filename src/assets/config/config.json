@@ -65,6 +65,7 @@
   },
   "image_s3": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
   "urlIndexer": "https://indexer.dev.aurascan.io/api/v1",
+  "graphUrl": "https://indexer-v2.dev.aurascan.io/v1/graphql",
   "timeInterval": 4000,
   "evnLabel": { "desktop": "Develop Testnet Network", "mobile": "Develop Testnet" }
 }

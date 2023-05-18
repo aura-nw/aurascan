@@ -28,7 +28,7 @@ import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { convertDataTransaction, Globals } from '../../../global/global';
+import { convertDataTransaction, convertDataTransactionV2, Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
@@ -301,16 +301,14 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   }
 
   getTxsFromHoroscope(nextKey = null): void {
-    const chainId = this.environmentService.configValue.chainId;
     const address = this.currentAddress;
-
-    this.transactionService.getAccountTxFromHoroscope(chainId, address, 40, nextKey).subscribe({
-      next: (txResponse) => {
-        const { code, data } = txResponse;
-        this.nextKey = data.nextKey || null;
-
-        if (code === 200) {
-          const txs = convertDataTransaction(data, this.coinInfo);
+    this.transactionService.getAccountTxFromHoroscope(address, 40, nextKey).subscribe({
+      next: (data) => {
+        if (data?.transaction?.length >= 40) {
+          this.nextKey = data?.transaction[data.length - 1].id;
+        }
+        if (data?.transaction?.length > 0) {
+          const txs = convertDataTransactionV2(data, this.coinInfo);
           txs.forEach((element) => {
             if (element.type === 'Send') {
               if (!element.messages.find((k) => k.from_address === this.currentAddress)) {

@@ -134,7 +134,7 @@
     <app-messages-item [label]="'Port'" [value]="transactionDetail?.messages[0]?.source_port"></app-messages-item>
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
@@ -156,7 +156,7 @@
     {{ getDataIBC(ibcListMapping.Receive) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="data?.packet?.sequence"
+      [value]="getLongValue(data?.packet?.sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="row mb-3 body-01" *ngIf="ibcData?.receive?.denom">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
@@ -176,7 +176,7 @@
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
     <app-messages-item
       [label]="'Signer'"
-      [value]="ibcData?.update_client?.signer"
+      [value]="ibcData?.update_client?.signer || transactionDetail.messages[0].signer"
       [dataLink]="{ url: '/account' }"></app-messages-item>
     <app-messages-item
       [label]="'Receiver'"
@@ -190,7 +190,7 @@
     {{ getDataIBC(ibcListMapping.Ack) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
@@ -224,7 +224,7 @@
     {{ getDataIBC(ibcListMapping.TimeOut, index) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.time_out[index - 1]?.next_sequence_recv"
+      [value]="getLongValue(ibcData?.time_out[index - 1]?.next_sequence_recv)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
@@ -256,7 +256,7 @@
       [value]="ibcData?.time_out[index - 1]?.proof_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Next Sequence Recv'"
-      [value]="ibcData?.time_out[index - 1]?.next_sequence_recv"></app-messages-item>
+      [value]="getLongValue(ibcData?.time_out[index - 1]?.next_sequence_recv)"></app-messages-item>
     <app-messages-item
       [label]="'Signer'"
       [value]="ibcData?.time_out[index - 1]?.signer"
@@ -312,7 +312,7 @@
   <ng-template #ibcChannelOpen let-data="data">
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
   </ng-template>
 

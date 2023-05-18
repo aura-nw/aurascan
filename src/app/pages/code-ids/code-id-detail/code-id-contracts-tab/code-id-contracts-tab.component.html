@@ -29,7 +29,10 @@
             <ng-container *ngIf="template.matColumnDef === 'creator_address'">
               <a
                 [class.text--primary]="data[template.matColumnDef]"
-                [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                [routerLink]="[
+                  data[template.matColumnDef]?.length > lengthAddress ? '/contracts' : '/account',
+                  data[template.matColumnDef]
+                ]"
                 [class.disabled-link]="!data[template.matColumnDef]">
                 {{ shortenAddress(data[template.matColumnDef]) || '-' }}
               </a>

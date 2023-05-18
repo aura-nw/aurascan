@@ -19,7 +19,7 @@ import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
-import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
+import { convertDataBlock, convertDataTransaction, convertDataTransactionV2, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 
@@ -249,21 +249,19 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getListBlock(): void {
-    this.blockService.blocksIndexer(this.PAGE_SIZE).subscribe((res) => {
-      const { code, data } = res;
-      if (code === 200) {
-        const blocks = convertDataBlock(data);
+    this.blockService.getListBlock(this.PAGE_SIZE).subscribe((res) => {
+      if (res?.block?.length > 0) {
+        const blocks = convertDataBlock(res);
         this.dataSourceBlock = new MatTableDataSource(blocks);
       }
     });
   }
 
   getListTransaction(): void {
-    this.transactionService.txsIndexer(this.PAGE_SIZE, 0).subscribe((res) => {
+    this.transactionService.getListTx(this.PAGE_SIZE, 0).subscribe((res) => {
       this.dataSourceTx.data = [];
-      const { code, data } = res;
-      if (code === 200) {
-        const txs = convertDataTransaction(data, this.coinInfo);
+      if (res?.transaction?.length > 0) {
+        const txs = convertDataTransactionV2(res, this.coinInfo);
 
         if (this.dataSourceTx.data.length > 0) {
           this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
