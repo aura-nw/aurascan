@@ -21,6 +21,7 @@ import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
+import { checkEnvQuery } from '../utils/common/info-common';
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -31,7 +32,7 @@ export class WalletService implements OnDestroy {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainId = this.environmentService.configValue.chainId;
   chainInfo = this.environmentService.configValue.chain_info;
-  urlIndexer = this.environmentService.configValue.indexerUri;
+  graphUrl = `${this.environmentService.configValue.graphUrl}`;
 
   coin98Client: Coin98Client;
   destroyed$ = new Subject();
@@ -314,38 +315,52 @@ export class WalletService implements OnDestroy {
   }
 
   private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
-    return this.http.get(`${this.urlIndexer}/account-info?address=${address}&chainId=${signDoc.chain_id}`).pipe(
-      map((res) => {
-        let accountAuth;
-        accountAuth = _.get(res, 'data.account_auth.account');
-        let account: {
-          account_number: number | string;
-          sequence: number | string;
-        };
-
-        if (accountAuth && accountAuth['@type'] === EAccountType.BaseAccount) {
-          account = accountAuth;
-        } else {
-          account = _.get(accountAuth, 'base_vesting_account.base_account');
+    const envDB = checkEnvQuery(this.environmentService.configValue.env);
+    const operationsDoc = `
+    query getAccountInfo {
+      ${envDB} {
+        account (where: {address: {_eq: $address}}) {
+          account_number
+          sequence
+          type
         }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: address,
+        },
+        operationName: 'getAccountInfo',
+      })
+      .pipe(
+        map((res) => {
+          let accountAuth;
+          accountAuth = res?.data[envDB].account;
+          let account: {
+            account_number: number | string;
+            sequence: number | string;
+          };
 
-        if (!account.account_number) {
+          if (!res?.data[envDB].account) {
+            throw new Error('Can not get Account');
+          }
+
+          if (account) {
+            return makeSignDoc(
+              signDoc.msgs,
+              signDoc.fee,
+              signDoc.chain_id,
+              signDoc.memo,
+              res?.data[envDB].account.account_number,
+              res?.data[envDB].account.sequence || 0,
+            );
+          }
           throw new Error('Can not get Account');
-        }
-
-        if (account) {
-          return makeSignDoc(
-            signDoc.msgs,
-            signDoc.fee,
-            signDoc.chain_id,
-            signDoc.memo,
-            account.account_number,
-            account.sequence || 0,
-          );
-        }
-        throw new Error('Can not get Account');
-      }),
-    );
+        }),
+      );
   }
 
   signMessage(base64String: string) {
