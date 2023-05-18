@@ -317,7 +317,7 @@ export class WalletService implements OnDestroy {
   private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
     const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
-    query getAccountInfo {
+    query getAccountInfo ($address: String) {
       ${envDB} {
         account (where: {address: {_eq: $address}}) {
           account_number
@@ -331,31 +331,28 @@ export class WalletService implements OnDestroy {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          address: address,
+          address,
         },
         operationName: 'getAccountInfo',
       })
       .pipe(
         map((res) => {
-          let accountAuth;
-          accountAuth = res?.data[envDB].account;
-          let account: {
-            account_number: number | string;
-            sequence: number | string;
-          };
-
-          if (!res?.data[envDB].account) {
+          if (!res?.data[envDB].account[0]) {
             throw new Error('Can not get Account');
           }
+          const accountAuth: {
+            account_number: number | string;
+            sequence: number | string;
+          } = res?.data[envDB].account[0];
 
-          if (account) {
+          if (accountAuth) {
             return makeSignDoc(
               signDoc.msgs,
               signDoc.fee,
               signDoc.chain_id,
               signDoc.memo,
-              res?.data[envDB].account.account_number,
-              res?.data[envDB].account.sequence || 0,
+              accountAuth.account_number,
+              accountAuth.sequence || 0,
             );
           }
           throw new Error('Can not get Account');
