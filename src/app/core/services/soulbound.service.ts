@@ -8,7 +8,6 @@ import { CommonService } from './common.service';
 @Injectable()
 export class SoulboundService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   apiUrl = `${this.environmentService.configValue.beUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {

@@ -1,21 +1,18 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
-import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IResponsesTemplates } from 'src/app/core/models/common.model';
-import { DeployContractListReq, SmartContractListReq } from 'src/app/core/models/contract.model';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
-import { checkEnvQuery } from '../utils/common/info-common';
 import { map } from 'rxjs/operators';
+import { IResponsesTemplates } from 'src/app/core/models/common.model';
+import { SmartContractListReq } from 'src/app/core/models/contract.model';
+import { EnvironmentService } from '../data-services/environment.service';
+import { checkEnvQuery } from '../utils/common/info-common';
+import { CommonService } from './common.service';
 
 @Injectable()
 export class ContractService extends CommonService {
   private contract$ = new BehaviorSubject<any>(null);
   contractObservable: Observable<any>;
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   apiUrl = `${this.environmentService.configValue.beUri}`;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
 

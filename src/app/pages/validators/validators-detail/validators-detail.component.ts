@@ -267,15 +267,15 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   getListPower(nextKey = null, isInit = true): void {
     this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe(
       (res) => {
-        const { code, data } = res;
-        this.nextKey = data.nextKey || null;
-
-        if (code === 200) {
-          const txs = _.get(data, 'transactions').map((element) => {
+        if (res?.transaction?.length > 0) {
+          if (res?.transaction?.length >= 100) {
+            this.nextKey = res?.transaction[res?.transaction?.length - 1].id;
+          }
+          const txs = _.get(res, 'transaction').map((element) => {
             let isStakeMode = false;
-            const tx_hash = _.get(element, 'tx_response.txhash');
-            const address = _.get(element, 'tx_response.tx.body.messages[0].validator_dst_address');
-            const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
+            const tx_hash = _.get(element, 'hash');
+            const address = _.get(element, 'data.body.messages[0].validator_dst_address');
+            const _type = _.get(element, 'data.body.messages[0].@type');
             if (
               _type === TRANSACTION_TYPE_ENUM.Delegate ||
               (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
@@ -285,17 +285,17 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
               isStakeMode = true;
             }
             let amount = getAmount(
-              _.get(element, 'tx_response.tx.body.messages'),
+              _.get(element, 'data.body.messages'),
               _type,
-              _.get(element, 'tx_response.tx.body.raw_log'),
+              _.get(element, 'data.body.raw_log'),
             );
 
             if (amount === 0 && element?.tx_response?.tx?.body?.messages.length > 0) {
               amount = 'More';
             }
 
-            const height = _.get(element, 'tx_response.height');
-            const timestamp = _.get(element, 'tx_response.timestamp');
+            const height = _.get(element, 'height');
+            const timestamp = _.get(element, 'timestamp');
 
             return { tx_hash, amount, isStakeMode, height, timestamp };
           });

@@ -14,7 +14,6 @@ import { LENGTH_CHARACTER } from '../constants/common.constant';
 export class TransactionService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
   envDB = checkEnvQuery(this.environmentService.configValue.env);
 
@@ -83,7 +82,7 @@ export class TransactionService extends CommonService {
     const operationsDoc = `
     query getListTx($limit: Int) {
       ${this.envDB} {
-        transaction(limit: $limit, order_by: {timestamp: desc}, where: {event_attribute_index: {value: {_eq: "${address}"} ${filterQuery} }}) {
+        transaction(limit: $limit, order_by: {timestamp: desc}, where: {event_attribute_index: {value: {_eq: "${address}"}} ${filterQuery} }) {
           id
           height
           hash

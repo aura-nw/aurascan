@@ -11,7 +11,6 @@ import { CommonService } from './common.service';
 export class BlockService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
   envDB = checkEnvQuery(this.environmentService.configValue.env);
 

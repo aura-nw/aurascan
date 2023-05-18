@@ -15,7 +15,6 @@ import { LCD_COSMOS } from '../constants/url.constant';
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.configValue.coins;
-  indexerUrl = `${this._environmentService.configValue.indexerUri}`;
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.configValue.chain_info;
