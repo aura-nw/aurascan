@@ -7,6 +7,8 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { Globals } from 'src/app/global/global';
+import { checkEnvQuery } from '../utils/common/info-common';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +17,8 @@ export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
+  graphUrl = `${this.environmentService.configValue.graphUrl}`;
+  envDB = checkEnvQuery(this.environmentService.configValue.env);
   stakingAPRSubject: BehaviorSubject<number>;
 
   constructor(
@@ -66,7 +70,39 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/${address}`);
   }
 
-  validatorsDetailListPower(address: string, pageLimit = 10, nextKey = null): Observable<any> {
+  validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
+    let filterQuery = '';
+    if (nextKey) {
+      filterQuery = ', id: {_lt: ' + `${nextKey}` + '}';
+    }
+    const operationsDoc = `
+    query getListPower($type: [String]) {
+      ${this.envDB} {
+        transaction(limit: ${limit}, order_by: {timestamp: desc}, where: {events: {event_attributes: {key: {_in: ["validator", "destination_validator"]}, value: {_eq: "${address}" }}}, transaction_messages: {type: {_in: $type}} ${filterQuery} }) {
+          id
+          hash
+          height
+          timestamp
+          data(path: "tx")
+          power_events {
+            amount
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          type: ["/cosmos.staking.v1beta1.MsgDelegate","/cosmos.staking.v1beta1.MsgUndelegate","/cosmos.staking.v1beta1.MsgBeginRedelegate"]
+        },
+        operationName: 'getListPower',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  validatorsDetailListPowerOld(address: string, pageLimit = 10, nextKey = null): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
       address,

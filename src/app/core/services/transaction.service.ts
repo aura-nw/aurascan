@@ -83,7 +83,7 @@ export class TransactionService extends CommonService {
     const operationsDoc = `
     query getListTx($limit: Int) {
       ${this.envDB} {
-        transaction(limit: $limit, order_by: {timestamp: desc}, where: {event_attribute_index: {value: {_eq: "${address}"} ${filterQuery} }}) {
+        transaction(limit: $limit, order_by: {timestamp: desc}, where: {event_attribute_index: {value: {_eq: "${address}"}} ${filterQuery} }) {
           id
           height
           hash
