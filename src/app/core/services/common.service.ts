@@ -9,6 +9,7 @@ import { CHART_RANGE, DATEFORMAT } from '../constants/common.constant';
 import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable()
 export class CommonService {
@@ -38,18 +39,8 @@ export class CommonService {
     return this._http.get<any>(`${this.apiUrl}/status`);
   }
 
-  getParamFromIndexer() {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      module: 'gov',
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this._http.get<any>(`${this.indexerUrl}/param`, {
-      params,
-    });
+  getParamTallyingFromLCD() {
+    return axios.get(`${this.chainInfo.rest}/cosmos/gov/v1beta1/params/tallying`);
   }
 
   getDateValue(time, isCustom = true) {

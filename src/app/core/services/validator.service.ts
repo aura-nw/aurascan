@@ -7,6 +7,8 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { Globals } from 'src/app/global/global';
+import { checkEnvQuery } from '../utils/common/info-common';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +17,7 @@ export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
+  graphUrl = `${this.environmentService.configValue.graphUrl}`;
   stakingAPRSubject: BehaviorSubject<number>;
 
   constructor(
@@ -47,19 +50,28 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators`);
   }
 
-  validatorsFromIndexer(address: string): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      operatorAddress: address,
-      pageLimit: 100,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/validator`, {
-      params,
-    });
+  getMissedBlockCounter(address = '') {
+    let updateQuery = '';
+    if (address !== '') {
+      updateQuery = '(where: {operator_address: {_similar: ' + address + '}})';
+    }
+    const envDB = checkEnvQuery(this.environmentService.configValue.env);
+    const operationsDoc = `
+    query getMissedBlockCounter {
+      ${envDB} {
+        validator ${updateQuery} {
+          account_address
+          missed_blocks_counter
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        operationName: 'getMissedBlockCounter',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
   }
 
   validatorsDetail(address: string): Observable<any> {
@@ -86,13 +98,7 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
   }
 
-  validatorsListUndelegateWallet(address: string): Observable<any> {
-    return this.http.get<any>(
-      `${this.indexerUrl}/account-unbonds?chainid=${this.chainInfo.chainId}&address=${address}`,
-    );
-  }
-
-  delegators(pageLimit = 100, address: string,  nextKey = null) {
+  delegators(pageLimit = 100, address: string, nextKey = null) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.limit=${pageLimit}&pagination.key=${nextKey}&pagination.reverse=true`,
     );
@@ -115,5 +121,9 @@ export class ValidatorService extends CommonService {
       block = 'latest';
     }
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BLOCK}/${block}`);
+  }
+
+  getListUndelegateLCD(address) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/delegators/${address}/unbonding_delegations`);
   }
 }
