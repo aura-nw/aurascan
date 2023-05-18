@@ -11,6 +11,7 @@ import {
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
+import { log } from 'console';
 Injectable();
 
 export class Globals {
@@ -292,14 +293,13 @@ export function convertDataTransaction(data, coinInfo) {
 }
 
 export function convertDataBlock(data) {
-  const block = _.get(data, 'blocks').map((element) => {
-    const height = _.get(element, 'block.header.height');
-    const block_hash = _.get(element, 'block_id.hash');
-    const num_txs = _.get(element, 'block.data.txs.length');
-    const proposer = _.get(element, 'validator_name');
-    const operator_address = _.get(element, 'operator_address');
-    const timestamp = _.get(element, 'block.header.time');
-
+  const block = _.get(data, 'block').map((element) => {
+    const height = _.get(element, 'height');
+    const block_hash = _.get(element, 'hash');
+    const num_txs = _.get(element, 'data.data.txs.length');
+    const proposer = _.get(element, 'validator.description.moniker');
+    const operator_address = _.get(element, 'validator.operator_address');
+    const timestamp = _.get(element, 'time');
     return { height, block_hash, num_txs, proposer, operator_address, timestamp };
   });
   return block;
