@@ -35,9 +35,9 @@ export class EnvironmentService {
     coins: '',
     env: '',
     indexerUri: '',
-    graphUrl:'',
     timeInterval: null,
     ipfsDomain: '',
+    graphUrl:'',
     evnLabel: '',
   });
 

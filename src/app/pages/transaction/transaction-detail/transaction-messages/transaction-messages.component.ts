@@ -13,6 +13,7 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 import * as _ from 'lodash';
 import { formatWithSchema } from '../../../../core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
+import * as Long from 'long';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -308,15 +309,15 @@ export class TransactionMessagesComponent implements OnInit {
         case this.eTransType.StoreCode:
           result.push({
             key: 'Sender',
-            value: data.sender || data.validator_address,
+            value: data?.sender || data?.validator_address,
             link: { url: '/account' },
           });
           result.push({ key: 'Code Id', value: this.getStoreCode(index), link: { url: '/code-ids/detail' } });
-          result.push({ value: data.wasm_byte_code, specialCase: this.specialCase.ByteCode });
+          result.push({ value: data?.wasm_byte_code, specialCase: this.specialCase.ByteCode });
           break;
 
         case this.eTransType.Vote:
-          result.push({ key: 'Proposal Id', value: data.proposal_id, link: { url: '/votings' } });
+          result.push({ key: 'Proposal Id', value: this.getLongValue(data.proposal_id), link: { url: '/votings' } });
           result.push({ key: 'Voter', value: data.voter, link: { url: '/account' } });
           result.push({ key: 'Option', value: this.parsingOptionVote(data?.option) });
           break;
@@ -418,7 +419,7 @@ export class TransactionMessagesComponent implements OnInit {
           if (this.transactionDetail?.tx?.logs?.length > 0) {
             result.push({
               key: 'Proposal Id',
-              value: this.transactionDetail?.tx?.logs[0].events[4].attributes[0].value,
+              value: this.getLongValue(this.transactionDetail?.tx?.logs[0].events[4].attributes[0].value),
               link: { url: '/votings' },
             });
             result.push({
@@ -481,7 +482,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.Deposit:
-          result.push({ key: 'Proposal Id', value: data.proposal_id, link: { url: '/votings' } });
+          result.push({ key: 'Proposal Id', value: this.getLongValue(data.proposal_id), link: { url: '/votings' } });
           result.push({ key: 'Depositor', value: data.depositor, link: { url: '/account' } });
           result.push({
             key: 'Amount',
@@ -492,7 +493,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.Deposit:
-          result.push({ key: 'Proposal Id', value: data.proposal_id, link: { url: '/votings' } });
+          result.push({ key: 'Proposal Id', value: this.getLongValue(data.proposal_id), link: { url: '/votings' } });
           result.push({ key: 'Depositor', value: data.depositor, link: { url: '/account' } });
           result.push({
             key: 'Amount',
@@ -619,8 +620,17 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   displayMsgRaw(): void {
-    this.objMsgContract = _.get(this.transactionDetail.tx.tx.body, 'messages').map((element) => {
+    this.objMsgContract = _.get(
+      this.transactionDetail?.tx?.tx?.body || this.transactionDetail?.tx?.body,
+      'messages',
+    ).map((element) => {
       let msg = _.get(element, 'msg');
+      try {
+        if (typeof msg !== 'object' && msg !== null) {
+          msg = JSON.parse(msg);
+        }
+      } catch {}
+
       //get type mint don't type token id
       if (!msg && this.transactionDetail?.raw_log.indexOf('mint') >= 0) {
         try {
@@ -690,7 +700,6 @@ export class TransactionMessagesComponent implements OnInit {
           this.ibcData['time_out'] = this.transactionDetail?.tx?.tx?.body?.messages.filter(
             (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCTimeout,
           );
-
           this.ibcData['update_client'] = this.transactionDetail?.tx?.tx?.body?.messages.find(
             (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCUpdateClient,
           );
@@ -717,17 +726,20 @@ export class TransactionMessagesComponent implements OnInit {
           }
 
           if (this.ibcData['acknowledgement']) {
+            let data;
             try {
               let dataEncode = atob(this.ibcData['acknowledgement']?.packet?.data);
-              const data = JSON.parse(dataEncode);
-              this.ibcData['acknowledgement'] = {
-                ...this.ibcData['acknowledgement'],
-                amount: data.amount,
-                denom: data.denom,
-                receiver: data.receiver,
-                sender: data.sender,
-              };
-            } catch (e) {}
+              data = JSON.parse(dataEncode);
+            } catch (e) {
+              data = this.ibcData['acknowledgement']?.packet?.data;
+            }
+            this.ibcData['acknowledgement'] = {
+              ...this.ibcData['acknowledgement'],
+              amount: data.amount,
+              denom: data.denom,
+              receiver: data.receiver,
+              sender: data.sender,
+            };
           }
 
           if (this.ibcData['receive']) {
@@ -748,19 +760,18 @@ export class TransactionMessagesComponent implements OnInit {
     if (!sequence) {
       return;
     }
-    this.transactionService.getListIBCSequence(sequence).subscribe((res) => {
-      const { code, data } = res;
-      if (code === 200) {
+    this.transactionService.getListIBCSequence(sequence, this.ibcData?.packet_src_channel).subscribe((res) => {
+      if (res?.transaction?.length > 0) {
         let typeTx;
         this.listIBCProgress = [];
-        let txs = _.get(data, 'transactions').map((element) => {
-          const code = _.get(element, 'tx_response.code');
-          const tx_hash = _.get(element, 'tx_response.txhash');
-          const time = _.get(element, 'tx_response.timestamp');
+        let txs = _.get(res, 'transaction').map((element) => {
+          const code = _.get(element, 'data.tx_response.code');
+          const tx_hash = _.get(element, 'data.tx_response.txhash');
+          const time = _.get(element, 'data.tx_response.timestamp');
           const effected = _.get(element, 'indexes.fungible_token_packet_success')?.length > 0 ? 1 : 0;
 
-          typeTx = _.get(element, 'tx_response.tx.body.messages[0].@type');
-          const lstType = _.get(element, 'tx_response.tx.body.messages');
+          typeTx = _.get(element, 'data.tx.body.messages[0].@type');
+          const lstType = _.get(element, 'data.tx.body.messages');
           if (lstType?.length > 0) {
             lstType.forEach((type) => {
               if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient) {
@@ -770,13 +781,13 @@ export class TransactionMessagesComponent implements OnInit {
             });
           }
 
-          let temp = _.get(element, 'tx_response.tx.auth_info.fee.amount[0].denom') || this.coinMinimalDenom;
+          let temp = _.get(element, 'data.tx.auth_info.fee.amount[0].denom') || this.coinMinimalDenom;
           const denom = temp === this.coinMinimalDenom ? this.denom : temp;
           return { code, tx_hash, typeTx, denom, time, effected };
         });
         if (this.ibcData['typeProgress'] === this.eTransType.IBCReceived) {
           txs = txs.filter((k) => k.typeTx === this.eTransType.IBCReceived);
-          this.denomIBC = data.transactions[0].indexes.denomination_trace_denom[0];
+          this.denomIBC = res.transaction[0]?.event_attributes[0]?.value;
         } else {
           txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
           this.denomIBC = this.transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom;
@@ -843,6 +854,14 @@ export class TransactionMessagesComponent implements OnInit {
     //check is int value
     if (Number(tempPercent) === tempPercent && tempPercent % 1 === 0) {
       value = temp;
+    }
+    return value;
+  }
+
+  getLongValue(value) {
+    const longProposalId = Long.fromValue(value);
+    if (Long.isLong(longProposalId)) {
+      value = longProposalId.toString();
     }
     return value;
   }

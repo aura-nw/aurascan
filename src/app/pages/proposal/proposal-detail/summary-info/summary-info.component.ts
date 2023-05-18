@@ -333,7 +333,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       };
       this.proposalService.getVotes(payload).subscribe((res) => {
         const optionVote = this.proposalService.getVoteMessageByConstant(
-          res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+          res?.transaction[0]?.data?.tx?.body?.messages[0]?.option,
         );
         this.proposalVotes = this.voteConstant.find((s) => s.key === optionVote)?.voteOption;
         this.voteValue = {

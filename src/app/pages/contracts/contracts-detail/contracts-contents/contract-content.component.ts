@@ -6,7 +6,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { isContract } from 'src/app/core/utils/common/validation';
-import { convertDataTransaction } from 'src/app/global/global';
+import { convertDataTransaction, convertDataTransactionV2 } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
 
@@ -36,7 +36,6 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   countCurrent: string = ContractTab.Transactions;
   contractTab = ContractTab;
   contractVerifyType = ContractVerifyType;
-  nextKey = null;
   activeId = 0;
   limit = 25;
   contractTransaction = {};
@@ -49,6 +48,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     popover: true,
   };
   dataInstantiate = [];
+  loadingContract = true;
 
   destroyed$ = new Subject();
   timerGetUpTime: any;
@@ -120,14 +120,12 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   getTransaction(isInit = true): void {
     if (isContract(this.contractsAddress)) {
-      this.contractService
-        .getTransactionsIndexer(this.limit, this.contractsAddress, 'execute')
-        .subscribe((dataExecute) => {
-          const { code, data } = dataExecute;
-          this.nextKey = dataExecute.data.nextKey;
-          if (code === 200) {
-            const txsExecute = convertDataTransaction(data, this.coinInfo);
-            if (dataExecute?.data?.transactions?.length > 0) {
+      this.contractService.getTransactionsIndexerV2(this.limit, this.contractsAddress, 'execute').subscribe(
+        (res) => {
+          const data = res;
+          if (res) {
+            const txsExecute = convertDataTransactionV2(data, this.coinInfo);
+            if (res?.transaction?.length > 0) {
               this.contractTransaction['data'] = txsExecute;
               this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
             }
@@ -136,36 +134,15 @@ export class ContractContentComponent implements OnInit, OnDestroy {
               this.contractTransaction['data'] = [...this.contractTransaction['data'], this.dataInstantiate[0]];
               this.contractTransaction['count'] = this.contractTransaction['count'] + this.dataInstantiate?.length;
             }
-
-            //check data < 25 record
-            if (isInit) {
-              if (this.contractTransaction['data']?.length < this.limit || !this.contractTransaction['data']) {
-                this.contractService
-                  .getTransactionsIndexer(this.limit, this.contractsAddress, 'instantiate')
-                  .subscribe((dataInstantiate) => {
-                    if (dataInstantiate.data?.transactions?.length > 0) {
-                      const txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
-                      txsInstantiate[0]['type'] =
-                        dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
-                      txsInstantiate[0]['contract_address'] = this.contractsAddress;
-                      let data = [];
-                      this.dataInstantiate = txsInstantiate;
-                      if (this.contractTransaction['data']?.length >= 1) {
-                        data = [...this.contractTransaction['data'], txsInstantiate[0]];
-                      } else {
-                        data = txsInstantiate;
-                      }
-                      let count = data.length || 0;
-                      this.contractTransaction = {
-                        data,
-                        count,
-                      };
-                    }
-                  });
-              }
-            }
           }
-        });
+        },
+        () => {},
+        () => {
+          this.loadingContract = false;
+        },
+      );
+    } else {
+      this.loadingContract = false;
     }
   }
 

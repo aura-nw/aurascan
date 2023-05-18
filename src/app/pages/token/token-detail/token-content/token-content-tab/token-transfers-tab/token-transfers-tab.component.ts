@@ -17,7 +17,7 @@ import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { TokenService } from '../../../../../../core/services/token.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { Globals } from '../../../../../../global/global';
+import { Globals, convertDataTransactionV2 } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -80,6 +80,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     public global: Globals,
@@ -130,27 +131,30 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       filterData['isSearchWallet'] = true;
     }
 
-    const res = await this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey);
-    if (res?.data?.code === 200) {
-      this.nextKey = res.data.data.nextKey || null;
-      res?.data?.data?.transactions.forEach((trans) => {
-        trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-      });
+    this.tokenService.getListTokenTransferIndexerV2(100, this.contractAddress, filterData).subscribe(
+      (res) => {
+        if (res) {
+          if (res.transaction.length >= 100) {
+            this.nextKey = res?.transaction[res.transaction.length - 1].id;
+          }
+          res.transaction?.forEach((trans) => {
+            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+          });
 
-      if (this.dataSource.data.length > 0 && !isReload) {
-        this.dataSource.data = [...this.dataSource.data, ...res.data.data.transactions];
-      } else {
-        this.dataSource.data = [...res.data.data.transactions];
-      }
-      this.pageData.length = this.dataSource.data.length;
-      this.resultLength.emit(this.pageData.length);
-      if (this.nextKey) {
-        this.hasMore.emit(true);
-      } else {
-        this.hasMore.emit(false);
-      }
-    }
-    this.loading = false;
+          if (this.dataSource.data.length > 0 && !isReload) {
+            this.dataSource.data = [...this.dataSource.data, ...res.transaction];
+          } else {
+            this.dataSource.data = [...res.transaction];
+          }
+          this.pageData.length = this.dataSource.data.length;
+          this.resultLength.emit(this.pageData.length);
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
