@@ -14,7 +14,6 @@ import { LENGTH_CHARACTER } from '../constants/common.constant';
 export class TransactionService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
   envDB = checkEnvQuery(this.environmentService.configValue.env);
 

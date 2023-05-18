@@ -9,12 +9,12 @@ import { CHART_RANGE, DATEFORMAT } from '../constants/common.constant';
 import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable()
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.configValue.coins;
-  indexerUrl = `${this._environmentService.configValue.indexerUri}`;
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.configValue.chain_info;
@@ -38,18 +38,8 @@ export class CommonService {
     return this._http.get<any>(`${this.apiUrl}/status`);
   }
 
-  getParamFromIndexer() {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      module: 'gov',
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this._http.get<any>(`${this.indexerUrl}/param`, {
-      params,
-    });
+  getParamTallyingFromLCD() {
+    return axios.get(`${this.chainInfo.rest}/cosmos/gov/v1beta1/params/tallying`);
   }
 
   getDateValue(time, isCustom = true) {

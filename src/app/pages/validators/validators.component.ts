@@ -203,8 +203,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getBlocksMiss() {
-    this.validatorService.validatorsFromIndexer(null).subscribe((res) => {
-      this.lstUptime = res.data.validators;
+    this.validatorService.getMissedBlockCounter('').subscribe((res) => {
+      this.lstUptime = res.validator;
     });
   }
 
@@ -212,7 +212,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     const itemUptime = this.lstUptime.find((k) => k.account_address === address);
     let result = NUM_BLOCK;
     if (itemUptime) {
-      result = NUM_BLOCK - +itemUptime.val_signing_info.missed_blocks_counter;
+      result = NUM_BLOCK - +itemUptime.missed_blocks_counter;
     }
     return result / 100;
   }
@@ -392,8 +392,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               this.lstUndelegate = null;
             }
           }
-
-          this.getDataUndelegate();
+          this.getListUndelegate();
 
           // store data wallet info
           dataInfoWallet['dataDelegate'] = JSON.stringify(this.dataDelegate);
@@ -413,11 +412,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       );
     }
   }
-
-  // async getListDelegators(address) {
-  //   const res = await this.validatorService.delegators(5, 0, address);
-  //   this.totalDelegator = res?.data?.pagination?.total;
-  // }
 
   checkAmountStaking(): void {
     let amountCheck;
@@ -635,30 +629,29 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }, 500);
   }
 
-  getDataUndelegate() {
-    this.validatorService.validatorsListUndelegateWallet(this.userAddress).subscribe((res) => {
-      let listUnDelegator = res;
-      if (listUnDelegator) {
-        this.lstUndelegate = [];
-        const now = new Date();
-        listUnDelegator.data.account_unbonding.forEach((data) => {
-          data.entries.forEach((f) => {
-            f['validator_identity'] = data.validator_description?.description?.identity;
-            f.balance = f.balance / NUMBER_CONVERT;
-            f.validator_address = data.validator_address;
-            f.validator_name = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.title;
-            f.jailed = data.validator_description?.jailed || false;
-            let timeConvert = new Date(f.completion_time);
-            if (now < timeConvert) {
-              this.lstUndelegate.push(f);
-            }
-          });
+  async getListUndelegate() {
+    const res = await this.validatorService.getListUndelegateLCD(this.userAddress);
+    let listUnDelegator = res;
+    if (listUnDelegator) {
+      this.lstUndelegate = [];
+      const now = new Date();
+      listUnDelegator.data.unbonding_responses.forEach((data) => {
+        data.entries.forEach((f) => {
+          f['validator_identity'] = data.validator_description?.description?.identity;
+          f.balance = f.balance / NUMBER_CONVERT;
+          f.validator_address = data.validator_address;
+          f.validator_name = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.title;
+          f.jailed = data.validator_description?.jailed || false;
+          let timeConvert = new Date(f.completion_time);
+          if (now < timeConvert) {
+            this.lstUndelegate.push(f);
+          }
         });
+      });
 
-        this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
-          return this.compare(a.completion_time, b.completion_time, true);
-        });
-      }
-    });
+      this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
+        return this.compare(a.completion_time, b.completion_time, true);
+      });
+    }
   }
 }
