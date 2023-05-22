@@ -23,7 +23,6 @@ export class TransactionService extends CommonService {
     const operationsDoc = `
     query auratestnet_transaction(
       $limit: Int = 100
-      $path: String = null
       $order: order_by = desc
       $compositeKey: String = null
       $value: String = null
@@ -72,7 +71,7 @@ export class TransactionService extends CommonService {
           code
           gas_used
           gas_wanted
-          data(path: $path)
+          data
         }
       }
     }
@@ -86,7 +85,6 @@ export class TransactionService extends CommonService {
           hash: payload.hash,
           compositeKey: payload.compositeKey,
           value: payload.value,
-          path: 'tx',
           key: payload.key,
           heightGT: null,
           heightLT: payload.heightLT,

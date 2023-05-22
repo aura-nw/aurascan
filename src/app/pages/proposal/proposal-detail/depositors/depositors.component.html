@@ -6,12 +6,12 @@
     </div>
     <div *ngIf="!loading">
       <app-proposal-table
-        *ngIf="depositorsList.length > 0"
+        *ngIf="depositorsList?.length > 0"
         [type]="proposalDeposit"
         [data]="depositorsList"
         [length]="depositorsList?.length">
       </app-proposal-table>
-      <div *ngIf="depositorsList.length === 0">
+      <div *ngIf="depositorsList?.length === 0">
         <app-table-no-data></app-table-no-data>
       </div>
     </div>

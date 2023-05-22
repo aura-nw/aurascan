@@ -53,51 +53,51 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.indexerUrl}/votes`, { params });
   }
 
-  // getProposalListDetail(payload) {
-  //   const envDB = checkEnvQuery(this.environmentService.configValue.env);
-  //   const operationsDoc = `
-  //   query auratestnet_proposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = 10) {
-  //     ${envDB} {
-  //       proposal(limit: $limit, offset: $offset, where: {proposal_id: {_eq: $proposalId}}, order_by: {proposal_id: $order}) {
-  //         content
-  //         deposit_end_time
-  //         description
-  //         initial_deposit
-  //         proposal_id
-  //         proposer_address
-  //         proposer {
-  //           description
-  //           operator_address
-  //           account_address
-  //         }
-  //         status
-  //         submit_time
-  //         tally
-  //         title
-  //         total_deposit
-  //         turnout
-  //         type
-  //         updated_at
-  //         voting_end_time
-  //         voting_start_time
-  //       }
-  //     }
-  //   }
+  getProposalListDetail(payload) {
+    const envDB = checkEnvQuery(this.environmentService.configValue.env);
+    const operationsDoc = `
+    query auratestnet_proposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = 10) {
+      ${envDB} {
+        proposal(limit: $limit, offset: $offset, where: {proposal_id: {_eq: $proposalId}}, order_by: {proposal_id: $order}) {
+          content
+          deposit_end_time
+          description
+          initial_deposit
+          proposal_id
+          proposer_address
+          proposer {
+            description
+            operator_address
+            account_address
+          }
+          status
+          submit_time
+          tally
+          title
+          total_deposit
+          turnout
+          type
+          updated_at
+          voting_end_time
+          voting_start_time
+        }
+      }
+    }
     
-  //   `;
-  //   return this.http
-  //     .post<any>(this.graphUrl, {
-  //       query: operationsDoc,
-  //       variables: {
-  //         limit: payload.limit,
-  //         offset: 0,
-  //         order: 'desc',
-  //         proposalId: payload.proposalId,
-  //       },
-  //       operationName: 'auratestnet_proposal',
-  //     })
-  //     .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  // }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          offset: 0,
+          order: 'desc',
+          proposalId: payload.proposalId,
+        },
+        operationName: 'auratestnet_proposal',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 
   getProposalList(pageLimit = 20, nextKey = null, proposalId = null): Observable<any> {
     const params = _({

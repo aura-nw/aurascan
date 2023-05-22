@@ -85,7 +85,7 @@ export class VotesComponent implements OnChanges {
         proposalid: this.proposalDetail.proposal_id,
       };
 
-      this.proposalDetail?.total_vote.forEach((f) => {
+      this.proposalDetail?.total_vote?.forEach((f) => {
         switch (f.answer) {
           case VOTE_OPTION.VOTE_OPTION_YES:
             this.countTotal.yes = f.count;

@@ -118,7 +118,7 @@ export class ProposalComponent implements OnInit {
                   value2: addr,
                 };
                 this.transactionService.getListTx(payload).subscribe((res) => {
-                  const optionVote = this.proposalService.getVoteMessageByConstant(res?.transaction[0]?.data?.body?.messages[0]?.option);
+                  const optionVote = this.proposalService.getVoteMessageByConstant(res?.transaction[0]?.data?.tx?.body?.messages[0]?.option);
                   pro.vote_option = this.voteConstant.find(
                     (s) => s.key === optionVote,
                   )?.voteOption;

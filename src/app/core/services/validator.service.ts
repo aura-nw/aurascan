@@ -103,14 +103,14 @@ export class ValidatorService extends CommonService {
   }
 
   validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
-    let filterQuery = '';
-    if (nextKey) {
-      filterQuery = ', id: {_lt: ' + `${nextKey}` + '}';
-    }
+    // let filterQuery = '';
+    // if (nextKey) {
+    //   filterQuery = ', id: {_lt: ' + `${nextKey}` + '}';
+    // }
     const operationsDoc = `
-    query getListPower($operator_address: String) {
+    query auratestnet_powerevent($operator_address: String, $limit: Int = 10, $offset: Int = 0) {
       auratestnet {
-        power_event(order_by: {height: desc}, where: {_or: [{validatorDst: {operator_address: {_eq: $operator_address}}}, {validatorSrc: {operator_address: {_eq: $operator_address}}}]}) {
+        power_event(order_by: {height: desc}, where: {_or: [{validatorDst: {operator_address: {_eq: $operator_address}}}, {validatorSrc: {operator_address: {_eq: $operator_address}}}]}, limit: $limit, offset: $offset) {
           id
           time
           height
@@ -119,7 +119,7 @@ export class ValidatorService extends CommonService {
             transaction_messages {
               type
             }
-            data(path: "tx.body.messages")
+            data
           }
         }
       }
@@ -131,7 +131,7 @@ export class ValidatorService extends CommonService {
         variables: {
           operator_address: address,
         },
-        operationName: 'getListPower',
+        operationName: 'auratestnet_powerevent',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
