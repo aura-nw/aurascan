@@ -42,7 +42,10 @@ export class BlocksComponent implements OnInit {
   }
 
   getList(): void {
-    this.blockService.getListBlock(this.pageSize).subscribe(
+    const payload = {
+      limit: 20,
+    };
+    this.blockService.getDataBlock(payload).subscribe(
       (res) => {
         if (res?.block?.length > 0) {
           const blocks = convertDataBlock(res);

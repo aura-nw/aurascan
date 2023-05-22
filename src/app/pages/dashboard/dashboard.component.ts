@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
+import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import * as moment from 'moment';
 import { MaskPipe } from 'ngx-mask';
 import { Subject, Subscription, timer } from 'rxjs';
@@ -12,6 +12,7 @@ import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportChart } from 'src/app/core/helpers/export';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -19,9 +20,8 @@ import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
-import { convertDataBlock, convertDataTransaction, convertDataTransactionV2, Globals } from '../../global/global';
+import { Globals, convertDataBlock, convertDataTransactionV2 } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -249,7 +249,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getListBlock(): void {
-    this.blockService.getListBlock(this.PAGE_SIZE).subscribe((res) => {
+    const payload = {
+      limit: this.PAGE_SIZE,
+    }
+    this.blockService.getDataBlock(payload).subscribe((res) => {
       if (res?.block?.length > 0) {
         const blocks = convertDataBlock(res);
         this.dataSourceBlock = new MatTableDataSource(blocks);
@@ -258,7 +261,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getListTransaction(): void {
-    this.transactionService.getListTx(this.PAGE_SIZE, 0).subscribe((res) => {
+    const payload = {
+      limit: this.PAGE_SIZE,
+    };
+    this.transactionService.getListTx(payload).subscribe((res) => {
       this.dataSourceTx.data = [];
       if (res?.transaction?.length > 0) {
         const txs = convertDataTransactionV2(res, this.coinInfo);

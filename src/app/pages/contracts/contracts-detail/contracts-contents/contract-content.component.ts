@@ -5,8 +5,9 @@ import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { isContract } from 'src/app/core/utils/common/validation';
-import { convertDataTransaction, convertDataTransactionV2 } from 'src/app/global/global';
+import { convertDataTransactionV2 } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
 
@@ -57,6 +58,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   constructor(
     private contractService: ContractService,
+    private transactionService: TransactionService,
     private router: Router,
     private aRoute: ActivatedRoute,
     private environmentService: EnvironmentService,
@@ -120,7 +122,12 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   getTransaction(isInit = true): void {
     if (isContract(this.contractsAddress)) {
-      this.contractService.getTransactionsIndexerV2(this.limit, this.contractsAddress, 'execute').subscribe(
+      const payload = {
+        limit: this.limit,
+        value: this.contractsAddress,
+        key: '_contract_address'
+      }
+      this.transactionService.getListTx(payload).subscribe(
         (res) => {
           const data = res;
           if (res) {

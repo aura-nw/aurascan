@@ -28,8 +28,8 @@ import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { convertDataTransaction, convertDataTransactionV2, Globals } from '../../../global/global';
-import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
+import { Globals, convertDataTransactionV2 } from '../../../global/global';
+import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
 
 @Component({
   selector: 'app-account-detail',
@@ -302,12 +302,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getTxsFromHoroscope(nextKey = null): void {
     const address = this.currentAddress;
-    this.transactionService.getAccountTxFromHoroscope(address, 40, nextKey).subscribe({
+    let payload = {
+      limit: 40,
+      value: address,
+      heightLT: nextKey,
+    };
+    this.transactionService.getListTx(payload).subscribe({
       next: (data) => {
-        if (data?.transaction?.length >= 40) {
-          this.nextKey = data?.transaction[data.length - 1].id;
-        }
         if (data?.transaction?.length > 0) {
+          this.nextKey = null;
+          if (data?.transaction?.length >= 40) {
+            this.nextKey = data?.transaction[data?.transaction?.length - 1].height;
+          }
           const txs = convertDataTransactionV2(data, this.coinInfo);
           txs.forEach((element) => {
             if (element.type === 'Send') {

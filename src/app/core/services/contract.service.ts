@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { EnvironmentService } from '../data-services/environment.service';
-import { checkEnvQuery } from '../utils/common/info-common';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -28,57 +26,6 @@ export class ContractService extends CommonService {
 
   getListContract(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
-  }
-
-  getTransactionsIndexerV2(
-    pageLimit: string | number,
-    contractAddress = '',
-    type: string,
-    hashIns = '',
-    nextKey = null,
-  ) {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
-    let filterQuery = '';
-    if (type) {
-      if (type === 'execute' && hashIns) {
-        filterQuery = `, hash: {_neq: ${hashIns}}`;
-      } else if (type === 'instantiate') {
-        filterQuery = `, events : {type: {_eq: "${type}" }}`;
-      }
-    }
-    if (nextKey) {
-      filterQuery = filterQuery.concat(', id: {_lt: ' + `${nextKey}` + '}');
-    }
-
-    const operationsDoc = `
-    query getListTx($limit: Int, $event_attr_val: String, $tx_msg_val: jsonb) {
-      ${envDB} {
-        transaction(limit: $limit, order_by: {timestamp: desc}, where: {_and: {_or: [{events: {event_attributes: {key: {_eq: "_contract_address"}, value: {_eq: $event_attr_val}}}}, {transaction_messages: {content: {_contains: $tx_msg_val}}}] ${filterQuery} }}) {
-          id
-          height
-          hash
-          timestamp
-          code
-          gas_used
-          gas_wanted
-          data(path: "tx")
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          limit: pageLimit,
-          event_attr_val: contractAddress,
-          tx_msg_val: {
-            contract: contractAddress,
-          },
-        },
-        operationName: 'getListTx',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
   }
 
   verifyCodeID(data: any): Observable<any> {

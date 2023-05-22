@@ -1,14 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
 import { checkEnvQuery } from '../utils/common/info-common';
-import { map } from 'rxjs/operators';
-import { LENGTH_CHARACTER } from '../constants/common.constant';
+import { CommonService } from './common.service';
 
 @Injectable()
 export class TransactionService extends CommonService {
@@ -21,68 +19,52 @@ export class TransactionService extends CommonService {
     super(http, environmentService);
   }
 
-  getListTx(limit: number, offset: string | number, txHash = '') {
-    let updateQuery = '';
-    let path = '(path: "tx")';
-    if (txHash?.length > 0 && txHash?.length === LENGTH_CHARACTER.TRANSACTION) {
-      updateQuery = ', where: {hash: {_eq: ' + `"${txHash}"` + '}}';
-      path = '';
-    }
+  getListTx(payload) {
     const operationsDoc = `
-    query getListTx($limit: Int) {
-      ${this.envDB} {
-        transaction(limit: $limit, order_by: {timestamp: desc} ${updateQuery}) {
-          height
-          hash
-          timestamp
-          code
-          gas_used
-          gas_wanted
-          data${path}
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          limit: limit,
-        },
-        operationName: 'getListTx',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  // txsIndexer(pageLimit: string | number, offset: string | number, txHash = ''): Observable<any> {
-  //   const params = _({
-  //     chainid: this.chainInfo.chainId,
-  //     pageLimit,
-  //     offset,
-  //     txHash,
-  //   })
-  //     .omitBy(_.isNull)
-  //     .omitBy(_.isUndefined)
-  //     .value();
-
-  //   return this.http.get<any>(`${this.indexerUrl}/transaction`, {
-  //     params,
-  //   });
-  // }
-
-  txsDetailLcd(txhash: string) {
-    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs/${txhash}`);
-  }
-
-  getAccountTxFromHoroscope(address: string, pageLimit = 10, nextKey = null): Observable<any> {
-    let filterQuery = '';
-    if (nextKey) {
-      filterQuery = ', id: {_lt: ' + `${nextKey}` + '}';
-    }
-    const operationsDoc = `
-    query getListTx($limit: Int) {
-      ${this.envDB} {
-        transaction(limit: $limit, order_by: {timestamp: desc}, where: {event_attribute_index: {value: {_eq: "${address}"}} ${filterQuery} }) {
+    query auratestnet_transaction(
+      $limit: Int = 100
+      $path: String = null
+      $order: order_by = desc
+      $compositeKey: String = null
+      $value: String = null
+      $key: String = null
+      $compositeKey2: String = null
+      $value2: String = null
+      $key2: String = null
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $indexGT: Int = null
+      $indexLT: Int = null
+      $hash: String = null
+      $height: Int = null
+    ) {
+      auratestnet {
+        transaction(
+          limit: $limit
+          where: {
+            hash: { _eq: $hash }
+            height: { _eq: $height }
+            event_attribute_index: {
+              value: { _eq: $value }
+              composite_key: { _eq: $compositeKey }
+              key: { _eq: $key }
+            }
+            _and: [
+              { height: { _gt: $heightGT } }
+              { index: { _gt: $indexGT } }
+              { height: { _lt: $heightLT } }
+              { index: { _lt: $indexLT } }
+              {
+                event_attribute_index: {
+                  value: { _eq: $value2 }
+                  composite_key: { _eq: $compositeKey2 }
+                  key: { _eq: $key2 }
+                }
+              }
+            ]
+          }
+          order_by: { height: $order, index: $order }
+        ) {
           id
           height
           hash
@@ -90,7 +72,7 @@ export class TransactionService extends CommonService {
           code
           gas_used
           gas_wanted
-          data(path: "tx")
+          data(path: $path)
         }
       }
     }
@@ -99,28 +81,30 @@ export class TransactionService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: pageLimit,
+          limit: payload.limit,
+          order: 'desc',
+          hash: payload.hash,
+          compositeKey: payload.compositeKey,
+          value: payload.value,
+          path: 'tx',
+          key: payload.key,
+          heightGT: null,
+          heightLT: payload.heightLT,
+          indexGT: null,
+          indexLT: null,
+          height: null,
+          compositeKey2: payload.compositeKey2,
+          value2: payload.value2,
+          key2: payload.key2,
         },
-        operationName: 'getListTx',
+        operationName: 'auratestnet_transaction',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  // getAccountTxFromHoroscope(chainId: string, address: string, pageLimit = 10, nextKey = null): Observable<any> {
-  //   const params = _({
-  //     chainid: chainId,
-  //     address,
-  //     pageLimit,
-  //     nextKey,
-  //   })
-  //     .omitBy(_.isNull)
-  //     .omitBy(_.isUndefined)
-  //     .value();
-
-  //   return this.http.get<any>(`${this.indexerUrl}/transaction`, {
-  //     params,
-  //   });
-  // }
+  txsDetailLcd(txhash: string) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs/${txhash}`);
+  }
 
   getListIBCSequence(sequence, channel): Observable<any> {
     const operationsDoc = `
@@ -148,8 +132,13 @@ export class TransactionService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: 20,
-          compositeKey: ["send_packet.packet_sequence", "recv_packet.packet_sequence", "acknowledge_packet.packet_sequence", "timeout_packet.packet_sequence"],
-          value: sequence
+          compositeKey: [
+            'send_packet.packet_sequence',
+            'recv_packet.packet_sequence',
+            'acknowledge_packet.packet_sequence',
+            'timeout_packet.packet_sequence',
+          ],
+          value: sequence,
         },
         operationName: 'getListSequence',
       })

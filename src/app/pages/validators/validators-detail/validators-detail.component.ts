@@ -175,13 +175,14 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   getListBlockWithOperator(nextKeyBlock = null, isInit = true): void {
     let payload = {
+      limit: 100,
       address: this.currentAddress,
       nextHeight: null,
     };
     if (nextKeyBlock !== null) {
       payload.nextHeight = nextKeyBlock;
     }
-    this.blockService.getBlockWithOperator(payload).subscribe(
+    this.blockService.getDataBlock(payload).subscribe(
       (res) => {
         this.nextKeyBlock = res.block[res.block.length - 1].height;
         if (res.block.length > 0) {
@@ -267,15 +268,15 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   getListPower(nextKey = null, isInit = true): void {
     this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe(
       (res) => {
-        if (res?.transaction?.length > 0) {
-          if (res?.transaction?.length >= 100) {
-            this.nextKey = res?.transaction[res?.transaction?.length - 1].id;
+        if (res?.power_event?.length > 0) {
+          if (res?.power_event?.length >= 100) {
+            this.nextKey = res?.power_event[res?.power_event?.length - 1].id;
           }
-          const txs = _.get(res, 'transaction').map((element) => {
+          const txs = _.get(res, 'power_event').map((element) => {
             let isStakeMode = false;
-            const tx_hash = _.get(element, 'hash');
-            const address = _.get(element, 'data.body.messages[0].validator_dst_address');
-            const _type = _.get(element, 'data.body.messages[0].@type');
+            const tx_hash = _.get(element, 'transaction.hash');
+            const address = _.get(element, 'transaction.data[0].validator_dst_address');
+            const _type = _.get(element, 'transaction.transaction_messages[0].type');
             if (
               _type === TRANSACTION_TYPE_ENUM.Delegate ||
               (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
@@ -284,18 +285,14 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
             ) {
               isStakeMode = true;
             }
-            let amount = getAmount(
-              _.get(element, 'data.body.messages'),
-              _type,
-              _.get(element, 'data.body.raw_log'),
-            );
+            let amount = getAmount(_.get(element, 'transaction.data'), _type, _.get(element, 'data.body.raw_log'));
 
-            if (amount === 0 && element?.tx_response?.tx?.body?.messages.length > 0) {
+            if (amount === 0 && element?.transaction?.data?.length > 0) {
               amount = 'More';
             }
 
             const height = _.get(element, 'height');
-            const timestamp = _.get(element, 'timestamp');
+            const timestamp = _.get(element, 'time');
 
             return { tx_hash, amount, isStakeMode, height, timestamp };
           });
@@ -439,14 +436,18 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getMissedBlockCounter() {
-    this.validatorService.getMissedBlockCounter(this.currentValidatorDetail.operator_address).subscribe((res) => {
-      this.currentValidatorDetail['up_time'] =
-        (NUM_BLOCK - +res.validator[0].missed_blocks_counter) / 100;
+    const payload = {
+      limit: 1,
+      offset: 0,
+      operator_address: this.currentValidatorDetail.operator_address,
+    };
+    this.validatorService.getDataValidator(payload).subscribe((res) => {
+      this.currentValidatorDetail['up_time'] = (NUM_BLOCK - +res.validator[0].missed_blocks_counter) / 100;
     });
   }
 
   getListUpTime(): void {
-    this.blockService.getListBlock(this.numberLastBlock).subscribe(
+    this.blockService.getDataBlock(this.numberLastBlock).subscribe(
       (res) => {
         if (res?.block?.length > 0) {
           const block = _.get(res, 'block').map((element) => {

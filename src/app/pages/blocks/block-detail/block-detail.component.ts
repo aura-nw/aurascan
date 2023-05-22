@@ -14,7 +14,7 @@ import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { Globals, convertDataBlock, convertDataTransaction, convertDataTransactionV2 } from '../../../../app/global/global';
+import { Globals, convertDataBlock, convertDataTransactionV2 } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -22,8 +22,7 @@ import { Globals, convertDataBlock, convertDataTransaction, convertDataTransacti
   styleUrls: ['./block-detail.component.scss'],
 })
 export class BlockDetailComponent implements OnInit {
-  id: string | number;
-  blockId: string | number;
+  blockHeight: string | number;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
@@ -87,22 +86,25 @@ export class BlockDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('height');
-    this.blockId = this.route.snapshot.paramMap.get('blockId');
-    if (this.id === 'null' || this.blockId === 'null') {
+    this.blockHeight = this.route.snapshot.paramMap.get('height');
+    if (this.blockHeight === 'null') {
       this.router.navigate(['/']);
     }
     this.getDetail();
   }
 
   getDetail(): void {
-    if (this.id) {
+    if (this.blockHeight) {
       this.getDetailByHeight();
     }
   }
 
   getDetailByHeight() {
-    this.blockService.getBlockDetail(this.id).subscribe(
+    let payload = {
+      limit: 1,
+      height: this.blockHeight,
+    };
+    this.blockService.getDataBlock(payload).subscribe(
       async (res) => {
         if (res?.block?.length > 0) {
           const block = convertDataBlock(res)[0];
@@ -117,7 +119,12 @@ export class BlockDetailComponent implements OnInit {
           for (const key in res.block[0]?.data?.data?.txs) {
             const element = res.block[0]?.data?.data?.txs[key];
             const tx = sha256(Buffer.from(element, 'base64')).toUpperCase();
-            this.transactionService.getListTx(1, 0, tx).subscribe((res) => {
+
+            const payload = {
+              limit: 1,
+              hash: tx,
+            };
+            this.transactionService.getListTx(payload).subscribe((res) => {
               if (res?.transaction[0]) {
                 txs.push(res?.transaction[0]);
               }

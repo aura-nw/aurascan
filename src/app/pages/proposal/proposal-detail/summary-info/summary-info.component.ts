@@ -21,6 +21,7 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 const marked = require('marked');
 
 @Component({
@@ -57,6 +58,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private numberPipe: DecimalPipe,
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -328,12 +330,14 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (addr) {
       const payload = {
-        proposalId: this.proposalId,
-        wallet: addr,
+        limit: 1,
+        composite_key: 'proposal_vote.proposal_id',
+        value: this.proposalId?.toString(),
+        value2: addr,
       };
-      this.proposalService.getVotes(payload).subscribe((res) => {
+      this.transactionService.getListTx(payload).subscribe((res) => {
         const optionVote = this.proposalService.getVoteMessageByConstant(
-          res?.transaction[0]?.data?.tx?.body?.messages[0]?.option,
+          res?.transaction[0]?.data?.body?.messages[0]?.option,
         );
         this.proposalVotes = this.voteConstant.find((s) => s.key === optionVote)?.voteOption;
         this.voteValue = {

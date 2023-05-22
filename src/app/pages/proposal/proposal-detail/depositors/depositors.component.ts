@@ -6,6 +6,7 @@ import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 
 @Component({
   selector: 'app-depositors',
@@ -25,6 +26,7 @@ export class DepositorsComponent implements OnInit {
     private proposalService: ProposalService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
+    private transactionService: TransactionService
   ) {
     this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
       if (event) {
@@ -39,10 +41,11 @@ export class DepositorsComponent implements OnInit {
 
   getDepositorsList(): void {
     const payload = {
-      proposalId: this.proposalId,
-      pageLimit: 100,
+      key: "proposal_id",
+      value: this.proposalId?.toString(),
+      limit: 100,
     };
-    this.proposalService.getDepositors(payload).subscribe(
+    this.transactionService.getListTx(payload).subscribe(
       (res) => {
         let dataList: any[] = [];
         if (res?.transaction?.length > 0) {

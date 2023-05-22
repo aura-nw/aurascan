@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
@@ -88,37 +87,6 @@ export class TokenService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
   }
-
-  // getListTokenTransferIndexerOld(pageLimit: string | number, contractAddress: string, filterData: any, nextKey = null) {
-  //   const params = _({
-  //     chainid: this.chainInfo.chainId,
-  //     searchType: 'execute',
-  //     searchKey: '_contract_address',
-  //     searchValue: contractAddress,
-  //     needFullLog: true,
-  //     pageLimit,
-  //     nextKey,
-  //     // countTotal: true,
-  //   })
-  //     .omitBy(_.isNull)
-  //     .omitBy(_.isUndefined)
-  //     .value();
-
-  //   if (filterData?.keyWord) {
-  //     if (
-  //       filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION &&
-  //       filterData?.keyWord == filterData?.keyWord.toUpperCase()
-  //     ) {
-  //       params['txHash'] = filterData?.keyWord;
-  //     } else if (filterData['isSearchWallet']) {
-  //       params['addressInContract'] = filterData?.keyWord;
-  //     } else {
-  //       params['query'] = 'wasm.token_id=' + filterData?.keyWord;
-  //     }
-  //   }
-
-  //   return axios.get(`${this.indexerUrl}/transaction`, { params });
-  // }
 
   getListTokenNFTFromIndexer(payload): Observable<any> {
     const params = _({

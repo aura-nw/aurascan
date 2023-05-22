@@ -18,6 +18,7 @@ import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { shortenAddressStartEnd } from '../../core/utils/common/shorten';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 
 @Component({
   selector: 'app-proposal',
@@ -73,6 +74,7 @@ export class ProposalComponent implements OnInit {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     public commonService: CommonService,
+    private transactionService: TransactionService
   ) {}
 
   ngOnInit(): void {
@@ -110,11 +112,13 @@ export class ProposalComponent implements OnInit {
             const getVoted = async () => {
               if (addr) {
                 const payload = {
-                  proposalId: pro.proposal_id,
-                  wallet: addr,
+                  limit: 1,
+                  composite_key: 'proposal_vote.proposal_id',
+                  value: pro.proposal_id?.toString(),
+                  value2: addr,
                 };
-                this.proposalService.getVotes(payload).subscribe((res) => {
-                  const optionVote = this.proposalService.getVoteMessageByConstant(res?.transaction[0]?.data?.tx?.body?.messages[0]?.option);
+                this.transactionService.getListTx(payload).subscribe((res) => {
+                  const optionVote = this.proposalService.getVoteMessageByConstant(res?.transaction[0]?.data?.body?.messages[0]?.option);
                   pro.vote_option = this.voteConstant.find(
                     (s) => s.key === optionVote,
                   )?.voteOption;

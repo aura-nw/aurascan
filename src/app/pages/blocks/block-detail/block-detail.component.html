@@ -4,7 +4,7 @@
 
 <ng-container *ngIf="!loading">
   <ng-container *ngIf="blockDetail; else noValues">
-    <app-pagetitle title="Details for Block #{{ id || blockDetail?.height }}"></app-pagetitle>
+    <app-pagetitle title="Details for Block #{{ blockHeight || blockDetail?.height }}"></app-pagetitle>
     <!-- Tabs -->
     <ul
       ngbNav

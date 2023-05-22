@@ -277,7 +277,10 @@ export function convertDataTransaction(data, coinInfo) {
         if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.GetReward) {
           type = TypeTransaction.GetReward;
         } else if (lstType?.length > 1) {
-          if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+          if (
+            lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.MultiSend ||
+            lstType[1]['@type'] === TRANSACTION_TYPE_ENUM.Send
+          ) {
             type = TypeTransaction.MultiSend;
           } else {
             type = 'Multiple';

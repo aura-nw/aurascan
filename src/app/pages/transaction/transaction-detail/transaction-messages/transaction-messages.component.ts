@@ -366,7 +366,7 @@ export class TransactionMessagesComponent implements OnInit {
             pipeType: pipeTypeData.BalanceOf,
           });
           result.push({ key: 'Delegator Address', value: data.delegator_address, link: { url: '/account' } });
-          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators'} });
+          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators' } });
           result.push({
             key: 'Amount',
             value: data.value?.amount,
@@ -620,7 +620,7 @@ export class TransactionMessagesComponent implements OnInit {
 
   displayMsgRaw(): void {
     this.objMsgContract = _.get(
-      this.transactionDetail?.tx?.tx?.body || this.transactionDetail?.tx?.body,
+      this.transactionDetail?.tx?.tx?.body || this.transactionDetail?.tx?.body || this.transactionDetail,
       'messages',
     ).map((element) => {
       let msg = _.get(element, 'msg');

@@ -10,10 +10,7 @@ export class JwtInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const currentUser = this.authenticationService.currentUserValue;
     request = request.clone({
-      setHeaders: {
-        'x-hasura-admin-secret': 'abc@123',
-        'Hasura-Client-Name': 'hasura-console',
-      },
+      setHeaders: {},
     });
     return next.handle(request);
   }
