@@ -96,3 +96,20 @@
     overflow: scroll;
   }
 }
+
+.card-info {
+  background-color: var(--aura-gray-10);
+}
+
+.box-event-log {
+  background-color: var(--aura-gray-9);
+  border-radius: 8px;
+  padding: 8px 20px;
+  padding-left: calc(var(--bs-gutter-x) * .5);
+  .item-event-log:not(:last-child) {
+    margin-bottom: var(--spacer-7);
+  }
+  .txt-event-key {
+    color: var(--aura-gray-4);
+  }
+}

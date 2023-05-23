@@ -42,18 +42,18 @@
           <div class="row box-error" *ngIf="errorMessage">
             {{ errorMessage }}
           </div>
-          <div class="row mb-3 body justify-content-between justify-content-lg-start">
+          <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Chain Id</div>
             <div class="col-auto col-lg-10 text--gray-1 body-01 mb-0">{{ transaction?.chainid }}</div>
           </div>
-          <div class="row mb-3 body justify-content-between justify-content-lg-start">
+          <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">TxHash</div>
             <div class="col-auto col-lg-10 text--gray-1 body-01">
               <span class="d-none d-lg-block">{{ transaction?.tx_hash }}</span>
               <span class="d-lg-none">{{ transaction?.tx_hash | cutStringPipe : 8 : 8 }}</span>
             </div>
           </div>
-          <div class="row mb-3 body justify-content-between justify-content-lg-start">
+          <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Status</div>
             <div class="col-auto col-lg-10 d-flex align-items-center body-01">
               <img
@@ -69,7 +69,7 @@
               }}</span>
             </div>
           </div>
-          <div class="row mb-3 body justify-content-between justify-content-lg-start">
+          <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Height</div>
             <div class="col-auto col-lg-10 body-01">
               <a class="text--primary" routerLink="/blocks/{{ transaction?.height }}">
@@ -77,7 +77,7 @@
               </a>
             </div>
           </div>
-          <div class="row mb-3 body justify-content-between justify-content-lg-start">
+          <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Time</div>
             <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1 body-01">
               <div>{{ commonService.getDateValue(transaction?.timestamp)[0] }}</div>
@@ -90,7 +90,7 @@
               </div>
             </div>
           </div>
-          <div class="row mb-3 body justify-content-between justify-content-lg-start">
+          <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Fee</div>
             <div class="col-auto col-lg-10 text--gray-1 body-01">
               {{ +transaction?.fee | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
@@ -111,13 +111,16 @@
       </div>
     </div>
 
-    <div class="card text--white" *ngIf="!isRawData && transaction?.messages">
-      <app-transaction-messages
-        [transactionDetail]="transaction"
-        [listValidator]="listValidator || []"
-        *ngIf="listValidator?.length > 0">
-      </app-transaction-messages>
-    </div>
+    <ng-container *ngIf="!isRawData && transaction?.messages">
+      <h2 class="text--white">Messages</h2>
+      <div class="card text--white">
+        <app-transaction-messages
+          [transactionDetail]="transaction"
+          [listValidator]="listValidator || []"
+          *ngIf="listValidator?.length > 0">
+        </app-transaction-messages>
+      </div>
+    </ng-container>
 
     <div class="card text--white" *ngIf="!isRawData && transaction?.read_set">
       <div class="card-header title-small">Read</div>

@@ -65,9 +65,13 @@ export class TransactionMessagesComponent implements OnInit {
   specialCase = {
     ByteCode: 'ByteCode',
     MultiSend: 'MultiSend',
+    EventLog: 'EventLog',
   };
   currentIndex = 0;
   transactionTypeArr = [];
+  pipeData = pipeTypeData;
+  eventLogData = [];
+  idxLog = 0;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -157,7 +161,6 @@ export class TransactionMessagesComponent implements OnInit {
       if (this.currentIndex !== index) {
         return;
       }
-      this.currentIndex++;
       let result = [];
 
       const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
@@ -286,7 +289,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.ExecuteContract:
-          this.displayMsgRaw();
+          this.displayMsgRaw(index);
           result.push({ key: 'Contract', value: data?.contract, link: { url: '/contracts' } });
           result.push({ key: 'Sender', value: data?.sender, link: { url: '/account' } });
           result.push({ key: 'Messages', value: this.objMsgContract, pipeType: pipeTypeData.Json });
@@ -294,7 +297,7 @@ export class TransactionMessagesComponent implements OnInit {
 
         case this.eTransType.InstantiateContract:
         case this.eTransType.InstantiateContract2:
-          this.displayMsgRaw();
+          this.displayMsgRaw(index);
           result.push({
             key: 'Contract',
             value: this.getDataJson('_contract_address'),
@@ -540,7 +543,15 @@ export class TransactionMessagesComponent implements OnInit {
         default:
           break;
       }
+      console.log(this.transactionDetail?.tx?.logs[0]?.events);
+
+      result.push({
+        key: 'Event Log',
+        value: this.transactionDetail?.tx?.logs,
+        specialCase: this.specialCase.EventLog,
+      });
       this.currentData.push(result);
+      this.currentIndex++;
     });
   }
 
@@ -618,37 +629,42 @@ export class TransactionMessagesComponent implements OnInit {
     } catch (e) {}
   }
 
-  displayMsgRaw(): void {
-    this.objMsgContract = _.get(
+  displayMsgRaw(idx = 0): void {
+    let msgs = _.get(
       this.transactionDetail?.tx?.tx?.body || this.transactionDetail?.tx?.body || this.transactionDetail,
       'messages',
-    ).map((element) => {
-      let msg = _.get(element, 'msg');
-      try {
-        if (typeof msg !== 'object' && msg !== null) {
-          msg = JSON.parse(msg);
-        }
-      } catch {}
-
-      //get type mint don't type token id
-      if (!msg && this.transactionDetail?.raw_log.indexOf('mint') >= 0) {
+    );
+    msgs?.forEach((element, index) => {
+      if (idx === index) {
+        let msg = _.get(element, 'msg');
         try {
-          const jsonData = JSON.parse(this.transactionDetail?.raw_log);
-          if (jsonData && jsonData[0]) {
-            const data = jsonData[0]?.events[jsonData[0]?.events?.length - 1]?.attributes;
-            let tokenId = data.find((k) => k.key === 'token_id')?.value || null;
-            msg = { mint: { token_id: tokenId || null } };
+          if (typeof msg !== 'object' && msg !== null) {
+            msg = JSON.parse(msg);
           }
-        } catch (e) {
-          msg = { mint: { token_id: null } };
+        } catch {}
+
+        //get type mint don't type token id
+        if (!msg && this.transactionDetail?.raw_log.indexOf('mint') >= 0) {
+          try {
+            const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+            if (jsonData && jsonData[0]) {
+              const data = jsonData[0]?.events[jsonData[0]?.events?.length - 1]?.attributes;
+              let tokenId = data.find((k) => k.key === 'token_id')?.value || null;
+              msg = { mint: { token_id: tokenId || null } };
+            }
+          } catch (e) {
+            msg = { mint: { token_id: null } };
+          }
         }
+        const funds = _.get(element, 'funds');
+        let result = { msg, funds };
+        this.objMsgContract = result;
+        return;
       }
-      const funds = _.get(element, 'funds');
-      return { msg, funds };
     });
 
     //get first data if array = 1
-    if (this.objMsgContract.length === 1) {
+    if (this.objMsgContract?.length === 1) {
       this.objMsgContract = this.objMsgContract[0];
     }
   }
@@ -859,5 +875,31 @@ export class TransactionMessagesComponent implements OnInit {
       value = longProposalId.toString();
     }
     return value;
+  }
+
+  displayLogAmount(value = '',index = 0) {
+    // let a = '100000000utaura';
+    // this.transactionDetail?.tx?.logs[0]?.events?.forEach((element, index) => {
+    //   let arr = element.attributes.filter(k => k.key === 'amount');
+    //   console.log(arr);
+    //   // this.displayLogAmount.push({key:index, })
+    // });
+    // // console.log(index);
+    console.log(value);
+    
+    if (index === this.idxLog) {
+      let result = value.match(/\d+/g)[0];
+      let denom = this.commonService.mappingNameIBC(value.replace(result, '') || this.denom);
+      result = balanceOf(result)?.toString();
+      // if (value.indexOf('aura')) {
+      //   result = balanceOf(result);
+      // } else if (value.indexOf('ibc')) {
+      //   result = balanceOf(result);
+      // }
+      // return result;
+      this.idxLog++;
+      return result + `<span class="text--primary ml-1">` + denom + `</span>`;
+    }
+    return null;
   }
 }
