@@ -60,17 +60,30 @@
                         <ng-container *ngFor="let element of item.value; let index = index">
                           <div class="item-event-log" *ngIf="index === i">
                             <span class="caption fw-normal">{{ element.events.type }}</span>
-                            <ng-container *ngFor="let item of element.events; let i = index">
-                              <div class="">
-                                <div class="col-3 txt-event-key caption fw-normal text--white">
+                            <!-- <ng-container *ngFor="let item of element.events; let i = index"> -->
+                            <mat-expansion-panel
+                              hideToggle
+                              *ngFor="let item of element.events; first as isFirst; let i = index"
+                              [expanded]="isFirst">
+                              <mat-expansion-panel-header class="content-contract">
+                                <mat-panel-title class="item-content body-02 text--gray-1">
+                                  <div class="txt-header caption fw-normal text--white">
+                                    {{ item.type }}
+                                  </div>
+                                </mat-panel-title>
+                                <mat-panel-description> </mat-panel-description>
+                              </mat-expansion-panel-header>
+
+                              <!-- <div class="col-3 txt-event-key caption fw-normal text--white mb-3">
                                   {{ item.type }}
-                                </div>
+                                </div> -->
+                              <div class="content-log">
                                 <ng-container *ngFor="let data of item.attributes; let idx = index">
-                                  <div class="mb-2 d-flex">
-                                    <span class="col-3 txt-event-key body-02 fw-normal text-capitalize">{{
+                                  <div class="ml-5 mb-2 d-flex">
+                                    <span class="col-2 txt-event-key body-02 fw-normal text-capitalize">{{
                                       data.key
                                     }}</span>
-                                    <span class="col-9 body-01">
+                                    <span class="col-10 body-01">
                                       {{ data.value }}
                                       <!-- <ng-container *ngIf="data.key === 'amount'">
                                         <span [innerHTML]="displayLogAmount(data.value, idx)"></span
@@ -80,7 +93,8 @@
                                   </div>
                                 </ng-container>
                               </div>
-                            </ng-container>
+                            </mat-expansion-panel>
+                            <!-- </ng-container> -->
                           </div>
                         </ng-container>
                       </div>
