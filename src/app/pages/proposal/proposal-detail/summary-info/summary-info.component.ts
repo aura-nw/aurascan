@@ -72,7 +72,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       proposalId: this.proposalId
     }
     this.proposalService
-      .getProposalListDetail(payload)
+      .getProposalData(payload)
       .pipe(
         map((dta) => dta),
         mergeMap((data) => {
@@ -110,7 +110,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
           const { quorum, threshold, veto_threshold } = result;
           if (this.proposalDetail) {
             const { pro_votes_yes, pro_total_vote, pro_votes_abstain, pro_votes_no_with_veto } = this.proposalDetail;
-
             this.proposalDetail['quorum'] = quorum * 100;
             this.proposalDetail['threshold'] = threshold * 100;
             this.proposalDetail['veto_threshold'] = veto_threshold * 100;
@@ -195,16 +194,10 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   }
 
   makeProposalDataDetail(data) {
-    let pro_votes_yes = balanceOf(+data.final_tally_result?.yes);
-    let pro_votes_no = balanceOf(+data.final_tally_result?.no);
-    let pro_votes_no_with_veto = balanceOf(+data.final_tally_result?.no_with_veto);
-    let pro_votes_abstain = balanceOf(+data.final_tally_result?.abstain);
-    if (data.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
-      pro_votes_yes = balanceOf(+data.tally?.yes);
-      pro_votes_no = balanceOf(+data.tally?.no);
-      pro_votes_no_with_veto = balanceOf(+data.tally?.no_with_veto);
-      pro_votes_abstain = balanceOf(+data.tally?.abstain);
-    }
+    let pro_votes_yes = balanceOf(+data.tally.yes);
+    let pro_votes_no = balanceOf(+data.tally.no);
+    let pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
+    let pro_votes_abstain = balanceOf(+data.tally.abstain);
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
 
     return {
