@@ -5,7 +5,7 @@ import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
-import { pipeTypeData, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
+import { CodeTransaction, pipeTypeData, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
 import { getAmount, Globals } from '../../../../global/global';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -543,13 +543,15 @@ export class TransactionMessagesComponent implements OnInit {
         default:
           break;
       }
-      console.log(this.transactionDetail?.tx?.logs[0]?.events);
+      
+      if (this.transactionDetail.code === CodeTransaction.Success) {
+        result.push({
+          key: 'Event Log',
+          value: this.transactionDetail?.tx?.logs,
+          specialCase: this.specialCase.EventLog,
+        });
+      }
 
-      result.push({
-        key: 'Event Log',
-        value: this.transactionDetail?.tx?.logs,
-        specialCase: this.specialCase.EventLog,
-      });
       this.currentData.push(result);
       this.currentIndex++;
     });
@@ -875,31 +877,5 @@ export class TransactionMessagesComponent implements OnInit {
       value = longProposalId.toString();
     }
     return value;
-  }
-
-  displayLogAmount(value = '',index = 0) {
-    // let a = '100000000utaura';
-    // this.transactionDetail?.tx?.logs[0]?.events?.forEach((element, index) => {
-    //   let arr = element.attributes.filter(k => k.key === 'amount');
-    //   console.log(arr);
-    //   // this.displayLogAmount.push({key:index, })
-    // });
-    // // console.log(index);
-    console.log(value);
-    
-    if (index === this.idxLog) {
-      let result = value.match(/\d+/g)[0];
-      let denom = this.commonService.mappingNameIBC(value.replace(result, '') || this.denom);
-      result = balanceOf(result)?.toString();
-      // if (value.indexOf('aura')) {
-      //   result = balanceOf(result);
-      // } else if (value.indexOf('ibc')) {
-      //   result = balanceOf(result);
-      // }
-      // return result;
-      this.idxLog++;
-      return result + `<span class="text--primary ml-1">` + denom + `</span>`;
-    }
-    return null;
   }
 }

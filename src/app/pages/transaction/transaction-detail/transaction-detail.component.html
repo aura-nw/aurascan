@@ -113,13 +113,11 @@
 
     <ng-container *ngIf="!isRawData && transaction?.messages">
       <h2 class="text--white">Messages</h2>
-      <div class="card text--white">
-        <app-transaction-messages
-          [transactionDetail]="transaction"
-          [listValidator]="listValidator || []"
-          *ngIf="listValidator?.length > 0">
-        </app-transaction-messages>
-      </div>
+      <app-transaction-messages
+        [transactionDetail]="transaction"
+        [listValidator]="listValidator || []"
+        *ngIf="listValidator?.length > 0">
+      </app-transaction-messages>
     </ng-container>
 
     <div class="card text--white" *ngIf="!isRawData && transaction?.read_set">

@@ -9,6 +9,7 @@ import {
   StringEllipsis,
   ReplaceIpfs,
   ConvertUauraToAura,
+  convertLogAmount,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
 
@@ -23,6 +24,7 @@ import { JsonPipe } from './json.pipe';
     BalanceOf,
     ReplaceIpfs,
     ConvertUauraToAura,
+    convertLogAmount,
   ],
   imports: [CommonModule],
   exports: [
@@ -35,6 +37,7 @@ import { JsonPipe } from './json.pipe';
     BalanceOf,
     ReplaceIpfs,
     ConvertUauraToAura,
+    convertLogAmount,
   ],
 })
 export class CommonPipeModule {}

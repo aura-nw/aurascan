@@ -106,6 +106,8 @@
   border-radius: 8px;
   padding: 8px 20px;
   padding-left: calc(var(--bs-gutter-x) * 0.5);
+  max-height: 420px;
+  overflow-y: scroll;
   .item-event-log:not(:last-child) {
     margin-bottom: var(--spacer-7);
   }
@@ -145,6 +147,9 @@
   box-shadow: none !important;
   mat-expansion-panel-header {
     padding: 0 12px;
+    .mat-expanded {
+      height: 40px;
+    }
     .txt-header::after {
       font-family: 'Font Awesome 5 Free';
       font-weight: 700;
