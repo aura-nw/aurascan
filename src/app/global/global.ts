@@ -277,9 +277,7 @@ export function convertDataTransaction(data, coinInfo) {
         if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.GetReward) {
           type = TypeTransaction.GetReward;
         } else if (lstType?.length > 1) {
-          if (
-            lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.MultiSend
-          ) {
+          if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
             type = TypeTransaction.MultiSend;
           } else {
             type = 'Multiple';
@@ -334,11 +332,6 @@ export function convertDataTransactionV2(data, coinInfo) {
         }
       });
     }
-    const typeOrigin = _type;
-    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
-
-    const status =
-      _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
     const _amount = getAmount(
       _.get(element, 'data.body.messages'),
@@ -347,7 +340,27 @@ export function convertDataTransactionV2(data, coinInfo) {
       coinInfo.coinMinimalDenom,
     );
 
-    const amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
+    const typeOrigin = _type;
+    let amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
+    let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
+
+    try {
+      if (lstType[0]['@type'].indexOf('ibc') == -1) {
+        if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.GetReward) {
+          type = TypeTransaction.GetReward;
+        } else if (lstType?.length > 1) {
+          if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+            type = TypeTransaction.MultiSend;
+          } else {
+            type = 'Multiple';
+          }
+          amount = 'More';
+        }
+      }
+    } catch (e) {}
+
+    const status =
+      _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
     const fee = balanceOf(_.get(element, 'data.auth_info.fee.amount[0].amount') || 0, coinInfo.coinDecimals).toFixed(
       coinInfo.coinDecimals,

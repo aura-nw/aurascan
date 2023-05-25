@@ -88,8 +88,6 @@ export class TransactionMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.transactionDetail);
-    
     this.currentIndex = 0;
     // check if contract type not belongTo TypeTransaction enum
     if (Object.values(TRANSACTION_TYPE_ENUM).includes(this.transactionDetail?.type)) {

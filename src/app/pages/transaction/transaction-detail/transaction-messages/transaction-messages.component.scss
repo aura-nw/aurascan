@@ -1,5 +1,8 @@
 @import '../../../../../assets/scss/color.scss';
 
+::-webkit-scrollbar {
+  height: 4px;
+}
 .msg-image {
   width: auto;
   height: 24px;
@@ -90,6 +93,9 @@
       align-items: center;
       text-align: right;
     }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
   }
 
   @media (max-width: 1366px) {
@@ -104,10 +110,10 @@
 .box-event-log {
   background-color: var(--aura-gray-9);
   border-radius: 8px;
-  padding: 8px 20px;
+  // padding: 8px 20px;
   padding-left: calc(var(--bs-gutter-x) * 0.5);
   max-height: 420px;
-  overflow-y: scroll;
+  overflow-y: auto;
   .item-event-log:not(:last-child) {
     margin-bottom: var(--spacer-7);
   }
@@ -148,7 +154,7 @@
   mat-expansion-panel-header {
     padding: 0 12px;
     .mat-expanded {
-      height: 40px;
+      height: 48px;
     }
     .txt-header::after {
       font-family: 'Font Awesome 5 Free';
@@ -162,5 +168,8 @@
         content: '\f078';
       }
     }
+  }
+  .mat-expansion-panel-header.mat-expanded {
+    height: 48px;
   }
 }
