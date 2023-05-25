@@ -392,7 +392,7 @@ export class WalletService implements OnDestroy {
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
-      signer = window.getOfflineSignerOnlyAmino(this.chainId);
+      signer = await window.getOfflineSignerAuto(this.chainId);
     }
 
     return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
