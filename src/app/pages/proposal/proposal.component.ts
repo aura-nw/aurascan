@@ -85,9 +85,8 @@ export class ProposalComponent implements OnInit {
   getFourLastedProposal() {
     let payload = {
       limit: 4,
-      nextKey: null,
     };
-    this.proposalService.getProposalList(payload).subscribe((res) => {
+    this.proposalService.getProposalData(payload).subscribe((res) => {
       if (res?.proposal) {
         const addr = this.walletService.wallet?.bech32Address || null;
         this.proposalData = res.proposal;
@@ -131,7 +130,7 @@ export class ProposalComponent implements OnInit {
       limit: 40,
       nextKey: nextKey,
     };
-    this.proposalService.getProposalList(payload).subscribe((res) => {
+    this.proposalService.getProposalData(payload).subscribe((res) => {
       this.nextKey = res.proposal[res.proposal.length - 1].proposal_id;
       if (res?.proposal) {
         let tempDta = res.proposal;

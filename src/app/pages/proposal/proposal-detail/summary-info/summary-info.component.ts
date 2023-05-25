@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { from } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../../../app/global/global';
 import {
   PROPOSAL_STATUS,
@@ -21,7 +22,6 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 const marked = require('marked');
 
 @Component({
@@ -69,8 +69,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   getProposalDetail(): void {
     let payload = {
       limit: 1,
-      proposalId: this.proposalId
-    }
+      proposalId: this.proposalId,
+    };
     this.proposalService
       .getProposalData(payload)
       .pipe(

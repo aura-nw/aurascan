@@ -413,9 +413,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   getVotingPeriod() {
     let payload = {
       limit: 20,
-      nextKey: null,
     };
-    this.proposalService.getProposalList(payload).subscribe((res) => {
+    this.proposalService.getProposalData(payload).subscribe((res) => {
       if (res?.proposal) {
         let tempDta = res.proposal;
         this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
