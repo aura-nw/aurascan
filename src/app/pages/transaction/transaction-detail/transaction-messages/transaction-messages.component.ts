@@ -1,19 +1,19 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import * as _ from 'lodash';
+import * as Long from 'long';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { ProposalService } from 'src/app/core/services/proposal.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
-import { pipeTypeData, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
-import { getAmount, Globals } from '../../../../global/global';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { CommonService } from 'src/app/core/services/common.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import * as _ from 'lodash';
+import { CodeTransaction, TRANSACTION_TYPE_ENUM, TypeTransaction, pipeTypeData } from '../../../../core/constants/transaction.enum';
 import { formatWithSchema } from '../../../../core/helpers/date';
-import { ProposalService } from 'src/app/core/services/proposal.service';
-import * as Long from 'long';
+import { Globals, getAmount } from '../../../../global/global';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -65,9 +65,13 @@ export class TransactionMessagesComponent implements OnInit {
   specialCase = {
     ByteCode: 'ByteCode',
     MultiSend: 'MultiSend',
+    EventLog: 'EventLog',
   };
   currentIndex = 0;
   transactionTypeArr = [];
+  pipeData = pipeTypeData;
+  eventLogData = [];
+  idxLog = 0;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -80,10 +84,12 @@ export class TransactionMessagesComponent implements OnInit {
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private transactionService: TransactionService,
-    private proposalService: ProposalService,
+    private proposalService: ProposalService
   ) {}
 
   ngOnInit(): void {
+    console.log(this.transactionDetail);
+    
     this.currentIndex = 0;
     // check if contract type not belongTo TypeTransaction enum
     if (Object.values(TRANSACTION_TYPE_ENUM).includes(this.transactionDetail?.type)) {
@@ -157,7 +163,6 @@ export class TransactionMessagesComponent implements OnInit {
       if (this.currentIndex !== index) {
         return;
       }
-      this.currentIndex++;
       let result = [];
 
       const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
@@ -286,7 +291,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.ExecuteContract:
-          this.displayMsgRaw();
+          this.displayMsgRaw(index);
           result.push({ key: 'Contract', value: data?.contract, link: { url: '/contracts' } });
           result.push({ key: 'Sender', value: data?.sender, link: { url: '/account' } });
           result.push({ key: 'Messages', value: this.objMsgContract, pipeType: pipeTypeData.Json });
@@ -294,7 +299,7 @@ export class TransactionMessagesComponent implements OnInit {
 
         case this.eTransType.InstantiateContract:
         case this.eTransType.InstantiateContract2:
-          this.displayMsgRaw();
+          this.displayMsgRaw(index);
           result.push({
             key: 'Contract',
             value: this.getDataJson('_contract_address'),
@@ -540,7 +545,17 @@ export class TransactionMessagesComponent implements OnInit {
         default:
           break;
       }
+      
+      if (this.transactionDetail.code === CodeTransaction.Success) {
+        result.push({
+          key: 'Event Log',
+          value: this.transactionDetail?.tx?.logs,
+          specialCase: this.specialCase.EventLog,
+        });
+      }
+
       this.currentData.push(result);
+      this.currentIndex++;
     });
   }
 
@@ -618,37 +633,42 @@ export class TransactionMessagesComponent implements OnInit {
     } catch (e) {}
   }
 
-  displayMsgRaw(): void {
-    this.objMsgContract = _.get(
+  displayMsgRaw(idx = 0): void {
+    let msgs = _.get(
       this.transactionDetail?.tx?.tx?.body || this.transactionDetail?.tx?.body || this.transactionDetail,
       'messages',
-    ).map((element) => {
-      let msg = _.get(element, 'msg');
-      try {
-        if (typeof msg !== 'object' && msg !== null) {
-          msg = JSON.parse(msg);
-        }
-      } catch {}
-
-      //get type mint don't type token id
-      if (!msg && this.transactionDetail?.raw_log.indexOf('mint') >= 0) {
+    );
+    msgs?.forEach((element, index) => {
+      if (idx === index) {
+        let msg = _.get(element, 'msg');
         try {
-          const jsonData = JSON.parse(this.transactionDetail?.raw_log);
-          if (jsonData && jsonData[0]) {
-            const data = jsonData[0]?.events[jsonData[0]?.events?.length - 1]?.attributes;
-            let tokenId = data.find((k) => k.key === 'token_id')?.value || null;
-            msg = { mint: { token_id: tokenId || null } };
+          if (typeof msg !== 'object' && msg !== null) {
+            msg = JSON.parse(msg);
           }
-        } catch (e) {
-          msg = { mint: { token_id: null } };
+        } catch {}
+
+        //get type mint don't type token id
+        if (!msg && this.transactionDetail?.raw_log.indexOf('mint') >= 0) {
+          try {
+            const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+            if (jsonData && jsonData[0]) {
+              const data = jsonData[0]?.events[jsonData[0]?.events?.length - 1]?.attributes;
+              let tokenId = data.find((k) => k.key === 'token_id')?.value || null;
+              msg = { mint: { token_id: tokenId || null } };
+            }
+          } catch (e) {
+            msg = { mint: { token_id: null } };
+          }
         }
+        const funds = _.get(element, 'funds');
+        let result = { msg, funds };
+        this.objMsgContract = result;
+        return;
       }
-      const funds = _.get(element, 'funds');
-      return { msg, funds };
     });
 
     //get first data if array = 1
-    if (this.objMsgContract.length === 1) {
+    if (this.objMsgContract?.length === 1) {
       this.objMsgContract = this.objMsgContract[0];
     }
   }

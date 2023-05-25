@@ -2,6 +2,8 @@ import { formatDate } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import { EnvironmentService } from '../data-services/environment.service';
+import { CommonService } from '../services/common.service';
+import { balanceOf } from '../utils/common/parsing';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -27,7 +29,7 @@ export class pipeCalDate implements PipeTransform {
 export class PipeCutString implements PipeTransform {
   transform(value: string, start: number, end?: number): string {
     let endChar = end || 0;
-    if (value && value.length > (start + endChar)) {
+    if (value && value.length > start + endChar) {
       if (end) {
         const firstChar = value.substring(0, start);
         const lastChar = value.substring(value.length - end);
@@ -92,5 +94,20 @@ export class ReplaceIpfs implements PipeTransform {
 export class ConvertUauraToAura implements PipeTransform {
   transform(value: number, powNum?: number): number {
     return value / Math.pow(10, powNum);
+  }
+}
+
+@Pipe({ name: 'convertLogAmount' })
+export class convertLogAmount implements PipeTransform {
+  constructor(private commonService: CommonService) {}
+  transform(value: string): string {
+    let result = value.match(/\d+/g)[0];
+    let denom = this.commonService.mappingNameIBC(value.replace(result, ''));
+    result = balanceOf(result)?.toString();
+    console.log(result);
+    if (+result <= 0) {
+      return '-';
+    }
+    return result + `<span class="text--primary ml-1">` + denom + `</span>`;
   }
 }

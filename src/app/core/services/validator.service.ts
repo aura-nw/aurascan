@@ -108,19 +108,17 @@ export class ValidatorService extends CommonService {
     //   filterQuery = ', id: {_lt: ' + `${nextKey}` + '}';
     // }
     const operationsDoc = `
-    query auratestnet_powerevent($operator_address: String, $limit: Int = 10, $offset: Int = 0) {
+    query auratestnet_powerevent($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
       auratestnet {
-        power_event(order_by: {height: desc}, where: {_or: [{validatorDst: {operator_address: {_eq: $operator_address}}}, {validatorSrc: {operator_address: {_eq: $operator_address}}}]}, limit: $limit, offset: $offset) {
+        power_event(order_by: {height: desc}, where: {_or: [{validatorDst: {operator_address: {_eq: $operator_address}}}, {validatorSrc: {operator_address: {_eq: $operator_address}}}], id: {_lt: $nextKey}}, limit: $limit) {
           id
           time
           height
+          type
           transaction {
             hash
-            transaction_messages {
-              type
-            }
-            data
           }
+          amount
         }
       }
     }
