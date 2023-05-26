@@ -77,12 +77,12 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
-    let result = value;
+    let result = {display: value, decimals: 6};
     if (value.indexOf('ibc') >= 0) {
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.coins.find((k) => k.denom === temp)?.display || {};
+      result = this.coins.find((k) => k.denom === temp);
     } else {
-      result = this.chainInfo.currencies[0].coinDenom;
+      result = {display: this.chainInfo.currencies[0].coinDenom, decimals: 6};
     }
     return result;
   }

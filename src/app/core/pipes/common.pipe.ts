@@ -79,7 +79,7 @@ export class CustomDate implements PipeTransform {
 @Pipe({ name: 'balanceOf' })
 export class BalanceOf implements PipeTransform {
   transform(amount: string | number, decimal = 6) {
-    return +(new BigNumber(amount).toNumber() / Math.pow(10, 6)).toFixed(decimal);
+    return +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
   }
 }
 
@@ -103,11 +103,11 @@ export class convertLogAmount implements PipeTransform {
   constructor(private commonService: CommonService, private mask: MaskPipe) {}
   transform(value: string): string {
     let result = value.match(/\d+/g)[0];
-    let denom = this.commonService.mappingNameIBC(value.replace(result, ''));
-    result = this.mask.transform(balanceOf(result), 'separator.6');
+    let data = this.commonService.mappingNameIBC(value.replace(result, ''));
+    result = this.mask.transform(balanceOf(result, data.decimals), 'separator.6');
     if (+result <= 0) {
       return '-';
     }
-    return result + `<span class="text--primary ml-1">` + denom + `</span>`;
+    return result + `<span class="text--primary ml-1">` + data.display + `</span>`;
   }
 }
