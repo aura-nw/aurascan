@@ -153,7 +153,7 @@
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask : 'separator.6' }}
         <span class="text--primary">{{
-          commonService.mappingNameIBC(transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom)
+          commonService.mappingNameIBC(transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom)?.display
         }}</span>
       </div>
     </div>
@@ -373,7 +373,7 @@
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of filterIBCType(type)">
               <div class="d-lg-flex justify-content-between">
-                <div>{{ denomIBC ? commonService.mappingNameIBC(denomIBC) : item.denom }}</div>
+                <div>{{ denomIBC ? commonService.mappingNameIBC(denomIBC)?.display : item.denom }}</div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
@@ -432,16 +432,20 @@
             <div class="txt-amount">
               <i class="ph-currency-circle-dollar mx-auto h3 mr-2 mb-0 text--white"></i>
               <div class="ml-2">
-                <span *ngIf="item?.amount?.length > 0" [innerHTML]="item?.coin[0]?.amount | convertLogAmount"></span>
+                <span
+                  *ngIf="item?.coins?.length > 0"
+                  [innerHTML]="item?.coins[0]?.amount + item?.coins[0]?.denom | convertLogAmount"></span>
               </div>
             </div>
           </div>
         </ng-container>
       </div>
-      <ng-container
-        [ngTemplateOutlet]="logEvent"
-        [ngTemplateOutletContext]="{ data: transactionDetail?.tx?.logs, idx: 0 }">
-      </ng-container>
+      <div class="mx-4 mt-3 mt-lg-1">
+        <ng-container
+          [ngTemplateOutlet]="logEvent"
+          [ngTemplateOutletContext]="{ data: transactionDetail?.tx?.logs, idx: 0 }">
+        </ng-container>
+      </div>
     </div>
   </ng-template>
 
@@ -469,7 +473,7 @@
                 <ng-container *ngFor="let data of item.attributes; let idx = index">
                   <div class="ml-5 mb-2 row">
                     <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{ data.key }}</span>
-                    <span class="col-12 col-lg-10 body-01">
+                    <span class="col-12 col-lg-10 body-01 text-break">
                       <ng-container *ngIf="data.key !== 'amount'">{{ data.value }}</ng-container>
                       <span *ngIf="data.key === 'amount'" [innerHTML]="data.value | convertLogAmount"></span>
                     </span>

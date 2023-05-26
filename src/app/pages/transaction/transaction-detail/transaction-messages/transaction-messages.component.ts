@@ -11,7 +11,12 @@ import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
-import { CodeTransaction, TRANSACTION_TYPE_ENUM, TypeTransaction, pipeTypeData } from '../../../../core/constants/transaction.enum';
+import {
+  CodeTransaction,
+  TRANSACTION_TYPE_ENUM,
+  TypeTransaction,
+  pipeTypeData,
+} from '../../../../core/constants/transaction.enum';
 import { formatWithSchema } from '../../../../core/helpers/date';
 import { Globals, getAmount } from '../../../../global/global';
 
@@ -84,12 +89,10 @@ export class TransactionMessagesComponent implements OnInit {
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private transactionService: TransactionService,
-    private proposalService: ProposalService
+    private proposalService: ProposalService,
   ) {}
 
   ngOnInit(): void {
-    console.log(this.transactionDetail);
-    
     this.currentIndex = 0;
     // check if contract type not belongTo TypeTransaction enum
     if (Object.values(TRANSACTION_TYPE_ENUM).includes(this.transactionDetail?.type)) {
@@ -168,6 +171,7 @@ export class TransactionMessagesComponent implements OnInit {
       const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
       this.transactionTypeArr.push(typeTrans?.value || data['@type'].split('.').pop());
       const denom = data?.amount?.length > 0 ? data?.amount[0]?.denom : this.denom;
+      let dataDenom = this.commonService.mappingNameIBC(denom);
       switch (data['@type']) {
         case this.eTransType.Send:
           result.push({ key: 'From Address', value: data?.from_address, link: { url: '/account' } });
@@ -175,7 +179,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: data?.amount[0]?.amount,
-            denom: this.commonService.mappingNameIBC(denom),
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -208,7 +212,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: amount || '-',
-            denom: amount ? this.denom : null,
+            denom: dataDenom,
             pipeType: pipeType,
           });
 
@@ -221,7 +225,7 @@ export class TransactionMessagesComponent implements OnInit {
             result.push({
               key: 'Auto Claim Reward',
               value: this.listAmountClaim[index],
-              denom: this.denom,
+              denom: dataDenom,
               pipeType: pipeTypeData.Number,
             });
           }
@@ -246,14 +250,14 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: data.amount?.amount,
-            denom: this.commonService.mappingNameIBC(denom),
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           if (this.amountClaim > 0) {
             result.push({
               key: 'Auto Claim Reward',
               value: this.amountClaim,
-              denom: this.commonService.mappingNameIBC(denom),
+              denom: dataDenom,
               pipeType: pipeTypeData.Number,
             });
           }
@@ -267,7 +271,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Limit',
             value: data?.grant?.authorization?.max_tokens?.amount,
-            denom: this.denom,
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -278,7 +282,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Total Amount Execute',
             value: this.totalAmountExecute,
-            denom: this.denom,
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           result.push({ key: 'Json', value: data?.msgs, pipeType: pipeTypeData.Json });
@@ -340,7 +344,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.EditValidator:
-          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/account' } });
+          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators' } });
           result.push({ key: 'Details', value: data.description?.details });
           result.push({ key: 'Moniker', value: data.description?.moniker });
           result.push({
@@ -358,7 +362,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
-            denom: data.min_self_delegation > 0 ? this.denom : null,
+            denom: data.min_self_delegation > 0 ? { display: this.denom } : null,
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -367,7 +371,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
-            denom: data.min_self_delegation > 0 ? this.denom : null,
+            denom: data.min_self_delegation > 0 ? { display: this.denom } : null,
             pipeType: pipeTypeData.BalanceOf,
           });
           result.push({ key: 'Delegator Address', value: data.delegator_address, link: { url: '/account' } });
@@ -375,7 +379,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: data.value?.amount,
-            denom: this.denom,
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           result.push({ key: 'Details', value: data.description?.details });
@@ -408,7 +412,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Validator Address',
             value: this.transactionDetail?.tx?.tx?.body?.messages[0]?.validator_addr,
-            link: { url: '/account' },
+            link: { url: '/validators' },
           });
           break;
 
@@ -417,7 +421,7 @@ export class TransactionMessagesComponent implements OnInit {
             key: 'Amount',
             value: data.initial_deposit[0].amount,
             pipeType: pipeTypeData.BalanceOf,
-            denom: data.initial_deposit[0].amount > 0 ? this.denom : null,
+            denom: data.initial_deposit[0].amount > 0 ? { display: this.denom } : null,
           });
           result.push({ key: 'Proposer', value: data.proposer, link: { url: '/account' } });
           if (this.transactionDetail?.tx?.logs?.length > 0) {
@@ -442,7 +446,7 @@ export class TransactionMessagesComponent implements OnInit {
             key: 'Spend Limit',
             value: this.spendLimitAmount,
             pipeType: pipeTypeData.BalanceOf,
-            denom: this.spendLimitAmount > 0 ? this.denom : null,
+            denom: this.spendLimitAmount > 0 ? { display: this.denom } : null,
           });
           result.push({
             key: 'Expiration',
@@ -465,7 +469,7 @@ export class TransactionMessagesComponent implements OnInit {
                 data?.allowance?.period_spend_limit[0].amount ||
                 0,
               pipeType: pipeTypeData.BalanceOf,
-              denom: this.denom,
+              denom: dataDenom,
             });
             result.push({
               key: 'Period',
@@ -491,7 +495,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: data?.amount[0]?.amount,
-            denom: this.commonService.mappingNameIBC(denom),
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -502,7 +506,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Amount',
             value: data?.amount[0]?.amount,
-            denom: this.commonService.mappingNameIBC(denom),
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -529,7 +533,7 @@ export class TransactionMessagesComponent implements OnInit {
             result.push({
               key: 'Amount',
               value: this.commissionAutoClaim,
-              denom: this.denom,
+              denom: dataDenom,
               pipeType: pipeTypeData.Number,
             });
           }
@@ -545,7 +549,7 @@ export class TransactionMessagesComponent implements OnInit {
         default:
           break;
       }
-      
+
       if (this.transactionDetail.code === CodeTransaction.Success) {
         result.push({
           key: 'Event Log',
@@ -767,7 +771,7 @@ export class TransactionMessagesComponent implements OnInit {
               data = element.events.find((k) => k['type'] === this.typeGetData.Transfer);
             });
             let temp = data?.attributes.find((j) => j['key'] === 'amount')?.value;
-            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp) || '';
+            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp)?.display || '';
             this.ibcData['typeProgress'] = this.eTransType.IBCReceived;
           }
         }

@@ -67,27 +67,6 @@ export class TransactionComponent implements OnInit {
     );
   }
 
-  // getList(): void {
-  //   this.transactionService.txsIndexer(this.pageSize, 0).subscribe(
-  //     (res) => {
-  //       const { code, data } = res;
-  //       if (code === 200) {
-  //         const txs = convertDataTransaction(data, this.coinInfo);
-  //         if (this.dataSource.data.length > 0) {
-  //           this.dataSource.data = [...this.dataSource.data, ...txs];
-  //         } else {
-  //           this.dataSource.data = [...txs];
-  //         }
-  //         this.dataTx = txs;
-  //       }
-  //     },
-  //     () => {},
-  //     () => {
-  //       this.loading = false;
-  //     },
-  //   );
-  // }
-
   checkAmountValue(amount: number, txHash: string) {
     if (amount === 0) {
       return '-';

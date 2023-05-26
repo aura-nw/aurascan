@@ -137,7 +137,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
               this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
             }
 
-            if (!isInit) {
+            if (!isInit && this.dataInstantiate?.length > 0) {
               this.contractTransaction['data'] = [...this.contractTransaction['data'], this.dataInstantiate[0]];
               this.contractTransaction['count'] = this.contractTransaction['count'] + this.dataInstantiate?.length;
             }
