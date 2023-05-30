@@ -245,43 +245,46 @@
     </div>
 
     <!-- Event Log -->
-    <!-- <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
+    <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
       <h2 class="card-header mb-0 text--white pb-0">Events</h2>
       <div class="card-body body">
-        <div class="col-12 col-lg-9 text--gray-1 box-event-log">
-          <ng-container *ngFor="let element of item.value; let index = index">
-            <div class="item-event-log" *ngIf="index === i">
-              <span class="caption fw-normal">{{ element.events.type }}</span>
-              <mat-expansion-panel
-                hideToggle
-                *ngFor="let item of element.events; first as isFirst; let i = index"
-                [expanded]="isFirst">
-                <mat-expansion-panel-header class="content-contract">
-                  <mat-panel-title class="item-content body-02 text--gray-1">
-                    <div class="txt-header caption fw-normal text--white">
-                      {{ item.type }}
-                    </div>
-                  </mat-panel-title>
-                  <mat-panel-description> </mat-panel-description>
-                </mat-expansion-panel-header>
+        <div class="col-12 text--gray-1 box-event-log">
+          <div class="item-event-log">
+            <mat-expansion-panel
+              hideToggle
+              *ngFor="let item of blockDetail.events; first as isFirst; let i = index"
+              [expanded]="isFirst">
+              <mat-expansion-panel-header class="content-contract">
+                <mat-panel-title class="item-content body-02 text--gray-1">
+                  <div class="txt-header caption fw-normal text--white">
+                    {{ item.type }}
+                  </div>
+                </mat-panel-title>
+                <mat-panel-description> </mat-panel-description>
+              </mat-expansion-panel-header>
 
-                <div class="content-log">
-                  <ng-container *ngFor="let data of item.attributes; let idx = index">
-                    <div class="ml-5 mb-2 d-flex">
-                      <span class="col-2 txt-event-key body-02 fw-normal text-capitalize">{{ data.key }}</span>
-                      <span class="col-10 body-01">
-                        <ng-container *ngIf="data.key !== 'amount'">{{ data.value }}</ng-container>
-                        <span *ngIf="data.key === 'amount'" [innerHTML]="data.value | convertLogAmount"></span>
-                      </span>
-                    </div>
-                  </ng-container>
-                </div>
-              </mat-expansion-panel>
-            </div>
-          </ng-container>
+              <div class="content-log">
+                <ng-container *ngFor="let data of item.attributes; let idx = index">
+                  <div class="ml-5 mb-2 row">
+                    <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{
+                      data.key | decodeData
+                    }}</span>
+                    <span class="col-12 col-lg-10 body-01 text-break">
+                      <ng-container *ngIf="(data.key | decodeData) !== 'amount' && (data.key | decodeData) !== 'fee'">{{
+                        data.value | decodeData
+                      }}</ng-container>
+                      <span
+                        *ngIf="(data.key | decodeData) === 'amount' || (data.key | decodeData) === 'fee'"
+                        [innerHTML]="data.value | decodeData | convertLogAmount"></span>
+                    </span>
+                  </div>
+                </ng-container>
+              </div>
+            </mat-expansion-panel>
+          </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </ng-container>
 </ng-container>
 

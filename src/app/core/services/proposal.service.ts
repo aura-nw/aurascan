@@ -97,6 +97,36 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListVoteFromIndexerV2(payload, option): Observable<any> {
+    const operationsDoc = `
+    query auratestnet_vote($limit: Int = 10, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
+      ${this.envDB} {
+        vote(limit: $limit, where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: $voteOption}}, order_by: {proposal_id: $order, txhash: asc}) {
+          height
+          proposal_id
+          txhash
+          updated_at
+          vote_option
+          voter
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.pageLimit,
+          // nextKey: payload.nextKey,
+          order: 'desc',
+          proposalId: payload.proposalId,
+          voteOption: option || null,
+        },
+        operationName: 'auratestnet_vote',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getVoteMessageByConstant(option: any) {
     if (typeof option === 'string') {
       return option;

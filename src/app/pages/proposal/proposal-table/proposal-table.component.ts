@@ -47,10 +47,10 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   validatorImgArr;
 
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'voter_address', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
+    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
     { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
+    { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
+    { matColumnDef: 'updated_at', headerCellDef: 'Time', desktopOnly: true },
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [

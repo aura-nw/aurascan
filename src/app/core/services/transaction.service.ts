@@ -62,7 +62,7 @@ export class TransactionService extends CommonService {
               }
             ]
           }
-          order_by: { height: $order, index: $order }
+          order_by: [{ height: $order}, {index: $order }]
         ) {
           id
           height

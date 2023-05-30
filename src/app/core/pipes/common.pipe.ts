@@ -111,3 +111,10 @@ export class convertLogAmount implements PipeTransform {
     return result + `<span class="text--primary ml-1">` + data.display + `</span>`;
   }
 }
+
+@Pipe({ name: 'decodeData' })
+export class decodeData implements PipeTransform {
+  transform(value: string): string {
+    return atob(value);
+  }
+}

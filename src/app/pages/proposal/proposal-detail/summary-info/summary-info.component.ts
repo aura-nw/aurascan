@@ -81,6 +81,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
               this.proposalDtl.emit(null);
             }
             this.proposalDetail = this.makeProposalDataDetail(data.proposal[0]);
+
             if (this.proposalDetail?.content?.amount) {
               this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
             }
@@ -199,9 +200,9 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     let pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
     let pro_votes_abstain = balanceOf(+data.tally.abstain);
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
-
+    const dataDetail = this.proposalDetail || data;
     return {
-      ...data,
+      ...dataDetail,
       initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
       pro_total_deposits: balanceOf(_.get(data, 'total_deposit[0].amount') || 0),
       pro_type: data?.content['@type']?.split('.').pop(),

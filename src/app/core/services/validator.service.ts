@@ -103,10 +103,6 @@ export class ValidatorService extends CommonService {
   }
 
   validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
-    // let filterQuery = '';
-    // if (nextKey) {
-    //   filterQuery = ', id: {_lt: ' + `${nextKey}` + '}';
-    // }
     const operationsDoc = `
     query auratestnet_powerevent($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
       auratestnet {
@@ -114,11 +110,17 @@ export class ValidatorService extends CommonService {
           id
           time
           height
-          type
           transaction {
             hash
           }
+          type
           amount
+          validatorSrc {
+            operator_address
+          }
+          validatorDst {
+            operator_address
+          }
         }
       }
     }
@@ -128,6 +130,7 @@ export class ValidatorService extends CommonService {
         query: operationsDoc,
         variables: {
           operator_address: address,
+          limit: limit
         },
         operationName: 'auratestnet_powerevent',
       })

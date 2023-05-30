@@ -440,7 +440,7 @@
           </div>
         </ng-container>
       </div>
-      <div class="mx-4 mt-3 mt-lg-1">
+      <div class="mx-4 mt-3 mt-lg-1" *ngIf="transactionDetail.code === codeTransaction.Success">
         <ng-container
           [ngTemplateOutlet]="logEvent"
           [ngTemplateOutletContext]="{ data: transactionDetail?.tx?.logs, idx: 0 }">
@@ -474,8 +474,10 @@
                   <div class="ml-5 mb-2 row">
                     <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{ data.key }}</span>
                     <span class="col-12 col-lg-10 body-01 text-break">
-                      <ng-container *ngIf="data.key !== 'amount'">{{ data.value }}</ng-container>
-                      <span *ngIf="data.key === 'amount'" [innerHTML]="data.value | convertLogAmount"></span>
+                      <ng-container *ngIf="data.key !== 'amount' && data.key !== 'fee'">{{ data.value }}</ng-container>
+                      <span
+                        *ngIf="data.key === 'amount' || data.key === 'fee'"
+                        [innerHTML]="data.value | convertLogAmount"></span>
                     </span>
                   </div>
                 </ng-container>
