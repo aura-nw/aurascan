@@ -9,6 +9,7 @@ import { RangeType } from '../models/common.model';
 import { CommonService } from './common.service';
 import { checkEnvQuery } from '../utils/common/info-common';
 import { map } from 'rxjs/operators';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable()
 export class TokenService extends CommonService {
@@ -170,5 +171,9 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
       params: { rangeType, coinId, min, max },
     });
+  }
+
+  getListAssetCommunityPool() {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
   }
 }
