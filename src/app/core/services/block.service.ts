@@ -26,10 +26,10 @@ export class BlockService extends CommonService {
   getDataBlock(payload) {
     const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
-    query auratestnet_block($limit: Int = 100, $order: order_by = desc, $height: Int = null, $hash: String = null, $path: String = null, $operatorAddress: String = null, $heightGT: Int = null, $heightLT: Int = null) {
+    query auratestnet_block($limit: Int = 100, $order: order_by = desc, $height: Int = null, $hash: String = null, $operatorAddress: String = null, $heightGT: Int = null, $heightLT: Int = null) {
       ${envDB} {
         block(limit: $limit, order_by: {height: $order}, where: {height: {_eq: $height, _gt: $heightGT, _lt: $heightLT}, hash: {_eq: $hash}, validator: {operator_address: {_eq: $operatorAddress}}}) {
-          data(path: $path)
+          data
           validator {
             operator_address
             description
@@ -49,7 +49,6 @@ export class BlockService extends CommonService {
           order: 'desc',
           hash: null,
           height: payload.height,
-          path: 'block',
           operatorAddress: payload.address,
           heightGT: null,
           heightLT: payload.nextHeight,

@@ -275,11 +275,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           const txs = _.get(res, 'power_event').map((element) => {
             let isStakeMode = false;
             const tx_hash = _.get(element, 'transaction.hash');
-            // const address = _.get(element, 'transaction.data[0].validator_dst_address');
+            const address = _.get(element, 'validatorDst.operator_address');
             const _type = _.get(element, 'type');
-            if (
-              _type === 'delegate'
-            ) {
+            if (_type === 'delegate' || (_type === 'redelegate' && address === this.currentAddress)) {
               isStakeMode = true;
             }
             // let amount = getAmount(_.get(element, 'transaction.data'), _type, _.get(element, 'data.body.raw_log'));

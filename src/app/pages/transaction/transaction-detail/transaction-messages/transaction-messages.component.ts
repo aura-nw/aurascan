@@ -77,6 +77,7 @@ export class TransactionMessagesComponent implements OnInit {
   pipeData = pipeTypeData;
   eventLogData = [];
   idxLog = 0;
+  codeTransaction = CodeTransaction;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;

@@ -108,16 +108,17 @@ export class BlockDetailComponent implements OnInit {
       async (res) => {
         if (res?.block?.length > 0) {
           const block = convertDataBlock(res)[0];
-          block['round'] = _.get(res.block[0], 'data.last_commit.round');
-          block['chainid'] = _.get(res.block[0], 'data.header.chain_id');
-          block['json_data'] = _.get(res.block[0], 'data');
+          block['round'] = _.get(res.block[0], 'data.block.last_commit.round');
+          block['chainid'] = _.get(res.block[0], 'data.block.header.chain_id');
+          block['json_data'] = _.get(res.block[0], 'data.block');
           block['gas_used'] = block['gas_wanted'] = 0;
+          block['events'] = _.get(res.block[0], 'data.block_result.txs_results[0].events');
           this.blockDetail = block;
-
+          
           //get list tx detail
           let txs = [];
-          for (const key in res.block[0]?.data?.data?.txs) {
-            const element = res.block[0]?.data?.data?.txs[key];
+          for (const key in res.block[0]?.data?.block?.data?.txs) {
+            const element = res.block[0]?.data?.block?.data?.txs[key];
             const tx = sha256(Buffer.from(element, 'base64')).toUpperCase();
 
             const payload = {

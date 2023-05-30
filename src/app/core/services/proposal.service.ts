@@ -53,11 +53,40 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.indexerUrl}/votes`, { params });
   }
 
-  getProposalListDetail(payload) {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
+  getListVoteFromIndexerV2(payload, option): Observable<any> {
     const operationsDoc = `
-    query auratestnet_proposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = 10) {
-      ${envDB} {
+    query auratestnet_vote($limit: Int = 10, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
+      ${this.envDB} {
+        vote(limit: $limit, where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: $voteOption}}, order_by: {proposal_id: $order, txhash: asc}) {
+          height
+          proposal_id
+          txhash
+          updated_at
+          vote_option
+          voter
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.pageLimit,
+          // nextKey: payload.nextKey,
+          order: 'desc',
+          proposalId: payload.proposalId,
+          voteOption: option || null
+        },
+        operationName: 'auratestnet_vote',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getProposalListDetail(payload) {
+    const operationsDoc = `
+    query auratestnet_proposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null) {
+      ${this.envDB} {
         proposal(limit: $limit, offset: $offset, where: {proposal_id: {_eq: $proposalId}}, order_by: {proposal_id: $order}) {
           content
           deposit_end_time
@@ -83,7 +112,6 @@ export class ProposalService extends CommonService {
         }
       }
     }
-    
     `;
     return this.http
       .post<any>(this.graphUrl, {

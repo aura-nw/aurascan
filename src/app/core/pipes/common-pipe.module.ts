@@ -10,6 +10,7 @@ import {
   ReplaceIpfs,
   ConvertUauraToAura,
   convertLogAmount,
+  decodeData,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
 
@@ -25,6 +26,7 @@ import { JsonPipe } from './json.pipe';
     ReplaceIpfs,
     ConvertUauraToAura,
     convertLogAmount,
+    decodeData
   ],
   imports: [CommonModule],
   exports: [
@@ -38,6 +40,7 @@ import { JsonPipe } from './json.pipe';
     ReplaceIpfs,
     ConvertUauraToAura,
     convertLogAmount,
+    decodeData
   ],
 })
 export class CommonPipeModule {}

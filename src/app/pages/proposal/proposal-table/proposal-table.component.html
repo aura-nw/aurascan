@@ -48,7 +48,7 @@
                       }}
                       <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'answer'">
+                    <ng-container *ngSwitchCase="'vote_option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'option'">
@@ -135,7 +135,7 @@
                     (data.txhash ? shortenAddress(data.txhash) : '-') +
                     '</a>'
                 },
-                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.answer) },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.vote_option) },
                 {
                   label: 'Time',
                   class: 'card__date text--gray-1 body-01',
@@ -173,7 +173,7 @@
                       '</a>'
                     : '<span class=text--gray-1>-</span>'
                 },
-                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.answer) },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.vote_option) },
                 {
                   label: 'Time',
                   class: 'card__date text--gray-1 body-01',

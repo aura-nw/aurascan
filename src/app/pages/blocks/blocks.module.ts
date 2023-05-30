@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { MaskPipe, NgxMaskModule } from 'ngx-mask';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
@@ -30,6 +30,6 @@ import { BlocksComponent } from './blocks.component';
     NgbNavModule,
     PaginatorModule,
   ],
-  providers: [BlockService],
+  providers: [BlockService, MaskPipe],
 })
 export class BlocksModule {}
