@@ -56,6 +56,23 @@
         </div>
       </div>
     </div>
+    <div *ngIf="tokenData" class="text--primary body h5 mb-2 d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <div class="avt">
+          <img class="rounded-circle" [src]="tokenData.logo" width="18" height="18" />
+        </div>
+        <h6 *ngIf="tokenData.name" class="body-03-mob mb-0 ml-2 text--primary" [innerHTML]="tokenData.name"></h6>
+      </div>
+      <span class="body fw-semibold text--gray-1"> {{ tokenData.info }}</span>
+    </div>
+    <div *ngIf="tokenAmount" class="body-03-mob h5 mb-0 d-flex align-items-center justify-content-between">
+      <div class="text--gray-4">Amount</div>
+      <span *ngIf="tokenAmount.decimal === 0" [appBigNumber]="tokenAmount.amount" [decimal]="0"></span>
+      <span  class="text--gray-1"
+        *ngIf="tokenAmount.decimal !== 0"
+        [appBigNumber]="tokenAmount.amount"
+        [decimal]="tokenAmount.decimal"></span>
+    </div>
     <div *ngIf="validatorData" class="text--primary body h5 mb-0 d-flex align-items-center">
       <div class="avt">
         <app-loading-image

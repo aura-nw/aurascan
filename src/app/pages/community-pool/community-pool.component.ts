@@ -1,5 +1,6 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
@@ -20,11 +21,11 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
 })
 export class CommunityPoolComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'name', headerCellDef: 'name' },
     { matColumnDef: 'symbol', headerCellDef: 'symbol' },
-    { matColumnDef: 'denom', headerCellDef: 'denom' },
     { matColumnDef: 'amount', headerCellDef: 'amount' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -33,8 +34,10 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-
-  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  assetList: [];
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  dataSource: MatTableDataSource<any>;
+  dataSourceMob: any[];
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -50,6 +53,7 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
     public global: Globals,
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnDestroy(): void {
@@ -84,6 +88,10 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
         (k) => k.name.toLowerCase().includes(this.textSearch) === true,
       );
       this.dataSource = new MatTableDataSource<any>(this.filterSearchData);
+      this.dataSourceMob = this.dataSource.data.slice(
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
       this.pageData.length = this.filterSearchData.length;
     } else {
       const res = await this.tokenService.getListAssetCommunityPool();
@@ -111,7 +119,10 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
       this.listAssetLcd.unshift(auraAsset);
       this.filterSearchData = this.listAssetLcd;
       this.dataSource = new MatTableDataSource<any>(this.listAssetLcd);
-      this.dataSource = new MatTableDataSource<any>(this.listAssetLcd);
+      this.dataSourceMob = this.dataSource.data.slice(
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
       this.pageData.length = this.listAssetLcd.length;
     }
   }
