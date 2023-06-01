@@ -325,7 +325,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getInfoCommon(): void {
     this.commonService.status().subscribe((res) => {
-      getInfo(this.global, res.data);
+      getInfo(this.global, res);
     });
   }
 

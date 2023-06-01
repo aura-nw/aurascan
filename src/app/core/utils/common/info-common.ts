@@ -8,10 +8,11 @@ import { balanceOf } from './parsing';
 export function getInfo(globals: any, data: any): void {
   globals.dataHeader = data;
   globals.dataHeader.bonded_tokens = formatNumber(globals.dataHeader.bonded_tokens / NUMBER_CONVERT) || 0;
-  globals.dataHeader.supply = formatNumber(globals?.dataHeader?.supply / NUMBER_CONVERT);
+  globals.dataHeader.total_aura = formatNumber(+globals?.dataHeader?.total_aura / NUMBER_CONVERT);
   globals.dataHeader.bonded_tokens_format = formatNumber(globals?.dataHeader?.bonded_tokens);
   globals.dataHeader.community_pool = Math.round(globals?.dataHeader?.community_pool / NUMBER_CONVERT);
   globals.dataHeader.community_pool_format = formatNumber(globals?.dataHeader?.community_pool);
+  globals.dataHeader.inflation = globals?.dataHeader?.inflation * 100 + '%';
 }
 
 export function formatNumber(number: number, args?: any): any {
@@ -54,12 +55,7 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
   const typeTrans = TYPE_TRANSACTION.find((f) => f.label.toLowerCase() === typeOrigin?.toLowerCase());
   trans.tx_hash = trans.hash;
   //get amount of transaction
-  trans.amount = getAmount(
-    trans.data?.body?.messages,
-    typeOrigin,
-    trans.tx_response?.raw_log,
-    coinMinimalDenom,
-  );
+  trans.amount = getAmount(trans.data?.body?.messages, typeOrigin, trans.tx_response?.raw_log, coinMinimalDenom);
   trans.fee = balanceOf(trans?.data?.auth_info?.fee?.amount[0]?.amount);
   trans.gas_limit = balanceOf(trans?.data?.auth_info?.fee?.gas_limit);
   trans.height = trans?.height;

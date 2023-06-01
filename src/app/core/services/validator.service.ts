@@ -40,7 +40,7 @@ export class ValidatorService extends CommonService {
       if (!inflation && !bonded_tokens && !supply) {
         inflation = this.global.dataHeader.inflation.slice(0, -1);
         bonded_tokens = this.global.dataHeader.bonded_tokens.toString().slice(0, -1);
-        supply = this.global.dataHeader.supply.toString().slice(0, -1);
+        supply = this.global.dataHeader.total_aura.toString().slice(0, -1);
         this.stakingAPRSubject.next((inflation * (1 - communityTax)) / (bonded_tokens / supply));
       }
     }, 500);
