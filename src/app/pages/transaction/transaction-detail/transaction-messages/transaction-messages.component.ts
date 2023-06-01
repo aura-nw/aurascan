@@ -191,7 +191,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Validator Address',
             value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
-            link: { url: '/validators' },
+            link: { url: '/validators', data: data?.validator_address },
           });
           // get amount
           let amount = data.amount?.amount;
@@ -231,12 +231,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Source Validator Address',
             value: `${data?.validator_src_address} (${this.getNameValidator(data?.validator_src_address)})`,
-            link: { url: '/validators' },
+            link: { url: '/validators', data: data?.validator_src_address },
           });
           result.push({
             key: 'Destination Validator Address',
             value: `${data?.validator_dst_address} (${this.getNameValidator(data?.validator_dst_address)})`,
-            link: { url: '/validators' },
+            link: { url: '/validators', data: data?.validator_dst_address },
           });
           result.push({
             key: 'Amount',
@@ -345,7 +345,11 @@ export class TransactionMessagesComponent implements OnInit {
           });
           result.push({ key: 'Security Contact', value: data.description?.security_contact });
           result.push({ key: 'Identity', value: data.description?.identity });
-          result.push({ key: 'Commission Rate', value: data.commission_rate });
+          result.push({
+            key: 'Commission Rate',
+            value: this.checkRateFloatNumber(data?.commission_rate) || 0,
+            pipeType: pipeTypeData.Percent,
+          });
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
@@ -362,7 +366,7 @@ export class TransactionMessagesComponent implements OnInit {
             pipeType: pipeTypeData.BalanceOf,
           });
           result.push({ key: 'Delegator Address', value: data.delegator_address, link: { url: '/account' } });
-          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators' } });
+          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators'} });
           result.push({
             key: 'Amount',
             value: data.value?.amount,
@@ -513,7 +517,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Validator Address',
             value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
-            link: { url: '/validators' },
+            link: { url: '/validators', data: data?.validator_address },
           });
 
           if (this.commissionAutoClaim > 0) {
@@ -775,7 +779,7 @@ export class TransactionMessagesComponent implements OnInit {
           this.denomIBC = data.transactions[0].indexes.denomination_trace_denom[0];
         } else {
           txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
-          this.denomIBC = this.transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom
+          this.denomIBC = this.transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom;
         }
         this.listIBCProgress = txs;
       }
