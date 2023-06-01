@@ -93,6 +93,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 130px;
 }
 
 ::ng-deep.card__date {

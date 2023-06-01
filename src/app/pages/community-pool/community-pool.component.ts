@@ -102,12 +102,12 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
       this.listAssetLcd = _.get(res, 'data.pool');
 
       this.listAssetLcd.forEach((element) => {
-        let test = this.listCoin.find((i) => i.denom === element.denom);
-        if (test) {
-          element.decimal = test.decimal;
-          element.symbol = test.display;
-          element.logo = test.logo;
-          element.name = test.name;
+        let findItem = this.listCoin.find((i) => i.denom === element.denom);
+        if (findItem) {
+          element.decimal = findItem.decimal;
+          element.symbol = findItem.display;
+          element.logo = findItem.logo;
+          element.name = findItem.name;
         } else {
           element.decimal = 6;
           element.symbol = '';
