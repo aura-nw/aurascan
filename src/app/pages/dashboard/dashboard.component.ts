@@ -22,6 +22,7 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransactionV2 } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -105,6 +106,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private token: TokenService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -426,7 +428,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this.voting_Period_arr[index].tally) {
               this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;
               this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
-              this.voting_Period_arr[index].tally.noWithVeto = (+no_with_veto * 100) / totalVote || 0;
+              this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
               this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
             }
           }
@@ -451,5 +453,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.subscribeVisibleLogicalRangeChange();
       }
     });
+  }
+
+  navigateToCommunityPool(): void {
+    this.router.navigate([`/community-pool`]);
   }
 }

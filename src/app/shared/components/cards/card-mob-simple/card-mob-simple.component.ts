@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 import { CodeTransaction } from '../../../../core/constants/transaction.enum';
 
 export interface CardMobSimpleValidatorAddress {
@@ -26,6 +25,19 @@ export interface CardMobSimpleContent {
   info: any;
 }
 
+export interface CardMobSimpleToken {
+  logo: string;
+  name: string
+  class?: string;
+  info?: any;
+}
+
+export interface CardMobSimpleAmount{
+  amount: string;
+  decimal: number;
+  isAura: boolean;
+}
+
 @Component({
   selector: 'app-card-mob-simple',
   templateUrl: './card-mob-simple.component.html',
@@ -36,6 +48,8 @@ export class CardMobSimpleComponent implements OnInit {
   @Input() title: CardMobSimpleTitle;
   @Input() validatorData: CardMobSimpleValidatorAddress;
   @Input() content: CardMobSimpleContent[];
+  @Input() tokenData: CardMobSimpleToken;
+  @Input() tokenAmount: CardMobSimpleAmount;
 
   statusTransaction = CodeTransaction;
 
