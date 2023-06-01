@@ -351,7 +351,11 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   getTxhDetail(value): void {
-    this.transactionService.getListTx(1, 0, decodeURI(value)).subscribe(
+    const payload = {
+      limit: 1,
+      hash: decodeURI(value),
+    };
+    this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

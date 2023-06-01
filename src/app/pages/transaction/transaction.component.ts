@@ -5,7 +5,7 @@ import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.consta
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { convertDataTransaction, convertDataTransactionV2, Globals } from '../../../app/global/global';
+import { Globals, convertDataTransactionV2 } from '../../../app/global/global';
 
 @Component({
   selector: 'app-transaction',
@@ -41,12 +41,14 @@ export class TransactionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.getList();
     this.getListTx();
   }
 
   getListTx(): void {
-    this.transactionService.getListTx(this.pageSize, 0).subscribe(
+    const payload = {
+      limit: this.pageSize,
+    }
+    this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
           const txs = convertDataTransactionV2(res, this.coinInfo);
@@ -64,27 +66,6 @@ export class TransactionComponent implements OnInit {
       },
     );
   }
-
-  // getList(): void {
-  //   this.transactionService.txsIndexer(this.pageSize, 0).subscribe(
-  //     (res) => {
-  //       const { code, data } = res;
-  //       if (code === 200) {
-  //         const txs = convertDataTransaction(data, this.coinInfo);
-  //         if (this.dataSource.data.length > 0) {
-  //           this.dataSource.data = [...this.dataSource.data, ...txs];
-  //         } else {
-  //           this.dataSource.data = [...txs];
-  //         }
-  //         this.dataTx = txs;
-  //       }
-  //     },
-  //     () => {},
-  //     () => {
-  //       this.loading = false;
-  //     },
-  //   );
-  // }
 
   checkAmountValue(amount: number, txHash: string) {
     if (amount === 0) {

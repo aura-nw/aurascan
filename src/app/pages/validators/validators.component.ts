@@ -203,7 +203,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getBlocksMiss() {
-    this.validatorService.getMissedBlockCounter('').subscribe((res) => {
+    this.validatorService.getDataValidator(null).subscribe((res) => {
       this.lstUptime = res.validator;
     });
   }

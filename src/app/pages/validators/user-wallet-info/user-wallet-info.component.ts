@@ -14,7 +14,7 @@ export class UserWalletInfoComponent implements OnChanges {
   @Input() breakpoint: any;
   @Input() userAddress: string;
   @Input() arrayDelegate: any[] = [];
-  @Input() dataDelegate: DataDelegateDto;
+  @Input() dataDelegate: any;
   @Input() lstUndelegate: any[] = [];
   @Input() modalManage: any;
   @Input() denom: any;
@@ -23,6 +23,7 @@ export class UserWalletInfoComponent implements OnChanges {
   validatorImgArr;
 
   dataSourceWallet = new MatTableDataSource<any>();
+  dataStakeInfo = {};
   templatesWallet: Array<TableTemplate> = [
     { matColumnDef: 'validator_name', headerCellDef: 'Name', desktopOnly: true },
     { matColumnDef: 'amount_staked', headerCellDef: 'Amount Staked' },
@@ -42,27 +43,14 @@ export class UserWalletInfoComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.arrayDelegate) {
-      if (changes.arrayDelegate.currentValue?.length !== changes.arrayDelegate.previousValue?.length) {
-        this.dataSourceWallet = new MatTableDataSource(this.arrayDelegate);
-      } else {
-        Object.keys(this.arrayDelegate).forEach((key) => {
-          if (this.dataSourceWallet.data[key]) {
-            Object.assign(this.dataSourceWallet.data[key], this.arrayDelegate[key]);
-          } else {
-            this.dataSourceWallet.data[key] = this.arrayDelegate[key];
-          }
-        });
-      }
-      if (changes.arrayDelegate.currentValue?.length > 0) {
-        // get ValidatorAddressArr
-        this.getValidatorAvatar(changes.arrayDelegate.currentValue);
-      }
+      this.dataSourceWallet = new MatTableDataSource(this.arrayDelegate);
     }
 
     if (changes.dataDelegate) {
       if (Number(this.dataDelegate?.stakingToken) > 0) {
         this.isDisableClaim = false;
       }
+      this.dataStakeInfo = changes.dataDelegate.currentValue;
     }
 
     if (changes.lstUndelegate) {

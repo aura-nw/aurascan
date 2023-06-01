@@ -50,18 +50,37 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators`);
   }
 
-  getMissedBlockCounter(address = '') {
-    let updateQuery = '';
-    if (address !== '') {
-      updateQuery = '(where: {operator_address: {_similar: ' + address + '}})';
-    }
+  getDataValidator(payload) {
     const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
-    query getMissedBlockCounter {
-      ${envDB} {
-        validator ${updateQuery} {
+    query auratestnet_validator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
+      ${this.envDB} {
+        validator(limit: $limit, offset: $offset, where: {operator_address: {_eq: $operatorAddress}}) {
           account_address
+          commission
+          consensus_address
+          consensus_hex_address
+          created_at
+          consensus_pubkey
+          delegator_shares
+          delegators_count
+          delegators_last_height
+          description
+          index_offset
+          jailed
+          jailed_until
+          min_self_delegation
           missed_blocks_counter
+          operator_address
+          percent_voting_power
+          self_delegation_balance
+          start_height
+          status
+          tokens
+          tombstoned
+          unbonding_height
+          unbonding_time
+          uptime
         }
       }
     }
@@ -69,7 +88,12 @@ export class ValidatorService extends CommonService {
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        operationName: 'getMissedBlockCounter',
+        variable: {
+          limit: payload?.limit || 1,
+          offset: payload?.offset || 0,
+          operatorAddress: payload?.operatorAddress || null,
+        },
+        operationName: 'auratestnet_validator',
       })
       .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
   }
@@ -79,21 +103,23 @@ export class ValidatorService extends CommonService {
   }
 
   validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
-    let filterQuery = '';
-    if (nextKey) {
-      filterQuery = ', id: {_lt: ' + `${nextKey}` + '}';
-    }
     const operationsDoc = `
-    query getListPower($type: [String]) {
+    query auratestnet_powerevent($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
       ${this.envDB} {
-        transaction(limit: ${limit}, order_by: {timestamp: desc}, where: {events: {event_attributes: {key: {_in: ["validator", "destination_validator"]}, value: {_eq: "${address}" }}}, transaction_messages: {type: {_in: $type}} ${filterQuery} }) {
+        power_event(order_by: {height: desc}, where: {_or: [{validatorDst: {operator_address: {_eq: $operator_address}}}, {validatorSrc: {operator_address: {_eq: $operator_address}}}], id: {_lt: $nextKey}}, limit: $limit) {
           id
-          hash
+          time
           height
-          timestamp
-          data(path: "tx")
-          power_events {
-            amount
+          transaction {
+            hash
+          }
+          type
+          amount
+          validatorSrc {
+            operator_address
+          }
+          validatorDst {
+            operator_address
           }
         }
       }
@@ -103,9 +129,11 @@ export class ValidatorService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          type: ["/cosmos.staking.v1beta1.MsgDelegate","/cosmos.staking.v1beta1.MsgUndelegate","/cosmos.staking.v1beta1.MsgBeginRedelegate"]
+          operator_address: address,
+          limit: limit,
+          nextKey: nextKey
         },
-        operationName: 'getListPower',
+        operationName: 'auratestnet_powerevent',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

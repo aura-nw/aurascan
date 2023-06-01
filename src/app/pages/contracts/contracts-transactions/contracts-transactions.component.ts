@@ -7,8 +7,8 @@ import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.consta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
-import { ContractService } from 'src/app/core/services/contract.service';
-import { convertDataTransaction, convertDataTransactionV2 } from 'src/app/global/global';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { convertDataTransactionV2 } from 'src/app/global/global';
 import { TableData } from 'src/app/shared/components/contract-table/contract-table.component';
 
 @Component({
@@ -48,6 +48,9 @@ export class ContractsTransactionsComponent implements OnInit {
   modeTxType = { Out: 0, In: 1, Instantiate: 2 };
   hashIns = '';
   hasLoadIns = false;
+  payload = {
+    limit: 100,
+  };
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
@@ -55,10 +58,10 @@ export class ContractsTransactionsComponent implements OnInit {
   constructor(
     public translate: TranslateService,
     private router: Router,
-    private contractService: ContractService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
+    private transactionService: TransactionService,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
@@ -74,6 +77,7 @@ export class ContractsTransactionsComponent implements OnInit {
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractInfo.contractsAddress = this.contractAddress;
+    this.payload['value'] = this.contractAddress;
     this.getData();
     this.getDataInstantiate();
     this.timerGetUpTime = setInterval(() => {
@@ -99,14 +103,20 @@ export class ContractsTransactionsComponent implements OnInit {
       if (params['label']) {
         this.label = params['label'] || this.modeTxType.Out;
       }
+      this.payload['key'] = null;
+      this.payload['compositeKey'] = null;
+      switch (+this.label) {
+        case 1:
+          this.payload['compositeKey'] = 'execute._contract_address';
+          break;
+        case 2:
+          this.payload['compositeKey'] = 'instantiate._contract_address';
+          break;
+        default:
+          this.payload['key'] = '_contract_address';
+          break;
+      }
       this.getDataTable(null, isReload);
-      // switch (+this.label) {
-      //   case 1:
-      //     this.getDataTable(null, isReload);
-      //     break;
-      //   default:
-      //     this.getDataTable(null, isReload);
-      // }
     });
   }
 
@@ -115,15 +125,16 @@ export class ContractsTransactionsComponent implements OnInit {
       return;
     }
     if (!this.label || +this.label == this.modeTxType.In) {
-      const type = +this.label == this.modeTxType.In ? 'execute' : '';
-      this.contractService.getTransactionsIndexerV2(100, this.contractAddress, type, this.hashIns, nextKey).subscribe(
+      this.payload['heightLT'] = nextKey;
+      this.transactionService.getListTxCondition(this.payload).subscribe(
         (dataExecute) => {
           if (dataExecute) {
             const txsExecute = convertDataTransactionV2(dataExecute, this.coinInfo);
             this.lengthTxsExecute = txsExecute.length;
             if (dataExecute.transaction?.length > 0) {
+              this.nextKey = null;
               if (txsExecute.length >= 100) {
-                this.nextKey = dataExecute?.transaction[txsExecute.length - 1].id;
+                this.nextKey = dataExecute?.transaction[txsExecute.length - 1].height;
               }
               if (this.contractTransaction['data']?.length > 0 && !isReload) {
                 this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
@@ -152,7 +163,7 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   getDataInstantiate(): void {
-    this.contractService.getTransactionsIndexerV2(1, this.contractAddress, 'instantiate').subscribe(
+    this.transactionService.getListTxCondition(this.payload).subscribe(
       (dataInstantiate) => {
         this.hasLoadIns = true;
         if (dataInstantiate.transaction?.length > 0) {

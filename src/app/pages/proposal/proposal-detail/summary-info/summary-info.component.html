@@ -57,12 +57,12 @@
           <div class="col-8 col-md-10 text-end text-lg-start">
             <a class="text--primary h6" [routerLink]="['/account', proposalDetail.proposer_address]">
               <span class="d-none d-lg-block">
-                {{ proposalDetail.proposer_name ? proposalDetail.proposer_name : proposalDetail.proposer_address }}
+                {{ proposalDetail.proposer ? proposalDetail.proposer.description.moniker : proposalDetail.proposer_address }}
               </span>
               <span class="d-lg-none">
                 {{
-                  proposalDetail.proposer_name
-                    ? proposalDetail.proposer_name
+                  proposalDetail.proposer
+                    ? proposalDetail.proposer.description.moniker
                     : (proposalDetail.proposer_address | cutStringPipe : 8 : 8)
                 }}
               </span>

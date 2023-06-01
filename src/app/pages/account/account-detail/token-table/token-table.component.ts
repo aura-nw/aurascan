@@ -94,11 +94,11 @@ export class TokenTableComponent implements OnChanges {
           lstToken = lstToken.filter((k) => k?.symbol);
           this.dataSource = new MatTableDataSource<any>(lstToken);
           this.pageData.length = res.meta.count;
-          this.totalAssets.emit(this.pageData.length);
         } else {
           this.pageData.length = 0;
           this.dataSource.data = [];
         }
+        this.totalAssets.emit(this.pageData.length);
       },
       () => {},
       () => {
