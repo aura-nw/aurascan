@@ -56,6 +56,10 @@ const routes: Routes = [
         loadChildren: () =>
           import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule),
       },
+      {
+        path: 'community-pool',
+        loadChildren: () => import('./pages/community-pool/community-pool.module').then((m) => m.CommunityPoolModule),
+      },
     ],
   },
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
