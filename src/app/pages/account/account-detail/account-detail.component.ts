@@ -307,7 +307,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       value: address,
       heightLT: nextKey,
     };
-    this.transactionService.getListTx(payload).subscribe({
+    this.transactionService.getListTxCondition(payload).subscribe({
       next: (data) => {
         if (data?.transaction?.length > 0) {
           this.nextKey = null;

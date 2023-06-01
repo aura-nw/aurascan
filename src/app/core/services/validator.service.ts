@@ -54,7 +54,7 @@ export class ValidatorService extends CommonService {
     const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
     query auratestnet_validator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
-      auratestnet {
+      ${this.envDB} {
         validator(limit: $limit, offset: $offset, where: {operator_address: {_eq: $operatorAddress}}) {
           account_address
           commission
@@ -105,7 +105,7 @@ export class ValidatorService extends CommonService {
   validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
     const operationsDoc = `
     query auratestnet_powerevent($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
-      auratestnet {
+      ${this.envDB} {
         power_event(order_by: {height: desc}, where: {_or: [{validatorDst: {operator_address: {_eq: $operator_address}}}, {validatorSrc: {operator_address: {_eq: $operator_address}}}], id: {_lt: $nextKey}}, limit: $limit) {
           id
           time
@@ -130,7 +130,8 @@ export class ValidatorService extends CommonService {
         query: operationsDoc,
         variables: {
           operator_address: address,
-          limit: limit
+          limit: limit,
+          nextKey: nextKey
         },
         operationName: 'auratestnet_powerevent',
       })

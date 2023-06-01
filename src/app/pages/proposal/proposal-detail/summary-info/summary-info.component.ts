@@ -211,8 +211,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote,
-      count_vote: data.total_vote,
       request_amount: balanceOf(data.request_amount),
+      proposer_name: _.get(data, 'description.moniker'),
     };
   }
 
@@ -333,7 +333,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
         value: this.proposalId?.toString(),
         value2: addr,
       };
-      this.transactionService.getListTx(payload).subscribe((res) => {
+      this.transactionService.getListTxMultiCondition(payload).subscribe((res) => {
         const optionVote = this.proposalService.getVoteMessageByConstant(
           res?.transaction[0]?.data?.tx?.body?.messages[0]?.option,
         );

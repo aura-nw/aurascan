@@ -21,6 +21,136 @@ export class TransactionService extends CommonService {
 
   getListTx(payload) {
     const operationsDoc = `
+    query auratestnet_transaction_top(
+      $limit: Int = 100
+      $order: order_by = desc
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $indexGT: Int = null
+      $indexLT: Int = null
+      $hash: String = null
+      $height: Int = null
+    ) {
+      ${this.envDB} {
+        transaction(
+          limit: $limit
+          where: {
+            hash: { _eq: $hash }
+            height: { _eq: $height }
+            _and: [
+              { height: { _gt: $heightGT } }
+              { index: { _gt: $indexGT } }
+              { height: { _lt: $heightLT } }
+              { index: { _lt: $indexLT } }
+            ]
+          }
+          order_by: [{ height: $order}, {index: $order }]
+        ) {
+          id
+          height
+          hash
+          timestamp
+          code
+          gas_used
+          gas_wanted
+          data
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+          hash: payload.hash,
+          value: payload.value,
+          key: payload.key,
+          heightGT: null,
+          heightLT: payload.heightLT,
+          indexGT: null,
+          indexLT: null,
+          height: null,
+        },
+        operationName: 'auratestnet_transaction_top',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListTxCondition(payload) {
+    const operationsDoc = `
+    query auratestnet_transaction(
+      $limit: Int = 100
+      $order: order_by = desc
+      $compositeKey: String = null
+      $value: String = null
+      $key: String = null
+      $compositeKeyIn: [String!] = null
+      $valueIn: [String!] = null
+      $keyIn: [String!] = null
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $indexGT: Int = null
+      $indexLT: Int = null
+      $hash: String = null
+      $height: Int = null
+    ) {
+      ${this.envDB} {
+        transaction(
+          limit: $limit
+          where: {
+            hash: { _eq: $hash }
+            height: { _eq: $height }
+            event_attribute_index: {
+              value: { _eq: $value, _in: $valueIn }
+              composite_key: { _eq: $compositeKey, _in: $compositeKeyIn }
+              key: { _eq: $key, _in: $keyIn }
+            }
+            _and: [
+              { height: { _gt: $heightGT } }
+              { index: { _gt: $indexGT } }
+              { height: { _lt: $heightLT } }
+              { index: { _lt: $indexLT } }
+            ]
+          }
+          order_by: [{ height: $order}, {index: $order }]
+        ) {
+          id
+          height
+          hash
+          timestamp
+          code
+          gas_used
+          gas_wanted
+          data
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+          hash: payload.hash,
+          compositeKey: payload.compositeKey,
+          value: payload.value,
+          key: payload.key,
+          heightGT: null,
+          heightLT: payload.heightLT,
+          indexGT: null,
+          indexLT: null,
+          height: null,
+        },
+        operationName: 'auratestnet_transaction',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListTxMultiCondition(payload) {
+    const operationsDoc = `
     query auratestnet_transaction(
       $limit: Int = 100
       $order: order_by = desc
@@ -37,7 +167,7 @@ export class TransactionService extends CommonService {
       $hash: String = null
       $height: Int = null
     ) {
-      auratestnet {
+      ${this.envDB} {
         transaction(
           limit: $limit
           where: {

@@ -139,7 +139,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.transactionService.getListTx(payload).subscribe(
+    this.transactionService.getListTxMultiCondition(payload).subscribe(
       (res) => {
         if (res) {
           this.nextKey = null;

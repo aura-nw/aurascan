@@ -127,7 +127,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         value: this.contractsAddress,
         key: '_contract_address'
       }
-      this.transactionService.getListTx(payload).subscribe(
+      this.transactionService.getListTxCondition(payload).subscribe(
         (res) => {
           const data = res;
           if (res) {

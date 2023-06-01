@@ -45,7 +45,7 @@ export class DepositorsComponent implements OnInit {
       value: this.proposalId?.toString(),
       limit: 100,
     };
-    this.transactionService.getListTx(payload).subscribe(
+    this.transactionService.getListTxCondition(payload).subscribe(
       (res) => {
         let dataList: any[] = [];
         if (res?.transaction?.length > 0) {

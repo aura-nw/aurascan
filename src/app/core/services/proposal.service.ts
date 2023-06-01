@@ -13,6 +13,7 @@ export class ProposalService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
+  maxValidator = `${this.environmentService.configValue.maxValidator}`;
   envDB = checkEnvQuery(this.environmentService.configValue.env);
   reloadList$ = new Subject();
   pageIndexObj = {};
@@ -37,6 +38,35 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.indexerUrl}/votes/validators`, { params });
   }
 
+  getValidatorVotesFromIndexerV2(proposalId): Observable<any> {
+    const operationsDoc = `
+    query auratestnet_validator($proposalId: Int = null, $limit: Int = 10) {
+      ${this.envDB} {
+        validator(where: {status: {_eq: "BOND_STATUS_BONDED"}}, order_by: {percent_voting_power: desc}, limit: $limit) {
+          vote(where: {proposal_id: {_eq: $proposalId}}) {
+            id
+            vote_option
+            txhash
+            proposal_id
+            updated_at
+          }
+          description
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: +this.maxValidator || 100,
+          proposalId: proposalId,
+        },
+        operationName: 'auratestnet_validator',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListVoteFromIndexer(payload, option): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
@@ -54,35 +84,36 @@ export class ProposalService extends CommonService {
   }
 
   getProposalData(payload) {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
     query auratestnet_proposal($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null) {
-      ${envDB} {
+      ${this.envDB} {
         proposal(limit: $limit, where: {proposal_id: {_eq: $proposalId, _lt: $nextKey}}, order_by: {proposal_id: $order}) {
-        content
-        deposit_end_time
-        description
-        initial_deposit
-        proposal_id
-        proposer_address
-        proposer {
+          content
+          deposit_end_time
           description
-          operator_address
-          account_address
+          initial_deposit
+          proposal_id
+          proposer_address
+          count_vote
+          proposer {
+            description
+            operator_address
+            account_address
+          }
+          status
+          submit_time
+          tally
+          title
+          total_deposit
+          turnout
+          type
+          updated_at
+          voting_end_time
+          voting_start_time
         }
-        status
-        submit_time
-        tally
-        title
-        total_deposit
-        turnout
-        type
-        updated_at
-        voting_end_time
-        voting_start_time
       }
     }
-  }`;
+    `;
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
@@ -99,9 +130,9 @@ export class ProposalService extends CommonService {
 
   getListVoteFromIndexerV2(payload, option): Observable<any> {
     const operationsDoc = `
-    query auratestnet_vote($limit: Int = 10, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
+    query auratestnet_vote($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
       ${this.envDB} {
-        vote(limit: $limit, where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: $voteOption}}, order_by: {proposal_id: $order, txhash: asc}) {
+        vote(limit: $limit, where: {proposal_id: {_eq: $proposalId}, height: {_lt: $nextKey}, vote_option: {_eq: $voteOption}}, order_by: {height: $order}) {
           height
           proposal_id
           txhash
@@ -117,7 +148,7 @@ export class ProposalService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload.pageLimit,
-          // nextKey: payload.nextKey,
+          nextKey: payload.nextKey,
           order: 'desc',
           proposalId: payload.proposalId,
           voteOption: option || null,

@@ -426,7 +426,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this.voting_Period_arr[index].tally) {
               this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;
               this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
-              this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
+              this.voting_Period_arr[index].tally.noWithVeto = (+no_with_veto * 100) / totalVote || 0;
               this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
             }
           }

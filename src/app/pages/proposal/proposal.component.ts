@@ -98,7 +98,7 @@ export class ProposalComponent implements OnInit {
               if (this.proposalData[index].tally) {
                 this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
                 this.proposalData[index].tally.no = (+no * 100) / totalVote;
-                this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+                this.proposalData[index].tally.noWithVeto = (+no_with_veto * 100) / totalVote;
                 this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
               }
             }
@@ -110,7 +110,7 @@ export class ProposalComponent implements OnInit {
                   value: pro.proposal_id?.toString(),
                   value2: addr,
                 };
-                this.transactionService.getListTx(payload).subscribe((res) => {
+                this.transactionService.getListTxMultiCondition(payload).subscribe((res) => {
                   const optionVote = this.proposalService.getVoteMessageByConstant(res?.transaction[0]?.data?.tx?.body?.messages[0]?.option);
                   pro.vote_option = this.voteConstant.find(
                     (s) => s.key === optionVote,

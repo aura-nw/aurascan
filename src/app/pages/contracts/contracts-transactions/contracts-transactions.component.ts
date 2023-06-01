@@ -126,7 +126,7 @@ export class ContractsTransactionsComponent implements OnInit {
     }
     if (!this.label || +this.label == this.modeTxType.In) {
       this.payload['heightLT'] = nextKey;
-      this.transactionService.getListTx(this.payload).subscribe(
+      this.transactionService.getListTxCondition(this.payload).subscribe(
         (dataExecute) => {
           if (dataExecute) {
             const txsExecute = convertDataTransactionV2(dataExecute, this.coinInfo);
@@ -163,7 +163,7 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   getDataInstantiate(): void {
-    this.transactionService.getListTx(this.payload).subscribe(
+    this.transactionService.getListTxCondition(this.payload).subscribe(
       (dataInstantiate) => {
         this.hasLoadIns = true;
         if (dataInstantiate.transaction?.length > 0) {

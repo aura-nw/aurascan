@@ -55,20 +55,7 @@
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'rank'">
-                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{
-                        data[template.matColumnDef]
-                      }}</span>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'updated_at'">
-                      <div *ngIf="data[template.matColumnDef]">
-                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
-                        <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
-                          <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
-                        </div>
-                      </div>
-                      <div *ngIf="!data[template.matColumnDef]">-</div>
+                      <span [class.label-circle]="j < 3">{{ pageValidatorIndex * 5 + j + 1 }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">
@@ -165,11 +152,11 @@
                 {
                   label: 'TxHash',
                   class: 'body-01',
-                  info: data.tx_hash
+                  info: data.txhash
                     ? '<a class=text--primary href=' +
-                      ('/transaction/' + data.tx_hash) +
+                      ('/transaction/' + data.txhash) +
                       '>' +
-                      shortenAddress(data.tx_hash) +
+                      shortenAddress(data.txhash) +
                       '</a>'
                     : '<span class=text--gray-1>-</span>'
                 },

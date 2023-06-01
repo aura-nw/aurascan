@@ -197,7 +197,7 @@ export class NFTDetailComponent implements OnInit {
       heightLT: nextKey,
     };
 
-    this.transactionService.getListTx(payload).subscribe(
+    this.transactionService.getListTxMultiCondition(payload).subscribe(
       (res) => {
         if (res) {
           this.nextKey = null;
