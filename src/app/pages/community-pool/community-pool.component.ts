@@ -3,13 +3,15 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { NUMBER_CONVERT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TokenService } from 'src/app/core/services/token.service';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -29,10 +31,10 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
+    pageSize: 10,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-  assetList: [];
+  pageSizeMob = 5;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   dataSource: MatTableDataSource<any>;
   dataSourceMob: any[];
@@ -45,88 +47,6 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
   listAssetLcd = [];
   searchSubject = new Subject();
   destroy$ = new Subject();
-  pool: any = [
-    {
-      denom: 'utaura',
-      amount: '66655519380.574680591140134408',
-    },
-    {
-      denom: 'ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20',
-      amount: '1000000.000000000000000000',
-    },
-    {
-      denom: '12',
-      amount: '1',
-    },
-    {
-      denom: '13',
-      amount: '2',
-    },
-    {
-      denom: '14',
-      amount: '3',
-    },
-    {
-      denom: '15',
-      amount: '4',
-    },
-    {
-      denom: '16',
-      amount: '4',
-    },
-    {
-      denom: '17',
-      amount: '4',
-    },
-    {
-      denom: '18',
-      amount: '4',
-    },
-    {
-      denom: '19',
-      amount: '4',
-    },
-    {
-      denom: '20',
-      amount: '4',
-    },
-    {
-      denom: '21',
-      amount: '4',
-    },
-    {
-      denom: '22',
-      amount: '4',
-    },
-    {
-      denom: '23',
-      amount: '4',
-    },
-    {
-      denom: '24',
-      amount: '4',
-    },
-    {
-      denom: '25',
-      amount: '4',
-    },
-    {
-      denom: '26',
-      amount: '4',
-    },
-    {
-      denom: '27',
-      amount: '4',
-    },
-    {
-      denom: '28',
-      amount: '4',
-    },
-    {
-      denom: '29',
-      amount: '4',
-    },
-  ];
 
   constructor(
     public translate: TranslateService,
@@ -168,22 +88,18 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
           k.name.toLowerCase().includes(this.textSearch.toLowerCase()) === true ||
           k.symbol.toLowerCase().includes(this.textSearch.toLowerCase()) === true,
       );
-      this.dataSource = new MatTableDataSource<any>(
-        this.filterSearchData.slice(
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-        ),
-      );
-      this.dataSourceMob = this.dataSource.data.slice(
+      this.dataSource.data = this.filterSearchData.slice(
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
+      this.dataSourceMob = this.filterSearchData.slice(
+        this.pageData.pageIndex * this.pageSizeMob,
+        this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
       );
       this.pageData.length = this.filterSearchData.length;
     } else {
       const res = await this.tokenService.getListAssetCommunityPool();
-      // this.listAssetLcd = _.get(res, 'data.pool');
-      let abc = this.pool;
-      this.listAssetLcd = abc;
+      this.listAssetLcd = _.get(res, 'data.pool');
 
       this.listAssetLcd.forEach((element) => {
         let test = this.listCoin.find((i) => i.denom === element.denom);
@@ -197,38 +113,40 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
           element.symbol = '';
           element.logo = '';
           element.name = 'Aura';
+          element.amount = element.amount / NUMBER_CONVERT;
           auraAsset = element;
         }
       });
       this.listAssetLcd = this.listAssetLcd.filter((k) => k.symbol !== '');
       this.listAssetLcd = this.listAssetLcd.sort((a, b) => {
-        return this.compare(a.amount, b.amount, false);
+        return this.compare(balanceOf(a.amount, a.decimal), balanceOf(b.amount, b.decimal), false);
       });
       this.listAssetLcd.unshift(auraAsset);
       this.filterSearchData = this.listAssetLcd;
       if (!this.dataSource) {
-        this.dataSource = new MatTableDataSource<any>(
-          this.listAssetLcd.slice(
-            this.pageData.pageIndex * this.pageData.pageSize,
-            this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-          ),
+        this.dataSource = new MatTableDataSource<any>(this.listAssetLcd);
+        this.dataSourceMob = this.listAssetLcd.slice(
+          this.pageData.pageIndex * this.pageSizeMob,
+          this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
         );
       } else {
-        this.dataSource.data = this.listAssetLcd.slice(
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        this.dataSource.data = this.listAssetLcd;
+        this.dataSourceMob = this.listAssetLcd.slice(
+          this.pageData.pageIndex * this.pageSizeMob,
+          this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
         );
       }
-      this.dataSourceMob = this.dataSource.data.slice(
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-      );
       this.pageData.length = this.listAssetLcd.length;
     }
   }
 
   paginatorEmit(event): void {
-    this.dataSource.paginator = event;
+    if (this.dataSource) {
+      this.dataSource.paginator = event;
+    } else {
+      this.dataSource = new MatTableDataSource<any>();
+      this.dataSource.paginator = event;
+    }
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {

@@ -34,7 +34,8 @@ export interface CardMobSimpleToken {
 
 export interface CardMobSimpleAmount{
   amount: string;
-  decimal: number
+  decimal: number;
+  isAura: boolean;
 }
 
 @Component({

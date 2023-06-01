@@ -89,6 +89,12 @@
   }
 }
 
+.ellipsis-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 ::ng-deep.card__date {
   span:first-child {
     margin-right: 16px;
