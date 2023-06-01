@@ -160,6 +160,12 @@ export class TransactionService extends CommonService {
       $compositeKey2: String = null
       $value2: String = null
       $key2: String = null
+      $compositeKeyIn: [String!] = null
+      $valueIn: [String!] = null
+      $keyIn: [String!] = null
+      $compositeKeyIn2: [String!] = null
+      $valueIn2: [String!] = null
+      $keyIn2: [String!] = null
       $heightGT: Int = null
       $heightLT: Int = null
       $indexGT: Int = null
@@ -174,9 +180,9 @@ export class TransactionService extends CommonService {
             hash: { _eq: $hash }
             height: { _eq: $height }
             event_attribute_index: {
-              value: { _eq: $value }
-              composite_key: { _eq: $compositeKey }
-              key: { _eq: $key }
+              value: { _eq: $value, _in: $valueIn }
+              composite_key: { _eq: $compositeKey, _in: $compositeKeyIn }
+              key: { _eq: $key, _in: $keyIn }
             }
             _and: [
               { height: { _gt: $heightGT } }
@@ -185,9 +191,9 @@ export class TransactionService extends CommonService {
               { index: { _lt: $indexLT } }
               {
                 event_attribute_index: {
-                  value: { _eq: $value2 }
-                  composite_key: { _eq: $compositeKey2 }
-                  key: { _eq: $key2 }
+                  value: { _eq: $value2, _in: $valueIn2 }
+                  composite_key: { _eq: $compositeKey2, _in: $compositeKeyIn2 }
+                  key: { _eq: $key2, _in: $keyIn2 }
                 }
               }
             ]
