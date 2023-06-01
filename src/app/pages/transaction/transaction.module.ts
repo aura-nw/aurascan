@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { MaskPipe, NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
@@ -15,7 +15,7 @@ import { TransactionRoutingModule } from './transaction-routing.module';
 import { TransactionComponent } from './transaction.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { MessagesItemComponent } from './transaction-detail/transaction-messages/messages-item/messages-item.component';
-import {NgxJsonViewerModule} from "ngx-json-viewer";
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 
 @NgModule({
@@ -35,6 +35,6 @@ import { ProposalService } from 'src/app/core/services/proposal.service';
     NgbNavModule,
     NgxJsonViewerModule,
   ],
-  providers: [TransactionService, MappingErrorService, ProposalService],
+  providers: [TransactionService, MappingErrorService, ProposalService, MaskPipe],
 })
 export class TransactionModule {}

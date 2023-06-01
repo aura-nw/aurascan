@@ -51,11 +51,16 @@ export function formatNumber(number: number, args?: any): any {
 }
 
 export function parseDataTransaction(trans: any, coinMinimalDenom: string, tokenID = '') {
-  let typeOrigin = trans.data?.body?.messages[0]['@type'];
+  let typeOrigin = trans.data?.tx?.body?.messages[0]['@type'];
   const typeTrans = TYPE_TRANSACTION.find((f) => f.label.toLowerCase() === typeOrigin?.toLowerCase());
   trans.tx_hash = trans.hash;
   //get amount of transaction
-  trans.amount = getAmount(trans.data?.body?.messages, typeOrigin, trans.tx_response?.raw_log, coinMinimalDenom);
+  trans.amount = getAmount(
+    trans.data?.tx?.body?.messages,
+    typeOrigin,
+    trans.tx_response?.raw_log,
+    coinMinimalDenom,
+  );
   trans.fee = balanceOf(trans?.data?.auth_info?.fee?.amount[0]?.amount);
   trans.gas_limit = balanceOf(trans?.data?.auth_info?.fee?.gas_limit);
   trans.height = trans?.height;
@@ -65,9 +70,9 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
     trans.status = StatusTransaction.Success;
   }
   [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.modeExecute] =
-    getDataInfo(trans.data?.body?.messages, tokenID, trans.tx_response?.raw_log);
+    getDataInfo(trans.data?.tx?.body?.messages, tokenID, trans.tx_response?.raw_log);
   trans.type = trans.method || typeTrans?.value;
-  trans.depositors = trans.data?.body?.messages[0]?.depositor;
+  trans.depositors = trans.data?.tx?.body?.messages[0]?.depositor;
   trans.price = balanceOf(_.get(trans, 'data.body.messages[0].funds[0].amount'));
   return trans;
 }

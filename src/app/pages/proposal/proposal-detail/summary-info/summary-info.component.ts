@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { from } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../../../app/global/global';
 import {
   PROPOSAL_STATUS,
@@ -57,6 +58,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private numberPipe: DecimalPipe,
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -65,16 +67,21 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   }
 
   getProposalDetail(): void {
+    let payload = {
+      limit: 1,
+      proposalId: this.proposalId,
+    };
     this.proposalService
-      .getProposalList(1, null, this.proposalId)
+      .getProposalData(payload)
       .pipe(
-        map((dta) => dta.data),
+        map((dta) => dta),
         mergeMap((data) => {
-          if (data?.count > 0) {
-            if (data.proposals[0].status === VOTING_STATUS.PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT) {
+          if (data?.proposal?.length > 0) {
+            if (data.proposal[0].status === VOTING_STATUS.PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT) {
               this.proposalDtl.emit(null);
             }
-            this.proposalDetail = this.makeProposalDataDetail(data.proposals[0]);
+            this.proposalDetail = this.makeProposalDataDetail(data.proposal[0]);
+
             if (this.proposalDetail?.content?.amount) {
               this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
             }
@@ -82,7 +89,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
               mergeMap((res) => {
                 if (res) {
                   this.proposalDetail.total_bonded_token = balanceOf(res.bonded_tokens);
-                  if (data.proposals[0].status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+                  if (data.proposal[0].status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
                     this.proposalDetail.pro_turnout =
                       (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
                   } else {
@@ -104,7 +111,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
           const { quorum, threshold, veto_threshold } = result;
           if (this.proposalDetail) {
             const { pro_votes_yes, pro_total_vote, pro_votes_abstain, pro_votes_no_with_veto } = this.proposalDetail;
-
             this.proposalDetail['quorum'] = quorum * 100;
             this.proposalDetail['threshold'] = threshold * 100;
             this.proposalDetail['veto_threshold'] = veto_threshold * 100;
@@ -189,20 +195,14 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   }
 
   makeProposalDataDetail(data) {
-    let pro_votes_yes = balanceOf(+data.final_tally_result.yes);
-    let pro_votes_no = balanceOf(+data.final_tally_result.no);
-    let pro_votes_no_with_veto = balanceOf(+data.final_tally_result.no_with_veto);
-    let pro_votes_abstain = balanceOf(+data.final_tally_result.abstain);
-    if (data.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
-      pro_votes_yes = balanceOf(+data.tally.yes);
-      pro_votes_no = balanceOf(+data.tally.no);
-      pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
-      pro_votes_abstain = balanceOf(+data.tally.abstain);
-    }
+    let pro_votes_yes = balanceOf(+data.tally.yes);
+    let pro_votes_no = balanceOf(+data.tally.no);
+    let pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
+    let pro_votes_abstain = balanceOf(+data.tally.abstain);
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
-
+    const dataDetail = this.proposalDetail || data;
     return {
-      ...data,
+      ...dataDetail,
       initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
       pro_total_deposits: balanceOf(_.get(data, 'total_deposit[0].amount') || 0),
       pro_type: data?.content['@type']?.split('.').pop(),
@@ -211,8 +211,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote,
-      count_vote: data.total_vote,
       request_amount: balanceOf(data.request_amount),
+      proposer_name: _.get(data, 'description.moniker'),
     };
   }
 
@@ -328,10 +328,12 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (addr) {
       const payload = {
-        proposalId: this.proposalId,
-        wallet: addr,
+        limit: 1,
+        composite_key: 'proposal_vote.proposal_id',
+        value: this.proposalId?.toString(),
+        value2: addr,
       };
-      this.proposalService.getVotes(payload).subscribe((res) => {
+      this.transactionService.getListTxMultiCondition(payload).subscribe((res) => {
         const optionVote = this.proposalService.getVoteMessageByConstant(
           res?.transaction[0]?.data?.tx?.body?.messages[0]?.option,
         );

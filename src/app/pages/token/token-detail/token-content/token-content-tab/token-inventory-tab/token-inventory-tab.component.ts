@@ -91,9 +91,11 @@ export class TokenInventoryComponent implements OnInit {
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
 
-      if (this.pageData.length > 200) {
-        this.pageData.length = 200;
+      if (this.pageData.length >= 100) {
         this.isMoreTx = true;
+        if (this.pageData.length > 200) {
+          this.pageData.length = 200;
+        }
       }
       this.loading = false;
     });
