@@ -227,7 +227,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
 
-      if (proposalDetail.currentYesPercent > proposalDetail.threshold) {
+      if ((currentYesPercent || proposalDetail.currentYesPercent) > proposalDetail.threshold) {
         if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
