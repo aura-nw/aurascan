@@ -11,6 +11,7 @@ import { TableNoDataModule } from '../../../app/shared/components/table-no-data/
 import { SharedModule } from '../../../app/shared/shared.module';
 import { CommunityPoolRoutingModule } from './community-pool-routing.module';
 import { CommunityPoolComponent } from './community-pool.component';
+import { ProposalService } from 'src/app/core/services/proposal.service';
 
 @NgModule({
   declarations: [CommunityPoolComponent],
@@ -27,5 +28,6 @@ import { CommunityPoolComponent } from './community-pool.component';
     NgxMaskModule,
     CommonDirectiveModule,
   ],
+  providers: [ProposalService],
 })
 export class CommunityPoolModule {}

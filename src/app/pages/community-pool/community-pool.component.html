@@ -110,4 +110,163 @@
     </div>
   </ng-container>
   <ng-template #noData> - </ng-template>
+
+  <!-- Proposal Table -->
+  <section class="all-list table-responsive" *ngIf="!breakpoint.value.matches">
+    <div class="card" *ngIf="dataSourceProposal?.data?.length > 0">
+      <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
+        <h2 class="mb-0 text--white">Community Pool Spent Proposals</h2>
+      </div>
+      <div class="card-body pt-0">
+        <table mat-table [dataSource]="dataSourceProposal" matSort class="table-reponsive aura-table">
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>#ID</th>
+            <td mat-cell *matCellDef="let element">#{{ element.proposal_id }}</td>
+          </ng-container>
+
+          <!-- Title Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let element" class="title-cell">
+              <a [routerLink]="[element.proposal_id]" class="text-clamp">{{ element.content.title }}</a>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+              <div
+                class="aura-status-inline {{ getStatus(element.status).class }} text-capitalize"
+                *ngIf="getStatus(element.status)">
+                <span class="status">{{ getStatus(element.status).value }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Sender Column -->
+          <ng-container matColumnDef="sender">
+            <th mat-header-cell *matHeaderCellDef>Sender</th>
+            <td mat-cell *matCellDef="let element">
+              <a class="text--primary" [routerLink]="['/account', element.content.recipient]">
+                {{ shortenAddress(element.content.recipient) || '-' }}
+              </a>
+            </td>
+          </ng-container>
+
+          <!-- Receipient Column -->
+          <ng-container matColumnDef="receipient">
+            <th mat-header-cell *matHeaderCellDef>Receipient</th>
+            <td mat-cell *matCellDef="let element">
+              <a class="text--primary" [routerLink]="['/account', element.content.recipient]">
+                {{ shortenAddress(element.content.recipient) || '-' }}
+              </a>
+            </td>
+          </ng-container>
+
+          <!-- Amount Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Amount</th>
+            <td mat-cell *matCellDef="let element">
+              <span
+                class="h5 h6-mob mb-0 text--gray-1"
+                [appBigNumber]="element?.content.amount[0].amount"
+                [decimal]="6"></span>
+              <span class="text--primary">{{ denom }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Voting end Time Column -->
+          <ng-container matColumnDef="voting_end_time">
+            <th mat-header-cell *matHeaderCellDef>Voting End</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="body-02 d-flex align-items-center">
+                <span>{{ element.submit_time | customDate : 'yyyy-MM-dd' }}</span>
+                <div class="divider divider-vertical mx-2"></div>
+                <span>{{ element.submit_time | customDate : 'HH:mm:ss' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsProposal"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsProposal"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell g-no-data" colspan="9999">
+              {{ 'NO DATA' | translate }}
+            </td>
+          </tr>
+        </table>
+        <app-paginator
+          [length]="length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
+      </div>
+    </div>
+    <div *ngIf="!(dataSourceProposal?.data?.length > 0)">
+      <app-table-no-data></app-table-no-data>
+    </div>
+  </section>
+  <!-- Proposal Card list -->
+  <section *ngIf="breakpoint.value.matches">
+    <div class="card">
+      <h2 class="px-6 pt-4 pt-lg-6 pb-0 pb-lg-2 text--white mb-0">Proposals</h2>
+      <div class="card-body">
+        <div *ngIf="dataSourceProposalMobile?.length > 0">
+          <app-card-mob-simple
+            *ngFor="let data of dataSourceProposalMobile"
+            [link]="'/votings/' + data.proposal_id"
+            [title]="{
+              size: 'md',
+              label: '#' + data.proposal_id,
+              titleClass: 'text--white h5 mb-0',
+              subLabelContent: data.content.title,
+              subLabelClass: 'text--primary g-ellipsis h5-mob mb-0'
+            }"
+            [content]="[
+              {
+                label: 'Status',
+                class: 'aura-status-inline text-capitalize body-02-mob ' + getStatus(data.status).class,
+                info: '<span class=status>' + getStatus(data.status).value + '</span>'
+              },
+              {
+                label: 'Voting Start',
+                class: 'card__date text--gray-1 body-01',
+                info:
+                  data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                    ? '<span>' +
+                      (data.voting_start_time | customDate : 'yyyy-MM-dd') +
+                      '</span>' +
+                      '<span>' +
+                      (data.voting_start_time | customDate : 'HH:mm:ss') +
+                      '</span>'
+                    : '-'
+              },
+              {
+                label: 'Submit Time',
+                class: 'card__date text--gray-1 body-01',
+                info:
+                  '<span>' +
+                  (data.submit_time | customDate : 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.submit_time | customDate : 'HH:mm:ss') +
+                  '</span>'
+              }
+            ]"></app-card-mob-simple>
+        </div>
+        <app-paginator
+          [length]="length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
+        <div *ngIf="!dataSourceProposal.data || (dataSourceProposal.data && dataSourceProposal.data.length === 0)">
+          <app-table-no-data></app-table-no-data>
+        </div>
+      </div>
+    </div>
+  </section>
 </section>

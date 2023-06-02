@@ -7,11 +7,14 @@ import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { NUMBER_CONVERT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PROPOSAL_STATUS } from 'src/app/core/constants/proposal.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -28,7 +31,18 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
     { matColumnDef: 'symbol', headerCellDef: 'symbol' },
     { matColumnDef: 'amount', headerCellDef: 'amount' },
   ];
+
+  templatesProposal: Array<TableTemplate> = [
+    { matColumnDef: 'id', headerCellDef: 'ID' },
+    { matColumnDef: 'title', headerCellDef: 'Title' },
+    { matColumnDef: 'status', headerCellDef: 'Status' },
+    { matColumnDef: 'sender', headerCellDef: 'Sender' },
+    { matColumnDef: 'receipient', headerCellDef: 'receipient' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'voting_end_time', headerCellDef: 'Voting End' },
+  ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
+  displayedColumnsProposal: string[] = this.templatesProposal.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 10,
@@ -47,12 +61,18 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
   listAssetLcd = [];
   searchSubject = new Subject();
   destroy$ = new Subject();
+  statusConstant = PROPOSAL_STATUS;
+  length: number;
+  nextKey = null;
+  dataSourceProposalMobile: any[];
+  dataSourceProposal: MatTableDataSource<any>;
 
   constructor(
     public translate: TranslateService,
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
+    private proposalService: ProposalService,
   ) {}
 
   ngOnDestroy(): void {
@@ -63,6 +83,8 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getListAsset();
+    this.getListProposal();
+    
     this.searchSubject
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
@@ -77,6 +99,13 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
 
   onKeyUp() {
     this.searchSubject.next(this.textSearch);
+  }
+
+  shortenAddress(address: string): string {
+    if (address) {
+      return shortenAddress(address, 8);
+    }
+    return '';
   }
 
   async getListAsset() {
@@ -161,5 +190,45 @@ export class CommunityPoolComponent implements OnInit, OnDestroy {
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
     this.getListAsset();
+  }
+
+  getStatus(key: string) {
+    let resObj: { value: string; class: string; key: string } = null;
+    const statusObj = this.statusConstant.find((s) => s.key === key);
+    if (statusObj !== undefined) {
+      resObj = {
+        value: statusObj.value,
+        class: statusObj.class,
+        key: statusObj.key,
+      };
+    }
+    return resObj;
+  }
+
+  getListProposal(nextKey = null) {
+    let payload = {
+      limit: 40,
+      nextKey: nextKey,
+      type: "/cosmos.distribution.v1beta1.CommunityPoolSpendProposal",
+    };
+    this.proposalService.getProposalData(payload).subscribe((res) => {
+      this.nextKey = res.proposal[res.proposal.length - 1].proposal_id;
+      if (res?.proposal) {
+        let tempDta = res.proposal;
+        tempDta.forEach((pro) => {
+          pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
+        });
+        if (this.dataSourceProposal?.data?.length > 0) {
+          this.dataSourceProposal.data = [...this.dataSourceProposal.data, ...tempDta];
+        } else {
+          this.dataSourceProposal = new MatTableDataSource<any>(tempDta);
+        }
+      }
+      this.dataSourceProposalMobile = this.dataSourceProposal.data.slice(
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
+      this.length = this.dataSourceProposal.data.length;
+    });
   }
 }
