@@ -22,6 +22,7 @@ import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constant
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -105,6 +106,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private token: TokenService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -444,5 +446,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.subscribeVisibleLogicalRangeChange();
       }
     });
+  }
+
+  navigateToCommunityPool(): void {
+    this.router.navigate([`/community-pool`]);
   }
 }
