@@ -95,10 +95,10 @@ export class ProposalComponent implements OnInit {
             if (pro?.tally) {
               const { yes, no, no_with_veto, abstain } = pro?.tally;
               let totalVote = +yes + +no + +no_with_veto + +abstain;
-              if (this.proposalData[index].tally) {
+              if (this.proposalData[index].tally && totalVote > 0) {
                 this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
                 this.proposalData[index].tally.no = (+no * 100) / totalVote;
-                this.proposalData[index].tally.noWithVeto = (+no_with_veto * 100) / totalVote;
+                this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
                 this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
               }
             }

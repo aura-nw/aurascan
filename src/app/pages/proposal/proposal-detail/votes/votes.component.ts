@@ -102,7 +102,6 @@ export class VotesComponent implements OnChanges {
           .getListVoteFromIndexerV2(payloads, VOTE_OPTION.VOTE_OPTION_ABSTAIN)
           .pipe(map((item) => ({ nextKey: item.vote[item.vote?.length - 1]?.height, votes: item.vote }))),
       ]).subscribe((res) => {
-        this.voteDataListLoading = true;
         res[0] && ((dta) => (this.voteData.all = dta))(res[0]);
         res[1] && ((dta) => (this.voteData.yes = dta))(res[1]);
         res[2] && ((dta) => (this.voteData.no = dta))(res[2]);
@@ -111,21 +110,21 @@ export class VotesComponent implements OnChanges {
 
         let voteData: any[];
         if (this.voteData?.all && !this.countCurrent) {
-          voteData = [...this.voteData?.all.votes];
+          voteData = [...this.voteData?.all?.votes];
           this.voteDataList = [...voteData];
         }
 
         const countAll =
-          +this.proposalDetail.count_vote.yes +
-          +this.proposalDetail.count_vote.abstain +
-          +this.proposalDetail.count_vote.no +
-          +this.proposalDetail.count_vote.no_with_veto;
+          +this.proposalDetail.count_vote?.yes +
+          +this.proposalDetail.count_vote?.abstain +
+          +this.proposalDetail.count_vote?.no +
+          +this.proposalDetail.count_vote?.no_with_veto;
 
         this.countVote.set('', countAll);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.proposalDetail.count_vote.yes);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.proposalDetail.count_vote.abstain);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.proposalDetail.count_vote.no);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.proposalDetail.count_vote.no_with_veto);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.proposalDetail.count_vote?.yes);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.proposalDetail.count_vote?.abstain);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.proposalDetail.count_vote?.no);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.proposalDetail.count_vote?.no_with_veto);
 
         this.voteDataListLoading = false;
         this.changeTab(this.countCurrent);

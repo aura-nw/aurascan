@@ -1,14 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
-import { TYPE_CODE_SPACE } from 'src/app/core/constants/messages.constant';
-import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IVotingDialog } from 'src/app/core/models/proposal.model';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
@@ -28,7 +25,6 @@ export class ProposalVoteComponent implements OnInit {
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
     private walletService: WalletService,
-    private transactionService: TransactionService,
     private mappingErrorService: MappingErrorService,
   ) {
     this.keyVote = data.voteValue ?? null;

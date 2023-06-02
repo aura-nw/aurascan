@@ -197,7 +197,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   makeProposalDataDetail(data) {
     let pro_votes_yes = balanceOf(+data.tally.yes);
     let pro_votes_no = balanceOf(+data.tally.no);
-    let pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
+    let pro_votes_no_with_veto = balanceOf(+(data.tally.no_with_veto || data.tally.noWithVeto));
     let pro_votes_abstain = balanceOf(+data.tally.abstain);
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
     const dataDetail = this.proposalDetail || data;
@@ -227,7 +227,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
 
-      if (proposalDetail.currentYesPercent > proposalDetail.threshold) {
+      if ((currentYesPercent || proposalDetail.currentYesPercent) > proposalDetail.threshold) {
         if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
