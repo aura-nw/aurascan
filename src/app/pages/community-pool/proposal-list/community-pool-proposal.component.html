@@ -61,8 +61,8 @@
           <ng-container matColumnDef="sender">
             <th mat-header-cell *matHeaderCellDef>Sender</th>
             <td mat-cell *matCellDef="let element">
-              <a class="text--primary fw-normal" [routerLink]="['/account', element.content.recipient]">
-                {{ shortenAddress(element.content.recipient) || '-' }}
+              <a class="text--primary fw-normal" [routerLink]="['/account', distributionAcc]">
+                {{ shortenAddress(distributionAcc) || '-' }}
               </a>
             </td>
           </ng-container>
@@ -143,8 +143,9 @@
                 class: 'aura-status-inline text-capitalize body-02-mob ' + getStatus(data.status).class,
                 info: '<span class=status>' + getStatus(data.status).value + '</span>'
               },
+              
               {
-                label: 'Voting Start',
+                label: 'Sender',
                 class: 'card__date text--gray-1 body-01',
                 info:
                   data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'

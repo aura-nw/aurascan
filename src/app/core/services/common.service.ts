@@ -42,6 +42,10 @@ export class CommonService {
     return axios.get(`${this.chainInfo.rest}/cosmos/gov/v1beta1/params/tallying`);
   }
 
+  getAccountDistribution() {
+    return axios.get(`${this.chainInfo.rest}/cosmos/auth/v1beta1/module_accounts/distribution`);
+  }
+
   getDateValue(time, isCustom = true) {
     if (time) {
       try {
@@ -70,10 +74,6 @@ export class CommonService {
     } else {
       return ['-', ''];
     }
-  }
-
-  getValidatorImg(identity: string) {
-    return axios.get(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`);
   }
 
   mappingNameIBC(value) {
