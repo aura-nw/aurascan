@@ -157,6 +157,7 @@ export class CommunityPoolProposalComponent implements OnInit, OnDestroy {
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
+      console.log(this.dataSourceMob);
       this.pageData.length = this.dataSource.data.length;
     });
   }

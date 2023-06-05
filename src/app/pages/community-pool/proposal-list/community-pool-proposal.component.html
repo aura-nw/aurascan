@@ -127,48 +127,53 @@
       <h2 class="px-6 pt-4 pt-lg-6 pb-0 pb-lg-2 text--white mb-0">Proposals</h2>
       <div class="card-body">
         <div *ngIf="dataSourceMob?.length > 0">
-          <app-card-mob-simple
-            *ngFor="let data of dataSourceMob"
-            [link]="'/votings/' + data.proposal_id"
+          <app-card-mob-explain *ngFor="let data of dataSourceMob"
             [title]="{
-              size: 'md',
-              label: '#' + data.proposal_id,
-              titleClass: 'text--white h5 mb-0',
-              subLabelContent: data.content.title,
-              subLabelClass: 'text--primary g-ellipsis h5-mob mb-0'
+              label: data.content.title,
+              labelLink: '/votings/' + data.proposal_id,
+              subLabel: '#' + data.proposal_id
             }"
+            [status]="getStatus(data.status)"
             [content]="[
               {
-                label: 'Status',
-                class: 'aura-status-inline text-capitalize body-02-mob ' + getStatus(data.status).class,
-                info: '<span class=status>' + getStatus(data.status).value + '</span>'
-              },
-              
-              {
                 label: 'Sender',
-                class: 'card__date text--gray-1 body-01',
+                class: '',
                 info:
-                  data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                    ? '<span>' +
-                      (data.voting_start_time | customDate : 'yyyy-MM-dd') +
-                      '</span>' +
-                      '<span>' +
-                      (data.voting_start_time | customDate : 'HH:mm:ss') +
-                      '</span>'
-                    : '-'
+                  '<a class=text--primary href=' +
+                  ('/validators/' + data.operator_address) +
+                  '>' +
+                  data.proposer +
+                  '</a>'
               },
               {
-                label: 'Submit Time',
-                class: 'card__date text--gray-1 body-01',
+                label: 'Receipient',
+                class: '',
+                info:
+                  '<a class=text--primary href=' +
+                  ('/validators/' + data.operator_address) +
+                  '>' +
+                  data.proposer +
+                  '</a>'
+              },
+
+              {
+                label: 'Amount',
+                class: 'text--primary',
+                info: '<span class=text--white>'+'64.000.000'+'</span>' + '<span class=ml-2>'+denom+'</span>'
+              },
+              {
+                label: 'Voting End',
+                class: '',
                 info:
                   '<span>' +
                   (data.submit_time | customDate : 'yyyy-MM-dd') +
                   '</span>' +
-                  '<span>' +
+                  '<span class=ml-2>' +
                   (data.submit_time | customDate : 'HH:mm:ss') +
                   '</span>'
               }
-            ]"></app-card-mob-simple>
+            ]"
+          ></app-card-mob-explain>
         </div>
         <app-paginator
           [length]="pageData.length"
