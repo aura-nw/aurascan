@@ -5,7 +5,6 @@ import { Observable, Subject } from 'rxjs';
 import { VOTE_OPTION } from '../constants/proposal.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { checkEnvQuery } from '../utils/common/info-common';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -14,7 +13,7 @@ export class ProposalService extends CommonService {
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
   maxValidator = `${this.environmentService.configValue.maxValidator}`;
-  envDB = checkEnvQuery(this.environmentService.configValue.env);
+  envDB = this.environmentService.configValue.horoscopeSelectedChain;
   reloadList$ = new Subject();
   pageIndexObj = {};
 
@@ -67,21 +66,21 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListVoteFromIndexer(payload, option): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      nextKey: payload.nextKey,
-      reverse: false,
-      pageLimit: payload.pageLimit,
-      answer: option,
-      proposalid: payload.proposalid,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
+  // getListVoteFromIndexer(payload, option): Observable<any> {
+  //   const params = _({
+  //     chainid: this.chainInfo.chainId,
+  //     nextKey: payload.nextKey,
+  //     reverse: false,
+  //     pageLimit: payload.pageLimit,
+  //     answer: option,
+  //     proposalid: payload.proposalid,
+  //   })
+  //     .omitBy(_.isNull)
+  //     .omitBy(_.isUndefined)
+  //     .value();
 
-    return this.http.get<any>(`${this.indexerUrl}/votes`, { params });
-  }
+  //   return this.http.get<any>(`${this.indexerUrl}/votes`, { params });
+  // }
 
   getProposalData(payload) {
     const operationsDoc = `
@@ -136,9 +135,11 @@ export class ProposalService extends CommonService {
           height
           proposal_id
           txhash
-          updated_at
           vote_option
           voter
+          transaction {
+            timestamp
+          }
         }
       }
     }
