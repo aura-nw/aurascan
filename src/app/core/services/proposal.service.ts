@@ -38,6 +38,7 @@ export class ProposalService extends CommonService {
             updated_at
           }
           description
+          operator_address
         }
       }
     }
