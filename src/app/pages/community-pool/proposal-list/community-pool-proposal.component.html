@@ -135,7 +135,6 @@
               subLabel: '#' + data.proposal_id
             }"
             [status]="getStatus(data.status)"
-            [tokenAmount]="{ amount: data.content.amount[0].amount, decimal: data.decimal, isAura: data.logo === '' }"
             [content]="[
               {
                 label: 'Sender',
@@ -156,6 +155,12 @@
                   '>' +
                   shortenAddress(data.content.recipient) +
                   '</a>'
+              },
+              {
+                label: 'Amount',
+                class: '',
+                info: data.content.amount[0].amount,
+                isAmount: true
               },
               {
                 label: 'Voting End',

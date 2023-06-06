@@ -10,13 +10,8 @@ export interface CardMobContent {
   label: string;
   class?: string;
   info: any;
+  isAmount?: boolean;
 }
-export interface CardMobSimpleAmount {
-  amount: string;
-  decimal: number;
-  isAura: boolean;
-}
-
 @Component({
   selector: 'app-card-mob-explain',
   templateUrl: './card-mob-explain.component.html',
@@ -32,14 +27,9 @@ export class CardMobExplainComponent implements OnInit {
     private environmentService: EnvironmentService,) {}
 
   ngOnInit(): void {
-    if(this.tokenAmount) {
-      this.content.splice(2, 0, {
-        label: 'Amount',
-        class: null,
-        info: this.tokenAmount.amount
-      });
-      this.content.join(" ")
-    }
+    console.log(this.content)
     
   }
 }
+
+// [tokenAmount]="{ amount: data.content.amount[0].amount, decimal: data.decimal, isAura: data.logo === '' }"
