@@ -2,14 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
-import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CHART_RANGE, DATEFORMAT } from '../constants/common.constant';
+import { DATEFORMAT } from '../constants/common.constant';
 import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
-import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable()
 export class CommonService {
@@ -18,6 +16,7 @@ export class CommonService {
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.configValue.chain_info;
+  graphUrl = `${this._environmentService.configValue.graphUrl}`;
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;
@@ -35,11 +34,16 @@ export class CommonService {
   }
 
   status(): Observable<any> {
-    return this._http.get<any>(`${this.apiUrl}/status`);
+    let api_link= this.graphUrl.replace('v1/graphql','api/v1');
+    return this._http.get<any>(`${api_link}/dashboard-statistics`);
   }
 
   getParamTallyingFromLCD() {
     return axios.get(`${this.chainInfo.rest}/cosmos/gov/v1beta1/params/tallying`);
+  }
+
+  getAccountDistribution() {
+    return axios.get(`${this.chainInfo.rest}/cosmos/auth/v1beta1/module_accounts/distribution`);
   }
 
   getDateValue(time, isCustom = true) {
@@ -70,10 +74,6 @@ export class CommonService {
     } else {
       return ['-', ''];
     }
-  }
-
-  getValidatorImg(identity: string) {
-    return axios.get(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`);
   }
 
   mappingNameIBC(value) {
