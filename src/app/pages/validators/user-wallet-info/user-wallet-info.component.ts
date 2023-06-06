@@ -44,6 +44,10 @@ export class UserWalletInfoComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.arrayDelegate) {
       this.dataSourceWallet = new MatTableDataSource(this.arrayDelegate);
+      if (changes.arrayDelegate.currentValue?.length > 0) {
+        // get ValidatorAddressArr
+        this.getValidatorAvatar(changes.arrayDelegate.currentValue);
+      }
     }
 
     if (changes.dataDelegate) {
