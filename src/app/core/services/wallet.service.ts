@@ -21,7 +21,6 @@ import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
-import { checkEnvQuery } from '../utils/common/info-common';
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -315,7 +314,7 @@ export class WalletService implements OnDestroy {
   }
 
   private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
+    const envDB = this.environmentService.configValue.horoscopeSelectedChain;
     const operationsDoc = `
     query getAccountInfo ($address: String) {
       ${envDB} {

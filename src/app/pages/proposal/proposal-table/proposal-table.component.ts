@@ -98,7 +98,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.data.forEach((element) => {
-      element.timestamp = element.timestamp || element.updated_at;
+      element.timestamp = element?.transaction?.timestamp || element.timestamp || element.updated_at;
       element.updated_at = null;
     });
     if (this.dataSource) {

@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
-import { checkEnvQuery } from '../utils/common/info-common';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -13,7 +12,7 @@ export class TransactionService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
-  envDB = checkEnvQuery(this.environmentService.configValue.env);
+  envDB = this.environmentService.configValue.horoscopeSelectedChain;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);

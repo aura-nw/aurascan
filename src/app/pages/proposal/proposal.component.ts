@@ -74,7 +74,7 @@ export class ProposalComponent implements OnInit {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     public commonService: CommonService,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -95,10 +95,10 @@ export class ProposalComponent implements OnInit {
             if (pro?.tally) {
               const { yes, no, no_with_veto, abstain } = pro?.tally;
               let totalVote = +yes + +no + +no_with_veto + +abstain;
-              if (this.proposalData[index].tally) {
+              if (this.proposalData[index].tally && totalVote > 0) {
                 this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
                 this.proposalData[index].tally.no = (+no * 100) / totalVote;
-                this.proposalData[index].tally.noWithVeto = (+no_with_veto * 100) / totalVote;
+                this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
                 this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
               }
             }
@@ -106,15 +106,15 @@ export class ProposalComponent implements OnInit {
               if (addr) {
                 const payload = {
                   limit: 1,
-                  composite_key: 'proposal_vote.proposal_id',
+                  compositeKey: 'proposal_vote.proposal_id',
                   value: pro.proposal_id?.toString(),
                   value2: addr,
                 };
                 this.transactionService.getListTxMultiCondition(payload).subscribe((res) => {
-                  const optionVote = this.proposalService.getVoteMessageByConstant(res?.transaction[0]?.data?.tx?.body?.messages[0]?.option);
-                  pro.vote_option = this.voteConstant.find(
-                    (s) => s.key === optionVote,
-                  )?.voteOption;
+                  const optionVote = this.proposalService.getVoteMessageByConstant(
+                    res?.transaction[0]?.data?.tx?.body?.messages[0]?.option,
+                  );
+                  pro.vote_option = this.voteConstant.find((s) => s.key === optionVote)?.voteOption;
                 });
               }
             };

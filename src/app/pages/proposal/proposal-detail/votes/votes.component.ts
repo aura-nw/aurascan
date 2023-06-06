@@ -43,7 +43,6 @@ export class VotesComponent implements OnChanges {
   countCurrent: string = '';
   voteDataListLoading = true;
   isFirstChange = false;
-  TAB_ALL = 0;
   proposalVote = PROPOSAL_TABLE_MODE.VOTES;
 
   voteData = {
@@ -87,22 +86,21 @@ export class VotesComponent implements OnChanges {
 
       combineLatest([
         this.proposalService
-          .getListVoteFromIndexerV2(payloads, null)
+          .getListVoteFromIndexer(payloads, null)
           .pipe(map((item) => ({ nextKey: item.vote[item.vote?.length - 1]?.height, votes: item.vote }))),
         this.proposalService
-          .getListVoteFromIndexerV2(payloads, VOTE_OPTION.VOTE_OPTION_YES)
+          .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_YES)
           .pipe(map((item) => ({ nextKey: item.vote[item.vote?.length - 1]?.height, votes: item.vote }))),
         this.proposalService
-          .getListVoteFromIndexerV2(payloads, VOTE_OPTION.VOTE_OPTION_NO)
+          .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO)
           .pipe(map((item) => ({ nextKey: item.vote[item.vote?.length - 1]?.height, votes: item.vote }))),
         this.proposalService
-          .getListVoteFromIndexerV2(payloads, VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO)
+          .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO)
           .pipe(map((item) => ({ nextKey: item.vote[item.vote?.length - 1]?.height, votes: item.vote }))),
         this.proposalService
-          .getListVoteFromIndexerV2(payloads, VOTE_OPTION.VOTE_OPTION_ABSTAIN)
+          .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_ABSTAIN)
           .pipe(map((item) => ({ nextKey: item.vote[item.vote?.length - 1]?.height, votes: item.vote }))),
       ]).subscribe((res) => {
-        this.voteDataListLoading = true;
         res[0] && ((dta) => (this.voteData.all = dta))(res[0]);
         res[1] && ((dta) => (this.voteData.yes = dta))(res[1]);
         res[2] && ((dta) => (this.voteData.no = dta))(res[2]);
@@ -111,21 +109,21 @@ export class VotesComponent implements OnChanges {
 
         let voteData: any[];
         if (this.voteData?.all && !this.countCurrent) {
-          voteData = [...this.voteData?.all.votes];
+          voteData = [...this.voteData?.all?.votes];
           this.voteDataList = [...voteData];
         }
 
         const countAll =
-          +this.proposalDetail.count_vote.yes +
-          +this.proposalDetail.count_vote.abstain +
-          +this.proposalDetail.count_vote.no +
-          +this.proposalDetail.count_vote.no_with_veto;
+          +this.proposalDetail.count_vote?.yes +
+          +this.proposalDetail.count_vote?.abstain +
+          +this.proposalDetail.count_vote?.no +
+          +this.proposalDetail.count_vote?.no_with_veto;
 
         this.countVote.set('', countAll);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.proposalDetail.count_vote.yes);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.proposalDetail.count_vote.abstain);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.proposalDetail.count_vote.no);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.proposalDetail.count_vote.no_with_veto);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.proposalDetail.count_vote?.yes);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.proposalDetail.count_vote?.abstain);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.proposalDetail.count_vote?.no);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.proposalDetail.count_vote?.no_with_veto);
 
         this.voteDataListLoading = false;
         this.changeTab(this.countCurrent);
@@ -168,7 +166,7 @@ export class VotesComponent implements OnChanges {
       case VOTE_OPTION.VOTE_OPTION_YES:
         payloads.nextKey = this.voteData.yes.nextKey;
         if (payloads.nextKey) {
-          this.proposalService.getListVoteFromIndexerV2(payloads, VOTE_OPTION.VOTE_OPTION_YES).subscribe((res) => {
+          this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_YES).subscribe((res) => {
             if (res.vote) {
               if (this.voteData.yes.votes.length % 25 !== res.vote?.length) {
                 this.voteData.yes = {
@@ -184,7 +182,7 @@ export class VotesComponent implements OnChanges {
       case VOTE_OPTION.VOTE_OPTION_ABSTAIN:
         payloads.nextKey = this.voteData.abstain.nextKey;
         if (payloads.nextKey) {
-          this.proposalService.getListVoteFromIndexerV2(payloads, VOTE_OPTION.VOTE_OPTION_ABSTAIN).subscribe((res) => {
+          this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_ABSTAIN).subscribe((res) => {
             if (res.vote) {
               if (this.voteData.abstain.votes.length % 25 !== res.vote?.length) {
                 this.voteData.abstain = {
@@ -200,7 +198,7 @@ export class VotesComponent implements OnChanges {
       case VOTE_OPTION.VOTE_OPTION_NO:
         payloads.nextKey = this.voteData.no.nextKey;
         if (payloads.nextKey) {
-          this.proposalService.getListVoteFromIndexerV2(payloads, VOTE_OPTION.VOTE_OPTION_NO).subscribe((res) => {
+          this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO).subscribe((res) => {
             if (res.vote) {
               if (this.voteData.no.votes.length % 25 !== res.vote?.length) {
                 this.voteData.no = {
@@ -217,16 +215,16 @@ export class VotesComponent implements OnChanges {
         payloads.nextKey = this.voteData.noWithVeto.nextKey;
         if (payloads.nextKey) {
           this.proposalService
-            .getListVoteFromIndexerV2(payloads, VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO)
+            .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO)
             .subscribe((res) => {
-              if (res.vote) {
-                if (this.voteData.noWithVeto.votes.length % 25 !== res.vote.length) {
+              if (res?.vote) {
+                if (this.voteData.noWithVeto.votes.length % 25 !== res?.vote?.length) {
                   this.voteData.noWithVeto = {
-                    nextKey: res.vote[res.vote?.length - 1]?.height,
-                    votes: [...this.voteData.noWithVeto.votes, ...res.vote],
+                    nextKey: res?.vote[res.vote?.length - 1]?.height,
+                    votes: [...this.voteData.noWithVeto.votes, ...res?.vote],
                   };
                 }
-                this.voteDataList = this.voteData?.noWithVeto.votes;
+                this.voteDataList = this.voteData?.noWithVeto?.votes;
               }
             });
         }
@@ -234,12 +232,12 @@ export class VotesComponent implements OnChanges {
       default:
         payloads.nextKey = this.voteData.all?.nextKey;
         if (payloads?.nextKey) {
-          this.proposalService.getListVoteFromIndexerV2(payloads, null).subscribe((res) => {
-            if (res.vote) {
-              if (this.voteData.all.votes.length % 25 !== res.vote.length) {
+          this.proposalService.getListVoteFromIndexer(payloads, null).subscribe((res) => {
+            if (res?.vote) {
+              if (this.voteData.all.votes.length % 25 !== res?.vote?.length) {
                 this.voteData.all = {
-                  nextKey: res.vote[res.vote?.length - 1]?.height,
-                  votes: [...this.voteData.all.votes, ...res.vote],
+                  nextKey: res?.vote[res?.vote?.length - 1]?.height,
+                  votes: [...this.voteData.all.votes, ...res?.vote],
                 };
               }
               this.voteDataList = this.voteData?.all.votes;

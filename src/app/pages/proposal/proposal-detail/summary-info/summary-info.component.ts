@@ -197,12 +197,13 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   makeProposalDataDetail(data) {
     let pro_votes_yes = balanceOf(+data.tally.yes);
     let pro_votes_no = balanceOf(+data.tally.no);
-    let pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
+    let pro_votes_no_with_veto = balanceOf(+(data.tally.no_with_veto || data.tally.noWithVeto));
     let pro_votes_abstain = balanceOf(+data.tally.abstain);
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
     const dataDetail = this.proposalDetail || data;
     return {
       ...dataDetail,
+      count_vote: data.count_vote || dataDetail.count_vote,
       initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
       pro_total_deposits: balanceOf(_.get(data, 'total_deposit[0].amount') || 0),
       pro_type: data?.content['@type']?.split('.').pop(),
@@ -227,7 +228,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
 
-      if (proposalDetail.currentYesPercent > proposalDetail.threshold) {
+      if ((currentYesPercent || proposalDetail.currentYesPercent) > proposalDetail.threshold) {
         if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
@@ -252,6 +253,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
           '%';
       }
     } else {
+      this.isNotReached = true;
+      this.quorumStatus = VOTING_QUORUM.NOT_REACHED;
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubTitle =
         'Current quorum is less than ' +
@@ -329,7 +332,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     if (addr) {
       const payload = {
         limit: 1,
-        composite_key: 'proposal_vote.proposal_id',
+        compositeKey: 'proposal_vote.proposal_id',
         value: this.proposalId?.toString(),
         value2: addr,
       };
@@ -337,7 +340,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
         const optionVote = this.proposalService.getVoteMessageByConstant(
           res?.transaction[0]?.data?.tx?.body?.messages[0]?.option,
         );
-        this.proposalVotes = this.voteConstant.find((s) => s.key === optionVote)?.voteOption;
+        this.proposalVotes = this.voteConstant?.find((s) => s.key === optionVote)?.voteOption;
         this.voteValue = {
           keyVote: optionVote,
         };

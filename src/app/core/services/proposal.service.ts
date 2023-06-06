@@ -5,7 +5,6 @@ import { Observable, Subject } from 'rxjs';
 import { VOTE_OPTION } from '../constants/proposal.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { checkEnvQuery } from '../utils/common/info-common';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -14,7 +13,7 @@ export class ProposalService extends CommonService {
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
   maxValidator = `${this.environmentService.configValue.maxValidator}`;
-  envDB = checkEnvQuery(this.environmentService.configValue.env);
+  envDB = this.environmentService.configValue.horoscopeSelectedChain;
   reloadList$ = new Subject();
   pageIndexObj = {};
 
@@ -26,19 +25,7 @@ export class ProposalService extends CommonService {
     super(http, environmentService);
   }
 
-  getValidatorVotesFromIndexer(proposalid): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      proposalid: proposalid,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/votes/validators`, { params });
-  }
-
-  getValidatorVotesFromIndexerV2(proposalId): Observable<any> {
+  getValidatorVotesFromIndexer(proposalId): Observable<any> {
     const operationsDoc = `
     query auratestnet_validator($proposalId: Int = null, $limit: Int = 10) {
       ${this.envDB} {
@@ -65,22 +52,6 @@ export class ProposalService extends CommonService {
         operationName: 'auratestnet_validator',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getListVoteFromIndexer(payload, option): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      nextKey: payload.nextKey,
-      reverse: false,
-      pageLimit: payload.pageLimit,
-      answer: option,
-      proposalid: payload.proposalid,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/votes`, { params });
   }
 
   getProposalData(payload) {
@@ -129,7 +100,7 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListVoteFromIndexerV2(payload, option): Observable<any> {
+  getListVoteFromIndexer(payload, option): Observable<any> {
     const operationsDoc = `
     query auratestnet_vote($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
       ${this.envDB} {
@@ -137,9 +108,11 @@ export class ProposalService extends CommonService {
           height
           proposal_id
           txhash
-          updated_at
           vote_option
           voter
+          transaction {
+            timestamp
+          }
         }
       }
     }

@@ -7,7 +7,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { Globals } from 'src/app/global/global';
-import { checkEnvQuery } from '../utils/common/info-common';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -17,7 +16,7 @@ export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
   graphUrl = `${this.environmentService.configValue.graphUrl}`;
-  envDB = checkEnvQuery(this.environmentService.configValue.env);
+  envDB = this.environmentService.configValue.horoscopeSelectedChain;
   stakingAPRSubject: BehaviorSubject<number>;
 
   constructor(
@@ -51,7 +50,6 @@ export class ValidatorService extends CommonService {
   }
 
   getDataValidator(payload) {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
     const operationsDoc = `
     query auratestnet_validator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
       ${this.envDB} {
@@ -95,7 +93,7 @@ export class ValidatorService extends CommonService {
         },
         operationName: 'auratestnet_validator',
       })
-      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   validatorsDetail(address: string): Observable<any> {
@@ -142,7 +140,7 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
   }
 
-  delegators(pageLimit = 100, address: string, nextKey = null) {
+  delegator(pageLimit = 100, address: string, nextKey = null) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.limit=${pageLimit}&pagination.key=${nextKey}&pagination.reverse=true`,
     );
@@ -154,10 +152,6 @@ export class ValidatorService extends CommonService {
 
   getValidatorInfoByList(addressList: string[]): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/validators/validator-info?address=${addressList}`);
-  }
-
-  getStakeInfo(delegatorAddress: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators/delegations/delegator/${delegatorAddress}`);
   }
 
   getUptimeLCD(block = null) {

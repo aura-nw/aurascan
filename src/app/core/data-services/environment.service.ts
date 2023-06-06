@@ -20,6 +20,7 @@ export interface IConfiguration {
   ipfsDomain: string;
   evnLabel: any;
   maxValidator: number;
+  horoscopeSelectedChain: string
 }
 
 @Injectable()
@@ -40,7 +41,8 @@ export class EnvironmentService {
     ipfsDomain: '',
     graphUrl:'',
     evnLabel: '',
-    maxValidator: null
+    maxValidator: null,
+    horoscopeSelectedChain: ''
   });
 
   get configValue(): IConfiguration {
@@ -73,7 +75,8 @@ export class EnvironmentService {
           timeInterval: config['timeInterval'] || 4000,
           ipfsDomain: config['ipfsDomain'],
           evnLabel: config['evnLabel'],
-          maxValidator: config['maxValidator'] || 200
+          maxValidator: config['maxValidator'] || 200,
+          horoscopeSelectedChain: config['horoscopeSelectedChain']
         };
 
         this.config.next(data);
