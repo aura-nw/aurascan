@@ -50,46 +50,45 @@ export class TokenInventoryComponent implements OnInit {
 
     if (this.typeContract === ContractRegisterType.CW4973) {
       this.linkToken = 'token-abt';
-      this.getNftData();
-    } else {
-      this.getNftCW721();
-    }
+    } 
+    this.getNftData();
   }
 
-  getNftData() {
-    this.loading = true;
+  getNftData(nextKey = null) {
     let payload = {
-      pageLimit: 100,
-      pageOffset: this.pageData.pageIndex * this.pageData.pageSize,
-      token_id: '',
-      owner: '',
-      contractType: this.typeContract,
-      contractAddress: this.contractAddress,
+      limit: 100,
+      nextKey: nextKey,
+      contract_address: this.contractAddress,
     };
 
-    if (this.keyWord) {
-      if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
-        payload.owner = this.keyWord;
-      } else if (
-        !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
-      ) {
-        payload.token_id = this.keyWord;
-      }
-    }
+    // if (this.keyWord) {
+    //   if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+    //     payload.owner = this.keyWord;
+    //   } else if (
+    //     !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
+    //   ) {
+    //     payload.token_id = this.keyWord;
+    //   }
+    // }
 
-    if (payload.pageOffset > 100) {
-      payload.pageOffset = 100;
-    }
+    // if (payload.pageOffset > 100) {
+    //   payload.pageOffset = 100;
+    // }
 
-    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
-      const asset = _.get(res, `data.assets[${this.typeContract}]`);
-      this.pageData.length = _.get(res, `data.assets[${this.typeContract}].asset.length`);
+    this.tokenService.getListTokenNFTFromIndexerV2(payload).subscribe((res) => {
+      const asset = _.get(res, `cw721_token`);
+      this.pageData.length = asset?.length;
+
+      asset.forEach(element => {
+        element.contract_address = element.contract_address || element.cw721_contract?.smart_contract?.address;
+      }); 
 
       if (this.nftData.data.length > 0) {
-        this.nftData.data = [...this.nftData.data, ...asset.asset];
+        this.nftData.data = [...this.nftData.data, ...asset];
       } else {
-        this.nftData.data = [...asset.asset];
+        this.nftData.data = [...asset];
       }
+      
       this.dataSourceMobile = this.nftData.data.slice(
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
@@ -105,73 +104,119 @@ export class TokenInventoryComponent implements OnInit {
     });
   }
 
-  getNftCW721(nextKey = null) {
-    // if (this.keyWord) {
-    //   if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
-    //     payload.owner = this.keyWord;
-    //   } else if (
-    //     !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
-    //   ) {
-    //     payload.token_id = this.keyWord;
-    //   }
-    // }
+    // getNftDataOld() {
+  //   this.loading = true;
+  //   let payload = {
+  //     pageLimit: 100,
+  //     pageOffset: this.pageData.pageIndex * this.pageData.pageSize,
+  //     token_id: '',
+  //     owner: '',
+  //     contractType: this.typeContract,
+  //     contractAddress: this.contractAddress,
+  //   };
 
-    let payload = {
-      contract_address: this.contractAddress,
-      limit: 100,
-      keyword: this.keyWord,
-      next_key: nextKey,
-    };
+  //   if (this.keyWord) {
+  //     if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+  //       payload.owner = this.keyWord;
+  //     } else if (
+  //       !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
+  //     ) {
+  //       payload.token_id = this.keyWord;
+  //     }
+  //   }
 
-    // if (this.keyWord) {
-    //   if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
-    //     payload.owner = this.keyWord;
-    //   } else if (
-    //     !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
-    //   ) {
-    //     payload.token_id = this.keyWord;
-    //   }
-    // }
+  //   if (payload.pageOffset > 100) {
+  //     payload.pageOffset = 100;
+  //   }
 
-    this.tokenService.getAssetCW721ByContract(payload).subscribe(
-      (res) => {
-        console.log('res ne', res);
+  //   this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
+  //     const asset = _.get(res, `data.assets[${this.typeContract}]`);
+  //     this.pageData.length = _.get(res, `data.assets[${this.typeContract}].asset.length`);
+
+  //     if (this.nftData.data.length > 0) {
+  //       this.nftData.data = [...this.nftData.data, ...asset.asset];
+  //     } else {
+  //       this.nftData.data = [...asset.asset];
+  //     }
+  //     this.dataSourceMobile = this.nftData.data.slice(
+  //       this.pageData.pageIndex * this.pageData.pageSize,
+  //       this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+  //     );
+
+  //     if (this.pageData.length >= 100) {
+  //       this.isMoreTx = true;
+  //       if (this.pageData.length > 200) {
+  //         this.pageData.length = 200;
+  //       }
+  //     }
+  //     this.loading = false;
+  //   });
+  // }
+
+
+  // getNftCW721(nextKey = null) {
+  //   // if (this.keyWord) {
+  //   //   if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+  //   //     payload.owner = this.keyWord;
+  //   //   } else if (
+  //   //     !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
+  //   //   ) {
+  //   //     payload.token_id = this.keyWord;
+  //   //   }
+  //   // }
+
+  //   let payload = {
+  //     contract_address: this.contractAddress,
+  //     limit: 100,
+  //     keyword: this.keyWord,
+  //     next_key: nextKey,
+  //   };
+
+  //   // if (this.keyWord) {
+  //   //   if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+  //   //     payload.owner = this.keyWord;
+  //   //   } else if (
+  //   //     !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
+  //   //   ) {
+  //   //     payload.token_id = this.keyWord;
+  //   //   }
+  //   // }
+
+  //   this.tokenService.getListTokenNFTFromIndexerV2(payload).subscribe(
+  //     (res) => {
+  //       console.log('res ne', res);
         
-        const asset = _.get(res, `data.assets[${this.typeContract}]`);
-        this.pageData.length = _.get(res, `meta.count`);
+  //       const asset = _.get(res, `data.assets[${this.typeContract}]`);
+  //       this.pageData.length = _.get(res, `meta.count`);
 
-        if (res.data.length > 0) {
-          this.nftData.data = [...this.nftData.data, ...res.data];
-        } else {
-          this.nftData.data = [...res.data];
-        }
-        this.dataSourceMobile = this.nftData.data.slice(
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-        );
+  //       if (res.data.length > 0) {
+  //         this.nftData.data = [...this.nftData.data, ...res.data];
+  //       } else {
+  //         this.nftData.data = [...res.data];
+  //       }
+  //       this.dataSourceMobile = this.nftData.data.slice(
+  //         this.pageData.pageIndex * this.pageData.pageSize,
+  //         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+  //       );
 
-        if (this.pageData.length >= 100) {
-          this.isMoreTx = true;
-          if (this.pageData.length > 200) {
-            this.pageData.length = 200;
-          }
-        }
-      },
-      () => {},
-      () => {
-        this.loading = false;
-      },
-    );
-  }
+  //       if (this.pageData.length >= 100) {
+  //         this.isMoreTx = true;
+  //         if (this.pageData.length > 200) {
+  //           this.pageData.length = 200;
+  //         }
+  //       }
+  //     },
+  //     () => {},
+  //     () => {
+  //       this.loading = false;
+  //     },
+  //   );
+  // }
 
   pageEvent(e: PageEvent): void {
     if (e.pageIndex * e.pageSize >= this.nftData.data.length) {
       this.pageData = e;
-      if (this.typeContract === ContractRegisterType.CW4973) {
-        this.getNftData();
-      } else {
-        this.getNftCW721(this.nextKey);
-      }
+      this.getNftData();
     } else {
       this.dataSourceMobile = this.nftData.data.slice(e.pageIndex * e.pageSize, e.pageIndex * e.pageSize + e.pageSize);
     }

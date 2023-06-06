@@ -52,7 +52,8 @@ export class NftListComponent implements OnChanges {
   }
 
   getNftData() {
-    this.searchValue = this.searchValue?.trim();
+    this.searchValue = 'NFTGLBUI050600010';
+    // this.searchValue = this.searchValue?.trim();
 
     const payload = {
       account_address: this.address,
@@ -62,8 +63,6 @@ export class NftListComponent implements OnChanges {
     };
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
       (res: ResponseDto) => {
-        console.log('res 721 ne', res);
-        
         if (res?.data?.length > 0) {
           if (this.nftList.length > 0) {
             this.nftList = [...this.nftList, ...res.data];
@@ -76,8 +75,8 @@ export class NftListComponent implements OnChanges {
           this.nftList.forEach((element) => {
             element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
             element.token_name = _.get(element, 'media_info.onchain.metadata.name');
-            element.image = _.get(element, 'media_info.offchain.image');
-            element.metadata = _.get(element, 'media_info.onchain.metadata');
+            // element.image = _.get(element, 'media_info.offchain.image');
+            // element.metadata = _.get(element, 'media_info.onchain.metadata');
             if (!this.searchValue) {
               this.totalValue += element.price * +element.balance || 0;
             }

@@ -54,12 +54,7 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
   const typeTrans = TYPE_TRANSACTION.find((f) => f.label.toLowerCase() === typeOrigin?.toLowerCase());
   trans.tx_hash = trans.hash;
   //get amount of transaction
-  trans.amount = getAmount(
-    trans.data?.tx?.body?.messages,
-    typeOrigin,
-    trans.tx_response?.raw_log,
-    coinMinimalDenom,
-  );
+  trans.amount = getAmount(trans.data?.tx?.body?.messages, typeOrigin, trans.tx_response?.raw_log, coinMinimalDenom);
   trans.fee = balanceOf(trans?.data?.auth_info?.fee?.amount[0]?.amount);
   trans.gas_limit = balanceOf(trans?.data?.auth_info?.fee?.gas_limit);
   trans.height = trans?.height;
@@ -80,11 +75,15 @@ export function checkTypeFile(nft: any) {
   let nftType = nft.img_type || '';
   let content_type = '';
   if (!nftType) {
-    if (nft?.animation) {
-      nftType = nft?.animation?.content_type || '';
+    if (
+      (typeof nft?.media_info?.offchain?.animation === 'object' &&
+        Object.keys(nft?.media_info?.offchain?.animation)?.length > 0) ||
+      nft?.animation
+    ) {
+      nftType = nft?.media_info?.offchain?.animation?.content_type || nft?.animation?.content_type || '';
     }
-    if (nft?.image && nftType == '') {
-      nftType = nft?.image?.content_type || '';
+    if (nft?.media_info?.offchain?.image && nftType == '') {
+      nftType = nft?.media_info?.offchain?.image?.content_type || '';
     }
   }
 

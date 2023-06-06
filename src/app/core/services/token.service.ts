@@ -56,6 +56,39 @@ export class TokenService extends CommonService {
     });
   }
 
+  getListTokenNFTFromIndexerV2(payload): Observable<any> {
+    const operationsDoc = `
+    query MyQuery($contract_address: String, $limit: Int = 10) {
+      auratestnet {
+        cw721_token(limit: $limit, where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}}, order_by: {created_at: desc}) {
+          token_id
+          owner
+          media_info
+          last_updated_height
+          created_at
+          burned
+          cw721_contract {
+            smart_contract {
+              address
+            }
+          }
+        }
+      }
+    }
+    `;
+    payload['contractAddress'] = 'aura1vl8mq97m5r48sejm5rtlxc724mzjtgs80nseka00xx6vyysffk2s3kpavh';
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variable: {
+          limit: payload?.limit || 20,
+          contract_address: payload?.contract_address,
+        },
+        operationName: 'MyQuery',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListTokenHolder(
     limit: string | number,
     offset: string | number,
@@ -83,13 +116,13 @@ export class TokenService extends CommonService {
       }
     }
     `;
-    payload['contractAddress'] = "aura1vl8mq97m5r48sejm5rtlxc724mzjtgs80nseka00xx6vyysffk2s3kpavh";
+    payload['contractAddress'] = 'aura1vl8mq97m5r48sejm5rtlxc724mzjtgs80nseka00xx6vyysffk2s3kpavh';
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variable: {
           limit: payload?.limit || 20,
-          contract_address: "",
+          contract_address: '',
         },
         operationName: 'MyQuery',
       })
@@ -123,6 +156,6 @@ export class TokenService extends CommonService {
   }
 
   getAssetCW721ByContract(payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw721-tokens/get-by-contract/`,payload);
+    return this.http.post<any>(`${this.apiUrl}/cw721-tokens/get-by-contract/`, payload);
   }
 }

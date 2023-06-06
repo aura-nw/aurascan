@@ -110,7 +110,6 @@ export class TokenHoldersTabComponent implements OnInit {
     };
     this.tokenService.getListTokenHolderNFT(payload).subscribe(
       (res) => {
-        console.log(res);
         if (res?.view_count_holder_cw721?.length > 0) {
           this.totalHolder = res.view_count_holder_cw721_aggregate?.aggregate?.count;
           if (this.totalHolder > this.numberTopHolder) {
