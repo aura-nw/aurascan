@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { DATEFORMAT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -30,6 +30,8 @@ export class CodeIdContractsTabComponent implements OnInit {
     { matColumnDef: 'verified_at', headerCellDef: 'Verified at' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
+  lengthAddress = LENGTH_CHARACTER.ADDRESS;
+
   constructor(private contractService: ContractService, private datePipe: DatePipe) {}
 
   ngOnInit(): void {

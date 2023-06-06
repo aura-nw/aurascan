@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
-import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
-import { DeployContractListReq, SmartContractListReq } from 'src/app/core/models/contract.model';
+import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -13,8 +11,8 @@ export class ContractService extends CommonService {
   private contract$ = new BehaviorSubject<any>(null);
   contractObservable: Observable<any>;
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   apiUrl = `${this.environmentService.configValue.beUri}`;
+  graphUrl = `${this.environmentService.configValue.graphUrl}`;
 
   get contract() {
     return this.contract$.value;
@@ -28,34 +26,6 @@ export class ContractService extends CommonService {
 
   getListContract(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
-  }
-
-  getTransactionsIndexer(
-    pageLimit: string | number,
-    contractAddress = '',
-    type: string,
-    nextKey = null,
-  ): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      searchType: type,
-      searchKey: '_contract_address',
-      searchValue: contractAddress,
-      pageLimit,
-      nextKey,
-      // countTotal: true,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/transaction`, {
-      params,
-    });
-  }
-
-  getContractDetail(contractAddress): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`);
   }
 
   verifyCodeID(data: any): Observable<any> {

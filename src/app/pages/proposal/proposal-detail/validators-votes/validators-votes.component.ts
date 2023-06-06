@@ -4,6 +4,7 @@ import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
+import * as _ from 'lodash';
 
 export interface IValidatorVotes {
   rank: number;
@@ -70,15 +71,25 @@ export class ValidatorsVotesComponent implements OnInit {
 
   getValidatorVotes(isInit = false): void {
     if (this.proposalId) {
-      this.proposalService.getValidatorVotesFromIndexer(this.proposalId).subscribe((res) => {
+      this.proposalService.getValidatorVotesFromIndexerV2(this.proposalId).subscribe((res) => {
+        let validatorVote = [];
+        if (res?.validator) {
+          validatorVote = _.get(res, 'validator').map((item) => {
+            const validator_name = item.description?.moniker;
+            const timestamp = _.get(item, 'vote[0].updated_at');
+            const vote_option = _.get(item, 'vote[0].vote_option');
+            const txhash = _.get(item, 'vote[0].txhash');
+            return { validator_name, timestamp, vote_option, txhash };
+          });
+        }
         this.voteDataListLoading = true;
 
-        this.voteData.all = res.data;
-        this.voteData.yes = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_YES);
-        this.voteData.abstain = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_ABSTAIN);
-        this.voteData.no = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_NO);
-        this.voteData.noWithVeto = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO);
-        this.voteData.didNotVote = res.data.filter((f) => f.answer === '');
+        this.voteData.all = validatorVote;
+        this.voteData.yes = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.VOTE_OPTION_YES);
+        this.voteData.abstain = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.VOTE_OPTION_ABSTAIN);
+        this.voteData.no = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.VOTE_OPTION_NO);
+        this.voteData.noWithVeto = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO);
+        this.voteData.didNotVote = validatorVote.filter((f) => f.vote_option === '');
         this.voteDataList = [...this.voteData.all];
 
         this.countVote.set('', this.voteData.all.length);

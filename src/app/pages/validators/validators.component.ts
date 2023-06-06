@@ -4,14 +4,13 @@ import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulatio
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { fromBech32, toHex } from '@cosmjs/encoding';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, forkJoin } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import { NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
-import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
 import { DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -19,12 +18,10 @@ import { AccountService } from '../../../app/core/services/account.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
-import { TransactionService } from '../../../app/core/services/transaction.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
-import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 
 @Component({
   selector: 'app-validators',
@@ -206,8 +203,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getBlocksMiss() {
-    this.validatorService.validatorsFromIndexer(null).subscribe((res) => {
-      this.lstUptime = res.data.validators;
+    this.validatorService.getDataValidator(null).subscribe((res) => {
+      this.lstUptime = res.validator;
     });
   }
 
@@ -215,7 +212,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     const itemUptime = this.lstUptime.find((k) => k.account_address === address);
     let result = NUM_BLOCK;
     if (itemUptime) {
-      result = NUM_BLOCK - +itemUptime.val_signing_info.missed_blocks_counter;
+      result = NUM_BLOCK - +itemUptime.missed_blocks_counter;
     }
     return result / 100;
   }
@@ -395,8 +392,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               this.lstUndelegate = null;
             }
           }
-
-          this.getDataUndelegate();
+          this.getListUndelegate();
 
           // store data wallet info
           dataInfoWallet['dataDelegate'] = JSON.stringify(this.dataDelegate);
@@ -416,11 +412,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       );
     }
   }
-
-  // async getListDelegators(address) {
-  //   const res = await this.validatorService.delegators(5, 0, address);
-  //   this.totalDelegator = res?.data?.pagination?.total;
-  // }
 
   checkAmountStaking(): void {
     let amountCheck;
@@ -638,30 +629,29 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }, 500);
   }
 
-  getDataUndelegate() {
-    this.validatorService.validatorsListUndelegateWallet(this.userAddress).subscribe((res) => {
-      let listUnDelegator = res;
-      if (listUnDelegator) {
-        this.lstUndelegate = [];
-        const now = new Date();
-        listUnDelegator.data.account_unbonding.forEach((data) => {
-          data.entries.forEach((f) => {
-            f['validator_identity'] = data.validator_description?.description?.identity;
-            f.balance = f.balance / NUMBER_CONVERT;
-            f.validator_address = data.validator_address;
-            f.validator_name = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.title;
-            f.jailed = data.validator_description?.jailed || false;
-            let timeConvert = new Date(f.completion_time);
-            if (now < timeConvert) {
-              this.lstUndelegate.push(f);
-            }
-          });
+  async getListUndelegate() {
+    const res = await this.validatorService.getListUndelegateLCD(this.userAddress);
+    let listUnDelegator = res;
+    if (listUnDelegator) {
+      this.lstUndelegate = [];
+      const now = new Date();
+      listUnDelegator.data.unbonding_responses.forEach((data) => {
+        data.entries.forEach((f) => {
+          f['validator_identity'] = data.validator_description?.description?.identity;
+          f.balance = f.balance / NUMBER_CONVERT;
+          f.validator_address = data.validator_address;
+          f.validator_name = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.title;
+          f.jailed = data.validator_description?.jailed || false;
+          let timeConvert = new Date(f.completion_time);
+          if (now < timeConvert) {
+            this.lstUndelegate.push(f);
+          }
         });
+      });
 
-        this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
-          return this.compare(a.completion_time, b.completion_time, true);
-        });
-      }
-    });
+      this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
+        return this.compare(a.completion_time, b.completion_time, true);
+      });
+    }
   }
 }

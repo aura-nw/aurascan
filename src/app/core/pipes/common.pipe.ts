@@ -2,6 +2,9 @@ import { formatDate } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import { EnvironmentService } from '../data-services/environment.service';
+import { CommonService } from '../services/common.service';
+import { balanceOf } from '../utils/common/parsing';
+import { MaskPipe } from 'ngx-mask';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -27,7 +30,7 @@ export class pipeCalDate implements PipeTransform {
 export class PipeCutString implements PipeTransform {
   transform(value: string, start: number, end?: number): string {
     let endChar = end || 0;
-    if (value && value.length > (start + endChar)) {
+    if (value && value.length > start + endChar) {
       if (end) {
         const firstChar = value.substring(0, start);
         const lastChar = value.substring(value.length - end);
@@ -76,7 +79,7 @@ export class CustomDate implements PipeTransform {
 @Pipe({ name: 'balanceOf' })
 export class BalanceOf implements PipeTransform {
   transform(amount: string | number, decimal = 6) {
-    return +(new BigNumber(amount).toNumber() / Math.pow(10, 6)).toFixed(decimal);
+    return +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
   }
 }
 
@@ -92,5 +95,26 @@ export class ReplaceIpfs implements PipeTransform {
 export class ConvertUauraToAura implements PipeTransform {
   transform(value: number, powNum?: number): number {
     return value / Math.pow(10, powNum);
+  }
+}
+
+@Pipe({ name: 'convertLogAmount' })
+export class convertLogAmount implements PipeTransform {
+  constructor(private commonService: CommonService, private mask: MaskPipe) {}
+  transform(value: string): string {
+    let result = value.match(/\d+/g)[0];
+    let data = this.commonService.mappingNameIBC(value.replace(result, ''));
+    result = this.mask.transform(balanceOf(result, data.decimals), 'separator.6');
+    if (+result <= 0) {
+      return '-';
+    }
+    return result + `<span class="text--primary ml-1">` + data.display + `</span>`;
+  }
+}
+
+@Pipe({ name: 'decodeData' })
+export class decodeData implements PipeTransform {
+  transform(value: string): string {
+    return atob(value);
   }
 }

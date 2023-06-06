@@ -7,6 +7,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { Globals } from 'src/app/global/global';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,8 @@ import { Globals } from 'src/app/global/global';
 export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
+  graphUrl = `${this.environmentService.configValue.graphUrl}`;
+  envDB = this.environmentService.configValue.horoscopeSelectedChain;
   stakingAPRSubject: BehaviorSubject<number>;
 
   constructor(
@@ -44,58 +46,101 @@ export class ValidatorService extends CommonService {
   }
 
   validators(): Observable<any> {
-    this.setURL();
     return this.http.get<any>(`${this.apiUrl}/validators`);
   }
 
-  validatorsFromIndexer(address: string): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      operatorAddress: address,
-      pageLimit: 100,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/validator`, {
-      params,
-    });
+  getDataValidator(payload) {
+    const operationsDoc = `
+    query auratestnet_validator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
+      ${this.envDB} {
+        validator(limit: $limit, offset: $offset, where: {operator_address: {_eq: $operatorAddress}}) {
+          account_address
+          commission
+          consensus_address
+          consensus_hex_address
+          created_at
+          consensus_pubkey
+          delegator_shares
+          delegators_count
+          delegators_last_height
+          description
+          index_offset
+          jailed
+          jailed_until
+          min_self_delegation
+          missed_blocks_counter
+          operator_address
+          percent_voting_power
+          self_delegation_balance
+          start_height
+          status
+          tokens
+          tombstoned
+          unbonding_height
+          unbonding_time
+          uptime
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variable: {
+          limit: payload?.limit || 1,
+          offset: payload?.offset || 0,
+          operatorAddress: payload?.operatorAddress || null,
+        },
+        operationName: 'auratestnet_validator',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   validatorsDetail(address: string): Observable<any> {
-    this.setURL();
     return this.http.get<any>(`${this.apiUrl}/validators/${address}`);
   }
 
-  validatorsDetailListPower(address: string, pageLimit = 10, nextKey = null): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      address,
-      pageLimit,
-      nextKey,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/transaction/power-event`, {
-      params,
-    });
+  validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
+    const operationsDoc = `
+    query auratestnet_powerevent($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
+      ${this.envDB} {
+        power_event(order_by: {height: desc}, where: {_or: [{validatorDst: {operator_address: {_eq: $operator_address}}}, {validatorSrc: {operator_address: {_eq: $operator_address}}}], id: {_lt: $nextKey}}, limit: $limit) {
+          id
+          time
+          height
+          transaction {
+            hash
+          }
+          type
+          amount
+          validatorSrc {
+            operator_address
+          }
+          validatorDst {
+            operator_address
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          operator_address: address,
+          limit: limit,
+          nextKey: nextKey
+        },
+        operationName: 'auratestnet_powerevent',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   validatorsDetailWallet(address: string): Observable<any> {
-    this.setURL();
     return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
   }
 
-  validatorsListUndelegateWallet(address: string): Observable<any> {
-    return this.http.get<any>(
-      `${this.indexerUrl}/account-unbonds?chainid=${this.chainInfo.chainId}&address=${address}`,
-    );
-  }
-
-  delegators(pageLimit = 100, address: string,  nextKey = null) {
+  delegators(pageLimit = 100, address: string, nextKey = null) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.limit=${pageLimit}&pagination.key=${nextKey}&pagination.reverse=true`,
     );
@@ -118,5 +163,9 @@ export class ValidatorService extends CommonService {
       block = 'latest';
     }
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BLOCK}/${block}`);
+  }
+
+  getListUndelegateLCD(address) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/delegators/${address}/unbonding_delegations`);
   }
 }

@@ -1,73 +1,77 @@
-<h2 class="card-header mb-0 pb-0 text--white d-block">
-  Messages
-  <div class="divider divider-horizontal my-4 d-lg-none"></div>
-</h2>
-<div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<div class="" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div *ngIf="!isTransactionTypeDefault">
     <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1">
       {{ checkTypeMessage() }}
-      <ng-container *ngIf="transactionDetail?.messages[0]['@type'] !== eTransType.MultiSend; else multiSend">
+      <ng-container *ngIf="!(transactionDetail?.messages[0]['@type'] === eTransType.MultiSend); else multiSend">
         <ng-container *ngFor="let element of currentData; let i = index">
-          <div class="card-info">
-            <ng-container
-              *ngTemplateOutlet="
-                messageHeader;
-                context: {
-                  data: {
-                    label:
-                      element[element.length - 1].key === 'header'
-                        ? element[element.length - 1].value
-                        : transactionTypeArr[i] || transactionDetailType
+          <div class="card text--white">
+            <div class="card-body body">
+              <ng-container
+                *ngTemplateOutlet="
+                  messageHeader;
+                  context: {
+                    data: {
+                      label:
+                        element[element.length - 1].key === 'header'
+                          ? element[element.length - 1].value
+                          : transactionTypeArr[i] || transactionDetailType
+                    }
                   }
-                }
-              "></ng-container>
-            <ng-container *ngIf="element.length > 0">
-              <ng-container *ngFor="let item of element">
-                <app-messages-item
-                  *ngIf="!item.specialCase && item.key !== 'header'"
-                  [label]="item.key"
-                  [value]="item.value"
-                  [dataLink]="item.link"
-                  [denom]="item.denom"
-                  [pipeType]="item.pipeType"></app-messages-item>
-                <ng-container [ngSwitch]="item.specialCase" *ngIf="item.specialCase">
-                  <div *ngSwitchCase="specialCase.ByteCode">
-                    <div class="row mb-3">
-                      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Byte Code</div>
-                      <div class="col-12 col-lg-9 text--gray-1">
-                        <div [class.ellipsis-text]="!seeLessArr[i]" class="overflow-hidden">
-                          {{ item?.value }}
-                        </div>
-                        <div
-                          (click)="seeLessArr[i] = true"
-                          class="text--primary cursor-pointer mt-1"
-                          *ngIf="!seeLessArr[i]">
-                          See More
-                        </div>
-                        <div
-                          (click)="seeLessArr[i] = false"
-                          class="text--primary cursor-pointer mt-1"
-                          *ngIf="seeLessArr[i]">
-                          See Less
+                "></ng-container>
+              <ng-container *ngIf="element.length > 0">
+                <ng-container *ngFor="let item of element">
+                  <app-messages-item
+                    *ngIf="!item.specialCase && item.key !== 'header'"
+                    [label]="item.key"
+                    [value]="item.value"
+                    [dataLink]="item.link"
+                    [denom]="item.denom"
+                    [pipeType]="item.pipeType"></app-messages-item>
+                  <ng-container [ngSwitch]="item.specialCase" *ngIf="item.specialCase">
+                    <div *ngSwitchCase="specialCase.ByteCode">
+                      <div class="d-flex flex-wrap mb-2">
+                        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Byte Code</div>
+                        <div class="col-12 col-lg-9 text--gray-1">
+                          <div [class.ellipsis-text]="!seeLessArr[i]" class="overflow-hidden">
+                            {{ item?.value }}
+                          </div>
+                          <div
+                            (click)="seeLessArr[i] = true"
+                            class="text--primary cursor-pointer mt-1"
+                            *ngIf="!seeLessArr[i]">
+                            See More
+                          </div>
+                          <div
+                            (click)="seeLessArr[i] = false"
+                            class="text--primary cursor-pointer mt-1"
+                            *ngIf="seeLessArr[i]">
+                            See Less
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                    <div *ngSwitchCase="specialCase.EventLog">
+                      <ng-container
+                        [ngTemplateOutlet]="logEvent"
+                        [ngTemplateOutletContext]="{ data: item.value, idx: i }">
+                      </ng-container>
+                    </div>
+                  </ng-container>
                 </ng-container>
               </ng-container>
-            </ng-container>
 
-            <ng-container *ngIf="element.length == 0">
-              <div class="row mb-3 body-01">
-                <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
-                <div class="col-12 col-lg-9">
-                  <pre
-                    id="json"
-                    class="raw-content text--white px-4"
-                    [innerHtml]="transactionDetail?.messages[0] | appJson"></pre>
+              <ng-container *ngIf="element.length == 0">
+                <div class="d-flex flex-wrap mb-2 body-01">
+                  <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
+                  <div class="col-12 col-lg-9">
+                    <pre
+                      id="json"
+                      class="raw-content text--white px-4"
+                      [innerHtml]="transactionDetail?.messages[0] | appJson"></pre>
+                  </div>
                 </div>
-              </div>
-            </ng-container>
+              </ng-container>
+            </div>
           </div>
         </ng-container>
       </ng-container>
@@ -75,36 +79,44 @@
 
     <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1">
       <ng-container *ngFor="let item of transactionDetail?.messages; index as i">
-        <div class="card-info">
-          <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: displayTitle(item['@type']) } }">
-          </ng-container>
-          <ng-container [ngSwitch]="item['@type']">
-            <div *ngSwitchCase="eTransType.IBCTransfer">
-              <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-              <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
-            </div>
-            <div *ngSwitchCase="eTransType.IBCReceived">
-              <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-              <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
-            </div>
-            <div *ngSwitchCase="eTransType.IBCAcknowledgement">
-              <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-              <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
-            </div>
-            <div *ngSwitchCase="eTransType.IBCUpdateClient">
-              <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }">
-              </ng-container>
-            </div>
-            <div *ngSwitchCase="eTransType.IBCTimeout">
-              <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item, index: i }">
-              </ng-container>
-              <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
-            </div>
-            <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
-              <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }">
-              </ng-container>
-            </div>
-          </ng-container>
+        <div class="card text--white">
+          <div class="card-body body">
+            <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: displayTitle(item['@type']) } }">
+            </ng-container>
+            <ng-container [ngSwitch]="item['@type']">
+              <div *ngSwitchCase="eTransType.IBCTransfer">
+                <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }">
+                </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+              </div>
+              <div *ngSwitchCase="eTransType.IBCReceived">
+                <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }">
+                </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+              </div>
+              <div *ngSwitchCase="eTransType.IBCAcknowledgement">
+                <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+              </div>
+              <div *ngSwitchCase="eTransType.IBCUpdateClient">
+                <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }">
+                </ng-container>
+              </div>
+              <div *ngSwitchCase="eTransType.IBCTimeout">
+                <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item, index: i }">
+                </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+              </div>
+              <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
+                <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }">
+                </ng-container>
+              </div>
+            </ng-container>
+            <ng-container
+              [ngTemplateOutlet]="logEvent"
+              [ngTemplateOutletContext]="{ data: transactionDetail?.tx?.logs, idx: i }">
+            </ng-container>
+          </div>
         </div>
       </ng-container>
     </ng-container>
@@ -112,7 +124,7 @@
 
   <div *ngIf="isTransactionTypeDefault">
     <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
-      <div class="row mb-3 body-01">
+      <div class="d-flex flex-wrap mb-2 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="item | appJson"></pre>
@@ -134,13 +146,15 @@
     <app-messages-item [label]="'Port'" [value]="transactionDetail?.messages[0]?.source_port"></app-messages-item>
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="row mb-3 body-01">
+    <div class="d-flex flex-wrap mb-2 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask : 'separator.6' }}
-        <span class="text--primary">{{ commonService.mappingNameIBC(transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom) }}</span>
+        <span class="text--primary">{{
+          commonService.mappingNameIBC(transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom)?.display
+        }}</span>
       </div>
     </div>
     <app-messages-item
@@ -156,9 +170,9 @@
     {{ getDataIBC(ibcListMapping.Receive) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="data?.packet?.sequence"
+      [value]="getLongValue(data?.packet?.sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="row mb-3 body-01" *ngIf="ibcData?.receive?.denom">
+    <div class="d-flex flex-wrap mb-2 body-01" *ngIf="ibcData?.receive?.denom">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.amount | balanceOf | mask : 'separator.6' }}
@@ -176,7 +190,7 @@
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
     <app-messages-item
       [label]="'Signer'"
-      [value]="ibcData?.update_client?.signer"
+      [value]="ibcData?.update_client?.signer || transactionDetail.messages[0].signer"
       [dataLink]="{ url: '/account' }"></app-messages-item>
     <app-messages-item
       [label]="'Receiver'"
@@ -190,9 +204,9 @@
     {{ getDataIBC(ibcListMapping.Ack) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="row mb-3 body-01">
+    <div class="d-flex flex-wrap mb-2 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.acknowledgement?.amount | balanceOf | mask : 'separator.6' }}
@@ -224,13 +238,13 @@
     {{ getDataIBC(ibcListMapping.TimeOut, index) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.time_out[index - 1]?.next_sequence_recv"
+      [value]="getLongValue(ibcData?.time_out[index - 1]?.next_sequence_recv)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
-    <div class="row mb-3 body-01">
+    <div class="d-flex flex-wrap mb-2 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Data</div>
       <div class="col-12 col-lg-9">
         <pre
@@ -256,7 +270,7 @@
       [value]="ibcData?.time_out[index - 1]?.proof_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Next Sequence Recv'"
-      [value]="ibcData?.time_out[index - 1]?.next_sequence_recv"></app-messages-item>
+      [value]="getLongValue(ibcData?.time_out[index - 1]?.next_sequence_recv)"></app-messages-item>
     <app-messages-item
       [label]="'Signer'"
       [value]="ibcData?.time_out[index - 1]?.signer"
@@ -312,14 +326,14 @@
   <ng-template #ibcChannelOpen let-data="data">
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
   </ng-template>
 
   <ng-template #ibcProgress>
     <div *ngIf="listIBCProgress?.length > 0">
-      <div class="divider divider-horizontal my-3"></div>
-      <div class="row mb-3 body-01 ibc-process">
+      <div class="divider divider-horizontal mt-4 mb-6"></div>
+      <div class="d-flex flex-wrap mb-2 body-01 ibc-process">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">IBC Progress</div>
         <div class="col-12 col-lg-9" style="word-break: break-word">
           <ng-container
@@ -359,7 +373,7 @@
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of filterIBCType(type)">
               <div class="d-lg-flex justify-content-between">
-                <div>{{ denomIBC ? commonService.mappingNameIBC(denomIBC) : item.denom }}</div>
+                <div>{{ denomIBC ? commonService.mappingNameIBC(denomIBC)?.display : item.denom }}</div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
@@ -397,36 +411,83 @@
   </ng-template>
 
   <ng-template #multiSend>
-    <ng-container *ngFor="let item of transactionDetail?.messages[0]?.outputs; let i = index">
-      <div class="card-info" *ngIf="i < numberListSend">
-        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: 'Send' } }"> </ng-container>
-        <app-messages-item
-          [label]="'From Address'"
-          [value]="transactionDetail?.messages[0]?.inputs[0]?.address"
-          [dataLink]="{ url: '/account' }"></app-messages-item>
-        <app-messages-item
-          [label]="'To Address'"
-          [value]="item?.address"
-          [dataLink]="{ url: '/account' }"></app-messages-item>
-        <div class="row mb-3 body-01">
-          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
-          <div class="col-12 col-lg-9 text--gray-1">
-            {{ item?.coins[0]?.amount | balanceOf | mask : 'separator.6' }}
-            <span class="text--primary">{{ denom }}</span>
-          </div>
-        </div>
+    <div class="card-info box-multisend">
+      <div class="card-text header-title">
+        <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+        Multisend
       </div>
-    </ng-container>
-    <div class="text-md-left text-center">
-      <button
-        type="button"
-        class="button button--md button-pill button-outline button-outline__in-card ml-auto"
-        (click)="loadMoreSend()"
-        *ngIf="transactionDetail?.messages[0]?.outputs?.length > numberListSend">
-        <span class="fw-500 body-02 text--gray-1">Load More</span>
-      </button>
-    </div></ng-template
-  >
+      <div class="body-multisend">
+        <ng-container *ngFor="let item of transactionDetail?.messages[0]?.outputs; let i = index">
+          <div class="d-flex justify-content-between mx-4 my-5">
+            <div class="txt-label">From</div>
+            <a
+              class="text--primary txt-address"
+              [routerLink]="['/account', transactionDetail?.messages[0]?.inputs[0]?.address]">
+              {{ transactionDetail?.messages[0]?.inputs[0]?.address }}
+            </a>
+            <div class="txt-label">To</div>
+            <a class="text--primary txt-address" [routerLink]="['/account', item?.address]">
+              {{ item?.address }}
+            </a>
+            <div class="txt-amount">
+              <i class="ph-currency-circle-dollar mx-auto h3 mr-2 mb-0 text--white"></i>
+              <div class="ml-2">
+                <span
+                  *ngIf="item?.coins?.length > 0"
+                  [innerHTML]="item?.coins[0]?.amount + item?.coins[0]?.denom | convertLogAmount"></span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="mx-4 mt-3 mt-lg-1" *ngIf="transactionDetail.code === codeTransaction.Success">
+        <ng-container
+          [ngTemplateOutlet]="logEvent"
+          [ngTemplateOutletContext]="{ data: transactionDetail?.tx?.logs, idx: 0 }">
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #logEvent let-data="data" let-idx="idx">
+    <div class="d-flex flex-wrap mb-2">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Event Log</div>
+      <div class="col-12 col-lg-9 text--gray-1 box-event-log">
+        <ng-container *ngFor="let element of data; let index = index">
+          <div class="item-event-log" *ngIf="index === idx">
+            <span class="caption fw-normal">{{ element.events.type }}</span>
+            <mat-expansion-panel
+              hideToggle
+              *ngFor="let item of element.events; first as isFirst; let i = index"
+              [expanded]="isFirst">
+              <mat-expansion-panel-header class="content-contract">
+                <mat-panel-title class="item-content body-02 text--gray-1">
+                  <div class="txt-header caption fw-normal text--white">
+                    {{ item.type }}
+                  </div>
+                </mat-panel-title>
+                <mat-panel-description> </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div class="content-log">
+                <ng-container *ngFor="let data of item.attributes; let idx = index">
+                  <div class="ml-5 mb-2 row">
+                    <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{ data.key }}</span>
+                    <span class="col-12 col-lg-10 body-01 text-break">
+                      <ng-container *ngIf="data.key !== 'amount' && data.key !== 'fee'">{{ data.value }}</ng-container>
+                      <span
+                        *ngIf="data.key === 'amount' || data.key === 'fee'"
+                        [innerHTML]="data.value | convertLogAmount"></span>
+                    </span>
+                  </div>
+                </ng-container>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
 
   <ng-template #messageHeader let-data="data">
     <div class="mb-3 d-flex box-header">
@@ -437,7 +498,7 @@
         </div>
       </div>
     </div>
-    <div class="divider divider-horizontal my-3"></div>
+    <div class="divider divider-horizontal mt-4 mb-6"></div>
   </ng-template>
 </div>
 

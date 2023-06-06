@@ -15,9 +15,12 @@ export interface IConfiguration {
   coins: any;
   env: string;
   indexerUri: string;
+  graphUrl: string;
   timeInterval: number;
   ipfsDomain: string;
   evnLabel: any;
+  maxValidator: number;
+  horoscopeSelectedChain: string
 }
 
 @Injectable()
@@ -36,7 +39,10 @@ export class EnvironmentService {
     indexerUri: '',
     timeInterval: null,
     ipfsDomain: '',
+    graphUrl:'',
     evnLabel: '',
+    maxValidator: null,
+    horoscopeSelectedChain: ''
   });
 
   get configValue(): IConfiguration {
@@ -65,9 +71,12 @@ export class EnvironmentService {
           coins: config['coins'],
           env: config['env'],
           indexerUri: config['urlIndexer'],
+          graphUrl: config['graphUrl'],
           timeInterval: config['timeInterval'] || 4000,
           ipfsDomain: config['ipfsDomain'],
-          evnLabel: config['evnLabel']
+          evnLabel: config['evnLabel'],
+          maxValidator: config['maxValidator'] || 200,
+          horoscopeSelectedChain: config['horoscopeSelectedChain']
         };
 
         this.config.next(data);

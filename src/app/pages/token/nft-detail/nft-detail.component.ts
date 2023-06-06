@@ -28,6 +28,7 @@ import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/i
 import { Globals } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 
 @Component({
   selector: 'app-nft-detail',
@@ -88,7 +89,7 @@ export class NFTDetailComponent implements OnInit {
     public global: Globals,
     public route: Router,
     private environmentService: EnvironmentService,
-    private tokenService: TokenService,
+    private transactionService: TransactionService,
     private router: ActivatedRoute,
     private soulboundService: SoulboundService,
     private walletService: WalletService,
@@ -187,27 +188,44 @@ export class NFTDetailComponent implements OnInit {
   }
 
   async getDataTable(nextKey = null) {
-    let filterData = {};
-    filterData['keyWord'] = this.nftId;
+    const payload = {
+      limit: 100,
+      value: this.contractAddress,
+      compositeKey: 'execute._contract_address',
+      key2: 'token_id',
+      value2: this.nftId,
+      heightLT: nextKey,
+    };
 
-    const res = await this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey);
-    if (res?.data?.code === 200) {
-      res?.data?.data?.transactions.forEach((trans) => {
-        trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-      });
-      let txs = [];
-      res.data?.data?.transactions.forEach((element, index) => {
-        txs.push(element);
-        if (element.type === 'buy') {
-          let txTransfer = { ...element };
-          txTransfer['type'] = 'transfer';
-          txTransfer['price'] = 0;
-          txs.push(txTransfer);
+    this.transactionService.getListTxMultiCondition(payload).subscribe(
+      (res) => {
+        if (res) {
+          this.nextKey = null;
+          if (res.transaction.length >= 100) {
+            this.nextKey = res?.transaction[res.transaction.length - 1].height;
+          }
+          res?.transaction.forEach((trans) => {
+            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+          });
+          let txs = [];
+          res?.transaction.forEach((element, index) => {
+            txs.push(element);
+            if (element.type === 'buy') {
+              let txTransfer = { ...element };
+              txTransfer['type'] = 'transfer';
+              txTransfer['price'] = 0;
+              txs.push(txTransfer);
+            }
+          });
+          this.dataSource.data = txs;
+          this.pageData.length = txs?.length;
         }
-      });
-      this.dataSource.data = txs;
-      this.pageData.length = txs?.length;
-    }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   paginatorEmit(event): void {

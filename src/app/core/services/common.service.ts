@@ -9,12 +9,12 @@ import { CHART_RANGE, DATEFORMAT } from '../constants/common.constant';
 import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable()
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.configValue.coins;
-  indexerUrl = `${this._environmentService.configValue.indexerUri}`;
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.configValue.chain_info;
@@ -35,31 +35,11 @@ export class CommonService {
   }
 
   status(): Observable<any> {
-    this.setURL();
     return this._http.get<any>(`${this.apiUrl}/status`);
   }
 
-  getParamFromIndexer() {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      module: 'gov',
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this._http.get<any>(`${this.indexerUrl}/param`, {
-      params,
-    });
-  }
-
-  setURL() {
-    if (this.networkQuerySubject.value === 1) {
-      this.apiUrl = `${this._environmentService.configValue.fabric}`;
-    }
-    if (this.networkQuerySubject.value === 2) {
-      this.apiUrl = `${this._environmentService.configValue.beUri}`;
-    }
+  getParamTallyingFromLCD() {
+    return axios.get(`${this.chainInfo.rest}/cosmos/gov/v1beta1/params/tallying`);
   }
 
   getDateValue(time, isCustom = true) {
@@ -97,12 +77,12 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
-    let result = value;
+    let result = {display: value, decimals: 6};
     if (value.indexOf('ibc') >= 0) {
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.coins.find((k) => k.denom === temp)?.display || {};
+      result = this.coins.find((k) => k.denom === temp);
     } else {
-      result = this.chainInfo.currencies[0].coinDenom;
+      result = {display: this.chainInfo.currencies[0].coinDenom, decimals: 6};
     }
     return result;
   }
@@ -117,7 +97,6 @@ export class CommonService {
   }
 
   getTokenByCoinId(range: string, id: string) {
-    this.setURL();
     return this._http.get<any>(`${this.apiUrl}/metrics/token?range=${range}&coidId=${id}`);
   }
 

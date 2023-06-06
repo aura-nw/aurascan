@@ -47,9 +47,9 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   validatorImgArr;
 
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'voter_address', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
+    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
     { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
   ];
 
@@ -62,8 +62,8 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       paramField: 'operator_address',
       prefix: 'operator_address',
     },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
+    { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
   ];
 
@@ -80,6 +80,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   dataSource: MatTableDataSource<any>;
   pageSize = 5;
   pageIndex = 0;
+  pageValidatorIndex = 0;
   proposalMode = PROPOSAL_TABLE_MODE;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
@@ -96,6 +97,10 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.data.forEach((element) => {
+      element.timestamp = element?.transaction?.timestamp || element.timestamp || element.updated_at;
+      element.updated_at = null;
+    });
     if (this.dataSource) {
       this.dataSource.data = this.data;
     } else {
@@ -118,7 +123,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.data.forEach((d) => {
         operatorAddArr.push(d.operator_address);
       });
-      if (operatorAddArr.length > 0) {
+      if (operatorAddArr.length > 0 && operatorAddArr[0]) {
         // get validator logo
         this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
           if (res?.data) {
@@ -187,6 +192,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     const { length, pageIndex, pageSize, previousPageIndex } = e;
     const next = length <= (pageIndex + 2) * pageSize;
 
+
     if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
       this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.DEPOSITORS] = pageIndex;
     } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
@@ -197,6 +203,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.tabId = this.tabId || 'all';
       this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES] = {};
       this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES][this.tabId] = pageIndex;
+      this.pageValidatorIndex = pageIndex;
     }
 
     if (next) {

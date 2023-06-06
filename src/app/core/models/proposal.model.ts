@@ -1,5 +1,5 @@
 export interface IListVoteQuery {
-  proposalid: number;
+  proposalId: number;
   pageLimit: number;
   nextKey?: string;
 }

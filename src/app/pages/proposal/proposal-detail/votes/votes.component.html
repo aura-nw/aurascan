@@ -19,6 +19,7 @@
     </ul>
     <div class="mt-3">
       <app-proposal-table
+        *ngIf="!voteDataListLoading"
         [tabId]="countCurrent"
         [type]="proposalVote"
         [length]="countVote.get(countCurrent)"
