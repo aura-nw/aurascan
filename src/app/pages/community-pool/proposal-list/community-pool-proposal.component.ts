@@ -1,13 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { PROPOSAL_STATUS } from 'src/app/core/constants/proposal.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -21,10 +18,9 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
   templateUrl: './community-pool-proposal.component.html',
   styleUrls: ['./community-pool-proposal.component.scss'],
 })
-export class CommunityPoolProposalComponent implements OnInit, OnDestroy {
+export class CommunityPoolProposalComponent implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  textSearch = '';
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'ID' },
@@ -45,13 +41,9 @@ export class CommunityPoolProposalComponent implements OnInit, OnDestroy {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   dataSource: MatTableDataSource<any>;
   dataSourceMob: any[];
-  filterSearchData = [];
-  maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   listCoin = this.environmentService.configValue.coins;
   listAssetLcd = [];
-  searchSubject = new Subject();
-  destroy$ = new Subject();
   statusConstant = PROPOSAL_STATUS;
   nextKey = null;
   distributionAcc = '';
@@ -65,30 +57,9 @@ export class CommunityPoolProposalComponent implements OnInit, OnDestroy {
     private commonService: CommonService,
   ) {}
 
-  ngOnDestroy(): void {
-    // throw new Error('Method not implemented.');
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   ngOnInit(): void {
     this.getAddressDistribution();
     this.getListProposal();
-
-    this.searchSubject
-      .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
-          this.getListProposal();
-        } else {
-          this.pageChange.selectPage(0);
-        }
-      });
-  }
-
-  onKeyUp() {
-    this.searchSubject.next(this.textSearch);
   }
 
   async getAddressDistribution() {
@@ -115,11 +86,6 @@ export class CommunityPoolProposalComponent implements OnInit, OnDestroy {
       this.pageData.pageIndex * this.pageSizeMob,
       this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
     );
-  }
-
-  resetSearch() {
-    this.textSearch = '';
-    this.onKeyUp();
   }
 
   pageEvent(e: PageEvent): void {
