@@ -61,7 +61,7 @@ export class BlocksComponent implements OnInit {
 
   getInfoCommon(): void {
     this.commonService.status().subscribe((res) => {
-      getInfo(this.globals, res.data);
+      getInfo(this.globals, res);
     });
   }
 }
