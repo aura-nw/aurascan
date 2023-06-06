@@ -77,12 +77,12 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
-    let result = {display: value, decimals: 6};
+    let result = { display: value, decimals: 6 };
     if (value.indexOf('ibc') >= 0) {
       let temp = value.slice(value.indexOf('ibc'));
       result = this.coins.find((k) => k.denom === temp);
     } else {
-      result = {display: this.chainInfo.currencies[0].coinDenom, decimals: 6};
+      result = { display: this.chainInfo.currencies[0].coinDenom, decimals: 6 };
     }
     return result;
   }
@@ -94,10 +94,6 @@ export class CommonService {
 
   getCommunityTax() {
     return axios.get(`${this._environmentService.configValue.chain_info.rest}/cosmos/distribution/v1beta1/params`);
-  }
-
-  getTokenByCoinId(range: string, id: string) {
-    return this._http.get<any>(`${this.apiUrl}/metrics/token?range=${range}&coidId=${id}`);
   }
 
   getDefaultImg() {
