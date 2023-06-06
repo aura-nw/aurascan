@@ -312,8 +312,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         }
         this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
         this.dataDelegate.validatorDetail = this.validatorDetail;
-        // this.getListDelegators(address);
-
         this.clicked = false;
         this.isExceedAmount = false;
         this.errorExceedAmount = false;
