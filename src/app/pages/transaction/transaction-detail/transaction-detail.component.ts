@@ -11,7 +11,7 @@ import { CodeTransaction } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { Globals, convertDataTransaction } from '../../../global/global';
+import { Globals, convertDataTransactionV2 } from '../../../global/global';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -68,20 +68,22 @@ export class TransactionDetailComponent implements OnInit {
 
   getDetail(): void {
     if (this.txHash?.length === LENGTH_CHARACTER.TRANSACTION) {
-      this.transactionService.txsIndexer(1, 0, this.txHash).subscribe(
+      const payload = {
+        limit: 1,
+        hash: this.txHash,
+      };
+      this.transactionService.getListTx(payload).subscribe(
         (res) => {
-          const { code, data } = res;
-          if (code === 200 && data.transactions?.length > 0) {
-            const txs = convertDataTransaction(data, this.coinInfo);
+          if (res?.transaction?.length > 0) {
+            const txs = convertDataTransactionV2(res, this.coinInfo);
             this.transaction = txs[0];
             this.transaction = {
               ...this.transaction,
               chainid: this.chainId,
-              gas_used: _.get(res?.data.transactions[0], 'tx_response.gas_used'),
-              gas_wanted: _.get(res?.data.transactions[0], 'tx_response.gas_wanted'),
-              raw_log: _.get(res?.data.transactions[0], 'tx_response.raw_log'),
-              type: _.get(res?.data.transactions[0], 'tx_response.tx.body.messages[0].@type'),
-              tx: _.get(res?.data.transactions[0], 'tx_response'),
+              gas_used: _.get(res?.transaction[0], 'gas_used'),
+              gas_wanted: _.get(res?.transaction[0], 'gas_wanted'),
+              raw_log: _.get(res?.transaction[0], 'data.tx_response.raw_log'),
+              type: this.transaction.typeOrigin,
             };
 
             if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {

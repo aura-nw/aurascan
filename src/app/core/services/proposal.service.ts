@@ -5,11 +5,15 @@ import { Observable, Subject } from 'rxjs';
 import { VOTE_OPTION } from '../constants/proposal.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ProposalService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
+  graphUrl = `${this.environmentService.configValue.graphUrl}`;
+  maxValidator = `${this.environmentService.configValue.maxValidator}`;
+  envDB = this.environmentService.configValue.horoscopeSelectedChain;
   reloadList$ = new Subject();
   pageIndexObj = {};
 
@@ -21,79 +25,110 @@ export class ProposalService extends CommonService {
     super(http, environmentService);
   }
 
-  getVotes(payload) {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      searchValue: payload.proposalId,
-      searchType: 'proposal_vote',
-      searchKey: 'proposal_id',
-      ['queryAnd[]']: 'transfer.sender='+payload.wallet,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/transaction`, { params });
+  getValidatorVotesFromIndexer(proposalId): Observable<any> {
+    const operationsDoc = `
+    query auratestnet_validator($proposalId: Int = null, $limit: Int = 10) {
+      ${this.envDB} {
+        validator(where: {status: {_eq: "BOND_STATUS_BONDED"}}, order_by: {percent_voting_power: desc}, limit: $limit) {
+          vote(where: {proposal_id: {_eq: $proposalId}}) {
+            id
+            vote_option
+            txhash
+            proposal_id
+            updated_at
+          }
+          description
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: +this.maxValidator || 100,
+          proposalId: proposalId,
+        },
+        operationName: 'auratestnet_validator',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getValidatorVotesFromIndexer(proposalid): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      proposalid: proposalid,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/votes/validators`, { params });
-  }
-
-  getDepositors(payload) {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      searchValue: payload.proposalId,
-      searchType: 'proposal_deposit',
-      searchKey: 'proposal_id',
-      pageLimit: payload.pageLimit,
-      nextKey: payload.nextKey,
-      // countTotal: true,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/transaction`, { params });
+  getProposalData(payload) {
+    const operationsDoc = `
+    query auratestnet_proposal($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null) {
+      ${this.envDB} {
+        proposal(limit: $limit, where: {proposal_id: {_eq: $proposalId, _lt: $nextKey}}, order_by: {proposal_id: $order}) {
+          content
+          deposit_end_time
+          description
+          initial_deposit
+          proposal_id
+          proposer_address
+          count_vote
+          proposer {
+            description
+            operator_address
+            account_address
+          }
+          status
+          submit_time
+          tally
+          title
+          total_deposit
+          turnout
+          type
+          updated_at
+          voting_end_time
+          voting_start_time
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+          nextKey: payload.nextKey,
+          proposalId: payload.proposalId,
+        },
+        operationName: 'auratestnet_proposal',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListVoteFromIndexer(payload, option): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      nextKey: payload.nextKey,
-      reverse: false,
-      pageLimit: payload.pageLimit,
-      answer: option,
-      proposalid: payload.proposalid,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/votes`, { params });
-  }
-
-  getProposalList(pageLimit = 20, nextKey = null, proposalId = null): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      pageLimit: pageLimit,
-      nextKey,
-      reverse: false,
-      proposalId: proposalId,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/proposal`, { params });
+    const operationsDoc = `
+    query auratestnet_vote($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
+      ${this.envDB} {
+        vote(limit: $limit, where: {proposal_id: {_eq: $proposalId}, height: {_lt: $nextKey}, vote_option: {_eq: $voteOption}}, order_by: {height: $order}) {
+          height
+          proposal_id
+          txhash
+          vote_option
+          voter
+          transaction {
+            timestamp
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.pageLimit,
+          nextKey: payload.nextKey,
+          order: 'desc',
+          proposalId: payload.proposalId,
+          voteOption: option || null,
+        },
+        operationName: 'auratestnet_vote',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getVoteMessageByConstant(option: any) {

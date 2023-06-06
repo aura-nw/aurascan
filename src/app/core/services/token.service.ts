@@ -3,16 +3,18 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { LENGTH_CHARACTER } from '../constants/common.constant';
+import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { RangeType } from '../models/common.model';
+import { checkEnvQuery } from '../utils/common/info-common';
 import { CommonService } from './common.service';
-import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable()
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
+  envDB = checkEnvQuery(this.environmentService.configValue.env);
+  graphUrl = `${this.environmentService.configValue.graphUrl}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -34,37 +36,6 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
   }
 
-  getListTokenTransferIndexer(pageLimit: string | number, contractAddress: string, filterData: any, nextKey = null) {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      searchType: 'execute',
-      searchKey: '_contract_address',
-      searchValue: contractAddress,
-      needFullLog: true,
-      pageLimit,
-      nextKey,
-      // countTotal: true,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    if (filterData?.keyWord) {
-      if (
-        filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION &&
-        filterData?.keyWord == filterData?.keyWord.toUpperCase()
-      ) {
-        params['txHash'] = filterData?.keyWord;
-      } else if (filterData['isSearchWallet']) {
-        params['addressInContract'] = filterData?.keyWord;
-      } else {
-        params['query'] = 'wasm.token_id=' + filterData?.keyWord;
-      }
-    }
-
-    return axios.get(`${this.indexerUrl}/transaction`, { params });
-  }
-
   getListTokenNFTFromIndexer(payload): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
@@ -73,7 +44,6 @@ export class TokenService extends CommonService {
       contractAddress: payload.contractAddress,
       pageLimit: payload.pageLimit,
       pageOffset: payload.pageOffset,
-      // countTotal: true,
       contractType: payload.contractType,
       isBurned: false,
     })
