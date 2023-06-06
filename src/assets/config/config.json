@@ -67,6 +67,10 @@
   "urlIndexer": "https://indexer.dev.aurascan.io/api/v1",
   "graphUrl": "https://indexer-v2.dev.aurascan.io/v1/graphql",
   "timeInterval": 4000,
-  "evnLabel": { "desktop": "Develop Testnet Network", "mobile": "Develop Testnet" },
-  "maxValidator": 200 
+  "evnLabel": {
+    "desktop": "Develop Testnet Network",
+    "mobile": "Develop Testnet"
+  },
+  "maxValidator": 200,
+  "horoscopeSelectedChain": "auratestnet"
 }
