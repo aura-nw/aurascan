@@ -141,7 +141,7 @@
                 class: '',
                 info:
                   '<a class=text--primary href=' +
-                  ('/validators/' + distributionAcc) +
+                  ('/account/' + distributionAcc) +
                   '>' +
                   shortenAddress(distributionAcc) +
                   '</a>'
@@ -151,7 +151,7 @@
                 class: '',
                 info:
                   '<a class=text--primary href=' +
-                  ('/validators/' + data.content.recipient) +
+                  ('/account/' + data.content.recipient) +
                   '>' +
                   shortenAddress(data.content.recipient) +
                   '</a>'
@@ -177,7 +177,7 @@
         </div>
         <app-paginator
           [length]="pageData.length"
-          [pageSize]="pageData.pageSize"
+          [pageSize]="pageSizeMob"
           (paginator)="paginatorEmit($event)"
           (pageEvent)="pageEvent($event)">
         </app-paginator>

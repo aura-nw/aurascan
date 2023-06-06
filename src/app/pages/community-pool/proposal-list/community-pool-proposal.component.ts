@@ -121,6 +121,11 @@ export class CommunityPoolProposalComponent implements OnInit, OnDestroy {
     this.pageData.pageIndex = e.pageIndex;
     if (this.pageData.length <= this.pageData.pageSize * (this.pageData.pageIndex + 1)) {
       this.getListProposal();
+    } else {
+      this.dataSourceMob = this.dataSource.data.slice(
+        this.pageData.pageIndex * this.pageSizeMob,
+        this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
+      );
     }
   }
 
@@ -154,10 +159,9 @@ export class CommunityPoolProposalComponent implements OnInit, OnDestroy {
         }
       }
       this.dataSourceMob = this.dataSource.data.slice(
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageSizeMob,
+        this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
       );
-      console.log(this.dataSourceMob);
       this.pageData.length = this.dataSource.data.length;
     });
   }
