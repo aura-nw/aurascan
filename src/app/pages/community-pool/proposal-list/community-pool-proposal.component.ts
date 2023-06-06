@@ -31,7 +31,7 @@ export class CommunityPoolProposalComponent implements OnInit, OnDestroy {
     { matColumnDef: 'title', headerCellDef: 'Title' },
     { matColumnDef: 'status', headerCellDef: 'Status' },
     { matColumnDef: 'sender', headerCellDef: 'Sender' },
-    { matColumnDef: 'receipient', headerCellDef: 'receipient' },
+    { matColumnDef: 'recipient', headerCellDef: 'recipient' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'voting_end_time', headerCellDef: 'Voting End' },
   ];

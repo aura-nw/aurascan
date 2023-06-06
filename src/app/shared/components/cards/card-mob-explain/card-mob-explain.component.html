@@ -19,8 +19,9 @@
     </div>
     <div class="card__content mt-4" #cardContent>
       <div class="card__content-item" *ngFor="let data of content">
-          <div class="text--gray-4}}">{{data.label}}</div>
-          <div class="{{data.class}}" [innerHTML]="data.info"></div>
+          <div class="text--gray-4">{{data.label}}</div>
+          <div *ngIf="!tokenAmount" class="{{data.class}}" [innerHTML]="data.info"></div>
+          <span *ngIf="tokenAmount" class="{{data.class}}" [appBigNumber]="tokenAmount.amount"></span>
       </div>
     </div>
 </div>
