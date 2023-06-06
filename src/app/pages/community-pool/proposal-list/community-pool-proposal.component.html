@@ -135,7 +135,7 @@
               subLabel: '#' + data.proposal_id
             }"
             [status]="getStatus(data.status)"
-            [tokenAmount]="{ amount: data.content.amount[0].amount, decimal: data.decimal, isAura: true ? data.logo === '' : false }"
+            [tokenAmount]="{ amount: data.content.amount[0].amount, decimal: data.decimal, isAura: data.logo === '' }"
             [content]="[
               {
                 label: 'Sender',

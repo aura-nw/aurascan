@@ -18,10 +18,13 @@
       </button>
     </div>
     <div class="card__content mt-4" #cardContent>
-      <div class="card__content-item" *ngFor="let data of content">
+      <div class="card__content-item" *ngFor="let data of content; let idx = index">
           <div class="text--gray-4">{{data.label}}</div>
-          <div *ngIf="!tokenAmount" class="{{data.class}}" [innerHTML]="data.info"></div>
-          <span *ngIf="tokenAmount" class="{{data.class}}" [appBigNumber]="tokenAmount.amount"></span>
+          <div *ngIf="idx !== 2" class="{{data.class}}" [innerHTML]="data.info"></div>
+        <div *ngIf="idx === 2" class="{{data.class}}">
+          <span [appBigNumber]="data.info"></span>
+          <span class="ml-2 text--primary">{{denom}}</span>
+        </div>
       </div>
     </div>
 </div>

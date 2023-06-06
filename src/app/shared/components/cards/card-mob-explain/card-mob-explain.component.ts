@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import {EnvironmentService} from "src/app/core/data-services/environment.service";
 
 export interface CardMobExplainTitle {
   label: string;
@@ -22,14 +23,23 @@ export interface CardMobSimpleAmount {
   styleUrls: ['./card-mob-explain.component.scss'],
 })
 export class CardMobExplainComponent implements OnInit {
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   @Input() title: CardMobExplainTitle;
   @Input() status: any;
   @Input() content: CardMobContent[];
   @Input() tokenAmount: any;
-  constructor() {}
+  constructor(
+    private environmentService: EnvironmentService,) {}
 
   ngOnInit(): void {
-    console.log(this.tokenAmount);
+    if(this.tokenAmount) {
+      this.content.splice(2, 0, {
+        label: 'Amount',
+        class: null,
+        info: this.tokenAmount.amount
+      });
+      this.content.join(" ")
+    }
     
   }
 }
