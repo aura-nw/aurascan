@@ -11,7 +11,6 @@ export class JwtInterceptor implements HttpInterceptor {
     const currentUser = this.authenticationService.currentUserValue;
     request = request.clone({
       setHeaders: {
-         'x-hasura-admin-secret': 'abc@123', 'Hasura-Client-Name': 'hasura-console'
       },
     });
     return next.handle(request);
