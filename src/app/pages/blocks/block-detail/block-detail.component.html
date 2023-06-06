@@ -252,7 +252,7 @@
           <div class="item-event-log">
             <mat-expansion-panel
               hideToggle
-              *ngFor="let item of blockDetail.events; first as isFirst; let i = index"
+              *ngFor="let item of blockDetail?.events; first as isFirst; let i = index"
               [expanded]="isFirst">
               <mat-expansion-panel-header class="content-contract">
                 <mat-panel-title class="item-content body-02 text--gray-1">
@@ -264,7 +264,7 @@
               </mat-expansion-panel-header>
 
               <div class="content-log">
-                <ng-container *ngFor="let data of item.attributes; let idx = index">
+                <ng-container *ngFor="let data of item?.attributes; let idx = index">
                   <div class="ml-5 mb-2 row">
                     <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{
                       data.key | decodeData

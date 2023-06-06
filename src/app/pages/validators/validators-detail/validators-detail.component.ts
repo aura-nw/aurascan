@@ -240,7 +240,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   async getListDelegator(nextKey = null, isInit = true) {
-    const res = await this.validatorService.delegators(100, this.currentAddress, nextKey);
+    const res = await this.validatorService.delegator(100, this.currentAddress, nextKey);
 
     if (res.data?.pagination?.next_key) {
       this.nextKeyDelegator = encodeURIComponent(res.data?.pagination?.next_key);

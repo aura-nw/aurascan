@@ -1,15 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import axios from 'axios';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { LENGTH_CHARACTER } from '../constants/common.constant';
+import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { RangeType } from '../models/common.model';
-import { CommonService } from './common.service';
 import { checkEnvQuery } from '../utils/common/info-common';
-import { map } from 'rxjs/operators';
-import { LCD_COSMOS } from '../constants/url.constant';
-import axios from 'axios';
+import { CommonService } from './common.service';
 
 @Injectable()
 export class TokenService extends CommonService {
@@ -38,58 +36,6 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
   }
 
-  getListTokenTransferIndexerV2(pageLimit: string | number, contractAddress = '', filterData: any, nextKey = null) {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
-    let filterQuery = '';
-    if (filterData?.keyWord) {
-      if (
-        filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION &&
-        filterData?.keyWord == filterData?.keyWord.toUpperCase()
-      ) {
-        filterQuery = filterQuery.concat(`, hash: {_eq: "${filterData?.keyWord}" }`);
-      } else if (filterData['isSearchWallet']) {
-        filterQuery = filterQuery.concat(`, events: {event_attributes: {value: {_eq: "${filterData?.keyWord}" }}}`);
-      } else {
-        filterQuery = filterQuery.concat(
-          `, events: {event_attributes: {key: {_eq: "token_id"}, value: {_eq: "${filterData?.keyWord}" }}}`,
-        );
-      }
-    }
-    if (nextKey) {
-      filterQuery = filterQuery.concat(', id: {_lt: ' + `${nextKey}` + '}');
-    }
-
-    const operationsDoc = `
-    query getListTx($limit: Int, $event_attr_val: String, $tx_msg_val: jsonb) {
-      ${envDB} {
-        transaction(limit: $limit, order_by: {timestamp: desc}, where: {_or: [{events: {event_attributes: {key: {_eq: "_contract_address"}, value: {_eq: $event_attr_val}}, type: {_eq: "execute"}}}, {transaction_messages: {content: {_contains: $tx_msg_val}}}] ${filterQuery} }) {
-          id
-          height
-          hash
-          timestamp
-          code
-          gas_used
-          gas_wanted
-          data(path: "tx")
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          limit: pageLimit,
-          event_attr_val: contractAddress,
-          tx_msg_val: {
-            contract: contractAddress,
-          },
-        },
-        operationName: 'getListTx',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
-  }
-
   getListTokenNFTFromIndexer(payload): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
@@ -98,7 +44,6 @@ export class TokenService extends CommonService {
       contractAddress: payload.contractAddress,
       pageLimit: payload.pageLimit,
       pageOffset: payload.pageOffset,
-      // countTotal: true,
       contractType: payload.contractType,
       isBurned: false,
     })
