@@ -104,12 +104,17 @@ export class CommunityPoolProposalComponent implements OnInit, OnDestroy {
   }
 
   paginatorEmit(event): void {
+    this.pageData.pageIndex = PAGE_EVENT.PAGE_INDEX;
     if (this.dataSource) {
       this.dataSource.paginator = event;
     } else {
       this.dataSource = new MatTableDataSource<any>();
       this.dataSource.paginator = event;
     }
+    this.dataSourceMob = this.dataSource.data.slice(
+      this.pageData.pageIndex * this.pageSizeMob,
+      this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
+    );
   }
 
   resetSearch() {
