@@ -87,8 +87,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
             }
             return this.commonService.status().pipe(
               mergeMap((res) => {
-                if (res.data) {
-                  this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
+                if (res) {
+                  this.proposalDetail.total_bonded_token = balanceOf(res.bonded_tokens);
                   if (data.proposal[0].status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
                     this.proposalDetail.pro_turnout =
                       (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
