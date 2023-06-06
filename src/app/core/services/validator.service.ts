@@ -140,7 +140,7 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
   }
 
-  delegators(pageLimit = 100, address: string, nextKey = null) {
+  delegator(pageLimit = 100, address: string, nextKey = null) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.limit=${pageLimit}&pagination.key=${nextKey}&pagination.reverse=true`,
     );
@@ -152,10 +152,6 @@ export class ValidatorService extends CommonService {
 
   getValidatorInfoByList(addressList: string[]): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/validators/validator-info?address=${addressList}`);
-  }
-
-  getStakeInfo(delegatorAddress: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators/delegations/delegator/${delegatorAddress}`);
   }
 
   getUptimeLCD(block = null) {
