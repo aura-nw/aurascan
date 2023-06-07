@@ -64,13 +64,13 @@ export class TokenHoldersTabComponent implements OnInit {
     if (this.typeContract !== ContractRegisterType.CW20) {
       this.getQuantity();
     } else {
-      this.getListTokenHolder();
+      this.getHolder();
     }
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
 
-  getListTokenHolder() {
+  getHolder() {
     this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress).subscribe(
       (res) => {
         if (res && res.data?.resultAsset?.length > 0) {
@@ -94,6 +94,47 @@ export class TokenHoldersTabComponent implements OnInit {
             });
           }
           this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
+  }
+
+  getHolderNFT() {
+    const payload = {
+      limit: this.numberTopHolder,
+      contractAddress: this.contractAddress,
+    };
+    this.tokenService.getListTokenHolderNFT(payload).subscribe(
+      (res) => {
+        if (res?.view_count_holder_cw721?.length > 0) {
+          this.totalHolder = res.view_count_holder_cw721_aggregate?.aggregate?.count;
+          if (this.totalHolder > this.numberTopHolder) {
+            this.pageData.length = this.numberTopHolder;
+          } else {
+            this.pageData.length = this.totalHolder;
+          }
+
+          res?.view_count_holder_cw721.forEach((element) => {
+            element['quantity'] = element.count;
+          });
+
+          let topHolder = Math.max(...res?.view_count_holder_cw721.map((o) => o.quantity)) || 1;
+          this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
+          res?.view_count_holder_cw721.forEach((element) => {
+            element['value'] = 0;
+          });
+
+          if (this.totalQuantity) {
+            res?.view_count_holder_cw721.forEach((k) => {
+              k['percent_hold'] = (k.quantity / this.totalQuantity) * 100;
+              k['width_chart'] = (k.quantity / this.numberTop) * 100;
+            });
+          }
+          this.dataSource = new MatTableDataSource<any>(res.view_count_holder_cw721);
         }
       },
       () => {},
@@ -127,7 +168,7 @@ export class TokenHoldersTabComponent implements OnInit {
     try {
       const config = await client.queryContractSmart(this.contractAddress, queryData);
       this.totalQuantity = config?.count || 0;
-      this.getListTokenHolder();
+      this.getHolderNFT();
     } catch (error) {}
   }
 }
