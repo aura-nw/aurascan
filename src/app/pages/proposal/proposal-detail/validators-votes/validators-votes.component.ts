@@ -71,7 +71,7 @@ export class ValidatorsVotesComponent implements OnInit {
 
   getValidatorVotes(isInit = false): void {
     if (this.proposalId) {
-      this.proposalService.getValidatorVotesFromIndexerV2(this.proposalId).subscribe((res) => {
+      this.proposalService.getValidatorVotesFromIndexer(this.proposalId).subscribe((res) => {
         let validatorVote = [];
         if (res?.validator) {
           validatorVote = _.get(res, 'validator').map((item) => {

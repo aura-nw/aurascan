@@ -25,19 +25,7 @@ export class ProposalService extends CommonService {
     super(http, environmentService);
   }
 
-  getValidatorVotesFromIndexer(proposalid): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      proposalid: proposalid,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/votes/validators`, { params });
-  }
-
-  getValidatorVotesFromIndexerV2(proposalId): Observable<any> {
+  getValidatorVotesFromIndexer(proposalId): Observable<any> {
     const operationsDoc = `
     query auratestnet_validator($proposalId: Int = null, $limit: Int = 10) {
       ${this.envDB} {
@@ -50,6 +38,7 @@ export class ProposalService extends CommonService {
             updated_at
           }
           description
+          operator_address
         }
       }
     }
@@ -66,27 +55,11 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  // getListVoteFromIndexer(payload, option): Observable<any> {
-  //   const params = _({
-  //     chainid: this.chainInfo.chainId,
-  //     nextKey: payload.nextKey,
-  //     reverse: false,
-  //     pageLimit: payload.pageLimit,
-  //     answer: option,
-  //     proposalid: payload.proposalid,
-  //   })
-  //     .omitBy(_.isNull)
-  //     .omitBy(_.isUndefined)
-  //     .value();
-
-  //   return this.http.get<any>(`${this.indexerUrl}/votes`, { params });
-  // }
-
   getProposalData(payload) {
     const operationsDoc = `
-    query auratestnet_proposal($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null) {
+    query auratestnet_proposal($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $type: String = null) {
       ${this.envDB} {
-        proposal(limit: $limit, where: {proposal_id: {_eq: $proposalId, _lt: $nextKey}}, order_by: {proposal_id: $order}) {
+        proposal(limit: $limit, where: {proposal_id: {_eq: $proposalId, _lt: $nextKey}, type: {_eq: $type}}, order_by: {proposal_id: $order}) {
           content
           deposit_end_time
           description
@@ -121,13 +94,14 @@ export class ProposalService extends CommonService {
           order: 'desc',
           nextKey: payload.nextKey,
           proposalId: payload.proposalId,
+          type: payload.type
         },
         operationName: 'auratestnet_proposal',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListVoteFromIndexerV2(payload, option): Observable<any> {
+  getListVoteFromIndexer(payload, option): Observable<any> {
     const operationsDoc = `
     query auratestnet_vote($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
       ${this.envDB} {

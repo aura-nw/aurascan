@@ -39,7 +39,7 @@ export class ValidatorService extends CommonService {
       if (!inflation && !bonded_tokens && !supply) {
         inflation = this.global.dataHeader.inflation.slice(0, -1);
         bonded_tokens = this.global.dataHeader.bonded_tokens.toString().slice(0, -1);
-        supply = this.global.dataHeader.supply.toString().slice(0, -1);
+        supply = this.global.dataHeader.total_aura.toString().slice(0, -1);
         this.stakingAPRSubject.next((inflation * (1 - communityTax)) / (bonded_tokens / supply));
       }
     }, 500);
@@ -140,7 +140,7 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
   }
 
-  delegators(pageLimit = 100, address: string, nextKey = null) {
+  delegator(pageLimit = 100, address: string, nextKey = null) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.limit=${pageLimit}&pagination.key=${nextKey}&pagination.reverse=true`,
     );
@@ -152,10 +152,6 @@ export class ValidatorService extends CommonService {
 
   getValidatorInfoByList(addressList: string[]): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/validators/validator-info?address=${addressList}`);
-  }
-
-  getStakeInfo(delegatorAddress: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators/delegations/delegator/${delegatorAddress}`);
   }
 
   getUptimeLCD(block = null) {

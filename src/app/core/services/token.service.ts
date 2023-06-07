@@ -44,7 +44,6 @@ export class TokenService extends CommonService {
       contractAddress: payload.contractAddress,
       pageLimit: payload.pageLimit,
       pageOffset: payload.pageOffset,
-      // countTotal: true,
       contractType: payload.contractType,
       isBurned: false,
     })
