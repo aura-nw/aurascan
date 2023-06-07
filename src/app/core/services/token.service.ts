@@ -59,7 +59,7 @@ export class TokenService extends CommonService {
   getListTokenNFTFromIndexerV2(payload): Observable<any> {
     const operationsDoc = `
     query MyQuery($contract_address: String, $limit: Int = 10) {
-      auratestnet {
+      ${this.envDB} {
         cw721_token(limit: $limit, where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}}, order_by: {created_at: desc}) {
           token_id
           owner
@@ -76,13 +76,12 @@ export class TokenService extends CommonService {
       }
     }
     `;
-    payload['contractAddress'] = 'aura1vl8mq97m5r48sejm5rtlxc724mzjtgs80nseka00xx6vyysffk2s3kpavh';
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variable: {
           limit: payload?.limit || 20,
-          contract_address: payload?.contract_address,
+          contract_address: payload?.contractAddress,
         },
         operationName: 'MyQuery',
       })
@@ -104,7 +103,6 @@ export class TokenService extends CommonService {
     query MyQuery($contract_address: String, $limit: Int = 10) {
       ${this.envDB} {
         view_count_holder_cw721(limit: $limit, where: {contract_address: {_eq: $contract_address}}, order_by: {count: desc}) {
-          contract_address
           count
           owner
         }
@@ -116,13 +114,12 @@ export class TokenService extends CommonService {
       }
     }
     `;
-    payload['contractAddress'] = 'aura1vl8mq97m5r48sejm5rtlxc724mzjtgs80nseka00xx6vyysffk2s3kpavh';
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variable: {
           limit: payload?.limit || 20,
-          contract_address: '',
+          contract_address: payload?.contractAddress,
         },
         operationName: 'MyQuery',
       })

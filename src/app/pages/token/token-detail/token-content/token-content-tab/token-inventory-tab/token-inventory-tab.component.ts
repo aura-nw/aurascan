@@ -58,7 +58,7 @@ export class TokenInventoryComponent implements OnInit {
     let payload = {
       limit: 100,
       nextKey: nextKey,
-      contract_address: this.contractAddress,
+      contractAddress: this.contractAddress,
     };
 
     // if (this.keyWord) {
@@ -184,7 +184,6 @@ export class TokenInventoryComponent implements OnInit {
 
   //   this.tokenService.getListTokenNFTFromIndexerV2(payload).subscribe(
   //     (res) => {
-  //       console.log('res ne', res);
         
   //       const asset = _.get(res, `data.assets[${this.typeContract}]`);
   //       this.pageData.length = _.get(res, `meta.count`);

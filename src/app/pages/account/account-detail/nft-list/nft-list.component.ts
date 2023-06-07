@@ -52,8 +52,7 @@ export class NftListComponent implements OnChanges {
   }
 
   getNftData() {
-    this.searchValue = 'NFTGLBUI050600010';
-    // this.searchValue = this.searchValue?.trim();
+    this.searchValue = this.searchValue?.trim();
 
     const payload = {
       account_address: this.address,
@@ -64,19 +63,19 @@ export class NftListComponent implements OnChanges {
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
       (res: ResponseDto) => {
         if (res?.data?.length > 0) {
+          if (res?.data?.length >= 100) {
+            this.nextKey = res?.data[res?.data?.length - 1].id;
+          }
           if (this.nftList.length > 0) {
             this.nftList = [...this.nftList, ...res.data];
           } else {
             this.nftList = res?.data;
           }
-          this.nextKey = res.meta?.next_key;
           this.pageData.length = this.nftList.length;
 
           this.nftList.forEach((element) => {
             element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
-            element.token_name = _.get(element, 'media_info.onchain.metadata.name');
-            // element.image = _.get(element, 'media_info.offchain.image');
-            // element.metadata = _.get(element, 'media_info.onchain.metadata');
+            element.token_name = _.get(element, 'cw721_contract.name');
             if (!this.searchValue) {
               this.totalValue += element.price * +element.balance || 0;
             }

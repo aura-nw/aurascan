@@ -82,8 +82,8 @@ export function checkTypeFile(nft: any) {
     ) {
       nftType = nft?.media_info?.offchain?.animation?.content_type || nft?.animation?.content_type || '';
     }
-    if (nft?.media_info?.offchain?.image && nftType == '') {
-      nftType = nft?.media_info?.offchain?.image?.content_type || '';
+    if (nftType == '' && (nft?.media_info?.offchain?.image || nft?.image?.link_s3)) {
+      nftType = nft?.media_info?.offchain?.image?.content_type || nft?.image?.content_type || '';
     }
   }
 

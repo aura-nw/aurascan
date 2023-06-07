@@ -5,7 +5,7 @@
       <app-loading-sprint></app-loading-sprint>
     </div>
     <!-- Filter -->
-    <div class="mb-6 d-lg-flex align-items-center justify-content-between">
+    <div class="mb-6 d-lg-flex align-items-center justify-content-between" *ngIf="!loading">
       <div class="h1 mb-0 text-gradient">
         <!--        $ {{ totalValue || 0 | number: global.formatNumber2Decimal }}-->
       </div>
@@ -17,7 +17,6 @@
             placeholder="Search for Token ID or Address"
             [(ngModel)]="searchValue"
             [maxLength]="maxLengthSearch"
-            (keyup.enter)="searchTokenNft()"
             [ngModelOptions]="{ standalone: true }"
             name="inputEmail"
             autocomplete="off" />
@@ -80,7 +79,7 @@
       </div>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data [textNull]="'No NFTs'"></app-table-no-data>
+      <app-table-no-data [textNull]="'No NFTs'" *ngIf="!loading"></app-table-no-data>
     </ng-template>
   </div>
 </div>
