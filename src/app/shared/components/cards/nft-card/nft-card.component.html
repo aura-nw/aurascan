@@ -2,7 +2,9 @@
   <!-- Image Default -->
   <img
     *ngIf="
-      (getTypeFile(nftItem) !== MEDIA_TYPE.IMG && !(nftItem.animation?.link_s3 || this.nftItem.animation_url)) || isError
+      (getTypeFile(nftItem) !== MEDIA_TYPE.IMG &&
+        !(nftItem.animation?.link_s3 || this.nftItem.animation_url || nftItem.media_info?.offchain?.animation?.url)) ||
+      isError
     "
     [src]="defaultImgToken"
     alt=""
@@ -26,10 +28,14 @@
     #video
     poster="{{ imageUrl }}"
     *ngIf="
-      getTypeFile(nftItem) === MEDIA_TYPE.VIDEO && (nftItem.animation?.link_s3 || this.nftItem.animation_url)
+      getTypeFile(nftItem) === MEDIA_TYPE.VIDEO &&
+      (nftItem.media_info?.offchain?.animation?.url || nftItem.animation?.link_s3 || this.nftItem.animation_url)
     "></video>
   <div
-    *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.VIDEO && (nftItem.animation?.link_s3 || this.nftItem.animation_url)"
+    *ngIf="
+      getTypeFile(nftItem) === MEDIA_TYPE.VIDEO &&
+      (nftItem.media_info?.offchain?.animation?.url || nftItem.animation?.link_s3 || this.nftItem.animation_url)
+    "
     class="control-container">
     <button class="button control__button" *ngIf="paused" (click)="playVideo(video); $event.stopPropagation()">
       <i class="ph-play"></i>
@@ -43,7 +49,10 @@
   <!-- Model-view -->
   <app-model-view
     (click)="nftLink && goTo(nftLink)"
-    *ngIf="getTypeFile(nftItem) === MEDIA_TYPE._3D && (nftItem.animation?.link_s3 || this.nftItem.animation_url)"
+    *ngIf="
+      getTypeFile(nftItem) === MEDIA_TYPE._3D &&
+      (nftItem.media_info?.offchain?.animation?.url || nftItem.animation?.link_s3 || this.nftItem.animation_url)
+    "
     [modelUrl]="animationUrl"
     [disablePan]="true"
     [previewImg]="imageUrl">
@@ -52,7 +61,10 @@
 
   <!-- Audio-view -->
   <app-audio-player
-    *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.AUDIO && (nftItem.animation?.link_s3 || this.nftItem.animation_url)"
+    *ngIf="
+      getTypeFile(nftItem) === MEDIA_TYPE.AUDIO &&
+      (nftItem.media_info?.offchain?.animation?.url || nftItem.animation?.link_s3 || this.nftItem.animation_url)
+    "
     [link]="nftLink"
     [src]="animationUrl"
     [nftId]="nftId"

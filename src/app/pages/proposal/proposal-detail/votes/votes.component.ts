@@ -119,11 +119,11 @@ export class VotesComponent implements OnChanges {
           +this.proposalDetail.count_vote?.no +
           +this.proposalDetail.count_vote?.no_with_veto;
 
-        this.countVote.set('', countAll);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.proposalDetail.count_vote?.yes);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.proposalDetail.count_vote?.abstain);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.proposalDetail.count_vote?.no);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.proposalDetail.count_vote?.no_with_veto);
+        this.countVote.set('', countAll || 0);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.proposalDetail.count_vote?.yes || 0);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.proposalDetail.count_vote?.abstain || 0);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.proposalDetail.count_vote?.no || 0);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.proposalDetail.count_vote?.no_with_veto || 0);
 
         this.voteDataListLoading = false;
         this.changeTab(this.countCurrent);

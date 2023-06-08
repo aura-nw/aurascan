@@ -313,8 +313,13 @@ export function convertDataTransactionV2(data, coinInfo) {
     let denom = coinInfo.coinDenom;
 
     // check send token ibc same chain
-    if (_type === TRANSACTION_TYPE_ENUM.Send && messages[0].amount[0].denom !== denom) {
+    if (_type === TRANSACTION_TYPE_ENUM.Send && messages[0]?.amount[0]?.denom !== denom) {
       denom = messages[0].amount[0].denom;
+    }
+
+    // check transfer token ibc different chain
+    if (_type === TRANSACTION_TYPE_ENUM.IBCTransfer && messages[0]?.token?.denom !== denom) {
+      denom = messages[0].token?.denom;
     }
 
     if (lstType?.length > 1) {

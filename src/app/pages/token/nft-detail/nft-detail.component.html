@@ -37,7 +37,11 @@
               <img
                 *ngIf="
                   (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG &&
-                    !(nftDetail.animation?.link_s3 || nftDetail?.animation_url)) ||
+                    !(
+                      nftDetail?.animation?.link_s3 ||
+                      nftDetail?.animation_url ||
+                      nftDetail.media_info?.offchain?.animation?.url
+                    )) ||
                   isError
                 "
                 [src]="defaultImgToken" />
@@ -60,7 +64,9 @@
                 (click)="expandMedia()"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
-                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
+                  (nftDetail.animation?.link_s3 ||
+                    nftDetail?.animation_url ||
+                    nftDetail.media_info?.offchain?.animation?.url)
                 "
                 [modelUrl]="animationUrl"
                 [disablePan]="false"
@@ -70,7 +76,9 @@
                 (click)="expandMedia()"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
-                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
+                  (nftDetail.animation?.link_s3 ||
+                    nftDetail?.animation_url ||
+                    nftDetail.media_info?.offchain?.animation?.url)
                 "
                 [src]="animationUrl"
                 [previewImg]="imageUrl">

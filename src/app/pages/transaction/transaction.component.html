@@ -24,7 +24,7 @@
                         *ngSwitchCase="'tx_hash'"
                         class="text--primary cursor-pointer hash-link"
                         [routerLink]="['/transaction', data['tx_hash']]">
-                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                        {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                       </a>
                       <a
                         *ngSwitchCase="'height'"
@@ -51,13 +51,15 @@
                         </div>
                       </div>
                       <div *ngSwitchCase="'fee'">
-                        {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                        {{ +data[template.matColumnDef] | mask : 'separator.6' }}
                         <span class="text--primary">{{ denom }}</span>
                       </div>
                       <div *ngSwitchCase="'amount'">
                         <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                          {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                          <span class="text--primary">{{ commonService.mappingNameIBC(data?.denom)?.display }}</span>
+                          <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
+                          <span class="text--primary ml-1">{{
+                            commonService.mappingNameIBC(data?.denom)?.display
+                          }}</span>
                         </ng-container>
                         <ng-template #displayNonNumber>
                           <span *ngIf="!data[template.matColumnDef]"> - </span>
