@@ -13,6 +13,7 @@ import { TableNoDataModule } from '../../shared/components/table-no-data/table-n
 import { BlockDetailComponent } from './block-detail/block-detail.component';
 import { BlocksRoutingModule } from './blocks-routing.module';
 import { BlocksComponent } from './blocks.component';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [BlocksComponent, BlockDetailComponent],
@@ -29,6 +30,7 @@ import { BlocksComponent } from './blocks.component';
     TableNoDataModule,
     NgbNavModule,
     PaginatorModule,
+    CommonDirectiveModule
   ],
   providers: [BlockService, MaskPipe],
 })

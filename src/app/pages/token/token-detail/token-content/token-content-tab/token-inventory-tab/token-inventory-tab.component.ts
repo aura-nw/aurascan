@@ -31,6 +31,8 @@ export class TokenInventoryComponent implements OnInit {
   isMoreTx = false;
   linkToken = 'token-nft';
   nextKey = null;
+  currentNextKey = null;
+  nextKeyId = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,66 +52,70 @@ export class TokenInventoryComponent implements OnInit {
 
     if (this.typeContract === ContractRegisterType.CW4973) {
       this.linkToken = 'token-abt';
-    } 
+    }
     this.getNftData();
   }
 
-  getNftData(nextKey = null) {
+  getNftData(nextKey = null, nextKeyId = null) {
     let payload = {
       limit: 100,
       nextKey: nextKey,
+      nextKeyId: nextKeyId,
       contractAddress: this.contractAddress,
+      owner: null,
+      token_id: null,
     };
 
-    // if (this.keyWord) {
-    //   if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
-    //     payload.owner = this.keyWord;
-    //   } else if (
-    //     !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
-    //   ) {
-    //     payload.token_id = this.keyWord;
-    //   }
-    // }
-
-    // if (payload.pageOffset > 100) {
-    //   payload.pageOffset = 100;
-    // }
-
-    this.tokenService.getListTokenNFTFromIndexerV2(payload).subscribe((res) => {
-      const asset = _.get(res, `cw721_token`);
-      this.pageData.length = asset?.length;
-
-      asset.forEach(element => {
-        element.contract_address = element.contract_address || element.cw721_contract?.smart_contract?.address;
-      }); 
-
-      if (this.nftData.data.length > 0) {
-        this.nftData.data = [...this.nftData.data, ...asset];
-      } else {
-        this.nftData.data = [...asset];
+    if (this.keyWord) {
+      if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+        payload.owner = this.keyWord;
+      } else if (
+        !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
+      ) {
+        payload.token_id = this.keyWord;
       }
-      
-      this.dataSourceMobile = this.nftData.data.slice(
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-      );
+    }
 
-      if (this.pageData.length >= 100) {
-        this.isMoreTx = true;
-        if (this.pageData.length > 200) {
-          this.pageData.length = 200;
+    this.tokenService.getListTokenNFTFromIndexerV2(payload).subscribe(
+      (res) => {
+        const asset = _.get(res, `cw721_token`);
+        if (asset?.length >= 100) {
+          this.isMoreTx = true;
+          this.nextKey = asset[asset?.length - 1]?.last_updated_height;
+          this.nextKeyId = asset[asset?.length - 1]?.id;
+        } else {
+          this.isMoreTx = false;
         }
-      }
-      this.loading = false;
-    });
+
+        asset.forEach((element) => {
+          element.contract_address = this.contractAddress;
+        });
+
+        if (this.nftData.data.length > 0) {
+          this.nftData.data = [...this.nftData.data, ...asset];
+        } else {
+          this.nftData.data = [...asset];
+        }
+        this.pageData.length = this.nftData.data?.length;
+
+        this.dataSourceMobile = this.nftData.data.slice(
+          this.pageData.pageIndex * this.pageData.pageSize,
+          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        );
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   pageEvent(e: PageEvent): void {
-    if (e.pageIndex * e.pageSize >= this.nftData.data.length) {
-      this.pageData = e;
-      this.getNftData();
-    } else {
-      this.dataSourceMobile = this.nftData.data.slice(e.pageIndex * e.pageSize, e.pageIndex * e.pageSize + e.pageSize);
+    const { length, pageIndex, pageSize } = e;
+    const next = length <= (pageIndex + 2) * pageSize;
+    if (next && this.nextKey && this.nextKey !== this.currentNextKey) {
+      this.getNftData(this.nextKey, this.nextKeyId);
+      this.currentNextKey = this.nextKey;
     }
   }
 

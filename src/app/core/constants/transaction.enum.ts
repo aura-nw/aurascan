@@ -11,7 +11,7 @@ export enum TypeTransaction {
   IBCMsgConnectionOpenTry = 'Connection Open Try',
   Send = 'Send',
   Received = 'Receive',
-  MultiSend = 'Multi Send',
+  MultiSend = 'Multisend',
   Delegate = 'Delegate',
   Undelegate = 'Undelegate',
   Redelegate = 'Redelegate',
