@@ -31,7 +31,9 @@ export class WalletService implements OnDestroy {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainId = this.environmentService.configValue.chainId;
   chainInfo = this.environmentService.configValue.chain_info;
-  graphUrl = `${this.environmentService.configValue.graphUrl}`;
+  graphUrl = `${
+    this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
+  }`;
 
   coin98Client: Coin98Client;
   destroyed$ = new Subject();
