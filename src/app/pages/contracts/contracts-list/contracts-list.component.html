@@ -72,9 +72,7 @@
                 (keyup)="onKeyUp()"
                 name="search"
                 autocomplete="off" />
-              <button
-                type="submit"
-                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
+              <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
@@ -102,12 +100,11 @@
                   <div [innerHTML]="template.headerCellDef | translate" [style.width]="'180px'"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
-                  <ng-container
-                    *ngIf="template.isUrl && template.isShort && template.matColumnDef === 'contract_address'">
+                  <ng-container *ngIf="template.isUrl && template.isShort && template.matColumnDef === 'address'">
                     <div class="d-flex align-items-center gap-2">
                       <div class="mr-2" [style.width]="'16px'">
                         <img
-                          *ngIf="data['contract_verification'] === contractVerifyType.Verified"
+                          *ngIf="data['contract_verification'] === contractVerifyStatus.SUCCESS"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                           alt="contract_verification"
                           width="16px"
@@ -121,8 +118,7 @@
                       </a>
                     </div>
                   </ng-container>
-                  <ng-container
-                    *ngIf="template.isUrl && template.isShort && template.matColumnDef !== 'contract_address'">
+                  <ng-container *ngIf="template.isUrl && template.isShort && template.matColumnDef !== 'address'">
                     <a
                       class="text--primary"
                       [routerLink]="[template.isUrl, data[template.matColumnDef]]"
@@ -133,27 +129,21 @@
                   <ng-container *ngIf="template.matColumnDef === 'contract_verification'">
                     <div
                       class="d-flex align-items-center ml-1"
-                      *ngIf="data[template.matColumnDef] === contractVerifyType.Verified">
+                      *ngIf="data[template.matColumnDef] === contractVerifyStatus.SUCCESS">
                       <span>{{ data['verified_at'] | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
                       <span>{{ data['verified_at'] | customDate : 'HH:mm:ss' }}</span>
                     </div>
-                    <div *ngIf="data[template.matColumnDef] !== contractVerifyType.Verified">-</div>
+                    <div *ngIf="data[template.matColumnDef] !== contractVerifyStatus.SUCCESS">-</div>
                   </ng-container>
-                  <ng-container *ngIf="template.matColumnDef === 'contract_name'">
+                  <ng-container *ngIf="template.matColumnDef === 'name'">
                     {{ (data[template.matColumnDef] | cutStringPipe : 16) || '-' }}
                   </ng-container>
-                  <!-- <ng-container *ngIf="template.matColumnDef === 'project_name'">
-                    <a [routerLink]="['/project', data.request_id]" class="g-ellipsis-project">{{
-                      data[template.matColumnDef]
-                    }}</a>
-                  </ng-container> -->
                   <ng-container
                     *ngIf="
                       (!template.isUrl || data[template.matColumnDef] === '') &&
                       template.matColumnDef !== 'contract_verification' &&
-                      template.matColumnDef !== 'contract_name' &&
-                      template.matColumnDef !== 'project_name'
+                      template.matColumnDef !== 'name'
                     ">
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <ng-container *ngSwitchDefault>

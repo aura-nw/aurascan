@@ -13,6 +13,12 @@ export enum ContractVerifyType {
   Verifying = 'VERIFYING'
 }
 
+export enum VerificationStatus { 
+  FAIL = 'FAIL',
+  VERIFYING = 'VERIFYING',
+  SUCCESS = 'SUCCESS',
+}
+
 export enum ContractTransactionType {
   IN = 'IN',
   CREATION = 'CREATION',
