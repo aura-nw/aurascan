@@ -440,7 +440,7 @@
           </div>
         </ng-container>
       </div>
-      <div class="mx-4 mt-3 mt-lg-1" *ngIf="transactionDetail.code === codeTransaction.Success">
+      <div class="mx-4 mt-3 mt-lg-1">
         <ng-container
           [ngTemplateOutlet]="logEvent"
           [ngTemplateOutletContext]="{ data: transactionDetail?.tx?.logs, idx: 0 }">
@@ -450,43 +450,49 @@
   </ng-template>
 
   <ng-template #logEvent let-data="data" let-idx="idx">
-    <div class="d-flex flex-wrap mb-2">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Event Log</div>
-      <div class="col-12 col-lg-9 text--gray-1 box-event-log">
-        <ng-container *ngFor="let element of data; let index = index">
-          <div class="item-event-log" *ngIf="index === idx">
-            <span class="caption fw-normal">{{ element.events.type }}</span>
-            <mat-expansion-panel
-              hideToggle
-              *ngFor="let item of element.events; first as isFirst; let i = index"
-              [expanded]="isFirst">
-              <mat-expansion-panel-header class="content-contract">
-                <mat-panel-title class="item-content body-02 text--gray-1">
-                  <div class="txt-header caption fw-normal text--white">
-                    {{ item.type }}
-                  </div>
-                </mat-panel-title>
-                <mat-panel-description> </mat-panel-description>
-              </mat-expansion-panel-header>
+    <ng-container *ngIf="transactionDetail.code === codeTransaction.Success">
+      <div class="d-flex flex-wrap mb-2">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Event Log</div>
+        <div class="col-12 col-lg-9 text--gray-1 box-event-log">
+          <ng-container *ngFor="let element of data; let index = index">
+            <div class="item-event-log" *ngIf="index === idx">
+              <span class="caption fw-normal">{{ element.events.type }}</span>
+              <mat-expansion-panel
+                hideToggle
+                *ngFor="let item of element.events; first as isFirst; let i = index"
+                [expanded]="isFirst">
+                <mat-expansion-panel-header class="content-contract">
+                  <mat-panel-title class="item-content body-02 text--gray-1">
+                    <div class="txt-header caption fw-normal text--white">
+                      {{ item.type }}
+                    </div>
+                  </mat-panel-title>
+                  <mat-panel-description> </mat-panel-description>
+                </mat-expansion-panel-header>
 
-              <div class="content-log">
-                <ng-container *ngFor="let data of item.attributes; let idx = index">
-                  <div class="ml-5 mb-2 row">
-                    <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{ data.key }}</span>
-                    <span class="col-12 col-lg-10 body-01 text-break">
-                      <ng-container *ngIf="data.key !== 'amount' && data.key !== 'fee'">{{ data.value }}</ng-container>
-                      <span
-                        *ngIf="data.key === 'amount' || data.key === 'fee'"
-                        [innerHTML]="data.value | convertLogAmount"></span>
-                    </span>
-                  </div>
-                </ng-container>
-              </div>
-            </mat-expansion-panel>
-          </div>
-        </ng-container>
+                <div class="content-log">
+                  <ng-container *ngFor="let data of item.attributes; let idx = index">
+                    <div class="ml-5 mb-2 row">
+                      <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{
+                        data.key
+                      }}</span>
+                      <span class="col-12 col-lg-10 body-01 text-break">
+                        <ng-container *ngIf="data.key !== 'amount' && data.key !== 'fee'">{{
+                          data.value
+                        }}</ng-container>
+                        <span
+                          *ngIf="data.key === 'amount' || data.key === 'fee'"
+                          [innerHTML]="data.value | convertLogAmount"></span>
+                      </span>
+                    </div>
+                  </ng-container>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </ng-container>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </ng-template>
 
   <ng-template #messageHeader let-data="data">
