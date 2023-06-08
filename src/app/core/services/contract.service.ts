@@ -12,9 +12,6 @@ export class ContractService extends CommonService {
   contractObservable: Observable<any>;
   chainInfo = this.environmentService.configValue.chain_info;
   apiUrl = `${this.environmentService.configValue.beUri}`;
-  graphUrl = `${
-    this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
-  }`;
 
   get contract() {
     return this.contract$.value;

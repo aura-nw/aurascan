@@ -19,6 +19,9 @@ export class CommonService {
   horoscopeApi = `${
     this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathApi
   }`;
+  graphUrl = `${
+    this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathGraphql
+  }`;
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;

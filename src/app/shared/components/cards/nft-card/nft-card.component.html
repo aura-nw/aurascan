@@ -61,7 +61,10 @@
 
   <!-- Audio-view -->
   <app-audio-player
-    *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.AUDIO && (nftItem.animation?.link_s3 || this.nftItem.animation_url)"
+    *ngIf="
+      getTypeFile(nftItem) === MEDIA_TYPE.AUDIO &&
+      (nftItem.media_info?.offchain?.animation?.url || nftItem.animation?.link_s3 || this.nftItem.animation_url)
+    "
     [link]="nftLink"
     [src]="animationUrl"
     [nftId]="nftId"
