@@ -57,20 +57,35 @@ export class TokenService extends CommonService {
 
   getListTokenNFTFromIndexerV2(payload): Observable<any> {
     const operationsDoc = `
-    query MyQuery($contract_address: String, $limit: Int = 10) {
+    query Query(
+      $contract_address: String
+      $limit: Int = 10
+      $nextKeyLastUpdatedHeight: Int = null
+      $nextKeyId: Int = null
+      $tokenId: String = null
+      $owner: String = null
+    ) {
       ${this.envDB} {
-        cw721_token(limit: $limit, where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}}, order_by: {created_at: desc}) {
+        cw721_token(
+          limit: $limit
+          where: {
+            cw721_contract: {
+              smart_contract: { address: { _eq: $contract_address } }
+            }
+            id: { _lt: $nextKeyId }
+            last_updated_height: { _lt: $nextKeyLastUpdatedHeight }
+            token_id: { _eq: $tokenId }
+            owner: { _eq: $owner }
+          }
+          order_by: [{ last_updated_height: desc }, { id: desc }]
+        ) {
+          id
           token_id
           owner
           media_info
           last_updated_height
           created_at
           burned
-          cw721_contract {
-            smart_contract {
-              address
-            }
-          }
         }
       }
     }
@@ -78,11 +93,15 @@ export class TokenService extends CommonService {
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        variable: {
+        variables: {
           limit: payload?.limit || 20,
           contract_address: payload?.contractAddress,
+          nextKeyLastUpdatedHeight: payload?.nextKey,
+          nextKeyId: payload?.nextKeyId,
+          tokenId: payload?.token_id,
+          owner: payload?.owner
         },
-        operationName: 'MyQuery',
+        operationName: 'Query',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -116,7 +135,7 @@ export class TokenService extends CommonService {
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        variable: {
+        variables: {
           limit: payload?.limit || 20,
           contract_address: payload?.contractAddress,
         },
