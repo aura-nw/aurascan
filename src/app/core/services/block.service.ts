@@ -10,7 +10,6 @@ import { CommonService } from './common.service';
 export class BlockService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-  graphUrl = `${this.environmentService.configValue.graphUrl}`;
   envDB = this.environmentService.configValue.horoscopeSelectedChain;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {

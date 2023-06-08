@@ -5,9 +5,9 @@
       <app-loading-sprint></app-loading-sprint>
     </div>
     <!-- Filter -->
-    <div class="mb-6 d-lg-flex align-items-center justify-content-between">
+    <div class="mb-6 d-lg-flex align-items-center justify-content-between" *ngIf="!loading">
       <div class="h1 mb-0 text-gradient">
-<!--        $ {{ totalValue || 0 | number: global.formatNumber2Decimal }}-->
+        <!--        $ {{ totalValue || 0 | number: global.formatNumber2Decimal }}-->
       </div>
       <form (ngSubmit)="searchTokenNft()" class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
         <div class="input-group">
@@ -17,7 +17,6 @@
             placeholder="Search for Token ID or Address"
             [(ngModel)]="searchValue"
             [maxLength]="maxLengthSearch"
-            (keyup.enter)="searchTokenNft()"
             [ngModelOptions]="{ standalone: true }"
             name="inputEmail"
             autocomplete="off" />
@@ -38,15 +37,17 @@
     <!-- Table -->
     <ng-container *ngIf="nftList?.length > 0; else noValues">
       <div>
-        <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
-             id="nft-cards">
+        <div
+          class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
+          id="nft-cards">
           <div class="nft-cards__col col" *ngFor="let item of showedData; let i = index">
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
                 <app-nft-card
+                  *ngIf="item"
                   [nftLink]="'/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id)"
                   [nftItem]="item"
-                  nftId="{{'nft#'+i}}"
+                  nftId="{{ 'nft#' + i }}"
                   [nftType]="getTypeFile(item)"></app-nft-card>
                 <div class="nft-cards__label">
                   <span class="text-gradient">CW-721</span>
@@ -73,15 +74,12 @@
             </div>
           </div>
         </div>
-        <app-paginator
-          [length]="pageData.length"
-          [pageSize]="pageData.pageSize"
-          (pageEvent)="handlePageEvent($event)">
+        <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (pageEvent)="handlePageEvent($event)">
         </app-paginator>
       </div>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data [textNull]="'No NFTs'"></app-table-no-data>
+      <app-table-no-data [textNull]="'No NFTs'" *ngIf="!loading"></app-table-no-data>
     </ng-template>
   </div>
 </div>

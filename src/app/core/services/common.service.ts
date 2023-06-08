@@ -16,7 +16,12 @@ export class CommonService {
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.configValue.chain_info;
-  graphUrl = `${this._environmentService.configValue.graphUrl}`;
+  horoscopeApi = `${
+    this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathApi
+  }`;
+  graphUrl = `${
+    this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathGraphql
+  }`;
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;
@@ -34,8 +39,7 @@ export class CommonService {
   }
 
   status(): Observable<any> {
-    let api_link= this.graphUrl.replace('v1/graphql','api/v1');
-    return this._http.get<any>(`${api_link}/dashboard-statistics`);
+    return this._http.get<any>(`${this.horoscopeApi}/dashboard-statistics`);
   }
 
   getParamTallyingFromLCD() {

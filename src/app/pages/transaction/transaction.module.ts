@@ -17,6 +17,7 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { MessagesItemComponent } from './transaction-detail/transaction-messages/messages-item/messages-item.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { ProposalService } from 'src/app/core/services/proposal.service';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [TransactionComponent, TransactionDetailComponent, TransactionMessagesComponent, MessagesItemComponent],
@@ -34,6 +35,7 @@ import { ProposalService } from 'src/app/core/services/proposal.service';
     CommonPipeModule,
     NgbNavModule,
     NgxJsonViewerModule,
+    CommonDirectiveModule
   ],
   providers: [TransactionService, MappingErrorService, ProposalService, MaskPipe],
 })

@@ -879,9 +879,11 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   getLongValue(value) {
-    const longProposalId = Long.fromValue(value);
-    if (Long.isLong(longProposalId)) {
-      value = longProposalId.toString();
+    if (value) {
+      const longProposalId = Long.fromValue(value);
+      if (Long.isLong(longProposalId)) {
+        value = longProposalId.toString();
+      }
     }
     return value;
   }
