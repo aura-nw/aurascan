@@ -14,7 +14,7 @@ export class TokenService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   envDB = this.environmentService.configValue.horoscopeSelectedChain;
-   graphUrl = `${
+  graphUrl = `${
     this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
   }`;
 
@@ -101,7 +101,7 @@ export class TokenService extends CommonService {
           nextKeyLastUpdatedHeight: payload?.nextKey,
           nextKeyId: payload?.nextKeyId,
           tokenId: payload?.token_id,
-          owner: payload?.owner
+          owner: payload?.owner,
         },
         operationName: 'Query',
       })

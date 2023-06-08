@@ -4,7 +4,7 @@
   "chainId": "aura-testnet-2",
   "timeStaking": "86400",
   "env": "dev",
-  "urlSocket": "https://explorer-ws.dev.aura.network",
+  "urlSocket": "https://explorer-api.dev.aura.network",
   "validator_s3": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
   "coins": [
     {
@@ -65,12 +65,14 @@
   },
   "image_s3": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
   "urlIndexer": "https://indexer.dev.aurascan.io/api/v1",
-  "graphUrl": "https://indexer-v2.dev.aurascan.io/v1/graphql",
   "timeInterval": 4000,
+  "ipfsDomain": "https://ipfs.io/",
   "evnLabel": {
     "desktop": "Develop Testnet Network",
     "mobile": "Develop Testnet"
   },
-  "maxValidator": 200,
-  "horoscopeSelectedChain": "auratestnet"
+  "horoscopeSelectedChain": "auratestnet",
+  "horoscopeUrl": "https://indexer-v2.dev.aurascan.io/",
+  "horoscopePathGraphql": "api/v1/graphiql",
+  "horoscopePathApi": "api/v1"
 }

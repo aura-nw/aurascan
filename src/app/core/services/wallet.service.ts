@@ -31,7 +31,7 @@ export class WalletService implements OnDestroy {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainId = this.environmentService.configValue.chainId;
   chainInfo = this.environmentService.configValue.chain_info;
-   graphUrl = `${
+  graphUrl = `${
     this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
   }`;
 

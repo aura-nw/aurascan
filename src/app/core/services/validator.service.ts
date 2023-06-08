@@ -15,7 +15,7 @@ import { map } from 'rxjs/operators';
 export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-   graphUrl = `${
+  graphUrl = `${
     this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
   }`;
   envDB = this.environmentService.configValue.horoscopeSelectedChain;
@@ -131,7 +131,7 @@ export class ValidatorService extends CommonService {
         variables: {
           operator_address: address,
           limit: limit,
-          nextKey: nextKey
+          nextKey: nextKey,
         },
         operationName: 'auratestnet_powerevent',
       })

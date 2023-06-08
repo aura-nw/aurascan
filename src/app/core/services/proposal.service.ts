@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 export class ProposalService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
-   graphUrl = `${
+  graphUrl = `${
     this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
   }`;
   maxValidator = `${this.environmentService.configValue.maxValidator}`;
@@ -96,7 +96,7 @@ export class ProposalService extends CommonService {
           order: 'desc',
           nextKey: payload.nextKey,
           proposalId: payload.proposalId,
-          type: payload.type
+          type: payload.type,
         },
         operationName: 'auratestnet_proposal',
       })
