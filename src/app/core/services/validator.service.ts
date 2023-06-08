@@ -15,9 +15,6 @@ import { map } from 'rxjs/operators';
 export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-  graphUrl = `${
-    this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
-  }`;
   envDB = this.environmentService.configValue.horoscopeSelectedChain;
   stakingAPRSubject: BehaviorSubject<number>;
 

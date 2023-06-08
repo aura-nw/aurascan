@@ -14,9 +14,6 @@ export class TokenService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   envDB = this.environmentService.configValue.horoscopeSelectedChain;
-  graphUrl = `${
-    this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
-  }`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
