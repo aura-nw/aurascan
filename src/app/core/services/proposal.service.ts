@@ -11,7 +11,9 @@ import { map } from 'rxjs/operators';
 export class ProposalService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
-  graphUrl = `${this.environmentService.configValue.graphUrl}`;
+   graphUrl = `${
+    this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
+  }`;
   maxValidator = `${this.environmentService.configValue.maxValidator}`;
   envDB = this.environmentService.configValue.horoscopeSelectedChain;
   reloadList$ = new Subject();
