@@ -23,6 +23,7 @@ export class CommonService {
     this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathGraphql
   }`;
   envDB = this._environmentService.configValue.horoscopeSelectedChain;
+  chainId = this._environmentService.configValue.chainId;
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;
@@ -40,7 +41,7 @@ export class CommonService {
   }
 
   status(): Observable<any> {
-    return this._http.get<any>(`${this.horoscopeApi}/dashboard-statistics`);
+    return this._http.get<any>(`${this.horoscopeApi}/dashboard-statistics?chainid=${this.chainId}`);
   }
 
   getParamTallyingFromLCD() {

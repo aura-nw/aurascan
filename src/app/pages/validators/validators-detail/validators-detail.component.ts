@@ -198,10 +198,10 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  getBlocksMiss(address = null) {
+  getBlocksMiss(address = null, lastBlock = []) {
     this.validatorService.getUptimeIndexer(address).subscribe((res) => {
       this.arrBlockUptime = res?.block?.filter((h) => h.block_signatures.length === 0);
-      if (this.arrBlockUptime?.length > 0) {
+      if (this.arrBlockUptime?.length > 0 && lastBlock?.length === 0) {
         this.arrLastBlock?.forEach((element) => {
           if (this.arrBlockUptime?.find((k) => k.height === element.height)) {
             element['isSign'] = false;
@@ -209,6 +209,12 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         });
       }
     });
+
+    if (lastBlock?.length > 0) {
+      lastBlock[0]['isSign'] = this.arrBlockUptime?.find((k) => k.height === lastBlock[0]?.height) ? false : true;
+      this.arrLastBlock?.unshift(lastBlock[0]);
+      this.arrLastBlock?.pop();
+    }
   }
 
   async getListDelegator(nextKey = null, isInit = true) {
@@ -400,9 +406,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     };
     this.blockService.getDataBlock(payload).subscribe((res) => {
       if (res?.block?.length > 0 && res?.block[0].height !== this.arrLastBlock[0].height) {
-        this.arrLastBlock?.unshift(res.block[0]);
-        this.arrLastBlock?.pop();
-        this.getBlocksMiss(this.currentValidatorDetail?.cons_address);
+        this.getBlocksMiss(this.currentValidatorDetail?.cons_address, res?.block);
       }
     });
   }
