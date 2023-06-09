@@ -18,6 +18,12 @@ export interface IConfiguration {
   timeInterval: number;
   ipfsDomain: string;
   evnLabel: any;
+  maxValidator: number;
+  horoscopeSelectedChain: string;
+  horoscopeUrl: string;
+  horoscopePathGraphql: string;
+  horoscopePathApi: string;
+  notice: { content: string; url: string };
 }
 
 @Injectable()
@@ -37,6 +43,12 @@ export class EnvironmentService {
     timeInterval: null,
     ipfsDomain: '',
     evnLabel: '',
+    maxValidator: null,
+    horoscopeSelectedChain: '',
+    horoscopeUrl: '',
+    horoscopePathGraphql: '',
+    horoscopePathApi: '',
+    notice: { content: '', url: '' },
   });
 
   get configValue(): IConfiguration {
@@ -67,7 +79,13 @@ export class EnvironmentService {
           indexerUri: config['urlIndexer'],
           timeInterval: config['timeInterval'] || 4000,
           ipfsDomain: config['ipfsDomain'],
-          evnLabel: config['evnLabel']
+          evnLabel: config['evnLabel'],
+          maxValidator: config['maxValidator'] || 200,
+          horoscopeSelectedChain: config['horoscopeSelectedChain'],
+          horoscopeUrl: config['horoscopeUrl'],
+          horoscopePathGraphql: config['horoscopePathGraphql'],
+          horoscopePathApi: config['horoscopePathApi'],
+          notice: config['notice'] || { content: '', url: '' },
         };
 
         this.config.next(data);
