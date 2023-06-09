@@ -5,6 +5,9 @@ import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import {map} from "rxjs/operators";
+import axios from "axios";
+import {LCD_COSMOS} from "src/app/core/constants/url.constant";
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -15,6 +18,7 @@ export class ContractService extends CommonService {
   graphUrl = `${
     this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
   }`;
+  envDB = this.environmentService.configValue.horoscopeSelectedChain;
 
   get contract() {
     return this.contract$.value;
@@ -24,6 +28,10 @@ export class ContractService extends CommonService {
     super(http, environmentService);
 
     this.contractObservable = this.contract$.asObservable();
+  }
+
+  setContract(contract: any) {
+    this.contract$.next(contract);
   }
 
   getListContract(data: any): Observable<any> {
@@ -40,8 +48,45 @@ export class ContractService extends CommonService {
 
   loadContractDetail(contractAddress): void {
     this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`).subscribe((res) => {
-      this.contract$.next(res);
+      this.contract$.next(res.data);
     });
+  }
+
+  loadContractDetailv2(contractAddress): Observable<any> {
+    const contractDoc = `
+    query auratestnet_contract($contractAddress: String = null) {
+      ${this.envDB} {
+        smart_contract(limit: 1, where: {address: {_eq: $contractAddress}}) {
+          address,
+          creator,          
+          cw721_contract {
+            name
+            symbol
+            smart_contract {
+              instantiate_hash
+            }
+          },
+          code {
+            type
+            code_id
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: contractDoc,
+        variables: {
+          contractAddress: contractAddress
+        },
+        operationName: 'auratestnet_contract',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getContractBalance(contractAddress){
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BALANCE}/${contractAddress}`);
   }
 
   registerContractType(data: any): Observable<any> {

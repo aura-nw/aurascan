@@ -16,7 +16,7 @@
           (mouseleave)="$event.stopImmediatePropagation()"
           (click)="copyData(); tooltip.toggle()" />
       </button>
-      <button class="button button--xxs button--sm-mob button-circle ml-4 ml-lg-2">
+      <button class="button button--xxs button--sm-mob button-circle ml-4 ml-lg-2" *ngIf="contractAddress">
         <img
           [src]="'assets/icons/icons-svg/basic/qr-code.svg' | imageS3"
           alt=""
@@ -42,23 +42,23 @@
     *ngIf="contractDetail"
     [contractsAddress]="contractAddress + ''"
     [contractTypeData]="contractDetail.contract_verification"></app-contract-content>
-</ng-container>
 
-<div class="col-lg-3">
-  <ng-template #modalManage let-modal>
-    <div class="box-address">
-      <div class="txt-right mb-4 cursor-pointer">
-        <img
-          [src]="'assets/images/icons/close-popup.png' | imageS3"
-          alt=""
-          width="16"
-          height="16"
-          (click)="closePopup()" />
+  <div class="col-lg-3">
+    <ng-template #modalManage let-modal>
+      <div class="box-address">
+        <div class="txt-right mb-4 cursor-pointer">
+          <img
+              [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
+              alt=""
+              width="16"
+              height="16"
+              (click)="closePopup()" />
+        </div>
+        <app-qr [address]="contractAddress || ''"> </app-qr>
       </div>
-      <app-qr [address]="contractAddress?.toString() || ''"> </app-qr>
-    </div>
-  </ng-template>
-</div>
+    </ng-template>
+  </div>
+</ng-container>
 
 <ng-template #noValues>
   <app-table-no-data></app-table-no-data>
