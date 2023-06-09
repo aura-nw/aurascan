@@ -162,7 +162,7 @@ export class ValidatorService extends CommonService {
   getUptimeIndexer(consAddress = null) {
     const operationsDoc = `
     query MyQuery($cons_address: String) {
-      serenity {
+      ${this.envDB} {
         block(order_by: {height: desc}, limit: 100) {
           height
           hash
