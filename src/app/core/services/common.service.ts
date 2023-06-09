@@ -22,6 +22,7 @@ export class CommonService {
   graphUrl = `${
     this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathGraphql
   }`;
+  envDB = this._environmentService.configValue.horoscopeSelectedChain;
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;

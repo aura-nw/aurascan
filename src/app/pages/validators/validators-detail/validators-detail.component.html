@@ -260,8 +260,8 @@
               </div>
             </ng-container>
             <ng-template #noValues>
-              <app-loading-sprint *ngIf="lengthBlockLoading"></app-loading-sprint>
-              <app-table-no-data *ngIf="!lengthBlockLoading"></app-table-no-data>
+              <app-loading-sprint *ngIf="isLoadingBlock"></app-loading-sprint>
+              <app-table-no-data *ngIf="!isLoadingBlock"></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
         </div>
@@ -289,25 +289,24 @@
             <div class="uptime-content m-lg-auto">
               <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
               <ng-container *ngIf="!lastBlockLoading">
-                <ng-container *ngFor="let itemBlock of arrBlockUptime; let index = index">
-                  <ng-container *ngIf="index < 100">
-                    <a
-                      class="block-uptime tool-tip"
-                      [ngStyle]="{
-                        'background-color':
-                          currentValidatorDetail?.status !== statusValidator.Active || itemBlock.isSyncFail
-                            ? 'none'
-                            : '#5EE6D0'
-                      }"
-                      [routerLink]="['/blocks', itemBlock?.height]"
-                      currentitem="false"
-                      matTooltip="{{ itemBlock?.height || 0 }}"
-                      [matTooltipPosition]="'above'">
-                      <div class="d-flex">
-                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
-                      </div>
-                    </a>
-                  </ng-container>
+                <ng-container *ngFor="let itemBlock of arrLastBlock; let index = index">
+                  <a
+                    class="block-uptime tool-tip"
+                    [ngClass]=""
+                    [ngStyle]="{
+                      'background-color':
+                        itemBlock?.isSign !== false && currentValidatorDetail?.status === statusValidator.Active
+                          ? '#5EE6D0'
+                          : ''
+                    }"
+                    href="/blocks/{{ itemBlock?.height }}"
+                    currentitem="false"
+                    matTooltip="{{ itemBlock?.height || 0 }}"
+                    [matTooltipPosition]="'above'">
+                    <div class="d-flex">
+                      <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                    </div>
+                  </a>
                 </ng-container>
               </ng-container>
             </div>
