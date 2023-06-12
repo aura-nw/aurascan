@@ -116,6 +116,8 @@ export class TokenInventoryComponent implements OnInit {
     if (next && this.nextKey && this.nextKey !== this.currentNextKey) {
       this.getNftData(this.nextKey, this.nextKeyId);
       this.currentNextKey = this.nextKey;
+    } else {
+      this.dataSourceMobile = this.nftData.data.slice(e.pageIndex * e.pageSize, e.pageIndex * e.pageSize + e.pageSize);
     }
   }
 

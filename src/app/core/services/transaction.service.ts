@@ -11,7 +11,6 @@ import { CommonService } from './common.service';
 export class TransactionService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-  envDB = this.environmentService.configValue.horoscopeSelectedChain;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
