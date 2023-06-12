@@ -4,7 +4,7 @@
   </div>
   <div *ngIf="!loading">
     <!-- Unverified -->
-    <ng-container *ngIf="codeIdDetail?.contract_verification?.length === 0">
+    <ng-container *ngIf="!codeIdDetail?.contract_verification || codeIdDetail?.contract_verification?.length === 0">
       <div class="d-flex content-contract body-02">
         <img
           [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"

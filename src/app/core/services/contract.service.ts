@@ -89,27 +89,34 @@ export class ContractService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  loadContractDetailv2(contractAddress): Observable<any> {
+  loadContractDetailV2(contractAddress): Observable<any> {
     const contractDoc = `
     query auratestnet_contract($contractAddress: String = null) {
       ${this.envDB} {
         smart_contract(limit: 1, where: {address: {_eq: $contractAddress}}) {
-          address,
-          creator,          
+          address
+          creator
+          instantiate_hash        
           cw721_contract {
             name
             symbol
-            smart_contract {
-              instantiate_hash
-            }
-          },
+          }
           code {
             type
             code_id
             code_id_verifications {
+              code_id
               compiler_version
-              verified_at
+              created_at
+              data_hash
+              execute_msg_schema
+              github_url
+              id
+              instantiate_msg_schema
+              query_msg_schema
+              updated_at
               verification_status
+              verified_at
             }
           }
         }
@@ -123,6 +130,41 @@ export class ContractService extends CommonService {
           contractAddress: contractAddress,
         },
         operationName: 'auratestnet_contract',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListContractByCode(payload): Observable<any> {
+    const contractDoc = `
+    query MyQuery($code_id: Int = 0) {
+      auratestnet {
+        smart_contract(where: {code_id: {_eq: $code_id}}, order_by: {updated_at: desc}) {
+          id
+          instantiate_hash
+          name
+          creator
+          created_at
+          code_id
+          address
+          code {
+            status
+            type
+            creator
+            code_id_verifications {
+              verified_at
+            }
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: contractDoc,
+        variables: {
+          code_id: payload.codeId,
+        },
+        operationName: 'MyQuery',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

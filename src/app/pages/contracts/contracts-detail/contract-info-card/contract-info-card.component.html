@@ -19,8 +19,8 @@
                 {{ contractDetail?.creator | cutStringPipe: 8:8 }}
               </a>
               at txn
-              <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.cw721_contract?.smart_contract?.instantiate_hash]">
-                {{ contractDetail?.cw721_contract?.smart_contract?.instantiate_hash | cutStringPipe: 8:8 }}
+              <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+                {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
               </a>
             </div>
           </td>
@@ -33,8 +33,8 @@
               {{ contractDetail?.creator | cutStringPipe: 8:8 }}
             </a>
             at txn
-            <a class="text--primary" [routerLink]="['/transaction', contractDetail?.cw721_contract?.smart_contract?.instantiate_hash]">
-              {{ contractDetail?.cw721_contract?.smart_contract?.instantiate_hash | cutStringPipe: 8:8 }}
+            <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+              {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
             </a>
           </td>
         </tr>
