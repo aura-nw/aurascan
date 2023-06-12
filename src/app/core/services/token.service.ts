@@ -13,7 +13,6 @@ import { CommonService } from './common.service';
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
-  envDB = this.environmentService.configValue.horoscopeSelectedChain;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);

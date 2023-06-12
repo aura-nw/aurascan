@@ -23,6 +23,7 @@ export interface IConfiguration {
   horoscopeUrl: string;
   horoscopePathGraphql: string;
   horoscopePathApi: string;
+  notice: { content: string; url: string };
 }
 
 @Injectable()
@@ -47,6 +48,7 @@ export class EnvironmentService {
     horoscopeUrl: '',
     horoscopePathGraphql: '',
     horoscopePathApi: '',
+    notice: { content: '', url: '' },
   });
 
   get configValue(): IConfiguration {
@@ -83,6 +85,7 @@ export class EnvironmentService {
           horoscopeUrl: config['horoscopeUrl'],
           horoscopePathGraphql: config['horoscopePathGraphql'],
           horoscopePathApi: config['horoscopePathApi'],
+          notice: config['notice'] || { content: '', url: '' },
         };
 
         this.config.next(data);
