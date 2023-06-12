@@ -32,6 +32,7 @@ export class NftListComponent implements OnChanges {
   totalValue = 0;
   nextKey = null;
   currentKey = null;
+  isHandleSearch = false;
 
   constructor(
     private accountService: AccountService,
@@ -91,6 +92,7 @@ export class NftListComponent implements OnChanges {
       () => {},
       () => {
         this.loading = false;
+        this.isHandleSearch = false;
       },
     );
   }
@@ -104,6 +106,10 @@ export class NftListComponent implements OnChanges {
   }
 
   searchTokenNft(): void {
+    if (this.isHandleSearch) {
+      return;
+    }
+    this.isHandleSearch = true;
     if (this.pageData.pageIndex !== 0) {
       this.pageData.pageIndex = 0;
     } else {

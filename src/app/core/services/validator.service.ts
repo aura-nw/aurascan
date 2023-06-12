@@ -15,7 +15,6 @@ import { map } from 'rxjs/operators';
 export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-  envDB = this.environmentService.configValue.horoscopeSelectedChain;
   stakingAPRSubject: BehaviorSubject<number>;
 
   constructor(
@@ -85,7 +84,7 @@ export class ValidatorService extends CommonService {
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        variable: {
+        variables: {
           limit: payload?.limit || 1,
           offset: payload?.offset || 0,
           operatorAddress: payload?.operatorAddress || null,
@@ -158,6 +157,34 @@ export class ValidatorService extends CommonService {
       block = 'latest';
     }
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BLOCK}/${block}`);
+  }
+
+  getUptimeIndexer(consAddress = null, limit = 100) {
+    const operationsDoc = `
+    query MyQuery($cons_address: String, $limit: Int = 100) {
+      ${this.envDB} {
+        block(order_by: {height: desc}, limit: $limit) {
+          height
+          hash
+          block_signatures(where: {validator_address: {_eq: $cons_address}}) {
+            signature
+            block_id_flag
+            timestamp
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          cons_address: consAddress,
+          limit: limit
+        },
+        operationName: 'MyQuery',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListUndelegateLCD(address) {
