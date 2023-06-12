@@ -33,15 +33,15 @@ export class ContractService extends CommonService {
     payload.name = null;
     let updateQuery = '';
 
-    if (payload.keyword.length >= LENGTH_CHARACTER.CONTRACT) {
+    if (payload.keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
       payload.address = payload.keyword;
-    } else if (payload.keyword.length >= LENGTH_CHARACTER.ADDRESS) {
+    } else if (payload.keyword?.length >= LENGTH_CHARACTER.ADDRESS) {
       payload.creator = payload.keyword;
     } else if (/^\d+$/.test(payload.keyword)) {
       payload.codeId = +payload.keyword;
       payload.name = '%' + payload.keyword + '%';
       updateQuery = `_or: [{name: {_like: "${payload.name}"}}, {code_id: {_eq: ${payload.codeId}}}],`;
-    } else if (payload.keyword.length > 0) {
+    } else if (payload.keyword?.length > 0) {
       payload.name = '%' + payload.keyword + '%';
       updateQuery = `name: {_like: "${payload.name}"},`;
     } else {

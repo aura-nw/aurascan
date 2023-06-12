@@ -39,7 +39,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   pageIndex = 0;
-  offsetApi = 0;
   dataSource = new MatTableDataSource<any>();
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyStatus = VerificationStatus;
@@ -71,7 +70,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.offsetApi = 0;
         this.pageChange.selectPage(0);
       });
   }
@@ -84,12 +82,12 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     let payload = {
       limit: 20,
       keyword: this.textSearch,
-      contractType: this.filterButtons.length > 0 ? this.filterButtons : null,
+      contractType: this.filterButtons?.length ? this.filterButtons : null,
       offset: this.pageIndex * this.pageData.pageSize,
     };
     this.contractService.getListContract(payload).subscribe((res) => {
-      if (res?.smart_contract.length > 0) {
-        res.smart_contract.forEach((item) => {
+      if (res?.smart_contract?.length) {
+        res?.smart_contract.forEach((item) => {
           item.verified_at = this.datePipe.transform(
             item.code?.code_id_verifications[0]?.verified_at,
             DATEFORMAT.DATETIME_UTC,
@@ -98,18 +96,12 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           item.compiler_version = item.code?.code_id_verifications[0]?.compiler_version;
           item.contract_verification = item.code.code_id_verifications[0]?.verification_status;
         });
-        if (!this.listContract || this.textSearch) {
-          this.listContract = [...res.smart_contract];
-        } else {
-          this.listContract = [...this.listContract, ...res.smart_contract];
-        }
+        this.dataSource.data = [...res.smart_contract];
         this.pageData.length = res.smart_contract_aggregate?.aggregate?.count;
-        this.offsetApi = this.listContract.length;
-
-        this.dataSource.data = this.listContract.slice(
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-        );
+      } else {
+        this.dataSource.data = [];
+        this.listContract = [];
+        this.pageData.length = 0;
       }
     });
   }
@@ -132,6 +124,9 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   resetFilterSearch() {
     this.textSearch = '';
+    this.filterButtons = [];
+    this.dataSource.data = [];
+    this.pageData.length = 0;
     this.onKeyUp();
   }
 
