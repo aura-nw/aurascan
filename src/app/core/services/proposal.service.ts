@@ -57,7 +57,7 @@ export class ProposalService extends CommonService {
     const operationsDoc = `
     query auratestnet_proposal($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $type: String = null) {
       ${this.envDB} {
-        proposal(limit: $limit, where: {proposal_id: {_eq: $proposalId, _lt: $nextKey}, type: {_eq: $type}}, order_by: {proposal_id: $order}) {
+        proposal(limit: $limit, where: {proposal_id: {_eq: $proposalId, _lt: $nextKey}, type: {_eq: $type}, status: {_neq: "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT"}}, order_by: {proposal_id: $order}) {
           content
           deposit_end_time
           description
