@@ -48,7 +48,7 @@ export class ContractService extends CommonService {
       updateQuery = '';
     }
     const operationsDoc = `
-    query auratestnet_smart_contract($limit: Int = 100, $offset: Int = 10, $type: [String!], $address: String = null, $creator: String =null) {
+    query auratestnet_smart_contract($limit: Int = 100, $offset: Int = 0, $type: [String!], $address: String = null, $creator: String =null) {
       ${this.envDB} {
         smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {code: {type: {_in: $type}}, ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
           address

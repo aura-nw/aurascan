@@ -23,8 +23,48 @@ export class TokenService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/cw20-tokens`, payload);
   }
 
-  getListCW721Token(payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw721-tokens`, payload);
+  // getListCW721Token(payload): Observable<any> {
+  //   return this.http.post<any>(`${this.apiUrl}/cw721-tokens`, payload);
+  // }
+
+  getListCW721Token(payload) {
+    const operationsDoc = `
+    query auratestnet_tokenCW721($limit: Int = 100, $offset: Int = 10, $type: [String!], $address: String = null, $creator: String =null) {
+      ${this.envDB} {
+         cw721_contract(order_by: {updated_at: desc}) {
+          name
+          smart_contract {
+            address
+          }
+          total_tx: cw721_activities_aggregate {
+            aggregate {
+              count
+            }
+          }
+          transfers_24h: cw721_activities_aggregate(where: {tx: {timestamp: {_gte: "2023/06/07"}}}) {
+            aggregate {
+              count
+            }
+          }
+          cw721_contract_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+      }
+    }
+     `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          offset: payload.offset,
+        },
+        operationName: 'auratestnet_tokenCW721',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getTokenDetail(address): Observable<any> {
