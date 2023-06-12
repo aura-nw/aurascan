@@ -1,0 +1,37 @@
+.custom-paginator {
+  .pagination {
+    .page-item {
+      background: transparent;
+    }
+  }
+}
+
+::ng-deep .pagination {
+  .page-item {
+    margin: 0 2px;
+    min-width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--aura-white);
+    padding: 0 4px;
+
+    .page-link {
+      background: transparent;
+      border: none;
+    }
+
+    &.active {
+      color: var(--aura-primary);
+      border: 1px solid var(--aura-primary);
+      border-radius: 4px;
+    }
+
+    &.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+}
