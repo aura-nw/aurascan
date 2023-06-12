@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
+import * as _ from 'lodash';
+import { CONTRACT_RESULT, TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { ContractService } from 'src/app/core/services/contract.service';
 @Component({
   selector: 'app-code-id-detail',
@@ -41,7 +43,18 @@ export class CodeIdDetailComponent implements OnInit {
 
   getCodeIdDetail() {
     this.contractService.getCodeIDDetail(this.codeId).subscribe((res) => {
-      this.codeIdDetail = res.data;
+      if (res.data?.length > 0) {
+        let data = res.data[0];
+        data.instantiates = data.smart_contracts?.length || 0;
+        data.tx_hash = data.store_hash;
+        data.verified_at = _.get(data, 'code_id_verifications[0].verified_at');
+        data.contract_verification = _.get(data, 'code_id_verifications[0].verification_status');
+        if (data.type === ContractRegisterType.CW721 && data.smart_contracts[0]?.name === TYPE_CW4973) {
+          data.type = ContractRegisterType.CW4973;
+        }
+
+        this.codeIdDetail = data;
+      }
     });
   }
 }
