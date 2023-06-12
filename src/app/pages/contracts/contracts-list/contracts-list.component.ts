@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ContractRegisterType, VerificationStatus } from 'src/app/core/constants/contract.enum';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
@@ -41,13 +41,13 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   pageIndex = 0;
   dataSource = new MatTableDataSource<any>();
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  contractVerifyStatus = VerificationStatus;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   filterButtons = [];
   searchSubject = new Subject();
   destroy$ = new Subject();
   contractRegisterType = ContractRegisterType;
   listContract = [];
+  contractVerifyType = ContractVerifyType;
 
   constructor(
     public translate: TranslateService,
