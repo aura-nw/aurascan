@@ -41,7 +41,7 @@
   <app-contract-content
     *ngIf="contractDetail"
     [contractsAddress]="contractAddress + ''"
-    [contractTypeData]="contractDetail.code.code_id_verifications[0].verification_status"></app-contract-content>
+    [contractTypeData]="contractDetail.code.code_id_verifications[0]?.verification_status"></app-contract-content>
 
   <div class="col-lg-3">
     <ng-template #modalManage let-modal>

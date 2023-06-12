@@ -134,3 +134,4 @@ export const LIST_ZEROES = [
   },
 ];
 
+export const TYPE_CW4973 = 'crates.io:cw4973';

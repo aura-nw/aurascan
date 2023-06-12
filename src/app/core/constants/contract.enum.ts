@@ -10,7 +10,7 @@ export enum ContractVerifyType {
   Unverified = 'UNVERIFIED',
   Verified = 'SUCCESS',
   VerifiedFail = 'FAIL',
-  Verifying = 'VERIFYING'
+  Verifying = 'VERIFYING',
 }
 
 export enum ContractTransactionType {

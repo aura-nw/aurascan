@@ -41,7 +41,7 @@ export class ContractComponent implements OnInit {
             this.isVerifying = false;
           }
 
-          return this.contractService.checkVerified(this.contractDetail.code_id);
+          return this.contractService.checkVerified(this.contractDetail?.code?.code_id);
         }),
       )
       .subscribe(({ data }) => {

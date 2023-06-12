@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
-import { ResponseDto } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
@@ -29,8 +28,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
     if (this.contractAddress) {
-      this.contractService.loadContractDetailv2(this.contractAddress).subscribe((res) => {
-        
+      this.contractService.loadContractDetailV2(this.contractAddress).subscribe((res) => {
         if (res?.smart_contract[0]) {
           this.contractService.setContract(res?.smart_contract[0]);
         } else {
@@ -40,6 +38,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     }
     this.subscription = this.contractService.contractObservable.subscribe((res) => {
       if (res) {
+        res.tx_hash = res.instantiate_hash;
         this.contractDetail = res;
       } else {
         this.contractDetail = null;
