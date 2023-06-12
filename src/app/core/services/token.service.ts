@@ -34,25 +34,6 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
   }
 
-  getListTokenNFTFromIndexer(payload): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      owner: payload.owner,
-      tokenId: payload.token_id,
-      contractAddress: payload.contractAddress,
-      pageLimit: payload.pageLimit,
-      pageOffset: payload.pageOffset,
-      contractType: payload.contractType,
-      isBurned: false,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-    return this.http.get<any>(`${this.indexerUrl}/asset/getByOwner`, {
-      params,
-    });
-  }
-
   getListTokenNFTFromIndexerV2(payload): Observable<any> {
     const operationsDoc = `
     query Query(
