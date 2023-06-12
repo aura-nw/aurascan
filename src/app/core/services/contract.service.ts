@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import axios from 'axios';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { SmartContractListReq } from 'src/app/core/models/contract.model';
+import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import {map} from "rxjs/operators";
-import axios from "axios";
-import {LCD_COSMOS} from "src/app/core/constants/url.constant";
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -15,8 +16,6 @@ export class ContractService extends CommonService {
   contractObservable: Observable<any>;
   chainInfo = this.environmentService.configValue.chain_info;
   apiUrl = `${this.environmentService.configValue.beUri}`;
-  envDB = this.environmentService.configValue.horoscopeSelectedChain;
-  envDB = this.environmentService.configValue.horoscopeSelectedChain;
 
   get contract() {
     return this.contract$.value;
@@ -89,24 +88,6 @@ export class ContractService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
-  
-    setContract(contract: any) {
-    this.contract$.next(contract);
-  }
-
-  verifyCodeID(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/verify-code-id`, data);
-  }
-
-  checkVerified(codeID: string): Observable<IResponsesTemplates<any>> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/verify/status/${codeID}`);
-  }
-
-  loadContractDetail(contractAddress): void {
-    this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`).subscribe((res) => {
-      this.contract$.next(res.data);
-    });
-  }
 
   loadContractDetailv2(contractAddress): Observable<any> {
     const contractDoc = `
@@ -125,6 +106,11 @@ export class ContractService extends CommonService {
           code {
             type
             code_id
+            code_id_verifications {
+              compiler_version
+              verified_at
+              verification_status
+            }
           }
         }
       }
@@ -134,15 +120,33 @@ export class ContractService extends CommonService {
       .post<any>(this.graphUrl, {
         query: contractDoc,
         variables: {
-          contractAddress: contractAddress
+          contractAddress: contractAddress,
         },
         operationName: 'auratestnet_contract',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getContractBalance(contractAddress){
+  getContractBalance(contractAddress) {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BALANCE}/${contractAddress}`);
+  }
+
+  setContract(contract: any) {
+    this.contract$.next(contract);
+  }
+
+  verifyCodeID(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/contracts/verify-code-id`, data);
+  }
+
+  checkVerified(codeID: string): Observable<IResponsesTemplates<any>> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/verify/status/${codeID}`);
+  }
+
+  loadContractDetail(contractAddress): void {
+    this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`).subscribe((res) => {
+      this.contract$.next(res.data);
+    });
   }
 
   registerContractType(data: any): Observable<any> {

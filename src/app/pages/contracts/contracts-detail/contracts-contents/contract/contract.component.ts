@@ -31,11 +31,11 @@ export class ContractComponent implements OnInit {
   getContractDetail(notCheck = false) {
     this.contractService.contractObservable
       .pipe(
-        mergeMap(({ data }) => {
+        mergeMap((data) => {
           if (data) {
             this.contractDetail = data;
           }
-          if (data?.status === 'verifying' && !notCheck) {
+          if (data?.code?.code_id_verifications[0]?.verification_status === 'verifying' && !notCheck) {
             this.isVerifying = true;
           } else {
             this.isVerifying = false;

@@ -41,18 +41,18 @@
   <app-contract-content
     *ngIf="contractDetail"
     [contractsAddress]="contractAddress + ''"
-    [contractTypeData]="contractDetail.contract_verification"></app-contract-content>
+    [contractTypeData]="contractDetail.code.code_id_verifications[0].verification_status"></app-contract-content>
 
   <div class="col-lg-3">
     <ng-template #modalManage let-modal>
       <div class="box-address">
         <div class="txt-right mb-4 cursor-pointer">
           <img
-              [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
-              alt=""
-              width="16"
-              height="16"
-              (click)="closePopup()" />
+            [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
+            alt=""
+            width="16"
+            height="16"
+            (click)="closePopup()" />
         </div>
         <app-qr [address]="contractAddress || ''"> </app-qr>
       </div>
