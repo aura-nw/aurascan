@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as _ from 'lodash';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ContractService } from 'src/app/core/services/contract.service';
 
@@ -12,8 +13,8 @@ export class VerifyCodeIdComponent implements OnInit {
   @Input() codeId: any;
   loading = true;
   codeIdDetail: any;
-  contractStatus: any = ContractVerifyType.Unverified;
   contractVerifyType = ContractVerifyType;
+
   constructor(private contractService: ContractService, private router: Router) {}
 
   ngOnInit(): void {
@@ -40,10 +41,22 @@ export class VerifyCodeIdComponent implements OnInit {
   }
 
   getCodeIdDetail() {
-    this.contractService.getCodeIDDetail(this.codeId).subscribe((res) => {
-      this.codeIdDetail = res.data;
-      this.contractStatus = this.codeIdDetail?.contract_verification;
-      this.loading = false;
-    });
+    this.contractService.getCodeIDDetail(this.codeId).subscribe(
+      (res) => {
+        if (res.data?.length > 0) {
+          let data = res.data[0];
+          data.compiler_version = _.get(data, 'code_id_verifications[0].compiler_version');
+          data.verified_at = _.get(data, 'code_id_verifications[0].verified_at');
+          data.contract_verification = _.get(data, 'code_id_verifications[0].verification_status');
+          data.url = _.get(data, 'code_id_verifications[0].github_url');
+
+          this.codeIdDetail = data;
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 }
