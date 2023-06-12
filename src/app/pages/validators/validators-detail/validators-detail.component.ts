@@ -199,7 +199,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getBlocksMiss(address = null, lastBlock = []) {
-    this.validatorService.getUptimeIndexer(address).subscribe((res) => {
+    //check is query last block
+    const limit = lastBlock?.length > 0 ? 5 : 100;
+    this.validatorService.getUptimeIndexer(address, limit).subscribe((res) => {
       this.arrBlockUptime = res?.block?.filter((h) => h.block_signatures.length === 0);
       if (this.arrBlockUptime?.length > 0 && lastBlock?.length === 0) {
         this.arrLastBlock?.forEach((element) => {
