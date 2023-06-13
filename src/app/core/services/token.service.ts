@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from '../constants/url.constant';
@@ -32,25 +31,6 @@ export class TokenService extends CommonService {
 
   getTokenCW721Detail(address): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
-  }
-
-  getListTokenNFTFromIndexer(payload): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      owner: payload.owner,
-      tokenId: payload.token_id,
-      contractAddress: payload.contractAddress,
-      pageLimit: payload.pageLimit,
-      pageOffset: payload.pageOffset,
-      contractType: payload.contractType,
-      isBurned: false,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-    return this.http.get<any>(`${this.indexerUrl}/asset/getByOwner`, {
-      params,
-    });
   }
 
   getListTokenNFTFromIndexerV2(payload): Observable<any> {
@@ -100,6 +80,29 @@ export class TokenService extends CommonService {
           owner: payload?.owner,
         },
         operationName: 'Query',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  countTotalTokenCW721(contract_address): Observable<any> {
+    const operationsDoc = `
+    query MyQuery($contract_address: String) {
+      ${this.envDB} {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          contract_address: contract_address,
+        },
+        operationName: 'MyQuery',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

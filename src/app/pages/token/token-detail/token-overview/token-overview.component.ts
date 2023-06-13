@@ -15,7 +15,7 @@ export class TokenOverviewComponent implements OnInit {
   params = '';
   contractType = ContractRegisterType;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  
+
   constructor(
     public global: Globals,
     private tokenService: TokenService,
@@ -28,6 +28,9 @@ export class TokenOverviewComponent implements OnInit {
       this.params = params?.a || '';
     });
     this.getTotalHolder();
+    if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
+      this.getTotalSupply();
+    }
 
     //set price change
     this.tokenDetail['change'] = this.tokenDetail.price_change_percentage_24h;
@@ -46,10 +49,18 @@ export class TokenOverviewComponent implements OnInit {
   }
 
   getTotalHolder() {
-    this.tokenService.getListTokenHolder(20, 0, this.tokenDetail.type, this.tokenDetail?.contract_address).subscribe((res) => {
-      if (res && res.data?.resultAsset?.length > 0) {
-        this.tokenDetail['holder'] = res.data?.resultCount || 0;
-      }
+    this.tokenService
+      .getListTokenHolder(20, 0, this.tokenDetail.type, this.tokenDetail?.contract_address)
+      .subscribe((res) => {
+        if (res && res.data?.resultAsset?.length > 0) {
+          this.tokenDetail['holder'] = res.data?.resultCount || 0;
+        }
+      });
+  }
+
+  getTotalSupply() {
+    this.tokenService.countTotalTokenCW721(this.tokenDetail?.contract_address).subscribe((res) => {
+      this.tokenDetail.holder = res.cw721_token_aggregate?.aggregate?.count || this.tokenDetail.holder || 0;
     });
   }
 }
