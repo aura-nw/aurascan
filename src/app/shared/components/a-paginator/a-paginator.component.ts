@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-a-paginator',
@@ -7,12 +7,10 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrls: ['./a-paginator.component.scss'],
 })
 export class APaginatorComponent {
-  @Input() paginator: MatPaginator;
+  @Input() paginator: PageEvent;
   @Input() length: number;
 
-  constructor() {}
+  @Output() pageChange = new EventEmitter();
 
-  pageChange(e) {
-    console.log(e);
-  }
+  constructor() {}
 }

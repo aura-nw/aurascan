@@ -98,6 +98,57 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getProposalData2({ limit, offset, proposalId }: { limit: number; offset: number; proposalId?: number }) {
+    const operationsDoc = `
+    query auratestnet_proposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $type: String = null, $n_status : String = "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT") {
+      ${this.envDB} {
+        proposal(limit: $limit, offset: $offset, where: {proposal_id: {_eq: $proposalId}, type: {_eq: $type}, status: {_neq: $n_status}}, order_by: {proposal_id: $order}) {
+          content
+          deposit_end_time
+          description
+          initial_deposit
+          proposal_id
+          proposer_address
+          count_vote
+          proposer {
+            description
+            operator_address
+            account_address
+          }
+          status
+          submit_time
+          tally
+          title
+          total_deposit
+          turnout
+          type
+          updated_at
+          voting_end_time
+          voting_start_time
+        }
+        proposal_aggregate(where: {proposal_id: {_eq: $proposalId}, type: {_eq: $type}, status: {_neq: "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT"}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          n_status: 'PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT',
+          order: 'desc',
+          limit: limit,
+          offset: offset,
+          proposalId: proposalId,
+        },
+        operationName: 'auratestnet_proposal',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListVoteFromIndexer(payload, option): Observable<any> {
     const operationsDoc = `
     query auratestnet_vote($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {

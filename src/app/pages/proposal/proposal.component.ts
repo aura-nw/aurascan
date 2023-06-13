@@ -53,7 +53,7 @@ export class ProposalComponent implements OnInit {
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 10,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
+    pageIndex: 1,
   };
   proposalVotes: {
     proId: number;
@@ -78,7 +78,8 @@ export class ProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getListProposal();
+    // this.getListProposal();
+    this.getListProposal2({ index: 1 });
     this.walletService.wallet$.subscribe((wallet) => this.getFourLastedProposal());
   }
 
@@ -149,6 +150,25 @@ export class ProposalComponent implements OnInit {
       );
       this.length = this.dataSource.data.length;
     });
+  }
+
+  getListProposal2({ index }) {
+    this.proposalService
+      .getProposalData2({
+        limit: 10,
+        offset: (index - 1) * 10,
+      })
+      .subscribe((res) => {
+        if (res?.proposal) {
+          let tempDta = res.proposal;
+          tempDta.forEach((pro) => {
+            pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
+          });
+
+          this.dataSource.data = tempDta;
+        }
+        this.length = res.proposal_aggregate.aggregate.count;
+      });
   }
 
   getStatus(key: string) {
@@ -268,7 +288,26 @@ export class ProposalComponent implements OnInit {
     } else this.dataSource.paginator = e;
   }
 
+  pageEvent2(index: number) {
+    // console.log(index);
+
+    // index = index - 1;
+
+    // const { length, pageSize } = this.pageData;
+    // const next = length <= (index + 2) * pageSize;
+    // this.dataSourceMobile = this.dataSource.data.slice(index * pageSize, index * pageSize + pageSize);
+
+    // if (next && this.nextKey) {
+    //   this.getListProposal(this.nextKey);
+    // }
+    // this.pageData.pageIndex = index;
+
+    this.getListProposal2({ index });
+  }
+
   pageEvent(e: PageEvent): void {
+    console.log(e);
+
     const { length, pageIndex, pageSize } = e;
     const next = length <= (pageIndex + 2) * pageSize;
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);

@@ -1,7 +1,7 @@
 <ng-container *ngIf="paginator">
-    <ngb-pagination [(page)]="paginator.pageIndex" [pageSize]="paginator.pageSize" [collectionSize]="100"
-        class="d-flex justify-content-end custom-paginator" (pageChange)="pageChange($event)" [boundaryLinks]="true"
-        [maxSize]="5" [ellipses]="false">
+    <ngb-pagination [(page)]="paginator.pageIndex" [pageSize]="paginator.pageSize" [collectionSize]="length"
+        class="d-flex justify-content-end custom-paginator" (pageChange)="pageChange.emit($event)"
+        [boundaryLinks]="true" [maxSize]="5" [ellipses]="false" [rotate]="true">
 
 
         <ng-template ngbPaginationPrevious="">
@@ -14,8 +14,6 @@
 
         <ng-template ngbPaginationFirst>First</ng-template>
         <ng-template ngbPaginationLast>Last</ng-template>
-        <ng-template ngbPaginationNumber let-p>
-            {{ p }}
-        </ng-template>
+        <ng-template ngbPaginationNumber let-p>{{ p }}</ng-template>
     </ngb-pagination>
 </ng-container>
