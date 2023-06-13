@@ -6,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
@@ -25,27 +24,30 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'contract_address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true },
-    { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
+    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true },
+    { matColumnDef: 'name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    //{ matColumnDef: 'project_name', headerCellDef: 'Project' },
     { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
     { matColumnDef: 'contract_verification', headerCellDef: 'Verified' },
-    { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account', isShort: true },
+    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', isShort: true },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  pageData: PageEvent;
-  pageSize = 20;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   pageIndex = 0;
-  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<any>();
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  contractVerifyType = ContractVerifyType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   filterButtons = [];
   searchSubject = new Subject();
   destroy$ = new Subject();
   contractRegisterType = ContractRegisterType;
+  listContract = [];
+  contractVerifyType = ContractVerifyType;
 
   constructor(
     public translate: TranslateService,
@@ -78,28 +80,28 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   getListContract() {
     let payload = {
-      limit: this.pageSize,
-      offset: this.pageIndex * this.pageSize,
+      limit: 20,
       keyword: this.textSearch,
-      contractType: this.filterButtons,
+      contractType: this.filterButtons?.length ? this.filterButtons : null,
+      offset: this.pageIndex * this.pageData.pageSize,
     };
-
     this.contractService.getListContract(payload).subscribe((res) => {
-      this.pageData = {
-        length: res?.meta?.count,
-        pageSize: 20,
-        pageIndex: PAGE_EVENT.PAGE_INDEX,
-      };
-      if (res?.data?.length > 0) {
-        res.data.forEach((item) => {
-          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          if (item.result === CONTRACT_RESULT.INCORRECT || !item.type) {
-            item.type = '-';
-          } else if (item.result === CONTRACT_RESULT.TBD) {
-            item.type = CONTRACT_RESULT.TBD;
-          }
+      if (res?.smart_contract?.length) {
+        res?.smart_contract.forEach((item) => {
+          item.verified_at = this.datePipe.transform(
+            item.code?.code_id_verifications[0]?.verified_at,
+            DATEFORMAT.DATETIME_UTC,
+          );
+          item.type = item.code.type;
+          item.compiler_version = item.code?.code_id_verifications[0]?.compiler_version;
+          item.contract_verification = item.code.code_id_verifications[0]?.verification_status;
         });
-        this.dataSource = res.data;
+        this.dataSource.data = [...res.smart_contract];
+        this.pageData.length = res.smart_contract_aggregate?.aggregate?.count;
+      } else {
+        this.dataSource.data = [];
+        this.listContract = [];
+        this.pageData.length = 0;
       }
     });
   }
@@ -122,6 +124,9 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   resetFilterSearch() {
     this.textSearch = '';
+    this.filterButtons = [];
+    this.dataSource.data = [];
+    this.pageData.length = 0;
     this.onKeyUp();
   }
 

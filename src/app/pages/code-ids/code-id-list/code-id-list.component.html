@@ -108,13 +108,7 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'type'">
                     <div>
-                      {{
-                        data['result'] === contractResult.CORRECT
-                          ? data[template.matColumnDef]
-                          : data['result'] === contractResult.TBD
-                          ? contractResult.TBD
-                          : '-'
-                      }}
+                      {{ data[template.matColumnDef] || '-' }}
                     </div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'instantiates'">
@@ -127,8 +121,12 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'verified_at'">
                     <div class="d-flex align-items-center ml-1">
-                      <span *ngIf="(data['verified_at'] && data['contract_verification'] === contractVerifyType.Verified); else unVerify">
-                        {{data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss'}}
+                      <span
+                        *ngIf="
+                          data['verified_at'] && data['contract_verification'] === contractVerifyType.Verified;
+                          else unVerify
+                        ">
+                        {{ data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss' }}
                       </span>
                       <ng-template #unVerify>
                         <span #unVerify>-</span>

@@ -2,9 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
-import { ResponseDto } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-contracts-detail',
@@ -12,9 +10,8 @@ import { balanceOf } from 'src/app/core/utils/common/parsing';
   styleUrls: ['./contracts-detail.component.scss'],
 })
 export class ContractsDetailComponent implements OnInit, OnDestroy {
-  contractAddress: string | number;
+  contractAddress: string;
   contractDetail: any;
-  priceToken = 0;
   modalReference: any;
   subscription: Subscription;
 
@@ -30,12 +27,19 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
-    this.contractService.loadContractDetail(this.contractAddress);
-    this.subscription = this.contractService.contractObservable.subscribe((res: ResponseDto) => {
-      if (res?.data) {
-        this.contractDetail = res?.data;
-        this.contractDetail.balance = balanceOf(this.contractDetail?.balance);
-        this.contractDetail.price = this.contractDetail?.balance * this.priceToken || 0;
+    if (this.contractAddress) {
+      this.contractService.loadContractDetailV2(this.contractAddress).subscribe((res) => {
+        if (res?.smart_contract[0]) {
+          this.contractService.setContract(res?.smart_contract[0]);
+        } else {
+          this.contractService.setContract(null);
+        }
+      });
+    }
+    this.subscription = this.contractService.contractObservable.subscribe((res) => {
+      if (res) {
+        res.tx_hash = res.instantiate_hash;
+        this.contractDetail = res;
       } else {
         this.contractDetail = null;
       }
