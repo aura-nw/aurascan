@@ -1,15 +1,15 @@
 <ng-container *ngIf="paginator">
     <ngb-pagination [(page)]="paginator.pageIndex" [pageSize]="paginator.pageSize" [collectionSize]="length"
-        class="d-flex justify-content-end custom-paginator" (pageChange)="pageChange.emit($event)"
-        [boundaryLinks]="true" [maxSize]="5" [ellipses]="false" [rotate]="true">
+        (pageChange)="pageChange.emit($event)" [boundaryLinks]="true" [maxSize]="maxSize" [ellipses]="false"
+        [rotate]="true">
 
 
         <ng-template ngbPaginationPrevious="">
-            <img src="../../../../assets/icons/icons-svg/white/chevron-left.svg" alt="">
+            <img src="../../../../assets/icons/icons-svg/white/chevron-left.svg" alt="Previous">
         </ng-template>
 
         <ng-template ngbPaginationNext>
-            <img src="../../../../assets/icons/icons-svg/white/chevron-right.svg" alt="">
+            <img src="../../../../assets/icons/icons-svg/white/chevron-right.svg" alt="Next">
         </ng-template>
 
         <ng-template ngbPaginationFirst>First</ng-template>

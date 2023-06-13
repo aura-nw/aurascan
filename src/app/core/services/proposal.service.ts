@@ -98,7 +98,17 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getProposalData2({ limit, offset, proposalId }: { limit: number; offset: number; proposalId?: number }) {
+  getProposalData2({
+    limit,
+    offset,
+    proposalId,
+    type,
+  }: {
+    limit: number;
+    offset?: number;
+    proposalId?: number;
+    type?: string;
+  }) {
     const operationsDoc = `
     query auratestnet_proposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $type: String = null, $n_status : String = "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT") {
       ${this.envDB} {
@@ -140,9 +150,10 @@ export class ProposalService extends CommonService {
         variables: {
           n_status: 'PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT',
           order: 'desc',
-          limit: limit,
-          offset: offset,
-          proposalId: proposalId,
+          limit,
+          offset,
+          proposalId,
+          type,
         },
         operationName: 'auratestnet_proposal',
       })
