@@ -10,8 +10,8 @@
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)">
-            <span class="h5 mb-0" [class.text--white]="customNav.activeId === index"
-              >{{ tab.value }} ({{ countVote.get(tab.key) }})
+            <span class="h5 mb-0" [class.text--white]="customNav.activeId === index">
+              {{ tab.value }} ({{ countVote.get(tab.key) }})
             </span>
           </a>
         </li>
@@ -21,8 +21,8 @@
       <app-proposal-table
         *ngIf="!voteDataListLoading"
         [tabId]="currentTabId"
-        [type]="proposalVote"
-        [length]="countVote.get(currentTabId)"
+        [type]="PROPOSAL_TABLE_MODE_VOTES"
+        [length]="countVote.get(currentTabId == 'all' ? '' : currentTabId)"
         [data]="voteDataList"
         (pageEventChange)="pageEventChange($event)">
       </app-proposal-table>

@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import { combineLatest } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
@@ -39,29 +39,17 @@ export class VotesComponent implements OnChanges {
 
   voteDataListLoading = true;
   isFirstChange = false;
-  proposalVote = PROPOSAL_TABLE_MODE.VOTES;
-
-  voteData = {
-    all: null,
-    yes: null,
-    abstain: null,
-    no: null,
-    noWithVeto: null,
-  };
-
-  countTotal = {
-    all: 0,
-    yes: 0,
-    abstain: 0,
-    no: 0,
-    noWithVeto: 0,
-  };
+  PROPOSAL_TABLE_MODE_VOTES = PROPOSAL_TABLE_MODE.VOTES;
 
   currentTabId = 'all';
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
+  constructor(
+    private proposalService: ProposalService,
+    private layout: BreakpointObserver,
+    private cdr: ChangeDetectorRef,
+  ) {
     // this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
     //   if (event) {
     //     this.getVotesList();
@@ -82,15 +70,23 @@ export class VotesComponent implements OnChanges {
       this.proposalService.getListVoteFromIndexer2(payloads, null).subscribe((res) => {
         this.voteDataListLoading = false;
         this.voteDataList = res.vote;
-        this.countTotal.all = res.vote_aggregate.aggregate.count;
       });
 
-      this.proposalService.getProposalVoteTotal(this.proposalDetail.proposal_id).subscribe((res) => {
-        this.countVote.set('', res['ALL']?.aggregate.count || 0);
-        this.countVote.set(VOTE_OPTION.YES, res[VOTE_OPTION.YES]?.aggregate.count || 0);
-        this.countVote.set(VOTE_OPTION.ABSTAIN, res[VOTE_OPTION.ABSTAIN]?.aggregate.count || 0);
-        this.countVote.set(VOTE_OPTION.NO, res[VOTE_OPTION.NO]?.aggregate.count || 0);
-        this.countVote.set(VOTE_OPTION.NO_WITH_VETO, res[VOTE_OPTION.NO_WITH_VETO]?.aggregate.count || 0);
+      this.proposalService.getProposalVoteTotal(this.proposalDetail.proposal_id).subscribe({
+        next: (res) => {
+          if (res) {
+            this.countVote.set('', res['ALL']?.aggregate.count || 0);
+            this.countVote.set(VOTE_OPTION.YES, res[VOTE_OPTION.YES]?.aggregate.count || 0);
+            this.countVote.set(VOTE_OPTION.ABSTAIN, res[VOTE_OPTION.ABSTAIN]?.aggregate.count || 0);
+            this.countVote.set(VOTE_OPTION.NO, res[VOTE_OPTION.NO]?.aggregate.count || 0);
+            this.countVote.set(VOTE_OPTION.NO_WITH_VETO, res[VOTE_OPTION.NO_WITH_VETO]?.aggregate.count || 0);
+          }
+
+          this.voteDataListLoading = false;
+        },
+        error: (error) => {
+          this.voteDataListLoading = true;
+        },
       });
     }
   }
@@ -110,7 +106,7 @@ export class VotesComponent implements OnChanges {
     const voteOption = tabId === 'all' ? null : tabId;
 
     if (this.currentTabId !== tabId) {
-      this.currentTabId = tabId;
+      this.currentTabId = tabId || 'all';
     }
 
     this.proposalService.getListVoteFromIndexer2(payloads, voteOption).subscribe((res) => {

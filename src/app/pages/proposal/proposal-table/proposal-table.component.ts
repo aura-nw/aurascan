@@ -39,7 +39,7 @@ interface CustomPageEvent {
 })
 export class ProposalTableComponent implements OnInit, OnChanges {
   @Input() type: PROPOSAL_TABLE_MODE;
-  @Input() tabId: string = 'all';
+  @Input() tabId: string;
   @Input() data: any[];
   @Input() length: number;
 
@@ -118,7 +118,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.dataSource = new MatTableDataSource(this.data);
     }
 
-    if (changes.tabId?.currentValue != changes.tabId?.previousValue) {
+    if (changes.tabId.currentValue != changes.tabId.previousValue) {
       this.pageData.pageIndex = 1;
     }
 
