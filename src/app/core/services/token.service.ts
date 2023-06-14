@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from '../constants/url.constant';
@@ -24,6 +23,43 @@ export class TokenService extends CommonService {
 
   getListCW721Token(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/cw721-tokens`, payload);
+  }
+
+  getListCW721TokenV2(payload, textSearch = null): Observable<any> {
+    if (textSearch?.length > 0) {
+      textSearch = '%' + textSearch + '%';
+    }
+    let querySort = `, order_by: {${payload.sort_column}: ${payload.sort_order}}`;
+    const operationsDoc = `
+    query MyQuery($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
+      ${this.envDB} {
+        list_token: m_view_count_cw721_txs(limit: $limit, offset: $offset ${querySort}, where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}) {
+          contract_address
+          symbol
+          name
+          total_tx
+          transfer_24h
+        }
+        total_token: m_view_count_cw721_txs_aggregate(where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}){
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit || 20,
+          offset: payload.offset || 0,
+          contract_address: textSearch || null,
+          name: textSearch || null,
+        },
+        operationName: 'MyQuery',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getTokenDetail(address): Observable<any> {
@@ -81,6 +117,29 @@ export class TokenService extends CommonService {
           owner: payload?.owner,
         },
         operationName: 'Query',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  countTotalTokenCW721(contract_address): Observable<any> {
+    const operationsDoc = `
+    query MyQuery($contract_address: String) {
+      ${this.envDB} {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          contract_address: contract_address,
+        },
+        operationName: 'MyQuery',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

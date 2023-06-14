@@ -70,8 +70,8 @@ export class CodeIdContractsTabComponent implements OnInit {
           item.contract_address = item?.address;
           item.tx_hash = item?.instantiate_hash;
           item.creator_address = item?.creator;
-          item.verified_at = _.get(item, 'code.code_id_verifications.verified_at');
-          item.type = item.type || '-';
+          item.verified_at = _.get(item, 'code.code_id_verifications[0].verified_at');
+          item.type = item.code?.type || '-';
           if (item.type === ContractRegisterType.CW721 && item.smart_contracts?.name === TYPE_CW4973) {
             item.type = ContractRegisterType.CW4973;
           }

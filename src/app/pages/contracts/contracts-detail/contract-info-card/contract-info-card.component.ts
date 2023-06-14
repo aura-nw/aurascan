@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 
 @Component({
@@ -15,7 +16,10 @@ export class ContractInfoCardComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.contractDetail?.code?.type === ContractRegisterType.CW4973) {
+    if (
+      this.contractDetail?.code?.type === ContractRegisterType.CW4973 ||
+      this.contractDetail?.cw721_contract.smart_contract.name === TYPE_CW4973
+    ) {
       this.linkNft = 'token-abt';
     }
   }

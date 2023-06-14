@@ -100,6 +100,9 @@ export class ContractService extends CommonService {
           cw721_contract {
             name
             symbol
+            smart_contract {
+              name
+            }
           }
           code {
             type
@@ -117,6 +120,7 @@ export class ContractService extends CommonService {
               updated_at
               verification_status
               verified_at
+              s3_location
             }
           }
         }
@@ -137,7 +141,7 @@ export class ContractService extends CommonService {
   getListContractByCode(payload): Observable<any> {
     const contractDoc = `
     query MyQuery($code_id: Int = 0) {
-      auratestnet {
+      ${this.envDB} {
         smart_contract(where: {code_id: {_eq: $code_id}}, order_by: {updated_at: desc}) {
           id
           instantiate_hash
