@@ -54,23 +54,6 @@
                         {{ +data[template.matColumnDef] | mask : 'separator.6' }}
                         <span class="text--primary">{{ denom }}</span>
                       </div>
-                      <div *ngSwitchCase="'amount'">
-                        <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                          <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                          <span class="text--primary ml-1">{{
-                            commonService.mappingNameIBC(data?.denom)?.display
-                          }}</span>
-                        </ng-container>
-                        <ng-template #displayNonNumber>
-                          <span *ngIf="!data[template.matColumnDef]"> - </span>
-                          <a
-                            *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
-                            class="text--primary cursor-pointer"
-                            [routerLink]="['/transaction', data['tx_hash']]">
-                            More
-                          </a>
-                        </ng-template>
-                      </div>
                       <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                     </ng-container>
                   </div>
@@ -100,14 +83,6 @@
               status: data.code
             }"
             [content]="[
-              {
-                label: 'Amount',
-                class: 'body-01-mob text--gray-1',
-                info:
-                  data.amount > 0
-                    ? (+data.amount | mask: 'separator.6') + '<span class=text--primary> ' + commonService.mappingNameIBC(data?.denom)?.display + '</span>'
-                    : checkAmountValue(data.amount, data.tx_hash)
-              },
               {
                 label: 'Fee',
                 class: 'body-01-mob text--gray-1',
