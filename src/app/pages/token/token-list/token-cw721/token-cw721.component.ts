@@ -10,7 +10,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
+import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
 
 @Component({
@@ -26,7 +26,7 @@ export class TokenCw721Component implements OnInit {
     { matColumnDef: 'token', headerCellDef: 'name' },
     { matColumnDef: 'tokenContract', headerCellDef: 'tokenContract' },
     { matColumnDef: 'total_tx', headerCellDef: 'total_tx' },
-    { matColumnDef: 'transfers_24h', headerCellDef: 'transfer' },
+    { matColumnDef: 'transfer_24h', headerCellDef: 'transfer' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -37,11 +37,7 @@ export class TokenCw721Component implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   sort: MatSort;
-  typeSortBy = {
-    transfers24h: 'transfers_24h',
-    totalTx: 'total_tx',
-  };
-  sortBy = this.typeSortBy.transfers24h;
+  sortBy = 'transfer_24h';
   sortOrder = 'desc';
   isSorting = true;
   searchSubject = new Subject();
@@ -81,17 +77,11 @@ export class TokenCw721Component implements OnInit {
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      keyword: this.textSearch,
       sort_column: this.sortBy,
       sort_order: this.sortOrder,
     };
-    this.tokenService.getListCW721TokenV2(payload).subscribe(res => {
-      this.isSorting = false;
-      if (res.list_token?.length > 0) {
-        res.total_token?.forEach((data) => {
-          console.log(data);
-        });
-      }
+
+    this.tokenService.getListCW721TokenV2(payload, this.textSearch).subscribe((res) => {
       this.dataSource = new MatTableDataSource<any>(res.list_token);
       this.pageData.length = res.total_token?.aggregate?.count;
     });
@@ -116,23 +106,8 @@ export class TokenCw721Component implements OnInit {
   }
 
   sortData(sort: Sort) {
-    if (!this.isSorting) {
-      this.dataSource.data.sort((a, b) => {
-        switch (sort.active) {
-          case 'transfers_24h':
-            this.sortBy = this.typeSortBy.transfers24h;
-            this.sortOrder = sort.direction;
-            this.getTokenData();
-            return 0;
-          case 'total_tx':
-            this.sortBy = this.typeSortBy.totalTx;
-            this.sortOrder = sort.direction;
-            this.getTokenData();
-            return 0;
-          default:
-            return 0;
-        }
-      });
-    }
+    this.sortBy = sort.active;
+    this.sortOrder = sort.direction;
+    this.getTokenData();
   }
 }

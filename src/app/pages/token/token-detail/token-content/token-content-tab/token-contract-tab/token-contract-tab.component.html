@@ -1,6 +1,6 @@
-<div class="box-contract text-white">
+<div class="box-contract text-white" *ngIf="tokenDetail">
   <!-- Unverified -->
-  <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Unverified">
+  <ng-container *ngIf="!tokenDetail?.contract_verification || tokenDetail?.contract_verification === contractVerifyType.Unverified">
     <div class="d-flex content-contract body-02">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"

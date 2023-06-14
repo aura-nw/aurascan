@@ -25,18 +25,22 @@ export class TokenService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/cw721-tokens`, payload);
   }
 
-  getListCW721TokenV2(payload): Observable<any> {
+  getListCW721TokenV2(payload, textSearch = null): Observable<any> {
+    if (textSearch?.length > 0) {
+      textSearch = '%' + textSearch + '%';
+    }
+    let querySort = `, order_by: {${payload.sort_column}: ${payload.sort_order}}`;
     const operationsDoc = `
-    query MyQuery {
+    query MyQuery($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
       ${this.envDB} {
-        list_token: m_view_count_cw721_txs {
+        list_token: m_view_count_cw721_txs(limit: $limit, offset: $offset ${querySort}, where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}) {
           contract_address
           symbol
           name
           total_tx
           transfer_24h
         }
-        total_token: m_view_count_cw721_txs_aggregate {
+        total_token: m_view_count_cw721_txs_aggregate(where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}){
           aggregate {
             count
           }
@@ -48,7 +52,10 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-      
+          limit: payload.limit || 20,
+          offset: payload.offset || 0,
+          contract_address: textSearch || null,
+          name: textSearch || null,
         },
         operationName: 'MyQuery',
       })

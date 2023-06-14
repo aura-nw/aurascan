@@ -60,7 +60,7 @@ export class TokenOverviewComponent implements OnInit {
 
   getTotalSupply() {
     this.tokenService.countTotalTokenCW721(this.tokenDetail?.contract_address).subscribe((res) => {
-      this.tokenDetail.holder = res.cw721_token_aggregate?.aggregate?.count || this.tokenDetail.holder || 0;
+      this.tokenDetail.num_tokens = res.cw721_token_aggregate?.aggregate?.count || this.tokenDetail.num_tokens || 0;
     });
   }
 }

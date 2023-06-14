@@ -109,6 +109,11 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     this.timerGetBlock = setInterval(() => {
       this.getLastHeight();
     }, this.timeInterval);
+
+    this.timerGetUpTime = setInterval(() => {
+      this.getDetail();
+      this.loadData(false);
+    }, 5000);
   }
 
   loadData(isInit = true) {
