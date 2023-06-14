@@ -243,12 +243,15 @@
       </div>
     </ng-container>
   </ng-container>
-  <app-paginator
+  <!-- <app-paginator
     [length]="length"
     [pageSize]="pageSize"
     (paginator)="paginatorEmit($event)"
     (pageEvent)="pageEvent($event)">
-  </app-paginator>
+  </app-paginator> -->
+  <div class="d-flex justify-content-end">
+    <app-a-paginator [paginator]="pageData" [length]="length" (pageChange)="pageEvent2($event)"> </app-a-paginator>
+  </div>
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>
   </ng-template>

@@ -160,6 +160,80 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListVoteFromIndexer2(payload, option): Observable<any> {
+    const operationsDoc = `
+    query auratestnet_vote($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
+      ${this.envDB} {
+        vote(limit: $limit, offset: $offset, where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: $voteOption}}, order_by: {height: $order}) {
+          height
+          proposal_id
+          txhash
+          vote_option
+          voter
+          transaction {
+            timestamp
+          }
+        }
+        vote_aggregate(where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: $voteOption}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.pageLimit,
+          order: 'desc',
+          proposalId: payload.proposalId,
+          voteOption: option || null,
+          offset: payload?.offset,
+        },
+        operationName: 'auratestnet_vote',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getProposalVoteTotal(proposalId: number) {
+    const operationsDoc = `
+    query getProposalVoteTotal($proposalId: Int) {
+      auratestnet {
+        ALL: vote_aggregate(where: {proposal_id: {_eq: $proposalId}}) {
+          ...aggregateCountFragment
+        }
+        VOTE_OPTION_YES: vote_aggregate(where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: "VOTE_OPTION_YES"}}) {
+          ...aggregateCountFragment
+        }
+        VOTE_OPTION_ABSTAIN: vote_aggregate(where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: "VOTE_OPTION_ABSTAIN"}}) {
+          ...aggregateCountFragment
+        }
+        VOTE_OPTION_NO: vote_aggregate(where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: "VOTE_OPTION_NO"}}) {
+          ...aggregateCountFragment
+        }
+        VOTE_OPTION_NO_WITH_VETO: vote_aggregate(where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: "VOTE_OPTION_NO_WITH_VETO"}}) {
+          ...aggregateCountFragment
+        }
+      }
+    }
+    
+    fragment aggregateCountFragment on auratestnet_vote_aggregate {
+      aggregate {
+        count
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: { proposalId },
+        operationName: 'getProposalVoteTotal',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListVoteFromIndexer(payload, option): Observable<any> {
     const operationsDoc = `
     query auratestnet_vote($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
@@ -199,19 +273,19 @@ export class ProposalService extends CommonService {
     let result = '';
     switch (option) {
       case 1:
-        result = VOTE_OPTION.VOTE_OPTION_YES;
+        result = VOTE_OPTION.YES;
         break;
       case 2:
-        result = VOTE_OPTION.VOTE_OPTION_ABSTAIN;
+        result = VOTE_OPTION.ABSTAIN;
         break;
       case 3:
-        result = VOTE_OPTION.VOTE_OPTION_NO;
+        result = VOTE_OPTION.NO;
         break;
       case 4:
-        result = VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO;
+        result = VOTE_OPTION.NO_WITH_VETO;
         break;
       default:
-        result = VOTE_OPTION.VOTE_OPTION_EMPTY;
+        result = VOTE_OPTION.EMPTY;
         break;
     }
     return result;

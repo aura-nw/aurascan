@@ -17,6 +17,10 @@
       border: none;
       padding: 0;
       color: var(--aura-white);
+
+      &:focus {
+        box-shadow: none;
+      }
     }
 
     &.active {
