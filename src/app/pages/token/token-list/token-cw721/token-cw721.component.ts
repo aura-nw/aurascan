@@ -85,19 +85,15 @@ export class TokenCw721Component implements OnInit {
       sort_column: this.sortBy,
       sort_order: this.sortOrder,
     };
-    this.tokenService.getListCW721Token(payload).subscribe((res: ResponseDto) => {
+    this.tokenService.getListCW721TokenV2(payload).subscribe(res => {
       this.isSorting = false;
-      if (res.data.length > 0) {
-        res.data.forEach((data) => {
-          data['isValueUp'] = true;
-          if (data.change < 0) {
-            data['isValueUp'] = false;
-            data.change = Number(data.change.toString().substring(1));
-          }
+      if (res.list_token?.length > 0) {
+        res.total_token?.forEach((data) => {
+          console.log(data);
         });
       }
-      this.dataSource = new MatTableDataSource<any>(res.data);
-      this.pageData.length = res.meta.count;
+      this.dataSource = new MatTableDataSource<any>(res.list_token);
+      this.pageData.length = res.total_token?.aggregate?.count;
     });
   }
 

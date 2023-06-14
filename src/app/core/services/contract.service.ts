@@ -137,7 +137,7 @@ export class ContractService extends CommonService {
   getListContractByCode(payload): Observable<any> {
     const contractDoc = `
     query MyQuery($code_id: Int = 0) {
-      auratestnet {
+      ${this.envDB} {
         smart_contract(where: {code_id: {_eq: $code_id}}, order_by: {updated_at: desc}) {
           id
           instantiate_hash

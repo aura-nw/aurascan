@@ -25,6 +25,36 @@ export class TokenService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/cw721-tokens`, payload);
   }
 
+  getListCW721TokenV2(payload): Observable<any> {
+    const operationsDoc = `
+    query MyQuery {
+      ${this.envDB} {
+        list_token: m_view_count_cw721_txs {
+          contract_address
+          symbol
+          name
+          total_tx
+          transfer_24h
+        }
+        total_token: m_view_count_cw721_txs_aggregate {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+      
+        },
+        operationName: 'MyQuery',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getTokenDetail(address): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/token/${address}`);
   }
