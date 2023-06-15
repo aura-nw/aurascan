@@ -113,7 +113,7 @@ export class MyGranteesComponent implements OnInit {
 
   getListGrant() {
     this.feeGrantService
-      .getListFeeGrants2(
+      .getListFeeGrants(
         {
           limit: this.pageData.pageSize,
           granter: this.currentAddress,

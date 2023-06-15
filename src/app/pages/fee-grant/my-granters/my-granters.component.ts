@@ -85,7 +85,7 @@ export class MyGrantersComponent implements OnInit {
 
   getListGrant() {
     this.feeGrantService
-      .getListFeeGrants2(
+      .getListFeeGrants(
         {
           limit: this.pageData.pageSize,
           isActive: this.isActive,
@@ -124,16 +124,16 @@ export class MyGrantersComponent implements OnInit {
 
   searchToken(): void {
     if (this.textSearch && this.textSearch.length > 0) {
-      this.pageEvent2(0);
+      this.pageEvent(0);
     }
   }
 
   resetFilterSearch() {
     this.textSearch = '';
-    this.pageEvent2(0);
+    this.pageEvent(0);
   }
 
-  pageEvent2(pageIndex: number): void {
+  pageEvent(pageIndex: number): void {
     // reset page 1 if pageIndex = 0
     if (pageIndex === 0) {
       this.pageData.pageIndex = 1;
@@ -144,7 +144,7 @@ export class MyGrantersComponent implements OnInit {
 
   async changeType(type: boolean) {
     this.isActive = type;
-    this.pageEvent2(0);
+    this.pageEvent(0);
     this.loading = true;
   }
 }

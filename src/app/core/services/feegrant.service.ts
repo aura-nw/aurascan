@@ -14,7 +14,7 @@ export class FeeGrantService extends CommonService {
     super(http, environmentService);
   }
 
-  getListFeeGrants2(
+  getListFeeGrants(
     {
       limit,
       hash,

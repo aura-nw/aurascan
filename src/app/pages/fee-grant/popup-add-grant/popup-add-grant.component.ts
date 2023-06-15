@@ -144,7 +144,7 @@ export class PopupAddGrantComponent implements OnInit {
         isActive: true,
         isGranter: false,
       };
-      this.feeGrantService.getListFeeGrants2(payload).subscribe(
+      this.feeGrantService.getListFeeGrants(payload).subscribe(
         (res) => {
           if (res.feegrant[0]?.expiration) {
             const timeCompare = new Date(res.feegrant[0]?.expiration).getTime();
