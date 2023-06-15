@@ -29,6 +29,7 @@ import { Globals } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 
 @Component({
   selector: 'app-nft-detail',
@@ -155,7 +156,10 @@ export class NFTDetailComponent implements OnInit {
             this.imageUrl = this.nftDetail?.image?.link_s3;
           }
         }
-      } else if (this.nftDetail.type === ContractRegisterType.CW4973) {
+      } else if (
+        this.nftDetail.type === ContractRegisterType.CW4973 ||
+        this.nftDetail?.cw721_contract.smart_contract.name === TYPE_CW4973
+      ) {
         if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
           this.toastr.error('Token invalid');
           return;

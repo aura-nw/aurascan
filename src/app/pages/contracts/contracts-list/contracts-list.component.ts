@@ -14,6 +14,7 @@ import { TableTemplate } from '../../../core/models/common.model';
 import { ContractService } from '../../../core/services/contract.service';
 import { shortenAddress } from '../../../core/utils/common/shorten';
 import { Globals } from '../../../global/global';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 
 @Component({
   selector: 'app-contracts-list',
@@ -93,6 +94,9 @@ export class ContractsListComponent implements OnInit, OnDestroy {
             DATEFORMAT.DATETIME_UTC,
           );
           item.type = item.code.type;
+          if (item.type === ContractRegisterType.CW721 && item?.name === TYPE_CW4973) {
+            item.type = ContractRegisterType.CW4973;
+          }
           item.compiler_version = item.code?.code_id_verifications[0]?.compiler_version;
           item.contract_verification = item.code.code_id_verifications[0]?.verification_status;
         });
