@@ -218,8 +218,44 @@ export class ContractService extends CommonService {
     );
   }
 
-  getNFTDetail(contractAddress: string, tokenId): Observable<any> {
+  getDetailCW4973(contractAddress: string, tokenId): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}/nft/${tokenId}`);
+  }
+
+  getDetailCW721(address, tokenId): Observable<any> {
+    const contractDoc = `
+    query CW721Owner($address: String, $tokenId: String) {
+      ${this.envDB} { 
+        data: cw721_token(where: { cw721_contract: {smart_contract: {address: {_eq: $address}, name: {_neq: "crates.io:cw4973"}}}, token_id: {_eq: $tokenId}}) { 
+        id
+        token_id
+        owner
+        media_info
+        burned
+        cw721_contract {
+          name
+          smart_contract {
+            name
+            address
+            creator
+          }
+          symbol
+          minter
+        }
+        } 
+      } 
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: contractDoc,
+        variables: {
+          address: address,
+          tokenId: tokenId,
+        },
+        operationName: 'CW721Owner',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListContractById(codeId: number): Observable<any> {
