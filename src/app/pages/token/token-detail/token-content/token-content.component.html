@@ -140,6 +140,7 @@
     <app-token-info-tab *ngIf="currentTab === tokenTab.Info"></app-token-info-tab>
     <app-token-contract-tab
       *ngIf="currentTab === tokenTab.Contract"
-      [contractAddress]="contractAddress"></app-token-contract-tab>
+      [contractAddress]="contractAddress"
+      [typeContract]="tokenDetail?.type"></app-token-contract-tab>
   </div>
 </section>

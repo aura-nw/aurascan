@@ -44,13 +44,7 @@
           </div>
           <div class="col-6 col-lg-auto">
             <div class="text--gray-light body">
-              {{
-                codeIdDetail.result === contractResult.CORRECT
-                  ? codeIdDetail.type
-                  : codeIdDetail.result === contractResult.TBD
-                  ? contractResult.TBD
-                  : '-'
-              }}
+              {{ codeIdDetail.type || '-' }}
             </div>
           </div>
         </div>
