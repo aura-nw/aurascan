@@ -9,20 +9,20 @@
     </button>
     <button
       class="button button-pill button-flat"
-      [class.active]="filterButtons.includes(contractRegisterType.CW20)"
-      (click)="filterButton(contractRegisterType.CW20)">
+      [class.active]="filterButtons.includes(ContractRegisterType.CW20)"
+      (click)="filterButton(ContractRegisterType.CW20)">
       CW-20
     </button>
     <button
       class="button button-pill button-flat"
-      [class.active]="filterButtons.includes(contractRegisterType.CW721)"
-      (click)="filterButton(contractRegisterType.CW721)">
+      [class.active]="filterButtons.includes(ContractRegisterType.CW721)"
+      (click)="filterButton(ContractRegisterType.CW721)">
       CW-721
     </button>
     <button
       class="button button-pill button-flat"
-      [class.active]="filterButtons.includes(contractRegisterType.CW4973)"
-      (click)="filterButton(contractRegisterType.CW4973)">
+      [class.active]="filterButtons.includes(ContractRegisterType.CW4973)"
+      (click)="filterButton(ContractRegisterType.CW4973)">
       CW-4973
     </button>
     <button
@@ -39,7 +39,7 @@
         class="form-control pl-0"
         placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
         [(ngModel)]="textSearch"
-        [maxLength]="maxLengthSearch"
+        [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
         (keyup)="onKeyUp()"
         name="search"
         autocomplete="off" />
@@ -68,7 +68,7 @@
                 class="form-control pl-0"
                 placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
                 [(ngModel)]="textSearch"
-                [maxLength]="maxLengthSearch"
+                [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
                 (keyup)="onKeyUp()"
                 name="search"
                 autocomplete="off" />
@@ -104,7 +104,7 @@
                     <div class="d-flex align-items-center gap-2">
                       <div class="mr-2" [style.width]="'16px'">
                         <img
-                          *ngIf="data['contract_verification'] === contractVerifyType.Verified"
+                          *ngIf="data['contract_verification'] === ContractVerifyType.Verified"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                           alt="contract_verification"
                           width="16px"
@@ -129,12 +129,12 @@
                   <ng-container *ngIf="template.matColumnDef === 'contract_verification'">
                     <div
                       class="d-flex align-items-center ml-1"
-                      *ngIf="data[template.matColumnDef] === contractVerifyType.Verified">
+                      *ngIf="data[template.matColumnDef] === ContractVerifyType.Verified">
                       <span>{{ data['verified_at'] | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
                       <span>{{ data['verified_at'] | customDate : 'HH:mm:ss' }}</span>
                     </div>
-                    <div *ngIf="data[template.matColumnDef] !== contractVerifyType.Verified">-</div>
+                    <div *ngIf="data[template.matColumnDef] !== ContractVerifyType.Verified">-</div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'name'">
                     {{ (data[template.matColumnDef] | cutStringPipe : 16) || '-' }}
@@ -167,12 +167,13 @@
             </tr>
           </table>
         </div>
-        <app-paginator
-          [length]="pageData.length"
-          [pageSize]="pageData.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator>
+
+        <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+          <app-a-paginator
+            [paginator]="pageData"
+            [length]="pageData.length"
+            (pageChange)="pageEvent($event)"></app-a-paginator>
+        </div>
       </div>
     </div>
   </ng-container>
