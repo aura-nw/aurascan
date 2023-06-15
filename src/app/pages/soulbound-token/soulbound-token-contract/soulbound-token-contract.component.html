@@ -26,8 +26,13 @@
           <div class="row justify-content-lg-end">
             <div class="box-input col-12 col-lg-3 mb-4 mb-lg-0">
               <mat-form-field appearance="fill" soulbound>
-                <mat-select class="list-token" placeholder="Select a type contract" panelClass="contractPanel"
-                  (selectionChange)="searchToken()" [(value)]="selectedType" [disableOptionCentering]="true">
+                <mat-select
+                  class="list-token"
+                  placeholder="Select a type contract"
+                  panelClass="contractPanel"
+                  (selectionChange)="searchToken()"
+                  [(value)]="selectedType"
+                  [disableOptionCentering]="true">
                   <mat-option *ngFor="let item of lstTypeSB" [value]="item.key">
                     <div class="d-flex option-contain">
                       <div class="option-lable">
@@ -41,16 +46,28 @@
             <div class="col-12 col-lg-auto">
               <form (ngSubmit)="getSearchValue()" class="aura-form single-input-field search-form-sblist" #searchForm>
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search for Token URI, Address or Token ID"
-                    [(ngModel)]="searchValue" [maxLength]="maxLengthSearch" (keyup.enter)="getSearchValue()"
-                    name="search" autocomplete="off" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search for Token URI, Address or Token ID"
+                    [(ngModel)]="searchValue"
+                    [maxLength]="maxLengthSearch"
+                    (keyup.enter)="getSearchValue()"
+                    name="search"
+                    autocomplete="off" />
                   <button type="submit" class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}">
                     <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                   </button>
-                  <button type="reset" class="btn-reset cursor-pointer {{
+                  <button
+                    type="reset"
+                    class="btn-reset cursor-pointer {{
                       !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
-                    }}" (click)="resetSearch()">
-                    <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24"
+                    }}"
+                    (click)="resetSearch()">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
+                      alt=""
+                      width="24"
                       height="24" />
                   </button>
                 </div>
@@ -129,7 +146,10 @@
             </tr>
           </table>
         </div>
-        <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)"
+        <app-paginator
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
           (pageEvent)="pageEvent($event)">
         </app-paginator>
       </ng-container>
