@@ -92,7 +92,7 @@ export class MyGrantersComponent implements OnInit {
       isGranter: true,
     };
 
-    this.feeGrantService.getListFeeGrantsV2(payload, this.textSearch).subscribe(
+    this.feeGrantService.getListFeeGrants(payload, this.textSearch).subscribe(
       (res) => {
         res.feegrant?.forEach((element) => {
           element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
