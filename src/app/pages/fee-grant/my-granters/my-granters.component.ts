@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -46,10 +46,9 @@ export class MyGrantersComponent implements OnInit {
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
+    pageIndex: 1,
   };
-  nextKey = null;
-  currentKey = null;
+
   currentAddress = null;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
@@ -85,89 +84,67 @@ export class MyGrantersComponent implements OnInit {
   }
 
   getListGrant() {
-    const payload = {
-      limit: 100,
-      grantee: this.currentAddress,
-      isActive: this.isActive,
-      isGranter: true,
-    };
-
-    this.feeGrantService.getListFeeGrantsV2(payload, this.textSearch).subscribe(
-      (res) => {
-        res.feegrant?.forEach((element) => {
-          element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
-          element.spendable = element?.spend_limit || '0';
-          element.limit = element.feegrant_histories[0]?.amount || '0';
-          element.reason = element?.status;
-          element.tx_hash = element?.transaction?.hash;
-          element.timestamp = element?.transaction?.timestamp;
-          element.origin_revoke_txhash = element?.revoke_tx?.hash;
-          if (element?.expiration) {
-            const timeCompare = new Date(element?.expiration).getTime();
-            if (element.status === 'Available' && timeCompare < Date.now()) {
-              element.reason = 'Expired';
+    this.feeGrantService
+      .getListFeeGrants(
+        {
+          limit: this.pageData.pageSize,
+          isActive: this.isActive,
+          isGranter: true,
+          grantee: this.currentAddress,
+          offset: this.pageData.pageSize * (this.pageData.pageIndex - 1),
+        },
+        this.textSearch,
+      )
+      .subscribe({
+        next: (res) => {
+          res.feegrant?.forEach((element) => {
+            element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
+            element.spendable = element?.spend_limit || '0';
+            element.limit = element.feegrant_histories[0]?.amount || '0';
+            element.reason = element?.status;
+            element.tx_hash = element?.transaction?.hash;
+            element.timestamp = element?.transaction?.timestamp;
+            element.origin_revoke_txhash = element?.revoke_tx?.hash;
+            if (element?.expiration) {
+              const timeCompare = new Date(element?.expiration).getTime();
+              if (element.status === 'Available' && timeCompare < Date.now()) {
+                element.reason = 'Expired';
+              }
             }
-          }
-        });
+          });
 
-        if (
-          this.dataSource?.data?.length > 0 &&
-          this.dataSource.data.length !== res.feegrant?.length &&
-          this.pageData.pageIndex != 0
-        ) {
-          this.dataSource.data = [...this.dataSource.data, ...res.feegrant];
-        } else {
-          this.dataSource.data = [...res.feegrant];
-        }
-        this.pageData.length = res.feegrant?.length;
-      },
-      () => {},
-      () => {
-        this.loading = false;
-      },
-    );
+          this.dataSource.data = res.feegrant;
+          this.pageData.length = res.feegrant_aggregate.aggregate.count;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 
   searchToken(): void {
     if (this.textSearch && this.textSearch.length > 0) {
-      this.getListGrant();
+      this.pageEvent(0);
     }
   }
 
   resetFilterSearch() {
     this.textSearch = '';
-    this.getListGrant();
+    this.pageEvent(0);
   }
 
-  paginatorEmit(e: MatPaginator): void {
-    if (this.dataSource.paginator) {
-      e.page.next({
-        length: this.dataSource.paginator.length,
-        pageIndex: 0,
-        pageSize: this.dataSource.paginator.pageSize,
-        previousPageIndex: this.dataSource.paginator.pageIndex,
-      });
-      this.dataSource.paginator = e;
-    } else {
-      this.dataSource.paginator = e;
+  pageEvent(pageIndex: number): void {
+    // reset page 1 if pageIndex = 0
+    if (pageIndex === 0) {
+      this.pageData.pageIndex = 1;
     }
-  }
 
-  pageEvent(e: PageEvent): void {
-    const { pageIndex, pageSize } = e;
-    const next = this.pageData.length <= (pageIndex + 2) * pageSize;
-    this.pageData.pageIndex = e.pageIndex;
-
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getGrantersData();
-      this.currentKey = this.nextKey;
-    }
+    this.getGrantersData();
   }
 
   async changeType(type: boolean) {
     this.isActive = type;
-    this.dataSource.data = null;
-    this.nextKey = null;
-    await this.getGrantersData();
+    this.pageEvent(0);
+    this.loading = true;
   }
 }

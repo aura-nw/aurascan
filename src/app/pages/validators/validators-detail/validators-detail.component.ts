@@ -205,23 +205,28 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   getBlocksMiss(address = null, lastBlock = []) {
     //check is query last block
-    const limit = lastBlock?.length > 0 ? 5 : 100;
-    this.validatorService.getUptimeIndexer(address, limit).subscribe((res) => {
+    let limit = 100;
+    let height = null;
+    if (lastBlock?.length > 0) {
+      limit = 1;
+      height = lastBlock[0]?.height;
+    }
+    this.validatorService.getUptimeIndexer(address, limit, height).subscribe((res) => {
       this.arrBlockUptime = res?.block?.filter((h) => h.block_signatures.length === 0);
-      if (this.arrBlockUptime?.length > 0 && lastBlock?.length === 0) {
-        this.arrLastBlock?.forEach((element) => {
-          if (this.arrBlockUptime?.find((k) => k.height === element.height)) {
-            element['isSign'] = false;
-          }
-        });
+      if (lastBlock?.length === 0) {
+        if (this.arrBlockUptime?.length > 0 && lastBlock?.length === 0) {
+          this.arrLastBlock?.forEach((element) => {
+            if (this.arrBlockUptime?.find((k) => k.height === element.height)) {
+              element['isSign'] = false;
+            }
+          });
+        }
+      } else {
+        lastBlock[0]['isSign'] = this.arrBlockUptime?.find((k) => k.height === lastBlock[0]?.height) ? false : true;
+        this.arrLastBlock?.unshift(lastBlock[0]);
+        this.arrLastBlock?.pop();
       }
     });
-
-    if (lastBlock?.length > 0) {
-      lastBlock[0]['isSign'] = this.arrBlockUptime?.find((k) => k.height === lastBlock[0]?.height) ? false : true;
-      this.arrLastBlock?.unshift(lastBlock[0]);
-      this.arrLastBlock?.pop();
-    }
   }
 
   async getListDelegator(nextKey = null, isInit = true) {

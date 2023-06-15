@@ -27,26 +27,42 @@ export class ContractService extends CommonService {
     this.contractObservable = this.contract$.asObservable();
   }
 
-  getListContract(payload) {
-    payload.codeId = null;
-    payload.creator = null;
-    payload.address = null;
-    payload.name = null;
+  getListContract({
+    codeId,
+    creator,
+    address,
+    name,
+    keyword,
+    limit,
+    offset,
+    contractType,
+  }: {
+    codeId?: number;
+    creator?: string;
+    address?: string;
+    name?: string;
+    keyword?: string;
+    limit?: number;
+    offset?: number;
+    contractType?: string[];
+  }) {
     let updateQuery = '';
-    const isFilterCW4973 = payload.contractType?.includes('CW4973');  
-    let typeQuery = isFilterCW4973 ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],' :'code: {type: {_in: $type}},';   
+    const isFilterCW4973 = contractType?.includes('CW4973');
+    let typeQuery = isFilterCW4973
+      ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],'
+      : 'code: {type: {_in: $type}},';
 
-    if (payload.keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
-      payload.address = payload.keyword;
-    } else if (payload.keyword?.length >= LENGTH_CHARACTER.ADDRESS) {
-      payload.creator = payload.keyword;
-    } else if (/^\d+$/.test(payload.keyword)) {
-      payload.codeId = +payload.keyword;
-      payload.name = '%' + payload.keyword + '%';
-      updateQuery = `_and: {_or: [{name: {_like: "${payload.name}"}}, {code_id: {_eq: ${payload.codeId}}}]},`;
-    } else if (payload.keyword?.length > 0) {
-      payload.name = '%' + payload.keyword + '%';
-      updateQuery = `name: {_like: "${payload.name}"},`;
+    if (keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
+      address = keyword;
+    } else if (keyword?.length >= LENGTH_CHARACTER.ADDRESS) {
+      creator = keyword;
+    } else if (/^\d+$/.test(keyword)) {
+      codeId = +keyword;
+      name = '%' + keyword + '%';
+      updateQuery = `_and: {_or: [{name: {_like: "${name}"}}, {code_id: {_eq: ${codeId}}}]},`;
+    } else if (keyword?.length > 0) {
+      name = '%' + keyword + '%';
+      updateQuery = `name: {_like: "${name}"},`;
     } else {
       updateQuery = '';
     }
@@ -80,11 +96,11 @@ export class ContractService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: payload.limit,
-          offset: payload.offset,
-          type: payload.contractType,
-          creator: payload.creator,
-          address: payload.address,
+          limit: limit,
+          offset: offset,
+          type: contractType,
+          creator: creator,
+          address: address,
         },
         operationName: 'auratestnet_smart_contract',
       })
@@ -218,8 +234,44 @@ export class ContractService extends CommonService {
     );
   }
 
-  getNFTDetail(contractAddress: string, tokenId): Observable<any> {
+  getDetailCW4973(contractAddress: string, tokenId): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}/nft/${tokenId}`);
+  }
+
+  getDetailCW721(address, tokenId): Observable<any> {
+    const contractDoc = `
+    query CW721Owner($address: String, $tokenId: String) {
+      ${this.envDB} { 
+        data: cw721_token(where: { cw721_contract: {smart_contract: {address: {_eq: $address}, name: {_neq: "crates.io:cw4973"}}}, token_id: {_eq: $tokenId}}) { 
+        id
+        token_id
+        owner
+        media_info
+        burned
+        cw721_contract {
+          name
+          smart_contract {
+            name
+            address
+            creator
+          }
+          symbol
+          minter
+        }
+        } 
+      } 
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: contractDoc,
+        variables: {
+          address: address,
+          tokenId: tokenId,
+        },
+        operationName: 'CW721Owner',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListContractById(codeId: number): Observable<any> {
