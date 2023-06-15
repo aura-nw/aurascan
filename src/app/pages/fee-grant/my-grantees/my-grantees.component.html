@@ -22,10 +22,7 @@
               [maxLength]="maxLengthSearch"
               name="search"
               autocomplete="off" />
-            <button
-              type="submit"
-              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-              (click)="searchToken()">
+            <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
               <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
@@ -39,7 +36,7 @@
           </div>
         </form>
         <div class="mt-4 mt-lg-0 text--gray-1">
-          {{ dataSource?.data?.length || 0 }} transaction{{ dataSource?.data?.length > 0 ? 's' : '' }} found
+          {{ pageData?.length || 0 }} transaction{{ pageData?.length > 0 ? 's' : '' }} found
         </div>
       </div>
       <div class="mt-4">
@@ -123,18 +120,9 @@
           </div>
         </ng-container>
         <div class="mt-6 d-flex justify-content-center justify-content-md-end">
-          <app-a-paginator
-            [paginator]="pageData"
-            [length]="pageData.length"
-            (pageChange)="pageEvent($event)">
+          <app-a-paginator [paginator]="pageData" [length]="pageData.length" (pageChange)="pageEvent2($event)">
           </app-a-paginator>
         </div>
-        <!-- <app-paginator
-          [length]="pageData?.length"
-          [pageSize]="pageData?.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator> -->
         <ng-template #noValues>
           <app-table-no-data></app-table-no-data>
         </ng-template>
