@@ -45,7 +45,6 @@ export class EnvironmentService {
     indexerUri: '',
     timeInterval: null,
     ipfsDomain: '',
-    graphUrl: '',
     evnLabel: '',
     maxValidator: null,
     horoscopeSelectedChain: '',
