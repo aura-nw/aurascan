@@ -46,11 +46,11 @@ export class ContractService extends CommonService {
     offset?: number;
     contractType?: string[];
   }) {
-    // codeId = null;
-    // creator = null;
-    // address = null;
-    // name = null;
     let updateQuery = '';
+    const isFilterCW4973 = contractType?.includes('CW4973');
+    let typeQuery = isFilterCW4973
+      ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],'
+      : 'code: {type: {_in: $type}},';
 
     if (keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
       address = keyword;
@@ -59,7 +59,7 @@ export class ContractService extends CommonService {
     } else if (/^\d+$/.test(keyword)) {
       codeId = +keyword;
       name = '%' + keyword + '%';
-      updateQuery = `_or: [{name: {_like: "${name}"}}, {code_id: {_eq: ${codeId}}}],`;
+      updateQuery = `_and: {_or: [{name: {_like: "${name}"}}, {code_id: {_eq: ${codeId}}}]},`;
     } else if (keyword?.length > 0) {
       name = '%' + keyword + '%';
       updateQuery = `name: {_like: "${name}"},`;
@@ -69,7 +69,7 @@ export class ContractService extends CommonService {
     const operationsDoc = `
     query auratestnet_smart_contract($limit: Int = 100, $offset: Int = 0, $type: [String!], $address: String = null, $creator: String =null) {
       ${this.envDB} {
-        smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {code: {type: {_in: $type}}, ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
           address
           name
           code_id
@@ -84,7 +84,7 @@ export class ContractService extends CommonService {
           updated_at
           creator
         }
-        smart_contract_aggregate(where: {code: {type: {_in: $type}}, ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        smart_contract_aggregate(where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
           aggregate {
             count
           }
@@ -234,8 +234,44 @@ export class ContractService extends CommonService {
     );
   }
 
-  getNFTDetail(contractAddress: string, tokenId): Observable<any> {
+  getDetailCW4973(contractAddress: string, tokenId): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}/nft/${tokenId}`);
+  }
+
+  getDetailCW721(address, tokenId): Observable<any> {
+    const contractDoc = `
+    query CW721Owner($address: String, $tokenId: String) {
+      ${this.envDB} { 
+        data: cw721_token(where: { cw721_contract: {smart_contract: {address: {_eq: $address}, name: {_neq: "crates.io:cw4973"}}}, token_id: {_eq: $tokenId}}) { 
+        id
+        token_id
+        owner
+        media_info
+        burned
+        cw721_contract {
+          name
+          smart_contract {
+            name
+            address
+            creator
+          }
+          symbol
+          minter
+        }
+        } 
+      } 
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: contractDoc,
+        variables: {
+          address: address,
+          tokenId: tokenId,
+        },
+        operationName: 'CW721Owner',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListContractById(codeId: number): Observable<any> {

@@ -57,7 +57,9 @@
                 controlsList="nodownload"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
-                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
+                  (nftDetail.animation?.link_s3 ||
+                    nftDetail?.animation_url ||
+                    nftDetail.media_info?.offchain?.animation?.url)
                 "
                 poster="{{ imageUrl }}"></video>
               <app-model-view

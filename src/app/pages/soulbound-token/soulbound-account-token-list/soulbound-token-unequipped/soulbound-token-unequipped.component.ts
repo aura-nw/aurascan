@@ -118,7 +118,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
 
   getSBTDetail(contractAddress, tokenID, isNotify) {
     this.isClick = true;
-    this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
+    this.contractService.getDetailCW4973(contractAddress, tokenID).subscribe((res) => {
       if (res?.data) {
         this.openDialogDetail(res.data);
         if (isNotify) {

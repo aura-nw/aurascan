@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ResponseDto } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { Globals } from 'src/app/global/global';
@@ -56,21 +55,21 @@ export class NftListComponent implements OnChanges {
     this.searchValue = this.searchValue?.trim();
 
     const payload = {
-      account_address: this.address,
+      owner: this.address,
       limit: 100,
       keyword: this.searchValue,
       next_key: nextKey,
     };
-    this.accountService.getAssetCW721ByOwner(payload).subscribe(
-      (res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          if (res?.data?.length >= 100) {
-            this.nextKey = res?.data[res?.data?.length - 1].id;
+    this.accountService.getAssetCW721ByOwnerV2(payload).subscribe(
+      (res) => {
+        if (res?.cw721_token?.length > 0) {
+          if (res?.cw721_token?.length >= 100) {
+            this.nextKey = res?.cw721_token[res?.cw721_token?.length - 1].id;
           }
           if (this.nftList.length > 0) {
-            this.nftList = [...this.nftList, ...res.data];
+            this.nftList = [...this.nftList, ...res.cw721_token];
           } else {
-            this.nftList = res?.data;
+            this.nftList = res?.cw721_token;
           }
           this.pageData.length = this.nftList.length;
 
