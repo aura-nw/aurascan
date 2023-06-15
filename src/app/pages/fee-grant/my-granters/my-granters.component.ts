@@ -136,6 +136,7 @@ export class MyGrantersComponent implements OnInit {
 
   resetFilterSearch() {
     this.textSearch = '';
+    this.dataSource.data = [];
     this.getListGrant();
   }
 

@@ -142,10 +142,13 @@ export class MyGranteesComponent implements OnInit {
         if (
           this.dataSource?.data?.length > 0 &&
           this.dataSource.data.length !== res.feegrant?.length &&
-          this.pageData.pageIndex != 0
+          this.pageData.pageIndex != 0 &&
+          !this.textSearch
         ) {
           this.dataSource.data = [...this.dataSource.data, ...res.feegrant];
         } else {
+          this.dataSource.paginator.pageIndex = 0;
+          this.pageData.pageIndex = 0;
           this.dataSource.data = [...res.feegrant];
         }
         this.pageData.length = res.feegrant?.length;
@@ -165,6 +168,7 @@ export class MyGranteesComponent implements OnInit {
 
   resetFilterSearch() {
     this.textSearch = '';
+    this.pageData.pageIndex = 0;
     this.getListGrant();
   }
 
