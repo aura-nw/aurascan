@@ -92,10 +92,12 @@ export class TransactionService extends CommonService {
       $indexLT: Int = null
       $hash: String = null
       $height: Int = null
+      $offset: Int = 0
     ) {
       ${this.envDB} {
         transaction(
           limit: $limit
+          offset: $offset
           where: {
             hash: { _eq: $hash }
             height: { _eq: $height }
@@ -122,6 +124,27 @@ export class TransactionService extends CommonService {
           gas_wanted
           data
         }
+        transaction_aggregate(
+          where: {
+            hash: {_eq: $hash}, 
+            height: {_eq: $height}, 
+            event_attribute_index: {
+              value: {_eq: $value, _in: $valueIn}, 
+              composite_key: {_eq: $compositeKey, _in: $compositeKeyIn}, 
+              key: {_eq: $key, _in: $keyIn}
+            }, 
+            _and: [
+              {height: {_gt: $heightGT}}, 
+              {index: {_gt: $indexGT}}, 
+              {height: {_lt: $heightLT}}, 
+              {index: {_lt: $indexLT}}
+            ]
+          }
+        ) {
+          aggregate {
+            count
+          }
+        }
       }
     }
     `;
@@ -140,6 +163,7 @@ export class TransactionService extends CommonService {
           indexGT: null,
           indexLT: null,
           height: null,
+          offset: payload?.offset || 0,
         },
         operationName: 'auratestnet_transaction',
       })

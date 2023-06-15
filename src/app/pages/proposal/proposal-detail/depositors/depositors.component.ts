@@ -26,7 +26,7 @@ export class DepositorsComponent implements OnInit {
     private proposalService: ProposalService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
   ) {
     this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
       if (event) {
@@ -41,9 +41,10 @@ export class DepositorsComponent implements OnInit {
 
   getDepositorsList(): void {
     const payload = {
-      key: "proposal_id",
+      key: 'proposal_id',
       value: this.proposalId?.toString(),
-      limit: 100,
+      limit: 5,
+      offset: 0,
     };
     this.transactionService.getListTxCondition(payload).subscribe(
       (res) => {
@@ -76,5 +77,9 @@ export class DepositorsComponent implements OnInit {
         this.loading = false;
       },
     );
+  }
+
+  pageEventChange({ tabId, pageIndex, pageSize }: any) {
+    console.log({ tabId, pageIndex, pageSize });
   }
 }

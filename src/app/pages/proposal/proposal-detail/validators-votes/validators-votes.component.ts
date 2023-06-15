@@ -74,7 +74,7 @@ export class ValidatorsVotesComponent implements OnInit {
     if (this.proposalId) {
       this.proposalService
         .getValidatorVotesFromIndexer2(this.proposalId, {
-          limit: 10,
+          limit: 2,
         })
         .subscribe(
           (res) => {
