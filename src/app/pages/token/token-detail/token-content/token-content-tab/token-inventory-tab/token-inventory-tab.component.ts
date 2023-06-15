@@ -50,7 +50,7 @@ export class TokenInventoryComponent implements OnInit {
       this.keyWord = params?.a || '';
     });
 
-    if (this.typeContract === ContractRegisterType.CW4973) {
+    if (this.route.snapshot.url[0]?.path === 'token-abt') {
       this.linkToken = 'token-abt';
     }
     this.getNftData();
