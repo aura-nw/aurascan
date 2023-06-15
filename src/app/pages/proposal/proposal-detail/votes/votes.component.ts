@@ -1,10 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
-import { combineLatest } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
-import { IListVoteQuery } from '../../../../core/models/proposal.model';
 import { ProposalService } from '../../../../core/services/proposal.service';
 export interface IVotes {
   id: number;
@@ -42,19 +40,24 @@ export class VotesComponent implements OnChanges {
   PROPOSAL_TABLE_MODE_VOTES = PROPOSAL_TABLE_MODE.VOTES;
 
   currentTabId = 'all';
+  payloads: { pageIndex?: number; pageLimit?: number; proposalId?: number | string; offset?: number };
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(
-    private proposalService: ProposalService,
-    private layout: BreakpointObserver,
-    private cdr: ChangeDetectorRef,
-  ) {
-    // this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
-    //   if (event) {
-    //     this.getVotesList();
-    //   }
-    // });
+  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
+    this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
+      if (event) {
+        this.pageEventChange({
+          tabId: this.currentTabId,
+          pageIndex: this.payloads?.pageIndex || 0,
+          pageSize: this.payloads?.pageLimit || 5,
+        });
+      }
+    });
+
+    setTimeout(() => {
+      this.proposalService.reloadList$.next(true);
+    }, 5500);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -96,7 +99,7 @@ export class VotesComponent implements OnChanges {
   }
 
   pageEventChange({ tabId, pageIndex, pageSize }: any) {
-    const payloads = {
+    this.payloads = {
       pageLimit: pageSize,
       proposalId: this.proposalDetail.proposal_id,
       offset: pageSize * pageIndex,
@@ -109,10 +112,8 @@ export class VotesComponent implements OnChanges {
       this.currentTabId = tabId || 'all';
     }
 
-    this.proposalService.getListVoteFromIndexer2(payloads, voteOption).subscribe((res) => {
+    this.proposalService.getListVoteFromIndexer2(this.payloads, voteOption).subscribe((res) => {
       this.voteDataList = res.vote;
     });
-
-    return;
   }
 }
