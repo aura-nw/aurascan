@@ -33,6 +33,8 @@ export class ContractService extends CommonService {
     payload.address = null;
     payload.name = null;
     let updateQuery = '';
+    const isFilterCW4973 = payload.contractType?.includes('CW4973');  
+    let typeQuery = isFilterCW4973 ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],' :'code: {type: {_in: $type}},';   
 
     if (payload.keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
       payload.address = payload.keyword;
@@ -41,7 +43,7 @@ export class ContractService extends CommonService {
     } else if (/^\d+$/.test(payload.keyword)) {
       payload.codeId = +payload.keyword;
       payload.name = '%' + payload.keyword + '%';
-      updateQuery = `_or: [{name: {_like: "${payload.name}"}}, {code_id: {_eq: ${payload.codeId}}}],`;
+      updateQuery = `_and: {_or: [{name: {_like: "${payload.name}"}}, {code_id: {_eq: ${payload.codeId}}}]},`;
     } else if (payload.keyword?.length > 0) {
       payload.name = '%' + payload.keyword + '%';
       updateQuery = `name: {_like: "${payload.name}"},`;
@@ -51,7 +53,7 @@ export class ContractService extends CommonService {
     const operationsDoc = `
     query auratestnet_smart_contract($limit: Int = 100, $offset: Int = 0, $type: [String!], $address: String = null, $creator: String =null) {
       ${this.envDB} {
-        smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {code: {type: {_in: $type}}, ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
           address
           name
           code_id
@@ -66,7 +68,7 @@ export class ContractService extends CommonService {
           updated_at
           creator
         }
-        smart_contract_aggregate(where: {code: {type: {_in: $type}}, ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        smart_contract_aggregate(where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
           aggregate {
             count
           }
