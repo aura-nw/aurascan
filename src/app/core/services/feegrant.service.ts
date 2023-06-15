@@ -35,9 +35,9 @@ export class FeeGrantService extends CommonService {
     }
 
     const operationsDoc = `
-    query auratestnet_feegrant($limit: Int = 100, $granter: String = null, $hash: String = null, $grantee: String = null) {
+    query auratestnet_feegrant($limit: Int = 100,  $offset: Int = 0, $granter: String = null, $hash: String = null, $grantee: String = null) {
       ${this.envDB} {
-        feegrant(limit: $limit, where: {granter: {_eq: $granter}, transaction: {hash: {_eq: $hash}}, grantee: {_eq: $grantee} ${updateQuery} }, order_by: {init_tx_id: desc}) {
+        feegrant(limit: $limit, offset: $offset, where: {granter: {_eq: $granter}, transaction: {hash: {_eq: $hash}}, grantee: {_eq: $grantee} ${updateQuery} }, order_by: {init_tx_id: desc}) {
           grantee
           granter
           expiration
@@ -65,10 +65,11 @@ export class FeeGrantService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: payload?.limit || 100,
+          limit: payload?.limit || 20,
           granter: payload?.granter || null,
           hash: payload?.hash || null,
           grantee: payload?.grantee || null,
+          offset: payload?.offset || 0,
         },
         operationName: 'auratestnet_feegrant',
       })

@@ -1,0 +1,23 @@
+<ng-container *ngIf="paginator && length > paginator?.pageSize">
+  <ngb-pagination
+    [(page)]="paginator.pageIndex"
+    [pageSize]="paginator.pageSize"
+    [collectionSize]="length"
+    (pageChange)="pageChange.emit($event)"
+    [boundaryLinks]="true"
+    [maxSize]="maxSize"
+    [ellipses]="false"
+    [rotate]="true">
+    <ng-template ngbPaginationPrevious="">
+      <img src="../../../../assets/icons/icons-svg/white/chevron-left.svg" alt="Previous" />
+    </ng-template>
+
+    <ng-template ngbPaginationNext>
+      <img src="../../../../assets/icons/icons-svg/white/chevron-right.svg" alt="Next" />
+    </ng-template>
+
+    <ng-template ngbPaginationFirst>First</ng-template>
+    <ng-template ngbPaginationLast>Last</ng-template>
+    <ng-template ngbPaginationNumber let-p>{{ p }}</ng-template>
+  </ngb-pagination>
+</ng-container>

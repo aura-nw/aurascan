@@ -54,7 +54,7 @@ export class MyGranteesComponent implements OnInit {
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
+    pageIndex: 1,
   };
   nextKey = null;
   currentKey = null;
@@ -113,6 +113,53 @@ export class MyGranteesComponent implements OnInit {
     this.getListGrant();
   }
 
+  // getListGrant() {
+  //   const payload = {
+  //     limit: 100,
+  //     granter: this.currentAddress,
+  //     isActive: this.isActive,
+  //     isGranter: false,
+  //   };
+
+  //   this.feeGrantService.getListFeeGrants(payload, this.textSearch).subscribe(
+  //     (res) => {
+  //       res.feegrant?.forEach((element) => {
+  //         element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
+  //         element.spendable = element?.spend_limit || '0';
+  //         element.limit = element.feegrant_histories[0]?.amount || '0';
+  //         element.reason = element?.status;
+  //         element.tx_hash = element?.transaction?.hash;
+  //         element.timestamp = element?.transaction?.timestamp;
+  //         element.origin_revoke_txhash = element?.revoke_tx?.hash;
+  //         if (element?.expiration) {
+  //           const timeCompare = new Date(element?.expiration).getTime();
+  //           if (element.status === 'Available' && timeCompare < Date.now()) {
+  //             element.reason = 'Expired';
+  //           }
+  //         }
+  //       });
+
+  //       if (
+  //         this.dataSource?.data?.length > 0 &&
+  //         this.dataSource.data.length !== res.feegrant?.length &&
+  //         this.pageData.pageIndex != 0 &&
+  //         !this.textSearch
+  //       ) {
+  //         this.dataSource.data = [...this.dataSource.data, ...res.feegrant];
+  //       } else {
+  //         this.dataSource.paginator.pageIndex = 0;
+  //         this.pageData.pageIndex = 0;
+  //         this.dataSource.data = [...res.feegrant];
+  //       }
+  //       this.pageData.length = res.feegrant?.length;
+  //     },
+  //     (error) => {},
+  //     () => {
+  //       this.loading = false;
+  //     },
+  //   );
+  // }
+
   getListGrant() {
     const payload = {
       limit: 100,
@@ -168,33 +215,39 @@ export class MyGranteesComponent implements OnInit {
 
   resetFilterSearch() {
     this.textSearch = '';
-    this.pageData.pageIndex = 0;
     this.getListGrant();
   }
 
-  paginatorEmit(e: MatPaginator): void {
-    if (this.dataSource.paginator) {
-      e.page.next({
-        length: this.dataSource.paginator.length,
-        pageIndex: 0,
-        pageSize: this.dataSource.paginator.pageSize,
-        previousPageIndex: this.dataSource.paginator.pageIndex,
-      });
-      this.dataSource.paginator = e;
-    } else {
-      this.dataSource.paginator = e;
-    }
-  }
+  // paginatorEmit(e: MatPaginator): void {
+  //   if (this.dataSource.paginator) {
+  //     e.page.next({
+  //       length: this.dataSource.paginator.length,
+  //       pageIndex: 0,
+  //       pageSize: this.dataSource.paginator.pageSize,
+  //       previousPageIndex: this.dataSource.paginator.pageIndex,
+  //     });
+  //     this.dataSource.paginator = e;
+  //   } else {
+  //     this.dataSource.paginator = e;
+  //   }
+  // }
 
-  pageEvent(e: PageEvent): void {
-    const { pageIndex, pageSize } = e;
-    const next = this.pageData.length <= (pageIndex + 2) * pageSize;
-    this.pageData.pageIndex = e.pageIndex;
+  // pageEvent(e: PageEvent): void {
+  //   const { pageIndex, pageSize } = e;
+  //   const next = this.pageData.length <= (pageIndex + 2) * pageSize;
+  //   this.pageData.pageIndex = e.pageIndex;
 
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getGranteesData();
-      this.currentKey = this.nextKey;
+  //   if (next && this.nextKey && this.currentKey !== this.nextKey) {
+  //     this.getGranteesData();
+  //     this.currentKey = this.nextKey;
+  //   }
+  // }
+  pageEvent(pageIndex: number): void {
+    // reset page 1 if pageIndex = 0
+    if (pageIndex === 0) {
+      this.pageData.pageIndex = 1;
     }
+    this.getGranteesData();
   }
 
   async changeType(type: boolean) {

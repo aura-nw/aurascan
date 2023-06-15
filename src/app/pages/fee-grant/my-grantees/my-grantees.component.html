@@ -122,12 +122,19 @@
             </table>
           </div>
         </ng-container>
-        <app-paginator
+        <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+          <app-a-paginator
+            [paginator]="pageData"
+            [length]="pageData.length"
+            (pageChange)="pageEvent($event)">
+          </app-a-paginator>
+        </div>
+        <!-- <app-paginator
           [length]="pageData?.length"
           [pageSize]="pageData?.pageSize"
           (paginator)="paginatorEmit($event)"
           (pageEvent)="pageEvent($event)">
-        </app-paginator>
+        </app-paginator> -->
         <ng-template #noValues>
           <app-table-no-data></app-table-no-data>
         </ng-template>
