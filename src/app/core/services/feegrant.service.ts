@@ -14,68 +14,6 @@ export class FeeGrantService extends CommonService {
     super(http, environmentService);
   }
 
-  getListFeeGrants(payload, textSearch = ''): Observable<any> {
-    if (textSearch?.length > 0) {
-      if (textSearch?.length === LENGTH_CHARACTER.TRANSACTION) {
-        payload.hash = textSearch;
-      } else {
-        if (payload.isGranter) {
-          payload.granter = textSearch;
-        } else {
-          payload.grantee = textSearch;
-        }
-      }
-    }
-
-    let updateQuery = '';
-    if (payload.isActive) {
-      updateQuery = ', status: {_eq: "Available"}';
-    } else {
-      updateQuery = ', status: {_neq: "Available"}';
-    }
-
-    const operationsDoc = `
-    query auratestnet_feegrant($limit: Int = 100,  $offset: Int = 0, $granter: String = null, $hash: String = null, $grantee: String = null) {
-      ${this.envDB} {
-        feegrant(limit: $limit, offset: $offset, where: {granter: {_eq: $granter}, transaction: {hash: {_eq: $hash}}, grantee: {_eq: $grantee} ${updateQuery} }, order_by: {init_tx_id: desc}) {
-          grantee
-          granter
-          expiration
-          type
-          status
-          spend_limit
-          transaction {
-            hash
-            timestamp
-          }
-          denom
-          init_tx_id
-          revoke_tx {
-            hash
-          }
-          feegrant_histories(where: {action: {_eq: "create"}}) {
-            id
-            amount
-          }
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          limit: payload?.limit || 20,
-          granter: payload?.granter || null,
-          hash: payload?.hash || null,
-          grantee: payload?.grantee || null,
-          offset: payload?.offset || 0,
-        },
-        operationName: 'auratestnet_feegrant',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
   getListFeeGrants2(
     {
       limit,
@@ -118,7 +56,7 @@ export class FeeGrantService extends CommonService {
     const operationsDoc = `
     query queryFeegrant($limit: Int = 100,  $offset: Int = 0, $granter: String = null, $hash: String = null, $grantee: String = null) {
       ${this.envDB} {
-        feegrant(limit: $limit, offset: $offset, where: {granter: {_eq: $granter}, transaction: {hash: {_eq: $hash}}, grantee: {_eq: $grantee}, status: {_eq: "Available"}}, order_by: {init_tx_id: desc}) {
+        feegrant(limit: $limit, offset: $offset, where: {granter: {_eq: $granter}, transaction: {hash: {_eq: $hash}}, grantee: {_eq: $grantee} ${updateQuery} }, order_by: {init_tx_id: desc}) {
           grantee
           granter
           expiration
@@ -139,7 +77,7 @@ export class FeeGrantService extends CommonService {
             amount
           }
         }
-        feegrant_aggregate(where: {granter: {_eq: $granter}, transaction: {hash: {_eq: $hash}}, grantee: {_eq: $grantee}, status: {_eq: "Available"}}) {
+        feegrant_aggregate(where: {granter: {_eq: $granter}, transaction: {hash: {_eq: $hash}}, grantee: {_eq: $grantee} ${updateQuery} }) {
           aggregate {
             count
           }

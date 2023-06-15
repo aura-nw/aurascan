@@ -138,13 +138,13 @@ export class PopupAddGrantComponent implements OnInit {
     if (granter && grantee_address) {
       this.isRevoking = false;
       const payload = {
-        limit: 100,
+        limit: 1,
         granter: granter,
         grantee: grantee_address,
         isActive: true,
         isGranter: false,
       };
-      this.feeGrantService.getListFeeGrants(payload).subscribe(
+      this.feeGrantService.getListFeeGrants2(payload).subscribe(
         (res) => {
           if (res.feegrant[0]?.expiration) {
             const timeCompare = new Date(res.feegrant[0]?.expiration).getTime();

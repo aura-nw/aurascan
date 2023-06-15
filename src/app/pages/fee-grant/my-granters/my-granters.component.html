@@ -34,7 +34,7 @@
           </div>
         </form>
         <div class="mt-4 mt-lg-0 text--gray-1">
-          {{ dataSource?.data?.length || 0 }} transaction{{ dataSource?.data?.length > 0 ? 's' : '' }} found
+          {{ pageData?.length || 0 }} transaction{{ pageData?.length > 0 ? 's' : '' }} found
         </div>
       </div>
       <div class="mt-4">
@@ -111,12 +111,16 @@
             </table>
           </div>
         </ng-container>
-        <app-paginator
+        <!-- <app-paginator
           [length]="pageData?.length"
           [pageSize]="pageData?.pageSize"
           (paginator)="paginatorEmit($event)"
           (pageEvent)="pageEvent($event)">
-        </app-paginator>
+        </app-paginator> -->
+        <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+          <app-a-paginator [paginator]="pageData" [length]="pageData.length" (pageChange)="pageEvent2($event)">
+          </app-a-paginator>
+        </div>
         <ng-template #noValues>
           <app-table-no-data></app-table-no-data>
         </ng-template>

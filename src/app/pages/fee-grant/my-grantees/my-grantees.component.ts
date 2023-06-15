@@ -57,13 +57,11 @@ export class MyGranteesComponent implements OnInit {
     pageIndex: 1,
   };
 
-  currentKey = null;
   currentAddress = null;
   destroyed$ = new Subject();
   timerGetFeeGrant: any;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(
     public commonService: CommonService,
@@ -89,7 +87,7 @@ export class MyGranteesComponent implements OnInit {
     });
 
     this.timerGetFeeGrant = setInterval(() => {
-      this.getListGrant2();
+      this.getListGrant();
     }, 30000);
   }
 
@@ -110,10 +108,10 @@ export class MyGranteesComponent implements OnInit {
       this.templates = this.templatesInActive;
       this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
     }
-    this.getListGrant2();
+    this.getListGrant();
   }
 
-  getListGrant2() {
+  getListGrant() {
     this.feeGrantService
       .getListFeeGrants2(
         {
@@ -125,8 +123,12 @@ export class MyGranteesComponent implements OnInit {
         },
         this.textSearch,
       )
-      .subscribe(
-        (res) => {
+      .subscribe({
+        next: (res) => {
+          if (!res) {
+            return;
+          }
+
           res.feegrant?.forEach((element) => {
             element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
             element.spendable = element?.spend_limit || '0';
@@ -142,28 +144,28 @@ export class MyGranteesComponent implements OnInit {
               }
             }
           });
-          this.dataSource.data = res.feegrant;
-          this.pageData.length = res.feegrant_aggregate.aggregate.count;
+
+          this.dataSource.data = res?.feegrant;
+          this.pageData.length = res?.feegrant_aggregate?.aggregate?.count || 0;
         },
-        (error) => {},
-        () => {
+        complete: () => {
           this.loading = false;
         },
-      );
+      });
   }
 
   searchToken(): void {
     if (this.textSearch && this.textSearch?.length > 0) {
-      this.pageEvent2(0);
+      this.pageEvent(0);
     }
   }
 
   resetFilterSearch() {
     this.textSearch = '';
-    this.pageEvent2(0);
+    this.pageEvent(0);
   }
 
-  pageEvent2(pageIndex: number): void {
+  pageEvent(pageIndex: number): void {
     // reset page 1 if pageIndex = 0
     if (pageIndex === 0) {
       this.pageData.pageIndex = 1;
@@ -175,7 +177,7 @@ export class MyGranteesComponent implements OnInit {
   async changeType(type: boolean) {
     this.isActive = type;
 
-    this.pageEvent2(0);
+    this.pageEvent(0);
     this.loading = true;
   }
 
@@ -192,7 +194,7 @@ export class MyGranteesComponent implements OnInit {
       if (result) {
         this.toastr.loading(result);
         setTimeout(() => {
-          this.mappingErrorService.checkDetailTx(result).then(() => this.pageEvent2(0));
+          this.mappingErrorService.checkDetailTx(result).then(() => this.pageEvent(0));
         }, 2000);
       }
     });
@@ -208,7 +210,7 @@ export class MyGranteesComponent implements OnInit {
       if (result) {
         this.toastr.loading(result);
         setTimeout(() => {
-          this.mappingErrorService.checkDetailTx(result).then(() => this.pageEvent2(0));
+          this.mappingErrorService.checkDetailTx(result).then(() => this.pageEvent(0));
         }, 2000);
       }
     });
