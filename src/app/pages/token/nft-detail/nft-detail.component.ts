@@ -56,7 +56,7 @@ export class NFTDetailComponent implements OnInit {
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   isSoulBound = false;
-  loading = false;
+  loading = true;
   nftId = '';
   contractAddress = '';
   nftDetail: any;
@@ -110,7 +110,6 @@ export class NFTDetailComponent implements OnInit {
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.nftId = this.router.snapshot.paramMap.get('nftId');
-    this.getNFTDetail();
     this.getDataTable();
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -119,58 +118,89 @@ export class NFTDetailComponent implements OnInit {
         this.userAddress = null;
       }
     });
+
+    if (this.router.snapshot.url[0]?.path === 'token-nft') {
+      this.getDetailCW721();
+    } else {
+      this.getDetailCW4973();
+    }
   }
 
   error(): void {
     this.isError = true;
   }
 
-  getNFTDetail() {
-    this.loading = true;
+  getDetailCW721() {
     const encoded = encodeURIComponent(this.nftId);
-    this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
-      if (!res?.data || res.data === null || res?.data.status === SB_TYPE.UNEQUIPPED) {
-        this.toastr.error('Token invalid');
-        this.loading = false;
-        return;
-      }
-      res.data['type'] = res.data['type'] || ContractRegisterType.CW721;
-      this.nftDetail = {
-        ...res.data,
-        contract_address: res.contract_address || res.data?.cw721_contract?.smart_contract?.address,
-        creator: res.creator || res.data?.cw721_contract?.smart_contract?.creator,
-        name: res.name || res.data?.cw721_contract?.name,
-      };
-      if (this.nftDetail.type === ContractRegisterType.CW721) {
-        if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
-          this.nftDetail['isDisplayName'] = true;
-          this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
+    this.contractService.getDetailCW721(this.contractAddress, encoded).subscribe(
+      (res) => {
+        res.data = res.data[0];
+
+        if (!res?.data || res.data === null || res?.data.status === SB_TYPE.UNEQUIPPED) {
+          this.toastr.error('Token invalid');
+          this.loading = false;
+          return;
         }
-        if (this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url) {
-          this.imageUrl = this.nftDetail.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url;
-        }
-        if (this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url) {
-          if (!this.nftDetail?.image?.link_s3) {
-            if (
-              (this.nftDetail.animation?.content_type ||
-                this.nftDetail?.media_info?.offchain?.animation?.content_type) === 'image/gif'
-            ) {
-              this.imageUrl = this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain.animation?.url;
-            } else {
+        res.data['type'] = res.data['type'] || ContractRegisterType.CW721;
+        this.nftDetail = {
+          ...res.data,
+          contract_address: res.contract_address || res.data?.cw721_contract?.smart_contract?.address,
+          creator: res.creator || res.data?.cw721_contract?.smart_contract?.creator,
+          name: res.name || res.data?.cw721_contract?.name,
+        };
+        if (this.nftDetail.type === ContractRegisterType.CW721) {
+          if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
+            this.nftDetail['isDisplayName'] = true;
+            this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
+          }
+          if (this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url) {
+            this.imageUrl = this.nftDetail.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url;
+          }
+          if (this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url) {
+            if (!this.nftDetail?.image?.link_s3) {
+              if (
+                (this.nftDetail.animation?.content_type ||
+                  this.nftDetail?.media_info?.offchain?.animation?.content_type) === 'image/gif'
+              ) {
+                this.imageUrl =
+                  this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain.animation?.url;
+              } else {
+                this.animationUrl =
+                  this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
+              }
+            } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
               this.animationUrl =
                 this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
+            } else {
+              this.imageUrl = this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain.image?.url;
             }
-          } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
-            this.animationUrl =
-              this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
-          } else {
-            this.imageUrl = this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain.image?.url;
           }
         }
-      } else if (
-        this.nftDetail.type === ContractRegisterType.CW4973 ||
-        this.nftDetail?.cw721_contract.smart_contract.name === TYPE_CW4973
-      ) {
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
+  }
+
+  getDetailCW4973() {
+    const encoded = encodeURIComponent(this.nftId);
+    this.contractService.getDetailCW4973(this.contractAddress, encoded).subscribe(
+      (res) => {
+        if (!res?.data || res.data === null || res?.data.status === SB_TYPE.UNEQUIPPED) {
+          this.toastr.error('Token invalid');
+          this.loading = false;
+          return;
+        }
+        res.data['type'] = res.data['type'] || ContractRegisterType.CW721;
+        this.nftDetail = {
+          ...res.data,
+          contract_address: res.contract_address || res.data?.cw721_contract?.smart_contract?.address,
+          creator: res.creator || res.data?.cw721_contract?.smart_contract?.creator,
+          name: res.name || res.data?.cw721_contract?.name,
+        };
+
         if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
           this.toastr.error('Token invalid');
           return;
@@ -197,9 +227,12 @@ export class NFTDetailComponent implements OnInit {
           this.nftDetail['nftName'] = this.nftDetail.token_name_ipfs || this.nftDetail.ipfs?.name || '';
         }
         this.isSoulBound = true;
-      }
-      this.loading = false;
-    });
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   async getDataTable(nextKey = null) {
