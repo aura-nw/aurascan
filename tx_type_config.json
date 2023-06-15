@@ -1,0 +1,10 @@
+[
+  {
+    "label": "/nois.allocation.v1.MsgClaimRewards",
+    "value": "Claim Rewards"
+  },
+  {
+    "label": "/nois.allocation.v1.MsgClaimRewards1",
+    "value": "Claim Rewards 1"
+  }
+]

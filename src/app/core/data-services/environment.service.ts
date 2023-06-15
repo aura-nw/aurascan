@@ -2,6 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import { BehaviorSubject } from 'rxjs';
+import type_config from '../../../../tx_type_config.json';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../app/core/constants/transaction.enum';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 
 export interface IConfiguration {
   fabric: string;
@@ -37,7 +40,7 @@ export class EnvironmentService {
     indexerUri: '',
     timeInterval: null,
     ipfsDomain: '',
-    graphUrl:'',
+    graphUrl: '',
     evnLabel: '',
   });
 
@@ -70,7 +73,7 @@ export class EnvironmentService {
           graphUrl: config['graphUrl'],
           timeInterval: config['timeInterval'] || 4000,
           ipfsDomain: config['ipfsDomain'],
-          evnLabel: config['evnLabel']
+          evnLabel: config['evnLabel'],
         };
 
         this.config.next(data);
@@ -78,5 +81,18 @@ export class EnvironmentService {
       .catch((err: any) => {
         console.error(err);
       });
+  }
+
+  extends_tx_type() {
+    try {
+      // Extends config type transaction
+      type_config.forEach((data) => {
+        TRANSACTION_TYPE_ENUM[data.label] = data.label;
+        TypeTransaction[data.value] = data.value;
+        TYPE_TRANSACTION.push({ label: TRANSACTION_TYPE_ENUM[data.label], value: TypeTransaction[data.value] });
+      });
+    } catch (err: any) {
+      console.error(err);
+    }
   }
 }

@@ -162,7 +162,10 @@ export class MaterialModule {}
     Globals,
     {
       provide: APP_INITIALIZER,
-      useFactory: (environmentService: EnvironmentService) => () => environmentService.load(),
+      useFactory: (environmentService: EnvironmentService) => () => {
+        environmentService.load();
+        environmentService.extends_tx_type();
+      },
       multi: true,
       deps: [EnvironmentService],
     },
