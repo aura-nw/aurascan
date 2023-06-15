@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
 import { mergeMap } from 'rxjs/operators';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ContractType } from 'src/app/core/constants/token.enum';
@@ -31,11 +32,18 @@ export class ContractComponent implements OnInit {
   getContractDetail(notCheck = false) {
     this.contractService.contractObservable
       .pipe(
-        mergeMap((data) => {
-          if (data) {
-            this.contractDetail = data;
+        mergeMap((res) => {
+          if (res) {
+            res.tx_hash = res.instantiate_hash;
+            res.execute_msg_schema = _.get(res, 'code.code_id_verifications[0].execute_msg_schema');
+            res.instantiate_msg_schema = _.get(res, 'code.code_id_verifications[0].instantiate_msg_schema');
+            res.query_msg_schema = _.get(res, 'code.code_id_verifications[0].query_msg_schema');
+            res.contract_hash = _.get(res, 'code.code_id_verifications[0].data_hash');
+            res.contract_name = _.get(res, 'cw721_contract.smart_contract.name');
+            res.compiler_version = _.get(res, 'code.code_id_verifications[0].compiler_version');
+            this.contractDetail = res;
           }
-          if (data?.code?.code_id_verifications[0]?.verification_status === 'verifying' && !notCheck) {
+          if (res?.code?.code_id_verifications[0]?.verification_status === 'verifying' && !notCheck) {
             this.isVerifying = true;
           } else {
             this.isVerifying = false;

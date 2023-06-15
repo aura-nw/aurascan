@@ -36,7 +36,7 @@ export class FeeGrantService extends CommonService {
 
     const operationsDoc = `
     query auratestnet_feegrant($limit: Int = 100, $granter: String = null, $hash: String = null, $grantee: String = null) {
-      auratestnet {
+      ${this.envDB} {
         feegrant(limit: $limit, where: {granter: {_eq: $granter}, transaction: {hash: {_eq: $hash}}, grantee: {_eq: $grantee} ${updateQuery} }, order_by: {init_tx_id: desc}) {
           grantee
           granter
