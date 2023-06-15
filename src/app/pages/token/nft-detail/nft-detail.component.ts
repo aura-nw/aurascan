@@ -134,26 +134,37 @@ export class NFTDetailComponent implements OnInit {
         this.loading = false;
         return;
       }
-      this.nftDetail = res.data;
+      res.data['type'] = res.data['type'] || ContractRegisterType.CW721;
+      this.nftDetail = {
+        ...res.data,
+        contract_address: res.contract_address || res.data?.cw721_contract?.smart_contract?.address,
+        creator: res.creator || res.data?.cw721_contract?.smart_contract?.creator,
+        name: res.name || res.data?.cw721_contract?.name,
+      };
       if (this.nftDetail.type === ContractRegisterType.CW721) {
         if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
           this.nftDetail['isDisplayName'] = true;
           this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
         }
-        if (this.nftDetail?.image?.link_s3) {
-          this.imageUrl = this.nftDetail.image?.link_s3;
+        if (this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url) {
+          this.imageUrl = this.nftDetail.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url;
         }
-        if (this.nftDetail.animation?.link_s3) {
+        if (this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url) {
           if (!this.nftDetail?.image?.link_s3) {
-            if (this.nftDetail.animation?.content_type === 'image/gif') {
-              this.imageUrl = this.nftDetail.animation?.link_s3;
+            if (
+              (this.nftDetail.animation?.content_type ||
+                this.nftDetail?.media_info?.offchain?.animation?.content_type) === 'image/gif'
+            ) {
+              this.imageUrl = this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain.animation?.url;
             } else {
-              this.animationUrl = this.nftDetail.animation?.link_s3;
+              this.animationUrl =
+                this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
             }
           } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
-            this.animationUrl = this.nftDetail.animation?.link_s3;
+            this.animationUrl =
+              this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
           } else {
-            this.imageUrl = this.nftDetail?.image?.link_s3;
+            this.imageUrl = this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain.image?.url;
           }
         }
       } else if (
