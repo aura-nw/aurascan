@@ -64,9 +64,58 @@ export class ValidatorsVotesComponent implements OnInit {
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
     this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
       if (event) {
-        this.getValidatorVotes();
+        // this.getValidatorVotes();
+        this.getValidatorVotes2();
       }
     });
+  }
+
+  getValidatorVotes2(isInit = false): void {
+    if (this.proposalId) {
+      this.proposalService
+        .getValidatorVotesFromIndexer2(this.proposalId, {
+          limit: 10,
+        })
+        .subscribe(
+          (res) => {
+            let validatorVote = [];
+            if (res?.validator) {
+              validatorVote = _.get(res, 'validator').map((item) => {
+                const validator_name = item.description?.moniker;
+                const timestamp = _.get(item, 'vote[0].updated_at');
+                const vote_option = _.get(item, 'vote[0].vote_option');
+                const txhash = _.get(item, 'vote[0].txhash');
+                const operator_address = _.get(item, 'operator_address');
+                const validator_identity = _.get(item, 'description.identity');
+                return { validator_name, timestamp, vote_option, txhash, operator_address, validator_identity };
+              });
+            }
+
+            this.voteData.all = validatorVote;
+            this.voteData.yes = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.YES);
+            this.voteData.abstain = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.ABSTAIN);
+            this.voteData.no = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.NO);
+            this.voteData.noWithVeto = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.NO_WITH_VETO);
+            this.voteData.didNotVote = validatorVote.filter((f) => f.vote_option === '');
+            this.voteDataList = [...this.voteData.all];
+
+            this.countVote.set('', this.voteData.all.length);
+            this.countVote.set(VOTE_OPTION.YES, this.voteData.yes.length);
+            this.countVote.set(VOTE_OPTION.ABSTAIN, this.voteData.abstain.length);
+            this.countVote.set(VOTE_OPTION.NO, this.voteData.no.length);
+            this.countVote.set(VOTE_OPTION.NO_WITH_VETO, this.voteData.noWithVeto.length);
+            this.countVote.set('null', this.voteData.didNotVote.length);
+
+            this.voteDataListLoading = false;
+            this.changeTab(this.countCurrent);
+          },
+          () => {},
+          () => {
+            this.voteDataListLoading = false;
+          },
+        );
+    }
+    isInit && this.customNav?.select(this.tabAll);
   }
 
   getValidatorVotes(isInit = false): void {
@@ -114,7 +163,9 @@ export class ValidatorsVotesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getValidatorVotes(true);
+    // this.getValidatorVotes(true);
+
+    this.getValidatorVotes2();
   }
 
   changeTab(tabId): void {
@@ -142,5 +193,9 @@ export class ValidatorsVotesComponent implements OnInit {
         this.voteDataList = this.voteData.didNotVote || 0;
         break;
     }
+  }
+
+  pageEventChange(e) {
+    console.log(e);
   }
 }

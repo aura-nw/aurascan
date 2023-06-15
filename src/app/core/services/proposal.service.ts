@@ -6,6 +6,7 @@ import { VOTE_OPTION } from '../constants/proposal.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
+import { offset } from '@popperjs/core';
 
 @Injectable()
 export class ProposalService extends CommonService {
@@ -46,6 +47,40 @@ export class ProposalService extends CommonService {
         variables: {
           limit: +this.maxValidator || 100,
           proposalId: proposalId,
+        },
+        operationName: 'auratestnet_validator',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getValidatorVotesFromIndexer2(
+    proposalId: number,
+    { limit, offset }: { limit: number; offset?: number },
+  ): Observable<any> {
+    const operationsDoc = `
+    query auratestnet_validator($proposalId: Int = null, $limit: Int = 10, $offset: Int = 0) {
+      ${this.envDB} {
+        validator(where: {status: {_eq: "BOND_STATUS_BONDED"}}, order_by: {percent_voting_power: desc}, limit: $limit, offset: $offset) {
+          vote(where: {proposal_id: {_eq: $proposalId}}) {
+            id
+            vote_option
+            txhash
+            proposal_id
+            updated_at
+          }
+          description
+          operator_address
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          proposalId: proposalId,
+          limit: limit,
+          offset: offset || 0,
         },
         operationName: 'auratestnet_validator',
       })
