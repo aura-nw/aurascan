@@ -45,7 +45,7 @@
       <div
         class="w-100 text-nowrap body-03 content-info mr-6"
         [ngClass]="{ 'g-ellipsis content-info-ellipsis': breakpoint.value.matches }">
-        {{ contractDetailData?.url }}
+        {{ contractDetailData?.code?.code_id_verifications[0]?.github_url }}
       </div>
       <div class="d-flex justify-content-end">
         <button
@@ -54,13 +54,13 @@
           #tooltip1="matTooltip"
           (mouseenter)="$event.stopImmediatePropagation()"
           (mouseleave)="$event.stopImmediatePropagation()"
-          (click)="copyData(contractDetailData?.url); tooltip1.toggle()">
+          (click)="copyData(contractDetailData?.code?.code_id_verifications[0]?.github_url); tooltip1.toggle()">
           <span>Copy</span>
         </button>
       </div>
     </div>
     <!-- File Contract Source Code -->
-    <div *ngIf="contractDetailData.s3_location">
+    <div *ngIf="contractDetailData.code?.code_id_verifications[0]?.s3_location">
       <div class="my-4 mt-lg-6 d-flex align-items-center">
         <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="16px" height="16px" />
         <span class="text--gray-1 ml-2 body-02">File Contract Source Code</span>
@@ -69,10 +69,14 @@
         <div
           class="w-100 text-nowrap body-03 content-info mr-6"
           [ngClass]="{ 'g-ellipsis content-info-ellipsis': breakpoint.value.matches }">
-          {{ contractDetailData?.s3_location.split('/')[contractDetailData?.s3_location.split('/').length - 1] }}
+          {{
+            contractDetailData?.code?.code_id_verifications[0]?.s3_location.split('/')[
+              contractDetailData?.code?.code_id_verifications[0]?.s3_location.split('/').length - 1
+            ]
+          }}
         </div>
         <a
-          href="{{ contractDetailData?.s3_location }}"
+          href="{{ contractDetailData?.code?.code_id_verifications[0]?.s3_location }}"
           class="button button-pill button--sm button-outline button-outline__in-card d-flex flex-shrink-0">
           <img
             [src]="'assets/icons/icons-svg/white/download.svg' | imageS3"

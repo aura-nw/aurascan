@@ -3,10 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
+import { CONTRACT_RESULT, TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { shortenAddress } from '../../../../core/utils/common/shorten';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-code-id-contracts-tab',
@@ -35,7 +37,7 @@ export class CodeIdContractsTabComponent implements OnInit {
   constructor(private contractService: ContractService, private datePipe: DatePipe) {}
 
   ngOnInit(): void {
-    this.getListContract();
+    this.getListContractByCode();
   }
   shortenAddress(address: string): string {
     if (address) {
@@ -50,29 +52,31 @@ export class CodeIdContractsTabComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    this.getListContract();
+    this.getListContractByCode();
   }
 
-  getListContract() {
+  getListContractByCode() {
     let payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      keyword: this.codeId.toString(),
-      contractType: [],
+      codeId: this.codeId.toString(),
     };
 
-    this.contractService.getListContract(payload).subscribe((res) => {
-      this.pageData.length = res?.meta?.count;
-      if (res?.data?.length > 0) {
-        res.data.forEach((item) => {
-          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          if (item.result === CONTRACT_RESULT.INCORRECT || !item.type) {
-            item.type = '-';
-          } else if (item.result === CONTRACT_RESULT.TBD) {
-            item.type = CONTRACT_RESULT.TBD;
+    this.contractService.getListContractByCode(payload).subscribe((res) => {
+      this.pageData.length = res?.smart_contract?.length || 0;
+      if (res?.smart_contract?.length > 0) {
+        res?.smart_contract.forEach((item) => {
+          item.updated_at = this.datePipe.transform(item?.created_at, DATEFORMAT.DATETIME_UTC);
+          item.contract_address = item?.address;
+          item.tx_hash = item?.instantiate_hash;
+          item.creator_address = item?.creator;
+          item.verified_at = _.get(item, 'code.code_id_verifications[0].verified_at');
+          item.type = item.code?.type || '-';
+          if (item.type === ContractRegisterType.CW721 && item.smart_contracts?.name === TYPE_CW4973) {
+            item.type = ContractRegisterType.CW4973;
           }
         });
-        this.dataSource = res.data;
+        this.dataSource = res.smart_contract;
       }
     });
   }
