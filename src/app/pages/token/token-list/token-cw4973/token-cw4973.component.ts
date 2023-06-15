@@ -75,9 +75,9 @@ export class TokenCw4973Component implements OnInit {
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: this.textSearch,
     };
-    this.soulboundService.getListABT(payload).subscribe((res: ResponseDto) => {
-      this.dataSource = new MatTableDataSource<any>(res.data);
-      this.pageData.length = res.meta.count;
+    this.soulboundService.getListABT(payload).subscribe((res) => {     
+      this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
+      this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;
     });
   }
 
