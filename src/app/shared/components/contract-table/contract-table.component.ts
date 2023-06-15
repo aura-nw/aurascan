@@ -169,7 +169,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
           to = contract.messages[0].contract;
           break;
         default:
-          if (Object.keys(msg)[0]?.length > 1) {
+          if (msg && Object.keys(msg)[0]?.length > 1) {
             method = Object.keys(msg)[0];
           } else {
             const typeTemp = contract.messages[0]['@type'];

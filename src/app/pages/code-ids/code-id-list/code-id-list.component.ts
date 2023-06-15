@@ -4,8 +4,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { CONTRACT_RESULT, TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -42,6 +42,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractResult = CONTRACT_RESULT;
   contractVerifyType = ContractVerifyType;
+
   constructor(private contractService: ContractService) {}
 
   ngOnInit(): void {
@@ -76,6 +77,16 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
     };
 
     this.contractService.getListCodeID(payload).subscribe((res) => {
+      res?.data?.forEach((k) => {
+        k.instantiates = k.smart_contracts?.length || 0;
+        k.tx_hash = k.store_hash;
+        k.verified_at = k.code_id_verifications[0]?.verified_at;
+        k.contract_verification = k.code_id_verifications[0]?.verification_status;
+        if (k.type === ContractRegisterType.CW721 && k.smart_contracts[0]?.name === TYPE_CW4973) {
+          k.type = ContractRegisterType.CW4973;
+        }
+      });
+
       this.dataSource.data = res.data;
       this.pageData.length = res?.meta?.count;
     });

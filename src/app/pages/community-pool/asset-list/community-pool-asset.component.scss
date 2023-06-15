@@ -1,0 +1,31 @@
+.search-form {
+  min-width: 100%;
+
+  @media (min-width: 992px) {
+    min-width: 410px;
+  }
+}
+
+.vertical-align-top {
+  vertical-align: top;
+}
+
+.proposal-title {
+  max-width: 370px;
+}
+
+.aura-table.proposal-table th.mat-header-cell:nth-child(3),
+.aura-table.proposal-table th.mat-header-cell:nth-child(4),
+.aura-table.proposal-table th.mat-header-cell:nth-child(5),
+.aura-table.proposal-table th.mat-header-cell:nth-child(6),
+.aura-table.proposal-table th.mat-header-cell:nth-child(7) {
+  width: 7%;
+}
+
+.aura-table.proposal-table th.mat-header-cell:nth-child(1) {
+  width: 4%;
+}
+
+.aura-table.proposal-table th.mat-header-cell:nth-child(2) {
+  width: 20%;
+}

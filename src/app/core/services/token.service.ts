@@ -1,21 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { LENGTH_CHARACTER } from '../constants/common.constant';
+import { map } from 'rxjs/operators';
+import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { RangeType } from '../models/common.model';
 import { CommonService } from './common.service';
-import { checkEnvQuery } from '../utils/common/info-common';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
-  envDB = checkEnvQuery(this.environmentService.configValue.env);
-  graphUrl = `${this.environmentService.configValue.graphUrl}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -25,51 +21,25 @@ export class TokenService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/cw20-tokens`, payload);
   }
 
-  getListCW721Token(payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw721-tokens`, payload);
-  }
-
-  getTokenDetail(address): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/token/${address}`);
-  }
-
-  getTokenCW721Detail(address): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
-  }
-
-  getListTokenTransferIndexerV2(pageLimit: string | number, contractAddress = '', filterData: any, nextKey = null) {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
-    let filterQuery = '';
-    if (filterData?.keyWord) {
-      if (
-        filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION &&
-        filterData?.keyWord == filterData?.keyWord.toUpperCase()
-      ) {
-        filterQuery = filterQuery.concat(`, hash: {_eq: "${filterData?.keyWord}" }`);
-      } else if (filterData['isSearchWallet']) {
-        filterQuery = filterQuery.concat(`, events: {event_attributes: {value: {_eq: "${filterData?.keyWord}" }}}`);
-      } else {
-        filterQuery = filterQuery.concat(
-          `, events: {event_attributes: {key: {_eq: "token_id"}, value: {_eq: "${filterData?.keyWord}" }}}`,
-        );
-      }
+  getListCW721TokenV2(payload, textSearch = null): Observable<any> {
+    if (textSearch?.length > 0) {
+      textSearch = '%' + textSearch + '%';
     }
-    if (nextKey) {
-      filterQuery = filterQuery.concat(', id: {_lt: ' + `${nextKey}` + '}');
-    }
-
+    let querySort = `, order_by: {${payload.sort_column}: ${payload.sort_order}}`;
     const operationsDoc = `
-    query getListTx($limit: Int, $event_attr_val: String, $tx_msg_val: jsonb) {
-      ${envDB} {
-        transaction(limit: $limit, order_by: {timestamp: desc}, where: {_or: [{events: {event_attributes: {key: {_eq: "_contract_address"}, value: {_eq: $event_attr_val}}, type: {_eq: "execute"}}}, {transaction_messages: {content: {_contains: $tx_msg_val}}}] ${filterQuery} }) {
-          id
-          height
-          hash
-          timestamp
-          code
-          gas_used
-          gas_wanted
-          data(path: "tx")
+    query MyQuery($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
+      ${this.envDB} {
+        list_token: m_view_count_cw721_txs(limit: $limit, offset: $offset ${querySort}, where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}) {
+          contract_address
+          symbol
+          name
+          total_tx
+          transfer_24h
+        }
+        total_token: m_view_count_cw721_txs_aggregate(where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}){
+          aggregate {
+            count
+          }
         }
       }
     }
@@ -78,66 +48,92 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: pageLimit,
-          event_attr_val: contractAddress,
-          tx_msg_val: {
-            contract: contractAddress,
-          },
+          limit: payload.limit || 20,
+          offset: payload.offset || 0,
+          contract_address: textSearch || null,
+          name: textSearch || null,
         },
-        operationName: 'getListTx',
+        operationName: 'MyQuery',
       })
-      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  // getListTokenTransferIndexerOld(pageLimit: string | number, contractAddress: string, filterData: any, nextKey = null) {
-  //   const params = _({
-  //     chainid: this.chainInfo.chainId,
-  //     searchType: 'execute',
-  //     searchKey: '_contract_address',
-  //     searchValue: contractAddress,
-  //     needFullLog: true,
-  //     pageLimit,
-  //     nextKey,
-  //     // countTotal: true,
-  //   })
-  //     .omitBy(_.isNull)
-  //     .omitBy(_.isUndefined)
-  //     .value();
+  getTokenDetail(address): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/token/${address}`);
+  }
 
-  //   if (filterData?.keyWord) {
-  //     if (
-  //       filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION &&
-  //       filterData?.keyWord == filterData?.keyWord.toUpperCase()
-  //     ) {
-  //       params['txHash'] = filterData?.keyWord;
-  //     } else if (filterData['isSearchWallet']) {
-  //       params['addressInContract'] = filterData?.keyWord;
-  //     } else {
-  //       params['query'] = 'wasm.token_id=' + filterData?.keyWord;
-  //     }
-  //   }
+  getListTokenNFTFromIndexerV2(payload): Observable<any> {
+    const operationsDoc = `
+    query Query(
+      $contract_address: String
+      $limit: Int = 10
+      $nextKeyLastUpdatedHeight: Int = null
+      $nextKeyId: Int = null
+      $tokenId: String = null
+      $owner: String = null
+    ) {
+      ${this.envDB} {
+        cw721_token(
+          limit: $limit
+          where: {
+            cw721_contract: {
+              smart_contract: { address: { _eq: $contract_address } }
+            }
+            id: { _lt: $nextKeyId }
+            last_updated_height: { _lt: $nextKeyLastUpdatedHeight }
+            token_id: { _eq: $tokenId }
+            owner: { _eq: $owner }
+          }
+          order_by: [{ last_updated_height: desc }, { id: desc }]
+        ) {
+          id
+          token_id
+          owner
+          media_info
+          last_updated_height
+          created_at
+          burned
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload?.limit || 20,
+          contract_address: payload?.contractAddress,
+          nextKeyLastUpdatedHeight: payload?.nextKey,
+          nextKeyId: payload?.nextKeyId,
+          tokenId: payload?.token_id,
+          owner: payload?.owner,
+        },
+        operationName: 'Query',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 
-  //   return axios.get(`${this.indexerUrl}/transaction`, { params });
-  // }
-
-  getListTokenNFTFromIndexer(payload): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      owner: payload.owner,
-      tokenId: payload.token_id,
-      contractAddress: payload.contractAddress,
-      pageLimit: payload.pageLimit,
-      pageOffset: payload.pageOffset,
-      // countTotal: true,
-      contractType: payload.contractType,
-      isBurned: false,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-    return this.http.get<any>(`${this.indexerUrl}/asset/getByOwner`, {
-      params,
-    });
+  countTotalTokenCW721(contract_address): Observable<any> {
+    const operationsDoc = `
+    query MyQuery($contract_address: String) {
+      ${this.envDB} {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          contract_address: contract_address,
+        },
+        operationName: 'MyQuery',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTokenHolder(
@@ -148,6 +144,34 @@ export class TokenService extends CommonService {
   ): Observable<any> {
     let url = `${this.indexerUrl}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
     return this.http.get<any>(url);
+  }
+
+  getListTokenHolderNFT(payload) {
+    const operationsDoc = `
+    query MyQuery($contract_address: String, $limit: Int = 10) {
+      ${this.envDB} {
+        view_count_holder_cw721(limit: $limit, where: {contract_address: {_eq: $contract_address}}, order_by: {count: desc}) {
+          count
+          owner
+        }
+        view_count_holder_cw721_aggregate(where: {contract_address: {_eq: $contract_address}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload?.limit || 20,
+          contract_address: payload?.contractAddress,
+        },
+        operationName: 'MyQuery',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getContractDetail(tokenAddress): Observable<any> {
@@ -170,5 +194,9 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
       params: { rangeType, coinId, min, max },
     });
+  }
+
+  getListAssetCommunityPool() {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
   }
 }

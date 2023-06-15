@@ -37,18 +37,11 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
   { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 12 },
   { matColumnDef: 'status', headerCellDef: 'Result', type: 'result', headerWidth: 9 },
-  {
-    matColumnDef: 'blockHeight',
-    headerCellDef: 'Block',
-    type: 'hash-url',
-    headerWidth: 6,
-    isUrl: '/blocks'
-  },
+  { matColumnDef: 'blockHeight', headerCellDef: 'Block', type: 'hash-url', headerWidth: 6, isUrl: '/blocks' },
   { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
   { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 12, isUrl: '/account' },
   { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 6, justify: 'center' },
   { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 12, isUrl: '/contracts' },
-  { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'AURA', headerWidth: 10 },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },
 ];
 
@@ -118,7 +111,6 @@ export const REGISTER_CONTRACT = [
   },
 ];
 
-
 export const LIST_ZEROES = [
   {
     value: '6',
@@ -134,3 +126,4 @@ export const LIST_ZEROES = [
   },
 ];
 
+export const TYPE_CW4973 = 'crates.io:cw4973';

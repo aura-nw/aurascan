@@ -68,7 +68,11 @@ export class TransactionDetailComponent implements OnInit {
 
   getDetail(): void {
     if (this.txHash?.length === LENGTH_CHARACTER.TRANSACTION) {
-      this.transactionService.getListTx(1, 0, this.txHash).subscribe(
+      const payload = {
+        limit: 1,
+        hash: this.txHash,
+      };
+      this.transactionService.getListTx(payload).subscribe(
         (res) => {
           if (res?.transaction?.length > 0) {
             const txs = convertDataTransactionV2(res, this.coinInfo);
@@ -79,7 +83,7 @@ export class TransactionDetailComponent implements OnInit {
               gas_used: _.get(res?.transaction[0], 'gas_used'),
               gas_wanted: _.get(res?.transaction[0], 'gas_wanted'),
               raw_log: _.get(res?.transaction[0], 'data.tx_response.raw_log'),
-              type: _.get(res?.transaction[0], 'data.tx.body.messages[0].@type'),
+              type: this.transaction.typeOrigin,
             };
 
             if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {

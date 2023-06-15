@@ -4,6 +4,7 @@ import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
+import * as _ from 'lodash';
 
 export interface IValidatorVotes {
   rank: number;
@@ -70,27 +71,46 @@ export class ValidatorsVotesComponent implements OnInit {
 
   getValidatorVotes(isInit = false): void {
     if (this.proposalId) {
-      this.proposalService.getValidatorVotesFromIndexer(this.proposalId).subscribe((res) => {
-        this.voteDataListLoading = true;
+      this.proposalService.getValidatorVotesFromIndexer(this.proposalId).subscribe(
+        (res) => {
+          let validatorVote = [];
+          if (res?.validator) {
+            validatorVote = _.get(res, 'validator').map((item) => {
+              const validator_name = item.description?.moniker;
+              const timestamp = _.get(item, 'vote[0].updated_at');
+              const vote_option = _.get(item, 'vote[0].vote_option');
+              const txhash = _.get(item, 'vote[0].txhash');
+              const operator_address = _.get(item, 'operator_address');
+              const validator_identity = _.get(item, 'description.identity');
+              return { validator_name, timestamp, vote_option, txhash, operator_address, validator_identity };
+            });
+          }
 
-        this.voteData.all = res.data;
-        this.voteData.yes = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_YES);
-        this.voteData.abstain = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_ABSTAIN);
-        this.voteData.no = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_NO);
-        this.voteData.noWithVeto = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO);
-        this.voteData.didNotVote = res.data.filter((f) => f.answer === '');
-        this.voteDataList = [...this.voteData.all];
+          this.voteData.all = validatorVote;
+          this.voteData.yes = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.VOTE_OPTION_YES);
+          this.voteData.abstain = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.VOTE_OPTION_ABSTAIN);
+          this.voteData.no = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.VOTE_OPTION_NO);
+          this.voteData.noWithVeto = validatorVote.filter(
+            (f) => f.vote_option === VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO,
+          );
+          this.voteData.didNotVote = validatorVote.filter((f) => f.vote_option === '');
+          this.voteDataList = [...this.voteData.all];
 
-        this.countVote.set('', this.voteData.all.length);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.yes.length);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.abstain.length);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.no.length);
-        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.voteData.noWithVeto.length);
-        this.countVote.set('null', this.voteData.didNotVote.length);
+          this.countVote.set('', this.voteData.all.length);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.yes.length);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.abstain.length);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.no.length);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.voteData.noWithVeto.length);
+          this.countVote.set('null', this.voteData.didNotVote.length);
 
-        this.voteDataListLoading = false;
-        this.changeTab(this.countCurrent);
-      });
+          this.voteDataListLoading = false;
+          this.changeTab(this.countCurrent);
+        },
+        () => {},
+        () => {
+          this.voteDataListLoading = false;
+        },
+      );
     }
     isInit && this.customNav?.select(this.tabAll);
   }
@@ -109,19 +129,19 @@ export class ValidatorsVotesComponent implements OnInit {
         this.voteDataList = this.voteData.all;
         break;
       case VOTE_OPTION.VOTE_OPTION_YES:
-        this.voteDataList = this.voteData.yes;
+        this.voteDataList = this.voteData.yes || 0;
         break;
       case VOTE_OPTION.VOTE_OPTION_ABSTAIN:
-        this.voteDataList = this.voteData.abstain;
+        this.voteDataList = this.voteData.abstain || 0;
         break;
       case VOTE_OPTION.VOTE_OPTION_NO:
-        this.voteDataList = this.voteData.no;
+        this.voteDataList = this.voteData.no || 0;
         break;
       case VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO:
-        this.voteDataList = this.voteData.noWithVeto;
+        this.voteDataList = this.voteData.noWithVeto || 0;
         break;
       default:
-        this.voteDataList = this.voteData.didNotVote;
+        this.voteDataList = this.voteData.didNotVote || 0;
         break;
     }
   }

@@ -6,6 +6,7 @@ import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 
 @Component({
   selector: 'app-depositors',
@@ -25,6 +26,7 @@ export class DepositorsComponent implements OnInit {
     private proposalService: ProposalService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
+    private transactionService: TransactionService
   ) {
     this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
       if (event) {
@@ -39,28 +41,29 @@ export class DepositorsComponent implements OnInit {
 
   getDepositorsList(): void {
     const payload = {
-      proposalId: this.proposalId,
-      pageLimit: 100,
+      key: "proposal_id",
+      value: this.proposalId?.toString(),
+      limit: 100,
     };
-    this.proposalService.getDepositors(payload).subscribe(
+    this.transactionService.getListTxCondition(payload).subscribe(
       (res) => {
         let dataList: any[] = [];
         if (res?.transaction?.length > 0) {
           this.dataLength = res.transaction?.length || 0;
           dataList = res?.transaction?.filter(
             (transaction) =>
-              transaction?.data?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
-              (transaction?.data?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
-                transaction?.data?.body?.messages[0]?.initial_deposit?.length > 0),
+              transaction?.data?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
+              (transaction?.data?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
+                transaction?.data?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
           );
 
           dataList.forEach((item) => {
-            if (item.data?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
-              item.depositors = item.data?.body?.messages[0]?.proposer;
-              item.amount = balanceOf(item.data?.body?.messages[0].initial_deposit[0].amount);
+            if (item.data?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
+              item.depositors = item.data?.tx?.body?.messages[0]?.proposer;
+              item.amount = balanceOf(item.data?.tx?.body?.messages[0].initial_deposit[0].amount);
             } else {
-              item.depositors = item.data?.body?.messages[0]?.depositor;
-              item.amount = balanceOf(item.data?.body?.messages[0].amount[0].amount);
+              item.depositors = item.data?.tx?.body?.messages[0]?.depositor;
+              item.amount = balanceOf(item.data?.tx?.body?.messages[0].amount[0].amount);
             }
             item.txhash = item?.hash;
             item.timestamp = item?.timestamp;

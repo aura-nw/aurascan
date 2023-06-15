@@ -30,6 +30,9 @@ export class TokenInventoryComponent implements OnInit {
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
   isMoreTx = false;
   linkToken = 'token-nft';
+  nextKey = null;
+  currentNextKey = null;
+  nextKeyId = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,9 +42,6 @@ export class TokenInventoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.typeContract === ContractRegisterType.CW4973) {
-      this.linkToken = 'token-abt';
-    }
     this.route.params.subscribe((params) => {
       this.contractAddress = params?.contractAddress;
     });
@@ -49,18 +49,21 @@ export class TokenInventoryComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.keyWord = params?.a || '';
     });
+
+    if (this.typeContract === ContractRegisterType.CW4973) {
+      this.linkToken = 'token-abt';
+    }
     this.getNftData();
   }
 
-  getNftData() {
-    this.loading = true;
+  getNftData(nextKey = null, nextKeyId = null) {
     let payload = {
-      pageLimit: 100,
-      pageOffset: this.pageData.pageIndex * this.pageData.pageSize,
-      token_id: '',
-      owner: '',
-      contractType: this.typeContract,
+      limit: 100,
+      nextKey: nextKey,
+      nextKeyId: nextKeyId,
       contractAddress: this.contractAddress,
+      owner: null,
+      token_id: null,
     };
 
     if (this.keyWord) {
@@ -73,36 +76,46 @@ export class TokenInventoryComponent implements OnInit {
       }
     }
 
-    if (payload.pageOffset > 100) {
-      payload.pageOffset = 100;
-    }
+    this.tokenService.getListTokenNFTFromIndexerV2(payload).subscribe(
+      (res) => {
+        const asset = _.get(res, `cw721_token`);
+        if (asset?.length >= 100) {
+          this.isMoreTx = true;
+          this.nextKey = asset[asset?.length - 1]?.last_updated_height;
+          this.nextKeyId = asset[asset?.length - 1]?.id;
+        } else {
+          this.isMoreTx = false;
+        }
 
-    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
-      const asset = _.get(res, `data.assets[${this.typeContract}]`);
-      this.pageData.length = _.get(res, `data.assets[${this.typeContract}].asset.length`);
+        asset.forEach((element) => {
+          element.contract_address = this.contractAddress;
+        });
 
-      if (this.nftData.data.length > 0) {
-        this.nftData.data = [...this.nftData.data, ...asset.asset];
-      } else {
-        this.nftData.data = [...asset.asset];
-      }
-      this.dataSourceMobile = this.nftData.data.slice(
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-      );
+        if (this.nftData.data.length > 0) {
+          this.nftData.data = [...this.nftData.data, ...asset];
+        } else {
+          this.nftData.data = [...asset];
+        }
+        this.pageData.length = this.nftData.data?.length;
 
-      if (this.pageData.length > 200) {
-        this.pageData.length = 200;
-        this.isMoreTx = true;
-      }
-      this.loading = false;
-    });
+        this.dataSourceMobile = this.nftData.data.slice(
+          this.pageData.pageIndex * this.pageData.pageSize,
+          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        );
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   pageEvent(e: PageEvent): void {
-    if (e.pageIndex * e.pageSize >= this.nftData.data.length) {
-      this.pageData = e;
-      this.getNftData();
+    const { length, pageIndex, pageSize } = e;
+    const next = length <= (pageIndex + 2) * pageSize;
+    if (next && this.nextKey && this.nextKey !== this.currentNextKey) {
+      this.getNftData(this.nextKey, this.nextKeyId);
+      this.currentNextKey = this.nextKey;
     } else {
       this.dataSourceMobile = this.nftData.data.slice(e.pageIndex * e.pageSize, e.pageIndex * e.pageSize + e.pageSize);
     }

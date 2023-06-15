@@ -28,8 +28,8 @@ import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { convertDataTransaction, convertDataTransactionV2, Globals } from '../../../global/global';
-import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
+import { Globals, convertDataTransactionV2 } from '../../../global/global';
+import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
 
 @Component({
   selector: 'app-account-detail',
@@ -59,7 +59,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'fee', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
@@ -302,19 +301,25 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getTxsFromHoroscope(nextKey = null): void {
     const address = this.currentAddress;
-    this.transactionService.getAccountTxFromHoroscope(address, 40, nextKey).subscribe({
+    let payload = {
+      limit: 40,
+      value: address,
+      heightLT: nextKey,
+    };
+    this.transactionService.getListTxCondition(payload).subscribe({
       next: (data) => {
-        if (data?.transaction?.length >= 40) {
-          this.nextKey = data?.transaction[data.length - 1].id;
-        }
         if (data?.transaction?.length > 0) {
+          this.nextKey = null;
+          if (data?.transaction?.length >= 40) {
+            this.nextKey = data?.transaction[data?.transaction?.length - 1].height;
+          }
           const txs = convertDataTransactionV2(data, this.coinInfo);
           txs.forEach((element) => {
             if (element.type === 'Send') {
               if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
                 element.type = 'Receive';
               }
-            } else if (element.type === 'Multi Send') {
+            } else if (element.type === 'Multisend') {
               if (element.messages[0]?.inputs[0]?.address !== this.currentAddress) {
                 element.type = 'Receive';
               }

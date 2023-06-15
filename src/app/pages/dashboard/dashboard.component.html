@@ -5,10 +5,30 @@
         <ngb-carousel [showNavigationArrows]="false">
           <ng-template ngbSlide>
             <div class="picsum-img-wrapper">
-              <img src="assets/images/pages/dashboard_mainnet-lauch--des.png" alt="Random first slide" class="carousel__img" />
+              <img
+                src="assets/images/pages/dashboard_mainnet-lauch--des.png"
+                alt="Random first slide"
+                class="carousel__img" />
             </div>
           </ng-template>
         </ngb-carousel>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mb-lg-6" *ngIf="notice?.content">
+    <div class="col">
+      <div class="notice-warning">
+        <div class="notice-icon">
+          <img src="assets/icons/icons-svg/color/warning-red.svg" alt="icon">
+          <span class="body-03 text--red-3 fw-semibold"> NOTICE </span>
+        </div>
+        <span class="body-03 text--white notice-content">
+          {{notice?.content}}
+          <a href="{{notice.url}}" target="_blank">
+            <i class="ph-arrow-square-out-fill body-03 text--gray-1"> </i>
+          </a>
+        </span>
       </div>
     </div>
   </div>
@@ -146,16 +166,19 @@
                 <div class="body text--gray-1">Height</div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.block_height > 0" class="h4 mb-0 fw-semibold text--white">
-              {{ global?.dataHeader?.block_height || 0 | number }}
+            <div *ngIf="global?.dataHeader?.total_blocks > 0" class="h4 mb-0 fw-semibold text--white">
+              {{ global?.dataHeader?.total_blocks || 0 | number }}
             </div>
           </div>
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
               <i class="ph-graph-light icon-brand text--gray-3"></i>
-              <div class="ml-4">
+              <div class="ml-4 d-flex align-items-center">
                 <div class="body text--gray-1">Community Pool</div>
+                <div class="ml-2 button button--sm button-ghost button-ghost--sm" (click)="navigateToCommunityPool()">
+                  <i class="ph-arrow-square-out-fill text--gray-1 body-01 h3-mob mb-0"></i>
+                </div>
               </div>
             </div>
             <div class="h4 mb-0 fw-semibold text--white">
@@ -170,8 +193,8 @@
                 <div class="body text--gray-1">Transactions</div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.total_txs_num >= 0" class="h4 mb-0 fw-semibold text--white">
-              {{ global?.dataHeader?.total_txs_num | number }}
+            <div *ngIf="global?.dataHeader?.total_transactions >= 0" class="h4 mb-0 fw-semibold text--white">
+              {{ global?.dataHeader?.total_transactions | number }}
             </div>
           </div>
         </div>
@@ -186,7 +209,7 @@
               </div>
             </div>
             <div *ngIf="global?.dataHeader?.bonded_tokens" class="h4 mb-0 fw-semibold text--white">
-              {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
+              {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.total_aura || 0 }}
             </div>
           </div>
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
@@ -222,7 +245,10 @@
         <ngb-carousel [showNavigationArrows]="false">
           <ng-template ngbSlide>
             <div class="picsum-img-wrapper">
-              <img src="assets/images/pages/dashboard_mainnet-lauch--des.png" alt="Random first slide" class="carousel__img" />
+              <img
+                src="assets/images/pages/dashboard_mainnet-lauch--des.png"
+                alt="Random first slide"
+                class="carousel__img" />
             </div>
           </ng-template>
         </ngb-carousel>
@@ -230,18 +256,21 @@
     </div>
     <div class="col-12 col-lg-4 mb-4 mb-lg-6">
       <div class="card card__item h-100">
-        <div class="card-body d-flex flex-column justify-content-center voting-card {{voting_Period_arr.length === 0 ? 'py-4 py-lg-6' : ''}}">
+        <div
+          class="card-body d-flex flex-column justify-content-center voting-card {{
+            voting_Period_arr.length === 0 ? 'py-4 py-lg-6' : ''
+          }}">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Votings</div>
           <div *ngIf="voting_Period_arr.length > 0">
             <div class="mt-4 d-flex align-items-center">
               <div class="flex-shrink-0 flex-grow-1 d-flex w-25">
                 <div class="dropdown aura-dropdown w-100">
                   <button
-                      class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false">
-                  <span class="body text-start">{{
+                    class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <span class="body text-start">{{
                       curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
                     }}</span>
                   </button>
@@ -258,15 +287,15 @@
               </div>
               <div class="ml-2">
                 <button
-                    *ngIf="!curr_voting_Period"
-                    [disabled]="true"
-                    class="button button--sm button-outline button-pill px-4">
+                  *ngIf="!curr_voting_Period"
+                  [disabled]="true"
+                  class="button button--sm button-outline button-pill px-4">
                   <span class="caption fw-normal">View detail</span>
                 </button>
                 <a
-                    *ngIf="curr_voting_Period"
-                    href="/votings/{{ curr_voting_Period.proposal_id }}"
-                    class="button button--sm button-outline button-pill px-4">
+                  *ngIf="curr_voting_Period"
+                  href="/votings/{{ curr_voting_Period.proposal_id }}"
+                  class="button button--sm button-outline button-pill px-4">
                   <span class="caption fw-normal">View detail</span>
                 </a>
               </div>
@@ -277,7 +306,9 @@
                   <div class="text--gray-2">Yes</div>
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{
-                      curr_voting_Period ? (curr_voting_Period.tally.yes | number : global.formatNumber2Decimal) : '0,0'
+                      curr_voting_Period
+                        ? (curr_voting_Period.tally.yes | number : global.formatNumber2Decimal)
+                        : '0,0'
                     }}%
                   </div>
                 </div>
@@ -294,8 +325,8 @@
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{
                       curr_voting_Period
-                          ? (curr_voting_Period.tally.no_with_veto | number : global.formatNumber2Decimal)
-                          : '0,0'
+                        ? (curr_voting_Period.tally.no_with_veto | number : global.formatNumber2Decimal)
+                        : '0,0'
                     }}%
                   </div>
                 </div>
@@ -304,16 +335,18 @@
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{
                       curr_voting_Period
-                          ? (curr_voting_Period.tally.abstain | number : global.formatNumber2Decimal)
-                          : '0,0'
+                        ? (curr_voting_Period.tally.abstain | number : global.formatNumber2Decimal)
+                        : '0,0'
                     }}%
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="d-flex flex-column align-items-center justify-content-center h-100" *ngIf="voting_Period_arr.length === 0">
-            <img src="assets/images/icons/empty_state_illus.svg" alt="">
+          <div
+            class="d-flex flex-column align-items-center justify-content-center h-100"
+            *ngIf="voting_Period_arr.length === 0">
+            <img src="assets/images/icons/empty_state_illus.svg" alt="" />
             <div class="text--gray-3">No proposal within the voting period</div>
           </div>
         </div>
@@ -356,7 +389,7 @@
                             *ngSwitchCase="'proposer'"
                             class="text--primary cursor-pointer text-break"
                             [routerLink]="['/validators', data.operator_address]">
-                            {{ data[template.matColumnDef] }}
+                            {{ data[template.matColumnDef] | stringEllipsis : 10 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"

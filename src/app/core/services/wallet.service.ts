@@ -21,7 +21,6 @@ import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
-import { checkEnvQuery } from '../utils/common/info-common';
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -32,7 +31,9 @@ export class WalletService implements OnDestroy {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainId = this.environmentService.configValue.chainId;
   chainInfo = this.environmentService.configValue.chain_info;
-  graphUrl = `${this.environmentService.configValue.graphUrl}`;
+  graphUrl = `${
+    this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
+  }`;
 
   coin98Client: Coin98Client;
   destroyed$ = new Subject();
@@ -315,7 +316,7 @@ export class WalletService implements OnDestroy {
   }
 
   private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
-    const envDB = checkEnvQuery(this.environmentService.configValue.env);
+    const envDB = this.environmentService.configValue.horoscopeSelectedChain;
     const operationsDoc = `
     query getAccountInfo ($address: String) {
       ${envDB} {
@@ -392,7 +393,7 @@ export class WalletService implements OnDestroy {
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
-      signer = window.getOfflineSignerOnlyAmino(this.chainId);
+      signer = await window.getOfflineSignerAuto(this.chainId);
     }
 
     return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>

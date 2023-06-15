@@ -4,7 +4,7 @@
 
 <ng-container *ngIf="!loading">
   <ng-container *ngIf="blockDetail; else noValues">
-    <app-pagetitle title="Details for Block #{{ id || blockDetail?.height }}"></app-pagetitle>
+    <app-pagetitle title="Details for Block #{{ blockHeight || blockDetail?.height }}"></app-pagetitle>
     <!-- Tabs -->
     <ul
       ngbNav
@@ -183,8 +183,8 @@
                         </div>
                         <div *ngSwitchCase="'amount'">
                           <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                            {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                            <span class="text--primary">{{ commonService.mappingNameIBC(data?.denom) }}</span>
+                            <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
+                            <span class="text--primary ml-1">{{ commonService.mappingNameIBC(data?.denom)?.display }}</span>
                           </ng-container>
                           <ng-template #displayNonNumber>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
@@ -241,6 +241,48 @@
             (pageEvent)="handlePageEvent($event)">
           </app-paginator>
         </ng-container>
+      </div>
+    </div>
+
+    <!-- Event Log -->
+    <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
+      <h2 class="card-header mb-0 text--white pb-0">Events</h2>
+      <div class="card-body body">
+        <div class="col-12 text--gray-1 box-event-log">
+          <div class="item-event-log">
+            <mat-expansion-panel
+              hideToggle
+              *ngFor="let item of blockDetail?.events; first as isFirst; let i = index"
+              [expanded]="isFirst">
+              <mat-expansion-panel-header class="content-contract">
+                <mat-panel-title class="item-content body-02 text--gray-1">
+                  <div class="txt-header caption fw-normal text--white">
+                    {{ item.type }}
+                  </div>
+                </mat-panel-title>
+                <mat-panel-description> </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div class="content-log">
+                <ng-container *ngFor="let data of item?.attributes; let idx = index">
+                  <div class="ml-5 mb-2 row">
+                    <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{
+                      data.key | decodeData
+                    }}</span>
+                    <span class="col-12 col-lg-10 body-01 text-break">
+                      <ng-container *ngIf="(data.key | decodeData) !== 'amount' && (data.key | decodeData) !== 'fee'">{{
+                        data.value | decodeData
+                      }}</ng-container>
+                      <span
+                        *ngIf="(data.key | decodeData) === 'amount' || (data.key | decodeData) === 'fee'"
+                        [innerHTML]="data.value | decodeData | convertLogAmount"></span>
+                    </span>
+                  </div>
+                </ng-container>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </div>
       </div>
     </div>
   </ng-container>
