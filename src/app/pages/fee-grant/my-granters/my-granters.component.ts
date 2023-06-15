@@ -130,14 +130,12 @@ export class MyGrantersComponent implements OnInit {
 
   searchToken(): void {
     if (this.textSearch && this.textSearch.length > 0) {
-      // this.dataSource.data = [];
       this.getListGrant();
     }
   }
 
   resetFilterSearch() {
     this.textSearch = '';
-    // this.dataSource.data = [];
     this.getListGrant();
   }
 

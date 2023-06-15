@@ -75,7 +75,7 @@
                           </ng-container>
                         </div>
                         <div *ngSwitchCase="'expiration'">
-                          <span class="{{ data['expired'] && isActive ? 'text--red-3' : '' }}">
+                          <span class="{{ data['reason'] === 'Expired' && isActive ? 'text--red-3' : '' }}">
                             {{
                               data[template.matColumnDef]
                                 ? (data[template.matColumnDef] | customDate : 'yyyy-MM-dd')
