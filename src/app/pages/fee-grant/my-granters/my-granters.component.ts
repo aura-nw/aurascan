@@ -51,7 +51,6 @@ export class MyGrantersComponent implements OnInit {
   nextKey = null;
   currentKey = null;
   currentAddress = null;
-  filterSearch = {};
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
@@ -86,48 +85,57 @@ export class MyGrantersComponent implements OnInit {
   }
 
   getListGrant() {
-    this.filterSearch['isGranter'] = true;
-    this.filterSearch['isActive'] = this.isActive;
+    const payload = {
+      limit: 100,
+      grantee: this.currentAddress,
+      isActive: this.isActive,
+      isGranter: true,
+    };
 
-    this.feeGrantService
-      .getListFeeGrants(this.filterSearch, this.currentAddress, this.nextKey, true)
-      .subscribe((res) => {
-        const { code, data } = res;
-        if (code === 200) {
-          this.nextKey = res.data.nextKey || null;
-          data.grants.forEach((element) => {
-            element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
-            element.limit = element?.spend_limit?.amount || '0';
-            element.spendable = element?.amount?.amount || '0';
-            element.reason = element?.status;
-            if (element.reason === 'Available' && element?.expired) {
+    this.feeGrantService.getListFeeGrantsV2(payload, this.textSearch).subscribe(
+      (res) => {
+        res.feegrant?.forEach((element) => {
+          element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
+          element.spendable = element?.spend_limit || '0';
+          element.limit = element.feegrant_histories[0]?.amount || '0';
+          element.reason = element?.status;
+          element.tx_hash = element?.transaction?.hash;
+          element.timestamp = element?.transaction?.timestamp;
+          element.origin_revoke_txhash = element?.revoke_tx?.hash;
+          if (element?.expiration) {
+            const timeCompare = new Date(element?.expiration).getTime();
+            if (element.status === 'Available' && timeCompare < Date.now()) {
               element.reason = 'Expired';
             }
-          });
-
-          if (this.dataSource?.data?.length > 0 && this.pageData.pageIndex != 0) {
-            this.dataSource.data = [...this.dataSource.data, ...data.grants];
-          } else {
-            this.dataSource.data = [...data.grants];
           }
-          this.pageData.length = this.dataSource.data.length;
+        });
+
+        if (
+          this.dataSource?.data?.length > 0 &&
+          this.dataSource.data.length !== res.feegrant?.length &&
+          this.pageData.pageIndex != 0
+        ) {
+          this.dataSource.data = [...this.dataSource.data, ...res.feegrant];
+        } else {
+          this.dataSource.data = [...res.feegrant];
         }
+        this.pageData.length = res.feegrant?.length;
+      },
+      () => {},
+      () => {
         this.loading = false;
-      });
+      },
+    );
   }
 
   searchToken(): void {
     if (this.textSearch && this.textSearch.length > 0) {
-      this.dataSource.data = [];
-      this.filterSearch['textSearch'] = this.textSearch;
       this.getListGrant();
     }
   }
 
   resetFilterSearch() {
     this.textSearch = '';
-    this.filterSearch['textSearch'] = '';
-    this.dataSource.data = [];
     this.getListGrant();
   }
 

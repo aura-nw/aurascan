@@ -76,11 +76,11 @@
                 {{ element.total_tx | number }}
               </td>
             </ng-container>
-            <ng-container matColumnDef="transfers_24h">
+            <ng-container matColumnDef="transfer_24h">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Transfers (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <ng-container *ngIf="element.transfers_24h; else noData">
-                  {{ element.transfers_24h | number }}
+                <ng-container *ngIf="element.transfer_24h; else noData">
+                  {{ element.transfer_24h | number }}
                 </ng-container>
               </td>
             </ng-container>

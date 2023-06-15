@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { DataDelegateDto, TableTemplate } from 'src/app/core/models/common.model';
+import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from 'src/app/global/global';
@@ -67,7 +67,6 @@ export class UserWalletInfoComponent implements OnChanges {
         }
       });
       this.lstUndelegate = lstUndelegateTemp;
-
       if (this.lstUndelegate?.length > 0) {
         // get ValidatorAddressArr
         this.getValidatorAvatar(this.lstUndelegate);
