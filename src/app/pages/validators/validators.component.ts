@@ -635,11 +635,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       const now = new Date();
       listUnDelegator.data.unbonding_responses.forEach((data) => {
         data.entries.forEach((f) => {
-          f['validator_identity'] = data.validator_description?.description?.identity;
           f.balance = f.balance / NUMBER_CONVERT;
           f.validator_address = data.validator_address;
           f.validator_name = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.title;
-          f.jailed = data.validator_description?.jailed || false;
+          f.jailed = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.jailed;
+          f.validator_identity = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.identity;
           let timeConvert = new Date(f.completion_time);
           if (now < timeConvert) {
             this.lstUndelegate.push(f);
