@@ -207,12 +207,6 @@ export class ContractService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/contracts/verify/status/${codeID}`);
   }
 
-  // loadContractDetail(contractAddress): void {
-  //   this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`).subscribe((res) => {
-  //     this.contract$.next(res.data);
-  //   });
-  // }
-
   registerContractType(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contract-codes`, data);
   }
