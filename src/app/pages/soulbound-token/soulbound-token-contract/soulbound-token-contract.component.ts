@@ -139,7 +139,7 @@ export class SoulboundTokenContractComponent implements OnInit {
       if (result !== 'canceled') {
         setTimeout(() => {
           this.getListToken();
-        }, 2000);
+        }, 4000);
       }
     });
   }
