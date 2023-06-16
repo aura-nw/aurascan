@@ -36,7 +36,6 @@ export class VotesComponent implements OnChanges {
   countVote: Map<string, number> = new Map<string, number>();
 
   voteDataListLoading = true;
-  isFirstChange = false;
   PROPOSAL_TABLE_MODE_VOTES = PROPOSAL_TABLE_MODE.VOTES;
 
   currentTabId = 'all';
@@ -47,6 +46,8 @@ export class VotesComponent implements OnChanges {
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
     this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
       if (event) {
+        this.getProposalVoteTotal();
+
         this.pageEventChange({
           tabId: this.currentTabId,
           pageIndex: this.payloads?.pageIndex || 0,
@@ -54,44 +55,45 @@ export class VotesComponent implements OnChanges {
         });
       }
     });
-
-    setTimeout(() => {
-      this.proposalService.reloadList$.next(true);
-    }, 5500);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['proposalDetail'].currentValue?.proposal_id && !this.isFirstChange) {
-      this.isFirstChange = true;
-      const payloads = {
-        pageLimit: 5,
-        proposalId: this.proposalDetail.proposal_id,
-        offset: 0,
-        pageIndex: 0,
-      };
-
-      this.proposalService.getListVoteFromIndexer2(payloads, null).subscribe((res) => {
-        this.voteDataListLoading = false;
-        this.voteDataList = res.vote;
-      });
-
-      this.proposalService.getProposalVoteTotal(this.proposalDetail.proposal_id).subscribe({
-        next: (res) => {
-          if (res) {
-            this.countVote.set('', res['ALL']?.aggregate.count || 0);
-            this.countVote.set(VOTE_OPTION.YES, res[VOTE_OPTION.YES]?.aggregate.count || 0);
-            this.countVote.set(VOTE_OPTION.ABSTAIN, res[VOTE_OPTION.ABSTAIN]?.aggregate.count || 0);
-            this.countVote.set(VOTE_OPTION.NO, res[VOTE_OPTION.NO]?.aggregate.count || 0);
-            this.countVote.set(VOTE_OPTION.NO_WITH_VETO, res[VOTE_OPTION.NO_WITH_VETO]?.aggregate.count || 0);
-          }
-
-          this.voteDataListLoading = false;
-        },
-        error: (error) => {
-          this.voteDataListLoading = true;
-        },
-      });
+    if (changes['proposalDetail'].currentValue?.proposal_id && changes['proposalDetail']?.firstChange) {
+      this.getListVoteFromIndexer();
+      this.getProposalVoteTotal();
     }
+  }
+
+  getListVoteFromIndexer() {
+    const payloads = {
+      pageLimit: 5,
+      proposalId: this.proposalDetail.proposal_id,
+      offset: 0,
+      pageIndex: 0,
+    };
+    this.proposalService.getListVoteFromIndexer2(payloads, null).subscribe((res) => {
+      this.voteDataListLoading = false;
+      this.voteDataList = res.vote;
+    });
+  }
+
+  getProposalVoteTotal() {
+    this.proposalService.getProposalVoteTotal(this.proposalDetail.proposal_id).subscribe({
+      next: (res) => {
+        if (res) {
+          this.countVote.set('', res['ALL']?.aggregate.count || 0);
+          this.countVote.set(VOTE_OPTION.YES, res[VOTE_OPTION.YES]?.aggregate.count || 0);
+          this.countVote.set(VOTE_OPTION.ABSTAIN, res[VOTE_OPTION.ABSTAIN]?.aggregate.count || 0);
+          this.countVote.set(VOTE_OPTION.NO, res[VOTE_OPTION.NO]?.aggregate.count || 0);
+          this.countVote.set(VOTE_OPTION.NO_WITH_VETO, res[VOTE_OPTION.NO_WITH_VETO]?.aggregate.count || 0);
+        }
+
+        this.voteDataListLoading = false;
+      },
+      error: (error) => {
+        this.voteDataListLoading = true;
+      },
+    });
   }
 
   changeTab(tabId): void {

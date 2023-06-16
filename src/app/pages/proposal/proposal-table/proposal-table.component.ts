@@ -9,9 +9,8 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild,
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
@@ -21,7 +20,6 @@ import { CommonService } from '../../../../app/core/services/common.service';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
 import { Globals } from '../../../global/global';
-import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
 
 interface CustomPageEvent {
   next?: number;
@@ -47,8 +45,8 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @Output() isNextPage = new EventEmitter<boolean>();
   @Output() pageEventChange = new EventEmitter<CustomPageEvent>();
 
-  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
 
   validatorImgArr;
 
@@ -103,7 +101,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     private layout: BreakpointObserver,
     private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
-    private proposalService: ProposalService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -118,27 +115,29 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.dataSource = new MatTableDataSource(this.data);
     }
 
-    if (changes.tabId.currentValue != changes.tabId.previousValue) {
+    if (changes.tabId?.currentValue != changes.tabId?.previousValue) {
       this.pageData.pageIndex = 1;
     }
 
-    let minus = 0;
-    if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
-      minus = this.getUpdatePage(changes.data.currentValue?.length, this.proposalService.pageIndexObj[this.type]);
-      this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type] || 0) - minus);
-    } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
-      minus = this.getUpdatePage(
-        changes.data.currentValue?.length,
-        this.proposalService.pageIndexObj[this.type][this.tabId],
-      );
-      this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
-    } else if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
-      const operatorAddArr = [];
+    // // let minus = 0;
+    // if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
+    //   // minus = this.getUpdatePage(changes.data.currentValue?.length, this.proposalService.pageIndexObj[this.type]);
+    //   // this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type] || 0) - minus);
+    // } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
+    //   // minus = this.getUpdatePage(
+    //   //   changes.data.currentValue?.length,
+    //   //   this.proposalService.pageIndexObj[this.type][this.tabId],
+    //   // );
+    //   // this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
+    // } else
+    if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
+      const operatorAddArr = this.data.map((i) => i.operator_address);
       // get ValidatorAddressArr
-      this.data.forEach((d) => {
-        operatorAddArr.push(d.operator_address);
-      });
-      if (operatorAddArr.length > 0 && operatorAddArr[0]) {
+      // this.data.forEach((d) => {
+      //   operatorAddArr.push(d.operator_address);
+      // });
+
+      if (operatorAddArr.length > 0) {
         // get validator logo
         this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
           if (res?.data) {
@@ -151,26 +150,27 @@ export class ProposalTableComponent implements OnInit, OnChanges {
                 }
               });
             });
-            this.cdr.markForCheck();
+
+            // this.cdr.markForCheck();
           }
         });
       }
 
-      minus = this.getUpdatePage(
-        changes.data.currentValue?.length,
-        this.proposalService.pageIndexObj[this.type][this.tabId],
-      );
-      this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
+      // minus = this.getUpdatePage(
+      //   changes.data.currentValue?.length,
+      //   this.proposalService.pageIndexObj[this.type][this.tabId],
+      // );
+      // this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
     }
   }
 
-  getUpdatePage(data, page): number {
-    let minus = 0;
-    if (data % 25 !== 0 && Math.ceil(data / this.pageSize) <= page) {
-      minus = 1;
-    }
-    return minus;
-  }
+  // getUpdatePage(data, page): number {
+  //   let minus = 0;
+  //   if (data % 25 !== 0 && Math.ceil(data / this.pageSize) <= page) {
+  //     minus = 1;
+  //   }
+  //   return minus;
+  // }
 
   ngOnInit(): void {
     this.template = this.getTemplate(this.type);
@@ -192,10 +192,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   }
 
   shortenAddress(address: string): string {
-    if (address) {
-      return shortenAddress(address, 8);
-    }
-    return '';
+    return shortenAddress(address, 8);
   }
 
   getVoteValue(voteKey) {
@@ -205,31 +202,32 @@ export class ProposalTableComponent implements OnInit, OnChanges {
 
   pageEvent2(index: number) {
     const { pageIndex, pageSize } = this.pageData;
-    const next = length <= (pageIndex + 1) * pageSize;
 
-    if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.DEPOSITORS] = pageIndex;
-    } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
-      this.tabId = this.tabId || 'all';
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES] = {};
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES][this.tabId] = pageIndex;
-    } else if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
-      this.tabId = this.tabId || 'all';
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES] = {};
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES][this.tabId] = pageIndex;
-      this.pageValidatorIndex = pageIndex;
-    }
+    // const next = length <= (pageIndex + 1) * pageSize;
 
-    if (next) {
-      this.isNextPage.emit(true);
+    // if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
+    //   // this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.DEPOSITORS] = pageIndex;
+    // } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
+    //   this.tabId = this.tabId || 'all';
+    //   this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES] = {};
+    //   this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES][this.tabId] = pageIndex;
+    // } else if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
+    //   this.tabId = this.tabId || 'all';
+    //   this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES] = {};
+    //   this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES][this.tabId] = pageIndex;
+    //   this.pageValidatorIndex = pageIndex;
+    // }
 
-      this.pageEventChange.emit({
-        type: this.type,
-        tabId: this.tabId,
-        pageIndex: index - 1,
-        pageSize,
-      });
-    }
+    // if (next) {
+    // this.isNextPage.emit(true);
+
+    this.pageEventChange.emit({
+      type: this.type,
+      tabId: this.tabId,
+      pageIndex: pageIndex - 1,
+      pageSize,
+    });
+    // }
   }
 
   // pageEvent(e: PageEvent): void {
@@ -268,13 +266,13 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   //   }
   // }
 
-  getListData(): any[] {
-    if (!(this.dataSource?.paginator && this.dataSource?.data)) {
-      return [];
-    }
-    return this.dataSource.data.slice(
-      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
-      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
-    );
-  }
+  // getListData(): any[] {
+  //   if (!(this.dataSource?.paginator && this.dataSource?.data)) {
+  //     return [];
+  //   }
+  //   return this.dataSource.data.slice(
+  //     this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
+  //     this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
+  //   );
+  // }
 }

@@ -11,7 +11,7 @@
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)">
             <span class="h5 mb-0" [class.text--white]="customNav.activeId === index">
-              {{ tab.value }} ({{ countVote.get(tab.key) }})
+              {{ tab.value }} ({{ countVote.get(tab.key) || 0 }})
             </span>
           </a>
         </li>

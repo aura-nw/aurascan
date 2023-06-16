@@ -4,9 +4,9 @@ import { debounceTime } from 'rxjs/operators';
 import { PROPOSAL_TABLE_MODE } from 'src/app/core/constants/proposal.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 
 @Component({
   selector: 'app-depositors',
@@ -16,11 +16,14 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 export class DepositorsComponent implements OnInit {
   @Input() proposalId: number;
   depositorsList: any[] = [];
+  tableData = [];
   loading = true;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   dataLength = 0;
   proposalDeposit = PROPOSAL_TABLE_MODE.DEPOSITORS;
+
+  pageData = { pageIndex: 0, pageSize: 5 };
 
   constructor(
     private proposalService: ProposalService,
@@ -43,14 +46,13 @@ export class DepositorsComponent implements OnInit {
     const payload = {
       key: 'proposal_id',
       value: this.proposalId?.toString(),
-      limit: 5,
-      offset: 0,
+      limit: 100, // get all
     };
-    this.transactionService.getListTxCondition(payload).subscribe(
-      (res) => {
+
+    this.transactionService.getListTxCondition(payload).subscribe({
+      next: (res) => {
         let dataList: any[] = [];
         if (res?.transaction?.length > 0) {
-          this.dataLength = res.transaction?.length || 0;
           dataList = res?.transaction?.filter(
             (transaction) =>
               transaction?.data?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
@@ -69,17 +71,22 @@ export class DepositorsComponent implements OnInit {
             item.txhash = item?.hash;
             item.timestamp = item?.timestamp;
           });
+
           this.depositorsList = dataList;
+          this.dataLength = dataList?.length || 0;
+
+          const { pageIndex, pageSize } = this.pageData;
+          this.tableData = this.depositorsList.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
         }
       },
-      () => {},
-      () => {
+      complete: () => {
         this.loading = false;
       },
-    );
+    });
   }
 
-  pageEventChange({ tabId, pageIndex, pageSize }: any) {
-    console.log({ tabId, pageIndex, pageSize });
+  pageEventChange({ pageIndex, pageSize }: any) {
+    this.pageData = { pageIndex, pageSize };
+    this.tableData = this.depositorsList.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
   }
 }

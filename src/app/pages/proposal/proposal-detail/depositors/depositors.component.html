@@ -8,7 +8,7 @@
       <app-proposal-table
         *ngIf="dataLength > 0"
         [type]="proposalDeposit"
-        [data]="depositorsList"
+        [data]="tableData"
         [length]="dataLength"
         (pageEventChange)="pageEventChange($event)">
       </app-proposal-table>

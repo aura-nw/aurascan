@@ -235,7 +235,7 @@ export class ProposalService extends CommonService {
   getProposalVoteTotal(proposalId: number) {
     const operationsDoc = `
     query getProposalVoteTotal($proposalId: Int) {
-      auratestnet {
+      ${this.envDB} {
         ALL: vote_aggregate(where: {proposal_id: {_eq: $proposalId}}) {
           ...aggregateCountFragment
         }
@@ -254,7 +254,7 @@ export class ProposalService extends CommonService {
       }
     }
     
-    fragment aggregateCountFragment on auratestnet_vote_aggregate {
+    fragment aggregateCountFragment on ${this.envDB}_vote_aggregate {
       aggregate {
         count
       }

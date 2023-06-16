@@ -97,7 +97,7 @@
     </ng-container>
     <ng-container *ngIf="breakpoint.value.matches">
       <div>
-        <ng-container *ngFor="let data of getListData(); index as i">
+        <ng-container *ngFor="let data of this.dataSource?.data; index as i">
           <!-- VOTES -->
           <ng-container *ngIf="type === proposalMode.VOTES">
             <app-card-mob-simple
