@@ -75,14 +75,15 @@ export class ValidatorsVotesComponent implements OnInit {
         (res) => {
           let validatorVote = [];
           if (res?.validator) {
-            validatorVote = _.get(res, 'validator').map((item) => {
+            validatorVote = _.get(res, 'validator').map((item, index) => {
               const validator_name = item.description?.moniker;
-              const timestamp = _.get(item, 'vote[0].updated_at');
+              const timestamp = _.get(item, 'vote[0].transaction.timestamp');
               const vote_option = _.get(item, 'vote[0].vote_option');
               const txhash = _.get(item, 'vote[0].txhash');
               const operator_address = _.get(item, 'operator_address');
               const validator_identity = _.get(item, 'description.identity');
-              return { validator_name, timestamp, vote_option, txhash, operator_address, validator_identity };
+              const rank = index + 1;
+              return { validator_name, timestamp, vote_option, txhash, operator_address, validator_identity, rank };
             });
           }
 
@@ -93,7 +94,7 @@ export class ValidatorsVotesComponent implements OnInit {
           this.voteData.noWithVeto = validatorVote.filter(
             (f) => f.vote_option === VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO,
           );
-          this.voteData.didNotVote = validatorVote.filter((f) => f.vote_option === '');
+          this.voteData.didNotVote = validatorVote.filter((f) => !f.vote_option || f.vote_option === '');
           this.voteDataList = [...this.voteData.all];
 
           this.countVote.set('', this.voteData.all.length);

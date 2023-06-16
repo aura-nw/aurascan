@@ -11,7 +11,7 @@ import { CodeTransaction } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { Globals, convertDataTransactionV2 } from '../../../global/global';
+import { Globals, convertDataTransaction } from '../../../global/global';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -75,7 +75,7 @@ export class TransactionDetailComponent implements OnInit {
       this.transactionService.getListTx(payload).subscribe(
         (res) => {
           if (res?.transaction?.length > 0) {
-            const txs = convertDataTransactionV2(res, this.coinInfo);
+            const txs = convertDataTransaction(res, this.coinInfo);
             this.transaction = txs[0];
             this.transaction = {
               ...this.transaction,
