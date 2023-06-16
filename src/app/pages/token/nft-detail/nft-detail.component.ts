@@ -119,11 +119,12 @@ export class NFTDetailComponent implements OnInit {
       }
     });
 
-    if (this.router.snapshot.url[0]?.path === 'token-nft') {
-      this.getDetailCW721();
-    } else {
-      this.getDetailCW4973();
-    }
+    this.getDetailCW721();
+    // if (this.router.snapshot.url[0]?.path === 'token-nft') {
+    //   this.getDetailCW721();
+    // } else {
+    //   this.getDetailCW4973();
+    // }
   }
 
   error(): void {
@@ -134,46 +135,57 @@ export class NFTDetailComponent implements OnInit {
     const encoded = encodeURIComponent(this.nftId);
     this.contractService.getDetailCW721(this.contractAddress, encoded).subscribe(
       (res) => {
-        res.data = res.data[0];
+        console.log(res);
+        res = res.data[0];
 
-        if (!res?.data || res.data === null || res?.data.status === SB_TYPE.UNEQUIPPED) {
+        if (!res || res === null) {
           this.toastr.error('Token invalid');
           this.loading = false;
           return;
         }
-        res.data['type'] = res.data['type'] || ContractRegisterType.CW721;
+
+        res['type'] = res['type'] || ContractRegisterType.CW721;
+        if (this.router.snapshot.url[0]?.path === 'token-abt') {
+          if (res.cw721_contract?.smart_contract?.name === TYPE_CW4973 && res.burned === false) {
+            res['type'] = ContractRegisterType.CW4973;
+            this.isSoulBound = true;
+          } else {
+            this.toastr.error('Token invalid');
+            this.loading = false;
+            return;
+          }
+        }
+
+        // if(res['name'] === TYPE_CW4973 && )
         this.nftDetail = {
-          ...res.data,
-          contract_address: res.contract_address || res.data?.cw721_contract?.smart_contract?.address,
-          creator: res.creator || res.data?.cw721_contract?.smart_contract?.creator,
-          name: res.name || res.data?.cw721_contract?.name,
+          ...res,
+          contract_address: res.contract_address || res?.cw721_contract?.smart_contract?.address,
+          creator: res.creator || res?.cw721_contract?.smart_contract?.creator,
+          name: res.name || res?.cw721_contract?.name,
         };
-        if (this.nftDetail.type === ContractRegisterType.CW721) {
-          if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
-            this.nftDetail['isDisplayName'] = true;
-            this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
-          }
-          if (this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url) {
-            this.imageUrl = this.nftDetail.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url;
-          }
-          if (this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url) {
-            if (!this.nftDetail?.image?.link_s3) {
-              if (
-                (this.nftDetail.animation?.content_type ||
-                  this.nftDetail?.media_info?.offchain?.animation?.content_type) === 'image/gif'
-              ) {
-                this.imageUrl =
-                  this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain.animation?.url;
-              } else {
-                this.animationUrl =
-                  this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
-              }
-            } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
+        if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
+          this.nftDetail['isDisplayName'] = true;
+          this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
+        }
+        if (this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url) {
+          this.imageUrl = this.nftDetail.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url;
+        }
+        if (this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url) {
+          if (!this.nftDetail?.image?.link_s3) {
+            if (
+              (this.nftDetail.animation?.content_type ||
+                this.nftDetail?.media_info?.offchain?.animation?.content_type) === 'image/gif'
+            ) {
+              this.imageUrl = this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain.animation?.url;
+            } else {
               this.animationUrl =
                 this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
-            } else {
-              this.imageUrl = this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain.image?.url;
             }
+          } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
+            this.animationUrl =
+              this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
+          } else {
+            this.imageUrl = this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain.image?.url;
           }
         }
       },
