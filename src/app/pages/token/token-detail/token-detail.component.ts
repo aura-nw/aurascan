@@ -53,7 +53,7 @@ export class TokenDetailComponent implements OnInit {
   }
 
   getTokenDetailNFT(): void {
-    this.contractService.loadContractDetailV2(this.contractAddress).subscribe(
+    this.contractService.loadContractDetail(this.contractAddress).subscribe(
       (res) => {
         const name = _.get(res, 'smart_contract[0].cw721_contract.name');
         let type = ContractRegisterType.CW721;

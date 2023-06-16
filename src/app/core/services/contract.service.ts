@@ -107,7 +107,7 @@ export class ContractService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  loadContractDetailV2(contractAddress): Observable<any> {
+  loadContractDetail(contractAddress): Observable<any> {
     const contractDoc = `
     query auratestnet_contract($contractAddress: String = null) {
       ${this.envDB} {
@@ -207,11 +207,11 @@ export class ContractService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/contracts/verify/status/${codeID}`);
   }
 
-  loadContractDetail(contractAddress): void {
-    this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`).subscribe((res) => {
-      this.contract$.next(res.data);
-    });
-  }
+  // loadContractDetail(contractAddress): void {
+  //   this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`).subscribe((res) => {
+  //     this.contract$.next(res.data);
+  //   });
+  // }
 
   registerContractType(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contract-codes`, data);

@@ -28,7 +28,7 @@ import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { Globals, convertDataTransactionV2 } from '../../../global/global';
+import { Globals, convertDataTransaction } from '../../../global/global';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
 
 @Component({
@@ -313,7 +313,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           if (data?.transaction?.length >= 40) {
             this.nextKey = data?.transaction[data?.transaction?.length - 1].height;
           }
-          const txs = convertDataTransactionV2(data, this.coinInfo);
+          const txs = convertDataTransaction(data, this.coinInfo);
           txs.forEach((element) => {
             if (element.type === 'Send') {
               if (!element.messages.find((k) => k.from_address === this.currentAddress)) {

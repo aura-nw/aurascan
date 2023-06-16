@@ -76,7 +76,7 @@ export class TokenInventoryComponent implements OnInit {
       }
     }
 
-    this.tokenService.getListTokenNFTFromIndexerV2(payload).subscribe(
+    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe(
       (res) => {
         const asset = _.get(res, `cw721_token`);
         if (asset?.length >= 100) {

@@ -8,7 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { convertDataTransactionV2 } from 'src/app/global/global';
+import { convertDataTransaction } from 'src/app/global/global';
 import { TableData } from 'src/app/shared/components/contract-table/contract-table.component';
 
 @Component({
@@ -129,7 +129,7 @@ export class ContractsTransactionsComponent implements OnInit {
       this.transactionService.getListTxCondition(this.payload).subscribe(
         (dataExecute) => {
           if (dataExecute) {
-            const txsExecute = convertDataTransactionV2(dataExecute, this.coinInfo);
+            const txsExecute = convertDataTransaction(dataExecute, this.coinInfo);
             this.lengthTxsExecute = txsExecute.length;
             if (dataExecute.transaction?.length > 0) {
               this.nextKey = null;
@@ -169,7 +169,7 @@ export class ContractsTransactionsComponent implements OnInit {
         if (dataInstantiate.transaction?.length > 0) {
           this.hashIns = dataInstantiate.transaction[0]?.hash;
           if (+this.label == this.modeTxType.Instantiate) {
-            this.txsInstantiate = convertDataTransactionV2(dataInstantiate, this.coinInfo);
+            this.txsInstantiate = convertDataTransaction(dataInstantiate, this.coinInfo);
             this.contractTransaction['data'] = this.txsInstantiate;
             this.contractTransaction['count'] = this.txsInstantiate.length || 0;
           }
