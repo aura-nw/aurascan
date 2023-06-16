@@ -55,10 +55,10 @@ export class ProposalService extends CommonService {
 
   getValidatorVotesFromIndexer2(
     proposalId: number,
-    { limit, offset }: { limit: number; offset?: number },
+    { limit, offset, voteOption }: { limit: number; offset?: number; voteOption?: string },
   ): Observable<any> {
     const operationsDoc = `
-    query auratestnet_validator($proposalId: Int = null, $limit: Int = 10, $offset: Int = 0) {
+    query queryValidatorVotes($proposalId: Int = null, $limit: Int = 10, $offset: Int = 0) {
       ${this.envDB} {
         validator(where: {status: {_eq: "BOND_STATUS_BONDED"}}, order_by: {percent_voting_power: desc}, limit: $limit, offset: $offset) {
           vote(where: {proposal_id: {_eq: $proposalId}}) {
@@ -82,7 +82,7 @@ export class ProposalService extends CommonService {
           limit: limit,
           offset: offset || 0,
         },
-        operationName: 'auratestnet_validator',
+        operationName: 'queryValidatorVotes',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

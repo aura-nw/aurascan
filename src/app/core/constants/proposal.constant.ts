@@ -46,6 +46,7 @@ export enum VOTE_OPTION {
 }
 
 /* 
+      ["VOTE_OPTION_YES", "VOTE_OPTION_ABSTAIN", "VOTE_OPTION_NO", "VOTE_OPTION_NO_WITH_VETO"]
 
         VOTE_OPTION_UNSPECIFIED: vote_aggregate(where: {vote_option: {_eq: "VOTE_OPTION_UNSPECIFIED"}}) {
           aggregate {
