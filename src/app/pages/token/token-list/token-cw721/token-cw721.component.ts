@@ -81,7 +81,7 @@ export class TokenCw721Component implements OnInit {
       sort_order: this.sortOrder,
     };
 
-    this.tokenService.getListCW721TokenV2(payload, this.textSearch).subscribe((res) => {
+    this.tokenService.getListCW721Token(payload, this.textSearch).subscribe((res) => {
       this.dataSource = new MatTableDataSource<any>(res.list_token);
       this.pageData.length = res.total_token?.aggregate?.count;
     });

@@ -111,7 +111,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   }
 
   getSBTDetail(contractAddress, tokenID, pick = true) {
-    this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
+    this.contractService.getDetailCW4973(contractAddress, tokenID).subscribe((res) => {
       if (res?.data) {
         this.updatePick(res.data, pick);
       }

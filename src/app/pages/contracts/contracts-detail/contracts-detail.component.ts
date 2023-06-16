@@ -29,7 +29,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
     if (this.contractAddress) {
-      this.contractService.loadContractDetailV2(this.contractAddress).subscribe((res) => {
+      this.contractService.loadContractDetail(this.contractAddress).subscribe((res) => {
         if (res?.smart_contract[0]) {
           this.contractService.setContract(res?.smart_contract[0]);
         } else {

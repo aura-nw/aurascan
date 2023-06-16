@@ -21,11 +21,7 @@ export class TokenService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/cw20-tokens`, payload);
   }
 
-  getListCW721Token(payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw721-tokens`, payload);
-  }
-
-  getListCW721TokenV2(payload, textSearch = null): Observable<any> {
+  getListCW721Token(payload, textSearch = null): Observable<any> {
     if (textSearch?.length > 0) {
       textSearch = '%' + textSearch + '%';
     }
@@ -66,11 +62,7 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/contracts/token/${address}`);
   }
 
-  getTokenCW721Detail(address): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
-  }
-
-  getListTokenNFTFromIndexerV2(payload): Observable<any> {
+  getListTokenNFTFromIndexer(payload): Observable<any> {
     const operationsDoc = `
     query Query(
       $contract_address: String
@@ -91,6 +83,7 @@ export class TokenService extends CommonService {
             last_updated_height: { _lt: $nextKeyLastUpdatedHeight }
             token_id: { _eq: $tokenId }
             owner: { _eq: $owner }
+            burned: {_eq: false}
           }
           order_by: [{ last_updated_height: desc }, { id: desc }]
         ) {
@@ -206,9 +199,5 @@ export class TokenService extends CommonService {
 
   getListAssetCommunityPool() {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
-  }
-
-  getAssetCW721ByContract(payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw721-tokens/get-by-contract/`, payload);
   }
 }

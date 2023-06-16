@@ -94,7 +94,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
   getSBTDetail(contractAddress, tokenID) {
     this.isClick = true;
-    this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
+    this.contractService.getDetailCW4973(contractAddress, tokenID).subscribe((res) => {
       this.isClick = false;
       if (res) {
         this.openDialogDetail(res.data);

@@ -7,7 +7,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { isContract } from 'src/app/core/utils/common/validation';
-import { convertDataTransactionV2 } from 'src/app/global/global';
+import { convertDataTransaction } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
 
@@ -107,9 +107,9 @@ export class ContractContentComponent implements OnInit, OnDestroy {
       }
     });
 
-    // this.timerGetUpTime = setInterval(() => {
-    //   this.getTransaction(false);
-    // }, 5000);
+    this.timerGetUpTime = setInterval(() => {
+      this.getTransaction(false);
+    }, 5000);
   }
 
   changeTab(tabId): void {
@@ -131,7 +131,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         (res) => {
           const data = res;
           if (res) {
-            const txsExecute = convertDataTransactionV2(data, this.coinInfo);
+            const txsExecute = convertDataTransaction(data, this.coinInfo);
             if (res?.transaction?.length > 0) {
               this.contractTransaction['data'] = txsExecute;
               this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;

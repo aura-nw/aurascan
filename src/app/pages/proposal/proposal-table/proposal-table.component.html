@@ -55,7 +55,7 @@
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'rank'">
-                      <span [class.label-circle]="j < 3">{{ pageValidatorIndex * 5 + j + 1 }}</span>
+                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{ data[template.matColumnDef] }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">

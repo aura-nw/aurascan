@@ -159,11 +159,11 @@ export class ValidatorService extends CommonService {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BLOCK}/${block}`);
   }
 
-  getUptimeIndexer(consAddress = null, limit = 100) {
+  getUptimeIndexer(consAddress = null, limit = 100, height = null) {
     const operationsDoc = `
-    query MyQuery($cons_address: String, $limit: Int = 100) {
+    query MyQuery($cons_address: String, $limit: Int = 100, $height: Int = 0) {
       ${this.envDB} {
-        block(order_by: {height: desc}, limit: $limit) {
+        block(order_by: {height: desc}, limit: $limit, where: {height: {_eq: $height}}) {
           height
           hash
           block_signatures(where: {validator_address: {_eq: $cons_address}}) {
@@ -180,7 +180,8 @@ export class ValidatorService extends CommonService {
         query: operationsDoc,
         variables: {
           cons_address: consAddress,
-          limit: limit
+          limit: limit,
+          height: height
         },
         operationName: 'MyQuery',
       })

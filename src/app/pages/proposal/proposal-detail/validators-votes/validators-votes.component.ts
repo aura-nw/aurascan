@@ -41,7 +41,7 @@ export class ValidatorsVotesComponent implements OnInit {
   ).map((vote) => ({
     ...vote,
     value: vote.value.toUpperCase(),
-    key: vote.key === VOTE_OPTION.UNSPECIFIED ? '' : vote.key,
+    // key: vote.key === VOTE_OPTION.UNSPECIFIED ? '' : vote.key,
   }));
 
   voteDataList: IValidatorVotes[] = [];
@@ -96,40 +96,42 @@ export class ValidatorsVotesComponent implements OnInit {
   loadValidatorVotes(validator) {
     let validatorVote = [];
     if (validator) {
-      validatorVote = validator.map((item) => {
+      validatorVote = validator.map((item, index) => {
         const validator_name = item.description?.moniker;
         const timestamp = _.get(item, 'vote[0].updated_at');
         const vote_option = _.get(item, 'vote[0].vote_option');
         const txhash = _.get(item, 'vote[0].txhash');
         const operator_address = _.get(item, 'operator_address');
         const validator_identity = _.get(item, 'description.identity');
-        return { validator_name, timestamp, vote_option, txhash, operator_address, validator_identity };
+        const rank = index + 1;
+        return { validator_name, timestamp, vote_option, txhash, operator_address, validator_identity, rank };
       });
     }
 
-    this.voteData.all = validatorVote;
-    this.voteData.yes = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.YES);
-    this.voteData.abstain = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.ABSTAIN);
-    this.voteData.no = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.NO);
-    this.voteData.noWithVeto = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.NO_WITH_VETO);
-    this.voteData.didNotVote = validatorVote.filter((f) => f.vote_option === '');
+    this.voteData[VOTE_OPTION.UNSPECIFIED] = validatorVote;
+    this.voteData[VOTE_OPTION.YES] = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.YES);
+    this.voteData[VOTE_OPTION.ABSTAIN] = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.ABSTAIN);
+    this.voteData[VOTE_OPTION.NO] = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.NO);
+    this.voteData[VOTE_OPTION.NO_WITH_VETO] = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.NO_WITH_VETO);
+    this.voteData[VOTE_OPTION.NULL] = validatorVote.filter((f) => !f.vote_option || f.vote_option === '');
 
     this.voteDataList = validatorVote;
 
-    this.countVote.set('', this.voteData.all.length);
-    this.countVote.set(VOTE_OPTION.YES, this.voteData.yes.length);
-    this.countVote.set(VOTE_OPTION.ABSTAIN, this.voteData.abstain.length);
-    this.countVote.set(VOTE_OPTION.NO, this.voteData.no.length);
-    this.countVote.set(VOTE_OPTION.NO_WITH_VETO, this.voteData.noWithVeto.length);
-    this.countVote.set('null', this.voteData.didNotVote.length);
+    console.log(this.voteData);
+
+    this.countVote.set(VOTE_OPTION.UNSPECIFIED, this.voteData[VOTE_OPTION.UNSPECIFIED].length);
+    this.countVote.set(VOTE_OPTION.YES, this.voteData[VOTE_OPTION.YES].length);
+    this.countVote.set(VOTE_OPTION.ABSTAIN, this.voteData[VOTE_OPTION.ABSTAIN].length);
+    this.countVote.set(VOTE_OPTION.NO, this.voteData[VOTE_OPTION.NO].length);
+    this.countVote.set(VOTE_OPTION.NO_WITH_VETO, this.voteData[VOTE_OPTION.NO_WITH_VETO].length);
+    this.countVote.set(VOTE_OPTION.NULL, this.voteData[VOTE_OPTION.NULL].length);
   }
 
   changeTab(tabId): void {
-    // this.pageEventChange({ tabId, pageIndex: 0, pageSize: 5 });
-    this.voteDataList = this.voteData.yes;
+    this.voteDataList = this.voteData[tabId];
   }
 
   pageEventChange(e) {
-    this.getValidatorVotes(e?.tabId);
+    this.getValidatorVotes(e?.tabId === VOTE_OPTION.UNSPECIFIED ? '' : e?.tabId);
   }
 }

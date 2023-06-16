@@ -112,7 +112,7 @@ export class SoulboundContractListComponent implements OnInit {
       if (result !== 'canceled') {
         setTimeout(() => {
           this.getListSmartContract();
-        }, 2000);
+        }, 4000);
       }
     });
   }
