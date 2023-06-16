@@ -18,6 +18,14 @@ export class CommonService {
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.configValue.chain_info;
+  horoscopeApi = `${
+    this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathApi
+  }`;
+  graphUrl = `${
+    this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathGraphql
+  }`;
+  envDB = this._environmentService.configValue.horoscopeSelectedChain;
+  chainId = this._environmentService.configValue.chainId;
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;

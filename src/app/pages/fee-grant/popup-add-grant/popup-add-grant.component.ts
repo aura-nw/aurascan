@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
@@ -136,53 +136,67 @@ export class PopupAddGrantComponent implements OnInit {
     } = this.grantForm.value;
 
     if (granter && grantee_address) {
-      const req = await this.feeGrantService.checkAddressValid(granter, grantee_address);
       this.isRevoking = false;
-      if (req.data?.data?.grants?.length > 0) {
-        this.isRevoking = true;
-        this.showNotice(grantee_address, granter);
-        return;
-      }
-    }
+      const payload = {
+        limit: 1,
+        granter: granter,
+        grantee: grantee_address,
+        isActive: true,
+        isGranter: false,
+      };
+      this.feeGrantService.getListFeeGrants(payload).subscribe(
+        (res) => {
+          if (res.feegrant[0]?.expiration) {
+            const timeCompare = new Date(res.feegrant[0]?.expiration).getTime();
+            if (res.feegrant[0]?.status === 'Available' && timeCompare < Date.now()) {
+              this.isRevoking = true;
+              this.showNotice(grantee_address, granter);
+              return;
+            }
+          }
+          const timeEndDate = moment(expiration_time)?.toDate()?.setHours(23, 59, 59);
+          const executeAddGrant = async () => {
+            const { hash, error } = await this.walletService.signAndBroadcast({
+              messageType:
+                isInstantiate || isExecute
+                  ? SIGNING_MESSAGE_TYPES.GRANT_MSG_ALLOWANCE
+                  : period_amount && this.periodShow
+                  ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE
+                  : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
+              message: {
+                granter,
+                grantee: grantee_address?.trim(),
+                spendLimit: amount,
+                expiration: expiration_time ? timeEndDate : null,
+                period: period_day ? period_day * this.dayConvert : undefined,
+                periodSpendLimit: period_amount,
+                isPeriodic: this.periodShow,
+                isInstantiate: isInstantiate,
+                isExecute: isExecute,
+                executeContract: execute_contract,
+              },
+              senderAddress: granter,
+              network: this.environmentService.configValue.chain_info,
+              signingType: ESigningType.Keplr,
+              chainId: this.walletService.chainId,
+            });
 
-    const timeEndDate = moment(expiration_time)?.toDate()?.setHours(23, 59, 59);
-    const executeAddGrant = async () => {
-      const { hash, error } = await this.walletService.signAndBroadcast({
-        messageType:
-          isInstantiate || isExecute
-            ? SIGNING_MESSAGE_TYPES.GRANT_MSG_ALLOWANCE
-            : period_amount && this.periodShow
-            ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE
-            : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
-        message: {
-          granter,
-          grantee: grantee_address?.trim(),
-          spendLimit: amount,
-          expiration: expiration_time ? timeEndDate : null,
-          period: period_day ? period_day * this.dayConvert : undefined,
-          periodSpendLimit: period_amount,
-          isPeriodic: this.periodShow,
-          isInstantiate: isInstantiate,
-          isExecute: isExecute,
-          executeContract: execute_contract,
+            if (hash) {
+              this.closeDialog(hash);
+            } else {
+              if (error != 'Request rejected') {
+                let errorMessage = this.mappingErrorService.checkMappingError('', error);
+                this.toastr.error(errorMessage);
+              }
+            }
+          };
+
+          executeAddGrant();
         },
-        senderAddress: granter,
-        network: this.environmentService.configValue.chain_info,
-        signingType: ESigningType.Keplr,
-        chainId: this.walletService.chainId,
-      });
-
-      if (hash) {
-        this.closeDialog(hash);
-      } else {
-        if (error != 'Request rejected') {
-          let errorMessage = this.mappingErrorService.checkMappingError('', error);
-          this.toastr.error(errorMessage);
-        }
-      }
-    };
-
-    executeAddGrant();
+        (error) => {},
+        () => {},
+      );
+    }
   }
 
   addClassFocus(e: HTMLInputElement) {
