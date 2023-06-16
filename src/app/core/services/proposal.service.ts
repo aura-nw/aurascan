@@ -32,7 +32,9 @@ export class ProposalService extends CommonService {
             vote_option
             txhash
             proposal_id
-            updated_at
+            transaction {
+              timestamp
+            }
           }
           description
           operator_address

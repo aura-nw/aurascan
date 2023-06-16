@@ -14,7 +14,7 @@ import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { Globals, convertDataBlock, convertDataTransactionV2 } from '../../../../app/global/global';
+import { Globals, convertDataBlock, convertDataTransaction } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -142,7 +142,7 @@ export class BlockDetailComponent implements OnInit {
               let dataTempTx = {};
               dataTempTx['transaction'] = txs;
               if (txs.length > 0) {
-                txs = convertDataTransactionV2(dataTempTx, this.coinInfo);
+                txs = convertDataTransaction(dataTempTx, this.coinInfo);
                 txs.forEach((k) => {
                   this.blockDetail['gas_used'] += +k.gas_used;
                   this.blockDetail['gas_wanted'] += +k.gas_wanted;

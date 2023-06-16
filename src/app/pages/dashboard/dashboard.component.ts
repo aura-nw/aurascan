@@ -20,7 +20,7 @@ import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
-import { Globals, convertDataBlock, convertDataTransactionV2 } from '../../global/global';
+import { Globals, convertDataBlock, convertDataTransaction } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 import { Router } from '@angular/router';
 
@@ -270,7 +270,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.transactionService.getListTx(payload).subscribe((res) => {
       this.dataSourceTx.data = [];
       if (res?.transaction?.length > 0) {
-        const txs = convertDataTransactionV2(res, this.coinInfo);
+        const txs = convertDataTransaction(res, this.coinInfo);
 
         if (this.dataSourceTx.data.length > 0) {
           this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];

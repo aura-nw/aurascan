@@ -22,7 +22,7 @@ export class CodeIdContractsTabComponent implements OnInit {
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
     { matColumnDef: 'contract_address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contracts' },
     { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
@@ -76,7 +76,7 @@ export class CodeIdContractsTabComponent implements OnInit {
             item.type = ContractRegisterType.CW4973;
           }
         });
-        this.dataSource = res.smart_contract;
+        this.dataSource.data = res.smart_contract;
       }
     });
   }

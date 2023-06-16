@@ -48,7 +48,7 @@ export class TokenContractTabComponent implements OnInit {
   }
 
   getContractDetailNFT() {
-    this.contractService.loadContractDetailV2(this.contractAddress).subscribe((res: ResponseDto) => {
+    this.contractService.loadContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
       if (res['smart_contract']?.length > 0) {
         let data = res['smart_contract'][0];
         let contract_verification = data?.code?.code_id_verifications[0]?.verification_status;
