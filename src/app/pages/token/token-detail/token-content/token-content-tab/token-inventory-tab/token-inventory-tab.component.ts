@@ -50,7 +50,7 @@ export class TokenInventoryComponent implements OnInit {
       this.keyWord = params?.a || '';
     });
 
-    if (this.typeContract === ContractRegisterType.CW4973) {
+    if (this.route.snapshot.url[0]?.path === 'token-abt') {
       this.linkToken = 'token-abt';
     }
     this.getNftData();
@@ -76,7 +76,7 @@ export class TokenInventoryComponent implements OnInit {
       }
     }
 
-    this.tokenService.getListTokenNFTFromIndexerV2(payload).subscribe(
+    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe(
       (res) => {
         const asset = _.get(res, `cw721_token`);
         if (asset?.length >= 100) {

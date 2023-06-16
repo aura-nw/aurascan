@@ -60,7 +60,7 @@ export class NftListComponent implements OnChanges {
       keyword: this.searchValue,
       next_key: nextKey,
     };
-    this.accountService.getAssetCW721ByOwnerV2(payload).subscribe(
+    this.accountService.getAssetCW721ByOwner(payload).subscribe(
       (res) => {
         if (res?.cw721_token?.length > 0) {
           if (res?.cw721_token?.length >= 100) {
