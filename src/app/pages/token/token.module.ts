@@ -5,8 +5,10 @@ import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskModule } from 'ngx-mask';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
+import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
@@ -37,7 +39,6 @@ import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component
 import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
-import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,7 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     TokenInventoryComponent,
     NFTDetailComponent,
     PopupShareComponent,
-    TokenCw4973Component
+    TokenCw4973Component,
   ],
   imports: [
     CommonModule,
@@ -80,7 +81,8 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     NftCardModule,
     AudioPlayerModule,
     ContractsModule,
-    CommonDirectiveModule
+    CommonDirectiveModule,
+    APaginatorModule,
   ],
   providers: [TokenService, AccountService],
 })

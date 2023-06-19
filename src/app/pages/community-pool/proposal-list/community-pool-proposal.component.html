@@ -1,177 +1,165 @@
-<section *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!-- Proposal Table -->
-  <section class="all-list table-responsive" *ngIf="!breakpoint.value.matches">
-    <div class="card" *ngIf="dataSource?.data?.length > 0">
-      <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
-        <h2 class="mb-0 text--white">Community Pool Spent Proposals</h2>
-      </div>
-      <div class="card-body pt-0">
-        <table mat-table [dataSource]="dataSource" matSort class="table-reponsive aura-table proposal-table">
-          <!-- ID Column -->
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>#ID</th>
-            <td mat-cell *matCellDef="let element" class="fw-normal">#{{ element.proposal_id }}</td>
-          </ng-container>
-
-          <!-- Title Column -->
-          <ng-container matColumnDef="title">
-            <th mat-header-cell *matHeaderCellDef>Title</th>
-            <td mat-cell *matCellDef="let element" class="title-cell fw-normal">
-              <a [routerLink]="['/votings/', element.proposal_id]" class="text-clamp proposal-title">{{
-                element.content.title
-              }}</a>
-            </td>
-          </ng-container>
-
-          <!-- Status Column -->
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let element">
-              <div
-                class="aura-status-inline {{ getStatus(element.status).class }} text-capitalize fw-normal"
-                *ngIf="getStatus(element.status)">
-                <span class="status fw-normal">{{ getStatus(element.status).value }}</span>
-              </div>
-            </td>
-          </ng-container>
-
-          <!-- Sender Column -->
-          <ng-container matColumnDef="sender">
-            <th mat-header-cell *matHeaderCellDef>Sender</th>
-            <td mat-cell *matCellDef="let element">
-              <a class="text--primary fw-normal" [routerLink]="['/account', distributionAcc]">
-                {{ shortenAddress(distributionAcc) || '-' }}
-              </a>
-            </td>
-          </ng-container>
-
-          <!-- Recipient Column -->
-          <ng-container matColumnDef="recipient">
-            <th mat-header-cell *matHeaderCellDef>Recipient</th>
-            <td mat-cell *matCellDef="let element">
-              <a class="text--primary fw-normal" [routerLink]="['/account', element.content.recipient]">
-                {{ shortenAddress(element.content.recipient) || '-' }}
-              </a>
-            </td>
-          </ng-container>
-
-          <!-- Amount Column -->
-          <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef>Amount</th>
-            <td mat-cell *matCellDef="let element">
-              <span
-                class="mb-0 text--gray-1 fw-normal"
-                [appBigNumber]="element?.content.amount[0].amount"
-                [decimal]="6"></span>
-              <span class="text--primary fw-normal"> {{ denom }}</span>
-            </td>
-          </ng-container>
-
-          <!-- Voting end Time Column -->
-          <ng-container matColumnDef="voting_end_time">
-            <th mat-header-cell *matHeaderCellDef>Voting End</th>
-            <td mat-cell *matCellDef="let element">
-              <div
-                *ngIf="element.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
-                class="d-flex align-items-center fw-normal">
-                <span>{{ element.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
-                <div class="mx-1"></div>
-                <span>{{ element.voting_end_time | customDate : 'HH:mm:ss' }}</span>
-              </div>
-              <div
-                class="body-02 d-flex align-items-center"
-                *ngIf="element.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-                <span>-</span>
-              </div>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell g-no-data" colspan="9999">
-              {{ 'NO DATA' | translate }}
-            </td>
-          </tr>
-        </table>
-        <app-paginator
-          [length]="pageData.length"
-          [pageSize]="pageData.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator>
-      </div>
-    </div>
-    <div *ngIf="!(dataSource?.data?.length > 0)">
-      <app-table-no-data></app-table-no-data>
-    </div>
-  </section>
-  <!-- Proposal Card list -->
-  <section *ngIf="breakpoint.value.matches">
+  <section class="all-list table-responsive">
     <div class="card">
-      <h2 class="px-6 pt-4 pt-lg-6 pb-0 pb-lg-2 text--white mb-0 h3-mob">Community Pool Spent Proposals</h2>
-      <div class="card-body">
-        <div *ngIf="dataSourceMob?.length > 0">
-          <app-card-mob-explain
-            *ngFor="let data of dataSourceMob"
-            [title]="{
-              label: data.content.title,
-              labelLink: '/votings/' + data.proposal_id,
-              subLabel: '#' + data.proposal_id
-            }"
-            [status]="getStatus(data.status)"
-            [content]="[
-              {
-                label: 'Sender',
-                class: '',
-                info:
-                  '<a class=text--primary href=' +
-                  ('/account/' + distributionAcc) +
-                  '>' +
-                  shortenAddress(distributionAcc) +
-                  '</a>'
-              },
-              {
-                label: 'Recipient',
-                class: '',
-                info:
-                  '<a class=text--primary href=' +
-                  ('/account/' + data.content.recipient) +
-                  '>' +
-                  shortenAddress(data.content.recipient) +
-                  '</a>'
-              },
-              {
-                label: 'Amount',
-                class: '',
-                info: data.content.amount[0].amount,
-                isAmount: true
-              },
-              {
-                label: 'Voting End',
-                class: '',
-                info:
-                  data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                    ? '<span>' +
-                      (data.voting_end_time | customDate : 'yyyy-MM-dd') +
-                      '</span>' +
-                      '<span>' +
-                      (data.voting_end_time | customDate : 'HH:mm:ss') +
-                      '</span>'
-                    : '-'
-              }
-            ]"></app-card-mob-explain>
-        </div>
-        <app-paginator
-          [length]="pageData.length"
-          [pageSize]="pageSizeMob"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator>
-        <div *ngIf="!dataSource.data || (dataSource.data && dataSource.data.length === 0)">
-          <app-table-no-data></app-table-no-data>
+      <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
+        <h2 class="mb-0 text--white h3-mob">Community Pool Spent Proposals</h2>
+      </div>
+      <div class="card-body pt-0" *ngIf="length > 0; else noData">
+        <ng-container *ngIf="!breakpoint.value.matches">
+          <table mat-table [dataSource]="dataSource" matSort class="table-reponsive aura-table proposal-table">
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>#ID</th>
+              <td mat-cell *matCellDef="let element" class="fw-normal">#{{ element.proposal_id }}</td>
+            </ng-container>
+
+            <!-- Title Column -->
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef>Title</th>
+              <td mat-cell *matCellDef="let element" class="title-cell fw-normal">
+                <a [routerLink]="['/votings/', element.proposal_id]" class="text-clamp proposal-title">{{
+                  element.content.title
+                }}</a>
+              </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element">
+                <div
+                  class="aura-status-inline {{ getStatus(element.status).class }} text-capitalize fw-normal"
+                  *ngIf="getStatus(element.status)">
+                  <span class="status fw-normal">{{ getStatus(element.status).value }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Sender Column -->
+            <ng-container matColumnDef="sender">
+              <th mat-header-cell *matHeaderCellDef>Sender</th>
+              <td mat-cell *matCellDef="let element">
+                <a class="text--primary fw-normal" [routerLink]="['/account', distributionAcc]">
+                  {{ shortenAddress(distributionAcc) || '-' }}
+                </a>
+              </td>
+            </ng-container>
+
+            <!-- Recipient Column -->
+            <ng-container matColumnDef="recipient">
+              <th mat-header-cell *matHeaderCellDef>Recipient</th>
+              <td mat-cell *matCellDef="let element">
+                <a class="text--primary fw-normal" [routerLink]="['/account', element.content.recipient]">
+                  {{ shortenAddress(element.content.recipient) || '-' }}
+                </a>
+              </td>
+            </ng-container>
+
+            <!-- Amount Column -->
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>Amount</th>
+              <td mat-cell *matCellDef="let element">
+                <span
+                  class="mb-0 text--gray-1 fw-normal"
+                  [appBigNumber]="element?.content.amount[0].amount"
+                  [decimal]="6"></span>
+                <span class="text--primary fw-normal"> {{ denom }}</span>
+              </td>
+            </ng-container>
+
+            <!-- Voting end Time Column -->
+            <ng-container matColumnDef="voting_end_time">
+              <th mat-header-cell *matHeaderCellDef>Voting End</th>
+              <td mat-cell *matCellDef="let element">
+                <div
+                  *ngIf="element.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
+                  class="d-flex align-items-center fw-normal">
+                  <span>{{ element.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
+                  <div class="mx-1"></div>
+                  <span>{{ element.voting_end_time | customDate : 'HH:mm:ss' }}</span>
+                </div>
+                <div
+                  class="body-02 d-flex align-items-center"
+                  *ngIf="element.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                  <span>-</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{ 'NO DATA' | translate }}
+              </td>
+            </tr>
+          </table>
+        </ng-container>
+        <ng-container *ngIf="breakpoint.value.matches">
+          <div *ngIf="dataSource?.data?.length > 0">
+            <app-card-mob-explain
+              *ngFor="let data of dataSource?.data"
+              [title]="{
+                label: data.content.title,
+                labelLink: '/votings/' + data.proposal_id,
+                subLabel: '#' + data.proposal_id
+              }"
+              [status]="getStatus(data.status)"
+              [content]="[
+                {
+                  label: 'Sender',
+                  class: '',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/account/' + distributionAcc) +
+                    '>' +
+                    shortenAddress(distributionAcc) +
+                    '</a>'
+                },
+                {
+                  label: 'Recipient',
+                  class: '',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/account/' + data.content.recipient) +
+                    '>' +
+                    shortenAddress(data.content.recipient) +
+                    '</a>'
+                },
+                {
+                  label: 'Amount',
+                  class: '',
+                  info: data.content.amount[0].amount,
+                  isAmount: true
+                },
+                {
+                  label: 'Voting End',
+                  class: '',
+                  info:
+                    data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                      ? '<span>' +
+                        (data.voting_end_time | customDate : 'yyyy-MM-dd') +
+                        '</span>' +
+                        '<span>' +
+                        (data.voting_end_time | customDate : 'HH:mm:ss') +
+                        '</span>'
+                      : '-'
+                }
+              ]">
+            </app-card-mob-explain>
+          </div>
+          <!-- </div> -->
+        </ng-container>
+
+        <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+          <app-a-paginator [paginator]="pageData" [length]="length" (pageChange)="getListProposal({ index: $event })">
+          </app-a-paginator>
         </div>
       </div>
     </div>
   </section>
-</section>
+</ng-container>
+<ng-template #noData>
+  <app-table-no-data></app-table-no-data>
+</ng-template>
