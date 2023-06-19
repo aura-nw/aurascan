@@ -2,13 +2,13 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import * as _ from 'lodash';
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { CONTRACT_RESULT, TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { shortenAddress } from '../../../../core/utils/common/shorten';
-import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-code-id-contracts-tab',

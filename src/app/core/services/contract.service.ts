@@ -67,7 +67,7 @@ export class ContractService extends CommonService {
       updateQuery = '';
     }
     const operationsDoc = `
-    query auratestnet_smart_contract($limit: Int = 100, $offset: Int = 0, $type: [String!], $address: String = null, $creator: String =null) {
+    query querySmartContractList($limit: Int = 100, $offset: Int = 0, $type: [String!], $address: String = null, $creator: String =null) {
       ${this.envDB} {
         smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
           address
@@ -102,14 +102,14 @@ export class ContractService extends CommonService {
           creator: creator,
           address: address,
         },
-        operationName: 'auratestnet_smart_contract',
+        operationName: 'querySmartContractList',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   loadContractDetail(contractAddress): Observable<any> {
     const contractDoc = `
-    query auratestnet_contract($contractAddress: String = null) {
+    query queryContractDetail($contractAddress: String = null) {
       ${this.envDB} {
         smart_contract(limit: 1, where: {address: {_eq: $contractAddress}}) {
           address
@@ -151,14 +151,14 @@ export class ContractService extends CommonService {
         variables: {
           contractAddress: contractAddress,
         },
-        operationName: 'auratestnet_contract',
+        operationName: 'queryContractDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListContractByCode(payload): Observable<any> {
     const contractDoc = `
-    query MyQuery($code_id: Int = 0) {
+    query queryListContractByCodeID($code_id: Int = 0) {
       ${this.envDB} {
         smart_contract(where: {code_id: {_eq: $code_id}}, order_by: {updated_at: desc}) {
           id
@@ -177,6 +177,11 @@ export class ContractService extends CommonService {
             }
           }
         }
+        smart_contract_aggregate(where: {code_id: {_eq: $code_id}}) {
+          aggregate {
+            count
+          }
+        }
       }
     }
     `;
@@ -186,7 +191,7 @@ export class ContractService extends CommonService {
         variables: {
           code_id: payload.codeId,
         },
-        operationName: 'MyQuery',
+        operationName: 'queryListContractByCodeID',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
