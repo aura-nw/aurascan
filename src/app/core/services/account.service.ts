@@ -5,6 +5,7 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
 import { TYPE_CW4973 } from '../constants/contract.constant';
+import { LENGTH_CHARACTER } from '../constants/common.constant';
 
 @Injectable()
 export class AccountService extends CommonService {
@@ -23,24 +24,27 @@ export class AccountService extends CommonService {
   }
 
   getAssetCW721ByOwner(payload): Observable<any> {
+    if (payload.keyword?.length >= LENGTH_CHARACTER.ADDRESS) {
+      payload.contractAddress = payload.keyword;
+    } else if (payload.keyword?.length > 0) {
+      payload.token_id = payload.keyword;
+    }
     const operationsDoc = `
     query Query(
       $contract_address: String
       $limit: Int = 10
-      $nextKeyLastUpdatedHeight: Int = null
-      $nextKeyId: Int = null
       $tokenId: String = null
       $owner: String = null
+      $offset: Int = 0
     ) {
       ${this.envDB} {
         cw721_token(
           limit: $limit
+          offset: $offset
           where: {
             cw721_contract: {
               smart_contract: { address: { _eq: $contract_address }, name: {_neq: "${TYPE_CW4973}"} }
             }
-            id: { _lt: $nextKeyId }
-            last_updated_height: { _lt: $nextKeyLastUpdatedHeight }
             token_id: { _eq: $tokenId }
             owner: { _eq: $owner }
           }
@@ -62,6 +66,11 @@ export class AccountService extends CommonService {
             }
           }
         }
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
+          aggregate {
+            count
+          }
+        }
       }
     }
     `;
@@ -75,6 +84,7 @@ export class AccountService extends CommonService {
           nextKeyId: payload?.nextKeyId,
           tokenId: payload?.token_id,
           owner: payload?.owner,
+          offset: payload.offset
         },
         operationName: 'Query',
       })
