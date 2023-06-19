@@ -1,7 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
-import { debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 import { ProposalService } from '../../../../core/services/proposal.service';
 export interface IVotes {
@@ -18,7 +19,7 @@ export interface IVotes {
   templateUrl: './votes.component.html',
   styleUrls: ['./votes.component.scss'],
 })
-export class VotesComponent implements OnChanges {
+export class VotesComponent implements OnChanges, OnDestroy {
   @Input() proposalDetail;
   @ViewChild('customNav') customNav: NgbNav;
 
@@ -42,9 +43,10 @@ export class VotesComponent implements OnChanges {
   payloads: { pageIndex?: number; pageLimit?: number; proposalId?: number | string; offset?: number };
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  destroyed$ = new Subject();
 
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
-    this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
+    this.proposalService.reloadList$.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
       if (event) {
         this.getProposalVoteTotal();
 
@@ -57,24 +59,16 @@ export class VotesComponent implements OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['proposalDetail'].currentValue?.proposal_id) {
-      this.getListVoteFromIndexer();
-      this.getProposalVoteTotal();
-    }
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
-  getListVoteFromIndexer() {
-    const payloads = {
-      pageLimit: 5,
-      proposalId: this.proposalDetail.proposal_id,
-      offset: 0,
-      pageIndex: 0,
-    };
-    this.proposalService.getListVoteFromIndexer2(payloads, null).subscribe((res) => {
-      this.voteDataListLoading = false;
-      this.voteDataList = res.vote;
-    });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['proposalDetail'].currentValue?.proposal_id !== changes['proposalDetail'].previousValue?.proposal_id) {
+      this.pageEventChange({ tabId: 'all', pageIndex: 0, pageSize: 5 });
+      this.getProposalVoteTotal();
+    }
   }
 
   getProposalVoteTotal() {

@@ -131,31 +131,29 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     //   // this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
     // } else
     if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
-      const operatorAddArr = this.data.map((i) => i.operator_address);
+      // const operatorAddArr = this.data.map((i) => i.operator_address);
       // get ValidatorAddressArr
       // this.data.forEach((d) => {
       //   operatorAddArr.push(d.operator_address);
       // });
-
-      if (operatorAddArr.length > 0) {
-        // get validator logo
-        this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
-          if (res?.data) {
-            this.validatorImgArr = res?.data;
-            // push image into validator array
-            this.dataSource.data.forEach((item) => {
-              this.validatorImgArr.forEach((imgObj) => {
-                if (imgObj.operator_address == item.operator_address) {
-                  item['image_url'] = imgObj.image_url;
-                }
-              });
-            });
-
-            // this.cdr.markForCheck();
-          }
-        });
-      }
-
+      // if (operatorAddArr.length > 0) {
+      //   // get validator logo
+      //   this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
+      //     console.log(res);
+      //     if (res?.data) {
+      //       this.validatorImgArr = res?.data;
+      //       // push image into validator array
+      //       this.dataSource.data.forEach((item) => {
+      //         this.validatorImgArr.forEach((imgObj) => {
+      //           if (imgObj.operator_address == item.operator_address) {
+      //             item['image_url'] = imgObj.image_url;
+      //           }
+      //         });
+      //       });
+      //       // this.cdr.markForCheck();
+      //     }
+      //   });
+      // }
       // minus = this.getUpdatePage(
       //   changes.data.currentValue?.length,
       //   this.proposalService.pageIndexObj[this.type][this.tabId],

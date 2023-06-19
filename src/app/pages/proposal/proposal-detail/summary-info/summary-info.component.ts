@@ -4,8 +4,8 @@ import { AfterViewChecked, Component, EventEmitter, Input, OnInit, Output } from
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { from } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { from, interval } from 'rxjs';
+import { map, mergeMap, takeUntil } from 'rxjs/operators';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../../../app/global/global';
 import {
@@ -64,6 +64,14 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.getProposalDetail();
     this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
+
+    interval(30000)
+      .pipe()
+      .subscribe((r) => {
+        this.proposalService.reloadList();
+        this.getProposalDetail();
+        this.getVotedProposal();
+      });
   }
 
   getProposalDetail(): void {
@@ -170,17 +178,17 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
           }
 
           //set interval reload when type = voting period or deposit period
-          if (
-            this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD ||
-            this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD
-          ) {
-            this.timerGetUpTime = setInterval(() => {
-              this.proposalService.reloadList();
-              this.getProposalDetail();
-              this.getVotedProposal();
-              clearInterval(this.timerGetUpTime);
-            }, 10000);
-          }
+          // if (
+          //   this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD ||
+          //   this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD
+          // ) {
+          //   this.timerGetUpTime = setInterval(() => {
+          //     this.proposalService.reloadList();
+          //     this.getProposalDetail();
+          //     this.getVotedProposal();
+          //     clearInterval(this.timerGetUpTime);
+          //   }, 10000);
+          // }
         }),
       )
       .subscribe({

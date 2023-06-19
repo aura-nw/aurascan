@@ -1,10 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
-import { debounceTime } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { Subject } from 'rxjs';
+import { map, mergeMap, takeUntil } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
-import * as _ from 'lodash';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 
 export interface IValidatorVotes {
   rank: number;
@@ -19,7 +21,7 @@ export interface IValidatorVotes {
   templateUrl: './validators-votes.component.html',
   styleUrls: ['./validators-votes.component.scss'],
 })
-export class ValidatorsVotesComponent implements OnInit {
+export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   @Input() proposalId: number;
   @ViewChild('customNav') customNav: NgbNav;
   PROPOSAL_VOTE_EXT = PROPOSAL_VOTE.concat({
@@ -59,14 +61,28 @@ export class ValidatorsVotesComponent implements OnInit {
     noWithVeto: null,
     didNotVote: null,
   };
+
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
-    this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
+  currentTabId = VOTE_OPTION.UNSPECIFIED;
+
+  destroyed$ = new Subject();
+
+  constructor(
+    private proposalService: ProposalService,
+    private layout: BreakpointObserver,
+    private validatorService: ValidatorService,
+  ) {
+    this.proposalService.reloadList$.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
       if (event) {
         this.getValidatorVotes();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   ngOnInit(): void {
@@ -80,10 +96,48 @@ export class ValidatorsVotesComponent implements OnInit {
           limit: 100,
           voteOption,
         })
+        .pipe(
+          mergeMap((res) => {
+            const validator = res.validator;
+
+            console.log(res);
+            const operatorAddressList = validator.map((validator) => validator.operator_address);
+
+            return this.validatorService.getValidatorInfoByList(operatorAddressList).pipe(
+              map((validatorInfo) => {
+                const validatorsMap = validator.map((item, index) => {
+                  const validator_name = item.description?.moniker;
+                  const timestamp = _.get(item, 'vote[0].updated_at');
+                  const vote_option = _.get(item, 'vote[0].vote_option');
+                  const txhash = _.get(item, 'vote[0].txhash');
+                  const operator_address = _.get(item, 'operator_address');
+                  const validator_identity = _.get(item, 'description.identity');
+                  const rank = index + 1;
+                  const image_url =
+                    _.find(validatorInfo.validator, { operator_address })?.image_url || 'validator-default.svg';
+
+                  return {
+                    validator_name,
+                    timestamp,
+                    vote_option,
+                    txhash,
+                    operator_address,
+                    validator_identity,
+                    rank,
+                    image_url,
+                  };
+                });
+                return validatorsMap || null;
+              }),
+            );
+          }),
+        )
         .subscribe(
-          (res) => {
+          (validatorVote) => {
+            console.log(validatorVote);
+
             this.voteDataListLoading = false;
-            this.loadValidatorVotes(res?.validator);
+            this.loadValidatorVotes(validatorVote);
           },
           () => {},
           () => {
@@ -93,20 +147,20 @@ export class ValidatorsVotesComponent implements OnInit {
     }
   }
 
-  loadValidatorVotes(validator) {
-    let validatorVote = [];
-    if (validator) {
-      validatorVote = validator.map((item, index) => {
-        const validator_name = item.description?.moniker;
-        const timestamp = _.get(item, 'vote[0].updated_at');
-        const vote_option = _.get(item, 'vote[0].vote_option');
-        const txhash = _.get(item, 'vote[0].txhash');
-        const operator_address = _.get(item, 'operator_address');
-        const validator_identity = _.get(item, 'description.identity');
-        const rank = index + 1;
-        return { validator_name, timestamp, vote_option, txhash, operator_address, validator_identity, rank };
-      });
-    }
+  loadValidatorVotes(validatorVote) {
+    // let validatorVote = [];
+    // if (validator) {
+    //   validatorVote = validator.map((item, index) => {
+    //     const validator_name = item.description?.moniker;
+    //     const timestamp = _.get(item, 'vote[0].updated_at');
+    //     const vote_option = _.get(item, 'vote[0].vote_option');
+    //     const txhash = _.get(item, 'vote[0].txhash');
+    //     const operator_address = _.get(item, 'operator_address');
+    //     const validator_identity = _.get(item, 'description.identity');
+    //     const rank = index + 1;
+    //     return { validator_name, timestamp, vote_option, txhash, operator_address, validator_identity, rank };
+    //   });
+    // }
 
     this.voteData[VOTE_OPTION.UNSPECIFIED] = validatorVote;
     this.voteData[VOTE_OPTION.YES] = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.YES);
@@ -117,7 +171,7 @@ export class ValidatorsVotesComponent implements OnInit {
 
     this.voteDataList = validatorVote;
 
-    console.log(this.voteData);
+    this.voteDataList = this.voteData[this.currentTabId];
 
     this.countVote.set(VOTE_OPTION.UNSPECIFIED, this.voteData[VOTE_OPTION.UNSPECIFIED].length);
     this.countVote.set(VOTE_OPTION.YES, this.voteData[VOTE_OPTION.YES].length);
@@ -128,6 +182,7 @@ export class ValidatorsVotesComponent implements OnInit {
   }
 
   changeTab(tabId): void {
+    this.currentTabId = tabId;
     this.voteDataList = this.voteData[tabId];
   }
 

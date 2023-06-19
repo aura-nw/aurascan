@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnInit } from '@angular/core';
-import { debounceTime } from 'rxjs/operators';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { PROPOSAL_TABLE_MODE } from 'src/app/core/constants/proposal.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -13,7 +14,7 @@ import { ProposalService } from '../../../../../app/core/services/proposal.servi
   templateUrl: './depositors.component.html',
   styleUrls: ['./depositors.component.scss'],
 })
-export class DepositorsComponent implements OnInit {
+export class DepositorsComponent implements OnInit, OnDestroy {
   @Input() proposalId: number;
   depositorsList: any[] = [];
   tableData = [];
@@ -24,6 +25,7 @@ export class DepositorsComponent implements OnInit {
   proposalDeposit = PROPOSAL_TABLE_MODE.DEPOSITORS;
 
   pageData = { pageIndex: 0, pageSize: 5 };
+  destroyed$ = new Subject();
 
   constructor(
     private proposalService: ProposalService,
@@ -31,13 +33,16 @@ export class DepositorsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private transactionService: TransactionService,
   ) {
-    this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
+    this.proposalService.reloadList$.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
       if (event) {
         this.getDepositorsList();
       }
     });
   }
-
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
   ngOnInit() {
     this.getDepositorsList();
   }
