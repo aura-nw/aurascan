@@ -109,6 +109,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       element.timestamp = element?.transaction?.timestamp || element.timestamp || element.updated_at;
       element.updated_at = null;
     });
+
     if (this.dataSource) {
       this.dataSource.data = this.data;
     } else {
@@ -118,62 +119,12 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     if (changes.tabId?.currentValue != changes.tabId?.previousValue) {
       this.pageData.pageIndex = 1;
     }
-
-    // // let minus = 0;
-    // if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
-    //   // minus = this.getUpdatePage(changes.data.currentValue?.length, this.proposalService.pageIndexObj[this.type]);
-    //   // this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type] || 0) - minus);
-    // } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
-    //   // minus = this.getUpdatePage(
-    //   //   changes.data.currentValue?.length,
-    //   //   this.proposalService.pageIndexObj[this.type][this.tabId],
-    //   // );
-    //   // this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
-    // } else
-    if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
-      // const operatorAddArr = this.data.map((i) => i.operator_address);
-      // get ValidatorAddressArr
-      // this.data.forEach((d) => {
-      //   operatorAddArr.push(d.operator_address);
-      // });
-      // if (operatorAddArr.length > 0) {
-      //   // get validator logo
-      //   this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
-      //     console.log(res);
-      //     if (res?.data) {
-      //       this.validatorImgArr = res?.data;
-      //       // push image into validator array
-      //       this.dataSource.data.forEach((item) => {
-      //         this.validatorImgArr.forEach((imgObj) => {
-      //           if (imgObj.operator_address == item.operator_address) {
-      //             item['image_url'] = imgObj.image_url;
-      //           }
-      //         });
-      //       });
-      //       // this.cdr.markForCheck();
-      //     }
-      //   });
-      // }
-      // minus = this.getUpdatePage(
-      //   changes.data.currentValue?.length,
-      //   this.proposalService.pageIndexObj[this.type][this.tabId],
-      // );
-      // this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
-    }
   }
-
-  // getUpdatePage(data, page): number {
-  //   let minus = 0;
-  //   if (data % 25 !== 0 && Math.ceil(data / this.pageSize) <= page) {
-  //     minus = 1;
-  //   }
-  //   return minus;
-  // }
 
   ngOnInit(): void {
     this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
-    this.dataSource = new MatTableDataSource(this.data);
+    // this.dataSource = new MatTableDataSource(this.data);
   }
 
   getTemplate(type: PROPOSAL_TABLE_MODE): Array<TableTemplate> {

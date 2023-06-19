@@ -98,9 +98,11 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
         })
         .pipe(
           mergeMap((res) => {
-            const validator = res.validator;
+            if (!res) {
+              throw new Error();
+            }
 
-            console.log(res);
+            const validator = res.validator;
             const operatorAddressList = validator.map((validator) => validator.operator_address);
 
             return this.validatorService.getValidatorInfoByList(operatorAddressList).pipe(
@@ -114,7 +116,7 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
                   const validator_identity = _.get(item, 'description.identity');
                   const rank = index + 1;
                   const image_url =
-                    _.find(validatorInfo.validator, { operator_address })?.image_url || 'validator-default.svg';
+                    _.find(validatorInfo.data, { operator_address })?.image_url || 'validator-default.svg';
 
                   return {
                     validator_name,
@@ -134,34 +136,24 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (validatorVote) => {
-            console.log(validatorVote);
-
             this.voteDataListLoading = false;
             this.loadValidatorVotes(validatorVote);
           },
-          () => {},
-          () => {
+          (_error) => {
             this.voteDataListLoading = false;
+
+            this.countVote.set(VOTE_OPTION.UNSPECIFIED, 0);
+            this.countVote.set(VOTE_OPTION.YES, 0);
+            this.countVote.set(VOTE_OPTION.ABSTAIN, 0);
+            this.countVote.set(VOTE_OPTION.NO, 0);
+            this.countVote.set(VOTE_OPTION.NO_WITH_VETO, 0);
+            this.countVote.set(VOTE_OPTION.NULL, 0);
           },
         );
     }
   }
 
   loadValidatorVotes(validatorVote) {
-    // let validatorVote = [];
-    // if (validator) {
-    //   validatorVote = validator.map((item, index) => {
-    //     const validator_name = item.description?.moniker;
-    //     const timestamp = _.get(item, 'vote[0].updated_at');
-    //     const vote_option = _.get(item, 'vote[0].vote_option');
-    //     const txhash = _.get(item, 'vote[0].txhash');
-    //     const operator_address = _.get(item, 'operator_address');
-    //     const validator_identity = _.get(item, 'description.identity');
-    //     const rank = index + 1;
-    //     return { validator_name, timestamp, vote_option, txhash, operator_address, validator_identity, rank };
-    //   });
-    // }
-
     this.voteData[VOTE_OPTION.UNSPECIFIED] = validatorVote;
     this.voteData[VOTE_OPTION.YES] = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.YES);
     this.voteData[VOTE_OPTION.ABSTAIN] = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.ABSTAIN);
