@@ -13,7 +13,8 @@
                     <div class="title-desk">{{ lastedItem.content.title }}</div>
                   </div>
                 </a>
-                <div *ngIf="getStatus(lastedItem.status)"
+                <div
+                  *ngIf="getStatus(lastedItem.status)"
                   class="proposal-status flex-shrink-0 proposal-status__{{ getStatus(lastedItem.status).key }}">
                   <span>{{ getStatus(lastedItem.status).value }}</span>
                 </div>
@@ -24,33 +25,38 @@
                     <div class="content-body fw-500">Proposer</div>
                     <a href="/account/{{ lastedItem.proposer_address }}" class="text--primary h6 mb-0">
                       {{
-                      lastedItem.proposer
-                      ? lastedItem.proposer.description.moniker
-                      : (lastedItem.proposer_address | cutStringPipe : 8 : 8)
-                      }}</a>
+                        lastedItem.proposer
+                          ? lastedItem.proposer.description.moniker
+                          : (lastedItem.proposer_address | cutStringPipe : 8 : 8)
+                      }}</a
+                    >
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body fw-500">Voting Start</div>
-                    <div class="text--gray-1 body-02 d-flex align-items-center"
+                    <div
+                      class="text--gray-1 body-02 d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>{{ lastedItem.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
                       <span>{{ lastedItem.voting_start_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
-                    <div class="text--gray-1 body-02 d-flex align-items-center"
+                    <div
+                      class="text--gray-1 body-02 d-flex align-items-center"
                       *ngIf="lastedItem.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>-</span>
                     </div>
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body fw-500">Voting End</div>
-                    <div class="text--gray-1 body-02 d-flex align-items-center"
+                    <div
+                      class="text--gray-1 body-02 d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>{{ lastedItem.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
                       <span>{{ lastedItem.voting_end_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
-                    <div class="text--gray-1 body-02 d-flex align-items-center"
+                    <div
+                      class="text--gray-1 body-02 d-flex align-items-center"
                       *ngIf="lastedItem.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>-</span>
                     </div>
@@ -60,17 +66,28 @@
               <div class="mt-3 d-flex">
                 <div class="vote-bar flex-grow-1">
                   <ul>
-                    <li class="primary" [style.width]="lastedItem.tally?.yes + '%'"
+                    <li
+                      class="primary"
+                      [style.width]="lastedItem.tally?.yes + '%'"
                       matTooltip="Yes {{ lastedItem.tally?.yes | number : global.formatNumber2Decimal }}%"
                       [matTooltipPosition]="'above'"></li>
-                    <li class="danger" *ngIf="lastedItem.tally?.no" [style.width]="lastedItem.tally?.no + '%'"
+                    <li
+                      class="danger"
+                      *ngIf="lastedItem.tally?.no"
+                      [style.width]="lastedItem.tally?.no + '%'"
                       matTooltip="No {{ lastedItem.tally?.no | number : global.formatNumber2Decimal }}%"
                       [matTooltipPosition]="'above'"></li>
-                    <li class="info" *ngIf="lastedItem.tally?.no_with_veto"
-                      [style.width]="lastedItem.tally?.no_with_veto + '%'" matTooltip="No with veto {{
+                    <li
+                      class="info"
+                      *ngIf="lastedItem.tally?.no_with_veto"
+                      [style.width]="lastedItem.tally?.no_with_veto + '%'"
+                      matTooltip="No with veto {{
                         lastedItem.tally?.no_with_veto | number : global.formatNumber2Decimal
-                      }}%" [matTooltipPosition]="'above'"></li>
-                    <li class="secondary" *ngIf="lastedItem.tally?.abstain"
+                      }}%"
+                      [matTooltipPosition]="'above'"></li>
+                    <li
+                      class="secondary"
+                      *ngIf="lastedItem.tally?.abstain"
                       [style.width]="lastedItem.tally?.abstain + '%'"
                       matTooltip="Abstain {{ lastedItem.tally?.abstain | number : global.formatNumber2Decimal }}%"
                       [matTooltipPosition]="'above'"></li>
@@ -78,7 +95,8 @@
                 </div>
                 <div class="most-vote flex-shrink-0 text--gray-1">
                   <div class="body-02 mb-1 text--gray-5">Most voted on</div>
-                  <div class="body-02 value {{
+                  <div
+                    class="body-02 value {{
                       getHighestVote(
                         lastedItem.tally?.yes,
                         lastedItem.tally?.no,
@@ -87,22 +105,23 @@
                       ).class
                     }}">
                     {{
-                    getHighestVote(
-                    lastedItem.tally?.yes,
-                    lastedItem.tally?.no,
-                    lastedItem.tally?.no_with_veto,
-                    lastedItem.tally?.abstain
-                    ).name
+                      getHighestVote(
+                        lastedItem.tally?.yes,
+                        lastedItem.tally?.no,
+                        lastedItem.tally?.no_with_veto,
+                        lastedItem.tally?.abstain
+                      ).name
                     }}
                     <span class="h4 mb-0 text--gray-1 ml-4">
                       {{
-                      getHighestVote(
-                      lastedItem.tally?.yes,
-                      lastedItem.tally?.no,
-                      lastedItem.tally?.no_with_veto,
-                      lastedItem.tally?.abstain
-                      ).value | number : global.formatNumber2Decimal
-                      }}% </span>&nbsp;
+                        getHighestVote(
+                          lastedItem.tally?.yes,
+                          lastedItem.tally?.no,
+                          lastedItem.tally?.no_with_veto,
+                          lastedItem.tally?.abstain
+                        ).value | number : global.formatNumber2Decimal
+                      }}% </span
+                    >&nbsp;
                   </div>
                 </div>
               </div>
@@ -112,23 +131,26 @@
               <div class="top-border">
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="body-03 text--gray-3">
-                    <span *ngIf="lastedItem.vote_option">You voted "{{ lastedItem.vote_option }}" for this
-                      proposal</span>
+                    <span *ngIf="lastedItem.vote_option"
+                      >You voted "{{ lastedItem.vote_option }}" for this proposal</span
+                    >
                   </div>
                   <div class="d-flex">
-                    <button class="button button--sm button-pill button-outline body mr-3"
+                    <button
+                      class="button button--sm button-pill button-outline body mr-3"
                       [routerLink]="[lastedItem.proposal_id]">
                       <span>Details</span>
                     </button>
-                    <button [disabled]="lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+                    <button
+                      [disabled]="lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                       (click)="openVoteDialog(lastedItem, idx)"
                       class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card body">
                       <span>
                         {{
-                        lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                        lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                        ? 'Voting Ended'
-                        : 'Vote'
+                          lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                          lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                            ? 'Voting Ended'
+                            : 'Vote'
                         }}
                       </span>
                     </button>
@@ -151,7 +173,9 @@
                       <span class="text--white pr-3">{{ lastedItem.content.title }}</span>
                     </h2>
                   </div>
-                  <div *ngIf="getStatus(lastedItem.status)" class="proposal-status-mobile flex-shrink-0 fw-semibold proposal-status__{{
+                  <div
+                    *ngIf="getStatus(lastedItem.status)"
+                    class="proposal-status-mobile flex-shrink-0 fw-semibold proposal-status__{{
                       getStatus(lastedItem.status).key
                     }}">
                     <span class="status">{{ getStatus(lastedItem.status).value }}</span>
@@ -167,38 +191,42 @@
                     <div class="text--gray-4">Proposer</div>
                     <a href="/account/{{ lastedItem.proposer_address }}" class="text--primary fw-500">
                       {{
-                      lastedItem.proposer_name
-                      ? lastedItem.proposer_name
-                      : (lastedItem.proposer_address | cutStringPipe : 8 : 8)
+                        lastedItem.proposer_name
+                          ? lastedItem.proposer_name
+                          : (lastedItem.proposer_address | cutStringPipe : 8 : 8)
                       }}
                     </a>
                   </div>
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Voting Start</div>
-                    <div class="text--white d-flex align-items-center"
+                    <div
+                      class="text--white d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{
                         lastedItem.voting_start_time | customDate : 'yyyy-MM-dd'
-                        }}</span>
+                      }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
                       <span *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{
                         lastedItem.voting_start_time | customDate : 'HH:mm:ss'
-                        }}</span>
+                      }}</span>
                     </div>
-                    <div class="text--white d-flex align-items-center"
+                    <div
+                      class="text--white d-flex align-items-center"
                       *ngIf="lastedItem.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>-</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between small-body">
                     <div class="text--gray-4">Voting End</div>
-                    <div class="text--white d-flex align-items-center"
+                    <div
+                      class="text--white d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>{{ lastedItem.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
                       <span>{{ lastedItem.voting_end_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
-                    <div class="text--white d-flex align-items-center"
+                    <div
+                      class="text--white d-flex align-items-center"
                       *ngIf="lastedItem.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>-</span>
                     </div>
@@ -207,17 +235,28 @@
                 <div class="mt-6 d-flex justify-content-between border-bottom-mobile pb-3">
                   <div class="vote-bar flex-grow-1 mr-0">
                     <ul class="mt-4 ul-mobile">
-                      <li class="primary" [style.width]="lastedItem.tally?.yes + '%'"
+                      <li
+                        class="primary"
+                        [style.width]="lastedItem.tally?.yes + '%'"
                         matTooltip="Yes {{ lastedItem.tally?.yes | number : global.formatNumber2Decimal }}%"
                         [matTooltipPosition]="'above'"></li>
-                      <li class="danger" *ngIf="lastedItem.tally?.no" [style.width]="lastedItem.tally?.no + '%'"
+                      <li
+                        class="danger"
+                        *ngIf="lastedItem.tally?.no"
+                        [style.width]="lastedItem.tally?.no + '%'"
                         matTooltip="No {{ lastedItem.tally?.no | number : global.formatNumber2Decimal }}%"
                         [matTooltipPosition]="'above'"></li>
-                      <li class="info" *ngIf="lastedItem.tally?.no_with_veto"
-                        [style.width]="lastedItem.tally?.no_with_veto + '%'" matTooltip="No with veto {{
+                      <li
+                        class="info"
+                        *ngIf="lastedItem.tally?.no_with_veto"
+                        [style.width]="lastedItem.tally?.no_with_veto + '%'"
+                        matTooltip="No with veto {{
                           lastedItem.tally?.no_with_veto | number : global.formatNumber2Decimal
-                        }}%" [matTooltipPosition]="'above'"></li>
-                      <li class="secondary" *ngIf="lastedItem.tally.abstain"
+                        }}%"
+                        [matTooltipPosition]="'above'"></li>
+                      <li
+                        class="secondary"
+                        *ngIf="lastedItem.tally.abstain"
                         [style.width]="lastedItem.tally.abstain + '%'"
                         matTooltip="Abstain {{ lastedItem.tally.abstain | number : global.formatNumber2Decimal }}%"
                         [matTooltipPosition]="'above'"></li>
@@ -225,7 +264,8 @@
                   </div>
                   <div class="most-vote flex-shrink-0 ml-4">
                     <div class="caption-mob fw-normal text--gray-5">Most voted on</div>
-                    <div class="body-02 value {{
+                    <div
+                      class="body-02 value {{
                         getHighestVote(
                           lastedItem.tally?.yes,
                           lastedItem.tally?.no,
@@ -234,21 +274,21 @@
                         ).class
                       }}">
                       {{
-                      getHighestVote(
-                      lastedItem.tally?.yes,
-                      lastedItem.tally?.no,
-                      lastedItem.tally?.no_with_veto,
-                      lastedItem.tally.abstain
-                      ).name
+                        getHighestVote(
+                          lastedItem.tally?.yes,
+                          lastedItem.tally?.no,
+                          lastedItem.tally?.no_with_veto,
+                          lastedItem.tally.abstain
+                        ).name
                       }}
                       <span class="h4 h6-mob mb-0 text--white ml-2">
                         {{
-                        getHighestVote(
-                        lastedItem.tally?.yes,
-                        lastedItem.tally?.no,
-                        lastedItem.tally?.no_with_veto,
-                        lastedItem.tally.abstain
-                        ).value | number : global.formatNumber2Decimal
+                          getHighestVote(
+                            lastedItem.tally?.yes,
+                            lastedItem.tally?.no,
+                            lastedItem.tally?.no_with_veto,
+                            lastedItem.tally.abstain
+                          ).value | number : global.formatNumber2Decimal
                         }}%
                       </span>
                     </div>
@@ -257,7 +297,8 @@
               </div>
             </div>
             <div class="card-footer card-footer-mobile d-flex justify-content-around">
-              <button class="button button-pill button--md button-outline button-fixed"
+              <button
+                class="button button-pill button--md button-outline button-fixed"
                 [routerLink]="[lastedItem.proposal_id]">
                 <span>Details</span>
               </button>
@@ -267,10 +308,10 @@
                 (click)="openVoteDialog(lastedItem, idex)">
                 <span>
                   {{
-                  lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                  lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                  ? 'Voting Ended'
-                  : 'Vote'
+                    lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                    lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                      ? 'Voting Ended'
+                      : 'Vote'
                   }}
                 </span>
               </button>
@@ -289,7 +330,6 @@
       </div>
       <div class="card-body pt-0">
         <ng-container *ngIf="!breakpoint.value.matches; else mobileTemplate">
-
           <table mat-table [dataSource]="dataSource" matSort class="table-reponsive aura-table">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
@@ -309,7 +349,8 @@
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef>Status</th>
               <td mat-cell *matCellDef="let element">
-                <div class="aura-status-inline {{ getStatus(element.status).class }} text-capitalize"
+                <div
+                  class="aura-status-inline {{ getStatus(element.status).class }} text-capitalize"
                   *ngIf="getStatus(element.status)">
                   <span class="status">{{ getStatus(element.status).value }}</span>
                 </div>
@@ -320,13 +361,15 @@
             <ng-container matColumnDef="votingStart">
               <th mat-header-cell *matHeaderCellDef>Voting Start</th>
               <td mat-cell *matCellDef="let element">
-                <div class="body-02 d-flex align-items-center"
+                <div
+                  class="body-02 d-flex align-items-center"
                   *ngIf="element.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                   <span>{{ element.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
                   <div class="divider divider-vertical mx-2"></div>
                   <span>{{ element.voting_start_time | customDate : 'HH:mm:ss' }}</span>
                 </div>
-                <div class="body-02 d-flex align-items-center"
+                <div
+                  class="body-02 d-flex align-items-center"
                   *ngIf="element.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                   <span>-</span>
                 </div>
@@ -365,56 +408,58 @@
         </ng-container>
 
         <ng-template #mobileTemplate>
-          <app-card-mob-simple *ngFor="let data of dataSource?.data" [link]="'/votings/' + data.proposal_id" [title]="{
-            size: 'md',
-            label: '#' + data.proposal_id,
-            titleClass: 'text--white h5 mb-0',
-            subLabelContent: data.content.title,
-            subLabelClass: 'text--primary g-ellipsis h5-mob mb-0'
-          }" [content]="[
-            {
-              label: 'Status',
-              class: 'aura-status-inline text-capitalize body-02-mob ' + getStatus(data.status).class,
-              info: '<span class=status>' + getStatus(data.status).value + '</span>'
-            },
-            {
-              label: 'Voting Start',
-              class: 'card__date text--gray-1 body-01',
-              info:
-                data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                  ? '<span>' +
-                    (data.voting_start_time | customDate : 'yyyy-MM-dd') +
-                    '</span>' +
-                    '<span>' +
-                    (data.voting_start_time | customDate : 'HH:mm:ss') +
-                    '</span>'
-                  : '-'
-            },
-            {
-              label: 'Submit Time',
-              class: 'card__date text--gray-1 body-01',
-              info:
-                '<span>' +
-                (data.submit_time | customDate : 'yyyy-MM-dd') +
-                '</span>' +
-                '<span>' +
-                (data.submit_time | customDate : 'HH:mm:ss') +
-                '</span>'
-            }
-          ]"></app-card-mob-simple>
+          <app-card-mob-simple
+            *ngFor="let data of dataSource?.data"
+            [link]="'/votings/' + data.proposal_id"
+            [title]="{
+              size: 'md',
+              label: '#' + data.proposal_id,
+              titleClass: 'text--white h5 mb-0',
+              subLabelContent: data.content.title,
+              subLabelClass: 'text--primary g-ellipsis h5-mob mb-0'
+            }"
+            [content]="[
+              {
+                label: 'Status',
+                class: 'aura-status-inline text-capitalize body-02-mob ' + getStatus(data.status).class,
+                info: '<span class=status>' + getStatus(data.status).value + '</span>'
+              },
+              {
+                label: 'Voting Start',
+                class: 'card__date text--gray-1 body-01',
+                info:
+                  data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                    ? '<span>' +
+                      (data.voting_start_time | customDate : 'yyyy-MM-dd') +
+                      '</span>' +
+                      '<span>' +
+                      (data.voting_start_time | customDate : 'HH:mm:ss') +
+                      '</span>'
+                    : '-'
+              },
+              {
+                label: 'Submit Time',
+                class: 'card__date text--gray-1 body-01',
+                info:
+                  '<span>' +
+                  (data.submit_time | customDate : 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.submit_time | customDate : 'HH:mm:ss') +
+                  '</span>'
+              }
+            ]"></app-card-mob-simple>
         </ng-template>
-
-
-        <div class="mt-6 d-flex  justify-content-center justify-content-md-end">
-          <app-a-paginator [paginator]="pageData" [length]="length"
-            (pageChange)="getListProposal({index: $event})"></app-a-paginator>
+        <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+          <app-a-paginator
+            [paginator]="pageData"
+            [length]="length"
+            (pageChange)="getListProposal({ index: $event })"></app-a-paginator>
         </div>
-
       </div>
     </div>
     <div *ngIf="!(dataSource?.data?.length > 0)">
       <app-table-no-data></app-table-no-data>
     </div>
   </section>
-
 </ng-container>
