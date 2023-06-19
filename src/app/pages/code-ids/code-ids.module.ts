@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -30,6 +31,7 @@ import { CodeIdsRoutingModule } from './code-ids-routing.module';
     SharedModule,
     NgbNavModule,
     ContractsModule,
+    APaginatorModule,
   ],
   providers: [ContractService],
 })

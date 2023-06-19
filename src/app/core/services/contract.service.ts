@@ -158,9 +158,9 @@ export class ContractService extends CommonService {
 
   getListContractByCode(payload): Observable<any> {
     const contractDoc = `
-    query queryListContractByCodeID($code_id: Int = 0) {
+    query queryListContractByCodeID($limit: Int = 100, $offset: Int = 0, $code_id: Int = 0) {
       ${this.envDB} {
-        smart_contract(where: {code_id: {_eq: $code_id}}, order_by: {updated_at: desc}) {
+        smart_contract(limit: $limit, offset: $offset, where: {code_id: {_eq: $code_id}}, order_by: {updated_at: desc}) {
           id
           instantiate_hash
           name
@@ -190,6 +190,8 @@ export class ContractService extends CommonService {
         query: contractDoc,
         variables: {
           code_id: payload.codeId,
+          limit: payload.limit,
+          offset: payload.offset
         },
         operationName: 'queryListContractByCodeID',
       })
