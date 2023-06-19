@@ -6,14 +6,12 @@ import { VOTE_OPTION } from '../constants/proposal.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
-import { offset } from '@popperjs/core';
 
 @Injectable()
 export class ProposalService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   maxValidator = `${this.environmentService.configValue.maxValidator}`;
   reloadList$ = new Subject();
-  pageIndexObj = {};
 
   reloadList() {
     this.reloadList$.next(true);
@@ -115,7 +113,7 @@ export class ProposalService extends CommonService {
     type?: string;
   }) {
     const operationsDoc = `
-    query auratestnet_proposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $type: String = null, $n_status : String = "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT") {
+    query queryProposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $type: String = null, $n_status : String = "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT") {
       ${this.envDB} {
         proposal(limit: $limit, offset: $offset, where: {proposal_id: {_eq: $proposalId}, type: {_eq: $type}, status: {_neq: $n_status}}, order_by: {proposal_id: $order}) {
           content
@@ -160,14 +158,14 @@ export class ProposalService extends CommonService {
           proposalId,
           type,
         },
-        operationName: 'auratestnet_proposal',
+        operationName: 'queryProposal',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListVoteFromIndexer2(payload, option): Observable<any> {
     const operationsDoc = `
-    query auratestnet_vote($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
+    query queryVote($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
       ${this.envDB} {
         vote(limit: $limit, offset: $offset, where: {proposal_id: {_eq: $proposalId}, vote_option: {_eq: $voteOption}}, order_by: {height: $order}) {
           height
@@ -197,14 +195,14 @@ export class ProposalService extends CommonService {
           voteOption: option || null,
           offset: payload?.offset,
         },
-        operationName: 'auratestnet_vote',
+        operationName: 'queryVote',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getProposalVoteTotal(proposalId: number) {
     const operationsDoc = `
-    query getProposalVoteTotal($proposalId: Int) {
+    query queryProposalVoteTotal($proposalId: Int) {
       ${this.envDB} {
         ALL: vote_aggregate(where: {proposal_id: {_eq: $proposalId}}) {
           ...aggregateCountFragment
@@ -234,39 +232,7 @@ export class ProposalService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: { proposalId },
-        operationName: 'getProposalVoteTotal',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getListVoteFromIndexer(payload, option): Observable<any> {
-    const operationsDoc = `
-    query auratestnet_vote($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
-      ${this.envDB} {
-        vote(limit: $limit, where: {proposal_id: {_eq: $proposalId}, height: {_lt: $nextKey}, vote_option: {_eq: $voteOption}}, order_by: {height: $order}) {
-          height
-          proposal_id
-          txhash
-          vote_option
-          voter
-          transaction {
-            timestamp
-          }
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          limit: payload.pageLimit,
-          nextKey: payload.nextKey,
-          order: 'desc',
-          proposalId: payload.proposalId,
-          voteOption: option || null,
-        },
-        operationName: 'auratestnet_vote',
+        operationName: 'queryProposalVoteTotal',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
