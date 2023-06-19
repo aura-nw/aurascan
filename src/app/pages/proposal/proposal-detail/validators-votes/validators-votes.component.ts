@@ -92,7 +92,7 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   getValidatorVotes(voteOption = null): void {
     if (this.proposalId) {
       this.proposalService
-        .getValidatorVotesFromIndexer2(this.proposalId, {
+        .getValidatorVotesFromIndexer(this.proposalId, {
           limit: 100,
           voteOption,
         })

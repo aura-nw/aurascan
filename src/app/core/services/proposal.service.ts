@@ -23,41 +23,9 @@ export class ProposalService extends CommonService {
     super(http, environmentService);
   }
 
-  getValidatorVotesFromIndexer(proposalId): Observable<any> {
-    const operationsDoc = `
-    query auratestnet_validator($proposalId: Int = null, $limit: Int = 10) {
-      ${this.envDB} {
-        validator(where: {status: {_eq: "BOND_STATUS_BONDED"}}, order_by: {percent_voting_power: desc}, limit: $limit) {
-          vote(where: {proposal_id: {_eq: $proposalId}}) {
-            id
-            vote_option
-            txhash
-            proposal_id
-            transaction {
-              timestamp
-            }
-          }
-          description
-          operator_address
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          limit: +this.maxValidator || 100,
-          proposalId: proposalId,
-        },
-        operationName: 'auratestnet_validator',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getValidatorVotesFromIndexer2(
+  getValidatorVotesFromIndexer(
     proposalId: number,
-    { limit, offset, voteOption }: { limit: number; offset?: number; voteOption?: string },
+    { limit, offset }: { limit: number; offset?: number; voteOption?: string },
   ): Observable<any> {
     const operationsDoc = `
     query queryValidatorVotes($proposalId: Int = null, $limit: Int = 10, $offset: Int = 0) {
