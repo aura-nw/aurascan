@@ -45,11 +45,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @Output() isNextPage = new EventEmitter<boolean>();
   @Output() pageEventChange = new EventEmitter<CustomPageEvent>();
 
-  // @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  validatorImgArr;
-
   votesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
     { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
@@ -99,9 +94,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
-    private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -124,7 +117,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
-    // this.dataSource = new MatTableDataSource(this.data);
   }
 
   getTemplate(type: PROPOSAL_TABLE_MODE): Array<TableTemplate> {
@@ -149,26 +141,8 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     return vote ? vote.value : 'Did not vote';
   }
 
-  pageEvent2(index: number) {
+  pageEvent(_index: number) {
     const { pageIndex, pageSize } = this.pageData;
-
-    // const next = length <= (pageIndex + 1) * pageSize;
-
-    // if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
-    //   // this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.DEPOSITORS] = pageIndex;
-    // } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
-    //   this.tabId = this.tabId || 'all';
-    //   this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES] = {};
-    //   this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES][this.tabId] = pageIndex;
-    // } else if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
-    //   this.tabId = this.tabId || 'all';
-    //   this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES] = {};
-    //   this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES][this.tabId] = pageIndex;
-    //   this.pageValidatorIndex = pageIndex;
-    // }
-
-    // if (next) {
-    // this.isNextPage.emit(true);
 
     this.pageEventChange.emit({
       type: this.type,
@@ -176,52 +150,5 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       pageIndex: pageIndex - 1,
       pageSize,
     });
-    // }
   }
-
-  // pageEvent(e: PageEvent): void {
-  //   const { length, pageIndex, pageSize, previousPageIndex } = e;
-  //   const next = length <= (pageIndex + 2) * pageSize;
-
-  //   if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
-  //     this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.DEPOSITORS] = pageIndex;
-  //   } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
-  //     this.tabId = this.tabId || 'all';
-  //     this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES] = {};
-  //     this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES][this.tabId] = pageIndex;
-  //   } else if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
-  //     this.tabId = this.tabId || 'all';
-  //     this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES] = {};
-  //     this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES][this.tabId] = pageIndex;
-  //     this.pageValidatorIndex = pageIndex;
-  //   }
-
-  //   if (next) {
-  //     this.isNextPage.emit(true);
-  //     this.loadMore.emit({
-  //       next: 1,
-  //       type: this.type,
-  //       tabId: this.tabId,
-  //     });
-  //   }
-  // }
-
-  // paginatorEmit(e): void {
-  //   if (this.dataSource) {
-  //     this.dataSource.paginator = e;
-  //   } else {
-  //     this.dataSource = new MatTableDataSource(this.data);
-  //     this.dataSource.paginator = e;
-  //   }
-  // }
-
-  // getListData(): any[] {
-  //   if (!(this.dataSource?.paginator && this.dataSource?.data)) {
-  //     return [];
-  //   }
-  //   return this.dataSource.data.slice(
-  //     this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
-  //     this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
-  //   );
-  // }
 }
