@@ -10,7 +10,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
-import { TokenService } from 'src/app/core/services/token.service';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
@@ -38,7 +37,6 @@ export class CommunityPoolProposalComponent implements OnInit {
     pageSize: 10,
     pageIndex: 1,
   };
-  length: number;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
     tap((state) => {
       this.pageData = {
@@ -50,8 +48,8 @@ export class CommunityPoolProposalComponent implements OnInit {
       this.getListProposal({ index: 1 });
     }),
   );
+  length: number;
   dataSource: MatTableDataSource<any>;
-  dataSourceMob: any[];
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   listCoin = this.environmentService.configValue.coins;
   statusConstant = PROPOSAL_STATUS;
@@ -59,7 +57,6 @@ export class CommunityPoolProposalComponent implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    public tokenService: TokenService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private proposalService: ProposalService,
@@ -68,7 +65,6 @@ export class CommunityPoolProposalComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAddressDistribution();
-    // this.getListProposal({ index: 1 });
   }
 
   async getAddressDistribution() {
@@ -102,7 +98,7 @@ export class CommunityPoolProposalComponent implements OnInit {
       offset: (index - 1) * this.pageData.pageSize,
       type: '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal',
     };
-    this.proposalService.getProposalData2(payload).subscribe((res) => {
+    this.proposalService.getProposalData(payload).subscribe((res) => {
       if (res?.proposal) {
         this.dataSource = new MatTableDataSource(res.proposal);
       }

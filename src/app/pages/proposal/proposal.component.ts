@@ -82,7 +82,7 @@ export class ProposalComponent implements OnInit {
 
   getFourLastedProposal() {
     this.proposalService
-      .getProposalData2({
+      .getProposalData({
         limit: 4,
       })
       .subscribe((res) => {
@@ -126,7 +126,7 @@ export class ProposalComponent implements OnInit {
 
   getListProposal({ index }) {
     this.proposalService
-      .getProposalData2({
+      .getProposalData({
         limit: this.pageData.pageSize,
         offset: (index - 1) * this.pageData.pageSize,
       })
