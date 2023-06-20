@@ -79,12 +79,12 @@ export class AccountService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload?.limit || 20,
+          offset: payload.offset,
           contract_address: payload?.contractAddress,
           nextKeyLastUpdatedHeight: payload?.nextKey,
           nextKeyId: payload?.nextKeyId,
           tokenId: payload?.token_id,
           owner: payload?.owner,
-          offset: payload.offset
         },
         operationName: 'Query',
       })
