@@ -78,6 +78,7 @@ export class TransactionMessagesComponent implements OnInit {
   eventLogData = [];
   idxLog = 0;
   codeTransaction = CodeTransaction;
+  isDisplay = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -889,5 +890,9 @@ export class TransactionMessagesComponent implements OnInit {
       }
     }
     return value;
+  }
+
+  changeShowData(idx){
+    this.isDisplay[idx] = !this.isDisplay[idx];
   }
 }
