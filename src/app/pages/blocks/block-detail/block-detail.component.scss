@@ -34,24 +34,31 @@
   &::before {
     content: '';
     position: absolute;
-    left: 2px;
+    left: 2.15px;
     top: 0;
-    bottom: 0;
+    bottom: 10px;
     width: 2px;
-    border: 1px dashed gray;
+    border-right: 2.5px dashed gray;
   }
   &::after {
     content: '';
     position: absolute;
     left: -5px;
     bottom: -1px;
-    width: 2px;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     border-top: 10px solid gray;
     border-radius: 3px;
+  }
+}
+::ng-deep mat-expansion-panel:last-child .mat-expansion-panel-content .content-log {
+  &::before {
+    bottom: 4px;
+  }
+  &::after {
+    content: unset;
   }
 }
 
@@ -66,13 +73,13 @@
     .txt-header::after {
       font-family: 'Font Awesome 5 Free';
       font-weight: 700;
-      content: '\f077';
+      content: '\f078';
       color: var(--aura-gray-1);
       font-size: 13px;
     }
     &[aria-expanded='true'] {
       .txt-header::after {
-        content: '\f078';
+        content: '\f077';
       }
     }
   }
