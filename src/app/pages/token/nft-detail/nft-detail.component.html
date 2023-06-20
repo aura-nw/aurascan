@@ -11,10 +11,10 @@
           <span class="mr-2">#{{ nftDetail?.token_id | cutStringPipe : 8 : 8 }}</span>
         </ng-container>
         <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
-        <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
+        <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
           <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
         </button>
-        <span class="burnt-tag caption" *ngIf="nftDetail?.is_burned">Burnt</span>
+        <span class="burnt-tag caption" *ngIf="nftDetail?.burned">Burnt</span>
       </h1>
       <div class="mt-2">
         <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]">{{
@@ -94,14 +94,14 @@
                 </ng-container>
                 <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
               </h1>
-              <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
+              <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
                 <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
               </button>
-              <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
+              <span class="burnt-tag" *ngIf="nftDetail?.burned">Burnt</span>
             </div>
             <ng-container *ngIf="isSoulBound">
               <button
-                *ngIf="nftDetail.status === sbType.EQUIPPED && userAddress === nftDetail?.receiver_address"
+                *ngIf="nftDetail.burned === false && userAddress === nftDetail?.receiver_address"
                 class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
                 (click)="getSBTPick()">
                 <span>Un-equip</span>
@@ -218,24 +218,7 @@
                   (click)="copyData(nftDetail?.contract_address); address.toggle()" />
               </div>
             </div>
-            <div class="card__ntf-detail-item body" *ngIf="isSoulBound">
-              <div class="label-detail text--gray-5">Creator:</div>
-              <div class="d-flex align-items-center">
-                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.minter_address]">
-                  {{ nftDetail?.minter_address }}</a
-                >
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #attestor="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.minter_address); attestor.toggle()" />
-              </div>
-            </div>
-            <div class="card__ntf-detail-item body" *ngIf="!isSoulBound">
+            <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Creator:</div>
               <div class="d-flex align-items-center">
                 <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.creator]">
@@ -288,11 +271,11 @@
       <div class="col-12 col-lg-4 mt-4 mt-lg-0">
         <div class="card card--sb-information mb-0">
           <div class="card-header card-header--has-border h2 text--white box-prop">Properties</div>
-          <ng-container *ngIf="nftDetail?.ipfs?.attributes">
-            <ng-container *ngIf="isObject(nftDetail.ipfs?.attributes)">
+          <ng-container *ngIf="nftDetail?.media_info?.onchain?.metadata?.attributes">
+            <ng-container *ngIf="isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)">
               <div class="box-prop-item">
                 <div class="row text--gray-1 box-prop-item__row">
-                  <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
+                  <ng-container *ngFor="let prop of nftDetail?.media_info?.onchain?.metadata?.attributes; index as i">
                     <div class="col-lg-4 col-6 mb-lg-6 mb-2 box-prop-item__col">
                       <div class="card-info py-4 text-center">
                         <div class="caption fw-normal text--white">
@@ -317,16 +300,16 @@
                 </div>
               </div>
             </ng-container>
-            <span *ngIf="!isObject(nftDetail.ipfs?.attributes)" class="pl-4 pl-lg-6 pt-2">-</span>
+            <span *ngIf="!isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)" class="pl-4 pl-lg-6 pt-2">-</span>
           </ng-container>
-          <span *ngIf="!nftDetail?.ipfs?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
+          <span *ngIf="!nftDetail?.media_info?.onchain?.metadata?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
         </div>
       </div>
       <div class="col-12 col-lg-8 pl-lg-3">
         <div class="card card--sb-information mb-0">
           <div class="card-header card-header--has-border h2 text--white pt-4 pb-5 pt-lg-6 pb-lg-4">Description</div>
           <div class="card-body text--gray-1 body-03 sb-props">
-            {{ nftDetail?.ipfs?.description || '-' }}
+            {{ nftDetail?.media_info?.onchain?.metadata?.description || '-' }}
           </div>
         </div>
       </div>

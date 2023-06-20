@@ -357,7 +357,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({ key: 'Identity', value: data.description?.identity });
           result.push({
             key: 'Commission Rate',
-            value: this.checkRateFloatNumber(data?.commission_rate) || 0,
+            value: this.checkRateFloatNumber(data?.commission_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
@@ -393,17 +393,17 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({ key: 'Identity', value: data.description?.identity });
           result.push({
             key: 'Commission Rate',
-            value: this.checkRateFloatNumber(data?.commission?.rate) || 0,
+            value: this.checkRateFloatNumber(data?.commission?.rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
             key: 'Commission Max Rate',
-            value: this.checkRateFloatNumber(data?.commission?.max_rate) || 0,
+            value: this.checkRateFloatNumber(data?.commission?.max_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
             key: 'Commission Max Change Rate',
-            value: this.checkRateFloatNumber(data?.commission?.max_change_rate) || 0,
+            value: this.checkRateFloatNumber(data?.commission?.max_change_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({ key: 'Public Key', value: data?.pubkey?.value || data?.pubkey?.key });
@@ -869,13 +869,16 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   checkRateFloatNumber(value) {
-    const temp = value / Math.pow(10, 18);
-    let tempPercent = temp * 100;
-    //check is int value
-    if (Number(tempPercent) === tempPercent && tempPercent % 1 === 0) {
-      value = temp;
+    if (!!value) {
+      const temp = value / Math.pow(10, 18);
+      let tempPercent = temp * 100;
+      //check is int value
+      if (Number(tempPercent) === tempPercent && tempPercent % 1 === 0) {
+        value = temp;
+      }
+      return value;
     }
-    return value;
+    return '-';
   }
 
   getLongValue(value) {
