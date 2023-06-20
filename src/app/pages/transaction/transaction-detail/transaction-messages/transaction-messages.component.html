@@ -61,7 +61,7 @@
               </ng-container>
 
               <ng-container *ngIf="element.length == 0">
-                <div class="d-flex flex-wrap mb-2 body-01">
+                <div class="d-flex flex-wrap mb-2">
                   <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
                   <div class="col-12 col-lg-9">
                     <pre
@@ -124,7 +124,7 @@
 
   <div *ngIf="isTransactionTypeDefault">
     <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
-      <div class="d-flex flex-wrap mb-2 body-01">
+      <div class="d-flex flex-wrap mb-2">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="item | appJson"></pre>
@@ -148,7 +148,7 @@
       [label]="'Sequence'"
       [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="d-flex flex-wrap mb-2 body-01">
+    <div class="d-flex flex-wrap mb-2">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask : 'separator.6' }}
@@ -172,7 +172,7 @@
       [label]="'Sequence'"
       [value]="getLongValue(data?.packet?.sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="d-flex flex-wrap mb-2 body-01" *ngIf="ibcData?.receive?.denom">
+    <div class="d-flex flex-wrap mb-2" *ngIf="ibcData?.receive?.denom">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.amount | balanceOf | mask : 'separator.6' }}
@@ -206,7 +206,7 @@
       [label]="'Sequence'"
       [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="d-flex flex-wrap mb-2 body-01">
+    <div class="d-flex flex-wrap mb-2">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.acknowledgement?.amount | balanceOf | mask : 'separator.6' }}
@@ -244,7 +244,7 @@
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
-    <div class="d-flex flex-wrap mb-2 body-01">
+    <div class="d-flex flex-wrap mb-2">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Data</div>
       <div class="col-12 col-lg-9">
         <pre
@@ -333,7 +333,7 @@
   <ng-template #ibcProgress>
     <div *ngIf="listIBCProgress?.length > 0">
       <div class="divider divider-horizontal mt-4 mb-6"></div>
-      <div class="d-flex flex-wrap mb-2 body-01 ibc-process">
+      <div class="d-flex flex-wrap mb-2 ibc-process">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">IBC Progress</div>
         <div class="col-12 col-lg-9" style="word-break: break-word">
           <ng-container
@@ -453,43 +453,46 @@
     <ng-container *ngIf="transactionDetail.code === codeTransaction.Success">
       <div class="d-flex flex-wrap mb-2">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Event Log</div>
-        <div class="col-12 col-lg-9 text--gray-1 box-event-log">
-          <ng-container *ngFor="let element of data; let index = index">
-            <div class="item-event-log" *ngIf="index === idx">
-              <span class="caption fw-normal">{{ element.events.type }}</span>
-              <mat-expansion-panel
-                hideToggle
-                *ngFor="let item of element.events; first as isFirst; let i = index"
-                [expanded]="isFirst">
-                <mat-expansion-panel-header class="content-contract">
-                  <mat-panel-title class="item-content body-02 text--gray-1">
-                    <div class="txt-header caption fw-normal text--white">
-                      {{ item.type }}
-                    </div>
-                  </mat-panel-title>
-                  <mat-panel-description> </mat-panel-description>
-                </mat-expansion-panel-header>
+        <div class="col-12 col-lg-9 text--gray-1">
+          <mat-slide-toggle (click)="changeShowData(idx)">Show all events</mat-slide-toggle>
+          <div class="box-event-log mt-2" *ngIf="isDisplay[idx]">
+            <ng-container *ngFor="let element of data; let index = index">
+              <div class="item-event-log" *ngIf="index === idx">
+                <span class="caption fw-normal">{{ element.events.type }}</span>
+                <mat-expansion-panel
+                  hideToggle
+                  *ngFor="let item of element.events; first as isFirst; let i = index"
+                  [expanded]="isFirst">
+                  <mat-expansion-panel-header class="content-contract">
+                    <mat-panel-title class="item-content body-02 text--gray-1">
+                      <div class="txt-header caption fw-normal text--white">
+                        {{ item.type }}
+                      </div>
+                    </mat-panel-title>
+                    <mat-panel-description> </mat-panel-description>
+                  </mat-expansion-panel-header>
 
-                <div class="content-log">
-                  <ng-container *ngFor="let data of item.attributes; let idx = index">
-                    <div class="ml-5 mb-2 row">
-                      <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{
-                        data.key
-                      }}</span>
-                      <span class="col-12 col-lg-10 body-01 text-break">
-                        <ng-container *ngIf="data.key !== 'amount' && data.key !== 'fee'">{{
-                          data.value
-                        }}</ng-container>
-                        <span
-                          *ngIf="data.key === 'amount' || data.key === 'fee'"
-                          [innerHTML]="data.value | convertLogAmount"></span>
-                      </span>
-                    </div>
-                  </ng-container>
-                </div>
-              </mat-expansion-panel>
-            </div>
-          </ng-container>
+                  <div class="content-log">
+                    <ng-container *ngFor="let data of item.attributes; let idx = index">
+                      <div class="ml-5 mb-2 row">
+                        <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{
+                          data.key
+                        }}</span>
+                        <span class="col-12 col-lg-10 text-break">
+                          <ng-container *ngIf="data.key !== 'amount' && data.key !== 'fee'">{{
+                            data.value
+                          }}</ng-container>
+                          <span
+                            *ngIf="data.key === 'amount' || data.key === 'fee'"
+                            [innerHTML]="data.value | convertLogAmount"></span>
+                        </span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </mat-expansion-panel>
+              </div>
+            </ng-container>
+          </div>
         </div>
       </div>
     </ng-container>
