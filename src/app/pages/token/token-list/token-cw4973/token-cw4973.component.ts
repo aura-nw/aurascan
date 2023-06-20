@@ -32,7 +32,7 @@ export class TokenCw4973Component implements OnInit {
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
+    pageIndex: 1,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -51,16 +51,11 @@ export class TokenCw4973Component implements OnInit {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
-          this.getTokenData();
-        } else {
-          this.pageChange.selectPage(0);
-        }
+        this.pageEvent(0);
       });
   }
 
   ngOnDestroy(): void {
-    // throw new Error('Method not implemented.');
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -72,7 +67,7 @@ export class TokenCw4973Component implements OnInit {
   getTokenData() {
     const payload = {
       limit: this.pageData.pageSize,
-      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
       keyword: this.textSearch,
     };
     this.soulboundService.getListABT(payload).subscribe((res) => {
@@ -85,13 +80,16 @@ export class TokenCw4973Component implements OnInit {
     this.dataSource.paginator = event;
   }
 
-  pageEvent(e: PageEvent): void {
-    this.pageData.pageIndex = e.pageIndex;
+  pageEvent(pageIndex: number): void {
+    // reset page 1 if pageIndex = 0
+    if (pageIndex === 0) {
+      this.pageData.pageIndex = 1;
+    }
     this.getTokenData();
   }
 
   resetSearch() {
     this.textSearch = '';
-    this.onKeyUp();
+    this.pageEvent(0);
   }
 }
