@@ -55,53 +55,7 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getProposalData(payload) {
-    const operationsDoc = `
-    query auratestnet_proposal($limit: Int = 10, $nextKey: Int = null, $order: order_by = desc, $proposalId: Int = null, $type: String = null) {
-      ${this.envDB} {
-        proposal(limit: $limit, where: {proposal_id: {_eq: $proposalId, _lt: $nextKey}, type: {_eq: $type}, status: {_neq: "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT"}}, order_by: {proposal_id: $order}) {
-          content
-          deposit_end_time
-          description
-          initial_deposit
-          proposal_id
-          proposer_address
-          count_vote
-          proposer {
-            description
-            operator_address
-            account_address
-          }
-          status
-          submit_time
-          tally
-          title
-          total_deposit
-          turnout
-          type
-          updated_at
-          voting_end_time
-          voting_start_time
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          limit: payload.limit,
-          order: 'desc',
-          nextKey: payload.nextKey,
-          proposalId: payload.proposalId,
-          type: payload.type,
-        },
-        operationName: 'auratestnet_proposal',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getProposalData2({
+  getProposalData({
     limit,
     offset,
     proposalId,
@@ -163,7 +117,7 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListVoteFromIndexer2(payload, option): Observable<any> {
+  getListVoteFromIndexer(payload, option): Observable<any> {
     const operationsDoc = `
     query queryVote($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {
       ${this.envDB} {

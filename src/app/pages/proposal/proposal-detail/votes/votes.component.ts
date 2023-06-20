@@ -108,7 +108,7 @@ export class VotesComponent implements OnChanges, OnDestroy {
       this.currentTabId = tabId || 'all';
     }
 
-    this.proposalService.getListVoteFromIndexer2(this.payloads, voteOption).subscribe((res) => {
+    this.proposalService.getListVoteFromIndexer(this.payloads, voteOption).subscribe((res) => {
       this.voteDataList = res.vote;
     });
   }
