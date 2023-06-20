@@ -110,9 +110,7 @@
 .box-event-log {
   background-color: var(--aura-gray-9);
   border-radius: 8px;
-  // padding: 8px 20px;
   padding-left: calc(var(--bs-gutter-x) * 0.5);
-  max-height: 210px;
   overflow-y: auto;
   .item-event-log:not(:last-child) {
     margin-bottom: var(--spacer-7);
@@ -162,10 +160,10 @@ mat-expansion-panel:last-child .mat-expansion-panel-content .content-log {
   width: 14px !important;
   height: 14px !important;
   top: 3px !important;
-  transform: translate3d(6px, 0, 0) !important;
+  transform: translate3d(4px, 0, 0) !important;
 }
 .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
-  transform: translate3d(16px, 0, 0) !important;
+  transform: translate3d(18px, 0, 0) !important;
 }
 
 .mat-slide-toggle-thumb {

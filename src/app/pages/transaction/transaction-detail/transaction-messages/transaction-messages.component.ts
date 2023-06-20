@@ -772,8 +772,12 @@ export class TransactionMessagesComponent implements OnInit {
             this.transactionDetail.tx.logs.forEach((element) => {
               data = element.events.find((k) => k['type'] === this.typeGetData.Transfer);
             });
-            let temp = data?.attributes.find((j) => j['key'] === 'amount')?.value;
-            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp)?.display || '';
+            let result = data?.attributes.find((j) => j['key'] === 'amount')?.value;
+            if (!result.startsWith('ibc')) {
+              result = result?.replace(result?.match(/\d+/g)[0], '');
+            }
+            this.ibcData['receive']['denomOrigin'] = result;
+            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(result)['display'] || '';
             this.ibcData['typeProgress'] = this.eTransType.IBCReceived;
           }
         }
@@ -892,7 +896,7 @@ export class TransactionMessagesComponent implements OnInit {
     return value;
   }
 
-  changeShowData(idx){
+  changeShowData(idx) {
     this.isDisplay[idx] = !this.isDisplay[idx];
   }
 }
