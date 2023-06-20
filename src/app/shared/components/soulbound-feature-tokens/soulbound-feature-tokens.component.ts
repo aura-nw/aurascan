@@ -21,6 +21,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   @Input() accountAddress = null;
   @Input() soulboundListData = null;
   @Input() displayManage = false;
+  @Input() isSBTValidator = false;
   @Output() totalSBT = new EventEmitter<number>();
   @Output() totalPick = new EventEmitter<number>();
   @Output() closeDlg = new EventEmitter<number>();
