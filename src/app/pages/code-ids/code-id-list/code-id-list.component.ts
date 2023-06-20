@@ -78,7 +78,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
 
     this.contractService.getListCodeId(payload).subscribe((res) => {
       res?.code?.forEach((k) => {
-        k.instantiates = k.smart_contracts_aggregate?.aggregate.count || 0;
+        k.instantiates = k.smart_contracts_aggregate?.aggregate?.count || 0;
         k.tx_hash = k.store_hash;
         k.verified_at = k.code_id_verifications[0]?.verified_at;
         k.contract_verification = k.code_id_verifications[0]?.verification_status;
@@ -88,7 +88,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
       });
 
       this.dataSource.data = res.code;
-      this.pageData.length = res?.code_aggregate.aggregate.count;
+      this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
     });
   }
 
