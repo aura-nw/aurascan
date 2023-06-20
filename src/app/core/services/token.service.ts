@@ -27,7 +27,7 @@ export class TokenService extends CommonService {
     }
     let querySort = `, order_by: {${payload.sort_column}: ${payload.sort_order}}`;
     const operationsDoc = `
-    query MyQuery($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
+    query queryListCW721($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
       ${this.envDB} {
         list_token: m_view_count_cw721_txs(limit: $limit, offset: $offset ${querySort}, where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}) {
           contract_address
@@ -53,7 +53,7 @@ export class TokenService extends CommonService {
           contract_address: textSearch || null,
           name: textSearch || null,
         },
-        operationName: 'MyQuery',
+        operationName: 'queryListCW721',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -64,23 +64,21 @@ export class TokenService extends CommonService {
 
   getListTokenNFTFromIndexer(payload): Observable<any> {
     const operationsDoc = `
-    query Query(
+    query queryListInventory(
       $contract_address: String
       $limit: Int = 10
-      $nextKeyLastUpdatedHeight: Int = null
-      $nextKeyId: Int = null
       $tokenId: String = null
       $owner: String = null
+      $offset: Int = 0
     ) {
       ${this.envDB} {
         cw721_token(
           limit: $limit
+          offset: $offset
           where: {
             cw721_contract: {
               smart_contract: { address: { _eq: $contract_address } }
             }
-            id: { _lt: $nextKeyId }
-            last_updated_height: { _lt: $nextKeyLastUpdatedHeight }
             token_id: { _eq: $tokenId }
             owner: { _eq: $owner }
             burned: {_eq: false}
@@ -95,6 +93,22 @@ export class TokenService extends CommonService {
           created_at
           burned
         }
+        cw721_token_aggregate(
+          where: {
+          cw721_contract: { 
+            smart_contract: { 
+              address: { _eq: $contract_address }
+            }
+          }
+          token_id: { _eq: $tokenId }
+          owner: { _eq: $owner }
+          burned: {_eq: false}
+        }
+        ) {
+          aggregate {
+            count
+          }
+        }
       }
     }
     `;
@@ -103,13 +117,12 @@ export class TokenService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload?.limit || 20,
+          offset: payload.offset,
           contract_address: payload?.contractAddress,
-          nextKeyLastUpdatedHeight: payload?.nextKey,
-          nextKeyId: payload?.nextKeyId,
           tokenId: payload?.token_id,
           owner: payload?.owner,
         },
-        operationName: 'Query',
+        operationName: 'queryListInventory',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
