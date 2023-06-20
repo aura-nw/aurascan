@@ -7,7 +7,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { Globals } from 'src/app/global/global';
-import { map } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +16,15 @@ export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
   stakingAPRSubject: BehaviorSubject<number>;
+
+  private cachedValidator$: Observable<
+    [
+      {
+        image_url: string;
+        operator_address: string;
+      },
+    ]
+  >;
 
   constructor(
     private http: HttpClient,
@@ -149,7 +158,14 @@ export class ValidatorService extends CommonService {
   }
 
   getValidatorInfoByList(addressList: string[]): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators/validator-info?address=${addressList}`);
+    // Cache validator info, only get on the first time
+    if (!this.cachedValidator$) {
+      this.cachedValidator$ = this.http
+        .get<any>(`${this.apiUrl}/validators/validator-info?address=${addressList}`)
+        .pipe(shareReplay(1));
+    }
+
+    return this.cachedValidator$;
   }
 
   getUptimeLCD(block = null) {
@@ -181,7 +197,7 @@ export class ValidatorService extends CommonService {
         variables: {
           cons_address: consAddress,
           limit: limit,
-          height: height
+          height: height,
         },
         operationName: 'MyQuery',
       })

@@ -4,8 +4,8 @@ import { AfterViewChecked, Component, EventEmitter, Input, OnInit, Output } from
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { from } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { from, interval } from 'rxjs';
+import { map, mergeMap, takeUntil } from 'rxjs/operators';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../../../app/global/global';
 import {
@@ -22,6 +22,7 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
+import { Bech32 } from '@cosmjs/encoding';
 const marked = require('marked');
 
 @Component({
@@ -49,6 +50,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   timerGetUpTime: any;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
+  reload$;
+
   constructor(
     private proposalService: ProposalService,
     public global: Globals,
@@ -66,11 +69,24 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
   }
 
+  enabledReload() {
+    if (!this.reload$) {
+      this.reload$ = interval(10000)
+        .pipe()
+        .subscribe((r) => {
+          this.proposalService.reloadList();
+          this.getProposalDetail();
+          this.getVotedProposal();
+        });
+    }
+  }
+
   getProposalDetail(): void {
     let payload = {
       limit: 1,
       proposalId: this.proposalId,
     };
+
     this.proposalService
       .getProposalData(payload)
       .pipe(
@@ -169,17 +185,12 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
             this.proposalDtl.emit(this.proposalDetail);
           }
 
-          //set interval reload when type = voting period or deposit period
+          // set interval reload when type = voting period or deposit period
           if (
             this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD ||
             this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD
           ) {
-            this.timerGetUpTime = setInterval(() => {
-              this.proposalService.reloadList();
-              this.getProposalDetail();
-              this.getVotedProposal();
-              clearInterval(this.timerGetUpTime);
-            }, 10000);
+            this.enabledReload();
           }
         }),
       )

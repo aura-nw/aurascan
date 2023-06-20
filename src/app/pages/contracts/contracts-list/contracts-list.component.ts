@@ -109,7 +109,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     if (pageIndex === 0) {
       this.pageData.pageIndex = 1;
     }
-
     this.getListContract();
   }
 
@@ -123,7 +122,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   resetFilterSearch() {
     this.textSearch = '';
     this.filterButtons = [];
-
     this.pageEvent(0);
   }
 

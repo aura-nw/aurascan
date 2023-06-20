@@ -1,4 +1,4 @@
-<h2 class="mb-0 text--white">NFTs ({{ nftList?.length || 0 }}<span *ngIf="nextKey"> NFTs and more</span>)</h2>
+<h2 class="mb-0 text--white">NFTs ({{ pageData?.length || 0 }} NFTs)</h2>
 <div class="card mt-3">
   <div class="card-body">
     <div *ngIf="loading" class="m-auto mt-10">
@@ -35,12 +35,12 @@
       </form>
     </div>
     <!-- Table -->
-    <ng-container *ngIf="nftList?.length > 0; else noValues">
+    <ng-container *ngIf="pageData?.length > 0; else noValues">
       <div>
         <div
           class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
           id="nft-cards">
-          <div class="nft-cards__col col" *ngFor="let item of showedData; let i = index">
+          <div class="nft-cards__col col" *ngFor="let item of nftList; let i = index">
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
                 <app-nft-card
@@ -74,8 +74,12 @@
             </div>
           </div>
         </div>
-        <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (pageEvent)="handlePageEvent($event)">
-        </app-paginator>
+        <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+          <app-a-paginator
+            [paginator]="pageData"
+            [length]="pageData.length"
+            (pageChange)="pageEvent($event)"></app-a-paginator>
+        </div>
       </div>
     </ng-container>
     <ng-template #noValues>
