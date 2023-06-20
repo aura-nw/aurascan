@@ -83,10 +83,16 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
+    try {
+      let temp = value?.match(/\d+/g)[0];
+      value = value?.replace(temp, '');
+    } catch {}
+
     let result = { display: value, decimals: 6 };
     if (value.indexOf('ibc') >= 0) {
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.coins.find((k) => k.denom === temp);
+      result = this.coins.find((k) => k.denom === temp) || {};
+      result.display = result.display || value;
     } else {
       result = { display: this.chainInfo.currencies[0].coinDenom, decimals: 6 };
     }

@@ -239,11 +239,11 @@ export class ContractService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}/nft/${tokenId}`);
   }
 
-  getDetailCW721(address, tokenId): Observable<any> {
+  getNFTDetail(address, tokenId): Observable<any> {
     const contractDoc = `
     query CW721Owner($address: String, $tokenId: String) {
       ${this.envDB} { 
-        data: cw721_token(where: { cw721_contract: {smart_contract: {address: {_eq: $address}, name: {_neq: "crates.io:cw4973"}}}, token_id: {_eq: $tokenId}}) { 
+        data: cw721_token(where: { cw721_contract: {smart_contract: {address: {_eq: $address}}}, token_id: {_eq: $tokenId}}) { 
         id
         token_id
         owner

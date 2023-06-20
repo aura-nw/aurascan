@@ -183,7 +183,7 @@
       [label]="'Origin Amount'"
       [value]="ibcData?.amount"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <app-messages-item [label]="'Origin Denom'" [value]="ibcData?.denom"></app-messages-item>
+    <app-messages-item [label]="'Origin Denom'" [value]="ibcData?.receive?.denom"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
@@ -373,7 +373,11 @@
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of filterIBCType(type)">
               <div class="d-lg-flex justify-content-between">
-                <div>{{ denomIBC ? commonService.mappingNameIBC(denomIBC)?.display : item.denom }}</div>
+                <div>
+                  {{
+                    (denomIBC ? commonService.mappingNameIBC(denomIBC)?.display : item.denom) | cutStringPipe : 16 : 16
+                  }}
+                </div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
