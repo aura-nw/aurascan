@@ -26,7 +26,7 @@ export const MENU: MenuItem[] = [
     id: 1,
     label: 'MENUITEMS.DASHBOARDS',
     icon: 'squares-four',
-    link: '/dashboard',
+    link: '/',
     name: MenuName.Dashboard,
   },
   {
@@ -172,7 +172,7 @@ export const MENU_MOB: MenuItem[] = [
     id: 1,
     label: 'MENUITEMS.DASHBOARDS',
     icon: 'squares-four',
-    link: '/dashboard',
+    link: '/',
     name: MenuName.Dashboard,
   },
   {
