@@ -43,9 +43,9 @@ export class CodeIdDetailComponent implements OnInit {
 
   getCodeIdDetail() {
     this.contractService.getCodeIDDetail(this.codeId).subscribe((res) => {
-      if (res.data?.length > 0) {
-        let data = res.data[0];
-        data.instantiates = data.smart_contracts?.length || 0;
+      if (res.code?.length > 0) {
+        let data = res.code[0];
+        data.instantiates = data.smart_contracts_aggregate?.aggregate.count || 0;
         data.tx_hash = data.store_hash;
         data.verified_at = _.get(data, 'code_id_verifications[0].verified_at');
         data.contract_verification = _.get(data, 'code_id_verifications[0].verification_status');
