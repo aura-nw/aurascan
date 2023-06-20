@@ -275,10 +275,6 @@ export class ContractService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListContractById(codeId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contract-codes/${codeId}`);
-  }
-
   getVerifyCodeStep(codeId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/verify-code-id/${codeId}`);
   }
@@ -287,7 +283,95 @@ export class ContractService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/contracts/contract-code/list`, data);
   }
 
+  getListCodeId(data: any): Observable<any> {
+    const keyword = data?.keyword ? data?.keyword : null;
+    let subQuery = '';
+    if (keyword) {
+      if (keyword.length >= LENGTH_CHARACTER.CONTRACT) {
+        subQuery = `smart_contracts: {address: {_eq: "${keyword}"}}`;
+      } else if (keyword.length >= LENGTH_CHARACTER.ADDRESS) {
+        subQuery = `creator: {_eq: "${keyword}"}`;
+      } else {
+        subQuery = `code_id: {_eq: ${keyword}}`
+      };
+    }
+    
+    const query = `query ContractCode($limit: Int, $offset: Int) {
+      ${this.envDB} {
+        code(where: {${subQuery}}, order_by: {code_id: desc}, limit: $limit, offset: $offset) {
+          code_id
+          creator
+          store_hash
+          type
+          status
+          created_at
+          code_id_verifications {
+            verified_at
+            compiler_version
+            github_url
+            verification_status
+          }
+          smart_contracts {
+            name
+          }
+          smart_contracts_aggregate {
+            aggregate {
+              count
+            }
+          }
+        } 
+        code_aggregate(where: { ${subQuery} }) { 
+          aggregate {
+            count 
+          } 
+        } 
+      } 
+    }`
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: query,
+        variables: {
+          limit: data?.limit,
+          offset: data?.offset,
+        },
+        operationName: 'ContractCode',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getCodeIDDetail(codeId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/contract-code/${codeId}`);
+    const query = `query ContractCodeDetail($codeId: Int) {
+      ${this.envDB} {
+        code(where: {code_id: {_eq: ${codeId}}}) {
+          code_id
+          creator
+          store_hash
+          type
+          status
+          created_at
+          code_id_verifications {
+            verified_at
+            compiler_version
+            github_url
+            verification_status
+          }
+          smart_contracts {
+            name
+          }
+          smart_contracts_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+      } 
+    }`
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: query,
+        variables: {},
+        operationName: 'ContractCodeDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 }
