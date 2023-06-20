@@ -17,21 +17,16 @@ export class NftListComponent implements OnChanges {
   @Input() address: string;
   @Output() totalValueNft = new EventEmitter<number>();
   image_s3 = this.environmentService.configValue.image_s3;
-  assetCW721: any[];
   searchValue = '';
   loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
+    pageIndex: 1,
   };
   nftList = [];
-  showedData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
-  nextKey = null;
-  currentKey = null;
-  isHandleSearch = false;
 
   constructor(
     private accountService: AccountService,
@@ -41,37 +36,24 @@ export class NftListComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {
-      this.nftList = [];
-      this.showedData = [];
-      this.pageData.pageIndex = PAGE_EVENT.PAGE_INDEX;
-      this.pageData.pageSize = 20;
-      this.nextKey = null;
-      this.currentKey = null;
+      this.pageEvent(0);
     }
-    this.getNftData();
   }
 
-  getNftData(nextKey = null) {
+  getNftData() {
     this.searchValue = this.searchValue?.trim();
-
     const payload = {
       owner: this.address,
-      limit: 100,
+      limit: this.pageData.pageSize,
       keyword: this.searchValue,
-      next_key: nextKey,
+      offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
     };
+
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
       (res) => {
         if (res?.cw721_token?.length > 0) {
-          if (res?.cw721_token?.length >= 100) {
-            this.nextKey = res?.cw721_token[res?.cw721_token?.length - 1].id;
-          }
-          if (this.nftList.length > 0) {
-            this.nftList = [...this.nftList, ...res.cw721_token];
-          } else {
-            this.nftList = res?.cw721_token;
-          }
-          this.pageData.length = this.nftList.length;
+          this.nftList = res?.cw721_token;
+          this.pageData.length = res.cw721_token_aggregate?.aggregate?.count;
 
           this.nftList.forEach((element) => {
             element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
@@ -80,58 +62,33 @@ export class NftListComponent implements OnChanges {
               this.totalValue += element.price * +element.balance || 0;
             }
           });
-          let start = this.pageData.pageIndex * this.pageData.pageSize;
-          let end = this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize;
-          this.showedData = this.nftList.slice(start, end);
           this.totalValueNft.emit(this.totalValue);
         } else {
-          this.nftList.length = 0;
+          this.pageData.length = 0;
         }
       },
       () => {},
       () => {
         this.loading = false;
-        this.isHandleSearch = false;
       },
     );
   }
 
   resetSearch(): void {
     this.searchValue = '';
-    this.pageData.pageIndex = 0;
-    this.nftList = [];
-    this.nextKey = null;
-    this.getNftData();
+    this.pageEvent(0);
   }
 
   searchTokenNft(): void {
-    if (this.isHandleSearch) {
-      return;
-    }
-    this.isHandleSearch = true;
-    if (this.pageData.pageIndex !== 0) {
-      this.pageData.pageIndex = 0;
-    } else {
-      this.nextKey = null;
-      this.nftList = [];
-      this.getNftData();
-    }
+    this.pageEvent(0);
   }
 
-  handlePageEvent(e: any) {
-    const { pageIndex, pageSize } = e;
-    const next = this.pageData.length <= (pageIndex + 2) * pageSize;
-
-    this.pageData.pageIndex = e.pageIndex;
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getNftData(this.nextKey);
-      this.currentKey = this.nextKey;
-    } else {
-      this.showedData = this.nftList.slice(
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-      );
+  pageEvent(pageIndex: number): void {
+    // reset page 1 if pageIndex = 0
+    if (pageIndex === 0) {
+      this.pageData.pageIndex = 1;
     }
+    this.getNftData();
   }
 
   handleRouterLink(link): void {

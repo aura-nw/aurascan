@@ -55,7 +55,9 @@
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'rank'">
-                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{ data[template.matColumnDef] }}</span>
+                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{
+                        data[template.matColumnDef]
+                      }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">
@@ -97,7 +99,7 @@
     </ng-container>
     <ng-container *ngIf="breakpoint.value.matches">
       <div>
-        <ng-container *ngFor="let data of getListData(); index as i">
+        <ng-container *ngFor="let data of this.dataSource?.data; index as i">
           <!-- VOTES -->
           <ng-container *ngIf="type === proposalMode.VOTES">
             <app-card-mob-simple
@@ -243,12 +245,9 @@
       </div>
     </ng-container>
   </ng-container>
-  <app-paginator
-    [length]="length"
-    [pageSize]="pageSize"
-    (paginator)="paginatorEmit($event)"
-    (pageEvent)="pageEvent($event)">
-  </app-paginator>
+  <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+    <app-a-paginator [paginator]="pageData" [length]="length" (pageChange)="pageEvent($event)"> </app-a-paginator>
+  </div>
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>
   </ng-template>

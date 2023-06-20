@@ -2,23 +2,22 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
+import { tap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../app/global/global';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
-import { DialogService } from '../../core/services/dialog.service';
 import { ProposalService } from '../../core/services/proposal.service';
 import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-proposal',
@@ -54,12 +53,9 @@ export class ProposalComponent implements OnInit {
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  // dataSourceMobile: any[];
   proposalData: any;
   length: number;
   nextKey = null;
-  // isLoadingAction = false;
-  // pageYOffset = 0;
   scrolling = false;
 
   pageData: PageEvent = {
@@ -67,14 +63,6 @@ export class ProposalComponent implements OnInit {
     pageSize: this.layout.isMatched([Breakpoints.Small, Breakpoints.XSmall]) ? 5 : 10,
     pageIndex: 1,
   };
-  // proposalVotes: {
-  //   proId: number;
-  //   vote: string | null;
-  // }[] = [];
-
-  // @HostListener('window:scroll', ['$event']) onScroll(event) {
-  //   this.pageYOffset = window.pageYOffset;
-  // }
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     private proposalService: ProposalService,
@@ -82,7 +70,6 @@ export class ProposalComponent implements OnInit {
     public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
-    private dlgService: DialogService,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     public commonService: CommonService,
@@ -95,7 +82,7 @@ export class ProposalComponent implements OnInit {
 
   getFourLastedProposal() {
     this.proposalService
-      .getProposalData2({
+      .getProposalData({
         limit: 4,
       })
       .subscribe((res) => {
@@ -139,7 +126,7 @@ export class ProposalComponent implements OnInit {
 
   getListProposal({ index }) {
     this.proposalService
-      .getProposalData2({
+      .getProposalData({
         limit: this.pageData.pageSize,
         offset: (index - 1) * this.pageData.pageSize,
       })
@@ -176,16 +163,16 @@ export class ProposalComponent implements OnInit {
 
     if (!highest || highest > 100) {
       highest = 0;
-      key = VOTE_OPTION.VOTE_OPTION_YES;
+      key = VOTE_OPTION.YES;
     } else {
       if (highest === yes) {
-        key = VOTE_OPTION.VOTE_OPTION_YES;
+        key = VOTE_OPTION.YES;
       } else if (highest === no) {
-        key = VOTE_OPTION.VOTE_OPTION_NO;
+        key = VOTE_OPTION.NO;
       } else if (highest === noWithVeto) {
-        key = VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO;
+        key = VOTE_OPTION.NO_WITH_VETO;
       } else {
-        key = VOTE_OPTION.VOTE_OPTION_ABSTAIN;
+        key = VOTE_OPTION.ABSTAIN;
       }
     }
 

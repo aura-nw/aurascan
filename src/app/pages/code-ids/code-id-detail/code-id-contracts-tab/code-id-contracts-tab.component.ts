@@ -2,13 +2,13 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import * as _ from 'lodash';
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { CONTRACT_RESULT, TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { shortenAddress } from '../../../../core/utils/common/shorten';
-import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-code-id-contracts-tab',
@@ -20,7 +20,7 @@ export class CodeIdContractsTabComponent implements OnInit {
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
+    pageIndex: 1,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
@@ -39,6 +39,7 @@ export class CodeIdContractsTabComponent implements OnInit {
   ngOnInit(): void {
     this.getListContractByCode();
   }
+
   shortenAddress(address: string): string {
     if (address) {
       return shortenAddress(address, 8);
@@ -46,24 +47,23 @@ export class CodeIdContractsTabComponent implements OnInit {
     return '';
   }
 
-  paginatorEmit(event): void {
-    this.dataSource.paginator = event;
-  }
-
-  pageEvent(e: PageEvent): void {
-    this.pageData.pageIndex = e.pageIndex;
+  pageEvent(pageIndex: number): void {
+    // reset page 1 if pageIndex = 0
+    if (pageIndex === 0) {
+      this.pageData.pageIndex = 1;
+    }
     this.getListContractByCode();
   }
 
   getListContractByCode() {
     let payload = {
       limit: this.pageData.pageSize,
-      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
       codeId: this.codeId.toString(),
     };
 
     this.contractService.getListContractByCode(payload).subscribe((res) => {
-      this.pageData.length = res?.smart_contract?.length || 0;
+      this.pageData.length = res?.smart_contract_aggregate?.aggregate?.count || 0;
       if (res?.smart_contract?.length > 0) {
         res?.smart_contract.forEach((item) => {
           item.updated_at = this.datePipe.transform(item?.created_at, DATEFORMAT.DATETIME_UTC);

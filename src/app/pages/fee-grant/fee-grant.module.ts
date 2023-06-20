@@ -13,7 +13,6 @@ import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
-import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FeeGrantRoutingModule } from './fee-grant-routing.module';
@@ -40,7 +39,6 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     FormsModule,
     CommonPipeModule,
     MatTableModule,
-    PaginatorModule,
     TableNoDataModule,
     TranslateModule,
     SharedModule,
