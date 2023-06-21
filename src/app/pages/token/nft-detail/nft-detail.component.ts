@@ -143,6 +143,7 @@ export class NFTDetailComponent implements OnInit {
           if (res.cw721_contract?.smart_contract?.name === TYPE_CW4973 && res.burned === false) {
             res['type'] = ContractRegisterType.CW4973;
             this.isSoulBound = true;
+            this.linkToken = 'token-abt'
           } else {
             this.toastr.error('Token invalid');
             this.loading = false;

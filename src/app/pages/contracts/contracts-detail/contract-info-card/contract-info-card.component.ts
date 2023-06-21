@@ -16,11 +16,10 @@ export class ContractInfoCardComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (
-      this.contractDetail?.code?.type === ContractRegisterType.CW4973 ||
-      this.contractDetail?.cw721_contract.smart_contract.name === TYPE_CW4973
-    ) {
-      this.linkNft = 'token-abt';
-    }
+    setTimeout(() => {
+      if (changes?.contractDetail?.currentValue?.name === TYPE_CW4973) {
+        this.linkNft = 'token-abt';
+      }
+    }, 500);
   }
 }
