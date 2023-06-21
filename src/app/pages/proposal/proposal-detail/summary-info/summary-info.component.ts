@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { from, interval } from 'rxjs';
-import { map, mergeMap, takeUntil } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../../../app/global/global';
 import {
@@ -22,7 +22,6 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
-import { Bech32 } from '@cosmjs/encoding';
 const marked = require('marked');
 
 @Component({
@@ -49,6 +48,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
   timerGetUpTime: any;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  proposalStatus = null;
 
   reload$;
 
@@ -97,7 +97,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
               this.proposalDtl.emit(null);
             }
             this.proposalDetail = this.makeProposalDataDetail(data.proposal[0]);
-
+            this.proposalStatus = this.getStatus(data.proposal[0].status);
+            
             if (this.proposalDetail?.content?.amount) {
               this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
             }
@@ -106,6 +107,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
                 if (res) {
                   this.proposalDetail.total_bonded_token = balanceOf(res.bonded_tokens);
                   if (data.proposal[0].status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+                    this.proposalDetail.voting_start_time = data.proposal[0].voting_start_time;
+                    this.proposalDetail.voting_end_time = data.proposal[0].voting_end_time;
                     this.proposalDetail.pro_turnout =
                       (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
                   } else {

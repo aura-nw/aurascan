@@ -249,7 +249,7 @@ export class TransactionService extends CommonService {
           gas_used
           gas_wanted
           data
-          event_attributes (where: {composite_key: {_eq: "denomination_trace.denom"}}) {
+          event_attributes (where: {_and: {composite_key: {_eq: "transfer.amount"}, value: {_like: "%ibc%"}}}) {
             value
             composite_key
             key
