@@ -358,7 +358,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({ key: 'Identity', value: data.description?.identity });
           result.push({
             key: 'Commission Rate',
-            value: this.checkRateFloatNumber(data?.commission_rate) || 0,
+            value: this.checkRateFloatNumber(data?.commission_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
@@ -394,17 +394,17 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({ key: 'Identity', value: data.description?.identity });
           result.push({
             key: 'Commission Rate',
-            value: this.checkRateFloatNumber(data?.commission?.rate) || 0,
+            value: this.checkRateFloatNumber(data?.commission?.rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
             key: 'Commission Max Rate',
-            value: this.checkRateFloatNumber(data?.commission?.max_rate) || 0,
+            value: this.checkRateFloatNumber(data?.commission?.max_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
             key: 'Commission Max Change Rate',
-            value: this.checkRateFloatNumber(data?.commission?.max_change_rate) || 0,
+            value: this.checkRateFloatNumber(data?.commission?.max_change_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({ key: 'Public Key', value: data?.pubkey?.value || data?.pubkey?.key });
@@ -772,8 +772,12 @@ export class TransactionMessagesComponent implements OnInit {
             this.transactionDetail.tx.logs.forEach((element) => {
               data = element.events.find((k) => k['type'] === this.typeGetData.Transfer);
             });
-            let temp = data?.attributes.find((j) => j['key'] === 'amount')?.value;
-            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp)?.display || '';
+            let result = data?.attributes.find((j) => j['key'] === 'amount')?.value;
+            if (!result.startsWith('ibc')) {
+              result = result?.replace(result?.match(/\d+/g)[0], '');
+            }
+            this.ibcData['receive']['denomOrigin'] = result;
+            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(result)['display'] || '';
             this.ibcData['typeProgress'] = this.eTransType.IBCReceived;
           }
         }
@@ -870,13 +874,16 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   checkRateFloatNumber(value) {
-    const temp = value / Math.pow(10, 18);
-    let tempPercent = temp * 100;
-    //check is int value
-    if (Number(tempPercent) === tempPercent && tempPercent % 1 === 0) {
-      value = temp;
+    if (!!value) {
+      const temp = value / Math.pow(10, 18);
+      let tempPercent = temp * 100;
+      //check is int value
+      if (Number(tempPercent) === tempPercent && tempPercent % 1 === 0) {
+        value = temp;
+      }
+      return value;
     }
-    return value;
+    return '-';
   }
 
   getLongValue(value) {
@@ -889,7 +896,7 @@ export class TransactionMessagesComponent implements OnInit {
     return value;
   }
 
-  changeShowData(idx){
+  changeShowData(idx) {
     this.isDisplay[idx] = !this.isDisplay[idx];
   }
 }

@@ -83,10 +83,18 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
-    let result = { display: value, decimals: 6 };
+    let result = {};
     if (value.indexOf('ibc') >= 0) {
+      try {
+        if (!value.startsWith('ibc')) {
+          let temp = value?.match(/\d+/g)[0];
+          value = value?.replace(temp, '');
+        }
+      } catch {}
+      result = { display: value, decimals: 6 };
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.coins.find((k) => k.denom === temp);
+      result = this.coins.find((k) => k.denom === temp) || {};
+      result['display'] = result['display'] || value;
     } else {
       result = { display: this.chainInfo.currencies[0].coinDenom, decimals: 6 };
     }

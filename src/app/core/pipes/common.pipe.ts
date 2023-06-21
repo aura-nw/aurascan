@@ -101,14 +101,17 @@ export class ConvertUauraToAura implements PipeTransform {
 @Pipe({ name: 'convertLogAmount' })
 export class convertLogAmount implements PipeTransform {
   constructor(private commonService: CommonService, private mask: MaskPipe) {}
-  transform(value: string): string {
-    let result = value.match(/\d+/g)[0];
-    let data = this.commonService.mappingNameIBC(value.replace(result, ''));
-    result = this.mask.transform(balanceOf(result, data.decimals), 'separator.6');
-    if (+result <= 0) {
+  transform(value: string, getDenomOnly = false): string {
+    let amount = value.match(/\d+/g)[0];
+    let data = this.commonService.mappingNameIBC(value);
+    if (getDenomOnly) {
+      return data['display'];
+    }
+    amount = this.mask.transform(balanceOf(amount, data['decimals']), 'separator.6');
+    if (+amount <= 0) {
       return '-';
     }
-    return result + `<span class="text--primary ml-1">` + data.display + `</span>`;
+    return amount + `<span class="text--primary ml-1">` + data['display'] + `</span>`;
   }
 }
 

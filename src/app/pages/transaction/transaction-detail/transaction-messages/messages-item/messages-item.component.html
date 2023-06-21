@@ -28,7 +28,7 @@
         <pre id="json" class="raw-content text--white px-4" [innerHtml]="value | appJson"></pre>
       </ng-container>
       <ng-container *ngSwitchCase="pipeTypeData.Percent">
-        {{ value | percent : global.formatNumber2Decimal }}
+        {{ value == '-' ? value : (value | percent : global.formatNumber2Decimal) }}
       </ng-container>
       <ng-container *ngSwitchDefault>{{ value || '-' }}</ng-container>
       <ng-container *ngIf="denom?.display && value !== '-'"
