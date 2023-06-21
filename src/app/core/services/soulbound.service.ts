@@ -73,7 +73,7 @@ export class SoulboundService extends CommonService {
             smart_contract: {
               name: {_eq: "crates.io:cw4973"}
             }, 
-            _or: [{name: {_like: $keyword}}, {smart_contract: {_or:[{address: {_like: $keyword}}, {creator: {_like: $keyword}}]}}]
+            _or: [{name: {_ilike: $keyword}}, {smart_contract: {_or:[{address: {_like: $keyword}}, {creator: {_like: $keyword}}]}}]
           },
           offset: $offset
         ) { 
@@ -90,7 +90,7 @@ export class SoulboundService extends CommonService {
             smart_contract: {
               name: {_eq: "crates.io:cw4973"}
             }, 
-            _or: [{name: {_like: $keyword}}, {smart_contract: {_or:[{address: {_like: $keyword}}, {creator: {_like: $keyword}}]}}]
+            _or: [{name: {_ilike: $keyword}}, {smart_contract: {_or:[{address: {_like: $keyword}}, {creator: {_like: $keyword}}]}}]
           }) {
             aggregate {
               count 
