@@ -153,7 +153,7 @@
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask : 'separator.6' }}
         <span class="text--primary">{{
-          commonService.mappingNameIBC(transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom)?.display
+          transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom | convertLogAmount : true
         }}</span>
       </div>
     </div>
@@ -183,7 +183,7 @@
       [label]="'Origin Amount'"
       [value]="ibcData?.amount"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <app-messages-item [label]="'Origin Denom'" [value]="ibcData?.receive?.denom"></app-messages-item>
+    <app-messages-item [label]="'Origin Denom'" [value]="ibcData?.receive?.denomOrigin"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
@@ -374,9 +374,7 @@
             <ng-container *ngFor="let item of filterIBCType(type)">
               <div class="d-lg-flex justify-content-between">
                 <div>
-                  {{
-                    (denomIBC ? commonService.mappingNameIBC(denomIBC)?.display : item.denom) | cutStringPipe : 16 : 16
-                  }}
+                  {{ (denomIBC ? (denomIBC | convertLogAmount : true) : item.denom) | cutStringPipe : 16 : 16 }}
                 </div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
@@ -479,10 +477,8 @@
                   <div class="content-log">
                     <ng-container *ngFor="let data of item.attributes; let idx = index">
                       <div class="ml-5 mb-2 row">
-                        <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{
-                          data.key
-                        }}</span>
-                        <span class="col-12 col-lg-10 text-break">
+                        <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key }}</span>
+                        <span class="col-12 col-lg-9 text-break">
                           <ng-container *ngIf="data.key !== 'amount' && data.key !== 'fee'">{{
                             data.value
                           }}</ng-container>
