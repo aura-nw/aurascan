@@ -44,7 +44,7 @@
                 (click)="expandMedia()"
                 *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
                 (error)="error()"
-                [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
+                [src]="animationUrl || imageUrl" />
               <video
                 (click)="expandMedia()"
                 [src]="animationUrl"
