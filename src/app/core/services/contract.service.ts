@@ -62,7 +62,7 @@ export class ContractService extends CommonService {
       updateQuery = `_and: {_or: [{name: {_like: "${name}"}}, {code_id: {_eq: ${codeId}}}]},`;
     } else if (keyword?.length > 0) {
       name = '%' + keyword + '%';
-      updateQuery = `name: {_like: "${name}"},`;
+      updateQuery = `name: {_ilike: "${name}"},`;
     } else {
       updateQuery = '';
     }
@@ -114,13 +114,11 @@ export class ContractService extends CommonService {
         smart_contract(limit: 1, where: {address: {_eq: $contractAddress}}) {
           address
           creator
-          instantiate_hash        
+          instantiate_hash
+          name     
           cw721_contract {
             name
             symbol
-            smart_contract {
-              name
-            }
           }
           code {
             type
