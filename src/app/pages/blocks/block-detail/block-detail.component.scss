@@ -14,7 +14,6 @@
 .box-event-log {
   border-radius: 8px;
   padding-left: calc(var(--bs-gutter-x) * 0.5);
-  max-height: 420px;
   overflow-y: auto;
   background-color: transparent;
   .item-event-log:not(:last-child) {
