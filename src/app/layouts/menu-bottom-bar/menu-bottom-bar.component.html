@@ -8,8 +8,7 @@
             class="menu-link text-center d-block"
             (click)="overLayClickEvent()"
             [routerLink]="item.link"
-            routerLinkActive="active"
-            [class.active]="router.url === '/' && item.link === '/dashboard'">
+            [class.active]="router.url === '/' && item.link === '/'">
             <i class="ph-{{ item.icon }} mx-auto h3 mr-2 mb-0"></i>
             <div class="caption fw-500 d-block mt-1">{{ item.label | translate }}</div>
           </a>
