@@ -3,7 +3,22 @@
   <div class="d-flex mb-4 mb-lg-5 align-items-center">
     <!-- <img [src]="tokenDetail?.image || defaultLogoToken" alt="" width="32px" height="32px" /> -->
     <h1 class="mb-0 text--white ml-2">
-      Token <span class="text--gray-5 break-word">{{ tokenDetail?.name }}</span>
+      <div class="d-flex">
+        Token <span class="text--gray-5 break-word ml-1">{{ tokenDetail?.name }}</span>
+        <div
+          class="status cursor-pointer d-flex align-items-top"
+          [matTooltipClass]="'token-tooltip'"
+          matTooltip="{{ tokenDetail.verify_text || 'Verified by Aura Network' }}"
+          [matTooltipPosition]="'above'">
+          <img
+            [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+            alt=""
+            width="18"
+            height="18"
+            class="ml-1"
+            *ngIf="tokenDetail.verify_status === 'VERIFIED'" />
+        </div>
+      </div>
     </h1>
   </div>
   <div class="row">
