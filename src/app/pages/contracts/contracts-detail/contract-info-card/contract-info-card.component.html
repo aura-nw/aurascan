@@ -16,11 +16,11 @@
             <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
             <div>
               <a class="text--primary mr-1 mr-lg-2" [routerLink]="['/account', contractDetail?.creator]">
-                {{ contractDetail?.creator | cutStringPipe: 8:8 }}
+                {{ contractDetail?.creator | cutStringPipe : 8 : 8 }}
               </a>
               at txn
               <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-                {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
+                {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
               </a>
             </div>
           </td>
@@ -30,11 +30,11 @@
           <td class="text--gray-5 body-02-mob">Contract Creator:</td>
           <td colspan="2">
             <a class="text--primary" [routerLink]="['/account', contractDetail?.creator]">
-              {{ contractDetail?.creator | cutStringPipe: 8:8 }}
+              {{ contractDetail?.creator | cutStringPipe : 8 : 8 }}
             </a>
             at txn
             <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-              {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
+              {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
             </a>
           </td>
         </tr>
@@ -43,10 +43,27 @@
           <td class="text--gray-5">Token Tracker:</td>
           <td colspan="2">
             <ng-container *ngIf="contractDetail?.cw721_contract?.name && contractDetail?.cw721_contract?.symbol">
-              <a class="text--primary break-word" [routerLink]="['/token', contractDetail?.address]"
-                *ngIf="contractDetail?.code?.type === contractRegisterType.CW20">
-                {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
-              </a>
+              <div class="d-flex align-items-center">
+                <a
+                  class="text--primary break-word"
+                  [routerLink]="['/token', contractDetail?.address]"
+                  *ngIf="contractDetail?.code?.type === contractRegisterType.CW20">
+                  {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
+                </a>
+                <div
+                  class="status cursor-pointer"
+                  [matTooltipClass]="'token-tooltip'"
+                  matTooltip="{{ contractDetail.verify_text || 'Verified by Aura Network' }}"
+                  [matTooltipPosition]="'above'">
+                  <img
+                    [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                    alt=""
+                    width="18"
+                    height="18"
+                    class="ml-1 mb-1"
+                    *ngIf="contractDetail.verify_status === 'VERIFIED'" />
+                </div>
+              </div>
               <a
                 *ngIf="contractDetail?.code?.type !== contractRegisterType.CW20"
                 class="text--primary break-word"
