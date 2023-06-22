@@ -133,9 +133,9 @@ export class TokenService extends CommonService {
 
   countTotalTokenCW721(contract_address): Observable<any> {
     const operationsDoc = `
-    query MyQuery($contract_address: String) {
+    query queryCountTotalToken721($contract_address: String) {
       ${this.envDB} {
-        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}}) {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}, burned: {_eq: false}})
           aggregate {
             count
           }
@@ -149,7 +149,7 @@ export class TokenService extends CommonService {
         variables: {
           contract_address: contract_address,
         },
-        operationName: 'MyQuery',
+        operationName: 'queryCountTotalToken721',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -166,7 +166,7 @@ export class TokenService extends CommonService {
 
   getListTokenHolderNFT(payload) {
     const operationsDoc = `
-    query MyQuery($contract_address: String, $limit: Int = 10) {
+    query queryListHolderNFT($contract_address: String, $limit: Int = 10) {
       ${this.envDB} {
         view_count_holder_cw721(limit: $limit, where: {contract_address: {_eq: $contract_address}}, order_by: {count: desc}) {
           count
@@ -187,7 +187,7 @@ export class TokenService extends CommonService {
           limit: payload?.limit || 20,
           contract_address: payload?.contractAddress,
         },
-        operationName: 'MyQuery',
+        operationName: 'queryListHolderNFT',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
