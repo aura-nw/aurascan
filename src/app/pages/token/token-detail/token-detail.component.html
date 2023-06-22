@@ -4,7 +4,13 @@
     <!-- <img [src]="tokenDetail?.image || defaultLogoToken" alt="" width="32px" height="32px" /> -->
     <h1 class="mb-0 text--white ml-2">
       <div class="d-flex">
-        Token <span class="text--gray-5 break-word ml-1">{{ tokenDetail?.name }}</span>
+        Token
+        <span class="text--gray-5 break-word ml-1 d-none d-lg-inline">
+          {{ tokenDetail?.name }}
+        </span>
+        <span class="text--gray-5 break-word ml-1 d-inline d-lg-none">
+          {{ tokenDetail?.name | stringEllipsis : 16 }}
+        </span>
         <div
           class="status cursor-pointer d-flex align-items-top"
           [matTooltipClass]="'token-tooltip'"
