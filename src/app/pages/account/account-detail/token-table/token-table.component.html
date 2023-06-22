@@ -52,12 +52,38 @@
                   <div class="ml-2 body-03 fw-semibold">
                     {{ element.name | stringEllipsis : 19 }}
                   </div>
+                  <div
+                    class="status cursor-pointer"
+                    [matTooltipClass]="'token-tooltip'"
+                    matTooltip="{{ element.verify_text || 'Verified by Aura Network' }}"
+                    [matTooltipPosition]="'above'">
+                    <img
+                      [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                      alt=""
+                      width="18"
+                      height="18"
+                      class="ml-1"
+                      *ngIf="element.verify_status === 'VERIFIED'" />
+                  </div>
                 </a>
                 <div class="d-flex align-items-center" *ngIf="element.contract_address === '-'">
                   <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
                   <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
                   <div class="ml-2 body-03 fw-semibold">
                     {{ element.name | stringEllipsis : 19 }}
+                  </div>
+                  <div
+                    class="status cursor-pointer"
+                    [matTooltipClass]="'token-tooltip'"
+                    matTooltip="{{ element.verify_text || 'Verified by Aura Network' }}"
+                    [matTooltipPosition]="'above'">
+                    <img
+                      [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                      alt=""
+                      width="18"
+                      height="18"
+                      class="ml-1"
+                      *ngIf="element.verify_status === 'VERIFIED'" />
                   </div>
                 </div>
               </td>
