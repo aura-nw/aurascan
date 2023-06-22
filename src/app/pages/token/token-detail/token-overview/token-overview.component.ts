@@ -30,6 +30,7 @@ export class TokenOverviewComponent implements OnInit {
     this.getTotalHolder();
     if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
       this.getTotalSupply();
+      this.getHolderNFT();
     }
 
     //set price change
@@ -61,6 +62,16 @@ export class TokenOverviewComponent implements OnInit {
   getTotalSupply() {
     this.tokenService.countTotalTokenCW721(this.tokenDetail?.contract_address).subscribe((res) => {
       this.tokenDetail.num_tokens = res.cw721_token_aggregate?.aggregate?.count || this.tokenDetail.num_tokens || 0;
+    });
+  }
+
+  getHolderNFT() {
+    const payload = {
+      limit: 100,
+      contractAddress: this.tokenDetail?.contract_address,
+    };
+    this.tokenService.getListTokenHolderNFT(payload).subscribe((res) => {
+      this.tokenDetail['holder'] = res.view_count_holder_cw721_aggregate?.aggregate?.count || 0;
     });
   }
 }
