@@ -45,7 +45,6 @@ export class BlockDetailComponent implements OnInit {
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'fee', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },

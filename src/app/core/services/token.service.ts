@@ -29,14 +29,18 @@ export class TokenService extends CommonService {
     const operationsDoc = `
     query queryListCW721($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
       ${this.envDB} {
-        list_token: m_view_count_cw721_txs(limit: $limit, offset: $offset ${querySort}, where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}) {
-          contract_address
-          symbol
-          name
-          total_tx
+        list_token: cw721_contract_stats(limit: $limit, offset: $offset ${querySort}, where: {_or:[ {cw721_contract: {smart_contract: {address: {_like: $contract_address}}}},  { cw721_contract: {name: {_ilike: $name}}} ]}) {
           transfer_24h
+          total_activity
+          cw721_contract {
+            name
+            symbol
+            smart_contract {
+              address
+            }
+          }
         }
-        total_token: m_view_count_cw721_txs_aggregate(where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}){
+        total_token: cw721_contract_stats_aggregate (where: {_or:[ {cw721_contract: {smart_contract: {address: {_like: $contract_address}}}},  { cw721_contract: {name: {_ilike: $name}}} ]}) {
           aggregate {
             count
           }
