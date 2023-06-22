@@ -101,9 +101,9 @@
             </div>
             <ng-container *ngIf="isSoulBound">
               <button
-                *ngIf="nftDetail.burned === false && userAddress === nftDetail?.receiver_address"
+                *ngIf="nftDetail.burned === false && userAddress === nftDetail?.owner"
                 class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
-                (click)="getSBTPick()">
+                (click)="unEquipSBT()">
                 <span>Un-equip</span>
               </button>
             </ng-container>
@@ -300,7 +300,9 @@
                 </div>
               </div>
             </ng-container>
-            <span *ngIf="!isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)" class="pl-4 pl-lg-6 pt-2">-</span>
+            <span *ngIf="!isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)" class="pl-4 pl-lg-6 pt-2"
+              >-</span
+            >
           </ng-container>
           <span *ngIf="!nftDetail?.media_info?.onchain?.metadata?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
         </div>
