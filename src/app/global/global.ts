@@ -140,6 +140,7 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender ||
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.to ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
 
       if (arrayMsg?.length > 1 || itemMessage.msg['batch_mint']) {
