@@ -34,7 +34,7 @@
         <!-- Table -->
         <ng-container *ngIf="!breakpoint.value.matches">
           <div class="table-responsive aura-table-contain mt-4" *ngIf="pageData?.length > 0; else noValues">
-            <table mat-table matSort [dataSource]="dataSource" class="aura-table assets-table">
+            <table mat-table matSort [dataSource]="dataSource" class="aura-table community-pool-assets-table">
               <!-- Name Column -->
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Name</th>
