@@ -60,18 +60,18 @@
                       <span *ngIf="element.symbol">({{ element.symbol }})</span>
                     </a>
                     <div
-                    class="status cursor-pointer"
-                    [matTooltipClass]="'token-tooltip'"
-                    matTooltip="{{ element.verify_text || 'Verified by Aura Network' }}"
-                    [matTooltipPosition]="'above'">
-                    <img
-                      [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
-                      alt=""
-                      width="18"
-                      height="18"
-                      class="ml-1"
-                      *ngIf="element.verify_status === 'VERIFIED'" />
-                  </div>
+                      class="status cursor-pointer"
+                      [matTooltipClass]="'token-tooltip'"
+                      matTooltip="{{ element.verify_text || 'Verified by Aura Network' }}"
+                      [matTooltipPosition]="'above'">
+                      <img
+                        [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                        alt=""
+                        width="18"
+                        height="18"
+                        class="ml-1 mb-1"
+                        *ngIf="element.verify_status === 'VERIFIED'" />
+                    </div>
 
                     <!-- <div class="body-02 fw-normal caption-mob mb-0 text--gray-6 pr-5 desc">
                       {{ element.description }}
