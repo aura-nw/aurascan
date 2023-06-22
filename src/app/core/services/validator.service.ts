@@ -56,6 +56,48 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators`);
   }
 
+  getListValidator() {
+    const operationsDoc = `
+    query getListValidator {
+      ${this.envDB} {
+        validator(order_by: {tokens: desc}) {
+          description
+          operator_address
+          account_address
+          consensus_hex_address
+          percent_voting_power
+          tokens
+          jailed
+          uptime
+          status
+          unbonding_height
+          start_height
+          unbonding_time
+          consensus_pubkey
+          delegator_shares
+          commission
+          self_delegation_balance
+          min_self_delegation
+          missed_blocks_counter
+          vote_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+        },
+        operationName: 'getListValidator',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getDataValidator(payload) {
     const operationsDoc = `
     query auratestnet_validator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {

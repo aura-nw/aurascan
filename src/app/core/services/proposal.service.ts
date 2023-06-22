@@ -117,6 +117,27 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getCountProposal() {
+    const operationsDoc = `
+    query getCountProposal {
+      ${this.envDB} {
+        proposal_aggregate {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {},
+        operationName: 'getCountProposal',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListVoteFromIndexer(payload, option): Observable<any> {
     const operationsDoc = `
     query queryVote($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $voteOption: String = null) {

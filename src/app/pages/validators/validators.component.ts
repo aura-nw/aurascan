@@ -13,7 +13,7 @@ import { getFee } from 'src/app/core/utils/signing/fee';
 import { NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
-import { DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { DataDelegateDto, TableTemplate } from '../../../app/core/models/common.model';
 import { AccountService } from '../../../app/core/services/account.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
@@ -22,6 +22,7 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
+import { ProposalService } from 'src/app/core/services/proposal.service';
 
 @Component({
   selector: 'app-validators',
@@ -97,9 +98,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
   staking_APR = 0;
-  numberProposal = 0;
   validatorImgArr;
   maxPercentPower = 0;
+  typeActive = 'BOND_STATUS_BONDED';
+  countProposal = 0;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -122,10 +124,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
+    private proposalService: ProposalService,
   ) {}
 
   async ngOnInit() {
     this.getBlocksMiss();
+    this.getCountProposal();
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.arrayDelegate = null;
@@ -161,20 +165,27 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getList(): void {
-    this.validatorService.validators().subscribe((res: ResponseDto) => {
-      if (res?.data?.length > 0) {
-        this.lstValidatorOrigin = res.data;
-        this.rawData = res.data;
-        this.numberProposal = res.data[0]?.target_count;
-        res.data.forEach((val) => {
-          val.vote_count = val.vote_count || 0;
-          val.participation = val.vote_count;
-          val.power = val.power / NUMBER_CONVERT;
-          val.up_time = Number(val.up_time.replace('%', ''));
+    this.validatorService.getListValidator().subscribe((res) => {
+      if (res.validator?.length > 0) {
+        this.lstValidatorOrigin = res.validator;
+        this.rawData = res.validator;
+        res.validator.forEach((val) => {
+          val.power = val.tokens / NUMBER_CONVERT;
+          val.up_time = 100;
           val.width_chart = val.up_time / 100;
+          val.title = val.description?.moniker;
+          val.commission = val.commission.commission_rates.rate;
+          val.percent_power = val.percent_voting_power.toFixed(2);
+          val.participation = val.vote_aggregate?.aggregate?.count || 0;
+          if (val.status === this.typeActive) {
+            val.status = this.statusValidator.Active;
+          }
         });
 
-        let dataFilter = res.data.filter((event) =>
+        console.log(res);
+        
+
+        let dataFilter = res.validator.filter((event) =>
           this.typeValidator === this.statusValidator.Active
             ? event.status === this.statusValidator.Active
             : event.status !== this.statusValidator.Active,
@@ -199,6 +210,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.dataSource.sort = this.sort;
         this.searchValidator();
       }
+    });
+  }
+
+  getCountProposal() {
+    this.proposalService.getCountProposal().subscribe((res) => {
+      this.countProposal = res.proposal_aggregate.aggregate.count || 0;
     });
   }
 
@@ -306,8 +323,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   getValidatorDetail(address, modal): void {
     this.validatorService.validatorsDetail(address).subscribe(
       (res) => {
-        if (res?.data) {
-          this.dataModal = res.data;
+        if (res.validator) {
+          this.dataModal = res.validator;
           this.dataModal.power = this.dataModal.power / NUMBER_CONVERT;
         }
         this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
@@ -639,7 +656,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           f.validator_address = data.validator_address;
           f.validator_name = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.title;
           f.jailed = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.jailed;
-          f.validator_identity = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.identity;
+          f.validator_identity = this.lstValidatorOrigin.find(
+            (i) => i.operator_address === f.validator_address,
+          )?.identity;
           let timeConvert = new Date(f.completion_time);
           if (now < timeConvert) {
             this.lstUndelegate.push(f);
