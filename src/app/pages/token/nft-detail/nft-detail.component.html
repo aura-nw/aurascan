@@ -31,12 +31,7 @@
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
               <img
                 *ngIf="
-                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG &&
-                    !(
-                      nftDetail?.animation?.link_s3 ||
-                      nftDetail?.animation_url ||
-                      nftDetail.media_info?.offchain?.animation?.url
-                    )) ||
+                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG && !nftDetail.media_info?.offchain?.animation?.url) ||
                   isError
                 "
                 [src]="defaultImgToken" />
@@ -50,33 +45,18 @@
                 [src]="animationUrl"
                 controls
                 controlsList="nodownload"
-                *ngIf="
-                  getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
-                  (nftDetail.animation?.link_s3 ||
-                    nftDetail?.animation_url ||
-                    nftDetail.media_info?.offchain?.animation?.url)
-                "
+                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO && nftDetail.media_info?.offchain?.animation?.url"
                 poster="{{ imageUrl }}"></video>
               <app-model-view
                 (click)="expandMedia()"
-                *ngIf="
-                  getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
-                  (nftDetail.animation?.link_s3 ||
-                    nftDetail?.animation_url ||
-                    nftDetail.media_info?.offchain?.animation?.url)
-                "
+                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE._3D && nftDetail.media_info?.offchain?.animation?.url"
                 [modelUrl]="animationUrl"
                 [disablePan]="false"
                 [previewImg]="imageUrl">
               </app-model-view>
               <app-audio-player
                 (click)="expandMedia()"
-                *ngIf="
-                  getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
-                  (nftDetail.animation?.link_s3 ||
-                    nftDetail?.animation_url ||
-                    nftDetail.media_info?.offchain?.animation?.url)
-                "
+                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO && nftDetail.media_info?.offchain?.animation?.url"
                 [src]="animationUrl"
                 [previewImg]="imageUrl">
               </app-audio-player>
@@ -101,9 +81,9 @@
             </div>
             <ng-container *ngIf="isSoulBound">
               <button
-                *ngIf="nftDetail.burned === false && userAddress === nftDetail?.receiver_address"
+                *ngIf="nftDetail.burned === false && userAddress === nftDetail?.owner"
                 class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
-                (click)="getSBTPick()">
+                (click)="unEquipSBT()">
                 <span>Un-equip</span>
               </button>
             </ng-container>
@@ -178,13 +158,9 @@
             <h2 class="mb-0 h5-mob text--white card__ntf-detail-item" id="popupCopy">Details</h2>
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Owner:</div>
-              <div
-                class="d-flex align-items-center position-relative"
-                *ngIf="nftDetail?.owner || nftDetail?.receiver_address">
-                <a
-                  class="text--primary g-ellipsis"
-                  [routerLink]="['/account', nftDetail?.owner || nftDetail?.receiver_address]">
-                  {{ nftDetail?.owner || nftDetail?.receiver_address }}
+              <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner">
+                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.owner]">
+                  {{ nftDetail?.owner }}
                 </a>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
@@ -194,7 +170,7 @@
                   #owner="matTooltip"
                   (mouseenter)="$event.stopImmediatePropagation()"
                   (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.owner || nftDetail?.receiver_address); owner.toggle()" />
+                  (click)="copyData(nftDetail?.owner); owner.toggle()" />
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -300,7 +276,9 @@
                 </div>
               </div>
             </ng-container>
-            <span *ngIf="!isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)" class="pl-4 pl-lg-6 pt-2">-</span>
+            <span *ngIf="!isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)" class="pl-4 pl-lg-6 pt-2"
+              >-</span
+            >
           </ng-container>
           <span *ngIf="!nftDetail?.media_info?.onchain?.metadata?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
         </div>
