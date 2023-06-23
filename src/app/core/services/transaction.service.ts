@@ -18,7 +18,7 @@ export class TransactionService extends CommonService {
 
   getListTx(payload) {
     const operationsDoc = `
-    query auratestnet_transaction_top(
+    query getListTx(
       $limit: Int = 100
       $order: order_by = desc
       $heightGT: Int = null
@@ -70,14 +70,14 @@ export class TransactionService extends CommonService {
           indexLT: null,
           height: null,
         },
-        operationName: 'auratestnet_transaction_top',
+        operationName: 'getListTx',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTxCondition(payload) {
     const operationsDoc = `
-    query auratestnet_transaction(
+    query getListTxCondition(
       $limit: Int = 100
       $order: order_by = desc
       $compositeKey: String = null
@@ -141,14 +141,14 @@ export class TransactionService extends CommonService {
           indexLT: null,
           height: null,
         },
-        operationName: 'auratestnet_transaction',
+        operationName: 'getListTxCondition',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTxMultiCondition(payload) {
     const operationsDoc = `
-    query auratestnet_transaction(
+    query getListTxMultiCondition(
       $limit: Int = 100
       $order: order_by = desc
       $compositeKey: String = null
@@ -228,7 +228,7 @@ export class TransactionService extends CommonService {
           value2: payload.value2,
           key2: payload.key2,
         },
-        operationName: 'auratestnet_transaction',
+        operationName: 'getListTxMultiCondition',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

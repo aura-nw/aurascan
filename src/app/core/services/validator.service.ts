@@ -56,53 +56,11 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators`);
   }
 
-  getListValidator() {
-    const operationsDoc = `
-    query getListValidator {
-      ${this.envDB} {
-        validator(order_by: {tokens: desc}) {
-          description
-          operator_address
-          account_address
-          consensus_hex_address
-          percent_voting_power
-          tokens
-          jailed
-          uptime
-          status
-          unbonding_height
-          start_height
-          unbonding_time
-          consensus_pubkey
-          delegator_shares
-          commission
-          self_delegation_balance
-          min_self_delegation
-          missed_blocks_counter
-          vote_aggregate {
-            aggregate {
-              count
-            }
-          }
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-        },
-        operationName: 'getListValidator',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
   getDataValidator(payload) {
     const operationsDoc = `
-    query auratestnet_validator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
+    query getDataValidator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
       ${this.envDB} {
-        validator(limit: $limit, offset: $offset, where: {operator_address: {_eq: $operatorAddress}}) {
+        validator(limit: $limit, offset: $offset, order_by: {tokens: desc}, where: {operator_address: {_eq: $operatorAddress}}) {
           account_address
           commission
           consensus_address
@@ -128,6 +86,13 @@ export class ValidatorService extends CommonService {
           unbonding_height
           unbonding_time
           uptime
+          missed_blocks_counter
+          image_url
+          vote_aggregate {
+            aggregate {
+              count
+            }
+          }
         }
       }
     }
@@ -136,11 +101,11 @@ export class ValidatorService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: payload?.limit || 1,
+          limit: payload?.limit || 200,
           offset: payload?.offset || 0,
           operatorAddress: payload?.operatorAddress || null,
         },
-        operationName: 'auratestnet_validator',
+        operationName: 'getDataValidator',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -151,7 +116,7 @@ export class ValidatorService extends CommonService {
 
   validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
     const operationsDoc = `
-    query auratestnet_powerevent($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
+    query validatorsDetailListPower($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
       ${this.envDB} {
         power_event(order_by: {height: desc}, where: {_or: [{validatorDst: {operator_address: {_eq: $operator_address}}}, {validatorSrc: {operator_address: {_eq: $operator_address}}}], id: {_lt: $nextKey}}, limit: $limit) {
           id
@@ -180,7 +145,7 @@ export class ValidatorService extends CommonService {
           limit: limit,
           nextKey: nextKey,
         },
-        operationName: 'auratestnet_powerevent',
+        operationName: 'validatorsDetailListPower',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
