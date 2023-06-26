@@ -129,7 +129,7 @@
     </app-token-transfers-tab>
     <app-token-holders-tab
       *ngIf="currentTab === tokenTab.Holders"
-      [decimalValue]="tokenDetail?.decimals"
+      [decimalValue]="tokenDetail?.decimals || 0"
       [keyWord]="textSearch"
       [tokenDetail]="tokenDetail"
       [typeContract]="tokenDetail?.type"
