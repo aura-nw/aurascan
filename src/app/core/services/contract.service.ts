@@ -303,7 +303,7 @@ export class ContractService extends CommonService {
           type
           status
           created_at
-          code_id_verifications {
+          code_id_verifications(order_by: {updated_at: desc}) {
             verified_at
             compiler_version
             github_url
@@ -347,7 +347,7 @@ export class ContractService extends CommonService {
           type
           status
           created_at
-          code_id_verifications {
+          code_id_verifications(order_by: {updated_at: desc}) {
             verified_at
             compiler_version
             github_url

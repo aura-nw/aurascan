@@ -12,6 +12,7 @@ import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-token-cw20',
@@ -90,24 +91,56 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       keyword: this.textSearch,
     };
 
-    this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
-      res.data.forEach((data) => {
-        Object.assign(data, {
-          ...data,
-          circulating_market_cap: +data.circulating_market_cap || 0,
-          onChainMarketCap: +data.circulating_market_cap || 0,
-          volume: +data.volume_24h,
-          price: +data.price,
-          isValueUp: data.price_change_percentage_24h < 0 ? false : true,
-          change: Number(data.price_change_percentage_24h.toString()),
-          isHolderUp: data.holders_change_percentage_24h < 0 ? false : true,
-          holders: +data.holders,
-          holderChange: Number(data.holders_change_percentage_24h.toString()),
-        });
-      });
+    this.tokenService.getListToken(payload).subscribe(res => {
+      const cw20data = _.get(res, `cw20_contract`);
+      const count =  _.get(res, `cw20_contract_aggregate`)
+      const listAddress = cw20data.map((item) => item.smart_contract.address);
+      const reqPayload = { contractAddress: listAddress }
+      this.tokenService.getTokenMarketData(reqPayload).subscribe(tokenMarket => {
+        const dataFlat = cw20data?.map((item) => {
+          const tokenFind = tokenMarket?.find(
+            (f) => String(f.contract_address) === item.smart_contract.address,
+          );
 
-      this.dataSource = new MatTableDataSource<any>(res.data);
-      this.pageData.length = res.meta.count;
+          return {
+            coin_id: tokenFind?.coin_id || '',
+            contract_address: item.smart_contract.address || '',
+            name: item.name || '',
+            symbol: item.symbol || '',
+            image: item.marketing_info?.logo?.url
+              ? item.marketing_info?.logo?.url
+              : tokenFind?.image || '',
+            description: tokenFind?.description || '',
+            verify_status: tokenFind?.verify_status || '',
+            verify_text: tokenFind?.verify_text || '',
+            circulating_market_cap: tokenFind?.circulating_market_cap || 0,
+            volume_24h: tokenFind?.total_volume || 0,
+            price: tokenFind?.current_price || 0,
+            price_change_percentage_24h:
+              tokenFind?.price_change_percentage_24h || 0,
+            holders_change_percentage_24h: 0,
+            holders: item.cw20_holders?.length,
+            max_total_supply: tokenFind?.max_supply || 0,
+            fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,
+          }
+        });
+        dataFlat.forEach((data) => {
+          Object.assign(data, {
+            ...data,
+            circulating_market_cap: +data.circulating_market_cap || 0,
+            onChainMarketCap: +data.circulating_market_cap || 0,
+            volume: +data.volume_24h,
+            price: +data.price,
+            isValueUp: data.price_change_percentage_24h < 0 ? false : true,
+            change: Number(data.price_change_percentage_24h.toString()),
+            isHolderUp: data.holders_change_percentage_24h < 0 ? false : true,
+            holders: +data.holders,
+            holderChange: Number(data.holders_change_percentage_24h.toString()),
+          });
+        } )
+        this.dataSource = new MatTableDataSource<any>(dataFlat);
+        this.pageData.length = count.aggregate.count;       
+      })
     });
   }
 

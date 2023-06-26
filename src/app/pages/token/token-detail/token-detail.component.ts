@@ -43,8 +43,28 @@ export class TokenDetailComponent implements OnInit {
 
   getTokenDetail(): void {
     this.tokenService.getTokenDetail(this.contractAddress).subscribe(
-      (res: ResponseDto) => {
-        this.tokenDetail = res.data;
+      (res) => {
+        const data = _.get(res, `smart_contract`);
+        if (data.length > 0) {
+          const reqPayload = { contractAddress: [data[0].address] }
+          this.tokenService.getTokenMarketData(reqPayload).subscribe(item => {
+            const token = data[0];
+            const tokenMarket = item.length > 0 ? item[0] : null;
+            token.max_total_supply = tokenMarket?.max_supply || 0;
+            token.circulating_market_cap =
+            tokenMarket?.circulating_market_cap || 0;
+            token.price = tokenMarket?.current_price || 0;
+            token.verify_status = tokenMarket?.verify_status || '';
+            token.verify_text = tokenMarket?.verify_text || '';
+            token.fully_diluted_market_cap =
+            tokenMarket?.fully_diluted_valuation ||
+              token.max_total_supply * token.price;
+            token.price_change_percentage_24h =
+            tokenMarket?.price_change_percentage_24h || 0;
+            token.holders_change_percentage_24h = 0;
+            this.tokenDetail = token;
+          });
+        }
       },
       () => {},
       () => {
