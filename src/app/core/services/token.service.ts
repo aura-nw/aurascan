@@ -222,11 +222,38 @@ export class TokenService extends CommonService {
   getListTokenHolder(
     limit: string | number,
     offset: string | number,
-    contractType: string,
     contractAddress: string,
   ): Observable<any> {
-    let url = `${this.indexerUrl}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
-    return this.http.get<any>(url);
+    const operationsDoc = `query CW20ListHolder($address: String, $limit: Int, $offset: Int) {
+      serenity {
+        cw20_holder(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}, limit: $limit, offset: $offset) {
+          amount
+          address
+          cw20_contract {
+            total_supply
+            decimal
+          }
+        }
+        cw20_holder_aggregate(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+    .post<any>(this.graphUrl, {
+      query: operationsDoc,
+      variables: {
+        limit: limit,
+        offset: offset,
+        address: contractAddress,
+      },
+      operationName: 'CW20ListHolder',
+    })
+    .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTokenHolderNFT(payload) {

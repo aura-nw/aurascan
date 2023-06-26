@@ -8,6 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { Globals } from '../../../../../../global/global';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -71,29 +72,27 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getHolder() {
-    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress).subscribe(
+    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.contractAddress).subscribe(
       (res) => {
-        if (res && res.data?.resultAsset?.length > 0) {
-          this.totalHolder = res.data?.resultCount;
+        const data = _.get(res, `cw20_holder`);
+        const count = _.get(res, `cw20_holder_aggregate`);
+        if (data?.length > 0) {
+          this.totalHolder = count.aggregate?.count;
           if (this.totalHolder > this.numberTopHolder) {
             this.pageData.length = this.numberTopHolder;
           } else {
             this.pageData.length = this.totalHolder;
           }
 
-          let topHolder = Math.max(...res.data?.resultAsset.map((o) => o.quantity)) || 1;
-          this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
-          res.data?.resultAsset.forEach((element) => {
-            element['value'] = 0;
+          const dataFlat = data?.map((item) => {
+            return {
+              owner: item.address,
+              balance: item.amount,
+              percent_hold: (item.amount / item.cw20_contract.total_supply) * 100,
+              value: 0,
+            };
           });
-
-          if (this.totalQuantity) {
-            res.data?.resultAsset.forEach((k) => {
-              k['percent_hold'] = (k.quantity / this.totalQuantity) * 100;
-              k['width_chart'] = (k.quantity / this.numberTop) * 100;
-            });
-          }
-          this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
+          this.dataSource = new MatTableDataSource<any>(dataFlat);
         }
       },
       () => {},
