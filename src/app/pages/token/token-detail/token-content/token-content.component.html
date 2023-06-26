@@ -124,7 +124,7 @@
       [contractAddress]="contractAddress"
       [isSearchAddress]="isSearchAddress"
       (resultLength)="getLength($event)"
-      [decimalValue]="tokenDetail?.decimals"
+      [decimalValue]="tokenDetail?.decimals || 0"
       (hasMore)="getMoreTx($event)">
     </app-token-transfers-tab>
     <app-token-holders-tab
