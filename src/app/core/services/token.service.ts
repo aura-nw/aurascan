@@ -18,7 +18,43 @@ export class TokenService extends CommonService {
   }
 
   getListToken(payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw20-tokens`, payload);
+    const operationsDoc = `query CW20ListToken($name: String, $address: String, $limit: Int, $offset: Int) { 
+      ${this.envDB} { 
+        cw20_contract(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}, limit: $limit, offset: $offset) {
+          marketing_info
+          name
+          symbol
+          smart_contract {
+            address
+          }
+          cw20_holders {
+            amount
+            address
+          }
+        } cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
+          aggregate {
+            count 
+          } 
+        } 
+      } 
+    }`;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          name: payload?.keyword ? `%${payload?.keyword}%` : null,
+          address: payload?.keyword ? payload?.keyword : null,
+          limit: payload?.limit,
+          offset: payload?.offset,
+        },
+        operationName: 'CW20ListToken',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getTokenMarketData(payload): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/cw20-tokens/token-market`, payload);
   }
 
   getListCW721Token(payload, textSearch = null): Observable<any> {
@@ -29,14 +65,18 @@ export class TokenService extends CommonService {
     const operationsDoc = `
     query queryListCW721($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
       ${this.envDB} {
-        list_token: m_view_count_cw721_txs(limit: $limit, offset: $offset ${querySort}, where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}) {
-          contract_address
-          symbol
-          name
-          total_tx
+        list_token: cw721_contract_stats(limit: $limit, offset: $offset ${querySort}, where: {_or:[ {cw721_contract: {smart_contract: {address: {_like: $contract_address}}}},  { cw721_contract: {name: {_ilike: $name}}} ]}) {
           transfer_24h
+          total_activity
+          cw721_contract {
+            name
+            symbol
+            smart_contract {
+              address
+            }
+          }
         }
-        total_token: m_view_count_cw721_txs_aggregate(where: {_or: [{contract_address: {_like: $contract_address}}, {name: {_like: $name}}]}){
+        total_token: cw721_contract_stats_aggregate (where: {_or:[ {cw721_contract: {smart_contract: {address: {_like: $contract_address}}}},  { cw721_contract: {name: {_ilike: $name}}} ]}) {
           aggregate {
             count
           }
@@ -59,7 +99,36 @@ export class TokenService extends CommonService {
   }
 
   getTokenDetail(address): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/token/${address}`);
+    const operationsDoc = `query CW20Detail($address: String) { 
+      ${this.envDB} { smart_contract(where: {address: {_eq: $address}}) {
+          address
+          cw20_contract {
+            name
+            marketing_info
+            cw20_holders {
+              address
+              amount
+            }
+            decimal
+          }
+          code {
+            code_id_verifications {
+              verification_status
+            }
+          }
+        } 
+      } 
+    }`;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: address,
+        },
+        operationName: 'CW20Detail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTokenNFTFromIndexer(payload): Observable<any> {
@@ -129,9 +198,9 @@ export class TokenService extends CommonService {
 
   countTotalTokenCW721(contract_address): Observable<any> {
     const operationsDoc = `
-    query MyQuery($contract_address: String) {
+    query queryCountTotalToken721($contract_address: String) {
       ${this.envDB} {
-        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}}) {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}, burned: {_eq: false}}) {
           aggregate {
             count
           }
@@ -145,7 +214,7 @@ export class TokenService extends CommonService {
         variables: {
           contract_address: contract_address,
         },
-        operationName: 'MyQuery',
+        operationName: 'queryCountTotalToken721',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -162,7 +231,7 @@ export class TokenService extends CommonService {
 
   getListTokenHolderNFT(payload) {
     const operationsDoc = `
-    query MyQuery($contract_address: String, $limit: Int = 10) {
+    query queryListHolderNFT($contract_address: String, $limit: Int = 10) {
       ${this.envDB} {
         view_count_holder_cw721(limit: $limit, where: {contract_address: {_eq: $contract_address}}, order_by: {count: desc}) {
           count
@@ -183,7 +252,7 @@ export class TokenService extends CommonService {
           limit: payload?.limit || 20,
           contract_address: payload?.contractAddress,
         },
-        operationName: 'MyQuery',
+        operationName: 'queryListHolderNFT',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

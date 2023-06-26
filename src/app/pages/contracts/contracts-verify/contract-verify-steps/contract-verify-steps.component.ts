@@ -46,7 +46,6 @@ export class ContractVerifyStepsComponent implements OnInit {
         className: this.getClassName(dta.result),
       }));
 
-      
       let stepTemp = this.steps.find((dta) => dta.result !== 'Success')?.check_id;
       if (stepTemp) {
         this.currentStep = stepTemp - 1 > 0 ? stepTemp - 1 : 0;

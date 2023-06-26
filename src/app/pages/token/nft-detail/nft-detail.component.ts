@@ -11,9 +11,10 @@ import {
   MEDIA_TYPE,
   PAGE_EVENT,
 } from 'src/app/core/constants/common.constant';
-import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
-import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -22,14 +23,12 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { TokenService } from 'src/app/core/services/token.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { Globals } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 
 @Component({
   selector: 'app-nft-detail',
@@ -64,7 +63,6 @@ export class NFTDetailComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   isMobileMatched = false;
 
-  contractVerifyType = ContractVerifyType;
   modeExecuteTransaction = ModeExecuteTransaction;
   nextKey = null;
   currentKey: string;
@@ -77,7 +75,6 @@ export class NFTDetailComponent implements OnInit {
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   userAddress = '';
 
@@ -118,115 +115,65 @@ export class NFTDetailComponent implements OnInit {
         this.userAddress = null;
       }
     });
-
-    if (this.router.snapshot.url[0]?.path === 'token-nft') {
-      this.getDetailCW721();
-    } else {
-      this.getDetailCW4973();
-    }
+    this.getNFTDetail();
   }
 
   error(): void {
     this.isError = true;
   }
 
-  getDetailCW721() {
+  getNFTDetail() {
     const encoded = encodeURIComponent(this.nftId);
-    this.contractService.getDetailCW721(this.contractAddress, encoded).subscribe(
+    this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe(
       (res) => {
-        res.data = res.data[0];
+        res = res.data[0];
 
-        if (!res?.data || res.data === null || res?.data.status === SB_TYPE.UNEQUIPPED) {
+        if (!res || res === null) {
           this.toastr.error('Token invalid');
           this.loading = false;
           return;
         }
-        res.data['type'] = res.data['type'] || ContractRegisterType.CW721;
-        this.nftDetail = {
-          ...res.data,
-          contract_address: res.contract_address || res.data?.cw721_contract?.smart_contract?.address,
-          creator: res.creator || res.data?.cw721_contract?.smart_contract?.creator,
-          name: res.name || res.data?.cw721_contract?.name,
-        };
-        if (this.nftDetail.type === ContractRegisterType.CW721) {
-          if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
-            this.nftDetail['isDisplayName'] = true;
-            this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
-          }
-          if (this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url) {
-            this.imageUrl = this.nftDetail.image?.link_s3 || this.nftDetail?.media_info?.offchain?.image?.url;
-          }
-          if (this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url) {
-            if (!this.nftDetail?.image?.link_s3) {
-              if (
-                (this.nftDetail.animation?.content_type ||
-                  this.nftDetail?.media_info?.offchain?.animation?.content_type) === 'image/gif'
-              ) {
-                this.imageUrl =
-                  this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain.animation?.url;
-              } else {
-                this.animationUrl =
-                  this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
-              }
-            } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
-              this.animationUrl =
-                this.nftDetail.animation?.link_s3 || this.nftDetail?.media_info?.offchain?.animation?.url;
-            } else {
-              this.imageUrl = this.nftDetail?.image?.link_s3 || this.nftDetail?.media_info?.offchain.image?.url;
-            }
-          }
-        }
-      },
-      () => {},
-      () => {
-        this.loading = false;
-      },
-    );
-  }
 
-  getDetailCW4973() {
-    const encoded = encodeURIComponent(this.nftId);
-    this.contractService.getDetailCW4973(this.contractAddress, encoded).subscribe(
-      (res) => {
-        if (!res?.data || res.data === null || res?.data.status === SB_TYPE.UNEQUIPPED) {
-          this.toastr.error('Token invalid');
-          this.loading = false;
-          return;
+        res['type'] = res['type'] || ContractRegisterType.CW721;
+        if (this.router.snapshot.url[0]?.path === 'token-abt') {
+          if (res.cw721_contract?.smart_contract?.name === TYPE_CW4973 && res.burned === false) {
+            res['type'] = ContractRegisterType.CW4973;
+            this.isSoulBound = true;
+            this.linkToken = 'token-abt';
+          } else {
+            this.toastr.error('Token invalid');
+            this.loading = false;
+            return;
+          }
         }
-        res.data['type'] = res.data['type'] || ContractRegisterType.CW721;
-        this.nftDetail = {
-          ...res.data,
-          contract_address: res.contract_address || res.data?.cw721_contract?.smart_contract?.address,
-          creator: res.creator || res.data?.cw721_contract?.smart_contract?.creator,
-          name: res.name || res.data?.cw721_contract?.name,
-        };
 
-        if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
-          this.toastr.error('Token invalid');
-          return;
+        this.nftDetail = {
+          ...res,
+          contract_address: res.data?.contract_address || res?.cw721_contract?.smart_contract?.address,
+          creator: res.data?.creator || res?.cw721_contract?.smart_contract?.creator,
+          name: res.name || res?.cw721_contract?.name,
+        };
+        if (this.nftDetail?.media_info?.offchain?.image?.url) {
+          this.imageUrl = this.nftDetail?.media_info?.offchain?.image?.url;
         }
-        this.linkToken = 'token-abt';
-        if (this.nftDetail?.ipfs?.image) {
-          this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.image);
-        }
-        if (this.nftDetail?.ipfs?.animation_url) {
-          if (!this.nftDetail?.ipfs?.image) {
-            if (this.nftDetail.img_type === 'image/gif') {
-              this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+        if (this.nftDetail?.media_info?.offchain?.animation?.url) {
+          if (!this.nftDetail?.media_info?.offchain?.image?.url) {
+            if (this.nftDetail?.media_info?.offchain?.animation?.content_type === 'image/gif') {
+              this.imageUrl = this.nftDetail?.media_info?.offchain.animation?.url;
             } else {
-              this.animationUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+              this.animationUrl = this.nftDetail?.media_info?.offchain?.animation?.url;
             }
           } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
-            this.animationUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+            this.animationUrl = this.nftDetail?.media_info?.offchain?.animation?.url;
           } else {
-            this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.image);
+            this.imageUrl = this.nftDetail?.media_info?.offchain.image?.url;
           }
         }
-        if (this.nftDetail.ipfs?.name) {
+
+        if (res.type === ContractRegisterType.CW4973) {
           this.nftDetail['isDisplayName'] = true;
-          this.nftDetail['nftName'] = this.nftDetail.token_name_ipfs || this.nftDetail.ipfs?.name || '';
+          this.nftDetail['nftName'] = this.nftDetail?.media_info?.onchain?.metadata?.name || '';
         }
-        this.isSoulBound = true;
       },
       () => {},
       () => {
@@ -328,14 +275,6 @@ export class NFTDetailComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  getSBTPick() {
-    const payload = {
-      receiverAddress: this.nftDetail?.receiver_address,
-      limit: LIMIT_NUM_SBT,
-    };
-    this.unEquipSBT();
   }
 
   async unEquipSBT() {

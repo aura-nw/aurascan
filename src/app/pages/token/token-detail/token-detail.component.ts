@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto } from 'src/app/core/models/common.model';
@@ -18,6 +19,7 @@ export class TokenDetailComponent implements OnInit {
   tokenDetail: any;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  contractType = ContractRegisterType;
 
   constructor(
     private router: ActivatedRoute,
@@ -42,8 +44,31 @@ export class TokenDetailComponent implements OnInit {
 
   getTokenDetail(): void {
     this.tokenService.getTokenDetail(this.contractAddress).subscribe(
-      (res: ResponseDto) => {
-        this.tokenDetail = res.data;
+      (res) => {
+        const data = _.get(res, `smart_contract`);
+        if (data.length > 0) {
+          const reqPayload = { contractAddress: [data[0].address] }
+          this.tokenService.getTokenMarketData(reqPayload).subscribe(item => {
+            const token = data[0];
+            const tokenMarket = item.length > 0 ? item[0] : null;
+            token.name = data[0].cw20_contract.name;
+            token.decimal = data[0].cw20_contract.decimal;
+            token.type = this.contractType.CW20;
+            token.max_total_supply = tokenMarket?.max_supply || 0;
+            token.circulating_market_cap =
+            tokenMarket?.circulating_market_cap || 0;
+            token.price = tokenMarket?.current_price || 0;
+            token.verify_status = tokenMarket?.verify_status || '';
+            token.verify_text = tokenMarket?.verify_text || '';
+            token.fully_diluted_market_cap =
+            tokenMarket?.fully_diluted_valuation ||
+              token.max_total_supply * token.price;
+            token.price_change_percentage_24h =
+            tokenMarket?.price_change_percentage_24h || 0;
+            token.holders_change_percentage_24h = 0;
+            this.tokenDetail = token;
+          });
+        }
       },
       () => {},
       () => {
@@ -57,6 +82,9 @@ export class TokenDetailComponent implements OnInit {
       (res) => {
         const name = _.get(res, 'smart_contract[0].cw721_contract.name');
         let type = ContractRegisterType.CW721;
+        if (res.smart_contract[0]?.name === TYPE_CW4973) {
+          type = ContractRegisterType.CW4973;
+        }
         const isNFTContract = true;
         const contract_address = _.get(res, 'smart_contract[0].address');
         this.tokenDetail = { name, type, contract_address, isNFTContract };

@@ -20,7 +20,7 @@
       </ng-container>
     </ul>
 
-    <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+    <div class="card text--white mt-4" *ngIf="{ value: breakpoint$ | async } as breakpoint">
       <div class="d-flex align-items-baseline">
         <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0" id="popupCopy">
           {{ !isRawData ? 'Information' : 'Raw Data' }}
@@ -66,7 +66,7 @@
           <div *ngIf="!loading" [ngClass]="{ 'card-info': breakpoint.value.matches }">
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
-              <div class="col-auto col-lg-9 text--gray-1 h6 mb-0">{{ blockDetail?.chainid }}</div>
+              <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ blockDetail?.chainid }}</div>
             </div>
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-3 text--gray-4">Height</div>
@@ -184,7 +184,7 @@
                         <div *ngSwitchCase="'amount'">
                           <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                             <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                            <span class="text--primary ml-1">{{ commonService.mappingNameIBC(data?.denom)?.display }}</span>
+                            <span class="text--primary ml-1">{{ data?.denom | convertLogAmount : true }}</span>
                           </ng-container>
                           <ng-template #displayNonNumber>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
@@ -225,11 +225,8 @@
               }"
               [content]="[
                 {
-                  label: 'Amount',
-                  info:
-                    +data.amount > 0
-                      ? (+data.amount | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
-                      : checkAmountValue(data.amount, data.tx_hash)
+                  label: 'Fee',
+                  info: (+data.fee | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
                 },
                 { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
               ]"></app-card-mob-simple>
@@ -266,10 +263,8 @@
               <div class="content-log">
                 <ng-container *ngFor="let data of item?.attributes; let idx = index">
                   <div class="ml-5 mb-2 row">
-                    <span class="col-12 col-lg-2 txt-event-key body-02 fw-normal text-capitalize">{{
-                      data.key | decodeData
-                    }}</span>
-                    <span class="col-12 col-lg-10 body-01 text-break">
+                    <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key | decodeData }}</span>
+                    <span class="col-12 col-lg-9 body-01 text-break">
                       <ng-container *ngIf="(data.key | decodeData) !== 'amount' && (data.key | decodeData) !== 'fee'">{{
                         data.value | decodeData
                       }}</ng-container>
