@@ -43,8 +43,8 @@ export class VerifyCodeIdComponent implements OnInit {
   getCodeIdDetail() {
     this.contractService.getCodeIDDetail(this.codeId).subscribe(
       (res) => {
-        if (res.data?.length > 0) {
-          let data = res.data[0];
+        if (res.code?.length > 0) {
+          let data = res.code[0];
           data.compiler_version = _.get(data, 'code_id_verifications[0].compiler_version');
           data.verified_at = _.get(data, 'code_id_verifications[0].verified_at');
           data.contract_verification = _.get(data, 'code_id_verifications[0].verification_status');
