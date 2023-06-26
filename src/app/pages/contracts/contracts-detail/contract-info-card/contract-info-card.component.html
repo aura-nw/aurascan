@@ -42,13 +42,13 @@
         <tr>
           <td class="text--gray-5">Token Tracker:</td>
           <td colspan="2">
-            <ng-container *ngIf="contractDetail?.cw721_contract?.name && contractDetail?.cw721_contract?.symbol">
+            <ng-container *ngIf="contractDetail?.cw20_contract?.name && contractDetail?.cw20_contract?.symbol">
               <div class="d-flex align-items-center">
                 <a
                   class="text--primary break-word"
                   [routerLink]="['/token', contractDetail?.address]"
                   *ngIf="contractDetail?.code?.type === contractRegisterType.CW20">
-                  {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
+                  {{ contractDetail?.cw20_contract?.name }} ({{ contractDetail?.cw20_contract?.symbol }})
                 </a>
                 <div
                   class="status cursor-pointer"
