@@ -225,7 +225,7 @@ export class TokenService extends CommonService {
     contractAddress: string,
   ): Observable<any> {
     const operationsDoc = `query CW20ListHolder($address: String, $limit: Int, $offset: Int) {
-      serenity {
+      ${this.envDB} {
         cw20_holder(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}, limit: $limit, offset: $offset) {
           amount
           address
