@@ -19,6 +19,7 @@ export class TokenDetailComponent implements OnInit {
   tokenDetail: any;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  contractType = ContractRegisterType;
 
   constructor(
     private router: ActivatedRoute,
@@ -50,6 +51,9 @@ export class TokenDetailComponent implements OnInit {
           this.tokenService.getTokenMarketData(reqPayload).subscribe(item => {
             const token = data[0];
             const tokenMarket = item.length > 0 ? item[0] : null;
+            token.name = data[0].cw20_contract.name;
+            token.decimal = data[0].cw20_contract.decimal;
+            token.type = this.contractType.CW20;
             token.max_total_supply = tokenMarket?.max_supply || 0;
             token.circulating_market_cap =
             tokenMarket?.circulating_market_cap || 0;
