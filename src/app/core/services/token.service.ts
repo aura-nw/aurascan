@@ -200,7 +200,7 @@ export class TokenService extends CommonService {
     const operationsDoc = `
     query queryCountTotalToken721($contract_address: String) {
       ${this.envDB} {
-        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}, burned: {_eq: false}})
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}, burned: {_eq: false}}) {
           aggregate {
             count
           }
