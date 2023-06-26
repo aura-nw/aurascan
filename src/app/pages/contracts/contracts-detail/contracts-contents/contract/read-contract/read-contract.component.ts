@@ -68,7 +68,7 @@ export class ReadContractComponent implements OnInit {
   query(query, msg) {
     msg.isLoading = true;
     SigningCosmWasmClient.connect(this.chainInfo.rpc)
-      .then((client) => client.queryContractSmart(this.contractDetailData.contract_address, query))
+      .then((client) => client.queryContractSmart(this.contractDetailData.address, query))
       .then((config) => {
         if (config) {
           msg.dataResponse = config;
