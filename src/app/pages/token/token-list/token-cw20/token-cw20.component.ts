@@ -3,6 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -10,9 +11,8 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
-import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
+import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-token-cw20',
@@ -91,38 +91,33 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       keyword: this.textSearch,
     };
 
-    this.tokenService.getListToken(payload).subscribe(res => {
+    this.tokenService.getListToken(payload).subscribe((res) => {
       const cw20data = _.get(res, `cw20_contract`);
-      const count =  _.get(res, `cw20_contract_aggregate`)
+      const count = _.get(res, `cw20_contract_aggregate`);
       const listAddress = cw20data.map((item) => item.smart_contract.address);
-      const reqPayload = { contractAddress: listAddress }
-      this.tokenService.getTokenMarketData(reqPayload).subscribe(tokenMarket => {
+      const reqPayload = { contractAddress: listAddress };
+      this.tokenService.getTokenMarketData(reqPayload).subscribe((tokenMarket) => {
         const dataFlat = cw20data?.map((item) => {
-          const tokenFind = tokenMarket?.find(
-            (f) => String(f.contract_address) === item.smart_contract.address,
-          );
+          const tokenFind = tokenMarket?.find((f) => String(f.contract_address) === item.smart_contract.address);
 
           return {
             coin_id: tokenFind?.coin_id || '',
             contract_address: item.smart_contract.address || '',
             name: item.name || '',
             symbol: item.symbol || '',
-            image: item.marketing_info?.logo?.url
-              ? item.marketing_info?.logo?.url
-              : tokenFind?.image || '',
+            image: item.marketing_info?.logo?.url ? item.marketing_info?.logo?.url : tokenFind?.image || '',
             description: tokenFind?.description || '',
             verify_status: tokenFind?.verify_status || '',
             verify_text: tokenFind?.verify_text || '',
             circulating_market_cap: tokenFind?.circulating_market_cap || 0,
             volume_24h: tokenFind?.total_volume || 0,
             price: tokenFind?.current_price || 0,
-            price_change_percentage_24h:
-              tokenFind?.price_change_percentage_24h || 0,
+            price_change_percentage_24h: tokenFind?.price_change_percentage_24h || 0,
             holders_change_percentage_24h: 0,
             holders: item.cw20_holders?.length,
             max_total_supply: tokenFind?.max_supply || 0,
             fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,
-          }
+          };
         });
         dataFlat.forEach((data) => {
           Object.assign(data, {
@@ -137,10 +132,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
             holders: +data.holders,
             holderChange: Number(data.holders_change_percentage_24h.toString()),
           });
-        } )
+        });
         this.dataSource = new MatTableDataSource<any>(dataFlat);
-        this.pageData.length = count.aggregate.count;       
-      })
+        this.pageData.length = count.aggregate.count;
+      });
     });
   }
 
