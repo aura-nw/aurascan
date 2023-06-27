@@ -38,7 +38,8 @@ export class TokenContractTabComponent implements OnInit {
         let query_msg_schema = _.get(data, 'code.code_id_verifications[0].query_msg_schema');
         let tx_hash = data.instantiate_hash;
         let code_id = _.get(data, 'code.code_id');
-        this.tokenDetail = { contract_verification, execute_msg_schema, query_msg_schema, tx_hash, code_id };
+        let address = data.address;
+        this.tokenDetail = { contract_verification, execute_msg_schema, query_msg_schema, tx_hash, code_id, address };
       }
     });
   }
