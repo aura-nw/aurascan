@@ -52,7 +52,6 @@ export class ContractComponent implements OnInit {
           } else {
             this.isVerifying = false;
           }
-
           return this.contractService.checkVerified(this.contractDetail?.code?.code_id);
         }),
       )
