@@ -18,7 +18,7 @@ export class TokenService extends CommonService {
   }
 
   getListToken(payload): Observable<any> {
-    const operationsDoc = `query CW20ListToken($name: String, $address: String, $limit: Int, $offset: Int) { 
+    const operationsDoc = `query queryCW20ListToken($name: String, $address: String, $limit: Int, $offset: Int) { 
       ${this.envDB} { 
         cw20_contract(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}, limit: $limit, offset: $offset) {
           marketing_info
@@ -49,7 +49,7 @@ export class TokenService extends CommonService {
           limit: payload?.limit,
           offset: payload?.offset,
         },
-        operationName: 'CW20ListToken',
+        operationName: 'queryCW20ListToken',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -100,7 +100,7 @@ export class TokenService extends CommonService {
   }
 
   getTokenDetail(address): Observable<any> {
-    const operationsDoc = `query CW20Detail($address: String) { 
+    const operationsDoc = `query queryCW20Detail($address: String) { 
       ${this.envDB} { smart_contract(where: {address: {_eq: $address}}) {
           address
           cw20_contract {
@@ -128,7 +128,7 @@ export class TokenService extends CommonService {
         variables: {
           address: address,
         },
-        operationName: 'CW20Detail',
+        operationName: 'queryCW20Detail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -226,7 +226,7 @@ export class TokenService extends CommonService {
     offset: string | number,
     contractAddress: string,
   ): Observable<any> {
-    const operationsDoc = `query CW20ListHolder($address: String, $limit: Int, $offset: Int) {
+    const operationsDoc = `query queryCW20ListHolder($address: String, $limit: Int, $offset: Int) {
       ${this.envDB} {
         cw20_holder(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
           amount
@@ -253,7 +253,7 @@ export class TokenService extends CommonService {
         offset: offset,
         address: contractAddress,
       },
-      operationName: 'CW20ListHolder',
+      operationName: 'queryCW20ListHolder',
     })
     .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
