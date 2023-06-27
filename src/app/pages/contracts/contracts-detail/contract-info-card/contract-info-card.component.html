@@ -42,12 +42,16 @@
         <tr>
           <td class="text--gray-5">Token Tracker:</td>
           <td colspan="2">
-            <ng-container *ngIf="contractDetail?.cw20_contract?.name && contractDetail?.cw20_contract?.symbol">
+            <ng-container>
               <div class="d-flex align-items-center">
                 <a
                   class="text--primary break-word"
-                  [routerLink]="['/token', contractDetail?.address]"
-                  *ngIf="contractDetail?.code?.type === contractRegisterType.CW20">
+                  [routerLink]="['/tokens/token/', contractDetail?.address]"
+                  *ngIf="
+                    contractDetail?.code?.type === contractRegisterType.CW20 &&
+                    contractDetail?.cw20_contract?.name &&
+                    contractDetail?.cw20_contract?.symbol
+                  ">
                   {{ contractDetail?.cw20_contract?.name }} ({{ contractDetail?.cw20_contract?.symbol }})
                 </a>
                 <div
@@ -65,7 +69,11 @@
                 </div>
               </div>
               <a
-                *ngIf="contractDetail?.code?.type !== contractRegisterType.CW20"
+                *ngIf="
+                  contractDetail?.code?.type !== contractRegisterType.CW20 &&
+                  contractDetail?.cw721_contract?.name &&
+                  contractDetail?.cw721_contract?.symbol
+                "
                 class="text--primary break-word"
                 [routerLink]="['/tokens/' + linkNft, contractDetail?.address]">
                 {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
