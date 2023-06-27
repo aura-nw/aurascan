@@ -30,7 +30,7 @@ export class AccountService extends CommonService {
       payload.token_id = payload.keyword;
     }
     const operationsDoc = `
-    query Query(
+    query queryAssetCW721(
       $contract_address: String
       $limit: Int = 10
       $tokenId: String = null
@@ -47,6 +47,7 @@ export class AccountService extends CommonService {
             }
             token_id: { _eq: $tokenId }
             owner: { _eq: $owner }
+            burned: {_eq: false}
           }
           order_by: [{ last_updated_height: desc }, { id: desc }]
         ) {
@@ -66,7 +67,7 @@ export class AccountService extends CommonService {
             }
           }
         }
-        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
           aggregate {
             count
           }
@@ -86,7 +87,7 @@ export class AccountService extends CommonService {
           tokenId: payload?.token_id,
           owner: payload?.owner,
         },
-        operationName: 'Query',
+        operationName: 'queryAssetCW721',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
