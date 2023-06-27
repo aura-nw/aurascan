@@ -27,18 +27,19 @@ export class TokenService extends CommonService {
           smart_contract {
             address
           }
-          cw20_holders {
-            amount
-            address
+          cw20_holders_aggregate {
+            aggregate {
+              count
+            }
           }
-        } cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
+        }
+        cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
           aggregate {
-            count 
-          } 
-        } 
-      } 
+            count
+          }
+        }
+      }
     }`;
-
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
@@ -104,6 +105,7 @@ export class TokenService extends CommonService {
           address
           cw20_contract {
             name
+            symbol
             marketing_info
             cw20_holders {
               address
@@ -226,7 +228,7 @@ export class TokenService extends CommonService {
   ): Observable<any> {
     const operationsDoc = `query CW20ListHolder($address: String, $limit: Int, $offset: Int) {
       ${this.envDB} {
-        cw20_holder(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}, limit: $limit, offset: $offset) {
+        cw20_holder(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
           amount
           address
           cw20_contract {
