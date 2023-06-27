@@ -28,10 +28,11 @@ export class TokenOverviewComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
-    this.getTotalHolder();
     if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
       this.getTotalSupply();
       this.getHolderNFT();
+    } else {
+      this.getTotalHolder();
     }
 
     //set price change
@@ -51,12 +52,10 @@ export class TokenOverviewComponent implements OnInit {
   }
 
   getTotalHolder() {
-    this.tokenService
-      .getListTokenHolder(20, 0, this.tokenDetail?.contract_address)
-      .subscribe((res) => {
-        const data = _.get(res, `cw20_holder_aggregate`);
-        this.tokenDetail['holder'] = data?.aggregate?.count || 0;
-      });
+    this.tokenService.getListTokenHolder(20, 0, this.tokenDetail?.contract_address).subscribe((res) => {
+      const data = _.get(res, `cw20_holder_aggregate`);
+      this.tokenDetail['holder'] = data?.aggregate?.count || 0;
+    });
   }
 
   getTotalSupply() {

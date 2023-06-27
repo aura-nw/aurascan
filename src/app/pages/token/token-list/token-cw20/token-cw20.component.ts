@@ -114,7 +114,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
             price: tokenFind?.current_price || 0,
             price_change_percentage_24h: tokenFind?.price_change_percentage_24h || 0,
             holders_change_percentage_24h: 0,
-            holders: item.cw20_holders?.length,
+            holders: item.cw20_holders_aggregate?.aggregate?.count,
             max_total_supply: tokenFind?.max_supply || 0,
             fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,
           };
