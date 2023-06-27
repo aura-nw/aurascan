@@ -88,6 +88,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   arrBlockUptime = [];
   arrLastBlock = [];
   isLeftPage = false;
+  typeActive = 'BOND_STATUS_BONDED';
 
   constructor(
     private route: ActivatedRoute,
@@ -140,22 +141,38 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   getDetail(isInit = false): void {
     if (!this.isLeftPage) {
-      this.validatorService.validatorsDetail(this.currentAddress).subscribe(
+      const payload = {
+        limit: 1,
+        offset: 0,
+        operatorAddress: this.currentAddress,
+      };
+      this.validatorService.getDataValidator(payload).subscribe(
         (res) => {
-          if (res.status === 404) {
+          if (res.status === 404 || res.validator?.length === 0) {
             this.router.navigate(['/']);
             return;
           }
 
+          const data = res.validator[0];
           this.currentValidatorDetail = {
-            ...res.data,
-            self_bonded: balanceOf(res.data.self_bonded),
-            power: balanceOf(res.data.power),
-            identity: res?.data?.identity,
+            ...data,
+            self_bonded: balanceOf(data.self_delegation_balance),
+            power: balanceOf(data.tokens),
+            identity: data.description?.identity,
+            up_time: (NUM_BLOCK - +data.missed_blocks_counter) / 100,
+            title: data.description?.moniker,
+            acc_address: data.account_address,
+            commission: (+data.commission.commission_rates.rate)?.toFixed(4),
+            details: data.description?.details,
+            percent_power: data.percent_voting_power?.toFixed(2),
+            bonded_height: data.start_height || 1,
+            status: data.status === this.typeActive ? this.statusValidator.Active : data.status,
           };
 
-          this.getMissedBlockCounter(this.currentValidatorDetail?.operator_address);
-          if (this.currentValidatorDetail?.cons_address && isInit) {
+          const percentSelfBonded = (this.currentValidatorDetail.self_delegation_balance / this.currentValidatorDetail.tokens) * 100;
+          this.currentValidatorDetail.percent_self_bonded = percentSelfBonded.toFixed(2) + '%';
+
+          if (this.currentValidatorDetail?.consensus_hex_address && isInit) {
             this.getUptime();
           }
 
@@ -402,7 +419,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       (res) => {
         if (res?.block?.length > 0) {
           this.arrLastBlock = res.block;
-          this.getBlocksMiss(this.currentValidatorDetail?.cons_address);
+          this.getBlocksMiss(this.currentValidatorDetail?.consensus_hex_address);
         }
       },
       () => {},
@@ -418,19 +435,8 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     };
     this.blockService.getDataBlock(payload).subscribe((res) => {
       if (res?.block?.length > 0 && res?.block[0].height !== this.arrLastBlock[0].height) {
-        this.getBlocksMiss(this.currentValidatorDetail?.cons_address, res?.block);
+        this.getBlocksMiss(this.currentValidatorDetail?.consensus_hex_address, res?.block);
       }
-    });
-  }
-
-  getMissedBlockCounter(address) {
-    const payload = {
-      limit: 1,
-      offset: 0,
-      operatorAddress: address,
-    };
-    this.validatorService.getDataValidator(payload).subscribe((res) => {
-      this.currentValidatorDetail['up_time'] = (NUM_BLOCK - +res.validator[0].missed_blocks_counter) / 100;
     });
   }
 }

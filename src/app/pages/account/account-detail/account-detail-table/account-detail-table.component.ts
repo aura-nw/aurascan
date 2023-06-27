@@ -81,30 +81,17 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
           operatorAddArr.push(f.validator_src_address);
           operatorAddArr.push(f.validator_dst_address);
         }
+
+        // if (this.pageEventType !== 'Redelegation' && imgObj.operator_address == item.validator_address) {
+        //   item['image_url'] = imgObj.image_url;
+        // }
+        // if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_src_address) {
+        //   item['src_image_url'] = imgObj.image_url;
+        // }
+        // if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_dst_address) {
+        //   item['dst_image_url'] = imgObj.image_url;
+        // }
       });
-      if (operatorAddArr.length > 0 && operatorAddArr[0]) {
-        // get validator logo
-        this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
-          if (res?.data) {
-            this.validatorImgArr = res?.data;
-            // push image into validator array
-            this.dataSource.data.forEach((item) => {
-              this.validatorImgArr.forEach((imgObj) => {
-                if (this.pageEventType !== 'Redelegation' && imgObj.operator_address == item.validator_address) {
-                  item['image_url'] = imgObj.image_url;
-                }
-                if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_src_address) {
-                  item['src_image_url'] = imgObj.image_url;
-                }
-                if (this.pageEventType === 'Redelegation' && imgObj.operator_address == item.validator_dst_address) {
-                  item['dst_image_url'] = imgObj.image_url;
-                }
-              });
-            });
-            this.cdr.markForCheck();
-          }
-        });
-      }
     }
   }
 

@@ -38,6 +38,7 @@ export class ProposalService extends CommonService {
           }
           description
           operator_address
+          image_url
         }
       }
     }

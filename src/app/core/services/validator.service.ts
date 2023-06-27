@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { LCD_COSMOS } from '../constants/url.constant';
 import { Globals } from 'src/app/global/global';
-import { map, shareReplay, tap } from 'rxjs/operators';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({
   providedIn: 'root',
@@ -16,15 +15,6 @@ export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
   stakingAPRSubject: BehaviorSubject<number>;
-
-  private cachedValidator$: Observable<
-    [
-      {
-        image_url: string;
-        operator_address: string;
-      },
-    ]
-  >;
 
   constructor(
     private http: HttpClient,
@@ -50,10 +40,6 @@ export class ValidatorService extends CommonService {
         this.stakingAPRSubject.next((inflation * (1 - communityTax)) / (bonded_tokens / supply));
       }
     }, 500);
-  }
-
-  validators(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators`);
   }
 
   getDataValidator(payload) {
@@ -94,6 +80,11 @@ export class ValidatorService extends CommonService {
             }
           }
         }
+        validator_aggregate(where: {status: {_eq: "BOND_STATUS_BONDED"}}) {
+          aggregate {
+            count
+          }
+        }
       }
     }
     `;
@@ -110,8 +101,38 @@ export class ValidatorService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  validatorsDetail(address: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators/${address}`);
+  getValidatorByListAddress(arrAddress) {
+    const operationsDoc = `
+    query getValidatorByListAddress($arrAddress: [String!]) {
+      ${this.envDB} {
+        validator(where: {operator_address: {_in: $arrAddress}}, order_by: {tokens: desc}) {
+          account_address
+          commission
+          consensus_address
+          consensus_hex_address
+          created_at
+          delegator_shares
+          delegators_count
+          delegators_last_height
+          description
+          jailed
+          operator_address
+          status
+          tokens
+          image_url
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          arrAddress: arrAddress || null,
+        },
+        operationName: 'getValidatorByListAddress',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
@@ -160,21 +181,6 @@ export class ValidatorService extends CommonService {
     );
   }
 
-  getValidatorAvatar(validatorAddress: string): string {
-    return `${this.environmentService.configValue.validator_s3}/${validatorAddress}.png`;
-  }
-
-  getValidatorInfoByList(addressList: string[]): Observable<any> {
-    // Cache validator info, only get on the first time
-    if (!this.cachedValidator$) {
-      this.cachedValidator$ = this.http
-        .get<any>(`${this.apiUrl}/validators/validator-info?address=${addressList}`)
-        .pipe(shareReplay(1));
-    }
-
-    return this.cachedValidator$;
-  }
-
   getUptimeLCD(block = null) {
     if (!block) {
       block = 'latest';
@@ -213,5 +219,13 @@ export class ValidatorService extends CommonService {
 
   getListUndelegateLCD(address) {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/delegators/${address}/unbonding_delegations`);
+  }
+
+  getDelegationLCD(address) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DELEGATION}/${address}`);
+  }
+
+  getRewardLCD(address) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.REWARD}/${address}/rewards`);
   }
 }
