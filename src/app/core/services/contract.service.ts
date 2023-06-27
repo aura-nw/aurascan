@@ -120,6 +120,10 @@ export class ContractService extends CommonService {
             name
             symbol
           }
+          cw20_contract {
+            name
+            symbol
+          }
           code {
             type
             code_id
