@@ -20,12 +20,12 @@
     <div class="col">
       <div class="notice-warning">
         <div class="notice-icon">
-          <img src="assets/icons/icons-svg/color/warning-red.svg" alt="icon">
+          <img src="assets/icons/icons-svg/color/warning-red.svg" alt="icon" />
           <span class="body-03 text--red-3 fw-semibold"> NOTICE </span>
         </div>
         <span class="body-03 text--gray-1 notice-content">
-          {{notice?.content}}
-          <a href="{{notice.url}}" target="_blank">
+          {{ notice?.content }}
+          <a href="{{ notice.url }}" target="_blank">
             <i class="ph-arrow-square-out-fill body-03 text--gray-1"> </i>
           </a>
         </span>
@@ -244,12 +244,12 @@
       <div class="mb-4 mb-lg-6 carousel">
         <ngb-carousel [showNavigationArrows]="false">
           <ng-template ngbSlide>
-            <div class="picsum-img-wrapper">
+            <a class="picsum-img-wrapper" target="_blank" href="https://insight.aura.network/">
               <img
                 src="assets/images/pages/dashboard_mainnet-lauch--des.png"
                 alt="Random first slide"
                 class="carousel__img" />
-            </div>
+            </a>
           </ng-template>
         </ngb-carousel>
       </div>
