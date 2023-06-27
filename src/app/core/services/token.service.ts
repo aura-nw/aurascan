@@ -27,9 +27,10 @@ export class TokenService extends CommonService {
           smart_contract {
             address
           }
-          cw20_holders {
-            amount
-            address
+          cw20_holders_aggregate {
+            aggregate {
+              count
+            }
           }
         } cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
           aggregate {
