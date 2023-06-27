@@ -4,8 +4,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, mergeMap, repeat, take, takeUntil, tap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
@@ -51,6 +51,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   searchSubject = new Subject();
   destroy$ = new Subject();
+  destroy_cw20$ = new Subject();
+  cw20Total: any[] = [];
 
   constructor(
     public translate: TranslateService,
@@ -67,6 +69,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getListToken();
+    this.getListToken2();
 
     this.searchSubject
       .asObservable()
@@ -84,6 +87,34 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.searchSubject.next(this.textSearch);
   }
 
+  getListToken2() {
+    let payload = {
+      offset: 0,
+      keyword: this.textSearch,
+    }
+    return of(null).pipe(
+      mergeMap(() => {
+        return this.tokenService.getListToken(payload);
+      }),
+      tap(res => {
+        const count = _.get(res, `cw20_contract_aggregate`);
+        const cw20Data = _.get(res, `cw20_contract`);
+        if(this.cw20Total.length <= count?.aggregate?.count) {
+          payload = {
+            offset: this.cw20Total.length,
+            keyword: this.textSearch,
+          };
+        } else {
+          this.destroy_cw20$.next();
+          this.destroy_cw20$.complete();
+        }
+        this.cw20Total = [...this.cw20Total,...cw20Data];
+      }),
+      repeat(),
+      takeUntil(this.destroy_cw20$),
+      take(10)).subscribe();
+  }
+
   getListToken() {
     const payload = {
       limit: this.pageData.pageSize,
@@ -99,7 +130,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       this.tokenService.getTokenMarketData(reqPayload).subscribe((tokenMarket) => {
         const dataFlat = cw20data?.map((item) => {
           const tokenFind = tokenMarket?.find((f) => String(f.contract_address) === item.smart_contract.address);
-
           return {
             coin_id: tokenFind?.coin_id || '',
             contract_address: item.smart_contract.address || '',
