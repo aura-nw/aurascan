@@ -23,6 +23,7 @@ export class Globals {
     aura: 0,
     btc: 0,
   };
+  listNameTag = [];
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {

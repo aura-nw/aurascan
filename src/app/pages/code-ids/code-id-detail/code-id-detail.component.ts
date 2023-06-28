@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { CONTRACT_RESULT, TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 @Component({
   selector: 'app-code-id-detail',
@@ -25,7 +26,7 @@ export class CodeIdDetailComponent implements OnInit {
   codeIdDetail;
   contractResult = CONTRACT_RESULT;
 
-  constructor(private router: ActivatedRoute, public route: Router, private contractService: ContractService) {}
+  constructor(private router: ActivatedRoute, public route: Router, private contractService: ContractService, public commonService: CommonService) {}
 
   ngOnInit(): void {
     this.codeId = this.router.snapshot.paramMap.get('codeId');

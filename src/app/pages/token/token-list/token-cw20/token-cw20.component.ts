@@ -85,6 +85,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   getListToken() {
+    this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,

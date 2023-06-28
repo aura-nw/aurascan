@@ -32,7 +32,7 @@
           <div class="first-col text--gray-5">Contract:</div>
           <div class="break-word">
             <a class="text--primary" [routerLink]="['/contracts', tokenDetail?.contract_address]">
-              {{ tokenDetail?.contract_address }}
+              {{ commonService.setNameTag(tokenDetail?.contract_address) }}
             </a>
           </div>
         </div>

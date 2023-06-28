@@ -37,7 +37,7 @@
       <input
         type="text"
         class="form-control pl-0"
-        placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
+        placeholder="Search for Contract name, contract address/name tag, creator address/name tag, Code ID"
         [(ngModel)]="textSearch"
         [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
         (keyup)="onKeyUp()"
@@ -66,7 +66,7 @@
               <input
                 type="text"
                 class="form-control pl-0"
-                placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
+                placeholder="Search for Contract name, contract address/name tag, creator address/name tag, Code ID"
                 [(ngModel)]="textSearch"
                 [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
                 (keyup)="onKeyUp()"
@@ -100,6 +100,14 @@
                   <div [innerHTML]="template.headerCellDef | translate" [style.width]="'180px'"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
+                  <ng-container *ngIf="template.isNameTag">
+                    <a
+                      class="text--primary"
+                      [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                      [class.disabled-link]="!data[template.matColumnDef]">
+                      {{ (commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8) || '-' }}
+                    </a>
+                  </ng-container>
                   <ng-container *ngIf="template.isUrl && template.isShort && template.matColumnDef === 'address'">
                     <div class="d-flex align-items-center gap-2">
                       <div class="mr-2" [style.width]="'16px'">
@@ -110,15 +118,12 @@
                           width="16px"
                           height="16px" />
                       </div>
-                      <a
-                        class="text--primary"
-                        [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                        [class.disabled-link]="!data[template.matColumnDef]">
-                        {{ shortenAddress(data[template.matColumnDef]) || '-' }}
-                      </a>
                     </div>
                   </ng-container>
-                  <ng-container *ngIf="template.isUrl && template.isShort && template.matColumnDef !== 'address'">
+                  <ng-container
+                    *ngIf="
+                      template.isUrl && template.isShort && template.matColumnDef !== 'address' && !template.isNameTag
+                    ">
                     <a
                       class="text--primary"
                       [routerLink]="[template.isUrl, data[template.matColumnDef]]"
