@@ -22,7 +22,7 @@ export class BlockService extends CommonService {
 
   getDataBlock(payload) {
     const operationsDoc = `
-    query getDataBlock($limit: Int = 100, $order: order_by = desc, $height: Int = null, $hash: String = null, $operatorAddress: String = null, $heightGT: Int = null, $heightLT: Int = null) {
+    query queryBlock($limit: Int = 100, $order: order_by = desc, $height: Int = null, $hash: String = null, $operatorAddress: String = null, $heightGT: Int = null, $heightLT: Int = null) {
       ${this.envDB} {
         block(limit: $limit, order_by: {height: $order}, where: {height: {_eq: $height, _gt: $heightGT, _lt: $heightLT}, hash: {_eq: $hash}, validator: {operator_address: {_eq: $operatorAddress}}}) {
           data
@@ -49,7 +49,7 @@ export class BlockService extends CommonService {
           heightGT: null,
           heightLT: payload.nextHeight,
         },
-        operationName: 'getDataBlock',
+        operationName: 'queryBlock',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

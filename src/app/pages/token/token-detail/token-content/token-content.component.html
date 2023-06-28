@@ -34,7 +34,7 @@
             <span
               *ngIf="infoSearch['balance']"
               [appBigNumber]="infoSearch['balance']"
-              [decimal]="tokenDetail.decimals"></span>
+              [decimal]="tokenDetail.decimals || 0"></span>
             {{ tokenDetail.symbol || tokenDetail.name }}
           </span>
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
@@ -45,15 +45,16 @@
             class="d-inline"
             *ngIf="infoSearch['balance']"
             [appBigNumber]="infoSearch['balance']"
-            [decimal]="tokenDetail.decimals"
+            [decimal]="tokenDetail.decimals || 0"
             [tokenPrice]="tokenDetail.price"></div>
-          (<div
+          (
+          <div
             *ngIf="infoSearch['balance']"
             class="d-inline"
             [appBigNumber]="infoSearch['balance']"
             [tokenPrice]="tokenDetail.price"
             [auraValue]="true"
-            [decimal]="tokenDetail.decimals"></div>
+            [decimal]="tokenDetail.decimals || 0"></div>
           {{ denom }})
         </div>
       </div>
@@ -124,12 +125,12 @@
       [contractAddress]="contractAddress"
       [isSearchAddress]="isSearchAddress"
       (resultLength)="getLength($event)"
-      [decimalValue]="tokenDetail?.decimals"
+      [decimalValue]="tokenDetail?.decimals || 0"
       (hasMore)="getMoreTx($event)">
     </app-token-transfers-tab>
     <app-token-holders-tab
       *ngIf="currentTab === tokenTab.Holders"
-      [decimalValue]="tokenDetail?.decimals"
+      [decimalValue]="tokenDetail?.decimals || 0"
       [keyWord]="textSearch"
       [tokenDetail]="tokenDetail"
       [typeContract]="tokenDetail?.type"
