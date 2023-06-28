@@ -52,15 +52,14 @@ export class TokenTableComponent implements OnChanges {
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
+
   constructor(
     public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
   ) {}
 
-  ngOnInit(): void {
-    this.getTotalAssets();
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
     this.getListToken();
@@ -87,6 +86,14 @@ export class TokenTableComponent implements OnChanges {
                 data.isValueUp = false;
                 data.change = Number(data.change.toString().substring(1));
               }
+              if (data.contract_address === '-') {
+                this.total = data.price * data.balance + this.total;
+              } else if (data.verify_status === 'VERIFIED') {
+                const powValue = Math.pow(10, data.decimals);
+                let amountValue = data.balance / powValue;
+                amountValue = amountValue * data.price;
+                this.total = amountValue + this.total;
+              }
             }
             return data;
           });
@@ -95,6 +102,7 @@ export class TokenTableComponent implements OnChanges {
           this.dataSource = new MatTableDataSource<any>(lstToken);
           this.pageData.length = res.meta.count;
           this.totalAssets.emit(this.pageData.length);
+          this.totalValue.emit(this.total);
         } else {
           this.pageData.length = 0;
           this.dataSource.data = [];
@@ -145,12 +153,5 @@ export class TokenTableComponent implements OnChanges {
     this.textSearch = '';
     this.pageData.pageIndex = 0;
     this.searchToken();
-  }
-
-  getTotalAssets(): void {
-    this.accountService.getTotalAssets(this.address).subscribe((res: ResponseDto) => {
-      this.total = res.data || 0;
-      this.totalValue.emit(this.total);
-    });
   }
 }
