@@ -1,5 +1,6 @@
 <h1 class="mb-0 text--white">CW-20 Tokens</h1>
-<section>
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+<section *ngIf="!isLoading">
   <ng-container>
     <div class="card mt-4 mt-lg-5">
       <div class="card-body">
@@ -177,7 +178,7 @@
         </app-paginator>
         <!-- No data -->
         <ng-template #noValues>
-          <app-table-no-data></app-table-no-data>
+          <app-table-no-data *ngif="!isLoading"></app-table-no-data>
         </ng-template>
       </div>
     </div>
