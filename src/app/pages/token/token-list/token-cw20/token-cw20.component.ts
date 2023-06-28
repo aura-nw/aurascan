@@ -98,9 +98,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       map((res) => {
         const count = _.get(res, `cw20_contract_aggregate`);
         const cw20Data = _.get(res, `cw20_contract`);
+        cw20Total = [...cw20Total, ...cw20Data];
         // Get more data when response data less than total data
         if (cw20Total.length < count?.aggregate?.count) {
-          cw20Total = [...cw20Total, ...cw20Data];
           payload = {
             offset: cw20Total.length,
           };
