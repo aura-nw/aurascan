@@ -77,7 +77,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       limit: this.pageData.pageSize,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
       keyword: this.textSearch,
-      contractType: this.filterButtons?.length ? this.filterButtons : null,
+      contractType: this.filterButtons?.length > 0 && this.filterButtons?.length < 4 ? this.filterButtons : null,
     };
 
     this.contractService.getListContract(payload).subscribe((res) => {

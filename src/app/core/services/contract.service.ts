@@ -49,7 +49,9 @@ export class ContractService extends CommonService {
     const isFilterCW4973 = contractType?.includes('CW4973');
     let typeQuery = isFilterCW4973
       ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],'
-      : 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}';
+      : contractType?.includes('CW721') || contractType?.includes('CW20')
+      ? 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}'
+      : 'code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}';
 
     if (keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
       address = keyword;
@@ -192,7 +194,7 @@ export class ContractService extends CommonService {
         variables: {
           code_id: payload.codeId,
           limit: payload.limit,
-          offset: payload.offset
+          offset: payload.offset,
         },
         operationName: 'queryListContractByCodeID',
       })
@@ -289,10 +291,10 @@ export class ContractService extends CommonService {
       } else if (keyword.length >= LENGTH_CHARACTER.ADDRESS) {
         subQuery = `creator: {_eq: "${keyword}"}`;
       } else {
-        subQuery = `code_id: {_eq: ${keyword}}`
-      };
+        subQuery = `code_id: {_eq: ${keyword}}`;
+      }
     }
-    
+
     const query = `query queryContractCode($limit: Int, $offset: Int) {
       ${this.envDB} {
         code(where: {${subQuery}}, order_by: {code_id: desc}, limit: $limit, offset: $offset) {
@@ -323,7 +325,7 @@ export class ContractService extends CommonService {
           } 
         } 
       } 
-    }`
+    }`;
     return this.http
       .post<any>(this.graphUrl, {
         query: query,
@@ -362,7 +364,7 @@ export class ContractService extends CommonService {
           }
         }
       } 
-    }`
+    }`;
     return this.http
       .post<any>(this.graphUrl, {
         query: query,
