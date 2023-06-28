@@ -61,7 +61,7 @@ export class SoulboundService extends CommonService {
 
   getListABT(payload): Observable<any> {
     const operationsDoc = `
-    query CW4973ListToken(
+    query queryCW4973ListToken(
       $keyword: String,
       $limit: Int, 
       $offset: Int
@@ -107,7 +107,7 @@ export class SoulboundService extends CommonService {
           offset: payload.offset,
           keyword: payload.keyword ? `%${payload.keyword}%` : null,
         },
-        operationName: 'CW4973ListToken',
+        operationName: 'queryCW4973ListToken',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

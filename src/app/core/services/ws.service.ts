@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import io, { Socket } from 'socket.io-client';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from './soulbound.service';
 import { WalletService } from './wallet.service';
 
@@ -34,7 +32,6 @@ export class WSService {
 
   constructor(
     private environmentService: EnvironmentService,
-    private toastr: NgxToastrService,
     private soulboundService: SoulboundService,
     private walletService: WalletService,
   ) {
