@@ -18,7 +18,7 @@ export class TransactionService extends CommonService {
 
   getListTx(payload) {
     const operationsDoc = `
-    query auratestnet_transaction_top(
+    query queryListTopTransaction(
       $limit: Int = 100
       $order: order_by = desc
       $heightGT: Int = null
@@ -70,14 +70,14 @@ export class TransactionService extends CommonService {
           indexLT: null,
           height: null,
         },
-        operationName: 'auratestnet_transaction_top',
+        operationName: 'queryListTopTransaction',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTxCondition(payload) {
     const operationsDoc = `
-    query auratestnet_transaction(
+    query queryTransaction(
       $limit: Int = 100
       $order: order_by = desc
       $compositeKey: String = null
@@ -141,14 +141,14 @@ export class TransactionService extends CommonService {
           indexLT: null,
           height: null,
         },
-        operationName: 'auratestnet_transaction',
+        operationName: 'queryTransaction',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTxMultiCondition(payload) {
     const operationsDoc = `
-    query auratestnet_transaction(
+    query queryTransactionMultiCondition(
       $limit: Int = 100
       $order: order_by = desc
       $compositeKey: String = null
@@ -228,7 +228,7 @@ export class TransactionService extends CommonService {
           value2: payload.value2,
           key2: payload.key2,
         },
-        operationName: 'auratestnet_transaction',
+        operationName: 'queryTransactionMultiCondition',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -239,9 +239,9 @@ export class TransactionService extends CommonService {
 
   getListIBCSequence(sequence, channel): Observable<any> {
     const operationsDoc = `
-    query getListSequence($limit: Int, $compositeKey: [String!] = "", $value: String = "") {
+    query queryListSequence($limit: Int, $compositeKey: [String!] = "", $value: String = "", $channel: String = "") {
       ${this.envDB} {
-        transaction(limit: $limit, where: {event_attributes: {composite_key: {_in: ["acknowledge_packet.packet_src_channel","send_packet.packet_src_channel", "recv_packet.packet_src_channel"]}, value: {_eq: "${channel}" }}, _and: {event_attributes: {composite_key: {_in: $compositeKey}, value: {_eq: $value}}}}) {
+        transaction(limit: $limit, where: {event_attributes: {composite_key: {_in: ["acknowledge_packet.packet_src_channel", "send_packet.packet_src_channel", "recv_packet.packet_src_channel"]}, value: {_eq: $channel}}, _and: {event_attributes: {composite_key: {_in: $compositeKey}, value: {_eq: $value}}}}) {
           height
           hash
           timestamp
@@ -270,8 +270,9 @@ export class TransactionService extends CommonService {
             'timeout_packet.packet_sequence',
           ],
           value: sequence,
+          channel: channel
         },
-        operationName: 'getListSequence',
+        operationName: 'queryListSequence',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

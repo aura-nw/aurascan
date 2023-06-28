@@ -24,7 +24,6 @@ export class ContractService extends CommonService {
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService, private global: Globals) {
     super(http, environmentService);
-
     this.contractObservable = this.contract$.asObservable();
   }
 
@@ -51,7 +50,7 @@ export class ContractService extends CommonService {
     const isFilterCW4973 = contractType?.includes('CW4973');
     let typeQuery = isFilterCW4973
       ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],'
-      : 'code: {type: {_in: $type}},';
+      : 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}';
 
     const addressNameTag = this.findNameTag(keyword, this.global.listNameTag);
     if (addressNameTag?.length > 0) {
@@ -249,7 +248,7 @@ export class ContractService extends CommonService {
 
   getNFTDetail(address, tokenId): Observable<any> {
     const contractDoc = `
-    query CW721Owner($address: String, $tokenId: String) {
+    query queryCW721Owner($address: String, $tokenId: String) {
       ${this.envDB} { 
         data: cw721_token(where: { cw721_contract: {smart_contract: {address: {_eq: $address}}}, token_id: {_eq: $tokenId}}) { 
         id
@@ -278,7 +277,7 @@ export class ContractService extends CommonService {
           address: address,
           tokenId: tokenId,
         },
-        operationName: 'CW721Owner',
+        operationName: 'queryCW721Owner',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -300,7 +299,7 @@ export class ContractService extends CommonService {
       }
     }
 
-    const query = `query ContractCode($limit: Int, $offset: Int) {
+    const query = `query queryContractCode($limit: Int, $offset: Int) {
       ${this.envDB} {
         code(where: {${subQuery}}, order_by: {code_id: desc}, limit: $limit, offset: $offset) {
           code_id
@@ -338,13 +337,13 @@ export class ContractService extends CommonService {
           limit: data?.limit,
           offset: data?.offset,
         },
-        operationName: 'ContractCode',
+        operationName: 'queryContractCode',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getCodeIDDetail(codeId: number): Observable<any> {
-    const query = `query ContractCodeDetail($codeId: Int) {
+    const query = `query queryContractCodeDetail($codeId: Int) {
       ${this.envDB} {
         code(where: {code_id: {_eq: ${codeId}}}) {
           code_id
@@ -374,7 +373,7 @@ export class ContractService extends CommonService {
       .post<any>(this.graphUrl, {
         query: query,
         variables: {},
-        operationName: 'ContractCodeDetail',
+        operationName: 'queryContractCodeDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

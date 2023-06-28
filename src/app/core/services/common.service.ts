@@ -103,11 +103,6 @@ export class CommonService {
     return result;
   }
 
-  isValidatorJailed(jail, status) {
-    let result = jail && status === STATUS_VALIDATOR.Jail ? true : false;
-    return result;
-  }
-
   getCommunityTax() {
     return axios.get(`${this._environmentService.configValue.chain_info.rest}/cosmos/distribution/v1beta1/params`);
   }
