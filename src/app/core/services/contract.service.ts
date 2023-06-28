@@ -49,7 +49,7 @@ export class ContractService extends CommonService {
     const isFilterCW4973 = contractType?.includes('CW4973');
     let typeQuery = isFilterCW4973
       ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],'
-      : 'code: {type: {_in: $type}},';
+      : 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}';
 
     if (keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
       address = keyword;
