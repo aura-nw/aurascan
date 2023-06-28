@@ -196,7 +196,7 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +
                       '>' +
-                      shortenAddress(data.depositors) +
+                      (commonService.setNameTag(data.depositors) | cutStringPipe : 8 : 8) +
                       '</a>'
                     : '<span class=text--gray-1>-</span>'
                 },
