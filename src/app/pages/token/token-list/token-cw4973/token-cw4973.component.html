@@ -12,7 +12,7 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search for Token Name or Address"
+                placeholder="Search for Token Name, Creator address/name tag"
                 [maxLength]="maxLengthSearch"
                 [(ngModel)]="textSearch"
                 (keyup)="onKeyUp()"
@@ -67,7 +67,7 @@
               <th mat-header-cell *matHeaderCellDef>Creator</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <a [routerLink]="['/account/', element.smart_contract.creator]" class="text-clamp">{{
-                  element.smart_contract.creator | cutStringPipe : 8 : 8
+                  commonService.setNameTag(element.smart_contract.creator) | cutStringPipe : 8 : 8
                 }}</a>
               </td>
             </ng-container>

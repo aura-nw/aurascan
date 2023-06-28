@@ -36,6 +36,7 @@ export class TableTemplate {
   suffix?: string;
   prefix?: string;
   headerWidth?: number;
+  isNameTag?: boolean;
   justify?: 'center' | 'flex-start' | 'flex-end'
 }
 

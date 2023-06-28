@@ -88,11 +88,12 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   }
 
   getListSB() {
+    this.searchValue = this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       receiverAddress: this.currentAddress,
-      keyword: this.textSearch?.trim(),
+      keyword: this.textSearch,
     };
 
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {

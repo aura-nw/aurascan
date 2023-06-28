@@ -12,6 +12,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-token-cw721',
@@ -50,6 +51,7 @@ export class TokenCw721Component implements OnInit {
     public global: Globals,
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +71,7 @@ export class TokenCw721Component implements OnInit {
   }
 
   getTokenData() {
+    this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
@@ -76,7 +79,13 @@ export class TokenCw721Component implements OnInit {
       sort_order: this.sortOrder,
     };
 
-    this.tokenService.getListCW721Token(payload, this.textSearch).subscribe((res) => {
+    let keySearch = this.textSearch;
+    const addressNameTag = this.commonService.findNameTag(keySearch);
+    if (addressNameTag?.length > 0) {
+      keySearch = addressNameTag;
+    }
+
+    this.tokenService.getListCW721Token(payload, keySearch).subscribe((res) => {
       this.dataSource = new MatTableDataSource<any>(res.list_token);
       this.pageData.length = res.total_token?.aggregate?.count;
     });

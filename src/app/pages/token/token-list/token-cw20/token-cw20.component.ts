@@ -98,9 +98,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       map((res) => {
         const count = _.get(res, `cw20_contract_aggregate`);
         const cw20Data = _.get(res, `cw20_contract`);
-        cw20Total = [...cw20Total, ...cw20Data];
         // Get more data when response data less than total data
         if (cw20Total.length < count?.aggregate?.count) {
+          cw20Total = [...cw20Total, ...cw20Data];
           payload = {
             offset: cw20Total.length,
           };
@@ -116,6 +116,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   getListToken() {
+    this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
@@ -169,10 +170,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                   nChainMarketCap: +tokenFind?.circulating_market_cap || 0,
                   volume: +tokenFind?.total_volume || 0,
                   price: +tokenFind?.current_price || 0,
-                  // isValueUp: data.price_change_percentage_24h < 0 ? false : true,
-                  // change: Number(data.price_change_percentage_24h.toString()),
-                  // isHolderUp: data.holders_change_percentage_24h < 0 ? false : true,
-                  //  holderChange: Number(data.holders_change_percentage_24h.toString()),
                   isHolderUp: true,
                   isValueUp: 0,
                   change: 0,
@@ -194,7 +191,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
               this.pageData.length = res?.length;
             });
           },
-          () => {},
+          (e) => {},
           () => {
             this.isLoading = false;
           },

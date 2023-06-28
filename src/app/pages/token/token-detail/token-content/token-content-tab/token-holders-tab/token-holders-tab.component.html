@@ -66,13 +66,13 @@
                         *ngIf="this.typeContract !== contractType.CW20"
                         href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                         class="text-clamp"
-                        >{{ data[template.matColumnDef] }}</a
+                        >{{ commonService.setNameTag(data[template.matColumnDef]) }}</a
                       >
                       <a
                         *ngIf="this.typeContract === contractType.CW20"
                         href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                         class="text-clamp"
-                        >{{ data[template.matColumnDef] }}</a
+                        >{{ commonService.setNameTag(data[template.matColumnDef]) }}</a
                       >
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
@@ -98,7 +98,10 @@
                       </ng-container>
                     </ng-container>
                     <ng-container *ngSwitchCase="'value'">
-                      <div [appBigNumber]=" data['balance']" [decimal]="decimalValue" [tokenPrice]="tokenDetail?.price"></div>
+                      <div
+                        [appBigNumber]="data['balance']"
+                        [decimal]="decimalValue"
+                        [tokenPrice]="tokenDetail?.price"></div>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       {{ data[template.matColumnDef] }}
