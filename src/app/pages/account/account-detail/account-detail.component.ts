@@ -353,8 +353,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     const halftime = 15000;
     this.accountService.getAccountDetail(this.currentAddress).subscribe(
       (res) => {
-        console.log(res);
-
         if (res.data.code === 200 && !res.data?.data) {
           this.isNoData = true;
           setTimeout(() => {
