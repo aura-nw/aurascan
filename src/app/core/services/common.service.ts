@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
 import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import { Globals } from 'src/app/global/global';
 
 @Injectable()
 export class CommonService {
@@ -24,6 +25,7 @@ export class CommonService {
   }`;
   envDB = this._environmentService.configValue.horoscopeSelectedChain;
   chainId = this._environmentService.configValue.chainId;
+  listNameTag = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;
@@ -107,5 +109,23 @@ export class CommonService {
 
   getDefaultImg() {
     return this._environmentService.configValue.image_s3 + 'images/aura__ntf-default-img.png';
+  }
+
+  getListNameTag(payload) {
+    return this._http.post<any>(`${this.apiUrl}/name-tag/get-name-tag`, payload);
+  }
+
+  setNameTag(address, listNameTag = []) {
+    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    return nameTag?.name_tag || address;
+  }
+
+  findNameTag(keySearch, listNameTag = []) {
+    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
+    if (this.listNameTag?.length > 0) {
+      const result = this.listNameTag?.find((k) => k.name_tag === keySearch)?.address;
+      return result;
+    }
   }
 }

@@ -10,6 +10,7 @@ import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { DROPDOWN_ELEMENT, IContractPopoverData, ITableContract } from 'src/app/core/models/contract.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
@@ -66,6 +67,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
     public translate: TranslateService,
     public global: Globals,
     private environmentService: EnvironmentService,
+    public commonService: CommonService
   ) {}
 
   ngOnChanges(): void {

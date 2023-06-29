@@ -17,12 +17,12 @@
             <div class="text--gray-4 body">Creator</div>
           </div>
           <div class="col-6 col-lg-auto">
-            <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-none d-lg-block">{{
-              codeIdDetail.creator
-            }}</a>
-            <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-lg-none">{{
-              codeIdDetail.creator | cutStringPipe : 8 : 8
-            }}</a>
+            <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-none d-lg-block">
+              {{ commonService.setNameTag(codeIdDetail.creator) }}
+            </a>
+            <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-lg-none">
+              {{ commonService.setNameTag(codeIdDetail.creator) | cutStringPipe : 8 : 8 }}
+            </a>
           </div>
         </div>
         <div class="row mt-2">

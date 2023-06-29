@@ -349,7 +349,7 @@
                               *ngSwitchCase="'delegator_address'"
                               class="text--primary cursor-pointer"
                               [routerLink]="['/account', data.delegator_address]">
-                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                              {{ commonService.setNameTag(data[template.matColumnDef], global.listNameTag) | cutStringPipe : 8 : 8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
                               {{ data[template.matColumnDef] | mask : 'separator.6' }}
@@ -376,7 +376,7 @@
                       [link]="'/account/' + data.delegator_address"
                       [content]="[
                         {
-                          label: data.delegator_address | cutStringPipe : 6 : 6,
+                          label: commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6,
                           info: ''
                         },
                         {
