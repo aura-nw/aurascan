@@ -66,7 +66,7 @@ export async function getNetworkFee(network, address, messageType, memo = ''): P
 
   let gasEstimation = 0;
   try {
-    const signer = window.getOfflineSignerOnlyAmino(network.chainId);
+    const signer = await window.getOfflineSignerAuto(network.chainId);
     const onlineClient = await SigningCosmWasmClient.connectWithSigner(network.rpc, signer);
     gasEstimation = await onlineClient.simulate(address, Array.isArray(messageType) ? messageType : [messageType], '');
   } catch (e) {
