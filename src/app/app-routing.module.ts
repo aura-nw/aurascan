@@ -35,10 +35,10 @@ const routes: Routes = [
         path: 'tokens',
         loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
       },
-      // {
-      //   path: 'statistics',
-      //   loadChildren: () => import('./pages/statistics/statistics.module').then((m) => m.StatisticsModule),
-      // },
+      {
+        path: 'statistics',
+        loadChildren: () => import('./pages/statistics/statistics.module').then((m) => m.StatisticsModule),
+      },
       {
         path: 'contracts',
         loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
