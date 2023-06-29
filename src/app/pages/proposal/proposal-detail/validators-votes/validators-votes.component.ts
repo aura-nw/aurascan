@@ -97,41 +97,31 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
           voteOption,
         })
         .pipe(
-          mergeMap((res) => {
-            if (!res) {
-              throw new Error();
-            }
-
+          map((res) => {
             const validator = res.validator;
-            const operatorAddressList = validator.map((validator) => validator.operator_address);
 
-            return this.validatorService.getValidatorInfoByList(operatorAddressList).pipe(
-              map((validatorInfo) => {
-                const validatorsMap = validator.map((item, index) => {
-                  const validator_name = item.description?.moniker;
-                  const timestamp = _.get(item, 'vote[0].updated_at');
-                  const vote_option = _.get(item, 'vote[0].vote_option');
-                  const txhash = _.get(item, 'vote[0].txhash');
-                  const operator_address = _.get(item, 'operator_address');
-                  const validator_identity = _.get(item, 'description.identity');
-                  const rank = index + 1;
-                  const image_url =
-                    _.find(validatorInfo.data, { operator_address })?.image_url || 'validator-default.svg';
+            const validatorsMap = validator.map((item, index) => {
+              const validator_name = item.description?.moniker;
+              const timestamp = _.get(item, 'vote[0].updated_at');
+              const vote_option = _.get(item, 'vote[0].vote_option');
+              const txhash = _.get(item, 'vote[0].txhash');
+              const operator_address = _.get(item, 'operator_address');
+              const validator_identity = _.get(item, 'description.identity');
+              const rank = index + 1;
+              const image_url = _.get(item, 'image_url');
 
-                  return {
-                    validator_name,
-                    timestamp,
-                    vote_option,
-                    txhash,
-                    operator_address,
-                    validator_identity,
-                    rank,
-                    image_url,
-                  };
-                });
-                return validatorsMap || null;
-              }),
-            );
+              return {
+                validator_name,
+                timestamp,
+                vote_option,
+                txhash,
+                operator_address,
+                validator_identity,
+                rank,
+                image_url,
+              };
+            });
+            return validatorsMap || null;
           }),
         )
         .subscribe(
