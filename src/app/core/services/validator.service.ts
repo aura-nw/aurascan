@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { LCD_COSMOS } from '../constants/url.constant';
 import { Globals } from 'src/app/global/global';
-import { map, shareReplay, tap } from 'rxjs/operators';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({
   providedIn: 'root',
@@ -16,15 +15,6 @@ export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
   stakingAPRSubject: BehaviorSubject<number>;
-
-  private cachedValidator$: Observable<
-    [
-      {
-        image_url: string;
-        operator_address: string;
-      },
-    ]
-  >;
 
   constructor(
     private http: HttpClient,
@@ -52,15 +42,11 @@ export class ValidatorService extends CommonService {
     }, 500);
   }
 
-  validators(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators`);
-  }
-
   getDataValidator(payload) {
     const operationsDoc = `
-    query auratestnet_validator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
+    query getDataValidator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
       ${this.envDB} {
-        validator(limit: $limit, offset: $offset, where: {operator_address: {_eq: $operatorAddress}}) {
+        validator(limit: $limit, offset: $offset, order_by: {tokens: desc}, where: {operator_address: {_eq: $operatorAddress}}) {
           account_address
           commission
           consensus_address
@@ -86,6 +72,18 @@ export class ValidatorService extends CommonService {
           unbonding_height
           unbonding_time
           uptime
+          missed_blocks_counter
+          image_url
+          vote_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+        validator_aggregate(where: {status: {_eq: "BOND_STATUS_BONDED"}}) {
+          aggregate {
+            count
+          }
         }
       }
     }
@@ -94,22 +92,52 @@ export class ValidatorService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: payload?.limit || 1,
+          limit: payload?.limit || 200,
           offset: payload?.offset || 0,
           operatorAddress: payload?.operatorAddress || null,
         },
-        operationName: 'auratestnet_validator',
+        operationName: 'getDataValidator',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  validatorsDetail(address: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators/${address}`);
+  getValidatorByListAddress(arrAddress) {
+    const operationsDoc = `
+    query getValidatorByListAddress($arrAddress: [String!]) {
+      ${this.envDB} {
+        validator(where: {operator_address: {_in: $arrAddress}}, order_by: {tokens: desc}) {
+          account_address
+          commission
+          consensus_address
+          consensus_hex_address
+          created_at
+          delegator_shares
+          delegators_count
+          delegators_last_height
+          description
+          jailed
+          operator_address
+          status
+          tokens
+          image_url
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          arrAddress: arrAddress || null,
+        },
+        operationName: 'getValidatorByListAddress',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
     const operationsDoc = `
-    query auratestnet_powerevent($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
+    query validatorsDetailListPower($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
       ${this.envDB} {
         power_event(order_by: {height: desc}, where: {_or: [{validatorDst: {operator_address: {_eq: $operator_address}}}, {validatorSrc: {operator_address: {_eq: $operator_address}}}], id: {_lt: $nextKey}}, limit: $limit) {
           id
@@ -138,7 +166,7 @@ export class ValidatorService extends CommonService {
           limit: limit,
           nextKey: nextKey,
         },
-        operationName: 'auratestnet_powerevent',
+        operationName: 'validatorsDetailListPower',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -151,21 +179,6 @@ export class ValidatorService extends CommonService {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.limit=${pageLimit}&pagination.key=${nextKey}&pagination.reverse=true`,
     );
-  }
-
-  getValidatorAvatar(validatorAddress: string): string {
-    return `${this.environmentService.configValue.validator_s3}/${validatorAddress}.png`;
-  }
-
-  getValidatorInfoByList(addressList: string[]): Observable<any> {
-    // Cache validator info, only get on the first time
-    if (!this.cachedValidator$) {
-      this.cachedValidator$ = this.http
-        .get<any>(`${this.apiUrl}/validators/validator-info?address=${addressList}`)
-        .pipe(shareReplay(1));
-    }
-
-    return this.cachedValidator$;
   }
 
   getUptimeLCD(block = null) {
@@ -206,5 +219,13 @@ export class ValidatorService extends CommonService {
 
   getListUndelegateLCD(address) {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/delegators/${address}/unbonding_delegations`);
+  }
+
+  getDelegationLCD(address) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DELEGATION}/${address}`);
+  }
+
+  getRewardLCD(address) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.REWARD}/${address}/rewards`);
   }
 }

@@ -64,7 +64,7 @@ export class AppComponent implements OnInit {
 
   getListNameTag(): void {
     const payload = {
-      limit: 200,
+      limit: 500,
       keyword: [],
       nextKey: 0,
     };

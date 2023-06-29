@@ -113,9 +113,9 @@ export class TransactionDetailComponent implements OnInit {
   }
 
   getListValidator(): void {
-    this.validatorService.validators().subscribe((res) => {
-      if (res.data?.length > 0) {
-        this.listValidator = res.data;
+    this.validatorService.getDataValidator(null).subscribe((res) => {
+      if (res.validator?.length > 0) {
+        this.listValidator = res.validator;
       }
     });
   }

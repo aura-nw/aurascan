@@ -671,7 +671,7 @@ export class TransactionMessagesComponent implements OnInit {
 
   getNameValidator(address) {
     const validatorSrcAddress = this.listValidator?.find((f) => f.operator_address === address);
-    return validatorSrcAddress?.title || '';
+    return validatorSrcAddress?.description?.moniker || '';
   }
 
   checkGetReward(): void {
