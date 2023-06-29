@@ -109,7 +109,7 @@ export class ContractsRegisterComponent implements OnInit {
   }
 
   getListContract() {
-    this.loading = true;
+    this.textSearch = this.textSearch?.trim();
     let payload = {
       account_address: this.userAddress,
       limit: this.pageData.pageSize,

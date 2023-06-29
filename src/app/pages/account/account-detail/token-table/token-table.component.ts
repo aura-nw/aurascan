@@ -67,6 +67,7 @@ export class TokenTableComponent implements OnChanges {
   }
 
   getListToken() {
+    this.textSearch = this.textSearch?.trim();
     const payload = {
       account_address: this.address,
       limit: this.pageData.pageSize,
@@ -119,11 +120,6 @@ export class TokenTableComponent implements OnChanges {
 
   handlePageEvent(e: any) {
     this.pageData.pageIndex = e.pageIndex;
-    this.getKeySearch();
-  }
-
-  getKeySearch() {
-    this.textSearch = this.textSearch?.trim();
     this.getListToken();
   }
 
@@ -131,7 +127,7 @@ export class TokenTableComponent implements OnChanges {
     if (this.paginator.pageIndex !== 0) {
       this.paginator.firstPage();
     } else {
-      this.getKeySearch();
+      this.getListToken();
     }
   }
 
