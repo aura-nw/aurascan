@@ -60,7 +60,7 @@
                           <app-loading-image
                             [identity]="data.validator_src_identity"
                             [appClass]="data['validator_src_jailed'] ? 'jailed' : ''"
-                            [srcImg]="data.src_image_url"></app-loading-image>
+                            [srcImg]="data.image_src_url"></app-loading-image>
                         </div>
                       </div>
                       <span [class.text-jailed]="data['validator_src_jailed']">
@@ -76,7 +76,7 @@
                           <app-loading-image
                             [identity]="data.validator_dst_identity"
                             [appClass]="data['validator_dst_jailed'] ? 'jailed' : ''"
-                            [srcImg]="data.dst_image_url"></app-loading-image>
+                            [srcImg]="data.image_dst_url"></app-loading-image>
                         </div>
                       </div>
                       <span [class.text-jailed]="data['validator_dst_jailed']">
@@ -185,7 +185,7 @@
                             <app-loading-image
                               [appClass]="item['validator_src_jailed'] ? 'jailed' : ''"
                               [identity]="item['validator_src_identity']"
-                              [srcImg]="item['src_image_url']">
+                              [srcImg]="item['image_src_url']">
                             </app-loading-image>
                           </span>
                         </div>
@@ -205,7 +205,7 @@
                             <app-loading-image
                               [appClass]="item['validator_dst_jailed'] ? 'jailed' : ''"
                               [identity]="item['validator_dst_identity']"
-                              [srcImg]="item['dst_image_url']">
+                              [srcImg]="item['image_dst_url']">
                             </app-loading-image>
                           </span>
                         </div>

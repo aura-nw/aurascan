@@ -38,6 +38,7 @@ export class ProposalService extends CommonService {
           }
           description
           operator_address
+          image_url
         }
       }
     }
@@ -113,6 +114,27 @@ export class ProposalService extends CommonService {
           type,
         },
         operationName: 'queryProposal',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getCountProposal() {
+    const operationsDoc = `
+    query getCountProposal {
+      ${this.envDB} {
+        proposal_aggregate {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {},
+        operationName: 'getCountProposal',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
