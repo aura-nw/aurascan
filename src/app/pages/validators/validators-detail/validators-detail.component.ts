@@ -141,19 +141,19 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   getDetail(isInit = false): void {
     if (!this.isLeftPage) {
-      const payload = {
-        limit: 1,
-        offset: 0,
-        operatorAddress: this.currentAddress,
-      };
-      this.validatorService.getDataValidator(payload).subscribe(
+      this.validatorService.getDataValidator(null).subscribe(
         (res) => {
           if (res.status === 404 || res.validator?.length === 0) {
             this.router.navigate(['/']);
             return;
           }
 
-          const data = res.validator[0];
+          const arrActive = res.validator.filter((k) => k.status === this.typeActive);
+          const arrInactive = res.validator.filter((k) => k.status !== this.typeActive && !k.jailed);
+          const arrJail = res.validator.filter((k) => k.status !== this.typeActive && k.jailed);
+          const arrRank = [...arrActive, ...arrInactive, ...arrJail];
+
+          const data = res.validator.find((k) => k.operator_address === this.currentAddress);
           this.currentValidatorDetail = {
             ...data,
             self_bonded: balanceOf(data.self_delegation_balance),
@@ -167,9 +167,11 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
             percent_power: data.percent_voting_power?.toFixed(2),
             bonded_height: data.start_height || 1,
             status: data.status === this.typeActive ? this.statusValidator.Active : data.status,
+            rank: arrRank?.findIndex((k) => k.operator_address === this.currentAddress) + 1 || 1,
           };
 
-          const percentSelfBonded = (this.currentValidatorDetail.self_delegation_balance / this.currentValidatorDetail.tokens) * 100;
+          const percentSelfBonded =
+            (this.currentValidatorDetail.self_delegation_balance / this.currentValidatorDetail.tokens) * 100;
           this.currentValidatorDetail.percent_self_bonded = percentSelfBonded.toFixed(2) + '%';
 
           if (this.currentValidatorDetail?.consensus_hex_address && isInit) {
