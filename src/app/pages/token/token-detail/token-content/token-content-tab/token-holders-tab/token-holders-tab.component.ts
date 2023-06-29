@@ -9,6 +9,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { Globals } from '../../../../../../global/global';
 import * as _ from 'lodash';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -59,6 +60,7 @@ export class TokenHoldersTabComponent implements OnInit {
     public global: Globals,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

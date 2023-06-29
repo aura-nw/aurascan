@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProjectDetail } from 'src/app/core/models/project';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-token-summary',
@@ -10,7 +11,7 @@ export class TokenSummaryComponent implements OnInit {
   @Input() tokenDetail: any;
   projectDetail: ProjectDetail;
 
-  constructor() {}
+  constructor(public commonService: CommonService) {}
 
   ngOnInit(): void {}
 }

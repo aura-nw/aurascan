@@ -86,6 +86,7 @@ export class SoulboundContractListComponent implements OnInit {
   }
 
   getListSmartContract() {
+    this.textSearch = this.searchValue = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,

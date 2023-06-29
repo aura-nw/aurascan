@@ -22,17 +22,18 @@ export class AppComponent implements OnInit {
     private commonService: CommonService,
     private globals: Globals,
     private tokenService: TokenService,
-    // private env: EnvironmentService
-    ) {}
+  ) // private env: EnvironmentService
+  {}
   ngOnInit(): void {
+    this.getListNameTag();
     this.getInfoCommon();
     this.getPriceToken();
 
     setInterval(() => {
+      this.getListNameTag();
       this.getInfoCommon();
       this.getPriceToken();
     }, 60000);
-
 
     // if (this.isTestnet) {
     //   let el = document.createElement('div');
@@ -58,6 +59,17 @@ export class AppComponent implements OnInit {
 
     this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.BTC).subscribe((res) => {
       this.globals.price.btc = res.data || 0;
+    });
+  }
+
+  getListNameTag(): void {
+    const payload = {
+      limit: 200,
+      keyword: [],
+      nextKey: 0,
+    };
+    this.commonService.getListNameTag(payload).subscribe((res) => {
+      this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
     });
   }
 }

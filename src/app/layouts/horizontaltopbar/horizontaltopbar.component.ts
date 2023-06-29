@@ -15,6 +15,7 @@ import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -80,6 +81,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
+    private commonService: CommonService,
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -323,6 +325,14 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     const regexRule = VALIDATORS.HASHRULE;
     if (this.searchValue) {
       this.searchValue = this.searchValue.trim();
+      const addressNameTag = this.commonService.findNameTag(this.searchValue);
+      if (addressNameTag?.length > 0) {
+        let urlLink = addressNameTag.length === LENGTH_CHARACTER.CONTRACT ? 'contracts' : 'account';
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate([urlLink, addressNameTag]);
+        });
+      }
+
       let isNumber = /^\d+$/.test(this.searchValue);
       if (regexRule.test(this.searchValue)) {
         //check is start with 'aura' and length >= normal address

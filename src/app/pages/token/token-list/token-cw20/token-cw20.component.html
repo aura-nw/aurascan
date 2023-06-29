@@ -73,10 +73,6 @@
                         class="ml-1 mb-1"
                         *ngIf="element.verify_status === 'VERIFIED'" />
                     </div>
-
-                    <!-- <div class="body-02 fw-normal caption-mob mb-0 text--gray-6 pr-5 desc">
-                      {{ element.description }}
-                    </div> -->
                   </div>
                 </div>
               </td>
@@ -178,7 +174,7 @@
         </app-paginator>
         <!-- No data -->
         <ng-template #noValues>
-          <app-table-no-data *ngif="!isLoading"></app-table-no-data>
+          <app-table-no-data></app-table-no-data>
         </ng-template>
       </div>
     </div>

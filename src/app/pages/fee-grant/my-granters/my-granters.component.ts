@@ -84,6 +84,7 @@ export class MyGrantersComponent implements OnInit {
   }
 
   getListGrant() {
+    this.textSearch = this.textSearch?.trim();
     this.feeGrantService
       .getListFeeGrants(
         {

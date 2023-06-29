@@ -9,6 +9,7 @@ import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { Globals } from 'src/app/global/global';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -21,7 +22,7 @@ export class ContractService extends CommonService {
     return this.contract$.value;
   }
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  constructor(private http: HttpClient, private environmentService: EnvironmentService, private global: Globals) {
     super(http, environmentService);
     this.contractObservable = this.contract$.asObservable();
   }
@@ -50,6 +51,11 @@ export class ContractService extends CommonService {
     let typeQuery = isFilterCW4973
       ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],'
       : 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}';
+
+    const addressNameTag = this.findNameTag(keyword, this.global.listNameTag);
+    if (addressNameTag?.length > 0) {
+      keyword = addressNameTag;
+    }
 
     if (keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
       address = keyword;
@@ -192,7 +198,7 @@ export class ContractService extends CommonService {
         variables: {
           code_id: payload.codeId,
           limit: payload.limit,
-          offset: payload.offset
+          offset: payload.offset,
         },
         operationName: 'queryListContractByCodeID',
       })
@@ -281,7 +287,7 @@ export class ContractService extends CommonService {
   }
 
   getListCodeId(data: any): Observable<any> {
-    const keyword = data?.keyword ? data?.keyword : null;
+    let keyword = data?.keyword ? data?.keyword : null;
     let subQuery = '';
     if (keyword) {
       if (keyword.length >= LENGTH_CHARACTER.CONTRACT) {
@@ -289,10 +295,10 @@ export class ContractService extends CommonService {
       } else if (keyword.length >= LENGTH_CHARACTER.ADDRESS) {
         subQuery = `creator: {_eq: "${keyword}"}`;
       } else {
-        subQuery = `code_id: {_eq: ${keyword}}`
-      };
+        subQuery = `code_id: {_eq: ${keyword}}`;
+      }
     }
-    
+
     const query = `query queryContractCode($limit: Int, $offset: Int) {
       ${this.envDB} {
         code(where: {${subQuery}}, order_by: {code_id: desc}, limit: $limit, offset: $offset) {
@@ -323,7 +329,7 @@ export class ContractService extends CommonService {
           } 
         } 
       } 
-    }`
+    }`;
     return this.http
       .post<any>(this.graphUrl, {
         query: query,
@@ -362,7 +368,7 @@ export class ContractService extends CommonService {
           }
         }
       } 
-    }`
+    }`;
     return this.http
       .post<any>(this.graphUrl, {
         query: query,

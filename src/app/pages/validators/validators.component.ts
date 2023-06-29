@@ -288,6 +288,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       result = [...lstInactive, ...lstJail];
     }
 
+    this.textSearch = this.textSearch?.trim();
     if (this.textSearch?.length > 0) {
       this.dataSource.data = result?.filter(
         (f) => f.title.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
@@ -440,7 +441,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         validator_name: validatorDetail.description?.moniker,
         validator_address: validatorDetail.operator_address,
         image_url: validatorDetail.image_url,
-        jailed: validatorDetail.jailed
+        jailed: validatorDetail.jailed,
       };
 
       if (dataReward?.reward[0]?.amount) {
