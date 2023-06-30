@@ -128,4 +128,13 @@ export class CommonService {
       return result;
     }
   }
+
+  checkDisplayTooltip(address): boolean {
+    let result = true;
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    if (nameTag?.name_tag !== address && nameTag?.name_tag?.length > 16) {
+      result = false;
+    }
+    return result;
+  }
 }

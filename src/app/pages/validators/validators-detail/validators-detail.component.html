@@ -106,7 +106,10 @@
           <div class="row">
             <div class="col-6">Website</div>
             <div class="col-6 text-end text-lg-start">
-              <a class="text--primary cursor-pointer" href="{{ currentValidatorDetail?.description?.website }}" target="_blank">
+              <a
+                class="text--primary cursor-pointer"
+                href="{{ currentValidatorDetail?.description?.website }}"
+                target="_blank">
                 {{ currentValidatorDetail?.description?.website }}
               </a>
             </div>
@@ -348,8 +351,14 @@
                             <a
                               *ngSwitchCase="'delegator_address'"
                               class="text--primary cursor-pointer"
+                              [matTooltipPosition]="'above'"
+                              [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
                               [routerLink]="['/account', data.delegator_address]">
-                              {{ commonService.setNameTag(data[template.matColumnDef], global.listNameTag) | cutStringPipe : 8 : 8 }}
+                              {{
+                                commonService.setNameTag(data[template.matColumnDef], global.listNameTag)
+                                  | cutStringPipe : 8 : 8
+                              }}
                             </a>
                             <div *ngSwitchCase="'amount'">
                               {{ data[template.matColumnDef] | mask : 'separator.6' }}

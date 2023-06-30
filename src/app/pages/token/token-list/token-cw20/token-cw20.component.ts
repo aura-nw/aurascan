@@ -149,9 +149,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
         .pipe(takeLast(1))
         .subscribe(
           (res) => {
-            const listAddress = res?.map((item) => item.smart_contract.address);
-            const reqPayload = { contractAddress: listAddress };
-            this.tokenService.getTokenMarketData(reqPayload).subscribe((tokenMarket) => {
+            this.tokenService.getTokenMarketData().subscribe((tokenMarket) => {
               // Flat data for mapping response api
               const dataFlat = res?.map((item) => {
                 const tokenFind = tokenMarket?.find(
