@@ -76,6 +76,8 @@ export class ChartStatsComponent implements OnInit {
         timeVisible: false,
         secondsVisible: false,
         borderColor: '#494C58',
+        fixLeftEdge: true,
+        fixRightEdge: true,
       },
       handleScroll: false
     });
@@ -129,6 +131,8 @@ export class ChartStatsComponent implements OnInit {
         timeVisible: false,
         secondsVisible: false,
         borderColor: '#494C58',
+        fixLeftEdge: true,
+        fixRightEdge: true,
       },
       handleScroll: false
     });
@@ -180,6 +184,8 @@ export class ChartStatsComponent implements OnInit {
         timeVisible: true,
         secondsVisible: true,
         borderColor: '#494C58',
+        fixLeftEdge: true,
+        fixRightEdge: true,
       },
       handleScroll: false
     });
