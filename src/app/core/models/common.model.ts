@@ -13,6 +13,7 @@ export interface IResponsesError {
   error: {
     statusCode: number;
     message: string;
+    Message?: string;
     errorName: string;
     path: string;
     requestId: string;
