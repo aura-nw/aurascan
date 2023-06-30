@@ -4,7 +4,7 @@
     <div class="body-02 text--gray-5 d-flex">
       for
       <a class="text--primary ml-1 text-break" [routerLink]="['/contracts', contractAddress]">
-        {{ contractAddress }}
+        {{ commonService.setNameTag(contractAddress) }}
       </a>
     </div>
   </div>

@@ -7,6 +7,7 @@ import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.consta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { convertDataTransaction } from 'src/app/global/global';
 import { TableData } from 'src/app/shared/components/contract-table/contract-table.component';
@@ -62,6 +63,7 @@ export class ContractsTransactionsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private transactionService: TransactionService,
+    public commonService: CommonService
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
