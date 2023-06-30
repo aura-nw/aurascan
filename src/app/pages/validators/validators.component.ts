@@ -388,11 +388,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     const halftime = 10000;
     const currentUrl = this.router.url;
     if (this.userAddress && currentUrl.includes('/validators')) {
-      forkJoin({
-        dataWallet: this.accountService.getAccountDetail(this.userAddress),
-        // listDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
-      }).subscribe(
-        ({ dataWallet }) => {
+      this.accountService.getAccountDetail(this.userAddress).subscribe(
+        (dataWallet) => {
           if (dataWallet) {
             this.dataDelegate = {
               ...this.dataDelegate,
