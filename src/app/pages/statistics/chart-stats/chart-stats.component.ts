@@ -29,7 +29,7 @@ export class ChartStatsComponent implements OnInit {
 
   currTime = new Date();
   currTimeMs = Date.parse(this.currTime + '');
-  prevTime = new Date(Date.now() - 8 * 24 * 60 * 60 * 1000);
+  prevTime = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000);
   prevTimeMs = Date.parse(this.prevTime + '');
 
   constructor(public translate: TranslateService, private statisticService: StatisticService) {}
@@ -76,7 +76,10 @@ export class ChartStatsComponent implements OnInit {
         timeVisible: false,
         secondsVisible: false,
         borderColor: '#494C58',
+        fixLeftEdge: true,
+        fixRightEdge: true,
       },
+      handleScroll: false
     });
     this.dailyTransactionChartSeries = this.dailyTransactionChart.addAreaSeries({});
 
@@ -128,7 +131,10 @@ export class ChartStatsComponent implements OnInit {
         timeVisible: false,
         secondsVisible: false,
         borderColor: '#494C58',
+        fixLeftEdge: true,
+        fixRightEdge: true,
       },
+      handleScroll: false
     });
     this.uniqueAddressChartSeries = this.uniqueAddressChart.addAreaSeries({});
     this.uniqueAddressChartSeries.applyOptions({
@@ -178,7 +184,10 @@ export class ChartStatsComponent implements OnInit {
         timeVisible: true,
         secondsVisible: true,
         borderColor: '#494C58',
+        fixLeftEdge: true,
+        fixRightEdge: true,
       },
+      handleScroll: false
     });
     this.dailyAddressChartSeries = this.dailyAddressChart.addAreaSeries({});
     this.dailyAddressChartSeries.applyOptions({
