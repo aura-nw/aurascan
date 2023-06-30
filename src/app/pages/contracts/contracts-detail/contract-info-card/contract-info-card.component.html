@@ -35,7 +35,12 @@
         <tr class="d-none d-lg-table-row">
           <td class="text--gray-5 body-02-mob">Contract Creator:</td>
           <td colspan="2">
-            <a class="text--primary" [routerLink]="['/account', contractDetail?.creator]">
+            <a
+              class="text--primary"
+              [routerLink]="['/account', contractDetail?.creator]"
+              [matTooltipPosition]="'above'"
+              [matTooltipDisabled]="commonService.checkDisplayTooltip(contractDetail?.creator)"
+              matTooltip="{{ commonService.setNameTag(contractDetail?.creator) }}">
               {{ commonService.setNameTag(contractDetail?.creator) | cutStringPipe : 8 : 8 }}
             </a>
             at txn

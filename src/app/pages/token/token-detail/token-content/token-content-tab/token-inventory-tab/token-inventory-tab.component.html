@@ -38,6 +38,9 @@
                 </a>
                 <a
                   class="small-text text--primary d-none d-lg-inline hover-link"
+                  [matTooltipPosition]="'above'"
+                  [matTooltipDisabled]="commonService.checkDisplayTooltip(item.owner)"
+                  matTooltip="{{ commonService.setNameTag(item.owner) }}"
                   href="/tokens/{{ linkToken }}/{{ item.contract_address }}?a={{ item.owner }}"
                   >{{ commonService.setNameTag(item.owner) | cutStringPipe : 8 : 8 }}
                 </a>

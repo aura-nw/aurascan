@@ -354,8 +354,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
             this.router.navigate(['blocks', this.searchValue]);
           });
         }
-      } else {
-        this.searchValue = '';
       }
     }
   }

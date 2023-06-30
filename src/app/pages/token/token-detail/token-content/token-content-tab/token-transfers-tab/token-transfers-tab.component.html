@@ -103,11 +103,19 @@
                           <div class="d-flex align-items-center">
                             <a
                               class="text--primary txt-from-address content-transfer"
+                              [matTooltipPosition]="'above'"
+                              [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
                               href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                               *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
                               {{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}
                             </a>
-                            <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">
+                            <span
+                              [matTooltipPosition]="'above'"
+                              [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
+                              *ngIf="data.modeExecute === modeExecuteTransaction.Mint"
+                              class="content-transfer">
                               {{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}
                             </span>
                             <span class="content-transfer" *ngIf="!data[template.matColumnDef]"> - </span>
@@ -141,6 +149,9 @@
                             <a
                               class="text--primary"
                               href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                              [matTooltipPosition]="'above'"
+                              [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
                               *ngIf="
                                 data.modeExecute !== modeExecuteTransaction.Burn &&
                                 data.modeExecute !== modeExecuteTransaction.UnEquip &&
@@ -149,11 +160,14 @@
                               {{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}
                             </a>
                             <span
+                              [matTooltipPosition]="'above'"
+                              [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
                               *ngIf="
                                 data.modeExecute === modeExecuteTransaction.Burn ||
                                 data.modeExecute === modeExecuteTransaction.UnEquip
                               "
-                              >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span
+                              >{{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}</span
                             >
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
                           </div>
