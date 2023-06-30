@@ -102,7 +102,10 @@
                     <a
                       [class.text--primary]="data[template.matColumnDef]"
                       [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                      [class.disabled-link]="!data[template.matColumnDef]">
+                      [class.disabled-link]="!data[template.matColumnDef]"
+                      [matTooltipPosition]="'above'"
+                      [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                      matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}">
                       {{ (commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8) || '-' }}
                     </a>
                   </ng-container>

@@ -64,7 +64,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
         this.pageEvent(0);
       });

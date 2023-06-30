@@ -35,7 +35,10 @@
                 <ng-container *ngIf="template.isUrl && template.isShort">
                   <a
                     [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                    [class.disabled-link]="!data[template.matColumnDef]">
+                    [class.disabled-link]="!data[template.matColumnDef]"
+                    [matTooltipPosition]="'above'"
+                    [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                    matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}">
                     <ng-container *ngIf="template.isNameTag">
                       {{ (commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8) || '-' }}
                     </ng-container>
