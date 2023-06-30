@@ -4,15 +4,15 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-token-cw721',
@@ -59,7 +59,7 @@ export class TokenCw721Component implements OnInit {
 
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
         this.pageEvent(0);
       });
