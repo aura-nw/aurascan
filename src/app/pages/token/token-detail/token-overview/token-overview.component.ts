@@ -4,6 +4,7 @@ import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-token-overview',
@@ -27,10 +28,11 @@ export class TokenOverviewComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
-    this.getTotalHolder();
     if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
       this.getTotalSupply();
       this.getHolderNFT();
+    } else {
+      this.getTotalHolder();
     }
 
     //set price change
@@ -50,13 +52,10 @@ export class TokenOverviewComponent implements OnInit {
   }
 
   getTotalHolder() {
-    this.tokenService
-      .getListTokenHolder(20, 0, this.tokenDetail.type, this.tokenDetail?.contract_address)
-      .subscribe((res) => {
-        if (res && res.data?.resultAsset?.length > 0) {
-          this.tokenDetail['holder'] = res.data?.resultCount || 0;
-        }
-      });
+    this.tokenService.getListTokenHolder(20, 0, this.tokenDetail?.contract_address).subscribe((res) => {
+      const data = _.get(res, `cw20_holder_aggregate`);
+      this.tokenDetail['holder'] = data?.aggregate?.count || 0;
+    });
   }
 
   getTotalSupply() {

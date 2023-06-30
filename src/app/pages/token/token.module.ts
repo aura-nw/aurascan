@@ -32,9 +32,6 @@ import { TokenContentComponent } from './token-detail/token-content/token-conten
 import { TokenDetailComponent } from './token-detail/token-detail.component';
 import { TokenOverviewComponent } from './token-detail/token-overview/token-overview.component';
 import { TokenSummaryComponent } from './token-detail/token-summary/token-summary.component';
-import { TokenHoldingNftComponent } from './token-holding/token-holding-nft/token-holding-nft.component';
-import { TokenHoldingWalletComponent } from './token-holding/token-holding-wallet/token-holding-wallet.component';
-import { TokenHoldingComponent } from './token-holding/token-holding.component';
 import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component';
 import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
@@ -52,9 +49,6 @@ import { TokenRoutingModule } from './token-routing.module';
     TokenTransfersTabComponent,
     TokenInfoTabComponent,
     TokenContractTabComponent,
-    TokenHoldingComponent,
-    TokenHoldingWalletComponent,
-    TokenHoldingNftComponent,
     TokenInventoryComponent,
     NFTDetailComponent,
     PopupShareComponent,

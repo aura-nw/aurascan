@@ -34,12 +34,15 @@
                 <a
                   class="small-text text--primary d-lg-none hover-link"
                   href="/tokens/{{ linkToken }}/{{ item.contract_address }}?a={{ item.owner }}"
-                  >{{ item.owner | cutStringPipe : 6 : 6 }}
+                  >{{ commonService.setNameTag(item.owner) | cutStringPipe : 6 : 6 }}
                 </a>
                 <a
                   class="small-text text--primary d-none d-lg-inline hover-link"
+                  [matTooltipPosition]="'above'"
+                  [matTooltipDisabled]="commonService.checkDisplayTooltip(item.owner)"
+                  matTooltip="{{ commonService.setNameTag(item.owner) }}"
                   href="/tokens/{{ linkToken }}/{{ item.contract_address }}?a={{ item.owner }}"
-                  >{{ item.owner | cutStringPipe : 8 : 8 }}
+                  >{{ commonService.setNameTag(item.owner) | cutStringPipe : 8 : 8 }}
                 </a>
               </div>
             </div>

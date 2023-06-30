@@ -12,6 +12,7 @@ import { TableTemplate } from '../../../core/models/common.model';
 import { ContractService } from '../../../core/services/contract.service';
 import { shortenAddress } from '../../../core/utils/common/shorten';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-contracts-list',
@@ -20,13 +21,13 @@ import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 })
 export class ContractsListComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true },
+    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },
     { matColumnDef: 'name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
     { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
     { matColumnDef: 'contract_verification', headerCellDef: 'Verified' },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', isShort: true },
+    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', isShort: true, isNameTag: true },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -50,6 +51,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     public translate: TranslateService,
     private contractService: ContractService,
     private datePipe: DatePipe,
+    public commonService: CommonService
   ) {}
 
   ngOnDestroy(): void {
@@ -62,7 +64,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
         this.pageEvent(0);
       });
@@ -73,11 +75,12 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   }
 
   getListContract() {
+    this.textSearch = this.textSearch?.trim();
     let payload = {
       limit: this.pageData.pageSize,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
       keyword: this.textSearch,
-      contractType: this.filterButtons?.length ? this.filterButtons : null,
+      contractType: this.filterButtons?.length > 0 && this.filterButtons?.length < 4 ? this.filterButtons : null,
     };
 
     this.contractService.getListContract(payload).subscribe((res) => {

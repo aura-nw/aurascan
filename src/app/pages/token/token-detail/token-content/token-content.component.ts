@@ -8,6 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-token-content',
@@ -40,7 +41,7 @@ export class TokenContentComponent implements OnInit {
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   linkToken = 'token-nft';
   activeTabID = 0;
-  textPlaceHolder = 'Filter Address/ TX Hash';
+  textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -52,6 +53,7 @@ export class TokenContentComponent implements OnInit {
     private environmentService: EnvironmentService,
     public global: Globals,
     private layout: BreakpointObserver,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +70,7 @@ export class TokenContentComponent implements OnInit {
       this.paramQuery = params?.a || '';
       this.searchTemp = this.paramQuery;
       this.handleSearch();
+      this.searchTemp = this.commonService.setNameTag(this.searchTemp);
     });
 
     if (localStorage.getItem('isVerifyTab') == 'true') {

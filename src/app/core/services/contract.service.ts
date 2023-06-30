@@ -9,6 +9,7 @@ import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { Globals } from 'src/app/global/global';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -21,9 +22,8 @@ export class ContractService extends CommonService {
     return this.contract$.value;
   }
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  constructor(private http: HttpClient, private environmentService: EnvironmentService, private global: Globals) {
     super(http, environmentService);
-
     this.contractObservable = this.contract$.asObservable();
   }
 
@@ -50,7 +50,14 @@ export class ContractService extends CommonService {
     const isFilterCW4973 = contractType?.includes('CW4973');
     let typeQuery = isFilterCW4973
       ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],'
-      : 'code: {type: {_in: $type}},';
+      : contractType?.includes('CW721') || contractType?.includes('CW20')
+      ? 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}'
+      : 'code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}';
+
+    const addressNameTag = this.findNameTag(keyword, this.global.listNameTag);
+    if (addressNameTag?.length > 0) {
+      keyword = addressNameTag;
+    }
 
     if (keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
       address = keyword;
@@ -117,6 +124,10 @@ export class ContractService extends CommonService {
           instantiate_hash
           name     
           cw721_contract {
+            name
+            symbol
+          }
+          cw20_contract {
             name
             symbol
           }
@@ -189,7 +200,7 @@ export class ContractService extends CommonService {
         variables: {
           code_id: payload.codeId,
           limit: payload.limit,
-          offset: payload.offset
+          offset: payload.offset,
         },
         operationName: 'queryListContractByCodeID',
       })
@@ -239,7 +250,7 @@ export class ContractService extends CommonService {
 
   getNFTDetail(address, tokenId): Observable<any> {
     const contractDoc = `
-    query CW721Owner($address: String, $tokenId: String) {
+    query queryCW721Owner($address: String, $tokenId: String) {
       ${this.envDB} { 
         data: cw721_token(where: { cw721_contract: {smart_contract: {address: {_eq: $address}}}, token_id: {_eq: $tokenId}}) { 
         id
@@ -268,7 +279,7 @@ export class ContractService extends CommonService {
           address: address,
           tokenId: tokenId,
         },
-        operationName: 'CW721Owner',
+        operationName: 'queryCW721Owner',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -277,12 +288,8 @@ export class ContractService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/contracts/verify-code-id/${codeId}`);
   }
 
-  getListCodeID(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/contract-code/list`, data);
-  }
-
   getListCodeId(data: any): Observable<any> {
-    const keyword = data?.keyword ? data?.keyword : null;
+    let keyword = data?.keyword ? data?.keyword : null;
     let subQuery = '';
     if (keyword) {
       if (keyword.length >= LENGTH_CHARACTER.CONTRACT) {
@@ -290,11 +297,11 @@ export class ContractService extends CommonService {
       } else if (keyword.length >= LENGTH_CHARACTER.ADDRESS) {
         subQuery = `creator: {_eq: "${keyword}"}`;
       } else {
-        subQuery = `code_id: {_eq: ${keyword}}`
-      };
+        subQuery = `code_id: {_eq: ${keyword}}`;
+      }
     }
-    
-    const query = `query ContractCode($limit: Int, $offset: Int) {
+
+    const query = `query queryContractCode($limit: Int, $offset: Int) {
       ${this.envDB} {
         code(where: {${subQuery}}, order_by: {code_id: desc}, limit: $limit, offset: $offset) {
           code_id
@@ -324,7 +331,7 @@ export class ContractService extends CommonService {
           } 
         } 
       } 
-    }`
+    }`;
     return this.http
       .post<any>(this.graphUrl, {
         query: query,
@@ -332,13 +339,13 @@ export class ContractService extends CommonService {
           limit: data?.limit,
           offset: data?.offset,
         },
-        operationName: 'ContractCode',
+        operationName: 'queryContractCode',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getCodeIDDetail(codeId: number): Observable<any> {
-    const query = `query ContractCodeDetail($codeId: Int) {
+    const query = `query queryContractCodeDetail($codeId: Int) {
       ${this.envDB} {
         code(where: {code_id: {_eq: ${codeId}}}) {
           code_id
@@ -363,12 +370,12 @@ export class ContractService extends CommonService {
           }
         }
       } 
-    }`
+    }`;
     return this.http
       .post<any>(this.graphUrl, {
         query: query,
         variables: {},
-        operationName: 'ContractCodeDetail',
+        operationName: 'queryContractCodeDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

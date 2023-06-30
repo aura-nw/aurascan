@@ -9,8 +9,9 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
+import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-token-cw4973',
@@ -42,6 +43,7 @@ export class TokenCw4973Component implements OnInit {
     public global: Globals,
     public tokenService: TokenService,
     public soulboundService: SoulboundService,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -65,11 +67,18 @@ export class TokenCw4973Component implements OnInit {
   }
 
   getTokenData() {
-    const payload = {
+    this.textSearch = this.textSearch?.trim();
+    let payload = {
       limit: this.pageData.pageSize,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
       keyword: this.textSearch,
     };
+
+    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    if (addressNameTag?.length > 0) {
+      payload['keyword'] = addressNameTag;
+    }
+
     this.soulboundService.getListABT(payload).subscribe((res) => {
       this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
       this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;

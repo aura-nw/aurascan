@@ -3,8 +3,8 @@
     <app-user-wallet-info
       [breakpoint]="breakpoint"
       [userAddress]="userAddress"
-      [arrayDelegate]="arrayDelegate"
       [dataDelegate]="dataDelegate"
+      [dataUserDelegate]="dataUserDelegate"
       [lstUndelegate]="lstUndelegate"
       [modalManage]="modalManage"
       [denom]="denom"
@@ -132,7 +132,7 @@
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
-                  <ng-container *ngSwitchCase="'up_time'">
+                  <ng-container *ngSwitchCase="'uptime'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
                       <div
                         [innerHTML]="template.headerCellDef | translate"
@@ -165,7 +165,7 @@
                       <div
                         [innerHTML]="template.headerCellDef | translate"
                         matTooltipPosition="above"
-                        matTooltip="Vote participation stat for the last {{ numberProposal || 0 }} proposals."
+                        matTooltip="Vote participation stat for the last {{ countProposal || 0 }} proposals."
                         #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
@@ -223,11 +223,11 @@
                             [matTooltipPosition]="'above'"></i>
                         </div>
                         <div *ngSwitchCase="'participation'">
-                          {{ data[template.matColumnDef] + '/' + data['target_count'] }}
+                          {{ data[template.matColumnDef] + '/' + countProposal }}
                         </div>
-                        <div *ngSwitchCase="'up_time'" class="pr-10">
+                        <div *ngSwitchCase="'uptime'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ calculatorUpTime(data['acc_address']) | number : globals.formatNumber2Decimal }}%
+                            {{ calculatorUpTime(data['account_address']) | number : globals.formatNumber2Decimal }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
@@ -352,7 +352,7 @@
                           </ng-container>
                           <ng-container *ngSwitchCase="'Participation'">
                             <div class="text--gray-1">
-                              {{ validator[template.matColumnDef] + '/' + validator['target_count'] }}
+                              {{ validator[template.matColumnDef] + '/' + countProposal }}
                             </div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Uptime'">
@@ -398,25 +398,25 @@
           <div class="avatar-wrapper">
             <div class="validator-avatar large">
               <app-loading-image
-                [appClass]="dataModal['jailed'] ? 'jailed' : ''"
-                [identity]="dataModal.identity"
-                [srcImg]="dataModal.image_url">
+                [appClass]="validatorDetail['jailed'] ? 'jailed' : ''"
+                [identity]="validatorDetail.identity"
+                [srcImg]="validatorDetail.image_url">
               </app-loading-image>
             </div>
           </div>
           <div class="ml-2">
             <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
-              <span class="modal__title text-break">{{ dataModal?.title }}</span>
+              <span class="modal__title text-break">{{ validatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ dataModal?.commission | percent : globals.formatNumber2Decimal }}
+              Commission - {{ validatorDetail?.commission | percent : globals.formatNumber2Decimal }}
             </div>
           </div>
         </div>
         <div class="body-01 text--gray-5">
           <div class="mb-1">
-            <span>Voting power - {{ dataModal?.percent_power }}%</span>&nbsp;
-            <span>({{ dataModal?.power | mask : 'separator.6' }}</span>
+            <span>Voting power - {{ validatorDetail?.percent_power }}%</span>&nbsp;
+            <span>({{ validatorDetail?.power | mask : 'separator.6' }}</span>
             <span class="text--primary ml-1">{{ denom }}</span
             >)
           </div>
@@ -571,7 +571,7 @@
               </ul>
             </div>
             <button
-              *ngIf="!dataModal['jailed']"
+              *ngIf="!validatorDetail['jailed']"
               type="button"
               class="button button--sm button--md-mob button-pill button-outline button-outline--gradient d-flex btn-item"
               (click)="changeTypePopup(dialogMode.Delegate)">

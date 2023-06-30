@@ -54,11 +54,19 @@
                     <a
                       *ngIf="data[template.matColumnDef]"
                       class="text--primary cursor-pointer hash-link"
+                      [matTooltipPosition]="'above'"
+                      [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                      matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
                       [routerLink]="[
                         template?.isUrl,
                         template?.paramField ? data[template?.paramField] : data[template.matColumnDef]
                       ]">
-                      {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                      <ng-container *ngIf="template.isNameTag">
+                        {{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}
+                      </ng-container>
+                      <ng-container *ngIf="!template.isNameTag">
+                        {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                      </ng-container>
                     </a>
                     <div class="" *ngIf="!data[template.matColumnDef]">-</div>
                   </ng-container>

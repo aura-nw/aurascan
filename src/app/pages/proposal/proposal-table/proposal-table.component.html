@@ -35,8 +35,16 @@
                 <ng-container *ngIf="template.isUrl && template.isShort">
                   <a
                     [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                    [class.disabled-link]="!data[template.matColumnDef]">
-                    {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                    [class.disabled-link]="!data[template.matColumnDef]"
+                    [matTooltipPosition]="'above'"
+                    [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                    matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}">
+                    <ng-container *ngIf="template.isNameTag">
+                      {{ (commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8) || '-' }}
+                    </ng-container>
+                    <ng-container *ngIf="!template.isNameTag">
+                      {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                    </ng-container>
                   </a>
                 </ng-container>
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
@@ -111,7 +119,7 @@
                     '<a class=text--primary href=' +
                     ('/account/' + data.voter) +
                     '>' +
-                    (data.voter ? shortenAddress(data.voter) : '-') +
+                    (data.voter ? (commonService.setNameTag(data.voter) | cutStringPipe : 8 : 8) : '-') +
                     '</a>'
                 },
                 {
@@ -191,7 +199,7 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +
                       '>' +
-                      shortenAddress(data.depositors) +
+                      (commonService.setNameTag(data.depositors) | cutStringPipe : 8 : 8) +
                       '</a>'
                     : '<span class=text--gray-1>-</span>'
                 },

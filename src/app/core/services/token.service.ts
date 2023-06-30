@@ -18,7 +18,7 @@ export class TokenService extends CommonService {
   }
 
   getListToken(payload): Observable<any> {
-    const operationsDoc = `query CW20ListToken($name: String, $address: String, $limit: Int, $offset: Int) { 
+    const operationsDoc = `query queryCW20ListToken($name: String, $address: String, $limit: Int, $offset: Int) { 
       ${this.envDB} { 
         cw20_contract(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}, limit: $limit, offset: $offset) {
           marketing_info
@@ -27,18 +27,19 @@ export class TokenService extends CommonService {
           smart_contract {
             address
           }
-          cw20_holders {
-            amount
-            address
+          cw20_holders_aggregate {
+            aggregate {
+              count
+            }
           }
-        } cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
+        }
+        cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
           aggregate {
-            count 
-          } 
-        } 
-      } 
+            count
+          }
+        }
+      }
     }`;
-
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
@@ -48,12 +49,12 @@ export class TokenService extends CommonService {
           limit: payload?.limit,
           offset: payload?.offset,
         },
-        operationName: 'CW20ListToken',
+        operationName: 'queryCW20ListToken',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getTokenMarketData(payload): Observable<any> {
+  getTokenMarketData(payload = {}): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/cw20-tokens/token-market`, payload);
   }
 
@@ -99,11 +100,12 @@ export class TokenService extends CommonService {
   }
 
   getTokenDetail(address): Observable<any> {
-    const operationsDoc = `query CW20Detail($address: String) { 
+    const operationsDoc = `query queryCW20Detail($address: String) { 
       ${this.envDB} { smart_contract(where: {address: {_eq: $address}}) {
           address
           cw20_contract {
             name
+            symbol
             marketing_info
             cw20_holders {
               address
@@ -126,7 +128,7 @@ export class TokenService extends CommonService {
         variables: {
           address: address,
         },
-        operationName: 'CW20Detail',
+        operationName: 'queryCW20Detail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -222,11 +224,38 @@ export class TokenService extends CommonService {
   getListTokenHolder(
     limit: string | number,
     offset: string | number,
-    contractType: string,
     contractAddress: string,
   ): Observable<any> {
-    let url = `${this.indexerUrl}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
-    return this.http.get<any>(url);
+    const operationsDoc = `query queryCW20ListHolder($address: String, $limit: Int, $offset: Int) {
+      ${this.envDB} {
+        cw20_holder(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
+          amount
+          address
+          cw20_contract {
+            total_supply
+            decimal
+          }
+        }
+        cw20_holder_aggregate(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+    .post<any>(this.graphUrl, {
+      query: operationsDoc,
+      variables: {
+        limit: limit,
+        offset: offset,
+        address: contractAddress,
+      },
+      operationName: 'queryCW20ListHolder',
+    })
+    .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTokenHolderNFT(payload) {

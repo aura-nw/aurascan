@@ -111,12 +111,13 @@ export class SoulboundTokenContractComponent implements OnInit {
   }
 
   getListToken() {
+    this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       minterAddress: this.currentAddress,
       contractAddress: this.contractAddress,
-      keyword: this.textSearch?.trim(),
+      keyword: this.textSearch,
       status: this.selectedType,
     };
 

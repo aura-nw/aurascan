@@ -26,6 +26,7 @@ import { DelegateItemComponent } from './validators-detail/delegate-item/delegat
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
 import { ValidatorsComponent } from './validators.component';
+import { ProposalService } from 'src/app/core/services/proposal.service';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,6 @@ import { ValidatorsComponent } from './validators.component';
     SoulboundFeatureTokensModule,
     CommonDirectiveModule
   ],
-  providers: [CommonService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe],
+  providers: [CommonService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe, ProposalService],
 })
 export class ValidatorsModule {}

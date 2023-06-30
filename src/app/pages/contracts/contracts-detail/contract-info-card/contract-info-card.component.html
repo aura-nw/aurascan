@@ -8,7 +8,13 @@
         </tr>
         <tr>
           <td class="text--gray-5 body-02-mob">My Name Tag:</td>
-          <td colspan="2">Not Available</td>
+          <td colspan="2">
+            {{
+              commonService.setNameTag(contractDetail?.address) !== contractDetail?.address
+                ? commonService.setNameTag(contractDetail?.address)
+                : 'Not Available'
+            }}
+          </td>
         </tr>
 
         <tr class="d-lg-none">
@@ -16,7 +22,7 @@
             <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
             <div>
               <a class="text--primary mr-1 mr-lg-2" [routerLink]="['/account', contractDetail?.creator]">
-                {{ contractDetail?.creator | cutStringPipe : 8 : 8 }}
+                {{ commonService.setNameTag(contractDetail?.creator) | cutStringPipe : 8 : 8 }}
               </a>
               at txn
               <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
@@ -29,8 +35,13 @@
         <tr class="d-none d-lg-table-row">
           <td class="text--gray-5 body-02-mob">Contract Creator:</td>
           <td colspan="2">
-            <a class="text--primary" [routerLink]="['/account', contractDetail?.creator]">
-              {{ contractDetail?.creator | cutStringPipe : 8 : 8 }}
+            <a
+              class="text--primary"
+              [routerLink]="['/account', contractDetail?.creator]"
+              [matTooltipPosition]="'above'"
+              [matTooltipDisabled]="commonService.checkDisplayTooltip(contractDetail?.creator)"
+              matTooltip="{{ commonService.setNameTag(contractDetail?.creator) }}">
+              {{ commonService.setNameTag(contractDetail?.creator) | cutStringPipe : 8 : 8 }}
             </a>
             at txn
             <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
@@ -42,13 +53,17 @@
         <tr>
           <td class="text--gray-5">Token Tracker:</td>
           <td colspan="2">
-            <ng-container *ngIf="contractDetail?.cw721_contract?.name && contractDetail?.cw721_contract?.symbol">
+            <ng-container>
               <div class="d-flex align-items-center">
                 <a
                   class="text--primary break-word"
-                  [routerLink]="['/token', contractDetail?.address]"
-                  *ngIf="contractDetail?.code?.type === contractRegisterType.CW20">
-                  {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
+                  [routerLink]="['/tokens/token/', contractDetail?.address]"
+                  *ngIf="
+                    contractDetail?.code?.type === contractRegisterType.CW20 &&
+                    contractDetail?.cw20_contract?.name &&
+                    contractDetail?.cw20_contract?.symbol
+                  ">
+                  {{ contractDetail?.cw20_contract?.name }} ({{ contractDetail?.cw20_contract?.symbol }})
                 </a>
                 <div
                   class="status cursor-pointer"
@@ -65,7 +80,11 @@
                 </div>
               </div>
               <a
-                *ngIf="contractDetail?.code?.type !== contractRegisterType.CW20"
+                *ngIf="
+                  contractDetail?.code?.type !== contractRegisterType.CW20 &&
+                  contractDetail?.cw721_contract?.name &&
+                  contractDetail?.cw721_contract?.symbol
+                "
                 class="text--primary break-word"
                 [routerLink]="['/tokens/' + linkNft, contractDetail?.address]">
                 {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})

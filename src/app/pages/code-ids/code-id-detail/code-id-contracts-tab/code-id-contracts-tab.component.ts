@@ -9,6 +9,7 @@ import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { shortenAddress } from '../../../../core/utils/common/shorten';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-code-id-contracts-tab',
@@ -34,7 +35,7 @@ export class CodeIdContractsTabComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
 
-  constructor(private contractService: ContractService, private datePipe: DatePipe) {}
+  constructor(private contractService: ContractService, private datePipe: DatePipe, public commonService: CommonService) {}
 
   ngOnInit(): void {
     this.getListContractByCode();
