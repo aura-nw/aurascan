@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -171,10 +171,6 @@ export class ValidatorService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  validatorsDetailWallet(address: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
-  }
-
   delegator(pageLimit = 100, address: string, nextKey = null) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.limit=${pageLimit}&pagination.key=${nextKey}&pagination.reverse=true`,
@@ -190,7 +186,7 @@ export class ValidatorService extends CommonService {
 
   getUptimeIndexer(consAddress = null, limit = 100, height = null) {
     const operationsDoc = `
-    query MyQuery($cons_address: String, $limit: Int = 100, $height: Int = 0) {
+    query getUptimeIndexer($cons_address: String, $limit: Int = 100, $height: Int = 0) {
       ${this.envDB} {
         block(order_by: {height: desc}, limit: $limit, where: {height: {_eq: $height}}) {
           height
@@ -212,7 +208,7 @@ export class ValidatorService extends CommonService {
           limit: limit,
           height: height,
         },
-        operationName: 'MyQuery',
+        operationName: 'getUptimeIndexer',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
