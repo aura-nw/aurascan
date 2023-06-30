@@ -256,37 +256,3 @@ img.icon-brand {
     padding-bottom: 0;
   }
 }
-
-.notice-warning {
-  padding: 16px;
-  background: rgba(213, 98, 94, 0.16);
-  border-radius: 8px;
-
-  width: fit-content;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  gap: 8px;
-
-  .notice-icon {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    gap: 8px;
-
-    line-height: 18px;
-
-    img {
-      height: 20px;
-      width: 20px;
-    }
-  }
-  .notice-content {
-    i {
-      font-size: 1.6rem !important;
-      vertical-align: text-top;
-      cursor: pointer;
-    }
-  }
-}
