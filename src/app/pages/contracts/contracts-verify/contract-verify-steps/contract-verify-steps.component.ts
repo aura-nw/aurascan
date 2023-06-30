@@ -13,6 +13,7 @@ export class ContractVerifyStepsComponent implements OnInit {
   @Output() isCompilerComplete = new EventEmitter<boolean>();
   @Output() isVerifyFail = new EventEmitter<boolean>();
   @Output() isVerifySuccess = new EventEmitter<boolean>();
+  errorMessage = null;
 
   currentStep = 0;
   steps = [];
@@ -41,6 +42,7 @@ export class ContractVerifyStepsComponent implements OnInit {
 
   getDataVerify() {
     this.contractService.getVerifyCodeStep(this.currentCode).subscribe((res: IResponsesTemplates<any>) => {
+      this.errorMessage = res?.error?.Message ?? null;
       this.steps = res?.data.map((dta) => ({
         ...dta,
         className: this.getClassName(dta.result),

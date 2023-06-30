@@ -191,8 +191,6 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
         } catch (e) {}
       } else if (method === ModeExecuteTransaction.Send) {
         toAddress = itemMessage?.msg?.send?.contract;
-      } else if (method === ModeExecuteTransaction.ProvideLiquidity) {
-        toAddress = itemMessage?.contract;
       }
       break;
     case eTransType.Deposit:
@@ -220,6 +218,7 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
       toAddress = itemMessage.to_address;
       break;
   }
+  toAddress = toAddress || itemMessage?.contract;
   return [fromAddress, toAddress, value, method, tokenId, modeExecute];
 }
 
