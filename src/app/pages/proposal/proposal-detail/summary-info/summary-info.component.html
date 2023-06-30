@@ -59,15 +59,15 @@
               <span class="d-none d-lg-block">
                 {{
                   proposalDetail?.proposer
-                    ? proposalDetail?.proposer?.description?.moniker
-                    : proposalDetail?.proposer_address
+                    ? commonService.setNameTag(proposalDetail?.proposer?.description?.moniker)
+                    : commonService.setNameTag(proposalDetail?.proposer_address)
                 }}
               </span>
               <span class="d-lg-none">
                 {{
                   proposalDetail?.proposer
-                    ? proposalDetail?.proposer?.description.moniker
-                    : (proposalDetail?.proposer_address | cutStringPipe : 8 : 8)
+                    ? commonService.setNameTag(proposalDetail?.proposer?.description.moniker)
+                    : (commonService.setNameTag(proposalDetail?.proposer_address) | cutStringPipe : 8 : 8)
                 }}
               </span>
             </a>
