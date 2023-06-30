@@ -159,8 +159,11 @@
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Owner:</div>
               <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner && !nftDetail?.burned">
-                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.owner]">
-                  {{ nftDetail?.owner }}
+                <a class="text--primary" [routerLink]="['/account', nftDetail?.owner]">
+                  <span class="d-sm-flex d-none">{{ commonService.setNameTag(nftDetail?.owner) }}</span>
+                  <span class="d-sm-none d-flex">{{
+                    commonService.setNameTag(nftDetail?.owner) | cutStringPipe : 8 : 8
+                  }}</span>
                 </a>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
@@ -180,9 +183,12 @@
                   [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                   class="mr-2"
                   alt="contract_verification" />
-                <a class="text--primary g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
-                  {{ nftDetail?.contract_address }}</a
-                >
+                <a class="text--primary" [routerLink]="['/contracts', nftDetail?.contract_address]">
+                  <span class="d-sm-flex d-none">{{ commonService.setNameTag(nftDetail?.contract_address) }}</span>
+                  <span class="d-sm-none d-flex">{{
+                    commonService.setNameTag(nftDetail?.contract_address) | cutStringPipe : 6 : 6
+                  }}</span>
+                </a>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                   class="ml-2 cursor-pointer btn-copy"
@@ -197,9 +203,12 @@
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Creator:</div>
               <div class="d-flex align-items-center">
-                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.creator]">
-                  {{ nftDetail?.creator }}</a
-                >
+                <a class="text--primary" [routerLink]="['/account', nftDetail?.creator]">
+                  <span class="d-sm-flex d-none">{{ commonService.setNameTag(nftDetail?.creator) }}</span>
+                  <span class="d-sm-none d-flex">{{
+                    commonService.setNameTag(nftDetail?.creator) | cutStringPipe : 8 : 8
+                  }}</span>
+                </a>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                   class="ml-2 cursor-pointer btn-copy"
@@ -355,9 +364,12 @@
                 <ng-container *ngSwitchCase="'from_address'">
                   <a
                     class="text--primary content-transfer"
+                    [matTooltipPosition]="'above'"
+                    [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                    matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
                     [routerLink]="['/account', data[template.matColumnDef]]"
                     *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                    {{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
                     data[template.matColumnDef] | cutStringPipe : 8 : 8
@@ -378,6 +390,9 @@
                     height="16px" />
                   <a
                     class="text--primary"
+                    [matTooltipPosition]="'above'"
+                    [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                    matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
                     [routerLink]="[
                       data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account',
                       data[template.matColumnDef]
@@ -387,14 +402,17 @@
                       data.modeExecute !== modeExecuteTransaction.UnEquip &&
                       data[template.matColumnDef]
                     ">
-                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                    {{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}
                   </a>
                   <span
+                    [matTooltipPosition]="'above'"
+                    [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                    matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
                     *ngIf="
                       data.modeExecute === modeExecuteTransaction.Burn ||
                       data.modeExecute === modeExecuteTransaction.UnEquip
                     "
-                    >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span
+                    >{{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}</span
                   >
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
                 </ng-container>

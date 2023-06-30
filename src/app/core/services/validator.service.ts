@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -169,10 +169,6 @@ export class ValidatorService extends CommonService {
         operationName: 'validatorsDetailListPower',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  validatorsDetailWallet(address: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
   }
 
   delegator(pageLimit = 100, address: string, nextKey = null) {
