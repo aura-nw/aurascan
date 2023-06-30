@@ -54,7 +54,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getTokenMarketData(payload): Observable<any> {
+  getTokenMarketData(payload = {}): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/cw20-tokens/token-market`, payload);
   }
 

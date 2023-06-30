@@ -22,7 +22,7 @@
           <a
             class="body-02 text--primary"
             [routerLink]="[textSearch?.length > lengthNormalAddress ? '/contracts' : '/account', textSearch]"
-            >{{ textSearch }}</a
+            >{{ commonService.setNameTag(textSearch) }}</a
           >
         </div>
         <div

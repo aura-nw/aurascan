@@ -33,9 +33,12 @@
                   (click)="copyMessage(currentAddress); tooltip.toggle()" />
               </div>
             </div>
-            <p *ngIf="commonService.setNameTag(currentAddress) !== currentAddress">
-              {{ commonService.setNameTag(currentAddress) | cutStringPipe : 16 : 16 }}
-            </p>
+            <div *ngIf="commonService.setNameTag(currentAddress) !== currentAddress" class="name-tag cursor-pointer">
+              <span class="d-sm-flex d-none">{{ commonService.setNameTag(currentAddress) }}</span>
+              <span class="d-sm-none d-flex">{{
+                commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8
+              }}</span>
+            </div>
           </div>
           <div class="mt-6 mt-xl-4">
             <div class="body-01 fw-semibold mb-1 mb-xl-2 text--white">Total Value</div>

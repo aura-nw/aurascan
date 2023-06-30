@@ -14,8 +14,11 @@
               <a
                 [class.text--primary]="data[template.matColumnDef]"
                 [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                [class.disabled-link]="!data[template.matColumnDef]">
-                {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                [class.disabled-link]="!data[template.matColumnDef]"
+                [matTooltipPosition]="'above'"
+                [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}">
+                {{ (commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8) || '-' }}
               </a>
             </ng-container>
             <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
@@ -33,7 +36,10 @@
                   data[template.matColumnDef]?.length > lengthAddress ? '/contracts' : '/account',
                   data[template.matColumnDef]
                 ]"
-                [class.disabled-link]="!data[template.matColumnDef]">
+                [class.disabled-link]="!data[template.matColumnDef]"
+                [matTooltipPosition]="'above'"
+                [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}">
                 {{ (commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8) || '-' }}
               </a>
             </ng-container>
