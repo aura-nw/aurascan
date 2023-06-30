@@ -186,7 +186,7 @@ export class ValidatorService extends CommonService {
 
   getUptimeIndexer(consAddress = null, limit = 100, height = null) {
     const operationsDoc = `
-    query MyQuery($cons_address: String, $limit: Int = 100, $height: Int = 0) {
+    query getUptimeIndexer($cons_address: String, $limit: Int = 100, $height: Int = 0) {
       ${this.envDB} {
         block(order_by: {height: desc}, limit: $limit, where: {height: {_eq: $height}}) {
           height
@@ -208,7 +208,7 @@ export class ValidatorService extends CommonService {
           limit: limit,
           height: height,
         },
-        operationName: 'MyQuery',
+        operationName: 'getUptimeIndexer',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
