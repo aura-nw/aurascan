@@ -9,11 +9,14 @@
         <tr>
           <td class="text--gray-5 body-02-mob">My Name Tag:</td>
           <td colspan="2">
-            {{
-              commonService.setNameTag(contractDetail?.address) !== contractDetail?.address
-                ? commonService.setNameTag(contractDetail?.address)
-                : 'Not Available'
-            }}
+            <ng-container
+              *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
+              <span class="d-sm-flex d-none">{{ commonService.setNameTag(contractDetail?.address) }}</span>
+              <span class="d-sm-none d-flex">{{
+                commonService.setNameTag(contractDetail?.address) | cutStringPipe : 8 : 8
+              }}</span>
+            </ng-container>
+            <ng-template #NoNameTag>Not Available</ng-template>
           </td>
         </tr>
 
