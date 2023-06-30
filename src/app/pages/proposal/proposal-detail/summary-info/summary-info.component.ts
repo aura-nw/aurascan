@@ -22,6 +22,7 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
+import {forEach} from "lodash";
 const marked = require('marked');
 
 @Component({
@@ -33,6 +34,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   @Input() proposalId: number;
   @Output() proposalDtl = new EventEmitter();
   proposalDetail;
+  proposalDetailPlanTitleArr = []
   statusConstant = PROPOSAL_STATUS;
   currentStatusConstant = VOTING_FINAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
@@ -49,6 +51,10 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   timerGetUpTime: any;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   proposalStatus = null;
+  typeSpecial = {
+    SoftwareUpgrade: '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
+    ParameterChange: '/cosmos.params.v1beta1.ParameterChangeProposal'
+  }
 
   reload$;
 
@@ -184,6 +190,14 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
             } else {
               this.finalSubTitle = VOTING_SUBTITLE.REJECT_3;
             }
+
+            if(this.proposalDetail?.content?.plan) {
+              this.getProposalPlanTitle(this.proposalDetail?.content?.plan);
+              console.log(this.proposalDetail?.content?.plan)
+              console.log(this.proposalDetailPlanTitleArr)
+            }
+
+
           } else {
             this.proposalDtl.emit(this.proposalDetail);
           }
@@ -405,5 +419,23 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       editor.innerHTML = marked.parse(this.proposalDetail.content.description);
       return;
     }
+  }
+
+  getProposalPlanTitle(data: any) {
+    if(typeof data !== "object" && data.length > 0) {
+      for (let key in data[0]) {
+        this.proposalDetailPlanTitleArr.push(key);
+      }
+    }
+    if(typeof data === "object") {
+      for (let prop in data) {
+        if (data.hasOwnProperty(prop)) {
+          this.proposalDetailPlanTitleArr.push(prop);
+        }
+      }
+    }
+  }
+  typeOf(value) {
+    return typeof value;
   }
 }

@@ -137,6 +137,28 @@
             </div>
           </div>
         </div>
+        <div
+            class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob"
+            *ngIf="(proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade || proposalDetail?.content['@type'] === typeSpecial.ParameterChange) && proposalDetailPlanTitleArr.length > 0">
+          <div class="col-auto col-md-2 text--gray-4">Changes</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <table class="planTable">
+              <tr class="border-bottom">
+                <th *ngFor="let row of proposalDetailPlanTitleArr" class="text--gray-4">{{row}}</th>
+              </tr>
+              <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0">
+                <tr *ngFor="let item of proposalDetail?.content?.plan">
+                  <td *ngFor="let row of proposalDetailPlanTitleArr">{{item[row]}}</td>
+                </tr>
+              </ng-container>
+              <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) === 'object'">
+                <tr>
+                  <td *ngFor="let row of proposalDetailPlanTitleArr">{{proposalDetail?.content?.plan[row]}}</td>
+                </tr>
+              </ng-container>
+            </table>
+          </div>
+        </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-12 col-md-2 text--gray-4">Details</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0" *ngIf="proposalDetail?.content.description">
