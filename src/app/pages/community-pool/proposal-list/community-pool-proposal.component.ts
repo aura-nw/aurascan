@@ -60,7 +60,7 @@ export class CommunityPoolProposalComponent implements OnInit {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private proposalService: ProposalService,
-    private commonService: CommonService,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
