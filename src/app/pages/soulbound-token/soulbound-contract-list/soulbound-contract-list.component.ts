@@ -11,6 +11,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-soulbound-contract-list',
@@ -44,6 +45,7 @@ export class SoulboundContractListComponent implements OnInit {
     public dialog: MatDialog,
     private walletService: WalletService,
     private router: Router,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -93,6 +95,11 @@ export class SoulboundContractListComponent implements OnInit {
       minterAddress: this.currentAddress,
       keyword: this.textSearch,
     };
+
+    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    if (addressNameTag?.length > 0) {
+      payload['keyword'] = addressNameTag;
+    }
 
     this.soulboundService.getListSoulbound(payload).subscribe((res) => {
       this.dataSource.data = res.data;
