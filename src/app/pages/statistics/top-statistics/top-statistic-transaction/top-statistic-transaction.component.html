@@ -35,8 +35,13 @@
                   <ng-container matColumnDef="address">
                     <th mat-header-cell *matHeaderCellDef>address</th>
                     <td mat-cell *matCellDef="let element">
-                      <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', element.address]">
-                        {{ element.address | cutStringPipe : 8 : 8 }}
+                      <a
+                        class="text--primary mr-5 mr-lg-10"
+                        [routerLink]="['/account', element.address]"
+                        [matTooltipPosition]="'above'"
+                        [matTooltipDisabled]="commonService.checkDisplayTooltip(element.address)"
+                        matTooltip="{{ commonService.setNameTag(element.address) }}">
+                        {{ commonService.setNameTag(element.address) | cutStringPipe : 8 : 8 }}
                       </a>
                     </td>
                   </ng-container>
@@ -91,8 +96,13 @@
                   <ng-container matColumnDef="address">
                     <th mat-header-cell *matHeaderCellDef>address</th>
                     <td mat-cell *matCellDef="let element">
-                      <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', element.address]">
-                        {{ element.address | cutStringPipe : 8 : 8 }}
+                      <a
+                        class="text--primary mr-5 mr-lg-10"
+                        [routerLink]="['/account', element.address]"
+                        [matTooltipPosition]="'above'"
+                        [matTooltipDisabled]="commonService.checkDisplayTooltip(element.address)"
+                        matTooltip="{{ commonService.setNameTag(element.address) }}">
+                        {{ commonService.setNameTag(element.address) | cutStringPipe : 8 : 8 }}
                       </a>
                     </td>
                   </ng-container>
@@ -148,8 +158,13 @@
                   <ng-container matColumnDef="address">
                     <th mat-header-cell *matHeaderCellDef>address</th>
                     <td mat-cell *matCellDef="let element">
-                      <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', element.address]">
-                        {{ element.address | cutStringPipe : 8 : 8 }}
+                      <a
+                        class="text--primary mr-5 mr-lg-10"
+                        [routerLink]="['/account', element.address]"
+                        [matTooltipPosition]="'above'"
+                        [matTooltipDisabled]="commonService.checkDisplayTooltip(element.address)"
+                        matTooltip="{{ commonService.setNameTag(element.address) }}">
+                        {{ commonService.setNameTag(element.address) | cutStringPipe : 8 : 8 }}
                       </a>
                     </td>
                   </ng-container>
@@ -199,8 +214,13 @@
                   <ng-container matColumnDef="address">
                     <th mat-header-cell *matHeaderCellDef>address</th>
                     <td mat-cell *matCellDef="let element">
-                      <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', element.address]">
-                        {{ element.address | cutStringPipe : 8 : 8 }}
+                      <a
+                        class="text--primary mr-5 mr-lg-10"
+                        [routerLink]="['/account', element.address]"
+                        [matTooltipPosition]="'above'"
+                        [matTooltipDisabled]="commonService.checkDisplayTooltip(element.address)"
+                        matTooltip="{{ commonService.setNameTag(element.address) }}">
+                        {{ commonService.setNameTag(element.address) | cutStringPipe : 8 : 8 }}
                       </a>
                     </td>
                   </ng-container>

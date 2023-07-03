@@ -4,6 +4,7 @@ import { StatisticService } from 'src/app/core/services/statistic.service';
 import { formatDate } from '@angular/common';
 import { Globals } from 'src/app/global/global';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-top-statistic-overview',
@@ -23,6 +24,7 @@ export class TopStatisticOverviewComponent implements OnInit {
     public global: Globals,
     private statisticService: StatisticService,
     private environmentService: EnvironmentService,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {
