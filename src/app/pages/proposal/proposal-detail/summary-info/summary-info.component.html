@@ -59,15 +59,15 @@
               <span class="d-none d-lg-block">
                 {{
                   proposalDetail?.proposer
-                    ? proposalDetail?.proposer?.description?.moniker
-                    : proposalDetail?.proposer_address
+                    ? commonService.setNameTag(proposalDetail?.proposer?.description?.moniker)
+                    : commonService.setNameTag(proposalDetail?.proposer_address)
                 }}
               </span>
               <span class="d-lg-none">
                 {{
                   proposalDetail?.proposer
-                    ? proposalDetail?.proposer?.description.moniker
-                    : (proposalDetail?.proposer_address | cutStringPipe : 8 : 8)
+                    ? commonService.setNameTag(proposalDetail?.proposer?.description.moniker)
+                    : (commonService.setNameTag(proposalDetail?.proposer_address) | cutStringPipe : 8 : 8)
                 }}
               </span>
             </a>
@@ -135,6 +135,50 @@
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
               <span>{{ proposalDetail.deposit_end_time | customDate : 'HH:mm:ss' }}</span>
             </div>
+          </div>
+        </div>
+        <div
+          class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob"
+          *ngIf="
+            (proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade ||
+              proposalDetail?.content['@type'] === typeSpecial.ParameterChange) &&
+            proposalDetailTitleArr.length > 0
+          ">
+          <div class="col-auto col-md-2 text--gray-4">
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade"> Plan </ng-container>
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
+              Changes
+            </ng-container>
+          </div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <table class="planTable">
+              <tr class="border-bottom">
+                <th *ngFor="let row of proposalDetailTitleArr" class="text--gray-4">{{ row }}</th>
+              </tr>
+              <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
+                <ng-container
+                  *ngIf="
+                    typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0
+                  ">
+                  <tr *ngFor="let item of proposalDetail?.content?.plan">
+                    <td *ngFor="let row of proposalDetailTitleArr">{{ item[row] }}</td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) === 'object'">
+                  <tr>
+                    <td *ngFor="let row of proposalDetailTitleArr">{{ proposalDetail?.content?.plan[row] }}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+
+              <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
+                <ng-container *ngIf="proposalDetail?.content?.changes">
+                  <tr *ngFor="let item of proposalDetail?.content?.changes">
+                    <td *ngFor="let row of proposalDetailTitleArr">{{ item[row] }}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </table>
           </div>
         </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob">

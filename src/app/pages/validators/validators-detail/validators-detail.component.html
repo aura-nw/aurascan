@@ -229,7 +229,7 @@
                   </tr>
                 </table>
                 <ng-container *ngIf="breakpoint.value.matches">
-                  <div *ngIf="dataSourceBlock" class="custom-card-mob-simple">
+                  <div *ngIf="dataSourceBlock" class="custom-card-mob-simple titleMob">
                     <app-card-mob-simple
                       *ngFor="let data of dataSourceBlockMob"
                       [link]="'/blocks/' + data.height"
@@ -379,7 +379,7 @@
                   </tr>
                 </table>
                 <ng-container *ngIf="breakpoint.value.matches">
-                  <div class="custom-card-mob-simple">
+                  <div class="custom-card-mob-simple titleMob">
                     <app-card-mob-simple
                       *ngFor="let data of dataSourceDelegatorMob"
                       [link]="'/account/' + data.delegator_address"
@@ -482,7 +482,7 @@
                   </tr>
                 </table>
                 <ng-container *ngIf="breakpoint.value.matches">
-                  <div class="custom-card-mob-simple">
+                  <div class="custom-card-mob-simple titleMob">
                     <app-card-mob-simple
                       *ngFor="let data of dataSourcePowerMob"
                       [link]="'/blocks/' + data.height"

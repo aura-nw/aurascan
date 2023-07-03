@@ -235,3 +235,14 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+.planTable {
+  th, td {
+    padding: 0 16px;
+    height: 32px;
+  }
+  tr {
+    th:first-child, td:first-child {
+      padding-left: 0;
+    }
+  }
+}
