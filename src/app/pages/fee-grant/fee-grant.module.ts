@@ -22,6 +22,7 @@ import { MyGrantersComponent } from './my-granters/my-granters.component';
 import { PopupAddGrantComponent } from './popup-add-grant/popup-add-grant.component';
 import { PopupNoticeComponent } from './popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     ClickOutsideModule,
     NgxMaskModule,
     APaginatorModule,
+    MatTooltipModule
   ],
   providers: [FormBuilder, FeeGrantService, TransactionService, MappingErrorService, AccountService],
 })

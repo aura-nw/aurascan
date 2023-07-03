@@ -17,7 +17,7 @@
             <input
               type="text"
               class="form-control pl-0"
-              placeholder="Search for Tx Hash or Address"
+              placeholder="Search for Tx Hash or Address/name tag"
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
               name="search"
@@ -60,8 +60,13 @@
                         <a
                           *ngSwitchCase="'grantee'"
                           class="text--primary cursor-pointer"
-                          [routerLink]="['/account', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
+                          [routerLink]="['/account', data[template.matColumnDef]]"
+                          [matTooltipPosition]="'above'"
+                          [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
+                          matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}">
+                          <span>{{
+                            commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8
+                          }}</span>
                         </a>
                         <div *ngSwitchCase="'type'">
                           {{ data[template.matColumnDef] }}
