@@ -84,7 +84,12 @@ export class MyGrantersComponent implements OnInit {
   }
 
   getListGrant() {
-    this.textSearch = this.textSearch?.trim();
+    let keySearch = (this.textSearch = this.textSearch?.trim());
+    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    if (addressNameTag?.length > 0) {
+      keySearch = addressNameTag;
+    }
+
     this.feeGrantService
       .getListFeeGrants(
         {
@@ -94,7 +99,7 @@ export class MyGrantersComponent implements OnInit {
           grantee: this.currentAddress,
           offset: this.pageData.pageSize * (this.pageData.pageIndex - 1),
         },
-        this.textSearch,
+        keySearch,
       )
       .subscribe({
         next: (res) => {
