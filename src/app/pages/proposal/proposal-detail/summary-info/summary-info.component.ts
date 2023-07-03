@@ -22,6 +22,7 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
+import { forEach } from 'lodash';
 const marked = require('marked');
 
 @Component({
@@ -33,6 +34,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   @Input() proposalId: number;
   @Output() proposalDtl = new EventEmitter();
   proposalDetail;
+  proposalDetailTitleArr = [];
   statusConstant = PROPOSAL_STATUS;
   currentStatusConstant = VOTING_FINAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
@@ -49,6 +51,10 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   timerGetUpTime: any;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   proposalStatus = null;
+  typeSpecial = {
+    SoftwareUpgrade: '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
+    ParameterChange: '/cosmos.params.v1beta1.ParameterChangeProposal',
+  };
 
   reload$;
 
@@ -98,7 +104,12 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
             }
             this.proposalDetail = this.makeProposalDataDetail(data.proposal[0]);
             this.proposalStatus = this.getStatus(data.proposal[0].status);
-            
+
+            //get more info proposal detail
+            if (this.proposalDetail?.content?.plan || this.proposalDetail?.content?.changes) {
+              this.getProposalMoreInfo(this.proposalDetail?.content?.plan || this.proposalDetail?.content?.changes);
+            }
+
             if (this.proposalDetail?.content?.amount) {
               this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
             }
@@ -405,5 +416,24 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       editor.innerHTML = marked.parse(this.proposalDetail.content.description);
       return;
     }
+  }
+
+  getProposalMoreInfo(data: any) {
+    if (typeof data !== 'object') {
+      for (let key in data[0]) {
+        this.proposalDetailTitleArr.push(key);
+      }
+    }
+    if (typeof data === 'object') {
+      data = data[0] || data;
+      for (let prop in data) {
+        if (data.hasOwnProperty(prop)) {
+          this.proposalDetailTitleArr.push(prop);
+        }
+      }
+    }
+  }
+  typeOf(value) {
+    return typeof value;
   }
 }

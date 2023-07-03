@@ -40,9 +40,9 @@ export class ContractComponent implements OnInit {
             res.query_msg_schema = _.get(res, 'code.code_id_verifications[0].query_msg_schema');
             res.contract_hash = _.get(res, 'code.code_id_verifications[0].data_hash');
             if (res?.cw20_contract) {
-              res.contract_name = _.get(res, 'cw20_contract.smart_contract.name');
+              res.contract_name = _.get(res, 'cw20_contract.name');
             } else {
-              res.contract_name = _.get(res, 'cw721_contract.smart_contract.name');
+              res.contract_name = _.get(res, 'cw721_contract.name');
             }
             res.compiler_version = _.get(res, 'code.code_id_verifications[0].compiler_version');
             this.contractDetail = res;

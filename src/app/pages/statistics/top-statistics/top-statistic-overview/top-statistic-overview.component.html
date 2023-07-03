@@ -29,19 +29,25 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <a
-                [routerLink]="['/account', transactionsData.top_aura_senders[0].address]"
+                [routerLink]="['/account', transactionsData.top_aura_senders[0]?.address]"
                 class="body-01 text--primary">
-                <span class="d-none d-lg-block">{{
-                  transactionsData.top_aura_senders[0].address | cutStringPipe : 8 : 8
-                }}</span>
+                <span
+                  class="d-none d-lg-block"
+                  [matTooltipPosition]="'above'"
+                  [matTooltipDisabled]="commonService.checkDisplayTooltip(transactionsData.top_aura_senders[0]?.address)"
+                  matTooltip="{{ commonService.setNameTag(transactionsData.top_aura_senders[0]?.address) }}"
+                  >{{
+                    commonService.setNameTag(transactionsData.top_aura_senders[0]?.address) | cutStringPipe : 8 : 8
+                  }}</span
+                >
                 <span class="d-lg-none">{{
-                  transactionsData.top_aura_senders[0].address | cutStringPipe : 6 : 6
+                  commonService.setNameTag(transactionsData.top_aura_senders[0]?.address) | cutStringPipe : 6 : 6
                 }}</span>
               </a>
             </div>
             <div class="body-01 text--gray-1">
               {{
-                (transactionsData.top_aura_senders[0].result.total_sent_amount.amount
+                (transactionsData.top_aura_senders[0]?.result.total_sent_amount?.amount
                   | convertUauraToAura : coinDecimals
                   | mask : 'separator.6') ?? 0
               }}
@@ -58,19 +64,25 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <a
-                [routerLink]="['/account', transactionsData.top_aura_receivers[0].address]"
+                [routerLink]="['/account', transactionsData.top_aura_receivers[0]?.address]"
                 class="body-01 text--primary">
-                <span class="d-none d-lg-block">{{
-                  transactionsData.top_aura_receivers[0].address | cutStringPipe : 8 : 8
-                }}</span>
+                <span
+                  class="d-none d-lg-block"
+                  [matTooltipPosition]="'above'"
+                  [matTooltipDisabled]="commonService.checkDisplayTooltip(transactionsData.top_aura_receivers[0]?.address)"
+                  matTooltip="{{ commonService.setNameTag(transactionsData.top_aura_receivers[0]?.address) }}"
+                  >{{
+                    commonService.setNameTag(transactionsData.top_aura_receivers[0]?.address) | cutStringPipe : 8 : 8
+                  }}</span
+                >
                 <span class="d-lg-none">{{
-                  transactionsData.top_aura_receivers[0].address | cutStringPipe : 6 : 6
+                  commonService.setNameTag(transactionsData.top_aura_receivers[0]?.address) | cutStringPipe : 6 : 6
                 }}</span>
               </a>
             </div>
             <div class="body-01 text--gray-1">
               {{
-                (transactionsData.top_aura_receivers[0].result.total_received_amount.amount
+                (transactionsData.top_aura_receivers[0]?.result?.total_received_amount?.amount
                   | convertUauraToAura : coinDecimals
                   | mask : 'separator.6') ?? 0
               }}
@@ -87,18 +99,24 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <a
-                [routerLink]="['/account', transactionsData.top_txn_count_sent[0].address]"
+                [routerLink]="['/account', transactionsData.top_txn_count_sent[0]?.address]"
                 class="body-01 text--primary">
-                <span class="d-none d-lg-block">{{
-                  transactionsData.top_txn_count_sent[0].address | cutStringPipe : 8 : 8
-                }}</span>
+                <span
+                  class="d-none d-lg-block"
+                  [matTooltipPosition]="'above'"
+                  [matTooltipDisabled]="commonService.checkDisplayTooltip(transactionsData.top_txn_count_sent[0]?.address)"
+                  matTooltip="{{ commonService.setNameTag(transactionsData.top_txn_count_sent[0]?.address) }}"
+                  >{{
+                    commonService.setNameTag(transactionsData.top_txn_count_sent[0]?.address) | cutStringPipe : 8 : 8
+                  }}</span
+                >
                 <span class="d-lg-none">{{
-                  transactionsData.top_txn_count_sent[0].address | cutStringPipe : 6 : 6
+                  commonService.setNameTag(transactionsData.top_txn_count_sent[0]?.address) | cutStringPipe : 6 : 6
                 }}</span>
               </a>
             </div>
             <div class="body-01 text--gray-1">
-              {{ (transactionsData.top_txn_count_sent[0].result.total_sent_tx.amount | number) ?? 0 }}
+              {{ (transactionsData.top_txn_count_sent[0]?.result?.total_sent_tx?.amount | number) ?? 0 }}
             </div>
           </div>
         </div>
@@ -112,18 +130,25 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <a
-                [routerLink]="['/account', transactionsData.top_txn_count_received[0].address]"
+                [routerLink]="['/account', transactionsData.top_txn_count_received[0]?.address]"
                 class="body-01 text--primary">
-                <span class="d-none d-lg-block">{{
-                  transactionsData.top_txn_count_received[0].address | cutStringPipe : 8 : 8
-                }}</span>
+                <span
+                  class="d-none d-lg-block"
+                  [matTooltipPosition]="'above'"
+                  [matTooltipDisabled]="commonService.checkDisplayTooltip(transactionsData.top_txn_count_received[0]?.address)"
+                  matTooltip="{{ commonService.setNameTag(transactionsData.top_txn_count_received[0]?.address) }}"
+                  >{{
+                    commonService.setNameTag(transactionsData.top_txn_count_received[0]?.address)
+                      | cutStringPipe : 8 : 8
+                  }}</span
+                >
                 <span class="d-lg-none">{{
-                  transactionsData.top_txn_count_received[0].address | cutStringPipe : 6 : 6
+                  commonService.setNameTag(transactionsData.top_txn_count_received[0]?.address) | cutStringPipe : 6 : 6
                 }}</span>
               </a>
             </div>
             <div class="body-01 text--gray-1">
-              {{ (transactionsData.top_txn_count_received[0].result.total_received_tx.amount | number) ?? 0 }}
+              {{ (transactionsData.top_txn_count_received[0]?.result?.total_received_tx?.amount | number) ?? 0 }}
             </div>
           </div>
         </div>
