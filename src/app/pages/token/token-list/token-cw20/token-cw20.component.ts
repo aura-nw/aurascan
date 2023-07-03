@@ -165,7 +165,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                   verify_status: tokenFind?.verify_status || '',
                   verify_text: tokenFind?.verify_text || '',
                   circulating_market_cap: +tokenFind?.circulating_market_cap || 0,
-                  nChainMarketCap: +tokenFind?.circulating_market_cap || 0,
+                  onChainMarketCap: +tokenFind?.circulating_market_cap || 0,
                   volume: +tokenFind?.total_volume || 0,
                   price: +tokenFind?.current_price || 0,
                   isHolderUp: true,

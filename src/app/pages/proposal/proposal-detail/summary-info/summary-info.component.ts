@@ -419,20 +419,23 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   }
 
   getProposalMoreInfo(data: any) {
-    if (typeof data !== 'object') {
-      for (let key in data[0]) {
-        this.proposalDetailTitleArr.push(key);
+    if (this.proposalDetailTitleArr?.length === 0) {
+      if (typeof data !== 'object') {
+        for (let key in data[0]) {
+          this.proposalDetailTitleArr.push(key);
+        }
       }
-    }
-    if (typeof data === 'object') {
-      data = data[0] || data;
-      for (let prop in data) {
-        if (data.hasOwnProperty(prop)) {
-          this.proposalDetailTitleArr.push(prop);
+      if (typeof data === 'object') {
+        data = data[0] || data;
+        for (let prop in data) {
+          if (data.hasOwnProperty(prop)) {
+            this.proposalDetailTitleArr.push(prop);
+          }
         }
       }
     }
   }
+
   typeOf(value) {
     return typeof value;
   }

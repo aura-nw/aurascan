@@ -10,7 +10,7 @@
             <input
               type="text"
               class="form-control"
-              placeholder="Search for Contract Address"
+              placeholder="Search for Contract Address/name tag"
               [(ngModel)]="searchValue"
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
@@ -51,9 +51,14 @@
               <td mat-cell *matCellDef="let element" class="py-4">
                 <div class="d-flex align-items-center">
                   <i class="ph-file-text h1 mb-0 text--gray-5"></i>
-                  <a class="ml-2 hover-link" [routerLink]="['contract', element.smart_contract.address]">{{
-                    element.smart_contract.address | cutStringPipe : 8 : 8
-                  }}</a>
+                  <a
+                    class="ml-2 hover-link"
+                    [routerLink]="['contract', element.smart_contract.address]"
+                    [matTooltipPosition]="'above'"
+                    [matTooltipDisabled]="commonService.checkDisplayTooltip(element.smart_contract?.address)"
+                    matTooltip="{{ commonService.setNameTag(element.smart_contract?.address) }}"
+                    >{{ commonService.setNameTag(element.smart_contract?.address) | cutStringPipe : 8 : 8 }}</a
+                  >
                 </div>
               </td>
             </ng-container>
