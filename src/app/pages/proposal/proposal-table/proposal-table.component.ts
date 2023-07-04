@@ -1,20 +1,17 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ProposalService } from 'src/app/core/services/proposal.service';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';

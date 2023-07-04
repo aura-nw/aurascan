@@ -17,7 +17,6 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { Globals, convertDataBlock } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 const marked = require('marked');
-const encode = require('@cosmjs/encoding');
 @Component({
   selector: 'app-validators-detail',
   templateUrl: './validators-detail.component.html',

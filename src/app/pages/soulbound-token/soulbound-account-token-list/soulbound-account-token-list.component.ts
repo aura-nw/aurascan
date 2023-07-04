@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {LIMIT_NUM_SBT, SB_TYPE} from 'src/app/core/constants/soulbound.constant';
+import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
