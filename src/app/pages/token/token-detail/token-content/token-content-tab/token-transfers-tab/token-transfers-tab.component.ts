@@ -198,14 +198,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = event;
   }
 
-  getNFTDetail(data) {
-    if (this.typeContract !== this.contractType.CW20) {
-      this.tokenService.getNFTDetail(this.contractAddress, data.token_id).subscribe((res) => {
-        this.nftDetail = res.data;
-      });
-    }
-  }
-
   getPopoverData(data): IContractPopoverData {
     return {
       amount: data?.amountToken || 0,

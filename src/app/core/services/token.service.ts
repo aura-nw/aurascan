@@ -286,14 +286,6 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getContractDetail(tokenAddress): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/${tokenAddress}`);
-  }
-
-  getNFTDetail(contractAddress: string, tokenId): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nft/${tokenId}`);
-  }
-
   getPriceToken(tokenId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
   }

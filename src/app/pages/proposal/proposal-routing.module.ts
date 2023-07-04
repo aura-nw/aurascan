@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {ProposalComponent} from "./proposal.component";
-import {ProposalDetailComponent} from "./proposal-detail/proposal-detail.component";
+import { ProposalDetailComponent } from "./proposal-detail/proposal-detail.component";
+import { ProposalComponent } from "./proposal.component";
 
 const routes: Routes = [
   {
