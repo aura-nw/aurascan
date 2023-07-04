@@ -666,3 +666,29 @@ body {
     }
   }
 }
+app-tooltip-customize {
+  width: max-content;
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%, -16px);
+  max-width: 0;
+  max-height: 0;
+  opacity: 0;
+  transition: opacity .35s ease-in-out;
+}
+.aura-tooltip-contain {
+  position: relative;
+  .aura-tooltip-object {
+    cursor: pointer;
+    &:not(.disabled-hover):hover ~ app-tooltip-customize, &.show ~ app-tooltip-customize {
+      max-width: 900px;
+      max-height: 900px;
+      opacity: 1;
+      .aura-tooltip {
+        display: block;
+        padding: 8px;
+      }
+    }
+  }
+}
