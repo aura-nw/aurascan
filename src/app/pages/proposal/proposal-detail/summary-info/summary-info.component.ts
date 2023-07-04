@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
-import { AfterViewChecked, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -22,7 +22,6 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
-import { forEach } from 'lodash';
 const marked = require('marked');
 
 @Component({
@@ -30,7 +29,7 @@ const marked = require('marked');
   templateUrl: './summary-info.component.html',
   styleUrls: ['./summary-info.component.scss'],
 })
-export class SummaryInfoComponent implements OnInit, AfterViewChecked {
+export class SummaryInfoComponent implements OnInit {
   @Input() proposalId: number;
   @Output() proposalDtl = new EventEmitter();
   proposalDetail;
@@ -410,12 +409,14 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     return (isNegative ? '-' : '') + abs + key;
   }
 
-  ngAfterViewChecked(): void {
-    const editor = document.getElementById('marked');
-    if (editor) {
-      editor.innerHTML = marked.parse(this.proposalDetail.content.description);
-      return;
-    }
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const editor = document.getElementById('marked');
+      if (editor) {
+        editor.innerHTML = marked.parse(this.proposalDetail.content.description);
+        return;
+      }
+    }, 500);
   }
 
   getProposalMoreInfo(data: any) {
