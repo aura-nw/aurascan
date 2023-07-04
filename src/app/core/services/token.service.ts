@@ -114,7 +114,7 @@ export class TokenService extends CommonService {
             decimal
           }
           code {
-            code_id_verifications {
+            code_id_verifications(order_by: {updated_at: desc}) {
               verification_status
             }
           }
