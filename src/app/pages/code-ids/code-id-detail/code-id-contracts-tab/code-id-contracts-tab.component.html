@@ -11,15 +11,7 @@
           </th>
           <td mat-cell *matCellDef="let data">
             <ng-container *ngIf="template.matColumnDef === 'contract_address'">
-              <a
-                [class.text--primary]="data[template.matColumnDef]"
-                [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                [class.disabled-link]="!data[template.matColumnDef]"
-                [matTooltipPosition]="'above'"
-                [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}">
-                {{ (commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8) || '-' }}
-              </a>
+              <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
             </ng-container>
             <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
               <a
@@ -30,18 +22,9 @@
               </a>
             </ng-container>
             <ng-container *ngIf="template.matColumnDef === 'creator_address'">
-              <a
-                [class.text--primary]="data[template.matColumnDef]"
-                [routerLink]="[
-                  data[template.matColumnDef]?.length > lengthAddress ? '/contracts' : '/account',
-                  data[template.matColumnDef]
-                ]"
-                [class.disabled-link]="!data[template.matColumnDef]"
-                [matTooltipPosition]="'above'"
-                [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}">
-                {{ (commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8) || '-' }}
-              </a>
+              <app-name-tag
+                [value]="data[template.matColumnDef]"
+                [url]="data[template.matColumnDef]?.length > lengthAddress ? 'contracts' : 'account'"></app-name-tag>
             </ng-container>
             <ng-container *ngIf="template.matColumnDef === 'type'">
               <div>{{ data[template.matColumnDef] }}</div>

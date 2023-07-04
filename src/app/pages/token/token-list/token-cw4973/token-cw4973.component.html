@@ -58,27 +58,13 @@
             <ng-container matColumnDef="tokenContract">
               <th mat-header-cell *matHeaderCellDef>Token Contract</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <a
-                  [routerLink]="['/contracts/', element.smart_contract.address]"
-                  class="text-clamp"
-                  [matTooltipPosition]="'above'"
-                  [matTooltipDisabled]="commonService.checkDisplayTooltip(element.smart_contract?.address)"
-                  matTooltip="{{ commonService.setNameTag(element.smart_contract?.address) }}"
-                  >{{ commonService.setNameTag(element.smart_contract?.address) | cutStringPipe : 8 : 8 }}</a
-                >
+                <app-name-tag [value]="element.smart_contract?.address" [url]="'contracts'"></app-name-tag>
               </td>
             </ng-container>
             <ng-container matColumnDef="attestor">
               <th mat-header-cell *matHeaderCellDef>Creator</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <a
-                  [routerLink]="['/account/', element.smart_contract.creator]"
-                  class="text-clamp"
-                  [matTooltipPosition]="'above'"
-                  [matTooltipDisabled]="commonService.checkDisplayTooltip(element.smart_contract?.creator)"
-                  matTooltip="{{ commonService.setNameTag(element.smart_contract?.creator) }}"
-                  >{{ commonService.setNameTag(element.smart_contract?.creator) | cutStringPipe : 8 : 8 }}</a
-                >
+                <app-name-tag [value]="element.smart_contract?.creator"></app-name-tag>
               </td>
             </ng-container>
 

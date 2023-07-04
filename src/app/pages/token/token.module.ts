@@ -36,6 +36,7 @@ import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component
 import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { TokenRoutingModule } from './token-routing.module';
     ContractsModule,
     CommonDirectiveModule,
     APaginatorModule,
+    NameTagModule
   ],
   providers: [TokenService, AccountService],
 })

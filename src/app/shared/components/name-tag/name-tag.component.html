@@ -1,0 +1,14 @@
+<a
+  [routerLink]="['/' + url, value]"
+  class="text--primary"
+  [matTooltipPosition]="'above'"
+  [matTooltipDisabled]="commonService.checkDisplayTooltip(value)"
+  matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(value) }}">
+  <ng-container *ngIf="!fullWidth">
+    {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
+  </ng-container>
+  <ng-container *ngIf="fullWidth">
+    <span class="d-none d-lg-flex">{{ commonService.setNameTag(value) || '-' }}</span>
+    <span class="d-flex d-lg-none">{{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}</span>
+  </ng-container>
+</a>

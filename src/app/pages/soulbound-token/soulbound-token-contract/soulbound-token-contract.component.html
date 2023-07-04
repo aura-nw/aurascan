@@ -109,7 +109,7 @@
                   [routerLink]="['/account', element.receiver_address]"
                   [matTooltipPosition]="'above'"
                   [matTooltipDisabled]="commonService.checkDisplayTooltip(element.receiver_address)"
-                  matTooltip="{{ commonService.setNameTag(element.receiver_address) }}">
+                  matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(element.receiver_address) }}">
                   {{ commonService.setNameTag(element.receiver_address) | cutStringPipe : 8 : 8 }}
                 </a>
               </td>

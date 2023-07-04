@@ -33,11 +33,16 @@
                   (click)="copyMessage(currentAddress); tooltip.toggle()" />
               </div>
             </div>
-            <div *ngIf="commonService.setNameTag(currentAddress) !== currentAddress" class="name-tag cursor-pointer">
+            <div
+              *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
+              class="name-tag cursor-pointer d-flex align-items-center">
               <span class="d-sm-flex d-none">{{ commonService.setNameTag(currentAddress) }}</span>
               <span class="d-sm-none d-flex">{{
                 commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8
               }}</span>
+              <a target="_blank" href="https://docs.opensea.io/docs/metadata-standards">
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              </a>
             </div>
           </div>
           <div class="mt-6 mt-xl-4">

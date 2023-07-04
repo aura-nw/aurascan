@@ -51,14 +51,7 @@
               <td mat-cell *matCellDef="let element" class="py-4">
                 <div class="d-flex align-items-center">
                   <i class="ph-file-text h1 mb-0 text--gray-5"></i>
-                  <a
-                    class="ml-2 hover-link"
-                    [routerLink]="['contract', element.smart_contract.address]"
-                    [matTooltipPosition]="'above'"
-                    [matTooltipDisabled]="commonService.checkDisplayTooltip(element.smart_contract?.address)"
-                    matTooltip="{{ commonService.setNameTag(element.smart_contract?.address) }}"
-                    >{{ commonService.setNameTag(element.smart_contract?.address) | cutStringPipe : 8 : 8 }}</a
-                  >
+                  <app-name-tag [value]="element.smart_contract?.address" [url]="'/accountbound/contract'"></app-name-tag>
                 </div>
               </td>
             </ng-container>

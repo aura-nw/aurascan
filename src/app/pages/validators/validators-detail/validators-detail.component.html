@@ -353,7 +353,7 @@
                               class="text--primary cursor-pointer"
                               [matTooltipPosition]="'above'"
                               [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
+                              matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(data[template.matColumnDef]) }}"
                               [routerLink]="['/account', data.delegator_address]">
                               {{
                                 commonService.setNameTag(data[template.matColumnDef], global.listNameTag)

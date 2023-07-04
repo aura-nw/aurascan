@@ -26,6 +26,7 @@ import { SoulboundTokenDetailPopupComponent } from './soulbound-token-detail-pop
 import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
 import {ClickOutsideModule} from "ng-click-outside";
 import { AbtRejectPopupComponent } from './abt-reject-popup/abt-reject-popup.component';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { AbtRejectPopupComponent } from './abt-reject-popup/abt-reject-popup.com
     ModelViewModule,
     AudioPlayerModule,
     ClickOutsideModule,
+    NameTagModule
   ],
   providers: [FormBuilder, SoulboundService],
 })
