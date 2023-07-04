@@ -181,7 +181,7 @@ export class ContractService extends CommonService {
             status
             type
             creator
-            code_id_verifications {
+            code_id_verifications(order_by: {updated_at: desc}) {
               verified_at
             }
           }
