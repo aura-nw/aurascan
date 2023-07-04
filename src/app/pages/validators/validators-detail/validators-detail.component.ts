@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,7 +22,7 @@ const marked = require('marked');
   templateUrl: './validators-detail.component.html',
   styleUrls: ['./validators-detail.component.scss'],
 })
-export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
+export class ValidatorsDetailComponent implements OnInit {
   currentAddress: string;
   currentValidatorDetail: any;
 
@@ -379,12 +379,14 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  ngAfterViewChecked(): void {
-    const editor = document.getElementById('marked');
-    if (editor && this.currentValidatorDetail) {
-      editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
-      return;
-    }
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const editor = document.getElementById('marked');
+      if (editor && this.currentValidatorDetail) {
+        editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
+        return;
+      }
+    }, 500);
   }
 
   openDialog() {

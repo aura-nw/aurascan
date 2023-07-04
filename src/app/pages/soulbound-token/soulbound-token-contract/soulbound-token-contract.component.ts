@@ -108,7 +108,7 @@ export class SoulboundTokenContractComponent implements OnInit {
 
   getSearchValue() {
     this.pageData.pageIndex = 0;
-    this.textSearch = this.searchValue;
+    this.textSearch = this.searchValue = this.searchValue.trim();
     this.getListToken();
   }
 

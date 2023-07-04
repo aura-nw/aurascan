@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,6 +12,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
 import { CommonService } from 'src/app/core/services/common.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
   selector: 'app-soulbound-contract-list',
@@ -19,6 +20,7 @@ import { CommonService } from 'src/app/core/services/common.service';
   styleUrls: ['./soulbound-contract-list.component.scss'],
 })
 export class SoulboundContractListComponent implements OnInit {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -75,6 +77,7 @@ export class SoulboundContractListComponent implements OnInit {
   resetSearch() {
     this.textSearch = '';
     this.searchValue = '';
+    this.pageChange.selectPage(0);
     this.getListSmartContract();
   }
 
