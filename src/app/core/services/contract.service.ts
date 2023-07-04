@@ -82,7 +82,7 @@ export class ContractService extends CommonService {
           code_id
           code {
             type
-            code_id_verifications {
+            code_id_verifications(order_by: {updated_at: desc}) {
               compiler_version
               verified_at
               verification_status
