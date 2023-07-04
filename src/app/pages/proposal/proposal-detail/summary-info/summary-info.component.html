@@ -138,7 +138,7 @@
           </div>
         </div>
         <div
-          class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob"
+          class="row mb-3 mb-md-4 body-02 body-01-mob"
           *ngIf="
             (proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade ||
               proposalDetail?.content['@type'] === typeSpecial.ParameterChange) &&
@@ -150,35 +150,47 @@
               Changes
             </ng-container>
           </div>
-          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
-            <table class="planTable">
-              <tr class="border-bottom">
-                <th *ngFor="let row of proposalDetailTitleArr" class="text--gray-4">{{ row }}</th>
-              </tr>
-              <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
-                <ng-container
-                  *ngIf="
-                    typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0
-                  ">
-                  <tr *ngFor="let item of proposalDetail?.content?.plan">
-                    <td *ngFor="let row of proposalDetailTitleArr">{{ item[row] }}</td>
-                  </tr>
+          <div class="{{proposalDetailTitleArr.length > 5 ? 'col-10 overflow-scroll-x--md' : 'col-12 col-md-auto'}} mt-0">
+            <ul
+                  ngbNav
+                  #customNav="ngbNav"
+                  [activeId]="activeId"
+                  class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap">
+                <ng-container *ngFor="let tab of proposalDetailTitleArr; index as index">
+                  <li [ngbNavItem]="index">
+                    <a ngbNavLink (click)="changeTab(tab.key)">
+                      <span class="tab-title mb-0 text-capitalize">{{ tab.value }}</span>
+                    </a>
+                  </li>
                 </ng-container>
-                <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) === 'object'">
-                  <tr>
-                    <td *ngFor="let row of proposalDetailTitleArr">{{ proposalDetail?.content?.plan[row] }}</td>
-                  </tr>
-                </ng-container>
+        </ul>
+            <ng-container  *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
+              <ng-container *ngIf=" typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0">
+                <div *ngFor="let item of proposalDetail?.content?.plan" class="mt-4">
+                  <div *ngFor="let key of getObjectKey(item)">
+                    <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
+                      {{item[key]}}
+                    </div>
+                  </div>
+                </div>
               </ng-container>
-
-              <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
-                <ng-container *ngIf="proposalDetail?.content?.changes">
-                  <tr *ngFor="let item of proposalDetail?.content?.changes">
-                    <td *ngFor="let row of proposalDetailTitleArr">{{ item[row] }}</td>
-                  </tr>
-                </ng-container>
+              <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) === 'object'">
+                <div *ngFor="let key of getObjectKey(proposalDetail?.content?.plan)" class="mt-4">
+                  <div *ngIf="key === proposalDetailTitleArr[activeId].value">
+                    {{proposalDetail?.content?.plan[key]}}
+                  </div>
+                </div>
               </ng-container>
-            </table>
+            </ng-container>
+            <ng-container  *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
+              <div *ngFor="let item of proposalDetail?.content?.changes" class="mt-4">
+                <div *ngFor="let key of getObjectKey(item)">
+                  <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
+                    {{item[key]}}
+                  </div>
+                </div>
+              </div>
+            </ng-container>
           </div>
         </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob">
