@@ -3,10 +3,9 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
-import { map, mergeMap, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 
 export interface IValidatorVotes {
   rank: number;
@@ -43,7 +42,6 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   ).map((vote) => ({
     ...vote,
     value: vote.value.toUpperCase(),
-    // key: vote.key === VOTE_OPTION.UNSPECIFIED ? '' : vote.key,
   }));
 
   voteDataList: IValidatorVotes[] = [];
@@ -68,11 +66,7 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject();
 
-  constructor(
-    private proposalService: ProposalService,
-    private layout: BreakpointObserver,
-    private validatorService: ValidatorService,
-  ) {
+  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
     this.proposalService.reloadList$.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
       if (event) {
         this.getValidatorVotes();

@@ -42,7 +42,6 @@ export class ContractsTransactionsComponent implements OnInit {
   timerGetUpTime: any;
   isLoadingTX = true;
   lengthTxsExecute = 0;
-  isLoadInstantiate = false;
   txsInstantiate = [];
   currentPage = 0;
   destroyed$ = new Subject();
@@ -63,7 +62,7 @@ export class ContractsTransactionsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private transactionService: TransactionService,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
