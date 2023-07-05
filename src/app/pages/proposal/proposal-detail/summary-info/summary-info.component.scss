@@ -249,8 +249,12 @@
 }
 .overflow-scroll-x--md {
   @media (min-width: 991.98px) {
-    overflow-x: scroll;
+    overflow-x: auto;
+    &::-webkit-scrollbar:vertical {
+      display: none;
+    }
     &::-webkit-scrollbar {
+      display: block;
       height: 4px;
       width: 4px;
     }
