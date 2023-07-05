@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -21,8 +20,8 @@ export class TokenTableComponent implements OnChanges {
   @Output() totalValue = new EventEmitter<number>();
   @Output() totalAssets = new EventEmitter<number>();
 
-  math = Math;
   textSearch = '';
+  searchValue = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'symbol', headerCellDef: 'symbol' },
@@ -67,7 +66,6 @@ export class TokenTableComponent implements OnChanges {
   }
 
   getListToken() {
-    this.textSearch = this.textSearch?.trim();
     const payload = {
       account_address: this.address,
       limit: this.pageData.pageSize,
@@ -112,8 +110,6 @@ export class TokenTableComponent implements OnChanges {
     return balanceOf(value, decimal);
   }
 
-  sortData(sort: Sort) {}
-
   paginatorEmit(event): void {
     this.paginator = event;
   }
@@ -124,6 +120,8 @@ export class TokenTableComponent implements OnChanges {
   }
 
   searchToken(): void {
+    this.searchValue = this.searchValue?.trim();
+    this.textSearch = this.searchValue?.trim();
     if (this.paginator.pageIndex !== 0) {
       this.paginator.firstPage();
     } else {
@@ -131,14 +129,9 @@ export class TokenTableComponent implements OnChanges {
     }
   }
 
-  checkSearch(): void {
-    if (this.textSearch.length === 0) {
-      this.searchToken();
-    }
-  }
-
   resetSearch(): void {
     this.textSearch = '';
+    this.searchValue = '';
     this.pageData.pageIndex = 0;
     this.searchToken();
   }
