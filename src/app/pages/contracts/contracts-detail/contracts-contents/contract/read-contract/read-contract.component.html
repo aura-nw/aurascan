@@ -50,6 +50,7 @@
                 [(ngModel)]="item.value"
                 panelClass="contractPanel"
                 (selectionChange)="resetError(msg)"
+                [disableOptionCentering]="true"
                 placeholder="{{ item.fieldName }} ({{ item.type }})">
                 <mat-option [value]="true">
                   <div class="d-flex option-contain">

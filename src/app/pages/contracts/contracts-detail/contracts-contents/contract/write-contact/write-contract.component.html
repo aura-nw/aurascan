@@ -64,14 +64,17 @@
                 class="form-check-input {{ item.isRequired }} {{ item.fieldName }} col-12 mb-4"
                 style="height: auto"></textarea>
 
-                <mat-form-field contract
+                <mat-form-field 
+                  contract
                   appearance="fill" 
                   *ngIf="item.type?.includes('boolean')"
                   [class.error-null]="item.isError"
                   class="col-12 mb-4">
-                  <mat-select [(ngModel)]="item.value"
+                  <mat-select
+                    [(ngModel)]="item.value"
                     panelClass="contractPanel"
                     (selectionChange)="resetError(msg)"
+                    [disableOptionCentering]="true"
                     placeholder="{{ item.fieldName }} ({{ item.type }})">
                     <mat-option [value]="true">
                       <div class="d-flex option-contain">
