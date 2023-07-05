@@ -150,12 +150,12 @@
               Changes
             </ng-container>
           </div>
-          <div class="{{proposalDetailTitleArr.length > 5 ? 'col-10 overflow-scroll-x--md' : 'col-12 col-md-auto'}} mt-0">
+          <div class="col-12 {{proposalDetailTitleArr.length > 5 ? 'col-md-10' : 'col-md-auto'}} mt-0">
             <ul
                   ngbNav
                   #customNav="ngbNav"
                   [activeId]="activeId"
-                  class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap">
+                  class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md">
                 <ng-container *ngFor="let tab of proposalDetailTitleArr; index as index">
                   <li [ngbNavItem]="index">
                     <a ngbNavLink (click)="changeTab(tab.key)">
@@ -182,7 +182,7 @@
                 </div>
               </ng-container>
             </ng-container>
-            <ng-container  *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
               <div *ngFor="let item of proposalDetail?.content?.changes" class="mt-4">
                 <div *ngFor="let key of getObjectKey(item)">
                   <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
