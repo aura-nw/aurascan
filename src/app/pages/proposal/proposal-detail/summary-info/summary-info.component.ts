@@ -54,6 +54,7 @@ export class SummaryInfoComponent implements OnInit {
     SoftwareUpgrade: '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
     ParameterChange: '/cosmos.params.v1beta1.ParameterChangeProposal',
   };
+  activeId = 0;
 
   reload$;
 
@@ -422,22 +423,39 @@ export class SummaryInfoComponent implements OnInit {
   getProposalMoreInfo(data: any) {
     if (this.proposalDetailTitleArr?.length === 0) {
       if (typeof data !== 'object') {
-        for (let key in data[0]) {
-          this.proposalDetailTitleArr.push(key);
+        let index = 0;
+        for (let prop in data[0]) {
+          this.proposalDetailTitleArr.push({
+            key: index,
+            value: prop
+          });
+          index++;
         }
       }
       if (typeof data === 'object') {
+        let index = 0;
         data = data[0] || data;
         for (let prop in data) {
           if (data.hasOwnProperty(prop)) {
-            this.proposalDetailTitleArr.push(prop);
+            this.proposalDetailTitleArr.push({
+              key: index,
+              value: prop
+            });
+            index++;
           }
         }
       }
     }
   }
+  changeTab(key) {
+    this.activeId = key;
+  }
 
   typeOf(value) {
     return typeof value;
+  }
+
+  getObjectKey(object) {
+    return Object.keys(object)
   }
 }

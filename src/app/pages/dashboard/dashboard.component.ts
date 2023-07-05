@@ -33,7 +33,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   chartRange = CHART_RANGE.M_60;
   chartRangeData = CHART_RANGE;
   PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
-  // public chartOptions: Partial<ChartOptions> = DASHBOARD_CHART_OPTIONS;
 
   templatesBlock: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },

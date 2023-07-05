@@ -27,6 +27,7 @@ export class NftListComponent implements OnChanges {
   nftList = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
+  textSearch = '';
 
   constructor(
     private accountService: AccountService,
@@ -41,11 +42,10 @@ export class NftListComponent implements OnChanges {
   }
 
   getNftData() {
-    this.searchValue = this.searchValue?.trim();
     const payload = {
       owner: this.address,
       limit: this.pageData.pageSize,
-      keyword: this.searchValue,
+      keyword: this.textSearch,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
     };
 
@@ -76,10 +76,13 @@ export class NftListComponent implements OnChanges {
 
   resetSearch(): void {
     this.searchValue = '';
+    this.textSearch = '';
     this.pageEvent(0);
   }
 
   searchTokenNft(): void {
+    this.searchValue = this.searchValue?.trim();
+    this.textSearch = this.searchValue;
     this.pageEvent(0);
   }
 

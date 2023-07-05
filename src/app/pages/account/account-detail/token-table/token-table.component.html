@@ -14,9 +14,8 @@
                 type="text"
                 class="form-control"
                 placeholder="Search for Token Name or Address"
-                [(ngModel)]="textSearch"
+                [(ngModel)]="searchValue"
                 [maxLength]="maxLengthSearch"
-                (keyup)="checkSearch()"
                 (keyup.enter)="searchToken()"
                 name="search"
                 autocomplete="off" />
@@ -38,7 +37,7 @@
       <ng-container *ngIf="pageData?.length > 0; else noValues">
         <!-- Table -->
         <div class="table-responsive mt-4 table-token" *ngIf="!assetsLoading">
-          <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
+          <table mat-table matSort [dataSource]="dataSource" class="aura-table">
             <!-- Asset Column -->
             <ng-container matColumnDef="asset">
               <th mat-header-cell *matHeaderCellDef>ASSET</th>
