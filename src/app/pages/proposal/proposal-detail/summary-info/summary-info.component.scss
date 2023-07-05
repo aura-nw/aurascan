@@ -260,3 +260,7 @@
     }
   }
 }
+.changes-contain.overflow-scroll-y {
+  overflow-y: auto;
+  max-height: 70px;
+}

@@ -54,7 +54,6 @@ export class SummaryInfoComponent implements OnInit {
     SoftwareUpgrade: '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
     ParameterChange: '/cosmos.params.v1beta1.ParameterChangeProposal',
   };
-
   activeId = 0;
 
   reload$;
