@@ -40,12 +40,14 @@
               [(ngModel)]="item.value"
               placeholder="{{ item.fieldName }} ({{ item.type }})" />
 
-            <mat-form-field contract
-              appearance="fill" 
+            <mat-form-field
+              contract
+              appearance="fill"
               *ngIf="item.type?.includes('boolean')"
               [class.error-null]="item.isError"
               class="col-12 mb-4">
-              <mat-select [(ngModel)]="item.value"
+              <mat-select
+                [(ngModel)]="item.value"
                 panelClass="contractPanel"
                 (selectionChange)="resetError(msg)"
                 placeholder="{{ item.fieldName }} ({{ item.type }})">
@@ -90,7 +92,7 @@
               <div class="mb-0">
                 {{ msg.fieldName }}
                 <span class="ml-1 font-italic text--gray-light small-body">
-                  {{ msg.resType }}                  
+                  {{ msg.resType }}
                 </span>
               </div>
               <div class="d-flex" *ngIf="msg.dataResponse">

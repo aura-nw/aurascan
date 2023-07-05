@@ -47,7 +47,7 @@ mat-expansion-panel {
   }
 }
 .overflow-scroll-x {
-  overflow-x: scroll;
+  overflow-x: auto;
   ::-webkit-scrollbar {
   height: 4px;
   width: 4px;
