@@ -42,7 +42,6 @@ export class NftListComponent implements OnChanges {
   }
 
   getNftData() {
-    this.textSearch = this.textSearch?.trim();
     const payload = {
       owner: this.address,
       limit: this.pageData.pageSize,
@@ -82,6 +81,7 @@ export class NftListComponent implements OnChanges {
   }
 
   searchTokenNft(): void {
+    this.searchValue = this.searchValue?.trim();
     this.textSearch = this.searchValue;
     this.pageEvent(0);
   }
