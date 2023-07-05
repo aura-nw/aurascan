@@ -51,26 +51,21 @@
                     </a>
                   </ng-container>
                   <ng-container *ngSwitchCase="'hash-url'">
-                    <ng-container *ngIf="data[template.matColumnDef] === contractInfo?.contractsAddress">
-                      <span
-                        [matTooltipPosition]="'above'"
-                        [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                        matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(data[template.matColumnDef]) }}"
-                        >{{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}</span
-                      >
+                    <ng-container *ngIf="template.isNameTag">
+                      <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        [url]="template?.isUrl"
+                        [isLink]="data[template.matColumnDef] !== contractInfo?.contractsAddress"></app-name-tag>
                     </ng-container>
-                    <ng-container *ngIf="data[template.matColumnDef] !== contractInfo?.contractsAddress">
+                    <ng-container *ngIf="!template.isNameTag">
                       <a
                         *ngIf="data[template.matColumnDef]"
                         class="text--primary cursor-pointer hash-link"
-                        [matTooltipPosition]="'above'"
-                        [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                        matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(data[template.matColumnDef]) }}"
                         [routerLink]="[
                           template?.isUrl,
                           template?.paramField ? data[template?.paramField] : data[template.matColumnDef]
                         ]"
-                        >{{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}</a
+                        >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</a
                       >
                     </ng-container>
                     <div class="" *ngIf="!data[template.matColumnDef]">-</div>

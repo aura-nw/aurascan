@@ -77,11 +77,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
     } else {
       this.isLoading = false;
     }
-
-    console.log(this.contractInfo);
-    
-    console.log(this.dataList);
-    
   }
 
   ngOnInit(): void {

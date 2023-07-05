@@ -111,10 +111,10 @@ export class ValidatorsDetailComponent implements OnInit {
       this.getLastHeight();
     }, this.timeInterval);
 
-    this.timerGetUpTime = setInterval(() => {
-      this.getDetail();
-      this.loadData(false);
-    }, 5000);
+    // this.timerGetUpTime = setInterval(() => {
+    //   this.getDetail();
+    //   this.loadData(false);
+    // }, 5000);
   }
 
   loadData(isInit = true) {
@@ -198,7 +198,7 @@ export class ValidatorsDetailComponent implements OnInit {
     }
     this.blockService.getDataBlock(payload).subscribe(
       (res) => {
-        this.nextKeyBlock = res.block[res.block.length - 1].height;
+        this.nextKeyBlock = res?.block[res?.block?.length - 1]?.height;
         if (res.block.length > 0) {
           const blocks = convertDataBlock(res);
           if (this.dataSourceBlock.data.length > 0 && isInit) {

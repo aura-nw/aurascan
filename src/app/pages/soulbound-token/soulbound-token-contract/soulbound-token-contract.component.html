@@ -104,14 +104,7 @@
             <ng-container matColumnDef="receiver_address">
               <th mat-header-cell *matHeaderCellDef class="">RECEIVER</th>
               <td mat-cell *matCellDef="let element" class="py-4">
-                <a
-                  class="hover-link"
-                  [routerLink]="['/account', element.receiver_address]"
-                  [matTooltipPosition]="'above'"
-                  [matTooltipDisabled]="commonService.checkDisplayTooltip(element.receiver_address)"
-                  matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(element.receiver_address) }}">
-                  {{ commonService.setNameTag(element.receiver_address) | cutStringPipe : 8 : 8 }}
-                </a>
+                <app-name-tag [value]="element.receiver_address"></app-name-tag>
               </td>
             </ng-container>
 
