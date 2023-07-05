@@ -117,29 +117,9 @@
           <div class="col-auto col-md-2 text--gray-4">Type</div>
           <div class="col-auto col-md-10 mt-0 fw-500 g-ellipsis__type text--gray-1">{{ proposalDetail.pro_type }}</div>
         </div>
-        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-4">Submit Time</div>
-          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
-            <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.submit_time | customDate : 'yyyy-MM-dd' }}</span>
-              <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.submit_time | customDate : 'HH:mm:ss' }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-4">Deposit End Time</div>
-          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
-            <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.deposit_end_time | customDate : 'yyyy-MM-dd' }}</span>
-              <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.deposit_end_time | customDate : 'HH:mm:ss' }}</span>
-            </div>
-          </div>
-        </div>
         <div
-          class="row mb-3 mb-md-4 body-02 body-01-mob"
-          *ngIf="
+            class="row mb-3 mb-md-4 body-02 body-01-mob"
+            *ngIf="
             (proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade ||
               proposalDetail?.content['@type'] === typeSpecial.ParameterChange) &&
             proposalDetailTitleArr.length > 0
@@ -152,24 +132,26 @@
           </div>
           <div class="col-12 {{proposalDetailTitleArr.length > 5 ? 'col-md-10' : 'col-md-auto'}} mt-0">
             <ul
-                  ngbNav
-                  #customNav="ngbNav"
-                  [activeId]="activeId"
-                  class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md">
-                <ng-container *ngFor="let tab of proposalDetailTitleArr; index as index">
-                  <li [ngbNavItem]="index">
-                    <a ngbNavLink (click)="changeTab(tab.key)">
-                      <span class="tab-title mb-0 text-capitalize">{{ tab.value }}</span>
-                    </a>
-                  </li>
-                </ng-container>
-        </ul>
-            <ng-container  *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
+                ngbNav
+                #customNav="ngbNav"
+                [activeId]="activeId"
+                class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md">
+              <ng-container *ngFor="let tab of proposalDetailTitleArr; index as index">
+                <li [ngbNavItem]="index">
+                  <a ngbNavLink (click)="changeTab(tab.key)">
+                    <span class="tab-title mb-0 text-capitalize">{{ tab.value }}</span>
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
               <ng-container *ngIf=" typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0">
-                <div *ngFor="let item of proposalDetail?.content?.plan" class="mt-4">
-                  <div *ngFor="let key of getObjectKey(item)">
-                    <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
-                      {{item[key]}}
+                <div class="changes-contain" [class.overflow-scroll-y]="proposalDetail?.content?.plan.length > 2">
+                  <div *ngFor="let item of proposalDetail?.content?.plan" class="mt-4">
+                    <div *ngFor="let key of getObjectKey(item)">
+                      <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
+                        {{item[key]}}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -191,6 +173,26 @@
                 </div>
               </div>
             </ng-container>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Submit Time</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.submit_time | customDate : 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.submit_time | customDate : 'HH:mm:ss' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-4">Deposit End Time</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.deposit_end_time | customDate : 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.deposit_end_time | customDate : 'HH:mm:ss' }}</span>
+            </div>
           </div>
         </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob">
