@@ -18,6 +18,7 @@
             [(ngModel)]="searchValue"
             [maxLength]="maxLengthSearch"
             [ngModelOptions]="{ standalone: true }"
+            (keyup.enter)="searchTokenNft()"
             name="inputEmail"
             autocomplete="off" />
           <button type="submit" class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}">
