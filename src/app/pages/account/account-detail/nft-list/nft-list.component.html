@@ -9,7 +9,7 @@
       <div class="h1 mb-0 text-gradient">
         <!--        $ {{ totalValue || 0 | number: global.formatNumber2Decimal }}-->
       </div>
-      <form (ngSubmit)="searchTokenNft()" class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
+      <form class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
         <div class="input-group">
           <input
             type="text"
@@ -18,6 +18,7 @@
             [(ngModel)]="searchValue"
             [maxLength]="maxLengthSearch"
             [ngModelOptions]="{ standalone: true }"
+            (keyup.enter)="searchTokenNft()"
             name="inputEmail"
             autocomplete="off" />
           <button type="submit" class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}">
