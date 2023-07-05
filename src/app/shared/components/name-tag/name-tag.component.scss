@@ -1,5 +1,5 @@
 .box-name-tag {
-  background: var(--aura-gray-9);
+  background: var(--aura-gray-8);
   border-radius: 4px;
   min-width: 130px;
   display: inline-flex;
@@ -8,9 +8,9 @@
   align-items: center;
   justify-content: center;
   font-weight: 400;
+  word-break: break-word;
   @media (min-width: 992px) {
     min-width: 168px;
-    // display: inline-flex;
     padding: 4px 12px;
   }
 }

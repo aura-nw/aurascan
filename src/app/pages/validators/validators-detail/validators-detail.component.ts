@@ -111,10 +111,10 @@ export class ValidatorsDetailComponent implements OnInit {
       this.getLastHeight();
     }, this.timeInterval);
 
-    // this.timerGetUpTime = setInterval(() => {
-    //   this.getDetail();
-    //   this.loadData(false);
-    // }, 5000);
+    this.timerGetUpTime = setInterval(() => {
+      this.getDetail();
+      this.loadData(false);
+    }, 5000);
   }
 
   loadData(isInit = true) {

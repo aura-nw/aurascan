@@ -149,3 +149,11 @@ form.search-form {
     }
   }
 }
+
+.address-name-tag {
+  ::ng-deep {
+    .box-name-tag {
+      min-width: auto;
+    }
+  }
+}
