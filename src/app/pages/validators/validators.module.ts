@@ -27,6 +27,7 @@ import { ValidatorsDetailComponent } from './validators-detail/validators-detail
 import { ValidatorsRoutingModule } from './validators-routing.module';
 import { ValidatorsComponent } from './validators.component';
 import { ProposalService } from 'src/app/core/services/proposal.service';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { ProposalService } from 'src/app/core/services/proposal.service';
     LoadingImageModule,
     NgbNavModule,
     SoulboundFeatureTokensModule,
-    CommonDirectiveModule
+    CommonDirectiveModule,
+    NameTagModule
   ],
   providers: [CommonService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe, ProposalService],
 })

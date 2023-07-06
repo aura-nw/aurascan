@@ -101,30 +101,26 @@
                         </ng-container>
                         <ng-container *ngSwitchCase="'from_address'">
                           <div class="d-flex align-items-center">
-                            <a
-                              class="text--primary txt-from-address content-transfer"
-                              [matTooltipPosition]="'above'"
-                              [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
-                              href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                              *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
-                              {{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}
-                            </a>
-                            <span
-                              [matTooltipPosition]="'above'"
-                              [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
-                              *ngIf="data.modeExecute === modeExecuteTransaction.Mint"
-                              class="content-transfer">
-                              {{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}
-                            </span>
-                            <span class="content-transfer" *ngIf="!data[template.matColumnDef]"> - </span>
+                            <div class="content-transfer">
+                              <app-name-tag
+                                [value]="data[template.matColumnDef]"
+                                [isHref]="true"
+                                [url]="'/tokens/' + linkToken + '/' + contractAddress + '?a='"
+                                *ngIf="
+                                  data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
+                                "></app-name-tag>
+                              <app-name-tag
+                                [value]="data[template.matColumnDef]"
+                                [isLink]="false"
+                                *ngIf="data.modeExecute === modeExecuteTransaction.Mint"></app-name-tag>
+                              <span class="" *ngIf="!data[template.matColumnDef]"> - </span>
+                            </div>
                             <ng-container *ngIf="!isSearchAddress">
                               <img
                                 [src]="'assets/images/icons/arrow-right.png' | imageS3"
                                 width="14"
                                 height="9"
-                                class="ml-4 ml-lg-0" />
+                                class="ml-3" />
                             </ng-container>
                             <ng-container *ngIf="isSearchAddress">
                               <div class="box-token-transfer">
@@ -140,35 +136,23 @@
                         </ng-container>
                         <ng-container *ngSwitchCase="'to_address'">
                           <div class="pl-4 pl-lg-0" [style.width]="'180px'">
-                            <img
-                              [src]="'assets/images/icons/token-contract.svg' | imageS3"
-                              *ngIf="isContractAddress(data.type, data.to_address)"
-                              alt=""
-                              width="16px"
-                              height="16px" />
-                            <a
-                              class="text--primary"
-                              href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                              [matTooltipPosition]="'above'"
-                              [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
+                            <app-name-tag
+                              [value]="data[template.matColumnDef]"
+                              [isHref]="true"
+                              [url]="'/tokens/' + linkToken + '/' + contractAddress + '?a='"
+                              [type]="data.type"
                               *ngIf="
                                 data.modeExecute !== modeExecuteTransaction.Burn &&
                                 data.modeExecute !== modeExecuteTransaction.UnEquip &&
                                 data[template.matColumnDef]
-                              ">
-                              {{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}
-                            </a>
-                            <span
-                              [matTooltipPosition]="'above'"
-                              [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                              matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}"
+                              "></app-name-tag>
+                            <app-name-tag
+                              [value]="data[template.matColumnDef]"
+                              [isLink]="false"
                               *ngIf="
                                 data.modeExecute === modeExecuteTransaction.Burn ||
                                 data.modeExecute === modeExecuteTransaction.UnEquip
-                              "
-                              >{{ commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8 }}</span
-                            >
+                              "></app-name-tag>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
                           </div>
                         </ng-container>

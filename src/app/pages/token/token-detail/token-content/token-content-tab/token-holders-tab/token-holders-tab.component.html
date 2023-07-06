@@ -56,18 +56,18 @@
                       <span class="token-id">{{ pageData?.pageIndex * 20 + i + 1 }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'owner'">
-                      <a
-                        *ngIf="this.typeContract !== contractType.CW20"
-                        href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp"
-                        >{{ commonService.setNameTag(data[template.matColumnDef]) }}</a
-                      >
-                      <a
-                        *ngIf="this.typeContract === contractType.CW20"
-                        href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp"
-                        >{{ commonService.setNameTag(data[template.matColumnDef]) }}</a
-                      >
+                      <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        [fullWidth]="true"
+                        [fullWidthMob]="true"
+                        [isHref]="true"
+                        [url]="
+                          '/tokens/' +
+                          (this.typeContract === contractType.CW20 ? 'token' : 'token-nft') +
+                          '/' +
+                          contractAddress +
+                          '?a='
+                        "></app-name-tag>
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
                       <div [appBigNumber]="data[template.matColumnDef]" [decimal]="decimalValue"></div>

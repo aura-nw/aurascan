@@ -9,14 +9,13 @@
         <tr>
           <td class="text--gray-5 body-02-mob">Public Name Tag:</td>
           <td colspan="2">
-            <ng-container
-              *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
-              <span class="d-sm-flex d-none">{{ commonService.setNameTag(contractDetail?.address) }}</span>
-              <span class="d-sm-none d-flex">{{
-                commonService.setNameTag(contractDetail?.address) | cutStringPipe : 8 : 8
-              }}</span>
-            </ng-container>
-            <ng-template #NoNameTag>Not Available</ng-template>
+            <div class="txt-name-tag">
+              <ng-container
+                *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
+                <app-name-tag [value]="contractDetail?.address" [isLink]="false"></app-name-tag>
+              </ng-container>
+              <ng-template #NoNameTag>Not Available</ng-template>
+            </div>
           </td>
         </tr>
 
@@ -24,9 +23,9 @@
           <td colspan="3">
             <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
             <div>
-              <a class="text--primary mr-1 mr-lg-2" [routerLink]="['/account', contractDetail?.creator]">
-                {{ commonService.setNameTag(contractDetail?.creator) | cutStringPipe : 8 : 8 }}
-              </a>
+              <span class="mr-1 mr-lg-2 txt-name-tag">
+                <app-name-tag [value]="contractDetail?.creator"></app-name-tag>
+              </span>
               at txn
               <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
                 {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
@@ -38,14 +37,9 @@
         <tr class="d-none d-lg-table-row">
           <td class="text--gray-5 body-02-mob">Contract Creator:</td>
           <td colspan="2">
-            <a
-              class="text--primary"
-              [routerLink]="['/account', contractDetail?.creator]"
-              [matTooltipPosition]="'above'"
-              [matTooltipDisabled]="commonService.checkDisplayTooltip(contractDetail?.creator)"
-              matTooltip="{{ commonService.setNameTag(contractDetail?.creator) }}">
-              {{ commonService.setNameTag(contractDetail?.creator) | cutStringPipe : 8 : 8 }}
-            </a>
+            <span class="mr-1 mr-lg-2 txt-name-tag">
+              <app-name-tag [value]="contractDetail?.creator"></app-name-tag>
+            </span>
             at txn
             <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
               {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
