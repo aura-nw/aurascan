@@ -33,19 +33,7 @@
                   </a>
                 </ng-container>
                 <ng-container *ngIf="template.isUrl && template.isShort">
-                  <a
-                    [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                    [class.disabled-link]="!data[template.matColumnDef]"
-                    [matTooltipPosition]="'above'"
-                    [matTooltipDisabled]="commonService.checkDisplayTooltip(data[template.matColumnDef])"
-                    matTooltip="{{ commonService.setNameTag(data[template.matColumnDef]) }}">
-                    <ng-container *ngIf="template.isNameTag">
-                      {{ (commonService.setNameTag(data[template.matColumnDef]) | cutStringPipe : 8 : 8) || '-' }}
-                    </ng-container>
-                    <ng-container *ngIf="!template.isNameTag">
-                      {{ shortenAddress(data[template.matColumnDef]) || '-' }}
-                    </ng-container>
-                  </a>
+                  <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
                 </ng-container>
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
@@ -114,7 +102,7 @@
               [content]="[
                 {
                   label: 'Voter',
-                  class: 'h5 mb-0 text--primary',
+                  class: 'h5 mb-0 text--primary name-tag-label',
                   info:
                     '<a class=text--primary href=' +
                     ('/account/' + data.voter) +
@@ -194,7 +182,7 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: 'h5 mb-0',
+                  class: 'h5 mb-0 name-tag-label',
                   info: data.depositors
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +

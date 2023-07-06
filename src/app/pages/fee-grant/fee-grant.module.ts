@@ -23,6 +23,7 @@ import { PopupAddGrantComponent } from './popup-add-grant/popup-add-grant.compon
 import { PopupNoticeComponent } from './popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ClickOutsideModule,
     NgxMaskModule,
     APaginatorModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NameTagModule
   ],
   providers: [FormBuilder, FeeGrantService, TransactionService, MappingErrorService, AccountService],
 })

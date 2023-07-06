@@ -130,10 +130,10 @@ export class CommonService {
   }
 
   checkDisplayTooltip(address): boolean {
-    let result = true;
+    let result = false;
     const nameTag = this.listNameTag?.find((k) => k.address === address);
-    if (nameTag?.name_tag !== address && nameTag?.name_tag?.length > 16) {
-      result = false;
+    if (!nameTag || nameTag?.name_tag === address) {
+      result = true;
     }
     return result;
   }

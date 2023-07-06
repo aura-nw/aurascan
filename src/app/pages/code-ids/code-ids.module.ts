@@ -16,6 +16,7 @@ import { CodeIdDetailComponent } from './code-id-detail/code-id-detail.component
 import { VerifyCodeIdComponent } from './code-id-detail/verify-code-id/verify-code-id.component';
 import { CodeIdListComponent } from './code-id-list/code-id-list.component';
 import { CodeIdsRoutingModule } from './code-ids-routing.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [CodeIdListComponent, CodeIdDetailComponent, VerifyCodeIdComponent, CodeIdContractsTabComponent],
@@ -32,6 +33,7 @@ import { CodeIdsRoutingModule } from './code-ids-routing.module';
     NgbNavModule,
     ContractsModule,
     APaginatorModule,
+    NameTagModule
   ],
   providers: [ContractService],
 })

@@ -52,24 +52,17 @@
     </div>
     <div class="card-body pt-3 pt-lg-0 px-3 px-lg-6">
       <div class="text--gray-1">
-        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob align-items-center">
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
             <a class="text--primary h6" [routerLink]="['/account', proposalDetail?.proposer_address]">
-              <span class="d-none d-lg-block">
-                {{
+              <app-name-tag
+                [value]="
                   proposalDetail?.proposer
-                    ? commonService.setNameTag(proposalDetail?.proposer?.description?.moniker)
-                    : commonService.setNameTag(proposalDetail?.proposer_address)
-                }}
-              </span>
-              <span class="d-lg-none">
-                {{
-                  proposalDetail?.proposer
-                    ? commonService.setNameTag(proposalDetail?.proposer?.description.moniker)
-                    : (commonService.setNameTag(proposalDetail?.proposer_address) | cutStringPipe : 8 : 8)
-                }}
-              </span>
+                    ? proposalDetail?.proposer?.description?.moniker
+                    : proposalDetail?.proposer_address
+                "
+                [fullWidth]="true"></app-name-tag>
             </a>
           </div>
         </div>
