@@ -132,7 +132,9 @@
               <pre id="json" class="raw-content text--white px-4" [innerHtml]="item | appJson"></pre>
             </div>
           </div>
-          <ng-container [ngTemplateOutlet]="logEvent" [ngTemplateOutletContext]="{ data: transactionDetail.tx?.logs, idx: i }">
+          <ng-container
+            [ngTemplateOutlet]="logEvent"
+            [ngTemplateOutletContext]="{ data: transactionDetail.tx?.logs, idx: i }">
           </ng-container>
         </div>
       </div>
@@ -144,7 +146,7 @@
     <app-messages-item
       [label]="'Sender'"
       [value]="transactionDetail?.messages[0]?.sender"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Receiver'" [value]="transactionDetail?.messages[0]?.receiver"></app-messages-item>
     <app-messages-item
       [label]="'Source Channel'"
@@ -197,11 +199,11 @@
     <app-messages-item
       [label]="'Signer'"
       [value]="ibcData?.update_client?.signer || transactionDetail.messages[0].signer"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item
       [label]="'Receiver'"
       [value]="ibcData?.receiver"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Sender'" [value]="ibcData?.sender"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
@@ -228,7 +230,7 @@
     <app-messages-item
       [label]="'Sender'"
       [value]="ibcData?.acknowledgement?.sender"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
@@ -236,7 +238,7 @@
     <app-messages-item
       [label]="'Signer'"
       [value]="ibcData?.acknowledgement?.signer"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
 
@@ -280,11 +282,14 @@
     <app-messages-item
       [label]="'Signer'"
       [value]="ibcData?.time_out[index - 1]?.signer"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
   </ng-template>
 
   <ng-template #ibcUpdateClient let-data="data">
-    <app-messages-item [label]="'Signer'" [value]="data?.signer" [dataLink]="{ url: '/account' }"></app-messages-item>
+    <app-messages-item
+      [label]="'Signer'"
+      [value]="data?.signer"
+      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Client ID'" [value]="data?.client_id"></app-messages-item>
     <app-messages-item
       [label]="'block'"
