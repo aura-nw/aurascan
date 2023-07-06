@@ -159,7 +159,10 @@
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Owner:</div>
               <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner && !nftDetail?.burned">
-                <app-name-tag [value]="nftDetail?.owner" [fullWidth]="true"></app-name-tag>
+                <app-name-tag
+                  [value]="nftDetail?.owner"
+                  [fullWidth]="true"
+                  [url]="nftDetail?.owner?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                   class="ml-2 cursor-pointer btn-copy"
@@ -174,10 +177,6 @@
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Contract Address:</div>
               <div class="d-flex align-items-center position-relative">
-                <!-- <img
-                  [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-                  class="mr-2"
-                  alt="contract_verification" /> -->
                 <app-name-tag
                   [value]="nftDetail?.contract_address"
                   [url]="'contracts'"
@@ -197,7 +196,10 @@
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Creator:</div>
               <div class="d-flex align-items-center">
-                <app-name-tag [value]="nftDetail?.creator" [fullWidth]="true"></app-name-tag>
+                <app-name-tag
+                  [value]="nftDetail?.creator"
+                  [fullWidth]="true"
+                  [url]="nftDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                   class="ml-2 cursor-pointer btn-copy"
