@@ -12,7 +12,7 @@ import {
   PAGE_EVENT,
 } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
-import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
@@ -77,6 +77,7 @@ export class NFTDetailComponent implements OnInit {
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   userAddress = '';
+  ContractVerifyType = ContractVerifyType;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;

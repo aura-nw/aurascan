@@ -181,7 +181,7 @@
                   [value]="nftDetail?.contract_address"
                   [url]="'contracts'"
                   [fullWidth]="true"
-                  [iconVerify]="true"></app-name-tag>
+                  [iconVerify]="false"></app-name-tag>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                   class="ml-2 cursor-pointer btn-copy"
@@ -354,15 +354,20 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'from_address'">
                   <div class="content-transfer">
-                    <app-name-tag
-                      [value]="data[template.matColumnDef]"
-                      *ngIf="
-                        data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
-                      "></app-name-tag>
-                    <app-name-tag
-                      [value]="data[template.matColumnDef]"
-                      *ngIf="data.modeExecute === modeExecuteTransaction.Mint"
-                      [isLink]="false"></app-name-tag>
+                    <ng-container *ngIf="data.modeExecute === modeExecuteTransaction.Take">
+                      <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
+                    </ng-container>
+                    <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take">
+                      <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        *ngIf="
+                          data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
+                        "></app-name-tag>
+                      <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        *ngIf="data.modeExecute === modeExecuteTransaction.Mint"
+                        [isLink]="false"></app-name-tag>
+                    </ng-container>
                   </div>
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
                   <img

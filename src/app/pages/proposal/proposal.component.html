@@ -191,8 +191,8 @@
                     <div class="text--gray-4">Proposer</div>
                     <a href="/account/{{ lastedItem.proposer_address }}" class="text--primary fw-500">
                       {{
-                        lastedItem.proposer_name
-                          ? lastedItem.proposer_name
+                        lastedItem.proposer
+                          ? lastedItem.proposer?.description?.moniker
                           : (lastedItem.proposer_address | cutStringPipe : 8 : 8)
                       }}
                     </a>
