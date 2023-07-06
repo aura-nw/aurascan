@@ -112,16 +112,6 @@
                       <div class="fw-500" [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
-                  <ng-container *ngSwitchCase="'rank'">
-                    <th mat-header-cell *matHeaderCellDef class="col-per-5">
-                      <div
-                        class="fw-500 text-center"
-                        [innerHTML]="template.headerCellDef | translate"
-                        matTooltipPosition="above"
-                        matTooltip="Ranking based on validators' voting power."
-                        #tooltip="matTooltip"></div>
-                    </th>
-                  </ng-container>
                   <ng-container *ngSwitchCase="'title'">
                     <th mat-header-cell *matHeaderCellDef class="pl-5 col-per-20">
                       <div class="pl-5" [innerHTML]="template.headerCellDef | translate"></div>
@@ -134,39 +124,45 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'uptime'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
-                      <div
-                        [innerHTML]="template.headerCellDef | translate"
-                        matTooltipPosition="above"
-                        matTooltip="Validator's availability in the last {{ numBlock }} blocks."
-                        #tooltip="matTooltip"></div>
+                      <div class="aura-tooltip-contain">
+                        <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
+                        <app-tooltip-customize
+                          [content]="
+                            'Validator\'s availability in the last ' + numBlock + ' blocks.'
+                          "></app-tooltip-customize>
+                      </div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'power'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-power">
-                      <div
-                        class="pl-5"
-                        [innerHTML]="template.headerCellDef | translate"
-                        matTooltipPosition="above"
-                        matTooltip="The more AURA delegated to a validator, the higher the validator's voting power."
-                        #tooltip="matTooltip"></div>
+                      <div class="aura-tooltip-contain">
+                        <div class="pl-5 aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
+                        <app-tooltip-customize
+                          [content]="
+                            'The more AURA delegated to a validator, the higher the validator\'s voting power.'
+                          ">
+                        </app-tooltip-customize>
+                      </div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'commission'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
-                      <div
-                        [innerHTML]="template.headerCellDef | translate"
-                        matTooltipPosition="above"
-                        matTooltip="The proportion of staking reward being taken by the validator as a commission."
-                        #tooltip="matTooltip"></div>
+                      <div class="aura-tooltip-contain">
+                        <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
+                        <app-tooltip-customize
+                          [content]="'The proportion of staking reward being taken by the validator as a commission.'">
+                        </app-tooltip-customize>
+                      </div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'participation'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
-                      <div
-                        [innerHTML]="template.headerCellDef | translate"
-                        matTooltipPosition="above"
-                        matTooltip="Vote participation stat for the last {{ countProposal || 0 }} proposals."
-                        #tooltip="matTooltip"></div>
+                      <div class="aura-tooltip-contain">
+                        <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
+                        <app-tooltip-customize
+                          [content]="'Vote participation stat for the last' + countProposal || 0 + 'proposals.'">
+                        </app-tooltip-customize>
+                      </div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchDefault>
@@ -184,15 +180,14 @@
                           {{ data[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
-                          <div [style.min-width]="'120px'" class="text-end">
+                          <div [style.min-width]="'120px'" class="text-end aura-tooltip-contain">
                             <span
-                              class="cursor-pointer"
-                              matTooltipPosition="above"
-                              matTooltip="{{ data[template.matColumnDef] | number }}"
-                              #tooltip="matTooltip"
+                              class="cursor-pointer aura-tooltip-object"
                               [votingPower]="true"
                               [appBigNumber]="data[template.matColumnDef]"
                               [decimal]="0"></span>
+                            <app-tooltip-customize [content]="data[template.matColumnDef] | number">
+                            </app-tooltip-customize>
                           </div>
                           <div
                             *ngIf="data['status'] === statusValidator.Active"
@@ -212,15 +207,20 @@
                           <span class="percent-vote fw-normal" *ngIf="data['status'] === statusValidator.Active">{{
                             data['percent_power'] + '%'
                           }}</span>
-                          <i
-                            class="ph-warning-fill cursor-pointer ml-1"
-                            *ngIf="
-                              (data['status'] === statusValidator.Active ||
-                                (data['status'] !== statusValidator.Active && !data['jailed'])) &&
-                              data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH
-                            "
-                            matTooltip="Validators with too much voting power will lessen the security and decentralization of the network."
-                            [matTooltipPosition]="'above'"></i>
+                          <div class="aura-tooltip-contain">
+                            <i
+                              class="ph-warning-fill cursor-pointer ml-1 aura-tooltip-object"
+                              *ngIf="
+                                (data['status'] === statusValidator.Active ||
+                                  (data['status'] !== statusValidator.Active && !data['jailed'])) &&
+                                data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH
+                              "></i>
+                            <app-tooltip-customize
+                              [content]="
+                                'Validators with too much voting power will lessen the security and decentralization of the network.'
+                              ">
+                            </app-tooltip-customize>
+                          </div>
                         </div>
                         <div *ngSwitchCase="'participation'">
                           {{ data[template.matColumnDef] + '/' + countProposal }}

@@ -2,13 +2,14 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskModule } from 'ngx-mask';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
+import { ProposalService } from 'src/app/core/services/proposal.service';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
@@ -26,8 +27,6 @@ import { DelegateItemComponent } from './validators-detail/delegate-item/delegat
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
 import { ValidatorsComponent } from './validators.component';
-import { ProposalService } from 'src/app/core/services/proposal.service';
-import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -51,7 +50,6 @@ import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.modul
     PopupDelegateModule,
     PaginatorModule,
     LayoutModule,
-    MatTooltipModule,
     LoadingImageModule,
     NgbNavModule,
     SoulboundFeatureTokensModule,

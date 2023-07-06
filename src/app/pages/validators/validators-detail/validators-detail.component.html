@@ -70,7 +70,10 @@
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
                 *ngIf="!breakpoint.value.matches" />
-              <app-tooltip-customize [content]="'Validator operator address at which token holders delegate <br/>their voting powers to.'"></app-tooltip-customize>
+              <app-tooltip-customize
+                [content]="
+                  'Validator operator address at which token holders delegate <br/>their voting powers to.'
+                "></app-tooltip-customize>
             </div>
           </div>
           <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
@@ -280,7 +283,8 @@
               <img
                 class="img-question aura-tooltip-object"
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
-                alt="" *ngIf="!breakpoint.value.matches" />
+                alt=""
+                *ngIf="!breakpoint.value.matches" />
               <app-tooltip-customize [content]="'Missed Blocks are displayed with an X'"></app-tooltip-customize>
             </div>
           </div>
@@ -294,16 +298,16 @@
                 <ng-container *ngFor="let itemBlock of arrLastBlock; let index = index">
                   <div class="aura-tooltip-contain">
                     <a
-                        class="block-uptime tool-tip aura-tooltip-object"
-                        [ngClass]=""
-                        [ngStyle]="{
-                      'background-color':
-                        itemBlock?.isSign !== false && currentValidatorDetail?.status === statusValidator.Active
-                          ? '#5EE6D0'
-                          : ''
-                    }"
-                        href="/blocks/{{ itemBlock?.height }}"
-                        currentitem="false">
+                      class="block-uptime tool-tip aura-tooltip-object"
+                      [ngClass]=""
+                      [ngStyle]="{
+                        'background-color':
+                          itemBlock?.isSign !== false && currentValidatorDetail?.status === statusValidator.Active
+                            ? '#5EE6D0'
+                            : ''
+                      }"
+                      href="/blocks/{{ itemBlock?.height }}"
+                      currentitem="false">
                       <div class="d-flex">
                         <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
                       </div>

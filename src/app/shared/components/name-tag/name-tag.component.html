@@ -1,34 +1,38 @@
 <ng-container *ngIf="isLink; else displayText">
-  <a
-    *ngIf="!isHref"
-    [routerLink]="['/' + url, paramUrl || value]"
-    class="text--primary"
-    [ngClass]="isBox ? 'box-name-tag' : ''"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(paramUrl || value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag) }}">
-    <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
-  </a>
-  <a
-    *ngIf="isHref"
-    [href]="url + value"
-    class="text--primary"
-    [ngClass]="isBox ? 'box-name-tag' : ''"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(value, global.listNameTag) }}">
-    <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
-  </a>
+  <div class="aura-tooltip-contain d-inline">
+    <a
+      *ngIf="!isHref"
+      [routerLink]="['/' + url, paramUrl || value]"
+      class="text--primary aura-tooltip-object"
+      [ngClass]="isBox ? 'box-name-tag' : ''">
+      <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
+    </a>
+    <app-tooltip-customize
+      [content]="
+        'Public Name Tag:' + commonService.setNameTag(paramUrl || value, global.listNameTag)
+      "></app-tooltip-customize>
+  </div>
+  <div class="aura-tooltip-contain d-inline">
+    <a
+      *ngIf="isHref"
+      [href]="url + value"
+      class="text--primary aura-tooltip-object"
+      [ngClass]="isBox ? 'box-name-tag' : ''">
+      <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
+    </a>
+    <app-tooltip-customize
+      [content]="'Public Name Tag:' + commonService.setNameTag(value, global.listNameTag)"></app-tooltip-customize>
+  </div>
 </ng-container>
 
 <ng-template #displayText>
-  <span
-    [ngClass]="isBox ? 'box-name-tag' : ''"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(value, global.listNameTag) }}"
-    >{{ commonService.setNameTag(value) | cutStringPipe : 8 : 8 }}</span
-  >
+  <div class="aura-tooltip-contain d-inline">
+    <span class="aura-tooltip-object" [ngClass]="isBox ? 'box-name-tag' : ''">
+      {{ commonService.setNameTag(value) | cutStringPipe : 8 : 8 }}
+    </span>
+    <app-tooltip-customize
+      [content]="'Public Name Tag:' + commonService.setNameTag(value, global.listNameTag)"></app-tooltip-customize>
+  </div>
 </ng-template>
 
 <ng-template #contentData>
