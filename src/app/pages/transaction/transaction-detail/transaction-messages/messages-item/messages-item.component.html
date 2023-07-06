@@ -5,15 +5,25 @@
       <ng-container *ngIf="value?.length > 0 && value !== '-'; else noValues">
         <span *ngIf="value === '[do-not-modify]'">{{ value }}</span>
         <ng-container *ngIf="value !== '[do-not-modify]'">
-          <a
-            *ngIf="dataLink.url.indexOf('http') === -1"
-            class="text--primary"
-            [routerLink]="[dataLink?.url || '/account', dataLink?.data || value]">
-            {{ value || dataLink?.data || '-' }}
-          </a>
-          <a class="text--primary" [href]="dataLink?.url" *ngIf="dataLink.url.indexOf('http') > -1" target="_blank">
-            {{ dataLink?.data || value || '-' }}
-          </a>
+          <ng-container *ngIf="dataLink?.nameTag">
+            <app-name-tag
+              [value]="value || dataLink?.data"
+              [url]="dataLink?.url || '/account'"
+              [fullWidth]="true"
+              [paramUrl]="dataLink?.data || value"
+              [fullWidthMob]="true"></app-name-tag>
+          </ng-container>
+          <ng-container *ngIf="!dataLink.nameTag">
+            <a
+              *ngIf="dataLink.url.indexOf('http') === -1"
+              class="text--primary"
+              [routerLink]="[dataLink?.url || '/account', dataLink?.data || value]">
+              {{ value || dataLink?.data || '-' }}
+            </a>
+            <a class="text--primary" [href]="dataLink?.url" *ngIf="dataLink.url.indexOf('http') > -1" target="_blank">
+              {{ dataLink?.data || value || '-' }}
+            </a>
+          </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>

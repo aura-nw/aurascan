@@ -18,6 +18,7 @@ import { MessagesItemComponent } from './transaction-detail/transaction-messages
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [TransactionComponent, TransactionDetailComponent, TransactionMessagesComponent, MessagesItemComponent],
@@ -35,7 +36,8 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     CommonPipeModule,
     NgbNavModule,
     NgxJsonViewerModule,
-    CommonDirectiveModule
+    CommonDirectiveModule,
+    NameTagModule
   ],
   providers: [TransactionService, MappingErrorService, ProposalService, MaskPipe],
 })

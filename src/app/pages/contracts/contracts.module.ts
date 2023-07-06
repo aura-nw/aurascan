@@ -31,6 +31,7 @@ import { ContractsTransactionsComponent } from './contracts-transactions/contrac
 import { ContractVerifyStepsComponent } from './contracts-verify/contract-verify-steps/contract-verify-steps.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-pagina
     ReadContractModule,
     PopupAddZeroModule,
     APaginatorModule,
+    NameTagModule
   ],
   providers: [ContractService],
   exports: [ContractVerifyStepsComponent],
