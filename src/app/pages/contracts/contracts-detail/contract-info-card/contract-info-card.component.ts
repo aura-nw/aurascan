@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -12,6 +13,8 @@ export class ContractInfoCardComponent implements OnInit, OnChanges {
   @Input() contractDetail: any;
   contractRegisterType = ContractRegisterType;
   linkNft = 'token-nft';
+  lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
+
   constructor(public commonService: CommonService) {}
 
   ngOnInit(): void {}
