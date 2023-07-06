@@ -637,12 +637,10 @@ body {
   padding: 16px;
   background: rgba(213, 98, 94, 0.16);
   border-radius: 8px;
-
   width: fit-content;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-
   gap: 8px;
 
   .notice-icon {
@@ -669,8 +667,9 @@ body {
 
 .name-tag-label {
   padding: 8px;
-  border-radius: 4px;
+  border-radius: 16px;
   background-color: var(--aura-gray-8);
+  font-size: 12px;
 }
 
 app-tooltip-customize {

@@ -56,13 +56,12 @@
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
             <a class="text--primary h6" [routerLink]="['/account', proposalDetail?.proposer_address]">
-              <app-name-tag
-                [value]="
-                  proposalDetail?.proposer
-                    ? proposalDetail?.proposer?.description?.moniker
-                    : proposalDetail?.proposer_address
-                "
-                [fullWidth]="true"></app-name-tag>
+              <ng-container *ngIf="proposalDetail?.proposer">
+                {{ proposalDetail?.proposer?.description?.moniker }}
+              </ng-container>
+              <ng-container *ngIf="!proposalDetail?.proposer">
+                <app-name-tag [value]="proposalDetail?.proposer_address" [fullWidth]="true"></app-name-tag>
+              </ng-container>
             </a>
           </div>
         </div>
@@ -111,8 +110,8 @@
           <div class="col-auto col-md-10 mt-0 fw-500 g-ellipsis__type text--gray-1">{{ proposalDetail.pro_type }}</div>
         </div>
         <div
-            class="row mb-3 mb-md-4 body-02 body-01-mob"
-            *ngIf="
+          class="row mb-3 mb-md-4 body-02 body-01-mob"
+          *ngIf="
             (proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade ||
               proposalDetail?.content['@type'] === typeSpecial.ParameterChange) &&
             proposalDetailTitleArr.length > 0
@@ -123,12 +122,12 @@
               Changes
             </ng-container>
           </div>
-          <div class="col-12 {{proposalDetailTitleArr.length > 5 ? 'col-md-10' : 'col-md-auto'}} mt-0">
+          <div class="col-12 {{ proposalDetailTitleArr.length > 5 ? 'col-md-10' : 'col-md-auto' }} mt-0">
             <ul
-                ngbNav
-                #customNav="ngbNav"
-                [activeId]="activeId"
-                class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md">
+              ngbNav
+              #customNav="ngbNav"
+              [activeId]="activeId"
+              class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md">
               <ng-container *ngFor="let tab of proposalDetailTitleArr; index as index">
                 <li [ngbNavItem]="index">
                   <a ngbNavLink (click)="changeTab(tab.key)">
@@ -138,12 +137,13 @@
               </ng-container>
             </ul>
             <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
-              <ng-container *ngIf=" typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0">
+              <ng-container
+                *ngIf="typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0">
                 <div class="changes-contain" [class.overflow-scroll-y]="proposalDetail?.content?.plan.length > 2">
                   <div *ngFor="let item of proposalDetail?.content?.plan" class="mt-4">
                     <div *ngFor="let key of getObjectKey(item)">
                       <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
-                        {{item[key]}}
+                        {{ item[key] }}
                       </div>
                     </div>
                   </div>
@@ -152,7 +152,7 @@
               <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) === 'object'">
                 <div *ngFor="let key of getObjectKey(proposalDetail?.content?.plan)" class="mt-4">
                   <div *ngIf="key === proposalDetailTitleArr[activeId].value">
-                    {{proposalDetail?.content?.plan[key]}}
+                    {{ proposalDetail?.content?.plan[key] }}
                   </div>
                 </div>
               </ng-container>
@@ -161,7 +161,7 @@
               <div *ngFor="let item of proposalDetail?.content?.changes" class="mt-4">
                 <div *ngFor="let key of getObjectKey(item)">
                   <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
-                    {{item[key]}}
+                    {{ item[key] }}
                   </div>
                 </div>
               </div>

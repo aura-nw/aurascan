@@ -353,8 +353,7 @@
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <app-name-tag
                               *ngSwitchCase="'delegator_address'"
-                              [value]="data.delegator_address"
-                              [url]="'contracts'"></app-name-tag>
+                              [value]="data.delegator_address"></app-name-tag>
                             <div *ngSwitchCase="'amount'">
                               {{ data[template.matColumnDef] | mask : 'separator.6' }}
                               <span class="text--primary">{{ denom }}</span>

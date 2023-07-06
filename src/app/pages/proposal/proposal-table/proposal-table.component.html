@@ -33,7 +33,16 @@
                   </a>
                 </ng-container>
                 <ng-container *ngIf="template.isUrl && template.isShort">
-                  <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
+                  <ng-container *ngIf="template.isNameTag">
+                    <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
+                  </ng-container>
+                  <ng-container *ngIf="!template.isNameTag">
+                    <a
+                      [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                      [class.disabled-link]="!data[template.matColumnDef]">
+                      {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                    </a>
+                  </ng-container>
                 </ng-container>
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
