@@ -17,7 +17,10 @@
             <div class="text--gray-4 body">Creator</div>
           </div>
           <div class="col-6 col-lg-auto">
-            <app-name-tag [value]="codeIdDetail.creator" [fullWidth]="true"></app-name-tag>
+            <app-name-tag
+              [value]="codeIdDetail.creator"
+              [fullWidth]="true"
+              [url]="codeIdDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
           </div>
         </div>
         <div class="row mt-2">
