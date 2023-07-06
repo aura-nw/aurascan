@@ -25,7 +25,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   countSelected = 0;
-  loading = false;
+  loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
@@ -81,22 +81,27 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   }
 
   getListSB() {
-    this.loading = true;
+    this.textSearch = this.searchValue = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       receiverAddress: this.userAddress,
       isEquipToken: true,
-      keyword: this.textSearch?.trim(),
+      keyword: this.textSearch,
     };
 
-    this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
-      this.countSelected = res.data.filter((k) => k.picked)?.length || 0;
-      this.soulboundData.data = res.data;
-      this.pageData.length = res.meta.count;
-      this.totalSBT.emit(this.pageData.length);
-    });
-    this.loading = false;
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
+      (res) => {
+        this.countSelected = res.data.filter((k) => k.picked)?.length || 0;
+        this.soulboundData.data = res.data;
+        this.pageData.length = res.meta.count;
+        this.totalSBT.emit(this.pageData.length);
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   paginatorEmit(event): void {
@@ -111,7 +116,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   }
 
   getSBTDetail(contractAddress, tokenID, pick = true) {
-    this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
+    this.contractService.getDetailCW4973(contractAddress, tokenID).subscribe((res) => {
       if (res?.data) {
         this.updatePick(res.data, pick);
       }

@@ -33,6 +33,11 @@
                   (click)="copyMessage(currentAddress); tooltip.toggle()" />
               </div>
             </div>
+            <div
+              *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
+              class="name-tag cursor-pointer d-flex align-items-center mt-2">
+              <app-name-tag [value]="currentAddress" [fullWidth]="true" [isLink]="false"></app-name-tag>
+            </div>
           </div>
           <div class="mt-6 mt-xl-4">
             <div class="body-01 fw-semibold mb-1 mb-xl-2 text--white">Total Value</div>
@@ -176,21 +181,6 @@
                               <div *ngSwitchCase="'fee'">
                                 {{ +data[template.matColumnDef] | mask : 'separator.6' }}
                                 <span class="text--primary">{{ denom }}</span>
-                              </div>
-                              <div *ngSwitchCase="'amount'">
-                                <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                                  {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                                  <span class="text--primary">{{ commonService.mappingNameIBC(data?.denom) }}</span>
-                                </ng-container>
-                                <ng-template #displayNonNumber>
-                                  <span *ngIf="!data[template.matColumnDef]"> - </span>
-                                  <a
-                                    *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
-                                    class="text--primary cursor-pointer"
-                                    [routerLink]="['/transaction', data['tx_hash']]">
-                                    More
-                                  </a>
-                                </ng-template>
                               </div>
                               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                             </ng-container>

@@ -27,16 +27,16 @@
     </ul>
   </div>
   <div class="mt-5">
+    <app-loading-sprint *ngIf="loadingContract"></app-loading-sprint>
     <app-contract-table
       [length]="limit"
-      *ngIf="countCurrent === contractTab.Transactions && contractTransaction['data']"
+      *ngIf="!loadingContract && countCurrent === contractTab.Transactions && contractTransaction['data']"
       [dataList]="contractTransaction"
       [templates]="templates"
-      [nextKey]="nextKey"
       [contractInfo]="contractInfo"
       (onViewSelected)="filterTransaction($event)"></app-contract-table>
     <app-contract
-      *ngIf="countCurrent === contractTab.Contract"
+      *ngIf="!loadingContract && countCurrent === contractTab.Contract"
       [contractTypeData]="contractTypeData"
       [contractsAddress]="contractsAddress"></app-contract>
   </div>

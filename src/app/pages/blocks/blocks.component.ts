@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
-import { convertDataBlock, Globals } from 'src/app/global/global';
+import { Globals, convertDataBlock } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -22,8 +22,6 @@ export class BlocksComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
-  dataBlock: any[];
-
   pageSize = 20;
   loading = true;
 
@@ -42,11 +40,13 @@ export class BlocksComponent implements OnInit {
   }
 
   getList(): void {
-    this.blockService.blocksIndexer(this.pageSize).subscribe(
+    const payload = {
+      limit: 20,
+    };
+    this.blockService.getDataBlock(payload).subscribe(
       (res) => {
-        const { code, data } = res;
-        if (code === 200) {
-          const blocks = convertDataBlock(data);
+        if (res?.block?.length > 0) {
+          const blocks = convertDataBlock(res);
           this.dataSource = new MatTableDataSource(blocks);
         }
       },
@@ -59,7 +59,7 @@ export class BlocksComponent implements OnInit {
 
   getInfoCommon(): void {
     this.commonService.status().subscribe((res) => {
-      getInfo(this.globals, res.data);
+      getInfo(this.globals, res);
     });
   }
 }

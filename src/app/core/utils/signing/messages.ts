@@ -1,10 +1,10 @@
 import { ChainInfo } from '@keplr-wallet/types';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
-import { MsgBeginRedelegate, MsgDelegate, MsgUndelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
+import { BasicAllowance, PeriodicAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/feegrant';
 import { MsgGrantAllowance, MsgRevokeAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
-import { BasicAllowance, PeriodicAllowance, AllowedMsgAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/feegrant';
-import { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
+import { MsgBeginRedelegate, MsgDelegate, MsgUndelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
 import { Duration } from 'cosmjs-types/google/protobuf/duration';
+import { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 import AllowedContractAllowance from './custom-feegrant';
 // Staking
@@ -216,24 +216,6 @@ export function GrantMsgAllowance(
         allowedAddress.push(element['address']);
       });
     }
-
-    //comment allow message for version 0.45
-    // const allowanceValue = {
-    //   allowance: itemAllowance,
-    //   allowedMessages: allowedMessages,
-    // };
-
-    // const allowanceEncode = AllowedMsgAllowance.encode(allowanceValue as any).finish();
-
-    // const allowance = {
-    //   typeUrl: TRANSACTION_TYPE_ENUM.AllowedMsgAllowance,
-    //   value: Uint8Array.from(allowanceEncode),
-    // };
-
-    // const allowedContractMsg = {
-    //   allowance: allowance,
-    //   allowedAddress: allowedAddress.length > 0 ? allowedAddress : [],
-    // };
 
     const allowedContractMsg = {
       allowance: itemAllowance,

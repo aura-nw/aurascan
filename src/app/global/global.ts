@@ -23,6 +23,7 @@ export class Globals {
     aura: 0,
     btc: 0,
   };
+  listNameTag = [];
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
@@ -125,6 +126,12 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
     case eTransType.ExecuteContract:
       method = 'mint';
       itemMessage.msg = itemMessage.msg || '';
+      if (typeof itemMessage.msg === 'string') {
+        try {
+          itemMessage.msg = JSON.parse(itemMessage.msg);
+        } catch (e) {}
+      }
+
       if (itemMessage.msg) {
         method = Object.keys(itemMessage.msg)[0];
       }
@@ -134,6 +141,7 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender ||
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.to ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
 
       if (arrayMsg?.length > 1 || itemMessage.msg['batch_mint']) {
@@ -183,8 +191,6 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
         } catch (e) {}
       } else if (method === ModeExecuteTransaction.Send) {
         toAddress = itemMessage?.msg?.send?.contract;
-      } else if (method === ModeExecuteTransaction.ProvideLiquidity) {
-        toAddress = itemMessage?.contract;
       }
       break;
     case eTransType.Deposit:
@@ -212,22 +218,33 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
       toAddress = itemMessage.to_address;
       break;
   }
+  toAddress = toAddress || itemMessage?.contract;
   return [fromAddress, toAddress, value, method, tokenId, modeExecute];
 }
 
 export function convertDataTransaction(data, coinInfo) {
-  const txs = _.get(data, 'transactions').map((element) => {
-    const code = _.get(element, 'tx_response.code');
-    const tx_hash = _.get(element, 'tx_response.txhash');
-    const messages = _.get(element, 'tx_response.tx.body.messages');
+  const txs = _.get(data, 'transaction').map((element) => {
+    if (!element['data']['body']) {
+      element['data']['body'] = element['data']['tx']['body'];
+      element['data']['auth_info'] = element['data']['tx']['auth_info'];
+    }
 
-    let _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
-    let lstType = _.get(element, 'tx_response.tx.body.messages');
+    const code = _.get(element, 'code');
+    const tx_hash = _.get(element, 'hash');
+    const messages = _.get(element, 'data.body.messages');
+
+    let _type = _.get(element, 'data.body.messages[0].@type');
+    let lstType = _.get(element, 'data.body.messages');
     let denom = coinInfo.coinDenom;
 
-    //check send token ibc same chain
-    if (_type === TRANSACTION_TYPE_ENUM.Send && messages[0].amount[0].denom !== denom) {
+    // check send token ibc same chain
+    if (_type === TRANSACTION_TYPE_ENUM.Send && messages[0]?.amount[0]?.denom !== denom) {
       denom = messages[0].amount[0].denom;
+    }
+
+    // check transfer token ibc different chain
+    if (_type === TRANSACTION_TYPE_ENUM.IBCTransfer && messages[0]?.token?.denom !== denom) {
+      denom = messages[0].token?.denom;
     }
 
     if (lstType?.length > 1) {
@@ -247,25 +264,16 @@ export function convertDataTransaction(data, coinInfo) {
     }
 
     const _amount = getAmount(
-      _.get(element, 'tx_response.tx.body.messages'),
+      _.get(element, 'data.body.messages'),
       _type,
-      _.get(element, 'tx_response.tx.body.raw_log'),
+      _.get(element, 'data.body.raw_log'),
       coinInfo.coinMinimalDenom,
     );
 
-    const fee = balanceOf(
-      _.get(element, 'tx_response.tx.auth_info.fee.amount[0].amount') || 0,
-      coinInfo.coinDecimals,
-    ).toFixed(coinInfo.coinDecimals);
-
-    const height = _.get(element, 'tx_response.height');
-    const timestamp = _.get(element, 'tx_response.timestamp');
-    const gas_used = _.get(element, 'tx_response.gas_used');
-    const gas_wanted = _.get(element, 'tx_response.gas_wanted');
-
+    const typeOrigin = _type;
     let amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
-
     let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
+
     try {
       if (lstType[0]['@type'].indexOf('ibc') == -1) {
         if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.GetReward) {
@@ -282,24 +290,48 @@ export function convertDataTransaction(data, coinInfo) {
     } catch (e) {}
 
     const status =
-      _.get(element, 'tx_response.code') == CodeTransaction.Success
-        ? StatusTransaction.Success
-        : StatusTransaction.Fail;
+      _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
-    return { code, tx_hash, type, status, amount, fee, height, timestamp, gas_used, gas_wanted, denom, messages };
+    const fee = balanceOf(_.get(element, 'data.auth_info.fee.amount[0].amount') || 0, coinInfo.coinDecimals).toFixed(
+      coinInfo.coinDecimals,
+    );
+    const height = _.get(element, 'height');
+    const timestamp = _.get(element, 'timestamp');
+    const gas_used = _.get(element, 'gas_used');
+    const gas_wanted = _.get(element, 'gas_wanted');
+    let tx = _.get(element, 'data.tx_response');
+    if (tx) {
+      tx['tx'] = _.get(element, 'data.tx');
+    }
+
+    return {
+      code,
+      tx_hash,
+      type,
+      status,
+      amount,
+      fee,
+      height,
+      timestamp,
+      gas_used,
+      gas_wanted,
+      denom,
+      messages,
+      tx,
+      typeOrigin,
+    };
   });
   return txs;
 }
 
 export function convertDataBlock(data) {
-  const block = _.get(data, 'blocks').map((element) => {
-    const height = _.get(element, 'block.header.height');
-    const block_hash = _.get(element, 'block_id.hash');
-    const num_txs = _.get(element, 'block.data.txs.length');
-    const proposer = _.get(element, 'validator_name');
-    const operator_address = _.get(element, 'operator_address');
-    const timestamp = _.get(element, 'block.header.time');
-
+  const block = _.get(data, 'block').map((element) => {
+    const height = _.get(element, 'height');
+    const block_hash = _.get(element, 'hash');
+    const num_txs = _.get(element, 'data.block.data.txs.length');
+    const proposer = _.get(element, 'validator.description.moniker');
+    const operator_address = _.get(element, 'validator.operator_address');
+    const timestamp = _.get(element, 'time');
     return { height, block_hash, num_txs, proposer, operator_address, timestamp };
   });
   return block;

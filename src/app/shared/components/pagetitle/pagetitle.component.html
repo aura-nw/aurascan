@@ -10,8 +10,8 @@
           </ng-container>
         </ol>
         <div class="text--white d-flex align-items-center" *ngIf="displayInfo">
-          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.block_height">
-            <span class="h4 text--white">Height:</span> {{ global?.dataHeader?.block_height | number }}
+          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.total_blocks">
+            <span class="h4 text--white">Height:</span> {{ global?.dataHeader?.total_blocks | number }}
           </div>
           <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.bonded_tokens">
             <span class="h4 text--white">Bonded:</span> {{ global?.dataHeader?.bonded_tokens }}

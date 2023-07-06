@@ -2,19 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
-import * as _ from 'lodash';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { CHART_RANGE, DATEFORMAT } from '../constants/common.constant';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { DATEFORMAT } from '../constants/common.constant';
 import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import { Globals } from 'src/app/global/global';
 
 @Injectable()
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.configValue.coins;
-  indexerUrl = `${this._environmentService.configValue.indexerUri}`;
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.configValue.chain_info;
@@ -26,6 +25,7 @@ export class CommonService {
   }`;
   envDB = this._environmentService.configValue.horoscopeSelectedChain;
   chainId = this._environmentService.configValue.chainId;
+  listNameTag = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;
@@ -43,31 +43,15 @@ export class CommonService {
   }
 
   status(): Observable<any> {
-    this.setURL();
-    return this._http.get<any>(`${this.apiUrl}/status`);
+    return this._http.get<any>(`${this.horoscopeApi}/dashboard-statistics?chainid=${this.chainId}`);
   }
 
-  getParamFromIndexer() {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      module: 'gov',
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this._http.get<any>(`${this.indexerUrl}/param`, {
-      params,
-    });
+  getParamTallyingFromLCD() {
+    return axios.get(`${this.chainInfo.rest}/cosmos/gov/v1beta1/params/tallying`);
   }
 
-  setURL() {
-    if (this.networkQuerySubject.value === 1) {
-      this.apiUrl = `${this._environmentService.configValue.fabric}`;
-    }
-    if (this.networkQuerySubject.value === 2) {
-      this.apiUrl = `${this._environmentService.configValue.beUri}`;
-    }
+  getAccountDistribution() {
+    return axios.get(`${this.chainInfo.rest}/cosmos/auth/v1beta1/module_accounts/distribution`);
   }
 
   getDateValue(time, isCustom = true) {
@@ -100,23 +84,22 @@ export class CommonService {
     }
   }
 
-  getValidatorImg(identity: string) {
-    return axios.get(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`);
-  }
-
   mappingNameIBC(value) {
-    let result = value;
+    let result = {};
     if (value.indexOf('ibc') >= 0) {
+      try {
+        if (!value.startsWith('ibc')) {
+          let temp = value?.match(/\d+/g)[0];
+          value = value?.replace(temp, '');
+        }
+      } catch {}
+      result = { display: value, decimals: 6 };
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.coins.find((k) => k.denom === temp)?.display || {};
+      result = this.coins.find((k) => k.denom === temp) || {};
+      result['display'] = result['display'] || value;
     } else {
-      result = this.chainInfo.currencies[0].coinDenom;
+      result = { display: this.chainInfo.currencies[0].coinDenom, decimals: 6 };
     }
-    return result;
-  }
-
-  isValidatorJailed(jail, status) {
-    let result = jail && status === STATUS_VALIDATOR.Jail ? true : false;
     return result;
   }
 
@@ -124,12 +107,34 @@ export class CommonService {
     return axios.get(`${this._environmentService.configValue.chain_info.rest}/cosmos/distribution/v1beta1/params`);
   }
 
-  getTokenByCoinId(range: string, id: string) {
-    this.setURL();
-    return this._http.get<any>(`${this.apiUrl}/metrics/token?range=${range}&coidId=${id}`);
-  }
-
   getDefaultImg() {
     return this._environmentService.configValue.image_s3 + 'images/aura__ntf-default-img.png';
+  }
+
+  getListNameTag(payload) {
+    return this._http.post<any>(`${this.apiUrl}/name-tag/get-name-tag`, payload);
+  }
+
+  setNameTag(address, listNameTag = []) {
+    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    return nameTag?.name_tag || address;
+  }
+
+  findNameTag(keySearch, listNameTag = []) {
+    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
+    if (this.listNameTag?.length > 0) {
+      const result = this.listNameTag?.find((k) => k.name_tag === keySearch)?.address;
+      return result;
+    }
+  }
+
+  checkDisplayTooltip(address): boolean {
+    let result = false;
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    if (!nameTag || nameTag?.name_tag === address) {
+      result = true;
+    }
+    return result;
   }
 }

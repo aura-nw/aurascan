@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ResponseDto } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { Globals } from 'src/app/global/global';
@@ -17,20 +17,17 @@ export class NftListComponent implements OnChanges {
   @Input() address: string;
   @Output() totalValueNft = new EventEmitter<number>();
   image_s3 = this.environmentService.configValue.image_s3;
-  assetCW721: any[];
   searchValue = '';
   loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
+    pageIndex: 1,
   };
   nftList = [];
-  showedData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
-  nextKey = null;
-  currentKey = null;
+  textSearch = '';
 
   constructor(
     private accountService: AccountService,
@@ -40,84 +37,61 @@ export class NftListComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {
-      this.nftList = [];
-      this.showedData = [];
-      this.pageData.pageIndex = PAGE_EVENT.PAGE_INDEX;
-      this.pageData.pageSize = 20;
-      this.nextKey = null;
-      this.currentKey = null;
+      this.pageEvent(0);
     }
-    this.getNftData();
   }
 
   getNftData() {
-    this.loading = true;
-    this.searchValue = this.searchValue?.trim();
-
     const payload = {
-      account_address: this.address,
-      limit: 100,
-      keyword: this.searchValue,
-      next_key: this.nextKey,
+      owner: this.address,
+      limit: this.pageData.pageSize,
+      keyword: this.textSearch,
+      offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
     };
-    this.accountService.getAssetCW721ByOwner(payload).subscribe((res: ResponseDto) => {
-      if (res?.data?.length > 0) {
-        if (this.nftList.length > 0) {
-          this.nftList = [...this.nftList, ...res.data];
-        } else {
-          this.nftList = res?.data;
-        }
-        this.nextKey = res.meta?.next_key;
-        this.pageData.length = this.nftList.length;
 
-        this.nftList.forEach((element) => {
-          if (!this.searchValue) {
-            this.totalValue += element.price * +element.balance || 0;
-          }
-        });
-        let start = this.pageData.pageIndex * this.pageData.pageSize;
-        let end = this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize;
-        this.showedData = this.nftList.slice(start, end);
-        this.totalValueNft.emit(this.totalValue);
-      } else {
-        this.nftList.length = 0;
-      }
-    });
-    this.loading = false;
+    this.accountService.getAssetCW721ByOwner(payload).subscribe(
+      (res) => {
+        if (res?.cw721_token?.length > 0) {
+          this.nftList = res?.cw721_token;
+          this.pageData.length = res.cw721_token_aggregate?.aggregate?.count;
+
+          this.nftList.forEach((element) => {
+            element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
+            element.token_name = _.get(element, 'cw721_contract.name');
+            if (!this.searchValue) {
+              this.totalValue += element.price * +element.balance || 0;
+            }
+          });
+          this.totalValueNft.emit(this.totalValue);
+        } else {
+          this.pageData.length = 0;
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   resetSearch(): void {
     this.searchValue = '';
-    this.pageData.pageIndex = 0;
-    this.nftList = [];
-    this.nextKey = null;
-    this.getNftData();
+    this.textSearch = '';
+    this.pageEvent(0);
   }
 
   searchTokenNft(): void {
-    if (this.pageData.pageIndex !== 0) {
-      this.pageData.pageIndex = 0;
-    } else {
-      this.nextKey = null;
-      this.nftList = [];
-      this.getNftData();
-    }
+    this.searchValue = this.searchValue?.trim();
+    this.textSearch = this.searchValue;
+    this.pageEvent(0);
   }
 
-  handlePageEvent(e: any) {
-    const { pageIndex, pageSize } = e;
-    const next = this.pageData.length <= (pageIndex + 2) * pageSize;
-
-    this.pageData.pageIndex = e.pageIndex;
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getNftData();
-      this.currentKey = this.nextKey;
-    } else {
-      this.showedData = this.nftList.slice(
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-      );
+  pageEvent(pageIndex: number): void {
+    // reset page 1 if pageIndex = 0
+    if (pageIndex === 0) {
+      this.pageData.pageIndex = 1;
     }
+    this.getNftData();
   }
 
   handleRouterLink(link): void {

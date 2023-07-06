@@ -6,14 +6,20 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskModule } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { ProposalService } from 'src/app/core/services/proposal.service';
+import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../../app/shared/shared.module';
+import { CommunityPoolAssetComponent } from './asset-list/community-pool-asset.component';
 import { CommunityPoolRoutingModule } from './community-pool-routing.module';
 import { CommunityPoolComponent } from './community-pool.component';
+import { CommunityPoolProposalComponent } from './proposal-list/community-pool-proposal.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
-  declarations: [CommunityPoolComponent],
+  declarations: [CommunityPoolAssetComponent, CommunityPoolProposalComponent, CommunityPoolComponent],
   imports: [
     CommunityPoolRoutingModule,
     CommonModule,
@@ -26,6 +32,10 @@ import { CommunityPoolComponent } from './community-pool.component';
     CommonPipeModule,
     NgxMaskModule,
     CommonDirectiveModule,
+    APaginatorModule,
+    MatTooltipModule,
+    NameTagModule
   ],
+  providers: [ProposalService],
 })
 export class CommunityPoolModule {}

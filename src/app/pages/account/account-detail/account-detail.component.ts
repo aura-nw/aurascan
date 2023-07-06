@@ -28,8 +28,8 @@ import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { convertDataTransaction, Globals } from '../../../global/global';
-import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
+import { Globals, convertDataTransaction } from '../../../global/global';
+import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
 
 @Component({
   selector: 'app-account-detail',
@@ -59,7 +59,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'fee', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
@@ -301,22 +300,26 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   }
 
   getTxsFromHoroscope(nextKey = null): void {
-    const chainId = this.environmentService.configValue.chainId;
     const address = this.currentAddress;
-
-    this.transactionService.getAccountTxFromHoroscope(chainId, address, 40, nextKey).subscribe({
-      next: (txResponse) => {
-        const { code, data } = txResponse;
-        this.nextKey = data.nextKey || null;
-
-        if (code === 200) {
+    let payload = {
+      limit: 40,
+      value: address,
+      heightLT: nextKey,
+    };
+    this.transactionService.getListTxCondition(payload).subscribe({
+      next: (data) => {
+        if (data?.transaction?.length > 0) {
+          this.nextKey = null;
+          if (data?.transaction?.length >= 40) {
+            this.nextKey = data?.transaction[data?.transaction?.length - 1].height;
+          }
           const txs = convertDataTransaction(data, this.coinInfo);
           txs.forEach((element) => {
             if (element.type === 'Send') {
               if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
                 element.type = 'Receive';
               }
-            } else if (element.type === 'Multi Send') {
+            } else if (element.type === 'Multisend') {
               if (element.messages[0]?.inputs[0]?.address !== this.currentAddress) {
                 element.type = 'Receive';
               }
@@ -348,87 +351,90 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   getAccountDetail(): void {
     this.isNoData = false;
     const halftime = 15000;
-    this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
-      this.chartLoading = true;
-      this.accDetailLoading = true;
-      if (res.data.code === 200 && !res.data?.data) {
-        this.isNoData = true;
-        setTimeout(() => {
-          this.getAccountDetail();
-        }, halftime);
-        return;
-      }
-
-      if (res?.data) {
-        this.currentAccountDetail = res.data;
-        this.chartOptions.series = [];
-        if (+this.currentAccountDetail.commission > 0) {
-          this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
-          this.chartOptions.colors.push(WalletAcount.Commission);
-          this.chartCustomOptions.push({
-            name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
-            color: WalletAcount.Commission,
-            amount: '0.000000',
-          });
-        } else {
-          this.chartCustomOptions = chartCustomOptions;
+    this.accountService.getAccountDetail(this.currentAddress).subscribe(
+      (res) => {
+        if (res.data.code === 200 && !res.data?.data) {
+          this.isNoData = true;
+          setTimeout(() => {
+            this.getAccountDetail();
+          }, halftime);
+          return;
         }
 
-        this.chartCustomOptions.forEach((f) => {
-          switch (f.name) {
-            case ACCOUNT_WALLET_COLOR_ENUM.Available:
-              f.amount = this.currentAccountDetail.available;
-              break;
-            case ACCOUNT_WALLET_COLOR_ENUM.Delegated:
-              f.amount = this.currentAccountDetail.delegated;
-              break;
-            case ACCOUNT_WALLET_COLOR_ENUM.StakingReward:
-              f.amount = this.currentAccountDetail.stake_reward;
-              break;
-            case ACCOUNT_WALLET_COLOR_ENUM.Commission:
-              f.amount = this.currentAccountDetail.commission;
-              break;
-            case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
-              f.amount = this.currentAccountDetail.unbonding;
-              break;
-            case ACCOUNT_WALLET_COLOR_ENUM.DelegableVesting:
-              f.amount = this.currentAccountDetail?.delegable_vesting;
-              break;
-            default:
-              break;
+        if (res?.data) {
+          this.currentAccountDetail = res.data;
+          this.chartOptions.series = [];
+          if (+this.currentAccountDetail.commission > 0) {
+            this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
+            this.chartOptions.colors.push(WalletAcount.Commission);
+            this.chartCustomOptions.push({
+              name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
+              color: WalletAcount.Commission,
+              amount: '0.000000',
+            });
+          } else {
+            this.chartCustomOptions = chartCustomOptions;
           }
-          f.amount = f.amount || '0';
-          this.chartOptions.series.push(Number(f.amount));
-        });
-        this.dataSourceToken.data = this.currentAccountDetail?.balances;
-        this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
-        this.dataSourceTokenBk = this.dataSourceToken;
 
-        this.dataSourceDelegation.data = this.currentAccountDetail?.delegations;
-        this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
+          this.chartCustomOptions.forEach((f) => {
+            switch (f.name) {
+              case ACCOUNT_WALLET_COLOR_ENUM.Available:
+                f.amount = this.currentAccountDetail.available;
+                break;
+              case ACCOUNT_WALLET_COLOR_ENUM.Delegated:
+                f.amount = this.currentAccountDetail.delegated;
+                break;
+              case ACCOUNT_WALLET_COLOR_ENUM.StakingReward:
+                f.amount = this.currentAccountDetail.stake_reward;
+                break;
+              case ACCOUNT_WALLET_COLOR_ENUM.Commission:
+                f.amount = this.currentAccountDetail.commission;
+                break;
+              case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
+                f.amount = this.currentAccountDetail.unbonding;
+                break;
+              case ACCOUNT_WALLET_COLOR_ENUM.DelegableVesting:
+                f.amount = this.currentAccountDetail?.delegable_vesting;
+                break;
+              default:
+                break;
+            }
+            f.amount = f.amount || '0';
+            this.chartOptions.series.push(Number(f.amount));
+          });
+          this.dataSourceToken.data = this.currentAccountDetail?.balances;
+          this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
+          this.dataSourceTokenBk = this.dataSourceToken;
 
-        this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations;
-        this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
-        this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations;
-        this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
+          this.dataSourceDelegation.data = this.currentAccountDetail?.delegations;
+          this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
 
-        if (this.currentAccountDetail?.vesting) {
-          this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
-          this.pageDataVesting.length = 1;
+          this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations;
+          this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
+          this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations;
+          this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
+
+          if (this.currentAccountDetail?.vesting) {
+            this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
+            this.pageDataVesting.length = 1;
+          }
+
+          if (this.userAddress === this.currentAddress) {
+            local.removeItem('accountDetail');
+            //store data wallet info
+            let accountDetail = {};
+            accountDetail['dataAccount'] = JSON.stringify(this.currentAccountDetail);
+            accountDetail['dataChart'] = JSON.stringify(this.chartOptions);
+            local.setItem('accountDetail', accountDetail);
+          }
         }
+      },
+      () => {},
+      () => {
         this.accDetailLoading = false;
         this.chartLoading = false;
-
-        if (this.userAddress === this.currentAddress) {
-          local.removeItem('accountDetail');
-          //store data wallet info
-          let accountDetail = {};
-          accountDetail['dataAccount'] = JSON.stringify(this.currentAccountDetail);
-          accountDetail['dataChart'] = JSON.stringify(this.chartOptions);
-          local.setItem('accountDetail', accountDetail);
-        }
-      }
-    });
+      },
+    );
   }
 
   searchToken(): void {
@@ -479,10 +485,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       size: 'sm',
       windowClass: 'modal-holder contact-qr-modal',
     });
-  }
-
-  splitDataSource(d: any[]) {
-    return d.slice(0, 5);
   }
 
   closePopup() {

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -9,46 +10,47 @@ import { CommonService } from './common.service';
 export class BlockService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
 
-  blocksIndexer(pageLimit: string | number, blockHeight = null): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      pageLimit,
-      blockHeight,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/block`, {
-      params,
-    });
-  }
-
-  blockWithOperator(pageLimit: string | number, operatorAddress: string, nextKey = null): Observable<any> {
-    const params = _({
-      chainid: this.chainInfo.chainId,
-      pageLimit,
-      operatorAddress,
-      nextKey,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-
-    return this.http.get<any>(`${this.indexerUrl}/block`, {
-      params,
-    });
-  }
-
   getBlockAndTxs(type: string): Observable<any> {
-    this.setURL();
     const date = new Date();
     return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`);
+  }
+
+  getDataBlock(payload) {
+    const operationsDoc = `
+    query queryBlock($limit: Int = 100, $order: order_by = desc, $height: Int = null, $hash: String = null, $operatorAddress: String = null, $heightGT: Int = null, $heightLT: Int = null) {
+      ${this.envDB} {
+        block(limit: $limit, order_by: {height: $order}, where: {height: {_eq: $height, _gt: $heightGT, _lt: $heightLT}, hash: {_eq: $hash}, validator: {operator_address: {_eq: $operatorAddress}}}) {
+          data
+          validator {
+            operator_address
+            description
+          }
+          hash
+          height
+          time
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+          hash: null,
+          height: payload.height,
+          operatorAddress: payload.address,
+          heightGT: null,
+          heightLT: payload.nextHeight,
+        },
+        operationName: 'queryBlock',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 }

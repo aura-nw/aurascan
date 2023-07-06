@@ -22,7 +22,9 @@
         [tabId]="countCurrent"
         [type]="proposalValidatorVote"
         [length]="countVote.get(countCurrent)"
-        [data]="voteDataList"></app-proposal-table>
+        [data]="voteDataList"
+        (pageEventChange)="pageEventChange($event)"
+        *ngIf="!voteDataListLoading"></app-proposal-table>
       <div *ngIf="voteDataListLoading">
         <app-loading-sprint></app-loading-sprint>
       </div>

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import BigNumber from 'bignumber.js';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
@@ -188,7 +187,7 @@ export class WriteContractComponent implements OnInit {
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
     try {
       this.walletService
-        .execute(this.userAddress, this.contractDetailData.contract_address, data)
+        .execute(this.userAddress, this.contractDetailData.address, data)
         .then((e) => {
           msg.isLoading = false;
           if ((e as any).result?.error) {

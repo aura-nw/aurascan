@@ -1,10 +1,4 @@
 <div class="row">
-  <!--  <div class="col-12">-->
-  <!--     <button class="button button-outline button-outline__in-card">-->
-  <!--      <img [src]="'assets/icons/icons-svg/white/chart-line-up.svg' | imageS3" alt="" width="16px" />-->
-  <!--      <span class="ml-1">Token Holders Chart</span>-->
-  <!--    </button>-->
-  <!--  </div>-->
   <div class="col-12 mb-lg-3">
     <div class="body-03 caption-mob fw-normal-mob text--gray-5">
       <span class="small-body text--light-gray" *ngIf="totalHolder > numberTopHolder">
@@ -31,7 +25,7 @@
           <ng-container *ngFor="let template of template; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
               <ng-container *ngSwitchCase="'id'">
-                <th mat-header-cell *matHeaderCellDef class="col-per-10">
+                <th mat-header-cell *matHeaderCellDef class="col-per-8">
                   <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
                 </th>
               </ng-container>
@@ -62,18 +56,18 @@
                       <span class="token-id">{{ pageData?.pageIndex * 20 + i + 1 }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'owner'">
-                      <a
-                        *ngIf="this.typeContract !== contractType.CW20"
-                        href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp"
-                        >{{ data[template.matColumnDef] }}</a
-                      >
-                      <a
-                        *ngIf="this.typeContract === contractType.CW20"
-                        href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp"
-                        >{{ data[template.matColumnDef] }}</a
-                      >
+                      <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        [fullWidth]="true"
+                        [fullWidthMob]="true"
+                        [isHref]="true"
+                        [url]="
+                          '/tokens/' +
+                          (this.typeContract === contractType.CW20 ? 'token' : 'token-nft') +
+                          '/' +
+                          contractAddress +
+                          '?a='
+                        "></app-name-tag>
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
                       <div [appBigNumber]="data[template.matColumnDef]" [decimal]="decimalValue"></div>
@@ -98,7 +92,10 @@
                       </ng-container>
                     </ng-container>
                     <ng-container *ngSwitchCase="'value'">
-                      <div [appBigNumber]=" data['balance']" [decimal]="decimalValue" [tokenPrice]="tokenDetail?.price"></div>
+                      <div
+                        [appBigNumber]="data['balance']"
+                        [decimal]="decimalValue"
+                        [tokenPrice]="tokenDetail?.price"></div>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       {{ data[template.matColumnDef] }}

@@ -1,10 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
-import { AfterViewChecked, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { from, interval } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../../../app/global/global';
 import {
   PROPOSAL_STATUS,
@@ -27,10 +29,11 @@ const marked = require('marked');
   templateUrl: './summary-info.component.html',
   styleUrls: ['./summary-info.component.scss'],
 })
-export class SummaryInfoComponent implements OnInit, AfterViewChecked {
+export class SummaryInfoComponent implements OnInit {
   @Input() proposalId: number;
   @Output() proposalDtl = new EventEmitter();
   proposalDetail;
+  proposalDetailTitleArr = [];
   statusConstant = PROPOSAL_STATUS;
   currentStatusConstant = VOTING_FINAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
@@ -45,8 +48,15 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   isNotReached = true;
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
   timerGetUpTime: any;
-
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  proposalStatus = null;
+  typeSpecial = {
+    SoftwareUpgrade: '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
+    ParameterChange: '/cosmos.params.v1beta1.ParameterChangeProposal',
+  };
+  activeId = 0;
+
+  reload$;
 
   constructor(
     private proposalService: ProposalService,
@@ -57,6 +67,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private numberPipe: DecimalPipe,
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -64,47 +75,72 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
   }
 
+  enabledReload() {
+    if (!this.reload$) {
+      this.reload$ = interval(10000)
+        .pipe()
+        .subscribe((r) => {
+          this.proposalService.reloadList();
+          this.getProposalDetail();
+          this.getVotedProposal();
+        });
+    }
+  }
+
   getProposalDetail(): void {
+    let payload = {
+      limit: 1,
+      proposalId: this.proposalId,
+    };
+
     this.proposalService
-      .getProposalList(1, null, this.proposalId)
+      .getProposalData(payload)
       .pipe(
-        map((dta) => dta.data),
+        map((dta) => dta),
         mergeMap((data) => {
-          if (data?.count > 0) {
-            if (data.proposals[0].status === VOTING_STATUS.PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT) {
+          if (data?.proposal?.length > 0) {
+            if (data.proposal[0].status === VOTING_STATUS.PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT) {
               this.proposalDtl.emit(null);
             }
-            this.proposalDetail = this.makeProposalDataDetail(data.proposals[0]);
+            this.proposalDetail = this.makeProposalDataDetail(data.proposal[0]);
+            this.proposalStatus = this.getStatus(data.proposal[0].status);
+
+            //get more info proposal detail
+            if (this.proposalDetail?.content?.plan || this.proposalDetail?.content?.changes) {
+              this.getProposalMoreInfo(this.proposalDetail?.content?.plan || this.proposalDetail?.content?.changes);
+            }
+
             if (this.proposalDetail?.content?.amount) {
               this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
             }
             return this.commonService.status().pipe(
               mergeMap((res) => {
-                if (res.data) {
-                  this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
-                  if (data.proposals[0].status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+                if (res) {
+                  this.proposalDetail.total_bonded_token = balanceOf(res.bonded_tokens);
+                  if (data.proposal[0].status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+                    this.proposalDetail.voting_start_time = data.proposal[0].voting_start_time;
+                    this.proposalDetail.voting_end_time = data.proposal[0].voting_end_time;
                     this.proposalDetail.pro_turnout =
                       (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
                   } else {
                     this.proposalDetail.pro_turnout = this.proposalDetail.turnout;
                   }
                 }
-                return this.commonService.getParamFromIndexer();
+                return from(this.commonService.getParamTallyingFromLCD());
               }),
             );
           } else {
             throw new Error('');
           }
         }),
-        map((paramFromIndexer) => paramFromIndexer.data?.result[0]),
+        map((paramFromIndexer) => paramFromIndexer?.data?.tally_params),
         map((result) => {
           if (!result) {
             return;
           }
-          const { quorum, threshold, veto_threshold } = result.params?.tallying_param;
+          const { quorum, threshold, veto_threshold } = result;
           if (this.proposalDetail) {
             const { pro_votes_yes, pro_total_vote, pro_votes_abstain, pro_votes_no_with_veto } = this.proposalDetail;
-
             this.proposalDetail['quorum'] = quorum * 100;
             this.proposalDetail['threshold'] = threshold * 100;
             this.proposalDetail['veto_threshold'] = veto_threshold * 100;
@@ -163,17 +199,12 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
             this.proposalDtl.emit(this.proposalDetail);
           }
 
-          //set interval reload when type = voting period or deposit period
+          // set interval reload when type = voting period or deposit period
           if (
             this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD ||
             this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD
           ) {
-            this.timerGetUpTime = setInterval(() => {
-              this.proposalService.reloadList();
-              this.getProposalDetail();
-              this.getVotedProposal();
-              clearInterval(this.timerGetUpTime);
-            }, 10000);
+            this.enabledReload();
           }
         }),
       )
@@ -189,20 +220,15 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   }
 
   makeProposalDataDetail(data) {
-    let pro_votes_yes = balanceOf(+data.final_tally_result.yes);
-    let pro_votes_no = balanceOf(+data.final_tally_result.no);
-    let pro_votes_no_with_veto = balanceOf(+data.final_tally_result.no_with_veto);
-    let pro_votes_abstain = balanceOf(+data.final_tally_result.abstain);
-    if (data.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
-      pro_votes_yes = balanceOf(+data.tally.yes);
-      pro_votes_no = balanceOf(+data.tally.no);
-      pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
-      pro_votes_abstain = balanceOf(+data.tally.abstain);
-    }
+    let pro_votes_yes = balanceOf(+data.tally.yes);
+    let pro_votes_no = balanceOf(+data.tally.no);
+    let pro_votes_no_with_veto = balanceOf(+(data.tally.no_with_veto || data.tally.noWithVeto));
+    let pro_votes_abstain = balanceOf(+data.tally.abstain);
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
-
+    const dataDetail = this.proposalDetail || data;
     return {
-      ...data,
+      ...dataDetail,
+      count_vote: data.count_vote || dataDetail.count_vote,
       initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
       pro_total_deposits: balanceOf(_.get(data, 'total_deposit[0].amount') || 0),
       pro_type: data?.content['@type']?.split('.').pop(),
@@ -211,8 +237,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote,
-      count_vote: data.total_vote,
       request_amount: balanceOf(data.request_amount),
+      proposer_name: _.get(data, 'description.moniker'),
     };
   }
 
@@ -227,7 +253,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
 
-      if (proposalDetail.currentYesPercent > proposalDetail.threshold) {
+      if ((currentYesPercent || proposalDetail.currentYesPercent) > proposalDetail.threshold) {
         if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
@@ -252,6 +278,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
           '%';
       }
     } else {
+      this.isNotReached = true;
+      this.quorumStatus = VOTING_QUORUM.NOT_REACHED;
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubTitle =
         'Current quorum is less than ' +
@@ -328,14 +356,16 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (addr) {
       const payload = {
-        proposalId: this.proposalId,
-        wallet: addr,
+        limit: 1,
+        compositeKey: 'proposal_vote.proposal_id',
+        value: this.proposalId?.toString(),
+        value2: addr,
       };
-      this.proposalService.getVotes(payload).subscribe((res) => {
+      this.transactionService.getListTxMultiCondition(payload).subscribe((res) => {
         const optionVote = this.proposalService.getVoteMessageByConstant(
-          res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+          res?.transaction[0]?.data?.tx?.body?.messages[0]?.option,
         );
-        this.proposalVotes = this.voteConstant.find((s) => s.key === optionVote)?.voteOption;
+        this.proposalVotes = this.voteConstant?.find((s) => s.key === optionVote)?.voteOption;
         this.voteValue = {
           keyVote: optionVote,
         };
@@ -380,11 +410,52 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     return (isNegative ? '-' : '') + abs + key;
   }
 
-  ngAfterViewChecked(): void {
-    const editor = document.getElementById('marked');
-    if (editor) {
-      editor.innerHTML = marked.parse(this.proposalDetail.content.description);
-      return;
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const editor = document.getElementById('marked');
+      if (editor) {
+        editor.innerHTML = marked.parse(this.proposalDetail.content.description);
+        return;
+      }
+    }, 500);
+  }
+
+  getProposalMoreInfo(data: any) {
+    if (this.proposalDetailTitleArr?.length === 0) {
+      if (typeof data !== 'object') {
+        let index = 0;
+        for (let prop in data[0]) {
+          this.proposalDetailTitleArr.push({
+            key: index,
+            value: prop
+          });
+          index++;
+        }
+      }
+      if (typeof data === 'object') {
+        let index = 0;
+        data = data[0] || data;
+        for (let prop in data) {
+          if (data.hasOwnProperty(prop)) {
+            this.proposalDetailTitleArr.push({
+              key: index,
+              value: prop
+            });
+            index++;
+          }
+        }
+      }
     }
+  }
+  changeTab(key) {
+    this.activeId = key;
+  }
+
+  typeOf(value) {
+    return typeof value;
+  }
+
+  getObjectKey(object) {
+    return Object.keys(object)
   }
 }

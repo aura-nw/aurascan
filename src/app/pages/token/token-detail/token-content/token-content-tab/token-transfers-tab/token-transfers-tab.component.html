@@ -101,22 +101,26 @@
                         </ng-container>
                         <ng-container *ngSwitchCase="'from_address'">
                           <div class="d-flex align-items-center">
-                            <a
-                              class="text--primary txt-from-address content-transfer"
-                              href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                              *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
-                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
-                            </a>
-                            <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
-                              data[template.matColumnDef] | cutStringPipe : 8 : 8
-                            }}</span>
-                            <span class="content-transfer" *ngIf="!data[template.matColumnDef]"> - </span>
+                            <div class="content-transfer">
+                              <app-name-tag
+                                [value]="data[template.matColumnDef]"
+                                [isHref]="true"
+                                [url]="'/tokens/' + linkToken + '/' + contractAddress + '?a='"
+                                *ngIf="
+                                  data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
+                                "></app-name-tag>
+                              <app-name-tag
+                                [value]="data[template.matColumnDef]"
+                                [isLink]="false"
+                                *ngIf="data.modeExecute === modeExecuteTransaction.Mint"></app-name-tag>
+                              <span class="" *ngIf="!data[template.matColumnDef]"> - </span>
+                            </div>
                             <ng-container *ngIf="!isSearchAddress">
                               <img
                                 [src]="'assets/images/icons/arrow-right.png' | imageS3"
                                 width="14"
                                 height="9"
-                                class="ml-4 ml-lg-0" />
+                                class="ml-3" />
                             </ng-container>
                             <ng-container *ngIf="isSearchAddress">
                               <div class="box-token-transfer">
@@ -132,29 +136,23 @@
                         </ng-container>
                         <ng-container *ngSwitchCase="'to_address'">
                           <div class="pl-4 pl-lg-0" [style.width]="'180px'">
-                            <img
-                              [src]="'assets/images/icons/token-contract.svg' | imageS3"
-                              *ngIf="isContractAddress(data.type, data.to_address)"
-                              alt=""
-                              width="16px"
-                              height="16px" />
-                            <a
-                              class="text--primary"
-                              href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            <app-name-tag
+                              [value]="data[template.matColumnDef]"
+                              [isHref]="true"
+                              [url]="'/tokens/' + linkToken + '/' + contractAddress + '?a='"
+                              [type]="data.type"
                               *ngIf="
                                 data.modeExecute !== modeExecuteTransaction.Burn &&
                                 data.modeExecute !== modeExecuteTransaction.UnEquip &&
                                 data[template.matColumnDef]
-                              ">
-                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
-                            </a>
-                            <span
+                              "></app-name-tag>
+                            <app-name-tag
+                              [value]="data[template.matColumnDef]"
+                              [isLink]="false"
                               *ngIf="
                                 data.modeExecute === modeExecuteTransaction.Burn ||
                                 data.modeExecute === modeExecuteTransaction.UnEquip
-                              "
-                              >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span
-                            >
+                              "></app-name-tag>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
                           </div>
                         </ng-container>
@@ -180,7 +178,7 @@
                           </span>
                           <a
                             class="text--primary"
-                            href="/tokens/{{linkToken}}/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
+                            href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
                             *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
                             {{ data[template.matColumnDef] | stringEllipsis : 16 }}
                           </a>
@@ -190,7 +188,6 @@
                             mat-icon-button
                             aria-label="Example icon-button with a menu"
                             placement="right"
-                            (click)="getNFTDetail(data)"
                             [ngbPopover]="popContent"
                             popoverClass="custom-popover token-popover">
                             <img

@@ -3,13 +3,14 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
+import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
 
 @Component({
@@ -32,7 +33,7 @@ export class TokenCw4973Component implements OnInit {
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
+    pageIndex: 1,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -42,6 +43,7 @@ export class TokenCw4973Component implements OnInit {
     public global: Globals,
     public tokenService: TokenService,
     public soulboundService: SoulboundService,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -49,18 +51,13 @@ export class TokenCw4973Component implements OnInit {
 
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
-          this.getTokenData();
-        } else {
-          this.pageChange.selectPage(0);
-        }
+        this.pageEvent(0);
       });
   }
 
   ngOnDestroy(): void {
-    // throw new Error('Method not implemented.');
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -70,14 +67,21 @@ export class TokenCw4973Component implements OnInit {
   }
 
   getTokenData() {
-    const payload = {
+    this.textSearch = this.textSearch?.trim();
+    let payload = {
       limit: this.pageData.pageSize,
-      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
       keyword: this.textSearch,
     };
-    this.soulboundService.getListABT(payload).subscribe((res: ResponseDto) => {
-      this.dataSource = new MatTableDataSource<any>(res.data);
-      this.pageData.length = res.meta.count;
+
+    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    if (addressNameTag?.length > 0) {
+      payload['keyword'] = addressNameTag;
+    }
+
+    this.soulboundService.getListABT(payload).subscribe((res) => {
+      this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
+      this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;
     });
   }
 
@@ -85,13 +89,16 @@ export class TokenCw4973Component implements OnInit {
     this.dataSource.paginator = event;
   }
 
-  pageEvent(e: PageEvent): void {
-    this.pageData.pageIndex = e.pageIndex;
+  pageEvent(pageIndex: number): void {
+    // reset page 1 if pageIndex = 0
+    if (pageIndex === 0) {
+      this.pageData.pageIndex = 1;
+    }
     this.getTokenData();
   }
 
   resetSearch() {
     this.textSearch = '';
-    this.onKeyUp();
+    this.pageEvent(0);
   }
 }
