@@ -45,36 +45,6 @@ export enum VOTE_OPTION {
   EMPTY = 'VOTE_OPTION_EMPTY',
 }
 
-/* 
-      ["VOTE_OPTION_YES", "VOTE_OPTION_ABSTAIN", "VOTE_OPTION_NO", "VOTE_OPTION_NO_WITH_VETO"]
-
-        VOTE_OPTION_UNSPECIFIED: vote_aggregate(where: {vote_option: {_eq: "VOTE_OPTION_UNSPECIFIED"}}) {
-          aggregate {
-            count
-          }
-        }
-        VOTE_OPTION_YES: vote_aggregate(where: {vote_option: {_eq: "VOTE_OPTION_YES"}}) {
-          aggregate {
-            count
-          }
-        }
-        VOTE_OPTION_NO: vote_aggregate(where: {vote_option: {_eq: "VOTE_OPTION_NO"}}) {
-          aggregate {
-            count
-          }
-        }
-        VOTE_OPTION_NO_WITH_VETO: vote_aggregate(where: {vote_option: {_eq: "VOTE_OPTION_NO_WITH_VETO"}}) {
-          aggregate {
-            count
-          }
-        }
-        VOTE_OPTION_ABSTAIN: vote_aggregate(where: {vote_option: {_eq: "VOTE_OPTION_ABSTAIN"}}) {
-          aggregate {
-            count
-          }
-        }                    
-*/
-
 export const PROPOSAL_VOTE = [
   {
     key: VOTE_OPTION.UNSPECIFIED,
