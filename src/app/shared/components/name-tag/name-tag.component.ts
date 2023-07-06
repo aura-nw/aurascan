@@ -20,7 +20,7 @@ export class NameTagComponent implements OnInit {
   @Input() param = '';
   @Input() type = '';
   @Input() isHref = false;
-  @Input() iconABT = false;
+  @Input() iconContract = false;
   @Input() iconVerify = false;
   @Input() paramUrl = '';
 

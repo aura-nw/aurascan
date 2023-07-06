@@ -70,7 +70,6 @@ export class AppComponent implements OnInit {
     };
     this.commonService.getListNameTag(payload).subscribe((res) => {
       this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
-      
     });
   }
 }

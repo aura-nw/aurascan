@@ -26,9 +26,17 @@
     [ngClass]="isBox ? 'box-name-tag' : ''"
     [matTooltipPosition]="'above'"
     [matTooltipDisabled]="commonService.checkDisplayTooltip(value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(value, global.listNameTag) }}"
-    >{{ commonService.setNameTag(value) | cutStringPipe : 8 : 8 }}</span
-  >
+    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(value, global.listNameTag) }}">
+    <ng-container *ngIf="!fullWidth">
+      {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
+    </ng-container>
+    <ng-container *ngIf="fullWidth">
+      <span class="d-none d-lg-flex">{{ commonService.setNameTag(value || paramUrl) || '-' }}</span>
+      <span class="d-flex d-lg-none justify-content-center">{{
+        (commonService.setNameTag(value || paramUrl) | cutStringPipe : 8 : 8) || '-'
+      }}</span>
+    </ng-container>
+  </span>
 </ng-template>
 
 <ng-template #contentData>
@@ -39,7 +47,12 @@
     class="mr-1"
     width="16px"
     height="16px" />
-  <i class="ph-file-text h1 mb-0 text--gray-5 mr-2" *ngIf="iconABT"></i>
+  <img
+    [src]="'assets/icons/icons-svg/basic/file-text.svg' | imageS3"
+    class="mr-2"
+    width="20px"
+    height="20px"
+    *ngIf="iconContract" />
   <img
     [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
     class="mr-2"
