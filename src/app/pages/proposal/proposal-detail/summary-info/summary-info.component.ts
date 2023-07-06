@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
-import { AfterViewChecked, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -22,7 +22,6 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
-import { forEach } from 'lodash';
 const marked = require('marked');
 
 @Component({
@@ -30,7 +29,7 @@ const marked = require('marked');
   templateUrl: './summary-info.component.html',
   styleUrls: ['./summary-info.component.scss'],
 })
-export class SummaryInfoComponent implements OnInit, AfterViewChecked {
+export class SummaryInfoComponent implements OnInit {
   @Input() proposalId: number;
   @Output() proposalDtl = new EventEmitter();
   proposalDetail;
@@ -55,6 +54,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     SoftwareUpgrade: '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
     ParameterChange: '/cosmos.params.v1beta1.ParameterChangeProposal',
   };
+  activeId = 0;
 
   reload$;
 
@@ -410,33 +410,52 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     return (isNegative ? '-' : '') + abs + key;
   }
 
-  ngAfterViewChecked(): void {
-    const editor = document.getElementById('marked');
-    if (editor) {
-      editor.innerHTML = marked.parse(this.proposalDetail.content.description);
-      return;
-    }
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const editor = document.getElementById('marked');
+      if (editor) {
+        editor.innerHTML = marked.parse(this.proposalDetail.content.description);
+        return;
+      }
+    }, 500);
   }
 
   getProposalMoreInfo(data: any) {
     if (this.proposalDetailTitleArr?.length === 0) {
       if (typeof data !== 'object') {
-        for (let key in data[0]) {
-          this.proposalDetailTitleArr.push(key);
+        let index = 0;
+        for (let prop in data[0]) {
+          this.proposalDetailTitleArr.push({
+            key: index,
+            value: prop
+          });
+          index++;
         }
       }
       if (typeof data === 'object') {
+        let index = 0;
         data = data[0] || data;
         for (let prop in data) {
           if (data.hasOwnProperty(prop)) {
-            this.proposalDetailTitleArr.push(prop);
+            this.proposalDetailTitleArr.push({
+              key: index,
+              value: prop
+            });
+            index++;
           }
         }
       }
     }
   }
+  changeTab(key) {
+    this.activeId = key;
+  }
 
   typeOf(value) {
     return typeof value;
+  }
+
+  getObjectKey(object) {
+    return Object.keys(object)
   }
 }

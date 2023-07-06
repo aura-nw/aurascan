@@ -8,6 +8,7 @@ import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table
 import { SharedModule } from 'src/app/shared/shared.module';
 import { WriteContractComponent } from './write-contract.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MaterialModule } from '../../../../../../app.module';
 
 @NgModule({
   declarations: [WriteContractComponent],
@@ -15,6 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     CommonModule,
     CommonPipeModule,
     TableNoDataModule,
+    MaterialModule,
     MatExpansionModule,
     RouterModule,
     FormsModule,

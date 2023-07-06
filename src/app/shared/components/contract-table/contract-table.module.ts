@@ -13,6 +13,7 @@ import { ContractPopoverModule } from 'src/app/shared/components/contract-popove
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { ContractTableComponent } from './contract-table.component';
 import { SharedModule } from '../../shared.module';
+import { NameTagModule } from '../name-tag/name-tag.module';
 
 @NgModule({
   declarations: [ContractTableComponent],
@@ -29,7 +30,8 @@ import { SharedModule } from '../../shared.module';
     DropdownModule,
     RouterModule,
     ContractPopoverModule,
-    SharedModule
+    SharedModule,
+    NameTagModule
   ],
   exports: [ContractTableComponent],
 })

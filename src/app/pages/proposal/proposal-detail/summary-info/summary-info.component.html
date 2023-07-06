@@ -52,24 +52,17 @@
     </div>
     <div class="card-body pt-3 pt-lg-0 px-3 px-lg-6">
       <div class="text--gray-1">
-        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob align-items-center">
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
             <a class="text--primary h6" [routerLink]="['/account', proposalDetail?.proposer_address]">
-              <span class="d-none d-lg-block">
-                {{
+              <app-name-tag
+                [value]="
                   proposalDetail?.proposer
-                    ? commonService.setNameTag(proposalDetail?.proposer?.description?.moniker)
-                    : commonService.setNameTag(proposalDetail?.proposer_address)
-                }}
-              </span>
-              <span class="d-lg-none">
-                {{
-                  proposalDetail?.proposer
-                    ? commonService.setNameTag(proposalDetail?.proposer?.description.moniker)
-                    : (commonService.setNameTag(proposalDetail?.proposer_address) | cutStringPipe : 8 : 8)
-                }}
-              </span>
+                    ? proposalDetail?.proposer?.description?.moniker
+                    : proposalDetail?.proposer_address
+                "
+                [fullWidth]="true"></app-name-tag>
             </a>
           </div>
         </div>
@@ -117,6 +110,64 @@
           <div class="col-auto col-md-2 text--gray-4">Type</div>
           <div class="col-auto col-md-10 mt-0 fw-500 g-ellipsis__type text--gray-1">{{ proposalDetail.pro_type }}</div>
         </div>
+        <div
+            class="row mb-3 mb-md-4 body-02 body-01-mob"
+            *ngIf="
+            (proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade ||
+              proposalDetail?.content['@type'] === typeSpecial.ParameterChange) &&
+            proposalDetailTitleArr.length > 0
+          ">
+          <div class="col-auto col-md-2 text--gray-4">
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade"> Plan </ng-container>
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
+              Changes
+            </ng-container>
+          </div>
+          <div class="col-12 {{proposalDetailTitleArr.length > 5 ? 'col-md-10' : 'col-md-auto'}} mt-0">
+            <ul
+                ngbNav
+                #customNav="ngbNav"
+                [activeId]="activeId"
+                class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md">
+              <ng-container *ngFor="let tab of proposalDetailTitleArr; index as index">
+                <li [ngbNavItem]="index">
+                  <a ngbNavLink (click)="changeTab(tab.key)">
+                    <span class="tab-title mb-0 text-capitalize">{{ tab.value }}</span>
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
+              <ng-container *ngIf=" typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0">
+                <div class="changes-contain" [class.overflow-scroll-y]="proposalDetail?.content?.plan.length > 2">
+                  <div *ngFor="let item of proposalDetail?.content?.plan" class="mt-4">
+                    <div *ngFor="let key of getObjectKey(item)">
+                      <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
+                        {{item[key]}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) === 'object'">
+                <div *ngFor="let key of getObjectKey(proposalDetail?.content?.plan)" class="mt-4">
+                  <div *ngIf="key === proposalDetailTitleArr[activeId].value">
+                    {{proposalDetail?.content?.plan[key]}}
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
+              <div *ngFor="let item of proposalDetail?.content?.changes" class="mt-4">
+                <div *ngFor="let key of getObjectKey(item)">
+                  <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
+                    {{item[key]}}
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Submit Time</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
@@ -135,50 +186,6 @@
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
               <span>{{ proposalDetail.deposit_end_time | customDate : 'HH:mm:ss' }}</span>
             </div>
-          </div>
-        </div>
-        <div
-          class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob"
-          *ngIf="
-            (proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade ||
-              proposalDetail?.content['@type'] === typeSpecial.ParameterChange) &&
-            proposalDetailTitleArr.length > 0
-          ">
-          <div class="col-auto col-md-2 text--gray-4">
-            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade"> Plan </ng-container>
-            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
-              Changes
-            </ng-container>
-          </div>
-          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
-            <table class="planTable">
-              <tr class="border-bottom">
-                <th *ngFor="let row of proposalDetailTitleArr" class="text--gray-4">{{ row }}</th>
-              </tr>
-              <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
-                <ng-container
-                  *ngIf="
-                    typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0
-                  ">
-                  <tr *ngFor="let item of proposalDetail?.content?.plan">
-                    <td *ngFor="let row of proposalDetailTitleArr">{{ item[row] }}</td>
-                  </tr>
-                </ng-container>
-                <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) === 'object'">
-                  <tr>
-                    <td *ngFor="let row of proposalDetailTitleArr">{{ proposalDetail?.content?.plan[row] }}</td>
-                  </tr>
-                </ng-container>
-              </ng-container>
-
-              <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
-                <ng-container *ngIf="proposalDetail?.content?.changes">
-                  <tr *ngFor="let item of proposalDetail?.content?.changes">
-                    <td *ngFor="let row of proposalDetailTitleArr">{{ item[row] }}</td>
-                  </tr>
-                </ng-container>
-              </ng-container>
-            </table>
           </div>
         </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob">

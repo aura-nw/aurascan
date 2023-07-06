@@ -2,22 +2,21 @@ import { DatePipe, formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { createChart, IChartApi, ISeriesApi, SeriesPartialOptionsMap } from 'lightweight-charts';
+import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import * as moment from 'moment';
+import { MaskPipe } from 'ngx-mask';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { CHART_RANGE } from 'src/app/core/constants/common.constant';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportStatisticChart } from 'src/app/core/helpers/export';
 import { StatisticService } from 'src/app/core/services/statistic.service';
+import { Globals } from 'src/app/global/global';
 import {
   CHART_CONFIG,
-  DASHBOARD_AREA_SERIES_CHART_OPTIONS,
   DASHBOARD_CHART_OPTIONS,
-  STATISTIC_AREA_SERIES_CHART_OPTIONS,
+  STATISTIC_AREA_SERIES_CHART_OPTIONS
 } from 'src/app/pages/dashboard/dashboard-chart-options';
-import { MaskPipe } from 'ngx-mask';
-import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-chart-detail',

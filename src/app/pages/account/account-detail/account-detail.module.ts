@@ -24,6 +24,7 @@ import { AccountDetailComponent } from './account-detail.component';
 import { NftListComponent } from './nft-list/nft-list.component';
 import { SoulboundTokenComponent } from './soulbound-token/soulbound-token.component';
 import { TokenTableComponent } from './token-table/token-table.component';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [AccountDetailComponent, TokenTableComponent, NftListComponent, SoulboundTokenComponent],
@@ -48,6 +49,7 @@ import { TokenTableComponent } from './token-table/token-table.component';
     SoulboundFeatureTokensModule,
     CommonDirectiveModule,
     APaginatorModule,
+    NameTagModule
   ],
   providers: [TransactionService, AccountService, DecimalPipe],
 })

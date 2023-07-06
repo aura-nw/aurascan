@@ -666,6 +666,13 @@ body {
     }
   }
 }
+
+.name-tag-label {
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--aura-gray-8);
+}
+
 app-tooltip-customize {
   width: max-content;
   position: absolute;

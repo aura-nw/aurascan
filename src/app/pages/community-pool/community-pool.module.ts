@@ -16,6 +16,7 @@ import { CommunityPoolRoutingModule } from './community-pool-routing.module';
 import { CommunityPoolComponent } from './community-pool.component';
 import { CommunityPoolProposalComponent } from './proposal-list/community-pool-proposal.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [CommunityPoolAssetComponent, CommunityPoolProposalComponent, CommunityPoolComponent],
@@ -32,7 +33,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     NgxMaskModule,
     CommonDirectiveModule,
     APaginatorModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NameTagModule
   ],
   providers: [ProposalService],
 })

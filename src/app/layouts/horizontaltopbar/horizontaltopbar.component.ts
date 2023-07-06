@@ -2,10 +2,12 @@ import { AfterViewInit, Component, EventEmitter, HostListener, OnInit, Output } 
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
+import { from } from 'rxjs';
+import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
-import { ResponseDto } from '../../core/models/common.model';
 import { EventService } from '../../core/services/event.service';
 import { LanguageService } from '../../core/services/language.service';
 import { TransactionService } from '../../core/services/transaction.service';
@@ -13,9 +15,6 @@ import { WalletService } from '../../core/services/wallet.service';
 import { LAYOUT_MODE } from '../layouts.model';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-import { from } from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -35,9 +34,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   cookieValue: any;
   countryName: any;
   valueset: any;
-  networks = NETWORK;
-  currentNetwork = JSON.parse(localStorage.getItem('currentNetwork')) || NETWORK[1];
-  currentChanel = JSON.parse(localStorage.getItem('currentChanel')) || null;
   searchValue = null;
   env = null;
   pageTitle = null;

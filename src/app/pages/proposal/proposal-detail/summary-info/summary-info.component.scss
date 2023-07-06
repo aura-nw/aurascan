@@ -235,14 +235,32 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-.planTable {
-  th, td {
-    padding: 0 16px;
-    height: 32px;
-  }
-  tr {
-    th:first-child, td:first-child {
-      padding-left: 0;
+.nav-tabs-proposal.aura-nav-tabs.nav-tabs {
+  .nav-item {
+    flex-grow: 0;
+    padding: 0 12px;
+    @media (min-width: 991.98px) {
+      padding: 0 32px;
     }
   }
+   .nav-link {
+    height: 32px;
+  }
+}
+.overflow-scroll-x--md {
+  @media (min-width: 991.98px) {
+    overflow-x: auto;
+    &::-webkit-scrollbar:vertical {
+      display: none;
+    }
+    &::-webkit-scrollbar {
+      display: block;
+      height: 4px;
+      width: 4px;
+    }
+  }
+}
+.changes-contain.overflow-scroll-y {
+  overflow-y: auto;
+  max-height: 70px;
 }

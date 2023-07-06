@@ -124,10 +124,16 @@
 
   <div *ngIf="isTransactionTypeDefault">
     <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
-      <div class="d-flex flex-wrap mb-2">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
-        <div class="col-12 col-lg-9">
-          <pre id="json" class="raw-content text--white px-4" [innerHtml]="item | appJson"></pre>
+      <div class="card text--white">
+        <div class="card-body body">
+          <div class="d-flex flex-wrap mb-2">
+            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
+            <div class="col-12 col-lg-9">
+              <pre id="json" class="raw-content text--white px-4" [innerHtml]="item | appJson"></pre>
+            </div>
+          </div>
+          <ng-container [ngTemplateOutlet]="logEvent" [ngTemplateOutletContext]="{ data: transactionDetail.tx?.logs, idx: i }">
+          </ng-container>
         </div>
       </div>
     </ng-container>

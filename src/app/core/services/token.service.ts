@@ -27,7 +27,7 @@ export class TokenService extends CommonService {
           smart_contract {
             address
           }
-          cw20_holders_aggregate {
+          cw20_holders_aggregate(where: {amount: {_gt: "0"}}) {
             aggregate {
               count
             }
@@ -114,7 +114,7 @@ export class TokenService extends CommonService {
             decimal
           }
           code {
-            code_id_verifications {
+            code_id_verifications(order_by: {updated_at: desc}) {
               verification_status
             }
           }
@@ -228,7 +228,7 @@ export class TokenService extends CommonService {
   ): Observable<any> {
     const operationsDoc = `query queryCW20ListHolder($address: String, $limit: Int, $offset: Int) {
       ${this.envDB} {
-        cw20_holder(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
+        cw20_holder(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}, amount: {_gt: "0"}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
           amount
           address
           cw20_contract {
@@ -236,7 +236,7 @@ export class TokenService extends CommonService {
             decimal
           }
         }
-        cw20_holder_aggregate(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}}) {
+        cw20_holder_aggregate(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}, amount: {_gt: "0"}}) {
           aggregate {
             count
           }
@@ -284,14 +284,6 @@ export class TokenService extends CommonService {
         operationName: 'queryListHolderNFT',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getContractDetail(tokenAddress): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/${tokenAddress}`);
-  }
-
-  getNFTDetail(contractAddress: string, tokenId): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nft/${tokenId}`);
   }
 
   getPriceToken(tokenId: string): Observable<any> {

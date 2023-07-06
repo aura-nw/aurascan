@@ -1,19 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 import { PageEventType } from '../../../../../app/core/constants/account.enum';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { CommonService } from '../../../../core/services/common.service';
@@ -46,8 +36,6 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
-    private validatorService: ValidatorService,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {}
