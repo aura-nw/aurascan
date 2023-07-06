@@ -10,11 +10,11 @@
           <td class="text--gray-5 body-02-mob">Public Name Tag:</td>
           <td colspan="2">
             <div class="txt-name-tag">
-              <ng-container
+              <!-- <ng-container
                 *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
                 <app-name-tag [value]="contractDetail?.address" [isLink]="false"></app-name-tag>
-              </ng-container>
-              <ng-template #NoNameTag>Not Available</ng-template>
+              </ng-container> -->
+              Not Available
             </div>
           </td>
         </tr>
@@ -24,7 +24,11 @@
             <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
             <div>
               <span class="mr-1 mr-lg-2 txt-name-tag">
-                <app-name-tag [value]="contractDetail?.creator"></app-name-tag>
+                <app-name-tag
+                  [value]="contractDetail?.creator"
+                  [url]="
+                    contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'
+                  "></app-name-tag>
               </span>
               at txn
               <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
@@ -38,7 +42,9 @@
           <td class="text--gray-5 body-02-mob">Contract Creator:</td>
           <td colspan="2">
             <span class="mr-1 mr-lg-2 txt-name-tag">
-              <app-name-tag [value]="contractDetail?.creator"></app-name-tag>
+              <app-name-tag
+                [value]="contractDetail?.creator"
+                [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
             </span>
             at txn
             <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">

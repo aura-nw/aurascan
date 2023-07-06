@@ -4,9 +4,7 @@
     [routerLink]="['/' + url, paramUrl || value]"
     class="text--primary"
     [ngClass]="isBox ? 'box-name-tag' : ''"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(paramUrl || value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag) }}">
+    >
     <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
   </a>
   <a
@@ -14,9 +12,7 @@
     [href]="url + value"
     class="text--primary"
     [ngClass]="isBox ? 'box-name-tag' : ''"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(value, global.listNameTag) }}">
+    >
     <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
   </a>
 </ng-container>
@@ -24,9 +20,7 @@
 <ng-template #displayText>
   <span
     [ngClass]="isBox ? 'box-name-tag' : ''"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(value, global.listNameTag) }}">
+    >
     <ng-container *ngIf="!fullWidth">
       {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
     </ng-container>
@@ -45,18 +39,20 @@
     *ngIf="isContractAddress(type, value)"
     alt=""
     class="mr-1"
-    width="16px"
-    height="16px" />
+    width="12px"
+    height="12px" />
   <img
     [src]="'assets/images/icons/token-contract.svg' | imageS3"
-    class="mr-2"
-    width="18px"
-    height="18px"
+    class="mr-1"
+    width="12px"
+    height="12px"
     *ngIf="iconContract" />
   <img
     [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-    class="mr-2"
+    class="mr-1"
     alt="contract_verification"
+    width="12px"
+    height="12px"
     *ngIf="iconVerify" />
   <ng-container *ngIf="!fullWidth">
     {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
