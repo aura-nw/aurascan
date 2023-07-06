@@ -25,12 +25,12 @@ export class AppComponent implements OnInit {
   ) // private env: EnvironmentService
   {}
   ngOnInit(): void {
-    this.getListNameTag();
+    // this.getListNameTag();
     this.getInfoCommon();
     this.getPriceToken();
 
     setInterval(() => {
-      this.getListNameTag();
+      // this.getListNameTag();
       this.getInfoCommon();
       this.getPriceToken();
     }, 60000);
@@ -63,13 +63,13 @@ export class AppComponent implements OnInit {
   }
 
   getListNameTag(): void {
-    const payload = {
-      limit: 500,
-      keyword: [],
-      nextKey: 0,
-    };
-    this.commonService.getListNameTag(payload).subscribe((res) => {
-      this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
-    });
+    // const payload = {
+    //   limit: 500,
+    //   keyword: [],
+    //   nextKey: 0,
+    // };
+    // this.commonService.getListNameTag(payload).subscribe((res) => {
+    //   this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
+    // });
   }
 }
