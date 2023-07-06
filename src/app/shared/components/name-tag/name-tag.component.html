@@ -2,25 +2,17 @@
   <a
     *ngIf="!isHref"
     [routerLink]="['/' + url, paramUrl || value]"
-    class="text--primary"
-    [ngClass]="isBox ? 'box-name-tag' : ''"
-    >
+    class="text--primary text-break"
+    [ngClass]="isBox ? 'box-name-tag' : ''">
     <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
   </a>
-  <a
-    *ngIf="isHref"
-    [href]="url + value"
-    class="text--primary"
-    [ngClass]="isBox ? 'box-name-tag' : ''"
-    >
+  <a *ngIf="isHref" [href]="url + value" class="text--primary text-break" [ngClass]="isBox ? 'box-name-tag' : ''">
     <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
   </a>
 </ng-container>
 
 <ng-template #displayText>
-  <span
-    [ngClass]="isBox ? 'box-name-tag' : ''"
-    >
+  <span class="text-break" [ngClass]="isBox ? 'box-name-tag' : ''">
     <ng-container *ngIf="!fullWidth">
       {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
     </ng-container>
