@@ -4,9 +4,7 @@
     [routerLink]="['/' + url, paramUrl || value]"
     class="text--primary"
     [ngClass]="isBox ? 'box-name-tag' : ''"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(paramUrl || value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag) }}">
+    >
     <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
   </a>
   <a
@@ -14,9 +12,7 @@
     [href]="url + value"
     class="text--primary"
     [ngClass]="isBox ? 'box-name-tag' : ''"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(value, global.listNameTag) }}">
+    >
     <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
   </a>
 </ng-container>
@@ -24,9 +20,7 @@
 <ng-template #displayText>
   <span
     [ngClass]="isBox ? 'box-name-tag' : ''"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(value, global.listNameTag) }}">
+    >
     <ng-container *ngIf="!fullWidth">
       {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
     </ng-container>
