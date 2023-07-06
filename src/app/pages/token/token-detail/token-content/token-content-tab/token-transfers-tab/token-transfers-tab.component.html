@@ -102,18 +102,10 @@
                         <ng-container *ngSwitchCase="'from_address'">
                           <div class="d-flex align-items-center">
                             <div class="content-transfer">
-                              <ng-container
-                                *ngIf="
-                                  data.modeExecute === modeExecuteTransaction.Default ||
-                                  data.modeExecute === modeExecuteTransaction.Take
-                                ">
+                              <ng-container *ngIf="data.modeExecute === modeExecuteTransaction.Take">
                                 <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                               </ng-container>
-                              <ng-container
-                                *ngIf="
-                                  data.modeExecute !== modeExecuteTransaction.Default &&
-                                  data.modeExecute !== modeExecuteTransaction.Take
-                                ">
+                              <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take">
                                 <app-name-tag
                                   [value]="data[template.matColumnDef]"
                                   [isHref]="true"
