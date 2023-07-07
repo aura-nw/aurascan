@@ -41,7 +41,7 @@ export class TokenContentComponent implements OnInit {
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   linkToken = 'token-nft';
   activeTabID = 0;
-  textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
+  textPlaceHolder = 'Filter Address/Txn Hash';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
