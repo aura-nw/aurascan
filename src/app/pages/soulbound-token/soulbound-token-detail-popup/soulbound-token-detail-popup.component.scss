@@ -50,7 +50,7 @@
 }
 
 .box-desc {
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 130px;
 
   @media (min-width: 991.98px) {
