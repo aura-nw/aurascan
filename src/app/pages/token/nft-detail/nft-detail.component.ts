@@ -7,7 +7,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import {
   LENGTH_CHARACTER,
-  LIST_TYPE_CONTRACT_ADDRESS,
   MEDIA_TYPE,
   PAGE_EVENT,
 } from 'src/app/core/constants/common.constant';
@@ -29,6 +28,7 @@ import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/i
 import { Globals } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-nft-detail',
@@ -137,7 +137,7 @@ export class NFTDetailComponent implements OnInit {
 
         res['type'] = res['type'] || ContractRegisterType.CW721;
         if (this.router.snapshot.url[0]?.path === 'token-abt') {
-          if (res.cw721_contract?.smart_contract?.name === TYPE_CW4973 && res.burned === false) {
+          if (res.name === TYPE_CW4973 && res.cw721_contract?.cw721_tokens[0]?.burned === false) {
             res['type'] = ContractRegisterType.CW4973;
             this.isSoulBound = true;
             this.linkToken = 'token-abt';
@@ -150,9 +150,13 @@ export class NFTDetailComponent implements OnInit {
 
         this.nftDetail = {
           ...res,
-          contract_address: res.data?.contract_address || res?.cw721_contract?.smart_contract?.address,
-          creator: res.data?.creator || res?.cw721_contract?.smart_contract?.creator,
-          name: res.name || res?.cw721_contract?.name,
+          contract_address: res.address,
+          name: _.get(res.cw721_contract, 'name'),
+          owner: _.get(res.cw721_contract, 'cw721_tokens[0].owner'),
+          burned: _.get(res.cw721_contract, 'cw721_tokens[0].burned'),
+          token_id: _.get(res.cw721_contract, 'cw721_tokens[0].token_id'),
+          media_info: _.get(res.cw721_contract, 'cw721_tokens[0].media_info'),
+          verification_status: _.get(res.code, 'code_id_verifications[0].verification_status'),
         };
         if (this.nftDetail?.media_info?.offchain?.image?.url) {
           this.imageUrl = this.nftDetail?.media_info?.offchain?.image?.url;
@@ -269,13 +273,6 @@ export class NFTDetailComponent implements OnInit {
       nftDetail: this.nftDetail,
       modeExecute: data?.modeExecute,
     };
-  }
-
-  isContractAddress(type, address) {
-    if (LIST_TYPE_CONTRACT_ADDRESS.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
-      return true;
-    }
-    return false;
   }
 
   async unEquipSBT() {

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LENGTH_CHARACTER, LIST_TYPE_CONTRACT_ADDRESS } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
 
@@ -23,14 +23,14 @@ export class NameTagComponent implements OnInit {
   @Input() iconContract = false;
   @Input() iconVerify = false;
   @Input() paramUrl = '';
+  @Input() isTokenDetail = false;
 
   constructor(public commonService: CommonService, private router: Router, public global: Globals) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  isContractAddress(type, address) {
-    if (LIST_TYPE_CONTRACT_ADDRESS.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
+  isContractAddress(address) {
+    if (address?.startsWith('aura') && address?.length === LENGTH_CHARACTER.CONTRACT) {
       return true;
     }
     return false;

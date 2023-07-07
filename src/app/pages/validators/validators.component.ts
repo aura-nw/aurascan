@@ -343,6 +343,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.validatorDetail = this.lstValidatorData?.find((f) => f.validator_address === address);
         this.validatorDetail = {
           ...this.validatorDetail,
+          validator_address: this.validatorDetail?.validator_address || address,
           jailed: data.jailed ? 1 : 0,
           identity: data.description.identity,
           image_url: data.image_url,
