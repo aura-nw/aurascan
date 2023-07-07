@@ -11,7 +11,6 @@ import { CommonService } from './common.service';
 @Injectable()
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);

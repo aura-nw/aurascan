@@ -181,7 +181,7 @@
                   [value]="nftDetail?.contract_address"
                   [url]="'contracts'"
                   [fullWidth]="true"
-                  [iconVerify]="false"></app-name-tag>
+                  [iconVerify]="nftDetail['verification_status'] === ContractVerifyType.Verified"></app-name-tag>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                   class="ml-2 cursor-pointer btn-copy"
@@ -360,11 +360,13 @@
                     <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take">
                       <app-name-tag
                         [value]="data[template.matColumnDef]"
+                        [isTokenDetail]="true"
                         *ngIf="
                           data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
                         "></app-name-tag>
                       <app-name-tag
                         [value]="data[template.matColumnDef]"
+                        [isTokenDetail]="true"
                         *ngIf="data.modeExecute === modeExecuteTransaction.Mint"
                         [isLink]="false"></app-name-tag>
                     </ng-container>
@@ -381,6 +383,7 @@
                     [url]="data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account'"
                     [value]="data[template.matColumnDef]"
                     [type]="data.type"
+                    [isTokenDetail]="true"
                     *ngIf="
                       data.modeExecute !== modeExecuteTransaction.Burn &&
                       data.modeExecute !== modeExecuteTransaction.UnEquip &&
@@ -389,6 +392,7 @@
                   <app-name-tag
                     [value]="data[template.matColumnDef]"
                     [type]="data.type"
+                    [isTokenDetail]="true"
                     *ngIf="
                       data.modeExecute === modeExecuteTransaction.Burn ||
                       data.modeExecute === modeExecuteTransaction.UnEquip
