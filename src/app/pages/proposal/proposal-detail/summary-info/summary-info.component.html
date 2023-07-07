@@ -55,14 +55,17 @@
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob align-items-center">
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
-            <a class="text--primary h6" [routerLink]="['/account', proposalDetail?.proposer_address]">
-              <ng-container *ngIf="proposalDetail?.proposer">
-                {{ proposalDetail?.proposer?.description?.moniker }}
-              </ng-container>
-              <ng-container *ngIf="!proposalDetail?.proposer">
-                <app-name-tag [value]="proposalDetail?.proposer_address" [fullWidth]="true"></app-name-tag>
-              </ng-container>
-            </a>
+            <ng-container *ngIf="proposalDetail?.proposer_address">
+              <a class="text--primary h6" [routerLink]="['/account', proposalDetail?.proposer_address]">
+                <ng-container *ngIf="proposalDetail?.proposer">
+                  {{ proposalDetail?.proposer?.description?.moniker }}
+                </ng-container>
+                <ng-container *ngIf="!proposalDetail?.proposer">
+                  <app-name-tag [value]="proposalDetail?.proposer_address" [fullWidth]="true"></app-name-tag>
+                </ng-container>
+              </a>
+            </ng-container>
+            <ng-container *ngIf="!proposalDetail?.proposer_address">-</ng-container>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
