@@ -152,20 +152,21 @@ export class ValidatorsDetailComponent implements OnInit {
           const arrJail = res.validator.filter((k) => k.status !== this.typeActive && k.jailed);
           const arrRank = [...arrActive, ...arrInactive, ...arrJail];
 
-          const data = res.validator.find((k) => k.operator_address === this.currentAddress);
+          const data = res.validator?.find((k) => k.operator_address === this.currentAddress);
           this.currentValidatorDetail = {
             ...data,
-            self_bonded: balanceOf(data.self_delegation_balance),
-            power: balanceOf(data.tokens),
+            self_bonded: balanceOf(data?.self_delegation_balance),
+            power: balanceOf(data?.tokens),
             identity: data.description?.identity,
-            up_time: (NUM_BLOCK - +data.missed_blocks_counter) / 100,
-            title: data.description?.moniker,
-            acc_address: data.account_address,
-            commission: (+data.commission.commission_rates.rate)?.toFixed(4),
-            details: data.description?.details,
-            percent_power: data.percent_voting_power?.toFixed(2),
-            bonded_height: data.start_height || 1,
-            status: data.status === this.typeActive ? this.statusValidator.Active : data.status,
+            up_time: (NUM_BLOCK - +data?.missed_blocks_counter) / 100,
+            title: data?.description?.moniker,
+            acc_address: data?.account_address,
+            commission: (+data?.commission.commission_rates.rate)?.toFixed(4),
+            details: data?.description?.details,
+            percent_power: data?.percent_voting_power?.toFixed(2),
+            bonded_height: data?.start_height || 1,
+            jailed: data.jailed ? 1 : 0,
+            status: data.status === this.typeActive ? this.statusValidator.Active : data?.status,
             rank: arrRank?.findIndex((k) => k.operator_address === this.currentAddress) + 1 || 1,
           };
 
@@ -383,10 +384,12 @@ export class ValidatorsDetailComponent implements OnInit {
     setTimeout(() => {
       const editor = document.getElementById('marked');
       if (editor && this.currentValidatorDetail) {
-        editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
+        editor.innerHTML = marked.parse(
+          this.currentValidatorDetail.details,
+        );
         return;
       }
-    }, 500);
+    }, 1000);
   }
 
   openDialog() {

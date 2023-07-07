@@ -68,8 +68,6 @@ export const TOKEN_ID_GET_PRICE = {
   BTC: 'bitcoin'
 };
 
-export const LIST_TYPE_CONTRACT_ADDRESS = ['revoke_all', 'approve_all', 'revoke', 'approve', 'auction_nft'];
-
 export enum MEDIA_TYPE {
   IMG = 'img',
   VIDEO = 'video',

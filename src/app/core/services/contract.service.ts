@@ -252,23 +252,29 @@ export class ContractService extends CommonService {
     const contractDoc = `
     query queryCW721Owner($address: String, $tokenId: String) {
       ${this.envDB} { 
-        data: cw721_token(where: { cw721_contract: {smart_contract: {address: {_eq: $address}}}, token_id: {_eq: $tokenId}}) { 
-        id
-        token_id
-        owner
-        media_info
-        burned
-        cw721_contract {
+        data: smart_contract(where: {address: {_eq: $address}}) {
           name
-          smart_contract {
+          creator
+          address
+          cw721_contract {
             name
-            address
-            creator
+            minter
+            symbol
+            cw721_tokens(where: {token_id: {_eq: $tokenId}}) {
+              id
+              token_id
+              owner
+              media_info
+              burned
+            }
           }
-          symbol
-          minter
+          code {
+            code_id_verifications {
+              id
+              verification_status
+            }
+          }
         }
-        } 
       } 
     }
     `;
