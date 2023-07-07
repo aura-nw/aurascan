@@ -10,7 +10,7 @@
       <input
         type="text"
         class="form-control pl-0"
-        placeholder="Search for Code ID/ Contract address/ Creator"
+        placeholder="Search for Code ID, Contract address, Creator address"
         [(ngModel)]="textSearch"
         [maxLength]="maxLengthSearch"
         (keyup)="onKeyUp()"
@@ -39,7 +39,7 @@
               <input
                 type="text"
                 class="form-control pl-0"
-                placeholder="Search for Code ID/ Contract address/ Creator"
+                placeholder="Search for Code ID, Contract address, Creator address"
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
                 (keyup)="onKeyUp()"
@@ -99,22 +99,11 @@
                     </a>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'creator'">
-                    <a
-                      [class.text--primary]="data[template.matColumnDef]"
-                      [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                      [class.disabled-link]="!data[template.matColumnDef]">
-                      {{ shortenAddress(data[template.matColumnDef]) || '-' }}
-                    </a>
+                    <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'type'">
                     <div>
-                      {{
-                        data['result'] === contractResult.CORRECT
-                          ? data[template.matColumnDef]
-                          : data['result'] === contractResult.TBD
-                          ? contractResult.TBD
-                          : '-'
-                      }}
+                      {{ data[template.matColumnDef] || '-' }}
                     </div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'instantiates'">
@@ -127,8 +116,12 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'verified_at'">
                     <div class="d-flex align-items-center ml-1">
-                      <span *ngIf="(data['verified_at'] && data['contract_verification'] === contractVerifyType.Verified); else unVerify">
-                        {{data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss'}}
+                      <span
+                        *ngIf="
+                          data['verified_at'] && data['contract_verification'] === contractVerifyType.Verified;
+                          else unVerify
+                        ">
+                        {{ data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss' }}
                       </span>
                       <ng-template #unVerify>
                         <span #unVerify>-</span>

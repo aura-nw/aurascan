@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -21,8 +20,8 @@ export class TokenTableComponent implements OnChanges {
   @Output() totalValue = new EventEmitter<number>();
   @Output() totalAssets = new EventEmitter<number>();
 
-  math = Math;
   textSearch = '';
+  searchValue = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'symbol', headerCellDef: 'symbol' },
@@ -52,14 +51,15 @@ export class TokenTableComponent implements OnChanges {
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
-
   constructor(
     public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getTotalAssets();
+  }
 
   ngOnChanges(): void {
     this.getListToken();
@@ -86,14 +86,6 @@ export class TokenTableComponent implements OnChanges {
                 data.isValueUp = false;
                 data.change = Number(data.change.toString().substring(1));
               }
-              if (data.contract_address === '-') {
-                this.total = data.price * data.balance + this.total;
-              } else if (data.verify_status === 'VERIFIED') {
-                const powValue = Math.pow(10, data.decimals);
-                let amountValue = data.balance / powValue;
-                amountValue = amountValue * data.price;
-                this.total = amountValue + this.total;
-              }
             }
             return data;
           });
@@ -101,12 +93,11 @@ export class TokenTableComponent implements OnChanges {
           lstToken = lstToken.filter((k) => k?.symbol);
           this.dataSource = new MatTableDataSource<any>(lstToken);
           this.pageData.length = res.meta.count;
-          this.totalAssets.emit(this.pageData.length);
-          this.totalValue.emit(this.total);
         } else {
           this.pageData.length = 0;
           this.dataSource.data = [];
         }
+        this.totalAssets.emit(this.pageData.length);
       },
       () => {},
       () => {
@@ -119,39 +110,36 @@ export class TokenTableComponent implements OnChanges {
     return balanceOf(value, decimal);
   }
 
-  sortData(sort: Sort) {}
-
   paginatorEmit(event): void {
     this.paginator = event;
   }
 
   handlePageEvent(e: any) {
     this.pageData.pageIndex = e.pageIndex;
-    this.getKeySearch();
-  }
-
-  getKeySearch() {
-    this.textSearch = this.textSearch?.trim();
     this.getListToken();
   }
 
   searchToken(): void {
+    this.searchValue = this.searchValue?.trim();
+    this.textSearch = this.searchValue?.trim();
     if (this.paginator.pageIndex !== 0) {
       this.paginator.firstPage();
     } else {
-      this.getKeySearch();
-    }
-  }
-
-  checkSearch(): void {
-    if (this.textSearch.length === 0) {
-      this.searchToken();
+      this.getListToken();
     }
   }
 
   resetSearch(): void {
     this.textSearch = '';
+    this.searchValue = '';
     this.pageData.pageIndex = 0;
     this.searchToken();
+  }
+
+  getTotalAssets(): void {
+    this.accountService.getTotalAssets(this.address).subscribe((res: ResponseDto) => {
+      this.total = res.data || 0;
+      this.totalValue.emit(this.total);
+    });
   }
 }

@@ -3,9 +3,13 @@
     <h1 class="mb-2 text--white">Transactions</h1>
     <div class="body-02 text--gray-5 d-flex">
       for
-      <a class="text--primary ml-1 text-break" [routerLink]="['/contracts', contractAddress]">
-        {{ contractAddress }}
-      </a>
+      <span class="ml-1 text-break txt-name-tag">
+        <app-name-tag
+          [value]="contractAddress"
+          [url]="'contracts'"
+          [fullWidth]="true"
+          [fullWidthMob]="true"></app-name-tag>
+      </span>
     </div>
   </div>
   <section>

@@ -6,9 +6,12 @@
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Contract</div>
-          <div class="ml-2 contract-address h4 mb-0">
-            <span class="d-lg-none body-mob fw-semibold">{{ contractAddress | stringEllipsis : 8 }}</span>
-            <span class="d-none d-lg-block fw-semibold">{{ contractAddress }}</span>
+          <div
+            class="ml-2 contract-address h4 mb-0">
+            <span class="d-lg-none body-mob fw-semibold">{{
+              commonService.setNameTag(contractAddress) | stringEllipsis : 8
+            }}</span>
+            <span class="d-none d-lg-block fw-semibold">{{ commonService.setNameTag(contractAddress) }}</span>
           </div>
         </div>
         <button
@@ -49,7 +52,7 @@
                   <input
                     type="text"
                     class="form-control"
-                    placeholder="Search for Token URI, Address or Token ID"
+                    placeholder="Search for Token URI, Receiver address or Token ID"
                     [(ngModel)]="searchValue"
                     [maxLength]="maxLengthSearch"
                     (keyup.enter)="getSearchValue()"
@@ -104,9 +107,7 @@
             <ng-container matColumnDef="receiver_address">
               <th mat-header-cell *matHeaderCellDef class="">RECEIVER</th>
               <td mat-cell *matCellDef="let element" class="py-4">
-                <a class="hover-link" [routerLink]="['/account', element.receiver_address]">
-                  {{ element.receiver_address | cutStringPipe : 8 : 8 }}
-                </a>
+                <app-name-tag [value]="element.receiver_address"></app-name-tag>
               </td>
             </ng-container>
 

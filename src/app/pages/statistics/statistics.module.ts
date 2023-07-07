@@ -15,6 +15,8 @@ import { TopStatisticOverviewComponent } from './top-statistics/top-statistic-ov
 import { TopStatisticTransactionComponent } from './top-statistics/top-statistic-transaction/top-statistic-transaction.component';
 import { TopStatisticsComponent } from './top-statistics/top-statistics.component';
 import { MaskPipe, NgxMaskModule } from 'ngx-mask';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { MaskPipe, NgxMaskModule } from 'ngx-mask';
     TranslateModule,
     TableNoDataModule,
     NgxMaskModule,
+    MatTooltipModule,
+    NameTagModule
   ],
   providers: [StatisticService, MaskPipe],
 })

@@ -1,12 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
 import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
-import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -15,16 +14,15 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
+import { Globals, convertDataBlock } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 const marked = require('marked');
-const encode = require('@cosmjs/encoding');
 @Component({
   selector: 'app-validators-detail',
   templateUrl: './validators-detail.component.html',
   styleUrls: ['./validators-detail.component.scss'],
 })
-export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
+export class ValidatorsDetailComponent implements OnInit {
   currentAddress: string;
   currentValidatorDetail: any;
 
@@ -66,7 +64,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   dataSourceBlockMob: any[];
   dataSourceDelegatorMob: any[];
 
-  lengthBlockLoading = true;
+  isLoadingBlock = true;
   isLoadingPower = true;
   lastBlockLoading = true;
   numberLastBlock = 100;
@@ -75,7 +73,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   nextKey = null;
   currentNextKey = null;
   nextKeyBlock = null;
-  currentNextKeyBlock = null;
 
   nextKeyDelegator = null;
   currentNextKeyDelegator = null;
@@ -88,8 +85,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   timeInterval = this.environmentService.configValue.timeInterval;
   soulboundList = [];
   arrBlockUptime = [];
+  arrLastBlock = [];
   isLeftPage = false;
-  addressBase64 = null;
+  typeActive = 'BOND_STATUS_BONDED';
 
   constructor(
     private route: ActivatedRoute,
@@ -121,7 +119,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   loadData(isInit = true) {
     if (!this.isLeftPage) {
       if (this.pageIndexBlock === 0) {
-        this.currentNextKeyBlock = null;
         this.getListBlockWithOperator(null, isInit);
       }
       if (this.pageIndexDelegator === 0) {
@@ -143,27 +140,41 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   getDetail(isInit = false): void {
     if (!this.isLeftPage) {
-      this.validatorService.validatorsDetail(this.currentAddress).subscribe(
+      this.validatorService.getDataValidator(null).subscribe(
         (res) => {
-          if (res.status === 404) {
+          if (res.status === 404 || res.validator?.length === 0) {
             this.router.navigate(['/']);
             return;
           }
 
+          const arrActive = res.validator.filter((k) => k.status === this.typeActive);
+          const arrInactive = res.validator.filter((k) => k.status !== this.typeActive && !k.jailed);
+          const arrJail = res.validator.filter((k) => k.status !== this.typeActive && k.jailed);
+          const arrRank = [...arrActive, ...arrInactive, ...arrJail];
+
+          const data = res.validator.find((k) => k.operator_address === this.currentAddress);
           this.currentValidatorDetail = {
-            ...res.data,
-            self_bonded: balanceOf(res.data.self_bonded),
-            power: balanceOf(res.data.power),
-            identity: res?.data?.identity,
+            ...data,
+            self_bonded: balanceOf(data.self_delegation_balance),
+            power: balanceOf(data.tokens),
+            identity: data.description?.identity,
+            up_time: (NUM_BLOCK - +data.missed_blocks_counter) / 100,
+            title: data.description?.moniker,
+            acc_address: data.account_address,
+            commission: (+data.commission.commission_rates.rate)?.toFixed(4),
+            details: data.description?.details,
+            percent_power: data.percent_voting_power?.toFixed(2),
+            bonded_height: data.start_height || 1,
+            status: data.status === this.typeActive ? this.statusValidator.Active : data.status,
+            rank: arrRank?.findIndex((k) => k.operator_address === this.currentAddress) + 1 || 1,
           };
-          this.addressBase64 = encode.toBase64(encode.fromHex(this.currentValidatorDetail.cons_address));
-          this.getDetailValidatorIndexer();
-          if (isInit) {
-            if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
-              this.getLastHeight();
-            } else {
-              this.getListUpTime();
-            }
+
+          const percentSelfBonded =
+            (this.currentValidatorDetail.self_delegation_balance / this.currentValidatorDetail.tokens) * 100;
+          this.currentValidatorDetail.percent_self_bonded = percentSelfBonded.toFixed(2) + '%';
+
+          if (this.currentValidatorDetail?.consensus_hex_address && isInit) {
+            this.getUptime();
           }
 
           this.getTotalSBT(this.currentValidatorDetail.acc_address);
@@ -176,12 +187,19 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getListBlockWithOperator(nextKeyBlock = null, isInit = true): void {
-    this.blockService.blockWithOperator(100, this.currentAddress, nextKeyBlock).subscribe(
+    let payload = {
+      limit: 100,
+      address: this.currentAddress,
+      nextHeight: null,
+    };
+    if (nextKeyBlock !== null) {
+      payload.nextHeight = nextKeyBlock;
+    }
+    this.blockService.getDataBlock(payload).subscribe(
       (res) => {
-        const { code, data } = res;
-        this.nextKeyBlock = data.nextKey || null;
-        if (code === 200) {
-          const blocks = convertDataBlock(data);
+        this.nextKeyBlock = res?.block[res?.block?.length - 1]?.height;
+        if (res.block.length > 0) {
+          const blocks = convertDataBlock(res);
           if (this.dataSourceBlock.data.length > 0 && isInit) {
             this.dataSourceBlock.data = [...this.dataSourceBlock.data, ...blocks];
           } else {
@@ -198,44 +216,39 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       },
       () => {},
       () => {
-        this.lengthBlockLoading = false;
+        this.isLoadingBlock = false;
       },
     );
   }
 
-  async getBlocksMiss(height = null) {
-    if (this.arrBlockUptime && this.arrBlockUptime?.length >= 100) {
-      return;
+  getBlocksMiss(address = null, lastBlock = []) {
+    //check is query last block
+    let limit = 100;
+    let height = null;
+    if (lastBlock?.length > 0) {
+      limit = 1;
+      height = lastBlock[0]?.height;
     }
-
-    const res = await this.validatorService.getUptimeLCD(height);
-    const currentHeight = Number(_.get(res, 'data.block.header.height')) || 0;
-    const temp = this.arrBlockUptime.find((k) => k.height === currentHeight);
-    if (!temp) {
-      const listBlock = _.get(res, 'data.block.last_commit.signatures');
-      if (listBlock) {
-        let height = Number(_.get(res, 'data.block.header.height')) || 0;
-        let isSyncFail = false;
-        const address = listBlock.find((k) => k.validator_address === this.addressBase64);
-        if (!address) {
-          isSyncFail = true;
+    this.validatorService.getUptimeIndexer(address, limit, height).subscribe((res) => {
+      this.arrBlockUptime = res?.block?.filter((h) => h.block_signatures.length === 0);
+      if (lastBlock?.length === 0) {
+        if (this.arrBlockUptime?.length > 0 && lastBlock?.length === 0) {
+          this.arrLastBlock?.forEach((element) => {
+            if (this.arrBlockUptime?.find((k) => k.height === element.height)) {
+              element['isSign'] = false;
+            }
+          });
         }
-
-        let element = [{ height, isSyncFail }];
-        if (this.arrBlockUptime && this.arrBlockUptime?.length > 0) {
-          this.arrBlockUptime = [...this.arrBlockUptime, ...element];
-        }
+      } else {
+        lastBlock[0]['isSign'] = this.arrBlockUptime?.find((k) => k.height === lastBlock[0]?.height) ? false : true;
+        this.arrLastBlock?.unshift(lastBlock[0]);
+        this.arrLastBlock?.pop();
       }
-    }
-
-    this.timerGetUpTime = setInterval(() => {
-      this.getBlocksMiss(height - 1);
-      clearInterval(this.timerGetUpTime);
-    }, 500);
+    });
   }
 
   async getListDelegator(nextKey = null, isInit = true) {
-    const res = await this.validatorService.delegators(100, this.currentAddress, nextKey);
+    const res = await this.validatorService.delegator(100, this.currentAddress, nextKey);
 
     if (res.data?.pagination?.next_key) {
       this.nextKeyDelegator = encodeURIComponent(res.data?.pagination?.next_key);
@@ -263,35 +276,26 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   getListPower(nextKey = null, isInit = true): void {
     this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe(
       (res) => {
-        const { code, data } = res;
-        this.nextKey = data.nextKey || null;
-
-        if (code === 200) {
-          const txs = _.get(data, 'transactions').map((element) => {
+        if (res?.power_event?.length > 0) {
+          if (res?.power_event?.length >= 100) {
+            this.nextKey = res?.power_event[res?.power_event?.length - 1].id;
+          }
+          const txs = _.get(res, 'power_event').map((element) => {
             let isStakeMode = false;
-            const tx_hash = _.get(element, 'tx_response.txhash');
-            const address = _.get(element, 'tx_response.tx.body.messages[0].validator_dst_address');
-            const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
-            if (
-              _type === TRANSACTION_TYPE_ENUM.Delegate ||
-              (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
-              _type === TRANSACTION_TYPE_ENUM.CreateValidator ||
-              _type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
-            ) {
+            const tx_hash = _.get(element, 'transaction.hash');
+            const address = _.get(element, 'validatorDst.operator_address');
+            const _type = _.get(element, 'type');
+            if (_type === 'delegate' || (_type === 'redelegate' && address === this.currentAddress)) {
               isStakeMode = true;
             }
-            let amount = getAmount(
-              _.get(element, 'tx_response.tx.body.messages'),
-              _type,
-              _.get(element, 'tx_response.tx.body.raw_log'),
-            );
+            let amount = balanceOf(element.amount) || '0';
 
-            if (amount === 0 && element?.tx_response?.tx?.body?.messages.length > 0) {
+            if (amount === 0 && element?.transaction?.data?.length > 0) {
               amount = 'More';
             }
 
-            const height = _.get(element, 'tx_response.height');
-            const timestamp = _.get(element, 'tx_response.timestamp');
+            const height = _.get(element, 'height');
+            const timestamp = _.get(element, 'time');
 
             return { tx_hash, amount, isStakeMode, height, timestamp };
           });
@@ -340,9 +344,8 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           page.pageIndex * page.pageSize + page.pageSize,
         );
         const nextBlock = page.length <= (page.pageIndex + 2) * page.pageSize;
-        if (nextBlock && this.nextKeyBlock && this.currentNextKeyBlock !== this.nextKeyBlock) {
+        if (nextBlock && this.nextKeyBlock) {
           this.getListBlockWithOperator(this.nextKeyBlock);
-          this.currentNextKeyBlock = this.nextKeyBlock;
         }
         this.pageIndexBlock = page.pageIndex;
         break;
@@ -376,12 +379,14 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  ngAfterViewChecked(): void {
-    const editor = document.getElementById('marked');
-    if (editor && this.currentValidatorDetail) {
-      editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
-      return;
-    }
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const editor = document.getElementById('marked');
+      if (editor && this.currentValidatorDetail) {
+        editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
+        return;
+      }
+    }, 500);
   }
 
   openDialog() {
@@ -409,50 +414,15 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  async getLastHeight() {
-    if (!this.isLeftPage) {
-      const res = await this.validatorService.getUptimeLCD();
-      const listBlock = _.get(res, 'data.block.last_commit.signatures');
-      if (listBlock) {
-        let height = Number(_.get(res, 'data.block.header.height')) || 0;
-        let isSyncFail = false;
-        const address = listBlock.find((k) => k.validator_address === this.addressBase64);
-        if (!address) {
-          isSyncFail = true;
-        }
-        let element = [{ height, isSyncFail }];
-        if (this.arrBlockUptime && this.arrBlockUptime?.length > 0) {
-          const temp = this.arrBlockUptime.find((k) => k.height === height);
-          if (!temp) {
-            this.arrBlockUptime = [...element, ...this.arrBlockUptime];
-          }
-        } else {
-          this.arrBlockUptime = [...element];
-          this.getBlocksMiss(height);
-        }
-      }
-      this.lastBlockLoading = false;
-    }
-  }
-
-  getDetailValidatorIndexer() {
-    this.validatorService.validatorsFromIndexer(this.currentValidatorDetail.operator_address).subscribe((res) => {
-      this.currentValidatorDetail['up_time'] =
-        (NUM_BLOCK - +res.data.validators[0].val_signing_info.missed_blocks_counter) / 100;
-    });
-  }
-
-  getListUpTime(): void {
-    this.blockService.blocksIndexer(this.numberLastBlock).subscribe(
+  getUptime() {
+    const payload = {
+      limit: 100,
+    };
+    this.blockService.getDataBlock(payload).subscribe(
       (res) => {
-        const { code, data } = res;
-        if (code === 200) {
-          const block = _.get(data, 'blocks').map((element) => {
-            const height = _.get(element, 'block.header.height');
-            const isSyncFail = true;
-            return { height, isSyncFail };
-          });
-          this.arrBlockUptime = block;
+        if (res?.block?.length > 0) {
+          this.arrLastBlock = res.block;
+          this.getBlocksMiss(this.currentValidatorDetail?.consensus_hex_address);
         }
       },
       () => {},
@@ -460,5 +430,16 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         this.lastBlockLoading = false;
       },
     );
+  }
+
+  getLastHeight() {
+    const payload = {
+      limit: 1,
+    };
+    this.blockService.getDataBlock(payload).subscribe((res) => {
+      if (res?.block?.length > 0 && res?.block[0].height !== this.arrLastBlock[0].height) {
+        this.getBlocksMiss(this.currentValidatorDetail?.consensus_hex_address, res?.block);
+      }
+    });
   }
 }

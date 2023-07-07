@@ -32,6 +32,9 @@
                 (click)="copyMessage(userAddress); tooltip.toggle()" />
             </div>
           </div>
+          <div *ngIf="commonService.setNameTag(userAddress) !== userAddress" class="name-tag cursor-pointer mt-2">
+            <app-name-tag [value]="userAddress" [fullWidth]="true"></app-name-tag>
+          </div>
         </div>
         <div class="mt-6 mt-lg-4">
           <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">

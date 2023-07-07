@@ -1,17 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { makeSignDoc, StdSignDoc } from '@cosmjs/amino';
+import { StdSignDoc, makeSignDoc } from '@cosmjs/amino';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { Decimal } from '@cosmjs/math';
-import { StdFee } from '@cosmjs/stargate';
 import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
 import { TranslateService } from '@ngx-translate/core';
-import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { EAccountType } from 'src/app/core/constants/account.enum';
 import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
@@ -31,7 +28,9 @@ export class WalletService implements OnDestroy {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainId = this.environmentService.configValue.chainId;
   chainInfo = this.environmentService.configValue.chain_info;
-  urlIndexer = this.environmentService.configValue.indexerUri;
+  graphUrl = `${
+    this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
+  }`;
 
   coin98Client: Coin98Client;
   destroyed$ = new Subject();
@@ -314,38 +313,49 @@ export class WalletService implements OnDestroy {
   }
 
   private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
-    return this.http.get(`${this.urlIndexer}/account-info?address=${address}&chainId=${signDoc.chain_id}`).pipe(
-      map((res) => {
-        let accountAuth;
-        accountAuth = _.get(res, 'data.account_auth.account');
-        let account: {
-          account_number: number | string;
-          sequence: number | string;
-        };
-
-        if (accountAuth && accountAuth['@type'] === EAccountType.BaseAccount) {
-          account = accountAuth;
-        } else {
-          account = _.get(accountAuth, 'base_vesting_account.base_account');
+    const envDB = this.environmentService.configValue.horoscopeSelectedChain;
+    const operationsDoc = `
+    query getAccountInfo ($address: String) {
+      ${envDB} {
+        account (where: {address: {_eq: $address}}) {
+          account_number
+          sequence
+          type
         }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address,
+        },
+        operationName: 'getAccountInfo',
+      })
+      .pipe(
+        map((res) => {
+          if (!res?.data[envDB].account[0]) {
+            throw new Error('Can not get Account');
+          }
+          const accountAuth: {
+            account_number: number | string;
+            sequence: number | string;
+          } = res?.data[envDB].account[0];
 
-        if (!account.account_number) {
+          if (accountAuth) {
+            return makeSignDoc(
+              signDoc.msgs,
+              signDoc.fee,
+              signDoc.chain_id,
+              signDoc.memo,
+              accountAuth.account_number,
+              accountAuth.sequence || 0,
+            );
+          }
           throw new Error('Can not get Account');
-        }
-
-        if (account) {
-          return makeSignDoc(
-            signDoc.msgs,
-            signDoc.fee,
-            signDoc.chain_id,
-            signDoc.memo,
-            account.account_number,
-            account.sequence || 0,
-          );
-        }
-        throw new Error('Can not get Account');
-      }),
-    );
+        }),
+      );
   }
 
   signMessage(base64String: string) {

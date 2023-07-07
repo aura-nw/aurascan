@@ -6,10 +6,19 @@ import { RouterModule } from '@angular/router';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { ReadContractComponent } from './read-contract.component';
+import { MaterialModule } from '../../../../../../app.module';
 
 @NgModule({
   declarations: [ReadContractComponent],
-  imports: [CommonModule, CommonPipeModule, TableNoDataModule, MatExpansionModule, RouterModule, FormsModule],
+  imports: [
+    CommonModule,
+    CommonPipeModule,
+    TableNoDataModule,
+    MatExpansionModule,
+    RouterModule,
+    FormsModule,
+    MaterialModule,
+  ],
   exports: [ReadContractComponent],
 })
 export class ReadContractModule {}

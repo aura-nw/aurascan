@@ -1,6 +1,6 @@
-<div class="box-contract text-white">
+<div class="box-contract text-white" *ngIf="tokenDetail">
   <!-- Unverified -->
-  <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Unverified">
+  <ng-container *ngIf="!tokenDetail?.contract_verification || tokenDetail?.contract_verification === contractVerifyType.Unverified">
     <div class="d-flex content-contract body-02">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
@@ -10,7 +10,7 @@
         class="mr-2" />
       <div>
         Are you the Code ID's owner?
-        <a class="text--primary" [routerLink]="['/code-ids/verify', contractAddress, tokenDetail.tx_hash]">
+        <a class="text--primary" [routerLink]="['/code-ids/verify', this.tokenDetail.code_id]">
           Verify and Publish
         </a>
         your Code ID source code today!
@@ -76,16 +76,6 @@
         (click)="changeTab(contractType.WriteContract)">
         <span>Write Contract</span>
       </button>
-      <!--
-      <button class="button-tab" [class.active]="countCurrent === contractType.ReadProxy"
-              (click)="changeTab(contractType.ReadProxy)">
-        <span>Read as Proxy</span>
-      </button>
-      <button class="button-tab" [class.active]="countCurrent === contractType.WriteProxy"
-              (click)="changeTab(contractType.WriteProxy)">
-        <span>Write as Proxy</span>
-      </button>
-      -->
     </div>
 
     <div class="mt-3">

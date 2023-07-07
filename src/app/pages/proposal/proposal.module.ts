@@ -24,6 +24,8 @@ import { ProposalRoutingModule } from './proposal-routing.module';
 import { ProposalTableComponent } from './proposal-table/proposal-table.component';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
+import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { ProposalComponent } from './proposal.component';
     TableNoDataModule,
     PaginatorModule,
     LoadingImageModule,
+    APaginatorModule,
+    NameTagModule
   ],
   providers: [ProposalService, MappingErrorService, DecimalPipe, ValidatorService],
 })

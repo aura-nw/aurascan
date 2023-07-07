@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,6 +11,8 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
+import { CommonService } from 'src/app/core/services/common.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
   selector: 'app-soulbound-contract-list',
@@ -18,6 +20,7 @@ import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-po
   styleUrls: ['./soulbound-contract-list.component.scss'],
 })
 export class SoulboundContractListComponent implements OnInit {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -44,6 +47,7 @@ export class SoulboundContractListComponent implements OnInit {
     public dialog: MatDialog,
     private walletService: WalletService,
     private router: Router,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +77,7 @@ export class SoulboundContractListComponent implements OnInit {
   resetSearch() {
     this.textSearch = '';
     this.searchValue = '';
+    this.pageChange.selectPage(0);
     this.getListSmartContract();
   }
 
@@ -86,12 +91,18 @@ export class SoulboundContractListComponent implements OnInit {
   }
 
   getListSmartContract() {
+    this.textSearch = this.searchValue = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       minterAddress: this.currentAddress,
       keyword: this.textSearch,
     };
+
+    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    if (addressNameTag?.length > 0) {
+      payload['keyword'] = addressNameTag;
+    }
 
     this.soulboundService.getListSoulbound(payload).subscribe((res) => {
       this.dataSource.data = res.data;
@@ -112,7 +123,7 @@ export class SoulboundContractListComponent implements OnInit {
       if (result !== 'canceled') {
         setTimeout(() => {
           this.getListSmartContract();
-        }, 2000);
+        }, 4000);
       }
     });
   }

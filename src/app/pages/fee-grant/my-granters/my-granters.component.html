@@ -12,7 +12,7 @@
             <input
               type="text"
               class="form-control pl-0"
-              placeholder="Search for Tx Hash or Address"
+              placeholder="Search for Tx Hash, Address or Status"
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
               name="search"
@@ -55,12 +55,7 @@
                           [routerLink]="['/transaction', data[template.matColumnDef]]">
                           <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                         </a>
-                        <a
-                          *ngSwitchCase="'granter'"
-                          class="text--primary cursor-pointer"
-                          [routerLink]="['/account', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
-                        </a>
+                        <app-name-tag [value]="data[template.matColumnDef]" *ngSwitchCase="'granter'"></app-name-tag>
                         <div *ngSwitchCase="'type'">
                           {{ data[template.matColumnDef] }}
                         </div>

@@ -1,4 +1,4 @@
-<div class="text-end sbt-contain">
+<div class="sbt-contain" [ngClass]="!isSBTValidator ? 'text-end' : 'sbt-validator'">
   <div class="soulbound-list" *ngIf="soulboundList && soulboundList?.length > 0">
     <ng-container *ngFor="let token of soulboundList; let last = last">
       <div class="soulbound__item">
@@ -44,5 +44,9 @@
     >
   </a>
   <!-- Placeholder space for flex position -->
-  <div class="button button--sm mt-md-3 mt-lg-0 mt-xl-3" *ngIf="wallet !== accountAddress || !displayManage || isLoading"></div>
+  <ng-container *ngIf="!isSBTValidator">
+    <div
+      class="button button--sm mt-md-3 mt-lg-0 mt-xl-3"
+      *ngIf="wallet !== accountAddress || !displayManage || isLoading"></div>
+  </ng-container>
 </div>

@@ -77,11 +77,13 @@
           </div>
           <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
         </div>
-        <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+        <div class="col-12 col-lg-6 mt-3 mt-lg-0 address-name-tag">
           <h6 class="mb-0 text--gray-1">Address</h6>
-          <a class="text--primary mt-1 body-01" [routerLink]="['/account', currentValidatorDetail?.acc_address]">
-            {{ currentValidatorDetail?.acc_address }}
-          </a>
+          <app-name-tag
+            [value]="currentValidatorDetail?.acc_address"
+            [url]="'account'"
+            [fullWidth]="true"
+            [fullWidthMob]="true"></app-name-tag>
         </div>
       </div>
       <div class="divider divider-horizontal mt-4"></div>
@@ -94,6 +96,7 @@
             <app-soulbound-feature-tokens
               [extend]="false"
               [accountAddress]="currentValidatorDetail.acc_address"
+              [isSBTValidator]="true"
               [soulboundListData]="soulboundList"></app-soulbound-feature-tokens>
           </div>
         </div>
@@ -104,8 +107,11 @@
           <div class="row">
             <div class="col-6">Website</div>
             <div class="col-6 text-end text-lg-start">
-              <a class="text--primary cursor-pointer" href="{{ currentValidatorDetail?.website }}" target="_blank">
-                {{ currentValidatorDetail?.website }}
+              <a
+                class="text--primary cursor-pointer"
+                href="{{ currentValidatorDetail?.description?.website }}"
+                target="_blank">
+                {{ currentValidatorDetail?.description?.website }}
               </a>
             </div>
           </div>
@@ -224,7 +230,7 @@
                   </tr>
                 </table>
                 <ng-container *ngIf="breakpoint.value.matches">
-                  <div *ngIf="dataSourceBlock" class="custom-card-mob-simple">
+                  <div *ngIf="dataSourceBlock" class="custom-card-mob-simple titleMob">
                     <app-card-mob-simple
                       *ngFor="let data of dataSourceBlockMob"
                       [link]="'/blocks/' + data.height"
@@ -259,8 +265,8 @@
               </div>
             </ng-container>
             <ng-template #noValues>
-              <app-loading-sprint *ngIf="lengthBlockLoading"></app-loading-sprint>
-              <app-table-no-data *ngIf="!lengthBlockLoading"></app-table-no-data>
+              <app-loading-sprint *ngIf="isLoadingBlock"></app-loading-sprint>
+              <app-table-no-data *ngIf="!isLoadingBlock"></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
         </div>
@@ -288,25 +294,24 @@
             <div class="uptime-content m-lg-auto">
               <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
               <ng-container *ngIf="!lastBlockLoading">
-                <ng-container *ngFor="let itemBlock of arrBlockUptime; let index = index">
-                  <ng-container *ngIf="index < 100">
-                    <a
-                      class="block-uptime tool-tip"
-                      [ngStyle]="{
-                        'background-color':
-                          currentValidatorDetail?.status !== statusValidator.Active || itemBlock.isSyncFail
-                            ? 'none'
-                            : '#5EE6D0'
-                      }"
-                      [routerLink]="['/blocks', itemBlock?.height]"
-                      currentitem="false"
-                      matTooltip="{{ itemBlock?.height || 0 }}"
-                      [matTooltipPosition]="'above'">
-                      <div class="d-flex">
-                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
-                      </div>
-                    </a>
-                  </ng-container>
+                <ng-container *ngFor="let itemBlock of arrLastBlock; let index = index">
+                  <a
+                    class="block-uptime tool-tip"
+                    [ngClass]=""
+                    [ngStyle]="{
+                      'background-color':
+                        itemBlock?.isSign !== false && currentValidatorDetail?.status === statusValidator.Active
+                          ? '#5EE6D0'
+                          : ''
+                    }"
+                    href="/blocks/{{ itemBlock?.height }}"
+                    currentitem="false"
+                    matTooltip="{{ itemBlock?.height || 0 }}"
+                    [matTooltipPosition]="'above'">
+                    <div class="d-flex">
+                      <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                    </div>
+                  </a>
                 </ng-container>
               </ng-container>
             </div>
@@ -344,12 +349,9 @@
                       <td mat-cell *matCellDef="let data">
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
-                            <a
+                            <app-name-tag
                               *ngSwitchCase="'delegator_address'"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/account', data.delegator_address]">
-                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
-                            </a>
+                              [value]="data.delegator_address"></app-name-tag>
                             <div *ngSwitchCase="'amount'">
                               {{ data[template.matColumnDef] | mask : 'separator.6' }}
                               <span class="text--primary">{{ denom }}</span>
@@ -369,13 +371,13 @@
                   </tr>
                 </table>
                 <ng-container *ngIf="breakpoint.value.matches">
-                  <div class="custom-card-mob-simple">
+                  <div class="custom-card-mob-simple titleMob">
                     <app-card-mob-simple
                       *ngFor="let data of dataSourceDelegatorMob"
                       [link]="'/account/' + data.delegator_address"
                       [content]="[
                         {
-                          label: data.delegator_address | cutStringPipe : 6 : 6,
+                          label: commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6,
                           info: ''
                         },
                         {
@@ -472,7 +474,7 @@
                   </tr>
                 </table>
                 <ng-container *ngIf="breakpoint.value.matches">
-                  <div class="custom-card-mob-simple">
+                  <div class="custom-card-mob-simple titleMob">
                     <app-card-mob-simple
                       *ngFor="let data of dataSourcePowerMob"
                       [link]="'/blocks/' + data.height"

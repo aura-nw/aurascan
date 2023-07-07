@@ -24,3 +24,12 @@
     }
   }
 }
+
+.txt-name-tag {
+  ::ng-deep {
+    .box-name-tag {
+      min-width: 200px;
+      justify-content: center;
+    }
+  }
+}

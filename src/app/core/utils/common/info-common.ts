@@ -8,10 +8,11 @@ import { balanceOf } from './parsing';
 export function getInfo(globals: any, data: any): void {
   globals.dataHeader = data;
   globals.dataHeader.bonded_tokens = formatNumber(globals.dataHeader.bonded_tokens / NUMBER_CONVERT) || 0;
-  globals.dataHeader.supply = formatNumber(globals?.dataHeader?.supply / NUMBER_CONVERT);
+  globals.dataHeader.total_aura = formatNumber(+globals?.dataHeader?.total_aura / NUMBER_CONVERT);
   globals.dataHeader.bonded_tokens_format = formatNumber(globals?.dataHeader?.bonded_tokens);
   globals.dataHeader.community_pool = Math.round(globals?.dataHeader?.community_pool / NUMBER_CONVERT);
   globals.dataHeader.community_pool_format = formatNumber(globals?.dataHeader?.community_pool);
+  globals.dataHeader.inflation = globals?.dataHeader?.inflation * 100 + '%';
 }
 
 export function formatNumber(number: number, args?: any): any {
@@ -50,29 +51,24 @@ export function formatNumber(number: number, args?: any): any {
 }
 
 export function parseDataTransaction(trans: any, coinMinimalDenom: string, tokenID = '') {
-  let typeOrigin = trans.tx_response?.tx?.body?.messages[0]['@type'];
+  let typeOrigin = trans.data?.tx?.body?.messages[0]['@type'];
   const typeTrans = TYPE_TRANSACTION.find((f) => f.label.toLowerCase() === typeOrigin?.toLowerCase());
-  trans.tx_hash = trans.tx_response?.txhash;
+  trans.tx_hash = trans.hash;
   //get amount of transaction
-  trans.amount = getAmount(
-    trans.tx_response?.tx?.body?.messages,
-    typeOrigin,
-    trans.tx_response?.raw_log,
-    coinMinimalDenom,
-  );
-  trans.fee = balanceOf(trans?.tx_response?.tx?.auth_info?.fee?.amount[0]?.amount);
-  trans.gas_limit = balanceOf(trans?.tx_response?.tx?.auth_info?.fee?.gas_limit);
-  trans.height = trans.tx_response?.height;
-  trans.timestamp = trans.tx_response?.timestamp;
+  trans.amount = getAmount(trans.data?.tx?.body?.messages, typeOrigin, trans.tx_response?.raw_log, coinMinimalDenom);
+  trans.fee = balanceOf(trans?.data?.auth_info?.fee?.amount[0]?.amount);
+  trans.gas_limit = balanceOf(trans?.data?.auth_info?.fee?.gas_limit);
+  trans.height = trans?.height;
+  trans.timestamp = trans?.timestamp;
   trans.status = StatusTransaction.Fail;
-  if (Number(trans.tx_response?.code) === CodeTransaction.Success) {
+  if (Number(trans?.code) === CodeTransaction.Success) {
     trans.status = StatusTransaction.Success;
   }
   [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.modeExecute] =
-    getDataInfo(trans.tx_response?.tx?.body?.messages, tokenID, trans.tx_response?.raw_log);
+    getDataInfo(trans.data?.tx?.body?.messages, tokenID, trans.data?.tx_response?.raw_log);
   trans.type = trans.method || typeTrans?.value;
-  trans.depositors = trans.tx_response?.tx?.body?.messages[0]?.depositor;
-  trans.price = balanceOf(_.get(trans, 'tx_response.tx.body.messages[0].funds[0].amount'));
+  trans.depositors = trans.data?.tx?.body?.messages[0]?.depositor;
+  trans.price = balanceOf(_.get(trans, 'data.body.messages[0].funds[0].amount'));
   return trans;
 }
 
@@ -80,11 +76,15 @@ export function checkTypeFile(nft: any) {
   let nftType = nft.img_type || '';
   let content_type = '';
   if (!nftType) {
-    if (nft?.animation) {
-      nftType = nft?.animation?.content_type || '';
+    if (
+      (typeof nft?.media_info?.offchain?.animation === 'object' &&
+        Object.keys(nft?.media_info?.offchain?.animation)?.length > 0) ||
+      nft?.animation
+    ) {
+      nftType = nft?.media_info?.offchain?.animation?.content_type || nft?.animation?.content_type || '';
     }
-    if (nft?.image && nftType == '') {
-      nftType = nft?.image?.content_type || '';
+    if (nftType == '' && (nft?.media_info?.offchain?.image || nft?.image?.link_s3)) {
+      nftType = nft?.media_info?.offchain?.image?.content_type || nft?.image?.content_type || '';
     }
   }
 
@@ -116,4 +116,3 @@ export function checkTypeFile(nft: any) {
   }
   return content_type;
 }
-

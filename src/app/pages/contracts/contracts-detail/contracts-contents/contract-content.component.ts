@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { isContract } from 'src/app/core/utils/common/validation';
 import { convertDataTransaction } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
@@ -19,24 +20,17 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   @Input() contractsAddress = '';
   @Input() contractTypeData: ContractVerifyType;
 
-  TABS = CONTRACT_TAB.filter((tab) =>
-    [
-      ContractTab.Transactions,
-      // ContractTab.Cw20Token,
-      ContractTab.Contract,
-      // ContractTab.Events,
-      // ContractTab.Analytics,
-    ].includes(tab.key),
-  ).map((tab) => ({
-    ...tab,
-    value: tab.value,
-    key: tab.key === ContractTab.Transactions ? '' : tab.key,
-  }));
+  TABS = CONTRACT_TAB.filter((tab) => [ContractTab.Transactions, ContractTab.Contract].includes(tab.key)).map(
+    (tab) => ({
+      ...tab,
+      value: tab.value,
+      key: tab.key === ContractTab.Transactions ? '' : tab.key,
+    }),
+  );
 
   countCurrent: string = ContractTab.Transactions;
   contractTab = ContractTab;
   contractVerifyType = ContractVerifyType;
-  nextKey = null;
   activeId = 0;
   limit = 25;
   contractTransaction = {};
@@ -49,6 +43,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     popover: true,
   };
   dataInstantiate = [];
+  loadingContract = true;
 
   destroyed$ = new Subject();
   timerGetUpTime: any;
@@ -57,6 +52,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   constructor(
     private contractService: ContractService,
+    private transactionService: TransactionService,
     private router: Router,
     private aRoute: ActivatedRoute,
     private environmentService: EnvironmentService,
@@ -120,52 +116,34 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   getTransaction(isInit = true): void {
     if (isContract(this.contractsAddress)) {
-      this.contractService
-        .getTransactionsIndexer(this.limit, this.contractsAddress, 'execute')
-        .subscribe((dataExecute) => {
-          const { code, data } = dataExecute;
-          this.nextKey = dataExecute.data.nextKey;
-          if (code === 200) {
+      const payload = {
+        limit: this.limit,
+        value: this.contractsAddress,
+        key: '_contract_address',
+      };
+      this.transactionService.getListTxCondition(payload).subscribe(
+        (res) => {
+          const data = res;
+          if (res) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
-            if (dataExecute?.data?.transactions?.length > 0) {
+            if (res?.transaction?.length > 0) {
               this.contractTransaction['data'] = txsExecute;
               this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
             }
 
-            if (!isInit) {
+            if (!isInit && this.dataInstantiate?.length > 0) {
               this.contractTransaction['data'] = [...this.contractTransaction['data'], this.dataInstantiate[0]];
               this.contractTransaction['count'] = this.contractTransaction['count'] + this.dataInstantiate?.length;
             }
-
-            //check data < 25 record
-            if (isInit) {
-              if (this.contractTransaction['data']?.length < this.limit || !this.contractTransaction['data']) {
-                this.contractService
-                  .getTransactionsIndexer(this.limit, this.contractsAddress, 'instantiate')
-                  .subscribe((dataInstantiate) => {
-                    if (dataInstantiate.data?.transactions?.length > 0) {
-                      const txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
-                      txsInstantiate[0]['type'] =
-                        dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
-                      txsInstantiate[0]['contract_address'] = this.contractsAddress;
-                      let data = [];
-                      this.dataInstantiate = txsInstantiate;
-                      if (this.contractTransaction['data']?.length >= 1) {
-                        data = [...this.contractTransaction['data'], txsInstantiate[0]];
-                      } else {
-                        data = txsInstantiate;
-                      }
-                      let count = data.length || 0;
-                      this.contractTransaction = {
-                        data,
-                        count,
-                      };
-                    }
-                  });
-              }
-            }
           }
-        });
+        },
+        () => {},
+        () => {
+          this.loadingContract = false;
+        },
+      );
+    } else {
+      this.loadingContract = false;
     }
   }
 

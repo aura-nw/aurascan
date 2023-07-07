@@ -30,6 +30,8 @@ import { ContractsRoutingModule } from './contracts-routing.module';
 import { ContractsTransactionsComponent } from './contracts-transactions/contracts-transactions.component';
 import { ContractVerifyStepsComponent } from './contracts-verify/contract-verify-steps/contract-verify-steps.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
+import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,7 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     CodeContractComponent,
     ContractsVerifyComponent,
     ContractVerifyStepsComponent,
-    ContractsRegisterComponent
+    ContractsRegisterComponent,
   ],
   imports: [
     CommonModule,
@@ -65,7 +67,9 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ClickOutsideModule,
     WriteContractModule,
     ReadContractModule,
-    PopupAddZeroModule
+    PopupAddZeroModule,
+    APaginatorModule,
+    NameTagModule
   ],
   providers: [ContractService],
   exports: [ContractVerifyStepsComponent],

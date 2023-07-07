@@ -57,12 +57,7 @@
                           [routerLink]="['/transaction', data[template.matColumnDef]]">
                           <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                         </a>
-                        <a
-                          *ngSwitchCase="'grantee'"
-                          class="text--primary cursor-pointer"
-                          [routerLink]="['/account', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
-                        </a>
+                        <app-name-tag [value]="data[template.matColumnDef]" *ngSwitchCase="'grantee'"></app-name-tag>
                         <div *ngSwitchCase="'type'">
                           {{ data[template.matColumnDef] }}
                         </div>

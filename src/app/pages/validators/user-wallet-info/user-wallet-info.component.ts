@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { DataDelegateDto, TableTemplate } from 'src/app/core/models/common.model';
+import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -13,9 +12,9 @@ import { Globals } from 'src/app/global/global';
 export class UserWalletInfoComponent implements OnChanges {
   @Input() breakpoint: any;
   @Input() userAddress: string;
-  @Input() arrayDelegate: any[] = [];
-  @Input() dataDelegate: DataDelegateDto;
+  @Input() dataDelegate: any;
   @Input() lstUndelegate: any[] = [];
+  @Input() dataUserDelegate: any;
   @Input() modalManage: any;
   @Input() denom: any;
   @Output() onViewDialog: EventEmitter<any> = new EventEmitter();
@@ -23,6 +22,7 @@ export class UserWalletInfoComponent implements OnChanges {
   validatorImgArr;
 
   dataSourceWallet = new MatTableDataSource<any>();
+  dataStakeInfo = {};
   templatesWallet: Array<TableTemplate> = [
     { matColumnDef: 'validator_name', headerCellDef: 'Name', desktopOnly: true },
     { matColumnDef: 'amount_staked', headerCellDef: 'Amount Staked' },
@@ -33,36 +33,16 @@ export class UserWalletInfoComponent implements OnChanges {
   clicked = false;
   isDisableClaim = true;
 
-  constructor(
-    public globals: Globals,
-    public commonService: CommonService,
-    private validatorService: ValidatorService,
-    private cdr: ChangeDetectorRef,
-  ) {}
+  constructor(public globals: Globals, public commonService: CommonService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.arrayDelegate) {
-      if (changes.arrayDelegate.currentValue?.length !== changes.arrayDelegate.previousValue?.length) {
-        this.dataSourceWallet = new MatTableDataSource(this.arrayDelegate);
-      } else {
-        Object.keys(this.arrayDelegate).forEach((key) => {
-          if (this.dataSourceWallet.data[key]) {
-            Object.assign(this.dataSourceWallet.data[key], this.arrayDelegate[key]);
-          } else {
-            this.dataSourceWallet.data[key] = this.arrayDelegate[key];
-          }
-        });
-      }
-      if (changes.arrayDelegate.currentValue?.length > 0) {
-        // get ValidatorAddressArr
-        this.getValidatorAvatar(changes.arrayDelegate.currentValue);
-      }
-    }
+    this.dataSourceWallet = new MatTableDataSource(this.dataUserDelegate?.delegations);
 
     if (changes.dataDelegate) {
       if (Number(this.dataDelegate?.stakingToken) > 0) {
         this.isDisableClaim = false;
       }
+      this.dataStakeInfo = changes.dataDelegate.currentValue;
     }
 
     if (changes.lstUndelegate) {
@@ -75,11 +55,6 @@ export class UserWalletInfoComponent implements OnChanges {
         }
       });
       this.lstUndelegate = lstUndelegateTemp;
-
-      if (this.lstUndelegate?.length > 0) {
-        // get ValidatorAddressArr
-        this.getValidatorAvatar(this.lstUndelegate);
-      }
     }
   }
 
@@ -94,30 +69,5 @@ export class UserWalletInfoComponent implements OnChanges {
       isClaimMode: isClaimMode,
     };
     this.onViewDialog.emit(dataModal);
-  }
-
-  getValidatorAvatar(validatorArr) {
-    if (validatorArr.length > 0) {
-      const operatorAddArr = [];
-      // get ValidatorAddressArr
-      validatorArr.forEach((d) => {
-        operatorAddArr.push(d.validator_address);
-      });
-      // get validator logo
-      this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
-        if (res?.data) {
-          this.validatorImgArr = res?.data;
-          // push image into validator array
-          validatorArr.forEach((item) => {
-            this.validatorImgArr.forEach((imgObj) => {
-              if (imgObj.operator_address == item.validator_address) {
-                item['image_url'] = imgObj.image_url;
-              }
-            });
-          });
-          this.cdr.markForCheck();
-        }
-      });
-    }
   }
 }
