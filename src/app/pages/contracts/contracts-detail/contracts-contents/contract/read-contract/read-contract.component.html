@@ -45,7 +45,7 @@
               appearance="fill"
               *ngIf="item.type?.includes('boolean')"
               [class.error-null]="item.isError"
-              class="col-12 mb-4">
+              class="col-12 mb-4 p-0">
               <mat-select
                 [(ngModel)]="item.value"
                 panelClass="contractPanel"
