@@ -75,7 +75,8 @@ export class SoulboundService extends CommonService {
             }, 
             _or: [{name: {_ilike: $keyword}}, {smart_contract: {_or:[{address: {_like: $keyword}}, {creator: {_like: $keyword}}]}}]
           },
-          offset: $offset
+          offset: $offset,
+          order_by: {updated_at: desc}
         ) { 
           name
           symbol

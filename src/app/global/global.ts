@@ -169,6 +169,7 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
       } else if (method === ModeExecuteTransaction.Take) {
         fromAddress = NULL_ADDRESS;
         toAddress = itemMessage.sender;
+        modeExecute = ModeExecuteTransaction.Take;
         try {
           const data = JSON.parse(rawLog);
           tokenId =
