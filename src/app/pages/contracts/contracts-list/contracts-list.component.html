@@ -37,7 +37,7 @@
       <input
         type="text"
         class="form-control pl-0"
-        placeholder="Search for Contract name, contract address, creator address, Code ID"
+        placeholder="Search for Contract name, contract address/name tag, creator address/name tag, Code ID"
         [(ngModel)]="textSearch"
         [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
         (keyup)="onKeyUp()"
@@ -66,7 +66,7 @@
               <input
                 type="text"
                 class="form-control pl-0"
-                placeholder="Search for Contract name, contract address, creator address, Code ID"
+                placeholder="Search for Contract name, contract address/name tag, creator address/name tag, Code ID"
                 [(ngModel)]="textSearch"
                 [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
                 (keyup)="onKeyUp()"
@@ -103,15 +103,18 @@
                   <ng-container *ngIf="template.isNameTag">
                     <ng-container *ngIf="template.matColumnDef === 'address'">
                       <div class="d-flex align-items-center gap-2">
-                        <div class="mr-2" [style.width]="'16px'">
+                        <!-- <div class="mr-2" [style.width]="'16px'">
                           <img
                             *ngIf="data['contract_verification'] === ContractVerifyType.Verified"
                             [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                             alt="contract_verification"
                             width="16px"
                             height="16px" />
-                        </div>
-                        <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
+                        </div> -->
+                        <app-name-tag
+                          [value]="data[template.matColumnDef]"
+                          [url]="template.isUrl"
+                          [iconVerify]="data['contract_verification'] === ContractVerifyType.Verified"></app-name-tag>
                       </div>
                     </ng-container>
                     <ng-container *ngIf="template.matColumnDef !== 'address'">

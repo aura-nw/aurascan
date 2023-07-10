@@ -632,7 +632,6 @@ body {
   max-width: unset !important;
 }
 
-
 .notice-warning {
   padding: 16px;
   background: rgba(213, 98, 94, 0.16);
@@ -665,8 +664,8 @@ body {
   }
 }
 .name-tag-label {
-  // padding: 8px;
-  // border-radius: 16px;
-  // background-color: var(--aura-gray-8);
-  // font-size: 12px;
+  padding: 8px;
+  border-radius: 16px;
+  background-color: var(--aura-gray-8);
+  font-size: 12px;
 }
