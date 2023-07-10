@@ -41,11 +41,3 @@
 .no-border-bottom {
   border-bottom: none;
 }
-
-.filter-name-tag {
-  ::ng-deep {
-    .box-name-tag {
-      min-width: auto;
-    }
-  }
-}

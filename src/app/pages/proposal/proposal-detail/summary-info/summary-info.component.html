@@ -61,7 +61,7 @@
                   {{ proposalDetail?.proposer?.description?.moniker }}
                 </ng-container>
                 <ng-container *ngIf="!proposalDetail?.proposer">
-                  <app-name-tag [value]="proposalDetail?.proposer_address" [fullWidth]="true"></app-name-tag>
+                  <app-name-tag [value]="proposalDetail?.proposer_address" [fullText]="true"></app-name-tag>
                 </ng-container>
               </a>
             </ng-container>

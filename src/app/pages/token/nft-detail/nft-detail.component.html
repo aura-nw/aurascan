@@ -161,7 +161,8 @@
               <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner && !nftDetail?.burned">
                 <app-name-tag
                   [value]="nftDetail?.owner"
-                  [fullWidth]="true"
+                  [fullText]="true"
+                  [widthAuto]="true"
                   [url]="nftDetail?.owner?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
@@ -180,7 +181,8 @@
                 <app-name-tag
                   [value]="nftDetail?.contract_address"
                   [url]="'contracts'"
-                  [fullWidth]="true"
+                  [fullText]="true"
+                  [widthAuto]="true"
                   [iconVerify]="nftDetail['verification_status'] === ContractVerifyType.Verified"></app-name-tag>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
@@ -198,7 +200,8 @@
               <div class="d-flex align-items-center">
                 <app-name-tag
                   [value]="nftDetail?.creator"
-                  [fullWidth]="true"
+                  [fullText]="true"
+                  [widthAuto]="true"
                   [url]="nftDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
                 <img
                   [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
