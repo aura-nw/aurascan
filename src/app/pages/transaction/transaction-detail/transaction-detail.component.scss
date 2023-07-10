@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/color.scss";
+@import '../../../../assets/scss/color.scss';
 
 .raw-content {
   white-space: pre-wrap;
@@ -16,6 +16,13 @@
   padding: 10px 15px;
   margin-bottom: 1rem;
   word-break: break-word;
+  .ellipsis-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 ::ng-deep app-transaction-messages .card-info:not(:last-child) {
