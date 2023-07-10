@@ -684,6 +684,7 @@ app-tooltip-customize {
   transition: opacity .35s ease-in-out;
 }
 .aura-tooltip-contain {
+  display: inline-block;
   position: relative;
   .aura-tooltip-object {
     cursor: pointer;
@@ -697,4 +698,8 @@ app-tooltip-customize {
       }
     }
   }
+}
+.spacer-tooltip {
+  padding-top: 50px;
+  margin-top: -40px;
 }

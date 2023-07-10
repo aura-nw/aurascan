@@ -118,7 +118,7 @@
         <div class="card-body p-4 p-lg-6">
           <ngx-simplebar *ngIf="dataSource && dataSource.data">
             <ng-container *ngIf="dataSource.data.length > 0; else noValues">
-              <div class="table-responsive aura-table-contain">
+              <div class="table-responsive aura-table-contain spacer-tooltip">
                 <ng-container>
                   <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
                     <ng-container *ngFor="let template of templates; index as i">
@@ -155,14 +155,14 @@
                                 {{ data[template.matColumnDef] }}
                               </a>
                               <div *ngSwitchCase="'type'">
-                                <div class="aura-status">
+                                <div class="aura-status aura-tooltip-contain">
                                   <div
-                                    class="status cursor-pointer"
-                                    [matTooltipClass]="'transaction-type-tooltip'"
-                                    matTooltip="{{ data[template.matColumnDef] }}"
-                                    [matTooltipPosition]="'above'">
+                                    class="status cursor-pointer aura-tooltip-object">
                                     {{ data[template.matColumnDef] | stringEllipsis : 11 }}
                                   </div>
+                                  <app-tooltip-customize
+                                      [content]="'transaction-type-tooltip'">
+                                  </app-tooltip-customize>
                                 </div>
                               </div>
                               <div *ngSwitchCase="'status'">

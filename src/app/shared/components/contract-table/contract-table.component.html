@@ -23,7 +23,7 @@
   </div>
   <ng-container *ngIf="!isLoading">
     <ng-container *ngIf="pageData?.length > 0 && dataSource; else noValues">
-      <div class="table-responsive aura-table-contain">
+      <div class="table-responsive aura-table-contain spacer-tooltip">
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
