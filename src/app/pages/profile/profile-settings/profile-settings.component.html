@@ -1,0 +1,72 @@
+<app-pagetitle title="Profile settings"></app-pagetitle>
+<div>
+  <span>Email</span>
+  <span>abc@gmail.com</span>
+</div>
+<div>
+  <form [formGroup]="changePassForm" class="aura-form single-input-field grant-form" autocomplete="off">
+    <!-- Old password -->
+    <div class="row mt-6">
+      <div class="col-12">
+        <div class="form-group">
+          <label for="old_password" class="form-label body-01">Old password</label>
+          <div class="input-group form-check-input pr-0">
+            <input
+              id="old_password"
+              [type]="hideOldPassword ? 'password' : 'text'"
+              #old_password
+              formControlName="old_password"
+              placeholder="Enter old password" />
+            <mat-icon class="ob-icon-color not-select" matSuffix (click)="hideOldPassword = !hideOldPassword">
+              {{ hideOldPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- New password -->
+    <div class="row mt-6">
+      <div class="col-12">
+        <div class="form-group">
+          <label for="new_password" class="form-label body-01">New password</label>
+          <div class="input-group form-check-input pr-0">
+            <input
+              id="new_password"
+              [type]="hideNewPassword ? 'password' : 'text'"
+              #new_password
+              formControlName="new_password"
+              placeholder="Enter new password" />
+            <mat-icon class="ob-icon-color not-select" matSuffix (click)="hideNewPassword = !hideNewPassword">
+              {{ hideNewPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Confirm new password -->
+    <div class="row mt-6">
+      <div class="col-12">
+        <div class="form-group">
+          <label for="cf_new_password" class="form-label body-01">Confirm new password</label>
+          <div class="input-group form-check-input pr-0">
+            <input
+              id="cf_new_password"
+              #cf_new_password
+              [type]="hideConfirmPassword ? 'password' : 'text'"
+              formControlName="cf_new_password"
+              placeholder="Type the new password again" />
+            <mat-icon class="" matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">
+              {{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- button group -->
+    <div class="d-flex mt-4 py-6 justify-content-end">
+      <button class="button button--md button-pill button-outline" type="button">
+        <span>Change password</span>
+      </button>
+    </div>
+  </form>
+</div>
