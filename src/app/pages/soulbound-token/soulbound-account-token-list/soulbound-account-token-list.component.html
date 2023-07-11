@@ -19,19 +19,13 @@
               <span class="d-md-none d-flex">{{ userAddress | cutStringPipe : 8 : 8 }}</span>
             </div>
             <div class="aura-tooltip-contain ml-2">
-              <button class="button button--xxs button-circle aura-tooltip-object disabled-hover"
-                      #tooltip
-                      (click)="commonService.copyToolTipAction(tooltip, userAddress)"
-              >
-                <img
-                    [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                    alt=""
-                    width="12px"
-                    height="12px"/>
+              <button
+                class="button button--xxs button-circle aura-tooltip-object disabled-hover"
+                #tooltip
+                (click)="commonService.copyToolTipAction(tooltip, userAddress)">
+                <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="12px" height="12px" />
               </button>
-              <app-tooltip-customize
-                  [content]="'Copied!'">
-              </app-tooltip-customize>
+              <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
             </div>
           </div>
           <div *ngIf="commonService.setNameTag(userAddress) !== userAddress" class="name-tag cursor-pointer mt-2">

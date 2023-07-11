@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private contractService: ContractService,
     private modalService: NgbModal,
+    public commonService: CommonService
   ) {}
 
   ngOnDestroy(): void {
