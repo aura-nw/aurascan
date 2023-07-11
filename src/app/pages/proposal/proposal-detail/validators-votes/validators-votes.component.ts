@@ -168,6 +168,7 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   }
 
   changeTab(tabId): void {
+    this.pageDataValidator.pageIndex = 0;
     this.currentTabId = tabId;
     this.loadValidatorVotes(this.rawData);
   }
