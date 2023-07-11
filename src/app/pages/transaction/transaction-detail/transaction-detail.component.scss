@@ -10,15 +10,17 @@
 }
 
 .box-error {
-  background-color: lightgray;
-  color: var(--aura-danger);
+  background-color: var(--aura-gray-9);
+  color: #e65e5e;
   border-radius: 10px;
   padding: 10px 15px;
   margin-bottom: 1rem;
   word-break: break-word;
+  font-size: 16px;
+  font-weight: 400;
   .ellipsis-text {
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
