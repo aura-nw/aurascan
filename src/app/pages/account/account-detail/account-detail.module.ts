@@ -25,6 +25,7 @@ import { NftListComponent } from './nft-list/nft-list.component';
 import { SoulboundTokenComponent } from './soulbound-token/soulbound-token.component';
 import { TokenTableComponent } from './token-table/token-table.component';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 
 @NgModule({
   declarations: [AccountDetailComponent, TokenTableComponent, NftListComponent, SoulboundTokenComponent],
@@ -49,7 +50,8 @@ import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.modul
     SoulboundFeatureTokensModule,
     CommonDirectiveModule,
     APaginatorModule,
-    NameTagModule
+    NameTagModule,
+    TooltipCustomizeModule,
   ],
   providers: [TransactionService, AccountService, DecimalPipe],
 })

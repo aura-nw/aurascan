@@ -11,6 +11,7 @@ import { ProposalService } from 'src/app/core/services/proposal.service';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { AccountService } from '../../../app/core/services/account.service';
@@ -29,12 +30,7 @@ import { ValidatorsRoutingModule } from './validators-routing.module';
 import { ValidatorsComponent } from './validators.component';
 
 @NgModule({
-  declarations: [
-    ValidatorsComponent,
-    ValidatorsDetailComponent,
-    UserWalletInfoComponent,
-    DelegateItemComponent,
-  ],
+  declarations: [ValidatorsComponent, ValidatorsDetailComponent, UserWalletInfoComponent, DelegateItemComponent],
   imports: [
     CommonModule,
     ValidatorsRoutingModule,
@@ -54,8 +50,17 @@ import { ValidatorsComponent } from './validators.component';
     NgbNavModule,
     SoulboundFeatureTokensModule,
     CommonDirectiveModule,
-    NameTagModule
+    NameTagModule,
+    TooltipCustomizeModule,
   ],
-  providers: [CommonService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe, ProposalService],
+  providers: [
+    CommonService,
+    BlockService,
+    TransactionService,
+    AccountService,
+    MappingErrorService,
+    DecimalPipe,
+    ProposalService,
+  ],
 })
 export class ValidatorsModule {}

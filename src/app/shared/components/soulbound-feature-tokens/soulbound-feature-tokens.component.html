@@ -34,14 +34,19 @@
     (click)="setLinkTab()"
     *ngIf="wallet === accountAddress && displayManage && !isLoading">
     <span>Manage your ABTs</span>
-    <span
-      class="nft__unclaimed-noti caption"
-      matTooltip="You have new un-claimed Account Bound Token(s) (ABTs). Kindly check and manage your ABTs in your account."
-      [matTooltipPosition]="'above'"
-      *ngIf="soulboundUnclaimedNum > 0"
-      [class.noti--pill]="soulboundUnclaimedNum > 9"
-      >{{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}</span
-    >
+    <div class="aura-tooltip-contain">
+      <span
+        class="nft__unclaimed-noti caption aura-tooltip-object"
+        *ngIf="soulboundUnclaimedNum > 0"
+        [class.noti--pill]="soulboundUnclaimedNum > 9">
+        {{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}
+      </span>
+      <app-tooltip-customize
+        [content]="
+          'You have new un-claimed Account Bound Token(s) (ABTs). Kindly check and manage your ABTs in your account.'
+        ">
+      </app-tooltip-customize>
+    </div>
   </a>
   <!-- Placeholder space for flex position -->
   <ng-container *ngIf="!isSBTValidator">
