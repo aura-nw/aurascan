@@ -44,6 +44,8 @@ export class TransactionDetailComponent implements OnInit {
   loading = true;
   isReload = false;
   listValidator = [];
+  seeLess = false;
+  heightBoxError = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -92,6 +94,11 @@ export class TransactionDetailComponent implements OnInit {
                 this.errorMessage,
                 this.transaction.code,
               );
+
+              // get height error box
+              setTimeout(() => {
+                this.heightBoxError = document.getElementById('contentError')?.offsetHeight;
+              }, 500);
             }
 
             this.getListValidator();

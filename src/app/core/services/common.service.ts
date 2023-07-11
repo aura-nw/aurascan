@@ -116,10 +116,9 @@ export class CommonService {
   }
 
   setNameTag(address, listNameTag = []) {
-    // this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
-    // const nameTag = this.listNameTag?.find((k) => k.address === address);
-    // return nameTag?.name_tag || address;
-    return address;
+    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    return nameTag?.name_tag || address;
   }
 
   findNameTag(keySearch, listNameTag = []) {
@@ -132,10 +131,19 @@ export class CommonService {
 
   checkDisplayTooltip(address): boolean {
     let result = false;
-    // const nameTag = this.listNameTag?.find((k) => k.address === address);
-    // if (!nameTag || nameTag?.name_tag === address) {
-    //   result = true;
-    // }
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    if (!nameTag || nameTag?.name_tag === address) {
+      result = true;
+    }
+    return result;
+  }
+
+  findUrlNameTag(address) {
+    let result = '';
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    if (nameTag?.enterpriseUrl?.length > 0) {
+      result = nameTag?.enterpriseUrl;
+    }
     return result;
   }
 }

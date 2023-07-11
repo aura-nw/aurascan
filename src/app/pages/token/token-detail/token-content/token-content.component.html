@@ -19,12 +19,13 @@
               height="18px" />
             FILTER BY ADDRESS
           </div>
-          <div class="mt-2 filter-name-tag">
+          <div class="mt-2">
             <app-name-tag
               [value]="textSearch"
               [url]="textSearch?.length > lengthNormalAddress ? '/contracts' : '/account'"
-              [fullWidth]="true"
-              [fullWidthMob]="true"></app-name-tag>
+              [fullText]="true"
+              [widthAuto]="true"
+              [fullTextMob]="true"></app-name-tag>
           </div>
         </div>
         <div
