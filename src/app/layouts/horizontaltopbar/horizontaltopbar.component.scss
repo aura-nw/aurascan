@@ -210,3 +210,17 @@ form.aura-form.single-input-field {
   border-radius: 25px;
   background-color: var(--aura-gray-10);
 }
+
+.wallet-connect{
+  display: flex;
+  background-color: var(--aura-gray-9);
+  border-radius: 999px;
+  align-items: center;
+  padding: 6px;
+  .split-menu{
+    background-color: var(--aura-gray-6);
+    width: 1px;
+    margin: 0px 12px;
+    height: 40px;
+  }
+}

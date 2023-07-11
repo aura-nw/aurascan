@@ -93,7 +93,7 @@
   }
 }
 
-.button-wallet-menu {
+.button-login-menu {
   min-width: 90px;
   border-radius: 999px;
   padding: 10px 24px;
@@ -111,14 +111,14 @@
     &:before {
       opacity: 0;
     }
-    // &:after {
-    //   opacity: 1;
-    // }
+    &:after {
+      opacity: 1;
+    }
   }
   &::before {
     background: url(../../../../assets/icons/icons-svg/black/caret-up.svg) center no-repeat;
   }
-  // &::after {
-  //   background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
-  // }
+  &::after {
+    background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
+  }
 }

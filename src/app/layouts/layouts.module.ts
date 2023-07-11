@@ -17,6 +17,7 @@ import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
 import { LayoutComponent } from './layout.component';
 import { MenuBottomBarComponent } from './menu-bottom-bar/menu-bottom-bar.component';
+import { AuthenticateMailModule } from '../shared/components/authenticate-mail/authenticate-mail.module';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MenuBottomBarComponent } from './menu-bottom-bar/menu-bottom-bar.compon
     WalletConnectModule,
     NgbPopoverModule,
     CommonPipeModule,
+    AuthenticateMailModule
   ],
   providers: [LanguageService, CommonService, TransactionService, ContractService],
   exports: [],

@@ -1,0 +1,14 @@
+<button
+  #connectButton
+  type="button"
+  class="button button--sm-mob button-flat body-01 button-login-menu"
+  data-bs-toggle="offcanvas"
+  data-bs-target="#offcanvasWallet"
+  aria-controls="offcanvasWallet"
+  (click)="linkLogin()">
+  <span class="d-lg-none body-mob">Login</span>
+  <span class="d-none d-lg-block">Login</span>
+  <div class="ml-2 d-flex">
+    <img [src]="'assets/icons/icons-svg/black/sign-in.svg' | imageS3" alt="" width="24" height="24" />
+  </div>
+</button>
