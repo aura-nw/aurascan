@@ -13,6 +13,12 @@ import { TooltipCustomizeComponent } from './components/tooltip-customize/toolti
 @NgModule({
   declarations: [PagetitleComponent, LoadingSprintComponent, CardMobExplainComponent, TooltipCustomizeComponent],
   imports: [CommonModule, CardMobSimpleModule, SoulboundFeatureTokensModule, CommonPipeModule, CommonDirectiveModule],
-  exports: [PagetitleComponent, LoadingSprintComponent, CardMobSimpleComponent, CardMobExplainComponent, TooltipCustomizeComponent],
+  exports: [
+    PagetitleComponent,
+    LoadingSprintComponent,
+    CardMobSimpleComponent,
+    CardMobExplainComponent,
+    TooltipCustomizeComponent,
+  ],
 })
 export class SharedModule {}
