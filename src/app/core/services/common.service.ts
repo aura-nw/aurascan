@@ -155,4 +155,12 @@ export class CommonService {
     }
   }
 
+    findUrlNameTag(address) {
+    let result = '';
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    if (nameTag?.enterpriseUrl?.length > 0) {
+      result = nameTag?.enterpriseUrl;
+    }
+    return result;
+  }
 }

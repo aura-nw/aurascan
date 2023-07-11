@@ -9,7 +9,6 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import {
   LENGTH_CHARACTER,
-  LIST_TYPE_CONTRACT_ADDRESS,
   PAGE_EVENT,
 } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
@@ -223,12 +222,5 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.cdr.markForCheck();
-  }
-
-  isContractAddress(type, address) {
-    if (LIST_TYPE_CONTRACT_ADDRESS.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
-      return true;
-    }
-    return false;
   }
 }

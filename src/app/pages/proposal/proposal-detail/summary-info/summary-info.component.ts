@@ -417,7 +417,7 @@ export class SummaryInfoComponent implements OnInit {
         editor.innerHTML = marked.parse(this.proposalDetail.content.description);
         return;
       }
-    }, 500);
+    }, 1000);
   }
 
   getProposalMoreInfo(data: any) {

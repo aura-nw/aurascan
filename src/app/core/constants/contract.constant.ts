@@ -65,6 +65,7 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/rust-optimizer:0.12.11', value: 'cosmwasm/rust-optimizer:0.12.11' },
   { label: 'cosmwasm/rust-optimizer:0.12.12', value: 'cosmwasm/rust-optimizer:0.12.12' },
   { label: 'cosmwasm/rust-optimizer:0.12.13', value: 'cosmwasm/rust-optimizer:0.12.13' },
+  { label: 'cosmwasm/rust-optimizer:0.13.0', value: 'cosmwasm/rust-optimizer:0.13.0' },
 
   // { label: 'cosmwasm/rust-optimizer-arm64:0.12.4', value: 'cosmwasm/rust-optimizer-arm64:0.12.4' },
   // { label: 'cosmwasm/rust-optimizer-arm64:0.12.5', value: 'cosmwasm/rust-optimizer-arm64:0.12.5' },
@@ -90,6 +91,7 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/workspace-optimizer:0.12.11', value: 'cosmwasm/workspace-optimizer:0.12.11' },
   { label: 'cosmwasm/workspace-optimizer:0.12.12', value: 'cosmwasm/workspace-optimizer:0.12.12' },
   { label: 'cosmwasm/workspace-optimizer:0.12.13', value: 'cosmwasm/workspace-optimizer:0.12.13' },
+  { label: 'cosmwasm/workspace-optimizer:0.13.0', value: 'cosmwasm/workspace-optimizer:0.13.0' },
 
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.4', value: 'cosmwasm/workspace-optimizer-arm64:0.12.4' },
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.5', value: 'cosmwasm/workspace-optimizer-arm64:0.12.5' },

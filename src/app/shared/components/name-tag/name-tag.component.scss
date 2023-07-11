@@ -1,16 +1,27 @@
 .box-name-tag {
   background: var(--aura-gray-8);
   border-radius: 16px;
-  min-width: 130px;
+  min-width: 142px;
   display: inline-flex;
-  padding: 4px;
+  padding: 4px 8px;
   font-size: 12px;
   align-items: center;
   justify-content: center;
   font-weight: 400;
   word-break: break-word;
   @media (min-width: 992px) {
-    min-width: 168px;
-    padding: 4px 12px;
+    padding: 4px 8px;
   }
+  &.w-auto {
+    min-width: auto;
+  }
+  &:has(.icon-name-tag){
+    min-width: 158px;
+  }
+}
+
+.icon-name-tag {
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
 }

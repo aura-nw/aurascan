@@ -7,10 +7,7 @@
         <div class="d-flex align-items-center">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Contract</div>
           <div
-            class="ml-2 contract-address h4 mb-0"
-            [matTooltipPosition]="'above'"
-            [matTooltipDisabled]="commonService.checkDisplayTooltip(contractAddress)"
-            matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(contractAddress) }}">
+            class="ml-2 contract-address h4 mb-0">
             <span class="d-lg-none body-mob fw-semibold">{{
               commonService.setNameTag(contractAddress) | stringEllipsis : 8
             }}</span>

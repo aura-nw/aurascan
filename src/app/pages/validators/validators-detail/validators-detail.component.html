@@ -78,13 +78,14 @@
           </div>
           <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
         </div>
-        <div class="col-12 col-lg-6 mt-3 mt-lg-0 address-name-tag">
+        <div class="col-12 col-lg-6 mt-3 mt-lg-0">
           <h6 class="mb-0 text--gray-1">Address</h6>
           <app-name-tag
             [value]="currentValidatorDetail?.acc_address"
             [url]="'account'"
-            [fullWidth]="true"
-            [fullWidthMob]="true"></app-name-tag>
+            [fullText]="true"
+            [widthAuto]="true"
+            [fullTextMob]="true"></app-name-tag>
         </div>
       </div>
       <div class="divider divider-horizontal mt-4"></div>
@@ -379,8 +380,9 @@
                       [link]="'/account/' + data.delegator_address"
                       [content]="[
                         {
-                          label: commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6,
-                          info: ''
+                          label: '',
+                          class: 'name-tag text--primary',
+                          info: commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6
                         },
                         {
                           label: 'Amount',

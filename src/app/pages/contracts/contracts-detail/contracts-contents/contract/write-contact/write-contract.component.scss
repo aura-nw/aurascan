@@ -139,4 +139,8 @@ textarea {
   .mat-option.mat-active {
     color: var(--aura-gray-1);
   }
+
+  textarea.mat-input-element{
+    padding: 0px 12px !important;
+  }
 }

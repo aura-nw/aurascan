@@ -142,21 +142,16 @@ form.search-form {
     justify-content: start;
   }
 }
+
 .titleMob {
   ::ng-deep app-card-mob-simple {
-    .d-flex.justify-content-between.small-body:first-child > div {
-      color: var(--aura-primary) !important;
-      padding: 8px;
-      border-radius: 4px;
+    .name-tag {
+      padding: 4px 8px;
+      border-radius: 16px;
       background-color: var(--aura-gray-8);
     }
-  }
-}
-
-.address-name-tag {
-  ::ng-deep {
-    .box-name-tag {
-      min-width: auto;
+    .d-flex.justify-content-between.small-body:first-child > div {
+      color: var(--aura-primary) !important;
     }
   }
 }

@@ -55,14 +55,17 @@
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob align-items-center">
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
-            <a class="text--primary h6" [routerLink]="['/account', proposalDetail?.proposer_address]">
-              <ng-container *ngIf="proposalDetail?.proposer">
-                {{ proposalDetail?.proposer?.description?.moniker }}
-              </ng-container>
-              <ng-container *ngIf="!proposalDetail?.proposer">
-                <app-name-tag [value]="proposalDetail?.proposer_address" [fullWidth]="true"></app-name-tag>
-              </ng-container>
-            </a>
+            <ng-container *ngIf="proposalDetail?.proposer_address">
+              <a class="text--primary h6" [routerLink]="['/account', proposalDetail?.proposer_address]">
+                <ng-container *ngIf="proposalDetail?.proposer">
+                  {{ proposalDetail?.proposer?.description?.moniker }}
+                </ng-container>
+                <ng-container *ngIf="!proposalDetail?.proposer">
+                  <app-name-tag [value]="proposalDetail?.proposer_address" [fullText]="true"></app-name-tag>
+                </ng-container>
+              </a>
+            </ng-container>
+            <ng-container *ngIf="!proposalDetail?.proposer_address">-</ng-container>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
@@ -122,7 +125,7 @@
               Changes
             </ng-container>
           </div>
-          <div class="col-12 {{ proposalDetailTitleArr.length > 5 ? 'col-md-10' : 'col-md-auto' }} mt-0">
+          <div class="col-12 col-md-10 mt-0">
             <ul
               ngbNav
               #customNav="ngbNav"
@@ -158,10 +161,12 @@
               </ng-container>
             </ng-container>
             <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
-              <div *ngFor="let item of proposalDetail?.content?.changes" class="mt-4">
-                <div *ngFor="let key of getObjectKey(item)">
-                  <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
-                    {{ item[key] }}
+              <div class="changes-contain" [class.overflow-scroll-y]="proposalDetail?.content?.changes.length > 2">
+                <div *ngFor="let item of proposalDetail?.content?.changes" class="mt-4">
+                  <div *ngFor="let key of getObjectKey(item)">
+                    <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
+                      {{ item[key] }}
+                    </div>
                   </div>
                 </div>
               </div>
