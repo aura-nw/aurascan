@@ -45,6 +45,7 @@ export class TokenTableComponent implements OnChanges {
   total = 0;
   pageEvent: any;
   paginator: MatPaginator;
+  dataTable = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -70,40 +71,63 @@ export class TokenTableComponent implements OnChanges {
       account_address: this.address,
       limit: this.pageData.pageSize,
       offset: this.pageData.pageSize * this.pageData.pageIndex,
-      keyword: this.textSearch,
+      keyword: this.textSearch?.trim(),
     };
-    this.accountService.getAssetCW20ByOwner(payload).subscribe(
-      (res: ResponseDto) => {
-        let data: any;
-        if (res?.data?.length > 0) {
-          let lstToken = _.get(res, 'data').map((element) => {
-            data = element;
-            if (data) {
-              data.change = data.price_change_percentage_24h;
-              data.isValueUp = true;
-              data['balance'] = data['balance'] || 0;
-              if (data.change !== '-' && data.change < 0) {
-                data.isValueUp = false;
-                data.change = Number(data.change.toString().substring(1));
-              }
-            }
-            return data;
-          });
+    if (this.dataTable.length > 0) {
+      let result = this.dataTable.slice(payload?.offset, payload?.offset + payload?.limit);
+      // Search with text search
+      if (payload?.keyword) {
+        result = this.dataTable.filter(
+          (item) =>
+            item.name.toLowerCase().includes(this.textSearch.toLowerCase()) ||
+            item.contract_address == payload?.keyword,
+        );
 
-          lstToken = lstToken.filter((k) => k?.symbol);
-          this.dataSource = new MatTableDataSource<any>(lstToken);
-          this.pageData.length = res.meta.count;
-        } else {
-          this.pageData.length = 0;
-          this.dataSource.data = [];
-        }
-        this.totalAssets.emit(this.pageData.length);
-      },
-      () => {},
-      () => {
-        this.assetsLoading = false;
-      },
-    );
+        const data = result.slice(payload?.offset, payload?.offset + payload?.limit);
+        this.dataSource = new MatTableDataSource<any>(data);
+        this.pageData.length = result?.length;
+      } else {
+        this.dataSource = new MatTableDataSource<any>(result);
+        this.pageData.length = this.dataTable?.length;
+      }
+    } else {
+      this.accountService.getAssetCW20ByOwner(payload).subscribe(
+        (res: ResponseDto) => {
+          let data: any;
+          if (res?.data?.length > 0) {
+            let lstToken = _.get(res, 'data').map((element) => {
+              data = element;
+              if (data) {
+                data.change = data.price_change_percentage_24h;
+                data.isValueUp = true;
+                data['balance'] = data['balance'] || 0;
+                if (data.change !== '-' && data.change < 0) {
+                  data.isValueUp = false;
+                  data.change = Number(data.change.toString().substring(1));
+                }
+              }
+              return data;
+            });
+
+            lstToken = lstToken.filter((k) => k?.symbol);
+            // store datatable
+            this.dataTable = lstToken;
+            // Sort and slice 20 frist record.
+            const result = lstToken.slice(payload?.offset, payload?.offset + payload?.limit);
+            this.dataSource = new MatTableDataSource<any>(result);
+            this.pageData.length = res.meta.count;
+          } else {
+            this.pageData.length = 0;
+            this.dataSource.data = [];
+          }
+          this.totalAssets.emit(this.pageData.length);
+        },
+        () => {},
+        () => {
+          this.assetsLoading = false;
+        },
+      );
+    }
   }
 
   convertValue(value: any, decimal: number) {
