@@ -1,9 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 
@@ -47,7 +49,6 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   voteDataList: IValidatorVotes[] = [];
   voteDataListLoading = true;
   countVote: Map<string, number> = new Map<string, number>();
-  countCurrent: string = '';
   tabAll = 0;
   proposalValidatorVote = PROPOSAL_TABLE_MODE.VALIDATORS_VOTES;
 
@@ -59,11 +60,15 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
     noWithVeto: null,
     didNotVote: null,
   };
-
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-
+  pageDataValidator: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
+  rawData = [];
   currentTabId = VOTE_OPTION.UNSPECIFIED;
 
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   destroyed$ = new Subject();
 
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
@@ -120,6 +125,7 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (validatorVote) => {
+            this.rawData = validatorVote;
             this.voteDataListLoading = false;
             this.loadValidatorVotes(validatorVote);
           },
@@ -145,24 +151,30 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
     this.voteData[VOTE_OPTION.NO_WITH_VETO] = validatorVote.filter((f) => f.vote_option === VOTE_OPTION.NO_WITH_VETO);
     this.voteData[VOTE_OPTION.NULL] = validatorVote.filter((f) => !f.vote_option || f.vote_option === '');
 
-    this.voteDataList = validatorVote;
-
-    this.voteDataList = this.voteData[this.currentTabId];
-
     this.countVote.set(VOTE_OPTION.UNSPECIFIED, this.voteData[VOTE_OPTION.UNSPECIFIED].length);
     this.countVote.set(VOTE_OPTION.YES, this.voteData[VOTE_OPTION.YES].length);
     this.countVote.set(VOTE_OPTION.ABSTAIN, this.voteData[VOTE_OPTION.ABSTAIN].length);
     this.countVote.set(VOTE_OPTION.NO, this.voteData[VOTE_OPTION.NO].length);
     this.countVote.set(VOTE_OPTION.NO_WITH_VETO, this.voteData[VOTE_OPTION.NO_WITH_VETO].length);
     this.countVote.set(VOTE_OPTION.NULL, this.voteData[VOTE_OPTION.NULL].length);
+
+    const listTemp = this.voteData[this.currentTabId] || validatorVote;
+    this.pageDataValidator.length = listTemp?.length || 0;
+    this.voteDataList = listTemp;
+    this.voteDataList = [...listTemp].splice(
+      this.pageDataValidator.pageIndex * this.pageDataValidator.pageSize,
+      this.pageDataValidator.pageSize,
+    );
   }
 
   changeTab(tabId): void {
+    this.pageDataValidator.pageIndex = 0;
     this.currentTabId = tabId;
-    this.voteDataList = this.voteData[tabId];
+    this.loadValidatorVotes(this.rawData);
   }
 
   pageEventChange(e) {
+    this.pageDataValidator.pageIndex = e.pageIndex || 0;
     this.getValidatorVotes(e?.tabId === VOTE_OPTION.UNSPECIFIED ? '' : e?.tabId);
   }
 }
