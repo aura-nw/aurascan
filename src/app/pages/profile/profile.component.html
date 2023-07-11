@@ -1,11 +1,29 @@
-<ng-container>
-  <div>Profile</div>
-  <button [routerLink]="['/profile-settings']">Profile settings</button>
-</ng-container>
-<ng-container>
-  <div>Personal note</div>
-  <button>Private name tag</button>
-  <button>Watchlist</button>
-</ng-container>
+<section>
+  <div class="container-fluid mt-2">
+    <div class="row">
+      <div class="col-3 pr-md-0">
+        <div>
+          <div class="mb-8">
+            <div class="body-01 fw-semibold text--gray-4 mb-4">Profile</div>
+            <a [routerLink]="['/profile']"
+               [queryParams]="{ tab: 'setting' }"
+               [class.active]="currentPage === 'setting'"
+               class="button button-tab-menu body fw-semibold">Profile settings</a>
+          </div>
+          <div>
+            <div class="body-01 fw-semibold text--gray-4 mb-4">Personal note</div>
+            <button class="button button-tab-menu body fw-semibold">Private name tag</button>
+            <button class="button button-tab-menu body fw-semibold">Watchlist</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-9 bg-gray-10">
+        <div class="profile-contain" *ngIf="currentPage">
+          <app-profile-settings *ngIf="currentPage === 'setting'"></app-profile-settings>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<app-profile-settings></app-profile-settings>
+
