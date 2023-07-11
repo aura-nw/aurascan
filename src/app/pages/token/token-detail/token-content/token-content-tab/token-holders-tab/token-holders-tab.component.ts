@@ -24,18 +24,18 @@ export class TokenHoldersTabComponent implements OnInit {
   @Input() decimalValue: number;
 
   CW20Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'rank' },
-    { matColumnDef: 'owner', headerCellDef: 'address' },
-    { matColumnDef: 'balance', headerCellDef: 'amount' },
-    { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
-    { matColumnDef: 'value', headerCellDef: 'value' },
+    { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
+    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
+    { matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12},
+    { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 12 },
+    { matColumnDef: 'value', headerCellDef: 'value', headerWidth: 12 },
   ];
 
   CW721Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'rank' },
-    { matColumnDef: 'owner', headerCellDef: 'address' },
-    { matColumnDef: 'quantity', headerCellDef: 'amount' },
-    { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
+    { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
+    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
+    { matColumnDef: 'quantity', headerCellDef: 'amount', headerWidth: 12 },
+    { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 15 },
   ];
 
   template: Array<TableTemplate> = [];

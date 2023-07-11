@@ -19,9 +19,9 @@
     </ul>
     <div class="mt-3">
       <app-proposal-table
-        [tabId]="countCurrent"
+        [tabId]="currentTabId"
         [type]="proposalValidatorVote"
-        [length]="countVote.get(countCurrent)"
+        [length]="pageDataValidator.length"
         [data]="voteDataList"
         (pageEventChange)="pageEventChange($event)"
         *ngIf="!voteDataListLoading"></app-proposal-table>

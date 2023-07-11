@@ -30,8 +30,15 @@
       </div>
       <div class="body py-4">
         <div *ngIf="!isRawData">
-          <div class="row box-error" *ngIf="errorMessage">
-            {{ errorMessage }}
+          <div class="row box-error" *ngIf="errorMessage" id="contentError">
+            <span [class.ellipsis-text]="!seeLess">
+              <div class="fw-semibold mb-2">Error:</div>
+              {{ errorMessage }}
+            </span>
+            <div *ngIf="heightBoxError >= 68" class="text--white cursor-pointer mt-2 w-auto h5 font-italic">
+              <span (click)="seeLess = true" *ngIf="!seeLess">See More</span>
+              <span (click)="seeLess = false" *ngIf="seeLess">See Less</span>
+            </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Chain Id</div>
