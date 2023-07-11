@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  formValid  = false;
+  formValid = false;
   email = '';
   passWord = '';
-  ngOnInit(): void {
-    
-  }
 
-  closeDialog(){
+  constructor() {
 
   }
 
-  onSubmit(){
+  ngOnInit(): void {}
 
-  }
+  closeDialog() {}
 
-  checkFormValid(){
+  onSubmit() {}
 
+  checkFormValid() {}
+
+  signOut(): void {
   }
 }
