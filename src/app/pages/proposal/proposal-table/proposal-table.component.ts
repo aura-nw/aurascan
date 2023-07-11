@@ -7,7 +7,7 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -43,7 +43,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @Output() pageEventChange = new EventEmitter<CustomPageEvent>();
 
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true, isNameTag: true},
+    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true, isNameTag: true },
     { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
     { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
@@ -64,7 +64,14 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'depositors', headerCellDef: 'Depositors', isUrl: '/account', isShort: true, desktopOnly: true, isNameTag: true },
+    {
+      matColumnDef: 'depositors',
+      headerCellDef: 'Depositors',
+      isUrl: '/account',
+      isShort: true,
+      desktopOnly: true,
+      isNameTag: true,
+    },
     { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
