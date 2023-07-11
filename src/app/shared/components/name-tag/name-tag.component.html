@@ -19,7 +19,10 @@
     [ngClass]="[
       isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
       widthAuto ? 'w-auto' : ''
-    ]">
+    ]"
+    [matTooltipPosition]="'above'"
+    [matTooltipDisabled]="commonService.checkDisplayTooltip(paramUrl || value)"
+    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag) }}">
     <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
   </a>
 </ng-container>
@@ -30,7 +33,10 @@
     [ngClass]="[
       isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
       widthAuto ? 'w-auto' : ''
-    ]">
+    ]"
+    [matTooltipPosition]="'above'"
+    [matTooltipDisabled]="commonService.checkDisplayTooltip(paramUrl || value)"
+    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag) }}">
     <ng-container *ngIf="!fullText">
       {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
     </ng-container>

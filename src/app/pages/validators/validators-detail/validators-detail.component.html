@@ -380,7 +380,9 @@
                       [content]="[
                         {
                           label: '',
-                          class: 'name-tag text--primary',
+                          class: !commonService.checkDisplayTooltip(data.delegator_address)
+                            ? 'name-tag text--primary'
+                            : 'text--primary',
                           info: commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6
                         },
                         {
