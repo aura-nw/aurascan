@@ -53,21 +53,6 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  copyData(): void {
-    let text = this.contractAddress.toString();
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('ttiopa123').click();
-    }, 800);
-  }
-
   viewQrAddress(staticDataModal: any): void {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
