@@ -242,20 +242,6 @@ export class NFTDetailComponent implements OnInit {
     }
   }
 
-  copyData(text: string) {
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('popupCopy').click();
-    }, 800);
-  }
-
   getPopoverData(data): IContractPopoverData {
     return {
       amount: data?.value || 0,

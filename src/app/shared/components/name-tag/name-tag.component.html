@@ -1,58 +1,67 @@
 <ng-container *ngIf="isLink; else displayText">
-  <a
-    *ngIf="!isHref"
-    [routerLink]="['/' + url, paramUrl || value]"
-    class="text--primary text-break"
-    [ngClass]="[
-      isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
-      widthAuto ? 'w-auto' : ''
-    ]"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(paramUrl || value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag) }}">
-    <ng-container [ngTemplateOutlet]="contentData"></ng-container>
-  </a>
-  <a
-    *ngIf="isHref"
-    [href]="url + value"
-    class="text--primary text-break"
-    [ngClass]="[
-      isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
-      widthAuto ? 'w-auto' : ''
-    ]"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(paramUrl || value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag) }}">
-    <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
-  </a>
+  <div class="aura-tooltip-contain">
+    <a
+      *ngIf="!isHref"
+      [routerLink]="['/' + url, paramUrl || value]"
+      class="text--primary text-break"
+      [ngClass]="[
+        isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
+        widthAuto ? 'w-auto' : ''
+      ]"
+      [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
+      <ng-container [ngTemplateOutlet]="contentData"></ng-container>
+    </a>
+    <app-tooltip-customize
+      [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
+    </app-tooltip-customize>
+  </div>
+  <div class="aura-tooltip-contain">
+    <a
+      *ngIf="isHref"
+      [href]="url + value"
+      class="text--primary text-break"
+      [ngClass]="[
+        isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
+        widthAuto ? 'w-auto' : ''
+      ]"
+      [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
+      <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
+    </a>
+    <app-tooltip-customize
+      [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
+    </app-tooltip-customize>
+  </div>
 </ng-container>
 
 <ng-template #displayText>
-  <span
-    class="text-break"
-    [ngClass]="[
-      isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
-      widthAuto ? 'w-auto' : ''
-    ]"
-    [matTooltipPosition]="'above'"
-    [matTooltipDisabled]="commonService.checkDisplayTooltip(paramUrl || value)"
-    matTooltip="{{ 'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag) }}">
-    <ng-container *ngIf="!fullText">
-      {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
-    </ng-container>
-    <ng-container *ngIf="fullText">
-      <span class="d-none d-lg-flex">{{ commonService.setNameTag(value || paramUrl) || '-' }}</span>
-      <span class="d-flex d-lg-none justify-content-center">{{
-        (commonService.setNameTag(value || paramUrl) | cutStringPipe : 8 : 8) || '-'
-      }}</span>
-    </ng-container>
-    <ng-container *ngIf="extendUrl && extendUrlLink">
-      <i
-        _ngcontent-wrg-c372=""
-        class="ph-arrow-square-out-fill text--gray-1 body-01 h3-mob mb-1 ml-1 cursor-pointer"
-        (click)="extendLink(extendUrlLink)"></i>
-    </ng-container>
-  </span>
+  <div class="aura-tooltip-contain">
+    <span
+      class="text-break"
+      [ngClass]="[
+        isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
+        widthAuto ? 'w-auto' : ''
+      ]"
+      [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
+      <ng-container *ngIf="!fullText">
+        {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
+      </ng-container>
+      <ng-container *ngIf="fullText">
+        <span class="d-none d-lg-flex">{{ commonService.setNameTag(value || paramUrl) || '-' }}</span>
+        <span class="d-flex d-lg-none justify-content-center">{{
+          (commonService.setNameTag(value || paramUrl) | cutStringPipe : 8 : 8) || '-'
+        }}</span>
+      </ng-container>
+      <ng-container *ngIf="extendUrl && extendUrlLink">
+        <i
+          _ngcontent-wrg-c372=""
+          class="ph-arrow-square-out-fill text--gray-1 body-01 h3-mob mb-1 ml-1 cursor-pointer"
+          (click)="extendLink(extendUrlLink)"></i>
+      </ng-container>
+    </span>
+    <app-tooltip-customize
+      [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
+    </app-tooltip-customize>
+  </div>
 </ng-template>
 
 <ng-template #contentData>
