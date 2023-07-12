@@ -12,7 +12,7 @@
           (click)="commonService.copyToolTipAction(tooltip, contractAddress)">
           <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" class="button__icon" alt="" />
         </button>
-        <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+        <app-tooltip-customize [content]="'Copied!'" class="tooltip--below"> </app-tooltip-customize>
       </div>
       <button class="button button--xxs button--sm-mob button-circle ml-4 ml-lg-2" *ngIf="contractAddress">
         <img

@@ -240,29 +240,29 @@
         <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
           <ul class="vote-bar-ul">
             <li class="bg--primary aura-tooltip-contain" [style.width]="proposalDetail.yesPercent + '%'">
-              <div class="aura-tooltip-object w-100"></div>
+              <div class="aura-tooltip-object w-100 h-100"></div>
               <app-tooltip-customize
-                [content]="'Yes ' + proposalDetail.yesPercent | number : global.formatNumber2Decimal + '%'">
+                [content]="'Yes ' + (proposalDetail.yesPercent | number : global.formatNumber2Decimal) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--danger aura-tooltip-contain" [style.width]="proposalDetail.noPercent + '%'">
-              <div class="aura-tooltip-object w-100"></div>
+              <div class="aura-tooltip-object w-100 h-100"></div>
               <app-tooltip-customize
-                [content]="'No ' + proposalDetail.noPercent | number : global.formatNumber2Decimal + '%'">
+                [content]="'No ' + (proposalDetail.noPercent | number : global.formatNumber2Decimal) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--info aura-tooltip-contain" [style.width]="proposalDetail.noWithVetoPercent + '%'">
-              <div class="aura-tooltip-object w-100"></div>
+              <div class="aura-tooltip-object w-100 h-100"></div>
               <app-tooltip-customize
                 [content]="
-                  'No with veto ' + proposalDetail.noWithVetoPercent | number : global.formatNumber2Decimal + '%'
+                  'No with veto ' + (proposalDetail.noWithVetoPercent | number : global.formatNumber2Decimal) + '%'
                 ">
               </app-tooltip-customize>
             </li>
             <li class="bg--secondary aura-tooltip-contain" [style.width]="proposalDetail.abstainPercent + '%'">
-              <div class="aura-tooltip-object w-100"></div>
+              <div class="aura-tooltip-object w-100 h-100"></div>
               <app-tooltip-customize
-                [content]="'Abstain ' + proposalDetail.abstainPercent | number : global.formatNumber2Decimal + '%'">
+                [content]="'Abstain ' + (proposalDetail.abstainPercent | number : global.formatNumber2Decimal) + '%'">
               </app-tooltip-customize>
             </li>
           </ul>

@@ -103,7 +103,7 @@
       <!-- validator -->
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
         <ng-container *ngIf="!breakpoint.value.matches">
-          <div class="table-responsive mt-6">
+          <div class="table-responsive spacer-tooltip">
             <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
               <ng-container *ngFor="let template of templates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">

@@ -20,3 +20,14 @@
     border-top: 10px solid var(--aura-gray-8);
   }
 }
+::ng-deep app-tooltip-customize.tooltip--below .aura-tooltip:before {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 10px solid var(--aura-gray-8);
+  border-top: unset;
+  bottom: unset;
+  top: 0;
+  transform: translate(-50%, -100%);
+}
