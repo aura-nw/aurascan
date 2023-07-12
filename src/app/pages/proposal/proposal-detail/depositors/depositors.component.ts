@@ -52,6 +52,7 @@ export class DepositorsComponent implements OnInit, OnDestroy {
       key: 'proposal_id',
       value: this.proposalId?.toString(),
       limit: 100, // get all
+      compositeKey: 'proposal_deposit.proposal_id'
     };
 
     this.transactionService.getListTxCondition(payload).subscribe({
