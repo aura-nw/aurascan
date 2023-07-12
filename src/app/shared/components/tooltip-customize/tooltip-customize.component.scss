@@ -5,6 +5,7 @@
   border: 1px solid var(--aura-gray-8);
   color: var(--aura-white);
   position: relative;
+  text-transform: initial;
   font-size: 1.2rem;
   &:before {
     content: '';
