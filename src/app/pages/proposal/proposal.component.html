@@ -88,7 +88,9 @@
                       <div class="aura-tooltip-object w-100 h-100"></div>
                       <app-tooltip-customize
                         [content]="
-                          'No with veto ' + (lastedItem.tally?.no_with_veto | number : global.formatNumber2Decimal) + '%'
+                          'No with veto ' +
+                          (lastedItem.tally?.no_with_veto | number : global.formatNumber2Decimal) +
+                          '%'
                         ">
                       </app-tooltip-customize>
                     </li>
@@ -98,7 +100,9 @@
                       [style.width]="lastedItem.tally?.abstain + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
                       <app-tooltip-customize
-                        [content]="'Abstain ' + (lastedItem.tally?.abstain | number : global.formatNumber2Decimal) + '%'">
+                        [content]="
+                          'Abstain ' + (lastedItem.tally?.abstain | number : global.formatNumber2Decimal) + '%'
+                        ">
                       </app-tooltip-customize>
                     </li>
                   </ul>
