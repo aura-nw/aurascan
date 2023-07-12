@@ -73,18 +73,16 @@
                   {{ contractDetail?.cw20_contract?.name }} ({{ contractDetail?.cw20_contract?.symbol }})
                 </a>
                 <div class="aura-tooltip-contain">
-                  <div
-                      class="status cursor-pointer aura-tooltip-object">
+                  <div class="status cursor-pointer aura-tooltip-object">
                     <img
-                        [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
-                        alt=""
-                        width="18"
-                        height="18"
-                        class="ml-1 mb-1"
-                        *ngIf="contractDetail.verify_status === 'VERIFIED'" />
+                      [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                      alt=""
+                      width="18"
+                      height="18"
+                      class="ml-1 mb-1"
+                      *ngIf="contractDetail.verify_status === 'VERIFIED'" />
                   </div>
-                  <app-tooltip-customize
-                      [content]="contractDetail.verify_text || 'Verified by Aura Network'">
+                  <app-tooltip-customize [content]="contractDetail.verify_text || 'Verified by Aura Network'">
                   </app-tooltip-customize>
                 </div>
               </div>
