@@ -1,60 +1,193 @@
-<div class="card card-login">
+<div class="card card-login" *ngIf="mode !== typeLogin.Welcome">
   <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">
-      <div class="mb-0 text--white w-100 text-center">Log in to AuraScan</div>
+      <img
+        [src]="'assets/icons/icons-svg/white/arrow-left-register.svg' | imageS3"
+        alt=""
+        class="cursor-pointer"
+        width="22px"
+        height="18px"
+        (click)="mode = typeLogin.Login"
+        *ngIf="mode !== typeLogin.Login" />
+      <div class="mb-0 text--white w-100 text-center" *ngIf="mode === typeLogin.Login">Log in to AuraScan</div>
+      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === typeLogin.Register">Register to AuraScan</div>
+      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === typeLogin.Forgot">Forgot password</div>
     </div>
   </div>
   <div class="card-body">
-    <form (ngSubmit)="onSubmit()" class="aura-form single-input-field login-form" autocomplete="off">
+    <!-- <ng-container
+      *ngIf="
+        mode !== typeLogin.Login &&
+        getConfirmPassword.touched &&
+        getConfirmPassword.dirty &&
+        loginForm.value.password !== loginForm.value.confirmPassword
+      ">
+      <div class="box-error mb-lg-6 mb-4">
+        <img
+          [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
+          alt=""
+          width="20px"
+          height="20px"
+          class="mr-1" />
+      </div>
+    </ng-container> -->
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="aura-form single-input-field login-form"
+      autocomplete="off">
+      <ng-container *ngIf="mode === typeLogin.Forgot">
+        <div class="text-center mb-6">
+          <img class="w-100" src="assets/images/pages/key.png" />
+          <span class="body-01 text--gray-2"
+            >Kindly enter the email linked to your account, we'll send you a link to reset password</span
+          >
+        </div>
+      </ng-container>
+
       <div class="row">
         <div class="col-12">
           <div class="form-group">
-            <label for="amount" class="form-label body-01 text--white">Email</label>
+            <label class="form-label body-01 text--white">Email</label>
             <input
-              type="text"
+              type="email"
+              formControlName="email"
               class="form-control form-check-input"
               placeholder="Enter your email"
-              [(ngModel)]="email"
               name="inputEmail"
+              (blur)="checkEmail = true"
+              [class.form-control--error]="loginForm.get('email')?.invalid && getEmail.touched && getEmail.dirty"
               autocomplete="off" />
+            <div
+              *ngIf="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty"
+              class="text-danger mt-2 caption fw-normal">
+              Invalid email format
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="row mt-6">
+      <div class="row mt-lg-6 mt-4" *ngIf="mode !== typeLogin.Forgot">
         <div class="col-12">
           <div class="form-group">
-            <label for="amount" class="form-label body-01 text--white">Password</label>
+            <label class="form-label body-01 text--white">Password</label>
             <input
               type="text"
               class="form-control form-check-input"
               placeholder="Enter your password"
-              [(ngModel)]="passWord"
+              formControlName="password"
+              (blur)="checkPassword = true"
+              [class.form-control--error]="
+                checkPassword && loginForm.get('password')?.invalid && getPassword.touched && getPassword.dirty
+              "
               name="inputEmail"
               autocomplete="off" />
+            <div *ngIf="getPassword.errors?.pattern && checkPassword" class="text-danger mt-2 caption fw-normal">
+              The password need to be more than 8 characters in length with at least one upper case, 1 lower case, 1
+              number and 1 special character
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="text--primary mt-6 h4">Forgot password</div>
-
-      <div class="d-flex justify-content-end mt-6">
-        <button class="button button-pill button-flat w-100 btn-login" type="submit" [disabled]="!formValid">
-          <span class="body-01">Log in</span>
-        </button>
-      </div>
-
-      <div class="text-center text--gray-4 body-01">
-        <div class="mt-4">
-          <span class="text--gray-4">Don’t have an account?</span>
-          <span class="text--primary fw-semibold ml-2">Register</span>
+      <ng-container *ngIf="mode === typeLogin.Register">
+        <div class="row mt-lg-6 mt-4">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="form-label body-01 text--white">Confirm password</label>
+              <input
+                type="text"
+                class="form-control form-check-input"
+                placeholder="Re-enter your password"
+                formControlName="confirmPassword"
+                name="inputConfirmEmail"
+                [class.form-control--error]="
+                  getConfirmPassword.touched &&
+                  getConfirmPassword.dirty &&
+                  loginForm.value.password !== loginForm.value.confirmPassword
+                "
+                autocomplete="off" />
+              <div
+                *ngIf="
+                  mode !== typeLogin.Login &&
+                  getConfirmPassword.touched &&
+                  getConfirmPassword.dirty &&
+                  loginForm.value.password !== loginForm.value.confirmPassword
+                "
+                class="text-danger mt-2 caption fw-normal">
+                The password confirmation does not match
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="py-6 text--white">or</div>
-        Continue with Google<br />
-        <div class="mt-6">
-          By continuing, you agree to our <span class="text--primary fw-semibold">Terms of Use</span>
+      </ng-container>
+
+      <ng-container *ngIf="mode === typeLogin.Login">
+        <div class="py-lg-6 py-4">
+          <span class="text--primary h4 cursor-pointer" (click)="mode = typeLogin.Forgot">Forgot password</span>
         </div>
-      </div>
+        <div class="d-flex justify-content-end">
+          <button
+            class="button button-pill button-flat w-100 btn-login"
+            type="submit"
+            [disabled]="loginForm.status === 'INVALID'">
+            <span class="body-01">Log in</span>
+          </button>
+        </div>
+        <div class="text-center text--gray-4 body-01">
+          <div class="mt-4">
+            <span class="text--gray-4">Don’t have an account?</span>
+            <span class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(typeLogin.Register)"
+              >Register</span
+            >
+          </div>
+          <div class="py-6 text--white">or</div>
+          Continue with Google<br />
+          <div class="mt-lg-6 mt-4 body-mob">
+            By continuing, you agree to our <span class="text--primary fw-semibold cursor-pointer">Terms of Use</span>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="mode === typeLogin.Register">
+        <div class="d-flex justify-content-end mt-6">
+          <button
+            class="button button-pill button-flat w-100 btn-login"
+            type="button"
+            (click)="showVerifyMail()"
+            [disabled]="loginForm.status === 'INVALID' || loginForm.value.password !== loginForm.value.confirmPassword">
+            <span class="body-01">Register</span>
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="mode === typeLogin.Forgot">
+        <div class="d-flex text-center mt-6">
+          <button
+            class="button button-pill button-flat btn-login m-auto btn-forgot"
+            type="button"
+            (click)="showVerifyMail()"
+            [disabled]="loginForm.get('email')?.invalid">
+            <span class="body-01">Continue</span>
+          </button>
+        </div>
+      </ng-container>
     </form>
+  </div>
+</div>
+
+<div *ngIf="mode === typeLogin.Welcome" class="card-welcome text-center">
+  <img class="img-welcome" src="assets/images/pages/planet.png" />
+  <div class="title-welcome">Welcome to AuraScan</div>
+  <span class="body-01 text--gray-2">
+    Congratulation! You have successfully registered an account. Please Login in to your account and experience the
+    blazing-fast blockchain explorer from Aura Network!
+  </span>
+  <div class="mt-6 mb-8">
+    <button
+      class="button button-outline button-outline--gradient button--xlg button-pill"
+      (click)="mode = typeLogin.Login">
+      <span class="body-01">Log in</span>
+    </button>
   </div>
 </div>
