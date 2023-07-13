@@ -79,11 +79,11 @@ export class TokenTableComponent implements OnChanges {
       if (payload?.keyword) {
         result = this.dataTable.filter(
           (item) =>
-            item.name.toLowerCase().includes(this.textSearch.toLowerCase()) ||
+            item.name?.toLowerCase().includes(payload?.keyword.toLowerCase()) ||
             item.contract_address == payload?.keyword,
         );
 
-        const data = result.slice(payload?.offset, payload?.offset + payload?.limit);
+        const data = result?.slice(payload?.offset, payload?.offset + payload?.limit);
         this.dataSource = new MatTableDataSource<any>(data);
         this.pageData.length = result?.length;
       } else {
@@ -113,7 +113,7 @@ export class TokenTableComponent implements OnChanges {
             // store datatable
             this.dataTable = lstToken;
             // Sort and slice 20 frist record.
-            const result = lstToken.slice(payload?.offset, payload?.offset + payload?.limit);
+            const result = lstToken?.slice(payload?.offset, payload?.offset + payload?.limit);
             this.dataSource = new MatTableDataSource<any>(result);
             this.pageData.length = res.meta.count;
           } else {
