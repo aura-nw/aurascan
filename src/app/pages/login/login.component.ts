@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit {
   mode = this.typeLogin.Login;
   checkEmail = false;
   checkPassword = false;
+  hidePassword = true;
+  hideConfirmPassword = true;
 
   constructor(private dialog: MatDialog, private fb: FormBuilder) {}
 

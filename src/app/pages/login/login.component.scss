@@ -21,12 +21,12 @@
     &:disabled {
       background: var(--aura-gray-8);
     }
-    &.btn-forgot{
+    &.btn-forgot {
       padding: 14px 24px;
     }
   }
   .form-check-input {
-    background-color: #24262e !important;
+    background-color: var(--aura-gray-10) !important;
     font-size: 16px;
     .isError {
       border: 1px solid red;
@@ -37,6 +37,9 @@
     border-radius: 8px;
     background-color: var(--aura-red-4);
     color: var(--aura-white);
+  }
+  .input-group {
+    background-color: var(--aura-gray-10);
   }
 }
 
@@ -61,4 +64,9 @@
       margin: 26px 0px 48px 0px;
     }
   }
+}
+
+.hidden-icon {
+  font-size: 2.4rem;
+  color: var(--aura-white);
 }

@@ -49,15 +49,16 @@
         <div class="col-12">
           <div class="form-group">
             <label class="form-label body-01 text--white">Email</label>
-            <input
-              type="email"
-              formControlName="email"
-              class="form-control form-check-input"
-              placeholder="Enter your email"
-              name="inputEmail"
-              (blur)="checkEmail = true"
-              [class.form-control--error]="loginForm.get('email')?.invalid && getEmail.touched && getEmail.dirty"
-              autocomplete="off" />
+            <div class="input-group">
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="Enter your email"
+                name="inputEmail"
+                (blur)="checkEmail = true"
+                [class.form-control--error]="loginForm.get('email')?.invalid && getEmail.touched && getEmail.dirty"
+                autocomplete="off" />
+            </div>
             <div
               *ngIf="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty"
               class="text-danger mt-2 caption fw-normal">
@@ -71,17 +72,22 @@
         <div class="col-12">
           <div class="form-group">
             <label class="form-label body-01 text--white">Password</label>
-            <input
-              type="text"
-              class="form-control form-check-input"
-              placeholder="Enter your password"
-              formControlName="password"
-              (blur)="checkPassword = true"
-              [class.form-control--error]="
-                checkPassword && loginForm.get('password')?.invalid && getPassword.touched && getPassword.dirty
-              "
-              name="inputEmail"
-              autocomplete="off" />
+            <div class="input-group pr-0">
+              <input
+                [type]="hidePassword ? 'password' : 'text'"
+                placeholder="Enter your password"
+                formControlName="password"
+                (blur)="checkPassword = true"
+                [class.form-control--error]="
+                  loginForm.get('password')?.invalid && getPassword.touched && getPassword.dirty
+                "
+                name="inputEmail"
+                autocomplete="off" />
+              <i
+                class="pr-4 hidden-icon cursor-pointer ph-bold  {{ hidePassword ? 'ph-eye-slash' : 'ph-fill ph-eye' }}"
+                (click)="hidePassword = !hidePassword"></i>
+            </div>
+
             <div *ngIf="getPassword.errors?.pattern && checkPassword" class="text-danger mt-2 caption fw-normal">
               The password need to be more than 8 characters in length with at least one upper case, 1 lower case, 1
               number and 1 special character
@@ -95,18 +101,24 @@
           <div class="col-12">
             <div class="form-group">
               <label class="form-label body-01 text--white">Confirm password</label>
-              <input
-                type="text"
-                class="form-control form-check-input"
-                placeholder="Re-enter your password"
-                formControlName="confirmPassword"
-                name="inputConfirmEmail"
-                [class.form-control--error]="
-                  getConfirmPassword.touched &&
-                  getConfirmPassword.dirty &&
-                  loginForm.value.password !== loginForm.value.confirmPassword
-                "
-                autocomplete="off" />
+              <div class="input-group pr-0">
+                <input
+                  [type]="hideConfirmPassword ? 'password' : 'text'"
+                  placeholder="Re-enter your password"
+                  formControlName="confirmPassword"
+                  name="inputConfirmEmail"
+                  [class.form-control--error]="
+                    getConfirmPassword.touched &&
+                    getConfirmPassword.dirty &&
+                    loginForm.value.password !== loginForm.value.confirmPassword
+                  "
+                  autocomplete="off" />
+                <i
+                  class="pr-4 hidden-icon cursor-pointer ph-bold  {{
+                    hideConfirmPassword ? 'ph-eye-slash' : 'ph-fill ph-eye'
+                  }}"
+                  (click)="hideConfirmPassword = !hideConfirmPassword"></i>
+              </div>
               <div
                 *ngIf="
                   mode !== typeLogin.Login &&

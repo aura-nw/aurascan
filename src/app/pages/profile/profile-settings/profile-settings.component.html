@@ -1,0 +1,64 @@
+<h1>Profile settings</h1>
+<div>
+  <span class="mr-2 caption text--gray-4">Email</span>
+  <span class="body text--white">abc@gmail.com</span>
+</div>
+<h3 class="fw-bold text--gray-4 mt-8">Change password</h3>
+<div>
+  <form [formGroup]="changePassForm" class="aura-form single-input-field profile-form" autocomplete="off">
+    <!-- Old password -->
+    <div class="row mt-6">
+      <div class="col-6">
+        <div class="form-group">
+          <label for="old_password" class="form-label body-01">Old password</label>
+          <div class="input-group pr-0">
+            <input
+              id="old_password"
+              [type]="hideOldPassword ? 'password' : 'text'"
+              #old_password
+              formControlName="old_password"
+              placeholder="Enter old password" />
+            <i class="pr-4 hidden-icon cursor-pointer ph-bold  {{hideOldPassword ? 'ph-eye-slash' : 'ph-fill ph-eye'}}" (click)="hideOldPassword = !hideOldPassword"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- New password -->
+    <div class="row mt-6">
+      <div class="col-6">
+        <div class="form-group">
+          <label for="new_password" class="form-label body-01">New password</label>
+          <div class="input-group pr-0">
+            <input
+              id="new_password"
+              [type]="hideNewPassword ? 'password' : 'text'"
+              #new_password
+              formControlName="new_password"
+              placeholder="Enter new password" />
+            <i class="pr-4 hidden-icon cursor-pointer ph-bold  {{hideNewPassword ? 'ph-eye-slash' : 'ph-fill ph-eye'}}" (click)="hideNewPassword = !hideNewPassword"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <label for="cf_new_password" class="form-label body-01">Confirm new password</label>
+          <div class="input-group pr-0">
+            <input
+                id="cf_new_password"
+                #cf_new_password
+                [type]="hideConfirmPassword ? 'password' : 'text'"
+                formControlName="cf_new_password"
+                placeholder="Type the new password again" />
+            <i class="pr-4 hidden-icon cursor-pointer ph-bold  {{hideConfirmPassword ? 'ph-eye-slash' : 'ph-fill ph-eye'}}" (click)="hideConfirmPassword = !hideConfirmPassword"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- button group -->
+    <div class="d-flex mt-4 py-6">
+      <button class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card" type="button">
+        <span>Change password</span>
+      </button>
+    </div>
+  </form>
+</div>

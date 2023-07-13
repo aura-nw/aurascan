@@ -11,6 +11,8 @@ export class ResetPasswordComponent implements OnInit {
   resetForm;
   data;
   mode = 'default';
+  hidePassword = true;
+  hideConfirmPassword = true;
 
   constructor(private fb: FormBuilder) {}
 
