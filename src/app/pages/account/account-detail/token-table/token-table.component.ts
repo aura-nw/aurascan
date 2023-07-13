@@ -71,16 +71,17 @@ export class TokenTableComponent implements OnChanges {
       account_address: this.address,
       limit: this.pageData.pageSize,
       offset: this.pageData.pageSize * this.pageData.pageIndex,
-      keyword: this.textSearch?.trim(),
+      keyword: this.textSearch,
     };
     if (this.dataTable.length > 0) {
       let result = this.dataTable.slice(payload?.offset, payload?.offset + payload?.limit);
       // Search with text search
-      if (payload?.keyword) {
+      if (this.textSearch) {
+        const textSearch = this.textSearch.trim();
         result = this.dataTable.filter(
           (item) =>
-            item.name?.toLowerCase().includes(payload?.keyword.toLowerCase()) ||
-            item.contract_address == payload?.keyword,
+            item.name?.toLowerCase().includes(textSearch.toLowerCase()) ||
+            item.contract_address == textSearch,
         );
 
         const data = result?.slice(payload?.offset, payload?.offset + payload?.limit);
