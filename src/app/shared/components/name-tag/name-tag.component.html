@@ -3,7 +3,7 @@
     <a
       *ngIf="!isHref"
       [routerLink]="['/' + url, paramUrl || value]"
-      class="text--primary text-break"
+      class="text--primary text-break d-flex"
       [ngClass]="[
         isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : ''
@@ -19,7 +19,7 @@
     <a
       *ngIf="isHref"
       [href]="url + value"
-      class="text--primary text-break"
+      class="text--primary text-break d-flex"
       [ngClass]="[
         isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : ''
@@ -54,7 +54,7 @@
       <ng-container *ngIf="extendUrl && extendUrlLink">
         <i
           _ngcontent-wrg-c372=""
-          class="ph-arrow-square-out-fill text--gray-1 body-01 h3-mob mb-1 ml-1 cursor-pointer"
+          class="ph-arrow-square-out-fill text--gray-1 body-01 h3-mob ml-1 cursor-pointer"
           (click)="extendLink(extendUrlLink)"></i>
       </ng-container>
     </span>
@@ -102,7 +102,7 @@
   <ng-container *ngIf="extendUrl && extendUrlLink">
     <i
       _ngcontent-wrg-c372=""
-      class="ph-arrow-square-out-fill text--primary body-01 h3-mob mb-1 ml-1"
+      class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1"
       (click)="extendLink(extendUrlLink)"></i>
   </ng-container>
 </ng-template>
