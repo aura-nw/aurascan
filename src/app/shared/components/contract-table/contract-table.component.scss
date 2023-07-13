@@ -1,21 +1,13 @@
 .contract-table {
-  .aura-status {
+  .status {
+    font-size: 12px;
+    font-weight: 600;
     .TO,
     .IN {
-      background: rgba(84, 206, 140, 0.2);
       color: var(--aura-green-3);
     }
-
     .OUT {
-      background: rgba(213, 98, 94, 0.2);
       color: var(--aura-red-3);
-    }
-
-    .TO,
-    .IN,
-    .OUT,
-    .CREATION {
-      font-weight: 500;
     }
   }
 }

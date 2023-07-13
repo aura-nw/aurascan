@@ -72,7 +72,7 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
                     <div
-                      class="aura-status"
+                      class="status"
                       [style.justify-content]="template?.justify || 'flex-start'"
                       *ngIf="data[template.matColumnDef]">
                       <div class="status text-capitalize" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
