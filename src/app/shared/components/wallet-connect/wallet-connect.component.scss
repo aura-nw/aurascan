@@ -97,6 +97,7 @@
   min-width: 90px;
   border-radius: 999px;
   padding: 10px 24px;
+  box-shadow: 2px 1000px 1px var(--aura-gray-9) inset !important;
   @media (max-width: 991.98px) {
     padding-right: 30px !important;
     &:before, &:after {
@@ -118,7 +119,19 @@
   &::before {
     background: url(../../../../assets/icons/icons-svg/black/caret-up.svg) center no-repeat;
   }
-  // &::after {
-  //   background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
-  // }
+  &.button-outline.button-outline--gradient:hover {
+    background: linear-gradient(113.1deg, #5EE6D0 13.45%, #BFC6FF 50.33%, #FFBA69 85.05%);
+    box-shadow: unset !important;
+    border-color: transparent;
+  }
+}
+.menu__input {
+  background: rgba(19, 20, 25, 1);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 16px;
+  padding-right: 10px;
+  border-radius: 4px;
 }
