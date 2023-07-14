@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class PopupShareComponent implements OnInit {
     public walletService: WalletService,
     public environmentService: EnvironmentService,
     private router: Router,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -37,20 +39,6 @@ export class PopupShareComponent implements OnInit {
 
   connectWallet(): void {
     this.walletAccount = this.walletService.getAccount();
-  }
-
-  copyMessage(text: string) {
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('shareContent').click();
-    }, 800);
   }
 
   executeShareLink(mode) {

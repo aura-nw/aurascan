@@ -127,7 +127,7 @@
                                 [src]="'assets/images/icons/arrow-right.png' | imageS3"
                                 width="14"
                                 height="9"
-                                class="ml-3" />
+                                class="mr-lg-3 mr-0 ml-3 ml-lg-0" />
                             </ng-container>
                             <ng-container *ngIf="isSearchAddress">
                               <div class="box-token-transfer">
@@ -142,7 +142,7 @@
                           </div>
                         </ng-container>
                         <ng-container *ngSwitchCase="'to_address'">
-                          <div class="pl-4 pl-lg-0" [style.width]="'180px'">
+                          <div class="pl-4 pl-lg-0" [style.min-width]="'200px'">
                             <app-name-tag
                               [value]="data[template.matColumnDef]"
                               [isHref]="true"

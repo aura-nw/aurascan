@@ -20,8 +20,12 @@
             <ng-template #NoNameTag>Not Available</ng-template>
           </td>
         </tr>
-
-        <tr class="d-lg-none">
+        <tr>
+          <td class="text--gray-5 body-02-mob">Private Name Tag:</td>
+          <td colspan="2"></td>
+        </tr>
+        <!-- 
+        <tr class="d-table-row">
           <td colspan="3">
             <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
             <div>
@@ -39,9 +43,9 @@
               </a>
             </div>
           </td>
-        </tr>
+        </tr> -->
 
-        <tr class="d-none d-lg-table-row">
+        <!-- <tr class="d-none d-lg-table-row">
           <td class="text--gray-5 body-02-mob">Contract Creator:</td>
           <td colspan="2">
             <span class="mr-1 mr-lg-2">
@@ -55,7 +59,7 @@
               {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
             </a>
           </td>
-        </tr>
+        </tr> -->
 
         <tr>
           <td class="text--gray-5">Token Tracker:</td>
@@ -72,18 +76,18 @@
                   ">
                   {{ contractDetail?.cw20_contract?.name }} ({{ contractDetail?.cw20_contract?.symbol }})
                 </a>
-                <div
-                  class="status cursor-pointer"
-                  [matTooltipClass]="'token-tooltip'"
-                  matTooltip="{{ contractDetail.verify_text || 'Verified by Aura Network' }}"
-                  [matTooltipPosition]="'above'">
-                  <img
-                    [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
-                    alt=""
-                    width="18"
-                    height="18"
-                    class="ml-1 mb-1"
-                    *ngIf="contractDetail.verify_status === 'VERIFIED'" />
+                <div class="aura-tooltip-contain">
+                  <div class="status cursor-pointer aura-tooltip-object">
+                    <img
+                      [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                      alt=""
+                      width="18"
+                      height="18"
+                      class="ml-1 mb-1"
+                      *ngIf="contractDetail.verify_status === 'VERIFIED'" />
+                  </div>
+                  <app-tooltip-customize [content]="contractDetail.verify_text || 'Verified by Aura Network'">
+                  </app-tooltip-customize>
                 </div>
               </div>
               <a

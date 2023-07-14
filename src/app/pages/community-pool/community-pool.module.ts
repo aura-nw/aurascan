@@ -8,6 +8,7 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../../app/shared/shared.module';
@@ -15,8 +16,6 @@ import { CommunityPoolAssetComponent } from './asset-list/community-pool-asset.c
 import { CommunityPoolRoutingModule } from './community-pool-routing.module';
 import { CommunityPoolComponent } from './community-pool.component';
 import { CommunityPoolProposalComponent } from './proposal-list/community-pool-proposal.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [CommunityPoolAssetComponent, CommunityPoolProposalComponent, CommunityPoolComponent],
@@ -33,7 +32,6 @@ import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.modul
     NgxMaskModule,
     CommonDirectiveModule,
     APaginatorModule,
-    MatTooltipModule,
     NameTagModule
   ],
   providers: [ProposalService],

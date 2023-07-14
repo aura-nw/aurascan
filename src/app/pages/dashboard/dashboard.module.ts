@@ -12,6 +12,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
@@ -33,6 +34,7 @@ import { DashboardComponent } from './dashboard.component';
     TranslateModule,
     TableNoDataModule,
     NgbCarouselModule,
+    TooltipCustomizeModule,
   ],
   providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService, CommonService, MaskPipe],
 })

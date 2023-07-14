@@ -43,11 +43,16 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail.change = Number(this.tokenDetail.change.toString().substring(1));
     }
 
-    this.tokenDetail['holderChange'] = this.tokenDetail.holders_change_percentage_24h || 0;
+    if (this.tokenDetail.cw20_contract.cw20_total_holder_stats.length > 0) {
+      this.tokenDetail.holderChange =
+        (this.tokenDetail.cw20_contract.cw20_total_holder_stats[1].total_holder * 100) /
+          this.tokenDetail.cw20_contract.cw20_total_holder_stats[0].total_holder -
+        100;
+    }
+
     this.tokenDetail['isHolderUp'] = true;
     if (this.tokenDetail.holderChange < 0) {
       this.tokenDetail['isHolderUp'] = false;
-      this.tokenDetail.holderChange = Number(this.tokenDetail.holderChange.toString().substring(1));
     }
   }
 
