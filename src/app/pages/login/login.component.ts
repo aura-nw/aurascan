@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { PopupVerifyMailComponent } from './popup-verify-mail/popup-verify-mail.component';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -10,21 +10,23 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   loginForm;
-  typeLogin = {
+  screenType = {
     Login: 'login',
     Register: 'register',
+    Verify: 'verify',
     Welcome: 'welcome',
     Forgot: 'forgot',
   };
   isSubmit = false;
-
-  mode = this.typeLogin.Login;
+  errorMessage = '';
+  mode = this.screenType.Verify;
   checkEmail = false;
   checkPassword = false;
   hidePassword = true;
   hideConfirmPassword = true;
+  emailFormat = '';
 
-  constructor(private dialog: MatDialog, private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private userService: UserService) {}
 
   ngOnInit(): void {
     this.formInit();
@@ -66,7 +68,7 @@ export class LoginComponent implements OnInit {
   }
 
   checkVerifyPassword() {
-    if (this.mode === this.typeLogin.Register) {
+    if (this.mode === this.screenType.Register) {
       this.checkPassword = true;
     }
   }
@@ -79,11 +81,29 @@ export class LoginComponent implements OnInit {
       email: this.loginForm.value?.email,
       mode: this.mode,
     };
-    let dialogRef = this.dialog.open(PopupVerifyMailComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      // if (result) {
-      // }
-    });
+    const tempChar = this.loginForm.value?.email.indexOf('@');
+    let strStart = this.loginForm.value?.email.substring(0, 3) + '***';
+    if (tempChar <= 3) {
+      strStart = this.loginForm.value?.email.substring(0, tempChar);
+    }
+    this.emailFormat = strStart + this.loginForm.value?.email.substring(tempChar);
+
+    this.errorMessage = '';
+    let payload = {
+      email: this.loginForm.value?.email,
+      password: this.loginForm.value?.password,
+      passwordConfirmation: this.loginForm.value?.confirmPassword,
+    };
+    if (this.mode === this.screenType.Register) {
+      this.userService.registerUser(payload).subscribe({
+        next: (res) => {
+          this.mode = this.screenType.Verify;
+        },
+        error: (error) => {
+          this.errorMessage = error.details.message[0];
+        },
+      });
+    }
   }
 }

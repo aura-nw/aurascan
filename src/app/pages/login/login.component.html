@@ -1,4 +1,4 @@
-<div class="card card-login" *ngIf="mode !== typeLogin.Welcome">
+<div class="card card-login" *ngIf="mode !== screenType.Welcome && mode !== screenType.Verify">
   <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">
       <img
@@ -7,21 +7,15 @@
         class="cursor-pointer"
         width="22px"
         height="18px"
-        (click)="mode = typeLogin.Login"
-        *ngIf="mode !== typeLogin.Login" />
-      <div class="mb-0 text--white w-100 text-center" *ngIf="mode === typeLogin.Login">Log in to AuraScan</div>
-      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === typeLogin.Register">Register to AuraScan</div>
-      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === typeLogin.Forgot">Forgot password</div>
+        (click)="mode = screenType.Login"
+        *ngIf="mode !== screenType.Login" />
+      <div class="mb-0 text--white w-100 text-center" *ngIf="mode === screenType.Login">Log in to AuraScan</div>
+      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Register">Register to AuraScan</div>
+      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Forgot">Forgot password</div>
     </div>
   </div>
   <div class="card-body">
-    <!-- <ng-container
-      *ngIf="
-        mode !== typeLogin.Login &&
-        getConfirmPassword.touched &&
-        getConfirmPassword.dirty &&
-        loginForm.value.password !== loginForm.value.confirmPassword
-      ">
+    <ng-container *ngIf="errorMessage !== ''">
       <div class="box-error mb-lg-6 mb-4">
         <img
           [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
@@ -29,14 +23,18 @@
           width="20px"
           height="20px"
           class="mr-1" />
+        <span>
+          {{ errorMessage }}
+          <!-- chưa hiển thị tất cả lỗi nếu có -->
+        </span>
       </div>
-    </ng-container> -->
+    </ng-container>
     <form
       [formGroup]="loginForm"
       (ngSubmit)="onSubmit()"
       class="aura-form single-input-field login-form"
       autocomplete="off">
-      <ng-container *ngIf="mode === typeLogin.Forgot">
+      <ng-container *ngIf="mode === screenType.Forgot">
         <div class="text-center mb-6">
           <img class="w-100" src="assets/images/pages/key.png" />
           <span class="body-01 text--gray-2"
@@ -68,7 +66,7 @@
         </div>
       </div>
 
-      <div class="row mt-lg-6 mt-4" *ngIf="mode !== typeLogin.Forgot">
+      <div class="row mt-lg-6 mt-4" *ngIf="mode !== screenType.Forgot">
         <div class="col-12">
           <div class="form-group">
             <label class="form-label body-01 text--white">Password</label>
@@ -96,7 +94,7 @@
         </div>
       </div>
 
-      <ng-container *ngIf="mode === typeLogin.Register">
+      <ng-container *ngIf="mode === screenType.Register">
         <div class="row mt-lg-6 mt-4">
           <div class="col-12">
             <div class="form-group">
@@ -121,7 +119,7 @@
               </div>
               <div
                 *ngIf="
-                  mode !== typeLogin.Login &&
+                  mode !== screenType.Login &&
                   getConfirmPassword.touched &&
                   getConfirmPassword.dirty &&
                   loginForm.value.password !== loginForm.value.confirmPassword
@@ -134,9 +132,9 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="mode === typeLogin.Login">
+      <ng-container *ngIf="mode === screenType.Login">
         <div class="py-lg-6 py-4">
-          <span class="text--primary h4 cursor-pointer" (click)="mode = typeLogin.Forgot">Forgot password</span>
+          <span class="text--primary h4 cursor-pointer" (click)="mode = screenType.Forgot">Forgot password</span>
         </div>
         <div class="d-flex justify-content-end">
           <button
@@ -149,7 +147,7 @@
         <div class="text-center text--gray-4 body-01">
           <div class="mt-4">
             <span class="text--gray-4">Don’t have an account?</span>
-            <span class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(typeLogin.Register)"
+            <span class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
               >Register</span
             >
           </div>
@@ -161,7 +159,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="mode === typeLogin.Register">
+      <ng-container *ngIf="mode === screenType.Register">
         <div class="d-flex justify-content-end mt-6">
           <button
             class="button button-pill button-flat w-100 btn-login"
@@ -173,7 +171,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="mode === typeLogin.Forgot">
+      <ng-container *ngIf="mode === screenType.Forgot">
         <div class="d-flex text-center mt-6">
           <button
             class="button button-pill button-flat btn-login m-auto btn-forgot"
@@ -188,7 +186,7 @@
   </div>
 </div>
 
-<div *ngIf="mode === typeLogin.Welcome" class="card-welcome text-center">
+<div *ngIf="mode === screenType.Welcome" class="card-welcome text-center">
   <img class="img-welcome" src="assets/images/pages/planet.png" />
   <div class="title-welcome">Welcome to AuraScan</div>
   <span class="body-01 text--gray-2">
@@ -198,8 +196,33 @@
   <div class="mt-6 mb-8">
     <button
       class="button button-outline button-outline--gradient button--xlg button-pill"
-      (click)="mode = typeLogin.Login">
+      (click)="mode = screenType.Login">
       <span class="body-01">Log in</span>
     </button>
+  </div>
+</div>
+
+<div *ngIf="mode === screenType.Verify" class="card-verify text-center text--gray-4">
+  <img class="mb-6" src="assets/images/pages/rocket.png" *ngIf="mode === screenType.Verify" />
+  <img class="mb-6" src="assets/images/pages/planet-2.png" *ngIf="mode === screenType.Forgot" />
+  <div class="title-verify w-100">
+    {{ mode === screenType.Verify ? 'Email verification' : 'Password recovery' }}
+  </div>
+  <div class="body-01 text--gray-2">
+    <ng-container *ngIf="mode === screenType.Verify">
+      <span>A verification link has been sent to {{ emailFormat }}.</span><br />
+      <span>Please click on the link to verify your email account.</span>
+    </ng-container>
+    <ng-container *ngIf="mode === screenType.Forgot">
+      A password reset link has been sent to {{ emailFormat }}. Please click on the link to change your password.
+    </ng-container>
+  </div>
+  <div class="body mt-6" *ngIf="mode === screenType.Verify">
+    In case you cannot find the email, please check the spam folder and ensure your spam filters allow email from
+    verify@aura.network
+  </div>
+  <div class="mt-6">
+    <span class="">Have not received any email?</span>
+    <span class="text--primary fw-semibold ml-1 cursor-pointer">Resend</span>
   </div>
 </div>
