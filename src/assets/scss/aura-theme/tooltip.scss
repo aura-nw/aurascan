@@ -1,0 +1,50 @@
+app-tooltip-customize {
+  z-index: 10;
+  width: max-content;
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%, -16px);
+  max-width: 0;
+  max-height: 0;
+  opacity: 0;
+  transition: opacity .35s ease-in-out;
+  &.tooltip--below {
+    bottom: 0;
+    top: 100%;
+    transform: translate(-50%, 16px);
+  }
+}
+.aura-tooltip-contain {
+  display: inline-block;
+  position: relative;
+  .aura-tooltip-object {
+    cursor: pointer;
+    &:not(.disabled-hover):hover ~ app-tooltip-customize, &.show ~ app-tooltip-customize {
+      max-width: 900px;
+      max-height: 900px;
+      opacity: 1;
+      .aura-tooltip {
+        display: block;
+        padding: 8px;
+      }
+    }
+  }
+}
+.spacer-tooltip {
+  padding-top: 50px;
+  margin-top: -40px;
+}
+
+app-tooltip-customize.tooltip--left {
+  left: unset;
+  right: 0;
+  transform: translate(0, -32px);
+}
+
+
+app-tooltip-customize.tooltip--right {
+  right: unset;
+  left: 0;
+  transform: translate(0, -16px);
+}
