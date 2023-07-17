@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   };
   isSubmit = false;
   errorMessage = '';
-  mode = this.screenType.Verify;
+  mode = this.screenType.Login;
   checkEmail = false;
   checkPassword = false;
   hidePassword = true;
@@ -81,29 +81,51 @@ export class LoginComponent implements OnInit {
       email: this.loginForm.value?.email,
       mode: this.mode,
     };
-
-    const tempChar = this.loginForm.value?.email.indexOf('@');
-    let strStart = this.loginForm.value?.email.substring(0, 3) + '***';
-    if (tempChar <= 3) {
-      strStart = this.loginForm.value?.email.substring(0, tempChar);
-    }
-    this.emailFormat = strStart + this.loginForm.value?.email.substring(tempChar);
-
     this.errorMessage = '';
-    let payload = {
-      email: this.loginForm.value?.email,
-      password: this.loginForm.value?.password,
-      passwordConfirmation: this.loginForm.value?.confirmPassword,
-    };
-    if (this.mode === this.screenType.Register) {
-      this.userService.registerUser(payload).subscribe({
-        next: (res) => {
-          this.mode = this.screenType.Verify;
-        },
-        error: (error) => {
-          this.errorMessage = error.details.message[0];
-        },
-      });
+
+    switch (this.mode) {
+      case this.screenType.Login:
+        let payloadLogin = {
+          email: this.loginForm.value?.email,
+          password: this.loginForm.value?.password,
+        };
+        this.userService.loginWithPassword(payloadLogin).subscribe({
+          next: (res) => {
+          },
+          error: (error) => {
+            this.errorMessage = error.details.message;
+          },
+        });
+        break;
+      case this.screenType.Register:
+        let payloadRegister = {
+          email: this.loginForm.value?.email,
+          password: this.loginForm.value?.password,
+          passwordConfirmation: this.loginForm.value?.confirmPassword,
+        };
+        this.userService.registerUser(payloadRegister).subscribe({
+          next: (res) => {
+            this.mode = this.screenType.Verify;
+            const tempChar = this.loginForm.value?.email.indexOf('@');
+            let strStart = this.loginForm.value?.email.substring(0, 3) + '***';
+            if (tempChar <= 3) {
+              strStart = this.loginForm.value?.email.substring(0, tempChar);
+            }
+            this.emailFormat = strStart + this.loginForm.value?.email.substring(tempChar);
+          },
+          error: (error) => {
+            this.errorMessage = error.details.message[0];
+          },
+        });
+        break;
+      case this.screenType.Forgot:
+        break;
+      case this.screenType.Welcome:
+        break;
+      case this.screenType.Verify:
+        break;
+      default:
+        break;
     }
   }
 }

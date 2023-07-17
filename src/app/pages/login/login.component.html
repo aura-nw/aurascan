@@ -140,6 +140,7 @@
           <button
             class="button button-pill button-flat w-100 btn-login"
             type="submit"
+            (click)="showVerifyMail()"
             [disabled]="loginForm.status === 'INVALID'">
             <span class="body-01">Log in</span>
           </button>

@@ -15,4 +15,8 @@ export class UserService extends CommonService {
   registerUser(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/users/register-with-password`, payload);
   }
+
+  loginWithPassword(payload): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/login-with-password`, payload);
+  }
 }
