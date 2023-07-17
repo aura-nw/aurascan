@@ -32,3 +32,27 @@
   top: 0;
   transform: translate(-50%, -100%);
 }
+
+::ng-deep app-tooltip-customize.tooltip--right .aura-tooltip {
+  border-bottom-left-radius: unset;
+  &:before {
+    border-top: 10px solid var(--aura-gray-8);
+    border-right: 10px solid transparent;
+    border-bottom: unset;
+    border-left: unset;
+    right: unset;
+    left: 20px;
+  }
+}
+
+::ng-deep app-tooltip-customize.tooltip--left .aura-tooltip {
+  border-bottom-right-radius: unset;
+  &:before {
+    border-top: 10px solid var(--aura-gray-8);
+    border-left: 10px solid transparent;
+    border-bottom: unset;
+    border-right: unset;
+    left: unset;
+    right: -6px;
+  }
+}

@@ -26,6 +26,7 @@ export class NameTagComponent implements OnInit {
   @Input() isTokenDetail = false;
   @Input() extendUrl = false;
   @Input() widthAuto = false;
+  @Input() isNameTagContract = false;
   extendUrlLink = '';
 
   constructor(public commonService: CommonService, public global: Globals) {}
