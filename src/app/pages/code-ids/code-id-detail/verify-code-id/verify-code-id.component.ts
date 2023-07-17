@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
@@ -15,24 +16,10 @@ export class VerifyCodeIdComponent implements OnInit {
   codeIdDetail: any;
   contractVerifyType = ContractVerifyType;
 
-  constructor(private contractService: ContractService, private router: Router) {}
+  constructor(private contractService: ContractService, private router: Router, public commonService: CommonService) {}
 
   ngOnInit(): void {
     this.getCodeIdDetail();
-  }
-
-  copyData(text: string): void {
-    var dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('popupCopy').click();
-    }, 800);
   }
 
   navigateToVerify() {

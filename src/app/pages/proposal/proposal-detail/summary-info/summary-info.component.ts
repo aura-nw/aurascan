@@ -356,15 +356,11 @@ export class SummaryInfoComponent implements OnInit {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (addr) {
       const payload = {
-        limit: 1,
-        compositeKey: 'proposal_vote.proposal_id',
-        value: this.proposalId?.toString(),
-        value2: addr,
+        proposal_id: this.proposalId?.toString(),
+        address: addr,
       };
-      this.transactionService.getListTxMultiCondition(payload).subscribe((res) => {
-        const optionVote = this.proposalService.getVoteMessageByConstant(
-          res?.transaction[0]?.data?.tx?.body?.messages[0]?.option,
-        );
+      this.proposalService.getVotedResult(payload).subscribe((res) => {
+        const optionVote = this.proposalService.getVoteMessageByConstant(res?.vote[0]?.vote_option);
         this.proposalVotes = this.voteConstant?.find((s) => s.key === optionVote)?.voteOption;
         this.voteValue = {
           keyVote: optionVote,
@@ -427,7 +423,7 @@ export class SummaryInfoComponent implements OnInit {
         for (let prop in data[0]) {
           this.proposalDetailTitleArr.push({
             key: index,
-            value: prop
+            value: prop,
           });
           index++;
         }
@@ -439,7 +435,7 @@ export class SummaryInfoComponent implements OnInit {
           if (data.hasOwnProperty(prop)) {
             this.proposalDetailTitleArr.push({
               key: index,
-              value: prop
+              value: prop,
             });
             index++;
           }
@@ -456,6 +452,6 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   getObjectKey(object) {
-    return Object.keys(object)
+    return Object.keys(object);
   }
 }

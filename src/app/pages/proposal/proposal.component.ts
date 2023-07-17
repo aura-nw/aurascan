@@ -8,7 +8,6 @@ import * as moment from 'moment';
 import { tap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../app/global/global';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
@@ -73,7 +72,6 @@ export class ProposalComponent implements OnInit {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     public commonService: CommonService,
-    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -104,15 +102,11 @@ export class ProposalComponent implements OnInit {
               const getVoted = async () => {
                 if (addr) {
                   const payload = {
-                    limit: 1,
-                    compositeKey: 'proposal_vote.proposal_id',
-                    value: pro.proposal_id?.toString(),
-                    value2: addr,
+                    proposal_id: pro.proposal_id?.toString(),
+                    address: addr,
                   };
-                  this.transactionService.getListTxMultiCondition(payload).subscribe((res) => {
-                    const optionVote = this.proposalService.getVoteMessageByConstant(
-                      res?.transaction[0]?.data?.tx?.body?.messages[0]?.option,
-                    );
+                  this.proposalService.getVotedResult(payload).subscribe((res) => {
+                    const optionVote = this.proposalService.getVoteMessageByConstant(res?.vote[0]?.vote_option);
                     pro.vote_option = this.voteConstant.find((s) => s.key === optionVote)?.voteOption;
                   });
                 }

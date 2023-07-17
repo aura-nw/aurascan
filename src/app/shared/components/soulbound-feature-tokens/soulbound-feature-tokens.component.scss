@@ -91,3 +91,21 @@
   padding: 0;
   align-items: flex-start;
 }
+app-tooltip-customize.sb-tooltip {
+  left: unset;
+  right: 0;
+  transform: translate(0, -32px);
+  ::ng-deep {
+    .aura-tooltip {
+      border-bottom-right-radius: unset;
+      &:before {
+        border-top: 10px solid var(--aura-gray-8);
+        border-left: 10px solid transparent;
+        border-bottom: unset;
+        border-right: unset;
+        left: unset;
+        right: -6px;
+      }
+    }
+  }
+}
