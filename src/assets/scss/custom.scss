@@ -709,3 +709,7 @@ app-tooltip-customize {
   padding-top: 50px;
   margin-top: -40px;
 }
+.overflow-scroll-x {
+  overflow-x: auto;
+  &::-webkit-scrollbar{ height : 6px; }
+}
