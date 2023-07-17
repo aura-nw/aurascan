@@ -61,6 +61,7 @@ const routes: Routes = [
         loadChildren: () => import('./pages/community-pool/community-pool.module').then((m) => m.CommunityPoolModule),
       },
       { path: 'login', loadChildren: () => import('./pages/login/login.module').then((m) => m.LoginModule) },
+      { path: 'user', loadChildren: () => import('./pages/login/login.module').then((m) => m.LoginModule) },
       {
         path: 'profile',
         loadChildren: () => import('./pages/profile/profile.module').then((m) => m.ProfileModule),

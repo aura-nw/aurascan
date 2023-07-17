@@ -9,6 +9,14 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
+    path: 'welcome',
+    component: LoginComponent,
+  },
+  {
+    path: 'already-active',
+    component: LoginComponent,
+  },
+  {
     path: 'reset-password',
     component: ResetPasswordComponent,
   },

@@ -7,6 +7,7 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./profile-settings.component.scss'],
 })
 export class ProfileSettingsComponent implements OnInit {
+  userEmail = null;
   changePassForm;
   hideOldPassword = true;
   hideNewPassword = true;
@@ -15,6 +16,7 @@ export class ProfileSettingsComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.userEmail = localStorage.getItem('userEmail').replace(/"/g, '');
     this.formInit();
   }
 

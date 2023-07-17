@@ -1,10 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {  Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import {  Subject } from 'rxjs';
-import {  tap } from 'rxjs/operators';
-import { EnvironmentService } from '../../../core/data-services/environment.service';
-import { DialogService } from '../../../core/services/dialog.service';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { EnvironmentService } from '../../../core/data-services/environment.service';
 
 @Component({
   selector: 'app-authenticate-mail',
@@ -12,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./authenticate-mail.component.scss'],
 })
 export class AuthenticateMailComponent implements OnDestroy {
-  user = 'demo';
+  userEmail = null; //'demo';
 
   @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
@@ -29,12 +28,11 @@ export class AuthenticateMailComponent implements OnDestroy {
   );
 
   destroy$ = new Subject();
-  constructor(
-    private envService: EnvironmentService,
-    private dlgService: DialogService,
-    private layout: BreakpointObserver,
-    private router: Router
-  ) {}
+  constructor(private envService: EnvironmentService, private layout: BreakpointObserver, private router: Router) {}
+
+  ngOnInit(): void {
+    this.userEmail = localStorage.getItem('userEmail');
+  }
 
   ngOnDestroy(): void {
     document.removeAllListeners('hide.bs.offcanvas');
@@ -48,10 +46,13 @@ export class AuthenticateMailComponent implements OnDestroy {
 
   disconnect(): void {
     // logout Google
-    this.user = null;
+    this.userEmail = null;
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userEmail');
   }
 
-  linkLogin(){
+  linkLogin() {
     this.router.navigate(['login']);
   }
 }
