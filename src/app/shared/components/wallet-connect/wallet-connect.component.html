@@ -4,7 +4,7 @@
       #connectButton
       *ngIf="!ng.wallet"
       type="button"
-      class="button button--sm-mob button-flat body-01 button-wallet-menu"
+      class="button button--xlg button--sm-mob button-flat body-01 button-wallet-menu"
       data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasWallet"
       aria-controls="offcanvasWallet">
@@ -14,20 +14,21 @@
 
     <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
       <button
-        class="button button--sm-mob button-flat body-01 button-dropdown button-wallet-menu"
+        class="button button--sm-mob button-outline button-outline--gradient body-01 button-wallet-menu"
         type="button"
         id="walletMenu"
         data-bs-toggle="dropdown"
         aria-expanded="false">
-        <span class="button__title d-lg-none body-mob">{{
-          ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) + '...' : ng.wallet?.name
-        }}</span>
-        <span class="button__title d-none d-lg-block body-mob">{{
-          ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name
-        }}</span>
+        <span class="button__title body-mob">{{ ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}</span>
       </button>
-      <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
-        <li class="dropdown-item caption-mob">{{ ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}</li>
+      <ul class="dropdown-menu aura-dropdown-menu walletMenu" aria-labelledby="walletMenu" id="wallet-menu">
+        <li class="">
+          <div class="menu__input">
+            <span class="text-gradient body-01 fw-500">{{ ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}</span>
+            <i class="ph-light ph-copy ml-2 body-01 text--white" (click)="copyMessage(ng.wallet?.bech32Address)"></i>
+          </div>
+        </li>
+        <li class="divider divider-horizontal my-2"></li>
         <li class="dropdown-item caption-mob" [routerLink]="['/account', ng.wallet?.bech32Address]">
           <a>Account Details</a>
         </li>
@@ -35,7 +36,7 @@
           <a>Register Code ID</a>
         </li> -->
         <li class="dropdown-item caption-mob" (click)="disconnect()">
-          <button type="button" class="button p-0">Log out</button>
+          <button type="button" class="button p-0">Disconnect Wallet</button>
         </li>
       </ul>
     </div>

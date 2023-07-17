@@ -1,6 +1,6 @@
-<button
+<button *ngIf="!user"
   type="button"
-  class="button button--sm-mob button-flat body-01 button-login-menu"
+  class="button button--xlg button--sm-mob button-flat body-01 button-login-menu"
   (click)="linkLogin()">
   <span class="d-lg-none body-mob">Login</span>
   <span class="d-none d-lg-block">Login</span>
@@ -8,3 +8,20 @@
     <img [src]="'assets/icons/icons-svg/black/sign-in.svg' | imageS3" alt="" width="24" height="24" />
   </div>
 </button>
+<div *ngIf="user" class="dropdown aura-dropdown">
+  <button
+      class="button button--xlg button-circle button-user"
+      id="userMenu"
+      data-bs-toggle="dropdown"
+      aria-expanded="false">
+    <img src="assets/icons/icons-svg/color/User.svg" alt="">
+  </button>
+  <ul class="dropdown-menu aura-dropdown-menu user-dropdown-menu walletMenu" aria-labelledby="userMenu">
+    <li class="dropdown-item caption-mob">
+      <a href="#" class="w-100">My Profile</a>
+    </li>
+    <li class="dropdown-item caption-mob" (click)="disconnect()">
+      <button type="button" class="button p-0">Log out</button>
+    </li>
+  </ul>
+</div>

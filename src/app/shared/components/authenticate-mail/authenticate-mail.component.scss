@@ -122,3 +122,10 @@
     background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
   }
 }
+.button-user {
+  background: rgba(36, 38, 46, 1);
+  vertical-align: middle;
+  &:hover {
+    background: var(--aura-gray-7);
+  }
+}
