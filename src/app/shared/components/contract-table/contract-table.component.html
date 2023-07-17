@@ -72,10 +72,17 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
                     <div
-                      class="status"
+                      class="aura-status"
                       [style.justify-content]="template?.justify || 'flex-start'"
                       *ngIf="data[template.matColumnDef]">
                       <div class="status text-capitalize" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'type'">
+                    <div class="method" *ngIf="data[template.matColumnDef]">
+                      <div class="text-capitalize" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
                         {{ data[template.matColumnDef] }}
                       </div>
                     </div>
