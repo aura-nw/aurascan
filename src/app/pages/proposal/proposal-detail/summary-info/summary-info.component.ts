@@ -55,7 +55,6 @@ export class SummaryInfoComponent implements OnInit {
     ParameterChange: '/cosmos.params.v1beta1.ParameterChangeProposal',
   };
   activeId = 0;
-
   reload$;
 
   constructor(
