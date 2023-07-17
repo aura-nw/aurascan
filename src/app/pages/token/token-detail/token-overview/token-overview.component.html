@@ -105,7 +105,7 @@
                 *ngIf="!tokenDetail.isNFTContract">
                 (<span class=""
                   >{{ tokenDetail.isHolderUp ? '↑' : '↓'
-                  }}{{ tokenDetail.holderChange | number : global.formatNumber2Decimal }}%</span
+                  }}{{ tokenDetail.holderChange || 0 | number : global.formatNumber2Decimal }}%</span
                 >)
               </span>
             </div>

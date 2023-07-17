@@ -40,7 +40,7 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   { matColumnDef: 'blockHeight', headerCellDef: 'Block', type: 'hash-url', headerWidth: 6, isUrl: '/blocks' },
   { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
   { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 12, isUrl: '/account', isNameTag: true },
-  { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 6, justify: 'center' },
+  { matColumnDef: 'label', headerCellDef: '', type: 'type', headerWidth: 6, justify: 'center' },
   { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 12, isUrl: '/contracts', isNameTag: true },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },
 ];
