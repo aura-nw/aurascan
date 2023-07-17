@@ -1,10 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {  Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import {  Subject } from 'rxjs';
-import {  tap } from 'rxjs/operators';
-import { EnvironmentService } from '../../../core/data-services/environment.service';
-import { DialogService } from '../../../core/services/dialog.service';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { EnvironmentService } from '../../../core/data-services/environment.service';
 
 @Component({
   selector: 'app-authenticate-mail',
@@ -31,9 +30,8 @@ export class AuthenticateMailComponent implements OnDestroy {
   destroy$ = new Subject();
   constructor(
     private envService: EnvironmentService,
-    private dlgService: DialogService,
     private layout: BreakpointObserver,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnDestroy(): void {
@@ -51,7 +49,7 @@ export class AuthenticateMailComponent implements OnDestroy {
     this.user = null;
   }
 
-  linkLogin(){
+  linkLogin() {
     this.router.navigate(['login']);
   }
 }

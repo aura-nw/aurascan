@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-settings',
@@ -20,13 +20,23 @@ export class ProfileSettingsComponent implements OnInit {
 
   formInit() {
     this.changePassForm = this.fb.group({
-      expiration_time: [''],
-      period_amount: [''],
-      period_day: [''],
-      isInstantiate: false,
-      isExecute: false,
-      execute_contract: this.fb.array([]),
+      old_password: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(100),
+          Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$'),
+        ],
+      ],
+      new_password: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(100),
+          Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$'),
+        ],
+      ],
+      cf_new_password: [''],
     });
-    // this.addContracts();
   }
 }

@@ -224,6 +224,10 @@
   </div>
   <div class="mt-6 mb-6 mb-lg-0">
     <span class="">Have not received any email?</span>
-    <span class="text--primary fw-semibold ml-1 cursor-pointer">Resend</span>
+    <span class="text--primary fw-semibold ml-1 cursor-pointer" (click)="showVerifyMail()">Resend</span>
+    <div *ngIf="errorMessage" class="text-danger mt-2 caption fw-normal">
+      You have reached the maximum number of verification email sent per day.<br />
+      Kindly come back tomorrow or contact us via mailbox [support@aura.netwwork] for special case!
+    </div>
   </div>
 </div>

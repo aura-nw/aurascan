@@ -90,8 +90,7 @@ export class LoginComponent implements OnInit {
           password: this.loginForm.value?.password,
         };
         this.userService.loginWithPassword(payloadLogin).subscribe({
-          next: (res) => {
-          },
+          next: (res) => {},
           error: (error) => {
             this.errorMessage = error.details.message;
           },
@@ -114,15 +113,27 @@ export class LoginComponent implements OnInit {
             this.emailFormat = strStart + this.loginForm.value?.email.substring(tempChar);
           },
           error: (error) => {
-            this.errorMessage = error.details.message[0];
+            this.errorMessage = error.details.message[0]; 
           },
         });
         break;
       case this.screenType.Forgot:
+        this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
+          next: (res) => {},
+          error: (error) => {
+            this.errorMessage = error.details.message;
+          },
+        });
         break;
       case this.screenType.Welcome:
         break;
       case this.screenType.Verify:
+        this.userService.resendVerifyEmail(this.loginForm.value?.email).subscribe({
+          next: (res) => {},
+          error: (error) => {
+            this.errorMessage = error.details.message;
+          },
+        });
         break;
       default:
         break;

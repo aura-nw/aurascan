@@ -19,4 +19,16 @@ export class UserService extends CommonService {
   loginWithPassword(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/login-with-password`, payload);
   }
+
+  changePassword(payload): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/user/change-password`, payload);
+  }
+
+  resendVerifyEmail(email: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/auth/resend-verification-email/${email}`);
+  }
+
+  sendResetPasswordEmail(email: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/auth/send-reset-password-email/${email}`);
+  }
 }
