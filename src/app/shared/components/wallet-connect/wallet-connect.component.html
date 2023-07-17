@@ -4,22 +4,23 @@
       #connectButton
       *ngIf="!ng.wallet"
       type="button"
-      class="button button--xlg button--sm-mob button-flat body-01 button-wallet-menu"
+      class="button button--xlg button--sm-mob button-wallet button-pill button-flat px-4 px-lg-6"
       data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasWallet"
       aria-controls="offcanvasWallet">
-      <span class="d-lg-none body-mob">Connect</span>
-      <span class="d-none d-lg-block">Connect Wallet</span>
+      <span class="d-lg-none body-mob body-01">Connect</span>
+      <span class="d-none d-lg-block body-01">Connect Wallet</span>
     </button>
 
     <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
       <button
-        class="button button--sm-mob button-outline button-outline--gradient body-01 button-wallet-menu"
+        class="button button--xlg button--sm-mob button-pill button-outline button-outline--gradient button-outline__in-card button-wallet-menu"
         type="button"
         id="walletMenu"
         data-bs-toggle="dropdown"
         aria-expanded="false">
-        <span class="button__title body-mob">{{ ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}</span>
+        <span class="button__title caption fw-normal d-lg-none">{{ ng.wallet?.bech32Address | cutStringPipe : 4 : 4 }}</span>
+        <span class="button__title body-01 fw-normal d-none d-lg-block">{{ ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}</span>
       </button>
       <ul class="dropdown-menu aura-dropdown-menu walletMenu" aria-labelledby="walletMenu" id="wallet-menu">
         <li class="">
@@ -29,13 +30,13 @@
           </div>
         </li>
         <li class="divider divider-horizontal my-2"></li>
-        <li class="dropdown-item caption-mob" [routerLink]="['/account', ng.wallet?.bech32Address]">
+        <li class="dropdown-item caption-mob px-3 px-lg-4 py-3" [routerLink]="['/account', ng.wallet?.bech32Address]">
           <a>Account Details</a>
         </li>
         <!-- <li class="dropdown-item caption-mob" [routerLink]="['/contracts/register']">
           <a>Register Code ID</a>
         </li> -->
-        <li class="dropdown-item caption-mob" (click)="disconnect()">
+        <li class="dropdown-item caption-mob px-3 px-lg-4 py-3" (click)="disconnect()">
           <button type="button" class="button p-0">Disconnect Wallet</button>
         </li>
       </ul>

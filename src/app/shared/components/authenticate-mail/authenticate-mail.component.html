@@ -2,15 +2,14 @@
   type="button"
   class="button button--xlg button--sm-mob button-flat body-01 button-login-menu"
   (click)="linkLogin()">
-  <span class="d-lg-none body-mob">Login</span>
   <span class="d-none d-lg-block">Login</span>
-  <div class="ml-2 d-flex">
-    <img [src]="'assets/icons/icons-svg/black/sign-in.svg' | imageS3" alt="" width="24" height="24" />
+  <div class="ml-lg-2 d-flex">
+    <img [src]="'assets/icons/icons-svg/black/sign-in.svg' | imageS3" alt="" class="login-img"/>
   </div>
 </button>
 <div *ngIf="user" class="dropdown aura-dropdown">
   <button
-      class="button button--xlg button-circle button-user"
+      class="button button--xlg button--sm-mob button-circle button-user"
       id="userMenu"
       data-bs-toggle="dropdown"
       aria-expanded="false">
