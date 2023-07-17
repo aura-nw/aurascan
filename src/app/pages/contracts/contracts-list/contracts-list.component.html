@@ -103,15 +103,19 @@
                   <ng-container *ngIf="template.isNameTag">
                     <ng-container *ngIf="template.matColumnDef === 'address'">
                       <div class="d-flex align-items-center gap-2">
-                        <div
-                          class="mr-2"
-                          [style.width]="'8px'"
-                          *ngIf="data['contract_verification'] !== ContractVerifyType.Verified"></div>
+                        <div class="mr-2" [style.width]="'16px'">
+                          <img
+                            [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
+                            alt="contract_verification"
+                            width="16px"
+                            height="16px"
+                            *ngIf="data['contract_verification'] === ContractVerifyType.Verified" />
+                        </div>
+
                         <app-name-tag
                           [value]="data[template.matColumnDef]"
                           [url]="template.isUrl"
-                          [isNameTagContract]="true"
-                          [iconVerify]="data['contract_verification'] === ContractVerifyType.Verified"></app-name-tag>
+                          [isNameTagContract]="true"></app-name-tag>
                       </div>
                     </ng-container>
                     <ng-container *ngIf="template.matColumnDef !== 'address'">
