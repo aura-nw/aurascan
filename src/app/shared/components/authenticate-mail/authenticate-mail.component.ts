@@ -11,7 +11,7 @@ import { EnvironmentService } from '../../../core/data-services/environment.serv
   styleUrls: ['./authenticate-mail.component.scss'],
 })
 export class AuthenticateMailComponent implements OnDestroy {
-  user = 'demo';
+  userEmail = null; //'demo';
 
   @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
@@ -28,11 +28,11 @@ export class AuthenticateMailComponent implements OnDestroy {
   );
 
   destroy$ = new Subject();
-  constructor(
-    private envService: EnvironmentService,
-    private layout: BreakpointObserver,
-    private router: Router,
-  ) {}
+  constructor(private envService: EnvironmentService, private layout: BreakpointObserver, private router: Router) {}
+
+  ngOnInit(): void {
+    this.userEmail = localStorage.getItem('userEmail');
+  }
 
   ngOnDestroy(): void {
     document.removeAllListeners('hide.bs.offcanvas');
@@ -46,7 +46,10 @@ export class AuthenticateMailComponent implements OnDestroy {
 
   disconnect(): void {
     // logout Google
-    this.user = null;
+    this.userEmail = null;
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userEmail');
   }
 
   linkLogin() {

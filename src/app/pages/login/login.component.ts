@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
@@ -26,9 +27,25 @@ export class LoginComponent implements OnInit {
   hideConfirmPassword = true;
   emailFormat = '';
 
-  constructor(private fb: FormBuilder, private userService: UserService) {}
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private router: ActivatedRoute,
+    private route: Router,
+  ) {}
 
   ngOnInit(): void {
+    // check exit email
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      this.route.navigate(['/']);
+    }
+
+    // check link from verify mail
+    if (this.router.snapshot.url[0]?.path === 'welcome' || this.router.snapshot.url[0]?.path === 'already-active') {
+      this.mode = this.screenType.Welcome;
+      return;
+    }
     this.formInit();
   }
 
@@ -83,37 +100,41 @@ export class LoginComponent implements OnInit {
     };
     this.errorMessage = '';
 
+    let payload = {
+      email: this.loginForm.value?.email,
+      password: this.loginForm.value?.password,
+    };
+
     switch (this.mode) {
       case this.screenType.Login:
-        let payloadLogin = {
-          email: this.loginForm.value?.email,
-          password: this.loginForm.value?.password,
-        };
-        this.userService.loginWithPassword(payloadLogin).subscribe({
-          next: (res) => {},
+        this.userService.loginWithPassword(payload).subscribe({
+          next: (res) => {
+            if (!res.error) {
+              localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
+              localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
+              localStorage.setItem('userEmail', JSON.stringify(res.email));
+              this.route.navigate(['/']);
+            }
+          },
           error: (error) => {
-            this.errorMessage = error.details.message;
+            this.errorMessage = error?.details?.message;
           },
         });
         break;
       case this.screenType.Register:
-        let payloadRegister = {
-          email: this.loginForm.value?.email,
-          password: this.loginForm.value?.password,
-          passwordConfirmation: this.loginForm.value?.confirmPassword,
-        };
-        this.userService.registerUser(payloadRegister).subscribe({
+        payload['passwordConfirmation'] = this.loginForm.value?.confirmPassword;
+        this.userService.registerUser(payload).subscribe({
           next: (res) => {
-            this.mode = this.screenType.Verify;
-            const tempChar = this.loginForm.value?.email.indexOf('@');
-            let strStart = this.loginForm.value?.email.substring(0, 3) + '***';
+            this.mode = this.screenType?.Verify;
+            const tempChar = this.loginForm.value?.email?.indexOf('@');
+            let strStart = this.loginForm.value?.email?.substring(0, 3) + '***';
             if (tempChar <= 3) {
-              strStart = this.loginForm.value?.email.substring(0, tempChar);
+              strStart = this.loginForm.value?.email?.substring(0, tempChar);
             }
-            this.emailFormat = strStart + this.loginForm.value?.email.substring(tempChar);
+            this.emailFormat = strStart + this.loginForm.value?.email?.substring(tempChar);
           },
           error: (error) => {
-            this.errorMessage = error.details.message[0]; 
+            this.errorMessage = error?.details?.message[0];
           },
         });
         break;
