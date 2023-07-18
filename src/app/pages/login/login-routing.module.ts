@@ -9,6 +9,10 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
+    path: ':mode',
+    component: LoginComponent,
+  },
+  {
     path: 'welcome',
     component: LoginComponent,
   },
@@ -17,7 +21,7 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'reset-password',
+    path: 'reset-password/email/:email/code/:code',
     component: ResetPasswordComponent,
   },
 ];

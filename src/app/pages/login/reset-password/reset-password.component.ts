@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -8,23 +10,28 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class ResetPasswordComponent implements OnInit {
   emailFormat = '';
+  userEmail = '';
   resetForm;
   data;
   mode = 'default';
   hidePassword = true;
   hideConfirmPassword = true;
+  codeVerify = '';
+  errorMessage = '';
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private router: ActivatedRoute, private userService: UserService) {}
 
   ngOnInit(): void {
-    let email = 'tetelrel@gmail.com';
-    const tempChar = email.indexOf('@');
-    let strStart = email.substring(0, 3) + '***';
-    if (tempChar <= 3) {
-      strStart = email.substring(0, tempChar);
+    this.codeVerify = this.router.snapshot?.params?.code;
+    this.userEmail = this.router.snapshot?.params?.email;
+    if (this.userEmail) {
+      const tempChar = this.userEmail.indexOf('@');
+      let strStart = this.userEmail.substring(0, 3) + '***';
+      if (tempChar <= 3) {
+        strStart = this.userEmail.substring(0, tempChar);
+      }
+      this.emailFormat = strStart + this.userEmail.substring(tempChar);
     }
-    this.emailFormat = strStart + email.substring(tempChar);
-
     this.formInit();
   }
 
@@ -50,5 +57,20 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
-  onSubmit() {}
+  onSubmit() {
+    const payload = {
+      email: this.userEmail,
+      resetPasswordToken: this.codeVerify,
+      password: this.resetForm.value?.password,
+      passwordConfirmation: this.resetForm.value?.confirmPassword,
+    };
+    this.userService.resetPasswordWithCode(payload).subscribe({
+      next: (res) => {
+        this.mode = 'resetSuccess';
+      },
+      error: (error) => {
+        this.errorMessage = error?.details?.message;
+      },
+    });
+  }
 }

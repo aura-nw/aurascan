@@ -12,6 +12,8 @@ import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { ProfileComponent } from './profile.component';
 import { MatIconModule } from '@angular/material/icon';
+import { UserService } from 'src/app/core/services/user.service';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [ProfileComponent, ProfileSettingsComponent],
@@ -28,7 +30,8 @@ import { MatIconModule } from '@angular/material/icon';
     ReactiveFormsModule,
     NameTagModule,
     MatIconModule,
+    NgbNavModule
   ],
-  providers: [FormBuilder],
+  providers: [FormBuilder, UserService],
 })
 export class ProfileModule {}

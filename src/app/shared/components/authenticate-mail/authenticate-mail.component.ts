@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
@@ -28,7 +28,12 @@ export class AuthenticateMailComponent implements OnDestroy {
   );
 
   destroy$ = new Subject();
-  constructor(private envService: EnvironmentService, private layout: BreakpointObserver, private router: Router) {}
+  constructor(
+    private envService: EnvironmentService,
+    private layout: BreakpointObserver,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     this.userEmail = localStorage.getItem('userEmail');
@@ -50,9 +55,14 @@ export class AuthenticateMailComponent implements OnDestroy {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userEmail');
+
+    // check is screen profile
+    if (this.route.snapshot['_routerState']?.url === '/profile') {
+      this.router.navigate(['/']);
+    }
   }
 
   linkLogin() {
-    this.router.navigate(['login']);
+    this.router.navigate(['login', 0]);
   }
 }

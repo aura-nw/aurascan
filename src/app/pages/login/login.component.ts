@@ -20,12 +20,14 @@ export class LoginComponent implements OnInit {
   };
   isSubmit = false;
   errorMessage = '';
+  errorCode = '';
   mode = this.screenType.Login;
   checkEmail = false;
   checkPassword = false;
   hidePassword = true;
   hideConfirmPassword = true;
   emailFormat = '';
+  isForgotScreen = false;
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +48,12 @@ export class LoginComponent implements OnInit {
       this.mode = this.screenType.Welcome;
       return;
     }
+
+    if (this.router.snapshot.params.mode == '0') {
+      this.mode = this.screenType.Login;
+      this.route.navigate(['login']);
+    }
+
     this.formInit();
   }
 
@@ -82,6 +90,8 @@ export class LoginComponent implements OnInit {
 
   changeMode(mode) {
     this.mode = mode;
+    this.errorMessage = '';
+    this.isForgotScreen = false;
   }
 
   checkVerifyPassword() {
@@ -105,6 +115,13 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.value?.password,
     };
 
+    const tempChar = this.loginForm.value?.email?.indexOf('@');
+    let strStart = this.loginForm.value?.email?.substring(0, 3) + '***';
+    if (tempChar <= 3) {
+      strStart = this.loginForm.value?.email?.substring(0, tempChar);
+    }
+    this.emailFormat = strStart + this.loginForm.value?.email?.substring(tempChar);
+
     switch (this.mode) {
       case this.screenType.Login:
         this.userService.loginWithPassword(payload).subscribe({
@@ -118,6 +135,7 @@ export class LoginComponent implements OnInit {
           },
           error: (error) => {
             this.errorMessage = error?.details?.message;
+            this.errorCode = error?.details?.code;
           },
         });
         break;
@@ -126,38 +144,52 @@ export class LoginComponent implements OnInit {
         this.userService.registerUser(payload).subscribe({
           next: (res) => {
             this.mode = this.screenType?.Verify;
-            const tempChar = this.loginForm.value?.email?.indexOf('@');
-            let strStart = this.loginForm.value?.email?.substring(0, 3) + '***';
-            if (tempChar <= 3) {
-              strStart = this.loginForm.value?.email?.substring(0, tempChar);
-            }
-            this.emailFormat = strStart + this.loginForm.value?.email?.substring(tempChar);
+            this.isForgotScreen = false;
           },
           error: (error) => {
             this.errorMessage = error?.details?.message[0];
           },
         });
         break;
-      case this.screenType.Forgot:
-        this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
-          next: (res) => {},
-          error: (error) => {
-            this.errorMessage = error.details.message;
-          },
-        });
-        break;
-      case this.screenType.Welcome:
-        break;
-      case this.screenType.Verify:
-        this.userService.resendVerifyEmail(this.loginForm.value?.email).subscribe({
-          next: (res) => {},
-          error: (error) => {
-            this.errorMessage = error.details.message;
-          },
-        });
-        break;
       default:
         break;
+    }
+  }
+
+  resetPassword() {
+    const tempChar = this.loginForm.value?.email?.indexOf('@');
+    let strStart = this.loginForm.value?.email?.substring(0, 3) + '***';
+    if (tempChar <= 3) {
+      strStart = this.loginForm.value?.email?.substring(0, tempChar);
+    }
+    this.emailFormat = strStart + this.loginForm.value?.email?.substring(tempChar);
+
+    this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
+      next: (res) => {
+        this.isForgotScreen = true;
+        this.mode = this.screenType.Verify;
+      },
+      error: (error) => {
+        this.errorMessage = error.details.message;
+      },
+    });
+  }
+
+  resendMail() {
+    if (this.isForgotScreen) {
+      this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
+        next: (res) => {},
+        error: (error) => {
+          this.errorMessage = error.details.message;
+        },
+      });
+    } else {
+      this.userService.resendVerifyEmail(this.loginForm.value?.email).subscribe({
+        next: (res) => {},
+        error: (error) => {
+          this.errorMessage = error.details.message;
+        },
+      });
     }
   }
 }

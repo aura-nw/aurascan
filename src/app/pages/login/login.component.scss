@@ -2,14 +2,12 @@
   max-width: 500px;
   margin: auto;
   margin-bottom: 16px;
-
   .card-header {
     font-weight: 600;
     font-size: 20px;
     padding: var(--spacer-6);
     line-height: 28px;
     background-color: var(--aura-gray-9);
-
     @media (min-width: 992px) {
       font-size: 22px;
     }
@@ -22,11 +20,9 @@
   .btn-login {
     border-radius: 8px;
     height: 40px;
-
     &:disabled {
       background: var(--aura-gray-8);
     }
-
     &.btn-forgot {
       padding: 14px 24px;
     }
@@ -35,17 +31,9 @@
   .form-check-input {
     background-color: var(--aura-gray-10) !important;
     font-size: 16px;
-
     .isError {
       border: 1px solid red;
     }
-  }
-
-  .box-error {
-    padding: 16px;
-    border-radius: 8px;
-    background-color: var(--aura-red-4);
-    color: var(--aura-white);
   }
 
   .input-group {
