@@ -43,7 +43,7 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail.change = Number(this.tokenDetail.change.toString().substring(1));
     }
 
-    if (this.tokenDetail.cw20_contract.cw20_total_holder_stats.length > 1) {
+    if (this.tokenDetail.cw20_contract?.cw20_total_holder_stats?.length > 1) {
       this.tokenDetail.holderChange =
         (this.tokenDetail.cw20_contract.cw20_total_holder_stats[1].total_holder * 100) /
           this.tokenDetail.cw20_contract.cw20_total_holder_stats[0].total_holder -

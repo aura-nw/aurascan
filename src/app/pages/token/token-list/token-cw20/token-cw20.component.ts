@@ -163,7 +163,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                 const tokenFind = tokenMarket?.find(
                   (f) => String(f.contract_address) === item?.smart_contract?.address,
                 );
-                if (item.cw20_total_holder_stats.length > 1) {
+                if (item.cw20_total_holder_stats?.length > 1) {
                   changePercent =
                     (item.cw20_total_holder_stats[1].total_holder * 100) /
                       item.cw20_total_holder_stats[0].total_holder -
