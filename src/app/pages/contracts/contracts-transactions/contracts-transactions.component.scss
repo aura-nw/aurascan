@@ -1,11 +1,3 @@
 .text-gray {
   color: var(--aura-light-gray);
 }
-
-.txt-name-tag {
-  ::ng-deep {
-    .box-name-tag {
-      min-width: auto;
-    }
-  }
-}

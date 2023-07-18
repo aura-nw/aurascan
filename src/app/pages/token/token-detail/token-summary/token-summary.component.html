@@ -34,7 +34,7 @@
             <app-name-tag
               [value]="tokenDetail?.contract_address"
               [url]="'contracts'"
-              [fullWidth]="true"></app-name-tag>
+              [fullText]="true"></app-name-tag>
           </div>
         </div>
       </td>
@@ -43,7 +43,7 @@
       <td colspan="2">
         <div class="d-flex align-items-center py-2">
           <div class="first-col text--gray-5">Decimals:</div>
-          <div class="text--white">{{ tokenDetail?.decimal }}</div>
+          <div class="text--white">{{ tokenDetail?.decimals }}</div>
         </div>
       </td>
     </tr>

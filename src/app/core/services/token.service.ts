@@ -17,7 +17,7 @@ export class TokenService extends CommonService {
   }
 
   getListToken(payload): Observable<any> {
-    const operationsDoc = `query queryCW20ListToken($name: String, $address: String, $limit: Int, $offset: Int) { 
+    const operationsDoc = `query queryCW20ListToken($name: String, $address: String, $limit: Int, $offset: Int, $date: date) { 
       ${this.envDB} { 
         cw20_contract(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}, limit: $limit, offset: $offset) {
           marketing_info
@@ -30,6 +30,10 @@ export class TokenService extends CommonService {
             aggregate {
               count
             }
+          }
+          cw20_total_holder_stats(where: {date: {_gte: $date}}) {
+            date
+            total_holder
           }
         }
         cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
@@ -47,6 +51,7 @@ export class TokenService extends CommonService {
           address: payload?.keyword ? payload?.keyword : null,
           limit: payload?.limit,
           offset: payload?.offset,
+          date: payload?.date
         },
         operationName: 'queryCW20ListToken',
       })
@@ -98,19 +103,23 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getTokenDetail(address): Observable<any> {
-    const operationsDoc = `query queryCW20Detail($address: String) { 
+  getTokenDetail(address, date): Observable<any> {
+    const operationsDoc = `query queryCW20Detail($address: String, $date: date) { 
       ${this.envDB} { smart_contract(where: {address: {_eq: $address}}) {
           address
           cw20_contract {
             name
             symbol
             marketing_info
+            decimal
             cw20_holders {
               address
               amount
             }
-            decimal
+            cw20_total_holder_stats(where: {date: {_gte: $date}}) {
+              date
+              total_holder
+            }
           }
           code {
             code_id_verifications(order_by: {updated_at: desc}) {
@@ -126,6 +135,7 @@ export class TokenService extends CommonService {
         query: operationsDoc,
         variables: {
           address: address,
+          date: date
         },
         operationName: 'queryCW20Detail',
       })

@@ -26,6 +26,7 @@ import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.modul
     PaginatorModule,
     LoadingImageModule,
     APaginatorModule,
-    NameTagModule
+    NameTagModule,
+    TooltipCustomizeModule,
   ],
   providers: [ProposalService, MappingErrorService, DecimalPipe, ValidatorService],
 })

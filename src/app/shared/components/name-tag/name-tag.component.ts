@@ -13,8 +13,8 @@ import { Globals } from 'src/app/global/global';
 export class NameTagComponent implements OnInit {
   @Input() value = '';
   @Input() url = 'account';
-  @Input() fullWidth = false;
-  @Input() fullWidthMob = false;
+  @Input() fullText = false;
+  @Input() fullTextMob = false;
   @Input() isLink = true;
   @Input() isBox = true;
   @Input() param = '';
@@ -24,15 +24,28 @@ export class NameTagComponent implements OnInit {
   @Input() iconVerify = false;
   @Input() paramUrl = '';
   @Input() isTokenDetail = false;
+  @Input() extendUrl = false;
+  @Input() widthAuto = false;
+  @Input() isNameTagContract = false;
+  extendUrlLink = '';
 
-  constructor(public commonService: CommonService, private router: Router, public global: Globals) {}
+  constructor(public commonService: CommonService, public global: Globals) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.extendUrl) {
+      this.extendUrlLink = this.commonService.findUrlNameTag(this.value || this.paramUrl);
+    }
+  }
 
   isContractAddress(address) {
     if (address?.startsWith('aura') && address?.length === LENGTH_CHARACTER.CONTRACT) {
       return true;
     }
     return false;
+  }
+
+  extendLink(url) {
+    url = url.match(/^https?:/) ? url : '//' + url;
+    window.open(url, '_blank');
   }
 }

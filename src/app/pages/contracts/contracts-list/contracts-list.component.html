@@ -37,7 +37,7 @@
       <input
         type="text"
         class="form-control pl-0"
-        placeholder="Search for Contract name, contract address, creator address, Code ID"
+        placeholder="Search for Contract name, contract address/name tag, creator address/name tag, Code ID"
         [(ngModel)]="textSearch"
         [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
         (keyup)="onKeyUp()"
@@ -66,7 +66,7 @@
               <input
                 type="text"
                 class="form-control pl-0"
-                placeholder="Search for Contract name, contract address, creator address, Code ID"
+                placeholder="Search for Contract name, contract address/name tag, creator address/name tag, Code ID"
                 [(ngModel)]="textSearch"
                 [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
                 (keyup)="onKeyUp()"
@@ -92,7 +92,7 @@
             </div>
           </div>
         </div>
-        <div class="table-responsive aura-table-contain mt-4 mt-lg-0" *ngIf="pageData?.length > 0; else noValues">
+        <div class="overflow-scroll-x aura-table-contain mt-4 mt-lg-0" *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
@@ -105,13 +105,17 @@
                       <div class="d-flex align-items-center gap-2">
                         <div class="mr-2" [style.width]="'16px'">
                           <img
-                            *ngIf="data['contract_verification'] === ContractVerifyType.Verified"
                             [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                             alt="contract_verification"
                             width="16px"
-                            height="16px" />
+                            height="16px"
+                            *ngIf="data['contract_verification'] === ContractVerifyType.Verified" />
                         </div>
-                        <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
+
+                        <app-name-tag
+                          [value]="data[template.matColumnDef]"
+                          [url]="template.isUrl"
+                          [isNameTagContract]="true"></app-name-tag>
                       </div>
                     </ng-container>
                     <ng-container *ngIf="template.matColumnDef !== 'address'">

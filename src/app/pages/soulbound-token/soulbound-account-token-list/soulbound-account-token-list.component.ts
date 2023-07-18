@@ -85,20 +85,6 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     this.modalReference.close();
   }
 
-  copyMessage(text: string) {
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('tokenAddress').click();
-    }, 800);
-  }
-
   changeTab(key) {
     this.activeId = key;
     this.reloadAPI = false;

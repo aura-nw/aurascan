@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-code-contract',
@@ -14,11 +15,10 @@ export class CodeContractComponent implements OnInit {
   contractVerifyType = ContractVerifyType;
   isExpand = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  
-  constructor(public router: Router, private layout: BreakpointObserver) {}
 
-  ngOnInit(): void {
-  }
+  constructor(public router: Router, private layout: BreakpointObserver, public commonService: CommonService) {}
+
+  ngOnInit(): void {}
 
   expandMenu(): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {
@@ -31,21 +31,8 @@ export class CodeContractComponent implements OnInit {
     this.isExpand = !this.isExpand;
   }
 
-  copyData(text: string): void {
-    var dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function (){
-      document.getElementById('popupCopy').click();
-    }, 800)
-  }
   sendRouteObject(type: 'json' | 'text', content: string) {
-    localStorage.setItem('contractRawData', JSON.stringify({content, type}));
+    localStorage.setItem('contractRawData', JSON.stringify({ content, type }));
     let url = this.router.serializeUrl(this.router.createUrlTree(['raw-data']));
     window.open(url, '_blank');
   }
