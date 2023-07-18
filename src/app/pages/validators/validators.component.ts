@@ -35,7 +35,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   votingPowerStatus = VOTING_POWER_STATUS;
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
-    // { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly: true },
     { matColumnDef: 'title', headerCellDef: 'Validator', desktopOnly: true },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },

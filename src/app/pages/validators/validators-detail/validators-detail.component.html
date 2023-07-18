@@ -64,26 +64,28 @@
         <div class="col-12 col-lg-6">
           <div class="d-flex position-relative">
             <h6 class="mb-0 text--gray-1">Operator Address</h6>
-            <div class="img-wrap">
+            <div class="img-wrap aura-tooltip-contain ml-1">
               <img
-                class="img-question ml-1"
+                class="img-question aura-tooltip-object"
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
-                matTooltip="Validator operator address at which token
-                                         holders delegate their voting powers to."
-                [matTooltipPosition]="'above'"
                 *ngIf="!breakpoint.value.matches" />
+              <app-tooltip-customize
+                [content]="
+                  'Validator operator address at which token holders delegate <br/>their voting powers to.'
+                "></app-tooltip-customize>
             </div>
           </div>
           <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
         </div>
-        <div class="col-12 col-lg-6 mt-3 mt-lg-0 address-name-tag">
+        <div class="col-12 col-lg-6 mt-3 mt-lg-0">
           <h6 class="mb-0 text--gray-1">Address</h6>
           <app-name-tag
             [value]="currentValidatorDetail?.acc_address"
             [url]="'account'"
-            [fullWidth]="true"
-            [fullWidthMob]="true"></app-name-tag>
+            [fullText]="true"
+            [widthAuto]="true"
+            [fullTextMob]="true"></app-name-tag>
         </div>
       </div>
       <div class="divider divider-horizontal mt-4"></div>
@@ -278,14 +280,13 @@
         <div class="card-header d-lg-flex align-items-center header-mob pb-0">
           <div class="flex-grow-1 d-flex align-items-center">
             <h3 class="h2-mob text--gray-1 mb-0">Uptime</h3>
-            <div class="img-wrap">
+            <div class="img-wrap aura-tooltip-contain ml-1">
               <img
-                class="img-question ml-1"
+                class="img-question aura-tooltip-object"
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
-                matTooltip="Missed Blocks are displayed with an X"
-                [matTooltipPosition]="'above'"
                 *ngIf="!breakpoint.value.matches" />
+              <app-tooltip-customize [content]="'Missed Blocks are displayed with an X'"></app-tooltip-customize>
             </div>
           </div>
           <div class="body-01 text--gray-5 mt-1 mt-lg-0">Last {{ numberLastBlock }} Blocks</div>
@@ -296,23 +297,24 @@
               <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
               <ng-container *ngIf="!lastBlockLoading">
                 <ng-container *ngFor="let itemBlock of arrLastBlock; let index = index">
-                  <a
-                    class="block-uptime tool-tip"
-                    [ngClass]=""
-                    [ngStyle]="{
-                      'background-color':
-                        itemBlock?.isSign !== false && currentValidatorDetail?.status === statusValidator.Active
-                          ? '#5EE6D0'
-                          : ''
-                    }"
-                    href="/blocks/{{ itemBlock?.height }}"
-                    currentitem="false"
-                    matTooltip="{{ itemBlock?.height || 0 }}"
-                    [matTooltipPosition]="'above'">
-                    <div class="d-flex">
-                      <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
-                    </div>
-                  </a>
+                  <div class="aura-tooltip-contain">
+                    <a
+                      class="block-uptime tool-tip aura-tooltip-object"
+                      [ngClass]=""
+                      [ngStyle]="{
+                        'background-color':
+                          itemBlock?.isSign !== false && currentValidatorDetail?.status === statusValidator.Active
+                            ? '#5EE6D0'
+                            : ''
+                      }"
+                      href="/blocks/{{ itemBlock?.height }}"
+                      currentitem="false">
+                      <div class="d-flex">
+                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                      </div>
+                    </a>
+                    <app-tooltip-customize [content]="itemBlock?.height || 0"></app-tooltip-customize>
+                  </div>
                 </ng-container>
               </ng-container>
             </div>
@@ -333,76 +335,77 @@
           </div> -->
         </div>
         <div class="card-body article-1 pt-4">
-          <ngx-simplebar>
-            <ng-container *ngIf="lengthDelegator > 0; else noValues">
-              <div class="table-responsive aura-table-contain">
-                <table
-                  mat-table
-                  [dataSource]="dataSourceDelegator"
-                  class="aura-table"
-                  *ngIf="!breakpoint.value.matches">
-                  <ng-container *ngFor="let template of templatesDelegator; index as i">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="col-per-50">
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
+          <ng-container *ngIf="lengthDelegator > 0; else noValues">
+            <div class="aura-table-contain">
+              <table
+                mat-table
+                [dataSource]="dataSourceDelegator"
+                class="aura-table"
+                *ngIf="!breakpoint.value.matches">
+                <ng-container *ngFor="let template of templatesDelegator; index as i">
+                  <ng-container [matColumnDef]="template.matColumnDef">
+                    <th mat-header-cell *matHeaderCellDef class="col-per-50">
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
 
-                      <td mat-cell *matCellDef="let data">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef">
-                            <app-name-tag
-                              *ngSwitchCase="'delegator_address'"
-                              [value]="data.delegator_address"></app-name-tag>
-                            <div *ngSwitchCase="'amount'">
-                              {{ data[template.matColumnDef] | mask : 'separator.6' }}
-                              <span class="text--primary">{{ denom }}</span>
-                            </div>
-                            <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
-                  </ng-container>
-                  <tr mat-header-row *matHeaderRowDef="displayedColumnsDelegator"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumnsDelegator"></tr>
-                  <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data pt-8" colspan="9999">
-                      <app-loading-sprint></app-loading-sprint>
+                    <td mat-cell *matCellDef="let data">
+                      <div>
+                        <ng-container [ngSwitch]="template.matColumnDef">
+                          <app-name-tag
+                            *ngSwitchCase="'delegator_address'"
+                            [value]="data.delegator_address"></app-name-tag>
+                          <div *ngSwitchCase="'amount'">
+                            {{ data[template.matColumnDef] | mask : 'separator.6' }}
+                            <span class="text--primary">{{ denom }}</span>
+                          </div>
+                          <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        </ng-container>
+                      </div>
                     </td>
-                  </tr>
-                </table>
-                <ng-container *ngIf="breakpoint.value.matches">
-                  <div class="custom-card-mob-simple titleMob">
-                    <app-card-mob-simple
-                      *ngFor="let data of dataSourceDelegatorMob"
-                      [link]="'/account/' + data.delegator_address"
-                      [content]="[
-                        {
-                          label: commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6,
-                          info: ''
-                        },
-                        {
-                          label: 'Amount',
-                          class: 'body-01 text--gray-1',
-                          info: (data.amount | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
-                        }
-                      ]"></app-card-mob-simple>
-                  </div>
+                  </ng-container>
                 </ng-container>
-                <app-paginator
-                  *ngIf="lengthDelegator > 0"
-                  [length]="lengthDelegator"
-                  [pageSize]="pageSize"
-                  [id]="'delegator'"
-                  (paginator)="paginatorEmit($event, 'delegator')"
-                  (pageEvent)="pageEvent($event, 'delegator')">
-                </app-paginator>
-              </div>
-            </ng-container>
-            <ng-template #noValues>
-              <app-table-no-data></app-table-no-data>
-            </ng-template>
-          </ngx-simplebar>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsDelegator"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsDelegator"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell g-no-data pt-8" colspan="9999">
+                    <app-loading-sprint></app-loading-sprint>
+                  </td>
+                </tr>
+              </table>
+              <ng-container *ngIf="breakpoint.value.matches">
+                <div class="custom-card-mob-simple titleMob">
+                  <app-card-mob-simple
+                    *ngFor="let data of dataSourceDelegatorMob"
+                    [link]="'/account/' + data.delegator_address"
+                    [content]="[
+                      {
+                        label: '',
+                        class: !commonService.checkDisplayTooltip(data.delegator_address)
+                          ? 'name-tag text--primary'
+                          : 'text--primary',
+                        info: commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6
+                      },
+                      {
+                        label: 'Amount',
+                        class: 'body-01 text--gray-1',
+                        info: (data.amount | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
+                      }
+                    ]"></app-card-mob-simple>
+                </div>
+              </ng-container>
+              <app-paginator
+                *ngIf="lengthDelegator > 0"
+                [length]="lengthDelegator"
+                [pageSize]="pageSize"
+                [id]="'delegator'"
+                (paginator)="paginatorEmit($event, 'delegator')"
+                (pageEvent)="pageEvent($event, 'delegator')">
+              </app-paginator>
+            </div>
+          </ng-container>
+          <ng-template #noValues>
+            <app-table-no-data></app-table-no-data>
+          </ng-template>
         </div>
       </div>
     </div>

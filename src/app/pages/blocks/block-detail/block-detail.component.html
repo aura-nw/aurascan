@@ -25,31 +25,31 @@
         <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0" id="popupCopy">
           {{ !isRawData ? 'Information' : 'Raw Data' }}
         </h2>
-        <button class="button button--xxs button--sm-mob button-circle ml-2 d-none d-lg-flex" *ngIf="isRawData">
-          <img
-            [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-            alt=""
-            matTooltip="Copied!"
-            #tooltip="matTooltip"
-            (mouseenter)="$event.stopImmediatePropagation()"
-            (mouseleave)="$event.stopImmediatePropagation()"
-            (click)="copyData(blockDetail?.json_data); tooltip.toggle()" />
-        </button>
+        <div class="aura-tooltip-contain">
+          <button
+            class="button button--xxs button--sm-mob button-circle ml-2 d-none d-lg-flex aura-tooltip-object disabled-hover"
+            *ngIf="isRawData"
+            #tooltip
+            (click)="commonService.copyToolTipAction(tooltip, blockDetail?.json_data)">
+            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
+          </button>
+          <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+        </div>
       </div>
       <div class="card-body body">
         <div class="d-lg-none mb-4">
           <div class="d-flex align-items-baseline">
             <h2 class="mb-4 text--white">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
-            <button class="button button--xxs button--sm-mob button-circle ml-2" *ngIf="isRawData">
-              <img
-                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                alt=""
-                matTooltip="Copied!"
-                #tooltip="matTooltip"
-                (mouseenter)="$event.stopImmediatePropagation()"
-                (mouseleave)="$event.stopImmediatePropagation()"
-                (click)="copyData(blockDetail?.json_data); tooltip.toggle()" />
-            </button>
+            <div class="aura-tooltip-contain">
+              <button
+                class="button button--xxs button--sm-mob button-circle ml-2 aura-tooltip-object disabled-hover"
+                *ngIf="isRawData"
+                #tooltip
+                (click)="commonService.copyToolTipAction(tooltip, blockDetail?.json_data)">
+                <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
+              </button>
+              <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+            </div>
           </div>
           <!-- Tabs -->
           <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
@@ -264,14 +264,7 @@
                 <ng-container *ngFor="let data of item?.attributes; let idx = index">
                   <div class="ml-5 mb-2 row">
                     <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key | decodeData }}</span>
-                    <span class="col-12 col-lg-9 body-01 text-break">
-                      <ng-container *ngIf="(data.key | decodeData) !== 'amount' && (data.key | decodeData) !== 'fee'">{{
-                        data.value | decodeData
-                      }}</ng-container>
-                      <span
-                        *ngIf="(data.key | decodeData) === 'amount' || (data.key | decodeData) === 'fee'"
-                        [innerHTML]="data.value | decodeData | convertLogAmount"></span>
-                    </span>
+                    <span class="col-12 col-lg-9 body-01 text-break"> {{ data.value | decodeData }} </span>
                   </div>
                 </ng-container>
               </div>
