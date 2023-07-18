@@ -1,14 +1,8 @@
 <div class="card card-login" *ngIf="mode !== screenType.Welcome && mode !== screenType.Verify">
   <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">
-      <img
-        [src]="'assets/icons/icons-svg/white/arrow-left-register.svg' | imageS3"
-        alt=""
-        class="cursor-pointer"
-        width="22px"
-        height="18px"
-        (click)="mode = screenType.Login"
-        *ngIf="mode !== screenType.Login" />
+      <img [src]="'assets/icons/icons-svg/white/arrow-left-register.svg' | imageS3" alt="" class="cursor-pointer"
+        width="22px" height="18px" (click)="mode = screenType.Login" *ngIf="mode !== screenType.Login" />
       <div class="mb-0 text--white w-100 text-center" *ngIf="mode === screenType.Login">Log in to AuraScan</div>
       <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Register">Register to AuraScan</div>
       <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Forgot">Forgot password</div>
@@ -17,11 +11,7 @@
   <div class="card-body">
     <ng-container *ngIf="errorMessage !== ''">
       <div class="box-error mb-lg-6 mb-4">
-        <img
-          [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
-          alt=""
-          width="20px"
-          height="20px"
+        <img [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3" alt="" width="20px" height="20px"
           class="mr-1" />
         <span>
           {{ errorMessage }}
@@ -29,17 +19,13 @@
         </span>
       </div>
     </ng-container>
-    <form
-      [formGroup]="loginForm"
-      (ngSubmit)="onSubmit()"
-      class="aura-form single-input-field login-form"
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="aura-form single-input-field login-form"
       autocomplete="off">
       <ng-container *ngIf="mode === screenType.Forgot">
         <div class="text-center mb-6">
           <img class="w-100" src="assets/images/pages/key.png" />
-          <span class="body-01 text--gray-2"
-            >Kindly enter the email linked to your account, we'll send you a link to reset password</span
-          >
+          <span class="body-01 text--gray-2">Kindly enter the email linked to your account, we'll send you a link to
+            reset password</span>
         </div>
       </ng-container>
 
@@ -48,17 +34,12 @@
           <div class="form-group">
             <label class="form-label body-01 text--white">Email</label>
             <div class="input-group">
-              <input
-                type="email"
-                formControlName="email"
-                placeholder="Enter your email"
-                name="inputEmail"
+              <input type="email" formControlName="email" placeholder="Enter your email" name="inputEmail"
                 (blur)="checkEmail = true"
                 [class.form-control--error]="loginForm.get('email')?.invalid && getEmail.touched && getEmail.dirty"
                 autocomplete="off" />
             </div>
-            <div
-              *ngIf="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty"
+            <div *ngIf="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty"
               class="text-danger mt-2 caption fw-normal">
               Invalid email format
             </div>
@@ -71,18 +52,11 @@
           <div class="form-group">
             <label class="form-label body-01 text--white">Password</label>
             <div class="input-group pr-0">
-              <input
-                [type]="hidePassword ? 'password' : 'text'"
-                placeholder="Enter your password"
-                formControlName="password"
-                (blur)="checkPassword = true"
-                [class.form-control--error]="
+              <input [type]="hidePassword ? 'password' : 'text'" placeholder="Enter your password"
+                formControlName="password" (blur)="checkPassword = true" [class.form-control--error]="
                   loginForm.get('password')?.invalid && getPassword.touched && getPassword.dirty
-                "
-                name="inputEmail"
-                autocomplete="off" />
-              <i
-                class="pr-4 hidden-icon cursor-pointer ph-bold  {{ hidePassword ? 'ph-eye-slash' : 'ph-fill ph-eye' }}"
+                " name="inputEmail" autocomplete="off" />
+              <i class="pr-4 hidden-icon cursor-pointer ph-bold  {{ hidePassword ? 'ph-eye-slash' : 'ph-fill ph-eye' }}"
                 (click)="hidePassword = !hidePassword"></i>
             </div>
 
@@ -100,31 +74,22 @@
             <div class="form-group">
               <label class="form-label body-01 text--white">Confirm password</label>
               <div class="input-group pr-0">
-                <input
-                  [type]="hideConfirmPassword ? 'password' : 'text'"
-                  placeholder="Re-enter your password"
-                  formControlName="confirmPassword"
-                  name="inputConfirmEmail"
-                  [class.form-control--error]="
+                <input [type]="hideConfirmPassword ? 'password' : 'text'" placeholder="Re-enter your password"
+                  formControlName="confirmPassword" name="inputConfirmEmail" [class.form-control--error]="
                     getConfirmPassword.touched &&
                     getConfirmPassword.dirty &&
                     loginForm.value.password !== loginForm.value.confirmPassword
-                  "
-                  autocomplete="off" />
-                <i
-                  class="pr-4 hidden-icon cursor-pointer ph-bold  {{
+                  " autocomplete="off" />
+                <i class="pr-4 hidden-icon cursor-pointer ph-bold  {{
                     hideConfirmPassword ? 'ph-eye-slash' : 'ph-fill ph-eye'
-                  }}"
-                  (click)="hideConfirmPassword = !hideConfirmPassword"></i>
+                  }}" (click)="hideConfirmPassword = !hideConfirmPassword"></i>
               </div>
-              <div
-                *ngIf="
+              <div *ngIf="
                   mode !== screenType.Login &&
                   getConfirmPassword.touched &&
                   getConfirmPassword.dirty &&
                   loginForm.value.password !== loginForm.value.confirmPassword
-                "
-                class="text-danger mt-2 caption fw-normal">
+                " class="text-danger mt-2 caption fw-normal">
                 The password confirmation does not match
               </div>
             </div>
@@ -137,10 +102,7 @@
           <span class="text--primary h4 cursor-pointer" (click)="mode = screenType.Forgot">Forgot password</span>
         </div>
         <div class="d-flex justify-content-end">
-          <button
-            class="button button-pill button-flat w-100 btn-login"
-            type="submit"
-            (click)="showVerifyMail()"
+          <button class="button button-pill button-flat w-100 btn-login" type="submit" (click)="showVerifyMail()"
             [disabled]="loginForm.status === 'INVALID'">
             <span class="body-01">Log in</span>
           </button>
@@ -148,12 +110,20 @@
         <div class="text-center text--gray-4 body-01">
           <div class="mt-4">
             <span class="text--gray-4">Don’t have an account?</span>
-            <span class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
-              >Register</span
-            >
+            <span class="text--primary fw-semibold ml-2 cursor-pointer"
+              (click)="changeMode(screenType.Register)">Register</span>
           </div>
           <div class="py-6 text--white">or</div>
-          Continue with Google<br />
+          <!-- Continue with Google<br /> -->
+
+
+          <div id="g_id_onload" data-client_id="xxxx" data-context="signin" data-ux_mode="popup"
+            data-callback="handleCredentialResponse" data-auto_prompt="false">
+          </div>
+
+          <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_blue"
+            data-text="signin_with" data-size="large" data-logo_alignment="left">
+          </div>
           <div class="mt-lg-6 mt-4 body-mob">
             By continuing, you agree to our <span class="text--primary fw-semibold cursor-pointer">Terms of Use</span>
           </div>
@@ -162,10 +132,7 @@
 
       <ng-container *ngIf="mode === screenType.Register">
         <div class="d-flex justify-content-end mt-6">
-          <button
-            class="button button-pill button-flat w-100 btn-login"
-            type="button"
-            (click)="showVerifyMail()"
+          <button class="button button-pill button-flat w-100 btn-login" type="button" (click)="showVerifyMail()"
             [disabled]="loginForm.status === 'INVALID' || loginForm.value.password !== loginForm.value.confirmPassword">
             <span class="body-01">Register</span>
           </button>
@@ -174,11 +141,8 @@
 
       <ng-container *ngIf="mode === screenType.Forgot">
         <div class="d-flex text-center mt-6">
-          <button
-            class="button button-pill button-flat btn-login m-auto btn-forgot"
-            type="button"
-            (click)="showVerifyMail()"
-            [disabled]="loginForm.get('email')?.invalid">
+          <button class="button button-pill button-flat btn-login m-auto btn-forgot" type="button"
+            (click)="showVerifyMail()" [disabled]="loginForm.get('email')?.invalid">
             <span class="body-01">Continue</span>
           </button>
         </div>
@@ -195,9 +159,7 @@
     blazing-fast blockchain explorer from Aura Network!
   </span>
   <div class="mt-6 mb-8">
-    <button
-      class="button button-outline button-outline--gradient button--xlg button-pill"
-      [routerLink]="['/login']">
+    <button class="button button-outline button-outline--gradient button--xlg button-pill" [routerLink]="['/login']">
       <span class="body-01">Log in</span>
     </button>
   </div>

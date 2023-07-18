@@ -27,6 +27,8 @@ export class LoginComponent implements OnInit {
   hideConfirmPassword = true;
   emailFormat = '';
 
+  scriptLoaded = false;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -47,6 +49,8 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.formInit();
+
+    this.initGoogleLogin();
   }
 
   get getEmail() {
@@ -158,6 +162,32 @@ export class LoginComponent implements OnInit {
         break;
       default:
         break;
+    }
+  }
+
+  initGoogleLogin() {
+    // inject callback function
+    window.handleCredentialResponse = (response) => {
+      console.log(response);
+    };
+    // load google api script
+    this.loadScript('GoogleLoginProvider', 'https://accounts.google.com/gsi/client', () => {
+      // Callback
+    });
+  }
+
+  loadScript(id: string, src: string, onload: any): void {
+    // get document if platform is only browser
+    if (typeof document !== 'undefined' && !document.getElementById(id)) {
+      let signInJS = document.createElement('script');
+
+      signInJS.async = true;
+      signInJS.src = src;
+      signInJS.onload = onload;
+
+      const parentElement = document.head;
+
+      parentElement.appendChild(signInJS);
     }
   }
 }
