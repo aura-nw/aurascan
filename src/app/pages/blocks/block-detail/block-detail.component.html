@@ -264,14 +264,7 @@
                 <ng-container *ngFor="let data of item?.attributes; let idx = index">
                   <div class="ml-5 mb-2 row">
                     <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key | decodeData }}</span>
-                    <span class="col-12 col-lg-9 body-01 text-break">
-                      <ng-container *ngIf="(data.key | decodeData) !== 'amount' && (data.key | decodeData) !== 'fee'">{{
-                        data.value | decodeData
-                      }}</ng-container>
-                      <span
-                        *ngIf="(data.key | decodeData) === 'amount' || (data.key | decodeData) === 'fee'"
-                        [innerHTML]="data.value | decodeData | convertLogAmount"></span>
-                    </span>
+                    <span class="col-12 col-lg-9 body-01 text-break"> {{ data.value | decodeData }} </span>
                   </div>
                 </ng-container>
               </div>
