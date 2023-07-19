@@ -213,6 +213,28 @@ export class ProposalService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getVotedResult(payload) {
+    const operationsDoc = `
+    query getVotedResult($proposalId: Int = 0, $voter: String = null) {
+      ${this.envDB} {
+        vote(where: {proposal_id: {_eq: $proposalId}, transaction: {votes: {voter: {_eq: $voter}}}}) {
+          vote_option
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          proposalId: payload.proposal_id,
+          voter: payload.address,
+        },
+        operationName: 'getVotedResult',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getVoteMessageByConstant(option: any) {
     if (typeof option === 'string') {
       return option;

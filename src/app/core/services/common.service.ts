@@ -116,26 +116,45 @@ export class CommonService {
   }
 
   setNameTag(address, listNameTag = []) {
-    // this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
-    // const nameTag = this.listNameTag?.find((k) => k.address === address);
-    // return nameTag?.name_tag || address;
-    return address;
+    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    return nameTag?.name_tag || address;
   }
 
   findNameTag(keySearch, listNameTag = []) {
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     if (this.listNameTag?.length > 0) {
-      const result = this.listNameTag?.find((k) => k.name_tag === keySearch)?.address;
+      const result = this.listNameTag?.find((k) => k.name_tag.trim() === keySearch.trim())?.address;
       return result;
     }
   }
 
   checkDisplayTooltip(address): boolean {
     let result = false;
-    // const nameTag = this.listNameTag?.find((k) => k.address === address);
-    // if (!nameTag || nameTag?.name_tag === address) {
-    //   result = true;
-    // }
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    if (!nameTag || nameTag?.name_tag === address) {
+      result = true;
+    }
+    return result;
+  }
+
+  showToolTip(element) {
+    if (element.classList.contains('disabled-hover')) {
+      element.classList.remove('disabled-hover');
+      element.classList.add('show');
+      setTimeout(function () {
+        element.classList.remove('show');
+        element.classList.add('disabled-hover');
+      }, 800);
+    }
+  }
+
+  findUrlNameTag(address) {
+    let result = '';
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    if (nameTag?.enterpriseUrl?.length > 0) {
+      result = nameTag?.enterpriseUrl;
+    }
     return result;
   }
 }

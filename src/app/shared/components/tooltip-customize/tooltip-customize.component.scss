@@ -1,0 +1,58 @@
+.aura-tooltip {
+  display: none;
+  border-radius: 4px;
+  background-color: var(--aura-gray-8);
+  border: 1px solid var(--aura-gray-8);
+  color: var(--aura-white);
+  position: relative;
+  text-transform: initial;
+  font-size: 1.2rem;
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid var(--aura-gray-8);
+  }
+}
+::ng-deep app-tooltip-customize.tooltip--below .aura-tooltip:before {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 10px solid var(--aura-gray-8);
+  border-top: unset;
+  bottom: unset;
+  top: 0;
+  transform: translate(-50%, -100%);
+}
+
+::ng-deep app-tooltip-customize.tooltip--right .aura-tooltip {
+  border-bottom-left-radius: unset;
+  &:before {
+    border-top: 10px solid var(--aura-gray-8);
+    border-right: 10px solid transparent;
+    border-bottom: unset;
+    border-left: unset;
+    right: unset;
+    left: 20px;
+  }
+}
+
+::ng-deep app-tooltip-customize.tooltip--left .aura-tooltip {
+  border-bottom-right-radius: unset;
+  &:before {
+    border-top: 10px solid var(--aura-gray-8);
+    border-left: 10px solid transparent;
+    border-bottom: unset;
+    border-right: unset;
+    left: unset;
+    right: -6px;
+  }
+}

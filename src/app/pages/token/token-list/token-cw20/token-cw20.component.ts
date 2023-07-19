@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -9,7 +10,7 @@ import { debounceTime, distinctUntilChanged, map, mergeMap, repeat, takeLast, ta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { PAGE_EVENT } from '../../../../core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
@@ -59,6 +60,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     public global: Globals,
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnDestroy(): void {
@@ -86,8 +88,12 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   getAllCW20Token(): Observable<any> {
+    let now = new Date();
+    now.setDate(now.getDate() - 1);
+
     let payload = {
       offset: 0,
+      date: this.datePipe.transform(now, DATEFORMAT.DATE_ONLY),
     };
     let cw20Total = [];
     const destroy_cw20$ = new Subject();
@@ -103,6 +109,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           cw20Total = [...cw20Total, ...cw20Data];
           payload = {
             offset: cw20Total.length,
+            date: this.datePipe.transform(now, DATEFORMAT.DATE_ONLY),
           };
         } else {
           destroy_cw20$.next();
@@ -152,9 +159,16 @@ export class TokenCw20Component implements OnInit, OnDestroy {
             this.tokenService.getTokenMarketData().subscribe((tokenMarket) => {
               // Flat data for mapping response api
               const dataFlat = res?.map((item) => {
+                let changePercent = 0;
                 const tokenFind = tokenMarket?.find(
                   (f) => String(f.contract_address) === item?.smart_contract?.address,
                 );
+                if (item.cw20_total_holder_stats?.length > 1) {
+                  changePercent =
+                    (item.cw20_total_holder_stats[1].total_holder * 100) /
+                      item.cw20_total_holder_stats[0].total_holder -
+                    100;
+                }
                 return {
                   coin_id: tokenFind?.coin_id || '',
                   contract_address: item.smart_contract.address || '',
@@ -168,12 +182,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                   onChainMarketCap: +tokenFind?.circulating_market_cap || 0,
                   volume: +tokenFind?.total_volume || 0,
                   price: +tokenFind?.current_price || 0,
-                  isHolderUp: true,
-                  isValueUp: 0,
-                  change: 0,
-                  holderChange: 0,
-                  price_change_percentage_24h: tokenFind?.price_change_percentage_24h || 0,
-                  holders_change_percentage_24h: 0,
+                  isHolderUp: changePercent >= 0 ? true : false,
+                  isValueUp: tokenFind?.price_change_percentage_24h >= 0 ? true : false,
+                  change: tokenFind?.price_change_percentage_24h || 0,
+                  holderChange: Math.abs(changePercent),
                   holders: item.cw20_holders_aggregate?.aggregate?.count,
                   max_total_supply: tokenFind?.max_supply || 0,
                   fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,

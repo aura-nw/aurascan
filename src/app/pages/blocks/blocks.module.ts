@@ -1,10 +1,13 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaskPipe, NgxMaskModule } from 'ngx-mask';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { BlockService } from '../../../app/core/services/block.service';
@@ -13,7 +16,6 @@ import { TableNoDataModule } from '../../shared/components/table-no-data/table-n
 import { BlockDetailComponent } from './block-detail/block-detail.component';
 import { BlocksRoutingModule } from './blocks-routing.module';
 import { BlocksComponent } from './blocks.component';
-import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [BlocksComponent, BlockDetailComponent],
@@ -30,7 +32,9 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     TableNoDataModule,
     NgbNavModule,
     PaginatorModule,
-    CommonDirectiveModule
+    CommonDirectiveModule,
+    TooltipCustomizeModule,
+    ClipboardModule,
   ],
   providers: [BlockService, MaskPipe],
 })

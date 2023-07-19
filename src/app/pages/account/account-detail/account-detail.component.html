@@ -19,24 +19,26 @@
                 <span class="d-sm-flex d-none">{{ currentAddress }}</span>
                 <span class="d-sm-none d-flex">{{ currentAddress | cutStringPipe : 8 : 8 }}</span>
               </div>
-              <div class="button button--xxs button-circle ml-2" id="popupCopy">
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class=""
-                  alt=""
-                  width="12px"
-                  height="12px"
-                  matTooltip="Copied!"
-                  #tooltip="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyMessage(currentAddress); tooltip.toggle()" />
+              <div class="aura-tooltip-contain ml-2">
+                <button
+                  class="button button--xxs button-circle aura-tooltip-object disabled-hover"
+                  #tooltip
+                  (click)="commonService.showToolTip(tooltip)"
+                  [cdkCopyToClipboard]="currentAddress">
+                  <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="12px" height="12px" />
+                </button>
+                <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
               </div>
             </div>
             <div
               *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
-              class="name-tag cursor-pointer d-flex align-items-center mt-2">
-              <app-name-tag [value]="currentAddress" [fullWidth]="true" [isLink]="false"></app-name-tag>
+              class="d-flex align-items-center mt-2">
+              <app-name-tag
+                [value]="currentAddress"
+                [fullText]="true"
+                [isLink]="false"
+                [extendUrl]="true"
+                [widthAuto]="true"></app-name-tag>
             </div>
           </div>
           <div class="mt-6 mt-xl-4">
@@ -118,7 +120,7 @@
         <div class="card-body p-4 p-lg-6">
           <ngx-simplebar *ngIf="dataSource && dataSource.data">
             <ng-container *ngIf="dataSource.data.length > 0; else noValues">
-              <div class="table-responsive aura-table-contain">
+              <div class="table-responsive aura-table-contain spacer-tooltip">
                 <ng-container>
                   <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
                     <ng-container *ngFor="let template of templates; index as i">
@@ -155,14 +157,12 @@
                                 {{ data[template.matColumnDef] }}
                               </a>
                               <div *ngSwitchCase="'type'">
-                                <div class="aura-status">
-                                  <div
-                                    class="status cursor-pointer"
-                                    [matTooltipClass]="'transaction-type-tooltip'"
-                                    matTooltip="{{ data[template.matColumnDef] }}"
-                                    [matTooltipPosition]="'above'">
+                                <div class="aura-status aura-tooltip-contain">
+                                  <div class="status cursor-pointer aura-tooltip-object">
                                     {{ data[template.matColumnDef] | stringEllipsis : 11 }}
                                   </div>
+                                  <app-tooltip-customize [content]="data[template.matColumnDef]">
+                                  </app-tooltip-customize>
                                 </div>
                               </div>
                               <div *ngSwitchCase="'status'">

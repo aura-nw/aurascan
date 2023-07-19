@@ -27,10 +27,10 @@
             <div class="body text--gray-2">Total {{ denom }}</div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
-            <div class="body-01">
+            <div class="body">
               <app-name-tag [value]="transactionsData.top_aura_senders[0]?.address"></app-name-tag>
             </div>
-            <div class="body-01 text--gray-1">
+            <div class="body text--gray-1">
               {{
                 (transactionsData.top_aura_senders[0]?.result.total_sent_amount?.amount
                   | convertUauraToAura : coinDecimals
@@ -47,10 +47,10 @@
             <div class="body text--gray-2">Total {{ denom }}</div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
-            <div class="body-01">
+            <div class="body">
               <app-name-tag [value]="transactionsData.top_aura_receivers[0]?.address"></app-name-tag>
             </div>
-            <div class="body-01 text--gray-1">
+            <div class="body text--gray-1">
               {{
                 (transactionsData.top_aura_receivers[0]?.result?.total_received_amount?.amount
                   | convertUauraToAura : coinDecimals
@@ -67,10 +67,10 @@
             <div class="body text--gray-2">Total Txn</div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
-            <div class="body-01">
+            <div class="body">
               <app-name-tag [value]="transactionsData.top_txn_count_sent[0]?.address"></app-name-tag>
             </div>
-            <div class="body-01 text--gray-1">
+            <div class="body text--gray-1">
               {{ (transactionsData.top_txn_count_sent[0]?.result?.total_sent_tx?.amount | number) ?? 0 }}
             </div>
           </div>
@@ -83,10 +83,10 @@
             <div class="body text--gray-2">Total Txn</div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
-            <div class="body-01">
+            <div class="body">
               <app-name-tag [value]="transactionsData.top_txn_count_received[0]?.address"></app-name-tag>
             </div>
-            <div class="body-01 text--gray-1">
+            <div class="body text--gray-1">
               {{ (transactionsData.top_txn_count_received[0]?.result?.total_received_tx?.amount | number) ?? 0 }}
             </div>
           </div>

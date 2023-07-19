@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +14,8 @@ import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app/app.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
@@ -36,7 +39,6 @@ import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component
 import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
-import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,9 @@ import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.modul
     ContractsModule,
     CommonDirectiveModule,
     APaginatorModule,
-    NameTagModule
+    NameTagModule,
+    TooltipCustomizeModule,
+    ClipboardModule,
   ],
   providers: [TokenService, AccountService],
 })

@@ -35,16 +35,15 @@
         [ngClass]="{ 'g-ellipsis content-info-ellipsis': breakpoint.value.matches }">
         {{ contractDetailData?.code?.code_id_verifications[0]?.github_url }}
       </div>
-      <div class="d-flex justify-content-end">
+      <div class="d-flex justify-content-end aura-tooltip-contain">
         <button
-          class="button button-pill button--sm button-outline button-outline__in-card"
-          matTooltip="Copied!"
-          #tooltip1="matTooltip"
-          (mouseenter)="$event.stopImmediatePropagation()"
-          (mouseleave)="$event.stopImmediatePropagation()"
-          (click)="copyData(contractDetailData?.code?.code_id_verifications[0]?.github_url); tooltip1.toggle()">
+          class="button button-pill button--sm button-outline button-outline__in-card aura-tooltip-object disabled-hover"
+          #tooltip
+          (click)="commonService.showToolTip(tooltip)"
+          [cdkCopyToClipboard]="contractDetailData?.code?.code_id_verifications[0]?.github_url">
           <span>Copy</span>
         </button>
+        <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
       </div>
     </div>
     <!-- File Contract Source Code -->
@@ -114,18 +113,16 @@
             </li>
           </ul>
         </div>
-        <button class="button button-circle button--sm mx-4 mx-lg-2">
-          <img
-            [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-            alt=""
-            matTooltip="Copied!"
-            #tooltip2="matTooltip"
-            (mouseenter)="$event.stopImmediatePropagation()"
-            (mouseleave)="$event.stopImmediatePropagation()"
-            width="20px"
-            height="20px"
-            (click)="copyData(contractDetailData?.execute_msg_schema); tooltip2.toggle()" />
-        </button>
+        <div class="aura-tooltip-contain">
+          <button
+            class="button button-circle button--sm mx-4 mx-lg-2 aura-tooltip-object disabled-hover"
+            #tooltip
+            (click)="commonService.showToolTip(tooltip)"
+            [cdkCopyToClipboard]="contractDetailData?.execute_msg_schema">
+            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="20px" height="20px" />
+          </button>
+          <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+        </div>
         <button class="button button-circle button--sm">
           <img
             [src]="'assets/images/icons/address-popup.png' | imageS3"
@@ -175,18 +172,16 @@
             </li>
           </ul>
         </div>
-        <button class="button button-circle button--sm mx-4 mx-lg-2">
-          <img
-            [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-            alt=""
-            width="20px"
-            height="20px"
-            matTooltip="Copied!"
-            #tooltip3="matTooltip"
-            (mouseenter)="$event.stopImmediatePropagation()"
-            (mouseleave)="$event.stopImmediatePropagation()"
-            (click)="copyData(contractDetailData?.instantiate_msg_schema); tooltip3.toggle()" />
-        </button>
+        <div class="aura-tooltip-contain">
+          <button
+            class="button button-circle button--sm mx-4 mx-lg-2 aura-tooltip-object disabled-hover"
+            #tooltip
+            (click)="commonService.showToolTip(tooltip)"
+            [cdkCopyToClipboard]="contractDetailData?.instantiate_msg_schema">
+            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="20px" height="20px" />
+          </button>
+          <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+        </div>
         <button class="button button-circle button--sm">
           <img
             [src]="'assets/images/icons/address-popup.png' | imageS3"
@@ -236,18 +231,16 @@
             </li>
           </ul>
         </div>
-        <button class="button button-circle button--sm mx-4 mx-lg-2">
-          <img
-            [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-            alt=""
-            width="20px"
-            height="20px"
-            matTooltip="Copied!"
-            #tooltip4="matTooltip"
-            (mouseenter)="$event.stopImmediatePropagation()"
-            (mouseleave)="$event.stopImmediatePropagation()"
-            (click)="copyData(contractDetailData?.query_msg_schema); tooltip4.toggle()" />
-        </button>
+        <div class="aura-tooltip-contain">
+          <button
+            class="button button-circle button--sm mx-4 mx-lg-2 aura-tooltip-object disabled-hover"
+            #tooltip
+            (click)="commonService.showToolTip(tooltip)"
+            [cdkCopyToClipboard]="contractDetailData?.query_msg_schema">
+            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="20px" height="20px" />
+          </button>
+          <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+        </div>
         <button class="button button-circle button--sm">
           <img
             [src]="'assets/images/icons/address-popup.png' | imageS3"

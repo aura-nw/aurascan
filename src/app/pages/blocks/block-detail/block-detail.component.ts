@@ -1,4 +1,3 @@
-import { Clipboard } from '@angular/cdk/clipboard';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
@@ -81,7 +80,6 @@ export class BlockDetailComponent implements OnInit {
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private transactionService: TransactionService,
-    private clipboard: Clipboard,
   ) {}
 
   ngOnInit(): void {
@@ -188,19 +186,5 @@ export class BlockDetailComponent implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
-  }
-
-  copyData(text: string): void {
-    var dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    this.clipboard.copy(JSON.stringify(text, null, 2));
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('popupCopy').click();
-    }, 800);
   }
 }

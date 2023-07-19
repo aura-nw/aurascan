@@ -490,12 +490,7 @@
                       <div class="ml-5 mb-2 row">
                         <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key }}</span>
                         <span class="col-12 col-lg-9 text-break">
-                          <ng-container *ngIf="data.key !== 'amount' && data.key !== 'fee'">{{
-                            data.value
-                          }}</ng-container>
-                          <span
-                            *ngIf="data.key === 'amount' || data.key === 'fee'"
-                            [innerHTML]="data.value | convertLogAmount"></span>
+                          {{ data.value }}
                         </span>
                       </div>
                     </ng-container>

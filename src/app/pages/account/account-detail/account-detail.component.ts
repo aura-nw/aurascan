@@ -263,20 +263,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  copyMessage(text: string) {
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('currentAddress').click();
-    }, 800);
-  }
-
   changePage(page: any): void {
     switch (page.pageEventType) {
       case this.pageEventType.Delegation:
