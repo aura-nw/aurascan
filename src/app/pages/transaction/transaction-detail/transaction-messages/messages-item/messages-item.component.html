@@ -9,9 +9,10 @@
             <app-name-tag
               [value]="value || dataLink?.data"
               [url]="dataLink?.url || '/account'"
-              [fullWidth]="true"
+              [fullText]="true"
               [paramUrl]="dataLink?.data || value"
-              [fullWidthMob]="true"></app-name-tag>
+              [fullTextMob]="true"
+              [widthAuto]="true"></app-name-tag>
           </ng-container>
           <ng-container *ngIf="!dataLink.nameTag">
             <a

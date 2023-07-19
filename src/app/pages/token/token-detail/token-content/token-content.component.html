@@ -19,12 +19,13 @@
               height="18px" />
             FILTER BY ADDRESS
           </div>
-          <div class="mt-2 filter-name-tag">
+          <div class="mt-2">
             <app-name-tag
               [value]="textSearch"
               [url]="textSearch?.length > lengthNormalAddress ? '/contracts' : '/account'"
-              [fullWidth]="true"
-              [fullWidthMob]="true"></app-name-tag>
+              [fullText]="true"
+              [widthAuto]="true"
+              [fullTextMob]="true"></app-name-tag>
           </div>
         </div>
         <div
@@ -43,21 +44,24 @@
         </div>
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
-          <div
-            class="d-inline"
-            *ngIf="infoSearch['balance']"
-            [appBigNumber]="infoSearch['balance']"
-            [decimal]="tokenDetail.decimals || 0"
-            [tokenPrice]="tokenDetail.price"></div>
-          (
-          <div
-            *ngIf="infoSearch['balance']"
-            class="d-inline"
-            [appBigNumber]="infoSearch['balance']"
-            [tokenPrice]="tokenDetail.price"
-            [auraValue]="true"
-            [decimal]="tokenDetail.decimals || 0"></div>
-          {{ denom }})
+          <ng-container *ngIf="tokenDetail.price > 0">
+            <div
+              class="d-inline"
+              *ngIf="infoSearch['balance']"
+              [appBigNumber]="infoSearch['balance']"
+              [decimal]="tokenDetail.decimals || 0"
+              [tokenPrice]="tokenDetail.price"></div>
+            (
+            <div
+              *ngIf="infoSearch['balance']"
+              class="d-inline"
+              [appBigNumber]="infoSearch['balance']"
+              [tokenPrice]="tokenDetail.price"
+              [auraValue]="true"
+              [decimal]="tokenDetail.decimals || 0"></div>
+            {{ denom }})
+          </ng-container>
+          <ng-container *ngIf="!(tokenDetail.price > 0)"> $0.00 (0 {{ denom }}) </ng-container>
         </div>
       </div>
     </div>

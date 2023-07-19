@@ -1,4 +1,3 @@
-import { Clipboard } from '@angular/cdk/clipboard';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,6 +43,8 @@ export class TransactionDetailComponent implements OnInit {
   loading = true;
   isReload = false;
   listValidator = [];
+  seeLess = false;
+  heightBoxError = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,7 +55,6 @@ export class TransactionDetailComponent implements OnInit {
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
-    private clipboard: Clipboard,
     private validatorService: ValidatorService,
   ) {}
 
@@ -92,6 +92,11 @@ export class TransactionDetailComponent implements OnInit {
                 this.errorMessage,
                 this.transaction.code,
               );
+
+              // get height error box
+              setTimeout(() => {
+                this.heightBoxError = document.getElementById('contentError')?.offsetHeight;
+              }, 500);
             }
 
             this.getListValidator();
@@ -122,19 +127,5 @@ export class TransactionDetailComponent implements OnInit {
 
   changeType(type: boolean): void {
     this.isRawData = type;
-  }
-
-  copyData(text: string): void {
-    var dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    this.clipboard.copy(JSON.stringify(text, null, 2));
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('popupCopy').click();
-    }, 800);
   }
 }

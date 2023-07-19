@@ -161,17 +161,21 @@
               <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner && !nftDetail?.burned">
                 <app-name-tag
                   [value]="nftDetail?.owner"
-                  [fullWidth]="true"
+                  [fullText]="true"
+                  [widthAuto]="true"
                   [url]="nftDetail?.owner?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #owner="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.owner); owner.toggle()" />
+                <div class="aura-tooltip-contain">
+                  <button
+                    class="button button--xxs aura-tooltip-object disabled-hover"
+                    #tooltip
+                    (click)="commonService.copyToolTipAction(tooltip, nftDetail?.owner)">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                      class="cursor-pointer btn-copy"
+                      alt="" />
+                  </button>
+                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -180,17 +184,21 @@
                 <app-name-tag
                   [value]="nftDetail?.contract_address"
                   [url]="'contracts'"
-                  [fullWidth]="true"
+                  [fullText]="true"
+                  [widthAuto]="true"
                   [iconVerify]="nftDetail['verification_status'] === ContractVerifyType.Verified"></app-name-tag>
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #address="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.contract_address); address.toggle()" />
+                <div class="aura-tooltip-contain">
+                  <button
+                    class="button button--xxs aura-tooltip-object disabled-hover"
+                    #tooltip
+                    (click)="commonService.copyToolTipAction(tooltip, nftDetail?.contract_address)">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                      class="cursor-pointer btn-copy"
+                      alt="" />
+                  </button>
+                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -198,17 +206,21 @@
               <div class="d-flex align-items-center">
                 <app-name-tag
                   [value]="nftDetail?.creator"
-                  [fullWidth]="true"
+                  [fullText]="true"
+                  [widthAuto]="true"
                   [url]="nftDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #creator="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.creator); creator.toggle()" />
+                <div class="aura-tooltip-contain">
+                  <button
+                    class="button button--xxs aura-tooltip-object disabled-hover"
+                    #tooltipcreator
+                    (click)="commonService.copyToolTipAction(tooltipcreator, nftDetail?.creator)">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                      class="cursor-pointer btn-copy"
+                      alt="" />
+                  </button>
+                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -222,15 +234,18 @@
                     {{ nftDetail?.token_id | cutStringPipe : 6 : 6 }}
                   </span>
                 </div>
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #tokenId="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.token_id); tokenId.toggle()" />
+                <div class="aura-tooltip-contain">
+                  <button
+                    class="button button--xxs aura-tooltip-object disabled-hover"
+                    #tooltipId
+                    (click)="commonService.copyToolTipAction(tooltipId, nftDetail?.token_id)">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                      class="ml-2 cursor-pointer btn-copy"
+                      alt="" />
+                  </button>
+                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
