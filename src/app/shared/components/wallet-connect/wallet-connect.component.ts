@@ -83,4 +83,13 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   disconnect(): void {
     this.walletService.disconnect();
   }
+
+  copyMessage(text: string) {
+    const dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
+  }
 }

@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthenticationService } from '../services/auth.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor() {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const currentUser = this.authenticationService.currentUserValue;
-    request = request.clone({
-      setHeaders: {
-         'x-hasura-admin-secret': 'abc@123', 'Hasura-Client-Name': 'hasura-console'
-      },
-    });
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: 'Bearer ' + accessToken.replace(/"/g, ''),
+        },
+      });
+    }
     return next.handle(request);
   }
 }

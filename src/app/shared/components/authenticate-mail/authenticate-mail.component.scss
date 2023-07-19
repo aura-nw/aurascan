@@ -93,20 +93,44 @@
   }
 }
 
-.menu__input {
-  background: rgba(19, 20, 25, 1);
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-left: 16px;
-  padding-right: 10px;
-  border-radius: 4px;
-}
-.button-wallet {
+.button-login-menu {
+  min-width: 90px;
   border-radius: 999px;
+  padding: 10px 24px;
+  .login-img {
+    width: 20px;
+    height: 20px;
+  }
+  @media (max-width: 991.98px) {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 0;
+    min-width: unset;
+    .login-img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  &[aria-expanded = 'true'] {
+    &:before {
+      opacity: 0;
+    }
+    &:after {
+      opacity: 1;
+    }
+  }
+  &::before {
+    background: url(../../../../assets/icons/icons-svg/black/caret-up.svg) center no-repeat;
+  }
+  &::after {
+    background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
+  }
 }
-.button-wallet-menu.button-outline__in-card {
-  box-shadow: 2px 1000px 1px var(--aura-gray-9) inset !important;
-  border-radius: 999px;
+.button-user {
+  background: rgba(36, 38, 46, 1);
+  vertical-align: middle;
+  &:hover {
+    background: var(--aura-gray-7);
+  }
 }

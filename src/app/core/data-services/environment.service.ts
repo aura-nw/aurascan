@@ -24,6 +24,7 @@ export interface IConfiguration {
   horoscopePathGraphql: string;
   horoscopePathApi: string;
   notice: { content: string; url: string };
+  googleClientId: string;
 }
 
 @Injectable()
@@ -49,6 +50,7 @@ export class EnvironmentService {
     horoscopePathGraphql: '',
     horoscopePathApi: '',
     notice: { content: '', url: '' },
+    googleClientId: ''
   });
 
   get configValue(): IConfiguration {
@@ -86,6 +88,7 @@ export class EnvironmentService {
           horoscopePathGraphql: config['horoscopePathGraphql'],
           horoscopePathApi: config['horoscopePathApi'],
           notice: config['notice'] || { content: '', url: '' },
+          googleClientId: config['googleClientId']
         };
 
         this.config.next(data);

@@ -1,0 +1,44 @@
+.button-tab-menu {
+  padding: 16px;
+  border-radius: 8px 0 0 8px;
+  transition: background-color 0.35s ease-in-out;
+  color: var(--aura-white);
+  display: block;
+  width: 100%;
+  min-height: 50px;
+  text-align: start;
+  &:hover,
+  &.active {
+    background-color: var(--aura-gray-10);
+  }
+}
+.bg-gray-10 {
+  background-color: var(--aura-gray-10);
+  border-radius: 8px;
+}
+.profile-contain {
+  padding: var(--spacer-4);
+  @media (min-width: 992px) {
+    padding: var(--spacer-6);
+  }
+}
+.tab-profile {
+  width: 100%;
+  .nav-item {
+    min-width: 154px;
+  }
+  .nav-link {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+}
+.aura-nav-tabs.nav-tabs {
+  flex-wrap: nowrap;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  overflow: hidden;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
