@@ -92,7 +92,7 @@
             </div>
           </div>
         </div>
-        <div class="aura-table-contain mt-4 mt-lg-0" *ngIf="pageData?.length > 0; else noValues">
+        <div class="overflow-scroll-x aura-table-contain mt-4 mt-lg-0" *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
@@ -103,18 +103,19 @@
                   <ng-container *ngIf="template.isNameTag">
                     <ng-container *ngIf="template.matColumnDef === 'address'">
                       <div class="d-flex align-items-center gap-2">
-                        <!-- <div class="mr-2" [style.width]="'16px'">
+                        <div class="mr-2" [style.width]="'16px'">
                           <img
-                            *ngIf="data['contract_verification'] === ContractVerifyType.Verified"
                             [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                             alt="contract_verification"
                             width="16px"
-                            height="16px" />
-                        </div> -->
+                            height="16px"
+                            *ngIf="data['contract_verification'] === ContractVerifyType.Verified" />
+                        </div>
+
                         <app-name-tag
                           [value]="data[template.matColumnDef]"
                           [url]="template.isUrl"
-                          [iconVerify]="data['contract_verification'] === ContractVerifyType.Verified"></app-name-tag>
+                          [isNameTagContract]="true"></app-name-tag>
                       </div>
                     </ng-container>
                     <ng-container *ngIf="template.matColumnDef !== 'address'">

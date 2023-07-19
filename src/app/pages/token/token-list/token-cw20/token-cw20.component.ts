@@ -163,7 +163,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                 const tokenFind = tokenMarket?.find(
                   (f) => String(f.contract_address) === item?.smart_contract?.address,
                 );
-                if (item.cw20_total_holder_stats.length > 0) {
+                if (item.cw20_total_holder_stats?.length > 1) {
                   changePercent =
                     (item.cw20_total_holder_stats[1].total_holder * 100) /
                       item.cw20_total_holder_stats[0].total_holder -
@@ -185,7 +185,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                   isHolderUp: changePercent >= 0 ? true : false,
                   isValueUp: tokenFind?.price_change_percentage_24h >= 0 ? true : false,
                   change: tokenFind?.price_change_percentage_24h || 0,
-                  holderChange: changePercent,
+                  holderChange: Math.abs(changePercent),
                   holders: item.cw20_holders_aggregate?.aggregate?.count,
                   max_total_supply: tokenFind?.max_supply || 0,
                   fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,

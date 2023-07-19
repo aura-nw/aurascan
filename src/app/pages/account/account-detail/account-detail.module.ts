@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +10,9 @@ import { SimplebarAngularModule } from 'simplebar-angular';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app.module';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { AccountService } from '../../../core/services/account.service';
@@ -24,8 +27,6 @@ import { AccountDetailComponent } from './account-detail.component';
 import { NftListComponent } from './nft-list/nft-list.component';
 import { SoulboundTokenComponent } from './soulbound-token/soulbound-token.component';
 import { TokenTableComponent } from './token-table/token-table.component';
-import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 
 @NgModule({
   declarations: [AccountDetailComponent, TokenTableComponent, NftListComponent, SoulboundTokenComponent],
@@ -52,6 +53,7 @@ import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-custom
     APaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
+    ClipboardModule,
   ],
   providers: [TransactionService, AccountService, DecimalPipe],
 })

@@ -13,14 +13,14 @@
     </div>
 
     <div class="text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-      <div class="row box-error" *ngIf="errorMessage">
+      <div class="row box-error" *ngIf="errorMessage && !isRawData">
         <span [class.ellipsis-text]="!seeLess" class="mb-1">
-          <div class="fw-semibold mb-2">Error:</div>
+          <div class="fw-semibold">Error:</div>
           <span class="body" id="contentError">{{ errorMessage }} </span>
         </span>
-        <div *ngIf="heightBoxError >= 58" class="text--white cursor-pointer mt-2 w-auto h5 font-italic">
-          <span (click)="seeLess = true" *ngIf="!seeLess">See More</span>
-          <span (click)="seeLess = false" *ngIf="seeLess">See Less</span>
+        <div *ngIf="heightBoxError >= 58" class="text--white cursor-pointer mt-1 w-auto h5 font-italic">
+          <span (click)="seeLess = true" *ngIf="!seeLess">See more</span>
+          <span (click)="seeLess = false" *ngIf="seeLess">See less</span>
         </div>
       </div>
       <div class="d-flex align-items-baseline">
@@ -32,7 +32,8 @@
             class="button button--xxs button--sm-mob button-circle ml-2 aura-tooltip-object disabled-hover"
             *ngIf="isRawData"
             #tooltip
-            (click)="commonService.copyToolTipAction(tooltip, transaction.tx)">
+            [cdkCopyToClipboard]="transaction.tx | json"
+            (click)="commonService.showToolTip(tooltip)">
             <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
           </button>
           <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>

@@ -124,7 +124,7 @@ export class CommonService {
   findNameTag(keySearch, listNameTag = []) {
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     if (this.listNameTag?.length > 0) {
-      const result = this.listNameTag?.find((k) => k.name_tag === keySearch)?.address;
+      const result = this.listNameTag?.find((k) => k.name_tag.trim() === keySearch.trim())?.address;
       return result;
     }
   }
@@ -138,24 +138,18 @@ export class CommonService {
     return result;
   }
 
-  copyToolTipAction(ele, string) {
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = string;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    if(ele.classList.contains('disabled-hover')) {
-      ele.classList.remove('disabled-hover');
-      ele.classList.add('show');
+  showToolTip(element) {
+    if (element.classList.contains('disabled-hover')) {
+      element.classList.remove('disabled-hover');
+      element.classList.add('show');
       setTimeout(function () {
-        ele.classList.remove('show');
-        ele.classList.add('disabled-hover');
+        element.classList.remove('show');
+        element.classList.add('disabled-hover');
       }, 800);
     }
   }
 
-    findUrlNameTag(address) {
+  findUrlNameTag(address) {
     let result = '';
     const nameTag = this.listNameTag?.find((k) => k.address === address);
     if (nameTag?.enterpriseUrl?.length > 0) {

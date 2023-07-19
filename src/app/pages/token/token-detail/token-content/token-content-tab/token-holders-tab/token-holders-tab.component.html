@@ -75,9 +75,11 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'value'">
                       <div
+                        *ngIf="tokenDetail.price > 0"
                         [appBigNumber]="data['balance']"
                         [decimal]="decimalValue"
                         [tokenPrice]="tokenDetail?.price"></div>
+                      <span *ngIf="!(tokenDetail.price > 0)">$0.00</span>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       {{ data[template.matColumnDef] }}

@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -61,6 +62,7 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     ClickOutsideModule,
     NameTagModule,
     TooltipCustomizeModule,
+    ClipboardModule,
   ],
   providers: [FormBuilder, SoulboundService],
 })

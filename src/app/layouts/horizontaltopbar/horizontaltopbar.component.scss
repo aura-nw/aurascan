@@ -10,6 +10,7 @@
     align-items: center;
     justify-content: center;
     font-weight: 600;
+    white-space: nowrap;
     @media (min-width: 414.99px) {
       padding: 0 var(--spacer-2);
     }
