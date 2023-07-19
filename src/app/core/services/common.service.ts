@@ -138,19 +138,13 @@ export class CommonService {
     return result;
   }
 
-  copyToolTipAction(ele, string) {
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = JSON.stringify(string);
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    if (ele.classList.contains('disabled-hover')) {
-      ele.classList.remove('disabled-hover');
-      ele.classList.add('show');
+  showToolTip(element) {
+    if (element.classList.contains('disabled-hover')) {
+      element.classList.remove('disabled-hover');
+      element.classList.add('show');
       setTimeout(function () {
-        ele.classList.remove('show');
-        ele.classList.add('disabled-hover');
+        element.classList.remove('show');
+        element.classList.add('disabled-hover');
       }, 800);
     }
   }

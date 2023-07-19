@@ -32,7 +32,8 @@
             class="button button--xxs button--sm-mob button-circle ml-2 aura-tooltip-object disabled-hover"
             *ngIf="isRawData"
             #tooltip
-            (click)="commonService.copyToolTipAction(tooltip, transaction.tx)">
+            [cdkCopyToClipboard]="transaction.tx | json"
+            (click)="commonService.showToolTip(tooltip)">
             <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
           </button>
           <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
