@@ -11,7 +11,7 @@ import { EnvironmentService } from '../../../core/data-services/environment.serv
   styleUrls: ['./authenticate-mail.component.scss'],
 })
 export class AuthenticateMailComponent implements OnDestroy {
-  userEmail = null; //'demo';
+  userEmail = null;
 
   @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
