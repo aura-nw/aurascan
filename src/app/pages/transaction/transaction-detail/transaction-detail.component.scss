@@ -18,13 +18,7 @@
   word-break: break-word;
   font-size: 16px;
   font-weight: 400;
-  .ellipsis-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  margin: 0px;
 }
 
 ::ng-deep app-transaction-messages .card-info:not(:last-child) {
