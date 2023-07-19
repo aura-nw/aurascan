@@ -59,7 +59,6 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isSubmit = true;
     let payload = {
       oldPassword: this.changePassForm.value?.old_password,
       password: this.changePassForm.value?.new_password,
@@ -70,8 +69,19 @@ export class ProfileSettingsComponent implements OnInit {
         this.toastr.successWithTitle('Please use the new password next time you log in.', 'Password changed');
       },
       error: (error) => {
-        this.toastr.error(error?.details?.message);
-      },
+        if (error?.details?.message === 'Unauthorized') {
+          const payload = {
+            refreshToken: localStorage.getItem('refreshToken').replace(/"/g, ''),
+          };
+          this.userService.refreshToken(payload).subscribe((res) => {
+            localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
+            localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
+            this.onSubmit();
+          });
+        } else {
+          this.toastr.error(error?.details?.message);
+        }
+      }
     });
   }
 }

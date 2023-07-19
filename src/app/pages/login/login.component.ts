@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
@@ -28,12 +29,16 @@ export class LoginComponent implements OnInit {
   hideConfirmPassword = true;
   emailFormat = '';
   isForgotScreen = false;
+  scriptLoaded = false;
+
+  clientId = this.environmentService.configValue.googleClientId;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private router: ActivatedRoute,
     private route: Router,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +60,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.formInit();
+    this.initGoogleLogin();
   }
 
   get getEmail() {
@@ -190,6 +196,47 @@ export class LoginComponent implements OnInit {
           this.errorMessage = error.details.message;
         },
       });
+    }
+  }
+
+  initGoogleLogin() {
+    // inject callback function
+    window.handleCredentialResponse = (response) => {
+      if (response.credential) {
+        const payload = {
+          token: response.credential,
+          site: 'main',
+        };
+
+        this.userService.loginWithGoogle(payload).subscribe({
+          next: (res) => {
+            localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
+            localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
+            localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
+            localStorage.setItem('provider', JSON.stringify(res.provider));
+            window.location.href = '/';
+          },
+          error: (error) => {
+            this.errorMessage = error?.details?.message;
+          },
+        });
+      }
+    };
+    // load google api script
+    this.loadScript('GoogleLoginProvider', 'https://accounts.google.com/gsi/client', () => {
+      // Callback
+    });
+  }
+
+  loadScript(id: string, src: string, onload: any): void {
+    // get document if platform is only browser
+    if (typeof document !== 'undefined' && !document.getElementById(id)) {
+      let signInJS = document.createElement('script');
+      signInJS.async = true;
+      signInJS.src = src;
+      signInJS.onload = onload;
+      const parentElement = document.head;
+      parentElement.appendChild(signInJS);
     }
   }
 }

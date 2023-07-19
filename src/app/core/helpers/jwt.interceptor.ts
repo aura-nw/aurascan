@@ -7,7 +7,7 @@ export class JwtInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const accessToken = localStorage.getItem('refreshToken');
+    const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
       request = request.clone({
         setHeaders: {

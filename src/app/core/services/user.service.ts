@@ -35,4 +35,12 @@ export class UserService extends CommonService {
   resetPasswordWithCode(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/reset-password`, payload);
   }
+
+  loginWithGoogle(payload): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/google`, payload);
+  }
+
+  refreshToken(payload): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
+  }
 }

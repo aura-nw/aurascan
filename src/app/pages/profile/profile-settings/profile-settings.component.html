@@ -98,7 +98,8 @@
         class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card"
         type="submit"
         [disabled]="
-          changePassForm.status === 'INVALID' || changePassForm.value.new_password === changePassForm.value.old_password
+          changePassForm.status === 'INVALID' ||
+          changePassForm.value.new_password === changePassForm.value.old_password
         ">
         <span>Change password</span>
       </button>

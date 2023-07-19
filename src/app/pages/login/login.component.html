@@ -157,7 +157,27 @@
             >
           </div>
           <div class="py-6 text--white">or</div>
-          Continue with Google<br />
+
+          <div class="box-sign-google">
+            <div
+              id="g_id_onload"
+              [attr.data-client_id]="clientId"
+              data-context="use"
+              data-ux_mode="popup"
+              data-callback="handleCredentialResponse"
+              data-auto_prompt="false"></div>
+
+            <div
+              class="g_id_signin"
+              data-type="standard"
+              data-shape="rectangular"
+              data-theme="outline"
+              data-text="signin_with"
+              data-size="large"
+              data-locale="en-GB"
+              data-logo_alignment="left"></div>
+          </div>
+
           <div class="mt-lg-6 mt-4 body-mob">
             By continuing, you agree to our <span class="text--primary fw-semibold cursor-pointer">Terms of Use</span>
           </div>
