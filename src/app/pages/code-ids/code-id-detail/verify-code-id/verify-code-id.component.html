@@ -88,7 +88,8 @@
           <button
             class="button button-outline button-pill ml-4 aura-tooltip-object disabled-hover"
             #tooltip
-            (click)="commonService.copyToolTipAction(tooltip, codeIdDetail.url)">
+            (click)="commonService.showToolTip(tooltip)"
+            [cdkCopyToClipboard]="codeIdDetail.url">
             <span class="body-01">Copy</span>
           </button>
           <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>

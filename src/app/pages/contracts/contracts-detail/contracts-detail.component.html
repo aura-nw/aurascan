@@ -9,7 +9,8 @@
         <button
           class="button button--xxs button--sm-mob button-circle aura-tooltip-object disabled-hover"
           #tooltip
-          (click)="commonService.copyToolTipAction(tooltip, contractAddress)">
+          (click)="commonService.showToolTip(tooltip)"
+          [cdkCopyToClipboard]="contractAddress">
           <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" class="button__icon" alt="" />
         </button>
         <app-tooltip-customize [content]="'Copied!'" class="tooltip--below"> </app-tooltip-customize>
