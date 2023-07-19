@@ -96,7 +96,7 @@ export class TransactionDetailComponent implements OnInit {
               // get height error box
               setTimeout(() => {
                 this.heightBoxError = document.getElementById('contentError')?.offsetHeight;
-              }, 500);
+              }, 1000);
             }
 
             this.getListValidator();
