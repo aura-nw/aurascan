@@ -141,11 +141,11 @@ export class CommonService {
   copyToolTipAction(ele, string) {
     const dummy = document.createElement('textarea');
     document.body.appendChild(dummy);
-    dummy.value = string;
+    dummy.value = JSON.stringify(string);
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
-    if(ele.classList.contains('disabled-hover')) {
+    if (ele.classList.contains('disabled-hover')) {
       ele.classList.remove('disabled-hover');
       ele.classList.add('show');
       setTimeout(function () {
@@ -155,7 +155,7 @@ export class CommonService {
     }
   }
 
-    findUrlNameTag(address) {
+  findUrlNameTag(address) {
     let result = '';
     const nameTag = this.listNameTag?.find((k) => k.address === address);
     if (nameTag?.enterpriseUrl?.length > 0) {
