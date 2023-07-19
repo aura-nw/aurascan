@@ -20,6 +20,7 @@ import { MessagesItemComponent } from './transaction-detail/transaction-messages
 import { TransactionMessagesComponent } from './transaction-detail/transaction-messages/transaction-messages.component';
 import { TransactionRoutingModule } from './transaction-routing.module';
 import { TransactionComponent } from './transaction.component';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [TransactionComponent, TransactionDetailComponent, TransactionMessagesComponent, MessagesItemComponent],
@@ -40,6 +41,7 @@ import { TransactionComponent } from './transaction.component';
     CommonDirectiveModule,
     NameTagModule,
     TooltipCustomizeModule,
+    ClipboardModule
   ],
   providers: [TransactionService, MappingErrorService, ProposalService, MaskPipe],
 })
