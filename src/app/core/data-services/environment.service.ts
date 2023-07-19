@@ -88,7 +88,7 @@ export class EnvironmentService {
           horoscopePathGraphql: config['horoscopePathGraphql'],
           horoscopePathApi: config['horoscopePathApi'],
           notice: config['notice'] || { content: '', url: '' },
-          googleClientId: config['googleClientId']
+          googleClientId: config['googleClientId'] || '3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08.apps.googleusercontent.com'
         };
 
         this.config.next(data);
