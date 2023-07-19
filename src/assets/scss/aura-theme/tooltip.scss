@@ -25,8 +25,18 @@ app-tooltip-customize {
     cursor: pointer;
 
     @media (min-width: 991.98px) {
+      &:not(.disabled-hover):hover~app-tooltip-customize {
+        max-width: 900px;
+        max-height: 900px;
+        opacity: 1;
 
-      &:not(.disabled-hover):hover~app-tooltip-customize,
+        .aura-tooltip {
+          display: block;
+          padding: 8px;
+        }        
+      }
+    }
+
       &.show~app-tooltip-customize {
         max-width: 900px;
         max-height: 900px;
@@ -37,7 +47,6 @@ app-tooltip-customize {
           padding: 8px;
         }
       }
-    }
   }
 }
 

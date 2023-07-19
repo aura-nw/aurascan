@@ -39,9 +39,8 @@
         <button
           class="button button-pill button--sm button-outline button-outline__in-card aura-tooltip-object disabled-hover"
           #tooltip
-          (click)="
-            commonService.copyToolTipAction(tooltip, contractDetailData?.code?.code_id_verifications[0]?.github_url)
-          ">
+          (click)="commonService.showToolTip(tooltip)"
+          [cdkCopyToClipboard]="contractDetailData?.code?.code_id_verifications[0]?.github_url">
           <span>Copy</span>
         </button>
         <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
@@ -118,7 +117,8 @@
           <button
             class="button button-circle button--sm mx-4 mx-lg-2 aura-tooltip-object disabled-hover"
             #tooltip
-            (click)="commonService.copyToolTipAction(tooltip, contractDetailData?.execute_msg_schema)">
+            (click)="commonService.showToolTip(tooltip)"
+            [cdkCopyToClipboard]="contractDetailData?.execute_msg_schema">
             <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="20px" height="20px" />
           </button>
           <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
@@ -176,7 +176,8 @@
           <button
             class="button button-circle button--sm mx-4 mx-lg-2 aura-tooltip-object disabled-hover"
             #tooltip
-            (click)="commonService.copyToolTipAction(tooltip, contractDetailData?.instantiate_msg_schema)">
+            (click)="commonService.showToolTip(tooltip)"
+            [cdkCopyToClipboard]="contractDetailData?.instantiate_msg_schema">
             <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="20px" height="20px" />
           </button>
           <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
@@ -234,7 +235,8 @@
           <button
             class="button button-circle button--sm mx-4 mx-lg-2 aura-tooltip-object disabled-hover"
             #tooltip
-            (click)="commonService.copyToolTipAction(tooltip, contractDetailData?.query_msg_schema)">
+            (click)="commonService.showToolTip(tooltip)"
+            [cdkCopyToClipboard]="contractDetailData?.query_msg_schema">
             <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="20px" height="20px" />
           </button>
           <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
