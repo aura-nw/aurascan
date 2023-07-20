@@ -7,15 +7,27 @@
           <td></td>
         </tr>
         <tr>
-          <td class="text--gray-5 body-02-mob">Public Name Tag:</td>
+          <td class="text--gray-5 body-02-mob">Public name:</td>
           <td colspan="2">
             <ng-container
               *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
-              <app-name-tag
+              <!-- <app-name-tag
                 [value]="contractDetail?.address"
                 [isLink]="false"
                 [extendUrl]="true"
-                [widthAuto]="true"></app-name-tag>
+                [widthAuto]="true"
+                [fullText]="true"></app-name-tag> -->
+              <div class="d-flex">
+                <span class="d-none d-lg-flex">{{ commonService.setNameTag(contractDetail?.address) || '-' }}</span>
+                <span class="d-flex d-lg-none justify-content-center">{{
+                  (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 8 : 8) || '-'
+                }}</span>
+                <a target="_blank" [href]="extendLink(commonService.findUrlNameTag(contractDetail?.address))">
+                  <i
+                    _ngcontent-wrg-c372=""
+                    class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1 cursor-pointer"></i>
+                </a>
+              </div>
             </ng-container>
             <ng-template #NoNameTag>Not Available</ng-template>
           </td>
@@ -24,42 +36,6 @@
           <td class="text--gray-5 body-02-mob">Private Name Tag:</td>
           <td colspan="2"></td>
         </tr>
-        <!-- 
-        <tr class="d-table-row">
-          <td colspan="3">
-            <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
-            <div>
-              <span class="mr-1 mr-lg-2">
-                <app-name-tag
-                  [value]="contractDetail?.creator"
-                  [widthAuto]="true"
-                  [url]="
-                    contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'
-                  "></app-name-tag>
-              </span>
-              at txn
-              <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-                {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
-              </a>
-            </div>
-          </td>
-        </tr> -->
-
-        <!-- <tr class="d-none d-lg-table-row">
-          <td class="text--gray-5 body-02-mob">Contract Creator:</td>
-          <td colspan="2">
-            <span class="mr-1 mr-lg-2">
-              <app-name-tag
-                [value]="contractDetail?.creator"
-                [widthAuto]="true"
-                [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
-            </span>
-            at txn
-            <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-              {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
-            </a>
-          </td>
-        </tr> -->
 
         <tr>
           <td class="text--gray-5">Token Tracker:</td>
