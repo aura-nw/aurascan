@@ -13,12 +13,12 @@
     </div>
 
     <div class="text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-      <div class="row box-error mb-4" *ngIf="errorMessage && !isRawData">
+      <div class="row box-error mb-4" id="boxContentError" *ngIf="errorMessage && !isRawData">
         <div class="mb-1">
           <div class="fw-semibold mb-1">Error:</div>
-          <span class="body" id="contentError" [class.ellipsis-text]="!seeLess">{{ errorMessage }} </span>
+          <span class="body" id="contentError" [class.ellipsis-text]="!seeLess">{{ errorMessage }}</span>
         </div>
-        <div *ngIf="heightBoxError >= 48" class="text--white cursor-pointer mt-1 w-auto h5 font-italic">
+        <div *ngIf="isDisplayMore" class="text--white cursor-pointer mt-1 w-auto h5 font-italic">
           <span (click)="seeLess = true" *ngIf="!seeLess">See more</span>
           <span (click)="seeLess = false" *ngIf="seeLess">See less</span>
         </div>
