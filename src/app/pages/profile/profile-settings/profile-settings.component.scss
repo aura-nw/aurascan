@@ -1,0 +1,29 @@
+.txt-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 2.8rem;
+  color: var(--aura-gray-4);
+  @media (min-width: 992px) {
+    line-height: 4rem;
+    font-size: 3.2rem;
+  }
+}
+.tab-title {
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.card__title {
+  font-size: 2.4rem;
+  line-height: 3.2rem;
+  font-weight: 500;
+  color: var(--aura-white);
+  margin-bottom: 32px;
+}
+.profile-form .input-group {
+  background-color: var(--aura-gray-10);
+}
+.hidden-icon {
+  font-size: 2.4rem;
+  color: var(--aura-white);
+}

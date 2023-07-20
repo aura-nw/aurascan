@@ -1,0 +1,47 @@
+<section>
+  <div class="container-fluid mt-2">
+    <div class="row">
+      <div class="col-lg-3 col-12 pr-md-0">
+        <div class="d-none d-lg-block">
+          <div class="mb-8">
+            <div class="body-01 fw-semibold text--gray-4 mb-4">Profile</div>
+            <a
+              [routerLink]="['/profile']"
+              [queryParams]="{ tab: 'setting' }"
+              [class.active]="currentTab === profileTab.Setting"
+              class="button button-tab-menu body fw-semibold"
+              >Profile settings</a
+            >
+          </div>
+          <div>
+            <div class="body-01 fw-semibold text--gray-4 mb-4">Personal note</div>
+            <button class="button button-tab-menu body fw-semibold">Private name tag</button>
+            <button class="button button-tab-menu body fw-semibold">Watchlist</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9 col-12 bg-gray-10">
+        <div class="profile-contain">
+          <div class="d-flex d-lg-none justify-content-between align-items-end tab-wrapper tab-profile">
+            <ul
+              ngbNav
+              #customNav="ngbNav"
+              [activeId]="activeTabID"
+              class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-lg-8 mb-4 mb-lg-0">
+              <ng-container *ngFor="let tab of PROFILE_TAB; index as index">
+                <li [ngbNavItem]="index">
+                  <a ngbNavLink (click)="changeTab(tab.key)" class="verify-contract">
+                    <span>{{ tab.value }}</span>
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+          <ng-container *ngIf="currentTab">
+            <app-profile-settings *ngIf="currentTab === profileTab.Setting"></app-profile-settings>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

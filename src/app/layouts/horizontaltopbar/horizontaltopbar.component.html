@@ -1,5 +1,5 @@
 <header id="page-topbar">
-  <div class="navbar-header">
+  <div class="navbar-header pt-1 pt-lg-0">
     <div class="row align-items-center">
       <!-- LOGO -->
       <div class="{{ !pageTitle ? 'col-lg-7' : 'col-lg-6' }}">
@@ -55,11 +55,13 @@
       </div>
     </div>
     <div class="wallet-connect">
+      <app-authenticate-mail></app-authenticate-mail>
+      <div class="divider divider-vertical divider-lighter mx-2 mx-lg-3"></div>
       <app-wallet-connect></app-wallet-connect>
     </div>
   </div>
   <!-- App Search mobile-->
-  <div class="app-search d-lg-none px-4 mt-4 pb-3">
+  <div class="app-search d-lg-none px-4 mt-4 pb-3" *ngIf="router.url !== '/login'">
     <form (ngSubmit)="handleSearch()" class="aura-form single-input-field">
       <div class="input-group">
         <input
