@@ -48,11 +48,16 @@ export class ContractService extends CommonService {
   }) {
     let updateQuery = '';
     const isFilterCW4973 = contractType?.includes('CW4973');
-    let typeQuery = isFilterCW4973
-      ? '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],'
-      : contractType?.includes('CW721') || contractType?.includes('CW20')
-      ? 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}'
-      : 'code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}';
+    let typeQuery = 'code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}';
+    if (isFilterCW4973) {
+      typeQuery = contractType?.includes('')
+        ? '_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {_eq: "crates.io:cw4973"}}],'
+        : '_or: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],';
+    } else if (contractType?.includes('CW721') || contractType?.includes('CW20')) {
+      typeQuery = contractType?.includes('')
+        ? 'code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}, name: {_neq: "crates.io:cw4973"}'
+        : 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}';
+    }
 
     const addressNameTag = this.findNameTag(keyword, this.global.listNameTag);
     if (addressNameTag?.length > 0) {
