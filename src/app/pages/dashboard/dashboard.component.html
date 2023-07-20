@@ -45,15 +45,17 @@
                   <div class="d-flex align-items-center py-4 px-2 pb-md-0 pb-lg-4 py-xl-6">
                     <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
                     <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">AURA</div>
-                    <a
-                      href="https://www.coingecko.com/en/coins/aura-network"
-                      target="_blank"
-                      class="ml-2 button button--sm button-ghost button-ghost--sm"
-                      matTooltip="Open CoinGecko"
-                      [matTooltipPosition]="'above'"
-                      [matTooltipClass]="'dashboard-tooltip'">
-                      <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
-                    </a>
+                    <div class="aura-tooltip-contain">
+                      <a
+                          href="https://www.coingecko.com/en/coins/aura-network"
+                          target="_blank"
+                          class="ml-2 button button--sm button-ghost button-ghost--sm aura-tooltip-object">
+                        <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
+                      </a>
+                      <app-tooltip-customize
+                          [content]="'Open CoinGecko'">
+                      </app-tooltip-customize>
+                    </div>
                   </div>
                   <div class="divider divider-horizontal"></div>
                   <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
@@ -166,8 +168,8 @@
                 <div class="body text--gray-1">Height</div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.block_height > 0" class="h4 mb-0 fw-semibold text--white">
-              {{ global?.dataHeader?.block_height || 0 | number }}
+            <div *ngIf="global?.dataHeader?.total_blocks > 0" class="h4 mb-0 fw-semibold text--white">
+              {{ global?.dataHeader?.total_blocks || 0 | number }}
             </div>
           </div>
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
@@ -193,8 +195,8 @@
                 <div class="body text--gray-1">Transactions</div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.total_txs_num >= 0" class="h4 mb-0 fw-semibold text--white">
-              {{ global?.dataHeader?.total_txs_num | number }}
+            <div *ngIf="global?.dataHeader?.total_transactions >= 0" class="h4 mb-0 fw-semibold text--white">
+              {{ global?.dataHeader?.total_transactions | number }}
             </div>
           </div>
         </div>
@@ -209,7 +211,7 @@
               </div>
             </div>
             <div *ngIf="global?.dataHeader?.bonded_tokens" class="h4 mb-0 fw-semibold text--white">
-              {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
+              {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.total_aura || 0 }}
             </div>
           </div>
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
@@ -389,7 +391,7 @@
                             *ngSwitchCase="'proposer'"
                             class="text--primary cursor-pointer text-break"
                             [routerLink]="['/validators', data.operator_address]">
-                            {{ data[template.matColumnDef] }}
+                            {{ data[template.matColumnDef] | stringEllipsis : 10 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"

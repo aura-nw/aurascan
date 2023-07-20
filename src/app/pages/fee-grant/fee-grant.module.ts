@@ -12,7 +12,8 @@ import { AccountService } from 'src/app/core/services/account.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
+import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FeeGrantRoutingModule } from './fee-grant-routing.module';
@@ -30,7 +31,7 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     MyGrantersComponent,
     PopupAddGrantComponent,
     PopupRevokeComponent,
-    PopupNoticeComponent
+    PopupNoticeComponent,
   ],
   imports: [
     CommonModule,
@@ -39,7 +40,6 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     FormsModule,
     CommonPipeModule,
     MatTableModule,
-    PaginatorModule,
     TableNoDataModule,
     TranslateModule,
     SharedModule,
@@ -47,6 +47,8 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     MatDatepickerModule,
     ClickOutsideModule,
     NgxMaskModule,
+    APaginatorModule,
+    NameTagModule
   ],
   providers: [FormBuilder, FeeGrantService, TransactionService, MappingErrorService, AccountService],
 })

@@ -13,6 +13,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-soulbound-token-contract',
@@ -51,6 +52,7 @@ export class SoulboundTokenContractComponent implements OnInit {
     public dialog: MatDialog,
     private soulboundService: SoulboundService,
     private walletService: WalletService,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -106,19 +108,25 @@ export class SoulboundTokenContractComponent implements OnInit {
 
   getSearchValue() {
     this.pageData.pageIndex = 0;
-    this.textSearch = this.searchValue;
+    this.textSearch = this.searchValue = this.searchValue.trim();
     this.getListToken();
   }
 
   getListToken() {
+    this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       minterAddress: this.currentAddress,
       contractAddress: this.contractAddress,
-      keyword: this.textSearch?.trim(),
+      keyword: this.textSearch,
       status: this.selectedType,
     };
+
+    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    if (addressNameTag?.length > 0) {
+      payload['keyword'] = addressNameTag;
+    }
 
     this.soulboundService.getSBContractDetail(payload).subscribe((res) => {
       this.dataSource.data = res.data;
@@ -139,7 +147,7 @@ export class SoulboundTokenContractComponent implements OnInit {
       if (result !== 'canceled') {
         setTimeout(() => {
           this.getListToken();
-        }, 2000);
+        }, 4000);
       }
     });
   }

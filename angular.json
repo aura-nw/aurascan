@@ -30,7 +30,11 @@
                             "@cosmjs/stargate",
                             "simplebar",
                             "simplebar-angular",
-                            "@cosmjs/cosmwasm-stargate"
+                            "@cosmjs/cosmwasm-stargate",
+                            "@cosmjs/math",
+                            "@cosmjs/amino",
+                            "buffer",
+                            "exceljs"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",

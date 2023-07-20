@@ -1,19 +1,30 @@
-<div class="row mb-3">
+<div class="d-flex flex-wrap mb-3">
   <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ label }}</div>
-  <div class="col-12 col-lg-9 body-01">
+  <div class="col-12 col-lg-9">
     <ng-container *ngIf="dataLink">
       <ng-container *ngIf="value?.length > 0 && value !== '-'; else noValues">
         <span *ngIf="value === '[do-not-modify]'">{{ value }}</span>
         <ng-container *ngIf="value !== '[do-not-modify]'">
-          <a
-            *ngIf="dataLink.url.indexOf('http') === -1"
-            class="text--primary"
-            [routerLink]="[dataLink?.url || '/account', dataLink?.data || value]">
-            {{ value || dataLink?.data || '-' }}
-          </a>
-          <a class="text--primary" [href]="dataLink?.url" *ngIf="dataLink.url.indexOf('http') > -1" target="_blank">
-            {{ dataLink?.data || value || '-' }}
-          </a>
+          <ng-container *ngIf="dataLink?.nameTag">
+            <app-name-tag
+              [value]="value || dataLink?.data"
+              [url]="dataLink?.url || '/account'"
+              [fullText]="true"
+              [paramUrl]="dataLink?.data || value"
+              [fullTextMob]="true"
+              [widthAuto]="true"></app-name-tag>
+          </ng-container>
+          <ng-container *ngIf="!dataLink.nameTag">
+            <a
+              *ngIf="dataLink.url.indexOf('http') === -1"
+              class="text--primary"
+              [routerLink]="[dataLink?.url || '/account', dataLink?.data || value]">
+              {{ value || dataLink?.data || '-' }}
+            </a>
+            <a class="text--primary" [href]="dataLink?.url" *ngIf="dataLink.url.indexOf('http') > -1" target="_blank">
+              {{ dataLink?.data || value || '-' }}
+            </a>
+          </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
@@ -22,18 +33,17 @@
         {{ (value | mask : 'separator.6') || '-' }}
       </ng-container>
       <ng-container *ngSwitchCase="pipeTypeData.BalanceOf">
-        {{ value > 0 ? (value | balanceOf | mask : 'separator.6') : '-' }}
+        {{ value > 0 ? (value | balanceOf : denom.decimals | mask : 'separator.6') : '-' }}
       </ng-container>
       <ng-container *ngSwitchCase="pipeTypeData.Json">
-        {{ value | balanceOf | mask : 'separator.6' }}
         <pre id="json" class="raw-content text--white px-4" [innerHtml]="value | appJson"></pre>
       </ng-container>
       <ng-container *ngSwitchCase="pipeTypeData.Percent">
-        {{ value | percent : global.formatNumber2Decimal }}
+        {{ value == '-' ? value : (value | percent : global.formatNumber2Decimal) }}
       </ng-container>
       <ng-container *ngSwitchDefault>{{ value || '-' }}</ng-container>
-      <ng-container *ngIf="denom"
-        ><span class="text--primary" *ngIf="value">{{ denom }}</span></ng-container
+      <ng-container *ngIf="denom?.display && value !== '-'"
+        ><span class="text--primary" *ngIf="value">{{ denom?.display }}</span></ng-container
       >
     </ng-container>
   </div>

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -21,6 +21,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   @Input() accountAddress = null;
   @Input() soulboundListData = null;
   @Input() displayManage = false;
+  @Input() isSBTValidator = false;
   @Output() totalSBT = new EventEmitter<number>();
   @Output() totalPick = new EventEmitter<number>();
   @Output() closeDlg = new EventEmitter<number>();
@@ -94,7 +95,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
   getSBTDetail(contractAddress, tokenID) {
     this.isClick = true;
-    this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
+    this.contractService.getDetailCW4973(contractAddress, tokenID).subscribe((res) => {
       this.isClick = false;
       if (res) {
         this.openDialogDetail(res.data);

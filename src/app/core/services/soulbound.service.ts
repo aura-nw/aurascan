@@ -4,11 +4,11 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class SoulboundService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   apiUrl = `${this.environmentService.configValue.beUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
@@ -60,10 +60,57 @@ export class SoulboundService extends CommonService {
   }
 
   getListABT(payload): Observable<any> {
-    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
-    return this.http.get<any>(`${this.apiUrl}/soulbound-token/tokens-list`, {
-      params
-    });
+    const operationsDoc = `
+    query queryCW4973ListToken(
+      $keyword: String,
+      $limit: Int, 
+      $offset: Int
+    ) {
+      ${this.envDB} { 
+        cw721_contract(
+          limit: $limit, 
+          where: {
+            smart_contract: {
+              name: {_eq: "crates.io:cw4973"}
+            }, 
+            _or: [{name: {_ilike: $keyword}}, {smart_contract: {_or:[{address: {_like: $keyword}}, {creator: {_like: $keyword}}]}}]
+          },
+          offset: $offset,
+          order_by: {updated_at: desc}
+        ) { 
+          name
+          symbol
+          smart_contract {
+            address
+            name
+            creator
+          }
+        } 
+        cw721_contract_aggregate(
+          where: {
+            smart_contract: {
+              name: {_eq: "crates.io:cw4973"}
+            }, 
+            _or: [{name: {_ilike: $keyword}}, {smart_contract: {_or:[{address: {_like: $keyword}}, {creator: {_like: $keyword}}]}}]
+          }) {
+            aggregate {
+              count 
+            } 
+          } 
+        } 
+      }`;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          offset: payload.offset,
+          keyword: payload.keyword ? `%${payload.keyword}%` : null,
+        },
+        operationName: 'queryCW4973ListToken',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   updateNotify(contractAddress: string, tokenId): Observable<any> {

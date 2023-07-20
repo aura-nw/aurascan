@@ -35,20 +35,13 @@ export const MAX_LENGTH_SEARCH_CONTRACT = 200;
 export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   // { matColumnDef: 'popover', headerCellDef: '', type: 'popover', headerWidth: 4 },
   { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
-  { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
-  { matColumnDef: 'status', headerCellDef: 'Result', type: 'result', headerWidth: 10 },
-  {
-    matColumnDef: 'blockHeight',
-    headerCellDef: 'Block',
-    type: 'hash-url',
-    headerWidth: 6,
-    isUrl: '/blocks'
-  },
+  { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 12 },
+  { matColumnDef: 'status', headerCellDef: 'Result', type: 'result', headerWidth: 9 },
+  { matColumnDef: 'blockHeight', headerCellDef: 'Block', type: 'hash-url', headerWidth: 6, isUrl: '/blocks' },
   { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
-  { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 12, isUrl: '/account' },
-  { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 6, justify: 'center' },
-  { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 12, isUrl: '/contracts' },
-  { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'AURA', headerWidth: 10 },
+  { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 12, isUrl: '/account', isNameTag: true },
+  { matColumnDef: 'label', headerCellDef: '', type: 'type', headerWidth: 6, justify: 'center' },
+  { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 12, isUrl: '/contracts', isNameTag: true },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },
 ];
 
@@ -72,6 +65,7 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/rust-optimizer:0.12.11', value: 'cosmwasm/rust-optimizer:0.12.11' },
   { label: 'cosmwasm/rust-optimizer:0.12.12', value: 'cosmwasm/rust-optimizer:0.12.12' },
   { label: 'cosmwasm/rust-optimizer:0.12.13', value: 'cosmwasm/rust-optimizer:0.12.13' },
+  { label: 'cosmwasm/rust-optimizer:0.13.0', value: 'cosmwasm/rust-optimizer:0.13.0' },
 
   // { label: 'cosmwasm/rust-optimizer-arm64:0.12.4', value: 'cosmwasm/rust-optimizer-arm64:0.12.4' },
   // { label: 'cosmwasm/rust-optimizer-arm64:0.12.5', value: 'cosmwasm/rust-optimizer-arm64:0.12.5' },
@@ -97,6 +91,7 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/workspace-optimizer:0.12.11', value: 'cosmwasm/workspace-optimizer:0.12.11' },
   { label: 'cosmwasm/workspace-optimizer:0.12.12', value: 'cosmwasm/workspace-optimizer:0.12.12' },
   { label: 'cosmwasm/workspace-optimizer:0.12.13', value: 'cosmwasm/workspace-optimizer:0.12.13' },
+  { label: 'cosmwasm/workspace-optimizer:0.13.0', value: 'cosmwasm/workspace-optimizer:0.13.0' },
 
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.4', value: 'cosmwasm/workspace-optimizer-arm64:0.12.4' },
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.5', value: 'cosmwasm/workspace-optimizer-arm64:0.12.5' },
@@ -118,7 +113,6 @@ export const REGISTER_CONTRACT = [
   },
 ];
 
-
 export const LIST_ZEROES = [
   {
     value: '6',
@@ -134,3 +128,4 @@ export const LIST_ZEROES = [
   },
 ];
 
+export const TYPE_CW4973 = 'crates.io:cw4973';

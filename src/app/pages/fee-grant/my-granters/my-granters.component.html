@@ -12,7 +12,7 @@
             <input
               type="text"
               class="form-control pl-0"
-              placeholder="Search for Tx Hash or Address"
+              placeholder="Search for Tx Hash, Address/name tag or Status"
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
               name="search"
@@ -34,7 +34,7 @@
           </div>
         </form>
         <div class="mt-4 mt-lg-0 text--gray-1">
-          {{ dataSource?.data?.length || 0 }} transaction{{ dataSource?.data?.length > 0 ? 's' : '' }} found
+          {{ pageData?.length || 0 }} transaction{{ pageData?.length > 0 ? 's' : '' }} found
         </div>
       </div>
       <div class="mt-4">
@@ -55,12 +55,7 @@
                           [routerLink]="['/transaction', data[template.matColumnDef]]">
                           <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                         </a>
-                        <a
-                          *ngSwitchCase="'granter'"
-                          class="text--primary cursor-pointer"
-                          [routerLink]="['/account', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
-                        </a>
+                        <app-name-tag [value]="data[template.matColumnDef]" *ngSwitchCase="'granter'"></app-name-tag>
                         <div *ngSwitchCase="'type'">
                           {{ data[template.matColumnDef] }}
                         </div>
@@ -75,7 +70,7 @@
                           </ng-container>
                         </div>
                         <div *ngSwitchCase="'expiration'">
-                          <span class="{{ data['expired'] && isActive ? 'text--red-3' : '' }}">
+                          <span class="{{ data['reason'] === 'Expired' && isActive ? 'text--red-3' : '' }}">
                             {{
                               data[template.matColumnDef]
                                 ? (data[template.matColumnDef] | customDate : 'yyyy-MM-dd')
@@ -93,7 +88,7 @@
                         <div *ngSwitchCase="'reason'" class="d-flex justify-content-between align-items-center">
                           <span>{{ data[template.matColumnDef] }}</span>
                           <a
-                            [routerLink]="['/transaction', data['tx_hash']]"
+                            [routerLink]="['/transaction', data['origin_revoke_txhash']]"
                             *ngIf="data['reason'] === 'Revoked'"
                             class="button body-01 text--primary">
                             <i class="ph-arrow-square-out"></i>
@@ -111,12 +106,10 @@
             </table>
           </div>
         </ng-container>
-        <app-paginator
-          [length]="pageData?.length"
-          [pageSize]="pageData?.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator>
+        <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+          <app-a-paginator [paginator]="pageData" [length]="pageData.length" (pageChange)="pageEvent($event)">
+          </app-a-paginator>
+        </div>
         <ng-template #noValues>
           <app-table-no-data></app-table-no-data>
         </ng-template>

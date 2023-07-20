@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/color.scss";
+@import '../../../../assets/scss/color.scss';
 
 .raw-content {
   white-space: pre-wrap;
@@ -10,11 +10,15 @@
 }
 
 .box-error {
-  background-color: lightgray;
-  color: var(--aura-danger);
+  background-color: var(--aura-gray-9);
+  color: #e65e5e;
   border-radius: 10px;
   padding: 10px 15px;
   margin-bottom: 1rem;
+  word-break: break-word;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
 }
 
 ::ng-deep app-transaction-messages .card-info:not(:last-child) {

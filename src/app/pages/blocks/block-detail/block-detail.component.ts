@@ -1,4 +1,3 @@
-import { Clipboard } from '@angular/cdk/clipboard';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
@@ -14,7 +13,7 @@ import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { convertDataBlock, convertDataTransaction, Globals } from '../../../../app/global/global';
+import { Globals, convertDataBlock, convertDataTransaction } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -22,8 +21,7 @@ import { convertDataBlock, convertDataTransaction, Globals } from '../../../../a
   styleUrls: ['./block-detail.component.scss'],
 })
 export class BlockDetailComponent implements OnInit {
-  id: string | number;
-  blockId: string | number;
+  blockHeight: string | number;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
@@ -46,7 +44,6 @@ export class BlockDetailComponent implements OnInit {
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'fee', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
@@ -83,44 +80,55 @@ export class BlockDetailComponent implements OnInit {
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private transactionService: TransactionService,
-    private clipboard: Clipboard,
   ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('height');
-    this.blockId = this.route.snapshot.paramMap.get('blockId');
-    if (this.id === 'null' || this.blockId === 'null') {
+    this.blockHeight = this.route.snapshot.paramMap.get('height');
+    if (this.blockHeight === 'null') {
       this.router.navigate(['/']);
     }
     this.getDetail();
   }
 
   getDetail(): void {
-    if (this.id) {
+    if (this.blockHeight) {
       this.getDetailByHeight();
     }
   }
 
   getDetailByHeight() {
-    this.blockService.blocksIndexer(1, this.id).subscribe(
+    let payload = {
+      limit: 1,
+      height: this.blockHeight,
+    };
+    this.blockService.getDataBlock(payload).subscribe(
       async (res) => {
-        const { code, data } = res;
-        if (code === 200 && data?.blocks?.length > 0) {
-          const block = convertDataBlock(data)[0];
-          block['round'] = _.get(data.blocks[0], 'block.last_commit.round');
-          block['chainid'] = _.get(data.blocks[0], 'block.header.chain_id');
-          block['json_data'] = _.get(data.blocks[0], 'block');
+        if (res?.block?.length > 0) {
+          const block = convertDataBlock(res)[0];
+          block['round'] = _.get(res.block[0], 'data.block.last_commit.round');
+          block['chainid'] = _.get(res.block[0], 'data.block.header.chain_id');
+          block['json_data'] = _.get(res.block[0], 'data.block');
           block['gas_used'] = block['gas_wanted'] = 0;
+          block['events'] = _.get(res.block[0], 'data.block_result.begin_block_events');
+          const blockEnd = _.get(res.block[0], 'data.block_result.end_block_events');
+          if (blockEnd) {
+            block['events'] = block['events'].concat(blockEnd);
+          }
           this.blockDetail = block;
 
           //get list tx detail
           let txs = [];
-          for (const key in data.blocks[0]?.block?.data?.txs) {
-            const element = data.blocks[0].block?.data?.txs[key];
+          for (const key in res.block[0]?.data?.block?.data?.txs) {
+            const element = res.block[0]?.data?.block?.data?.txs[key];
             const tx = sha256(Buffer.from(element, 'base64')).toUpperCase();
-            this.transactionService.txsIndexer(1, 0, tx).subscribe((res) => {
-              if (res.data.transactions[0]) {
-                txs.push(res.data.transactions[0]);
+
+            const payload = {
+              limit: 1,
+              hash: tx,
+            };
+            this.transactionService.getListTx(payload).subscribe((res) => {
+              if (res?.transaction[0]) {
+                txs.push(res?.transaction[0]);
               }
             });
           }
@@ -129,7 +137,7 @@ export class BlockDetailComponent implements OnInit {
           setTimeout(() => {
             if (txs?.length > 0) {
               let dataTempTx = {};
-              dataTempTx['transactions'] = txs;
+              dataTempTx['transaction'] = txs;
               if (txs.length > 0) {
                 txs = convertDataTransaction(dataTempTx, this.coinInfo);
                 txs.forEach((k) => {
@@ -178,19 +186,5 @@ export class BlockDetailComponent implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
-  }
-
-  copyData(text: string): void {
-    var dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    this.clipboard.copy(JSON.stringify(text, null, 2));
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('popupCopy').click();
-    }, 800);
   }
 }

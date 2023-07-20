@@ -11,18 +11,18 @@
             <span> You voted "{{ proposalVotes }}" </span>
             <span>for this proposal</span>
           </div>
-          <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.status)?.key }}">
-            <span>{{ getStatus(proposalDetail.status)?.value }}</span>
+          <div class="proposal-status proposal-status__{{ proposalStatus.key }}">
+            <span>{{ proposalStatus.value }}</span>
           </div>
           <div class="divider divider-vertical mx-6"></div>
           <button
-            [disabled]="proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+            [disabled]="proposalStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
             class="button button--sm button-outline button-outline--gradient button-pill button-outline__in-card body flex-shrink-0 fw-semibold">
             <span>
               {{
-                proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                proposalStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
                   ? 'Voting Ended'
                   : 'Vote'
               }}
@@ -41,8 +41,8 @@
         </div>
         <div class="ml-3 flex-shrink-0 text-end">
           <div class="d-inline-block">
-            <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.status)?.key }} mb-2">
-              <span class="small-body-mob fw-semibold">{{ getStatus(proposalDetail.status)?.value }}</span>
+            <div class="proposal-status proposal-status__{{ proposalStatus.key }} mb-2">
+              <span class="small-body-mob fw-semibold">{{ proposalStatus.value }}</span>
             </div>
           </div>
         </div>
@@ -52,21 +52,20 @@
     </div>
     <div class="card-body pt-3 pt-lg-0 px-3 px-lg-6">
       <div class="text--gray-1">
-        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob align-items-center">
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
-            <a class="text--primary h6" [routerLink]="['/account', proposalDetail.proposer_address]">
-              <span class="d-none d-lg-block">
-                {{ proposalDetail.proposer_name ? proposalDetail.proposer_name : proposalDetail.proposer_address }}
-              </span>
-              <span class="d-lg-none">
-                {{
-                  proposalDetail.proposer_name
-                    ? proposalDetail.proposer_name
-                    : (proposalDetail.proposer_address | cutStringPipe : 8 : 8)
-                }}
-              </span>
-            </a>
+            <ng-container *ngIf="proposalDetail?.proposer_address">
+              <a class="text--primary h6" [routerLink]="['/account', proposalDetail?.proposer_address]">
+                <ng-container *ngIf="proposalDetail?.proposer">
+                  {{ proposalDetail?.proposer?.description?.moniker }}
+                </ng-container>
+                <ng-container *ngIf="!proposalDetail?.proposer">
+                  <app-name-tag [value]="proposalDetail?.proposer_address" [fullText]="true"></app-name-tag>
+                </ng-container>
+              </a>
+            </ng-container>
+            <ng-container *ngIf="!proposalDetail?.proposer_address">-</ng-container>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
@@ -86,12 +85,12 @@
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Voting Start</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
-            <div class="d-flex align-items-center" *ngIf="proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-              <span>{{ proposalDetail.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
+            <div class="d-flex align-items-center" *ngIf="proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+              <span>{{ proposalDetail?.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.voting_start_time | customDate : 'HH:mm:ss' }}</span>
+              <span>{{ proposalDetail?.voting_start_time | customDate : 'HH:mm:ss' }}</span>
             </div>
-            <div class="d-flex align-items-center" *ngIf="proposalDetail.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+            <div class="d-flex align-items-center" *ngIf="proposalStatus.key === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
               <span>-</span>
             </div>
           </div>
@@ -99,12 +98,12 @@
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Voting End</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
-            <div class="d-flex align-items-center" *ngIf="proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-              <span>{{ proposalDetail.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
+            <div class="d-flex align-items-center" *ngIf="proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+              <span>{{ proposalDetail?.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.voting_end_time | customDate : 'HH:mm:ss' }}</span>
+              <span>{{ proposalDetail?.voting_end_time | customDate : 'HH:mm:ss' }}</span>
             </div>
-            <div class="d-flex align-items-center" *ngIf="proposalDetail.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+            <div class="d-flex align-items-center" *ngIf="proposalStatus.key === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
               <span>-</span>
             </div>
           </div>
@@ -112,6 +111,67 @@
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Type</div>
           <div class="col-auto col-md-10 mt-0 fw-500 g-ellipsis__type text--gray-1">{{ proposalDetail.pro_type }}</div>
+        </div>
+        <div
+          class="row mb-3 mb-md-4 body-02 body-01-mob"
+          *ngIf="
+            (proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade ||
+              proposalDetail?.content['@type'] === typeSpecial.ParameterChange) &&
+            proposalDetailTitleArr.length > 0
+          ">
+          <div class="col-auto col-md-2 text--gray-4">
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade"> Plan </ng-container>
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
+              Changes
+            </ng-container>
+          </div>
+          <div class="col-12 col-md-10 mt-0">
+            <ul
+              ngbNav
+              #customNav="ngbNav"
+              [activeId]="activeId"
+              class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md">
+              <ng-container *ngFor="let tab of proposalDetailTitleArr; index as index">
+                <li [ngbNavItem]="index">
+                  <a ngbNavLink (click)="changeTab(tab.key)">
+                    <span class="tab-title mb-0 text-capitalize">{{ tab.value }}</span>
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
+              <ng-container
+                *ngIf="typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0">
+                <div class="changes-contain" [class.overflow-scroll-y]="proposalDetail?.content?.plan.length > 2">
+                  <div *ngFor="let item of proposalDetail?.content?.plan" class="mt-4">
+                    <div *ngFor="let key of getObjectKey(item)">
+                      <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
+                        {{ item[key] }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) === 'object'">
+                <div *ngFor="let key of getObjectKey(proposalDetail?.content?.plan)" class="mt-4">
+                  <div *ngIf="key === proposalDetailTitleArr[activeId].value">
+                    {{ proposalDetail?.content?.plan[key] }}
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
+              <div class="changes-contain" [class.overflow-scroll-y]="proposalDetail?.content?.changes.length > 2">
+                <div *ngFor="let item of proposalDetail?.content?.changes" class="mt-4">
+                  <div *ngFor="let key of getObjectKey(item)">
+                    <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
+                      {{ item[key] }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Submit Time</div>
@@ -154,20 +214,20 @@
     <div class="card-footer pt-0 pb-0 px-3 px-lg-10">
       <div
         class="proposal__summary-total"
-        *ngIf="!votingBarLoading && proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD'">
+        *ngIf="!votingBarLoading && proposalStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD'">
         <div
           class="row justify-content-between align-items-center mb-3"
-          *ngIf="proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+          *ngIf="proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
           <div class="col-6 col-md-2 body-03 h6-mob text--gray-1">Final Status:</div>
           <div class="col-6 col-md-10 body-02 text-end text-md-start">
             <div
               class="aura-status-inline
-                 {{ getStatus(proposalDetail.status)?.value === 'passed' ? 'text--green-3' : 'text--red-3' }}">
-              <span class="status">{{ getStatus(proposalDetail.status)?.value | titlecase }}</span>
+                 {{ proposalStatus.value === 'passed' ? 'text--green-3' : 'text--red-3' }}">
+              <span class="status">{{ proposalStatus.value | titlecase }}</span>
             </div>
           </div>
         </div>
-        <div class="mt-2 mb-3 body-03 text--gray-7" *ngIf="proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+        <div class="mt-2 mb-3 body-03 text--gray-7" *ngIf="proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
           {{ finalSubTitle }}
         </div>
         <div class="row justify-content-between align-items-center mb-3 body-03 h6-mob text--gray-1">
@@ -179,26 +239,32 @@
         </div>
         <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
           <ul class="vote-bar-ul">
-            <li
-              class="bg--primary"
-              [style.width]="proposalDetail.yesPercent + '%'"
-              matTooltip="Yes {{ proposalDetail.yesPercent | number : global.formatNumber2Decimal }}%"
-              [matTooltipPosition]="'above'"></li>
-            <li
-              class="bg--danger"
-              [style.width]="proposalDetail.noPercent + '%'"
-              matTooltip="No {{ proposalDetail.noPercent | number : global.formatNumber2Decimal }}%"
-              [matTooltipPosition]="'above'"></li>
-            <li
-              class="bg--info"
-              [style.width]="proposalDetail.noWithVetoPercent + '%'"
-              matTooltip="No with veto {{ proposalDetail.noWithVetoPercent | number : global.formatNumber2Decimal }}%"
-              [matTooltipPosition]="'above'"></li>
-            <li
-              class="bg--secondary"
-              [style.width]="proposalDetail.abstainPercent + '%'"
-              matTooltip="Abstain {{ proposalDetail.abstainPercent | number : global.formatNumber2Decimal }}%"
-              [matTooltipPosition]="'above'"></li>
+            <li class="bg--primary aura-tooltip-contain" [style.width]="proposalDetail.yesPercent + '%'">
+              <div class="aura-tooltip-object w-100 h-100"></div>
+              <app-tooltip-customize
+                [content]="'Yes ' + (proposalDetail.yesPercent | number : global.formatNumber2Decimal) + '%'">
+              </app-tooltip-customize>
+            </li>
+            <li class="bg--danger aura-tooltip-contain" [style.width]="proposalDetail.noPercent + '%'">
+              <div class="aura-tooltip-object w-100 h-100"></div>
+              <app-tooltip-customize
+                [content]="'No ' + (proposalDetail.noPercent | number : global.formatNumber2Decimal) + '%'">
+              </app-tooltip-customize>
+            </li>
+            <li class="bg--info aura-tooltip-contain" [style.width]="proposalDetail.noWithVetoPercent + '%'">
+              <div class="aura-tooltip-object w-100 h-100"></div>
+              <app-tooltip-customize
+                [content]="
+                  'No with veto ' + (proposalDetail.noWithVetoPercent | number : global.formatNumber2Decimal) + '%'
+                ">
+              </app-tooltip-customize>
+            </li>
+            <li class="bg--secondary aura-tooltip-contain" [style.width]="proposalDetail.abstainPercent + '%'">
+              <div class="aura-tooltip-object w-100 h-100"></div>
+              <app-tooltip-customize
+                [content]="'Abstain ' + (proposalDetail.abstainPercent | number : global.formatNumber2Decimal) + '%'">
+              </app-tooltip-customize>
+            </li>
           </ul>
         </div>
         <div class="mt-4 text--gray-1" *ngIf="breakpoint.value.matches">
@@ -312,7 +378,7 @@
           </ul>
         </div>
       </div>
-      <ng-container *ngIf="proposalDetail.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+      <ng-container *ngIf="proposalStatus.key == 'PROPOSAL_STATUS_VOTING_PERIOD'">
         <div class="row proposal__summary-total pb-3">
           <div class="col-12 col-lg-6 pr-lg-8 border-right" [class.border-right]="!breakpoint.value.matches">
             <app-current-turnout
@@ -332,13 +398,13 @@
           <div class="mt-3">
             <button
               *ngIf="breakpoint.value.matches"
-              [disabled]="proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+              [disabled]="proposalStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD'"
               (click)="openVoteDialog(proposalDetail)"
               class="button button--md button-fixed button-pill button-outline button-outline--gradient button-outline__in-card body d-block flex-shrink-0 h5-mob">
               <span>
                 {{
-                  proposalDetail.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                  proposalDetail.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                  proposalStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                  proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
                     ? 'Voting Ended'
                     : 'Vote'
                 }}

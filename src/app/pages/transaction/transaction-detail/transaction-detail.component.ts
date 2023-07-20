@@ -1,4 +1,3 @@
-import { Clipboard } from '@angular/cdk/clipboard';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,6 +43,8 @@ export class TransactionDetailComponent implements OnInit {
   loading = true;
   isReload = false;
   listValidator = [];
+  seeLess = false;
+  isDisplayMore = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,7 +55,6 @@ export class TransactionDetailComponent implements OnInit {
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
-    private clipboard: Clipboard,
     private validatorService: ValidatorService,
   ) {}
 
@@ -68,20 +68,22 @@ export class TransactionDetailComponent implements OnInit {
 
   getDetail(): void {
     if (this.txHash?.length === LENGTH_CHARACTER.TRANSACTION) {
-      this.transactionService.txsIndexer(1, 0, this.txHash).subscribe(
+      const payload = {
+        limit: 1,
+        hash: this.txHash,
+      };
+      this.transactionService.getListTx(payload).subscribe(
         (res) => {
-          const { code, data } = res;
-          if (code === 200 && data.transactions?.length > 0) {
-            const txs = convertDataTransaction(data, this.coinInfo);
+          if (res?.transaction?.length > 0) {
+            const txs = convertDataTransaction(res, this.coinInfo);
             this.transaction = txs[0];
             this.transaction = {
               ...this.transaction,
               chainid: this.chainId,
-              gas_used: _.get(res?.data.transactions[0], 'tx_response.gas_used'),
-              gas_wanted: _.get(res?.data.transactions[0], 'tx_response.gas_wanted'),
-              raw_log: _.get(res?.data.transactions[0], 'tx_response.raw_log'),
-              type: _.get(res?.data.transactions[0], 'tx_response.tx.body.messages[0].@type'),
-              tx: _.get(res?.data.transactions[0], 'tx_response'),
+              gas_used: _.get(res?.transaction[0], 'gas_used'),
+              gas_wanted: _.get(res?.transaction[0], 'gas_wanted'),
+              raw_log: _.get(res?.transaction[0], 'data.tx_response.raw_log'),
+              type: this.transaction.typeOrigin,
             };
 
             if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
@@ -90,6 +92,17 @@ export class TransactionDetailComponent implements OnInit {
                 this.errorMessage,
                 this.transaction.code,
               );
+
+              // get height error box
+              setTimeout(() => {
+                const lengthChar = document.getElementById('contentError')?.innerText?.length;
+                const widthContent = document.getElementById('contentError')?.offsetWidth;
+                
+                // cal width text/content
+                if (lengthChar * 6.8 > widthContent * 3) {
+                  this.isDisplayMore = true;
+                }
+              }, 500);
             }
 
             this.getListValidator();
@@ -111,28 +124,14 @@ export class TransactionDetailComponent implements OnInit {
   }
 
   getListValidator(): void {
-    this.validatorService.validators().subscribe((res) => {
-      if (res.data?.length > 0) {
-        this.listValidator = res.data;
+    this.validatorService.getDataValidator(null).subscribe((res) => {
+      if (res.validator?.length > 0) {
+        this.listValidator = res.validator;
       }
     });
   }
 
   changeType(type: boolean): void {
     this.isRawData = type;
-  }
-
-  copyData(text: string): void {
-    var dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    this.clipboard.copy(JSON.stringify(text, null, 2));
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    // fake event click out side copy button
-    // this event for hidden tooltip
-    setTimeout(function () {
-      document.getElementById('popupCopy').click();
-    }, 800);
   }
 }

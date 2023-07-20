@@ -13,7 +13,7 @@ export class MessagesItemComponent implements OnInit {
   @Input() label: string;
   @Input() value: any;
   @Input() dataLink: any;
-  @Input() denom: string = '';
+  @Input() denom: any = { display: null, decimal: 6 };
   @Input() pipeType: string = '';
 
   pipeTypeData = pipeTypeData;

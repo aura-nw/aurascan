@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -5,12 +6,16 @@ import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskModule } from 'ngx-mask';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
+import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app/app.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
@@ -30,14 +35,10 @@ import { TokenContentComponent } from './token-detail/token-content/token-conten
 import { TokenDetailComponent } from './token-detail/token-detail.component';
 import { TokenOverviewComponent } from './token-detail/token-overview/token-overview.component';
 import { TokenSummaryComponent } from './token-detail/token-summary/token-summary.component';
-import { TokenHoldingNftComponent } from './token-holding/token-holding-nft/token-holding-nft.component';
-import { TokenHoldingWalletComponent } from './token-holding/token-holding-wallet/token-holding-wallet.component';
-import { TokenHoldingComponent } from './token-holding/token-holding.component';
 import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component';
 import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
-import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -51,13 +52,10 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     TokenTransfersTabComponent,
     TokenInfoTabComponent,
     TokenContractTabComponent,
-    TokenHoldingComponent,
-    TokenHoldingWalletComponent,
-    TokenHoldingNftComponent,
     TokenInventoryComponent,
     NFTDetailComponent,
     PopupShareComponent,
-    TokenCw4973Component
+    TokenCw4973Component,
   ],
   imports: [
     CommonModule,
@@ -80,7 +78,11 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     NftCardModule,
     AudioPlayerModule,
     ContractsModule,
-    CommonDirectiveModule
+    CommonDirectiveModule,
+    APaginatorModule,
+    NameTagModule,
+    TooltipCustomizeModule,
+    ClipboardModule,
   ],
   providers: [TokenService, AccountService],
 })

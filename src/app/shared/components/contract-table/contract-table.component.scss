@@ -1,21 +1,31 @@
 .contract-table {
-  .aura-status {
-    .TO,
-    .IN {
+  .status {
+    font-weight: 500;
+
+    &.TO,
+    &.IN {
       background: rgba(84, 206, 140, 0.2);
       color: var(--aura-green-3);
     }
 
-    .OUT {
+    &.OUT {
       background: rgba(213, 98, 94, 0.2);
       color: var(--aura-red-3);
     }
+  }
+
+  .method {
+    color: var(--aura-white);
+    font-size: 12px;
+    font-weight: 600;
 
     .TO,
-    .IN,
-    .OUT,
-    .CREATION {
-      font-weight: 500;
+    .IN {
+      color: var(--aura-green-3);
+    }
+
+    .OUT {
+      color: var(--aura-red-3);
     }
   }
 }
@@ -33,6 +43,10 @@
 
       & td:nth-child(2) {
         min-width: 200px;
+      }
+
+      & td.nameTag {
+        min-width: 170px;
       }
     }
   }

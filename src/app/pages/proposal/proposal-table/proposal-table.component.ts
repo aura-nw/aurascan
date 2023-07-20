@@ -1,7 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -9,24 +8,22 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild,
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ProposalService } from 'src/app/core/services/proposal.service';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
 import { Globals } from '../../../global/global';
-import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
 
 interface CustomPageEvent {
-  next: number;
+  next?: number;
   type: string;
   tabId: string;
+  pageIndex?: number;
+  pageSize?: number;
 }
 
 @Component({
@@ -40,16 +37,15 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @Input() tabId: string;
   @Input() data: any[];
   @Input() length: number;
-  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
   @Output() isNextPage = new EventEmitter<boolean>();
-  validatorImgArr;
+  @Output() pageEventChange = new EventEmitter<CustomPageEvent>();
 
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'voter_address', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
+    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true, isNameTag: true },
     { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
   ];
 
@@ -62,13 +58,20 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       paramField: 'operator_address',
       prefix: 'operator_address',
     },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
+    { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'depositors', headerCellDef: 'Depositors', isUrl: '/account', isShort: true, desktopOnly: true },
+    {
+      matColumnDef: 'depositors',
+      headerCellDef: 'Depositors',
+      isUrl: '/account',
+      isShort: true,
+      desktopOnly: true,
+      isNameTag: true,
+    },
     { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
@@ -80,82 +83,44 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   dataSource: MatTableDataSource<any>;
   pageSize = 5;
   pageIndex = 0;
+  pageValidatorIndex = 0;
   proposalMode = PROPOSAL_TABLE_MODE;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
+  pageData: PageEvent = {
+    length: 0,
+    pageSize: 5,
+    pageIndex: 1,
+  };
 
   constructor(
     public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
-    private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
-    private proposalService: ProposalService,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.data.forEach((element) => {
+      element.timestamp = element?.transaction?.timestamp || element.timestamp || element.updated_at;
+      element.updated_at = null;
+    });
+
     if (this.dataSource) {
       this.dataSource.data = this.data;
     } else {
       this.dataSource = new MatTableDataSource(this.data);
     }
 
-    let minus = 0;
-    if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
-      minus = this.getUpdatePage(changes.data.currentValue?.length, this.proposalService.pageIndexObj[this.type]);
-      this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type] || 0) - minus);
-    } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
-      minus = this.getUpdatePage(
-        changes.data.currentValue?.length,
-        this.proposalService.pageIndexObj[this.type][this.tabId],
-      );
-      this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
-    } else if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
-      const operatorAddArr = [];
-      // get ValidatorAddressArr
-      this.data.forEach((d) => {
-        operatorAddArr.push(d.operator_address);
-      });
-      if (operatorAddArr.length > 0) {
-        // get validator logo
-        this.validatorService.getValidatorInfoByList(operatorAddArr).subscribe((res) => {
-          if (res?.data) {
-            this.validatorImgArr = res?.data;
-            // push image into validator array
-            this.dataSource.data.forEach((item) => {
-              this.validatorImgArr.forEach((imgObj) => {
-                if (imgObj.operator_address == item.operator_address) {
-                  item['image_url'] = imgObj.image_url;
-                }
-              });
-            });
-            this.cdr.markForCheck();
-          }
-        });
-      }
-
-      minus = this.getUpdatePage(
-        changes.data.currentValue?.length,
-        this.proposalService.pageIndexObj[this.type][this.tabId],
-      );
-      this.pageChange?.selectPage((this.proposalService.pageIndexObj[this.type][this.tabId] || 0) - minus);
+    if (changes.tabId?.currentValue != changes.tabId?.previousValue) {
+      this.pageData.pageIndex = 1;
     }
-  }
-
-  getUpdatePage(data, page): number {
-    let minus = 0;
-    if (data % 25 !== 0 && Math.ceil(data / this.pageSize) <= page) {
-      minus = 1;
-    }
-    return minus;
   }
 
   ngOnInit(): void {
     this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
-    this.dataSource = new MatTableDataSource(this.data);
   }
 
   getTemplate(type: PROPOSAL_TABLE_MODE): Array<TableTemplate> {
@@ -172,10 +137,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   }
 
   shortenAddress(address: string): string {
-    if (address) {
-      return shortenAddress(address, 8);
-    }
-    return '';
+    return shortenAddress(address, 8);
   }
 
   getVoteValue(voteKey) {
@@ -183,48 +145,14 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     return vote ? vote.value : 'Did not vote';
   }
 
-  pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize, previousPageIndex } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
+  pageEvent(_index: number) {
+    const { pageIndex, pageSize } = this.pageData;
 
-    if (this.type === PROPOSAL_TABLE_MODE.DEPOSITORS) {
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.DEPOSITORS] = pageIndex;
-    } else if (this.type === PROPOSAL_TABLE_MODE.VOTES) {
-      this.tabId = this.tabId || 'all';
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES] = {};
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VOTES][this.tabId] = pageIndex;
-    } else if (this.type === PROPOSAL_TABLE_MODE.VALIDATORS_VOTES) {
-      this.tabId = this.tabId || 'all';
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES] = {};
-      this.proposalService.pageIndexObj[PROPOSAL_TABLE_MODE.VALIDATORS_VOTES][this.tabId] = pageIndex;
-    }
-
-    if (next) {
-      this.isNextPage.emit(true);
-      this.loadMore.emit({
-        next: 1,
-        type: this.type,
-        tabId: this.tabId,
-      });
-    }
-  }
-
-  paginatorEmit(e): void {
-    if (this.dataSource) {
-      this.dataSource.paginator = e;
-    } else {
-      this.dataSource = new MatTableDataSource(this.data);
-      this.dataSource.paginator = e;
-    }
-  }
-
-  getListData(): any[] {
-    if (!(this.dataSource?.paginator && this.dataSource?.data)) {
-      return [];
-    }
-    return this.dataSource.data.slice(
-      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
-      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
-    );
+    this.pageEventChange.emit({
+      type: this.type,
+      tabId: this.tabId,
+      pageIndex: pageIndex - 1,
+      pageSize,
+    });
   }
 }

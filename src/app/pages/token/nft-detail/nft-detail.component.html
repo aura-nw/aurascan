@@ -2,12 +2,7 @@
   <app-loading-sprint></app-loading-sprint>
 </div>
 
-<ng-container
-  *ngIf="
-    nftDetail &&
-    (nftDetail.type === contractType.CW721 ||
-      (nftDetail.type === contractType.CW4973 && nftDetail?.status === sbType.EQUIPPED))
-  ">
+<ng-container *ngIf="nftDetail && (nftDetail.type === contractType.CW721 || nftDetail.type === contractType.CW4973)">
   <div class="text--white">
     <div class="d-lg-none">
       <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap">
@@ -16,10 +11,10 @@
           <span class="mr-2">#{{ nftDetail?.token_id | cutStringPipe : 8 : 8 }}</span>
         </ng-container>
         <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
-        <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
+        <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
           <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
         </button>
-        <span class="burnt-tag caption" *ngIf="nftDetail?.is_burned">Burnt</span>
+        <span class="burnt-tag caption" *ngIf="nftDetail?.burned">Burnt</span>
       </h1>
       <div class="mt-2">
         <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]">{{
@@ -36,8 +31,7 @@
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
               <img
                 *ngIf="
-                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG &&
-                    !(nftDetail.animation?.link_s3 || nftDetail?.animation_url)) ||
+                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG && !nftDetail.media_info?.offchain?.animation?.url) ||
                   isError
                 "
                 [src]="defaultImgToken" />
@@ -45,33 +39,24 @@
                 (click)="expandMedia()"
                 *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
                 (error)="error()"
-                [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
+                [src]="animationUrl || imageUrl" />
               <video
                 (click)="expandMedia()"
                 [src]="animationUrl"
                 controls
                 controlsList="nodownload"
-                *ngIf="
-                  getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
-                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
-                "
+                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO && nftDetail.media_info?.offchain?.animation?.url"
                 poster="{{ imageUrl }}"></video>
               <app-model-view
                 (click)="expandMedia()"
-                *ngIf="
-                  getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
-                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
-                "
+                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE._3D && nftDetail.media_info?.offchain?.animation?.url"
                 [modelUrl]="animationUrl"
                 [disablePan]="false"
                 [previewImg]="imageUrl">
               </app-model-view>
               <app-audio-player
                 (click)="expandMedia()"
-                *ngIf="
-                  getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
-                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
-                "
+                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO && nftDetail.media_info?.offchain?.animation?.url"
                 [src]="animationUrl"
                 [previewImg]="imageUrl">
               </app-audio-player>
@@ -89,16 +74,16 @@
                 </ng-container>
                 <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
               </h1>
-              <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
+              <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
                 <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
               </button>
-              <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
+              <span class="burnt-tag" *ngIf="nftDetail?.burned">Burnt</span>
             </div>
             <ng-container *ngIf="isSoulBound">
               <button
-                *ngIf="nftDetail.status === sbType.EQUIPPED && userAddress === nftDetail?.receiver_address"
+                *ngIf="nftDetail.burned === false && userAddress === nftDetail?.owner"
                 class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
-                (click)="getSBTPick()">
+                (click)="unEquipSBT()">
                 <span>Un-equip</span>
               </button>
             </ng-container>
@@ -173,78 +158,72 @@
             <h2 class="mb-0 h5-mob text--white card__ntf-detail-item" id="popupCopy">Details</h2>
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Owner:</div>
-              <div
-                class="d-flex align-items-center position-relative"
-                *ngIf="nftDetail?.owner || nftDetail?.receiver_address">
-                <a
-                  class="text--primary g-ellipsis"
-                  [routerLink]="['/account', nftDetail?.owner || nftDetail?.receiver_address]">
-                  {{ nftDetail?.owner || nftDetail?.receiver_address }}
-                </a>
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #owner="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.owner || nftDetail?.receiver_address); owner.toggle()" />
+              <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner && !nftDetail?.burned">
+                <app-name-tag
+                  [value]="nftDetail?.owner"
+                  [fullText]="true"
+                  [widthAuto]="true"
+                  [url]="nftDetail?.owner?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
+                <div class="aura-tooltip-contain">
+                  <button
+                    class="button button--xxs aura-tooltip-object disabled-hover"
+                    #tooltip
+                    (click)="commonService.showToolTip(tooltip)"
+                    [cdkCopyToClipboard]="nftDetail?.owner">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                      class="cursor-pointer btn-copy"
+                      alt="" />
+                  </button>
+                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Contract Address:</div>
               <div class="d-flex align-items-center position-relative">
-                <img
-                  [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-                  class="mr-2"
-                  alt="contract_verification" />
-                <a class="text--primary g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
-                  {{ nftDetail?.contract_address }}</a
-                >
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #address="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.contract_address); address.toggle()" />
+                <app-name-tag
+                  [value]="nftDetail?.contract_address"
+                  [url]="'contracts'"
+                  [fullText]="true"
+                  [widthAuto]="true"
+                  [iconVerify]="nftDetail['verification_status'] === ContractVerifyType.Verified"></app-name-tag>
+                <div class="aura-tooltip-contain">
+                  <button
+                    class="button button--xxs aura-tooltip-object disabled-hover"
+                    #tooltip
+                    (click)="commonService.showToolTip(tooltip)"
+                    [cdkCopyToClipboard]="nftDetail?.contract_address">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                      class="cursor-pointer btn-copy"
+                      alt="" />
+                  </button>
+                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                </div>
               </div>
             </div>
-            <div class="card__ntf-detail-item body" *ngIf="isSoulBound">
+            <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Creator:</div>
               <div class="d-flex align-items-center">
-                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.minter_address]">
-                  {{ nftDetail?.minter_address }}</a
-                >
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #attestor="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.minter_address); attestor.toggle()" />
-              </div>
-            </div>
-            <div class="card__ntf-detail-item body" *ngIf="!isSoulBound">
-              <div class="label-detail text--gray-5">Creator:</div>
-              <div class="d-flex align-items-center">
-                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.creator]">
-                  {{ nftDetail?.creator }}</a
-                >
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #creator="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.creator); creator.toggle()" />
+                <app-name-tag
+                  [value]="nftDetail?.creator"
+                  [fullText]="true"
+                  [widthAuto]="true"
+                  [url]="nftDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
+                <div class="aura-tooltip-contain">
+                  <button
+                    class="button button--xxs aura-tooltip-object disabled-hover"
+                    #tooltipcreator
+                    (click)="commonService.showToolTip(tooltipcreator)"
+                    [cdkCopyToClipboard]="nftDetail?.creator">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                      class="cursor-pointer btn-copy"
+                      alt="" />
+                  </button>
+                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -258,15 +237,19 @@
                     {{ nftDetail?.token_id | cutStringPipe : 6 : 6 }}
                   </span>
                 </div>
-                <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class="ml-2 cursor-pointer btn-copy"
-                  alt=""
-                  matTooltip="Copied!"
-                  #tokenId="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.token_id); tokenId.toggle()" />
+                <div class="aura-tooltip-contain">
+                  <button
+                    class="button button--xxs aura-tooltip-object disabled-hover"
+                    #tooltipId
+                    (click)="commonService.showToolTip(tooltipId)"
+                    [cdkCopyToClipboard]="nftDetail?.token_id">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                      class="ml-2 cursor-pointer btn-copy"
+                      alt="" />
+                  </button>
+                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -283,11 +266,11 @@
       <div class="col-12 col-lg-4 mt-4 mt-lg-0">
         <div class="card card--sb-information mb-0">
           <div class="card-header card-header--has-border h2 text--white box-prop">Properties</div>
-          <ng-container *ngIf="nftDetail?.ipfs?.attributes">
-            <ng-container *ngIf="isObject(nftDetail.ipfs?.attributes)">
+          <ng-container *ngIf="nftDetail?.media_info?.onchain?.metadata?.attributes">
+            <ng-container *ngIf="isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)">
               <div class="box-prop-item">
                 <div class="row text--gray-1 box-prop-item__row">
-                  <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
+                  <ng-container *ngFor="let prop of nftDetail?.media_info?.onchain?.metadata?.attributes; index as i">
                     <div class="col-lg-4 col-6 mb-lg-6 mb-2 box-prop-item__col">
                       <div class="card-info py-4 text-center">
                         <div class="caption fw-normal text--white">
@@ -312,16 +295,18 @@
                 </div>
               </div>
             </ng-container>
-            <span *ngIf="!isObject(nftDetail.ipfs?.attributes)" class="pl-4 pl-lg-6 pt-2">-</span>
+            <span *ngIf="!isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)" class="pl-4 pl-lg-6 pt-2"
+              >-</span
+            >
           </ng-container>
-          <span *ngIf="!nftDetail?.ipfs?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
+          <span *ngIf="!nftDetail?.media_info?.onchain?.metadata?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
         </div>
       </div>
       <div class="col-12 col-lg-8 pl-lg-3">
         <div class="card card--sb-information mb-0">
           <div class="card-header card-header--has-border h2 text--white pt-4 pb-5 pt-lg-6 pb-lg-4">Description</div>
           <div class="card-body text--gray-1 body-03 sb-props">
-            {{ nftDetail?.ipfs?.description || '-' }}
+            {{ nftDetail?.media_info?.onchain?.metadata?.description || '-' }}
           </div>
         </div>
       </div>
@@ -387,15 +372,24 @@
                   </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'from_address'">
-                  <a
-                    class="text--primary content-transfer"
-                    [routerLink]="['/account', data[template.matColumnDef]]"
-                    *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
-                  </a>
-                  <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
-                    data[template.matColumnDef] | cutStringPipe : 8 : 8
-                  }}</span>
+                  <div class="content-transfer">
+                    <ng-container *ngIf="data.modeExecute === modeExecuteTransaction.Take">
+                      <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
+                    </ng-container>
+                    <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take">
+                      <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        [isTokenDetail]="true"
+                        *ngIf="
+                          data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
+                        "></app-name-tag>
+                      <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        [isTokenDetail]="true"
+                        *ngIf="data.modeExecute === modeExecuteTransaction.Mint"
+                        [isLink]="false"></app-name-tag>
+                    </ng-container>
+                  </div>
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
                   <img
                     [src]="'assets/images/icons/arrow-right.png' | imageS3"
@@ -404,32 +398,25 @@
                     class="ml-10 ml-lg-15" />
                 </ng-container>
                 <ng-container *ngSwitchCase="'to_address'">
-                  <img
-                    [src]="'assets/images/icons/token-contract.svg' | imageS3"
-                    *ngIf="isContractAddress(data.type, data.to_address)"
-                    alt=""
-                    width="16px"
-                    height="16px" />
-                  <a
-                    class="text--primary"
-                    [routerLink]="[
-                      data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account',
-                      data[template.matColumnDef]
-                    ]"
+                  <app-name-tag
+                    [url]="data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account'"
+                    [value]="data[template.matColumnDef]"
+                    [type]="data.type"
+                    [isTokenDetail]="true"
                     *ngIf="
                       data.modeExecute !== modeExecuteTransaction.Burn &&
                       data.modeExecute !== modeExecuteTransaction.UnEquip &&
                       data[template.matColumnDef]
-                    ">
-                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
-                  </a>
-                  <span
+                    "></app-name-tag>
+                  <app-name-tag
+                    [value]="data[template.matColumnDef]"
+                    [type]="data.type"
+                    [isTokenDetail]="true"
                     *ngIf="
                       data.modeExecute === modeExecuteTransaction.Burn ||
                       data.modeExecute === modeExecuteTransaction.UnEquip
                     "
-                    >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span
-                  >
+                    [isLink]="false"></app-name-tag>
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">

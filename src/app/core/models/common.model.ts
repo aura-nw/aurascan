@@ -13,6 +13,7 @@ export interface IResponsesError {
   error: {
     statusCode: number;
     message: string;
+    Message?: string;
     errorName: string;
     path: string;
     requestId: string;
@@ -36,6 +37,7 @@ export class TableTemplate {
   suffix?: string;
   prefix?: string;
   headerWidth?: number;
+  isNameTag?: boolean;
   justify?: 'center' | 'flex-start' | 'flex-end'
 }
 
@@ -125,17 +127,17 @@ export class ResponseDto {
 }
 
 export class CommonDataDto {
-  block_height?: number;
+  total_blocks?: number;
   block_time: string;
   bonded_tokens: number;
   community_pool: number;
   inflation: string;
-  total_txs_num: number;
+  total_transactions: number;
   total_validator_active_num: number;
   total_validator_num: number;
   bonded_tokens_format: number;
   community_pool_format: number;
-  supply: number;
+  total_aura: number;
 }
 
 export interface DataDelegateDto {

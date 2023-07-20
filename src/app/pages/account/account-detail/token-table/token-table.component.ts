@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -21,8 +20,8 @@ export class TokenTableComponent implements OnChanges {
   @Output() totalValue = new EventEmitter<number>();
   @Output() totalAssets = new EventEmitter<number>();
 
-  math = Math;
   textSearch = '';
+  searchValue = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'symbol', headerCellDef: 'symbol' },
@@ -46,20 +45,22 @@ export class TokenTableComponent implements OnChanges {
   total = 0;
   pageEvent: any;
   paginator: MatPaginator;
+  dataTable = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
-
   constructor(
     public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getTotalAssets();
+  }
 
   ngOnChanges(): void {
     this.getListToken();
@@ -72,54 +73,67 @@ export class TokenTableComponent implements OnChanges {
       offset: this.pageData.pageSize * this.pageData.pageIndex,
       keyword: this.textSearch,
     };
-    this.accountService.getAssetCW20ByOwner(payload).subscribe(
-      (res: ResponseDto) => {
-        let data: any;
-        if (res?.data?.length > 0) {
-          let lstToken = _.get(res, 'data').map((element) => {
-            data = element;
-            if (data) {
-              data.change = data.price_change_percentage_24h;
-              data.isValueUp = true;
-              data['balance'] = data['balance'] || 0;
-              if (data.change !== '-' && data.change < 0) {
-                data.isValueUp = false;
-                data.change = Number(data.change.toString().substring(1));
-              }
-              if (data.contract_address === '-') {
-                this.total = data.price * data.balance + this.total;
-              } else if (data.verify_status === 'VERIFIED') {
-                const powValue = Math.pow(10, data.decimals);
-                let amountValue = data.balance / powValue;
-                amountValue = amountValue * data.price;
-                this.total = amountValue + this.total;
-              }
-            }
-            return data;
-          });
+    if (this.dataTable.length > 0) {
+      let result = this.dataTable.slice(payload?.offset, payload?.offset + payload?.limit);
+      // Search with text search
+      if (this.textSearch) {
+        const textSearch = this.textSearch.trim();
+        result = this.dataTable.filter(
+          (item) =>
+            item.name?.toLowerCase().includes(textSearch.toLowerCase()) ||
+            item.contract_address == textSearch,
+        );
 
-          lstToken = lstToken.filter((k) => k?.symbol);
-          this.dataSource = new MatTableDataSource<any>(lstToken);
-          this.pageData.length = res.meta.count;
+        const data = result?.slice(payload?.offset, payload?.offset + payload?.limit);
+        this.dataSource = new MatTableDataSource<any>(data);
+        this.pageData.length = result?.length;
+      } else {
+        this.dataSource = new MatTableDataSource<any>(result);
+        this.pageData.length = this.dataTable?.length;
+      }
+    } else {
+      this.accountService.getAssetCW20ByOwner(payload).subscribe(
+        (res: ResponseDto) => {
+          let data: any;
+          if (res?.data?.length > 0) {
+            let lstToken = _.get(res, 'data').map((element) => {
+              data = element;
+              if (data) {
+                data.change = data.price_change_percentage_24h;
+                data.isValueUp = true;
+                data['balance'] = data['balance'] || 0;
+                if (data.change !== '-' && data.change < 0) {
+                  data.isValueUp = false;
+                  data.change = Number(data.change.toString().substring(1));
+                }
+              }
+              return data;
+            });
+
+            lstToken = lstToken.filter((k) => k?.symbol);
+            // store datatable
+            this.dataTable = lstToken;
+            // Sort and slice 20 frist record.
+            const result = lstToken?.slice(payload?.offset, payload?.offset + payload?.limit);
+            this.dataSource = new MatTableDataSource<any>(result);
+            this.pageData.length = res.meta.count;
+          } else {
+            this.pageData.length = 0;
+            this.dataSource.data = [];
+          }
           this.totalAssets.emit(this.pageData.length);
-          this.totalValue.emit(this.total);
-        } else {
-          this.pageData.length = 0;
-          this.dataSource.data = [];
-        }
-      },
-      () => {},
-      () => {
-        this.assetsLoading = false;
-      },
-    );
+        },
+        () => {},
+        () => {
+          this.assetsLoading = false;
+        },
+      );
+    }
   }
 
   convertValue(value: any, decimal: number) {
     return balanceOf(value, decimal);
   }
-
-  sortData(sort: Sort) {}
 
   paginatorEmit(event): void {
     this.paginator = event;
@@ -127,31 +141,30 @@ export class TokenTableComponent implements OnChanges {
 
   handlePageEvent(e: any) {
     this.pageData.pageIndex = e.pageIndex;
-    this.getKeySearch();
-  }
-
-  getKeySearch() {
-    this.textSearch = this.textSearch?.trim();
     this.getListToken();
   }
 
   searchToken(): void {
+    this.searchValue = this.searchValue?.trim();
+    this.textSearch = this.searchValue?.trim();
     if (this.paginator.pageIndex !== 0) {
       this.paginator.firstPage();
     } else {
-      this.getKeySearch();
-    }
-  }
-
-  checkSearch(): void {
-    if (this.textSearch.length === 0) {
-      this.searchToken();
+      this.getListToken();
     }
   }
 
   resetSearch(): void {
     this.textSearch = '';
+    this.searchValue = '';
     this.pageData.pageIndex = 0;
     this.searchToken();
+  }
+
+  getTotalAssets(): void {
+    this.accountService.getTotalAssets(this.address).subscribe((res: ResponseDto) => {
+      this.total = res.data || 0;
+      this.totalValue.emit(this.total);
+    });
   }
 }

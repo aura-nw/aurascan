@@ -1,0 +1,15 @@
+.search-form {
+  min-width: 100%;
+
+  @media (min-width: 992px) {
+    min-width: 410px;
+  }
+}
+
+.aura-table.community-pool-assets-table th.mat-header-cell {
+  width: 33%;
+}
+
+.vertical-align-top {
+  vertical-align: top;
+}

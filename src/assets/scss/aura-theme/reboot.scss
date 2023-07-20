@@ -1,18 +1,18 @@
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: var(--aura-light-gray);
-  border-radius: 10px;
+  background-color: #5C606D;
+  width: 5px;
 }
 
 ::-webkit-scrollbar {
   width: 5px;
-  background-color: var(--aura-light-gray);
+  background-color: #F2F3F5;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: #FFF;
-  background-image: var(--aura-gradient-general)
+  background: linear-gradient(108.46deg, #5EE6D0 12.51%, #BFC6FF 51.13%, #FFBA69 87.49%)
 }
 h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
   margin-bottom: 0;

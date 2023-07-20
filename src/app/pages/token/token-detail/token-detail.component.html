@@ -4,25 +4,17 @@
     <!-- <img [src]="tokenDetail?.image || defaultLogoToken" alt="" width="32px" height="32px" /> -->
     <h1 class="mb-0 text--white ml-2">
       <div class="d-flex">
-        Token
-        <span class="text--gray-5 break-word ml-1 d-none d-lg-inline">
-          {{ tokenDetail?.name }}
-        </span>
-        <span class="text--gray-5 break-word ml-1 d-inline d-lg-none">
-          {{ tokenDetail?.name | stringEllipsis : 16 }}
-        </span>
-        <div
-          class="status cursor-pointer d-flex align-items-top"
-          [matTooltipClass]="'token-tooltip'"
-          matTooltip="{{ tokenDetail.verify_text || 'Verified by Aura Network' }}"
-          [matTooltipPosition]="'above'">
+        Token <span class="text--gray-5 break-word ml-1">{{ tokenDetail?.name }}</span>
+        <div class="status cursor-pointer d-flex align-items-top aura-tooltip-contain">
           <img
             [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
             alt=""
             width="18"
             height="18"
-            class="ml-1"
-            *ngIf="tokenDetail.verify_status === 'VERIFIED'" />
+            class="ml-1 aura-tooltip-object"
+            *ngIf="tokenDetail?.verify_status === 'VERIFIED'" />
+          <app-tooltip-customize [content]="tokenDetail?.verify_text || 'Verified by Aura Network'">
+          </app-tooltip-customize>
         </div>
       </div>
     </h1>

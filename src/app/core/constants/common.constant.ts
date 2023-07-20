@@ -27,7 +27,7 @@ export const NETWORK = [
 
 export const DATEFORMAT = {
   DATETIME_UTC: 'yyyy-MM-dd HH:mm:ss',
-  DATE_ONLY: 'dd/MM/yyyy',
+  DATE_ONLY: 'yyyy-MM-dd',
 };
 
 export const NUMBER_CONVERT = 1000000; //10^6 satoshi unit
@@ -67,8 +67,6 @@ export const TOKEN_ID_GET_PRICE = {
   AURA: 'aura-network',
   BTC: 'bitcoin'
 };
-
-export const LIST_TYPE_CONTRACT_ADDRESS = ['revoke_all', 'approve_all', 'revoke', 'approve'];
 
 export enum MEDIA_TYPE {
   IMG = 'img',

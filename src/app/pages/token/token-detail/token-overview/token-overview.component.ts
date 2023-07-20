@@ -4,6 +4,7 @@ import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-token-overview',
@@ -15,7 +16,7 @@ export class TokenOverviewComponent implements OnInit {
   params = '';
   contractType = ContractRegisterType;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  
+
   constructor(
     public global: Globals,
     private tokenService: TokenService,
@@ -27,7 +28,12 @@ export class TokenOverviewComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
-    this.getTotalHolder();
+    if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
+      this.getTotalSupply();
+      this.getHolderNFT();
+    } else {
+      this.getTotalHolder();
+    }
 
     //set price change
     this.tokenDetail['change'] = this.tokenDetail.price_change_percentage_24h;
@@ -37,19 +43,40 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail.change = Number(this.tokenDetail.change.toString().substring(1));
     }
 
-    this.tokenDetail['holderChange'] = this.tokenDetail.holders_change_percentage_24h || 0;
+    if (this.tokenDetail.cw20_contract?.cw20_total_holder_stats?.length > 1) {
+      this.tokenDetail.holderChange =
+        (this.tokenDetail.cw20_contract.cw20_total_holder_stats[1].total_holder * 100) /
+          this.tokenDetail.cw20_contract.cw20_total_holder_stats[0].total_holder -
+        100;
+    }
+
     this.tokenDetail['isHolderUp'] = true;
     if (this.tokenDetail.holderChange < 0) {
       this.tokenDetail['isHolderUp'] = false;
-      this.tokenDetail.holderChange = Number(this.tokenDetail.holderChange.toString().substring(1));
+      this.tokenDetail.holderChange = Math.abs(this.tokenDetail.holderChange);
     }
   }
 
   getTotalHolder() {
-    this.tokenService.getListTokenHolder(20, 0, this.tokenDetail.type, this.tokenDetail?.contract_address).subscribe((res) => {
-      if (res && res.data?.resultAsset?.length > 0) {
-        this.tokenDetail['holder'] = res.data?.resultCount || 0;
-      }
+    this.tokenService.getListTokenHolder(20, 0, this.tokenDetail?.contract_address).subscribe((res) => {
+      const data = _.get(res, `cw20_holder_aggregate`);
+      this.tokenDetail['holder'] = data?.aggregate?.count || 0;
+    });
+  }
+
+  getTotalSupply() {
+    this.tokenService.countTotalTokenCW721(this.tokenDetail?.contract_address).subscribe((res) => {
+      this.tokenDetail.num_tokens = res.cw721_token_aggregate?.aggregate?.count || this.tokenDetail.num_tokens || 0;
+    });
+  }
+
+  getHolderNFT() {
+    const payload = {
+      limit: 100,
+      contractAddress: this.tokenDetail?.contract_address,
+    };
+    this.tokenService.getListTokenHolderNFT(payload).subscribe((res) => {
+      this.tokenDetail['holder'] = res.view_count_holder_cw721_aggregate?.aggregate?.count || 0;
     });
   }
 }
