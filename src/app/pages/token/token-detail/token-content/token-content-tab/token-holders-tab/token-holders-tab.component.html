@@ -20,7 +20,7 @@
       <app-loading-sprint></app-loading-sprint>
     </div>
     <ng-container *ngIf="pageData?.length > 0; else noValues">
-      <div class="table-responsive aura-table-contain">
+      <div class="overflow-scroll-x spacer-tooltip aura-table-contain">
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of template; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
