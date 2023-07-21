@@ -12,8 +12,9 @@
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
     <app-tooltip-customize
-      [class.tooltip--right]="isNameTagContract"
-      [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
+      [class.tooltip--right]="tooltipRight"
+      [class.tooltip--left]="tooltipLeft"
+      [content]="paramUrl || value + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
     </app-tooltip-customize>
   </div>
   <div class="aura-tooltip-contain">
@@ -29,7 +30,7 @@
       <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
     </a>
     <app-tooltip-customize
-      [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
+      [content]="paramUrl || value + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
     </app-tooltip-customize>
   </div>
 </ng-container>
@@ -60,7 +61,7 @@
       </ng-container>
     </span>
     <app-tooltip-customize
-      [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
+      [content]="paramUrl || value + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
     </app-tooltip-customize>
   </div>
 </ng-template>
