@@ -57,3 +57,11 @@
     }
   }
 }
+
+.contract-table {
+  ::ng-deep {
+    .tooltip--left {
+      transform: translate(0, -15px);
+    }
+  }
+}
