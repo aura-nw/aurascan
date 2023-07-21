@@ -79,7 +79,7 @@ export class ChartStatsComponent implements OnInit {
         fixLeftEdge: true,
         fixRightEdge: true,
       },
-      handleScroll: false
+      handleScroll: false,
     });
     this.dailyTransactionChartSeries = this.dailyTransactionChart.addAreaSeries({});
 
@@ -134,7 +134,7 @@ export class ChartStatsComponent implements OnInit {
         fixLeftEdge: true,
         fixRightEdge: true,
       },
-      handleScroll: false
+      handleScroll: false,
     });
     this.uniqueAddressChartSeries = this.uniqueAddressChart.addAreaSeries({});
     this.uniqueAddressChartSeries.applyOptions({
@@ -187,7 +187,7 @@ export class ChartStatsComponent implements OnInit {
         fixLeftEdge: true,
         fixRightEdge: true,
       },
-      handleScroll: false
+      handleScroll: false,
     });
     this.dailyAddressChartSeries = this.dailyAddressChart.addAreaSeries({});
     this.dailyAddressChartSeries.applyOptions({

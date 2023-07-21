@@ -1,4 +1,4 @@
-<div class="text-end sbt-contain">
+<div class="sbt-contain" [ngClass]="!isSBTValidator ? 'text-end' : 'sbt-validator'">
   <div class="soulbound-list" *ngIf="soulboundList && soulboundList?.length > 0">
     <ng-container *ngFor="let token of soulboundList; let last = last">
       <div class="soulbound__item">
@@ -28,21 +28,29 @@
   </div>
   <a
     [routerLink]="['/accountbound/account', accountAddress]"
-    class="button button-pill button-outline button-outline--gradient button-outline__in-card button--sm mt-md-3 mt-lg-0 mt-xl-3 position-relative"
+    class="button button-pill button-outline button-outline--gradient button-outline__in-card button--sm mt-md-3 mt-lg-0 mt-xl-3 position-relative aura-tooltip-contain d-inline-flex"
     [class.mr-2]="soulboundUnclaimedNum > 0"
     [class.mt-6]="soulboundList && soulboundList?.length > 0"
     (click)="setLinkTab()"
     *ngIf="wallet === accountAddress && displayManage && !isLoading">
     <span>Manage your ABTs</span>
     <span
-      class="nft__unclaimed-noti caption"
-      matTooltip="You have new un-claimed Account Bound Token(s) (ABTs). Kindly check and manage your ABTs in your account."
-      [matTooltipPosition]="'above'"
+      class="nft__unclaimed-noti caption aura-tooltip-object"
       *ngIf="soulboundUnclaimedNum > 0"
-      [class.noti--pill]="soulboundUnclaimedNum > 9"
-      >{{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}</span
-    >
+      [class.noti--pill]="soulboundUnclaimedNum > 9">
+      {{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}
+    </span>
+    <app-tooltip-customize
+      class="tooltip--left"
+      [content]="
+        'You have new un-claimed Account Bound Token(s) (ABTs). </br>Kindly check and manage your ABTs in your account.'
+      ">
+    </app-tooltip-customize>
   </a>
   <!-- Placeholder space for flex position -->
-  <div class="button button--sm mt-md-3 mt-lg-0 mt-xl-3" *ngIf="wallet !== accountAddress || !displayManage || isLoading"></div>
+  <ng-container *ngIf="!isSBTValidator">
+    <div
+      class="button button--sm mt-md-3 mt-lg-0 mt-xl-3"
+      *ngIf="wallet !== accountAddress || !displayManage || isLoading"></div>
+  </ng-container>
 </div>

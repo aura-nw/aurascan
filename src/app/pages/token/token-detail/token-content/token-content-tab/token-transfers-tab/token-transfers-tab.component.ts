@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import {
   LENGTH_CHARACTER,
-  LIST_TYPE_CONTRACT_ADDRESS,
   PAGE_EVENT,
 } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
@@ -80,6 +80,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     public global: Globals,
@@ -88,6 +89,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -95,7 +97,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       this.keyWord = params?.a || '';
     });
 
-    this.getListTransactionToken(this.keyWord);
+    this.getListTransactionToken();
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
@@ -106,7 +108,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.timerGetUpTime = setInterval(() => {
       if (this.pageData.pageIndex === 0) {
         this.currentKey = null;
-        this.getListTransactionToken(null, null, true);
+        this.getListTransactionToken(null, true);
       }
     }, 5000);
   }
@@ -117,40 +119,53 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async getListTransactionToken(dataSearch = '', nextKey = null, isReload = false) {
-    if (!this.dataSource.data) {
-      this.loading = true;
-    }
-    let filterData = {};
-    filterData['keyWord'] = this.keyWord || dataSearch;
-    if (
-      filterData['keyWord']?.length >= LENGTH_CHARACTER.ADDRESS &&
-      filterData['keyWord']?.startsWith(this.prefixAdd)
-    ) {
-      filterData['isSearchWallet'] = true;
-    }
+  async getListTransactionToken(nextKey = null, isReload = false) {
+    let payload = {
+      limit: 100,
+      value: this.contractAddress,
+      compositeKey: 'execute._contract_address',
+      heightLT: nextKey,
+    };
 
-    const res = await this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey);
-    if (res?.data?.code === 200) {
-      this.nextKey = res.data.data.nextKey || null;
-      res?.data?.data?.transactions.forEach((trans) => {
-        trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-      });
-
-      if (this.dataSource.data.length > 0 && !isReload) {
-        this.dataSource.data = [...this.dataSource.data, ...res.data.data.transactions];
+    if (this.keyWord) {
+      if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
+        payload['hash'] = this.keyWord;
       } else {
-        this.dataSource.data = [...res.data.data.transactions];
-      }
-      this.pageData.length = this.dataSource.data.length;
-      this.resultLength.emit(this.pageData.length);
-      if (this.nextKey) {
-        this.hasMore.emit(true);
-      } else {
-        this.hasMore.emit(false);
+        payload['value2'] = this.keyWord;
+        if (!(this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd))) {
+          payload['key2'] = 'token_id';
+        }
       }
     }
-    this.loading = false;
+
+    this.transactionService.getListTxMultiCondition(payload).subscribe(
+      (res) => {
+        if (res) {
+          this.nextKey = null;
+          if (res.transaction.length >= 100) {
+            this.nextKey = res?.transaction[res.transaction.length - 1].height;
+            this.hasMore.emit(true);
+          } else {
+            this.hasMore.emit(false);
+          }
+          res.transaction?.forEach((trans) => {
+            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+          });
+
+          if (this.dataSource.data.length > 0 && !isReload) {
+            this.dataSource.data = [...this.dataSource.data, ...res.transaction];
+          } else {
+            this.dataSource.data = [...res.transaction];
+          }
+          this.pageData.length = this.dataSource.data.length;
+          this.resultLength.emit(this.pageData.length);
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -173,21 +188,13 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     const next = length <= (pageIndex + 2) * pageSize;
     this.pageData = e;
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getListTransactionToken(null, this.nextKey);
+      this.getListTransactionToken(this.nextKey);
       this.currentKey = this.nextKey;
     }
   }
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
-  }
-
-  getNFTDetail(data) {
-    if (this.typeContract !== this.contractType.CW20) {
-      this.tokenService.getNFTDetail(this.contractAddress, data.token_id).subscribe((res) => {
-        this.nftDetail = res.data;
-      });
-    }
   }
 
   getPopoverData(data): IContractPopoverData {
@@ -215,12 +222,5 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.cdr.markForCheck();
-  }
-
-  isContractAddress(type, address) {
-    if (LIST_TYPE_CONTRACT_ADDRESS.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
-      return true;
-    }
-    return false;
   }
 }

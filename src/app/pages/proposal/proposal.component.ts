@@ -1,10 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
+import { tap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from '../../../app/global/global';
@@ -12,11 +13,9 @@ import { PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constant
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
-import { DialogService } from '../../core/services/dialog.service';
 import { ProposalService } from '../../core/services/proposal.service';
 import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
-import { shortenAddressStartEnd } from '../../core/utils/common/shorten';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 
 @Component({
@@ -38,30 +37,31 @@ export class ProposalComponent implements OnInit {
     { matColumnDef: 'submitTime', headerCellDef: 'Submit Time' },
     { matColumnDef: 'totalDeposit', headerCellDef: 'Total Deposit' },
   ];
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
+    tap((state) => {
+      this.pageData = {
+        length: PAGE_EVENT.LENGTH,
+        pageSize: state.matches ? 5 : 10,
+        pageIndex: 1,
+      };
+
+      this.getListProposal({ index: 1 });
+    }),
+  );
+
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  dataSourceMobile: any[];
   proposalData: any;
   length: number;
   nextKey = null;
-  isLoadingAction = false;
-  pageYOffset = 0;
   scrolling = false;
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
+    pageSize: this.layout.isMatched([Breakpoints.Small, Breakpoints.XSmall]) ? 5 : 10,
+    pageIndex: 1,
   };
-  proposalVotes: {
-    proId: number;
-    vote: string | null;
-  }[] = [];
-
-  @HostListener('window:scroll', ['$event']) onScroll(event) {
-    this.pageYOffset = window.pageYOffset;
-  }
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     private proposalService: ProposalService,
@@ -69,92 +69,72 @@ export class ProposalComponent implements OnInit {
     public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
-    private dlgService: DialogService,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
-    this.getListProposal();
     this.walletService.wallet$.subscribe((wallet) => this.getFourLastedProposal());
   }
 
   getFourLastedProposal() {
-    this.proposalService.getProposalList(4, null).subscribe((res) => {
-      if (res?.data?.proposals) {
-        const addr = this.walletService.wallet?.bech32Address || null;
-        this.proposalData = res.data.proposals;
-        if (this.proposalData?.length > 0) {
-          this.proposalData.forEach((pro, index) => {
-            if (pro?.tally) {
-              const { yes, no, no_with_veto, abstain } = pro?.tally;
-              let totalVote = +yes + +no + +no_with_veto + +abstain;
-
-              if (this.proposalData[index].tally) {
-                this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
-                this.proposalData[index].tally.no = (+no * 100) / totalVote;
-                this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-                this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+    this.proposalService
+      .getProposalData({
+        limit: 4,
+      })
+      .subscribe((res) => {
+        if (res?.proposal) {
+          const addr = this.walletService.wallet?.bech32Address || null;
+          this.proposalData = res.proposal;
+          if (this.proposalData?.length > 0) {
+            this.proposalData.forEach((pro, index) => {
+              if (pro?.tally) {
+                const { yes, no, no_with_veto, abstain } = pro?.tally;
+                let totalVote = +yes + +no + +no_with_veto + +abstain;
+                if (this.proposalData[index].tally && totalVote > 0) {
+                  this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
+                  this.proposalData[index].tally.no = (+no * 100) / totalVote;
+                  this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+                  this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+                }
               }
-            } else if (pro?.final_tally_result) {
-              const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
-              let totalVote = +yes + +no + +no_with_veto + +abstain;
-              this.proposalData[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
-              this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
-              this.proposalData[index].tally.no = (+no * 100) / totalVote;
-              this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-              this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
-            }
-
-            const getVoted = async () => {
-              if (addr) {
-                const payload = {
-                  proposalId: pro.proposal_id,
-                  wallet: addr,
-                };
-                this.proposalService.getVotes(payload).subscribe((res) => {
-                  const optionVote = this.proposalService.getVoteMessageByConstant(res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option);
-                  pro.vote_option = this.voteConstant.find(
-                    (s) => s.key === optionVote,
-                  )?.voteOption;
-                });
-              }
-            };
-            getVoted();
-          });
+              const getVoted = async () => {
+                if (addr) {
+                  const payload = {
+                    proposal_id: pro.proposal_id?.toString(),
+                    address: addr,
+                  };
+                  this.proposalService.getVotedResult(payload).subscribe((res) => {
+                    const optionVote = this.proposalService.getVoteMessageByConstant(res?.vote[0]?.vote_option);
+                    pro.vote_option = this.voteConstant.find((s) => s.key === optionVote)?.voteOption;
+                  });
+                }
+              };
+              getVoted();
+            });
+          }
         }
-      }
-    });
+      });
   }
 
-  getListProposal(nextKey = null) {
-    this.proposalService.getProposalList(40, nextKey).subscribe((res) => {
-      this.nextKey = res.data.nextKey ? res.data.nextKey : null;
-      if (res?.data?.proposals) {
-        let tempDta = res.data.proposals;
-        tempDta.forEach((pro, index) => {
-          pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
-          const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
-          let totalVote = +yes + +no + +no_with_veto + +abstain;
-          tempDta[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
-          tempDta[index].tally.yes = (+yes * 100) / totalVote;
-          tempDta[index].tally.no = (+no * 100) / totalVote;
-          tempDta[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-          tempDta[index].tally.abstain = (+abstain * 100) / totalVote;
-        });
-        if (this.dataSource.data.length > 0) {
-          this.dataSource.data = [...this.dataSource.data, ...tempDta];
-        } else {
-          this.dataSource.data = [...tempDta];
+  getListProposal({ index }) {
+    this.proposalService
+      .getProposalData({
+        limit: this.pageData.pageSize,
+        offset: (index - 1) * this.pageData.pageSize,
+      })
+      .subscribe((res) => {
+        if (res?.proposal) {
+          let tempDta = res.proposal;
+          tempDta.forEach((pro) => {
+            pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
+          });
+
+          this.dataSource.data = tempDta;
         }
-      }
-      this.dataSourceMobile = this.dataSource.data.slice(
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-      );
-      this.length = this.dataSource.data.length;
-    });
+        this.length = res.proposal_aggregate.aggregate.count;
+      });
   }
 
   getStatus(key: string) {
@@ -177,16 +157,16 @@ export class ProposalComponent implements OnInit {
 
     if (!highest || highest > 100) {
       highest = 0;
-      key = VOTE_OPTION.VOTE_OPTION_YES;
+      key = VOTE_OPTION.YES;
     } else {
       if (highest === yes) {
-        key = VOTE_OPTION.VOTE_OPTION_YES;
+        key = VOTE_OPTION.YES;
       } else if (highest === no) {
-        key = VOTE_OPTION.VOTE_OPTION_NO;
+        key = VOTE_OPTION.NO;
       } else if (highest === noWithVeto) {
-        key = VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO;
+        key = VOTE_OPTION.NO_WITH_VETO;
       } else {
-        key = VOTE_OPTION.VOTE_OPTION_ABSTAIN;
+        key = VOTE_OPTION.ABSTAIN;
       }
     }
 
@@ -241,47 +221,5 @@ export class ProposalComponent implements OnInit {
     setTimeout(() => {
       this.scrolling = !this.scrolling;
     }, 500);
-  }
-
-  parsingStatus(sts) {
-    return (
-      this.voteConstant.find((s) => {
-        return s.value?.toUpperCase() === sts?.toUpperCase();
-      })?.voteOption || sts
-    );
-  }
-
-  shortenAddress(address: string): string {
-    return shortenAddressStartEnd(address, 6, 10);
-  }
-
-  dlgServOpen(): void {
-    this.dlgService.showDialog({
-      content: 'Please set up override Keplr in settings of Coin98 wallet',
-      title: '',
-    });
-  }
-
-  paginatorEmit(e: MatPaginator): void {
-    if (this.dataSource.paginator) {
-      e.page.next({
-        length: this.dataSource.paginator.length,
-        pageIndex: 0,
-        pageSize: this.dataSource.paginator.pageSize,
-        previousPageIndex: this.dataSource.paginator.pageIndex,
-      });
-      this.dataSource.paginator = e;
-    } else this.dataSource.paginator = e;
-  }
-
-  pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
-
-    if (next && this.nextKey) {
-      this.getListProposal(this.nextKey);
-    }
-    this.pageData.pageIndex = e.pageIndex;
   }
 }

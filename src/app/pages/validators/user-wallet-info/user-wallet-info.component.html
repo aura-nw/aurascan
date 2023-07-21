@@ -1,5 +1,5 @@
 <ng-container *ngIf="userAddress">
-  <div class="card" *ngIf="arrayDelegate?.length > 0">
+  <div class="card" *ngIf="dataUserDelegate?.delegations?.length > 0">
     <!-- heading -->
     <div class="card-header card-header-gray title-small small-body-mob">
       <div class="row justify-content-between">
@@ -7,14 +7,14 @@
           <div class="mb-1 mb-lg-2 d-flex justify-content-between">
             <span class="body-02 body-01-mob text--gray-3">Available Balance: </span>
             <h6 class="mb-0">
-              <span class="text--gray-1" [appBigNumber]="dataDelegate.availableToken" [decimal]="0"></span>
+              <span class="text--gray-1" [appBigNumber]="+dataStakeInfo['availableToken'] || 0" [decimal]="0"></span>
               <span class="ml-1 text--primary">{{ denom }}</span>
             </h6>
           </div>
           <div class="mb-3 mb-lg-0 d-flex justify-content-between">
             <span class="body-02 body-01-mob text--gray-3">Total Staked: </span>
             <h6 class="mb-0">
-              <span class="text--gray-1" [appBigNumber]="dataDelegate.delegatedToken" [decimal]="0"></span>
+              <span class="text--gray-1" [appBigNumber]="+dataStakeInfo['delegatedToken'] || 0" [decimal]="0"></span>
               <span class="ml-1 text--primary">{{ denom }}</span>
             </h6>
           </div>

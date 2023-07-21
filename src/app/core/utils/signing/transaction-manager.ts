@@ -3,7 +3,6 @@ import { calculateFee, DeliverTxResponse, SigningStargateClient, StdFee } from '
 import { ChainInfo } from '@keplr-wallet/types';
 import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 import { KEPLR_ERRORS } from '../../constants/wallet.constant';
-import { getFee } from './fee';
 import { messageCreators } from './messages';
 import { getSigner } from './signer';
 

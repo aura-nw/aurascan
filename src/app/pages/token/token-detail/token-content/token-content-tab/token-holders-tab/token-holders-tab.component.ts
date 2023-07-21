@@ -8,6 +8,8 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { Globals } from '../../../../../../global/global';
+import * as _ from 'lodash';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -22,18 +24,18 @@ export class TokenHoldersTabComponent implements OnInit {
   @Input() decimalValue: number;
 
   CW20Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'rank' },
-    { matColumnDef: 'owner', headerCellDef: 'address' },
-    { matColumnDef: 'balance', headerCellDef: 'amount' },
-    { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
-    { matColumnDef: 'value', headerCellDef: 'value' },
+    { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
+    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
+    { matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12},
+    { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 12 },
+    { matColumnDef: 'value', headerCellDef: 'value', headerWidth: 12 },
   ];
 
   CW721Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'rank' },
-    { matColumnDef: 'owner', headerCellDef: 'address' },
-    { matColumnDef: 'quantity', headerCellDef: 'amount' },
-    { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
+    { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
+    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
+    { matColumnDef: 'quantity', headerCellDef: 'amount', headerWidth: 12 },
+    { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 15 },
   ];
 
   template: Array<TableTemplate> = [];
@@ -58,42 +60,82 @@ export class TokenHoldersTabComponent implements OnInit {
     public global: Globals,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
     if (this.typeContract !== ContractRegisterType.CW20) {
       this.getQuantity();
     } else {
-      this.getListTokenHolder();
+      this.getHolder();
     }
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
 
-  getListTokenHolder() {
-    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress).subscribe(
+  getHolder() {
+    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.contractAddress).subscribe(
       (res) => {
-        if (res && res.data?.resultAsset?.length > 0) {
-          this.totalHolder = res.data?.resultCount;
+        const data = _.get(res, `cw20_holder`);
+        const count = _.get(res, `cw20_holder_aggregate`);
+        if (data?.length > 0) {
+          this.totalHolder = count.aggregate?.count;
           if (this.totalHolder > this.numberTopHolder) {
             this.pageData.length = this.numberTopHolder;
           } else {
             this.pageData.length = this.totalHolder;
           }
 
-          let topHolder = Math.max(...res.data?.resultAsset.map((o) => o.quantity)) || 1;
+          const dataFlat = data?.map((item) => {
+            return {
+              owner: item.address,
+              balance: item.amount,
+              percent_hold: (item.amount / item.cw20_contract.total_supply) * 100,
+              value: 0,
+            };
+          });
+          this.dataSource = new MatTableDataSource<any>(dataFlat);
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
+  }
+
+  getHolderNFT() {
+    const payload = {
+      limit: this.numberTopHolder,
+      contractAddress: this.contractAddress,
+    };
+    this.tokenService.getListTokenHolderNFT(payload).subscribe(
+      (res) => {
+        if (res?.view_count_holder_cw721?.length > 0) {
+          this.totalHolder = res.view_count_holder_cw721_aggregate?.aggregate?.count;
+          if (this.totalHolder > this.numberTopHolder) {
+            this.pageData.length = this.numberTopHolder;
+          } else {
+            this.pageData.length = this.totalHolder;
+          }
+
+          res?.view_count_holder_cw721.forEach((element) => {
+            element['quantity'] = element.count;
+          });
+
+          let topHolder = Math.max(...res?.view_count_holder_cw721.map((o) => o.quantity)) || 1;
           this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
-          res.data?.resultAsset.forEach((element) => {
+          res?.view_count_holder_cw721.forEach((element) => {
             element['value'] = 0;
           });
 
           if (this.totalQuantity) {
-            res.data?.resultAsset.forEach((k) => {
+            res?.view_count_holder_cw721.forEach((k) => {
               k['percent_hold'] = (k.quantity / this.totalQuantity) * 100;
               k['width_chart'] = (k.quantity / this.numberTop) * 100;
             });
           }
-          this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
+          this.dataSource = new MatTableDataSource<any>(res.view_count_holder_cw721);
         }
       },
       () => {},
@@ -127,7 +169,7 @@ export class TokenHoldersTabComponent implements OnInit {
     try {
       const config = await client.queryContractSmart(this.contractAddress, queryData);
       this.totalQuantity = config?.count || 0;
-      this.getListTokenHolder();
+      this.getHolderNFT();
     } catch (error) {}
   }
 }

@@ -15,27 +15,54 @@
       <tr>
         <td class="text--gray-5 body-02-mob">Balance:</td>
         <td>
-          {{ contractDetail?.balance | mask : 'separator.6' }}
+          {{ contractBalance | mask : 'separator.6' }}
           {{ denom }}
+        </td>
+      </tr>
+
+      <tr class="d-lg-none">
+        <td colspan="3">
+          <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
+          <div>
+            <span class="mr-1 mr-lg-2">
+              <app-name-tag
+                [value]="contractDetail?.creator"
+                [widthAuto]="true"
+                [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
+            </span>
+            at txn
+            <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+              {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
+            </a>
+          </div>
+        </td>
+      </tr>
+
+      <tr class="d-none d-lg-table-row">
+        <td class="text--gray-5 body-02-mob">Contract Creator:</td>
+        <td colspan="2">
+          <span class="mr-1 mr-lg-2">
+            <app-name-tag
+              [value]="contractDetail?.creator"
+              [widthAuto]="true"
+              [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
+          </span>
+          at txn
+          <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+            {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
+          </a>
         </td>
       </tr>
 
       <tr>
         <td class="text--gray-5 body-02-mob border_none">Aura Value:</td>
         <td class="border_none">
-          ${{ contractDetail?.price | number : global.formatNumber2Decimal }}
+          ${{ contractPrice | number : global.formatNumber2Decimal }}
           <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
             >(@ ${{ global.price.aura | mask : 'separator.6' }}/{{ denom | uppercase }})
           </span>
         </td>
       </tr>
-
-      <tr class="d-none">
-        <!-- Mobile -->
-        <td colspan="2" class="border_none py-4"></td>
-      </tr>
-      <!-- Desktop -->
-      <tr class="d-none d-lg-table-row"></tr>
     </table>
   </div>
 </div>

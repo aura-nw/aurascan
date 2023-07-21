@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { map } from 'rxjs/operators';
+import { TYPE_CW4973 } from '../constants/contract.constant';
+import { LENGTH_CHARACTER } from '../constants/common.constant';
 
 @Injectable()
 export class AccountService extends CommonService {
@@ -17,11 +20,76 @@ export class AccountService extends CommonService {
   }
 
   getAssetCW20ByOwner(payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/`,payload);
+    return this.http.post<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/`, payload);
   }
 
   getAssetCW721ByOwner(payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw721-tokens/get-by-owner/`,payload);
+    if (payload.keyword?.length >= LENGTH_CHARACTER.ADDRESS) {
+      payload.contractAddress = payload.keyword;
+    } else if (payload.keyword?.length > 0) {
+      payload.token_id = payload.keyword;
+    }
+    const operationsDoc = `
+    query queryAssetCW721(
+      $contract_address: String
+      $limit: Int = 10
+      $tokenId: String = null
+      $owner: String = null
+      $offset: Int = 0
+    ) {
+      ${this.envDB} {
+        cw721_token(
+          limit: $limit
+          offset: $offset
+          where: {
+            cw721_contract: {
+              smart_contract: { address: { _eq: $contract_address }, name: {_neq: "${TYPE_CW4973}"} }
+            }
+            token_id: { _eq: $tokenId }
+            owner: { _eq: $owner }
+            burned: {_eq: false}
+          }
+          order_by: [{ last_updated_height: desc }, { id: desc }]
+        ) {
+          id
+          token_id
+          owner
+          media_info
+          last_updated_height
+          created_at
+          burned
+          cw721_contract {
+            name
+            symbol
+            smart_contract {
+              name
+              address
+            }
+          }
+        }
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload?.limit || 20,
+          offset: payload.offset,
+          contract_address: payload?.contractAddress,
+          nextKeyLastUpdatedHeight: payload?.nextKey,
+          nextKeyId: payload?.nextKeyId,
+          tokenId: payload?.token_id,
+          owner: payload?.owner,
+        },
+        operationName: 'queryAssetCW721',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getTotalAssets(account_id: string): Observable<any> {

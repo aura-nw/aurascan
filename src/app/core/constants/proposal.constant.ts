@@ -4,7 +4,7 @@ export enum VOTING_STATUS {
   PROPOSAL_STATUS_VOTING_PERIOD = 'PROPOSAL_STATUS_VOTING_PERIOD',
   PROPOSAL_STATUS_DEPOSIT_PERIOD = 'PROPOSAL_STATUS_DEPOSIT_PERIOD',
   PROPOSAL_STATUS_FAILED = 'PROPOSAL_STATUS_FAILED',
-  PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT = 'PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT'
+  PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT = 'PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT',
 }
 
 export const PROPOSAL_STATUS = [
@@ -36,42 +36,42 @@ export const PROPOSAL_STATUS = [
 ];
 
 export enum VOTE_OPTION {
-  VOTE_OPTION_NULL = 'null',
-  VOTE_OPTION_UNSPECIFIED = 'VOTE_OPTION_UNSPECIFIED',
-  VOTE_OPTION_YES = 'VOTE_OPTION_YES',
-  VOTE_OPTION_ABSTAIN = 'VOTE_OPTION_ABSTAIN',
-  VOTE_OPTION_NO = 'VOTE_OPTION_NO',
-  VOTE_OPTION_NO_WITH_VETO = 'VOTE_OPTION_NO_WITH_VETO',
-  VOTE_OPTION_EMPTY = 'VOTE_OPTION_EMPTY'
+  NULL = 'null',
+  UNSPECIFIED = 'VOTE_OPTION_UNSPECIFIED',
+  YES = 'VOTE_OPTION_YES',
+  ABSTAIN = 'VOTE_OPTION_ABSTAIN',
+  NO = 'VOTE_OPTION_NO',
+  NO_WITH_VETO = 'VOTE_OPTION_NO_WITH_VETO',
+  EMPTY = 'VOTE_OPTION_EMPTY',
 }
 
 export const PROPOSAL_VOTE = [
   {
-    key: VOTE_OPTION.VOTE_OPTION_UNSPECIFIED,
+    key: VOTE_OPTION.UNSPECIFIED,
     value: 'All',
     class: '',
     voteOption: '',
   },
   {
-    key: VOTE_OPTION.VOTE_OPTION_YES,
+    key: VOTE_OPTION.YES,
     value: 'Yes',
     class: 'primary',
     voteOption: 'Yes',
   },
   {
-    key: VOTE_OPTION.VOTE_OPTION_NO,
+    key: VOTE_OPTION.NO,
     value: 'No',
     class: 'danger',
     voteOption: 'No',
   },
   {
-    key: VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO,
+    key: VOTE_OPTION.NO_WITH_VETO,
     value: 'NoWithVeto',
     class: 'info',
     voteOption: 'NoWithVeto',
   },
   {
-    key: VOTE_OPTION.VOTE_OPTION_ABSTAIN,
+    key: VOTE_OPTION.ABSTAIN,
     value: 'Abstain',
     class: 'secondary',
     voteOption: 'Abstain',
@@ -96,11 +96,11 @@ export enum VOTING_SUBTITLE {
   REJECT_1 = 'This proposal is rejected because there are more than {{proposalDetail.noWithVetoPercent}}% of No With Veto votes.',
   REJECT_2 = 'This proposal is rejected because it is above the threshold and received more than 50.00% of No votes.',
   REJECT_3 = 'This proposal is failed because it did not reach the quorum.',
-  FAILED = 'This proposal is failed because the upgrade can\'t be executed',
+  FAILED = "This proposal is failed because the upgrade can't be executed",
 }
 
 export enum VOTING_QUORUM {
-  REACHED= '(Reached)',
+  REACHED = '(Reached)',
   NOT_REACHED = '(Not Reached)',
 }
 

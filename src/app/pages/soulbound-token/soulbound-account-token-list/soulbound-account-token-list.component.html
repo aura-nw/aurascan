@@ -18,19 +18,24 @@
               <span class="d-md-flex d-none">{{ userAddress }}</span>
               <span class="d-md-none d-flex">{{ userAddress | cutStringPipe : 8 : 8 }}</span>
             </div>
-            <div class="button button--xxs button-circle ml-2" id="popupCopy">
-              <img
-                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                class=""
-                alt=""
-                width="12px"
-                height="12px"
-                matTooltip="Copied!"
-                #tooltip="matTooltip"
-                (mouseenter)="$event.stopImmediatePropagation()"
-                (mouseleave)="$event.stopImmediatePropagation()"
-                (click)="copyMessage(userAddress); tooltip.toggle()" />
+            <div class="aura-tooltip-contain ml-2">
+              <button
+                class="button button--xxs button-circle aura-tooltip-object disabled-hover"
+                #tooltip
+                (click)="commonService.showToolTip(tooltip)"
+                [cdkCopyToClipboard]="userAddress">
+                <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="12px" height="12px" />
+              </button>
+              <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
             </div>
+          </div>
+          <div *ngIf="commonService.setNameTag(userAddress) !== userAddress" class="name-tag cursor-pointer mt-2">
+            <app-name-tag
+              [value]="userAddress"
+              [fullText]="true"
+              [widthAuto]="true"
+              [extendUrl]="true"
+              [isLink]="false"></app-name-tag>
           </div>
         </div>
         <div class="mt-6 mt-lg-4">

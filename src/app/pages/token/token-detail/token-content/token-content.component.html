@@ -19,11 +19,14 @@
               height="18px" />
             FILTER BY ADDRESS
           </div>
-          <a
-            class="body-02 text--primary"
-            [routerLink]="[textSearch?.length > lengthNormalAddress ? '/contracts' : '/account', textSearch]"
-            >{{ textSearch }}</a
-          >
+          <div class="mt-2">
+            <app-name-tag
+              [value]="textSearch"
+              [url]="textSearch?.length > lengthNormalAddress ? '/contracts' : '/account'"
+              [fullText]="true"
+              [widthAuto]="true"
+              [fullTextMob]="true"></app-name-tag>
+          </div>
         </div>
         <div
           class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
@@ -34,27 +37,31 @@
             <span
               *ngIf="infoSearch['balance']"
               [appBigNumber]="infoSearch['balance']"
-              [decimal]="tokenDetail.decimals"></span>
+              [decimal]="tokenDetail.decimals || 0"></span>
             {{ tokenDetail.symbol || tokenDetail.name }}
           </span>
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
         </div>
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
-          <div
-            class="d-inline"
-            *ngIf="infoSearch['balance']"
-            [appBigNumber]="infoSearch['balance']"
-            [decimal]="tokenDetail.decimals"
-            [tokenPrice]="tokenDetail.price"></div>
-          (<div
-            *ngIf="infoSearch['balance']"
-            class="d-inline"
-            [appBigNumber]="infoSearch['balance']"
-            [tokenPrice]="tokenDetail.price"
-            [auraValue]="true"
-            [decimal]="tokenDetail.decimals"></div>
-          {{ denom }})
+          <ng-container *ngIf="tokenDetail.price > 0">
+            <div
+              class="d-inline"
+              *ngIf="infoSearch['balance']"
+              [appBigNumber]="infoSearch['balance']"
+              [decimal]="tokenDetail.decimals || 0"
+              [tokenPrice]="tokenDetail.price"></div>
+            (
+            <div
+              *ngIf="infoSearch['balance']"
+              class="d-inline"
+              [appBigNumber]="infoSearch['balance']"
+              [tokenPrice]="tokenDetail.price"
+              [auraValue]="true"
+              [decimal]="tokenDetail.decimals || 0"></div>
+            {{ denom }})
+          </ng-container>
+          <ng-container *ngIf="!(tokenDetail.price > 0)"> $0.00 (0 {{ denom }}) </ng-container>
         </div>
       </div>
     </div>
@@ -124,12 +131,12 @@
       [contractAddress]="contractAddress"
       [isSearchAddress]="isSearchAddress"
       (resultLength)="getLength($event)"
-      [decimalValue]="tokenDetail?.decimals"
+      [decimalValue]="tokenDetail?.decimals || 0"
       (hasMore)="getMoreTx($event)">
     </app-token-transfers-tab>
     <app-token-holders-tab
       *ngIf="currentTab === tokenTab.Holders"
-      [decimalValue]="tokenDetail?.decimals"
+      [decimalValue]="tokenDetail?.decimals || 0"
       [keyWord]="textSearch"
       [tokenDetail]="tokenDetail"
       [typeContract]="tokenDetail?.type"
@@ -140,6 +147,7 @@
     <app-token-info-tab *ngIf="currentTab === tokenTab.Info"></app-token-info-tab>
     <app-token-contract-tab
       *ngIf="currentTab === tokenTab.Contract"
-      [contractAddress]="contractAddress"></app-token-contract-tab>
+      [contractAddress]="contractAddress"
+      [typeContract]="tokenDetail?.type"></app-token-contract-tab>
   </div>
 </section>

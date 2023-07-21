@@ -4,7 +4,7 @@
   </div>
   <div *ngIf="!loading">
     <!-- Unverified -->
-    <ng-container *ngIf="contractStatus === contractVerifyType.Unverified">
+    <ng-container *ngIf="!codeIdDetail?.contract_verification || codeIdDetail?.contract_verification?.length === 0">
       <div class="d-flex content-contract body-02">
         <img
           [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
@@ -20,7 +20,7 @@
       </div>
     </ng-container>
     <!-- Verifying -->
-    <ng-container *ngIf="contractStatus === contractVerifyType.Verifying">
+    <ng-container *ngIf="codeIdDetail?.contract_verification === contractVerifyType.Verifying">
       <div class="d-flex content-contract body-02">
         <img
           [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
@@ -39,7 +39,7 @@
       </div>
     </ng-container>
     <!-- Verify Fail -->
-    <ng-container *ngIf="contractStatus === contractVerifyType.VerifiedFail">
+    <ng-container *ngIf="codeIdDetail?.contract_verification === contractVerifyType.VerifiedFail">
       <div class="d-flex content-contract body-02">
         <img
           [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
@@ -59,7 +59,7 @@
       <app-contract-verify-steps [codeID]="codeIdDetail.code_id"></app-contract-verify-steps>
     </ng-container>
     <!-- Verify Successfull -->
-    <ng-container *ngIf="contractStatus === contractVerifyType.Verified">
+    <ng-container *ngIf="codeIdDetail?.contract_verification === contractVerifyType.Verified">
       <div class="d-flex fw-semibold">
         <img [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="" width="16px" height="16px" />
         <div class="ml-2">Code ID Verified</div>
@@ -84,15 +84,16 @@
           class="form-control form-check-input body mt-0 text--gray-1"
           readonly
           value="{{ codeIdDetail.url }}" />
-        <button
-          class="button button-outline button-pill ml-4"
-          matTooltip="Copied!"
-          #tooltip2="matTooltip"
-          (mouseenter)="$event.stopImmediatePropagation()"
-          (mouseleave)="$event.stopImmediatePropagation()"
-          (click)="copyData(codeIdDetail.url); tooltip2.toggle()">
-          <span class="body-01">Copy</span>
-        </button>
+        <div class="aura-tooltip-contain">
+          <button
+            class="button button-outline button-pill ml-4 aura-tooltip-object disabled-hover"
+            #tooltip
+            (click)="commonService.showToolTip(tooltip)"
+            [cdkCopyToClipboard]="codeIdDetail.url">
+            <span class="body-01">Copy</span>
+          </button>
+          <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+        </div>
       </div>
     </ng-container>
   </div>

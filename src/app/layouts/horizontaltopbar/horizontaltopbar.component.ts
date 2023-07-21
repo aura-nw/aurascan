@@ -2,10 +2,12 @@ import { AfterViewInit, Component, EventEmitter, HostListener, OnInit, Output } 
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
+import { from } from 'rxjs';
+import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
-import { ResponseDto } from '../../core/models/common.model';
 import { EventService } from '../../core/services/event.service';
 import { LanguageService } from '../../core/services/language.service';
 import { TransactionService } from '../../core/services/transaction.service';
@@ -13,8 +15,6 @@ import { WalletService } from '../../core/services/wallet.service';
 import { LAYOUT_MODE } from '../layouts.model';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-import { from } from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -34,9 +34,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   cookieValue: any;
   countryName: any;
   valueset: any;
-  networks = NETWORK;
-  currentNetwork = JSON.parse(localStorage.getItem('currentNetwork')) || NETWORK[1];
-  currentChanel = JSON.parse(localStorage.getItem('currentChanel')) || null;
   searchValue = null;
   env = null;
   pageTitle = null;
@@ -80,6 +77,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
+    private commonService: CommonService,
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -162,6 +160,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   checkEnv() {
+    this.env = this.environmentService.configValue.env;
     this.innerWidth = window.innerWidth;
     this.pageTitle =
       this.innerWidth > 992
@@ -322,6 +321,14 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     const regexRule = VALIDATORS.HASHRULE;
     if (this.searchValue) {
       this.searchValue = this.searchValue.trim();
+      const addressNameTag = this.commonService.findNameTag(this.searchValue);
+      if (addressNameTag?.length > 0) {
+        let urlLink = addressNameTag.length === LENGTH_CHARACTER.CONTRACT ? 'contracts' : 'account';
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate([urlLink, addressNameTag]);
+        });
+      }
+
       let isNumber = /^\d+$/.test(this.searchValue);
       if (regexRule.test(this.searchValue)) {
         //check is start with 'aura' and length >= normal address
@@ -343,16 +350,18 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
             this.router.navigate(['blocks', this.searchValue]);
           });
         }
-      } else {
-        this.searchValue = '';
       }
     }
   }
 
   getTxhDetail(value): void {
-    this.transactionService.txsIndexer(1, 0, decodeURI(value)).subscribe(
-      (res: ResponseDto) => {
-        if (res.data) {
+    const payload = {
+      limit: 1,
+      hash: decodeURI(value),
+    };
+    this.transactionService.getListTx(payload).subscribe(
+      (res) => {
+        if (res?.transaction?.length > 0) {
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate(['transaction', this.searchValue]);
           });
