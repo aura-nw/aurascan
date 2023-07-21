@@ -18,7 +18,7 @@
           <div class="fw-semibold mb-1 body-01">Error:</div>
           <span class="body" id="contentError" [class.ellipsis-text]="!seeLess">{{ errorMessage }}</span>
         </div>
-        <div *ngIf="isDisplayMore" class="cursor-pointer mt-1 w-auto h5 txt-see-more">
+        <div *ngIf="isDisplayMore" class="cursor-pointer mt-1 w-auto txt-see-more">
           <span (click)="seeLess = true" *ngIf="!seeLess">See more</span>
           <span (click)="seeLess = false" *ngIf="seeLess">See less</span>
         </div>
