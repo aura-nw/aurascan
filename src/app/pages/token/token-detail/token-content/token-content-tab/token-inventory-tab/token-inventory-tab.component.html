@@ -26,7 +26,8 @@
                 <a
                   class="small-text text--primary hover-link"
                   href="/tokens/{{ linkToken }}/{{ item.contract_address }}?a={{ encodeData(item.token_id) }}">
-                  {{ item.token_id }}
+                  <span class="d-none d-lg-inline-block">{{ item.token_id | cutStringPipe : 8 : 8 }}</span>
+                  <span class="d-inline-block d-lg-none">{{ item.token_id | cutStringPipe : 5 : 5 }}</span>
                 </a>
               </div>
               <div class="spacer-tooltip nft__info">

@@ -26,4 +26,9 @@ export class ContractInfoCardComponent implements OnInit, OnChanges {
       }
     }, 500);
   }
+
+  extendLink(url) {
+    url = url.match(/^https?:/) ? url : '//' + url;
+    return url;
+  }
 }

@@ -10,3 +10,9 @@
     min-width: 100px;
   }
 }
+
+::ng-deep {
+  .box-name-tag {
+    min-width: 142px;
+  }
+}
