@@ -1,0 +1,122 @@
+.wallet-connect-container {
+  .text {
+    font-size: 16px;
+  }
+
+  .img-wallet {
+    width: 32px;
+    cursor: pointer;
+    height: auto;
+  }
+
+  .wallet-avatar {
+    width: 26px;
+    height: 26px;
+    border: 1px solid #d2d2d2;
+    border-radius: 100%;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .account-button {
+    white-space: nowrap;
+    @media (min-width: 992px) {
+      width: 192px;
+    }
+  }
+
+  .walletMenu {
+    &.aura-dropdown .dropdown-menu.aura-dropdown-menu {
+      border: 1px solid var(--aura-gray-9);
+      border-radius: 8px;
+      box-shadow: 0px 2px 10px rgba(3, 3, 3, 0.3);
+      li.dropdown-item {
+        transition: background-color .35s ease-in-out;
+        &:hover {
+          background-color: var(--aura-gray-9) !important;
+        }
+      }
+    }
+    .button__title {
+      @media (min-width: 576px) {
+        min-width: 100px;
+      }
+    }
+
+    li {
+      cursor: pointer;
+    }
+  }
+
+  .offcanvas-wallet {
+    background: #141416;
+    box-shadow: -2px 0px 18px rgba(0, 0, 0, 0.25);
+    border: none;
+
+    .card {
+      background: #141416;
+    }
+  }
+
+  .wallet-container {
+    position: relative;
+
+    .qr-modal {
+      position: absolute;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      z-index: 1552;
+
+      display: flex;
+      justify-content: center;
+
+      background-color: rgba(255, 255, 255, 0.75);
+
+      .modal-content {
+        margin-top: 80px;
+        height: fit-content;
+        width: 80%;
+        box-shadow: 1px 1px 1px 1px rgba(219, 219, 225, 0.5);
+        border: 1px solid rgb(204, 204, 204);
+        background: rgb(255, 255, 255);
+        overflow: auto;
+        border-radius: 4px;
+        outline: none;
+        padding: 20px;
+      }
+    }
+  }
+}
+
+.button-wallet-menu {
+  min-width: 90px;
+  @media (max-width: 991.98px) {
+    padding-right: 30px !important;
+    &:before, &:after {
+      right: 10px !important;
+    }
+  }
+  @media (max-width: 414.98px) {
+    padding: 0 14px;
+    padding-right: 25px !important;
+  }
+  &[aria-expanded = 'true'] {
+    &:before {
+      opacity: 0;
+    }
+    &:after {
+      opacity: 1;
+    }
+  }
+  &::before {
+    background: url(../../../../assets/icons/icons-svg/black/caret-up.svg) center no-repeat;
+  }
+  &::after {
+    background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
+  }
+}
