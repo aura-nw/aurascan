@@ -783,9 +783,11 @@ export class TransactionMessagesComponent implements OnInit {
     }
   }
 
-  getStoreCode(index): number {
-    let temp = this.transactionDetail.tx.logs[index].events[1];
-    return temp?.attributes.find((k) => k.key === 'code_id')?.value || 0;
+  getStoreCode(index) {
+    try {
+      let temp = this.transactionDetail?.tx?.logs[index]?.events[1];
+      return temp?.attributes?.find((k) => k.key === 'code_id')?.value || 0;
+    } catch (error) {}
   }
 
   getDataIBC(type = '', index = 0): void {
