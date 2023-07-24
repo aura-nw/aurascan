@@ -93,17 +93,24 @@
   }
 }
 
-.button-wallet-menu {
+.button-login-menu {
   min-width: 90px;
-  @media (max-width: 991.98px) {
-    padding-right: 30px !important;
-    &:before, &:after {
-      right: 10px !important;
-    }
+  border-radius: 999px;
+  padding: 10px 24px;
+  .login-img {
+    width: 20px;
+    height: 20px;
   }
-  @media (max-width: 414.98px) {
-    padding: 0 14px;
-    padding-right: 25px !important;
+  @media (max-width: 991.98px) {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 0;
+    min-width: unset;
+    .login-img {
+      width: 16px;
+      height: 16px;
+    }
   }
   &[aria-expanded = 'true'] {
     &:before {
@@ -118,5 +125,12 @@
   }
   &::after {
     background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
+  }
+}
+.button-user {
+  background: rgba(36, 38, 46, 1);
+  vertical-align: middle;
+  &:hover {
+    background: var(--aura-gray-7);
   }
 }

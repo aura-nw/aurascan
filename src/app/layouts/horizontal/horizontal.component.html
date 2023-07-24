@@ -4,7 +4,7 @@
     (mobileMenuButtonClicked)="onToggleMobileMenu()"
     (settingsButtonClicked)="onSettingsButtonClicked()"></app-horizontaltopbar>
   <div class="main-content">
-    <div class="page-content">
+    <div class="page-content" [ngClass]="router.url === '/login' ? 'box-mobile-login' : ''">
       <div class="container-fluid">
         <!-- content -->
         <router-outlet></router-outlet>
