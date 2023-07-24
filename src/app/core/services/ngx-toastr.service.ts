@@ -21,6 +21,14 @@ export class NgxToastrService {
     });
   }
 
+  successWithTitle(message: string, title = '', configTimeOut = 3000): void {
+    this.toastrService.success(message, title, {
+      positionClass: this.POSITION_CLASS,
+      timeOut: configTimeOut,
+      toastClass: 'aura-toast'
+    });
+  }
+
   successWithTap(message: string, title = ''): Observable<void> {
     return this.toastrService.success(message, title, {
       positionClass: this.POSITION_CLASS,

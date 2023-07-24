@@ -11,5 +11,7 @@ declare global {
     coin98: {
       keplr: Keplr;
     };
+
+    handleCredentialResponse: (response: any) => void;
   }
 }

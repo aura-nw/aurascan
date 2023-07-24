@@ -24,7 +24,7 @@
   .logo {
     display: contents;
     img {
-      height: 36px;
+      height: 24px;
       @media (min-width: 992px) {
         height: 60px;
       }
@@ -211,3 +211,21 @@ form.aura-form.single-input-field {
   border-radius: 25px;
   background-color: var(--aura-gray-10);
 }
+
+.wallet-connect{
+  display: flex;
+  background-color: var(--aura-gray-9);
+  border-radius: 999px;
+  align-items: center;
+  padding: 4px;
+  .divider.divider-vertical {
+    min-height: 32px;
+    @media (min-width: 991.98px) {
+      min-height: 40px;
+    }
+  }
+}
+.button-login-menu {
+  border-radius: 999px;
+}
+

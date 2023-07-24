@@ -1,4 +1,4 @@
-@mixin mono-font-size($font-size, $line-height, $font-weight, $font: "Inter") {
+@mixin mono-font-size($font-size, $line-height, $font-weight, $font: 'Inter') {
   font-size: #{$font-size}rem !important;
   line-height: #{$line-height}rem !important;
   font-weight: $font-weight !important;
@@ -86,31 +86,31 @@ h6,
   .caption-mob {
     @include mono-font-size(1.2, 1.6, 600);
   }
-
 }
 $textColors: (
-  "primary",
-  "danger",
-  "info",
-  "warning",
-  "white",
-  "black",
-  "gray-light",
-  "gray-1",
-  "gray-2",
-  "gray-3",
-  "gray-4",
-  "gray-5",
-  "gray-6",
-  "gray-7",
-  "green-4",
-  "green-3",
-  "green-2",
-  "red-3",
-  "yellow-3",
-  "blue-2",
-  "blue-3link",
-  "yellow-4",
+  'primary',
+  'danger',
+  'info',
+  'warning',
+  'white',
+  'black',
+  'gray-light',
+  'gray-1',
+  'gray-2',
+  'gray-3',
+  'gray-4',
+  'gray-5',
+  'gray-6',
+  'gray-7',
+  'green-4',
+  'green-3',
+  'green-2',
+  'red-3',
+  'yellow-3',
+  'blue-2',
+  'blue-3link',
+  'yellow-4',
+  'aqua-2'
 );
 @each $color in $textColors {
   .text--#{$color} {
@@ -153,13 +153,12 @@ $textColors: (
   }
 }
 
-
 .text-gradient {
   background: var(--aura-gradient-general);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.text-hover-gray{
-  color: #9DA2AF;
+.text-hover-gray {
+  color: #9da2af;
 }
