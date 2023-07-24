@@ -26,7 +26,9 @@ export class NameTagComponent implements OnInit {
   @Input() isTokenDetail = false;
   @Input() extendUrl = false;
   @Input() widthAuto = false;
-  @Input() isNameTagContract = false;
+  @Input() tooltipRight = false;
+  @Input() tooltipLeft = false;
+  
   extendUrlLink = '';
 
   constructor(public commonService: CommonService, public global: Globals) {}
@@ -46,6 +48,6 @@ export class NameTagComponent implements OnInit {
 
   extendLink(url) {
     url = url.match(/^https?:/) ? url : '//' + url;
-    window.open(url, '_blank');
+    return url;
   }
 }

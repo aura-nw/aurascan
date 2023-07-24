@@ -99,7 +99,7 @@ export class TransactionDetailComponent implements OnInit {
                 const widthContent = document.getElementById('contentError')?.offsetWidth;
                 
                 // cal width text/content
-                if (lengthChar * 6.8 > widthContent * 3) {
+                if (lengthChar * 7.1 > widthContent * 3) {
                   this.isDisplayMore = true;
                 }
               }, 500);
