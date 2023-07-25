@@ -1,9 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TYPE_ACCOUNT } from 'src/app/core/constants/account.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { Globals } from '../../../../global/global';
-import { ContractService } from 'src/app/core/services/contract.service';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-contracts-overview-card',
@@ -32,7 +33,7 @@ export class ContractsOverviewCardComponent implements OnInit, OnChanges {
   async ngOnChanges(changes: SimpleChanges) {
     const balanceReq = await this.contractService.getContractBalance(this.contractDetail.address);
     if (balanceReq?.data) {
-      this.contractBalance = balanceReq.data.balances[0] ? balanceReq.data.balances[0] : 0;
+      this.contractBalance = balanceReq.data.balances[0].amount ? balanceOf(balanceReq.data.balances[0].account) : 0;
       this.contractPrice = this.contractBalance * this.priceToken || 0;
     }
   }
