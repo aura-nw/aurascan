@@ -32,9 +32,8 @@ export class ContractsOverviewCardComponent implements OnInit, OnChanges {
 
   async ngOnChanges(changes: SimpleChanges) {
     const balanceReq = await this.contractService.getContractBalance(this.contractDetail.address);
-    if (balanceReq?.data) {
-      this.contractBalance = balanceReq.data.balances[0].amount ? balanceOf(balanceReq.data.balances[0].account) : 0;
-      this.contractPrice = this.contractBalance * this.priceToken || 0;
-    }
+    this.contractBalance = balanceReq?.data?.balances[0]?.amount ? balanceReq?.data?.balances[0]?.amount : 0;
+    this.contractBalance = balanceOf(this.contractBalance);
+    this.contractPrice = this.contractBalance * this.priceToken || 0;
   }
 }
