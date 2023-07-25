@@ -15,7 +15,7 @@
       <tr>
         <td class="text--gray-5 body-02-mob">Balance:</td>
         <td>
-          {{ contractBalance | mask : 'separator.6' }}
+          <span [appBigNumber]="contractBalance" [decimal]="6"></span>
           {{ denom }}
         </td>
       </tr>
@@ -57,7 +57,7 @@
       <tr>
         <td class="text--gray-5 body-02-mob border_none">Aura Value:</td>
         <td class="border_none">
-          ${{ contractPrice | number : global.formatNumber2Decimal }}
+          <span [appBigNumber]="contractBalance" [decimal]="6" [tokenPrice]="global.price.aura"></span>
           <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
             (${{ global.price.aura | mask : 'separator.6' }}/{{ denom | uppercase }})
           </span>
