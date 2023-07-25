@@ -16,11 +16,14 @@ export class ProfileSettingsComponent implements OnInit {
   hideConfirmPassword = true;
   isSubmit = false;
   errorMessage = '';
+  currentProvider = 'password';
+  isError = false;
 
   constructor(private fb: FormBuilder, private userService: UserService, private toastr: NgxToastrService) {}
 
   ngOnInit(): void {
-    this.userEmail = localStorage.getItem('userEmail').replace(/"/g, '');
+    this.userEmail = localStorage.getItem('userEmail')?.replace(/"/g, '');
+    this.currentProvider = localStorage.getItem('provider')?.replace(/"/g, '');
     this.formInit();
   }
 
@@ -40,11 +43,7 @@ export class ProfileSettingsComponent implements OnInit {
     this.changePassForm = this.fb.group({
       old_password: [
         '',
-        [
-          Validators.required,
-          Validators.maxLength(100),
-          Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$'),
-        ],
+        [Validators.maxLength(100), Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$')],
       ],
       new_password: [
         '',
@@ -56,6 +55,11 @@ export class ProfileSettingsComponent implements OnInit {
       ],
       cf_new_password: ['', [Validators.required, Validators.maxLength(100)]],
     });
+
+    // check required if type = password
+    if (this.currentProvider != 'google') {
+      this.changePassForm.controls['old_password'].addValidators([Validators.required]);
+    }
   }
 
   onSubmit() {
@@ -67,8 +71,16 @@ export class ProfileSettingsComponent implements OnInit {
     this.userService.changePassword(payload).subscribe({
       next: (res) => {
         this.toastr.successWithTitle('Please use the new password next time you log in.', 'Password changed');
+
+        if (this.currentProvider === 'google') {
+          localStorage.setItem('provider', JSON.stringify('password'));
+          setTimeout(() => {
+            window.location.reload();
+          }, 4000);
+        }
       },
       error: (error) => {
+        this.isError = true;
         if (error?.details?.message === 'Unauthorized') {
           const payload = {
             refreshToken: localStorage.getItem('refreshToken').replace(/"/g, ''),
@@ -81,7 +93,7 @@ export class ProfileSettingsComponent implements OnInit {
         } else {
           this.toastr.error(error?.details?.message);
         }
-      }
+      },
     });
   }
 }

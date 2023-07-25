@@ -10,6 +10,8 @@ import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { QrModule } from '../qr/qr.module';
 import { WalletConnectComponent } from './wallet-connect.component';
 import { WalletListComponent } from './wallet-list/wallet-list.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.module';
 
 @NgModule({
   declarations: [WalletConnectComponent, WalletListComponent],
@@ -23,6 +25,8 @@ import { WalletListComponent } from './wallet-list/wallet-list.component';
     TranslateModule,
     MatDialogModule,
     CommonPipeModule,
+    ClipboardModule,
+    TooltipCustomizeModule
   ],
   exports: [WalletConnectComponent],
 })
