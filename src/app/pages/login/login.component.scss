@@ -11,10 +11,6 @@
     @media (min-width: 992px) {
       font-size: 22px;
     }
-    .img-back{
-      cursor: pointer;
-      position: absolute;
-    }
   }
 
   .card-body {
@@ -22,7 +18,6 @@
   }
 
   .btn-login {
-    border-radius: 8px;
     height: 48px;
     border: none;
     &:disabled {
