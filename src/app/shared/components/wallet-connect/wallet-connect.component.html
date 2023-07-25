@@ -19,25 +19,38 @@
         id="walletMenu"
         data-bs-toggle="dropdown"
         aria-expanded="false">
-        <span class="button__title caption fw-normal d-lg-none">{{ ng.wallet?.bech32Address | cutStringPipe : 4 : 4 }}</span>
-        <span class="button__title body-01 fw-normal d-none d-lg-block">{{ ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}</span>
+        <span class="button__title caption fw-normal d-lg-none">{{
+          ng.wallet?.bech32Address | cutStringPipe : 4 : 4
+        }}</span>
+        <span class="button__title body-01 fw-normal d-none d-lg-block">{{
+          ng.wallet?.bech32Address | cutStringPipe : 8 : 8
+        }}</span>
       </button>
       <ul class="dropdown-menu aura-dropdown-menu walletMenu" aria-labelledby="walletMenu" id="wallet-menu">
         <li class="">
-          <div class="menu__input">
-            <span class="text-gradient body-01 fw-500">{{ ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}</span>
-            <i class="ph-light ph-copy ml-2 body-01 text--white" (click)="copyMessage(ng.wallet?.bech32Address)"></i>
+          <div class="menu__input" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+            <span class="text-gradient body-01">{{ ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}</span>
+            <div class="aura-tooltip-contain ml-2">
+              <button
+                class="button button--xxs button-circle aura-tooltip-object disabled-hover"
+                #tooltip
+                (click)="commonService.showToolTip(tooltip)"
+                [cdkCopyToClipboard]="ng.wallet?.bech32Address">
+                <i class="ph-light ph-copy body-01 text--white"></i>
+              </button>
+              <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+            </div>
           </div>
         </li>
         <li class="divider divider-horizontal my-2"></li>
-        <li class="dropdown-item caption-mob px-3 px-lg-4 py-3" [routerLink]="['/account', ng.wallet?.bech32Address]">
+        <li class="dropdown-item caption-mob px-3 px-lg-4 py-3 body" [routerLink]="['/account', ng.wallet?.bech32Address]">
           <a>Account Details</a>
         </li>
         <!-- <li class="dropdown-item caption-mob" [routerLink]="['/contracts/register']">
           <a>Register Code ID</a>
         </li> -->
         <li class="dropdown-item caption-mob px-3 px-lg-4 py-3" (click)="disconnect()">
-          <button type="button" class="button p-0">Disconnect Wallet</button>
+          <button type="button" class="button p-0 body">Disconnect Wallet</button>
         </li>
       </ul>
     </div>

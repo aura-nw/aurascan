@@ -1,36 +1,48 @@
 <div class="card card-login" *ngIf="mode !== screenType.Welcome && mode !== screenType.Verify">
   <div class="card-header">
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center text-center">
       <img
         [src]="'assets/icons/icons-svg/white/arrow-left-register.svg' | imageS3"
         alt=""
-        class="cursor-pointer"
+        class="img-back"
         width="22px"
         height="18px"
-        (click)="mode = screenType.Login; errorMessage = ''"
+        (click)="mode = screenType.Login; errorMessage = []"
         *ngIf="mode !== screenType.Login" />
-      <div class="mb-0 text--white w-100 text-center" *ngIf="mode === screenType.Login">Log in to AuraScan</div>
+      <div class="mb-0 text--white w-100" *ngIf="mode === screenType.Login">Log in to AuraScan</div>
       <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Register">Register to AuraScan</div>
       <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Forgot">Forgot password</div>
     </div>
   </div>
   <div class="card-body">
-    <ng-container *ngIf="errorMessage !== ''">
+    <ng-container *ngIf="errorMessage?.length > 0">
       <div class="box-error-message mb-lg-6 mb-4">
-        <img
-          [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
-          alt=""
-          width="20px"
-          height="20px"
-          class="mr-1" />
-        <ng-container *ngIf="errorCode === 'EU001' && mode === screenType.Login">
-          Please click on the verification link send to {{ emailFormat }} before to complete the registration process.
-          In case you have not yet received any email.
-          <span (click)="resendMail()" class="text--aqua-2 cursor-pointer">Resend</span>
+        <ng-container *ngFor="let error of errorMessage; let i = index">
+          <div class="item-error-message">
+            <div [style.width]="'24px'" class="content-error">
+              <img
+                *ngIf="i === 0"
+                [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
+                alt=""
+                width="16px"
+                height="16px" />
+            </div>
+            <div class="caption">
+              <ng-container *ngIf="errorCode === 'EU001' && mode === screenType.Login">
+                <ng-container *ngIf="i === 0">
+                  Please click on the verification link send to {{ emailFormat }} before to complete the registration
+                  process.<br />
+                  In case you have not yet received any email.
+                  <span (click)="resendMail()" class="text--aqua-2 cursor-pointer">Resend</span>
+                </ng-container>
+                <ng-container *ngIf="i !== 0">{{ error }}</ng-container>
+              </ng-container>
+              <span *ngIf="errorCode !== 'EU001'">
+                {{ error }}
+              </span>
+            </div>
+          </div>
         </ng-container>
-        <span *ngIf="errorCode !== 'EU001'">
-          {{ errorMessage }}
-        </span>
       </div>
     </ng-container>
     <form
@@ -51,19 +63,20 @@
         <div class="col-12">
           <div class="form-group">
             <label class="form-label body-01 text--white">Email</label>
-            <div class="input-group">
+            <div
+              class="input-group"
+              [class.form-control--error]="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty">
               <input
                 type="email"
                 formControlName="email"
                 placeholder="Enter your email"
                 name="inputEmail"
-                (blur)="checkEmail = true"
-                [class.form-control--error]="loginForm.get('email')?.invalid && getEmail.touched && getEmail.dirty"
+                (blur)="checkEmail = true; isError = false"
                 autocomplete="off" />
             </div>
             <div
               *ngIf="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty"
-              class="text-danger mt-2 caption fw-normal">
+              class="text--danger mt-2 caption fw-normal">
               Invalid email format
             </div>
           </div>
@@ -74,15 +87,12 @@
         <div class="col-12">
           <div class="form-group">
             <label class="form-label body-01 text--white">Password</label>
-            <div class="input-group pr-0">
+            <div class="input-group pr-0" [class.form-control--error]="getPassword.errors?.pattern && checkPassword">
               <input
                 [type]="hidePassword ? 'password' : 'text'"
                 placeholder="Enter your password"
                 formControlName="password"
-                (blur)="checkPassword = true"
-                [class.form-control--error]="
-                  loginForm.get('password')?.invalid && getPassword.touched && getPassword.dirty
-                "
+                (blur)="checkPassword = true; isError = false"
                 name="inputEmail"
                 autocomplete="off" />
               <i
@@ -90,7 +100,7 @@
                 (click)="hidePassword = !hidePassword"></i>
             </div>
 
-            <div *ngIf="getPassword.errors?.pattern && checkPassword" class="text-danger mt-2 caption fw-normal">
+            <div *ngIf="getPassword.errors?.pattern && checkPassword" class="text--danger mt-2 caption fw-normal">
               The password need to be more than 8 characters in length with at least one upper case, 1 lower case, 1
               number and 1 special character
             </div>
@@ -103,17 +113,21 @@
           <div class="col-12">
             <div class="form-group">
               <label class="form-label body-01 text--white">Confirm password</label>
-              <div class="input-group pr-0">
+              <div
+                class="input-group pr-0"
+                [class.form-control--error]="
+                  mode !== screenType.Login &&
+                  getConfirmPassword.touched &&
+                  getConfirmPassword.dirty &&
+                  loginForm.value.password !== loginForm.value.confirmPassword &&
+                  loginForm.value.password?.length > 0 &&
+                  loginForm.value.confirmPassword?.length > 0
+                ">
                 <input
                   [type]="hideConfirmPassword ? 'password' : 'text'"
                   placeholder="Re-enter your password"
                   formControlName="confirmPassword"
                   name="inputConfirmEmail"
-                  [class.form-control--error]="
-                    getConfirmPassword.touched &&
-                    getConfirmPassword.dirty &&
-                    loginForm.value.password !== loginForm.value.confirmPassword
-                  "
                   autocomplete="off" />
                 <i
                   class="pr-4 hidden-icon cursor-pointer ph-bold  {{
@@ -126,9 +140,11 @@
                   mode !== screenType.Login &&
                   getConfirmPassword.touched &&
                   getConfirmPassword.dirty &&
-                  loginForm.value.password !== loginForm.value.confirmPassword
+                  loginForm.value.password !== loginForm.value.confirmPassword &&
+                  loginForm.value.password?.length > 0 &&
+                  loginForm.value.confirmPassword?.length > 0
                 "
-                class="text-danger mt-2 caption fw-normal">
+                class="text--danger mt-2 caption fw-normal">
                 The password confirmation does not match
               </div>
             </div>
@@ -138,21 +154,23 @@
 
       <ng-container *ngIf="mode === screenType.Login">
         <div class="py-lg-6 py-4">
-          <span class="text--primary h4 cursor-pointer" (click)="mode = screenType.Forgot; errorMessage = ''">Forgot password</span>
+          <span class="text--aqua-2 h4 cursor-pointer" (click)="mode = screenType.Forgot; errorMessage = []"
+            >Forgot password</span
+          >
         </div>
         <div class="d-flex justify-content-end">
           <button
             class="button button-pill button-flat w-100 btn-login"
             type="submit"
             (click)="showVerifyMail()"
-            [disabled]="loginForm.status === 'INVALID'">
+            [disabled]="loginForm.status === 'INVALID' || isError">
             <span class="body-01">Log in</span>
           </button>
         </div>
         <div class="text-center text--gray-4 body-01">
           <div class="mt-4">
             <span class="text--gray-4">Don’t have an account?</span>
-            <span class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
+            <span class="text--aqua-2 fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
               >Register</span
             >
           </div>
@@ -179,7 +197,7 @@
           </div>
 
           <div class="mt-lg-6 mt-4 body-mob">
-            By continuing, you agree to our <span class="text--primary fw-semibold cursor-pointer">Terms of Use</span>
+            By continuing, you agree to our <span class="text--aqua-2 fw-semibold cursor-pointer">Terms of Use</span>
           </div>
         </div>
       </ng-container>
@@ -247,9 +265,9 @@
   </div>
   <div class="mt-6 mb-6 mb-lg-0">
     <span class="">Have not received any email?</span>
-    <span class="text--primary fw-semibold ml-1 cursor-pointer" (click)="resendMail()">Resend</span>
-    <div *ngIf="errorMessage" class="text-danger mt-2 caption fw-normal">
-      {{ errorMessage }}
+    <span class="text--aqua-2 fw-semibold ml-1 cursor-pointer" (click)="resendMail()">Resend</span>
+    <div *ngIf="errorMessage?.length > 0" class="text--danger mt-2 caption fw-normal">
+      {{ errorMessage[0] }}
     </div>
   </div>
 </div>

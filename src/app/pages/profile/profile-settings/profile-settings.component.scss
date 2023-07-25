@@ -22,6 +22,9 @@
 }
 .profile-form .input-group {
   background-color: var(--aura-gray-10);
+  ::-ms-reveal {
+    display: none;
+  }
 }
 .hidden-icon {
   font-size: 2.4rem;

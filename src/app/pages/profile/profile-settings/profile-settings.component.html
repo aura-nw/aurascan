@@ -11,7 +11,7 @@
     autocomplete="off"
     (ngSubmit)="onSubmit()">
     <!-- Old password -->
-    <div class="row mt-4">
+    <div class="row mt-4" *ngIf="currentProvider !== 'google'">
       <div class="col-12 col-lg-6">
         <div class="form-group">
           <label for="old_password" class="form-label body-01">Old password</label>
@@ -21,6 +21,7 @@
               [type]="hideOldPassword ? 'password' : 'text'"
               #old_password
               formControlName="old_password"
+              (blur)="isError = false"
               placeholder="Enter old password" />
             <i
               class="pr-4 hidden-icon cursor-pointer ph-bold  {{ hideOldPassword ? 'ph-eye-slash' : 'ph-fill ph-eye' }}"
@@ -28,7 +29,7 @@
           </div>
           <div
             *ngIf="getOldPassword.errors?.pattern && getOldPassword.touched && getOldPassword.dirty"
-            class="text-danger mt-2 caption fw-normal">
+            class="text--danger mt-2 caption fw-normal">
             The password need to be more than 8 characters in length with at least one upper case, 1 lower case, 1
             number and 1 special character
           </div>
@@ -46,19 +47,20 @@
               [type]="hideNewPassword ? 'password' : 'text'"
               #new_password
               formControlName="new_password"
+              (blur)="isError = false"
               placeholder="Enter new password" />
             <i
               class="pr-4 hidden-icon cursor-pointer ph-bold  {{ hideNewPassword ? 'ph-eye-slash' : 'ph-fill ph-eye' }}"
               (click)="hideNewPassword = !hideNewPassword"></i>
           </div>
           <ng-container *ngIf="getNewPassword.touched && getNewPassword.dirty">
-            <div *ngIf="getNewPassword.errors?.pattern" class="text-danger mt-2 caption fw-normal">
+            <div *ngIf="getNewPassword.errors?.pattern" class="text--danger mt-2 caption fw-normal">
               The password need to be more than 8 characters in length with at least one upper case, 1 lower case, 1
               number and 1 special character
             </div>
             <div
               *ngIf="changePassForm.value.new_password === changePassForm.value.old_password"
-              class="text-danger mt-2 caption fw-normal">
+              class="text--danger mt-2 caption fw-normal">
               New password must be different from current password.
             </div>
           </ng-container>
@@ -73,6 +75,7 @@
               #cf_new_password
               [type]="hideConfirmPassword ? 'password' : 'text'"
               formControlName="cf_new_password"
+              (blur)="isError = false"
               placeholder="Type the new password again" />
             <i
               class="pr-4 hidden-icon cursor-pointer ph-bold  {{
@@ -86,7 +89,7 @@
               getConfirmPassword.dirty &&
               changePassForm.value.new_password !== changePassForm.value.cf_new_password
             "
-            class="text-danger mt-2 caption fw-normal">
+            class="text--danger mt-2 caption fw-normal">
             The password confirmation does not match
           </div>
         </div>
@@ -99,7 +102,8 @@
         type="submit"
         [disabled]="
           changePassForm.status === 'INVALID' ||
-          changePassForm.value.new_password === changePassForm.value.old_password
+          changePassForm.value.new_password === changePassForm.value.old_password ||
+          isError
         ">
         <span>Change password</span>
       </button>
