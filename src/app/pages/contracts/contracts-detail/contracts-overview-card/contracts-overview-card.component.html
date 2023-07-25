@@ -59,7 +59,7 @@
         <td class="border_none">
           ${{ contractPrice | number : global.formatNumber2Decimal }}
           <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
-            >(@ ${{ global.price.aura | mask : 'separator.6' }}/{{ denom | uppercase }})
+            (${{ global.price.aura | mask : 'separator.6' }}/{{ denom | uppercase }})
           </span>
         </td>
       </tr>
