@@ -58,7 +58,7 @@ export class ProfileSettingsComponent implements OnInit {
 
     // check required if type = password
     if (this.currentProvider != 'google') {
-      this.changePassForm.controls['old_password'].setValidators([Validators.required]);
+      this.changePassForm.controls['old_password'].addValidators([Validators.required]);
     }
   }
 

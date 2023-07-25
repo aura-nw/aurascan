@@ -15,7 +15,11 @@
       <div class="col-12 col-lg-6">
         <div class="form-group">
           <label for="old_password" class="form-label body-01">Old password</label>
-          <div class="input-group pr-0">
+          <div
+            class="input-group pr-0"
+            [class.form-control--error]="
+              getOldPassword.errors?.pattern && getOldPassword.touched && getOldPassword.dirty
+            ">
             <input
               id="old_password"
               [type]="hideOldPassword ? 'password' : 'text'"
@@ -41,7 +45,14 @@
       <div class="col-12 col-lg-6">
         <div class="form-group">
           <label for="new_password" class="form-label body-01">New password</label>
-          <div class="input-group pr-0">
+          <div
+            class="input-group pr-0"
+            [class.form-control--error]="
+              getNewPassword.touched &&
+              getNewPassword.dirty &&
+              (getNewPassword.errors?.pattern ||
+                changePassForm.value.new_password === changePassForm.value.old_password)
+            ">
             <input
               id="new_password"
               [type]="hideNewPassword ? 'password' : 'text'"
@@ -69,7 +80,15 @@
       <div class="col-12 col-lg-6 mt-lg-0 mt-4">
         <div class="form-group">
           <label for="cf_new_password" class="form-label body-01">Confirm new password</label>
-          <div class="input-group pr-0">
+          <div
+            class="input-group pr-0"
+            [class.form-control--error]="
+              getConfirmPassword.touched &&
+              getConfirmPassword.dirty &&
+              changePassForm.value.new_password !== changePassForm.value.cf_new_password &&
+              changePassForm.value.new_password?.length > 0 &&
+              changePassForm.value.cf_new_password?.length > 0
+            ">
             <input
               id="cf_new_password"
               #cf_new_password
@@ -87,7 +106,9 @@
             *ngIf="
               getConfirmPassword.touched &&
               getConfirmPassword.dirty &&
-              changePassForm.value.new_password !== changePassForm.value.cf_new_password
+              changePassForm.value.new_password !== changePassForm.value.cf_new_password &&
+              changePassForm.value.new_password?.length > 0 &&
+              changePassForm.value.cf_new_password?.length > 0
             "
             class="text--danger mt-2 caption fw-normal">
             The password confirmation does not match
