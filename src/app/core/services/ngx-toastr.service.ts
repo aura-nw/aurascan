@@ -21,7 +21,7 @@ export class NgxToastrService {
     });
   }
 
-  successWithTitle(message: string, title = '', configTimeOut = 3000): void {
+  successWithTitle(message: string, title = '', configTimeOut = 5000): void {
     this.toastrService.success(message, title, {
       positionClass: this.POSITION_CLASS,
       timeOut: configTimeOut,

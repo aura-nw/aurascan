@@ -33,7 +33,7 @@
                   Please click on the verification link send to {{ emailFormat }} before to complete the registration
                   process.<br />
                   In case you have not yet received any email.
-                  <span (click)="resendMail()" class="text--aqua-2 cursor-pointer">Resend</span>
+                  <a (click)="resendMail()" class="text--primary cursor-pointer">Resend</a>
                 </ng-container>
                 <ng-container *ngIf="i !== 0">{{ error }}</ng-container>
               </ng-container>
@@ -154,8 +154,8 @@
 
       <ng-container *ngIf="mode === screenType.Login">
         <div class="py-lg-6 py-4">
-          <span class="text--aqua-2 h4 cursor-pointer" (click)="mode = screenType.Forgot; errorMessage = []"
-            >Forgot password</span
+          <a class="text--primary h4 cursor-pointer" (click)="mode = screenType.Forgot; errorMessage = []"
+            >Forgot password</a
           >
         </div>
         <div class="d-flex justify-content-end">
@@ -170,8 +170,8 @@
         <div class="text-center text--gray-4 body-01">
           <div class="mt-4">
             <span class="text--gray-4">Don’t have an account?</span>
-            <span class="text--aqua-2 fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
-              >Register</span
+            <a class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
+              >Register</a
             >
           </div>
           <div class="py-6 text--white">or</div>
@@ -197,7 +197,7 @@
           </div>
 
           <div class="mt-lg-6 mt-4 body-mob">
-            By continuing, you agree to our <span class="text--aqua-2 fw-semibold cursor-pointer">Terms of Use</span>
+            By continuing, you agree to our <a class="text--primary fw-semibold cursor-pointer">Terms of Use</a>
           </div>
         </div>
       </ng-container>
@@ -265,9 +265,9 @@
   </div>
   <div class="mt-6 mb-6 mb-lg-0">
     <span class="">Have not received any email?</span>
-    <span class="text--aqua-2 fw-semibold ml-1 cursor-pointer" (click)="resendMail()">Resend</span>
+    <a class="text--primary fw-semibold ml-1 cursor-pointer" (click)="resendMail()">Resend</a>
     <div *ngIf="errorMessage?.length > 0" class="text--danger mt-2 caption fw-normal">
-      {{ errorMessage[0] }}
+      <div>{{ errorMessage[errorMessage?.length - 1] }}</div>
     </div>
   </div>
 </div>
