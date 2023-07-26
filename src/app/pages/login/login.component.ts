@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     Forgot: 'forgot',
   };
   isSubmit = false;
-  errorMessage = '';
+  errorMessage = [];
   errorCode = '';
   mode = this.screenType.Login;
   checkEmail = false;
@@ -30,6 +30,8 @@ export class LoginComponent implements OnInit {
   emailFormat = '';
   isForgotScreen = false;
   scriptLoaded = false;
+  isError = false;
+  errorResendMsg = 'Only can do resend email after 5 minute, please wait and click Resend again.';
 
   clientId = this.environmentService.configValue.googleClientId;
 
@@ -77,7 +79,7 @@ export class LoginComponent implements OnInit {
 
   formInit() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+      email: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,10}$')]],
       password: [
         '',
         [
@@ -96,7 +98,7 @@ export class LoginComponent implements OnInit {
 
   changeMode(mode) {
     this.mode = mode;
-    this.errorMessage = '';
+    this.errorMessage = [];
     this.isForgotScreen = false;
   }
 
@@ -114,7 +116,7 @@ export class LoginComponent implements OnInit {
       email: this.loginForm.value?.email,
       mode: this.mode,
     };
-    this.errorMessage = '';
+    this.errorMessage = [];
 
     let payload = {
       email: this.loginForm.value?.email,
@@ -136,12 +138,14 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
               localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
               localStorage.setItem('userEmail', JSON.stringify(res.email));
+              localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
               this.route.navigate(['/']);
             }
           },
           error: (error) => {
-            this.errorMessage = error?.details?.message;
+            this.addError(error?.details?.message);
             this.errorCode = error?.details?.code;
+            this.isError = true;
           },
         });
         break;
@@ -153,7 +157,7 @@ export class LoginComponent implements OnInit {
             this.isForgotScreen = false;
           },
           error: (error) => {
-            this.errorMessage = error?.details?.message[0];
+            this.addError(error?.details?.message[0]);
           },
         });
         break;
@@ -176,7 +180,7 @@ export class LoginComponent implements OnInit {
         this.mode = this.screenType.Verify;
       },
       error: (error) => {
-        this.errorMessage = error.details.message;
+        this.addError(error.details.message);
       },
     });
   }
@@ -184,18 +188,31 @@ export class LoginComponent implements OnInit {
   resendMail() {
     if (this.isForgotScreen) {
       this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
-        next: (res) => {},
+        next: (res) => this.removeResendMsg(),
         error: (error) => {
-          this.errorMessage = error.details.message;
+          this.addError(error.details.message);
         },
       });
     } else {
       this.userService.resendVerifyEmail(this.loginForm.value?.email).subscribe({
-        next: (res) => {},
+        next: (res) => this.removeResendMsg(),
         error: (error) => {
-          this.errorMessage = error.details.message;
+          this.addError(error.details.message);
         },
       });
+    }
+  }
+
+  addError(error) {
+    if (this.errorMessage[this.errorMessage?.length - 1] !== error) {
+      this.errorMessage.push(error);
+    }
+  }
+
+  removeResendMsg() {
+    const index = this.errorMessage?.indexOf(this.errorResendMsg);
+    if (index > -1) {
+      this.errorMessage?.splice(index, 1);
     }
   }
 
@@ -213,11 +230,11 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
             localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
             localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
-            localStorage.setItem('provider', JSON.stringify(res.provider));
+            localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
             window.location.href = '/';
           },
           error: (error) => {
-            this.errorMessage = error?.details?.message;
+            this.addError(error?.details?.message);
           },
         });
       }

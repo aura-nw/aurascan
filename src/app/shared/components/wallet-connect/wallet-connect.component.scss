@@ -31,11 +31,12 @@
 
   .walletMenu {
     &.aura-dropdown .dropdown-menu.aura-dropdown-menu {
-      border: 1px solid var(--aura-gray-9);
+      border: 1px solid var(--aura-gray-6);
       border-radius: 8px;
       box-shadow: 0px 2px 10px rgba(3, 3, 3, 0.3);
+      overflow: unset;
       li.dropdown-item {
-        transition: background-color .35s ease-in-out;
+        transition: background-color 0.35s ease-in-out;
         &:hover {
           background-color: var(--aura-gray-9) !important;
         }
@@ -109,4 +110,8 @@
 .button-wallet-menu.button-outline__in-card {
   box-shadow: 2px 1000px 1px var(--aura-gray-9) inset !important;
   border-radius: 999px;
+  &:hover {
+    background: linear-gradient(88deg, #22534b 0%, #43485b 52.6%, #5c4326 100%);
+    box-shadow: unset !important;
+  }
 }

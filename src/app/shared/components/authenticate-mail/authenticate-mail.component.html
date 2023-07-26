@@ -17,11 +17,11 @@
     <img src="assets/icons/icons-svg/color/User.svg" alt="" />
   </button>
   <ul class="dropdown-menu aura-dropdown-menu user-dropdown-menu walletMenu" aria-labelledby="userMenu">
-    <li class="dropdown-item caption-mob">
-      <a routerLink="profile" class="w-100">My Profile</a>
+    <li class="dropdown-item caption-mob cursor-pointer" [routerLink]="['/profile']">
+      <a class="w-100 body">My Profile</a>
     </li>
-    <li class="dropdown-item caption-mob" (click)="disconnect()">
-      <button type="button" class="button p-0">Log out</button>
+    <li class="dropdown-item caption-mob cursor-pointer" (click)="disconnect()">
+      <button type="button" class="button p-0 body">Log out</button>
     </li>
   </ul>
 </div>

@@ -18,8 +18,8 @@
   }
 
   .btn-login {
-    border-radius: 8px;
-    height: 40px;
+    height: 48px;
+    border: none;
     &:disabled {
       background: var(--aura-gray-8);
     }
@@ -38,6 +38,9 @@
 
   .input-group {
     background-color: var(--aura-gray-10);
+    ::-ms-reveal {
+      display: none;
+    }
   }
 }
 
@@ -97,4 +100,9 @@
     display: flex;
     justify-content: center;
   }
+}
+
+.content-error{
+  min-width: 24px;
+  margin-top: -2px;
 }

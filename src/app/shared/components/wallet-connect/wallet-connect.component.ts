@@ -6,6 +6,7 @@ import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { WalletService } from '../../../core/services/wallet.service';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-wallet-connect',
@@ -35,6 +36,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     private envService: EnvironmentService,
     private dlgService: DialogService,
     private layout: BreakpointObserver,
+    public commonService: CommonService
   ) {
     this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state === 'open') {
