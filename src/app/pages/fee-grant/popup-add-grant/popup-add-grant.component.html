@@ -101,7 +101,7 @@
                 class="radio-box radio-box--dark"
                 [checked]="periodShow"
                 (change)="changePeriodStage(true)" />
-              <label for="granted" class=" ml-2 mb-0 text-justify">Yes</label>
+              <label for="granted" class="ml-2 mb-0 text-justify">Yes</label>
             </div>
             <div class="form-group d-flex align-items-center ml-8">
               <input
@@ -111,7 +111,7 @@
                 class="radio-box radio-box--dark"
                 [checked]="!periodShow"
                 (change)="changePeriodStage(false)" />
-              <label for="not-granted" class=" ml-2 mb-0 text-justify">No</label>
+              <label for="not-granted" class="ml-2 mb-0 text-justify">No</label>
             </div>
           </div>
         </div>
@@ -121,9 +121,7 @@
         <div class="col-12">
           <div class="card-explain">
             <div class="form-group">
-              <label for="period_amount" class="form-label  body-01 required"
-                >Period Spend Limit Amount</label
-              >
+              <label for="period_amount" class="form-label body-01 required">Period Spend Limit Amount</label>
               <div
                 class="input-group form-check-input pr-0"
                 [class.form-control--error]="grantForm.get('period_amount')?.invalid && isSubmit">
@@ -153,7 +151,7 @@
               </div>
             </div>
             <div class="form-group mt-4">
-              <label for="period_day" class="form-label  body-01 required">Period</label>
+              <label for="period_day" class="form-label body-01 required">Period</label>
               <div
                 class="input-group form-check-input pr-0"
                 [class.form-control--error]="grantForm.get('period_day')?.invalid && isSubmit">
@@ -220,7 +218,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="allContractAllowActive"
                   (change)="changeContractsActive(true)" />
-                <label for="all" class=" ml-2 mb-0 text-justify">All smart contracts</label>
+                <label for="all" class="ml-2 mb-0 text-justify">All smart contracts</label>
               </div>
               <div class="form-group d-flex align-items-center ml-lg-2 mt-4 mt-lg-0">
                 <input
@@ -230,7 +228,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="!allContractAllowActive"
                   (change)="changeContractsActive(false)" />
-                <label for="specified" class=" ml-2 mb-0 text-justify">Specified smart contracts</label>
+                <label for="specified" class="ml-2 mb-0 text-justify">Specified smart contracts</label>
               </div>
             </div> -->
             Specified smart contracts
