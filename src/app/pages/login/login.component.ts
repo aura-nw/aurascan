@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
@@ -41,6 +42,7 @@ export class LoginComponent implements OnInit {
     private router: ActivatedRoute,
     private route: Router,
     private environmentService: EnvironmentService,
+    private toastr: NgxToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -153,10 +155,12 @@ export class LoginComponent implements OnInit {
         payload['passwordConfirmation'] = this.loginForm.value?.confirmPassword;
         this.userService.registerUser(payload).subscribe({
           next: (res) => {
+            this.errorMessage = [];
             this.mode = this.screenType?.Verify;
             this.isForgotScreen = false;
           },
           error: (error) => {
+            this.errorCode = error?.details?.code;
             this.addError(error?.details?.message[0]);
           },
         });
@@ -177,9 +181,11 @@ export class LoginComponent implements OnInit {
     this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
       next: (res) => {
         this.isForgotScreen = true;
+        this.errorMessage = [];
         this.mode = this.screenType.Verify;
       },
       error: (error) => {
+        this.errorCode = error?.details?.code;
         this.addError(error.details.message);
       },
     });
@@ -188,14 +194,14 @@ export class LoginComponent implements OnInit {
   resendMail() {
     if (this.isForgotScreen) {
       this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
-        next: (res) => this.removeResendMsg(),
+        next: (res) => {},
         error: (error) => {
           this.addError(error?.details?.message);
         },
       });
     } else {
       this.userService.resendVerifyEmail(this.loginForm.value?.email).subscribe({
-        next: (res) => this.removeResendMsg(),
+        next: (res) => {},
         error: (error) => {
           this.addError(error?.details?.message);
         },
@@ -204,15 +210,10 @@ export class LoginComponent implements OnInit {
   }
 
   addError(error) {
-    if (this.errorMessage[this.errorMessage?.length - 1] !== error) {
+    if (this.errorMessage?.length === 0 && error !== this.errorResendMsg) {
       this.errorMessage?.push(error);
-    }
-  }
-
-  removeResendMsg() {
-    const index = this.errorMessage?.indexOf(this.errorResendMsg);
-    if (index > -1) {
-      this.errorMessage?.splice(index, 1);
+    } else {
+      this.toastr.error(error);
     }
   }
 
