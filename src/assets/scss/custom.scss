@@ -689,6 +689,12 @@ body {
   background-color: var(--aura-red-4);
   color: var(--aura-white);
   font-weight: 600;
+  .item-error-message{
+    display: flex;
+    &:not(:first-child){
+      margin-top: var(--spacer-1);
+    }
+  }
 }
 
 .aura-toast {
