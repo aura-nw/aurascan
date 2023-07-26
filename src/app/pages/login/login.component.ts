@@ -190,14 +190,14 @@ export class LoginComponent implements OnInit {
       this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
         next: (res) => this.removeResendMsg(),
         error: (error) => {
-          this.addError(error.details.message);
+          this.addError(error?.details?.message);
         },
       });
     } else {
       this.userService.resendVerifyEmail(this.loginForm.value?.email).subscribe({
         next: (res) => this.removeResendMsg(),
         error: (error) => {
-          this.addError(error.details.message);
+          this.addError(error?.details?.message);
         },
       });
     }
@@ -205,7 +205,7 @@ export class LoginComponent implements OnInit {
 
   addError(error) {
     if (this.errorMessage[this.errorMessage?.length - 1] !== error) {
-      this.errorMessage.push(error);
+      this.errorMessage?.push(error);
     }
   }
 
