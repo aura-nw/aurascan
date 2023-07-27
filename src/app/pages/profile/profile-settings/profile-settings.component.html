@@ -51,7 +51,8 @@
               getNewPassword.touched &&
               getNewPassword.dirty &&
               (getNewPassword.errors?.pattern ||
-                changePassForm.value.new_password === changePassForm.value.old_password)
+                (changePassForm.value.new_password === changePassForm.value.old_password &&
+                  changePassForm.value.new_password?.length > 0))
             ">
             <input
               id="new_password"
@@ -70,7 +71,10 @@
               number and 1 special character
             </div>
             <div
-              *ngIf="changePassForm.value.new_password === changePassForm.value.old_password"
+              *ngIf="
+                changePassForm.value.new_password === changePassForm.value.old_password &&
+                changePassForm.value.new_password?.length > 0
+              "
               class="text--danger mt-2 caption fw-normal">
               New password must be different from current password.
             </div>
