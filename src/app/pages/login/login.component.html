@@ -70,6 +70,7 @@
                 type="email"
                 formControlName="email"
                 placeholder="Enter your email"
+                class="input-email"
                 name="inputEmail"
                 (blur)="checkEmail = true; isError = false"
                 autocomplete="off" />
@@ -208,7 +209,9 @@
             class="button button-pill button-flat w-100 btn-login"
             type="button"
             (click)="showVerifyMail()"
-            [disabled]="loginForm.status === 'INVALID' || loginForm.value.password !== loginForm.value.confirmPassword">
+            [disabled]="
+              loginForm.status === 'INVALID' || loginForm.value.password !== loginForm.value.confirmPassword || isError
+            ">
             <span class="body-01">Register</span>
           </button>
         </div>
@@ -220,7 +223,7 @@
             class="button button-pill button-flat btn-login m-auto btn-forgot"
             type="button"
             (click)="resetPassword()"
-            [disabled]="loginForm.get('email')?.invalid">
+            [disabled]="loginForm.get('email')?.invalid || isError">
             <span class="body-01">Continue</span>
           </button>
         </div>
