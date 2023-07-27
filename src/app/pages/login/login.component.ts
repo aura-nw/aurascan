@@ -162,6 +162,7 @@ export class LoginComponent implements OnInit {
           error: (error) => {
             this.errorCode = error?.details?.code;
             this.addError(error?.details?.message[0]);
+            this.isError = true;
           },
         });
         break;
@@ -186,7 +187,8 @@ export class LoginComponent implements OnInit {
       },
       error: (error) => {
         this.errorCode = error?.details?.code;
-        this.addError(error.details.message);
+        this.toastr.error(error.details.message);
+        this.isError = true;
       },
     });
   }
@@ -210,6 +212,11 @@ export class LoginComponent implements OnInit {
   }
 
   addError(error) {
+    if (this.mode === this.screenType?.Verify) {
+      this.toastr.error(error);
+      return;
+    }
+
     if (this.errorMessage?.length === 0 && error !== this.errorResendMsg) {
       this.errorMessage?.push(error);
     } else {

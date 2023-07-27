@@ -623,6 +623,11 @@ body {
     font-weight: 700;
   }
 }
+.toast-container{
+  @media (max-width: 413px) {
+    width: 93%;
+  }
+}
 .toast-container .ngx-toastr {
   width: 350px;
 }
