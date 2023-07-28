@@ -189,7 +189,7 @@ export class LoginComponent implements OnInit {
       error: (error) => {
         this.errorMessage = [];
         this.errorCode = error?.details?.code;
-        if (error?.details?.message.indexOf('User have not registered') >= 0) {
+        if (error?.details?.message.indexOf('registered') >= 0 || error?.details?.message.indexOf('verified') >= 0) {
           this.addError(error?.details?.message);
         } else {
           this.toastr.error(error.details?.message);
