@@ -6,23 +6,29 @@
   "env": "dev",
   "urlSocket": "https://explorer-api.dev.aura.network",
   "validator_s3": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
-  "coins": [
-    {
-      "name": "Serenity Aura",
-      "display": "AURA",
-      "denom": "ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20",
-      "decimal": 6,
-      "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-    }
-  ],
+  "coins":[
+        {"name": "Serenity Aura",
+         "display": "AURA",
+         "denom": "ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20",
+         "decimal": 6,
+         "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"},
+        {"name": "Serenity Aura 2",
+         "display": "AURA",
+         "denom": "ibc/64846F530A4FFAF387CFC4F3F369EA9C83FC158B7F09B4573DD9A3EE8EA49F06",
+         "decimal": 6,
+         "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"},
+         {"name": "Serenity Aura 3",
+         "display": "AURA",
+         "denom": "ibc/0BE15F56B56143F8E36B346577011F6661D3445EDC3B81891A9779F85ED90D75",
+         "decimal": 6,
+         "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"}
+      ],
   "chain_info": {
     "chainId": "aura-testnet-2",
     "chainName": "aura devnet",
     "rpc": "https://rpc.dev.aura.network",
     "rest": "https://lcd.dev.aura.network",
-    "bip44": {
-      "coinType": 118
-    },
+    "bip44": { "coinType": 118 },
     "bech32Config": {
       "bech32PrefixAccAddr": "aura",
       "bech32PrefixAccPub": "aurapub",
@@ -31,31 +37,11 @@
       "bech32PrefixConsAddr": "auravalcons",
       "bech32PrefixConsPub": "auravalconspub"
     },
-    "currencies": [
-      {
-        "coinDenom": "TAURA",
-        "coinMinimalDenom": "utaura",
-        "coinDecimals": 6
-      }
-    ],
-    "feeCurrencies": [
-      {
-        "coinDenom": "TAURA",
-        "coinMinimalDenom": "utaura",
-        "coinDecimals": 6
-      }
-    ],
-    "stakeCurrency": {
-      "coinDenom": "TAURA",
-      "coinMinimalDenom": "utaura",
-      "coinDecimals": 6
-    },
+    "currencies": [{ "coinDenom": "TAURA", "coinMinimalDenom": "utaura", "coinDecimals": 6 }],
+    "feeCurrencies": [{ "coinDenom": "TAURA", "coinMinimalDenom": "utaura", "coinDecimals": 6 }],
+    "stakeCurrency": { "coinDenom": "TAURA", "coinMinimalDenom": "utaura", "coinDecimals": 6 },
     "coinType": 118,
-    "gasPriceStep": {
-      "low": 0.001,
-      "average": 0.0025,
-      "high": 0.004
-    },
+    "gasPriceStep": { "low": 0.001, "average": 0.0025, "high": 0.004 },
     "features": ["ibc-transfer"],
     "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
     "logo": "https://i.imgur.com/zi0mTYb.png",
@@ -65,14 +51,11 @@
   "urlIndexer": "https://indexer.dev.aurascan.io/api/v1",
   "timeInterval": 4000,
   "ipfsDomain": "https://ipfs.io/",
-  "evnLabel": {
-    "desktop": "Develop Testnet Network",
-    "mobile": "Develop Testnet"
-  },
+  "evnLabel": { "desktop": "Develop Testnet Network", "mobile": "Develop Testnet" },
   "horoscopeSelectedChain": "auratestnet",
   "horoscopeUrl": "https://indexer-v2.dev.aurascan.io/",
-  "horoscopePathGraphql": "api/v1/graphiql",
-  "horoscopePathApi": "api/v1",
+  "horoscopePathGraphql": "api/v2/graphql",
+  "horoscopePathApi": "api/v2",
   "notice": {
     "content": "Aurascan will be temporarily unavailable due to Xstaxy network upgrades on Jun 12th, 14:00 UTC",
     "url": "https://aurascan.io/votings/4"
