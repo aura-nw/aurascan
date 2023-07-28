@@ -14,19 +14,23 @@ export class StatisticService extends CommonService {
     super(http, environmentService);
   }
 
-  getListAccountStatistic(dayRange, limit): Observable<any> {
-    const params = _({
-      chainId: this.chainInfo.chainId,
-      dayRange : dayRange,
-      limit : limit,
-    })
-      .omitBy(_.isNull)
-      .omitBy(_.isUndefined)
-      .value();
-    return this.http.get<any>(`${this.indexerUrl}/account-statistics`, {
-      params,
-    });
+  getListAccountStatistic(): Observable<any> {
+    return this.http.get<any>(`${this.horoscopeApi}/statistics/top-accounts?chainid=${this.chainId}`);
   }
+
+  // getListAccountStatisticV1(dayRange, limit): Observable<any> {
+  //   const params = _({
+  //     chainId: this.chainInfo.chainId,
+  //     dayRange : dayRange,
+  //     limit : limit,
+  //   })
+  //     .omitBy(_.isNull)
+  //     .omitBy(_.isUndefined)
+  //     .value();
+  //   return this.http.get<any>(`${this.indexerUrl}/account-statistics`, {
+  //     params,
+  //   });
+  // }
 
   getDailyTxStatistic(property: "daily_txs" | "daily_active_addresses" | "unique_addresses", startDate, endDate): Observable<any> {
     const params = _({
