@@ -43,7 +43,7 @@ export class CommonService {
   }
 
   status(): Observable<any> {
-    return this._http.get<any>(`${this.horoscopeApi}/dashboard-statistics?chainid=${this.chainId}`);
+    return this._http.get<any>(`${this.horoscopeApi}/statistics/dashboard?chainid=${this.chainId}`);
   }
 
   getParamTallyingFromLCD() {
