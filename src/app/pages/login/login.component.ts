@@ -102,6 +102,7 @@ export class LoginComponent implements OnInit {
     this.mode = mode;
     this.errorMessage = [];
     this.isForgotScreen = false;
+    this.isError = false;
   }
 
   checkVerifyPassword() {
@@ -186,8 +187,13 @@ export class LoginComponent implements OnInit {
         this.mode = this.screenType.Verify;
       },
       error: (error) => {
+        this.errorMessage = [];
         this.errorCode = error?.details?.code;
-        this.toastr.error(error.details.message);
+        if (error?.details?.message.indexOf('User have not registered') >= 0) {
+          this.addError(error?.details?.message);
+        } else {
+          this.toastr.error(error.details?.message);
+        }
         this.isError = true;
       },
     });
@@ -198,29 +204,22 @@ export class LoginComponent implements OnInit {
       this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
         next: (res) => {},
         error: (error) => {
-          this.addError(error?.details?.message);
+          this.toastr.error(error.details?.message);
         },
       });
     } else {
       this.userService.resendVerifyEmail(this.loginForm.value?.email).subscribe({
         next: (res) => {},
         error: (error) => {
-          this.addError(error?.details?.message);
+          this.toastr.error(error.details?.message);
         },
       });
     }
   }
 
   addError(error) {
-    if (this.mode === this.screenType?.Verify) {
-      this.toastr.error(error);
-      return;
-    }
-
     if (this.errorMessage?.length === 0 && error !== this.errorResendMsg) {
       this.errorMessage?.push(error);
-    } else {
-      this.toastr.error(error);
     }
   }
 

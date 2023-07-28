@@ -7,7 +7,7 @@
         class="position-absolute cursor-pointer"
         width="22px"
         height="18px"
-        (click)="mode = screenType.Login; errorMessage = []"
+        (click)="changeMode(screenType.Login)" 
         *ngIf="mode !== screenType.Login" />
       <div class="mb-0 text--white w-100" *ngIf="mode === screenType.Login">Log in to AuraScan</div>
       <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Register">Register to AuraScan</div>
@@ -155,7 +155,7 @@
 
       <ng-container *ngIf="mode === screenType.Login">
         <div class="py-lg-6 py-4">
-          <a class="text--primary h4 cursor-pointer" (click)="mode = screenType.Forgot; errorMessage = []"
+          <a class="text--primary h4 cursor-pointer" (click)="changeMode(screenType.Forgot)"
             >Forgot password</a
           >
         </div>
