@@ -129,8 +129,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   }
 
   filterButton(val: string) {
-    console.log(val);
-
     const i = this.filterButtons.findIndex((i) => i === val);
 
     switch (val) {
