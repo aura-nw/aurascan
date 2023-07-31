@@ -107,11 +107,14 @@
         <ng-container *ngFor="let data of this.dataSource?.data; index as i">
           <!-- VOTES -->
           <ng-container *ngIf="type === proposalMode.VOTES">
+            {{ commonService.checkDisplayTooltip(data.voter) }}
             <app-card-mob-simple
               [content]="[
                 {
                   label: 'Voter',
-                  class: 'h5 mb-0 text--primary name-tag-label',
+                  class: !commonService.checkDisplayTooltip(data.voter)
+                    ? 'name-tag-label mb-0 text--primary'
+                    : 'mb-0 text--primary',
                   info:
                     '<a class=text--primary href=' +
                     ('/account/' + data.voter) +
@@ -191,7 +194,7 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: 'h5 mb-0 name-tag-label',
+                  class: !commonService.checkDisplayTooltip(data.voter) ? 'name-tag-label mb-0' : 'mb-0',
                   info: data.depositors
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +
