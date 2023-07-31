@@ -225,14 +225,6 @@ body {
 
   &-string {
     color: #ce9178;
-    
-    &.string-long{
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      overflow-wrap: anywhere;
-      -webkit-box-orient: vertical;    
-    }
   }
 }
 

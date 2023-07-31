@@ -357,7 +357,7 @@
                           </ng-container>
                           <ng-container *ngSwitchCase="'Uptime'">
                             <ng-container *ngIf="validator['status'] === statusValidator.Active">
-                              <div class="text--gray-1">{{ calculatorUpTime(validator['cons_address']) }}%</div>
+                              <div class="text--gray-1">{{ calculatorUpTime(validator['account_address']) }}%</div>
                             </ng-container>
                             <ng-container *ngIf="validator['status'] !== statusValidator.Active">
                               <div class="text--gray-1">0.00%</div>
