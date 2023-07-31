@@ -30,7 +30,8 @@
             class="button button--xxs button--sm-mob button-circle ml-2 d-none d-lg-flex aura-tooltip-object disabled-hover"
             *ngIf="isRawData"
             #tooltip
-            (click)="commonService.copyToolTipAction(tooltip, blockDetail?.json_data)">
+            (click)="commonService.showToolTip(tooltip)"
+            [cdkCopyToClipboard]="blockDetail?.json_data | json">
             <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
           </button>
           <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
@@ -45,7 +46,8 @@
                 class="button button--xxs button--sm-mob button-circle ml-2 aura-tooltip-object disabled-hover"
                 *ngIf="isRawData"
                 #tooltip
-                (click)="commonService.copyToolTipAction(tooltip, blockDetail?.json_data)">
+                (click)="commonService.showToolTip(tooltip)"
+                [cdkCopyToClipboard]="blockDetail?.json_data | json">
                 <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
               </button>
               <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
@@ -264,14 +266,7 @@
                 <ng-container *ngFor="let data of item?.attributes; let idx = index">
                   <div class="ml-5 mb-2 row">
                     <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key | decodeData }}</span>
-                    <span class="col-12 col-lg-9 body-01 text-break">
-                      <ng-container *ngIf="(data.key | decodeData) !== 'amount' && (data.key | decodeData) !== 'fee'">{{
-                        data.value | decodeData
-                      }}</ng-container>
-                      <span
-                        *ngIf="(data.key | decodeData) === 'amount' || (data.key | decodeData) === 'fee'"
-                        [innerHTML]="data.value | decodeData | convertLogAmount"></span>
-                    </span>
+                    <span class="col-12 col-lg-9 body-01 text-break"> {{ data.value | decodeData }} </span>
                   </div>
                 </ng-container>
               </div>

@@ -22,7 +22,8 @@
               <button
                 class="button button--xxs button-circle aura-tooltip-object disabled-hover"
                 #tooltip
-                (click)="commonService.copyToolTipAction(tooltip, userAddress)">
+                (click)="commonService.showToolTip(tooltip)"
+                [cdkCopyToClipboard]="userAddress">
                 <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="12px" height="12px" />
               </button>
               <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
