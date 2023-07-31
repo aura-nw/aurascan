@@ -286,7 +286,11 @@ export class ValidatorsDetailComponent implements OnInit {
             const tx_hash = _.get(element, 'transaction.hash');
             const address = _.get(element, 'validatorDst.operator_address');
             const _type = _.get(element, 'type');
-            if (_type === 'delegate' || (_type === 'redelegate' && address === this.currentAddress)) {
+            if (
+              _type === 'delegate' ||
+              _type === 'create_validator' ||
+              (_type === 'redelegate' && address === this.currentAddress)
+            ) {
               isStakeMode = true;
             }
             let amount = balanceOf(element.amount) || '0';
