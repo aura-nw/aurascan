@@ -177,7 +177,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           val.power = balanceOf(val.tokens);
           val.width_chart = val.uptime / 100;
           val.title = val.description?.moniker;
-          val.commission = (+val.commission?.commission_rates?.rate).toFixed(4);
+          val.commission = (+val.commission?.commission_rates?.rate || +val?.commission?.rate).toFixed(4);
           val.percent_power = val.percent_voting_power.toFixed(2);
           val.participation = val.vote_aggregate?.aggregate?.count || 0;
           val.identity = val.description.identity;
@@ -346,7 +346,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           jailed: data.jailed ? 1 : 0,
           identity: data.description.identity,
           image_url: data.image_url,
-          commission: (+data.commission.commission_rates.rate)?.toFixed(4),
+          commission: (+data.commission?.commission_rates?.rate || +data?.commission?.rate)?.toFixed(4),
           percent_power: data.percent_voting_power?.toFixed(2),
           power: balanceOf(data.tokens),
           title: data.description?.moniker,
