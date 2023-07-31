@@ -161,7 +161,7 @@ export class ValidatorsDetailComponent implements OnInit {
             up_time: (NUM_BLOCK - +data?.missed_blocks_counter) / 100,
             title: data?.description?.moniker,
             acc_address: data?.account_address,
-            commission: (+data?.commission.commission_rates.rate)?.toFixed(4),
+            commission: (+data?.commission?.commission_rates?.rate || +data?.commission?.rate)?.toFixed(4),
             details: data?.description?.details,
             percent_power: data?.percent_voting_power?.toFixed(2),
             bonded_height: data?.start_height || 1,
@@ -384,9 +384,7 @@ export class ValidatorsDetailComponent implements OnInit {
     setTimeout(() => {
       const editor = document.getElementById('marked');
       if (editor && this.currentValidatorDetail) {
-        editor.innerHTML = marked.parse(
-          this.currentValidatorDetail.details,
-        );
+        editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
         return;
       }
     }, 1000);
