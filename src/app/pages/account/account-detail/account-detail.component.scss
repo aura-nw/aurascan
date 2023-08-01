@@ -1,21 +1,8 @@
 section.account-detail {
   .qr-code {
-    border-right: 1px solid var(--aura-gray-9);
-    vertical-align: middle;
-  }
-  .soulbound-feature-tokens {
-    flex: 1 0 100%;
-    border-top: 1px solid var(--aura-gray-9);
-    @media (min-width: 1199.98px) {
-      flex: 0 1 auto;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      flex-shrink: 0;
-      flex-grow: 1;
-      border-top: none;
-      border-left: 1px solid var(--aura-gray-9);
-    }
+    background-color: var(--aura-gray-9);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
   }
   form.search-form {
     .input-group {
@@ -82,14 +69,6 @@ section.account-detail {
     align-items: center;
     justify-content: center;
   }
-  &.button--md {
-    width: 40px;
-    height: 40px;
-  }
-  &.button--xxs {
-    width: 24px;
-    height: 24px;
-  }
 }
 .link-reset-data {
   text-decoration: underline;
@@ -148,12 +127,4 @@ section.account-detail {
 .aura-table.transaction-table th.mat-header-cell:nth-child(2),
 .aura-table.transaction-table th.mat-header-cell:nth-child(7) {
   min-width: 200px;
-}
-.box-manage-abt {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-}
-app-soulbound-feature-tokens {
-  width: 100%;
 }

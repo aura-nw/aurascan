@@ -19,7 +19,7 @@ export class TokenTableComponent implements OnChanges {
   @Input() address: string;
   @Output() totalValue = new EventEmitter<number>();
   @Output() totalAssets = new EventEmitter<number>();
-
+  tokenFilter = 'All';
   textSearch = '';
   searchValue = '';
   templates: Array<TableTemplate> = [
@@ -52,6 +52,24 @@ export class TokenTableComponent implements OnChanges {
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
+  listTokenType = [
+    {
+    label: 'All',
+    quantity: 3
+    },
+    {
+    label: 'Native Coin',
+    quantity: 1
+    },
+    {
+    label: 'IBC Token',
+    quantity: 2
+    },
+    {
+    label: 'CW-20 Token',
+    quantity: 2
+    }
+  ]
   constructor(
     public global: Globals,
     private accountService: AccountService,
@@ -67,6 +85,9 @@ export class TokenTableComponent implements OnChanges {
   }
 
   getListToken() {
+    if (this.tokenFilter) {
+      console.log(this.tokenFilter);
+    }
     const payload = {
       account_address: this.address,
       limit: this.pageData.pageSize,
