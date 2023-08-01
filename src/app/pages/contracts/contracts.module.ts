@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from 'src/app/app.module';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { ContractTableModule } from 'src/app/shared/components/contract-table/contract-table.module';
@@ -74,6 +75,7 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
+    CommonDirectiveModule,
   ],
   providers: [ContractService],
   exports: [ContractVerifyStepsComponent],

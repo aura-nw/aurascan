@@ -63,7 +63,7 @@
         ngbNav
         #customNav="ngbNav"
         [activeId]="0"
-        class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap"
+        class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-3"
         [class.mobile-tab]="breakpoint.value.matches">
         <ng-container *ngFor="let tab of TABS; index as index">
           <li [ngbNavItem]="index">
@@ -160,7 +160,7 @@
                       <div class="aura-tooltip-contain">
                         <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
                         <app-tooltip-customize
-                          [content]="'Vote participation stat for the last' + countProposal || 0 + 'proposals.'">
+                          [content]="'Vote participation stat for the last ' + countProposal || 0 + 'proposals.'">
                         </app-tooltip-customize>
                       </div>
                     </th>
@@ -357,7 +357,7 @@
                           </ng-container>
                           <ng-container *ngSwitchCase="'Uptime'">
                             <ng-container *ngIf="validator['status'] === statusValidator.Active">
-                              <div class="text--gray-1">{{ calculatorUpTime(validator['cons_address']) }}%</div>
+                              <div class="text--gray-1">{{ calculatorUpTime(validator['account_address']) }}%</div>
                             </ng-container>
                             <ng-container *ngIf="validator['status'] !== statusValidator.Active">
                               <div class="text--gray-1">0.00%</div>

@@ -12,8 +12,11 @@
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
     <app-tooltip-customize
-      [class.tooltip--right]="isNameTagContract"
-      [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
+      [class.tooltip--right]="tooltipRight"
+      [class.tooltip--left]="tooltipLeft"
+      [content]="
+        (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
+      ">
     </app-tooltip-customize>
   </div>
   <div class="aura-tooltip-contain">
@@ -29,7 +32,11 @@
       <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
     </a>
     <app-tooltip-customize
-      [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
+      [class.tooltip--right]="tooltipRight"
+      [class.tooltip--left]="tooltipLeft"
+      [content]="
+        (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
+      ">
     </app-tooltip-customize>
   </div>
 </ng-container>
@@ -53,14 +60,19 @@
         }}</span>
       </ng-container>
       <ng-container *ngIf="extendUrl && extendUrlLink">
-        <i
-          _ngcontent-wrg-c372=""
-          class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1 cursor-pointer"
-          (click)="extendLink(extendUrlLink)"></i>
+        <a target="_blank" [href]="extendLink(extendUrlLink)">
+          <i
+            _ngcontent-wrg-c372=""
+            class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1 cursor-pointer"></i>
+        </a>
       </ng-container>
     </span>
     <app-tooltip-customize
-      [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
+      [class.tooltip--right]="tooltipRight"
+      [class.tooltip--left]="tooltipLeft"
+      [content]="
+        (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
+      ">
     </app-tooltip-customize>
   </div>
 </ng-template>
@@ -101,9 +113,8 @@
     </ng-container>
   </ng-container>
   <ng-container *ngIf="extendUrl && extendUrlLink">
-    <i
-      _ngcontent-wrg-c372=""
-      class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1"
-      (click)="extendLink(extendUrlLink)"></i>
+    <a target="_blank" [href]="extendLink(extendUrlLink)">
+      <i _ngcontent-wrg-c372="" class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1"></i>
+    </a>
   </ng-container>
 </ng-template>
