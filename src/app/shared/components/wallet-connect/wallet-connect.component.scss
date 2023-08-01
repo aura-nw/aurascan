@@ -1,14 +1,9 @@
 .wallet-connect-container {
-  .text {
-    font-size: 16px;
+  margin-top: 0px;
+  margin-bottom: 22px;
+  @media (max-width: 414px) {
+    margin-bottom: 16px;
   }
-
-  .img-wallet {
-    width: 32px;
-    cursor: pointer;
-    height: auto;
-  }
-
   .wallet-avatar {
     width: 26px;
     height: 26px;
@@ -57,7 +52,7 @@
     background: #141416;
     box-shadow: -2px 0px 18px rgba(0, 0, 0, 0.25);
     border: none;
-
+    z-index: 2000;
     .card {
       background: #141416;
     }
@@ -113,5 +108,40 @@
   &:hover {
     background: linear-gradient(88deg, #22534b 0%, #43485b 52.6%, #5c4326 100%);
     box-shadow: unset !important;
+  }
+}
+
+.box-connect {
+  box-shadow: 2px 1000px 1px var(--aura-black) inset !important;
+  padding: 0px 16px 0px 8px;
+  height: 32px;
+  border: 1px solid var(--aura-gray-9);
+  cursor: unset;
+  .txt-wallet:hover {
+    text-decoration: underline;
+    color: white;
+    text-underline-offset: 2px;
+  }
+}
+.icon-connect {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 7px;
+  background-color: var(--aura-danger);
+  &.connected {
+    background-color: var(--aura-blue-4);
+  }
+}
+.box-connect-wallet {
+  .divider-vertical {
+    height: 32px;
+  }
+  .aura-tooltip-object {
+    background: none;
+  }
+  @media (max-width: 414px) {
+    width: 100%;
+    justify-content: space-between;
   }
 }
