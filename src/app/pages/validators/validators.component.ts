@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { Subject, Subscription, forkJoin } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -177,7 +177,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           val.power = balanceOf(val.tokens);
           val.width_chart = val.uptime / 100;
           val.title = val.description?.moniker;
-          val.commission = (+val.commission?.commission_rates?.rate).toFixed(4);
+          val.commission = (+val.commission?.commission_rates?.rate || +val?.commission?.rate || 0).toFixed(4);
           val.percent_power = val.percent_voting_power.toFixed(2);
           val.participation = val.vote_aggregate?.aggregate?.count || 0;
           val.identity = val.description.identity;
@@ -346,7 +346,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           jailed: data.jailed ? 1 : 0,
           identity: data.description.identity,
           image_url: data.image_url,
-          commission: (+data.commission.commission_rates.rate)?.toFixed(4),
+          commission: (+data.commission?.commission_rates?.rate || +data?.commission?.rate || 0)?.toFixed(4),
           percent_power: data.percent_voting_power?.toFixed(2),
           power: balanceOf(data.tokens),
           title: data.description?.moniker,
