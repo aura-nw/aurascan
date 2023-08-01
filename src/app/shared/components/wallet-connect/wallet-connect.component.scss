@@ -117,12 +117,8 @@
   height: 32px;
   border: 1px solid var(--aura-gray-9);
   cursor: unset;
-  .txt-wallet:hover {
-    text-decoration: underline;
-    color: white;
-    text-underline-offset: 2px;
-  }
 }
+
 .icon-connect {
   width: 14px;
   height: 14px;
@@ -133,12 +129,21 @@
     background-color: var(--aura-blue-4);
   }
 }
+
 .box-connect-wallet {
   .divider-vertical {
     height: 32px;
   }
   .aura-tooltip-object {
     background: none;
+  }
+  .txt-wallet,
+  .txt-disconnect:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .txt-disconnect:hover {
+    color: var(--aura-blue-4);
   }
   @media (max-width: 414px) {
     width: 100%;

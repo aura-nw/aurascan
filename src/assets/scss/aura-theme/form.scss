@@ -382,7 +382,7 @@
 
 /* special case menu dropdown */
 .aura-dropdown .dropdown-menu.aura-dropdown-menu.walletMenu {
-  top: calc(100% + 12px) !important;
+  top: calc(100% + 5px) !important;
   width: 130px;
   @media (min-width: 991.98px) {
     width: 240px;

@@ -1,27 +1,26 @@
-<button
-  *ngIf="!userEmail"
-  type="button"
-  class="button button--xlg button--sm-mob button-flat body-01 button-login-menu"
-  (click)="linkLogin()">
-  <span class="d-none d-lg-block">Login</span>
-  <div class="ml-lg-2 d-flex">
-    <img [src]="'assets/icons/icons-svg/black/sign-in.svg' | imageS3" alt="" class="login-img" />
-  </div>
-</button>
-<div *ngIf="userEmail" class="dropdown aura-dropdown">
+<div class="wallet-connect">
   <button
-    class="button button--xlg button--sm-mob button-circle button-user"
-    id="userMenu"
-    data-bs-toggle="dropdown"
-    aria-expanded="false">
-    <img src="assets/icons/icons-svg/color/User.svg" alt="" />
+    *ngIf="!userEmail"
+    type="button"
+    class="button button--xlg button--sm-mob button-pill button-flat body-01 button-login-menu"
+    (click)="linkLogin()">
+    <span class="d-none d-lg-block">Login</span>
   </button>
-  <ul class="dropdown-menu aura-dropdown-menu user-dropdown-menu walletMenu" aria-labelledby="userMenu">
-    <li class="dropdown-item caption-mob cursor-pointer" [routerLink]="['/profile']">
-      <a class="w-100 body">My Profile</a>
-    </li>
-    <li class="dropdown-item caption-mob cursor-pointer" (click)="disconnect()">
-      <button type="button" class="button p-0 body">Log out</button>
-    </li>
-  </ul>
+  <div *ngIf="userEmail" class="dropdown aura-dropdown connected">
+    <button
+      class="button button--xlg button--sm-mob button-circle button-user"
+      id="userMenu"
+      data-bs-toggle="dropdown"
+      aria-expanded="false">
+      <img src="assets/icons/icons-svg/color/User.svg" alt="" />
+    </button>
+    <ul class="dropdown-menu aura-dropdown-menu user-dropdown-menu walletMenu" aria-labelledby="userMenu">
+      <li class="dropdown-item caption-mob cursor-pointer" [routerLink]="['/profile']">
+        <a class="w-100 body">My Profile</a>
+      </li>
+      <li class="dropdown-item caption-mob cursor-pointer" (click)="disconnect()">
+        <button type="button" class="button p-0 body">Log out</button>
+      </li>
+    </ul>
+  </div>
 </div>
