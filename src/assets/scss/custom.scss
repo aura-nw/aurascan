@@ -193,7 +193,6 @@ body {
   .tooltip {
     &-title {
       margin-bottom: 12px;
-      font-weight: 500;
     }
 
     &-amount {
@@ -415,7 +414,6 @@ body {
   color: var(--aura-white) !important;
   font-size: 2rem;
   line-height: 2.3rem;
-  font-weight: 500;
 
   &--desc {
     color: var(--aura-red-3) !important;
@@ -570,7 +568,6 @@ body {
     background-color: var(--aura-gray-8);
     border-radius: 48px;
     padding: 8px 12px;
-    font-weight: 500;
   }
 }
 .txt-copied {
