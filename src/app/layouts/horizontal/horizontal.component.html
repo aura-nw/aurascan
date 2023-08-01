@@ -6,6 +6,7 @@
   <div class="main-content">
     <div class="page-content" [ngClass]="router.url === '/login' ? 'box-mobile-login' : ''">
       <div class="container-fluid">
+        <app-wallet-connect></app-wallet-connect>
         <!-- content -->
         <router-outlet></router-outlet>
       </div>

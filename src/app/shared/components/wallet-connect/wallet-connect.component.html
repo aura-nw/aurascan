@@ -4,56 +4,40 @@
       #connectButton
       *ngIf="!ng.wallet"
       type="button"
-      class="button button--xlg button--sm-mob button-wallet button-pill button-flat px-4 px-lg-6"
+      class="button button-pill box-connect caption fw-normal cursor-pointer"
       data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasWallet"
       aria-controls="offcanvasWallet">
-      <span class="d-lg-none body-mob body-01">Connect</span>
-      <span class="d-none d-lg-block body-01">Connect Wallet</span>
+      <span class="icon-connect"></span>
+      <span class="text--white">Connect Wallet</span>
     </button>
 
-    <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
-      <button
-        class="button button--xlg button--sm-mob button-pill button-outline button-outline--gradient button-outline__in-card button-wallet-menu"
-        type="button"
-        id="walletMenu"
-        data-bs-toggle="dropdown"
-        aria-expanded="false">
-        <span class="button__title caption fw-normal d-lg-none">{{
-          ng.wallet?.bech32Address | cutStringPipe : 4 : 4
-        }}</span>
-        <span class="button__title body-01 fw-normal d-none d-lg-block">{{
-          ng.wallet?.bech32Address | cutStringPipe : 8 : 8
-        }}</span>
-      </button>
-      <ul class="dropdown-menu aura-dropdown-menu walletMenu" aria-labelledby="walletMenu" id="wallet-menu">
-        <li class="">
-          <div class="menu__input" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
-            <span class="text-gradient body-01">{{ ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}</span>
-            <div class="aura-tooltip-contain ml-2">
-              <button
-                class="button button--xxs button-circle aura-tooltip-object disabled-hover"
-                #tooltip
-                (click)="commonService.showToolTip(tooltip)"
-                [cdkCopyToClipboard]="ng.wallet?.bech32Address">
-                <i class="ph-light ph-copy body-01 text--white"></i>
-              </button>
-              <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
-            </div>
+    <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet">
+      <div class="button button-pill button--xs box-connect caption fw-normal">
+        <span class="icon-connect connected"></span>
+        <span class="fw-semibold fw-normal-mob text--gray-1 d-flex align-items-center">
+          <span class="txt-wallet cursor-pointer" [routerLink]="['/account/', ng.wallet?.bech32Address]">
+            {{ ng.wallet?.name || ng.wallet?.bech32Address | cutStringPipe : 8 : 8 }}
+          </span>
+          <div class="aura-tooltip-contain ml-2">
+            <button
+              class="aura-tooltip-object disabled-hover p-0"
+              #tooltip
+              (click)="commonService.showToolTip(tooltip)"
+              [cdkCopyToClipboard]="ng.wallet?.bech32Address">
+              <i class="ph-light ph-copy body-01 text--white"></i>
+            </button>
+            <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
           </div>
-        </li>
-        <li class="divider divider-horizontal my-2"></li>
-        <li class="dropdown-item caption-mob px-3 px-lg-4 py-3 body" [routerLink]="['/account', ng.wallet?.bech32Address]">
-          <a>Account Details</a>
-        </li>
-        <!-- <li class="dropdown-item caption-mob" [routerLink]="['/contracts/register']">
-          <a>Register Code ID</a>
-        </li> -->
-        <li class="dropdown-item caption-mob px-3 px-lg-4 py-3" (click)="disconnect()">
-          <button type="button" class="button p-0 body">Disconnect Wallet</button>
-        </li>
-      </ul>
+        </span>
+      </div>
+      <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
+      <div class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center" (click)="disconnect()">
+        <span class="txt-disconnect">Disconnect</span>
+        <img [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3" alt="" width="18px" height="18px" class="ml-1" />
+      </div>
     </div>
+
     <div
       class="offcanvas offcanvas-wallet offcanvas-end"
       tabindex="-1"
