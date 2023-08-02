@@ -24,15 +24,15 @@
                 *ngIf="i === 0"
                 [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
                 alt=""
+                [ngStyle]="{ 'margin-top': '2px' }"
                 width="16px"
                 height="16px" />
             </div>
-            <div class="caption">
+            <div>
               <ng-container *ngIf="errorCode === 'EU001' && (mode === screenType.Login || mode === screenType.Forgot)">
                 <ng-container *ngIf="i === 0">
-                  Please click on the verification link send to {{ emailFormat }} before to complete the registration
-                  process.<br />
-                  In case you have not yet received any email.
+                  Please click on the verification link sent to your mail to complete the registration process.<br />
+                  In case you've not yet received any email.
                   <a (click)="resendMail()" class="text--primary cursor-pointer">Resend</a>
                 </ng-container>
                 <ng-container *ngIf="i !== 0">{{ error }}</ng-container>
