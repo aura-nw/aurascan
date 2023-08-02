@@ -9,6 +9,7 @@ import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 import { Globals } from 'src/app/global/global';
+import * as _ from 'lodash';
 
 @Injectable()
 export class CommonService {
@@ -112,7 +113,10 @@ export class CommonService {
   }
 
   getListNameTag(payload) {
-    return this._http.post<any>(`${this.apiUrl}/name-tag/get-name-tag`, payload);
+    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
+    return this._http.get<any>(`${this.apiUrl}/public-name-tag`, {
+      params,
+    });
   }
 
   setNameTag(address, listNameTag = []) {

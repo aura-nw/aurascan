@@ -53,7 +53,7 @@ export class TokenDetailComponent implements OnInit {
         (res) => {
           const data = _.get(res, `smart_contract`);
           if (data.length > 0) {
-            const reqPayload = { contractAddress: [data[0].address] };
+            const reqPayload = { contractAddress: data[0].address };
             this.tokenService.getTokenMarketData(reqPayload).subscribe((item) => {
               const token = data[0];
               const tokenMarket = item.length > 0 ? item[0] : null;
