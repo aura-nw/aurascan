@@ -1,3 +1,14 @@
+<div class="col-lg-6 col-12 box-error-message mb-2" *ngIf="errorMessage">
+  <div class="item-error-message align-items-center">
+    <div [style.width]="'24px'" class="content-error">
+      <img [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3" alt="" width="16px" height="16px" />
+    </div>
+    <div>
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>
+
 <div class="txt-title">Profile settings</div>
 <div class="mt-4">
   <span class="mr-2 caption text--gray-4">Email</span>
@@ -41,8 +52,8 @@
       </div>
     </div>
     <!-- New password -->
-    <div class="row mt-lg-6 mt-4">
-      <div class="col-12 col-lg-6">
+    <div class="row mt-lg-6 mt-4 mb-4">
+      <div class="col-12 col-lg-6 mb-4 mb-lg-0">
         <div class="form-group">
           <label for="new_password" class="form-label body-01">New password</label>
           <div
@@ -81,7 +92,7 @@
           </ng-container>
         </div>
       </div>
-      <div class="col-12 col-lg-6 mt-lg-0 mt-4">
+      <div class="col-12 col-lg-6">
         <div class="form-group">
           <label for="cf_new_password" class="form-label body-01">Confirm new password</label>
           <div
@@ -121,15 +132,11 @@
       </div>
     </div>
     <!-- button group -->
-    <div class="d-flex mt-4">
+    <div class="d-flex">
       <button
         class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card"
         type="submit"
-        [disabled]="
-          changePassForm.status === 'INVALID' ||
-          changePassForm.value.new_password === changePassForm.value.old_password ||
-          isError
-        ">
+        [disabled]="checkDisableForm()">
         <span>Change password</span>
       </button>
     </div>
