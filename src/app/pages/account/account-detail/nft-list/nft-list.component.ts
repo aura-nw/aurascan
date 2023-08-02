@@ -24,10 +24,29 @@ export class NftListComponent implements OnChanges {
     pageSize: 20,
     pageIndex: 1,
   };
+  nftFilter = 'All';
   nftList = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
   textSearch = '';
+  listCollection = [
+    {
+    label: 'All',
+    quantity: 10
+    },
+    {
+    label: 'Business Bolar Bear',
+    quantity: 5
+    },
+    {
+    label: 'FOX NFT Collection',
+    quantity: 3
+    },
+    {
+    label: 'Greenovatiove NFT',
+    quantity: 2
+    }
+  ]
 
   constructor(
     private accountService: AccountService,

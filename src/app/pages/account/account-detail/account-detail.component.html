@@ -10,72 +10,71 @@
           <app-qr [address]="currentAddress || ''"> </app-qr>
         </div>
         <div class="d-flex flex-column col-lg-auto col-12 py-4 px-4 pl-md-6 pb-md-6">
-            <div>
-              <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Address</h3>
-              <div class="d-flex align-items-center">
-                <div class="body-01 text--white" id="currentAddress">
-                  <span>{{ currentAddress | cutStringPipe : 8 : 8 }}</span>
-                </div>
-                <div class="aura-tooltip-contain ml-2">
-                  <button
-                      class="button button-circle aura-tooltip-object disabled-hover"
-                      #tooltip
-                      (click)="commonService.showToolTip(tooltip)"
-                      [cdkCopyToClipboard]="currentAddress">
-                    <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="16px" height="16px" />
-                  </button>
-                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
-                </div>
+          <div>
+            <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Address</h3>
+            <div class="d-flex align-items-center">
+              <div class="body-01 text--white" id="currentAddress">
+                <span>{{ currentAddress | cutStringPipe : 8 : 8 }}</span>
               </div>
-              <div class="mt-2"
-                  *ngIf="commonService.setNameTag(currentAddress) !== currentAddress">
-                <div>
-                  <app-name-tag
-                      [value]="currentAddress"
-                      [fullText]="true"
-                      [isLink]="false"
-                      [extendUrl]="true"
-                      [widthAuto]="true"></app-name-tag>
-                </div>
-                <button class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2">
-                  <span>Set Private Name Tag</span>
+              <div class="aura-tooltip-contain ml-2">
+                <button
+                  class="button button-circle aura-tooltip-object disabled-hover"
+                  #tooltip
+                  (click)="commonService.showToolTip(tooltip)"
+                  [cdkCopyToClipboard]="currentAddress">
+                  <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="16px" height="16px" />
                 </button>
+                <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
               </div>
             </div>
-            <div class="mt-6 mt-lg-3 d-flex justify-content-between align-items-center d-xl-block">
+            <div class="mt-2" *ngIf="commonService.setNameTag(currentAddress) !== currentAddress">
               <div>
-                <h3 class="fw-bold fw-semibold-mob mb-1 text--white">Total Value</h3>
-                <span class="h1 mb-0 fw-700 mb-0 text-gradient d-inline" *ngIf="!isNoData">
-                  $ {{ totalValueToken + totalValueNft || 0 | number : global.formatNumber2Decimal }}
-                </span>
-                <img
-                    [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                    alt=""
-                    class="ml-10"
-                    width="20"
-                    height="20"
-                    *ngIf="isNoData" />
+                <app-name-tag
+                  [value]="currentAddress"
+                  [fullText]="true"
+                  [isLink]="false"
+                  [extendUrl]="true"
+                  [widthAuto]="true"></app-name-tag>
               </div>
-              <div class="button button--md button-circle ml-1 d-xl-none">
-                <img
-                    [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
-                    alt=""
-                    width="30px"
-                    height="30px"
-                    (click)="viewQrAddress(modalManage)" />
-              </div>
+              <button class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2">
+                <span>Set Private Name Tag</span>
+              </button>
             </div>
           </div>
+          <div class="mt-6 mt-lg-3 d-flex justify-content-between align-items-center d-xl-block">
+            <div>
+              <h3 class="fw-bold fw-semibold-mob mb-1 text--white">Total Value</h3>
+              <span class="h1 mb-0 fw-700 mb-0 text-gradient d-inline" *ngIf="!isNoData">
+                $ {{ totalValueToken + totalValueNft || 0 | number : global.formatNumber2Decimal }}
+              </span>
+              <img
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                class="ml-10"
+                width="20"
+                height="20"
+                *ngIf="isNoData" />
+            </div>
+            <div class="button button--md button-circle ml-1 d-xl-none">
+              <img
+                [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
+                alt=""
+                width="30px"
+                height="30px"
+                (click)="viewQrAddress(modalManage)" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-12 col-lg-9">
-      <div class="card">
+    <div class="col-12 col-lg-9 mb-5">
+      <div class="card h-100">
         <div class="px-4 py-4 px-lg-6 py-lg-6">
           <app-token-table
-              [address]="currentAddress"
-              (totalAssets)="totalAssets = $event"
-              (totalValue)="totalValueToken = $event"
-              *ngIf="!isNoData"></app-token-table>
+            [address]="currentAddress"
+            (totalAssets)="totalAssets = $event"
+            (totalValue)="totalValueToken = $event"
+            *ngIf="!isNoData"></app-token-table>
           <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
         </div>
       </div>
@@ -87,20 +86,17 @@
       <div class="box-address">
         <div class="txt-right mb-4">
           <img
-              [src]="'assets/images/icons/close-popup.png' | imageS3"
-              alt=""
-              width="14"
-              height="14"
-              (click)="closePopup()" />
+            [src]="'assets/images/icons/close-popup.png' | imageS3"
+            alt=""
+            width="14"
+            height="14"
+            (click)="closePopup()" />
         </div>
         <app-qr [address]="currentAddress || ''"> </app-qr>
       </div>
     </ng-template>
   </div>
-
 </section>
-
-
 
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!--SBT  -->
@@ -108,15 +104,17 @@
     <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
       <div class="mt-6 mt-lg-0">
         <app-soulbound-feature-tokens
-            [extend]="true"
-            (totalPick)="totalSBT = $event"
-            [displayManage]="true"
-            [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
+          [extend]="true"
+          (totalPick)="totalSBT = $event"
+          [displayManage]="true"
+          [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
       </div>
     </div>
   </div>
   <!-- Main info -->
   <div class="mt-4 mt-lg-6">
+    <!-- NFT -->
+    <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
     <!-- Tab List-->
     <ul
       ngbNav
@@ -140,16 +138,12 @@
     <!-- Assets-->
     <ng-container *ngIf="currentTab === tabsData.Assets">
       <!-- Coin & Token-->
-      <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ totalAssets || 0 }})</h2>
       <app-token-table
         [address]="currentAddress"
         (totalAssets)="totalAssets = $event"
         (totalValue)="totalValueToken = $event"
         *ngIf="!isNoData"></app-token-table>
       <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
-
-      <!-- NFT -->
-      <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
     </ng-container>
     <!-- Transaction -->
     <ng-container *ngIf="currentTab === tabsData.Transactions">
