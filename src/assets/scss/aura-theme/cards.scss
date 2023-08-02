@@ -1,6 +1,6 @@
 .nft-cards {
   &__col {
-    overflow: hidden;
+    // overflow: hidden;
     margin-bottom: var(--spacer-4);
     @media (min-width: 992px) {
       margin-bottom: var(--spacer-6);
@@ -9,7 +9,7 @@
   &__item-border {
     display: block;
     border-radius: var(--spacer-2);
-    overflow: hidden;
+    // overflow: hidden;
     box-shadow: 2px 1000px 1px #141416 inset;
     transition: border-color 0.35s ease-in-out;
     padding: 0;
@@ -91,7 +91,7 @@
     text-overflow: ellipsis;
   }
   .nft__info {
-    overflow: hidden;
+    // overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     color: var(--aura-primary);

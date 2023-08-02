@@ -186,7 +186,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                   isValueUp: tokenFind?.price_change_percentage_24h >= 0 ? true : false,
                   change: tokenFind?.price_change_percentage_24h || 0,
                   holderChange: Math.abs(changePercent),
-                  holders: item.cw20_holders_aggregate?.aggregate?.count,
+                  holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
                   max_total_supply: tokenFind?.max_supply || 0,
                   fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,
                 };

@@ -118,7 +118,7 @@
     <ng-container *ngIf="currentTab === tabsData.Transactions">
       <div class="card" *ngIf="!isNoData">
         <div class="card-body p-4 p-lg-6">
-          <ngx-simplebar *ngIf="dataSource && dataSource.data">
+          <ng-container *ngIf="dataSource && dataSource.data">
             <ng-container *ngIf="dataSource.data.length > 0; else noValues">
               <div class="table-responsive aura-table-contain spacer-tooltip">
                 <ng-container>
@@ -209,7 +209,7 @@
             <ng-template #noValues>
               <app-table-no-data *ngIf="!transactionLoading"></app-table-no-data>
             </ng-template>
-          </ngx-simplebar>
+          </ng-container>
           <div *ngIf="transactionLoading" class="">
             <app-loading-sprint></app-loading-sprint>
           </div>

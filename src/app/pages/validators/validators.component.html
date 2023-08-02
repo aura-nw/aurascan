@@ -63,7 +63,7 @@
         ngbNav
         #customNav="ngbNav"
         [activeId]="0"
-        class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap"
+        class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-3"
         [class.mobile-tab]="breakpoint.value.matches">
         <ng-container *ngFor="let tab of TABS; index as index">
           <li [ngbNavItem]="index">
@@ -103,7 +103,7 @@
       <!-- validator -->
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
         <ng-container *ngIf="!breakpoint.value.matches">
-          <div class="table-responsive spacer-tooltip">
+          <div class="table-responsive spacer-tooltip table-validator">
             <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
               <ng-container *ngFor="let template of templates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
@@ -160,7 +160,7 @@
                       <div class="aura-tooltip-contain">
                         <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
                         <app-tooltip-customize
-                          [content]="'Vote participation stat for the last' + countProposal || 0 + 'proposals.'">
+                          [content]="'Vote participation stat for the last ' + countProposal || 0 + 'proposals.'">
                         </app-tooltip-customize>
                       </div>
                     </th>
@@ -186,7 +186,9 @@
                               [votingPower]="true"
                               [appBigNumber]="data[template.matColumnDef]"
                               [decimal]="0"></span>
-                            <app-tooltip-customize [content]="data[template.matColumnDef] | number">
+                            <app-tooltip-customize
+                              [content]="data[template.matColumnDef] | number"
+                              [class.tooltip--left]="true">
                             </app-tooltip-customize>
                           </div>
                           <div
@@ -263,7 +265,7 @@
                             [disabled]="clicked"
                             *ngIf="!data['jailed']"
                             (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)">
-                            <span class="fw-500 body-02 text--gray-1">Delegate</span>
+                            <span class="body-02 text--gray-1">Delegate</span>
                           </button>
                         </div>
                         <div *ngSwitchDefault class="text-center">{{ data[template.matColumnDef] }}</div>
@@ -357,7 +359,7 @@
                           </ng-container>
                           <ng-container *ngSwitchCase="'Uptime'">
                             <ng-container *ngIf="validator['status'] === statusValidator.Active">
-                              <div class="text--gray-1">{{ calculatorUpTime(validator['cons_address']) }}%</div>
+                              <div class="text--gray-1">{{ calculatorUpTime(validator['account_address']) }}%</div>
                             </ng-container>
                             <ng-container *ngIf="validator['status'] !== statusValidator.Active">
                               <div class="text--gray-1">0.00%</div>

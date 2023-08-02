@@ -10,20 +10,20 @@
 }
 
 .box-error {
-  background-color: var(--aura-gray-9);
+  background-color: var(--aura-gray-10);
   color: #e65e5e;
-  border-radius: 10px;
-  padding: 10px 15px;
+  border-radius: 8px;
+  padding: 12px;
   margin-bottom: 1rem;
   word-break: break-word;
-  font-size: 16px;
+  font-size: 1.4rem;
   font-weight: 400;
-  .ellipsis-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  margin: 0px;
+  line-height: 1.6rem !important;
+  .txt-see-more {
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--aura-gray-light);
   }
 }
 

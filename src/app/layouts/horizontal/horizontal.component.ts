@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-horizontal',
@@ -12,7 +13,7 @@ import { Component, OnInit } from '@angular/core';
 export class HorizontalComponent implements OnInit {
   isCondensed = false;
 
-  constructor() {}
+  constructor(public router: Router) {}
 
   ngOnInit(): void {
     document.body.setAttribute('data-layout', 'horizontal');

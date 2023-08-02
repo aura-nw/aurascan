@@ -1,6 +1,6 @@
 .navbar-header {
   .page-title {
-    color: var(--aura-gray-5);
+    color: var(--aura-gray-4);
     padding: 0 var(--spacer-1);
     background-color: var(--aura-gray-10);
     border-radius: 4px;
@@ -24,7 +24,7 @@
   .logo {
     display: contents;
     img {
-      height: 36px;
+      height: 24px;
       @media (min-width: 992px) {
         height: 60px;
       }

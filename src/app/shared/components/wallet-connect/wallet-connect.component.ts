@@ -6,6 +6,8 @@ import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { WalletService } from '../../../core/services/wallet.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-wallet-connect',
@@ -35,6 +37,9 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     private envService: EnvironmentService,
     private dlgService: DialogService,
     private layout: BreakpointObserver,
+    public commonService: CommonService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state === 'open') {
@@ -82,5 +87,19 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
 
   disconnect(): void {
     this.walletService.disconnect();
+    
+    // redirect dashboard if fee grant
+    if (this.route.snapshot['_routerState']?.url === '/fee-grant') {
+      this.router.navigate(['/']);
+    }
+  }
+
+  copyMessage(text: string) {
+    const dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
   }
 }
