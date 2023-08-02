@@ -64,7 +64,6 @@ export class AppComponent implements OnInit {
   getListNameTag(): void {
     const payload = {
       limit: 500,
-      keyword: [],
       nextKey: 0,
     };
     this.commonService.getListNameTag(payload).subscribe((res) => {
