@@ -378,12 +378,14 @@
                     </ng-container>
                     <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take">
                       <app-name-tag
+                        [tooltipPosition]="'tooltip--below'"
                         [value]="data[template.matColumnDef]"
                         [isTokenDetail]="true"
                         *ngIf="
                           data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
                         "></app-name-tag>
                       <app-name-tag
+                        [tooltipPosition]="'tooltip--below'"
                         [value]="data[template.matColumnDef]"
                         [isTokenDetail]="true"
                         *ngIf="data.modeExecute === modeExecuteTransaction.Mint"

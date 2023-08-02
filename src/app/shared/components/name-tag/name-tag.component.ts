@@ -27,6 +27,7 @@ export class NameTagComponent implements OnInit {
   @Input() extendUrl = false;
   @Input() widthAuto = false;
   @Input() isNameTagContract = false;
+  @Input() tooltipPosition: 'tooltip--left' | 'tooltip--right' | 'tooltip--below' | null = null;
   extendUrlLink = '';
 
   constructor(public commonService: CommonService, public global: Globals) {}

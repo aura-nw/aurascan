@@ -12,6 +12,7 @@
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
     <app-tooltip-customize
+        class="{{tooltipPosition}}"
       [class.tooltip--right]="isNameTagContract"
       [content]="'Public Name Tag: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)">
     </app-tooltip-customize>
