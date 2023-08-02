@@ -5,7 +5,7 @@
       [routerLink]="['/accountbound/account', accountAddress]"
       (click)="setLinkTab()"
       *ngIf="wallet === accountAddress && displayManage && !isLoading">
-      <span>{{ wallet === accountAddress && displayManage && !isLoading ? 'Manage your ABTs' : 'See more' }} </span>
+      <span class="btn-text-manage fw-semibold">{{ wallet === accountAddress && displayManage && !isLoading ? 'Manage your ABTs' : 'See more' }} </span>
     </a>
   </div>
   <div class="soulbound-list" *ngIf="soulboundList && soulboundList?.length > 0">

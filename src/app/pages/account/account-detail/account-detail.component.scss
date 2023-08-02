@@ -61,7 +61,7 @@ section.account-detail {
 }
 .button {
   &.button-circle {
-    aspect-ratio : 1 / 1 !important;
+    aspect-ratio: 1 / 1 !important;
     padding: 0;
     border-radius: 50%;
     background-color: #363843;
@@ -88,8 +88,8 @@ section.account-detail {
   }
   ::ng-deep {
     .modal-dialog .modal-content {
-        padding-bottom: 52px !important;
-      }
+      padding-bottom: 52px !important;
+    }
   }
   .header-mob {
     padding-bottom: 0px !important;
@@ -127,4 +127,10 @@ section.account-detail {
 .aura-table.transaction-table th.mat-header-cell:nth-child(2),
 .aura-table.transaction-table th.mat-header-cell:nth-child(7) {
   min-width: 200px;
+}
+
+.right-border {
+  @media (min-width: 991.98px) {
+    border-right: 1px solid #363843 !important;
+  }
 }
