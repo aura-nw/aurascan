@@ -88,6 +88,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
         res.data = res.data.filter((k) => k.picked);
       }
       this.soulboundList = res.data;
+      
       this.totalSBT.emit(res.meta.count);
       this.totalPick.emit(res.data?.length || 0);
     });
@@ -148,5 +149,9 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     if (this.soulboundUnclaimedNum > 0) {
       localStorage.setItem('tabUnEquip', 'true');
     }
+  }
+
+  encodeData(data) {
+    return encodeURIComponent(data);
   }
 }

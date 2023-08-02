@@ -13,9 +13,6 @@
   align-items: center;
   gap: 20px;
   flex-grow: 1;
-  @media (min-width: 991.98px) {
-    justify-content: flex-end;
-  }
   .soulbound__item {
     flex-basis: 20%;
     box-sizing: border-box;

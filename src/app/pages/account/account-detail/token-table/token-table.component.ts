@@ -54,22 +54,22 @@ export class TokenTableComponent implements OnChanges {
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
   listTokenType = [
     {
-    label: 'All',
-    quantity: 3
+      label: 'All',
+      quantity: 3,
     },
     {
-    label: 'Native Coin',
-    quantity: 1
+      label: 'Native Coin',
+      quantity: 1,
     },
     {
-    label: 'IBC Token',
-    quantity: 2
+      label: 'IBC Token',
+      quantity: 2,
     },
     {
-    label: 'CW-20 Token',
-    quantity: 2
-    }
-  ]
+      label: 'CW-20 Token',
+      quantity: 2,
+    },
+  ];
   constructor(
     public global: Globals,
     private accountService: AccountService,
@@ -85,9 +85,6 @@ export class TokenTableComponent implements OnChanges {
   }
 
   getListToken() {
-    if (this.tokenFilter) {
-      console.log(this.tokenFilter);
-    }
     const payload = {
       account_address: this.address,
       limit: this.pageData.pageSize,
@@ -100,9 +97,7 @@ export class TokenTableComponent implements OnChanges {
       if (this.textSearch) {
         const textSearch = this.textSearch.trim();
         result = this.dataTable.filter(
-          (item) =>
-            item.name?.toLowerCase().includes(textSearch.toLowerCase()) ||
-            item.contract_address == textSearch,
+          (item) => item.name?.toLowerCase().includes(textSearch.toLowerCase()) || item.contract_address == textSearch,
         );
 
         const data = result?.slice(payload?.offset, payload?.offset + payload?.limit);
