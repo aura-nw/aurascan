@@ -4,13 +4,19 @@
       <app-loading-sprint></app-loading-sprint>
     </div> -->
     <!-- Filter -->
-    <div class="d-lg-flex justify-content-between align-items-center" *ngIf="!loading">
-      <h3 class="mb-0 fw-bold text--white">NFTs ({{ pageData?.length || 0 }} NFTs)</h3>
+    <div class="d-lg-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
+      <h3 class="mb-0 fw-bold text--white">NFTs ({{ pageData?.length || 0 }})</h3>
       <div class="d-flex align-items-center justify-content-center">
-        <div class="d-flex align-items-center justify-content-center">
-          <div class="body d-flex align-items-center justify-content-center mr-2">Filter</div>
+        <div class="d-flex align-items-center justify-content-center select-box">
+          <div class="body d-flex align-items-center justify-content-center mr-2">Collections</div>
           <mat-form-field appearance="fill" nftFilter>
-            <mat-select class="nft-filter" panelClass="tokenFilterPanel" [disableOptionCentering]="true">
+            <mat-select
+              class="nft-filter"
+              panelClass="tokenFilterPanel"
+              [disableOptionCentering]="true"
+              placeholder="Select collection"
+              [(value)]="nftFilter"
+              (selectionChange)="getNftData()">
               <div *ngFor="let item of listCollection; let i = index">
                 <mat-option [value]="item.label" [class.mb-1]="i > 0 && i < listCollection.length">
                   <div class="d-flex option-contain">

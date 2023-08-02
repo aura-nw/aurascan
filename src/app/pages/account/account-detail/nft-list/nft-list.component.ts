@@ -21,32 +21,20 @@ export class NftListComponent implements OnChanges {
   loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 20,
+    pageSize: 10,
     pageIndex: 1,
   };
-  nftFilter = 'All';
+  nftFilter = null;
   nftList = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
   textSearch = '';
   listCollection = [
     {
-    label: 'All',
-    quantity: 10
+      label: 'All',
+      quantity: 0,
     },
-    {
-    label: 'Business Bolar Bear',
-    quantity: 5
-    },
-    {
-    label: 'FOX NFT Collection',
-    quantity: 3
-    },
-    {
-    label: 'Greenovatiove NFT',
-    quantity: 2
-    }
-  ]
+  ];
 
   constructor(
     private accountService: AccountService,
@@ -66,6 +54,7 @@ export class NftListComponent implements OnChanges {
       limit: this.pageData.pageSize,
       keyword: this.textSearch,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
+      name: (this.nftFilter === 'All' ? null : this.nftFilter),
     };
 
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
@@ -93,6 +82,28 @@ export class NftListComponent implements OnChanges {
     );
   }
 
+  getListCollection() {
+    const payload = {
+      owner: this.address,
+    };
+
+    this.accountService.getListCollectionByOwner(payload).subscribe(
+      (res) => {
+        if (res?.cw721_contract?.length > 0) {
+          res.cw721_contract.forEach((item) => {
+            this.listCollection.push({
+              label: item.name,
+              quantity: item.cw721_tokens_aggregate.aggregate.count,
+            });
+          });
+          this.listCollection[0].quantity = res?.cw721_token_aggregate?.aggregate?.count;
+        }
+      },
+      () => {},
+      () => {},
+    );
+  }
+
   resetSearch(): void {
     this.searchValue = '';
     this.textSearch = '';
@@ -111,6 +122,7 @@ export class NftListComponent implements OnChanges {
       this.pageData.pageIndex = 1;
     }
     this.getNftData();
+    this.getListCollection();
   }
 
   handleRouterLink(link): void {
