@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -48,6 +48,7 @@ export class SoulboundContractListComponent implements OnInit {
     private walletService: WalletService,
     private router: Router,
     public commonService: CommonService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -57,11 +58,12 @@ export class SoulboundContractListComponent implements OnInit {
         mergeMap((_) => this.walletService.wallet$),
       )
       .subscribe((wallet) => {
+        const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
         if (wallet) {
           this.currentAddress = this.walletService.wallet?.bech32Address;
           this.checkWL();
           this.getListSmartContract();
-        } else {
+        } else if (urlPath === 'accountbound') {
           this.currentAddress = null;
           this.router.navigate(['/']);
         }
