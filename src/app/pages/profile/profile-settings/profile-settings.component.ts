@@ -63,6 +63,7 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   onSubmit() {
+    this.errorMessage = '';
     let payload = {
       oldPassword: this.changePassForm.value?.old_password,
       password: this.changePassForm.value?.new_password,
@@ -91,9 +92,24 @@ export class ProfileSettingsComponent implements OnInit {
             this.onSubmit();
           });
         } else {
-          this.toastr.error(error?.details?.message);
+          this.errorMessage = error?.details?.message;
         }
       },
     });
+  }
+
+  checkDisableForm() {
+    let result = false;
+    if (
+      this.changePassForm.status === 'INVALID' ||
+      this.changePassForm.value.new_password === this.changePassForm.value.old_password ||
+      (this.changePassForm.value.new_password !== this.changePassForm.value.cf_new_password &&
+        this.changePassForm.value.new_password.length > 0 &&
+        this.changePassForm.value.cf_new_password?.length > 0) ||
+      this.isError
+    ) {
+      result = true;
+    }
+    return result;
   }
 }
