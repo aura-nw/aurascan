@@ -193,7 +193,7 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: !commonService.checkDisplayTooltip(data.voter) ? 'name-tag-label mb-0' : 'mb-0',
+                  class: !commonService.checkDisplayTooltip(data.depositors) ? 'name-tag-label mb-0' : 'mb-0',
                   info: data.depositors
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +
