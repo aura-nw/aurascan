@@ -612,7 +612,7 @@ body {
     font-weight: 700;
   }
 }
-.toast-container{
+.toast-container {
   @media (max-width: 413px) {
     width: 93%;
   }
@@ -701,7 +701,9 @@ body {
 }
 .overflow-scroll-x {
   overflow-x: auto;
-  &::-webkit-scrollbar{ height : 6px; }
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
 }
 
 .box-error-message {
@@ -709,10 +711,10 @@ body {
   border-radius: 8px;
   background-color: var(--aura-red-4);
   color: var(--aura-white);
-  font-weight: 600;
-  .item-error-message{
+  line-height: 1.8rem;
+  .item-error-message {
     display: flex;
-    &:not(:first-child){
+    &:not(:first-child) {
       margin-top: var(--spacer-1);
     }
   }
