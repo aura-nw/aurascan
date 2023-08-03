@@ -13,8 +13,6 @@
     </a>
     <app-tooltip-customize
         class="{{tooltipPosition}}"
-      [class.tooltip--right]="tooltipRight"
-      [class.tooltip--left]="tooltipLeft"
       [content]="
         (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
       ">
@@ -33,8 +31,7 @@
       <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
     </a>
     <app-tooltip-customize
-      [class.tooltip--right]="tooltipRight"
-      [class.tooltip--left]="tooltipLeft"
+        class="{{tooltipPosition}}"
       [content]="
         (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
       ">
@@ -69,8 +66,7 @@
       </ng-container>
     </span>
     <app-tooltip-customize
-      [class.tooltip--right]="tooltipRight"
-      [class.tooltip--left]="tooltipLeft"
+        class="{{tooltipPosition}}"
       [content]="
         (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
       ">

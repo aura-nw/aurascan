@@ -92,7 +92,7 @@
             </div>
           </div>
         </div>
-        <div class="overflow-scroll-x aura-table-contain spacer-tooltip" *ngIf="pageData?.length > 0; else noValues">
+        <div class="overflow-scroll-x aura-table-contain" *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
@@ -115,11 +115,12 @@
                         <app-name-tag
                           [value]="data[template.matColumnDef]"
                           [url]="template.isUrl"
-                          [tooltipRight]="true"></app-name-tag>
+                          [tooltipPosition]="'tooltip--right'"></app-name-tag>
                       </div>
                     </ng-container>
                     <ng-container *ngIf="template.matColumnDef !== 'address'">
-                      <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl" [tooltipLeft]="true"></app-name-tag>
+                      <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"
+                                    [tooltipPosition]="'tooltip--left'"></app-name-tag>
                     </ng-container>
                   </ng-container>
                   <ng-container
