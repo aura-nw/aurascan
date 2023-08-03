@@ -34,7 +34,11 @@
                 </ng-container>
                 <ng-container *ngIf="template.isUrl && template.isShort">
                   <ng-container *ngIf="template.isNameTag">
-                    <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
+                    <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        [url]="template.isUrl"
+                        [tooltipPosition]="'tooltip--right'"
+                    ></app-name-tag>
                   </ng-container>
                   <ng-container *ngIf="!template.isNameTag">
                     <a

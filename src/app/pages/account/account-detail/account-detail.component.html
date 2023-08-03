@@ -132,7 +132,7 @@
         <div class="card-body p-4 p-lg-6">
           <ng-container *ngIf="dataSource && dataSource.data">
             <ng-container *ngIf="dataSource.data.length > 0; else noValues">
-              <div class="table-responsive aura-table-contain spacer-tooltip">
+              <div class="table-responsive aura-table-contain">
                 <ng-container>
                   <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
                     <ng-container *ngFor="let template of templates; index as i">
