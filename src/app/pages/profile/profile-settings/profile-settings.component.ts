@@ -18,6 +18,7 @@ export class ProfileSettingsComponent implements OnInit {
   errorMessage = '';
   currentProvider = 'password';
   isError = false;
+  textTitle = 'Change password';
 
   constructor(private fb: FormBuilder, private userService: UserService, private toastr: NgxToastrService) {}
 
@@ -25,6 +26,10 @@ export class ProfileSettingsComponent implements OnInit {
     this.userEmail = localStorage.getItem('userEmail')?.replace(/"/g, '');
     this.currentProvider = localStorage.getItem('provider')?.replace(/"/g, '');
     this.formInit();
+
+    if (this.currentProvider === 'google') {
+      this.textTitle = 'Create password';
+    }
   }
 
   get getOldPassword() {
