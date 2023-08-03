@@ -30,7 +30,8 @@ export class FeeGrantComponent implements OnInit {
         mergeMap((_) => this.walletService.wallet$),
       )
       .subscribe((wallet) => {
-        if (!wallet) {
+        const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
+        if (!wallet && urlPath === 'fee-grant') {
           this.router.navigate(['/']);
         }
       });
