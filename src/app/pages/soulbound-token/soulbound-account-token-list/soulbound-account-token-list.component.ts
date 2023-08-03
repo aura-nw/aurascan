@@ -112,4 +112,9 @@ export class SoulboundAccountTokenListComponent implements OnInit {
       this.totalPick = res.data.length;
     });
   }
+
+  extendLink(url) {
+    url = url.match(/^https?:/) ? url : '//' + url;
+    return url;
+  }
 }
