@@ -21,9 +21,8 @@ export class AppComponent implements OnInit {
   constructor(
     private commonService: CommonService,
     private globals: Globals,
-    private tokenService: TokenService,
-  ) // private env: EnvironmentService
-  {}
+    private tokenService: TokenService, // private env: EnvironmentService
+  ) {}
   ngOnInit(): void {
     this.getListNameTag();
     this.getInfoCommon();
@@ -65,7 +64,6 @@ export class AppComponent implements OnInit {
   getListNameTag(): void {
     const payload = {
       limit: 500,
-      keyword: [],
       nextKey: 0,
     };
     this.commonService.getListNameTag(payload).subscribe((res) => {

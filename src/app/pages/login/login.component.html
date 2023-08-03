@@ -1,0 +1,274 @@
+<div class="card card-login" *ngIf="mode !== screenType.Welcome && mode !== screenType.Verify">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center text-center">
+      <img
+        [src]="'assets/icons/icons-svg/white/arrow-left-register.svg' | imageS3"
+        alt=""
+        class="position-absolute cursor-pointer"
+        width="22px"
+        height="18px"
+        (click)="changeMode(screenType.Login)"
+        *ngIf="mode !== screenType.Login" />
+      <div class="mb-0 text--white w-100" *ngIf="mode === screenType.Login">Log in to AuraScan</div>
+      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Register">Register to AuraScan</div>
+      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Forgot">Forgot password</div>
+    </div>
+  </div>
+  <div class="card-body">
+    <ng-container *ngIf="errorMessage?.length > 0">
+      <div class="box-error-message mb-lg-6 mb-4">
+        <ng-container *ngFor="let error of errorMessage; let i = index">
+          <div class="item-error-message">
+            <div [style.width]="'24px'" class="content-error">
+              <img
+                *ngIf="i === 0"
+                [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
+                alt=""
+                [ngStyle]="{ 'margin-top': '2px' }"
+                width="16px"
+                height="16px" />
+            </div>
+            <div>
+              <ng-container *ngIf="errorCode === 'EU001' && (mode === screenType.Login || mode === screenType.Forgot)">
+                <ng-container *ngIf="i === 0">
+                  Please click on the verification link sent to your mail to complete the registration process.<br />
+                  In case you've not yet received any email.
+                  <a (click)="resendMail()" class="text--primary cursor-pointer">Resend</a>
+                </ng-container>
+                <ng-container *ngIf="i !== 0">{{ error }}</ng-container>
+              </ng-container>
+              <span *ngIf="errorCode !== 'EU001'">
+                {{ error }}
+              </span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="aura-form single-input-field login-form"
+      autocomplete="off">
+      <ng-container *ngIf="mode === screenType.Forgot">
+        <div class="text-center mb-6">
+          <img class="" src="assets/images/pages/key_left.png" />
+          <div class="body-01 text--gray-2 mt-6">
+            Kindly enter the email linked to your account, we'll send you a link to reset password
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label class="form-label body-01 text--white">Email</label>
+            <div
+              class="input-group"
+              [class.form-control--error]="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty">
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="Enter your email"
+                class="input-email"
+                name="inputEmail"
+                (blur)="checkEmail = true; isError = false"
+                autocomplete="off" />
+            </div>
+            <div
+              *ngIf="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty"
+              class="text--danger mt-2 caption fw-normal">
+              Invalid email format
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-lg-6 mt-4" *ngIf="mode !== screenType.Forgot">
+        <div class="col-12">
+          <div class="form-group">
+            <label class="form-label body-01 text--white">Password</label>
+            <div class="input-group pr-0" [class.form-control--error]="getPassword.errors?.pattern && checkPassword">
+              <input
+                [type]="hidePassword ? 'password' : 'text'"
+                placeholder="Enter your password"
+                formControlName="password"
+                (blur)="checkPassword = true; isError = false"
+                name="inputEmail"
+                autocomplete="off" />
+              <i
+                class="pr-4 hidden-icon cursor-pointer ph-bold  {{ hidePassword ? 'ph-eye-slash' : 'ph-fill ph-eye' }}"
+                (click)="hidePassword = !hidePassword"></i>
+            </div>
+
+            <div *ngIf="getPassword.errors?.pattern && checkPassword" class="text--danger mt-2 caption fw-normal">
+              The password need to be more than 8 characters in length with at least one upper case, 1 lower case, 1
+              number and 1 special character
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="mode === screenType.Register">
+        <div class="row mt-lg-6 mt-4">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="form-label body-01 text--white">Confirm password</label>
+              <div
+                class="input-group pr-0"
+                [class.form-control--error]="
+                  mode !== screenType.Login &&
+                  getConfirmPassword.touched &&
+                  getConfirmPassword.dirty &&
+                  loginForm.value.password !== loginForm.value.confirmPassword &&
+                  loginForm.value.password?.length > 0 &&
+                  loginForm.value.confirmPassword?.length > 0
+                ">
+                <input
+                  [type]="hideConfirmPassword ? 'password' : 'text'"
+                  placeholder="Re-enter your password"
+                  formControlName="confirmPassword"
+                  name="inputConfirmEmail"
+                  autocomplete="off" />
+                <i
+                  class="pr-4 hidden-icon cursor-pointer ph-bold  {{
+                    hideConfirmPassword ? 'ph-eye-slash' : 'ph-fill ph-eye'
+                  }}"
+                  (click)="hideConfirmPassword = !hideConfirmPassword"></i>
+              </div>
+              <div
+                *ngIf="
+                  mode !== screenType.Login &&
+                  getConfirmPassword.touched &&
+                  getConfirmPassword.dirty &&
+                  loginForm.value.password !== loginForm.value.confirmPassword &&
+                  loginForm.value.password?.length > 0 &&
+                  loginForm.value.confirmPassword?.length > 0
+                "
+                class="text--danger mt-2 caption fw-normal">
+                The password confirmation does not match
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="mode === screenType.Login">
+        <div class="py-lg-6 py-4">
+          <a class="text--primary h4 cursor-pointer" (click)="changeMode(screenType.Forgot)">Forgot password</a>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button
+            class="button button-pill button-flat w-100 btn-login button--lg border-radius--sm"
+            type="submit"
+            (click)="showVerifyMail()"
+            [disabled]="loginForm.status === 'INVALID' || isError">
+            <span class="body-01">Log in</span>
+          </button>
+        </div>
+        <div class="text-center text--gray-4 body-01">
+          <div class="mt-4">
+            <span class="text--gray-4">Don’t have an account?</span>
+            <a class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
+              >Register</a
+            >
+          </div>
+          <div class="py-6 text--white">or</div>
+
+          <div class="box-sign-google">
+            <div
+              id="g_id_onload"
+              [attr.data-client_id]="clientId"
+              data-context="use"
+              data-ux_mode="popup"
+              data-callback="handleCredentialResponse"
+              data-auto_prompt="false"></div>
+
+            <div
+              class="g_id_signin"
+              data-type="standard"
+              data-shape="rectangular"
+              data-theme="outline"
+              data-text="signin_with"
+              data-size="large"
+              data-locale="en-GB"
+              data-logo_alignment="left"></div>
+          </div>
+
+          <div class="mt-lg-6 mt-4 body-mob">
+            By continuing, you agree to our <a class="text--primary fw-semibold cursor-pointer">Terms of Use</a>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="mode === screenType.Register">
+        <div class="d-flex justify-content-end mt-6">
+          <button
+            class="button button-pill button-flat w-100 btn-login"
+            type="button"
+            (click)="showVerifyMail()"
+            [disabled]="
+              loginForm.status === 'INVALID' || loginForm.value.password !== loginForm.value.confirmPassword || isError
+            ">
+            <span class="body-01">Register</span>
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="mode === screenType.Forgot">
+        <div class="d-flex text-center mt-6">
+          <button
+            class="button button-pill button-flat btn-login m-auto btn-forgot"
+            type="button"
+            (click)="resetPassword()"
+            [disabled]="loginForm.get('email')?.invalid || isError">
+            <span class="body-01">Continue</span>
+          </button>
+        </div>
+      </ng-container>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="mode === screenType.Welcome" class="card-welcome text-center">
+  <img class="img-welcome" src="assets/images/pages/planet.png" />
+  <div class="title-welcome">Welcome to AuraScan</div>
+  <span class="body-01 text--gray-2">
+    Congratulation! You have successfully registered an account. Please Login in to your account and experience the
+    blazing-fast blockchain explorer from Aura Network!
+  </span>
+  <div class="mt-6 mb-8">
+    <button class="button button-outline button-outline--gradient button--xlg button-pill" [routerLink]="['/login']">
+      <span class="body-01">Log in</span>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="mode === screenType.Verify" class="card-verify text-center text--gray-4 mt-6">
+  <img class="mb-6" src="assets/images/pages/rocket.png" *ngIf="!isForgotScreen" />
+  <img class="mb-6" src="assets/images/pages/planet-2.png" *ngIf="isForgotScreen" />
+  <div class="title-verify w-100">
+    {{ !isForgotScreen ? 'Email verification' : 'Password recovery' }}
+  </div>
+  <div class="body-01 text--gray-2">
+    <ng-container *ngIf="!isForgotScreen">
+      <span>A verification link has been sent to {{ emailFormat }}.</span><br />
+      <span>Please click on the link to verify your email account.</span>
+    </ng-container>
+    <ng-container *ngIf="isForgotScreen">
+      A password reset link has been sent to {{ emailFormat }}.<br />
+      Please click on the link to change your password.
+    </ng-container>
+  </div>
+  <div class="body mt-6" *ngIf="!isForgotScreen">
+    In case you cannot find the email, please check the spam folder and ensure your spam filters allow email from
+    verify@aura.network
+  </div>
+  <div class="mt-6 mb-6 mb-lg-0">
+    <span class="">Have not received any email?</span>
+    <a class="text--primary fw-semibold ml-1 cursor-pointer" (click)="resendMail()">Resend</a>
+    <div *ngIf="errorMessage?.length > 0" class="text--danger mt-2 caption fw-normal">
+      <div>{{ errorMessage[errorMessage?.length - 1] }}</div>
+    </div>
+  </div>
+</div>
