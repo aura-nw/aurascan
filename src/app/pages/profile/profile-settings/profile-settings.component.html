@@ -14,7 +14,7 @@
   <span class="mr-2 caption text--gray-4">Email</span>
   <span class="body text--white d-lg-inline-flex d-block mt-1 mt-lg-0">{{ userEmail }}</span>
 </div>
-<h3 class="fw-bold text--gray-4 mt-8 h4-mob">Change password</h3>
+<h3 class="fw-bold text--gray-4 mt-8 h4-mob">{{ textTitle }}</h3>
 <div>
   <form
     [formGroup]="changePassForm"
@@ -137,7 +137,7 @@
         class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card"
         type="submit"
         [disabled]="checkDisableForm()">
-        <span>Change password</span>
+        <span>{{ textTitle }}</span>
       </button>
     </div>
   </form>
