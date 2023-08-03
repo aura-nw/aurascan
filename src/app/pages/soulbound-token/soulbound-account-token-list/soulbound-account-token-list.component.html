@@ -29,13 +29,27 @@
               <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
             </div>
           </div>
-          <div *ngIf="commonService.setNameTag(userAddress) !== userAddress" class="name-tag cursor-pointer mt-2">
-            <app-name-tag
-              [value]="userAddress"
-              [fullText]="true"
-              [widthAuto]="true"
-              [extendUrl]="true"
-              [isLink]="false"></app-name-tag>
+          <div
+            *ngIf="commonService.setNameTag(userAddress) !== userAddress"
+            class="name-tag cursor-pointer mt-1 aura-tooltip-contain">
+            <div class="d-flex aura-tooltip-object align-items-center">
+              <span class="d-none d-lg-flex">{{ commonService.setNameTag(userAddress) || '-' }}</span>
+              <span class="d-flex d-lg-none justify-content-center">{{
+                (commonService.setNameTag(userAddress) | cutStringPipe : 8 : 8) || '-'
+              }}</span>
+              <a
+                target="_blank"
+                [href]="extendLink(commonService.findUrlNameTag(userAddress))"
+                *ngIf="commonService.findUrlNameTag(userAddress)">
+                <i
+                  _ngcontent-wrg-c372=""
+                  class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1 cursor-pointer mt-1"></i>
+              </a>
+            </div>
+            <app-tooltip-customize
+              [class.tooltip--right]="true"
+              [content]="'Public name: ' + commonService.setNameTag(userAddress)">
+            </app-tooltip-customize>
           </div>
         </div>
         <div class="mt-6 mt-lg-4">

@@ -32,13 +32,25 @@
             </div>
             <div
               *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
-              class="d-flex align-items-center mt-2">
-              <app-name-tag
-                [value]="currentAddress"
-                [fullText]="true"
-                [isLink]="false"
-                [extendUrl]="true"
-                [widthAuto]="true"></app-name-tag>
+              class="d-flex align-items-center mt-1 aura-tooltip-contain">
+              <div class="d-flex aura-tooltip-object align-items-center">
+                <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+                <span class="d-flex d-lg-none justify-content-center">{{
+                  (commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8) || '-'
+                }}</span>
+                <a
+                  target="_blank"
+                  [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
+                  *ngIf="commonService.findUrlNameTag(currentAddress)">
+                  <i
+                    _ngcontent-wrg-c372=""
+                    class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1 cursor-pointer mt-1"></i>
+                </a>
+              </div>
+              <app-tooltip-customize
+                [class.tooltip--right]="true"
+                [content]="'Public name: ' + commonService.setNameTag(currentAddress, global.listNameTag)">
+              </app-tooltip-customize>
             </div>
           </div>
           <div class="mt-6 mt-xl-4">
