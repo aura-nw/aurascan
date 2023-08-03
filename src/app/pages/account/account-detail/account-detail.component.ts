@@ -494,4 +494,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       this.totalSBT = res.data.length;
     });
   }
+
+  extendLink(url) {
+    url = url.match(/^https?:/) ? url : '//' + url;
+    return url;
+  }
 }
