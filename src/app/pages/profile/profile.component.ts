@@ -16,14 +16,14 @@ export class ProfileComponent implements OnInit {
       key: ProfileTab.Setting,
       value: 'Profile settings'
     },
-    {
-      key: ProfileTab.PrivateNameTag,
-      value: 'Private name tag'
-    },
-    {
-      key: ProfileTab.WatchList,
-      value: 'Watchlist'
-    }
+    // {
+    //   key: ProfileTab.PrivateNameTag,
+    //   value: 'Private name tag'
+    // },
+    // {
+    //   key: ProfileTab.WatchList,
+    //   value: 'Watchlist'
+    // }
   ]
 
   constructor(private route: ActivatedRoute, private router: Router) {}
