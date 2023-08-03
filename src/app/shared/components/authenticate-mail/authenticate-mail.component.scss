@@ -1,0 +1,43 @@
+.button-login-menu {
+  .login-img {
+    width: 20px;
+    height: 20px;
+  }
+  &[aria-expanded='true'] {
+    &:before {
+      opacity: 0;
+    }
+    &:after {
+      opacity: 1;
+    }
+  }
+  &::before {
+    background: url(../../../../assets/icons/icons-svg/black/caret-up.svg) center no-repeat;
+  }
+  &::after {
+    background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
+  }
+}
+.button-user {
+  background: rgba(36, 38, 46, 1);
+  vertical-align: middle;
+  &:hover {
+    background: var(--aura-gray-7);
+  }
+}
+
+.wallet-connect {
+  display: flex;
+  align-items: center;
+  .divider.divider-vertical {
+    min-height: 32px;
+    @media (min-width: 991.98px) {
+      min-height: 40px;
+    }
+  }
+  .connected {
+    background-color: var(--aura-gray-9);
+    border-radius: 999px;
+    padding: 5px;
+  }
+}
