@@ -4,11 +4,11 @@
       <app-loading-sprint></app-loading-sprint>
     </div> -->
     <!-- Filter -->
-    <div class="d-lg-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
-      <h3 class="mb-0 fw-bold text--white">NFTs ({{ pageData?.length || 0 }})</h3>
-      <div class="d-flex align-items-center justify-content-center">
-        <div class="d-flex align-items-center justify-content-center select-box">
-          <div class="body d-flex align-items-center justify-content-center mr-2">Collections</div>
+    <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
+      <h3 class="mb-0 fw-bold text--white mb-2 mb-xl-0">NFTs ({{ pageData?.length || 0 }})</h3>
+      <div class="d-flex flex-row-reverse flex-lg-row align-items-center justify-content-start justify-content-lg-end">
+        <div class="d-flex align-items-center justify-content-center ml-2 ml-lg-0">
+          <div class="bbody d-lg-flex d-none align-items-center justify-content-center mr-2">Collections</div>
           <mat-form-field appearance="fill" nftFilter>
             <mat-select
               class="nft-filter"
@@ -29,37 +29,33 @@
               </div>
             </mat-select>
           </mat-form-field>
-          <div class="position-relative ml-4">
-            <form (ngSubmit)="searchTokenNft()" class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Search for Token ID or Address"
-                  [(ngModel)]="searchValue"
-                  [maxLength]="maxLengthSearch"
-                  [ngModelOptions]="{ standalone: true }"
-                  (keyup.enter)="searchTokenNft()"
-                  name="inputEmail"
-                  autocomplete="off" />
-                <button type="submit" class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-                </button>
-                <button
-                  type="reset"
-                  class="btn-reset cursor-pointer {{
-                    !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
-                  }}"
-                  (click)="resetSearch()">
-                  <img
-                    [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
-                    alt=""
-                    width="24"
-                    height="24" />
-                </button>
-              </div>
-            </form>
-          </div>
+        </div>
+        <div class="position-relative ml-4">
+          <form (ngSubmit)="searchTokenNft()" class="aura-form single-input-field account-search-form">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search for Token ID or Address"
+                [(ngModel)]="searchValue"
+                [maxLength]="maxLengthSearch"
+                [ngModelOptions]="{ standalone: true }"
+                (keyup.enter)="searchTokenNft()"
+                name="inputEmail"
+                autocomplete="off" />
+              <button type="submit" class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}">
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+              <button
+                type="reset"
+                class="btn-reset cursor-pointer {{
+                  !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
