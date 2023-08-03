@@ -63,7 +63,7 @@ export class ProfileSettingsComponent implements OnInit {
 
     // check required if type = password
     if (this.currentProvider != 'google') {
-      this.changePassForm.controls['old_password'].addValidators([Validators.required]);
+      this.changePassForm.controls['old_password']?.addValidators([Validators.required]);
     }
   }
 
@@ -76,7 +76,8 @@ export class ProfileSettingsComponent implements OnInit {
     };
     this.userService.changePassword(payload).subscribe({
       next: (res) => {
-        this.toastr.successWithTitle('Please use the new password next time you log in.', 'Password changed');
+        const passwordText = this.currentProvider === 'google' ? 'Password created' : 'Password changed';
+        this.toastr.successWithTitle('Please use the new password next time you log in.', passwordText);
 
         if (this.currentProvider === 'google') {
           localStorage.setItem('provider', JSON.stringify('password'));
