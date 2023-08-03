@@ -18,6 +18,7 @@ export class ProfileSettingsComponent implements OnInit {
   errorMessage = '';
   currentProvider = 'password';
   isError = false;
+  textTitle = 'Change password';
 
   constructor(private fb: FormBuilder, private userService: UserService, private toastr: NgxToastrService) {}
 
@@ -25,6 +26,10 @@ export class ProfileSettingsComponent implements OnInit {
     this.userEmail = localStorage.getItem('userEmail')?.replace(/"/g, '');
     this.currentProvider = localStorage.getItem('provider')?.replace(/"/g, '');
     this.formInit();
+
+    if (this.currentProvider === 'google') {
+      this.textTitle = 'Create password';
+    }
   }
 
   get getOldPassword() {
@@ -58,7 +63,7 @@ export class ProfileSettingsComponent implements OnInit {
 
     // check required if type = password
     if (this.currentProvider != 'google') {
-      this.changePassForm.controls['old_password'].addValidators([Validators.required]);
+      this.changePassForm.controls['old_password']?.addValidators([Validators.required]);
     }
   }
 
@@ -71,7 +76,8 @@ export class ProfileSettingsComponent implements OnInit {
     };
     this.userService.changePassword(payload).subscribe({
       next: (res) => {
-        this.toastr.successWithTitle('Please use the new password next time you log in.', 'Password changed');
+        const passwordText = this.currentProvider === 'google' ? 'Password created' : 'Password changed';
+        this.toastr.successWithTitle('Please use the new password next time you log in.', passwordText);
 
         if (this.currentProvider === 'google') {
           localStorage.setItem('provider', JSON.stringify('password'));
