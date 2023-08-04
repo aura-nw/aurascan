@@ -14,6 +14,13 @@
     }
   }
 }
+.table-token{
+  overflow-y: scroll;
+  height: 380px;
+  ::ng-deep table thead {
+    display: none;
+  }
+}
 
 .token-filter-form.aura-form.single-input-field .input-group {
   height: 40px;
