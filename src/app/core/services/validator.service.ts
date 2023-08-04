@@ -46,7 +46,7 @@ export class ValidatorService extends CommonService {
     const operationsDoc = `
     query getDataValidator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
       ${this.envDB} {
-        validator(limit: $limit, offset: $offset, order_by: {tokens: desc}, where: {operator_address: {_eq: $operatorAddress}}) {
+        validator(limit: $limit, offset: $offset, order_by: {tokens: desc}, where: {operator_address: {_eq: $operatorAddress}, status: {_neq: "UNRECOGNIZED"}}) {
           account_address
           commission
           consensus_address
@@ -97,40 +97,6 @@ export class ValidatorService extends CommonService {
           operatorAddress: payload?.operatorAddress || null,
         },
         operationName: 'getDataValidator',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getValidatorByListAddress(arrAddress) {
-    const operationsDoc = `
-    query getValidatorByListAddress($arrAddress: [String!]) {
-      ${this.envDB} {
-        validator(where: {operator_address: {_in: $arrAddress}}, order_by: {tokens: desc}) {
-          account_address
-          commission
-          consensus_address
-          consensus_hex_address
-          created_at
-          delegator_shares
-          delegators_count
-          delegators_last_height
-          description
-          jailed
-          operator_address
-          status
-          tokens
-          image_url
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          arrAddress: arrAddress || null,
-        },
-        operationName: 'getValidatorByListAddress',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

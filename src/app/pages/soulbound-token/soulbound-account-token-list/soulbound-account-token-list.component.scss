@@ -20,7 +20,6 @@
 }
 
 .aura-nav-tabs.nav-tabs .nav-link {
-  font-weight: 500;
   font-size: 14px;
   @media (min-width: 992px) {
     font-weight: 600;
@@ -31,8 +30,8 @@
   width: 100%;
   ul.aura-nav-tabs {
     flex-wrap: nowrap;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
     overflow: hidden;
     overflow-x: auto;
     &::-webkit-scrollbar {
@@ -71,5 +70,20 @@
     width: auto;
     border-radius: 24px;
     padding: 4px 8px;
+  }
+}
+
+::ng-deep {
+  .nft-cards__item {
+    overflow: hidden;
+    .nft__info {
+      overflow: hidden;
+    }
+  }
+}
+
+.name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
   }
 }

@@ -7,7 +7,7 @@
   </div>
 
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverified && contractDetail && !isVerifying">
-    <div class="d-flex fw-500 content-contract">
+    <div class="d-flex content-contract">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
         alt=""
@@ -16,7 +16,7 @@
         class="mr-2" />
       <div>
         Are you the Code ID's owner?
-        <span class="text--primary fw-500 ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail?.code?.code_id)">
+        <span class="text--primary ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail?.code?.code_id)">
           Verify and Publish
         </span>
         your Code ID source code today!
@@ -40,7 +40,7 @@
         </div>
         <div>
           Kindly click
-          <span class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify(contractDetail?.code?.code_id)">
+          <span class="text--primary cursor-pointer" (click)="navigateToVerify(contractDetail?.code?.code_id)">
             here
           </span>
           for more detail
@@ -75,7 +75,7 @@
   </ng-container>
 
   <ng-container *ngIf="contractTypeData === contractVerifyType.VerifiedFail">
-    <div class="d-flex fw-500 content-contract">
+    <div class="d-flex content-contract">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
         alt=""
@@ -84,7 +84,7 @@
         class="mr-2" />
       <div>
         Are you the Code ID's owner?
-        <span class="text--primary fw-500 ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail?.code?.code_id)">
+        <span class="text--primary ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail?.code?.code_id)">
           Verify and Publish
         </span>
         your Code ID source code today!

@@ -1,10 +1,10 @@
-<h1 class="mb-0 text--white fw-500-mob">Non-Fungible Tokens (NFT)</h1>
+<h1 class="mb-0 text--white">Non-Fungible Tokens (NFT)</h1>
 <section>
   <ng-container>
     <div class="card mt-4 mt-lg-5">
       <div class="card-body">
         <!-- Title -->
-        <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">
+        <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mb-4">
           <div class="caption-mob fw-normal-mob body-03 text--gray-5 mt-4 mt-lg-0">
             A total of {{ pageData?.length | number }} Token Contract{{ pageData?.length > 1 ? 's' : '' }} found
           </div>
@@ -38,7 +38,7 @@
         </div>
         <div class="divider divider-horizontal d-lg-none my-4"></div>
         <!-- Table -->
-        <div class="table-responsive aura-table-contain mt-4" *ngIf="pageData?.length > 0; else noValues">
+        <div class="aura-table-contain overflow-scroll-x " *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef>#</th>

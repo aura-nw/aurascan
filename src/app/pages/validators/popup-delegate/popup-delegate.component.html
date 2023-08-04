@@ -11,7 +11,7 @@
   </div>
   <div class="box-token mt-8 body-02">
     <div class="d-lg-flex mb-4 mb-xl-6">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5">My delegation</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5">My delegation</div>
       <div class="body-01 text--gray-1">
         {{
           !data.validatorDetail?.amount_staked || +data.validatorDetail?.amount_staked < 0.000001
@@ -22,13 +22,13 @@
       </div>
     </div>
     <div class="d-lg-flex mb-4 mb-xl-6">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5">Delegable Balance</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5">Delegable Balance</div>
       <div class="body-01 text--gray-1">
         {{ !availableToken || +availableToken < 0.000001 ? '0' : (+availableToken | mask : 'separator.6') }}
         <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
-    <div class="fw-500 text--gray-5">Amount to Delegate</div>
+    <div class="text--gray-5">Amount to Delegate</div>
   </div>
 </ng-container>
 
@@ -52,7 +52,7 @@
   </div>
   <div class="body-01 text--white">
     <div class="d-lg-flex mb-3 mb-xl-6">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">My delegation</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">My delegation</div>
       <div class="text--gray-1">
         {{
           !data.validatorDetail?.amount_staked || +data.validatorDetail?.amount_staked < 0.000001
@@ -63,7 +63,7 @@
       </div>
     </div>
     <div class="d-lg-flex mb-3 mb-xl-6">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Pending Reward</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">Pending Reward</div>
       <div class="text--gray-1">
         {{
           !data.validatorDetail?.pending_reward || +data.validatorDetail?.pending_reward < 0.000001
@@ -74,7 +74,7 @@
       </div>
     </div>
     <div class="d-lg-flex">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500 text--gray-5 body-02">Delegable Balance</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">Delegable Balance</div>
       <div class="text--gray-1">
         {{ !availableToken || +availableToken < 0.000001 ? '0' : (+availableToken | mask : 'separator.6') }}
         <span class="text--primary"> {{ denom }}</span>

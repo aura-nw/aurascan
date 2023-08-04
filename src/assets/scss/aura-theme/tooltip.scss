@@ -1,5 +1,5 @@
 app-tooltip-customize {
-  z-index: 10;
+  z-index: 2000;
   width: max-content;
   position: absolute;
   left: 50%;
@@ -29,6 +29,7 @@ app-tooltip-customize {
         max-width: 900px;
         max-height: 900px;
         opacity: 1;
+        height: fit-content;
 
         .aura-tooltip {
           display: block;
@@ -48,11 +49,6 @@ app-tooltip-customize {
         }
       }
   }
-}
-
-.spacer-tooltip {
-  padding-top: 50px;
-  margin-top: -40px;
 }
 
 app-tooltip-customize.tooltip--left {

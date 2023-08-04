@@ -20,7 +20,7 @@
         </button>
       </div>
       <!-- Filter -->
-      <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mt-6">
+      <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mt-6 mb-2 mb-lg-4">
         <div class="body text--gray-4 mt-4 mt-lg-0">
           A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
         </div>
@@ -80,7 +80,7 @@
       </div>
       <!-- Table -->
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-        <div class="table-responsive aura-table-slist mt-2 mt-lg-4">
+        <div class="overflow-scroll-x aura-table-contain aura-table-slist">
           <table mat-table [dataSource]="dataSource" class="aura-table">
             <!-- Number Column -->
             <ng-container matColumnDef="id">

@@ -34,7 +34,11 @@
                 </ng-container>
                 <ng-container *ngIf="template.isUrl && template.isShort">
                   <ng-container *ngIf="template.isNameTag">
-                    <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
+                    <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        [url]="template.isUrl"
+                        [tooltipPosition]="'tooltip--right'"
+                    ></app-name-tag>
                   </ng-container>
                   <ng-container *ngIf="!template.isNameTag">
                     <a
@@ -111,7 +115,9 @@
               [content]="[
                 {
                   label: 'Voter',
-                  class: 'h5 mb-0 text--primary name-tag-label',
+                  class: !commonService.checkDisplayTooltip(data.voter)
+                    ? 'name-tag-label mb-0 text--primary'
+                    : 'mb-0 text--primary',
                   info:
                     '<a class=text--primary href=' +
                     ('/account/' + data.voter) +
@@ -191,7 +197,7 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: 'h5 mb-0 name-tag-label',
+                  class: !commonService.checkDisplayTooltip(data.depositors) ? 'name-tag-label mb-0' : 'mb-0',
                   info: data.depositors
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +

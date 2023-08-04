@@ -4,3 +4,17 @@
     width: 70px;
   }
 }
+
+::ng-deep {
+  .box-name-tag {
+    background-color: var(--aura-gray-8) !important;
+
+    .aura-tooltip-contain a {
+    }
+    &:not(.private-name-tag) {
+      &:after {
+        border-right: 15px solid var(--aura-gray-9) !important;
+      }
+    }
+  }
+}

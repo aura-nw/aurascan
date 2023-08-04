@@ -20,7 +20,7 @@ export class AccountService extends CommonService {
   }
 
   getAssetCW20ByOwner(payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/`, payload);
+    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/${payload?.account_address}`);
   }
 
   getAssetCW721ByOwner(payload): Observable<any> {

@@ -82,7 +82,10 @@
                   <span
                     class="text--primary hover-link"
                     (click)="handleRouterLink('/tokens/token-nft/' + item.contract_address)"
-                    >{{ item.token_name }}</span
+                    >
+                    <span class="d-none d-lg-inline-block">{{ item.token_name | cutStringPipe : 16 }}</span>
+                    <span class="d-inline-block d-lg-none">{{ item.token_name | cutStringPipe : 12 }}</span>
+                    </span
                   >
                 </div>
                 <div class="mt-1 nft__info">
@@ -92,7 +95,8 @@
                     (click)="
                       handleRouterLink('/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id))
                     ">
-                    {{ item.token_id }}
+                    <span class="d-none d-lg-inline-block">{{ item.token_id | cutStringPipe : 12 }}</span>
+                    <span class="d-inline-block d-lg-none">{{ item.token_id | cutStringPipe : 9 }}</span>
                   </span>
                 </div>
               </div>

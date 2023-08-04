@@ -44,7 +44,7 @@ export class TransactionDetailComponent implements OnInit {
   isReload = false;
   listValidator = [];
   seeLess = false;
-  heightBoxError = 0;
+  isDisplayMore = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -95,7 +95,13 @@ export class TransactionDetailComponent implements OnInit {
 
               // get height error box
               setTimeout(() => {
-                this.heightBoxError = document.getElementById('contentError')?.offsetHeight;
+                const lengthChar = document.getElementById('contentError')?.innerText?.length;
+                const widthContent = document.getElementById('contentError')?.offsetWidth;
+                
+                // cal width text/content
+                if (lengthChar * 7.1 > widthContent * 3) {
+                  this.isDisplayMore = true;
+                }
               }, 500);
             }
 
