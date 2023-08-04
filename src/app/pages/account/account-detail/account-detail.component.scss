@@ -156,12 +156,9 @@ section.account-detail {
 app-soulbound-feature-tokens {
   width: 100%;
 }
-::ng-deep {
-  .box-name-tag {
-    &:not(.private-name-tag) {
-      &:after {
-        border-right: 15px solid var(--aura-gray-10) !important;
-      }
-    }
+
+.name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
   }
 }

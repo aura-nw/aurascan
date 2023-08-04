@@ -670,11 +670,12 @@ body {
   height: 26px;
   display: inline-flex;
   align-items: center;
-  font-size: 14px;
+  font-size: 1.2rem !important;
   font-weight: 400;
+  line-height: 1.6rem;
   word-break: break-word;
   background-color: var(--aura-gray-8);
-  border-radius: 4px;
+  border-radius: 4px 0px 0px 4px;
   padding-left: var(--spacer-2);
   padding-right: var(--spacer-5);
   &.private-name-tag {
