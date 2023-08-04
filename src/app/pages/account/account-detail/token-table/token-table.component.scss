@@ -18,7 +18,10 @@
 
 .token-filter-form.aura-form.single-input-field .input-group {
   height: 40px;
-  min-width: 312px;
+  @media (min-width: 991.99px) {
+    width: 312px;
+  }
+    width: 100%;
 }
 .image-token {
   width: 24px;
@@ -106,7 +109,7 @@
 
   .tokenFilterPanel {
     border: 1px solid var(--aura-gray-8);
-    background: #25252C;
+    background: #25252c;
     min-width: calc(100% + 20px) !important;
     transform: translate3D(5px, 32px, 0) !important;
     padding: var(--spacer-2) !important;
