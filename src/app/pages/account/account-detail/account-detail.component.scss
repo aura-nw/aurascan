@@ -115,7 +115,6 @@ section.account-detail {
   .header-mob {
     padding-bottom: 0px !important;
     font-size: 2rem !important;
-    font-weight: 500;
   }
   .aura-form {
     .select-input-field {
@@ -156,4 +155,13 @@ section.account-detail {
 }
 app-soulbound-feature-tokens {
   width: 100%;
+}
+::ng-deep {
+  .box-name-tag {
+    &:not(.private-name-tag) {
+      &:after {
+        border-right: 15px solid var(--aura-gray-10) !important;
+      }
+    }
+  }
 }

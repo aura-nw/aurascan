@@ -1,4 +1,4 @@
-<h1 class="mb-0 text--white fw-500-mob">Account Bound Tokens (ABT)</h1>
+<h1 class="mb-0 text--white-mob">Account Bound Tokens (ABT)</h1>
 <section>
   <ng-container>
     <div class="card mt-4 mt-lg-5">
@@ -33,7 +33,7 @@
           </form>
         </div>
         <div class="divider divider-horizontal d-lg-none my-4"></div>
-        <div class="overflow-scroll-x spacer-tooltip aura-table-contain" *ngIf="pageData?.length > 0; else noValues">
+        <div class="overflow-scroll-x aura-table-contain" *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef>#</th>
