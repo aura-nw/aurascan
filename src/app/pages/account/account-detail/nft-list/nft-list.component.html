@@ -1,39 +1,63 @@
-<h2 class="mb-0 text--white">NFTs ({{ pageData?.length || 0 }} NFTs)</h2>
 <div class="card mt-3">
   <div class="card-body">
-    <div *ngIf="loading" class="m-auto mt-10">
+    <!-- <div *ngIf="loading" class="m-auto mt-10">
       <app-loading-sprint></app-loading-sprint>
-    </div>
+    </div> -->
     <!-- Filter -->
-    <div class="mb-6 d-lg-flex align-items-center justify-content-between" *ngIf="!loading">
-      <div class="h1 mb-0 text-gradient">
-        <!--        $ {{ totalValue || 0 | number: global.formatNumber2Decimal }}-->
-      </div>
-      <form (ngSubmit)="searchTokenNft()" class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
-        <div class="input-group">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Search for Token ID or Address"
-            [(ngModel)]="searchValue"
-            [maxLength]="maxLengthSearch"
-            [ngModelOptions]="{ standalone: true }"
-            (keyup.enter)="searchTokenNft()"
-            name="inputEmail"
-            autocomplete="off" />
-          <button type="submit" class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-          </button>
-          <button
-            type="reset"
-            class="btn-reset cursor-pointer {{
-              !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
-            }}"
-            (click)="resetSearch()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
-          </button>
+    <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
+      <h3 class="mb-0 fw-bold text--white mb-2 mb-xl-0">NFTs ({{ pageData?.length || 0 }})</h3>
+      <div class="d-flex flex-column flex-lg-row align-items-end justify-content-end gap-2">
+        <div class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100">
+          <div class="body d-lg-flex d-none align-items-center justify-content-center mr-2">Collections</div>
+          <mat-form-field class="w-100" appearance="outline" nftFilter>
+            <mat-select
+              class="nft-filter"
+              panelClass="tokenFilterPanel"
+              [disableOptionCentering]="true"
+              placeholder="Select collection"
+              [(value)]="nftFilter"
+              (selectionChange)="getNftData()">
+              <div *ngFor="let item of listCollection; let i = index">
+                <mat-option [value]="item.label" [class.mb-1]="i > 0 && i < listCollection.length">
+                  <div class="d-flex option-contain">
+                    <div class="option-lable">
+                      <span>{{ item.label + ' (' + item.quantity + ')' }}</span>
+                    </div>
+                  </div>
+                </mat-option>
+                <div class="divider divider-horizontal my-2" *ngIf="i === 0"></div>
+              </div>
+            </mat-select>
+          </mat-form-field>
         </div>
-      </form>
+        <div class="position-relative ml-4 w-100">
+          <form (ngSubmit)="searchTokenNft()" class="aura-form single-input-field account-search-form w-100">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control w-100"
+                placeholder="Search for Token ID or Address"
+                [(ngModel)]="searchValue"
+                [maxLength]="maxLengthSearch"
+                [ngModelOptions]="{ standalone: true }"
+                (keyup.enter)="searchTokenNft()"
+                name="inputEmail"
+                autocomplete="off" />
+              <button type="submit" class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}">
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+              <button
+                type="reset"
+                class="btn-reset cursor-pointer {{
+                  !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <!-- Table -->
     <ng-container *ngIf="pageData?.length > 0; else noValues">
@@ -88,7 +112,7 @@
       </div>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data [textNull]="'No NFTs'" *ngIf="!loading"></app-table-no-data>
+      <app-table-no-data [textNull]="'Kindly select the collections'" *ngIf="!loading"></app-table-no-data>
     </ng-template>
   </div>
 </div>

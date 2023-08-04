@@ -19,7 +19,7 @@ export class TokenTableComponent implements OnChanges {
   @Input() address: string;
   @Output() totalValue = new EventEmitter<number>();
   @Output() totalAssets = new EventEmitter<number>();
-
+  tokenFilter = 'All';
   textSearch = '';
   searchValue = '';
   templates: Array<TableTemplate> = [
@@ -52,6 +52,24 @@ export class TokenTableComponent implements OnChanges {
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
+  listTokenType = [
+    {
+      label: 'All',
+      quantity: 3,
+    },
+    {
+      label: 'Native Coin',
+      quantity: 1,
+    },
+    {
+      label: 'IBC Token',
+      quantity: 2,
+    },
+    {
+      label: 'CW-20 Token',
+      quantity: 2,
+    },
+  ];
   constructor(
     public global: Globals,
     private accountService: AccountService,
@@ -79,9 +97,7 @@ export class TokenTableComponent implements OnChanges {
       if (this.textSearch) {
         const textSearch = this.textSearch.trim();
         result = this.dataTable.filter(
-          (item) =>
-            item.name?.toLowerCase().includes(textSearch.toLowerCase()) ||
-            item.contract_address == textSearch,
+          (item) => item.name?.toLowerCase().includes(textSearch.toLowerCase()) || item.contract_address == textSearch,
         );
 
         const data = result?.slice(payload?.offset, payload?.offset + payload?.limit);
