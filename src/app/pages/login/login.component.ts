@@ -103,6 +103,11 @@ export class LoginComponent implements OnInit {
     this.errorMessage = [];
     this.isForgotScreen = false;
     this.isError = false;
+
+    // load google api script
+    this.loadScript('GoogleLoginProvider', 'https://accounts.google.com/gsi/client', () => {
+      // Callback
+    });
   }
 
   checkVerifyPassword() {

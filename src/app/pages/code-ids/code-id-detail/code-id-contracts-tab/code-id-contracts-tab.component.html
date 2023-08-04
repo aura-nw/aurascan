@@ -11,7 +11,10 @@
           </th>
           <td mat-cell *matCellDef="let data">
             <ng-container *ngIf="template.matColumnDef === 'contract_address'">
-              <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl" [tooltipRight]="true"></app-name-tag>
+              <app-name-tag
+                [value]="data[template.matColumnDef]"
+                [url]="template.isUrl"
+                [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </ng-container>
             <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
               <a

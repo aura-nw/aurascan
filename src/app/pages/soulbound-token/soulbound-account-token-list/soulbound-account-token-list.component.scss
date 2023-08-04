@@ -20,7 +20,6 @@
 }
 
 .aura-nav-tabs.nav-tabs .nav-link {
-  font-weight: 500;
   font-size: 14px;
   @media (min-width: 992px) {
     font-weight: 600;
@@ -80,5 +79,11 @@
     .nft__info {
       overflow: hidden;
     }
+  }
+}
+
+.name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
   }
 }

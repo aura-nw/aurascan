@@ -11,7 +11,7 @@
           <td colspan="2">
             <ng-container
               *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
-              <div class="d-flex align-items-center">
+              <div class="box-name-tag">
                 <span class="d-none d-lg-flex">{{ commonService.setNameTag(contractDetail?.address) || '-' }}</span>
                 <span class="d-flex d-lg-none justify-content-center">{{
                   (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 8 : 8) || '-'
