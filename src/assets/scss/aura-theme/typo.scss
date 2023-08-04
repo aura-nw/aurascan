@@ -20,7 +20,7 @@ h2,
 }
 h3,
 .h3 {
-  @include mono-font-size(2, 2.6, 500);
+  @include mono-font-size(2, 2.6, 400);
 }
 h4,
 .h4 {
@@ -32,7 +32,7 @@ h5,
 }
 h6,
 .h6 {
-  @include mono-font-size(1.6, 2.4, 500);
+  @include mono-font-size(1.6, 2.4, 400);
 }
 .body {
   @include mono-font-size(1.4, 1.6, 400);
@@ -41,7 +41,7 @@ h6,
   @include mono-font-size(1.6, 2, 400);
 }
 .body-02 {
-  @include mono-font-size(1.4, 1.8, 500);
+  @include mono-font-size(1.4, 1.8, 400);
 }
 .body-03 {
   @include mono-font-size(1.4, 1.6, 400);
@@ -60,7 +60,7 @@ h6,
     display: inline-block;
   }
   .h3-mob {
-    @include mono-font-size(2, 2.6, 500);
+    @include mono-font-size(2, 2.6, 400);
   }
   .h4-mob {
     @include mono-font-size(1.6, 2, 600);
@@ -69,7 +69,7 @@ h6,
     @include mono-font-size(1.6, 1.9, 600);
   }
   .h6-mob {
-    @include mono-font-size(1.6, 2.4, 500);
+    @include mono-font-size(1.6, 2.4, 400);
   }
   .body-mob {
     @include mono-font-size(1.4, 1.6, 400);
@@ -78,7 +78,7 @@ h6,
     @include mono-font-size(1.6, 2, 400);
   }
   .body-02-mob {
-    @include mono-font-size(1.4, 1.6, 500);
+    @include mono-font-size(1.4, 1.6, 400);
   }
   .body-03-mob {
     @include mono-font-size(1.4, 1.6, 400);
@@ -124,15 +124,9 @@ $textColors: (
 .fw-semibold {
   font-weight: 600 !important;
 }
-
-.fw-500 {
-  font-weight: 500 !important;
-}
-
 .fw-normal {
   font-weight: 400 !important;
 }
-
 .font-italic {
   font-style: italic;
 }
@@ -144,11 +138,6 @@ $textColors: (
   .fw-semibold-mob {
     font-weight: 600 !important;
   }
-
-  .fw-500-mob {
-    font-weight: 500 !important;
-  }
-
   .fw-normal-mob {
     font-weight: 400 !important;
   }
