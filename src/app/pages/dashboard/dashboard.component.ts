@@ -280,17 +280,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  updateBlockAndTxs(type: string): void {
-    this.chartRange = type;
-    this.blockService.getBlockAndTxs(type).subscribe((res) => {
-      //update data common
-      this.getInfoCommon();
-      const data1 = res.data.map((i) => i.total);
-      let categories = res.data.map((i) => i.timestamp);
-      this.drawChartFirstTime(data1, categories);
-    });
-  }
-
   getCoinInfo(type: string) {
     this.originalData = [];
     this.originalDataArr = [];
