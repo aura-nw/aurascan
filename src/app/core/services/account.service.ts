@@ -69,7 +69,7 @@ export class AccountService extends CommonService {
             }
           }
         }
-        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}, name: {_eq: $name}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
           aggregate {
             count
           }

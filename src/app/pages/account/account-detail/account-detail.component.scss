@@ -113,7 +113,7 @@ section.account-detail {
 ::ng-deep.account-search-form {
   width: 100%;
   @media (min-width: 992px) {
-    width: 410px;
+    width: 320px;
   }
 }
 .account__tab-item {
@@ -167,6 +167,12 @@ mat-select.tnx-filter[aria-expanded='true'] {
   }
 }
 
-.filter-container {
-  width: 420px;
+.name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
+  }
+}
+
+.btn-private {
+  width: fit-content;
 }

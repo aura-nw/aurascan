@@ -61,7 +61,7 @@
         <a target="_blank" [href]="extendLink(extendUrlLink)">
           <i
             _ngcontent-wrg-c372=""
-            class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1 cursor-pointer"></i>
+            class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer"></i>
         </a>
       </ng-container>
     </span>
@@ -111,14 +111,14 @@
   </ng-container>
   <ng-container *ngIf="extendUrl && extendUrlLink">
     <a target="_blank" [href]="extendLink(extendUrlLink)">
-      <i _ngcontent-wrg-c372="" class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1"></i>
+      <i _ngcontent-wrg-c372="" class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1"></i>
     </a>
   </ng-container>
 </ng-template>
 
 <ng-template #displayNameTag>
   <ng-container *ngIf="!commonService.checkDisplayTooltip(paramUrl || value)">
-    {{ (commonService.setNameTag(value) | cutStringPipe : 16) || '-' }}
+    {{ (commonService.setNameTag(value) | cutStringPipe : maxCharacter) || '-' }}
   </ng-container>
 
   <ng-container *ngIf="commonService.checkDisplayTooltip(paramUrl || value)">

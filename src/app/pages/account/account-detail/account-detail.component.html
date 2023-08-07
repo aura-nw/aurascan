@@ -27,20 +27,34 @@
                 <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
               </div>
             </div>
-            <div class="mt-2" *ngIf="commonService.setNameTag(currentAddress) !== currentAddress">
-              <div>
-                <app-name-tag
-                  [value]="currentAddress"
-                  [fullText]="true"
-                  [isLink]="false"
-                  [extendUrl]="true"
-                  [widthAuto]="true"></app-name-tag>
+            <div
+              *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
+              class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
+              <div class="d-inline-flex aura-tooltip-object align-items-center">
+                <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+                <span class="d-flex d-lg-none justify-content-center">
+                  <ng-container *ngIf="!commonService.checkDisplayTooltip(currentAddress)">
+                    {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 16) || '-' }}
+                  </ng-container>
+                  <ng-container *ngIf="commonService.checkDisplayTooltip(currentAddress)">
+                    {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8) || '-' }}
+                  </ng-container>
+                </span>
+                <a
+                  target="_blank"
+                  [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
+                  *ngIf="commonService.findUrlNameTag(currentAddress)">
+                  <i
+                    _ngcontent-wrg-c372=""
+                    class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer mt-1"></i>
+                </a>
               </div>
-              <button class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2">
-                <span>Set Private Name Tag</span>
-              </button>
             </div>
           </div>
+          <!-- <button
+            class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private">
+            <span class="caption fw-normal">Set Private Name Tag</span>
+          </button> -->
           <div class="mt-6 mt-lg-3 d-flex justify-content-between align-items-center d-xl-block">
             <div>
               <h3 class="fw-bold fw-semibold-mob mb-1 text--white">Total Value</h3>
@@ -102,13 +116,11 @@
   <!--SBT  -->
   <div class="card">
     <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
-      <div class="mt-6 mt-lg-0">
-        <app-soulbound-feature-tokens
-          [extend]="true"
-          (totalPick)="totalSBT = $event"
-          [displayManage]="true"
-          [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
-      </div>
+      <app-soulbound-feature-tokens
+        [extend]="true"
+        (totalPick)="totalSBT = $event"
+        [displayManage]="true"
+        [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
     </div>
   </div>
   <!-- Main info -->
@@ -236,12 +248,9 @@
                         class="d-flex justify-content-between align-items-center body-02 body-01-mob chart-legend-item py-3 px-0">
                         <div class="d-flex align-items-center">
                           <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
-                          <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
+                          <span class="text--gray-5 body body-01-mob">{{ item.name }}</span>
                         </div>
-                        <span
-                          class="text--gray-1 body body-01-mob fw-500 fw-normal-mob"
-                          [appBigNumber]="item.amount"
-                          [decimal]="0"></span>
+                        <span class="text--gray-1 body body-01-mob" [appBigNumber]="item.amount" [decimal]="0"></span>
                       </div>
                     </ng-container>
                   </div>
@@ -352,15 +361,18 @@
                             </li>
                             <li>
                               <div class="d-flex justify-content-between align-items-center">
-                                  <button class="button button-pill button--sm button-outline text--white">Reset</button>
+                                <button class="button button-pill button--sm button-outline text--white">Reset</button>
                                 <div class="d-flex gap-4">
-                                  <button class="button button-pill button--sm button-outline text--white">Reset</button>
-                                  <button class="button button-pill button--sm button-outline text--white">Apply</button>
+                                  <button class="button button-pill button--sm button-outline text--white">
+                                    Reset
+                                  </button>
+                                  <button class="button button-pill button--sm button-outline text--white">
+                                    Apply
+                                  </button>
                                 </div>
                               </div>
                             </li>
                           </ul>
-                          
                         </div>
                       </div>
                     </div>

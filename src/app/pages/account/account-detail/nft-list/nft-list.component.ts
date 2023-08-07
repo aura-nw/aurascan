@@ -63,7 +63,7 @@ export class NftListComponent implements OnChanges {
           this.nftList = res?.cw721_token;
           this.pageData.length = res.cw721_token_aggregate?.aggregate?.count;
 
-          this.nftList.forEach((element) => {
+          this.nftList?.forEach((element) => {
             element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
             element.token_name = _.get(element, 'cw721_contract.name');
             if (!this.searchValue) {
