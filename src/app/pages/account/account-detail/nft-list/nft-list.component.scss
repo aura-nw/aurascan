@@ -80,7 +80,7 @@
 
   .nftFilterPanel {
     border: 1px solid var(--aura-gray-8);
-    background: #25252C;
+    background: #25252c;
     min-width: calc(100% + 20px) !important;
     transform: translate3D(5px, 32px, 0) !important;
     padding: var(--spacer-2) !important;
@@ -90,5 +90,11 @@
     border-radius: 4px;
     color: var(--aura-white) !important;
     padding: 0 8px !important;
+  }
+}
+
+.box-nft {
+  .input-group {
+    height: 40px;
   }
 }

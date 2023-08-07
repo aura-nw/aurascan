@@ -134,3 +134,9 @@ section.account-detail {
     border-right: 1px solid #363843 !important;
   }
 }
+
+.name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
+  }
+}

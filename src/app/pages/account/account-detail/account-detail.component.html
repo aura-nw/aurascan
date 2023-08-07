@@ -27,14 +27,27 @@
                 <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
               </div>
             </div>
-            <div class="mt-2" *ngIf="commonService.setNameTag(currentAddress) !== currentAddress">
-              <div>
-                <app-name-tag
-                  [value]="currentAddress"
-                  [fullText]="true"
-                  [isLink]="false"
-                  [extendUrl]="true"
-                  [widthAuto]="true"></app-name-tag>
+            <div
+              *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
+              class="name-tag cursor-pointer mt-1 aura-tooltip-contain">
+              <div class="d-flex aura-tooltip-object align-items-center">
+                <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+                <span class="d-flex d-lg-none justify-content-center">
+                  <ng-container *ngIf="!commonService.checkDisplayTooltip(currentAddress)">
+                    {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 16) || '-' }}
+                  </ng-container>
+                  <ng-container *ngIf="commonService.checkDisplayTooltip(currentAddress)">
+                    {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8) || '-' }}
+                  </ng-container>
+                </span>
+                <a
+                  target="_blank"
+                  [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
+                  *ngIf="commonService.findUrlNameTag(currentAddress)">
+                  <i
+                    _ngcontent-wrg-c372=""
+                    class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer mt-1"></i>
+                </a>
               </div>
               <button class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2">
                 <span>Set Private Name Tag</span>
@@ -236,10 +249,10 @@
                         class="d-flex justify-content-between align-items-center body-02 body-01-mob chart-legend-item py-3 px-0">
                         <div class="d-flex align-items-center">
                           <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
-                          <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
+                          <span class="text--gray-5 body body-01-mob">{{ item.name }}</span>
                         </div>
                         <span
-                          class="text--gray-1 body body-01-mob fw-500 fw-normal-mob"
+                          class="text--gray-1 body body-01-mob"
                           [appBigNumber]="item.amount"
                           [decimal]="0"></span>
                       </div>
@@ -511,10 +524,10 @@
                         class="d-flex justify-content-between align-items-center body-02 body-01-mob chart-legend-item py-3 px-0">
                         <div class="d-flex align-items-center">
                           <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
-                          <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
+                          <span class="text--gray-5 body body-01-mob">{{ item.name }}</span>
                         </div>
                         <span
-                          class="text--gray-1 body body-01-mob fw-500 fw-normal-mob"
+                          class="text--gray-1 body body-01-mob"
                           [appBigNumber]="item.amount"
                           [decimal]="0"></span>
                       </div>
