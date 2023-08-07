@@ -4,6 +4,7 @@
     vertical-align: middle;
   }
   .sbt-detail {
+    overflow-x: auto;
     ::ng-deep {
       flex-wrap: wrap;
       flex-basis: 20%;

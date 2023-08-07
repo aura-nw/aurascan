@@ -1,5 +1,5 @@
-<div class="d-flex flex-column justify-content-center align-items-center m-5 text-center text-gray">
-  <img [src]="'assets/images/icons/noValues.svg' | imageS3" alt="" />
-  <!-- <img [src]="'assets/images/icons/noItem.png' | imageS3" alt="" width="240" height="240"/> -->
+<div class="d-flex flex-column justify-content-center align-items-center m-5 text-center text-gray body-01">
+  <img [src]="'assets/images/icons/noValues.svg' | imageS3" alt="" *ngIf="textNull === 'NO DATA'" />
+  <img [src]="'assets/images/noItemNFT.png' | imageS3" alt="" *ngIf="textNull !== 'NO DATA'" />
   {{ textNull }}
 </div>

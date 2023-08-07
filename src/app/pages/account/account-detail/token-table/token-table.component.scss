@@ -56,7 +56,7 @@
     align-items: center;
     width: 150px;
     height: 40px;
-    border: 1px solid transparent;
+    // border: 1px solid transparent;
     @media (min-width: 991.98px) {
       width: 100%;
     }
@@ -72,6 +72,7 @@
     .mat-form-field-flex {
       padding: 0 16px;
       background: transparent;
+      height: 40px;
     }
 
     .mat-form-field-infix {
@@ -95,7 +96,7 @@
     }
 
     .mat-select-arrow-wrapper {
-      transform: translateY(-22%);
+      transform: translateY(-26%);
 
       .mat-select-arrow {
         border: solid var(--aura-white);
@@ -111,13 +112,17 @@
     .mat-select-arrow {
       border-width: 1px 0 0 1px !important;
     }
+    .mat-select-arrow-wrapper {
+      transform: translateY(2%);
+    }
   }
 
   .tokenFilterPanel {
     border: 1px solid var(--aura-gray-8);
     background: #25252c;
-    min-width: calc(100% + 20px) !important;
-    transform: translate3D(5px, 32px, 0) !important;
+    width: 214px !important;
+    min-width: 214px !important;
+    transform: translate3D(1px, 29px, 0) !important;
     padding: var(--spacer-2) !important;
     border-radius: 8px;
   }

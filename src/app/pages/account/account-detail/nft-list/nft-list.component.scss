@@ -21,7 +21,7 @@
     align-items: center;
     width: 150px;
     height: 40px;
-    border: 1px solid transparent;
+    // border: 1px solid transparent;
     @media (min-width: 991.98px) {
       width: 100%;
     }
@@ -37,6 +37,7 @@
     .mat-form-field-flex {
       padding: 0 16px;
       background: transparent;
+      height: 40px;
     }
 
     .mat-form-field-infix {
@@ -60,7 +61,7 @@
     }
 
     .mat-select-arrow-wrapper {
-      transform: translateY(-22%);
+      transform: translateY(-26%);
 
       .mat-select-arrow {
         border: solid var(--aura-white);
@@ -75,6 +76,9 @@
   mat-select.nft-filter[aria-expanded='true'] {
     .mat-select-arrow {
       border-width: 1px 0 0 1px !important;
+    }
+    .mat-select-arrow-wrapper {
+      transform: translateY(2%);
     }
   }
 

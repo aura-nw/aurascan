@@ -21,7 +21,7 @@
                 <mat-option [value]="item.label" [class.mb-1]="i > 0 && i < listCollection.length">
                   <div class="d-flex option-contain">
                     <div class="option-lable">
-                      <span>{{ item.label + ' (' + item.quantity + ')' }}</span>
+                      <span>{{ (item.label | cutStringPipe : 18) + ' (' + item.quantity + ')' }}</span>
                     </div>
                   </div>
                 </mat-option>
@@ -36,7 +36,7 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search for Tx Hash, Address or Status"
+                placeholder="Search for Token ID or Address"
                 [(ngModel)]="searchValue"
                 [maxLength]="maxLengthSearch"
                 [ngModelOptions]="{ standalone: true }"
@@ -112,7 +112,8 @@
       </div>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data [textNull]="'Kindly select the collections'" *ngIf="!loading"></app-table-no-data>
+      <app-table-no-data [textNull]="'Kindly select the collections'" *ngIf="!loading && textSearch?.length == 0"></app-table-no-data>
+      <app-table-no-data *ngIf="!loading && textSearch?.length > 0"></app-table-no-data>
     </ng-template>
   </div>
 </div>

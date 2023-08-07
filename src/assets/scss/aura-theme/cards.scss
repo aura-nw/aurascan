@@ -50,7 +50,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      object-fit: contain;
+      object-fit: fill;
       border-radius: 8px 8px 0 0;
     }
     &::before {
