@@ -92,13 +92,13 @@
               <div class="align-items-center pt-6 px-4 pr-lg-6 pl-lg-1">
                 <div class="d-lg-flex flex-wrap mb-4">
                   <!-- Tabs -->
-                  <div class="button-switch-stage button-switch-stage__1">
-                    <button type="button" [class.active]="isPrice" (click)="isPrice = true; getCoinInfo(chartRange)">
-                      <span>Price</span>
+                  <div class="button-switch-stage button-switch-stage__3">
+                    <button type="button" disabled [class.active]="isPrice" (click)="isPrice = true; getCoinInfo(chartRange)">
+                      <span>Price chart</span>
                     </button>
-                    <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
+                    <!-- <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
                       <span>Volume</span>
-                    </button>
+                    </button> -->
                   </div>
                   <div class="ms-auto mt-4 mt-md-0">
                     <div class="d-flex align-items-center chart__options">
