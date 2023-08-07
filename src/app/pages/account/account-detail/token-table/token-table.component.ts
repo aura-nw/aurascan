@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -64,6 +65,7 @@ export class TokenTableComponent implements OnChanges {
   assetsLoading = true;
   total = 0;
   dataTable = [];
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -75,6 +77,7 @@ export class TokenTableComponent implements OnChanges {
     public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
