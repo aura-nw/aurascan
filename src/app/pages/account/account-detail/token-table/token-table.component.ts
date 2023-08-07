@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -19,20 +19,40 @@ export class TokenTableComponent implements OnChanges {
   @Input() address: string;
   @Output() totalValue = new EventEmitter<number>();
   @Output() totalAssets = new EventEmitter<number>();
-  tokenFilter = 'All';
+  tokenFilter = '';
   textSearch = '';
   searchValue = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
-    { matColumnDef: 'symbol', headerCellDef: 'symbol' },
     { matColumnDef: 'contractAddress', headerCellDef: 'contractAddress' },
-    { matColumnDef: 'amount', headerCellDef: 'amount' },
     { matColumnDef: 'price', headerCellDef: 'price' },
-    { matColumnDef: 'chance', headerCellDef: 'chance' },
+    { matColumnDef: 'amount', headerCellDef: 'amount' },
     { matColumnDef: 'value', headerCellDef: 'value' },
   ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
+  listTokenType = [
+    {
+      label: 'All',
+      value: '',
+      quantity: 0,
+    },
+    {
+      label: 'Native Coin',
+      value: 'native',
+      quantity: 0,
+    },
+    {
+      label: 'IBC Token',
+      value: 'ibc',
+      quantity: 0,
+    },
+    {
+      label: 'CW-20 Token',
+      value: 'cw20',
+      quantity: 0,
+    },
+  ];
+  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 10,
@@ -43,8 +63,6 @@ export class TokenTableComponent implements OnChanges {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   assetsLoading = true;
   total = 0;
-  pageEvent: any;
-  paginator: MatPaginator;
   dataTable = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -52,24 +70,7 @@ export class TokenTableComponent implements OnChanges {
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
-  listTokenType = [
-    {
-      label: 'All',
-      quantity: 3,
-    },
-    {
-      label: 'Native Coin',
-      quantity: 1,
-    },
-    {
-      label: 'IBC Token',
-      quantity: 2,
-    },
-    {
-      label: 'CW-20 Token',
-      quantity: 2,
-    },
-  ];
+
   constructor(
     public global: Globals,
     private accountService: AccountService,
@@ -87,26 +88,28 @@ export class TokenTableComponent implements OnChanges {
   getListToken() {
     const payload = {
       account_address: this.address,
-      limit: this.pageData.pageSize,
-      offset: this.pageData.pageSize * this.pageData.pageIndex,
       keyword: this.textSearch,
     };
     if (this.dataTable.length > 0) {
-      let result = this.dataTable.slice(payload?.offset, payload?.offset + payload?.limit);
+      let searchList;
+      // Filter type token
+      if (this.tokenFilter !== '') {
+        searchList = this.dataTable.filter((item) => item.type?.toLowerCase() === this.tokenFilter);
+      }
+
       // Search with text search
-      if (this.textSearch) {
+      if (this.textSearch && searchList) {
         const textSearch = this.textSearch.trim();
-        result = this.dataTable.filter(
+        searchList = searchList.filter(
           (item) => item.name?.toLowerCase().includes(textSearch.toLowerCase()) || item.contract_address == textSearch,
         );
-
-        const data = result?.slice(payload?.offset, payload?.offset + payload?.limit);
-        this.dataSource = new MatTableDataSource<any>(data);
-        this.pageData.length = result?.length;
-      } else {
-        this.dataSource = new MatTableDataSource<any>(result);
-        this.pageData.length = this.dataTable?.length;
+      } else if (this.tokenFilter === '') {
+        const textSearch = this.textSearch.trim();
+        searchList = this.dataTable.filter(
+          (item) => item.name?.toLowerCase().includes(textSearch.toLowerCase()) || item.contract_address == textSearch,
+        );
       }
+      this.dataSource.data = [...searchList];
     } else {
       this.accountService.getAssetCW20ByOwner(payload).subscribe(
         (res: ResponseDto) => {
@@ -130,9 +133,15 @@ export class TokenTableComponent implements OnChanges {
             // store datatable
             this.dataTable = lstToken;
             // Sort and slice 20 frist record.
-            const result = lstToken?.slice(payload?.offset, payload?.offset + payload?.limit);
-            this.dataSource = new MatTableDataSource<any>(result);
+            this.dataSource = new MatTableDataSource<any>(lstToken);
             this.pageData.length = res.meta?.count || lstToken?.length;
+            this.listTokenType.forEach((e) => {
+              if (e.value === '') {
+                e.quantity = this.pageData.length;
+              } else {
+                e.quantity = this.dataTable.filter((ite) => ite.type.toLowerCase() === e.value).length;
+              }
+            });
           } else {
             this.pageData.length = 0;
             this.dataSource.data = [];
@@ -151,29 +160,15 @@ export class TokenTableComponent implements OnChanges {
     return balanceOf(value, decimal);
   }
 
-  paginatorEmit(event): void {
-    this.paginator = event;
-  }
-
-  handlePageEvent(e: any) {
-    this.pageData.pageIndex = e.pageIndex;
-    this.getListToken();
-  }
-
   searchToken(): void {
     this.searchValue = this.searchValue?.trim();
     this.textSearch = this.searchValue?.trim();
-    if (this.paginator.pageIndex !== 0) {
-      this.paginator.firstPage();
-    } else {
-      this.getListToken();
-    }
+    this.getListToken();
   }
 
   resetSearch(): void {
     this.textSearch = '';
     this.searchValue = '';
-    this.pageData.pageIndex = 0;
     this.searchToken();
   }
 
