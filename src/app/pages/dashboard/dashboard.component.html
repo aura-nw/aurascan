@@ -362,7 +362,7 @@
                 <ng-container *ngFor="let template of templatesBlock; index as i">
                   <ng-container [matColumnDef]="template.matColumnDef">
                     <th mat-header-cell *matHeaderCellDef>
-                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>
@@ -430,7 +430,7 @@
                       *matHeaderCellDef
                       [class.width-txhash]="template.headerCellDef === 'Tx Hash'"
                       [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
-                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>
