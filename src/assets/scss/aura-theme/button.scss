@@ -127,6 +127,18 @@
       }
     }
 
+
+    &.button-filter {
+      &:before {
+        opacity: 1;
+        background: url("../../icons/icons-svg/white/filter.svg") center no-repeat;
+      }
+      &:after {
+        opacity: 0;
+        background: url("../../icons/icons-svg/white/filter.svg") center no-repeat;
+      }
+    }
+
     &.button-dropdown {
     position: relative;
     &:before, &:after {

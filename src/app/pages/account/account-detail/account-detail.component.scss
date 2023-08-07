@@ -134,3 +134,39 @@ section.account-detail {
     border-right: 1px solid #363843 !important;
   }
 }
+
+.button-switch-stage {
+  &__1 {
+    width: 100%;
+    @media (min-width: 568.98px) {
+      max-width: 168px;
+    }
+    button {
+      padding: 0 14px;
+    }
+  }
+  &__2 {
+    width: 100%;
+    max-width: unset;
+    @media (min-width: 991.98px) {
+      max-width: 239px;
+    }
+  }
+}
+
+.text-gray-5 {
+  color: var(--aura-gray-5);
+}
+
+mat-select.tnx-filter[aria-expanded='true'] {
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0px !important;
+  }
+  .mat-select-arrow {
+    border-width: 1px 0 0 1px !important;
+  }
+}
+
+.filter-container {
+  width: 420px;
+}

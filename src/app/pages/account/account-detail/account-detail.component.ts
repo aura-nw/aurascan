@@ -54,6 +54,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   textSearch = '';
   dataSourceToken: MatTableDataSource<any>;
   dataSourceTokenBk: MatTableDataSource<any>;
+  tnxType = null;
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
@@ -178,12 +179,14 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       label: 'Vestings',
     },
   ];
-  currentTab = TabsAccount.Assets;
+  currentTab = TabsAccount.ExecutedTxs;
   currentStake = StakeModeAccount.Delegations;
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;
   totalSBT = 0;
+
+  isSent = true;
 
   constructor(
     private transactionService: TransactionService,

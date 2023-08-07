@@ -262,278 +262,343 @@
         <h3 class="mb-0 fw-bold text--white mb-4">Transactions</h3>
 
         <ul
-        ngbNav
-        #customNav="ngbNav"
-        [activeId]="0"
-        class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
-        [class.mobile-tab]="breakpoint.value.matches">
-        <ng-container *ngFor="let tab of TABS; index as index">
-          <li [ngbNavItem]="index">
-            <a
-              class="account__tab-item"
-              ngbNavLink
-              (click)="currentTab = tab.label; currentStake = stakeMode.Delegations">
-              <span class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--gray-light' }}">{{
-                tab.label
-              }}</span>
-            </a>
-          </li>
+          ngbNav
+          #customNav="ngbNav"
+          [activeId]="0"
+          class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
+          [class.mobile-tab]="breakpoint.value.matches">
+          <ng-container *ngFor="let tab of TABS; index as index">
+            <li [ngbNavItem]="index">
+              <a
+                class="account__tab-item"
+                ngbNavLink
+                (click)="currentTab = tab.label; currentStake = stakeMode.Delegations">
+                <span
+                  class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--gray-light' }}"
+                  >{{ tab.label }}</span
+                >
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+        <!-- Assets-->
+        <ng-container *ngIf="currentTab === tabsData.ExecutedTxs">
+          <!-- Coin & Token-->
+          <app-token-table
+            [address]="currentAddress"
+            (totalAssets)="totalAssets = $event"
+            (totalValue)="totalValueToken = $event"
+            *ngIf="!isNoData"></app-token-table>
+          <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
         </ng-container>
-      </ul>
-      <!-- Assets-->
-      <ng-container *ngIf="currentTab === tabsData.Assets">
-        <!-- Coin & Token-->
-        <app-token-table
-          [address]="currentAddress"
-          (totalAssets)="totalAssets = $event"
-          (totalValue)="totalValueToken = $event"
-          *ngIf="!isNoData"></app-token-table>
-        <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
-      </ng-container>
-      <!-- Transaction -->
-      <ng-container *ngIf="currentTab === tabsData.Transactions">
-        <div class="card" *ngIf="!isNoData">
-          <div class="card-body p-4 p-lg-6">
-            <ngx-simplebar *ngIf="dataSource && dataSource.data">
-              <ng-container *ngIf="dataSource.data.length > 0; else noValues">
-                <div class="table-responsive aura-table-contain spacer-tooltip">
-                  <ng-container>
-                    <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
-                      <ng-container *ngFor="let template of templates; index as i">
-                        <ng-container [matColumnDef]="template.matColumnDef">
-                          <th
-                            mat-header-cell
-                            *matHeaderCellDef
-                            class="{{
-                              template.headerCellDef === 'Time' ||
-                              template.headerCellDef === 'Result' ||
-                              template.headerCellDef === 'Tx Hash'
-                                ? 'col-per-15'
-                                : 'col-per-13'
-                            }}">
-                            <div [innerHTML]="template.headerCellDef | translate"></div>
-                          </th>
-  
-                          <td mat-cell *matCellDef="let data">
-                            <div>
-                              <ng-container [ngSwitch]="template.matColumnDef">
-                                <div *ngSwitchCase="'timestamp'">
-                                  {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                                </div>
-                                <a
-                                  *ngSwitchCase="'tx_hash'"
-                                  class="text--primary cursor-pointer hash-link"
-                                  [routerLink]="['/transaction', data['tx_hash']]">
-                                  {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
-                                </a>
-                                <a
-                                  *ngSwitchCase="'height'"
-                                  class="text--primary cursor-pointer block-link"
-                                  [routerLink]="['/blocks', data['height']]">
-                                  {{ data[template.matColumnDef] }}
-                                </a>
-                                <div *ngSwitchCase="'type'">
-                                  <div class="aura-status aura-tooltip-contain">
-                                    <div class="status cursor-pointer aura-tooltip-object">
-                                      {{ data[template.matColumnDef] | stringEllipsis : 11 }}
-                                    </div>
-                                    <app-tooltip-customize [content]="data[template.matColumnDef]">
-                                    </app-tooltip-customize>
+        <!-- Transaction -->
+        <ng-container *ngIf="currentTab === tabsData.FtsTxs">
+          <div class="card" *ngIf="!isNoData">
+            <div class="card-body p-4 p-lg-6">
+              <ngx-simplebar *ngIf="dataSource && dataSource.data">
+                <ng-container *ngIf="dataSource.data.length > 0; else noValues">
+                  <div class="table-responsive aura-table-contain spacer-tooltip">
+                    <div class="mb-3 w-100 d-flex justify-content-between align-items-center">
+                      <div class="d-flex flex-column align-items-start gap-2">
+                        <div class="button-switch-stage button-switch-stage__1">
+                          <button type="button" [class.active]="isSent" (click)="isSent = true">
+                            <span>Sent</span>
+                          </button>
+                          <button type="button" [class.active]="!isSent" (click)="isSent = false">
+                            <span>Received</span>
+                          </button>
+                        </div>
+                        <span class="text-gray-5">More than > {{ dataSource.data.length }} transactions found</span>
+                      </div>
+                      <div>
+                        <div class="dropdown aura-dropdown small-text">
+                          <button
+                            class="button button-pill button--sm button-outline button-outline__in-card button-filter"
+                            type="button"
+                            id="transaction-filter"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <span>Filter</span>
+                          </button>
+                          <ul
+                            class="dropdown-menu aura-dropdown-menu .border-sm border-gray-9 border-radius--sm filter-container p-4"
+                            aria-labelledby="transaction-filter">
+                            <h3 class="mb-0 fw-bold text--white mb-4">Filter</h3>
+                            <li class="dropdown-item cursor-pointer d-flex flex-column p-0">
+                              <span class="text-sm">From - To</span>
+
+                              <button type="button" class="button p-0 caption fw-normal">JSON Format</button>
+                            </li>
+                            <li class="dropdown-item cursor-pointer d-flex flex-column p-0">
+                              <span class="text-sm">Tnx Type</span>
+                              <mat-form-field class="w-100" appearance="outline" tnxType>
+                                <mat-select
+                                  class="tnx-filter"
+                                  panelClass="tokenFilterPanel"
+                                  [disableOptionCentering]="true"
+                                  placeholder="Select a type">
+                                  <div>
+                                    <mat-option>
+                                      <div class="d-flex option-contain">
+                                        <div class="option-lable">
+                                          <span></span>
+                                        </div>
+                                      </div>
+                                    </mat-option>
+                                    <div class="divider divider-horizontal my-2"></div>
                                   </div>
+                                </mat-select>
+                              </mat-form-field>
+                            </li>
+                            <li>
+                              <div class="d-flex justify-content-between align-items-center">
+                                  <button class="button button-pill button--sm button-outline text--white">Reset</button>
+                                <div class="d-flex gap-4">
+                                  <button class="button button-pill button--sm button-outline text--white">Reset</button>
+                                  <button class="button button-pill button--sm button-outline text--white">Apply</button>
                                 </div>
-                                <div *ngSwitchCase="'status'">
-                                  <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
-                                    <div *ngSwitchCase="'Success'" class="text--green-3">
-                                      {{ data[template.matColumnDef] }}
-                                    </div>
-                                    <div *ngSwitchCase="'Fail'" class="text--red-3">
-                                      {{ data[template.matColumnDef] }}
-                                    </div>
-                                    <div *ngSwitchCase="'Pending'" class="text--yellow-3">
-                                      {{ data[template.matColumnDef] }}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div *ngSwitchCase="'fee'">
-                                  {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                                  <span class="text--primary">{{ denom }}</span>
-                                </div>
-                                <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                              </ng-container>
-                            </div>
-                          </td>
-                        </ng-container>
-                      </ng-container>
-  
-                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                      <tr class="mat-row" *matNoDataRow>
-                        <td class="mat-cell g-no-data pt-8" colspan="9999">
-                          <app-loading-sprint></app-loading-sprint>
-                        </td>
-                      </tr>
-                    </table>
-                  </ng-container>
-                </div>
-                <app-paginator
-                  [length]="pageData.length"
-                  [pageSize]="pageData.pageSize"
-                  (paginator)="paginatorEmit($event)"
-                  (pageEvent)="pageEvent($event)">
-                </app-paginator>
-              </ng-container>
-              <ng-template #noValues>
-                <app-table-no-data *ngIf="!transactionLoading"></app-table-no-data>
-              </ng-template>
-            </ngx-simplebar>
-            <div *ngIf="transactionLoading" class="">
-              <app-loading-sprint></app-loading-sprint>
-            </div>
-          </div>
-        </div>
-        <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
-      </ng-container>
-      <!-- Stake -->
-      <ng-container *ngIf="currentTab === tabsData.Stake">
-        <div class="row row-eq-height" *ngIf="!isNoData">
-          <div class="col-12 col-lg-8">
-            <div class="card card-h-100 px-lg-6 py-lg-6">
-              <div class="card-body article-2">
-                <div *ngIf="!accDetailLoading">
-                  <!-- Tab List-->
-                  <ul
-                    ngbNav
-                    #customNav2="ngbNav"
-                    [activeId]="0"
-                    class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
-                    [class.mobile-tab]="breakpoint.value.matches">
-                    <ng-container *ngFor="let tab of TABS_STAKE; index as index">
-                      <li [ngbNavItem]="index">
-                        <a class="account__tab-item" ngbNavLink (click)="currentStake = tab.key">
-                          <span
-                            class="h5 text--white text-uppercase mb-0
-                            {{ customNav2.activeId === index ? 'text--white' : 'text--gray-light' }}">
-                            {{ tab.label }}
-                          </span>
-                        </a>
-                      </li>
-                    </ng-container>
-                  </ul>
-                  <!-- Delegations-->
-                  <app-account-detail-table
-                    *ngIf="currentStake === stakeMode.Delegations"
-                    [dataSource]="dataSourceDelegation"
-                    [templates]="templatesDelegation"
-                    [displayedColumns]="displayedColumnsDelegation"
-                    [pageData]="pageDataDelegation"
-                    [pageEventType]="pageEventType.Delegation"
-                    (pageEvent)="changePage($event)">
-                  </app-account-detail-table>
-                  <!-- Unbondings-->
-                  <app-account-detail-table
-                    *ngIf="currentStake === stakeMode.Unbondings"
-                    [dataSource]="dataSourceUnBonding"
-                    [templates]="templatesUnBonding"
-                    [displayedColumns]="displayedColumnsUnBonding"
-                    [pageData]="pageDataUnbonding"
-                    [pageEventType]="pageEventType.Unbonding"
-                    (pageEvent)="changePage($event)">
-                  </app-account-detail-table>
-                  <!-- Redelegations-->
-                  <div *ngIf="currentStake === stakeMode.Redelegations">
-                    <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
-                      1. {{ 'NOTICE.REDELEGATE_WAITING' | translate : { timeStaking: timeStaking } }}<br />
-                      2. {{ 'NOTICE.NUMBER_REDELEGATE' | translate }}
+                              </div>
+                            </li>
+                          </ul>
+                          
+                        </div>
+                      </div>
                     </div>
-                    <app-account-detail-table
-                      [dataSource]="dataSourceReDelegation"
-                      [templates]="templatesReDelegation"
-                      [displayedColumns]="displayedColumnsReDelegation"
-                      [pageData]="pageDataRedelegation"
-                      [pageEventType]="pageEventType.Redelegation"
-                      (pageEvent)="changePage($event)"></app-account-detail-table>
+                    <ng-container>
+                      <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
+                        <ng-container *ngFor="let template of templates; index as i">
+                          <ng-container [matColumnDef]="template.matColumnDef">
+                            <th
+                              mat-header-cell
+                              *matHeaderCellDef
+                              class="{{
+                                template.headerCellDef === 'Time' ||
+                                template.headerCellDef === 'Result' ||
+                                template.headerCellDef === 'Tx Hash'
+                                  ? 'col-per-15'
+                                  : 'col-per-13'
+                              }}">
+                              <div [innerHTML]="template.headerCellDef | translate"></div>
+                            </th>
+
+                            <td mat-cell *matCellDef="let data">
+                              <div>
+                                <ng-container [ngSwitch]="template.matColumnDef">
+                                  <div *ngSwitchCase="'timestamp'">
+                                    {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                                  </div>
+                                  <a
+                                    *ngSwitchCase="'tx_hash'"
+                                    class="text--primary cursor-pointer hash-link"
+                                    [routerLink]="['/transaction', data['tx_hash']]">
+                                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                                  </a>
+                                  <a
+                                    *ngSwitchCase="'height'"
+                                    class="text--primary cursor-pointer block-link"
+                                    [routerLink]="['/blocks', data['height']]">
+                                    {{ data[template.matColumnDef] }}
+                                  </a>
+                                  <div *ngSwitchCase="'type'">
+                                    <div class="aura-status aura-tooltip-contain">
+                                      <div class="status cursor-pointer aura-tooltip-object">
+                                        {{ data[template.matColumnDef] | stringEllipsis : 11 }}
+                                      </div>
+                                      <app-tooltip-customize [content]="data[template.matColumnDef]">
+                                      </app-tooltip-customize>
+                                    </div>
+                                  </div>
+                                  <div *ngSwitchCase="'status'">
+                                    <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                                      <div *ngSwitchCase="'Success'" class="text--green-3">
+                                        {{ data[template.matColumnDef] }}
+                                      </div>
+                                      <div *ngSwitchCase="'Fail'" class="text--red-3">
+                                        {{ data[template.matColumnDef] }}
+                                      </div>
+                                      <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                                        {{ data[template.matColumnDef] }}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div *ngSwitchCase="'fee'">
+                                    {{ +data[template.matColumnDef] | mask : 'separator.6' }}
+                                    <span class="text--primary">{{ denom }}</span>
+                                  </div>
+                                  <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                                </ng-container>
+                              </div>
+                            </td>
+                          </ng-container>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        <tr class="mat-row" *matNoDataRow>
+                          <td class="mat-cell g-no-data pt-8" colspan="9999">
+                            <app-loading-sprint></app-loading-sprint>
+                          </td>
+                        </tr>
+                      </table>
+                    </ng-container>
                   </div>
-                  <!-- Vestings-->
-                  <app-account-detail-table
-                    *ngIf="currentStake === stakeMode.Vestings"
-                    [dataSource]="dataSourceVesting"
-                    [templates]="templatesVesting"
-                    [displayedColumns]="displayedColumnsVesting"
-                    [pageData]="pageDataVesting"
-                    [pageEventType]="pageEventType.Vestings"
-                    (pageEvent)="changePage($event)">
-                  </app-account-detail-table>
-                </div>
-                <div class="mt-20" *ngIf="accDetailLoading">
-                  <app-loading-sprint></app-loading-sprint>
-                </div>
+                  <app-paginator
+                    [length]="pageData.length"
+                    [pageSize]="pageData.pageSize"
+                    (paginator)="paginatorEmit($event)"
+                    (pageEvent)="pageEvent($event)">
+                  </app-paginator>
+                </ng-container>
+                <ng-template #noValues>
+                  <app-table-no-data *ngIf="!transactionLoading"></app-table-no-data>
+                </ng-template>
+              </ngx-simplebar>
+              <div *ngIf="transactionLoading" class="">
+                <app-loading-sprint></app-loading-sprint>
               </div>
             </div>
           </div>
-          <div class="col-12 col-lg-4">
-            <div class="card card-h-100">
-              <div class="article-2 py-4 py-lg-6 px-4 px-lg-6 d-flex flex-column justify-content-between">
-                <ng-container *ngIf="!chartLoading">
-                  <div id="walletChart" class="my-0 mx-auto">
-                    <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
-                      <apx-chart
-                        [series]="chartOptions.series"
-                        [chart]="chartOptions.chart"
-                        [labels]="chartOptions.labels"
-                        [fill]="chartOptions.fill"
-                        [dataLabels]="chartOptions.dataLabels"
-                        [responsive]="chartOptions.responsive"
-                        [plotOptions]="chartOptions.plotOptions"
-                        [legend]="chartOptions.legend"
-                        [colors]="chartOptions.colors"
-                        [tooltip]="chartOptions.tooltip"
-                        [stroke]="{ show: false }">
-                      </apx-chart>
-                    </ng-container>
-                    <ng-template #chartNoValue>
-                      <div class="d-flex flex-column justify-content-center align-items-center">
-                        <div class="box-chart d-flex align-items-center justify-content-center">
-                          <div></div>
-                        </div>
+          <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
+        </ng-container>
+        <!-- Stake -->
+        <ng-container *ngIf="currentTab === tabsData.NftTxs">
+          <div class="row row-eq-height" *ngIf="!isNoData">
+            <div class="col-12 col-lg-8">
+              <div class="card card-h-100 px-lg-6 py-lg-6">
+                <div class="card-body article-2">
+                  <div *ngIf="!accDetailLoading">
+                    <!-- Tab List-->
+                    <ul
+                      ngbNav
+                      #customNav2="ngbNav"
+                      [activeId]="0"
+                      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
+                      [class.mobile-tab]="breakpoint.value.matches">
+                      <ng-container *ngFor="let tab of TABS_STAKE; index as index">
+                        <li [ngbNavItem]="index">
+                          <a class="account__tab-item" ngbNavLink (click)="currentStake = tab.key">
+                            <span
+                              class="h5 text--white text-uppercase mb-0
+                            {{ customNav2.activeId === index ? 'text--white' : 'text--gray-light' }}">
+                              {{ tab.label }}
+                            </span>
+                          </a>
+                        </li>
+                      </ng-container>
+                    </ul>
+                    <!-- Delegations-->
+                    <app-account-detail-table
+                      *ngIf="currentStake === stakeMode.Delegations"
+                      [dataSource]="dataSourceDelegation"
+                      [templates]="templatesDelegation"
+                      [displayedColumns]="displayedColumnsDelegation"
+                      [pageData]="pageDataDelegation"
+                      [pageEventType]="pageEventType.Delegation"
+                      (pageEvent)="changePage($event)">
+                    </app-account-detail-table>
+                    <!-- Unbondings-->
+                    <app-account-detail-table
+                      *ngIf="currentStake === stakeMode.Unbondings"
+                      [dataSource]="dataSourceUnBonding"
+                      [templates]="templatesUnBonding"
+                      [displayedColumns]="displayedColumnsUnBonding"
+                      [pageData]="pageDataUnbonding"
+                      [pageEventType]="pageEventType.Unbonding"
+                      (pageEvent)="changePage($event)">
+                    </app-account-detail-table>
+                    <!-- Redelegations-->
+                    <div *ngIf="currentStake === stakeMode.Redelegations">
+                      <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
+                        1. {{ 'NOTICE.REDELEGATE_WAITING' | translate : { timeStaking: timeStaking } }}<br />
+                        2. {{ 'NOTICE.NUMBER_REDELEGATE' | translate }}
                       </div>
-                    </ng-template>
-                  </div>
-                  <div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                      <span class="h2 h3-mob mb-0 text--gray-1">{{ denom }}</span>
-                      <span
-                        class="h5 h6-mob mb-0 text--gray-1"
-                        [appBigNumber]="currentAccountDetail?.total"
-                        [decimal]="0"></span>
+                      <app-account-detail-table
+                        [dataSource]="dataSourceReDelegation"
+                        [templates]="templatesReDelegation"
+                        [displayedColumns]="displayedColumnsReDelegation"
+                        [pageData]="pageDataRedelegation"
+                        [pageEventType]="pageEventType.Redelegation"
+                        (pageEvent)="changePage($event)"></app-account-detail-table>
                     </div>
-                    <ng-container *ngFor="let item of chartCustomOptions; let last = last">
-                      <div
-                        class="d-flex justify-content-between align-items-center body-02 body-01-mob chart-legend-item py-3 px-0">
-                        <div class="d-flex align-items-center">
-                          <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
-                          <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
+                    <!-- Vestings-->
+                    <app-account-detail-table
+                      *ngIf="currentStake === stakeMode.Vestings"
+                      [dataSource]="dataSourceVesting"
+                      [templates]="templatesVesting"
+                      [displayedColumns]="displayedColumnsVesting"
+                      [pageData]="pageDataVesting"
+                      [pageEventType]="pageEventType.Vestings"
+                      (pageEvent)="changePage($event)">
+                    </app-account-detail-table>
+                  </div>
+                  <div class="mt-20" *ngIf="accDetailLoading">
+                    <app-loading-sprint></app-loading-sprint>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4">
+              <div class="card card-h-100">
+                <div class="article-2 py-4 py-lg-6 px-4 px-lg-6 d-flex flex-column justify-content-between">
+                  <ng-container *ngIf="!chartLoading">
+                    <div id="walletChart" class="my-0 mx-auto">
+                      <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
+                        <apx-chart
+                          [series]="chartOptions.series"
+                          [chart]="chartOptions.chart"
+                          [labels]="chartOptions.labels"
+                          [fill]="chartOptions.fill"
+                          [dataLabels]="chartOptions.dataLabels"
+                          [responsive]="chartOptions.responsive"
+                          [plotOptions]="chartOptions.plotOptions"
+                          [legend]="chartOptions.legend"
+                          [colors]="chartOptions.colors"
+                          [tooltip]="chartOptions.tooltip"
+                          [stroke]="{ show: false }">
+                        </apx-chart>
+                      </ng-container>
+                      <ng-template #chartNoValue>
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                          <div class="box-chart d-flex align-items-center justify-content-center">
+                            <div></div>
+                          </div>
                         </div>
+                      </ng-template>
+                    </div>
+                    <div>
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="h2 h3-mob mb-0 text--gray-1">{{ denom }}</span>
                         <span
-                          class="text--gray-1 body body-01-mob fw-500 fw-normal-mob"
-                          [appBigNumber]="item.amount"
+                          class="h5 h6-mob mb-0 text--gray-1"
+                          [appBigNumber]="currentAccountDetail?.total"
                           [decimal]="0"></span>
                       </div>
-                    </ng-container>
+                      <ng-container *ngFor="let item of chartCustomOptions; let last = last">
+                        <div
+                          class="d-flex justify-content-between align-items-center body-02 body-01-mob chart-legend-item py-3 px-0">
+                          <div class="d-flex align-items-center">
+                            <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
+                            <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
+                          </div>
+                          <span
+                            class="text--gray-1 body body-01-mob fw-500 fw-normal-mob"
+                            [appBigNumber]="item.amount"
+                            [decimal]="0"></span>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                  <div *ngIf="chartLoading" class="mt-14">
+                    <app-loading-sprint></app-loading-sprint>
                   </div>
-                </ng-container>
-                <div *ngIf="chartLoading" class="mt-14">
-                  <app-loading-sprint></app-loading-sprint>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
-      </ng-container>
-
+          <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
+        </ng-container>
       </div>
     </div>
-    
   </div>
 </section>
 
