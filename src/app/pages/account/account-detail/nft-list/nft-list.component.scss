@@ -1,6 +1,6 @@
 .aura-form.single-input-field {
   .input-group {
-    padding: 0 var(--spacer-6);
+    padding: 0 var(--spacer-3);
     input {
       font-size: 1.4rem;
       line-height: 1.9rem;
@@ -15,7 +15,7 @@
 
 ::ng-deep {
   .mat-form-field[nftFilter] {
-    background-color: var(--aura-bg-form);
+    background-color: var(--aura-gray-10);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -40,7 +40,7 @@
     }
 
     .mat-form-field-infix {
-      padding: 0 0 0.75em 0;
+      padding: 4px 0 0.75em 0;
     }
 
     .mat-select-placeholder,
@@ -60,7 +60,7 @@
     }
 
     .mat-select-arrow-wrapper {
-      transform: translateY(-5%);
+      transform: translateY(-22%);
 
       .mat-select-arrow {
         border: solid var(--aura-white);
