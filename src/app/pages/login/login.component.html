@@ -218,7 +218,7 @@
       <ng-container *ngIf="mode === screenType.Forgot">
         <div class="d-flex text-center mt-6">
           <button
-            class="button button-pill button-flat btn-login m-auto btn-forgot"
+            class="button button-pill button-flat btn-login m-auto btn-forgot w-100"
             type="button"
             (click)="resetPassword()"
             [disabled]="loginForm.get('email')?.invalid || isError">
