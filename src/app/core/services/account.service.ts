@@ -36,7 +36,6 @@ export class AccountService extends CommonService {
       $tokenId: String = null
       $owner: String = null
       $offset: Int = 0
-      $name: String = null
     ) {
       ${this.envDB} {
         cw721_token(
@@ -45,7 +44,6 @@ export class AccountService extends CommonService {
           where: {
             cw721_contract: {
               smart_contract: { address: { _eq: $contract_address }, name: {_neq: "${TYPE_CW4973}"} }
-              name: {_eq: $name}
             }
             token_id: { _eq: $tokenId }
             owner: { _eq: $owner }
@@ -69,7 +67,7 @@ export class AccountService extends CommonService {
             }
           }
         }
-        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}, name: {_eq: $name}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
           aggregate {
             count
           }
@@ -83,12 +81,11 @@ export class AccountService extends CommonService {
         variables: {
           limit: payload?.limit || 20,
           offset: payload.offset,
-          contract_address: payload?.contractAddress,
+          contract_address: payload?.contractAddress || payload?.address,
           nextKeyLastUpdatedHeight: payload?.nextKey,
           nextKeyId: payload?.nextKeyId,
           tokenId: payload?.token_id,
           owner: payload?.owner,
-          name: payload?.name
         },
         operationName: 'queryAssetCW721',
       })
@@ -110,6 +107,9 @@ export class AccountService extends CommonService {
             aggregate {
               count
             }
+          }
+          smart_contract {
+            address
           }
         }
         cw721_token_aggregate(where: {cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}, owner: {_eq: $owner}, burned: {_eq: false}}) {

@@ -33,6 +33,7 @@ export class NftListComponent implements OnChanges {
     {
       label: 'All',
       quantity: 0,
+      address: null,
     },
   ];
 
@@ -54,7 +55,7 @@ export class NftListComponent implements OnChanges {
       limit: this.pageData.pageSize,
       keyword: this.textSearch,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
-      name: (this.nftFilter === 'All' ? null : this.nftFilter),
+      address: this.nftFilter,
     };
 
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
@@ -94,6 +95,7 @@ export class NftListComponent implements OnChanges {
             this.listCollection.push({
               label: item.name,
               quantity: item.cw721_tokens_aggregate.aggregate.count,
+              address: item.smart_contract.address,
             });
           });
           this.listCollection[0].quantity = res?.cw721_token_aggregate?.aggregate?.count;
