@@ -5,7 +5,7 @@
     </div> -->
     <!-- Filter -->
     <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
-      <h3 class="mb-0 fw-bold text--white mb-2 mb-xl-0">NFTs ({{ pageData?.length || 0 }})</h3>
+      <h3 class="mb-0 fw-bold text--white mb-4 mb-xl-0">NFTs ({{ pageData?.length || 0 }})</h3>
       <div class="d-flex flex-column flex-lg-row align-items-end justify-content-end gap-2">
         <div class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100">
           <div class="body d-lg-flex d-none align-items-center justify-content-center mr-2">Collections</div>
@@ -30,7 +30,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="position-relative ml-4">
+        <div class="position-relative ml-4 w-lg-auto w-100 mt-3 mt-lg-0">
           <form (ngSubmit)="searchTokenNft()" class="aura-form single-input-field account-search-form">
             <div class="input-group">
               <input
