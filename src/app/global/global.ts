@@ -337,3 +337,92 @@ export function convertDataBlock(data) {
   });
   return block;
 }
+
+export function convertDataAccountTransaction(data, coinInfo) {
+  const txs = _.get(data, 'transaction').map((element) => {
+    // if (!element['data']['body']) {
+    //   element['data']['body'] = element['data']['tx']['body'];
+    //   element['data']['auth_info'] = element['data']['tx']['auth_info'];
+    // }
+
+    const code = _.get(element, 'code');
+    const tx_hash = _.get(element, 'hash');
+    const messages = _.get(element, 'transaction_messages');
+
+    let _type = _.get(element, 'transaction_messages[0]');
+    let lstType = _.get(element, 'transaction_messages');
+    let denom = coinInfo.coinDenom;
+
+    // check send token ibc same chain
+    if (_type === TRANSACTION_TYPE_ENUM.Send && messages[0]?.amount[0]?.denom !== denom) {
+      denom = messages[0].amount[0].denom;
+    }
+
+    // check transfer token ibc different chain
+    if (_type === TRANSACTION_TYPE_ENUM.IBCTransfer && messages[0]?.token?.denom !== denom) {
+      denom = messages[0].token?.denom;
+    }
+
+    if (lstType?.length > 1) {
+      lstType.forEach((type) => {
+        if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && type['@type'].indexOf('ibc') > -1) {
+          _type = type['@type'];
+          try {
+            let dataEncode = atob(type?.packet?.data);
+            const data = JSON.parse(dataEncode);
+            denom = data.denom;
+          } catch (e) {
+            denom = coinInfo.coinDenom;
+          }
+          return;
+        }
+      });
+    }
+
+    // const _amount = getAmount(
+    //   _.get(element, 'data.body.messages'),
+    //   _type,
+    //   _.get(element, 'data.body.raw_log'),
+    //   coinInfo.coinMinimalDenom,
+    // );
+
+    const _amount = 1;
+
+    const typeOrigin = _type;
+    let amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
+    let type = _.find(TYPE_TRANSACTION, { label: _type?.type })?.value || _type?.type.split('.').pop();
+
+    const status =
+      _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+
+    const fee = balanceOf(_.get(element, 'data.auth_info.fee.amount[0].amount') || 0, coinInfo.coinDecimals).toFixed(
+      coinInfo.coinDecimals,
+    );
+    const height = _.get(element, 'height');
+    const timestamp = _.get(element, 'timestamp');
+    const gas_used = _.get(element, 'gas_used');
+    const gas_wanted = _.get(element, 'gas_wanted');
+    let tx = _.get(element, 'data.tx_response');
+    if (tx) {
+      tx['tx'] = _.get(element, 'data.tx');
+    }
+
+    return {
+      code,
+      tx_hash,
+      type,
+      status,
+      amount,
+      fee,
+      height,
+      timestamp,
+      gas_used,
+      gas_wanted,
+      denom,
+      messages,
+      tx,
+      typeOrigin,
+    };
+  });
+  return txs;
+}

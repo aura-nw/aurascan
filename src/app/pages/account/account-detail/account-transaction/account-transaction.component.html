@@ -1,0 +1,131 @@
+<div class="card mt-3" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div class="card-body">
+    <h3 class="mb-0 fw-bold text--white mb-4">Transactions</h3>
+
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="0"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
+      [class.mobile-tab]="breakpoint.value.matches">
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a class="account__tab-item" ngbNavLink (click)="currentTab = tab.label">
+            <span class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--gray-light' }}">{{
+              tab.label
+            }}</span>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+
+    <!-- Assets-->
+    <ng-container *ngIf="currentTab === tabsData.ExecutedTxs">
+      <!-- Executed Transaction -->
+      <div class="d-flex justify-content-between mb-3">
+        A total of {{ pageDataExecute?.length }} transaction{{ pageDataExecute?.length > 1 ? 's' : '' }} found
+        <ng-container *ngTemplateOutlet="filter"></ng-container>
+      </div>
+
+      <app-account-transaction-table (lengthData)="pageDataExecute.length = $event"></app-account-transaction-table>
+      <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
+    </ng-container>
+
+    <!-- Aura Transfer -->
+    <ng-container *ngIf="currentTab === tabsData.AuraTxs">
+      <div class="d-flex justify-content-between mb-3">
+        <div class="button-switch-stage button-switch-stage__1">
+          <button type="button" [class.active]="isSent" (click)="isSent = true" class="w-auto px-4 py-2">
+            <span>Sent</span>
+          </button>
+          <button type="button" [class.active]="!isSent" (click)="isSent = false" class="w-auto px-4 py-2">
+            <span>Received</span>
+          </button>
+        </div>
+        <ng-container *ngTemplateOutlet="filter"></ng-container>
+      </div>
+    </ng-container>
+
+    <!-- Fts Transaction -->
+    <ng-container *ngIf="currentTab === tabsData.FtsTxs">
+      <app-account-transaction-table></app-account-transaction-table>
+      <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
+    </ng-container>
+
+    <!-- NFT Transactions -->
+    <ng-container *ngIf="currentTab === tabsData.NftTxs">
+      <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #reloadTemplate>
+  <div class="card p-5 d-flex justify-content-between align-items-center" *ngIf="isNoData">
+    <div class="text-center">
+      <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="mr-2" width="40" height="40" />
+      <div class="small-text text--light-gray mt-4">
+        Fetching data, might take longer than usual. <br />
+        Please come back later or
+        <span class="link-reset-data" (click)="reloadData()">refresh the page</span>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #filter>
+  <div class="dropdown aura-dropdown small-text">
+    <button
+      class="button button-pill button--sm button-outline button-outline__in-card button-filter"
+      type="button"
+      id="transaction-filter"
+      data-bs-toggle="dropdown"
+      aria-expanded="false">
+      <span>Filter</span>
+    </button>
+    <ul
+      class="dropdown-menu aura-dropdown-menu .border-sm border-gray-9 border-radius--sm filter-container p-4"
+      aria-labelledby="transaction-filter">
+      <h3 class="mb-0 fw-bold text--white mb-4">Filter</h3>
+      <li class="dropdown-item cursor-pointer d-flex flex-column p-0">
+        <span class="text-sm">From - To</span>
+
+        <!-- <button type="button" class="button p-0 caption fw-normal">JSON Format</button> -->
+        <div class="input py-0 px-3 align-items-center d-flex justify-content-between">
+          <input matInput [matDatepicker]="picker" [(ngModel)]="datePicker" class="border--none w-100" />
+          <mat-datepicker-toggle [for]="picker" style="width: 24px"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </div>
+      </li>
+      <li class="dropdown-item cursor-pointer d-flex flex-column p-0">
+        <span class="text-sm">Tnx Type</span>
+        <mat-form-field class="w-100" appearance="outline" tnxType>
+          <mat-select
+            class="tnx-filter"
+            panelClass="tokenFilterPanel"
+            [disableOptionCentering]="true"
+            placeholder="Select a type">
+            <div>
+              <mat-option>
+                <div class="d-flex option-contain">
+                  <div class="option-lable">
+                    <span></span>
+                  </div>
+                </div>
+              </mat-option>
+              <div class="divider divider-horizontal my-2"></div>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </li>
+      <li>
+        <div class="d-flex justify-content-between align-items-center">
+          <button class="button button-pill button--sm button-outline text--white">Reset</button>
+          <div class="d-flex gap-4">
+            <button class="button button-pill button--sm button-outline text--white">Reset</button>
+            <button class="button button-pill button--sm button-outline text--white">Apply</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ng-template>

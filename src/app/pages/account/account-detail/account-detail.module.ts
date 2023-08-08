@@ -24,14 +24,26 @@ import { SharedModule } from '../../../shared/shared.module';
 import { AccountDetailRoutingModule } from './account-detail-routing.module';
 import { AccountDetailTableModule } from './account-detail-table/account-detail-table.module';
 import { AccountDetailComponent } from './account-detail.component';
+import { AccountStakeComponent } from './account-stake/account-stake.component';
+import { AccountTransactionComponent } from './account-transaction/account-transaction.component';
 import { NftListComponent } from './nft-list/nft-list.component';
 import { SoulboundTokenComponent } from './soulbound-token/soulbound-token.component';
 import { TokenTableComponent } from './token-table/token-table.component';
-import { AccountStakeComponent } from './account-stake/account-stake.component';
-import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { AccountTransactionTableComponent } from './account-transaction-table/account-transaction-table.component';
+import { UserService } from 'src/app/core/services/user.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
-  declarations: [AccountDetailComponent, TokenTableComponent, NftListComponent, SoulboundTokenComponent, AccountStakeComponent, TransactionListComponent],
+  declarations: [
+    AccountDetailComponent,
+    TokenTableComponent,
+    NftListComponent,
+    SoulboundTokenComponent,
+    AccountStakeComponent,
+    AccountTransactionComponent,
+    AccountTransactionTableComponent,
+  ],
   imports: [
     CommonModule,
     AccountDetailRoutingModule,
@@ -57,6 +69,6 @@ import { TransactionListComponent } from './transaction-list/transaction-list.co
     TooltipCustomizeModule,
     ClipboardModule,
   ],
-  providers: [TransactionService, AccountService, DecimalPipe],
+  providers: [TransactionService, AccountService, DecimalPipe, UserService],
 })
 export class AccountDetailModule {}

@@ -1,31 +1,32 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CHART_OPTION, ChartOptions, chartCustomOptions } from '../chart-options';
-import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT } from 'src/app/core/constants/account.constant';
-import { StakeModeAccount, TabsAccount } from 'src/app/core/constants/account.enum';
-import { CommonService } from 'src/app/core/services/common.service';
-import { ActivatedRoute } from '@angular/router';
-import { AccountService } from 'src/app/core/services/account.service';
-import { Globals, convertDataTransaction } from 'src/app/global/global';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { Subject } from 'rxjs';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT } from 'src/app/core/constants/account.constant';
+import { TabsAccount } from 'src/app/core/constants/account.enum';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { AccountService } from 'src/app/core/services/account.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { Globals, convertDataTransaction } from 'src/app/global/global';
+import { CHART_OPTION, ChartOptions, chartCustomOptions } from '../chart-options';
 
 @Component({
-  selector: 'app-transaction-list',
-  templateUrl: './transaction-list.component.html',
-  styleUrls: ['./transaction-list.component.scss'],
+  selector: 'app-account-transaction',
+  templateUrl: './account-transaction.component.html',
+  styleUrls: ['./account-transaction.component.scss'],
 })
-export class TransactionListComponent implements OnInit, AfterViewInit {
+
+export class AccountTransactionComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   public chartOptions: Partial<ChartOptions>;
   currentKey = null;
@@ -43,11 +44,30 @@ export class TransactionListComponent implements OnInit, AfterViewInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
 
-  pageData: PageEvent = {
+  pageDataExecute: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 20,
+    pageSize: PAGE_EVENT.PAGE_SIZE,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
+
+  pageDataAura: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
+
+  pageDataFts: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
+
+  pageDataNft: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
+
   nextKey = null;
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -70,12 +90,11 @@ export class TransactionListComponent implements OnInit, AfterViewInit {
   tabsData = TabsAccount;
 
   currentTab = TabsAccount.ExecutedTxs;
-  currentStake = StakeModeAccount.Delegations;
-  stakeMode = StakeModeAccount;
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;
   totalSBT = 0;
+  datePicker: any;
 
   isSent = true;
 
@@ -93,9 +112,11 @@ export class TransactionListComponent implements OnInit, AfterViewInit {
   ) {
     this.chartOptions = CHART_OPTION();
   }
+
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
   }
+
   ngOnInit(): void {
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
@@ -104,7 +125,7 @@ export class TransactionListComponent implements OnInit, AfterViewInit {
         this.transactionLoading = true;
 
         this.dataSource = new MatTableDataSource();
-        this.getTxsFromHoroscope();
+        // this.getTxsFromHoroscope();
       }
     });
   }
@@ -120,65 +141,68 @@ export class TransactionListComponent implements OnInit, AfterViewInit {
       this.dataSource.paginator = e;
     } else this.dataSource.paginator = e;
   }
+
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
     const next = length <= (pageIndex + 2) * pageSize;
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
-    this.pageData = e;
+    this.pageDataExecute = e;
 
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getTxsFromHoroscope(this.nextKey);
+      // this.getTxsFromHoroscope(this.nextKey);
       this.currentKey = this.nextKey;
     }
   }
-  getTxsFromHoroscope(nextKey = null): void {
-    const address = this.currentAddress;
-    let payload = {
-      limit: 40,
-      value: address,
-      heightLT: nextKey,
-    };
-    this.transactionService.getListTxCondition(payload).subscribe({
-      next: (data) => {
-        if (data?.transaction?.length > 0) {
-          this.nextKey = null;
-          if (data?.transaction?.length >= 40) {
-            this.nextKey = data?.transaction[data?.transaction?.length - 1].height;
-          }
-          const txs = convertDataTransaction(data, this.coinInfo);
-          txs.forEach((element) => {
-            if (element.type === 'Send') {
-              if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
-                element.type = 'Receive';
-              }
-            } else if (element.type === 'Multisend') {
-              if (element.messages[0]?.inputs[0]?.address !== this.currentAddress) {
-                element.type = 'Receive';
-              }
-            }
-          });
 
-          if (this.dataSource.data.length > 0) {
-            this.dataSource.data = [...this.dataSource.data, ...txs];
-          } else {
-            this.dataSource.data = [...txs];
-          }
-          this.dataSourceMobile = this.dataSource.data.slice(
-            this.pageData.pageIndex * this.pageData.pageSize,
-            this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-          );
+  // getTxsFromHoroscope(nextKey = null): void {
+  //   const address = this.currentAddress;
+  //   let payload = {
+  //     limit: 40,
+  //     value: address,
+  //     heightLT: nextKey,
+  //   };
+  //   this.transactionService.getListTxCondition(payload).subscribe({
+  //     next: (data) => {
+  //       // if (data?.transaction?.length > 0) {
+  //       //   this.nextKey = null;
+  //       //   if (data?.transaction?.length >= 40) {
+  //       //     this.nextKey = data?.transaction[data?.transaction?.length - 1].height;
+  //       //   }
+  //       //   const txs = convertDataTransaction(data, this.coinInfo);
+  //       //   txs.forEach((element) => {
+  //       //     if (element.type === 'Send') {
+  //       //       if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
+  //       //         element.type = 'Receive';
+  //       //       }
+  //       //     } else if (element.type === 'Multisend') {
+  //       //       if (element.messages[0]?.inputs[0]?.address !== this.currentAddress) {
+  //       //         element.type = 'Receive';
+  //       //       }
+  //       //     }
+  //       //   });
 
-          this.pageData.length = this.dataSource.data.length;
-        }
-      },
-      error: () => {
-        this.transactionLoading = false;
-      },
-      complete: () => {
-        this.transactionLoading = false;
-      },
-    });
-  }
+  //       //   if (this.dataSource.data.length > 0) {
+  //       //     this.dataSource.data = [...this.dataSource.data, ...txs];
+  //       //   } else {
+  //       //     this.dataSource.data = [...txs];
+  //       //   }
+  //       //   this.dataSourceMobile = this.dataSource.data.slice(
+  //       //     this.pageDataExecute.pageIndex * this.pageDataExecute.pageSize,
+  //       //     this.pageDataExecute.pageIndex * this.pageDataExecute.pageSize + this.pageDataExecute.pageSize,
+  //       //   );
+
+  //       //   this.pageDataExecute.length = this.dataSource.data.length;
+  //       }
+  //     },
+  //     error: () => {
+  //       this.transactionLoading = false;
+  //     },
+  //     complete: () => {
+  //       this.transactionLoading = false;
+  //     },
+  //   });
+  // }
+
   reloadData() {
     location.reload();
   }
