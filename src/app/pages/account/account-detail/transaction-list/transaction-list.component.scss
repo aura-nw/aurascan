@@ -1,0 +1,13 @@
+
+mat-select.tnx-filter[aria-expanded='true'] {
+    .mat-form-field-appearance-outline .mat-form-field-infix {
+      padding: 0px !important;
+    }
+    .mat-select-arrow {
+      border-width: 1px 0 0 1px !important;
+    }
+  }
+  
+  .filter-container {
+    width: 420px;
+  }

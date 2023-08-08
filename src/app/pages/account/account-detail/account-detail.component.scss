@@ -112,19 +112,6 @@ section.account-detail {
   }
 }
 
-.text-gray-5 {
-  color: var(--aura-gray-5);
-}
-
-mat-select.tnx-filter[aria-expanded='true'] {
-  .mat-form-field-appearance-outline .mat-form-field-infix {
-    padding: 0px !important;
-  }
-  .mat-select-arrow {
-    border-width: 1px 0 0 1px !important;
-  }
-}
-
 .name-tag:not(.private-name-tag) {
   &:after {
     border-right: 15px solid var(--aura-gray-10);
