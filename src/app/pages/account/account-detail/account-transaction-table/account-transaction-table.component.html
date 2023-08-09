@@ -1,6 +1,6 @@
 <ngx-simplebar *ngIf="dataSource && dataSource.data">
   <ng-container *ngIf="dataSource.data.length > 0; else noValues">
-    <div class="table-responsive aura-table-contain spacer-tooltip">
+    <div class="table-responsive spacer-tooltip">
       <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
@@ -35,12 +35,13 @@
                     [routerLink]="['/blocks', data['height']]">
                     {{ data[template.matColumnDef] }}
                   </a>
-                  <div *ngSwitchCase="'type'">
+                  <div *ngSwitchCase="'lstType'">
                     <div class="aura-status aura-tooltip-contain">
                       <div class="status cursor-pointer aura-tooltip-object">
-                        {{ data[template.matColumnDef] | stringEllipsis : 11 }}
+                        {{ data[template.matColumnDef][0] | stringEllipsis : 11 }}
                       </div>
-                      <app-tooltip-customize [content]="data[template.matColumnDef]"> </app-tooltip-customize>
+                      <app-tooltip-customize [content]="data[template.matColumnDef][0]"> </app-tooltip-customize>
+                      <!-- {{ data[template.matColumnDef]?.length > 1 ? 'true' : '' }} -->
                     </div>
                   </div>
                   <div *ngSwitchCase="'status'">

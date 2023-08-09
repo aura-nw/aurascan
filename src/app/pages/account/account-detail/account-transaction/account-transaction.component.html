@@ -23,11 +23,17 @@
     <ng-container *ngIf="currentTab === tabsData.ExecutedTxs">
       <!-- Executed Transaction -->
       <div class="d-flex justify-content-between mb-3">
-        A total of {{ pageDataExecute?.length }} transaction{{ pageDataExecute?.length > 1 ? 's' : '' }} found
+        {{ hasNextKeyExecute ? 'More than' : 'A total of' }} {{ pageDataExecute?.length }} transaction{{
+          pageDataExecute?.length > 1 ? 's' : ''
+        }}
+        found
         <ng-container *ngTemplateOutlet="filter"></ng-container>
       </div>
 
-      <app-account-transaction-table (lengthData)="pageDataExecute.length = $event"></app-account-transaction-table>
+      <app-account-transaction-table
+        (lengthData)="pageDataExecute.length = $event"
+        (hasNextKey)="hasNextKeyExecute = $event"
+        [modeQuery]="currentTab"></app-account-transaction-table>
       <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
     </ng-container>
 
@@ -44,6 +50,12 @@
         </div>
         <ng-container *ngTemplateOutlet="filter"></ng-container>
       </div>
+
+      <app-account-transaction-table
+        (lengthData)="pageDataExecute.length = $event"
+        (hasNextKey)="hasNextKeyExecute = $event"
+        [modeQuery]="currentTab"
+        [isTypeSend]="isSent"></app-account-transaction-table>
     </ng-container>
 
     <!-- Fts Transaction -->

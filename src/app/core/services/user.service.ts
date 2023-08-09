@@ -53,7 +53,11 @@ export class UserService extends CommonService {
       $startTime: timestamptz = null,
       $endTime: timestamptz = null,
       $limit: Int = null,
-      $listTxMsgType: [String!] = null
+      $listTxMsgType: [String!] = null,
+      $heightGT: Int = null,
+      $heightLT: Int = null,
+      $orderHeight: order_by = desc
+    
     ) {
       serenity {
         transaction(
@@ -62,8 +66,11 @@ export class UserService extends CommonService {
               composite_key: {_eq: $compositeKey}, 
               value: {_eq: $address}}, 
             timestamp: {_lte: $endTime, _gte: $startTime}
-            transaction_messages: {type: {_in: $listTxMsgType}}},
-          limit: $limit
+            transaction_messages: {type: {_in: $listTxMsgType}}
+            _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]
+          },
+          limit: $limit,
+          order_by: {height: $orderHeight}
         ) {
           hash
           height
@@ -81,12 +88,10 @@ export class UserService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          "limit": 20,
-          "compositeKey": null,
-          "startTime": "2023-08-01",
-          "endTime": "2023-08-08",
-          "address": 'aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx',
-          "listTxMsgType": null
+          limit: payload.limit || 40,
+          compositeKey: payload.compositeKey || "message.sender",
+          address: payload.address,
+          heightLT: payload.heightLT
         },
         operationName: 'QueryTxOfAccount',
       })

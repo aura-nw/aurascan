@@ -1,8 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { TabsAccount } from 'src/app/core/constants/account.enum';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -20,16 +21,21 @@ import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
 })
 export class AccountTransactionTableComponent implements OnChanges {
   @Input() address: string;
+  @Input() modeQuery: string;
+  @Input() isTypeSend: boolean = true;
   @Output() lengthData = new EventEmitter<number>();
+  @Output() hasNextKey = new EventEmitter<boolean>();
 
   transactionLoading = false;
   currentAddress: string;
   tokenFilter = '';
   textSearch = '';
   searchValue = '';
-  templates: Array<TableTemplate> = [
+  templates: Array<TableTemplate>;
+
+  templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'lstType', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'fee', headerCellDef: 'Fee' },
@@ -58,10 +64,11 @@ export class AccountTransactionTableComponent implements OnChanges {
       quantity: 0,
     },
   ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
+  displayedColumns: string[];
+
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 5,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   nextKey = null;
@@ -104,42 +111,65 @@ export class AccountTransactionTableComponent implements OnChanges {
     });
   }
 
-  ngOnChanges(): void {}
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isTypeSend) {
+      this.transactionLoading = true;
+      this.dataSource = new MatTableDataSource();
+      this.pageData.length = 0;
+      this.lengthData.emit(this.pageData.length);
+      this.getTxsAddress();
+    }
+  }
 
   getTxsAddress(nextKey = null): void {
     const address = this.currentAddress;
     let payload = {
-      limit: 40,
-      value: address,
+      limit: 100,
+      address: address,
       heightLT: nextKey,
+      compositeKey: 'message.sender',
     };
+
+    switch (this.modeQuery) {
+      case TabsAccount.ExecutedTxs:
+        this.templates = this.templatesExecute;
+        this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
+        break;
+      case TabsAccount.AuraTxs:
+        payload.compositeKey = 'coin_spent.spender' || 'coin_received.receiver';
+        if (!this.isTypeSend) {
+          payload.compositeKey = 'coin_received.receiver';
+        }
+        this.templates = this.templatesExecute;
+        this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
+        break;
+      default:
+        break;
+    }
+
     this.userService.getListTxByAddress(payload).subscribe({
       next: (data) => {
-        console.log(data);
-
         if (data?.transaction?.length > 0) {
-          this.nextKey = null;
-          if (data?.transaction?.length >= 40) {
-            this.nextKey = data?.transaction[data?.transaction?.length - 1].height;
+          this.nextKey = data?.transaction[data?.transaction?.length - 1]?.height;
+          if (data?.transaction?.length >= 100) {
+            this.hasNextKey.emit(true);
+          } else {
+            this.hasNextKey.emit(false);
           }
-          const txs = convertDataAccountTransaction(data, this.coinInfo);
-          // txs.forEach((element) => {
-          //   if (element.type === 'Send') {
-          //     if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
-          //       element.type = 'Receive';
-          //     }
-          //   } else if (element.type === 'Multisend') {
-          //     if (element.messages[0]?.inputs[0]?.address !== this.currentAddress) {
-          //       element.type = 'Receive';
-          //     }
-          //   }
-          // });
+
+          let setReceive = false;
+          if (this.modeQuery !== TabsAccount.ExecutedTxs && !this.isTypeSend) {
+            setReceive = true;
+          }
+
+          let txs = convertDataAccountTransaction(data, this.coinInfo, setReceive);
 
           if (this.dataSource.data.length > 0) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
           } else {
             this.dataSource.data = [...txs];
           }
+
           this.dataSourceMobile = this.dataSource.data.slice(
             this.pageData.pageIndex * this.pageData.pageSize,
             this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,

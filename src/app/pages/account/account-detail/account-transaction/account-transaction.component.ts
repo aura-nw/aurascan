@@ -17,7 +17,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { Globals, convertDataTransaction } from 'src/app/global/global';
+import { Globals } from 'src/app/global/global';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from '../chart-options';
 
 @Component({
@@ -49,6 +49,7 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
     pageSize: PAGE_EVENT.PAGE_SIZE,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
+  hasNextKeyExecute = false; 
 
   pageDataAura: PageEvent = {
     length: PAGE_EVENT.LENGTH,
