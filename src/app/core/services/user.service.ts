@@ -45,7 +45,7 @@ export class UserService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
   }
 
-  getListTxByAddress(payload){
+  getListTxByAddress(payload) {
     const operationsDoc = `
     query QueryTxOfAccount(
       $compositeKey: String = null, 
@@ -59,7 +59,7 @@ export class UserService extends CommonService {
       $orderHeight: order_by = desc
     
     ) {
-      serenity {
+      ${this.envDB} {
         transaction(
           where: {
             event_attribute_index: {
@@ -89,11 +89,76 @@ export class UserService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload.limit || 40,
-          compositeKey: payload.compositeKey || "message.sender",
+          compositeKey: payload.compositeKey,
           address: payload.address,
-          heightLT: payload.heightLT
+          heightLT: payload.heightLT,
+          listTxMsgType: payload.listTxMsgType
         },
         operationName: 'QueryTxOfAccount',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListFTByAddress(payload) {
+    const operationsDoc = `
+    query Cw20TXOfAccount($receiver: String = null, $sender: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listAction: [String!] = null) {
+      ${this.envDB} {
+        transaction(where: {events: {smart_contract_events: {cw20_activities: {to: {_eq: $receiver}, _or: [{from: {_eq: $sender}}, {sender: {_eq: $sender}}], action: {_in: $listAction}}}}, timestamp: {_gte: $startTime, _lte: $endTime}}, order_by: {height: desc}) {
+          gas_used
+          hash
+          height
+          timestamp
+          events(where: {smart_contract_events: {cw20_activities: {id: {_is_null: false}}}}) {
+            smart_contract_events {
+              cw20_activities {
+                amount
+                action
+                from
+                to
+                sender
+              }
+              smart_contract {
+                cw20_contract {
+                  symbol
+                  decimal
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          sender: 'aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n',
+          receiver: 'aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n',
+          listAction: ['transfer'],
+          startTime: '2023-01-13T11:11:46.644+07:00',
+          endTime: '2023-01-13T11:11:46.644+07:00',
+        },
+        operationName: 'Cw20TXOfAccount',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListTypeFilter() {
+    const operationsDoc = `
+    query GetListType {
+      ${this.envDB} {
+        transaction_message(distinct_on: type) {
+          type
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {},
+        operationName: 'GetListType',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

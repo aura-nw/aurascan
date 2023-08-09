@@ -349,14 +349,20 @@ export function convertDataAccountTransaction(data, coinInfo, setReceive = false
     const tx_hash = _.get(element, 'hash');
 
     const lstTypeTemp = _.get(element, 'transaction_messages');
-    const lstType = lstTypeTemp.map((type) => {
-      let result = _.find(TYPE_TRANSACTION, { label: type?.type })?.value || type?.type.split('.').pop();
-      //check display type receive
-      if (result === 'Send' && setReceive) {
-        result = 'Receive';
+    let type;
+    if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.GetReward) {
+      type = TypeTransaction.GetReward;
+    } else if (lstTypeTemp?.length > 1) {
+      if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+        type = TypeTransaction.MultiSend;
+      } else {
+        type = 'Multiple';
       }
-      return result;
-    });
+    }
+
+    if (!type) {
+      type = _.find(TYPE_TRANSACTION, { label: lstTypeTemp[0]?.type })?.value || lstTypeTemp[0]?.type.split('.').pop();
+    }
 
     let denom = coinInfo.coinDenom;
     const _amount = 1;
@@ -377,7 +383,7 @@ export function convertDataAccountTransaction(data, coinInfo, setReceive = false
     return {
       code,
       tx_hash,
-      lstType,
+      type,
       status,
       amount,
       fee,

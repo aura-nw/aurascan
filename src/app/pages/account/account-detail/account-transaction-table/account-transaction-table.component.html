@@ -1,7 +1,160 @@
+<div class="d-flex justify-content-between mb-3 align-items-center">
+  <div>
+    <div class="button-switch-stage button-switch-stage__1" *ngIf="displayType">
+      <button type="button" [class.active]="isSent" class="w-auto px-4 py-2">
+        <span>Sent</span>
+      </button>
+      <button type="button" [class.active]="!isSent" class="w-auto px-4 py-2">
+        <span>Received</span>
+      </button>
+    </div>
+    <div *ngIf="!displayType && !transactionLoading">
+      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+      found
+    </div>
+  </div>
+  <div>
+    <button
+      #menuTrigger="matMenuTrigger"
+      [matMenuTriggerFor]="filterMenu"
+      class="button button-pill button--sm button-outline button-outline__in-card button-filter"
+      type="button">
+      <span>Filter</span>
+    </button>
+
+    <mat-menu #filterMenu="matMenu" class="aura-menu-panel tsx-filter-panel text--white mt-2" [hasBackdrop]="false">
+      <div
+        class="body fw-500 aura-form single-input-field"
+        (click)="$event.stopPropagation()"
+        (keydown)="$event.stopPropagation()">
+        <h3 class="mb-0 fw-bold text--white mb-4">Filter</h3>
+        <!-- Date -->
+        <div class="cursor-pointer d-flex flex-column p-0 mb-4">
+          <span class="text-sm mb-2">From - To</span>
+          <div class="input-group align-items-center d-flex justify-content-between pr-1">
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate" />
+              <input matEndDate placeholder="End date" [(ngModel)]="transactionFilter.endDate" class="pl-3" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          </div>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </div>
+        <!-- txn type -->
+        <div class="cursor-pointer d-flex flex-column p-0 mb-4">
+          <span class="text-sm mb-2">Tnx Type</span>
+          <button
+            [matMenuTriggerFor]="tnxTypeMenu"
+            class="input-group align-items-center d-flex justify-content-between text--gray-4"
+            type="button">
+            <span class="box-type-selected">
+              <ng-container *ngIf="listTypeSelected?.length === 0"> Select a type </ng-container>
+              <ng-container *ngIf="listTypeSelected">{{ listTypeSelected }} </ng-container>
+            </span>
+            <i class="ph-light ph-funnel-simple text--white h1"></i>
+          </button>
+          <mat-menu
+            #tnxTypeMenu="matMenu"
+            class="aura-menu-panel tnx-type-panel text--white mt-2 p-2"
+            [yPosition]="'above'"
+            [hasBackdrop]="false">
+            <div class="aura-form single-input-field">
+              <div
+                class="input-group tnx-type-search mb-2"
+                (click)="$event.stopPropagation()"
+                (keydown)="$event.stopPropagation()">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search for Tnx Type"
+                  [(ngModel)]="transactionTypeKeyWord"
+                  [ngModelOptions]="{ standalone: true }"
+                  (keyup.enter)="searchTransactionType()"
+                  name="search"
+                  autocomplete="off" />
+                <button
+                  type="submit"
+                  class="btn-search {{ transactionTypeKeyWord && transactionTypeKeyWord?.length > 0 ? 'd-none' : '' }}">
+                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                </button>
+                <button
+                  type="reset"
+                  class="btn-reset cursor-pointer {{
+                    !transactionTypeKeyWord || (transactionTypeKeyWord && transactionTypeKeyWord?.length === 0)
+                      ? 'd-none'
+                      : ''
+                  }}"
+                  (click)="clearFilterSearch()">
+                  <img
+                    [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
+                    alt=""
+                    width="24"
+                    height="24" />
+                </button>
+              </div>
+              <div>
+                <div
+                  class="form-group d-flex align-items-center tnx-filter-item px-2"
+                  (click)="$event.stopPropagation()"
+                  (keydown)="$event.stopPropagation()">
+                  <input
+                    type="checkbox"
+                    id="all"
+                    (change)="onChangeTnxFilterType($event, 'all')"
+                    class="check-box check-box--dark" />
+                  <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
+                </div>
+                <div class="divider divider-horizontal my-2"></div>
+                <div class="tnx-filter-box" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+                  <div
+                    *ngFor="let type of tnxType; let i = index"
+                    class="form-group d-flex align-items-center tnx-filter-item px-2">
+                    <input
+                      type="checkbox"
+                      id="type-{{ i }}"
+                      [checked]="
+                        (this.transactionFilter?.type?.length > 0 &&
+                          this.transactionFilter?.type?.includes(type.label)) ||
+                        this.transactionFilter.type === null
+                      "
+                      (change)="onChangeTnxFilterType($event, type)"
+                      class="check-box check-box--dark" />
+                    <label for="type-{{ i }}" class="ml-2 mb-0 text-justify pl-1"> {{ type.value }} </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-menu>
+        </div>
+        <!-- Button action group -->
+        <div class="divider divider-horizontal"></div>
+        <div class="d-flex justify-content-between align-items-center pt-4">
+          <button class="button button-pill button-outline button--xlg" (click)="initTnxFilter()">
+            <span>Reset</span>
+          </button>
+          <div class="d-flex">
+            <button
+              class="button button-pill button-outline button--xlg ml-2 ml-lg-0"
+              (click)="menuTrigger.closeMenu(); searchType()">
+              <span>Cancel</span>
+            </button>
+            <button
+              class="button button-pill button-outline button-apply ml-2 ml-lg-4 button--xlg"
+              [disabled]="!transactionFilter.startDate && !transactionFilter.endDate && !listTypeSelected"
+              (click)="menuTrigger.closeMenu(); searchType()">
+              <span>Apply</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-menu>
+  </div>
+</div>
+
 <ngx-simplebar *ngIf="dataSource && dataSource.data">
   <ng-container *ngIf="dataSource.data.length > 0; else noValues">
-    <div class="table-responsive spacer-tooltip">
-      <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
+    <div class="table-responsive spacer-tooltip d-none d-lg-block">
+      <table mat-table [dataSource]="dataSource" class="aura-table account-transaction-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th
@@ -9,7 +162,7 @@
               *matHeaderCellDef
               class="{{
                 template.headerCellDef === 'Time' ||
-                template.headerCellDef === 'Result' ||
+                template.headerCellDef === 'Type' ||
                 template.headerCellDef === 'Tx Hash'
                   ? 'col-per-15'
                   : 'col-per-13'
@@ -35,13 +188,12 @@
                     [routerLink]="['/blocks', data['height']]">
                     {{ data[template.matColumnDef] }}
                   </a>
-                  <div *ngSwitchCase="'lstType'">
+                  <div *ngSwitchCase="'type'">
                     <div class="aura-status aura-tooltip-contain">
                       <div class="status cursor-pointer aura-tooltip-object">
-                        {{ data[template.matColumnDef][0] | stringEllipsis : 11 }}
+                        {{ data[template.matColumnDef] | stringEllipsis : 20 }}
                       </div>
-                      <app-tooltip-customize [content]="data[template.matColumnDef][0]"> </app-tooltip-customize>
-                      <!-- {{ data[template.matColumnDef]?.length > 1 ? 'true' : '' }} -->
+                      <app-tooltip-customize [content]="data[template.matColumnDef]"> </app-tooltip-customize>
                     </div>
                   </div>
                   <div *ngSwitchCase="'status'">
@@ -77,6 +229,37 @@
         </tr>
       </table>
     </div>
+    <div class="d-lg-none">
+      <app-card-mob-account
+        *ngFor="let data of dataSourceMobile"
+        [link]="'/transaction/' + data.tx_hash"
+        [data]="data"
+        [title]="{
+          size: 'md',
+          titleClass: 'body-02-mob',
+          label: data.tx_hash | cutStringPipe : 8 : 8,
+          subLabelContent: data.type,
+          subLabelClass: 'btn-mob',
+          status: data.code
+        }"
+        [content]="[
+          {
+            label: 'Result',
+            class: 'text--gray-1 caption-mob',
+            info: '<span class=text--green-3> ' + (data.status | uppercase) + '</span>'
+          },
+          {
+            label: 'Height',
+            class: 'text--gray-1 body-02-mob fw-semibold',
+            info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+          },
+          {
+            label: 'Amount',
+            class: 'text--gray-1 body-02-mob',
+            info: (data.fee | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
+          }
+        ]"></app-card-mob-account>
+    </div>
     <app-paginator
       [length]="pageData.length"
       [pageSize]="pageData.pageSize"
@@ -85,7 +268,8 @@
     </app-paginator>
   </ng-container>
   <ng-template #noValues>
-    <app-table-no-data *ngIf="!transactionLoading"></app-table-no-data>
+    <app-table-no-data *ngIf="!transactionLoading && !isSearch"></app-table-no-data>
+    <app-table-no-data *ngIf="!transactionLoading && isSearch" textNull="No data with this type of message"></app-table-no-data>
   </ng-template>
 </ngx-simplebar>
 <div *ngIf="transactionLoading" class="">

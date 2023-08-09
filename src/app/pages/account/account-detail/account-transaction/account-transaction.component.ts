@@ -4,22 +4,17 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT } from 'src/app/core/constants/account.constant';
 import { TabsAccount } from 'src/app/core/constants/account.enum';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from "src/app/core/constants/transaction.constant";
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { AccountService } from 'src/app/core/services/account.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
 import { Globals } from 'src/app/global/global';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from '../chart-options';
-import {TYPE_TRANSACTION} from "src/app/core/constants/transaction.constant";
 
 @Component({
   selector: 'app-account-transaction',
@@ -49,7 +44,6 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
     pageSize: PAGE_EVENT.PAGE_SIZE,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-  hasNextKeyExecute = false; 
 
   pageDataAura: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -102,16 +96,11 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
   tnxType = TYPE_TRANSACTION;
 
   constructor(
-    private transactionService: TransactionService,
     public commonService: CommonService,
     private route: ActivatedRoute,
-    private accountService: AccountService,
     public global: Globals,
-    private walletService: WalletService,
     private layout: BreakpointObserver,
-    private modalService: NgbModal,
     private environmentService: EnvironmentService,
-    private soulboundService: SoulboundService,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -128,38 +117,8 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
         this.transactionLoading = true;
 
         this.dataSource = new MatTableDataSource();
-        // this.getTxsFromHoroscope();
       }
     });
-    this.initTnxFilter()
-  }
-
-  initTnxFilter() {
-    this.transactionTypeKeyWord = '';
-    this.transactionFilter = {
-      startDate: null,
-      endDate: null,
-      type: []
-    };
-  }
-
-  onChangeTnxFilterType(event, type: any){
-    if(event.target.checked) {
-      if(type === 'all') {
-        this.transactionFilter.type = null;
-      } else {
-        this.transactionFilter.type.push(type.label);
-      }
-    } else {
-      if(type === 'all') {
-        this.transactionFilter.type = [];
-      } else {
-        this.transactionFilter.type.forEach((element,index)=>{
-          if(element === type.label) this.transactionFilter.type.splice(index,1);
-        });
-      }
-    }
-    console.log(this.transactionFilter.type)
   }
 
   paginatorEmit(e: MatPaginator): void {
@@ -181,63 +140,9 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
     this.pageDataExecute = e;
 
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      // this.getTxsFromHoroscope(this.nextKey);
       this.currentKey = this.nextKey;
     }
   }
-
-  searchTransactionType() {
-    console.log(this.transactionTypeKeyWord)
-  }
-
-  // getTxsFromHoroscope(nextKey = null): void {
-  //   const address = this.currentAddress;
-  //   let payload = {
-  //     limit: 40,
-  //     value: address,
-  //     heightLT: nextKey,
-  //   };
-  //   this.transactionService.getListTxCondition(payload).subscribe({
-  //     next: (data) => {
-  //       // if (data?.transaction?.length > 0) {
-  //       //   this.nextKey = null;
-  //       //   if (data?.transaction?.length >= 40) {
-  //       //     this.nextKey = data?.transaction[data?.transaction?.length - 1].height;
-  //       //   }
-  //       //   const txs = convertDataTransaction(data, this.coinInfo);
-  //       //   txs.forEach((element) => {
-  //       //     if (element.type === 'Send') {
-  //       //       if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
-  //       //         element.type = 'Receive';
-  //       //       }
-  //       //     } else if (element.type === 'Multisend') {
-  //       //       if (element.messages[0]?.inputs[0]?.address !== this.currentAddress) {
-  //       //         element.type = 'Receive';
-  //       //       }
-  //       //     }
-  //       //   });
-
-  //       //   if (this.dataSource.data.length > 0) {
-  //       //     this.dataSource.data = [...this.dataSource.data, ...txs];
-  //       //   } else {
-  //       //     this.dataSource.data = [...txs];
-  //       //   }
-  //       //   this.dataSourceMobile = this.dataSource.data.slice(
-  //       //     this.pageDataExecute.pageIndex * this.pageDataExecute.pageSize,
-  //       //     this.pageDataExecute.pageIndex * this.pageDataExecute.pageSize + this.pageDataExecute.pageSize,
-  //       //   );
-
-  //       //   this.pageDataExecute.length = this.dataSource.data.length;
-  //       }
-  //     },
-  //     error: () => {
-  //       this.transactionLoading = false;
-  //     },
-  //     complete: () => {
-  //       this.transactionLoading = false;
-  //     },
-  //   });
-  // }
 
   reloadData() {
     location.reload();

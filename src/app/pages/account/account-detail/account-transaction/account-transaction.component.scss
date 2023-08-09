@@ -1,7 +1,7 @@
 .filter-container {
   width: 420px;
 }
-::ng-deep .mat-menu-panel.tnx-type-panel{
+::ng-deep .mat-menu-panel.tnx-type-panel {
   width: 388px;
   max-width: unset;
   @media (max-width: 414px) {
@@ -48,11 +48,4 @@
 }
 .input-group.tnx-type-search {
   height: 40px;
-}
-.tnx-filter-item {
-  height: 44px;
-}
-.tnx-filter-box {
-  max-height: 356px;
-  overflow-y: auto;
 }
