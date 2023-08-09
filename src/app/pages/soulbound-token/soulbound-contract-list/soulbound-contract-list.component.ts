@@ -78,6 +78,9 @@ export class SoulboundContractListComponent implements OnInit {
   resetSearch() {
     this.textSearch = '';
     this.searchValue = '';
+    if (this.pageChange) {
+      this.pageChange.selectPage(0);
+    }
     this.getListSmartContract();
   }
 
