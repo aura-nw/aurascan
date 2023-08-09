@@ -19,6 +19,7 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { Globals } from 'src/app/global/global';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from '../chart-options';
+import {TYPE_TRANSACTION} from "src/app/core/constants/transaction.constant";
 
 @Component({
   selector: 'app-account-transaction',
@@ -33,7 +34,6 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
   currentAddress: string;
   currentAccountDetail: any;
   textSearch = '';
-  tnxType = null;
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
@@ -95,9 +95,11 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
   totalValueNft = 0;
   totalAssets = 0;
   totalSBT = 0;
-  datePicker: any;
+  transactionFilter;
+  transactionTypeKeyWord = '';
 
   isSent = true;
+  tnxType = TYPE_TRANSACTION;
 
   constructor(
     private transactionService: TransactionService,
@@ -129,6 +131,35 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
         // this.getTxsFromHoroscope();
       }
     });
+    this.initTnxFilter()
+  }
+
+  initTnxFilter() {
+    this.transactionTypeKeyWord = '';
+    this.transactionFilter = {
+      startDate: null,
+      endDate: null,
+      type: []
+    };
+  }
+
+  onChangeTnxFilterType(event, type: any){
+    if(event.target.checked) {
+      if(type === 'all') {
+        this.transactionFilter.type = null;
+      } else {
+        this.transactionFilter.type.push(type.label);
+      }
+    } else {
+      if(type === 'all') {
+        this.transactionFilter.type = [];
+      } else {
+        this.transactionFilter.type.forEach((element,index)=>{
+          if(element === type.label) this.transactionFilter.type.splice(index,1);
+        });
+      }
+    }
+    console.log(this.transactionFilter.type)
   }
 
   paginatorEmit(e: MatPaginator): void {
@@ -153,6 +184,10 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
       // this.getTxsFromHoroscope(this.nextKey);
       this.currentKey = this.nextKey;
     }
+  }
+
+  searchTransactionType() {
+    console.log(this.transactionTypeKeyWord)
   }
 
   // getTxsFromHoroscope(nextKey = null): void {
