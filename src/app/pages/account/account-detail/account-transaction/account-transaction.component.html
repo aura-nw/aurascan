@@ -73,59 +73,123 @@
 </ng-template>
 
 <ng-template #filter>
-  <div class="dropdown aura-dropdown small-text">
+  <div>
     <button
+      #menuTrigger="matMenuTrigger"
+      [matMenuTriggerFor]="filterMenu"
       class="button button-pill button--sm button-outline button-outline__in-card button-filter"
-      type="button"
-      id="transaction-filter"
-      data-bs-toggle="dropdown"
-      aria-expanded="false">
+      type="button">
       <span>Filter</span>
     </button>
-    <ul
-      class="dropdown-menu aura-dropdown-menu .border-sm border-gray-9 border-radius--sm filter-container p-4"
-      aria-labelledby="transaction-filter">
-      <h3 class="mb-0 fw-bold text--white mb-4">Filter</h3>
-      <li class="dropdown-item cursor-pointer d-flex flex-column p-0">
-        <span class="text-sm">From - To</span>
 
-        <!-- <button type="button" class="button p-0 caption fw-normal">JSON Format</button> -->
-        <div class="input py-0 px-3 align-items-center d-flex justify-content-between">
-          <input matInput [matDatepicker]="picker" [(ngModel)]="datePicker" class="border--none w-100" />
-          <mat-datepicker-toggle [for]="picker" style="width: 24px"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+    <mat-menu
+        #filterMenu="matMenu"
+        class="aura-menu-panel tsx-filter-panel text--white mt-2"
+        [hasBackdrop]="false">
+      <div class="body fw-500 aura-form single-input-field"
+           (click)="$event.stopPropagation()"
+           (keydown)="$event.stopPropagation()"
+      >
+        <h3 class="mb-0 fw-bold text--white mb-4">Filter</h3>
+        <!-- Date -->
+        <div class="cursor-pointer d-flex flex-column p-0 mb-4">
+          <span class="text-sm mb-2">From - To</span>
+          <div class="input-group align-items-center d-flex justify-content-between pr-1">
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate">
+              <input matEndDate placeholder="End date" [(ngModel)]="transactionFilter.endDate" class="pl-3">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          </div>
+          <mat-date-range-picker #picker></mat-date-range-picker>
         </div>
-      </li>
-      <li class="dropdown-item cursor-pointer d-flex flex-column p-0">
-        <span class="text-sm">Tnx Type</span>
-        <mat-form-field class="w-100" appearance="outline" tnxType>
-          <mat-select
-            class="tnx-filter"
-            panelClass="tokenFilterPanel"
-            [disableOptionCentering]="true"
-            placeholder="Select a type">
-            <div>
-              <mat-option>
-                <div class="d-flex option-contain">
-                  <div class="option-lable">
-                    <span></span>
+        <!-- txn type -->
+        <div class="cursor-pointer d-flex flex-column p-0 mb-4">
+          <span class="text-sm mb-2">Tnx Type</span>
+          <button
+              [matMenuTriggerFor]="tnxTypeMenu"
+              class="input-group align-items-center d-flex justify-content-between text--gray-4"
+              type="button">
+            <span>Select a type</span>
+            <i class="ph-light ph-funnel-simple text--white h1"></i>
+          </button>
+          <mat-menu
+              #tnxTypeMenu="matMenu"
+              class="aura-menu-panel tnx-type-panel text--white mt-2 p-2"
+              [yPosition]="'above'"
+              [hasBackdrop]="false">
+            <div class="aura-form single-input-field">
+              <div class="input-group tnx-type-search mb-2"
+                   (click)="$event.stopPropagation()"
+                   (keydown)="$event.stopPropagation()">
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search for Tnx Type"
+                    [(ngModel)]="transactionTypeKeyWord"
+                    [ngModelOptions]="{ standalone: true }"
+                    (keyup.enter)="searchTransactionType()"
+                    name="search"
+                    autocomplete="off" />
+                <button type="submit" class="btn-search {{ transactionTypeKeyWord && transactionTypeKeyWord?.length > 0 ? 'd-none' : '' }}">
+                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                </button>
+                <button
+                    type="reset"
+                    class="btn-reset cursor-pointer {{
+                  !transactionTypeKeyWord || (transactionTypeKeyWord && transactionTypeKeyWord?.length === 0) ? 'd-none' : ''
+                }}"
+                    (click)="transactionTypeKeyWord = ''">
+                  <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                </button>
+              </div>
+              <div>
+                <div class="form-group d-flex align-items-center tnx-filter-item px-2"
+                     (click)="$event.stopPropagation()"
+                     (keydown)="$event.stopPropagation()">
+                  <input
+                      type="checkbox"
+                      id="all"
+                      (change)="onChangeTnxFilterType($event, 'all')"
+                      class="check-box check-box--dark"/>
+                  <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
+                </div>
+                <div class="divider divider-horizontal my-2"></div>
+                <div class="tnx-filter-box"
+                     (click)="$event.stopPropagation()"
+                     (keydown)="$event.stopPropagation()">
+                  <div *ngFor="let type of tnxType, let i = index"
+                       class="form-group d-flex align-items-center tnx-filter-item px-2">
+                    <input
+                        type="checkbox"
+                        id="type-{{i}}"
+                        [checked]="(this.transactionFilter?.type?.length > 0 && this.transactionFilter?.type?.includes(type.label)) || this.transactionFilter.type === null"
+                        (change)="onChangeTnxFilterType($event, type)"
+                        class="check-box check-box--dark"/>
+                    <label for="type-{{i}}" class="ml-2 mb-0 text-justify pl-1"> {{type.value}} </label>
                   </div>
                 </div>
-              </mat-option>
-              <div class="divider divider-horizontal my-2"></div>
+              </div>
             </div>
-          </mat-select>
-        </mat-form-field>
-      </li>
-      <li>
-        <div class="d-flex justify-content-between align-items-center">
-          <button class="button button-pill button--sm button-outline text--white">Reset</button>
-          <div class="d-flex gap-4">
-            <button class="button button-pill button--sm button-outline text--white">Reset</button>
-            <button class="button button-pill button--sm button-outline text--white">Apply</button>
+          </mat-menu>
+        </div>
+        <!-- Button action group -->
+        <div class="divider divider-horizontal"></div>
+        <div class="d-flex justify-content-between align-items-center pt-4">
+          <button class="button button-pill button-outline button--xlg" (click)="initTnxFilter()">
+            <span>Reset</span>
+          </button>
+          <div class="d-flex">
+            <button class="button button-pill button-outline button--xlg ml-2 ml-lg-0" (click)="menuTrigger.closeMenu()">
+              <span>Cancel</span>
+            </button>
+            <button class="button button-pill button-outline button-apply ml-2 ml-lg-4 button--xlg"
+                [disabled]="!transactionFilter.startDate && !transactionFilter.endDate">
+              <span>Apply</span>
+            </button>
           </div>
         </div>
-      </li>
-    </ul>
+      </div>
+    </mat-menu>
   </div>
 </ng-template>
