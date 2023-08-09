@@ -15,7 +15,6 @@ import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.c
 import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
-import { TokenService } from '../../../../../../core/services/token.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
 import { Globals } from '../../../../../../global/global';
 
@@ -85,7 +84,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   constructor(
     public global: Globals,
     public commonService: CommonService,
-    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
