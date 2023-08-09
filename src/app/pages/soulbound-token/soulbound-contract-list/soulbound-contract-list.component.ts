@@ -2,17 +2,17 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
-import { CommonService } from 'src/app/core/services/common.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
 
 @Component({
   selector: 'app-soulbound-contract-list',
@@ -48,7 +48,6 @@ export class SoulboundContractListComponent implements OnInit {
     private walletService: WalletService,
     private router: Router,
     public commonService: CommonService,
-    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +78,6 @@ export class SoulboundContractListComponent implements OnInit {
   resetSearch() {
     this.textSearch = '';
     this.searchValue = '';
-    this.pageChange.selectPage(0);
     this.getListSmartContract();
   }
 
