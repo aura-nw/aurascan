@@ -81,7 +81,7 @@ export class ContractService extends CommonService {
     const operationsDoc = `
     query querySmartContractList($limit: Int = 100, $offset: Int = 0, $type: [String!], $address: String = null, $creator: String =null) {
       ${this.envDB} {
-        smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}, status: {_eq: "LATEST"}}) {
           address
           name
           code_id
@@ -123,7 +123,7 @@ export class ContractService extends CommonService {
     const contractDoc = `
     query queryContractDetail($contractAddress: String = null) {
       ${this.envDB} {
-        smart_contract(limit: 1, where: {address: {_eq: $contractAddress}}) {
+        smart_contract(limit: 1, where: {address: {_eq: $contractAddress}, status: {_eq: "LATEST"}}) {
           address
           creator
           instantiate_hash
