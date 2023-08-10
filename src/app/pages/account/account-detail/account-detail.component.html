@@ -32,11 +32,11 @@
             </div>
             <div
               *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
-              class="name-tag cursor-pointer mt-1 aura-tooltip-contain">
+              class="name-tag cursor-pointer mt-1 aura-tooltip-contain d-inline-flex">
               <div class="d-flex aura-tooltip-object align-items-center">
                 <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
                 <span class="d-flex d-lg-none justify-content-center">{{
-                  (commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8) || '-'
+                  (commonService.setNameTag(currentAddress) | cutStringPipe : 16) || '-'
                 }}</span>
                 <a
                   target="_blank"

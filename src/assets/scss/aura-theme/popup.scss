@@ -45,3 +45,10 @@
 .cdk-overlay-dark-backdrop {
   background: rgba(0, 0, 0, 0.7);
 }
+.aura-menu-panel {
+  border: 1px solid var(--aura-gray-8);
+  border-radius: var(--spacer-2);
+  padding: var(--spacer-4);
+  background-color: var(--aura-gray-10);
+  margin-bottom: 6px;
+}

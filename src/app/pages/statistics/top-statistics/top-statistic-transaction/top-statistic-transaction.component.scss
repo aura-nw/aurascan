@@ -1,5 +1,6 @@
 .button-switch-stage button {
   width: 100%;
+
   @media (min-width: 575.98px) {
     width: 70px;
   }
@@ -9,10 +10,26 @@
   .aura-table th.mat-header-cell {
     min-width: 100px;
   }
+
+  .aura-table th.mat-header-cell:nth-child(1) {
+    min-width: 80px;
+  }
+
+  .aura-table th.mat-header-cell:nth-child(2) {
+    min-width: 180px;
+  }
 }
 
-::ng-deep {
-  .box-name-tag {
-    min-width: 142px;
+.box-statistic {
+  ::ng-deep {
+    .box-name-tag {
+      background-color: var(--aura-gray-8) !important;
+
+      &:not(.private-name-tag) {
+        &:after {
+          border-right: 15px solid var(--aura-gray-10) !important;
+        }
+      }
+    }
   }
 }

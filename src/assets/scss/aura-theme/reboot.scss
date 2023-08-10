@@ -94,3 +94,8 @@ app-paginator {
     color: var(--aura-green-3) !important;
   }
 }
+
+.mat-mdc-icon-button {
+  --mat-mdc-button-persistent-ripple-color: transparent !important;
+  --mat-mdc-button-ripple-color: transparent !important;
+}

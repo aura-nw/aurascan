@@ -984,7 +984,7 @@ export class TransactionMessagesComponent implements OnInit {
       const temp = value / Math.pow(10, 18);
       let tempPercent = temp * 100;
       //check is int value
-      if (Number(tempPercent) === tempPercent && tempPercent % 1 === 0) {
+      if (Number(tempPercent) === tempPercent && (tempPercent % 1 === 0 || tempPercent % 1 === tempPercent)) {
         value = temp;
       }
       return value;
