@@ -26,7 +26,7 @@
                 <a
                   class="small-text text--primary hover-link"
                   href="/tokens/{{ linkToken }}/{{ item.contract_address }}?a={{ encodeData(item.token_id) }}">
-                  <span class="d-none d-lg-inline-block">{{ item.token_id | cutStringPipe : 12 }}</span>
+                  <span class="d-none d-lg-inline-block">{{ item.token_id | cutStringPipe : 10 }}</span>
                   <span class="d-inline-block d-lg-none">{{ item.token_id | cutStringPipe : 9 }}</span>
                 </a>
               </div>
