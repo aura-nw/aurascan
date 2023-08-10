@@ -83,22 +83,24 @@
           </app-paginator>
         </ng-container>
         <ng-container *ngIf="breakpoint.value.matches">
-          <ng-container *ngFor="let data of dataSourceMob; index as i">
-            <app-card-mob-simple
-              [tokenData]="{
-                logo: data.logo ? data.logo : defaultLogoToken,
-                name: data.name,
-                info: data.symbol ? data.symbol : 'AURA'
-              }"
-              [tokenAmount]="{ amount: data.amount, decimal: data.decimal, isAura: true ? data.logo === '' : false }">
-            </app-card-mob-simple>
+          <ng-container *ngIf="pageData?.length > 0; else noValues">
+            <ng-container *ngFor="let data of dataSourceMob; index as i">
+              <app-card-mob-simple
+                [tokenData]="{
+                  logo: data.logo ? data.logo : defaultLogoToken,
+                  name: data.name,
+                  info: data.symbol ? data.symbol : 'AURA'
+                }"
+                [tokenAmount]="{ amount: data.amount, decimal: data.decimal, isAura: true ? data.logo === '' : false }">
+              </app-card-mob-simple>
+            </ng-container>
+            <app-paginator
+              [length]="pageData.length"
+              [pageSize]="pageSizeMob"
+              (paginator)="paginatorEmit($event)"
+              (pageEvent)="pageEvent($event)">
+            </app-paginator>
           </ng-container>
-          <app-paginator
-            [length]="pageData.length"
-            [pageSize]="pageSizeMob"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="pageEvent($event)">
-          </app-paginator>
         </ng-container>
 
         <!-- No data -->
