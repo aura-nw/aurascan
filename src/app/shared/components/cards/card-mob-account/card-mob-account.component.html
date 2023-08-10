@@ -1,0 +1,34 @@
+<div class="card-mob-simple">
+  <div *ngIf="title" class="d-flex justify-content-between align-items-center mb-3">
+    <div *ngIf="title.label">
+      <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
+        <span class="{{ title.titleClass ? title.titleClass : '' }}">{{ title.label }}</span>
+      </div>
+      <div class="caption-mob fw-normal text--gray-3 mt-1">{{ commonService.getDateValue(data.timestamp)[0] }}</div>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <!-- <div *ngIf="title.status && +title.status !== statusTransaction.Success" class="mr-2">
+        <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px" />
+      </div> -->
+      <div *ngIf="title.subLabelContent" class="sub-label body {{ title.subLabelClass ? title.subLabelClass : '' }}">
+        <span>{{ title.subLabelContent }}</span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="content && content.length > 0">
+    <div class="d-flex justify-content-between small-body caption-mob">
+      <div *ngFor="let data of content; let i = index">
+        <div>
+          <div class="text--gray-4 fw-normal" *ngIf="data.label">{{ data.label }}</div>
+          <div
+            *ngIf="data.info"
+            class="{{ data.class ? data.class : 'text--gray-1' }} mb-0"
+            [ngStyle]="{ 'margin-top': '2px' }"
+            [ngClass]="data.label === 'Result' && data['status'] === 'Fail' ? 'text--red-3' : ''"
+            [innerHTML]="data.info"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

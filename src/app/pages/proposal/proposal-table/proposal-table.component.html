@@ -35,10 +35,9 @@
                 <ng-container *ngIf="template.isUrl && template.isShort">
                   <ng-container *ngIf="template.isNameTag">
                     <app-name-tag
-                        [value]="data[template.matColumnDef]"
-                        [url]="template.isUrl"
-                        [tooltipPosition]="'tooltip--right'"
-                    ></app-name-tag>
+                      [value]="data[template.matColumnDef]"
+                      [url]="template.isUrl"
+                      [tooltipPosition]="'tooltip--right'"></app-name-tag>
                   </ng-container>
                   <ng-container *ngIf="!template.isNameTag">
                     <a
@@ -118,12 +117,19 @@
                   class: !commonService.checkDisplayTooltip(data.voter)
                     ? 'name-tag-label mb-0 text--primary'
                     : 'mb-0 text--primary',
-                  info:
-                    '<a class=text--primary href=' +
-                    ('/account/' + data.voter) +
-                    '>' +
-                    (data.voter ? (commonService.setNameTag(data.voter) | cutStringPipe : 8 : 8) : '-') +
-                    '</a>'
+                  info: !data?.voter
+                    ? '-'
+                    : !commonService.checkDisplayTooltip(data.voter)
+                    ? '<a class=text--primary href=' +
+                      ('/account/' + data.voter) +
+                      '>' +
+                      (commonService.setNameTag(data.voter) | cutStringPipe : 16) +
+                      '</a>'
+                    : '<a class=text--primary href=' +
+                      ('/account/' + data.voter) +
+                      '>' +
+                      (commonService.setNameTag(data.voter) | cutStringPipe : 8 : 8) +
+                      '</a>'
                 },
                 {
                   label: 'TxHash',
@@ -198,13 +204,19 @@
                 {
                   label: 'Depositor',
                   class: !commonService.checkDisplayTooltip(data.depositors) ? 'name-tag-label mb-0' : 'mb-0',
-                  info: data.depositors
+                  info: !data?.depositors
+                    ? '-'
+                    : !commonService.checkDisplayTooltip(data.depositors)
                     ? '<a class=text--primary href=' +
+                      ('/account/' + data.depositors) +
+                      '>' +
+                      (commonService.setNameTag(data.depositors) | cutStringPipe : 16) +
+                      '</a>'
+                    : '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +
                       '>' +
                       (commonService.setNameTag(data.depositors) | cutStringPipe : 8 : 8) +
                       '</a>'
-                    : '<span class=text--gray-1>-</span>'
                 },
                 {
                   label: 'TxHash',

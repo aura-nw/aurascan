@@ -3,6 +3,19 @@
     border-right: 1px solid var(--aura-gray-9);
     vertical-align: middle;
   }
+  .sbt-detail {
+    overflow-x: auto;
+    ::ng-deep {
+      flex-wrap: wrap;
+      flex-basis: 20%;
+      .soulbound__item {
+        min-width: 120px;
+      }
+      .nft-cards__label {
+        display: none;
+      }
+    }
+  }
   .soulbound-feature-tokens {
     flex: 1 0 100%;
     border-top: 1px solid var(--aura-gray-9);

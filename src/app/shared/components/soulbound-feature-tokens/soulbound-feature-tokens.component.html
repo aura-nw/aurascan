@@ -1,56 +1,51 @@
 <div class="sbt-contain" [ngClass]="!isSBTValidator ? 'text-end' : 'sbt-validator'">
-  <div class="soulbound-list" *ngIf="soulboundList && soulboundList?.length > 0">
-    <ng-container *ngFor="let token of soulboundList; let last = last">
-      <div class="soulbound__item">
-        <ng-container *ngIf="token.picked">
-          <a
-            href="javascript:void(0)"
-            class="nft-card d-block"
-            (click)="linkSBDetail(token.contract_address, token.token_id)">
-            <app-sb-img [token]="token"></app-sb-img>
-          </a>
-        </ng-container>
-        <ng-container *ngIf="!token.picked">
-          <div class="nft-card nft__unclaimed">
-            <div class="position-relative text-center">
-              <app-sb-img [token]="token"></app-sb-img>
-              <button
-                class="button button-pill button--sm button-flat btn-preview border_none px-3 px-lg-4"
-                (click)="getSBTDetail(token.contract_address, token.token_id)">
-                <span>Preview</span>
-              </button>
-            </div>
-            <div class="text-center text--yellow-3 mt-3">{{ token.status }}</div>
-          </div>
-        </ng-container>
-      </div>
-    </ng-container>
+  <div class="d-flex w-100 justify-content-between mb-4" *ngIf="displayManage">
+    <h3 class="mb-0 fw-semibold text--white">ABTs ({{ soulboundList?.length || 0 }})</h3>
+    <a
+      [routerLink]="['/accountbound/account', accountAddress]"
+      (click)="setLinkTab()"
+      [class.mr-2]="soulboundUnclaimedNum > 0"
+      class="button button-pill button-outline button--sm position-relative aura-tooltip-contain d-inline-flex"
+      *ngIf="wallet === accountAddress">
+      <span class="btn-text-manage fw-semibold"
+        >{{ wallet === accountAddress ? 'Manage your ABTs' : 'See more' }}
+      </span>
+      <span
+        class="nft__unclaimed-noti caption aura-tooltip-object"
+        *ngIf="soulboundUnclaimedNum > 0"
+        [class.noti--pill]="soulboundUnclaimedNum > 9">
+        {{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}
+      </span>
+      <app-tooltip-customize
+        class="tooltip--left"
+        [content]="
+          'You have new un-claimed Account Bound Token(s) (ABTs). </br>Kindly check and manage your ABTs in your account.'
+        ">
+      </app-tooltip-customize>
+    </a>
   </div>
-  <a
-    [routerLink]="['/accountbound/account', accountAddress]"
-    class="button button-pill button-outline button-outline--gradient button-outline__in-card button--sm mt-md-3 mt-lg-0 mt-xl-3 position-relative aura-tooltip-contain d-inline-flex"
-    [class.mr-2]="soulboundUnclaimedNum > 0"
-    [class.mt-6]="soulboundList && soulboundList?.length > 0"
-    (click)="setLinkTab()"
-    *ngIf="wallet === accountAddress && displayManage && !isLoading">
-    <span>Manage your ABTs</span>
-    <span
-      class="nft__unclaimed-noti caption aura-tooltip-object"
-      *ngIf="soulboundUnclaimedNum > 0"
-      [class.noti--pill]="soulboundUnclaimedNum > 9">
-      {{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}
-    </span>
-    <app-tooltip-customize
-      class="tooltip--left"
-      [content]="
-        'You have new un-claimed Account Bound Token(s) (ABTs). </br>Kindly check and manage your ABTs in your account.'
-      ">
-    </app-tooltip-customize>
-  </a>
-  <!-- Placeholder space for flex position -->
-  <ng-container *ngIf="!isSBTValidator">
-    <div
-      class="button button--sm mt-md-3 mt-lg-0 mt-xl-3"
-      *ngIf="wallet !== accountAddress || !displayManage || isLoading"></div>
-  </ng-container>
+  <div class="soulbound-list mt-4 mt-lg-0">
+    <ng-container *ngIf="soulboundList && soulboundList?.length > 0; else noNFT">
+      <ng-container class="" *ngFor="let token of soulboundList; let last = last">
+        <div class="soulbound__item">
+          <ng-container *ngIf="token.picked">
+            <div class="nft-cards__item">
+              <app-nft-card
+                [nftLink]="'/tokens/token-nft/' + token.contract_address + '/' + encodeData(token.token_id)"
+                [nftItem]="token"
+                [nftType]="getTypeFile(token)"></app-nft-card>
+              <div class="nft-cards__label">
+                <span class="text-gradient">CW-4973</span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #noNFT>
+      <div class="w-100">
+        <app-table-no-data [textNull]="'Kindly pick your featured ABTs'"></app-table-no-data>
+      </div>
+    </ng-template>
+  </div>
 </div>

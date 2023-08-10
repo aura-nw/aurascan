@@ -1,4 +1,5 @@
-<div class="d-flex flex-column justify-content-center align-items-center m-5 text-center">
-  <img [src]="'assets/images/icons/noValues.svg' | imageS3" alt="" />
-    {{ textNull }}
+<div class="d-flex flex-column justify-content-center align-items-center m-5 text-center text-gray body-01">
+  <img [src]="'assets/images/icons/noValues.svg' | imageS3" alt="" *ngIf="textNull !== 'Kindly pick your featured ABTs'" />
+  <img [src]="'assets/images/noItemNFT.png' | imageS3" alt="" *ngIf="textNull === 'Kindly pick your featured ABTs'" />
+  {{ textNull }}
 </div>

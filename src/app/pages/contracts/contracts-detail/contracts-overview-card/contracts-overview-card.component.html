@@ -32,7 +32,7 @@
             </span>
             at txn
             <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-              {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
+              {{ contractDetail?.tx_hash | cutStringPipe : 6 : 6 }}
             </a>
           </div>
         </td>
