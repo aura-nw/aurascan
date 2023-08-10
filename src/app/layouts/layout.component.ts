@@ -1,5 +1,5 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { EventService } from '../core/services/event.service';
 import {
   LAYOUT_HORIZONTAL,
@@ -10,6 +10,12 @@ import {
   SIDEBAR_SIZE,
   TOPBAR,
 } from './layouts.model';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { tap } from 'rxjs/operators';
+import { WalletService } from '../core/services/wallet.service';
+import { Subject } from 'rxjs';
+import { WALLET_PROVIDER } from '../core/constants/wallet.constant';
+import { DialogService } from '../core/services/dialog.service';
 
 @Component({
   selector: 'app-layout',
@@ -21,6 +27,16 @@ import {
  * Layout Component
  */
 export class LayoutComponent implements OnInit {
+  @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
+  @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
+  isMobileMatched = false;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
+    tap((state) => {
+      if (state) {
+        this.isMobileMatched = state.matches;
+      }
+    }),
+  );
   // layout related config
   layoutType!: string;
   layoutMode!: string;
@@ -36,7 +52,14 @@ export class LayoutComponent implements OnInit {
     this.pageYOffset = window.pageYOffset;
   }
 
-  constructor(private eventService: EventService, private scroll: ViewportScroller) {}
+  destroy$ = new Subject();
+  constructor(
+    private walletService: WalletService,
+    private eventService: EventService,
+    private scroll: ViewportScroller,
+    private layout: BreakpointObserver,
+    private dlgService: DialogService,
+  ) {}
 
   ngOnInit() {
     this.layoutMode = LAYOUT_MODE;
@@ -91,8 +114,38 @@ export class LayoutComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    this.offcanvasWallet.nativeElement.addEventListener('hide.bs.offcanvas', () => {
+      this.walletService.setDialogState('close');
+    });
+  }
+  ngOnDestroy(): void {
+    document.removeAllListeners('hide.bs.offcanvas');
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  connectWallet(provider: WALLET_PROVIDER): void {
+    try {
+      const connect = async () => {
+        const connect = await this.walletService.connect(provider);
+        if (!connect && provider === WALLET_PROVIDER.COIN98 && !this.isMobileMatched) {
+          this.dlgService.showDialog({
+            title: '',
+            content: 'Please set up override Keplr in settings of Coin98 wallet',
+          });
+        }
+        this.buttonDismiss.nativeElement.click();
+      };
 
+      connect();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  dismiss(): void {
+    this.buttonDismiss.nativeElement.click();
+  }
   /**
    * Check if the horizontal layout is requested
    */

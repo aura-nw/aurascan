@@ -3,7 +3,20 @@
     <button class="button" [class.active]="isActive" (click)="changeType(true)">Active</button>
     <button class="button" [class.active]="!isActive" (click)="changeType(false)">Inactive</button>
   </div>
-  <button class="button button-outline button-outline--gradient button--md button-pill" (click)="openCreatePopup()">
+  <button
+    *ngIf="wallet"
+    class="button button-outline button-outline--gradient button--md button-pill"
+    (click)="openCreatePopup()">
+    <span>Add New Grant</span>
+  </button>
+  <button
+    #connectButton
+    *ngIf="!wallet"
+    type="button"
+    class="button button-outline button-outline--gradient button--md button-pill"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasWallet"
+    aria-controls="offcanvasWallet">
     <span>Add New Grant</span>
   </button>
 </div>
@@ -89,8 +102,19 @@
                         </div>
                         <div *ngSwitchCase="'action'">
                           <button
+                            *ngIf="wallet"
                             class="button button--sm button-pill button-outline"
                             (click)="showRevoke(data['grantee'], data['granter'])">
+                            <span>Revoke</span>
+                          </button>
+                          <button
+                            #connectButton
+                            *ngIf="!wallet"
+                            type="button"
+                            class="button button--sm button-pill button-outline"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasWallet"
+                            aria-controls="offcanvasWallet">
                             <span>Revoke</span>
                           </button>
                         </div>

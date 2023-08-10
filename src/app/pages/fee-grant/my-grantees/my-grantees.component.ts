@@ -25,6 +25,7 @@ import { PopupRevokeComponent } from 'src/app/pages/fee-grant/popup-revoke/popup
   styleUrls: ['./my-grantees.component.scss'],
 })
 export class MyGranteesComponent implements OnInit {
+  wallet = null;
   loading = true;
   isActive = true;
   textSearch = '';
@@ -73,7 +74,11 @@ export class MyGranteesComponent implements OnInit {
     public translate: TranslateService,
     private walletService: WalletService,
     private mappingErrorService: MappingErrorService,
-  ) {}
+  ) {
+    this.walletService.wallet$.subscribe((wallet) => {
+      this.wallet = wallet;
+    });
+  }
 
   ngOnInit() {
     this.walletService.wallet$.subscribe((wallet) => {
@@ -112,7 +117,7 @@ export class MyGranteesComponent implements OnInit {
   }
 
   getListGrant() {
-    let keySearch = this.textSearch = this.textSearch?.trim();
+    let keySearch = (this.textSearch = this.textSearch?.trim());
     const addressNameTag = this.commonService.findNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;

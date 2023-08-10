@@ -18,6 +18,7 @@ import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.c
 import { LayoutComponent } from './layout.component';
 import { MenuBottomBarComponent } from './menu-bottom-bar/menu-bottom-bar.component';
 import { AuthenticateMailModule } from '../shared/components/authenticate-mail/authenticate-mail.module';
+import { WalletListComponent } from '../shared/components/wallet-connect/wallet-list/wallet-list.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { AuthenticateMailModule } from '../shared/components/authenticate-mail/a
     HorizontaltopbarComponent,
     DialogComponent,
     MenuBottomBarComponent,
+    WalletListComponent,
   ],
   imports: [
     CommonModule,
