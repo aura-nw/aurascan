@@ -49,7 +49,6 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     this.userAddress = this.router.snapshot.paramMap.get('address');
     this.walletService.wallet$.subscribe((wallet) => {
       this.wallet = wallet?.bech32Address;
-      this.getABTNotify();
       this.getData();
       this.timerGetUpTime = setInterval(() => {
         this.getData();
@@ -60,11 +59,11 @@ export class SoulboundFeatureTokensComponent implements OnInit {
       this.totalNotify.emit(this.soulboundUnclaimedNum);
     });
 
-    // setTimeout(() => {
-    //   if (this.wallet) {
-    //     this.getABTNotify();
-    //   }
-    // }, 1000);
+    setTimeout(() => {
+      if (this.wallet) {
+        this.getABTNotify();
+      }
+    }, 1000);
   }
 
   getData() {
@@ -89,7 +88,6 @@ export class SoulboundFeatureTokensComponent implements OnInit {
         res.data = res.data.filter((k) => k.picked);
       }
       this.soulboundList = res.data;
-
       this.totalSBT.emit(res.meta.count);
       this.totalPick.emit(res.data?.length || 0);
     });
@@ -131,7 +129,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   getABTNotify(): void {
     this.soulboundService.getNotify(this.wallet).subscribe(
       (res) => {
-        this.soulboundUnclaimedNum = res.data?.notify || 0;
+        this.soulboundUnclaimedNum = res.data.notify;
         this.totalNotify.emit(this.soulboundUnclaimedNum);
       },
       () => {},
@@ -150,9 +148,5 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     if (this.soulboundUnclaimedNum > 0) {
       localStorage.setItem('tabUnEquip', 'true');
     }
-  }
-
-  encodeData(data) {
-    return encodeURIComponent(data);
   }
 }

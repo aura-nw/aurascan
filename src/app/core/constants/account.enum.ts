@@ -46,10 +46,9 @@ export enum WalletAcount {
 }
 
 export enum TabsAccount {
-  ExecutedTxs = 'EXECUTED',
-  AuraTxs = 'AURA TRANSFER',
-  FtsTxs = 'FTs TRANSFER',
-  NftTxs = 'NFTs TRANSFER',
+  Assets = 'ASSETS',
+  Transactions = 'TRANSACTIONS',
+  Stake = 'STAKE',
 }
 
 export enum StakeModeAccount {

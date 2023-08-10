@@ -21,21 +21,13 @@ export class NftListComponent implements OnChanges {
   loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 20,
     pageIndex: 1,
   };
-  nftFilter = null;
   nftList = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
   textSearch = '';
-  listCollection = [
-    {
-      label: 'All',
-      quantity: 0,
-      address: null,
-    },
-  ];
 
   constructor(
     private accountService: AccountService,
@@ -55,7 +47,6 @@ export class NftListComponent implements OnChanges {
       limit: this.pageData.pageSize,
       keyword: this.textSearch,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
-      address: this.nftFilter,
     };
 
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
@@ -64,7 +55,7 @@ export class NftListComponent implements OnChanges {
           this.nftList = res?.cw721_token;
           this.pageData.length = res.cw721_token_aggregate?.aggregate?.count;
 
-          this.nftList?.forEach((element) => {
+          this.nftList.forEach((element) => {
             element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
             element.token_name = _.get(element, 'cw721_contract.name');
             if (!this.searchValue) {
@@ -80,29 +71,6 @@ export class NftListComponent implements OnChanges {
       () => {
         this.loading = false;
       },
-    );
-  }
-
-  getListCollection() {
-    const payload = {
-      owner: this.address,
-    };
-
-    this.accountService.getListCollectionByOwner(payload).subscribe(
-      (res) => {
-        if (res?.cw721_contract?.length > 0) {
-          res.cw721_contract.forEach((item) => {
-            this.listCollection.push({
-              label: item.name,
-              quantity: item.cw721_tokens_aggregate.aggregate.count,
-              address: item.smart_contract.address,
-            });
-          });
-          this.listCollection[0].quantity = res?.cw721_token_aggregate?.aggregate?.count;
-        }
-      },
-      () => {},
-      () => {},
     );
   }
 
@@ -124,7 +92,6 @@ export class NftListComponent implements OnChanges {
       this.pageData.pageIndex = 1;
     }
     this.getNftData();
-    this.getListCollection();
   }
 
   handleRouterLink(link): void {
