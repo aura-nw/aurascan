@@ -263,24 +263,23 @@ form.search-form-validators {
   }
 }
 
-@media (max-width: 1366px) {
-  tbody tr {
-    & td {
-      min-width: 130px;
-    }
-
-    & td:nth-child(2) {
-      min-width: 400px;
-    }
-
-    & td:nth-child(1) {
-      min-width: 200px;
-    }
-  }
-}
-
 .table-validator {
   app-tooltip-customize.tooltip--left {
     transform: translate(0, -15px);
+  }
+  @media (max-width: 1366px) {
+    tbody tr {
+      & td {
+        min-width: 130px;
+      }
+
+      & td:nth-child(2) {
+        min-width: 400px;
+      }
+
+      & td:nth-child(1) {
+        min-width: 200px;
+      }
+    }
   }
 }
