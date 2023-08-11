@@ -35,7 +35,7 @@
       </div>
       <!-- Table -->
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-        <div class="overflow-scroll-x aura-table-contain spacer-tooltip aura-table-sctr">
+        <div class="overflow-scroll-x aura-table-contain aura-table-sctr">
           <table mat-table [dataSource]="dataSource" class="aura-table">
             <!-- Number Column -->
             <ng-container matColumnDef="id">
@@ -54,7 +54,7 @@
                     [value]="element.smart_contract?.address"
                     [url]="'/accountbound/contract'"
                     [iconContract]="true"
-                    [tooltipRight]="true"></app-name-tag>
+                    [tooltipPosition]="'tooltip--right'"></app-name-tag>
                 </div>
               </td>
             </ng-container>

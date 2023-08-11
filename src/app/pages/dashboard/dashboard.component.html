@@ -16,23 +16,6 @@
     </div>
   </div>
 
-  <div class="row mb-4 mb-lg-6" *ngIf="notice?.content">
-    <div class="col">
-      <div class="notice-warning">
-        <div class="notice-icon">
-          <img src="assets/icons/icons-svg/color/warning-red.svg" alt="icon" />
-          <span class="body-03 text--red-3 fw-semibold"> NOTICE </span>
-        </div>
-        <span class="body-03 text--gray-1 notice-content">
-          {{ notice?.content }}
-          <a href="{{ notice.url }}" target="_blank">
-            <i class="ph-arrow-square-out-fill body-03 text--gray-1"> </i>
-          </a>
-        </span>
-      </div>
-    </div>
-  </div>
-
   <div class="row mb-lg-6">
     <div class="col-12 col-lg-8 mb-4 mb-lg-0">
       <div class="card mb-0 h-100">
@@ -109,13 +92,13 @@
               <div class="align-items-center pt-6 px-4 pr-lg-6 pl-lg-1">
                 <div class="d-lg-flex flex-wrap mb-4">
                   <!-- Tabs -->
-                  <div class="button-switch-stage button-switch-stage__1">
-                    <button type="button" [class.active]="isPrice" (click)="isPrice = true; getCoinInfo(chartRange)">
-                      <span>Price</span>
+                  <div class="button-switch-stage button-switch-stage__3">
+                    <button type="button" disabled [class.active]="isPrice" (click)="isPrice = true; getCoinInfo(chartRange)">
+                      <span>Price chart</span>
                     </button>
-                    <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
+                    <!-- <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
                       <span>Volume</span>
-                    </button>
+                    </button> -->
                   </div>
                   <div class="ms-auto mt-4 mt-md-0">
                     <div class="d-flex align-items-center chart__options">
@@ -379,7 +362,7 @@
                 <ng-container *ngFor="let template of templatesBlock; index as i">
                   <ng-container [matColumnDef]="template.matColumnDef">
                     <th mat-header-cell *matHeaderCellDef>
-                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>
@@ -447,7 +430,7 @@
                       *matHeaderCellDef
                       [class.width-txhash]="template.headerCellDef === 'Tx Hash'"
                       [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
-                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>

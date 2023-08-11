@@ -105,23 +105,33 @@
               [content]="[
                 {
                   label: 'Sender',
-                  class: 'name-tag-label',
-                  info:
-                    '<a class=text--primary href=' +
-                    ('/account/' + distributionAcc) +
-                    '>' +
-                    (commonService.setNameTag(distributionAcc) | cutStringPipe : 8 : 8) +
-                    '</a>'
+                  class: !commonService.checkDisplayTooltip(distributionAcc) ? 'name-tag-label' : '',
+                  info: !commonService.checkDisplayTooltip(distributionAcc)
+                    ? '<a class=text--primary href=' +
+                      ('/account/' + distributionAcc) +
+                      '>' +
+                      (commonService.setNameTag(distributionAcc) | cutStringPipe : 16) +
+                      '</a>'
+                    : '<a class=text--primary href=' +
+                      ('/account/' + distributionAcc) +
+                      '>' +
+                      (commonService.setNameTag(distributionAcc) | cutStringPipe : 8 : 8) +
+                      '</a>'
                 },
                 {
                   label: 'Recipient',
-                  class: 'name-tag-label',
-                  info:
-                    '<a class=text--primary href=' +
-                    ('/account/' + data.content.recipient) +
-                    '>' +
-                    (commonService.setNameTag(data.content.recipient) | cutStringPipe : 8 : 8) +
-                    '</a>'
+                  class: !commonService.checkDisplayTooltip(data.content.recipient) ? 'name-tag-label' : '',
+                  info: !commonService.checkDisplayTooltip(data.content.recipient)
+                    ? '<a class=text--primary href=' +
+                      ('/account/' + data.content.recipient) +
+                      '>' +
+                      (commonService.setNameTag(data.content.recipient) | cutStringPipe : 16) +
+                      '</a>'
+                    : '<a class=text--primary href=' +
+                      ('/account/' + data.content.recipient) +
+                      '>' +
+                      (commonService.setNameTag(data.content.recipient) | cutStringPipe : 8 : 8) +
+                      '</a>'
                 },
                 {
                   label: 'Amount',

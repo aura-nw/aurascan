@@ -31,19 +31,24 @@
           </div>
           <div
             *ngIf="commonService.setNameTag(userAddress) !== userAddress"
-            class="name-tag cursor-pointer mt-1 aura-tooltip-contain">
-            <div class="d-flex aura-tooltip-object align-items-center">
+            class="name-tag cursor-pointer mt-1 aura-tooltip-contain d-inline-flex">
+            <div class="d-inline-flex aura-tooltip-object align-items-center">
               <span class="d-none d-lg-flex">{{ commonService.setNameTag(userAddress) || '-' }}</span>
-              <span class="d-flex d-lg-none justify-content-center">{{
-                (commonService.setNameTag(userAddress) | cutStringPipe : 8 : 8) || '-'
-              }}</span>
+              <span class="d-flex d-lg-none justify-content-center">
+                <ng-container *ngIf="!commonService.checkDisplayTooltip(userAddress)">
+                  {{ (commonService.setNameTag(userAddress) | cutStringPipe : 16) || '-' }}
+                </ng-container>
+                <ng-container *ngIf="commonService.checkDisplayTooltip(userAddress)">
+                  {{ (commonService.setNameTag(userAddress) | cutStringPipe : 8 : 8) || '-' }}
+                </ng-container>
+            </span>
               <a
                 target="_blank"
                 [href]="extendLink(commonService.findUrlNameTag(userAddress))"
                 *ngIf="commonService.findUrlNameTag(userAddress)">
                 <i
                   _ngcontent-wrg-c372=""
-                  class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1 cursor-pointer mt-1"></i>
+                  class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer mt-1"></i>
               </a>
             </div>
             <app-tooltip-customize
@@ -70,7 +75,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-6 mt-lg-0 ml-auto {{ totalPick > 0 ? 'soulbound-feature-tokens' : 'px-6' }}" *ngIf="userAddress">
+      <div class="mt-4 mt-lg-0 ml-auto sbt-detail {{ totalPick > 0 ? 'soulbound-feature-tokens' : 'px-6' }}" *ngIf="userAddress && totalPick > 0">
         <app-soulbound-feature-tokens
           [extend]="false"
           [accountAddress]="userAddress"
