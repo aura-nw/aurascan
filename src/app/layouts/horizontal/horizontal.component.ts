@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-horizontal',
@@ -12,8 +13,9 @@ import { Router } from '@angular/router';
  */
 export class HorizontalComponent implements OnInit {
   isCondensed = false;
+  notice = this.environmentService.configValue.notice;
 
-  constructor(public router: Router) {}
+  constructor(public router: Router, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     document.body.setAttribute('data-layout', 'horizontal');

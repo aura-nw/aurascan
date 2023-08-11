@@ -56,7 +56,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
-  notice = this.environmentService.configValue.notice;
 
   chart: IChartApi = null;
   areaSeries: ISeriesApi<'Area'> = null;
@@ -187,7 +186,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   parseDataFromApi(dta: any[]) {
     const parseData = dta.map((el) => ({
-      dataX: this.isPrice ? el.current_price : el.total_volume,
+      dataX: this.isPrice ? Number(el.current_price?.toFixed(6)) : Number(el.total_volume?.toFixed(6)),
       dataY: el.timestamp,
     }));
     return {
@@ -278,17 +277,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.dataTx = txs;
       }
-    });
-  }
-
-  updateBlockAndTxs(type: string): void {
-    this.chartRange = type;
-    this.blockService.getBlockAndTxs(type).subscribe((res) => {
-      //update data common
-      this.getInfoCommon();
-      const data1 = res.data.map((i) => i.total);
-      let categories = res.data.map((i) => i.timestamp);
-      this.drawChartFirstTime(data1, categories);
     });
   }
 

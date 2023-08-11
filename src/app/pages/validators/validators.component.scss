@@ -57,7 +57,6 @@ form.search-form-validators {
     color: var(--aura-white);
     font-size: 1.6rem;
     line-height: 1.9rem;
-    font-weight: 500;
     @media (min-width: 992px) {
       line-height: 2.4rem;
     }
@@ -147,7 +146,6 @@ form.search-form-validators {
     button.button.button-primary.active {
       font-size: 1.4rem;
       line-height: 1.6rem;
-      font-weight: 500;
       border-radius: 4px;
 
       @media (min-width: 992px) {
@@ -265,24 +263,23 @@ form.search-form-validators {
   }
 }
 
-@media (max-width: 1366px) {
-  tbody tr {
-    & td {
-      min-width: 130px;
-    }
-
-    & td:nth-child(2) {
-      min-width: 400px;
-    }
-
-    & td:nth-child(1) {
-      min-width: 200px;
-    }
-  }
-}
-
 .table-validator {
   app-tooltip-customize.tooltip--left {
     transform: translate(0, -15px);
+  }
+  @media (max-width: 1366px) {
+    tbody tr {
+      & td {
+        min-width: 130px;
+      }
+
+      & td:nth-child(2) {
+        min-width: 400px;
+      }
+
+      & td:nth-child(1) {
+        min-width: 200px;
+      }
+    }
   }
 }

@@ -335,12 +335,8 @@
         </div>
         <div class="card-body article-1 pt-4">
           <ng-container *ngIf="lengthDelegator > 0; else noValues">
-            <div class="aura-table-contain overflow-scroll-x spacer-tooltip">
-              <table
-                mat-table
-                [dataSource]="dataSourceDelegator"
-                class="aura-table"
-                *ngIf="!breakpoint.value.matches">
+            <div class="aura-table-contain overflow-scroll-x">
+              <table mat-table [dataSource]="dataSourceDelegator" class="aura-table" *ngIf="!breakpoint.value.matches">
                 <ng-container *ngFor="let template of templatesDelegator; index as i">
                   <ng-container [matColumnDef]="template.matColumnDef">
                     <th mat-header-cell *matHeaderCellDef class="col-per-50">
@@ -353,7 +349,7 @@
                           <app-name-tag
                             *ngSwitchCase="'delegator_address'"
                             [value]="data.delegator_address"
-                            [tooltipRight]="true"></app-name-tag>
+                            [tooltipPosition]="'tooltip--right'"></app-name-tag>
                           <div *ngSwitchCase="'amount'">
                             {{ data[template.matColumnDef] | mask : 'separator.6' }}
                             <span class="text--primary">{{ denom }}</span>
@@ -383,7 +379,9 @@
                         class: !commonService.checkDisplayTooltip(data.delegator_address)
                           ? 'name-tag text--primary'
                           : 'text--primary',
-                        info: commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6
+                        info: !commonService.checkDisplayTooltip(data.delegator_address)
+                          ? (commonService.setNameTag(data.delegator_address) | cutStringPipe : 16)
+                          : (commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6)
                       },
                       {
                         label: 'Amount',

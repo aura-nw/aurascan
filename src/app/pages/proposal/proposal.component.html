@@ -22,7 +22,7 @@
               <div class="d-flex justify-content-between mt-6 proposal-lasted__content small-body">
                 <div>
                   <div class="d-flex mb-2">
-                    <div class="content-body fw-500">Proposer</div>
+                    <div class="content-body">Proposer</div>
                     <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary h6 mb-0">
                       <ng-container *ngIf="lastedItem?.proposer">
                         {{ lastedItem?.proposer?.description?.moniker }}
@@ -33,7 +33,7 @@
                     </a>
                   </div>
                   <div class="d-flex mb-2">
-                    <div class="content-body fw-500">Voting Start</div>
+                    <div class="content-body">Voting Start</div>
                     <div
                       class="text--gray-1 body-02 d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
@@ -48,7 +48,7 @@
                     </div>
                   </div>
                   <div class="d-flex mb-2">
-                    <div class="content-body fw-500">Voting End</div>
+                    <div class="content-body">Voting End</div>
                     <div
                       class="text--gray-1 body-02 d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
@@ -204,7 +204,7 @@
                 <div class="w-100 body-01">
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Proposer</div>
-                    <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary fw-500">
+                    <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary">
                       <ng-container *ngIf="lastedItem?.proposer">
                         {{ lastedItem?.proposer?.description?.moniker }}
                       </ng-container>
