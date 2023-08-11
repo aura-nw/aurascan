@@ -92,6 +92,8 @@
     }
     .label-detail {
       min-width: 140px;
+      display: flex;
+      align-items: center;
     }
     .g-ellipsis {
       width: unset;
