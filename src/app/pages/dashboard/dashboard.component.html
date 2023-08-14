@@ -5,10 +5,7 @@
         <ngb-carousel [showNavigationArrows]="false">
           <ng-template ngbSlide>
             <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
-              <img
-                src="assets/images/pages/banner_aurascan.png"
-                alt="Random first slide"
-                class="carousel__img" />
+              <img src="assets/images/pages/banner_aurascan.png" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
@@ -25,23 +22,21 @@
               <div
                 class="card-info card-info--gradient-black mb-0 card-summary-info p-0 h-100 d-flex align-items-center">
                 <div class="d-flex flex-column px-lg-4 flex-shrink-0 flex-grow-1">
-                  <div class="d-flex align-items-center py-4 px-2 pb-md-0 pb-lg-4 py-xl-6">
-                    <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
-                    <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">AURA</div>
-                    <div class="aura-tooltip-contain">
-                      <a
+                  <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
+                    <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
+                      <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
+                      <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">AURA</div>
+                      <div class="aura-tooltip-contain">
+                        <a
                           href="https://www.coingecko.com/en/coins/aura-network"
                           target="_blank"
                           class="ml-2 button button--sm button-ghost button-ghost--sm aura-tooltip-object">
-                        <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
-                      </a>
-                      <app-tooltip-customize
-                          [content]="'Open CoinGecko'">
-                      </app-tooltip-customize>
+                          <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
+                        </a>
+                        <app-tooltip-customize [content]="'Open CoinGecko'"> </app-tooltip-customize>
+                      </div>
                     </div>
-                  </div>
-                  <div class="divider divider-horizontal"></div>
-                  <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
+                    <div class="divider divider-horizontal"></div>
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                       <i class="ph-coins-thin icon-info text--gray-3"></i>
                       <div class="ml-4">
@@ -93,7 +88,11 @@
                 <div class="d-lg-flex flex-wrap mb-4">
                   <!-- Tabs -->
                   <div class="button-switch-stage button-switch-stage__3">
-                    <button type="button" disabled [class.active]="isPrice" (click)="isPrice = true; getCoinInfo(chartRange)">
+                    <button
+                      type="button"
+                      disabled
+                      [class.active]="isPrice"
+                      (click)="isPrice = true; getCoinInfo(chartRange)">
                       <span>Price chart</span>
                     </button>
                     <!-- <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
@@ -230,10 +229,7 @@
         <ngb-carousel [showNavigationArrows]="false">
           <ng-template ngbSlide>
             <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
-              <img
-                src="assets/images/pages/banner_aurascan.png"
-                alt="Random first slide"
-                class="carousel__img" />
+              <img src="assets/images/pages/banner_aurascan.png" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>

@@ -26,6 +26,10 @@
   max-width: 130px;
 }
 
+.aura-table.contract-table th.mat-header-cell:nth-child(1) {
+  min-width: 220px;
+}
+
 .aura-table.contract-table th.mat-header-cell:nth-child(5) {
   max-width: 150px;
 }
