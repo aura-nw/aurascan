@@ -21,6 +21,7 @@ import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-po
 })
 export class SoulboundContractListComponent implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
+  wallet = null;
   textSearch = '';
   searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -48,7 +49,11 @@ export class SoulboundContractListComponent implements OnInit {
     private walletService: WalletService,
     private router: Router,
     public commonService: CommonService,
-  ) {}
+  ) {
+    this.walletService.wallet$.subscribe((wallet) => {
+      this.wallet = wallet;
+    });
+  }
 
   ngOnInit(): void {
     from([1])
@@ -60,11 +65,9 @@ export class SoulboundContractListComponent implements OnInit {
         const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
         if (wallet) {
           this.currentAddress = this.walletService.wallet?.bech32Address;
-          this.checkWL();
           this.getListSmartContract();
         } else if (urlPath === 'accountbound') {
           this.currentAddress = null;
-          this.router.navigate(['/']);
         }
       });
   }

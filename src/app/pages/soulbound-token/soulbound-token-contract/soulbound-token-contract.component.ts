@@ -65,14 +65,9 @@ export class SoulboundTokenContractComponent implements OnInit {
         if (wallet) {
           this.contractAddress = this.route.snapshot.paramMap.get('address');
           this.currentAddress = this.walletService.wallet?.bech32Address;
-          if (!this.contractAddress || (this.contractAddress && this.contractAddress.trim().length === 0)) {
-            this.router.navigate(['/']);
-          }
-          this.checkWL();
           this.getListToken();
         } else {
           this.currentAddress = null;
-          this.router.navigate(['/']);
         }
       });
   }

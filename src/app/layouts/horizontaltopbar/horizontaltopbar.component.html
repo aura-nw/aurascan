@@ -115,10 +115,6 @@
                   <span class="nav-link__panel nav-link__panel-more" *ngIf="menuLink.length > 0">
                     <ng-container *ngFor="let subMenu of item.subItems">
                       <a
-                        *ngIf="
-                          subMenu.label !== 'Account Bound Token' ||
-                          (subMenu.label === 'Account Bound Token' && lengthSBT > 0 && isAllowInABTWhiteList)
-                        "
                         [routerLink]="subMenu.link"
                         class="d-flex align-items-center mb-0 nav-link__item nav-link__sub-item py-0"
                         [class.active]="checkMenuActive(subMenu.link)">
