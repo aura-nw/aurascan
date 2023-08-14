@@ -17,7 +17,7 @@
               </figure>
             </a>
           </div>
-          <div class="page-title ml-1 ml-lg-2 fw-500" *ngIf="pageTitle">{{ pageTitle }}</div>
+          <div class="page-title ml-2 fw-normal-mob" *ngIf="pageTitle">{{ pageTitle }}</div>
           <div class="divider divider-vertical mx-6 ml-xl-12 mr-xl-0 d-none d-lg-block" *ngIf="pageTitle"></div>
         </div>
       </div>
@@ -54,11 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="wallet-connect">
-      <app-authenticate-mail></app-authenticate-mail>
-      <div class="divider divider-vertical divider-lighter mx-2 mx-lg-3"></div>
-      <app-wallet-connect></app-wallet-connect>
-    </div>
+    <app-authenticate-mail></app-authenticate-mail>
   </div>
   <!-- App Search mobile-->
   <div class="app-search d-lg-none px-4 mt-4 pb-3" *ngIf="router.url !== '/login'">

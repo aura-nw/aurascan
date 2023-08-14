@@ -32,13 +32,25 @@
             </div>
             <div
               *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
-              class="d-flex align-items-center mt-2">
-              <app-name-tag
-                [value]="currentAddress"
-                [fullText]="true"
-                [isLink]="false"
-                [extendUrl]="true"
-                [widthAuto]="true"></app-name-tag>
+              class="name-tag cursor-pointer mt-1 aura-tooltip-contain d-inline-flex">
+              <div class="d-flex aura-tooltip-object align-items-center">
+                <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+                <span class="d-flex d-lg-none justify-content-center">{{
+                  (commonService.setNameTag(currentAddress) | cutStringPipe : 16) || '-'
+                }}</span>
+                <a
+                  target="_blank"
+                  [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
+                  *ngIf="commonService.findUrlNameTag(currentAddress)">
+                  <i
+                    _ngcontent-wrg-c372=""
+                    class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer mt-1"></i>
+                </a>
+              </div>
+              <app-tooltip-customize
+                [class.tooltip--right]="true"
+                [content]="'Public name: ' + commonService.setNameTag(currentAddress, global.listNameTag)">
+              </app-tooltip-customize>
             </div>
           </div>
           <div class="mt-6 mt-xl-4">
@@ -120,7 +132,7 @@
         <div class="card-body p-4 p-lg-6">
           <ng-container *ngIf="dataSource && dataSource.data">
             <ng-container *ngIf="dataSource.data.length > 0; else noValues">
-              <div class="table-responsive aura-table-contain spacer-tooltip">
+              <div class="table-responsive aura-table-contain">
                 <ng-container>
                   <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
                     <ng-container *ngFor="let template of templates; index as i">
@@ -335,10 +347,10 @@
                       class="d-flex justify-content-between align-items-center body-02 body-01-mob chart-legend-item py-3 px-0">
                       <div class="d-flex align-items-center">
                         <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
-                        <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
+                        <span class="text--gray-5 body body-01-mob fw-normal-mob">{{ item.name }}</span>
                       </div>
                       <span
-                        class="text--gray-1 body body-01-mob fw-500 fw-normal-mob"
+                        class="text--gray-1 body body-01-mob fw-normal-mob"
                         [appBigNumber]="item.amount"
                         [decimal]="0"></span>
                     </div>

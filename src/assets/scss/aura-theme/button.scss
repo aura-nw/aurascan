@@ -6,6 +6,8 @@
     outline: none;
     background-color: transparent;
     cursor: pointer;
+    height: 32px;
+    padding: 0 16px;
 
     &--lg {
       height: 44px;
@@ -122,6 +124,18 @@
       }
       &:not(.button-outline--gradient):hover {
         border-color: var(--aura-white);
+      }
+    }
+
+
+    &.button-filter {
+      &:before {
+        opacity: 1;
+        background: url("../../icons/icons-svg/white/filter.svg") center no-repeat;
+      }
+      &:after {
+        opacity: 0;
+        background: url("../../icons/icons-svg/white/filter.svg") center no-repeat;
       }
     }
 
@@ -318,7 +332,6 @@
     color: var(--aura-gray-4);
     font-size: 1.4rem;
     line-height: 1.8rem;
-    font-weight: 500;
   }
   &:focus, &:hover, &.active {
     background-color:  var(--aura-gray-10);

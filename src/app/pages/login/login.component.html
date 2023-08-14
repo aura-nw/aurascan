@@ -24,15 +24,15 @@
                 *ngIf="i === 0"
                 [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
                 alt=""
+                [ngStyle]="{ 'margin-top': '2px' }"
                 width="16px"
                 height="16px" />
             </div>
-            <div class="caption">
+            <div>
               <ng-container *ngIf="errorCode === 'EU001' && (mode === screenType.Login || mode === screenType.Forgot)">
                 <ng-container *ngIf="i === 0">
-                  Please click on the verification link send to {{ emailFormat }} before to complete the registration
-                  process.<br />
-                  In case you have not yet received any email.
+                  Please click on the verification link sent to your mail to complete the registration process.<br />
+                  In case you've not yet received any email.
                   <a (click)="resendMail()" class="text--primary cursor-pointer">Resend</a>
                 </ng-container>
                 <ng-container *ngIf="i !== 0">{{ error }}</ng-container>
@@ -166,14 +166,14 @@
             <span class="body-01">Log in</span>
           </button>
         </div>
-        <div class="text-center text--gray-4 body-01">
-          <div class="mt-4">
+        <div class="text-center text--gray-4">
+          <div class="mt-4 body-01">
             <span class="text--gray-4">Don’t have an account?</span>
             <a class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
               >Register</a
             >
           </div>
-          <div class="py-6 text--white">or</div>
+          <div class="py-6 text--white body-01">or</div>
 
           <div class="box-sign-google">
             <div
@@ -218,7 +218,7 @@
       <ng-container *ngIf="mode === screenType.Forgot">
         <div class="d-flex text-center mt-6">
           <button
-            class="button button-pill button-flat btn-login m-auto btn-forgot"
+            class="button button-pill button-flat btn-login m-auto btn-forgot w-100"
             type="button"
             (click)="resetPassword()"
             [disabled]="loginForm.get('email')?.invalid || isError">

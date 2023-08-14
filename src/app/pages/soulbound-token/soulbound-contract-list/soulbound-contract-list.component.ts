@@ -8,11 +8,11 @@ import { delay, mergeMap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
-import { CommonService } from 'src/app/core/services/common.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
 
 @Component({
   selector: 'app-soulbound-contract-list',
@@ -57,11 +57,12 @@ export class SoulboundContractListComponent implements OnInit {
         mergeMap((_) => this.walletService.wallet$),
       )
       .subscribe((wallet) => {
+        const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
         if (wallet) {
           this.currentAddress = this.walletService.wallet?.bech32Address;
           this.checkWL();
           this.getListSmartContract();
-        } else {
+        } else if (urlPath === 'accountbound') {
           this.currentAddress = null;
           this.router.navigate(['/']);
         }
@@ -77,7 +78,9 @@ export class SoulboundContractListComponent implements OnInit {
   resetSearch() {
     this.textSearch = '';
     this.searchValue = '';
-    this.pageChange.selectPage(0);
+    if (this.pageChange) {
+      this.pageChange.selectPage(0);
+    }
     this.getListSmartContract();
   }
 

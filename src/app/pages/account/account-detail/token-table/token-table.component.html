@@ -36,7 +36,7 @@
       </div>
       <ng-container *ngIf="pageData?.length > 0; else noValues">
         <!-- Table -->
-        <div class="table-responsive table-token spacer-tooltip" *ngIf="!assetsLoading">
+        <div class="table-responsive table-token" *ngIf="!assetsLoading">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table mt-4">
             <!-- Asset Column -->
             <ng-container matColumnDef="asset">

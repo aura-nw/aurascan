@@ -3,6 +3,19 @@
     border-right: 1px solid var(--aura-gray-9);
     vertical-align: middle;
   }
+  .sbt-detail {
+    overflow-x: auto;
+    ::ng-deep {
+      flex-wrap: wrap;
+      flex-basis: 20%;
+      .soulbound__item {
+        min-width: 120px;
+      }
+      .nft-cards__label {
+        display: none;
+      }
+    }
+  }
   .soulbound-feature-tokens {
     flex: 1 0 100%;
     border-top: 1px solid var(--aura-gray-9);
@@ -20,7 +33,6 @@
 }
 
 .aura-nav-tabs.nav-tabs .nav-link {
-  font-weight: 500;
   font-size: 14px;
   @media (min-width: 992px) {
     font-weight: 600;
@@ -80,5 +92,11 @@
     .nft__info {
       overflow: hidden;
     }
+  }
+}
+
+.name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
   }
 }

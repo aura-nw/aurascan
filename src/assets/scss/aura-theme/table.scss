@@ -20,13 +20,13 @@
     font-size: 1.4rem;
     line-height: 2rem;
     font-weight: 600;
-    color: var(--aura-white);
+    color: var(--aura-gray-4);
     background-color: var(--aura-gray-9);
   }
   .mat-cell, .mat-footer-cell {
     font-size: 1.4rem;
     line-height: 1.8rem;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--aura-gray-1);
   }
   th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {

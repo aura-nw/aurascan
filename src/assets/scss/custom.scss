@@ -193,7 +193,6 @@ body {
   .tooltip {
     &-title {
       margin-bottom: 12px;
-      font-weight: 500;
     }
 
     &-amount {
@@ -225,14 +224,6 @@ body {
 
   &-string {
     color: #ce9178;
-    
-    &.string-long{
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      overflow-wrap: anywhere;
-      -webkit-box-orient: vertical;    
-    }
   }
 }
 
@@ -415,7 +406,6 @@ body {
   color: var(--aura-white) !important;
   font-size: 2rem;
   line-height: 2.3rem;
-  font-weight: 500;
 
   &--desc {
     color: var(--aura-red-3) !important;
@@ -570,7 +560,6 @@ body {
     background-color: var(--aura-gray-8);
     border-radius: 48px;
     padding: 8px 12px;
-    font-weight: 500;
   }
 }
 .txt-copied {
@@ -623,7 +612,7 @@ body {
     font-weight: 700;
   }
 }
-.toast-container{
+.toast-container {
   @media (max-width: 413px) {
     width: 93%;
   }
@@ -677,15 +666,46 @@ body {
   }
 }
 
-.name-tag-label {
-  // padding: 8px;
-  // border-radius: 16px;
-  // background-color: var(--aura-gray-8);
-  // font-size: 12px;
+.name-tag, .name-tag-label a{
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.2rem !important;
+  font-weight: 400;
+  line-height: 1.6rem;
+  word-break: break-word;
+  background-color: var(--aura-gray-8);
+  border-radius: 4px 0px 0px 4px;
+  padding-left: var(--spacer-2);
+  padding-right: var(--spacer-5);
+  color: var(--aura-gray-light);
+  &.private-name-tag {
+    padding: 0 var(--spacer-2);
+    background-color: unset;
+    border-radius: 16px;
+    border: 1px solid var(--aura-gray-8);
+  }
+  &:not(.private-name-tag) {
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      border-top: 13px solid transparent;
+      border-right: 15px solid var(--aura-gray-9);
+      border-bottom: 13px solid transparent;
+    }
+  }
 }
 .overflow-scroll-x {
   overflow-x: auto;
-  &::-webkit-scrollbar{ height : 6px; }
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
 }
 
 .box-error-message {
@@ -693,10 +713,10 @@ body {
   border-radius: 8px;
   background-color: var(--aura-red-4);
   color: var(--aura-white);
-  font-weight: 600;
-  .item-error-message{
+  line-height: 1.8rem;
+  .item-error-message {
     display: flex;
-    &:not(:first-child){
+    &:not(:first-child) {
       margin-top: var(--spacer-1);
     }
   }

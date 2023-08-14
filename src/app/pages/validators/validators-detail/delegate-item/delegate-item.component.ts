@@ -8,7 +8,6 @@ import { AccountService } from 'src/app/core/services/account.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import { Globals } from 'src/app/global/global';
@@ -46,7 +45,6 @@ export class DelegateItemComponent implements OnInit {
   constructor(
     public globals: Globals,
     public commonService: CommonService,
-    private validatorService: ValidatorService,
     private walletService: WalletService,
     private modalService: NgbModal,
     private accountService: AccountService,
@@ -112,12 +110,11 @@ export class DelegateItemComponent implements OnInit {
             stakingToken: res?.data?.stake_reward,
             dialogMode: DIALOG_STAKE_MODE.Delegate,
             validatorDetail:
-              res?.data?.delegations.find(
+              res?.data?.delegations?.find(
                 (k) => k.validator_address === this.currentValidatorDetail?.operator_address,
               ) || {},
           };
           this.dataDelegate.validatorDetail['amount_staked'] = this.dataDelegate?.validatorDetail?.amount || 0;
-
           document.getElementById('buttonOpenDialog').click();
         }
       });
@@ -179,7 +176,6 @@ export class DelegateItemComponent implements OnInit {
         this.changeStatus.emit(false);
         this.checkStatusExecuteBlock(hash, error);
       };
-
       executeStaking();
     }
   }

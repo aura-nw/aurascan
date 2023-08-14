@@ -1,6 +1,6 @@
 .navbar-header {
   .page-title {
-    color: var(--aura-gray-5);
+    color: var(--aura-gray-4);
     padding: 0 var(--spacer-1);
     background-color: var(--aura-gray-10);
     border-radius: 4px;
@@ -17,7 +17,6 @@
     @media (min-width: 992px) {
       font-size: 1.4rem;
       padding: var(--spacer-2) var(--spacer-4);
-      font-weight: 500;
       height: 32px;
     }
   }
@@ -211,21 +210,3 @@ form.aura-form.single-input-field {
   border-radius: 25px;
   background-color: var(--aura-gray-10);
 }
-
-.wallet-connect{
-  display: flex;
-  background-color: var(--aura-gray-9);
-  border-radius: 999px;
-  align-items: center;
-  padding: 4px;
-  .divider.divider-vertical {
-    min-height: 32px;
-    @media (min-width: 991.98px) {
-      min-height: 40px;
-    }
-  }
-}
-.button-login-menu {
-  border-radius: 999px;
-}
-
