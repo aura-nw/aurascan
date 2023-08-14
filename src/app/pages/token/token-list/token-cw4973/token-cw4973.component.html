@@ -32,7 +32,7 @@
             </div>
           </form>
         </div>
-        <div class="divider divider-horizontal d-lg-none my-4"></div>
+        <div *ngIf="pageData?.length > 0" class="divider divider-horizontal d-lg-none my-4"></div>
         <div class="overflow-scroll-x aura-table-contain" *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table">
             <ng-container matColumnDef="id">
