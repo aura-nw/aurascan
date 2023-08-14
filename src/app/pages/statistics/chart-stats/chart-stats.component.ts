@@ -28,9 +28,9 @@ export class ChartStatsComponent implements OnInit {
   max = 99999;
 
   currTime = new Date();
-  currTimeMs = Date.parse(this.currTime + '');
+  // currTimeMs = Date.parse(this.currTime + '');
   prevTime = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000);
-  prevTimeMs = Date.parse(this.prevTime + '');
+  // prevTimeMs = Date.parse(this.prevTime + '');
 
   constructor(public translate: TranslateService, private statisticService: StatisticService) {}
 
@@ -39,8 +39,6 @@ export class ChartStatsComponent implements OnInit {
     this.uniqueAddressChartInit();
     this.dailyAddressChartInit();
     this.getDailyTransactionData();
-    this.getUniqueAddressData();
-    this.getDailyAddressData();
   }
 
   dailyTransactionChartInit() {
@@ -236,40 +234,21 @@ export class ChartStatsComponent implements OnInit {
   }
 
   getDailyTransactionData() {
-    this.statisticService.getDailyTxStatistic('daily_txs', this.prevTimeMs, this.currTimeMs).subscribe((res) => {
-      let valueArr = [];
+    this.statisticService.getDataStatistic(this.prevTime, this.currTime).subscribe((res) => {
+      let valueArrDaily = [];
+      let valueArrUnique = [];
+      let valueArrActive = [];
       let timeArr = [];
-      res.data.dailyData.forEach((data) => {
-        valueArr.push(data.daily_txs);
+      
+      res.daily_statistics.forEach((data) => {
+        valueArrDaily.push(data.daily_txs);
+        valueArrUnique.push(data.unique_addresses);
+        valueArrActive.push(data.daily_active_addresses);
         timeArr.push(data.date);
       });
-      this.drawChart(valueArr, timeArr, 'dailyTrans');
+      this.drawChart(valueArrDaily, timeArr, 'dailyTrans');
+      this.drawChart(valueArrUnique, timeArr, 'uniqueAddress');
+      this.drawChart(valueArrActive, timeArr, 'dailyAddress');
     });
-  }
-
-  getUniqueAddressData() {
-    this.statisticService.getDailyTxStatistic('unique_addresses', this.prevTimeMs, this.currTimeMs).subscribe((res) => {
-      let valueArr = [];
-      let timeArr = [];
-      res.data.dailyData.forEach((data) => {
-        valueArr.push(data.unique_addresses);
-        timeArr.push(data.date);
-      });
-      this.drawChart(valueArr, timeArr, 'uniqueAddress');
-    });
-  }
-
-  getDailyAddressData() {
-    this.statisticService
-      .getDailyTxStatistic('daily_active_addresses', this.prevTimeMs, this.currTimeMs)
-      .subscribe((res) => {
-        let valueArr = [];
-        let timeArr = [];
-        res.data.dailyData.forEach((data) => {
-          valueArr.push(data.daily_active_addresses);
-          timeArr.push(data.date);
-        });
-        this.drawChart(valueArr, timeArr, 'dailyAddress');
-      });
   }
 }

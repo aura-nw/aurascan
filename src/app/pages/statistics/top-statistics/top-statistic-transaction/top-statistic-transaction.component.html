@@ -20,7 +20,7 @@
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-body">
-        <h4 class="mb-0 text--gray-1">Top {{ denom }} Senders</h4>
+        <h4 class="mb-0 text--gray-1">Top {{ denom }} Spenders</h4>
         <div class="mt-4">
           <div>
             <ng-container *ngIf="AURASendersDS?.data?.length > 0; else noValues">
@@ -42,7 +42,7 @@
                   </ng-container>
                   <!-- Total aura Column -->
                   <ng-container matColumnDef="total">
-                    <th mat-header-cell *matHeaderCellDef>total {{ denom }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ denom }} Amount</th>
                     <td mat-cell *matCellDef="let element">
                       {{
                         (element.amount
@@ -53,7 +53,7 @@
                   </ng-container>
                   <!-- Percent Column -->
                   <ng-container matColumnDef="percentage">
-                    <th mat-header-cell *matHeaderCellDef>percentage</th>
+                    <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{ (element.percentage | number : global.formatNumber2Decimal) ?? 0 }}%
                     </td>
@@ -98,7 +98,7 @@
                   </ng-container>
                   <!-- Total aura Column -->
                   <ng-container matColumnDef="total">
-                    <th mat-header-cell *matHeaderCellDef>total {{ denom }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ denom }} Amount</th>
                     <td mat-cell *matCellDef="let element">
                       {{
                         (element.amount
@@ -109,7 +109,7 @@
                   </ng-container>
                   <!-- Percent Column -->
                   <ng-container matColumnDef="percentage">
-                    <th mat-header-cell *matHeaderCellDef>percentage</th>
+                    <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
                         (element.percentage | number : global.formatNumber2Decimal) ?? 0
@@ -155,14 +155,14 @@
                   </ng-container>
                   <!-- Total aura Column -->
                   <ng-container matColumnDef="total">
-                    <th mat-header-cell *matHeaderCellDef>total Txn</th>
+                    <th mat-header-cell *matHeaderCellDef>Txn Count</th>
                     <td mat-cell *matCellDef="let element">
                       {{ (element.amount | number) ?? 0 }}
                     </td>
                   </ng-container>
                   <!-- Percent Column -->
                   <ng-container matColumnDef="percentage">
-                    <th mat-header-cell *matHeaderCellDef>percentage</th>
+                    <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{ (element.percentage | number : global.formatNumber2Decimal) ?? 0 }}%
                     </td>
@@ -184,7 +184,7 @@
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-body">
-        <h4 class="mb-0 text--gray-1">Top Gas Used</h4>
+        <h4 class="mb-0 text--gray-1">Top Gas User</h4>
         <div class="mt-4">
           <div>
             <ng-container *ngIf="TxnCountReceivedDS?.data?.length > 0; else noValues">
@@ -206,14 +206,14 @@
                   </ng-container>
                   <!-- Total aura Column -->
                   <ng-container matColumnDef="total">
-                    <th mat-header-cell *matHeaderCellDef>total Txn</th>
+                    <th mat-header-cell *matHeaderCellDef>Gas Amount</th>
                     <td mat-cell *matCellDef="let element">
                       {{ (element.amount | number) ?? 0 }}
                     </td>
                   </ng-container>
                   <!-- Percent Column -->
                   <ng-container matColumnDef="percentage">
-                    <th mat-header-cell *matHeaderCellDef>percentage</th>
+                    <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{ (element.percentage | number : global.formatNumber2Decimal) ?? 0 }}%
                     </td>

@@ -116,7 +116,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         const prevTime = new Date(currTime.getFullYear() - this.prevYearNumber, 0, 1);
         const min = Date.parse(prevTime + '');
 
-        this.statisticService.getDailyTxStatistic(this.payloadChartType, min, max).subscribe((res) => {
+        this.statisticService.getDataStatistic(min, max).subscribe((res) => {
           if (res?.data?.extremeData) {
             this.minAmount = res?.data?.extremeData?.min?.amount;
             this.maxAmount = res?.data?.extremeData?.max?.amount;
@@ -160,7 +160,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     const prevTime = new Date(currTime.getFullYear() - 1, 0, 1);
     const min = Date.parse(prevTime + '');
 
-    this.statisticService.getDailyTxStatistic(this.payloadChartType, min, max).subscribe((res) => {
+    this.statisticService.getDataStatistic(min, max).subscribe((res) => {
       if (res?.data?.extremeData) {
         this.minAmount = res?.data?.extremeData?.min?.amount;
         this.maxAmount = res?.data?.extremeData?.max?.amount;
