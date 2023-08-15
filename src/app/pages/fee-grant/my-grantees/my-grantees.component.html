@@ -143,7 +143,11 @@
           </app-a-paginator>
         </div>
         <ng-template #noValues>
-          <app-table-no-data></app-table-no-data>
+          <app-table-no-data *ngIf="wallet"></app-table-no-data>
+          <div *ngIf="!wallet" class="d-flex flex-column justify-content-center align-items-center m-5 text-center">
+            <img [src]="'assets/images/icons/noValues.svg' | imageS3" alt="" />
+            Kindly connect wallet to experience feegrant functions
+          </div>
         </ng-template>
       </div>
     </ng-container>

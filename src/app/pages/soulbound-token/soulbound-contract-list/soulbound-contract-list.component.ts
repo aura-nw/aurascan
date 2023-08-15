@@ -66,8 +66,6 @@ export class SoulboundContractListComponent implements OnInit {
         if (wallet) {
           this.currentAddress = this.walletService.wallet?.bech32Address;
           this.getListSmartContract();
-        } else if (urlPath === 'accountbound') {
-          this.currentAddress = null;
         }
       });
   }
@@ -130,14 +128,6 @@ export class SoulboundContractListComponent implements OnInit {
         setTimeout(() => {
           this.getListSmartContract();
         }, 4000);
-      }
-    });
-  }
-
-  checkWL() {
-    this.soulboundService.getListWL().subscribe((res) => {
-      if (!res?.data?.find((k) => k.account_address === this.currentAddress)) {
-        this.router.navigate(['/']);
       }
     });
   }

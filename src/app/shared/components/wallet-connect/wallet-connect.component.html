@@ -39,9 +39,33 @@
       <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
       <div class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center" (click)="disconnect()">
         <span class="txt-disconnect">Disconnect</span>
-        <img [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3" alt="" width="18px" height="18px" class="ml-1" />
+        <img
+          [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
+          alt=""
+          width="18px"
+          height="18px"
+          class="ml-1" />
       </div>
     </div>
-
+    <div
+      class="offcanvas offcanvas-wallet offcanvas-end"
+      tabindex="-1"
+      id="offcanvasWallet"
+      #offcanvasWallet
+      aria-labelledby="offcanvasWalletLabel">
+      <div class="offcanvas-body p-0">
+        <div class="wallet-container">
+          <div class="card border-0">
+            <div class="card-body" *ngIf="{ b: breakpoint$ | async } as breakpoint">
+              <app-wallet-list
+                [disabled]="breakpoint.b.matches"
+                (onConnect)="connectWallet($event)"
+                (onDismiss)="dismiss()"></app-wallet-list>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button #buttonDismiss class="d-none" data-bs-dismiss="offcanvas"></button>
+    </div>
   </ng-container>
 </div>

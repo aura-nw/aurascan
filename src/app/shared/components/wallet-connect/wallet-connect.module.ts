@@ -11,9 +11,10 @@ import { QrModule } from '../qr/qr.module';
 import { WalletConnectComponent } from './wallet-connect.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.module';
+import { WalletListComponent } from './wallet-list/wallet-list.component';
 
 @NgModule({
-  declarations: [WalletConnectComponent],
+  declarations: [WalletConnectComponent, WalletListComponent],
   imports: [
     CommonModule,
     NgApexchartsModule,

@@ -91,9 +91,13 @@ export class MyGranteesComponent implements OnInit {
       }
     });
 
-    this.timerGetFeeGrant = setInterval(() => {
-      this.getListGrant();
-    }, 30000);
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet.bech32Address) {
+        this.timerGetFeeGrant = setInterval(() => {
+          this.getListGrant();
+        }, 30000);
+      }
+    });
   }
 
   /**

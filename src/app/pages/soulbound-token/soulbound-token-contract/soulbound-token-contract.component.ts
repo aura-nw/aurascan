@@ -149,12 +149,4 @@ export class SoulboundTokenContractComponent implements OnInit {
       }
     });
   }
-
-  checkWL() {
-    this.soulboundService.getListWL().subscribe((res) => {
-      if (!res?.data?.find((k) => k.account_address === this.currentAddress)) {
-        this.router.navigate(['/']);
-      }
-    });
-  }
 }
