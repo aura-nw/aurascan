@@ -65,6 +65,7 @@ export class SoulboundContractListComponent implements OnInit {
           this.currentAddress = this.walletService.wallet?.bech32Address;
           this.getListSmartContract();
         } else {
+          this.currentAddress = null;
           this.dataSource.data = [];
           this.loading = false;
         }
