@@ -64,7 +64,6 @@ export class MenuBottomBarComponent implements OnInit {
       .subscribe((wallet) => {
         if (wallet) {
           this.currentAddress = this.walletService.wallet?.bech32Address;
-          this.checkWL();
         } else {
           this.currentAddress = null;
           this.isAllowInABTWhiteList = false;
@@ -97,14 +96,6 @@ export class MenuBottomBarComponent implements OnInit {
         }
       }
     }
-  }
-
-  checkWL() {
-    this.soulboundService.getListWL().subscribe((res) => {
-      if (!res?.data?.find((k) => k.account_address === this.currentAddress)) {
-        this.isAllowInABTWhiteList = false;
-      }
-    });
   }
 
   overLayClickEvent() {

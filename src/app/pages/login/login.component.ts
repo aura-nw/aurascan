@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
   hideConfirmPassword = true;
   emailFormat = '';
   isForgotScreen = false;
-  scriptLoaded = false;
   isError = false;
   errorResendMsg = 'Only can do resend email after 5 minute, please wait and click Resend again.';
 
@@ -56,11 +55,6 @@ export class LoginComponent implements OnInit {
     if (this.router.snapshot.url[0]?.path === 'welcome' || this.router.snapshot.url[0]?.path === 'already-active') {
       this.mode = this.screenType.Welcome;
       return;
-    }
-
-    if (this.router.snapshot.params.mode == '0') {
-      this.mode = this.screenType.Login;
-      this.route.navigate(['login']);
     }
 
     this.formInit();
