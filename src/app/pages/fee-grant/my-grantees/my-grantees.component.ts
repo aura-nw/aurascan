@@ -25,7 +25,6 @@ import { PopupRevokeComponent } from 'src/app/pages/fee-grant/popup-revoke/popup
   styleUrls: ['./my-grantees.component.scss'],
 })
 export class MyGranteesComponent implements OnInit {
-  wallet = null;
   loading = true;
   isActive = true;
   textSearch = '';
@@ -74,11 +73,7 @@ export class MyGranteesComponent implements OnInit {
     public translate: TranslateService,
     private walletService: WalletService,
     private mappingErrorService: MappingErrorService,
-  ) {
-    this.walletService.wallet$.subscribe((wallet) => {
-      this.wallet = wallet;
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.walletService.wallet$.subscribe((wallet) => {
@@ -88,6 +83,7 @@ export class MyGranteesComponent implements OnInit {
       } else {
         this.loading = false;
         this.currentAddress = null;
+        this.dataSource.data = [];
       }
     });
 
@@ -110,14 +106,18 @@ export class MyGranteesComponent implements OnInit {
   }
 
   getGranteesData() {
-    if (this.isActive) {
-      this.templates = this.templatesActive;
-      this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
+    if (this.currentAddress) {
+      if (this.isActive) {
+        this.templates = this.templatesActive;
+        this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
+      } else {
+        this.templates = this.templatesInActive;
+        this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
+      }
+      this.getListGrant();
     } else {
-      this.templates = this.templatesInActive;
-      this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
+      this.loading = false;
     }
-    this.getListGrant();
   }
 
   getListGrant() {
@@ -143,7 +143,6 @@ export class MyGranteesComponent implements OnInit {
           if (!res) {
             return;
           }
-
           res.feegrant?.forEach((element) => {
             element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
             element.spendable = element?.spend_limit || '0';
@@ -185,15 +184,13 @@ export class MyGranteesComponent implements OnInit {
     if (pageIndex === 0) {
       this.pageData.pageIndex = 1;
     }
-
     this.getGranteesData();
   }
 
   async changeType(type: boolean) {
     this.isActive = type;
-
-    this.pageEvent(0);
     this.loading = true;
+    this.pageEvent(0);
   }
 
   showRevoke(granteeAddress: string, granterAddress: string) {
