@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -47,7 +46,6 @@ export class SoulboundContractListComponent implements OnInit {
     private soulboundService: SoulboundService,
     public dialog: MatDialog,
     private walletService: WalletService,
-    private router: Router,
     public commonService: CommonService,
   ) {
     this.walletService.wallet$.subscribe((wallet) => {
@@ -66,6 +64,8 @@ export class SoulboundContractListComponent implements OnInit {
         if (wallet) {
           this.currentAddress = this.walletService.wallet?.bech32Address;
           this.getListSmartContract();
+        } else {
+          this.loading = false;
         }
       });
   }

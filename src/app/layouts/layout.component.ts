@@ -1,5 +1,5 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { EventService } from '../core/services/event.service';
 import {
   LAYOUT_HORIZONTAL,
