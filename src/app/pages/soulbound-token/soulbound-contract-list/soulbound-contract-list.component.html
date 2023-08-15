@@ -35,7 +35,7 @@
         </div>
       </div>
       <!-- Table -->
-      <ng-container>
+      <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
         <div class="overflow-scroll-x aura-table-contain aura-table-sctr">
           <table mat-table [dataSource]="dataSource" class="aura-table">
             <!-- Number Column -->
@@ -94,16 +94,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
-                <div
-                  *ngIf="!wallet"
-                  class="d-flex flex-column justify-content-center align-items-center m-5 text-center">
-                  <img [src]="'assets/images/icons/noValues.svg' | imageS3" alt="" />
-                  Kindly connect wallet to view the ABT contract deployed with your as creator
-                </div>
-                <div *ngIf="wallet" class="d-flex flex-column justify-content-center align-items-center m-5 text-center">
-                  <img [src]="'assets/images/icons/noValues.svg' | imageS3" alt="" />
-                  There isn't any smart contract deployed with you as the ABT's creator
-                </div>
+                {{ 'NO DATA' | translate }}
               </td>
             </tr>
           </table>
@@ -118,3 +109,12 @@
     </div>
   </div>
 </section>
+<ng-template #noValues>
+  <app-loading-sprint *ngIf="loading"></app-loading-sprint>
+  <app-table-no-data
+    [textNull]="'Kindly connect wallet to view the ABT contract deployed with your as creator'"
+    *ngIf="!loading && !wallet"></app-table-no-data>
+  <app-table-no-data
+    [textNull]="'There isn\'t any smart contract deployed with you as the ABT\'s creator'"
+    *ngIf="!loading && wallet"></app-table-no-data>
+</ng-template>
