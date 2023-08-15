@@ -18,6 +18,7 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./my-granters.component.scss'],
 })
 export class MyGrantersComponent implements OnInit {
+  wallet = null;
   loading = true;
   isActive = true;
   textSearch = '';
@@ -58,7 +59,11 @@ export class MyGrantersComponent implements OnInit {
     private environmentService: EnvironmentService,
     private feeGrantService: FeeGrantService,
     private walletService: WalletService,
-  ) {}
+  ) {
+    this.walletService.wallet$.subscribe((wallet) => {
+      this.wallet = wallet;
+    });
+  }
 
   ngOnInit() {
     this.walletService.wallet$.subscribe((wallet) => {

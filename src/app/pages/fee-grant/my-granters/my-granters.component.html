@@ -39,7 +39,7 @@
       </div>
       <div class="mt-4">
         <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-          <div class="overflow-scroll-x aura-table-contain ">
+          <div class="overflow-scroll-x aura-table-contain">
             <table mat-table [dataSource]="dataSource" class="aura-table grant-table">
               <ng-container *ngFor="let template of templates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
@@ -111,7 +111,11 @@
           </app-a-paginator>
         </div>
         <ng-template #noValues>
-          <app-table-no-data></app-table-no-data>
+          <app-table-no-data *ngIf="wallet"></app-table-no-data>
+          <div *ngIf="!wallet" class="d-flex flex-column justify-content-center align-items-center m-5 text-center">
+            <img [src]="'assets/images/icons/noValues.svg' | imageS3" alt="" />
+            Kindly connect wallet to experience feegrant functions
+          </div>
         </ng-template>
       </div>
     </ng-container>
