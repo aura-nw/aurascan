@@ -9,7 +9,7 @@
       The chart shows the total distinct numbers of address on the Aura Blockchain Network and the increase in the
       number of address daily.
     </p>
-    <p class="text--gray-1 mt-5" *ngIf="chartType === 'cumulative-addresses'">
+    <p class="text--gray-1 mt-5" *ngIf="chartType === 'daily_active_addresses'">
       The Active Aura Addresses chart shows the daily number of unique addresses that were active on the network
     </p>
   </div>
@@ -20,13 +20,13 @@
           <i class="ph-lightbulb h3 mb-0 text--gray-1 mr-2"></i>
           <div>
             <span>
-              {{ this.payloadChartType === 'unique_addresses' ? 'Highest increase of' : 'Highest number of' }}
+              {{ chartType === 'unique-addresses' ? 'Highest increase of' : 'Highest number of' }}
             </span>
             <span class="text--primary">{{ maxAmount | number : global.formatNumberOnlyDecimal }}</span>
             <br class="d-lg-none" />
-            <span class="mr-1" *ngIf="payloadChartType === 'daily_txs'"> transactions on</span>
-            <span class="mr-1" *ngIf="payloadChartType === 'unique_addresses'"> new addresses was recorded on</span>
-            <span class="mr-1" *ngIf="payloadChartType === 'daily_active_addresses'"> addresses on</span>
+            <span class="mr-1" *ngIf="chartType === 'daily-transactions'"> transactions on</span>
+            <span class="mr-1" *ngIf="chartType === 'unique-addresses'"> new addresses was recorded on</span>
+            <span class="mr-1" *ngIf="chartType === 'daily_active_addresses'"> addresses on</span>
             <span class="text--primary">{{ maxAmountDate }}</span>
           </div>
         </div>
@@ -38,13 +38,13 @@
           <i class="ph-lightbulb h3 mb-0 text--gray-1 mr-2"></i>
           <div>
             <span>
-              {{ this.payloadChartType === 'unique_addresses' ? 'Lowest increase of' : 'Lowest number of' }}
+              {{ chartType === 'unique-addresses' ? 'Lowest increase of' : 'Lowest number of' }}
             </span>
             <span class="mr-1 text--primary">{{ minAmount | number : global.formatNumberOnlyDecimal }}</span>
             <br class="d-lg-none" />
-            <span class="mr-1" *ngIf="payloadChartType === 'daily_txs'">transactions on</span>
-            <span class="mr-1" *ngIf="payloadChartType === 'unique_addresses'">new addresses was recorded on</span>
-            <span class="mr-1" *ngIf="payloadChartType === 'daily_active_addresses'">addresses on</span>
+            <span class="mr-1" *ngIf="chartType === 'daily-transactions'">transactions on</span>
+            <span class="mr-1" *ngIf="chartType === 'unique-addresses'">new addresses was recorded on</span>
+            <span class="mr-1" *ngIf="chartType === 'daily_active_addresses'">addresses on</span>
             <span class="text--primary">{{ minAmountDate }}</span>
           </div>
         </div>
@@ -66,8 +66,6 @@
                   <span class="mr-1 text--gray-2">Source:</span>
                   <a href="https://aurascan.io/" class="text--blue-3link">aurascan.io</a>
                 </div>
-                <span class="dot mx-2 d-none d-lg-block"></span>
-                <span class="text--gray-3">Click and drag in the plot area to zoom in</span>
               </div>
             </div>
           </div>

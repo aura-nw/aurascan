@@ -104,7 +104,7 @@
               </a>
             </li>
             <li class="nav-item dropdown mx-5 mx-lg-4 mx-xl-8" *ngIf="i > 0">
-              <ng-container *ngIf="(item.name === 'More' && wallet) || item.name !== 'More'">
+              <ng-container >
                 <button
                   (click)="onMenuClick($event)"
                   class="button nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0">
@@ -115,10 +115,6 @@
                   <span class="nav-link__panel nav-link__panel-more" *ngIf="menuLink.length > 0">
                     <ng-container *ngFor="let subMenu of item.subItems">
                       <a
-                        *ngIf="
-                          subMenu.label !== 'Account Bound Token' ||
-                          (subMenu.label === 'Account Bound Token' && lengthSBT > 0 && isAllowInABTWhiteList)
-                        "
                         [routerLink]="subMenu.link"
                         class="d-flex align-items-center mb-0 nav-link__item nav-link__sub-item py-0"
                         [class.active]="checkMenuActive(subMenu.link)">

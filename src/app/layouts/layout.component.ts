@@ -1,5 +1,5 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { EventService } from '../core/services/event.service';
 import {
   LAYOUT_HORIZONTAL,
@@ -92,7 +92,6 @@ export class LayoutComponent implements OnInit {
   }
 
   ngAfterViewInit() {}
-
   /**
    * Check if the horizontal layout is requested
    */

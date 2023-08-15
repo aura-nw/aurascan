@@ -16,7 +16,7 @@ export class TopStatisticTransactionComponent implements OnInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   rangeList = AURA_TOP_STATISTIC_RANGE;
-  currentRange = AURA_TOP_STATISTIC_RANGE.D_1;
+  currentRange = AURA_TOP_STATISTIC_RANGE.Range1;
   currentDay;
   preDay;
   loading = true;
@@ -45,7 +45,7 @@ export class TopStatisticTransactionComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentDay = formatDate(Date.now(), 'dd-MMM', 'en-US');
-    this.getTransactionData(this.currentRange);
+    this.getTransactionData(this.currentRange.toString());
   }
 
   getTransactionData(time: string) {
@@ -53,18 +53,29 @@ export class TopStatisticTransactionComponent implements OnInit {
     let day = new Date();
     day.setDate(day.getDate() - +this.currentRange);
     this.preDay = formatDate(day, 'dd-MMM', 'en-US');
-    this.statisticService.getListAccountStatistic(this.currentRange, 10).subscribe((res) => {
-      this.loading = true;
-      if (res && res.data) {
-        this.transactionsData = res.data;
-        this.AURASendersDS.data = res.data.top_aura_senders;
-        this.AURAReceiversDS.data = res.data.top_aura_receivers;
-        this.TxnCountSentDS.data = res.data.top_txn_count_sent;
-        this.TxnCountReceivedDS.data = res.data.top_txn_count_received;
-      } else {
-        this.transactionsData = null;
-      }
-      this.loading = false;
-    });
+    let filterValue = 'three_days';
+    if (time === AURA_TOP_STATISTIC_RANGE.Range2) {
+      filterValue = 'fifteen_days';
+    } else if (time === AURA_TOP_STATISTIC_RANGE.Range3) {
+      filterValue = 'thirty_days';
+    }
+
+    this.statisticService.getListAccountStatistic().subscribe(
+      (res) => {
+        if (res && res[filterValue]) {
+          this.transactionsData = res[filterValue];
+          this.AURASendersDS.data = res[filterValue].top_amount_sent;
+          this.AURAReceiversDS.data = res[filterValue].top_amount_received;
+          this.TxnCountSentDS.data = res[filterValue].top_tx_sent;
+          this.TxnCountReceivedDS.data = res[filterValue].top_gas_used;
+        } else {
+          this.transactionsData = null;
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 }

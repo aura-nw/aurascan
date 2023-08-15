@@ -63,6 +63,9 @@ export class AuthenticateMailComponent implements OnDestroy {
   }
 
   linkLogin() {
-    this.router.navigate(['login', 0]);
+    this.router.navigate(['login']);
+    if (this.router.navigated) {
+      this.router.onSameUrlNavigation = 'reload';
+    }
   }
 }
