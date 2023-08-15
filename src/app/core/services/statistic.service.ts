@@ -9,7 +9,6 @@ import { CommonService } from './common.service';
 @Injectable()
 export class StatisticService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
-  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -20,13 +19,10 @@ export class StatisticService extends CommonService {
   }
 
   getDataStatistic(startDate, endDate): Observable<any> {
-    console.log(startDate);
-    console.log(endDate)
-    
     const operationsDoc = `
     query queryStatisticChart($startDate: timestamptz = null, $endDate: timestamptz = null) {
       ${this.envDB} {
-        daily_statistics(where: {date: {_gte: $startDate, _lte: $endDate}}) {
+        daily_statistics(where: {date: {_gte: $startDate, _lte: $endDate}}, order_by: {date: asc}) {
           daily_active_addresses
           daily_txs
           date

@@ -15,7 +15,7 @@ import { Globals } from 'src/app/global/global';
 import {
   CHART_CONFIG,
   DASHBOARD_CHART_OPTIONS,
-  STATISTIC_AREA_SERIES_CHART_OPTIONS
+  STATISTIC_AREA_SERIES_CHART_OPTIONS,
 } from 'src/app/pages/dashboard/dashboard-chart-options';
 
 @Component({
@@ -30,10 +30,9 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   theTitle: string;
   chart: IChartApi = null;
   areaSeries: ISeriesApi<'Area'> = null;
-  logicalRangeChange$ = new Subject<{ from: number; to: number }>();
+  logicalRangeChange$ = new Subject<{ from; to }>();
   endData = false;
   destroy$ = new Subject();
-  payloadChartType;
   prevYearNumber = 1;
   originalData = [];
 
@@ -58,7 +57,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     if (
       this.chartType !== 'daily-transactions' &&
       this.chartType !== 'unique-addresses' &&
-      this.chartType !== 'cumulative-addresses'
+      this.chartType !== 'daily_active_addresses'
     ) {
       this.router.navigate(['/']);
     }
@@ -74,17 +73,14 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
       case 'daily-transactions':
         this.theTitle = 'Aura Daily Transactions Chart';
         this.chartName = 'Transactions per Day';
-        this.payloadChartType = 'daily_txs';
         break;
       case 'unique-addresses':
         this.theTitle = 'Aura Unique Addresses Chart';
         this.chartName = 'Aura cumulative Address Growth';
-        this.payloadChartType = 'unique_addresses';
         break;
-      case 'cumulative-addresses':
+      case 'daily_active_addresses':
         this.theTitle = 'Active Aura Addresses Chart';
         this.chartName = 'Active Aura addresses per day';
-        this.payloadChartType = 'daily_active_addresses';
         break;
       default:
         this.router.navigate(['/']);
@@ -115,28 +111,41 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         const max = Date.parse(currTime + '');
         const prevTime = new Date(currTime.getFullYear() - this.prevYearNumber, 0, 1);
         const min = Date.parse(prevTime + '');
-
         this.statisticService.getDataStatistic(min, max).subscribe((res) => {
-          if (res?.data?.extremeData) {
-            this.minAmount = res?.data?.extremeData?.min?.amount;
-            this.maxAmount = res?.data?.extremeData?.max?.amount;
-            const dayMin = new Date(res?.data?.extremeData?.min?.date);
-            const dayMax = new Date(res?.data?.extremeData?.max?.date);
+          if (res?.daily_statistics.length > 0) {
+            const dayMin = new Date(res?.daily_statistics[res?.daily_statistics.length - 1]?.date);
+            const dayMax = new Date(res?.daily_statistics[0]?.date);
             this.minAmountDate = formatDate(dayMin, 'dd/MM/yyyy', 'en-US');
             this.maxAmountDate = formatDate(dayMax, 'dd/MM/yyyy', 'en-US');
-          }
-          if (res?.data?.dailyData?.length > 0) {
             let dataY = [];
             let dataX = [];
-            res.data.dailyData.forEach((data) => {
-              if (this.payloadChartType === 'daily_txs') {
+            res?.daily_statistics.forEach((data) => {
+              if (this.chartType === 'daily-transactions') {
                 dataX.push(data.daily_txs);
+                if (data.daily_txs >= this.maxAmount) {
+                  this.maxAmount = data.daily_txs;
+                }
+                if (data.daily_txs <= this.minAmount) {
+                  this.minAmount = data.daily_txs;
+                }
               }
-              if (this.payloadChartType === 'unique_addresses') {
+              if (this.chartType === 'unique-addresses') {
                 dataX.push(data.unique_addresses);
+                if (data.unique_addresses >= this.maxAmount) {
+                  this.maxAmount = data.unique_addresses;
+                }
+                if (data.unique_addresses <= this.minAmount) {
+                  this.minAmount = data.unique_addresses;
+                }
               }
-              if (this.payloadChartType === 'daily_active_addresses') {
+              if (this.chartType === 'daily_active_addresses') {
                 dataX.push(data.daily_active_addresses);
+                if (data.daily_active_addresses >= this.maxAmount) {
+                  this.maxAmount = data.daily_active_addresses;
+                }
+                if (data.daily_active_addresses <= this.minAmount) {
+                  this.minAmount = data.daily_active_addresses;
+                }
               }
               dataY.push(data.date);
             });
@@ -156,31 +165,43 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     this.endData = false;
     this.chartRange = type;
     const currTime = new Date();
-    const max = Date.parse(currTime + '');
     const prevTime = new Date(currTime.getFullYear() - 1, 0, 1);
-    const min = Date.parse(prevTime + '');
 
-    this.statisticService.getDataStatistic(min, max).subscribe((res) => {
-      if (res?.data?.extremeData) {
-        this.minAmount = res?.data?.extremeData?.min?.amount;
-        this.maxAmount = res?.data?.extremeData?.max?.amount;
-        const dayMin = new Date(res?.data?.extremeData?.min?.date);
-        const dayMax = new Date(res?.data?.extremeData?.max?.date);
+    this.statisticService.getDataStatistic(prevTime, currTime).subscribe((res) => {
+      if (res?.daily_statistics.length > 0) {
+        const dayMin = new Date(res?.daily_statistics[res?.daily_statistics.length - 1]?.date);
+        const dayMax = new Date(res?.daily_statistics[0]?.date);
         this.minAmountDate = formatDate(dayMin, 'dd/MM/yyyy', 'en-US');
         this.maxAmountDate = formatDate(dayMax, 'dd/MM/yyyy', 'en-US');
-      }
-      if (res?.data?.dailyData?.length > 0) {
         let dataY = [];
         let dataX = [];
-        res.data.dailyData.forEach((data) => {
-          if (this.payloadChartType === 'daily_txs') {
+        res?.daily_statistics.forEach((data) => {
+          if (this.chartType === 'daily-transactions') {
             dataX.push(data.daily_txs);
+            if (data.daily_txs >= this.maxAmount) {
+              this.maxAmount = data.daily_txs;
+            }
+            if (data.daily_txs <= this.minAmount) {
+              this.minAmount = data.daily_txs;
+            }
           }
-          if (this.payloadChartType === 'unique_addresses') {
+          if (this.chartType === 'unique-addresses') {
             dataX.push(data.unique_addresses);
+            if (data.unique_addresses >= this.maxAmount) {
+              this.maxAmount = data.unique_addresses;
+            }
+            if (data.unique_addresses <= this.minAmount) {
+              this.minAmount = data.unique_addresses;
+            }
           }
-          if (this.payloadChartType === 'daily_active_addresses') {
+          if (this.chartType === 'daily_active_addresses') {
             dataX.push(data.daily_active_addresses);
+            if (data.daily_active_addresses >= this.maxAmount) {
+              this.maxAmount = data.daily_active_addresses;
+            }
+            if (data.daily_active_addresses <= this.minAmount) {
+              this.minAmount = data.daily_active_addresses;
+            }
           }
           dataY.push(data.date);
         });
@@ -248,7 +269,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     const container = document.getElementById('dailyChart');
     const toolTip = document.createElement('div');
     let label = '';
-    switch (this.payloadChartType) {
+    switch (this.chartType) {
       case 'daily_txs':
         label = 'Transactions';
         break;

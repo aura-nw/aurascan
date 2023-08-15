@@ -26,11 +26,8 @@ export class ChartStatsComponent implements OnInit {
   dailyAddressChartSeries;
   min = 0;
   max = 99999;
-
   currTime = new Date();
-  // currTimeMs = Date.parse(this.currTime + '');
   prevTime = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000);
-  // prevTimeMs = Date.parse(this.prevTime + '');
 
   constructor(public translate: TranslateService, private statisticService: StatisticService) {}
 
@@ -235,20 +232,23 @@ export class ChartStatsComponent implements OnInit {
 
   getDailyTransactionData() {
     this.statisticService.getDataStatistic(this.prevTime, this.currTime).subscribe((res) => {
-      let valueArrDaily = [];
-      let valueArrUnique = [];
-      let valueArrActive = [];
-      let timeArr = [];
-      
-      res.daily_statistics.forEach((data) => {
-        valueArrDaily.push(data.daily_txs);
-        valueArrUnique.push(data.unique_addresses);
-        valueArrActive.push(data.daily_active_addresses);
-        timeArr.push(data.date);
-      });
-      this.drawChart(valueArrDaily, timeArr, 'dailyTrans');
-      this.drawChart(valueArrUnique, timeArr, 'uniqueAddress');
-      this.drawChart(valueArrActive, timeArr, 'dailyAddress');
+      if (res?.daily_statistics?.length > 0) {
+        let valueArrDaily = [];
+        let valueArrUnique = [];
+        let valueArrActive = [];
+        let timeArr = [];
+
+        res.daily_statistics.forEach((data) => {
+          valueArrDaily.push(data.daily_txs);
+          valueArrUnique.push(data.unique_addresses);
+          valueArrActive.push(data.daily_active_addresses);
+          timeArr.push(data.date);
+        });
+
+        this.drawChart(valueArrDaily, timeArr, 'dailyTrans');
+        this.drawChart(valueArrUnique, timeArr, 'uniqueAddress');
+        this.drawChart(valueArrActive, timeArr, 'dailyAddress');
+      }
     });
   }
 }
