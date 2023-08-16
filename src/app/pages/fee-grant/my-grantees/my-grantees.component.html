@@ -139,11 +139,11 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
           </div>
+          <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+            <app-a-paginator [paginator]="pageData" [length]="pageData.length" (pageChange)="pageEvent($event)">
+            </app-a-paginator>
+          </div>
         </ng-container>
-        <div class="mt-6 d-flex justify-content-center justify-content-md-end">
-          <app-a-paginator [paginator]="pageData" [length]="pageData.length" (pageChange)="pageEvent($event)">
-          </app-a-paginator>
-        </div>
         <ng-template #noValues>
           <ng-container *ngIf="currentAddress">
             <app-table-no-data
