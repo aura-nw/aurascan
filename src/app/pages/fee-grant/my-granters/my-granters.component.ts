@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -48,7 +49,8 @@ export class MyGrantersComponent implements OnInit {
     pageSize: 20,
     pageIndex: 1,
   };
-
+  isNoData = true;
+  isSearchData = false;
   currentAddress = null;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
@@ -58,12 +60,21 @@ export class MyGrantersComponent implements OnInit {
     private environmentService: EnvironmentService,
     private feeGrantService: FeeGrantService,
     private walletService: WalletService,
+    private router: Router,
   ) {}
 
   ngOnInit() {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
+        window.addEventListener('keplr_keystorechange', () => {
+          this.isNoData = true;
+          const currentRoute = this.router.url;
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigate([currentRoute]); // navigate to same route
+          });
+        });
         this.currentAddress = wallet.bech32Address;
+        this.isNoData = false;
         this.getGrantersData();
       } else {
         this.loading = false;
@@ -126,6 +137,9 @@ export class MyGrantersComponent implements OnInit {
 
           this.dataSource.data = res.feegrant;
           this.pageData.length = res.feegrant_aggregate.aggregate.count;
+          if (res.feegrant.length === 0 && this.isSearchData === false) {
+            this.isNoData = true;
+          }
         },
         complete: () => {
           this.loading = false;
@@ -134,6 +148,7 @@ export class MyGrantersComponent implements OnInit {
   }
 
   searchToken(): void {
+    this.isSearchData = true;
     if (this.textSearch && this.textSearch.length > 0) {
       this.pageEvent(0);
     }
@@ -155,6 +170,7 @@ export class MyGrantersComponent implements OnInit {
   async changeType(type: boolean) {
     this.isActive = type;
     this.loading = true;
+    this.isNoData = false;
     this.pageEvent(0);
   }
 }
