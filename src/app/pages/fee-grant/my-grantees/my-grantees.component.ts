@@ -93,6 +93,7 @@ export class MyGranteesComponent implements OnInit {
       } else {
         this.loading = false;
         this.currentAddress = null;
+        this.pageEvent(0);
         this.dataSource.data = [];
       }
     });
