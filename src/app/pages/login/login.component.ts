@@ -141,7 +141,7 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
               localStorage.setItem('userEmail', JSON.stringify(res.email));
               localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
-              this.route.navigate(['/']);
+              this.route.navigate(['/profile']);
             }
           },
           error: (error) => {
@@ -237,7 +237,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
             localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
             localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
-            window.location.href = '/';
+            window.location.href = '/profile';
           },
           error: (error) => {
             this.addError(error?.details?.message);
