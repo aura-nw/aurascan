@@ -87,11 +87,6 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
 
   disconnect(): void {
     this.walletService.disconnect();
-    
-    // redirect dashboard if fee grant
-    if (this.route.snapshot['_routerState']?.url === '/fee-grant') {
-      this.router.navigate(['/']);
-    }
   }
 
   copyMessage(text: string) {

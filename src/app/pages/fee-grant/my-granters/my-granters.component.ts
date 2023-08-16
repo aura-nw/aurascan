@@ -66,21 +66,26 @@ export class MyGrantersComponent implements OnInit {
         this.currentAddress = wallet.bech32Address;
         this.getGrantersData();
       } else {
+        this.loading = false;
         this.currentAddress = null;
+        this.dataSource.data = [];
       }
     });
   }
 
   getGrantersData() {
-    this.loading = true;
-    if (this.isActive) {
-      this.templates = this.templatesActive;
-      this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
+    if (this.currentAddress) {
+      if (this.isActive) {
+        this.templates = this.templatesActive;
+        this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
+      } else {
+        this.templates = this.templatesInActive;
+        this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
+      }
+      this.getListGrant();
     } else {
-      this.templates = this.templatesInActive;
-      this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
+      this.loading = false;
     }
-    this.getListGrant();
   }
 
   getListGrant() {
@@ -144,13 +149,12 @@ export class MyGrantersComponent implements OnInit {
     if (pageIndex === 0) {
       this.pageData.pageIndex = 1;
     }
-
     this.getGrantersData();
   }
 
   async changeType(type: boolean) {
     this.isActive = type;
-    this.pageEvent(0);
     this.loading = true;
+    this.pageEvent(0);
   }
 }

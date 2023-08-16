@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -21,6 +20,7 @@ import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-po
 })
 export class SoulboundContractListComponent implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
+  wallet = null;
   textSearch = '';
   searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -46,9 +46,12 @@ export class SoulboundContractListComponent implements OnInit {
     private soulboundService: SoulboundService,
     public dialog: MatDialog,
     private walletService: WalletService,
-    private router: Router,
     public commonService: CommonService,
-  ) {}
+  ) {
+    this.walletService.wallet$.subscribe((wallet) => {
+      this.wallet = wallet;
+    });
+  }
 
   ngOnInit(): void {
     from([1])
@@ -60,11 +63,11 @@ export class SoulboundContractListComponent implements OnInit {
         const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
         if (wallet) {
           this.currentAddress = this.walletService.wallet?.bech32Address;
-          this.checkWL();
           this.getListSmartContract();
-        } else if (urlPath === 'accountbound') {
+        } else {
           this.currentAddress = null;
-          this.router.navigate(['/']);
+          this.dataSource.data = [];
+          this.loading = false;
         }
       });
   }
@@ -127,14 +130,6 @@ export class SoulboundContractListComponent implements OnInit {
         setTimeout(() => {
           this.getListSmartContract();
         }, 4000);
-      }
-    });
-  }
-
-  checkWL() {
-    this.soulboundService.getListWL().subscribe((res) => {
-      if (!res?.data?.find((k) => k.account_address === this.currentAddress)) {
-        this.router.navigate(['/']);
       }
     });
   }

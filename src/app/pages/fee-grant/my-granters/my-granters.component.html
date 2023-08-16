@@ -6,7 +6,7 @@
 <div class="mt-4 mt-lg-5 card">
   <div class="card-body">
     <ng-container *ngIf="!loading">
-      <div class="d-lg-flex flex-row-reverse justify-content-between align-items-center">
+      <div class="d-lg-flex flex-row-reverse justify-content-between align-items-center" *ngIf="currentAddress">
         <form (ngSubmit)="searchToken()" class="aura-form single-input-field granter-search-form">
           <div class="input-group px-6">
             <input
@@ -39,7 +39,7 @@
       </div>
       <div class="mt-4">
         <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-          <div class="overflow-scroll-x aura-table-contain ">
+          <div class="overflow-scroll-x aura-table-contain">
             <table mat-table [dataSource]="dataSource" class="aura-table grant-table">
               <ng-container *ngFor="let template of templates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
@@ -111,7 +111,16 @@
           </app-a-paginator>
         </div>
         <ng-template #noValues>
-          <app-table-no-data></app-table-no-data>
+          <app-table-no-data
+            [textNull]="
+              this.isActive
+                ? 'You don\'t have any active granted fee allowance to others'
+                : 'You don\'t have any inactive granted fee allowance to others'
+            "
+            *ngIf="currentAddress"></app-table-no-data>
+          <app-table-no-data
+            [textNull]="'Kindly connect wallet to experience feegrant functions'"
+            *ngIf="!currentAddress"></app-table-no-data>
         </ng-template>
       </div>
     </ng-container>

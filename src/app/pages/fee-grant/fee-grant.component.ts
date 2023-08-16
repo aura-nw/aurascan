@@ -31,9 +31,6 @@ export class FeeGrantComponent implements OnInit {
       )
       .subscribe((wallet) => {
         const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
-        if (!wallet && urlPath === 'fee-grant') {
-          this.router.navigate(['/']);
-        }
       });
   }
 

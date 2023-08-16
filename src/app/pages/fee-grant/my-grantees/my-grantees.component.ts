@@ -83,12 +83,17 @@ export class MyGranteesComponent implements OnInit {
       } else {
         this.loading = false;
         this.currentAddress = null;
+        this.dataSource.data = [];
       }
     });
 
-    this.timerGetFeeGrant = setInterval(() => {
-      this.getListGrant();
-    }, 30000);
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet.bech32Address) {
+        this.timerGetFeeGrant = setInterval(() => {
+          this.getListGrant();
+        }, 30000);
+      }
+    });
   }
 
   /**
@@ -101,18 +106,22 @@ export class MyGranteesComponent implements OnInit {
   }
 
   getGranteesData() {
-    if (this.isActive) {
-      this.templates = this.templatesActive;
-      this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
+    if (this.currentAddress) {
+      if (this.isActive) {
+        this.templates = this.templatesActive;
+        this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
+      } else {
+        this.templates = this.templatesInActive;
+        this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
+      }
+      this.getListGrant();
     } else {
-      this.templates = this.templatesInActive;
-      this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
+      this.loading = false;
     }
-    this.getListGrant();
   }
 
   getListGrant() {
-    let keySearch = this.textSearch = this.textSearch?.trim();
+    let keySearch = (this.textSearch = this.textSearch?.trim());
     const addressNameTag = this.commonService.findNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
@@ -134,7 +143,6 @@ export class MyGranteesComponent implements OnInit {
           if (!res) {
             return;
           }
-
           res.feegrant?.forEach((element) => {
             element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
             element.spendable = element?.spend_limit || '0';
@@ -176,15 +184,13 @@ export class MyGranteesComponent implements OnInit {
     if (pageIndex === 0) {
       this.pageData.pageIndex = 1;
     }
-
     this.getGranteesData();
   }
 
   async changeType(type: boolean) {
     this.isActive = type;
-
-    this.pageEvent(0);
     this.loading = true;
+    this.pageEvent(0);
   }
 
   showRevoke(granteeAddress: string, granterAddress: string) {

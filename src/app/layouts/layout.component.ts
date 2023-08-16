@@ -92,7 +92,6 @@ export class LayoutComponent implements OnInit {
   }
 
   ngAfterViewInit() {}
-
   /**
    * Check if the horizontal layout is requested
    */
