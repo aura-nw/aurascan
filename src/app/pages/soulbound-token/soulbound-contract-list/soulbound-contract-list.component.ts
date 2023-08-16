@@ -73,6 +73,7 @@ export class SoulboundContractListComponent implements OnInit {
           this.getListSmartContract();
         } else {
           this.currentAddress = null;
+          this.pageChange?.selectPage(0);
           this.dataSource.data = [];
           this.loading = false;
         }
@@ -89,9 +90,7 @@ export class SoulboundContractListComponent implements OnInit {
   resetSearch() {
     this.textSearch = '';
     this.searchValue = '';
-    if (this.pageChange) {
-      this.pageChange.selectPage(0);
-    }
+    this.pageChange?.selectPage(0);
     this.getListSmartContract();
   }
 
@@ -105,6 +104,9 @@ export class SoulboundContractListComponent implements OnInit {
   }
 
   getListSmartContract() {
+    if (this.currentAddress === null) {
+      return;
+    }
     this.textSearch = this.searchValue = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,

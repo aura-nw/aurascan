@@ -29,7 +29,9 @@ export class TopStatisticOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentDay = formatDate(Date.now(), 'dd-MMM', 'en-US');
-    this.getTransactionData(this.currentRange);
+    setTimeout(() => {
+      this.getTransactionData(this.currentRange);
+    }, 500);
   }
 
   getTransactionData(time: string) {
