@@ -1,0 +1,18 @@
+.txt-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 2.8rem;
+  color: var(--aura-gray-4);
+  @media (min-width: 992px) {
+    line-height: 4rem;
+    font-size: 3.2rem;
+  }
+}
+
+.search-form.private-search-form {
+  width: 100%;
+
+  @media (min-width: 992px) {
+    width: 410px;
+  }
+}

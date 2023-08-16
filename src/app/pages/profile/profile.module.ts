@@ -14,9 +14,13 @@ import { ProfileComponent } from './profile.component';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from 'src/app/core/services/user.service';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { PrivateNameTagComponent } from './private-name-tag/private-name-tag.component';
+import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
+import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
 
 @NgModule({
-  declarations: [ProfileComponent, ProfileSettingsComponent],
+  declarations: [ProfileComponent, ProfileSettingsComponent, PrivateNameTagComponent, PopupNameTagComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -30,7 +34,9 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     NameTagModule,
     MatIconModule,
-    NgbNavModule
+    NgbNavModule,
+    TableNoDataModule,
+    APaginatorModule,
   ],
   providers: [FormBuilder, UserService],
 })

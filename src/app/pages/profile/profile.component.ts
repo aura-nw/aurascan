@@ -9,17 +9,17 @@ import { ProfileTab } from 'src/app/core/constants/profile.enum';
 })
 export class ProfileComponent implements OnInit {
   profileTab = ProfileTab;
-  currentTab = ProfileTab.Setting;
+  currentTab = ProfileTab.PrivateNameTag;
   activeTabID = 0;
   PROFILE_TAB = [
     {
       key: ProfileTab.Setting,
       value: 'Profile settings'
     },
-    // {
-    //   key: ProfileTab.PrivateNameTag,
-    //   value: 'Private name tag'
-    // },
+    {
+      key: ProfileTab.PrivateNameTag,
+      value: 'Private name tag'
+    },
     // {
     //   key: ProfileTab.WatchList,
     //   value: 'Watchlist'

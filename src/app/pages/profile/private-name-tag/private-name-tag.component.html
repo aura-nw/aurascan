@@ -1,0 +1,190 @@
+<div class="d-flex justify-content-between">
+  <div class="txt-title">Private name tag</div>
+  <button
+    (click)="openPopup()"
+    class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card"
+    type="button">
+    <span>Create</span>
+  </button>
+</div>
+
+<div class="mt-4">
+  <div class="d-lg-flex align-items-center justify-content-between">
+    <div>Total 0/10 addresses tagged</div>
+    <div class="filter-group d-flex align-items-center flex-nowrap">
+      <form class="aura-form single-input-field search-form private-search-form d-none d-lg-block">
+        <div class="input-group px-6">
+          <input
+            type="text"
+            class="form-control pl-0"
+            placeholder="Search for Address or Name tag"
+            [(ngModel)]="textSearch"
+            [maxLength]="35"
+            (keyup)="onKeyUp()"
+            name="search"
+            autocomplete="off" />
+          <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+          <button
+            type="reset"
+            class="btn-reset cursor-pointer {{
+              !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+            }}"
+            (click)="resetFilterSearch()">
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div>
+    <div class="overflow-scroll-x aura-table-contain" *ngIf="pageData?.length > 0; else noValues">
+      <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
+        <ng-container *ngFor="let template of templates; index as i">
+          <ng-container [matColumnDef]="template.matColumnDef">
+            <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
+              <div [innerHTML]="template.headerCellDef"></div>
+            </th>
+            <td mat-cell *matCellDef="let data">
+              <ng-container *ngIf="template.matColumnDef === 'address'">
+                <a [routerLink]="['/account/', template.matColumnDef]" class="text--primary text-break d-flex">
+                  {{ template.matColumnDef | cutStringPipe : 8 : 8 }}
+                </a>
+                <div>desc</div>
+              </ng-container>
+              <ng-container *ngIf="template.matColumnDef === 'name'">
+                <app-name-tag [value]="data[template.matColumnDef]" [tooltipPosition]="'tooltip--left'"></app-name-tag>
+              </ng-container>
+              <ng-container *ngIf="template.matColumnDef === 'add_time' || template.matColumnDef === 'update_time'">
+                {{ commonService.getDateValue(data['date_format'], false)[0] }}
+              </ng-container>
+              <ng-container *ngIf="template.matColumnDef === 'name'">
+                <button
+                  type="button"
+                  class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
+                  [disabled]="data['result'] === 'Correct'"
+                  (click)="openPopup()">
+                  <img
+                    [src]="'assets/icons/icons-svg/white/edit_simple.svg' | imageS3"
+                    alt=""
+                    width="16px"
+                    height="16px" />
+                  <span class="ml-1">Edit</span>
+                </button>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  (!template.isUrl || data[template.matColumnDef] === '') &&
+                  template.matColumnDef !== 'contract_verification' &&
+                  template.matColumnDef !== 'name'
+                ">
+                <ng-container [ngSwitch]="template.matColumnDef">
+                  <ng-container *ngSwitchDefault>
+                    {{ data[template.matColumnDef] }}
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </td>
+          </ng-container>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell g-no-data" colspan="9999">
+            {{ 'NO DATA' | translate }}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+      <app-a-paginator
+        [paginator]="pageData"
+        [length]="pageData.length"
+        (pageChange)="pageEvent($event)"></app-a-paginator>
+    </div>
+  </div>
+</div>
+
+<ng-template #noValues>
+  <app-table-no-data></app-table-no-data>
+</ng-template>
+
+<div class="col-lg-6">
+  <ng-template #modalManage let-modal>
+    <!-- <div class="aura-form d-flex row p-3">
+      <div class="col-12 d-flex justify-content-between px-0 mb-4">
+        <span class="h1 h4-mob mb-0 text--white">
+          <ng-container *ngIf="isEditMode">Update Type for Code ID</ng-container>
+          <ng-container *ngIf="!isEditMode">Register Type for Code ID</ng-container>
+        </span>
+        <img
+          [src]="'assets/icons/icons-svg/white/close.svg' | imageS3"
+          alt=""
+          width="14"
+          height="14"
+          class="mr-2 cursor-pointer"
+          (click)="closeDialog(modal)" />
+      </div>
+      <div class="divider divider-horizontal"></div>
+      <div class="box-body-register col-12">
+        <p class="body-02 mb-1 text--gray-1" [class.input-require]="!isEditMode">Code ID</p>
+        <div class="box-input">
+          <input
+            type="text"
+            class="form-check-input col-12 mb-4 text--gray-1"
+            [maxlength]="50"
+            [(ngModel)]="currentCodeID"
+            [disabled]="isEditMode"
+            (keypress)="validateCurrentCodeID($event)"
+            (keyup)="checkInput()"
+            placeholder="Enter a Code ID" />
+        </div>
+        <p class="caption fw-normal text--gray-5 mb-4" *ngIf="!isEditMode">
+          Enter a Code ID that you own (ID must be greater than 0).
+        </p>
+        <p class="body-02 mb-1 text--gray-1 input-require">Type</p>
+        <div class="box-input">
+          <mat-form-field appearance="fill" contract>
+            <mat-select
+              class="list-token"
+              placeholder="Select a type"
+              panelClass="contractPanel"
+              (selectionChange)="checkInput()"
+              [(value)]="selectedTypeContract"
+              [disableOptionCentering]="true">
+              <mat-option *ngFor="let item of lstTypeContract" [value]="item.value">
+                <div class="d-flex option-contain">
+                  <div class="option-lable">
+                    <span>{{ item.value | translate }}</span>
+                  </div>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-center justify-content-lg-end w-100 mt-4">
+        <button
+          type="button"
+          class="button button-pill button--sm button--md-mob button-outline button-fixed mr-4"
+          (click)="closeDialog(modal)">
+          <span>Close</span>
+        </button>
+        <button
+          type="button"
+          class="button button-pill button--sm button--md-mob button-outline button-outline--gradient button-fixed"
+          (click)="handleButtonContract(isEditMode)"
+          [disabled]="isDisable || isProcess">
+          <span>
+            <ng-container *ngIf="isEditMode">Update</ng-container>
+            <ng-container *ngIf="!isEditMode">Register</ng-container>
+          </span>
+        </button>
+      </div>
+    </div> -->
+  </ng-template>
+</div>
