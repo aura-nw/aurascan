@@ -271,10 +271,10 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     const toolTip = document.createElement('div');
     let label = '';
     switch (this.chartType) {
-      case 'daily_txs':
+      case 'daily-transactions':
         label = 'Transactions';
         break;
-      case 'unique_addresses':
+      case 'unique-addresses':
         label = 'Unique Addresses';
         break;
       case 'daily_active_addresses':
