@@ -17,7 +17,7 @@
 }
 
 .table-token {
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 380px;
 
   ::ng-deep table thead {
