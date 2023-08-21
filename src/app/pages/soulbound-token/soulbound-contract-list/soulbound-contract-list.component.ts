@@ -12,6 +12,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-soulbound-contract-list',
@@ -20,7 +21,6 @@ import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-po
 })
 export class SoulboundContractListComponent implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
-  wallet = null;
   textSearch = '';
   searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -41,17 +41,16 @@ export class SoulboundContractListComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   loading = true;
   currentAddress = '';
+  isNoData = true;
+  isSearchData = false;
 
   constructor(
     private soulboundService: SoulboundService,
     public dialog: MatDialog,
     private walletService: WalletService,
     public commonService: CommonService,
-  ) {
-    this.walletService.wallet$.subscribe((wallet) => {
-      this.wallet = wallet;
-    });
-  }
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     from([1])
@@ -62,15 +61,27 @@ export class SoulboundContractListComponent implements OnInit {
       .subscribe((wallet) => {
         const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
         if (wallet) {
+          window.addEventListener('keplr_keystorechange', () => {
+            this.isNoData = true;
+            const currentRoute = this.router.url;
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate([currentRoute]); // navigate to same route
+            });
+          });
           this.currentAddress = this.walletService.wallet?.bech32Address;
+          this.isNoData = false;
           this.getListSmartContract();
         } else {
+          this.currentAddress = null;
+          this.pageChange?.selectPage(0);
+          this.dataSource.data = [];
           this.loading = false;
         }
       });
   }
 
   searchToken() {
+    this.isSearchData = true;
     this.pageData.pageIndex = 0;
     this.textSearch = this.searchValue;
     this.getListSmartContract();
@@ -79,9 +90,7 @@ export class SoulboundContractListComponent implements OnInit {
   resetSearch() {
     this.textSearch = '';
     this.searchValue = '';
-    if (this.pageChange) {
-      this.pageChange.selectPage(0);
-    }
+    this.pageChange?.selectPage(0);
     this.getListSmartContract();
   }
 
@@ -95,6 +104,9 @@ export class SoulboundContractListComponent implements OnInit {
   }
 
   getListSmartContract() {
+    if (this.currentAddress === null) {
+      return;
+    }
     this.textSearch = this.searchValue = this.textSearch?.trim();
     const payload = {
       limit: this.pageData.pageSize,
@@ -111,8 +123,11 @@ export class SoulboundContractListComponent implements OnInit {
     this.soulboundService.getListSoulbound(payload).subscribe((res) => {
       this.dataSource.data = res.data;
       this.pageData.length = res.meta.count;
+      if (res.data.length === 0 && this.isSearchData === false) {
+        this.isNoData = true;
+      }
+      this.loading = false;
     });
-    this.loading = false;
   }
 
   openDialog(contract_address): void {

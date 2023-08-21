@@ -6,7 +6,9 @@
 <div class="mt-4 mt-lg-5 card">
   <div class="card-body">
     <ng-container *ngIf="!loading">
-      <div class="d-lg-flex flex-row-reverse justify-content-between align-items-center">
+      <div
+        class="d-lg-flex flex-row-reverse justify-content-between align-items-center"
+        *ngIf="!isNoData">
         <form (ngSubmit)="searchToken()" class="aura-form single-input-field granter-search-form">
           <div class="input-group px-6">
             <input
@@ -105,17 +107,22 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
           </div>
-        </ng-container>
-        <div class="mt-6 d-flex justify-content-center justify-content-md-end">
-          <app-a-paginator [paginator]="pageData" [length]="pageData.length" (pageChange)="pageEvent($event)">
-          </app-a-paginator>
-        </div>
-        <ng-template #noValues>
-          <app-table-no-data *ngIf="wallet"></app-table-no-data>
-          <div *ngIf="!wallet" class="d-flex flex-column justify-content-center align-items-center m-5 text-center">
-            <img [src]="'assets/images/icons/noValues.svg' | imageS3" alt="" />
-            Kindly connect wallet to experience feegrant functions
+          <div class="mt-6 d-flex justify-content-center justify-content-md-end">
+            <app-a-paginator [paginator]="pageData" [length]="pageData.length" (pageChange)="pageEvent($event)">
+            </app-a-paginator>
           </div>
+        </ng-container>
+        <ng-template #noValues>
+          <ng-container>
+            <app-table-no-data
+              [textNull]="
+                this.isActive
+                  ? 'You don\'t have any active granted fee allowance to others'
+                  : 'You don\'t have any inactive granted fee allowance to others'
+              "
+              *ngIf="!loading && isNoData"></app-table-no-data>
+            <app-table-no-data *ngIf="!loading && !isNoData"></app-table-no-data>
+          </ng-container>
         </ng-template>
       </div>
     </ng-container>
