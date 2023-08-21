@@ -46,9 +46,10 @@ export enum WalletAcount {
 }
 
 export enum TabsAccount {
-  Assets = 'ASSETS',
-  Transactions = 'TRANSACTIONS',
-  Stake = 'STAKE',
+  ExecutedTxs = 'EXECUTED',
+  AuraTxs = 'AURA TRANSFER',
+  FtsTxs = 'FTs TRANSFER',
+  NftTxs = 'NFTs TRANSFER',
 }
 
 export enum StakeModeAccount {
@@ -63,4 +64,9 @@ export enum EAccountType {
   BaseAccount = '/cosmos.auth.v1beta1.BaseAccount',
   PeriodicVestingAccount = 'cosmos-sdk/PeriodicVestingAccount',
   DelayedVestingAccount = 'cosmos-sdk/DelayedVestingAccount',
+}
+
+export enum AccountTxType {
+  Sent = 'Sent',
+  Received = 'Received',
 }

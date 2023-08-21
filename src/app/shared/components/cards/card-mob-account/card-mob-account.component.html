@@ -1,0 +1,89 @@
+<div class="card-mob-simple">
+  <div
+    *ngIf="title.label"
+    class="d-flex justify-content-between align-items-center"
+    [ngStyle]="{ 'margin-bottom': '6px' }">
+    <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
+      <span class="{{ title.titleClass ? title.titleClass : '' }}">{{ title.label }}</span>
+    </div>
+    <ng-container *ngIf="modeQuery === tabsData.ExecutedTxs">
+      <span class="text--green-3 caption"> {{ dataCard.status | uppercase }} </span>
+    </ng-container>
+  </div>
+
+  <div class="caption-mob fw-normal text--gray-light d-flex justify-content-between">
+    <div class="d-flex align-items-center">
+      <i class="ph ph-clock mr-1"></i>
+      <span>{{ commonService.getDateValue(dataCard.timestamp, false)[0] }}</span>
+      <i class="ph ph-chat-circle-text mr-1 ml-6"></i>
+      <span>{{ title.subLabelContent | stringEllipsis : 16 }}</span>
+      <div *ngIf="dataCard.arrEvent?.length > 1" class="ml-1 text--gray-4">+{{ dataCard.arrEvent?.length - 1 }}</div>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <ng-container *ngIf="modeQuery !== tabsData.ExecutedTxs">
+        <i
+          *ngIf="!dataCard.expand"
+          class="ph ph-caret-down text--white h3 icon-expand active"
+          (click)="expandData(dataCard)"></i>
+        <i
+          *ngIf="dataCard.expand"
+          class="ph ph-caret-up text--white h3 cursor-pointer"
+          (click)="dataCard.expand = false"></i>
+      </ng-container>
+    </div>
+  </div>
+
+  <div *ngIf="content && content.length > 0">
+    <ng-container *ngIf="modeQuery === tabsData.ExecutedTxs">
+      <div class="d-flex justify-content-between small-body caption-mob mt-3">
+        <div *ngFor="let data of content; let i = index" class="col-6">
+          <div class="text--gray-4 fw-normal" *ngIf="data.label !== 'Expand'">{{ data.label }}</div>
+          <div
+            *ngIf="data.info"
+            class="{{ data.class ? data.class : 'text--gray-1' }} mb-0"
+            [ngStyle]="{ 'margin-top': '2px' }"
+            [ngClass]="data.label === 'Result' && data['status'] === 'Fail' ? 'text--red-3' : ''"
+            [innerHTML]="data.info"></div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="modeQuery !== tabsData.ExecutedTxs">
+      <div
+        class="text--gray-1 caption-mob mb-0 mt-2"
+        [ngClass]="dataCard['status'] === 'Fail' ? 'text--red-3' : ''"
+        [innerHTML]="'<span class=text--green-3> ' + (dataCard.status | uppercase) + '</span>'"></div>
+    </ng-container>
+  </div>
+
+  <div *ngIf="dataCard.expand && modeQuery !== tabsData.ExecutedTxs" class="box-expand">
+    <div class="row mb-1">
+      <div class="col-6">
+        {{ currentType === 'Sent' ? 'To' : 'From' }}
+      </div>
+      <div class="col-6">Amount</div>
+    </div>
+    <div class="content-expand">
+      <ng-container *ngFor="let item of dataCard.arrEvent">
+        <div class="row item-expand">
+          <div class="col-6 caption fw-normal">
+            <ng-container *ngIf="!commonService.checkDisplayTooltip(item[address] || currentAddress)">
+              <app-name-tag
+                [value]="item[address] || currentAddress"
+                [isLink]="!(item[address]?.startsWith('0000') || currentAddress?.startsWith('0000'))"
+                [maxCharacter]="12"></app-name-tag>
+            </ng-container>
+            <ng-container *ngIf="commonService.checkDisplayTooltip(item[address] || currentAddress)">
+              {{ (item[address] || currentAddress | cutStringPipe : 6 : 6) || '-' }}
+            </ng-container>
+          </div>
+          <div class="col-6 caption fw-normal">
+            <span [appBigNumber]="item.amount" [decimal]="0"></span>
+            <span class="text--primary"> {{ item.denom || denom }}</span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
