@@ -26,7 +26,7 @@
     <ng-container *ngIf="!loading">
       <div
         class="d-lg-flex flex-row-reverse justify-content-between align-items-center"
-        *ngIf="!isNoData && currentAddress">
+        *ngIf="!isNoData">
         <form (ngSubmit)="searchToken()" class="aura-form single-input-field grantees-search-form">
           <div class="input-group px-6">
             <input
@@ -145,7 +145,7 @@
           </div>
         </ng-container>
         <ng-template #noValues>
-          <ng-container *ngIf="currentAddress">
+          <ng-container>
             <app-table-no-data
               [textNull]="
                 this.isActive
@@ -155,9 +155,6 @@
               *ngIf="!loading && isNoData"></app-table-no-data>
             <app-table-no-data *ngIf="!loading && !isNoData"></app-table-no-data>
           </ng-container>
-          <app-table-no-data
-            [textNull]="'Kindly connect wallet to experience feegrant functions'"
-            *ngIf="!currentAddress"></app-table-no-data>
         </ng-template>
       </div>
     </ng-container>

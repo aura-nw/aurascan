@@ -1,5 +1,7 @@
+<h1 class="mb-4 text--white">Fee Grant</h1>
 <!-- Tabs -->
 <ul
+  *ngIf="currentAddress"
   ngbNav
   #customNav="ngbNav"
   [activeId]="!isGrantees ? 1 : 0"
@@ -14,6 +16,29 @@
 </ul>
 <!-- Main -->
 <div class="mt-4 mt-lg-8">
-  <app-my-grantees *ngIf="isGrantees"></app-my-grantees>
-  <app-my-granters *ngIf="!isGrantees"></app-my-granters>
+  <ng-container *ngIf="currentAddress">
+    <app-my-grantees *ngIf="isGrantees"></app-my-grantees>
+    <app-my-granters *ngIf="!isGrantees"></app-my-granters>
+  </ng-container>
+  <ng-container *ngIf="!currentAddress">
+    <div class="d-flex justify-content-end align-items-center">
+      <button
+        #connectButton
+        type="button"
+        class="button button-outline button-outline--gradient button--md button-pill"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasWallet"
+        aria-controls="offcanvasWallet">
+        <span>Add New Grant</span>
+      </button>
+    </div>
+
+    <div class="mt-4 mt-lg-5 card">
+      <div class="card-body">
+        <div class="mt-4">
+          <app-table-no-data [textNull]="'Kindly connect wallet to experience feegrant functions'"></app-table-no-data>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>
