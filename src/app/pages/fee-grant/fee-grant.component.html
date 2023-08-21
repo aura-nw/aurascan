@@ -1,11 +1,11 @@
-<h1 class="mb-4 text--white">Fee Grant</h1>
+<h1 class="text--white mb-lg-0">Fee Grant</h1>
 <!-- Tabs -->
 <ul
   *ngIf="currentAddress"
   ngbNav
   #customNav="ngbNav"
   [activeId]="!isGrantees ? 1 : 0"
-  class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-flex">
+  class="aura-nav-tabs nav-tabs nav-tabs-custom mt-4 mb-4 d-flex">
   <ng-container *ngFor="let tab of TAB; index as index">
     <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1 flex-lg-shrink-1 flex-lg-grow-0 px-lg-4">
       <a ngbNavLink (click)="changeType(tab.id === 0)" class="fw-semibold">
@@ -15,30 +15,18 @@
   </ng-container>
 </ul>
 <!-- Main -->
-<div class="mt-4 mt-lg-8">
-  <ng-container *ngIf="currentAddress">
+<div class="mt-4 mt-lg-8" *ngIf="currentAddress">
+  <ng-container>
     <app-my-grantees *ngIf="isGrantees"></app-my-grantees>
     <app-my-granters *ngIf="!isGrantees"></app-my-granters>
   </ng-container>
-  <ng-container *ngIf="!currentAddress">
-    <div class="d-flex justify-content-end align-items-center">
-      <button
-        #connectButton
-        type="button"
-        class="button button-outline button-outline--gradient button--md button-pill"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasWallet"
-        aria-controls="offcanvasWallet">
-        <span>Add New Grant</span>
-      </button>
-    </div>
-
-    <div class="mt-4 mt-lg-5 card">
-      <div class="card-body">
-        <div class="mt-4">
-          <app-table-no-data [textNull]="'Kindly connect wallet to experience feegrant functions'"></app-table-no-data>
-        </div>
+</div>
+<ng-container *ngIf="!currentAddress">
+  <div class="mt-lg-5 card">
+    <div class="card-body">
+      <div class="mt-4">
+        <app-table-no-data [textNull]="'Kindly connect wallet to experience feegrant functions'"></app-table-no-data>
       </div>
     </div>
-  </ng-container>
-</div>
+  </div>
+</ng-container>
