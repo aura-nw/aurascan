@@ -6,6 +6,9 @@ import { getInfo } from './core/utils/common/info-common';
 import { Globals } from './global/global';
 // import eruda from 'eruda';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { forkJoin } from 'rxjs';
+import { NameTagService } from './core/services/name-tag.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +24,8 @@ export class AppComponent implements OnInit {
   constructor(
     private commonService: CommonService,
     private globals: Globals,
-    private tokenService: TokenService, // private env: EnvironmentService
+    private tokenService: TokenService,
+    private nameTagService: NameTagService,
   ) {}
   ngOnInit(): void {
     this.getListNameTag();
@@ -66,8 +70,43 @@ export class AppComponent implements OnInit {
       limit: 500,
       nextKey: 0,
     };
-    this.commonService.getListNameTag(payload).subscribe((res) => {
-      this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
+
+    const payloadPrivate = {
+      limit: 100,
+      offset: 0,
+      keyword: null,
+    };
+
+    forkJoin({
+      publicName: this.commonService.getListNameTag(payload),
+      privateName: this.nameTagService.getListPrivateNameTag(payloadPrivate),
+    }).subscribe(({ publicName, privateName }) => {
+      let listTemp = publicName.data?.nameTags?.map((element) => {
+        const address = _.get(element, 'address');
+        let name_tag = _.get(element, 'name_tag');
+        let isPrivate = false;
+        let name_tag_private = null;
+        const enterpriseUrl = _.get(element, 'enterpriseUrl');
+        let privateData = privateName?.data?.find((k) => k.address === address);
+        if (privateData) {
+          name_tag_private = privateData.name_tag;
+          isPrivate = true;
+        }
+        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private };
+      });
+
+      // get other data of private list
+      const isSameUser = (listTemp, privateName) => listTemp?.address === privateName.address;
+      const onlyInLeft = (left, right, compareFunction) =>
+        left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
+      const onlyInB = onlyInLeft(privateName?.data, listTemp, isSameUser);
+      onlyInB.forEach((element) => {
+        element['name_tag_private'] = element.name_tag;
+        element['isPrivate'] = true;
+      });
+      const result = [...listTemp, ...onlyInB];
+
+      this.globals.listNameTag = this.commonService.listNameTag = result;
     });
   }
 }

@@ -50,4 +50,9 @@ export class NameTagComponent implements OnInit {
     url = url.match(/^https?:/) ? url : '//' + url;
     return url;
   }
+
+  displayContent(value) {
+    let result = value + '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag);
+    return result;
+  }
 }

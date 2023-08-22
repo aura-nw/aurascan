@@ -120,7 +120,7 @@ export class CommonService {
   setNameTag(address, listNameTag = []) {
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     const nameTag = this.listNameTag?.find((k) => k.address === address);
-    return nameTag?.name_tag || address;
+    return nameTag?.name_tag_private || nameTag?.name_tag || address;
   }
 
   findNameTag(keySearch, listNameTag = []) {
@@ -156,6 +156,15 @@ export class CommonService {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
     if (nameTag?.enterpriseUrl?.length > 0) {
       result = nameTag?.enterpriseUrl;
+    }
+    return result;
+  }
+
+  checkPrivate(address): boolean {
+    let result = false;
+    const nameTag = this.listNameTag?.find((k) => k.address === address && k.isPrivate);
+    if (nameTag?.name_tag_private) {
+      result = true;
     }
     return result;
   }

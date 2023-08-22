@@ -70,7 +70,6 @@ export class PopupNameTagComponent implements OnInit {
   checkFormValid() {
     this.getAddress['value'] = this.getAddress?.value.trim();
     this.isValidAddress = false;
-    console.log(this.getAddress.value?.length);
 
     if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
       if (
@@ -84,7 +83,6 @@ export class PopupNameTagComponent implements OnInit {
 
   async onSubmit() {
     this.isSubmit = true;
-    console.log(this.privateNameForm);
     const { isAccount, address, name, note } = this.privateNameForm.value;
 
     const payload = {
@@ -104,7 +102,6 @@ export class PopupNameTagComponent implements OnInit {
         this.toastr.successWithTitle('Private name tag created!', 'Success');
       },
       error: (error) => {
-        console.log(error);
         this.toastr.error(error?.details.message[0] || 'Error');
       },
     });
