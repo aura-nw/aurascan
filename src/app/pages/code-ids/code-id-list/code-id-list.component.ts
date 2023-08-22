@@ -35,7 +35,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
     { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail' },
     { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
     { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'type', headerCellDef: 'Message' },
     { matColumnDef: 'instantiates', headerCellDef: 'INSTANTIATES' },
     { matColumnDef: 'created_at', headerCellDef: 'created at' },
     { matColumnDef: 'verified_at', headerCellDef: 'Verified at' },
