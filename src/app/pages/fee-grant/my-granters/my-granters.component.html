@@ -117,8 +117,8 @@
             <app-table-no-data
               [textNull]="
                 this.isActive
-                  ? 'You don\'t have any active granted fee allowance to others'
-                  : 'You don\'t have any inactive granted fee allowance to others'
+                  ? 'You don\'t have any active granted fee allowance from others'
+                  : 'You don\'t have any inactive granted fee allowance from others'
               "
               *ngIf="!loading && isNoData"></app-table-no-data>
             <app-table-no-data *ngIf="!loading && !isNoData"></app-table-no-data>
