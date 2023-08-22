@@ -13,7 +13,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 })
 export class TopStatisticOverviewComponent implements OnInit {
   rangeList = AURA_TOP_STATISTIC_RANGE;
-  currentRange = AURA_TOP_STATISTIC_RANGE.D_1;
+  currentRange = AURA_TOP_STATISTIC_RANGE.Range1;
   currentDay;
   preDay;
   loading = true;
@@ -24,12 +24,14 @@ export class TopStatisticOverviewComponent implements OnInit {
     public global: Globals,
     private statisticService: StatisticService,
     private environmentService: EnvironmentService,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
     this.currentDay = formatDate(Date.now(), 'dd-MMM', 'en-US');
-    this.getTransactionData(this.currentRange);
+    setTimeout(() => {
+      this.getTransactionData(this.currentRange);
+    }, 500);
   }
 
   getTransactionData(time: string) {
@@ -37,14 +39,21 @@ export class TopStatisticOverviewComponent implements OnInit {
     let day = new Date();
     day.setDate(day.getDate() - +this.currentRange);
     this.preDay = formatDate(day, 'dd-MMM', 'en-US');
-    this.statisticService.getListAccountStatistic(this.currentRange, 1).subscribe((res) => {
-      this.loading = true;
-      if (res && res.data) {
-        this.transactionsData = res.data;
-      } else {
-        this.transactionsData = null;
-      }
-      this.loading = false;
-    });
+    let filterValue = 'three_days';
+    if (time === AURA_TOP_STATISTIC_RANGE.Range2) {
+      filterValue = 'fifteen_days';
+    } else if (time === AURA_TOP_STATISTIC_RANGE.Range3) {
+      filterValue = 'thirty_days';
+    }
+
+    this.statisticService.getListAccountStatistic().subscribe(
+      (res) => {
+        this.transactionsData = res[filterValue];
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 }
