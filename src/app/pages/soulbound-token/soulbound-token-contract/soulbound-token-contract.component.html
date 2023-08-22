@@ -80,7 +80,7 @@
       </div>
       <!-- Table -->
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-        <div class="overflow-scroll-x aura-table-contain spacer-tooltip aura-table-slist">
+        <div class="overflow-scroll-x aura-table-contain aura-table-slist">
           <table mat-table [dataSource]="dataSource" class="aura-table">
             <!-- Number Column -->
             <ng-container matColumnDef="id">

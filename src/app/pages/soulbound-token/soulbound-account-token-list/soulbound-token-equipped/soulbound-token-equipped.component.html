@@ -67,7 +67,8 @@
                     <span
                       class="text--primary hover-link"
                       (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)">
-                      {{ token.token_id | cutStringPipe : 8 : 8 }}
+                      <span class="d-lg-inline-block d-none">{{ token.token_id | cutStringPipe : 12 }}</span>
+                      <span class="d-lg-none d-inline-block">{{ token.token_id | cutStringPipe : 9 }}</span>
                     </span>
                   </div>
                 </div>

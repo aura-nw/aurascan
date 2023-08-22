@@ -12,7 +12,7 @@
             <input
               type="text"
               class="form-control pl-0"
-              placeholder="Search for Tx Hash, Address/name tag or Status"
+              placeholder="Search for Tx Hash or Address/name tag"
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
               name="search"
@@ -39,7 +39,7 @@
       </div>
       <div class="mt-4">
         <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-          <div class="overflow-scroll-x aura-table-contain spacer-tooltip">
+          <div class="overflow-scroll-x aura-table-contain ">
             <table mat-table [dataSource]="dataSource" class="aura-table grant-table">
               <ng-container *ngFor="let template of templates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">

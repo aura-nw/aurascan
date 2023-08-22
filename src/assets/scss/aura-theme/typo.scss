@@ -1,4 +1,4 @@
-@mixin mono-font-size($font-size, $line-height, $font-weight, $font: "Inter") {
+@mixin mono-font-size($font-size, $line-height, $font-weight, $font: 'Inter') {
   font-size: #{$font-size}rem !important;
   line-height: #{$line-height}rem !important;
   font-weight: $font-weight !important;
@@ -7,6 +7,9 @@
 html,
 body {
   font-size: 10px;
+}
+.text-sm {
+  font-size: 14px !important;
 }
 h1,
 .h1 {
@@ -20,7 +23,7 @@ h2,
 }
 h3,
 .h3 {
-  @include mono-font-size(2, 2.6, 500);
+  @include mono-font-size(2, 2.6, 400);
 }
 h4,
 .h4 {
@@ -32,7 +35,7 @@ h5,
 }
 h6,
 .h6 {
-  @include mono-font-size(1.6, 2.4, 500);
+  @include mono-font-size(1.6, 2.4, 400);
 }
 .body {
   @include mono-font-size(1.4, 1.6, 400);
@@ -41,7 +44,7 @@ h6,
   @include mono-font-size(1.6, 2, 400);
 }
 .body-02 {
-  @include mono-font-size(1.4, 1.8, 500);
+  @include mono-font-size(1.4, 1.8, 400);
 }
 .body-03 {
   @include mono-font-size(1.4, 1.6, 400);
@@ -60,7 +63,7 @@ h6,
     display: inline-block;
   }
   .h3-mob {
-    @include mono-font-size(2, 2.6, 500);
+    @include mono-font-size(2, 2.6, 400);
   }
   .h4-mob {
     @include mono-font-size(1.6, 2, 600);
@@ -69,7 +72,7 @@ h6,
     @include mono-font-size(1.6, 1.9, 600);
   }
   .h6-mob {
-    @include mono-font-size(1.6, 2.4, 500);
+    @include mono-font-size(1.6, 2.4, 400);
   }
   .body-mob {
     @include mono-font-size(1.4, 1.6, 400);
@@ -78,7 +81,7 @@ h6,
     @include mono-font-size(1.6, 2, 400);
   }
   .body-02-mob {
-    @include mono-font-size(1.4, 1.6, 500);
+    @include mono-font-size(1.4, 1.6, 400);
   }
   .body-03-mob {
     @include mono-font-size(1.4, 1.6, 400);
@@ -86,31 +89,32 @@ h6,
   .caption-mob {
     @include mono-font-size(1.2, 1.6, 600);
   }
-
 }
 $textColors: (
-  "primary",
-  "danger",
-  "info",
-  "warning",
-  "white",
-  "black",
-  "gray-light",
-  "gray-1",
-  "gray-2",
-  "gray-3",
-  "gray-4",
-  "gray-5",
-  "gray-6",
-  "gray-7",
-  "green-4",
-  "green-3",
-  "green-2",
-  "red-3",
-  "yellow-3",
-  "blue-2",
-  "blue-3link",
-  "yellow-4",
+  'primary',
+  'danger',
+  'info',
+  'warning',
+  'white',
+  'black',
+  'gray-light',
+  'gray-1',
+  'gray-2',
+  'gray-3',
+  'gray-4',
+  'gray-5',
+  'gray-6',
+  'gray-7',
+  'green-4',
+  'green-3',
+  'green-2',
+  'red-3',
+  'yellow-3',
+  'blue-2',
+  'blue-3link',
+  'yellow-4',
+  'aqua-2',
+  'aura-blue-3link'
 );
 @each $color in $textColors {
   .text--#{$color} {
@@ -123,15 +127,9 @@ $textColors: (
 .fw-semibold {
   font-weight: 600 !important;
 }
-
-.fw-500 {
-  font-weight: 500 !important;
-}
-
 .fw-normal {
   font-weight: 400 !important;
 }
-
 .font-italic {
   font-style: italic;
 }
@@ -143,16 +141,10 @@ $textColors: (
   .fw-semibold-mob {
     font-weight: 600 !important;
   }
-
-  .fw-500-mob {
-    font-weight: 500 !important;
-  }
-
   .fw-normal-mob {
     font-weight: 400 !important;
   }
 }
-
 
 .text-gradient {
   background: var(--aura-gradient-general);
@@ -160,6 +152,6 @@ $textColors: (
   -webkit-text-fill-color: transparent;
 }
 
-.text-hover-gray{
-  color: #9DA2AF;
+.text-hover-gray {
+  color: #9da2af;
 }
