@@ -29,7 +29,7 @@ export class ContractsRegisterComponent implements OnInit {
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'type', headerCellDef: 'Message' },
     { matColumnDef: 'result', headerCellDef: 'Result registration' },
     { matColumnDef: 'updated_at', headerCellDef: 'Time Registered' },
     { matColumnDef: 'action', headerCellDef: '' },

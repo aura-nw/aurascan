@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   templatesTx: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'type', headerCellDef: 'Message' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);

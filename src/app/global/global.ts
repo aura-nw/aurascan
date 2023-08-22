@@ -11,6 +11,7 @@ import {
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
+import { TabsAccount } from '../core/constants/account.enum';
 Injectable();
 
 export class Globals {
@@ -290,6 +291,14 @@ export function convertDataTransaction(data, coinInfo) {
       }
     } catch (e) {}
 
+    if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
+      try {
+        let dataTemp = JSON.parse(messages[0]?.msg);
+        let action = Object.keys(dataTemp)[0];
+        type = 'Execute_' + action[0]?.toUpperCase() + action.substr(1)?.toLowerCase();
+      } catch {}
+    }
+
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
@@ -336,4 +345,137 @@ export function convertDataBlock(data) {
     return { height, block_hash, num_txs, proposer, operator_address, timestamp };
   });
   return block;
+}
+
+export function convertDataAccountTransaction(data, coinInfo, modeQuery, setReceive = false) {
+  const txs = _.get(data, 'transaction').map((element) => {
+    const code = _.get(element, 'code');
+    const tx_hash = _.get(element, 'hash');
+
+    const lstTypeTemp = _.get(element, 'transaction_messages');
+    let type;
+    if (lstTypeTemp) {
+      if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.GetReward) {
+        type = TypeTransaction.GetReward;
+      } else if (lstTypeTemp?.length > 1) {
+        if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+          type = TypeTransaction.MultiSend;
+        } else {
+          type = 'Multiple';
+        }
+      }
+    }
+
+    let denom = coinInfo.coinDenom;
+    const _amount = _.get(element, 'events[0].event_attributes[2].value');
+    let amount = balanceOf(_amount?.match(/\d+/g)[0]);
+
+    const status =
+      _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+
+    const fee = balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals);
+    const height = _.get(element, 'height');
+    const timestamp = _.get(element, 'timestamp');
+    let limit = 5;
+    let fromAddress;
+    let toAddress;
+    let arrEvent;
+    let tokenId;
+    let contractAddress;
+
+    switch (modeQuery) {
+      case TabsAccount.ExecutedTxs:
+        type = getTypeTx(element);
+        break;
+      case TabsAccount.AuraTxs:
+        arrEvent = _.get(element, 'transaction_messages')?.map((item, index) => {
+          let type = _.get(item, 'type');
+          let fromAddress = _.get(item, 'event_attributes[1].value');
+          let toAddress = _.get(item, 'event_attributes[0].value');
+          let amountTemp = _.get(item, 'event_attributes[2].value')?.match(/\d+/g)[0];
+          let denom = coinInfo.coinDenom;
+          let amount = balanceOf(Number(amountTemp) || 0, denom);
+          return { type, fromAddress, toAddress, amount, denom };
+        });
+        break;
+      case TabsAccount.FtsTxs:
+        arrEvent = _.get(element, 'events')?.map((item, index) => {
+          let type = getTypeTx(element);
+          let fromAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].from') || NULL_ADDRESS;
+          let toAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].to') || NULL_ADDRESS;
+          let denom = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.symbol');
+          let amountTemp = _.get(item, 'smart_contract_events[0].cw20_activities[0].amount');
+          let decimal = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.decimal');
+          let amount = balanceOf(amountTemp || 0, +decimal);
+          return { type, fromAddress, toAddress, amount, denom };
+        });
+        break;
+      case TabsAccount.NftTxs:
+        arrEvent = _.get(element, 'events')?.map((item, index) => {
+          let type = getTypeTx(element);
+          let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
+          let toAddress = _.get(item, 'smart_contract_events[0].cw721_activity.to') || NULL_ADDRESS;
+          let contractAddress = _.get(element, 'transaction_messages[0].content.contract');
+          let dataTemp = _.get(element, 'transaction_messages[0].content.msg');
+          let tokenId;
+          if (typeof dataTemp === 'string') {
+            try {
+              dataTemp = JSON.parse(dataTemp);
+              tokenId = dataTemp[Object.keys(dataTemp)[0]]?.token_id || '';
+            } catch (e) {}
+          }
+
+          return { type, fromAddress, toAddress, tokenId, contractAddress };
+        });
+        break;
+    }
+
+    if (modeQuery !== TabsAccount.ExecutedTxs) {
+      fromAddress = arrEvent[0]?.fromAddress;
+      toAddress = arrEvent[0]?.toAddress;
+      denom = arrEvent[0]?.denom;
+      amount = arrEvent[0]?.amount;
+      type = arrEvent[0]?.type || lstTypeTemp[0]?.type?.split('.').pop();
+      tokenId = arrEvent[0]?.tokenId;
+      contractAddress = arrEvent[0]?.contractAddress;
+    }
+
+    if (type === 'Send' && setReceive) {
+      type = 'Receive';
+    }
+
+    return {
+      code,
+      tx_hash,
+      type,
+      status,
+      amount,
+      fee,
+      height,
+      timestamp,
+      denom,
+      fromAddress,
+      toAddress,
+      tokenId,
+      contractAddress,
+      arrEvent,
+      limit,
+    };
+  });
+  return txs;
+}
+
+export function getTypeTx(element) {
+  let type = _.get(element, 'transaction_messages[0].content["@type"]');
+  if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
+    try {
+      let dataTemp = _.get(element, 'transaction_messages[0].content.msg');
+      dataTemp = JSON.parse(dataTemp);
+      let action = Object.keys(dataTemp)[0];
+      type = 'Execute_' + action[0]?.toUpperCase() + action.substr(1)?.toLowerCase();
+    } catch (e) {}
+  } else {
+    type = _.find(TYPE_TRANSACTION, { label: type })?.value || type.split('.').pop();
+  }
+  return type;
 }

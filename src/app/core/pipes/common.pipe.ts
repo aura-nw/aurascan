@@ -121,3 +121,23 @@ export class decodeData implements PipeTransform {
     return atob(value);
   }
 }
+
+@Pipe({ name: 'displayTypeToolTip' })
+export class displayTypeToolTip implements PipeTransform {
+  transform(value: any): string {
+    let result = '';
+    value.forEach((element, index) => {
+      if (index <= 4) {
+        if (result?.length > 0) {
+          result += ', ' + element.type;
+        } else {
+          result += element.type;
+        }
+      }
+    });
+    if (value?.length > 4) {
+      result += ', ...';
+    }
+    return result;
+  }
+}
