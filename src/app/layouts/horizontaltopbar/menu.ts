@@ -159,7 +159,7 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 2,
-        label: 'Account Bound Token',
+        label: 'ABT Creator',
         link: '/accountbound',
         icon: 'medal',
       },
@@ -296,7 +296,7 @@ export const MENU_MOB: MenuItem[] = [
       },
       {
         id: 2,
-        label: 'Account Bound Token',
+        label: 'ABT Creator',
         link: '/accountbound',
         icon: 'medal',
       },

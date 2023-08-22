@@ -3,4 +3,7 @@
 
 <app-dialog></app-dialog>
 <!-- button scroll to top -->
-<button class="button-float {{pageYOffset > 0 ? 'show' : ''}}" [class.active]="scrolling" (click)="scrollToTop()"></button>
+<button
+  class="button-float {{ pageYOffset > 0 ? 'show' : '' }}"
+  [class.active]="scrolling"
+  (click)="scrollToTop()"></button>
