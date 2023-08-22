@@ -116,7 +116,7 @@ export class TokenTableComponent implements OnChanges {
             // Sort and slice 20 frist record.
             const result = lstToken?.slice(payload?.offset, payload?.offset + payload?.limit);
             this.dataSource = new MatTableDataSource<any>(result);
-            this.pageData.length = res.meta.count;
+            this.pageData.length = res.meta?.count || lstToken?.length;
           } else {
             this.pageData.length = 0;
             this.dataSource.data = [];

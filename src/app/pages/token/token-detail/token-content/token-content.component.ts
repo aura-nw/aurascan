@@ -21,8 +21,6 @@ export class TokenContentComponent implements OnInit {
   @Output() resultLength = new EventEmitter<any>();
   @Output() hasMore = new EventEmitter<any>();
 
-  // tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
-  // tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Contract];
   TABS = [];
@@ -53,7 +51,7 @@ export class TokenContentComponent implements OnInit {
     private environmentService: EnvironmentService,
     public global: Globals,
     private layout: BreakpointObserver,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -88,11 +86,11 @@ export class TokenContentComponent implements OnInit {
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
-
     if (this.searchTemp?.length > 0) {
+      const addressNameTag = this.commonService.findNameTag(this.searchTemp);
       this.textSearch = this.searchTemp;
       let tempTabs;
-      this.paramQuery = this.searchTemp;
+      this.paramQuery = addressNameTag || this.searchTemp;
       if (this.textSearch.length === LENGTH_CHARACTER.TRANSACTION && this.textSearch == this.textSearch.toUpperCase()) {
         this.isSearchTx = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);

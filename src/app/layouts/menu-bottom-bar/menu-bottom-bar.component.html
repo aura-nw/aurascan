@@ -10,7 +10,7 @@
             [routerLink]="item.link"
             [class.active]="router.url === '/' && item.link === '/'">
             <i class="ph-{{ item.icon }} mx-auto h3 mr-2 mb-0"></i>
-            <div class="caption fw-500 d-block mt-1">{{ item.label | translate }}</div>
+            <div class="caption d-block mt-1">{{ item.label | translate }}</div>
           </a>
         </ng-container>
         <ng-container *ngIf="item.name === menuName.BlockChain">

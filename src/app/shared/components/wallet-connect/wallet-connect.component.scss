@@ -1,14 +1,9 @@
 .wallet-connect-container {
-  .text {
-    font-size: 16px;
+  margin-top: 0px;
+  margin-bottom: 22px;
+  @media (max-width: 414px) {
+    margin-bottom: 16px;
   }
-
-  .img-wallet {
-    width: 32px;
-    cursor: pointer;
-    height: auto;
-  }
-
   .wallet-avatar {
     width: 26px;
     height: 26px;
@@ -31,11 +26,12 @@
 
   .walletMenu {
     &.aura-dropdown .dropdown-menu.aura-dropdown-menu {
-      border: 1px solid var(--aura-gray-9);
+      border: 1px solid var(--aura-gray-6);
       border-radius: 8px;
       box-shadow: 0px 2px 10px rgba(3, 3, 3, 0.3);
+      overflow: unset;
       li.dropdown-item {
-        transition: background-color .35s ease-in-out;
+        transition: background-color 0.35s ease-in-out;
         &:hover {
           background-color: var(--aura-gray-9) !important;
         }
@@ -56,7 +52,7 @@
     background: #141416;
     box-shadow: -2px 0px 18px rgba(0, 0, 0, 0.25);
     border: none;
-
+    z-index: 2000;
     .card {
       background: #141416;
     }
@@ -93,30 +89,64 @@
   }
 }
 
-.button-wallet-menu {
-  min-width: 90px;
-  @media (max-width: 991.98px) {
-    padding-right: 30px !important;
-    &:before, &:after {
-      right: 10px !important;
-    }
+.menu__input {
+  background: rgba(19, 20, 25, 1);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 16px;
+  padding-right: 10px;
+  border-radius: 4px;
+}
+.button-wallet {
+  border-radius: 999px;
+}
+.button-wallet-menu.button-outline__in-card {
+  box-shadow: 2px 1000px 1px var(--aura-gray-9) inset !important;
+  border-radius: 999px;
+  &:hover {
+    background: linear-gradient(88deg, #22534b 0%, #43485b 52.6%, #5c4326 100%);
+    box-shadow: unset !important;
   }
-  @media (max-width: 414.98px) {
-    padding: 0 14px;
-    padding-right: 25px !important;
+}
+
+.box-connect {
+  box-shadow: 2px 1000px 1px var(--aura-black) inset !important;
+  padding: 0px 16px 0px 8px;
+  height: 32px;
+  border: 1px solid var(--aura-gray-9);
+  cursor: unset;
+}
+
+.icon-connect {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 7px;
+  background-color: var(--aura-danger);
+  &.connected {
+    background-color: var(--aura-blue-4);
   }
-  &[aria-expanded = 'true'] {
-    &:before {
-      opacity: 0;
-    }
-    &:after {
-      opacity: 1;
-    }
+}
+
+.box-connect-wallet {
+  .divider-vertical {
+    height: 32px;
   }
-  &::before {
-    background: url(../../../../assets/icons/icons-svg/black/caret-up.svg) center no-repeat;
+  .aura-tooltip-object {
+    background: none;
   }
-  &::after {
-    background: url(../../../../assets/icons/icons-svg/black/caret-down.svg) center no-repeat;
+  .txt-wallet,
+  .txt-disconnect:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .txt-disconnect:hover {
+    color: var(--aura-blue-4);
+  }
+  @media (max-width: 992px) {
+    width: 100%;
+    justify-content: space-between;
   }
 }

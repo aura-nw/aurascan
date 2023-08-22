@@ -4,3 +4,21 @@
     width: 70px;
   }
 }
+
+.box-statistic {
+  .card-info {
+    min-height: 98px;
+    background-color: var(--aura-gray-9);
+  }
+
+  ::ng-deep {
+    .box-name-tag {
+      background-color: var(--aura-gray-8) !important;
+      &:not(.private-name-tag) {
+        &:after {
+          border-right: 15px solid var(--aura-gray-9) !important;
+        }
+      }
+    }
+  }
+}

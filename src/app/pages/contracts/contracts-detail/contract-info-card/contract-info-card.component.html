@@ -11,23 +11,23 @@
           <td colspan="2">
             <ng-container
               *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
-              <!-- <app-name-tag
-                [value]="contractDetail?.address"
-                [isLink]="false"
-                [extendUrl]="true"
-                [widthAuto]="true"></app-name-tag> -->
-              <div class="d-flex">
+              <div class="box-name-tag">
                 <span class="d-none d-lg-flex">{{ commonService.setNameTag(contractDetail?.address) || '-' }}</span>
-                <span class="d-flex d-lg-none justify-content-center">{{
-                  (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 8 : 8) || '-'
-                }}</span>
+                <span class="d-flex d-lg-none justify-content-center">
+                  <ng-container *ngIf="!commonService.checkDisplayTooltip(contractDetail?.address)">
+                    {{ (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 16) || '-' }}
+                  </ng-container>
+                  <ng-container *ngIf="commonService.checkDisplayTooltip(contractDetail?.address)">
+                    {{ (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 8 : 8) || '-' }}
+                  </ng-container>
+                </span>
                 <a
                   target="_blank"
                   [href]="extendLink(commonService.findUrlNameTag(contractDetail?.address))"
                   *ngIf="commonService.findUrlNameTag(contractDetail?.address)">
                   <i
                     _ngcontent-wrg-c372=""
-                    class="ph-arrow-square-out-fill text--primary body-01 h3-mob ml-1 cursor-pointer"></i>
+                    class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer mb-1"></i>
                 </a>
               </div>
             </ng-container>

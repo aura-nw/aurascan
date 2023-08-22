@@ -12,7 +12,7 @@
     </div>
   </div>
 </div>
-<div class="divider divider-horizontal my-4 d-lg-none"></div>
+<div *ngIf="pageData?.length > 0" class="divider divider-horizontal my-4 d-lg-none"></div>
 <!-- Table -->
 <div class="row">
   <div class="col-12">
@@ -20,7 +20,7 @@
       <app-loading-sprint></app-loading-sprint>
     </div>
     <ng-container *ngIf="pageData?.length > 0; else noValues">
-      <div class="overflow-scroll-x spacer-tooltip aura-table-contain">
+      <div class="overflow-scroll-x aura-table-contain">
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of template; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
@@ -43,7 +43,7 @@
                         [fullText]="true"
                         [fullTextMob]="true"
                         [isHref]="true"
-                        [tooltipRight]="true"
+                        [tooltipPosition]="'tooltip--right'"
                         [url]="
                           '/tokens/' +
                           (this.typeContract === contractType.CW20 ? 'token' : 'token-nft') +

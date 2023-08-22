@@ -5,30 +5,10 @@
         <ngb-carousel [showNavigationArrows]="false">
           <ng-template ngbSlide>
             <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
-              <img
-                src="assets/images/pages/banner_aurascan.png"
-                alt="Random first slide"
-                class="carousel__img" />
+              <img src="assets/images/pages/banner_aurascan.png" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mb-lg-6" *ngIf="notice?.content">
-    <div class="col">
-      <div class="notice-warning">
-        <div class="notice-icon">
-          <img src="assets/icons/icons-svg/color/warning-red.svg" alt="icon" />
-          <span class="body-03 text--red-3 fw-semibold"> NOTICE </span>
-        </div>
-        <span class="body-03 text--gray-1 notice-content">
-          {{ notice?.content }}
-          <a href="{{ notice.url }}" target="_blank">
-            <i class="ph-arrow-square-out-fill body-03 text--gray-1"> </i>
-          </a>
-        </span>
       </div>
     </div>
   </div>
@@ -42,23 +22,21 @@
               <div
                 class="card-info card-info--gradient-black mb-0 card-summary-info p-0 h-100 d-flex align-items-center">
                 <div class="d-flex flex-column px-lg-4 flex-shrink-0 flex-grow-1">
-                  <div class="d-flex align-items-center py-4 px-2 pb-md-0 pb-lg-4 py-xl-6">
-                    <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
-                    <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">AURA</div>
-                    <div class="aura-tooltip-contain">
-                      <a
+                  <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
+                    <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
+                      <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
+                      <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">AURA</div>
+                      <div class="aura-tooltip-contain">
+                        <a
                           href="https://www.coingecko.com/en/coins/aura-network"
                           target="_blank"
                           class="ml-2 button button--sm button-ghost button-ghost--sm aura-tooltip-object">
-                        <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
-                      </a>
-                      <app-tooltip-customize
-                          [content]="'Open CoinGecko'">
-                      </app-tooltip-customize>
+                          <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
+                        </a>
+                        <app-tooltip-customize [content]="'Open CoinGecko'"> </app-tooltip-customize>
+                      </div>
                     </div>
-                  </div>
-                  <div class="divider divider-horizontal"></div>
-                  <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
+                    <div class="divider divider-horizontal"></div>
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                       <i class="ph-coins-thin icon-info text--gray-3"></i>
                       <div class="ml-4">
@@ -247,10 +225,7 @@
         <ngb-carousel [showNavigationArrows]="false">
           <ng-template ngbSlide>
             <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
-              <img
-                src="assets/images/pages/banner_aurascan.png"
-                alt="Random first slide"
-                class="carousel__img" />
+              <img src="assets/images/pages/banner_aurascan.png" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
@@ -379,7 +354,7 @@
                 <ng-container *ngFor="let template of templatesBlock; index as i">
                   <ng-container [matColumnDef]="template.matColumnDef">
                     <th mat-header-cell *matHeaderCellDef>
-                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>
@@ -447,7 +422,7 @@
                       *matHeaderCellDef
                       [class.width-txhash]="template.headerCellDef === 'Tx Hash'"
                       [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
-                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>

@@ -2,13 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
+import * as _ from 'lodash';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
-import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
-import { Globals } from 'src/app/global/global';
 
 @Injectable()
 export class CommonService {
@@ -43,7 +42,7 @@ export class CommonService {
   }
 
   status(): Observable<any> {
-    return this._http.get<any>(`${this.horoscopeApi}/dashboard-statistics?chainid=${this.chainId}`);
+    return this._http.get<any>(`${this.horoscopeApi}/statistics/dashboard?chainid=${this.chainId}`);
   }
 
   getParamTallyingFromLCD() {
@@ -112,7 +111,10 @@ export class CommonService {
   }
 
   getListNameTag(payload) {
-    return this._http.post<any>(`${this.apiUrl}/name-tag/get-name-tag`, payload);
+    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
+    return this._http.get<any>(`${this.apiUrl}/public-name-tag`, {
+      params,
+    });
   }
 
   setNameTag(address, listNameTag = []) {
