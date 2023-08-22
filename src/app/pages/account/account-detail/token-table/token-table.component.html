@@ -190,10 +190,15 @@
                 <ng-container *ngIf="element.contract_address === '-'">
                   <div [appBigNumber]="element.balance" [decimal]="0"></div>
                 </ng-container>
-                <div
-                  *ngIf="element.contract_address !== '-'"
-                  [appBigNumber]="element.balance"
-                  [decimal]="element.decimals"></div>
+                <div *ngIf="element.contract_address !== '-'" class="aura-tooltip-contain d-flex">
+                  <div class="aura-tooltip-object" *ngIf="(element.balance | balanceOf : element.decimals) < 0.001"> <0,001 </div>
+                  <app-tooltip-customize [content]="convertSmallNumber(element.balance,element.decimals)">
+                  </app-tooltip-customize>
+                  <div
+                    *ngIf="(element.balance | balanceOf : element.decimals) > 0.001"
+                    [appBigNumber]="element.balance"
+                    [decimal]="element.decimals"></div>
+                </div>
               </td>
             </ng-container>
 

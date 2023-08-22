@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -180,5 +181,11 @@ export class TokenTableComponent implements OnChanges {
       this.total = res.data || 0;
       this.totalValue.emit(this.total);
     });
+  }
+
+  convertSmallNumber(amount: number, decimal: number) {
+    let valueString = (new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toString();
+    let res = valueString.match(/(.*)e-(\d)/);
+    return res ? '0.' + new Array(parseInt(res[2], 10)).join('0') + res[1].replace('.', '') : valueString;
   }
 }
