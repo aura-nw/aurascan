@@ -2,38 +2,41 @@
 <section class="mt-6">
   <div class="card">
     <div class="card-body">
-      <!-- Title -->
-      <div class="h2 mb-4 mb-lg-0 text--white">Smart Contracts</div>
-      <div
-        class="d-flex flex-column flex-lg-row justify-content-lg-between flex-lg-row-reverse align-items-lg-center mb-4">
-        <form (ngSubmit)="searchToken()" class="aura-form single-input-field search-form-sbcontract" #searchForm>
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Search for Contract Address/name tag"
-              [(ngModel)]="searchValue"
-              [maxLength]="maxLengthSearch"
-              (keyup.enter)="searchToken()"
-              name="search"
-              autocomplete="off" />
-            <button type="submit" class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
-            <button
-              type="reset"
-              class="btn-reset cursor-pointer {{
-                !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
-              }}"
-              (click)="resetSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
+      <ng-container *ngIf="currentAddress">
+        <div *ngIf="!isNoData && !loading" class="h2 mb-4 mb-lg-0 text--white">Smart Contracts</div>
+        <div
+          *ngIf="!isNoData && !loading"
+          class="d-flex flex-column flex-lg-row justify-content-lg-between flex-lg-row-reverse align-items-lg-center mb-4">
+          <form (ngSubmit)="searchToken()" class="aura-form single-input-field search-form-sbcontract" #searchForm>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search for Contract Address/name tag"
+                [(ngModel)]="searchValue"
+                [maxLength]="maxLengthSearch"
+                (keyup.enter)="searchToken()"
+                name="search"
+                autocomplete="off" />
+              <button type="submit" class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}">
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+              <button
+                type="reset"
+                class="btn-reset cursor-pointer {{
+                  !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+            </div>
+          </form>
+          <div class="body text--gray-4 mt-4 mt-lg-0">
+            A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
           </div>
-        </form>
-        <div class="body text--gray-4 mt-4 mt-lg-0">
-          A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
         </div>
-      </div>
+      </ng-container>
+
       <!-- Table -->
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
         <div class="overflow-scroll-x aura-table-contain aura-table-sctr">
@@ -111,10 +114,15 @@
 </section>
 <ng-template #noValues>
   <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-  <app-table-no-data
-    [textNull]="'Kindly connect wallet to view the ABT contract deployed with your as creator'"
-    *ngIf="!loading && !wallet"></app-table-no-data>
-  <app-table-no-data
-    [textNull]="'There isn\'t any smart contract deployed with you as the ABT\'s creator'"
-    *ngIf="!loading && wallet"></app-table-no-data>
+  <ng-container *ngIf="currentAddress">
+    <app-table-no-data
+      [textNull]="'There isn\'t any smart contract deployed with you as the ABT\'s creator'"
+      *ngIf="!loading && isNoData"></app-table-no-data>
+    <app-table-no-data *ngIf="!loading && !isNoData"></app-table-no-data>
+  </ng-container>
+  <ng-container *ngIf="!currentAddress">
+    <app-table-no-data
+      [textNull]="'Kindly connect wallet to view the ABT contract deployed with your as creator'"
+      *ngIf="!loading"></app-table-no-data>
+  </ng-container>
 </ng-template>

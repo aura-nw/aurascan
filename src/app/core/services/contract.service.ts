@@ -96,7 +96,7 @@ export class ContractService extends CommonService {
           updated_at
           creator
         }
-        smart_contract_aggregate(where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        smart_contract_aggregate(where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}, status: {_eq: "LATEST"}}) {
           aggregate {
             count
           }

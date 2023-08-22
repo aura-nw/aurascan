@@ -447,7 +447,7 @@
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchCase="'type'">
-                            <span class="label__status">{{ data[template.matColumnDef] }}</span>
+                            <span class="label__status">{{ data[template.matColumnDef] | cutStringPipe : 20 }}</span>
                           </div>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                         </ng-container>
