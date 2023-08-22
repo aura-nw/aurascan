@@ -18,6 +18,7 @@ import { PrivateNameTagComponent } from './private-name-tag/private-name-tag.com
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 
 @NgModule({
   declarations: [ProfileComponent, ProfileSettingsComponent, PrivateNameTagComponent, PopupNameTagComponent],
@@ -38,6 +39,6 @@ import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component
     TableNoDataModule,
     APaginatorModule,
   ],
-  providers: [FormBuilder, UserService],
+  providers: [FormBuilder, UserService, NameTagService],
 })
 export class ProfileModule {}
