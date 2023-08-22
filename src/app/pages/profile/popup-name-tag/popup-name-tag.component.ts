@@ -3,8 +3,11 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -30,10 +33,20 @@ export class PopupNameTagComponent implements OnInit {
     public environmentService: EnvironmentService,
     public translate: TranslateService,
     private commonService: CommonService,
+    private nameTagService: NameTagService,
+    private toastr: NgxToastrService,
   ) {}
 
   ngOnInit(): void {
     this.formInit();
+    const payload = {
+      limit: 20,
+      offset: 0,
+      keyword: null,
+    };
+    this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
+      console.log(res);
+    });
   }
 
   get getAddress() {
@@ -55,8 +68,10 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   checkFormValid() {
+    this.getAddress['value'] = this.getAddress?.value.trim();
     this.isValidAddress = false;
-    if (this.getAddress.value?.length > 0 && this.getAddress?.value?.trim().startsWith('aura')) {
+
+    if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
       if (
         (this.getAddress.value?.length === LENGTH_CHARACTER.ADDRESS && this.isAccount) ||
         (this.getAddress.value?.length === LENGTH_CHARACTER.CONTRACT && !this.isAccount)
@@ -68,7 +83,28 @@ export class PopupNameTagComponent implements OnInit {
 
   async onSubmit() {
     this.isSubmit = true;
-    console.log(this.privateNameForm);
+    const { isAccount, address, name, note } = this.privateNameForm.value;
+
+    const payload = {
+      type: isAccount ? 'account' : 'contract',
+      address: address,
+      nameTag: name,
+      note: null,
+    };
+
+    this.nameTagService.createPrivateName(payload).subscribe({
+      next: (res) => {
+        if (res.code && res.code !== 200) {
+          this.toastr.error(res.message || 'Error');
+          return;
+        }
+
+        this.toastr.successWithTitle('Private name tag created!', 'Success');
+      },
+      error: (error) => {
+        this.toastr.error(error?.details.message[0] || 'Error');
+      },
+    });
   }
 
   changeFavorite() {
