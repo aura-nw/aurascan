@@ -1,7 +1,7 @@
 export const AURA_TOP_STATISTIC_RANGE = {
-  D_1: '1',
-  D_3: '3',
-  D_7: '7',
+  Range1: '3',
+  Range2: '15',
+  Range3: '30',
 };
 
 export const TABS_TITLE_TOP_STATISTICS = [

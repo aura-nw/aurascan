@@ -130,13 +130,13 @@ export const MENU: MenuItem[] = [
         name: MenuName.ChartStats,
         icon: 'line-segments',
       },
-      // {
-      //   id: 2,
-      //   label: 'MENUITEMS.TOP-STATISTICS',
-      //   link: '/statistics/top-statistic',
-      //   name: MenuName.TopStatistics,
-      //   icon: 'chart-line-up',
-      // },
+      {
+        id: 2,
+        label: 'MENUITEMS.TOP-STATISTICS',
+        link: '/statistics/top-statistic',
+        name: MenuName.TopStatistics,
+        icon: 'chart-line-up',
+      },
     ],
   },
   {
@@ -159,7 +159,7 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 2,
-        label: 'Account Bound Token',
+        label: 'ABT Creator',
         link: '/accountbound',
         icon: 'medal',
       },
@@ -267,13 +267,13 @@ export const MENU_MOB: MenuItem[] = [
         name: MenuName.ChartStats,
         icon: 'line-segments',
       },
-      // {
-      //   id: 4,
-      //   label: 'MENUITEMS.TOP-STATISTICS',
-      //   link: '/statistics/top-statistic',
-      //   name: MenuName.TopStatistics,
-      //   icon: 'chart-line-up',
-      // },
+      {
+        id: 4,
+        label: 'MENUITEMS.TOP-STATISTICS',
+        link: '/statistics/top-statistic',
+        name: MenuName.TopStatistics,
+        icon: 'chart-line-up',
+      },
     ],
   },
   {
@@ -296,7 +296,7 @@ export const MENU_MOB: MenuItem[] = [
       },
       {
         id: 2,
-        label: 'Account Bound Token',
+        label: 'ABT Creator',
         link: '/accountbound',
         icon: 'medal',
       },

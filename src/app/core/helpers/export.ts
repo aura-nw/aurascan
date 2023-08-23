@@ -59,7 +59,7 @@ export function exportStatisticChart(data: any, type: string, currDate: string) 
     case 'unique-addresses':
       label = 'Aura Unique Addresses Data';
       break;
-    case 'cumulative-addresses':
+    case 'daily_active_addresses':
       label = 'Active Aura Addresses Data';
       break;
   }

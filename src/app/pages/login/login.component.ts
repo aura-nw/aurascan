@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
   hideConfirmPassword = true;
   emailFormat = '';
   isForgotScreen = false;
-  scriptLoaded = false;
   isError = false;
   errorResendMsg = 'Only can do resend email after 5 minute, please wait and click Resend again.';
 
@@ -56,11 +55,6 @@ export class LoginComponent implements OnInit {
     if (this.router.snapshot.url[0]?.path === 'welcome' || this.router.snapshot.url[0]?.path === 'already-active') {
       this.mode = this.screenType.Welcome;
       return;
-    }
-
-    if (this.router.snapshot.params.mode == '0') {
-      this.mode = this.screenType.Login;
-      this.route.navigate(['login']);
     }
 
     this.formInit();
@@ -147,7 +141,7 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
               localStorage.setItem('userEmail', JSON.stringify(res.email));
               localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
-              this.route.navigate(['/']);
+              this.route.navigate(['/profile']);
             }
           },
           error: (error) => {
@@ -243,7 +237,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
             localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
             localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
-            window.location.href = '/';
+            window.location.href = '/profile';
           },
           error: (error) => {
             this.addError(error?.details?.message);

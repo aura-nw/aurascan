@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
@@ -56,39 +57,54 @@ export class MyGranteesComponent implements OnInit {
     pageSize: 20,
     pageIndex: 1,
   };
-
+  isNoData = true;
   currentAddress = null;
   destroyed$ = new Subject();
   timerGetFeeGrant: any;
-
+  isSearchData = false;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     public commonService: CommonService,
     public global: Globals,
+    public translate: TranslateService,
     private environmentService: EnvironmentService,
     private dialog: MatDialog,
     private feeGrantService: FeeGrantService,
     private toastr: NgxToastrService,
-    public translate: TranslateService,
     private walletService: WalletService,
     private mappingErrorService: MappingErrorService,
+    private router: Router,
   ) {}
 
   ngOnInit() {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
+        window.addEventListener('keplr_keystorechange', () => {
+          this.isNoData = true;
+          const currentRoute = this.router.url;
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigate([currentRoute]); // navigate to same route
+          });
+        });
         this.currentAddress = wallet.bech32Address;
+        this.isNoData = false;
         this.getGranteesData();
       } else {
         this.loading = false;
         this.currentAddress = null;
+        this.pageEvent(0);
+        this.dataSource.data = [];
       }
     });
 
-    this.timerGetFeeGrant = setInterval(() => {
-      this.getListGrant();
-    }, 30000);
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet.bech32Address) {
+        this.timerGetFeeGrant = setInterval(() => {
+          this.getListGrant();
+        }, 30000);
+      }
+    });
   }
 
   /**
@@ -101,18 +117,22 @@ export class MyGranteesComponent implements OnInit {
   }
 
   getGranteesData() {
-    if (this.isActive) {
-      this.templates = this.templatesActive;
-      this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
+    if (this.currentAddress) {
+      if (this.isActive) {
+        this.templates = this.templatesActive;
+        this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
+      } else {
+        this.templates = this.templatesInActive;
+        this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
+      }
+      this.getListGrant();
     } else {
-      this.templates = this.templatesInActive;
-      this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
+      this.loading = false;
     }
-    this.getListGrant();
   }
 
   getListGrant() {
-    let keySearch = this.textSearch = this.textSearch?.trim();
+    let keySearch = (this.textSearch = this.textSearch?.trim());
     const addressNameTag = this.commonService.findNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
@@ -134,7 +154,6 @@ export class MyGranteesComponent implements OnInit {
           if (!res) {
             return;
           }
-
           res.feegrant?.forEach((element) => {
             element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
             element.spendable = element?.spend_limit || '0';
@@ -153,6 +172,9 @@ export class MyGranteesComponent implements OnInit {
 
           this.dataSource.data = res?.feegrant;
           this.pageData.length = res?.feegrant_aggregate?.aggregate?.count || 0;
+          if (res.feegrant.length === 0 && this.isSearchData === false) {
+            this.isNoData = true;
+          }
         },
         complete: () => {
           this.loading = false;
@@ -161,6 +183,7 @@ export class MyGranteesComponent implements OnInit {
   }
 
   searchToken(): void {
+    this.isSearchData = true;
     if (this.textSearch && this.textSearch?.length > 0) {
       this.pageEvent(0);
     }
@@ -176,15 +199,14 @@ export class MyGranteesComponent implements OnInit {
     if (pageIndex === 0) {
       this.pageData.pageIndex = 1;
     }
-
     this.getGranteesData();
   }
 
   async changeType(type: boolean) {
     this.isActive = type;
-
-    this.pageEvent(0);
     this.loading = true;
+    this.isNoData = false;
+    this.pageEvent(0);
   }
 
   showRevoke(granteeAddress: string, granterAddress: string) {

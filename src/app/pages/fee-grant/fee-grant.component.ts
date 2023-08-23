@@ -11,6 +11,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 })
 export class FeeGrantComponent implements OnInit {
   isGrantees = true;
+  currentAddress = null;
   TAB = [
     {
       id: 0,
@@ -21,7 +22,7 @@ export class FeeGrantComponent implements OnInit {
       value: 'My Granters',
     },
   ];
-  constructor(public walletService: WalletService, private router: Router) {}
+  constructor(public walletService: WalletService, private router: Router,) {}
 
   ngOnInit(): void {
     from([1])
@@ -31,8 +32,11 @@ export class FeeGrantComponent implements OnInit {
       )
       .subscribe((wallet) => {
         const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
-        if (!wallet && urlPath === 'fee-grant') {
-          this.router.navigate(['/']);
+        if (wallet) {
+          this.currentAddress = wallet.bech32Address;
+        }
+        else{
+          this.currentAddress = null;
         }
       });
   }
