@@ -225,6 +225,11 @@ export class AccountDetailComponent implements OnInit {
   }
 
   editPrivateName() {
-    this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

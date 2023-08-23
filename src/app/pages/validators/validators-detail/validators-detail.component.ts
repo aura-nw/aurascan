@@ -103,6 +103,7 @@ export class ValidatorsDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.commonService['listNameTag'] = this.global?.listNameTag;
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.loadData();
     this.getDetail(true);
@@ -446,16 +447,5 @@ export class ValidatorsDetailComponent implements OnInit {
         this.getBlocksMiss(this.currentValidatorDetail?.consensus_hex_address, res?.block);
       }
     });
-  }
-
-  displayContent(value) {
-    let result = value;
-    if (!this.commonService.checkPublic(value, this.global.listNameTag)) {
-      result += '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag, false);
-    }
-    if (this.commonService.checkPrivate(value)) {
-      result += '<br>' + 'Private name tag: ' + this.commonService.setNameTag(value, this.global.listNameTag);
-    }
-    return result;
   }
 }

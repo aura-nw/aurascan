@@ -122,7 +122,7 @@ section.account-detail {
   .private-name-tag {
     height: 24px;
     padding: 0 var(--spacer-2);
-    background-color: unset;
+    background-color: var(--aura-gray-10);
     border-radius: 16px;
     border: 1px solid var(--aura-gray-8);
   }

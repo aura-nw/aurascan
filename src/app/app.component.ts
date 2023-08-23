@@ -33,10 +33,13 @@ export class AppComponent implements OnInit {
     this.getPriceToken();
 
     setInterval(() => {
-      this.getListNameTag();
       this.getInfoCommon();
       this.getPriceToken();
     }, 60000);
+
+    setInterval(() => {
+      this.getListNameTag();
+    }, 20000);
 
     // if (this.isTestnet) {
     //   let el = document.createElement('div');

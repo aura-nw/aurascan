@@ -24,6 +24,7 @@ export class PopupNameTagComponent implements OnInit {
   currentCodeID;
   publicNameTag = '-';
   isValidAddress = false;
+  isError = false;
 
   nameTagType = {
     Account: 'account',
@@ -77,8 +78,8 @@ export class PopupNameTagComponent implements OnInit {
 
     if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
       if (
-        (this.getAddress.value?.length === LENGTH_CHARACTER.ADDRESS && this.isAccount) ||
-        (this.getAddress.value?.length === LENGTH_CHARACTER.CONTRACT && !this.isAccount)
+        (this.getAddress.value.trim()?.length === LENGTH_CHARACTER.ADDRESS && this.isAccount) ||
+        (this.getAddress.value.trim()?.length === LENGTH_CHARACTER.CONTRACT && !this.isAccount)
       ) {
         this.isValidAddress = true;
       }
@@ -99,13 +100,16 @@ export class PopupNameTagComponent implements OnInit {
     this.nameTagService.createPrivateName(payload).subscribe({
       next: (res) => {
         if (res.code && res.code !== 200) {
+          this.isError = true;
           this.toastr.error(res.message || 'Error');
           return;
         }
 
+        this.closeDialog();
         this.toastr.successWithTitle('Private name tag created!', 'Success');
       },
       error: (error) => {
+        this.isError = true;
         this.toastr.error(error?.details.message[0] || 'Error');
       },
     });
@@ -117,6 +121,7 @@ export class PopupNameTagComponent implements OnInit {
 
   changeType(type) {
     this.isAccount = type;
+    this.isError = false
     this.privateNameForm.value.isAccount = type;
     this.checkFormValid();
   }
@@ -135,7 +140,7 @@ export class PopupNameTagComponent implements OnInit {
     this.publicNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const temp = this.commonService.setNameTag(this.getAddress.value);
+      const temp = this.commonService.setNameTag(this.getAddress.value, null, false);
       if (temp !== this.getAddress.value) {
         this.publicNameTag = temp;
       }

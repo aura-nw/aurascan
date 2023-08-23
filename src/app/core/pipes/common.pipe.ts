@@ -142,27 +142,3 @@ export class displayTypeToolTip implements PipeTransform {
     return result;
   }
 }
-
-@Pipe({ name: 'displayNameTag' })
-export class displayNameTag implements PipeTransform {
-  constructor(private global: Globals) {}
-  transform(address: any): string {
-    const nameTag = this.global.listNameTag?.find((k) => k.address === address);
-    let result = nameTag?.name_tag_private || nameTag?.name_tag || address;
-    return result;
-  }
-}
-
-@Pipe({ name: 'checkIsPrivate' })
-export class checkIsPrivate implements PipeTransform {
-  constructor(private global: Globals) {}
-  transform(address: any): boolean {
-    let result = false;
-    const nameTag = this.global.listNameTag?.find((k) => k.address === address && k.isPrivate);
-    if (nameTag?.name_tag_private) {
-      result = true;
-    }
-    return result;
-  }
-}
-

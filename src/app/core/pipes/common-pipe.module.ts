@@ -12,8 +12,6 @@ import {
   convertLogAmount,
   decodeData,
   displayTypeToolTip,
-  displayNameTag,
-  checkIsPrivate,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
 
@@ -31,8 +29,6 @@ import { JsonPipe } from './json.pipe';
     convertLogAmount,
     decodeData,
     displayTypeToolTip,
-    displayNameTag,
-    checkIsPrivate
   ],
   imports: [CommonModule],
   exports: [
@@ -48,8 +44,6 @@ import { JsonPipe } from './json.pipe';
     convertLogAmount,
     decodeData,
     displayTypeToolTip,
-    displayNameTag,
-    checkIsPrivate
   ],
 })
 export class CommonPipeModule {}

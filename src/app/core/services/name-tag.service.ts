@@ -21,9 +21,6 @@ export class NameTagService extends CommonService {
 
   createPrivateName(payload) {
     const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
-    return this.http.post<any>(`${this.apiUrl}/user/private-name-tag`, {
-      params,
-    });
+    return this.http.post<any>(`${this.apiUrl}/user/private-name-tag`, params);
   }
 }
-
