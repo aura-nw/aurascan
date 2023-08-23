@@ -26,4 +26,3 @@ export class NameTagService extends CommonService {
     });
   }
 }
-

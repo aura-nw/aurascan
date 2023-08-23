@@ -70,7 +70,7 @@
                 placeholder="aura..."
                 class="input-address"
                 (change)="checkPublicNameTag()"
-                (blur)="checkFormValid()"
+                (blur)="checkFormValid(); isError = false"
                 autocomplete="off" />
             </div>
             <div
@@ -93,6 +93,7 @@
                 class="col-12 mb-4 text--gray-1"
                 [maxlength]="maxLengthNameTag"
                 formControlName="name"
+                (blur)="isError = false"
                 (keypress)="checkValidNameTag($event)"
                 placeholder="Enter private name tag" />
             </div>
@@ -115,6 +116,7 @@
               rows="5"
               matInput
               formControlName="note"
+              (blur)="isError = false"
               [maxLength]="maxLengthNote"
               placeholder="Enter note"
               class="form-check-input col-12 text-area"
@@ -139,7 +141,7 @@
         <button
           class="button button--md button-outline button-pill button-flat ml-4 btn btn-create"
           type="submit"
-          [disabled]="privateNameForm.status === 'INVALID' || !isValidAddress">
+          [disabled]="privateNameForm.status === 'INVALID' || !isValidAddress || isError">
           <span class="text--black">Create</span>
         </button>
       </div>

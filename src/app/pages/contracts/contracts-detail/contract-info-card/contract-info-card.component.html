@@ -10,15 +10,23 @@
           <td class="text--gray-5 body-02-mob">Public Name:</td>
           <td colspan="2">
             <ng-container
-              *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
+              *ngIf="
+                commonService.setNameTag(contractDetail?.address, null, false) !== contractDetail?.address;
+                else NoNameTag
+              ">
               <div class="box-name-tag">
-                <span class="d-none d-lg-flex">{{ commonService.setNameTag(contractDetail?.address) || '-' }}</span>
+                <span class="d-none d-lg-flex">{{
+                  commonService.setNameTag(contractDetail?.address, null, false) || '-'
+                }}</span>
                 <span class="d-flex d-lg-none justify-content-center">
+                  {{ commonService.checkDisplayTooltip(contractDetail?.address) }}
                   <ng-container *ngIf="!commonService.checkDisplayTooltip(contractDetail?.address)">
-                    {{ (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 16) || '-' }}
+                    {{ (commonService.setNameTag(contractDetail?.address, null, false) | cutStringPipe : 16) || '-' }}
                   </ng-container>
                   <ng-container *ngIf="commonService.checkDisplayTooltip(contractDetail?.address)">
-                    {{ (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 8 : 8) || '-' }}
+                    {{
+                      (commonService.setNameTag(contractDetail?.address, null, false) | cutStringPipe : 8 : 8) || '-'
+                    }}
                   </ng-container>
                 </span>
                 <a
@@ -36,7 +44,11 @@
         </tr>
         <tr>
           <td class="text--gray-5 body-02-mob">Private Name Tag:</td>
-          <td colspan="2"></td>
+          <td colspan="2">
+            <div class="box-name-tag private-name-tag" *ngIf="commonService.checkPrivate(contractDetail?.address)">
+              {{ (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 16) || '' }}
+            </div>
+          </td>
         </tr>
 
         <tr>

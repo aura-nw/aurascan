@@ -28,7 +28,7 @@ import { JsonPipe } from './json.pipe';
     ConvertUauraToAura,
     convertLogAmount,
     decodeData,
-    displayTypeToolTip
+    displayTypeToolTip,
   ],
   imports: [CommonModule],
   exports: [
@@ -43,7 +43,7 @@ import { JsonPipe } from './json.pipe';
     ConvertUauraToAura,
     convertLogAmount,
     decodeData,
-    displayTypeToolTip
+    displayTypeToolTip,
   ],
 })
 export class CommonPipeModule {}

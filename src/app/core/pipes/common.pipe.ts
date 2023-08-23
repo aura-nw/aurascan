@@ -5,6 +5,7 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from '../services/common.service';
 import { balanceOf } from '../utils/common/parsing';
 import { MaskPipe } from 'ngx-mask';
+import { Globals } from 'src/app/global/global';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {

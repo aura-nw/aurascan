@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
@@ -25,6 +24,12 @@ export class PopupNameTagComponent implements OnInit {
   currentCodeID;
   publicNameTag = '-';
   isValidAddress = false;
+  isError = false;
+
+  nameTagType = {
+    Account: 'account',
+    Contract: 'contract',
+  };
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
@@ -73,8 +78,8 @@ export class PopupNameTagComponent implements OnInit {
 
     if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
       if (
-        (this.getAddress.value?.length === LENGTH_CHARACTER.ADDRESS && this.isAccount) ||
-        (this.getAddress.value?.length === LENGTH_CHARACTER.CONTRACT && !this.isAccount)
+        (this.getAddress.value.trim()?.length === LENGTH_CHARACTER.ADDRESS && this.isAccount) ||
+        (this.getAddress.value.trim()?.length === LENGTH_CHARACTER.CONTRACT && !this.isAccount)
       ) {
         this.isValidAddress = true;
       }
@@ -86,22 +91,25 @@ export class PopupNameTagComponent implements OnInit {
     const { isAccount, address, name, note } = this.privateNameForm.value;
 
     const payload = {
-      type: isAccount ? 'account' : 'contract',
+      type: isAccount ? this.nameTagType.Account : this.nameTagType.Contract,
       address: address,
       nameTag: name,
-      note: null,
+      note: note,
     };
 
     this.nameTagService.createPrivateName(payload).subscribe({
       next: (res) => {
         if (res.code && res.code !== 200) {
+          this.isError = true;
           this.toastr.error(res.message || 'Error');
           return;
         }
 
+        this.closeDialog();
         this.toastr.successWithTitle('Private name tag created!', 'Success');
       },
       error: (error) => {
+        this.isError = true;
         this.toastr.error(error?.details.message[0] || 'Error');
       },
     });
@@ -113,6 +121,7 @@ export class PopupNameTagComponent implements OnInit {
 
   changeType(type) {
     this.isAccount = type;
+    this.isError = false
     this.privateNameForm.value.isAccount = type;
     this.checkFormValid();
   }
@@ -131,7 +140,7 @@ export class PopupNameTagComponent implements OnInit {
     this.publicNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const temp = this.commonService.setNameTag(this.getAddress.value);
+      const temp = this.commonService.setNameTag(this.getAddress.value, null, false);
       if (temp !== this.getAddress.value) {
         this.publicNameTag = temp;
       }

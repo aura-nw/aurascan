@@ -33,10 +33,13 @@ export class AppComponent implements OnInit {
     this.getPriceToken();
 
     setInterval(() => {
-      this.getListNameTag();
       this.getInfoCommon();
       this.getPriceToken();
     }, 60000);
+
+    setInterval(() => {
+      this.getListNameTag();
+    }, 20000);
 
     // if (this.isTestnet) {
     //   let el = document.createElement('div');
@@ -77,6 +80,16 @@ export class AppComponent implements OnInit {
       keyword: null,
     };
 
+    // get list name tag if not login email
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+      this.commonService.getListNameTag(payload).subscribe((res) => {
+        this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
+      });
+      return;
+    }
+
+    // get list name tag if login email
     forkJoin({
       publicName: this.commonService.getListNameTag(payload),
       privateName: this.nameTagService.getListPrivateNameTag(payloadPrivate),
@@ -102,10 +115,10 @@ export class AppComponent implements OnInit {
       const onlyInB = onlyInLeft(privateName?.data, listTemp, isSameUser);
       onlyInB.forEach((element) => {
         element['name_tag_private'] = element.name_tag;
+        element['name_tag'] = null;
         element['isPrivate'] = true;
       });
       const result = [...listTemp, ...onlyInB];
-
       this.globals.listNameTag = this.commonService.listNameTag = result;
     });
   }
