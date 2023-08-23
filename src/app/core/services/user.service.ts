@@ -130,6 +130,7 @@ export class UserService extends CommonService {
           fee
           timestamp
           code
+          data
           transaction_messages {
             type
             content

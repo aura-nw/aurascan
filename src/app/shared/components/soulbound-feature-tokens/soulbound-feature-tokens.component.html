@@ -5,8 +5,7 @@
       [routerLink]="['/accountbound/account', accountAddress]"
       (click)="setLinkTab()"
       [class.mr-2]="soulboundUnclaimedNum > 0"
-      class="button button-pill button-outline button--sm position-relative aura-tooltip-contain d-inline-flex"
-      *ngIf="wallet === accountAddress">
+      class="button button-pill button-outline button--sm position-relative aura-tooltip-contain d-inline-flex">
       <span class="btn-text-manage fw-semibold"
         >{{ wallet === accountAddress ? 'Manage your ABTs' : 'See more' }}
       </span>

@@ -221,9 +221,9 @@ export class AccountTransactionTableComponent {
           payload.compositeKey = 'coin_received.receiver';
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 15 });
+        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
-        // this.getListTxAuraByAddress(payload);
+        this.getListTxAuraByAddress(payload);
         break;
       case TabsAccount.FtsTxs:
         if (this.currentType === AccountTxType.Sent) {
@@ -243,7 +243,7 @@ export class AccountTransactionTableComponent {
           payload['receiver'] = address;
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'tokenId', headerCellDef: 'Token ID', headerWidth: 17 });
+        this.templates.push({ matColumnDef: 'tokenId', headerCellDef: 'Token ID', headerWidth: 21 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;
@@ -335,7 +335,7 @@ export class AccountTransactionTableComponent {
         setReceive = true;
       }
 
-      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
+      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive, this.currentAddress);
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
       } else {
