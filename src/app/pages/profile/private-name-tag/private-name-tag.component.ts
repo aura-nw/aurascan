@@ -12,6 +12,8 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
 import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
 import { ToastrService } from 'ngx-toastr';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { PrivateNameTagDto } from 'src/app/core/models/name-tag.model';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -32,8 +34,8 @@ export class PrivateNameTagComponent implements OnInit {
     { matColumnDef: 'favorite', headerCellDef: 'Fav.', headerWidth: 8 },
     { matColumnDef: 'address', headerCellDef: 'Address', headerWidth: 12 },
     { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 6 },
-    { matColumnDef: 'name', headerCellDef: 'Private Name Tag', headerWidth: 12 },
-    { matColumnDef: 'add_time', headerCellDef: 'Added Time', headerWidth: 10 },
+    { matColumnDef: 'name_tag', headerCellDef: 'Private Name Tag', headerWidth: 12 },
+    { matColumnDef: 'created_at', headerCellDef: 'Added Time', headerWidth: 10 },
     { matColumnDef: 'update_time', headerCellDef: 'Updated Time', headerWidth: 10 },
     { matColumnDef: 'action', headerCellDef: '', headerWidth: 8 },
   ];
@@ -42,10 +44,12 @@ export class PrivateNameTagComponent implements OnInit {
   textSearch = '';
   searchSubject = new Subject();
   destroy$ = new Subject();
-  dataSource = new MatTableDataSource<any>();
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataTable = [];
 
   constructor(
     public commonService: CommonService,
+    public nameTagService: NameTagService,
     private modalService: NgbModal,
     private dialog: MatDialog,
     private toastr: NgxToastrService,
@@ -58,7 +62,10 @@ export class PrivateNameTagComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.dataSource);
+    this.getListPrivateName();
+  }
 
   onKeyUp() {
     this.searchSubject.next(this.textSearch);
@@ -73,7 +80,20 @@ export class PrivateNameTagComponent implements OnInit {
     this.getListPrivateName();
   }
 
-  getListPrivateName() {}
+  getListPrivateName() {
+    this.textSearch = this.textSearch?.trim();
+    const payload = {
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageSize * this.pageData.pageIndex,
+      keyword: this.textSearch,
+    };
+
+    this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
+      console.log(res);
+      this.dataSource.data = res.data;
+      this.pageData.length = res?.meta?.count || 0;
+    });
+  }
 
   openPopup() {
     const dialogConfig = new MatDialogConfig();

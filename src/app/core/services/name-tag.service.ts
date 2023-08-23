@@ -14,14 +14,14 @@ export class NameTagService extends CommonService {
 
   getListPrivateNameTag(payload) {
     const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
-    return this.http.get<any>(`${this.apiUrl}/admin/private-name-tag`, {
+    return this.http.get<any>(`${this.apiUrl}/user/private-name-tag`, {
       params,
     });
   }
 
   createPrivateName(payload) {
     const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
-    return this.http.post<any>(`${this.apiUrl}/admin/private-name-tag`, {
+    return this.http.post<any>(`${this.apiUrl}/user/private-name-tag`, {
       params,
     });
   }

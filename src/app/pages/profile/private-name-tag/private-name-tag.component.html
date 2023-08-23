@@ -10,7 +10,7 @@
 
 <div class="mt-4">
   <div class="d-lg-flex align-items-center justify-content-between">
-    <div>Total 0/10 addresses tagged</div>
+    <div>Total 0/{{ pageData?.length }} addresses tagged</div>
     <div class="filter-group d-flex align-items-center flex-nowrap">
       <form class="aura-form single-input-field search-form private-search-form d-none d-lg-block">
         <div class="input-group px-6">
@@ -40,63 +40,41 @@
   </div>
 
   <div>
-    <div class="overflow-scroll-x aura-table-contain" *ngIf="pageData?.length > 0; else noValues">
-      <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
+    <div class="overflow-scroll-x aura-table-contain mt-4" *ngIf="pageData?.length > 0; else noValues">
+      <table mat-table [dataSource]="dataSource" class="aura-table grant-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
-            <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
-              <div [innerHTML]="template.headerCellDef"></div>
+            <th mat-header-cell *matHeaderCellDef>
+              <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
             <td mat-cell *matCellDef="let data">
-              <ng-container *ngIf="template.matColumnDef === 'address'">
-                <a [routerLink]="['/account/', template.matColumnDef]" class="text--primary text-break d-flex">
-                  {{ template.matColumnDef | cutStringPipe : 8 : 8 }}
-                </a>
-                <div>desc</div>
-              </ng-container>
-              <ng-container *ngIf="template.matColumnDef === 'name'">
-                <app-name-tag [value]="data[template.matColumnDef]" [tooltipPosition]="'tooltip--left'"></app-name-tag>
-              </ng-container>
-              <ng-container *ngIf="template.matColumnDef === 'add_time' || template.matColumnDef === 'update_time'">
-                {{ commonService.getDateValue(data['date_format'], false)[0] }}
-              </ng-container>
-              <ng-container *ngIf="template.matColumnDef === 'name'">
-                <button
-                  type="button"
-                  class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
-                  [disabled]="data['result'] === 'Correct'"
-                  (click)="openPopup()">
-                  <img
-                    [src]="'assets/icons/icons-svg/white/edit_simple.svg' | imageS3"
-                    alt=""
-                    width="16px"
-                    height="16px" />
-                  <span class="ml-1">Edit</span>
-                </button>
-              </ng-container>
-
-              <ng-container
-                *ngIf="
-                  (!template.isUrl || data[template.matColumnDef] === '') &&
-                  template.matColumnDef !== 'contract_verification' &&
-                  template.matColumnDef !== 'name'
-                ">
-                <ng-container [ngSwitch]="template.matColumnDef">
-                  <ng-container *ngSwitchDefault>
-                    {{ data[template.matColumnDef] }}
-                  </ng-container>
+              <div>
+                <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
+                  <div *ngSwitchCase="'favorite'" class="text--primary cursor-pointer"></div>
+                  <div *ngSwitchCase="'address'" class="d-flex flex-column">
+                    <a class="text--primary cursor-pointer" [routerLink]="['/account', data[template.matColumnDef]]">
+                      <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
+                    </a>
+                    <span>{{ data.note || '-' }}</span>
+                  </div>
+                  <div *ngSwitchCase="'type'">
+                    {{ data[template.matColumnDef].charAt(0).toUpperCase() + data[template.matColumnDef].slice(1) }}
+                  </div>
+                  <app-name-tag [value]="data.address" *ngSwitchCase="'name_tag'"></app-name-tag>
+                  <div *ngSwitchCase="'created_at'">
+                    {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                  </div>
+                  <div *ngSwitchCase="'update_time'">
+                    {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                  </div>
+                  <div *ngSwitchCase="'action'"></div>
                 </ng-container>
-              </ng-container>
+              </div>
             </td>
           </ng-container>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell g-no-data" colspan="9999">
-            {{ 'NO DATA' | translate }}
-          </td>
-        </tr>
       </table>
     </div>
 
