@@ -64,10 +64,10 @@ export class TopStatisticTransactionComponent implements OnInit {
       (res) => {
         if (res && res[filterValue]) {
           this.transactionsData = res[filterValue];
-          this.AURASendersDS.data = res[filterValue].top_amount_sent;
-          this.AURAReceiversDS.data = res[filterValue].top_amount_received;
-          this.TxnCountSentDS.data = res[filterValue].top_tx_sent;
-          this.TxnCountReceivedDS.data = res[filterValue].top_gas_used;
+          this.AURASendersDS.data = res[filterValue]?.top_amount_sent;
+          this.AURAReceiversDS.data = res[filterValue]?.top_amount_received;
+          this.TxnCountSentDS.data = res[filterValue]?.top_tx_sent;
+          this.TxnCountReceivedDS.data = res[filterValue]?.top_gas_used;
         } else {
           this.transactionsData = null;
         }
