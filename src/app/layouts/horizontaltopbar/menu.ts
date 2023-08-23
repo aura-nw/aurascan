@@ -145,12 +145,6 @@ export const MENU: MenuItem[] = [
     icon: 'list',
     name: MenuName.More,
     subItems: [
-      // {
-      //   id: 2,
-      //   label: 'Multi-send',
-      //   link: '/fee',
-      //   icon: 'users-three',
-      // },
       {
         id: 1,
         label: 'Fee Grant',
@@ -282,12 +276,6 @@ export const MENU_MOB: MenuItem[] = [
     icon: 'list',
     name: MenuName.More,
     subItems: [
-      // {
-      //   id: 2,
-      //   label: 'Multi-send',
-      //   link: '/fee',
-      //   icon: 'users-three',
-      // },
       {
         id: 1,
         label: 'Fee Grant',
