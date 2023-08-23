@@ -31,13 +31,13 @@
               *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
               <div class="d-inline-flex aura-tooltip-object align-items-center">
-                <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+                <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress, null, false) || '-' }}</span>
                 <span class="d-flex d-lg-none justify-content-center">
                   <ng-container *ngIf="!commonService.checkDisplayTooltip(currentAddress)">
-                    {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 16) || '-' }}
+                    {{ (commonService.setNameTag(currentAddress, null, false) | cutStringPipe : 16) || '-' }}
                   </ng-container>
                   <ng-container *ngIf="commonService.checkDisplayTooltip(currentAddress)">
-                    {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8) || '-' }}
+                    {{ (commonService.setNameTag(currentAddress, null, false) | cutStringPipe : 8 : 8) || '-' }}
                   </ng-container>
                 </span>
                 <a
@@ -51,10 +51,30 @@
               </div>
             </div>
           </div>
-          <!-- <button
-            class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private">
-            <span class="caption fw-normal">Set Private Name Tag</span>
-          </button> -->
+
+          <button
+            class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private"
+            *ngIf="!commonService.checkPrivate(currentAddress)"
+            (click)="editPrivateName()">
+            <span class="caption fw-normal"> Set Private Name Tag </span>
+          </button>
+          <div
+            *ngIf="commonService.checkPrivate(currentAddress)"
+            class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
+            <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag pe-none">
+              <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+              <span class="d-flex d-lg-none justify-content-center">
+                <ng-container *ngIf="!commonService.checkDisplayTooltip(currentAddress)">
+                  {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 16) || '-' }}
+                </ng-container>
+                <ng-container *ngIf="commonService.checkDisplayTooltip(currentAddress)">
+                  {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8) || '-' }}
+                </ng-container>
+              </span>
+            </div>
+            <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
+          </div>
+
           <div class="mt-6 mt-lg-3 d-flex justify-content-between align-items-center d-xl-block">
             <div>
               <h3 class="fw-bold fw-semibold-mob mb-1 text--white">Total Value</h3>

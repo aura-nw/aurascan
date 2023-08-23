@@ -1,10 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
@@ -14,19 +12,11 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT } from '../../../core/constants/account.constant';
-import {
-  ACCOUNT_WALLET_COLOR_ENUM,
-  PageEventType,
-  StakeModeAccount,
-  TabsAccount,
-  WalletAcount,
-} from '../../../core/constants/account.enum';
-import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
-import { TableTemplate } from '../../../core/models/common.model';
+import { ACCOUNT_WALLET_COLOR_ENUM, StakeModeAccount, WalletAcount } from '../../../core/constants/account.enum';
+import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
-import { TransactionService } from '../../../core/services/transaction.service';
-import { Globals, convertDataTransaction } from '../../../global/global';
+import { Globals } from '../../../global/global';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
 
 @Component({
@@ -78,7 +68,6 @@ export class AccountDetailComponent implements OnInit {
   isSent = true;
 
   constructor(
-    private transactionService: TransactionService,
     public commonService: CommonService,
     private route: ActivatedRoute,
     private accountService: AccountService,
@@ -88,6 +77,7 @@ export class AccountDetailComponent implements OnInit {
     private modalService: NgbModal,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
+    private router: Router,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -232,5 +222,9 @@ export class AccountDetailComponent implements OnInit {
   extendLink(url) {
     url = url.match(/^https?:/) ? url : '//' + url;
     return url;
+  }
+
+  editPrivateName() {
+    this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
   }
 }

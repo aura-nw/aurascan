@@ -12,6 +12,8 @@ import {
   convertLogAmount,
   decodeData,
   displayTypeToolTip,
+  displayNameTag,
+  checkIsPrivate,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
 
@@ -28,7 +30,9 @@ import { JsonPipe } from './json.pipe';
     ConvertUauraToAura,
     convertLogAmount,
     decodeData,
-    displayTypeToolTip
+    displayTypeToolTip,
+    displayNameTag,
+    checkIsPrivate
   ],
   imports: [CommonModule],
   exports: [
@@ -43,7 +47,9 @@ import { JsonPipe } from './json.pipe';
     ConvertUauraToAura,
     convertLogAmount,
     decodeData,
-    displayTypeToolTip
+    displayTypeToolTip,
+    displayNameTag,
+    checkIsPrivate
   ],
 })
 export class CommonPipeModule {}

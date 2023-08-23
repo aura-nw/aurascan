@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
@@ -31,7 +30,7 @@ export class NameTagComponent implements OnInit {
 
   extendUrlLink = '';
 
-  constructor(public commonService: CommonService, public global: Globals) {}
+  constructor(public commonService: CommonService, public global: Globals, ) {}
 
   ngOnInit(): void {
     if (this.extendUrl) {
@@ -52,7 +51,13 @@ export class NameTagComponent implements OnInit {
   }
 
   displayContent(value) {
-    let result = value + '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag);
+    let result = value;
+    if (!this.commonService.checkPublic(value)) {
+      result += '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag, false);
+    }
+    if (this.commonService.checkPrivate(value)) {
+      result += '<br>' + 'Private name tag: ' + this.commonService.setNameTag(value, this.global.listNameTag);
+    }
     return result;
   }
 }

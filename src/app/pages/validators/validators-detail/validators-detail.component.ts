@@ -447,4 +447,15 @@ export class ValidatorsDetailComponent implements OnInit {
       }
     });
   }
+
+  displayContent(value) {
+    let result = value;
+    if (!this.commonService.checkPublic(value, this.global.listNameTag)) {
+      result += '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag, false);
+    }
+    if (this.commonService.checkPrivate(value)) {
+      result += '<br>' + 'Private name tag: ' + this.commonService.setNameTag(value, this.global.listNameTag);
+    }
+    return result;
+  }
 }

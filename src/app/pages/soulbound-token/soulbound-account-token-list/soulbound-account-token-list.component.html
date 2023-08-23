@@ -41,7 +41,7 @@
                 <ng-container *ngIf="commonService.checkDisplayTooltip(userAddress)">
                   {{ (commonService.setNameTag(userAddress) | cutStringPipe : 8 : 8) || '-' }}
                 </ng-container>
-            </span>
+              </span>
               <a
                 target="_blank"
                 [href]="extendLink(commonService.findUrlNameTag(userAddress))"
@@ -53,7 +53,7 @@
             </div>
             <app-tooltip-customize
               [class.tooltip--right]="true"
-              [content]="'Public name: ' + commonService.setNameTag(userAddress)">
+              [content]="'Public name: ' + commonService.setNameTag(userAddress, null, false)">
             </app-tooltip-customize>
           </div>
         </div>
@@ -75,7 +75,9 @@
           </div>
         </div>
       </div>
-      <div class="mt-4 mt-lg-0 ml-auto sbt-detail {{ totalPick > 0 ? 'soulbound-feature-tokens' : 'px-6' }}" *ngIf="userAddress && totalPick > 0">
+      <div
+        class="mt-4 mt-lg-0 ml-auto sbt-detail {{ totalPick > 0 ? 'soulbound-feature-tokens' : 'px-6' }}"
+        *ngIf="userAddress && totalPick > 0">
         <app-soulbound-feature-tokens
           [extend]="false"
           [accountAddress]="userAddress"
