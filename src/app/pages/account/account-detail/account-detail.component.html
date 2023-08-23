@@ -114,7 +114,7 @@
 
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!--SBT  -->
-  <div class="card">
+  <div class="card" *ngIf="totalSBT > 0 || currentAddress === userAddress">
     <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
       <app-soulbound-feature-tokens
         [extend]="true"
@@ -123,21 +123,19 @@
         [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
     </div>
   </div>
-  <!-- Main info -->
-  <div class="mt-4 mt-lg-6">
-    <!-- NFT -->
-    <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
 
-    <!-- Staking-->
-    <app-account-stake
-      *ngIf="currentAccountDetail"
-      [chartOptions]="chartOptions"
-      [chartCustomOptions]="chartCustomOptions"
-      [currentAccountDetail]="currentAccountDetail"></app-account-stake>
+  <!-- NFT -->
+  <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
 
-    <!-- Transaction List-->
-    <app-account-transaction></app-account-transaction>
-  </div>
+  <!-- Staking-->
+  <app-account-stake
+    *ngIf="currentAccountDetail"
+    [chartOptions]="chartOptions"
+    [chartCustomOptions]="chartCustomOptions"
+    [currentAccountDetail]="currentAccountDetail"></app-account-stake>
+
+  <!-- Transaction List-->
+  <app-account-transaction></app-account-transaction>
 </section>
 
 <ng-template #reloadTemplate>
