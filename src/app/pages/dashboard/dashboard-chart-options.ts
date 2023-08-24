@@ -34,6 +34,9 @@ export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
   handleScale: {
     mouseWheel: false,
   },
+  handleScale: {
+    mouseWheel: false,
+  },
 };
 
 export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'] = {
