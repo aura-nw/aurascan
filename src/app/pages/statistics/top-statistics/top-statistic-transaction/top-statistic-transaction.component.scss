@@ -6,18 +6,21 @@
   }
 }
 
-@media (max-width: 991.99px) {
-  .aura-table th.mat-header-cell {
-    min-width: 100px;
-  }
+.aura-table th.mat-header-cell {
+  min-width: 100px;
+}
 
-  .aura-table th.mat-header-cell:nth-child(1) {
-    min-width: 80px;
-  }
+.aura-table th.mat-header-cell:nth-child(1) {
+  min-width: 80px;
+}
 
-  .aura-table th.mat-header-cell:nth-child(2) {
-    min-width: 180px;
-  }
+.aura-table th.mat-header-cell:nth-child(2) {
+  min-width: 190px;
+}
+
+.aura-table th.mat-header-cell:nth-child(3),
+.aura-table th.mat-header-cell:nth-child(4) {
+  min-width: 140px;
 }
 
 .box-statistic {
