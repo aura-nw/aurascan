@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TABS_TITLE_ACCOUNT } from 'src/app/core/constants/account.constant';
@@ -10,8 +10,7 @@ import { TabsAccount } from 'src/app/core/constants/account.enum';
   templateUrl: './account-transaction.component.html',
   styleUrls: ['./account-transaction.component.scss'],
 })
-export class AccountTransactionComponent implements OnInit, AfterViewInit {
-  // loading param check
+export class AccountTransactionComponent implements OnInit {
   isNoData = false;
 
   destroyed$ = new Subject();
@@ -22,8 +21,6 @@ export class AccountTransactionComponent implements OnInit, AfterViewInit {
   currentTab = TabsAccount.ExecutedTxs;
 
   constructor(private layout: BreakpointObserver) {}
-
-  ngAfterViewInit(): void {}
 
   ngOnInit(): void {}
 

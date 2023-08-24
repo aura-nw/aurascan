@@ -292,7 +292,7 @@
                       >
                       <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                     </div>
-                    <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="data.arrEvent?.length > 1">
+                    <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="data.arrEvent?.length > 1 && data.expand">
                       <span
                         (click)="seeMoreData(data)"
                         *ngIf="data.limit < data.arrEvent?.length"

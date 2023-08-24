@@ -347,7 +347,7 @@ export function convertDataBlock(data) {
   return block;
 }
 
-export function convertDataAccountTransaction(data, coinInfo, modeQuery, setReceive = false) {
+export function convertDataAccountTransaction(data, coinInfo, modeQuery, setReceive = false, currentAddress) {
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
@@ -389,18 +389,26 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
         break;
       case TabsAccount.AuraTxs:
         arrEvent = _.get(element, 'transaction_messages')?.map((item, index) => {
-          let type = _.get(item, 'type');
-          let fromAddress = _.get(item, 'event_attributes[1].value');
-          let toAddress = _.get(item, 'event_attributes[0].value');
-          let amountTemp = _.get(item, 'event_attributes[2].value')?.match(/\d+/g)[0];
+          let type = getTypeTx(element, index);
+          let fromAddress = currentAddress;
+          let toAddress = currentAddress;
+          let dataTemp;
+          if (setReceive) {
+            dataTemp = element?.data?.tx_response?.logs[index]?.events?.find((k) => k.type === 'coin_spent');
+            fromAddress = dataTemp?.attributes[0]?.value;
+          } else {
+            dataTemp = element?.data?.tx_response?.logs[index]?.events?.find((k) => k.type === 'coin_received');
+            toAddress = dataTemp?.attributes[0]?.value;
+          }
+          let amountTemp = _.get(dataTemp, 'attributes[1].value')?.match(/\d+/g)[0];
           let denom = coinInfo.coinDenom;
-          let amount = balanceOf(Number(amountTemp) || 0, denom);
+          let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
           return { type, fromAddress, toAddress, amount, denom };
         });
         break;
       case TabsAccount.FtsTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
-          let type = getTypeTx(element);
+          let type = getTypeTx(element, index);
           let fromAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].from') || NULL_ADDRESS;
           let toAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].to') || NULL_ADDRESS;
           let denom = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.symbol');
@@ -412,7 +420,13 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
         break;
       case TabsAccount.NftTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
-          let type = getTypeTx(element);
+          const typeOrigin = _.get(element, 'transaction_messages[0].content["@type"]');
+          let type = item?.smart_contract_events[index]
+            ? item?.smart_contract_events[index]?.cw721_activity?.action
+            : null;
+          if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
+            type = 'Execute_' + type[0]?.toUpperCase() + type?.substr(1)?.toLowerCase();
+          }
           let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
           let toAddress = _.get(item, 'smart_contract_events[0].cw721_activity.to') || NULL_ADDRESS;
           let contractAddress = _.get(element, 'transaction_messages[0].content.contract');
@@ -421,7 +435,9 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
           if (typeof dataTemp === 'string') {
             try {
               dataTemp = JSON.parse(dataTemp);
-              tokenId = dataTemp[Object.keys(dataTemp)[0]]?.token_id || '';
+              let objData = dataTemp[Object.keys(dataTemp)[0]];
+              tokenId = objData?.token_id || objData[Object.keys(objData)[0]]?.token_id || '';
+              contractAddress = objData[Object.keys(objData)[0]]?.contract_address || contractAddress;
             } catch (e) {}
           }
 
@@ -465,7 +481,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
   return txs;
 }
 
-export function getTypeTx(element) {
+export function getTypeTx(element, index = 0) {
   let type = _.get(element, 'transaction_messages[0].content["@type"]');
   if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
     try {
