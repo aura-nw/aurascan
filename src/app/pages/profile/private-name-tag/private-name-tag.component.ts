@@ -106,6 +106,9 @@ export class PrivateNameTagComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        setTimeout(() => {
+          this.getListPrivateName();
+        }, 500);
         this.toastr.loading(result);
       }
     });
