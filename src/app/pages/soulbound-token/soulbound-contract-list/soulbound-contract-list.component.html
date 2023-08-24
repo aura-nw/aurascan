@@ -2,10 +2,10 @@
 <section class="mt-6">
   <div class="card">
     <div class="card-body">
-      <ng-container *ngIf="currentAddress">
-        <div *ngIf="!isNoData && !loading" class="h2 mb-4 mb-lg-0 text--white">Smart Contracts</div>
+      <ng-container *ngIf="currentAddress && !loading">
+        <div *ngIf="!isNoData" class="h2 mb-4 mb-lg-0 text--white">Smart Contracts</div>
         <div
-          *ngIf="!isNoData && !loading"
+          *ngIf="!isNoData"
           class="d-flex flex-column flex-lg-row justify-content-lg-between flex-lg-row-reverse align-items-lg-center mb-4">
           <form (ngSubmit)="searchToken()" class="aura-form single-input-field search-form-sbcontract" #searchForm>
             <div class="input-group">
@@ -114,11 +114,11 @@
 </section>
 <ng-template #noValues>
   <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-  <ng-container *ngIf="currentAddress">
+  <ng-container *ngIf="currentAddress && !loading">
     <app-table-no-data
       [textNull]="'There isn\'t any smart contract deployed with you as the ABT\'s creator'"
-      *ngIf="!loading && isNoData"></app-table-no-data>
-    <app-table-no-data *ngIf="!loading && !isNoData"></app-table-no-data>
+      *ngIf="isNoData"></app-table-no-data>
+    <app-table-no-data *ngIf="!isNoData"></app-table-no-data>
   </ng-container>
   <ng-container *ngIf="!currentAddress">
     <app-table-no-data
