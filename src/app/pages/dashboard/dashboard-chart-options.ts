@@ -34,9 +34,6 @@ export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
   handleScale: {
     mouseWheel: false,
   },
-  handleScale: {
-    mouseWheel: false,
-  },
 };
 
 export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'] = {
@@ -50,7 +47,7 @@ export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'
   },
 };
 
-export const STATISTIC_CHART_OPTIONS: DeepPartial<ChartOptions> = {
+export const STATISTIC_CHART_DETAIL_OPTIONS: DeepPartial<ChartOptions> = {
   height: 300,
   crosshair: {
     horzLine: {
