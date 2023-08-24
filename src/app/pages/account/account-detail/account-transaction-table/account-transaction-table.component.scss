@@ -208,6 +208,7 @@
   }
   .item-show {
     height: 30px;
+    min-width: 180px;
     display: flex;
     align-items: center;
     margin-bottom: var(--spacer-4);
@@ -250,7 +251,7 @@
   }
 }
 
-.btn-select-type{
+.btn-select-type {
   background-color: unset;
   color: white;
 }

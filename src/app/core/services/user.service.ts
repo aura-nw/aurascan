@@ -227,12 +227,8 @@ export class UserService extends CommonService {
                 from
                 to
                 sender
-              }
-              smart_contract {
-                cw721_contract {
-                  cw721_tokens {
-                    token_id
-                  }
+                cw721_token{
+                  token_id
                 }
               }
             }
@@ -240,7 +236,6 @@ export class UserService extends CommonService {
         }
       }
     }
-    
     `;
     return this.http
       .post<any>(this.graphUrl, {

@@ -420,8 +420,6 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
         break;
       case TabsAccountLink.NftTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
-          console.log(element);
-
           const typeOrigin = _.get(element, 'transaction_messages[0].content["@type"]');
           let type = item?.smart_contract_events[0] ? item?.smart_contract_events[0]?.cw721_activity?.action : null;
           if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
@@ -440,8 +438,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
               } catch (e) {}
             }
             let objData = dataTemp[Object.keys(dataTemp)[0]];
-            tokenId =
-              objData?.token_id || objData[Object.keys(objData)[0]]?.token_id || objData?.token_ids[index] || '';
+            tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
             contractAddress = objData[Object.keys(objData)[0]]?.contract_address || contractAddress;
           } catch {}
 
