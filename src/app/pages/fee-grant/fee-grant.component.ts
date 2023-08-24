@@ -31,7 +31,6 @@ export class FeeGrantComponent implements OnInit {
         mergeMap((_) => this.walletService.wallet$),
       )
       .subscribe((wallet) => {
-        const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
         if (wallet) {
           this.currentAddress = wallet.bech32Address;
         }
