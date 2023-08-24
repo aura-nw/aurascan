@@ -30,7 +30,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
-  chartRange = CHART_RANGE.M_60;
+  chartRange = CHART_RANGE.H_24;
   chartRangeData = CHART_RANGE;
   PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
 
@@ -293,7 +293,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const min = moment()
       .subtract(value, unit as any)
       .valueOf();
-
     const payload = {
       coinId: this.tokenIdGetPrice.AURA,
       rangeType: CHART_CONFIG[this.chartRange].type,

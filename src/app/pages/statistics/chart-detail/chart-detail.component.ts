@@ -14,8 +14,8 @@ import { StatisticService } from 'src/app/core/services/statistic.service';
 import { Globals } from 'src/app/global/global';
 import {
   CHART_CONFIG,
-  DASHBOARD_CHART_OPTIONS,
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
+  STATISTIC_CHART_OPTIONS,
 } from 'src/app/pages/dashboard/dashboard-chart-options';
 
 @Component({
@@ -91,7 +91,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
 
   // config chart
   initChart() {
-    this.chart = createChart(document.getElementById('dailyChart'), DASHBOARD_CHART_OPTIONS);
+    this.chart = createChart(document.getElementById('dailyChart'), STATISTIC_CHART_OPTIONS);
     this.areaSeries = this.chart.addAreaSeries(STATISTIC_AREA_SERIES_CHART_OPTIONS);
     if (this.chartType !== 'unique-addresses')
       this.areaSeries.applyOptions({
