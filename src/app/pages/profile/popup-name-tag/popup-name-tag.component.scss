@@ -1,7 +1,9 @@
 .card.card-private-name {
-  // padding: var(--spacer-4);
   @media (min-width: 992px) {
     width: 800px;
+  }
+  @media (max-width: 414px) {
+    max-height: 80vh;
   }
   .card-header {
     background-color: var(--aura-gray-9);
@@ -68,6 +70,36 @@
     }
     .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
       transform: translate3d(18px, 0, 0) !important;
+    }
+  }
+}
+
+.box-name-tag {
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.6rem;
+  word-break: break-word;
+  background-color: var(--aura-gray-9);
+  border-radius: 4px 0px 0px 4px;
+  padding-left: var(--spacer-2);
+  padding-right: var(--spacer-5);
+  color: var(--aura-gray-light);
+  &:not(.private-name-tag) {
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      border-top: 13px solid transparent;
+      border-right: 15px solid #24262e;
+      border-bottom: 13px solid transparent;
     }
   }
 }

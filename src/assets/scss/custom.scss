@@ -761,3 +761,9 @@ body {
   background: url('../../assets/icons/icons-svg/white/error-notice.svg') center;
   background-size: cover;
 }
+
+.ellipsis-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -17,8 +17,28 @@
   }
 }
 
-:ng-deep .box-name-tag {
+.private-name-table {
+  th.mat-header-cell:nth-child(1) {
+    min-width: 60px;
+  }
+  th.mat-header-cell:nth-child(7) {
+    min-width: 80px;
+  }
+  th.mat-header-cell:nth-child(2),
+  th.mat-header-cell:nth-child(4),
+  th.mat-header-cell:nth-child(5),
+  th.mat-header-cell:nth-child(6) {
+    min-width: 150px;
+  }
+}
+
+.txt-total-name {
+  color: #e6e7e8;
+}
+
+.profile-private-name-tag {
   height: 24px;
+  width: fit-content;
   padding: 0 var(--spacer-2);
   background-color: var(--aura-gray-10);
   border-radius: 16px;

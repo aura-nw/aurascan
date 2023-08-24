@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -10,9 +9,10 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
+import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -50,9 +50,9 @@ export class PrivateNameTagComponent implements OnInit {
   constructor(
     public commonService: CommonService,
     public nameTagService: NameTagService,
-    private modalService: NgbModal,
     private dialog: MatDialog,
     private toastr: NgxToastrService,
+    private global: Globals,
   ) {
     this.searchSubject
       .asObservable()
@@ -63,6 +63,7 @@ export class PrivateNameTagComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.commonService.listNameTag = this.global.listNameTag;
     this.getListPrivateName();
   }
 

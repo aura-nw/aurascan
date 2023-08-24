@@ -68,11 +68,13 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   setDataFrom(data) {
+    this.isValidAddress = true;
     this.privateNameForm.controls['isFavorite'].setValue(data.isFavorite);
     this.privateNameForm.controls['isAccount'].setValue(data.type === 'account' ? true : false);
     this.privateNameForm.controls['address'].setValue(data.address);
     this.privateNameForm.controls['name'].setValue(data.nameTag);
     this.privateNameForm.controls['note'].setValue(data.note);
+    this.checkPublicNameTag();
   }
 
   closeDialog(hash = null) {
@@ -134,8 +136,6 @@ export class PopupNameTagComponent implements OnInit {
   editPrivateName(payload) {
     this.nameTagService.updatePrivateNameTag(payload).subscribe({
       next: (res) => {
-        console.log(res);
-
         if (res.code && res.code !== 200) {
           this.isError = true;
           this.toastr.error(res.message || 'Error');
