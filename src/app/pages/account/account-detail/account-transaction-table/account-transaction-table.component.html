@@ -4,14 +4,16 @@
       <button
         type="button"
         [class.active]="currentType === accountTxType.Sent"
-        (click)="changeType(accountTxType.Sent)"
+        [routerLink]="['/account', currentAddress]"
+        [queryParams]="{ tab: modeQuery, type: accountTxType.Sent }"
         class="w-auto px-4 py-2">
         <span>Sent</span>
       </button>
       <button
         type="button"
-        [class.active]="currentType !== accountTxType.Sent"
-        (click)="changeType(accountTxType.Received)"
+        [class.active]="currentType === accountTxType.Received"
+        [routerLink]="['/account', currentAddress]"
+        [queryParams]="{ tab: modeQuery, type: accountTxType.Received }"
         class="w-auto px-4 py-2">
         <span>Received</span>
       </button>
@@ -229,6 +231,7 @@
                           +{{ data.arrEvent?.length - 1 }}
                         </div>
                       </div>
+
                       <app-tooltip-customize
                         [content]="data[template.matColumnDef]"
                         *ngIf="modeQuery === tabsData.ExecutedTxs">

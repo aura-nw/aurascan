@@ -227,7 +227,13 @@ export class UserService extends CommonService {
                 from
                 to
                 sender
-                cw721_token_id
+              }
+              smart_contract {
+                cw721_contract {
+                  cw721_tokens {
+                    token_id
+                  }
+                }
               }
             }
           }

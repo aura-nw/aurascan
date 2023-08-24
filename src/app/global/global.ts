@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import { TabsAccountLink } from '../core/constants/account.enum';
 import { LENGTH_CHARACTER, NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
 import {
@@ -11,7 +12,6 @@ import {
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
-import { TabsAccount } from '../core/constants/account.enum';
 Injectable();
 
 export class Globals {
@@ -384,10 +384,10 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     let contractAddress;
 
     switch (modeQuery) {
-      case TabsAccount.ExecutedTxs:
+      case TabsAccountLink.ExecutedTxs:
         type = getTypeTx(element);
         break;
-      case TabsAccount.AuraTxs:
+      case TabsAccountLink.AuraTxs:
         arrEvent = _.get(element, 'transaction_messages')?.map((item, index) => {
           let type = getTypeTx(element, index);
           let fromAddress = currentAddress;
@@ -406,7 +406,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
           return { type, fromAddress, toAddress, amount, denom };
         });
         break;
-      case TabsAccount.FtsTxs:
+      case TabsAccountLink.FtsTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
           let type = getTypeTx(element, index);
           let fromAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].from') || NULL_ADDRESS;
@@ -418,12 +418,12 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
           return { type, fromAddress, toAddress, amount, denom };
         });
         break;
-      case TabsAccount.NftTxs:
+      case TabsAccountLink.NftTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
+          console.log(element);
+
           const typeOrigin = _.get(element, 'transaction_messages[0].content["@type"]');
-          let type = item?.smart_contract_events[index]
-            ? item?.smart_contract_events[index]?.cw721_activity?.action
-            : null;
+          let type = item?.smart_contract_events[0] ? item?.smart_contract_events[0]?.cw721_activity?.action : null;
           if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
             type = 'Execute_' + type[0]?.toUpperCase() + type?.substr(1)?.toLowerCase();
           }
@@ -432,21 +432,25 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
           let contractAddress = _.get(element, 'transaction_messages[0].content.contract');
           let dataTemp = _.get(element, 'transaction_messages[0].content.msg');
           let tokenId;
-          if (typeof dataTemp === 'string') {
-            try {
-              dataTemp = JSON.parse(dataTemp);
-              let objData = dataTemp[Object.keys(dataTemp)[0]];
-              tokenId = objData?.token_id || objData[Object.keys(objData)[0]]?.token_id || '';
-              contractAddress = objData[Object.keys(objData)[0]]?.contract_address || contractAddress;
-            } catch (e) {}
-          }
+
+          try {
+            if (typeof dataTemp === 'string') {
+              try {
+                dataTemp = JSON.parse(dataTemp);
+              } catch (e) {}
+            }
+            let objData = dataTemp[Object.keys(dataTemp)[0]];
+            tokenId =
+              objData?.token_id || objData[Object.keys(objData)[0]]?.token_id || objData?.token_ids[index] || '';
+            contractAddress = objData[Object.keys(objData)[0]]?.contract_address || contractAddress;
+          } catch {}
 
           return { type, fromAddress, toAddress, tokenId, contractAddress };
         });
         break;
     }
 
-    if (modeQuery !== TabsAccount.ExecutedTxs) {
+    if (modeQuery !== TabsAccountLink.ExecutedTxs) {
       fromAddress = arrEvent[0]?.fromAddress;
       toAddress = arrEvent[0]?.toAddress;
       denom = arrEvent[0]?.denom;
@@ -486,9 +490,13 @@ export function getTypeTx(element, index = 0) {
   if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
     try {
       let dataTemp = _.get(element, 'transaction_messages[0].content.msg');
-      dataTemp = JSON.parse(dataTemp);
+      if (typeof dataTemp === 'string') {
+        try {
+          dataTemp = JSON.parse(dataTemp);
+        } catch (e) {}
+      }
       let action = Object.keys(dataTemp)[0];
-      type = 'Execute_' + action[0]?.toUpperCase() + action.substr(1)?.toLowerCase();
+      type = 'Execute_' + action[0]?.toUpperCase() + action?.substr(1)?.toLowerCase();
     } catch (e) {}
   } else {
     type = _.find(TYPE_TRANSACTION, { label: type })?.value || type.split('.').pop();
