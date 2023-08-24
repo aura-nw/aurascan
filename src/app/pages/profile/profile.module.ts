@@ -19,9 +19,18 @@ import { PrivateNameTagComponent } from './private-name-tag/private-name-tag.com
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { ProfileComponent } from './profile.component';
+import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
+import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 
 @NgModule({
-  declarations: [ProfileComponent, ProfileSettingsComponent, PrivateNameTagComponent, PopupNameTagComponent],
+  declarations: [
+    ProfileComponent,
+    ProfileSettingsComponent,
+    PrivateNameTagComponent,
+    PopupNameTagComponent,
+    PopupCommonComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -37,7 +46,8 @@ import { ProfileComponent } from './profile.component';
     MatIconModule,
     NgbNavModule,
     TableNoDataModule,
-    APaginatorModule,
+    PaginatorModule,
+    TooltipCustomizeModule,
   ],
   providers: [FormBuilder, UserService, NameTagService],
 })

@@ -44,28 +44,35 @@ export class PopupNameTagComponent implements OnInit {
 
   ngOnInit(): void {
     this.formInit();
-    const payload = {
-      limit: 20,
-      offset: 0,
-      keyword: null,
-    };
-    this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
-      console.log(res);
-    });
+    if (this.data) {
+      this.setDataFrom(this.data);
+    }
   }
 
   get getAddress() {
     return this.privateNameForm.get('address');
   }
 
+  get getFavorite() {
+    return this.privateNameForm.get('isFavorite');
+  }
+
   formInit() {
     this.privateNameForm = this.fb.group({
-      favorite: [''],
+      isFavorite: [0],
       isAccount: [true, [Validators.required]],
       address: ['', [Validators.required]],
       name: ['', [Validators.required, Validators.maxLength(this.maxLengthNameTag)]],
       note: ['', [Validators.maxLength(200)]],
     });
+  }
+
+  setDataFrom(data) {
+    this.privateNameForm.controls['isFavorite'].setValue(data.isFavorite);
+    this.privateNameForm.controls['isAccount'].setValue(data.type === 'account' ? true : false);
+    this.privateNameForm.controls['address'].setValue(data.address);
+    this.privateNameForm.controls['name'].setValue(data.nameTag);
+    this.privateNameForm.controls['note'].setValue(data.note);
   }
 
   closeDialog(hash = null) {
@@ -88,15 +95,24 @@ export class PopupNameTagComponent implements OnInit {
 
   async onSubmit() {
     this.isSubmit = true;
-    const { isAccount, address, name, note } = this.privateNameForm.value;
+    const { isFavorite, isAccount, address, name, note } = this.privateNameForm.value;
 
     const payload = {
+      isFavorite: isFavorite,
       type: isAccount ? this.nameTagType.Account : this.nameTagType.Contract,
       address: address,
       nameTag: name,
       note: note,
     };
 
+    if (this.data) {
+      this.editPrivateName(payload);
+    } else {
+      this.createPrivateName(payload);
+    }
+  }
+
+  createPrivateName(payload) {
     this.nameTagService.createPrivateName(payload).subscribe({
       next: (res) => {
         if (res.code && res.code !== 200) {
@@ -115,13 +131,34 @@ export class PopupNameTagComponent implements OnInit {
     });
   }
 
+  editPrivateName(payload) {
+    this.nameTagService.updatePrivateNameTag(payload).subscribe({
+      next: (res) => {
+        console.log(res);
+
+        if (res.code && res.code !== 200) {
+          this.isError = true;
+          this.toastr.error(res.message || 'Error');
+          return;
+        }
+
+        // this.closeDialog();
+        // this.toastr.successWithTitle('Private name tag created!', 'Success');
+      },
+      error: (error) => {
+        this.isError = true;
+        this.toastr.error(error?.details.message[0] || 'Error');
+      },
+    });
+  }
+
   changeFavorite() {
-    this.privateNameForm.value.favorite = !this.privateNameForm.value.favorite;
+    this.privateNameForm.value.isFavorite = !this.privateNameForm.value.isFavorite;
   }
 
   changeType(type) {
     this.isAccount = type;
-    this.isError = false
+    this.isError = false;
     this.privateNameForm.value.isAccount = type;
     this.checkFormValid();
   }

@@ -8,12 +8,11 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
-import { ToastrService } from 'ngx-toastr';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { PrivateNameTagDto } from 'src/app/core/models/name-tag.model';
+import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -23,20 +22,21 @@ import { PrivateNameTagDto } from 'src/app/core/models/name-tag.model';
 export class PrivateNameTagComponent implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
 
+  countFav = 0;
   modalReference: any;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 5,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'favorite', headerCellDef: 'Fav.', headerWidth: 8 },
+    { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 8 },
     { matColumnDef: 'address', headerCellDef: 'Address', headerWidth: 12 },
     { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 6 },
     { matColumnDef: 'name_tag', headerCellDef: 'Private Name Tag', headerWidth: 12 },
-    { matColumnDef: 'created_at', headerCellDef: 'Added Time', headerWidth: 10 },
-    { matColumnDef: 'update_time', headerCellDef: 'Updated Time', headerWidth: 10 },
+    { matColumnDef: 'createdAt', headerCellDef: 'Added Time', headerWidth: 10 },
+    { matColumnDef: 'updatedAt', headerCellDef: 'Updated Time', headerWidth: 10 },
     { matColumnDef: 'action', headerCellDef: '', headerWidth: 8 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -63,7 +63,6 @@ export class PrivateNameTagComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.dataSource);
     this.getListPrivateName();
   }
 
@@ -76,29 +75,32 @@ export class PrivateNameTagComponent implements OnInit {
     this.onKeyUp();
   }
 
-  pageEvent(pageIndex: number): void {
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
     this.getListPrivateName();
   }
 
-  getListPrivateName() {
+  getListPrivateName(nextKey = null) {
     this.textSearch = this.textSearch?.trim();
     const payload = {
-      limit: this.pageData.pageSize,
-      offset: this.pageData.pageSize * this.pageData.pageIndex,
+      limit: 100,
       keyword: this.textSearch,
     };
 
     this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
-      console.log(res);
+      this.countFav = res.data?.filter((k) => k.isFavorite === 1)?.length || 0;
       this.dataSource.data = res.data;
       this.pageData.length = res?.meta?.count || 0;
     });
   }
 
-  openPopup() {
+  openPopup(data = null) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'grant-overlay-panel';
     dialogConfig.disableClose = true;
+    if (data) {
+      dialogConfig.data = data;
+    }
     let dialogRef = this.dialog.open(PopupNameTagComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -106,5 +108,54 @@ export class PrivateNameTagComponent implements OnInit {
         this.toastr.loading(result);
       }
     });
+  }
+
+  openPopupDelete(data) {
+    let dialogRef = this.dialog.open(PopupCommonComponent, {
+      panelClass: 'sizeNormal',
+      data: {
+        title: 'Remove Private Name Tag',
+        content: 'Are you sure to remove private name tag for the address ' + data.address + ' ' + data.nameTag + ' ?',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== 'canceled') {
+        this.deleteNameTag(data.id);
+      }
+    });
+  }
+
+  deleteNameTag(id) {
+    this.nameTagService.deletePrivateNameTag(id).subscribe((res) => {
+      if (res.code && res.code !== 200) {
+        this.toastr.error(res.message || 'Error');
+        return;
+      }
+
+      this.toastr.successWithTitle('Private name tag removed!', 'Success');
+      setTimeout(() => {
+        this.getListPrivateName();
+      }, 500);
+    });
+  }
+
+  editPrivateNameTag() {}
+
+  updateFavorite(data) {
+    const payload = {
+      id: data.id,
+      isFavorite: !data.isFavorite,
+    };
+
+    this.nameTagService.updatePrivateNameTag(payload).subscribe((res) => {
+      setTimeout(() => {
+        this.getListPrivateName();
+      }, 500);
+    });
+  }
+
+  paginatorEmit(event): void {
+    this.dataSource.paginator = event;
   }
 }

@@ -81,7 +81,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           this.pageChange.selectPage(0);
         }
       });
-    console.log(this.dataSource);
   }
 
   onKeyUp() {
