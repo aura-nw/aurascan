@@ -59,7 +59,6 @@ export class SoulboundContractListComponent implements OnInit {
         mergeMap((_) => this.walletService.wallet$),
       )
       .subscribe((wallet) => {
-        const urlPath = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
         if (wallet) {
           window.addEventListener('keplr_keystorechange', () => {
             this.isNoData = true;
@@ -104,6 +103,7 @@ export class SoulboundContractListComponent implements OnInit {
   }
 
   getListSmartContract() {
+    this.loading = true;
     if (this.currentAddress === null) {
       return;
     }
