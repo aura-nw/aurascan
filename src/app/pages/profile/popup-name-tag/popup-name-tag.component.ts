@@ -32,7 +32,7 @@ export class PopupNameTagComponent implements OnInit {
   };
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { data: any },
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupNameTagComponent>,
     private fb: FormBuilder,
     public environmentService: EnvironmentService,
@@ -95,7 +95,7 @@ export class PopupNameTagComponent implements OnInit {
     }
   }
 
-  async onSubmit() {
+  onSubmit() {
     this.isSubmit = true;
     const { isFavorite, isAccount, address, name, note } = this.privateNameForm.value;
 
@@ -105,6 +105,7 @@ export class PopupNameTagComponent implements OnInit {
       address: address,
       nameTag: name,
       note: note,
+      id: this.data.id,
     };
 
     if (this.data) {
@@ -142,8 +143,9 @@ export class PopupNameTagComponent implements OnInit {
           return;
         }
 
-        // this.closeDialog();
-        // this.toastr.successWithTitle('Private name tag created!', 'Success');
+        this.closeDialog(true);
+
+        this.toastr.successWithTitle('Private name tag created!', 'Success');
       },
       error: (error) => {
         this.isError = true;

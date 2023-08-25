@@ -30,6 +30,6 @@ export class NameTagService extends CommonService {
 
   updatePrivateNameTag(payload) {
     const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
-    return this.http.patch<any>(`${this.apiUrl}/user/private-name-tag/${params.id}`, params);
+    return this.http.patch<any>(`${this.apiUrl}/user/private-name-tag/${payload.id}`, params);
   }
 }
