@@ -275,6 +275,9 @@ export function convertDataTransaction(data, coinInfo) {
     const typeOrigin = _type;
     let amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
     let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
+    if (type.startsWith('Msg')) {
+      type = type?.replace('Msg', '');
+    }
 
     try {
       if (lstType[0]['@type'].indexOf('ibc') == -1) {
@@ -433,7 +436,10 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
           }
           let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
           let toAddress = _.get(item, 'smart_contract_events[0].cw721_activity.to') || NULL_ADDRESS;
-          let contractAddress = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address');
+          let contractAddress = _.get(
+            item,
+            'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address',
+          );
           let tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
 
           return { type, fromAddress, toAddress, tokenId, contractAddress };
@@ -447,6 +453,9 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       denom = arrEvent[0]?.denom;
       amount = arrEvent[0]?.amount;
       type = arrEvent[0]?.type || lstTypeTemp[0]?.type?.split('.').pop();
+      if (type.startsWith('Msg')) {
+        type = type?.replace('Msg', '');
+      }
       tokenId = arrEvent[0]?.tokenId;
       contractAddress = arrEvent[0]?.contractAddress;
     }
@@ -491,6 +500,9 @@ export function getTypeTx(element, index = 0) {
     } catch (e) {}
   } else {
     type = _.find(TYPE_TRANSACTION, { label: type })?.value || type.split('.').pop();
+    if (type.startsWith('Msg')) {
+      type = type?.replace('Msg', '');
+    }
   }
   return type;
 }
