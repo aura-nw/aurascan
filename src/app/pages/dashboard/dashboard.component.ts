@@ -162,6 +162,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
               rangeType: CHART_CONFIG[this.chartRange].type,
               min,
               max,
+              step: CHART_CONFIG[this.chartRange].step,
             };
 
             return this.token.getTokenMetrics(payload);
@@ -313,6 +314,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       rangeType: CHART_CONFIG[this.chartRange].type,
       min,
       max,
+      step: CHART_CONFIG[this.chartRange].step,
     };
 
     this.token.getTokenMetrics(payload).subscribe((res) => {
