@@ -29,7 +29,10 @@ export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
   timeScale: {
     timeVisible: true,
     secondsVisible: true,
-    minBarSpacing: 5,
+    minBarSpacing: 0,
+  },
+  handleScale: {
+    mouseWheel: false,
   },
 };
 
@@ -41,6 +44,38 @@ export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'
     type: 'price',
     precision: 4,
     minMove: 0.0001,
+  },
+};
+
+export const STATISTIC_CHART_DETAIL_OPTIONS: DeepPartial<ChartOptions> = {
+  height: 300,
+  crosshair: {
+    horzLine: {
+      visible: false,
+    },
+  },
+  layout: {
+    backgroundColor: '#24262e',
+    textColor: '#868a97',
+  },
+  grid: {
+    vertLines: {
+      color: '#363843',
+    },
+    horzLines: {
+      color: '#363843',
+    },
+  },
+  leftPriceScale: {
+    visible: true,
+  },
+  rightPriceScale: {
+    visible: false,
+  },
+  timeScale: {
+    timeVisible: true,
+    secondsVisible: true,
+    minBarSpacing: 0,
   },
 };
 
@@ -60,30 +95,35 @@ export const CHART_CONFIG: {
     type: RangeType;
     value: number;
     unit: string;
+    step: number;
   };
 } = {
-  ['60m']: {
-    initRange: 20,
-    type: RangeType.minute,
-    value: 1440,
-    unit: 'm',
-  },
   ['24h']: {
-    initRange: 24,
-    type: RangeType.hour,
-    value: 360,
-    unit: 'h',
+    initRange: 960,
+    type: RangeType.minute,
+    value: 2,
+    unit: 'd',
+    step: 3,
   },
-  ['30d']: {
-    initRange: 30,
-    type: RangeType.day,
+  ['7d']: {
+    initRange: 168,
+    type: RangeType.hour,
     value: 365,
     unit: 'd',
+    step: 1,
+  },
+  ['30d']: {
+    initRange: 720,
+    type: RangeType.hour,
+    value: 365,
+    unit: 'd',
+    step: 4,
   },
   ['12M']: {
-    initRange: 12,
-    type: RangeType.month,
+    initRange: 365,
+    type: RangeType.day,
     value: 60,
-    unit: 'M',
+    unit: 'd',
+    step: 1,
   },
 };

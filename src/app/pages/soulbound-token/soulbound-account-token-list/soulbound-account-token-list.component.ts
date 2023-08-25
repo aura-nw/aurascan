@@ -49,19 +49,12 @@ export class SoulboundAccountTokenListComponent implements OnInit {
 
   ngOnInit(): void {
     this.userAddress = this.route.snapshot.paramMap.get('address');
-
-    if (!this.userAddress || (this.userAddress && this.userAddress.trim().length === 0)) {
-      this.router.navigate(['/']);
-    }
-
     this.walletService.wallet$.subscribe((wallet) => {
       this.TABS = this.TAB_EQUIPPED;
       if (wallet) {
         if (wallet?.bech32Address === this.userAddress) {
           this.TABS = this.TAB_ALL;
-        } else {
-          this.router.navigate(['/']);
-        }
+        } 
       }
     });
 

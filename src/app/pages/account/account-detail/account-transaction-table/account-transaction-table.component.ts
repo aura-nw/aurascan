@@ -5,7 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
-import { AccountTxType, TabsAccount } from 'src/app/core/constants/account.enum';
+import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
@@ -33,7 +33,7 @@ export class AccountTransactionTableComponent {
   textSearch = '';
   searchValue = '';
   templates: Array<TableTemplate>;
-  tabsData = TabsAccount;
+  tabsData = TabsAccountLink;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
@@ -46,11 +46,11 @@ export class AccountTransactionTableComponent {
 
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 14 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 15 },
-    { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 8 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12 },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 17 },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 17 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 14 },
+    { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 7 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 14 },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 20 },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 19 },
   ];
 
   displayedColumns: string[];
@@ -105,6 +105,13 @@ export class AccountTransactionTableComponent {
     if (this.tnxTypeOrigin?.length === 0) {
       this.getListTypeFilter();
     }
+
+    this.route.queryParams.subscribe((params) => {
+      if (params?.type) {
+        this.currentType = params.type || AccountTxType.Sent;
+      }
+    });
+
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
@@ -209,23 +216,23 @@ export class AccountTransactionTableComponent {
     }
 
     switch (this.modeQuery) {
-      case TabsAccount.ExecutedTxs:
+      case TabsAccountLink.ExecutedTxs:
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesExecute;
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
         this.getListTxByAddress(payload);
         break;
-      case TabsAccount.AuraTxs:
+      case TabsAccountLink.AuraTxs:
         payload.compositeKey = 'coin_spent.spender';
         if (this.currentType !== AccountTxType.Sent) {
           payload.compositeKey = 'coin_received.receiver';
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 15 });
+        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
-        // this.getListTxAuraByAddress(payload);
+        this.getListTxAuraByAddress(payload);
         break;
-      case TabsAccount.FtsTxs:
+      case TabsAccountLink.FtsTxs:
         if (this.currentType === AccountTxType.Sent) {
           payload['sender'] = address;
         } else {
@@ -236,14 +243,14 @@ export class AccountTransactionTableComponent {
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListFTByAddress(payload);
         break;
-      case TabsAccount.NftTxs:
+      case TabsAccountLink.NftTxs:
         if (this.currentType === AccountTxType.Sent) {
           payload['sender'] = address;
         } else {
           payload['receiver'] = address;
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'tokenId', headerCellDef: 'Token ID', headerWidth: 17 });
+        this.templates.push({ matColumnDef: 'tokenId', headerCellDef: 'Token ID', headerWidth: 21 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;
@@ -331,11 +338,11 @@ export class AccountTransactionTableComponent {
       }
 
       let setReceive = false;
-      if (this.modeQuery !== TabsAccount.ExecutedTxs && this.currentType !== AccountTxType.Sent) {
+      if (this.modeQuery !== TabsAccountLink.ExecutedTxs && this.currentType !== AccountTxType.Sent) {
         setReceive = true;
       }
 
-      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
+      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive, this.currentAddress);
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
       } else {

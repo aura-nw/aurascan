@@ -75,7 +75,15 @@
                 [maxCharacter]="12"></app-name-tag>
             </ng-container>
             <ng-container *ngIf="commonService.checkDisplayTooltip(item[address] || currentAddress)">
-              {{ (item[address] || currentAddress | cutStringPipe : 6 : 6) || '-' }}
+              <a
+                *ngIf="!(item[address]?.startsWith('0000') || currentAddress?.startsWith('0000'))"
+                class="text--primary cursor-pointer block-link"
+                [routerLink]="['/account', item[address] || currentAddress]">
+                {{ item[address] || currentAddress | cutStringPipe : 6 : 6 }}
+              </a>
+              <span *ngIf="item[address]?.startsWith('0000') || currentAddress?.startsWith('0000')">
+                {{ (item[address] || currentAddress | cutStringPipe : 6 : 6) || '-' }}
+              </span>
             </ng-container>
           </div>
           <div class="col-6 caption fw-normal">

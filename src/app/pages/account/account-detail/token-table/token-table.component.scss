@@ -65,7 +65,6 @@
     align-items: center;
     width: 150px;
     height: 40px;
-    // border: 1px solid transparent;
 
     @media (min-width: 991.98px) {
       width: 100%;
@@ -143,11 +142,14 @@
   .tokenFilterPanel {
     border: 1px solid var(--aura-gray-8);
     background: #25252c;
-    width: 214px !important;
+    width: calc(100vw - 66px) !important;
     min-width: 214px !important;
     transform: translate3D(1px, 29px, 0) !important;
     padding: var(--spacer-2) !important;
     border-radius: 8px;
+    @media (min-width: 991.98px) {
+      width: 214px !important;
+    }
   }
 
   .mat-option {

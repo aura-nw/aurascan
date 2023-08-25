@@ -130,6 +130,7 @@ export class UserService extends CommonService {
           fee
           timestamp
           code
+          data
           transaction_messages {
             type
             content
@@ -226,14 +227,20 @@ export class UserService extends CommonService {
                 from
                 to
                 sender
-                cw721_token_id
+                cw721_token {
+                  token_id
+                }
+                cw721_contract {
+                  smart_contract {
+                    address
+                  }
+                }
               }
             }
           }
         }
       }
     }
-    
     `;
     return this.http
       .post<any>(this.graphUrl, {
