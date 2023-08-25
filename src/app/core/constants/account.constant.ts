@@ -18,8 +18,8 @@ export const ACCOUNT_WALLET_COLOR = [
 ];
 
 export const TABS_TITLE_ACCOUNT = [
-  { label: TabsAccount.ExecutedTxs },
-  { label: TabsAccount.AuraTxs },
-  { label: TabsAccount.FtsTxs },
-  { label: TabsAccount.NftTxs },
+  { label: TabsAccount.ExecutedTxs, value: 'execute' },
+  { label: TabsAccount.AuraTxs, value: 'aura-transfer' },
+  { label: TabsAccount.FtsTxs, value: 'ft-transfer' },
+  { label: TabsAccount.NftTxs, value: 'nft-transfer' },
 ];

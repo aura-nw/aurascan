@@ -52,6 +52,13 @@ export enum TabsAccount {
   NftTxs = 'NFTs TRANSFER',
 }
 
+export enum TabsAccountLink {
+  ExecutedTxs = 'execute',
+  AuraTxs = 'aura-transfer',
+  FtsTxs = 'ft-transfer',
+  NftTxs = 'nft-transfer',
+}
+
 export enum StakeModeAccount {
   Delegations = 0,
   Unbondings = 1,
