@@ -90,19 +90,14 @@ export class MyGranteesComponent implements OnInit {
         this.currentAddress = wallet.bech32Address;
         this.isNoData = false;
         this.getGranteesData();
+        this.timerGetFeeGrant = setInterval(() => {
+          this.getListGrant();
+        }, 30000);
       } else {
         this.loading = false;
         this.currentAddress = null;
         this.pageEvent(0);
         this.dataSource.data = [];
-      }
-    });
-
-    this.walletService.wallet$.subscribe((wallet) => {
-      if (wallet.bech32Address) {
-        this.timerGetFeeGrant = setInterval(() => {
-          this.getListGrant();
-        }, 30000);
       }
     });
   }

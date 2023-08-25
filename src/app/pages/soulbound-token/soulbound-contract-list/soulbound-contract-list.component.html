@@ -123,6 +123,8 @@
   <ng-container *ngIf="!currentAddress">
     <app-table-no-data
       [textNull]="'Kindly connect wallet to view the ABT contract deployed with you as creator'"
+      [img]="'assets/images/noWallet.png'"
+      [class]="'mb-10 mt-1'"
       *ngIf="!loading"></app-table-no-data>
   </ng-container>
 </ng-template>

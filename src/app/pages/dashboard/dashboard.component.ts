@@ -4,8 +4,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import * as moment from 'moment';
 import { MaskPipe } from 'ngx-mask';
-import { Subject, Subscription, timer } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { Subject, Subscription, of, timer } from 'rxjs';
+import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
@@ -23,6 +23,7 @@ import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constant
 import { Globals, convertDataBlock, convertDataTransaction } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 import { Router } from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-dashboard',
@@ -91,6 +92,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
   destroy$ = new Subject();
+  isMobileMatched = false;
+  breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
+  currentAddress = null;
 
   constructor(
     public commonService: CommonService,
@@ -106,7 +110,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
-  ) {}
+    private breakpointObserver: BreakpointObserver,
+  ) {
+    this.breakpoint$.subscribe((state) => {
+      if (state) {
+        this.isMobileMatched = state.matches;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.getInfoData();
@@ -116,7 +127,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => this.getInfoData());
 
     this.initChart();
-
     this.getCoinInfo(this.chartRange);
     this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
     this.getVotingPeriod();
@@ -131,27 +141,38 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   subscribeVisibleLogicalRangeChange() {
-    this.logicalRangeChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(({ from, to }) => {
-      if (from <= 0 && !this.endData) {
-        const { value, unit } = CHART_CONFIG[this.chartRange];
+    this.logicalRangeChange$
+      .pipe(
+        debounceTime(500),
+        switchMap(({ from, to }) => {
+          if (from <= 0 && !this.endData) {
+            const { value, unit } = CHART_CONFIG[this.chartRange];
 
-        const max = moment(this.originalData[0].timestamp)
-          .subtract(1, unit as any)
-          .valueOf();
+            const max = moment(this.originalData[0].timestamp)
+              .subtract(1, unit as any)
+              .valueOf();
 
-        const min = moment(this.originalData[0].timestamp)
-          .subtract(1, unit as any)
-          .subtract(value, unit as any)
-          .valueOf();
+            const min = moment(this.originalData[0].timestamp)
+              .subtract(1, unit as any)
+              .subtract(value, unit as any)
+              .valueOf();
 
-        const payload = {
-          coinId: this.tokenIdGetPrice.AURA,
-          rangeType: CHART_CONFIG[this.chartRange].type,
-          min,
-          max,
-        };
+            const payload = {
+              coinId: this.tokenIdGetPrice.AURA,
+              rangeType: CHART_CONFIG[this.chartRange].type,
+              min,
+              max,
+              step: CHART_CONFIG[this.chartRange].step,
+            };
 
-        this.token.getTokenMetrics(payload).subscribe((res) => {
+            return this.token.getTokenMetrics(payload);
+          }
+          return of(null);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((res) => {
+        if (res) {
           //update data common
           if (res?.data?.length > 0) {
             const { dataX, dataY } = this.parseDataFromApi(res.data);
@@ -166,9 +187,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           } else {
             this.endData = true;
           }
-        });
-      }
-    });
+        }
+      });
   }
 
   chartEvent() {
@@ -198,11 +218,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   drawChartFirstTime(data, dateTime) {
     this.chartDataExp = [];
     let arr = []; // drawing chart array
-
     arr = this.makeChartData(data, dateTime);
-
     this.originalDataArr = arr;
-
     this.areaSeries.applyOptions({
       priceFormat: {
         type: this.isPrice ? 'price' : 'volume',
@@ -210,7 +227,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.areaSeries.setData(arr);
-
     const chartLength = arr.length - 1;
 
     if (chartLength <= CHART_CONFIG[this.chartRange].initRange) {
@@ -252,7 +268,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   getListBlock(): void {
     const payload = {
       limit: this.PAGE_SIZE,
-    }
+    };
     this.blockService.getDataBlock(payload).subscribe((res) => {
       if (res?.block?.length > 0) {
         const blocks = convertDataBlock(res);
@@ -298,6 +314,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       rangeType: CHART_CONFIG[this.chartRange].type,
       min,
       max,
+      step: CHART_CONFIG[this.chartRange].step,
     };
 
     this.token.getTokenMetrics(payload).subscribe((res) => {
@@ -322,26 +339,26 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  exportChart() {
-    const exportData = this.originalData.map((item) => {
-      const dateF = this.datepipe.transform(new Date(item.timestamp), 'dd-MM-yyyy:HH-mm-ss');
-      return {
-        date: dateF,
-        value: this.isPrice ? item.current_price : item.total_volume,
-      };
-    });
+  // exportChart() {
+  //   const exportData = this.originalData.map((item) => {
+  //     const dateF = this.datepipe.transform(new Date(item.timestamp), 'dd-MM-yyyy:HH-mm-ss');
+  //     return {
+  //       date: dateF,
+  //       value: this.isPrice ? item.current_price : item.total_volume,
+  //     };
+  //   });
 
-    exportChart(
-      [
-        {
-          table1: exportData,
-        },
-      ],
-      this.chartRange,
-      this.isPrice,
-      this.currDate,
-    );
-  }
+  //   exportChart(
+  //     [
+  //       {
+  //         table1: exportData,
+  //       },
+  //     ],
+  //     this.chartRange,
+  //     this.isPrice,
+  //     this.currDate,
+  //   );
+  // }
 
   initTooltip() {
     const container = document.getElementById('chart');
@@ -432,12 +449,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // re-draw chart when connect coin98 app in mobile
     this.walletService.wallet$.subscribe((wallet) => {
-      if (this.originalData.length === 0) {
-        this.originalData = this.cacheData;
-        this.chart.remove();
-        this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
-        this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
-        this.subscribeVisibleLogicalRangeChange();
+      if (wallet && this.isMobileMatched) {
+        if (this.originalData.length === 0) {
+          this.originalData = this.cacheData;
+          this.chart.remove();
+          this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
+          this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
+          this.areaSeries.setData(this.originalDataArr);
+        }
       }
     });
   }
