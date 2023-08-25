@@ -98,10 +98,10 @@ export const CHART_CONFIG: {
   };
 } = {
   ['24h']: {
-    initRange: 480,
+    initRange: 960,
     type: RangeType.minute,
-    value: 1440,
-    unit: 'm',
+    value: 2,
+    unit: 'd',
   },
   ['7d']: {
     initRange: 168,
