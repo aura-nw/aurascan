@@ -390,17 +390,23 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       case TabsAccountLink.AuraTxs:
         arrEvent = _.get(element, 'transaction_messages')?.map((item, index) => {
           let type = getTypeTx(element, index);
-          let fromAddress = currentAddress;
-          let toAddress = currentAddress;
-          let dataTemp;
-          if (setReceive) {
-            dataTemp = element?.data?.tx_response?.logs[index]?.events?.find((k) => k.type === 'coin_spent');
-            fromAddress = dataTemp?.attributes[0]?.value;
-          } else {
-            dataTemp = element?.data?.tx_response?.logs[index]?.events?.find((k) => k.type === 'coin_received');
-            toAddress = dataTemp?.attributes[0]?.value;
+          console.log(element);
+          let fromAddress;
+          let toAddress;
+          let amountTemp;
+          const coinSpentData = element?.data?.tx_response?.logs[index]?.events?.find(
+            (k) => k.type === 'coin_spent',
+          )?.attributes;
+          const coinReceiveData = element?.data?.tx_response?.logs[index]?.events?.find(
+            (k) => k.type === 'coin_received',
+          )?.attributes;
+
+          if (coinSpentData && coinReceiveData) {
+            let indexDefault = 2;
+            fromAddress = coinSpentData[coinSpentData?.length - indexDefault]?.value;
+            toAddress = coinReceiveData[coinReceiveData?.length - indexDefault]?.value;
+            amountTemp = coinSpentData[coinSpentData?.length - indexDefault - 1]?.value?.match(/\d+/g)[0];
           }
-          let amountTemp = _.get(dataTemp, 'attributes[1].value')?.match(/\d+/g)[0];
           let denom = coinInfo.coinDenom;
           let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
           return { type, fromAddress, toAddress, amount, denom };
@@ -427,20 +433,8 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
           }
           let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
           let toAddress = _.get(item, 'smart_contract_events[0].cw721_activity.to') || NULL_ADDRESS;
-          let contractAddress = _.get(element, 'transaction_messages[0].content.contract');
-          let dataTemp = _.get(element, 'transaction_messages[0].content.msg');
-          let tokenId;
-
-          try {
-            if (typeof dataTemp === 'string') {
-              try {
-                dataTemp = JSON.parse(dataTemp);
-              } catch (e) {}
-            }
-            let objData = dataTemp[Object.keys(dataTemp)[0]];
-            tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
-            contractAddress = objData[Object.keys(objData)[0]]?.contract_address || contractAddress;
-          } catch {}
+          let contractAddress = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address');
+          let tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
 
           return { type, fromAddress, toAddress, tokenId, contractAddress };
         });
