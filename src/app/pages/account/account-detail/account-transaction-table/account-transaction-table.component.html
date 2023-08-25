@@ -187,7 +187,11 @@
 <ngx-simplebar *ngIf="dataSource && dataSource.data">
   <ng-container *ngIf="dataSource.data.length > 0; else noValues">
     <div class="table-responsive spacer-tooltip d-none d-lg-block">
-      <table mat-table [dataSource]="dataSource" class="aura-table account-transaction-table">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="aura-table account-transaction-table"
+        [ngClass]="modeQuery !== tabsData.ExecutedTxs ? 'table-transfer' : ''">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
@@ -225,8 +229,8 @@
                   </div>
                   <div *ngSwitchCase="'type'">
                     <div class="aura-status aura-tooltip-contain">
-                      <div class="status cursor-pointer aura-tooltip-object text-capitalize">
-                        {{ data[template.matColumnDef] | stringEllipsis : 20 }}
+                      <div class="status cursor-pointer aura-tooltip-object">
+                        {{ data[template.matColumnDef] | stringEllipsis : 25 }}
                         <div *ngIf="data.arrEvent?.length > 1" class="ml-1 text--gray-4">
                           +{{ data.arrEvent?.length - 1 }}
                         </div>

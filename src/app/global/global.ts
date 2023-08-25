@@ -298,7 +298,7 @@ export function convertDataTransaction(data, coinInfo) {
       try {
         let dataTemp = JSON.parse(messages[0]?.msg);
         let action = Object.keys(dataTemp)[0];
-        type = 'Execute_' + action[0]?.toUpperCase() + action.substr(1)?.toLowerCase();
+        type = 'Contract: ' + action;
       } catch {}
     }
 
@@ -432,7 +432,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
           const typeOrigin = _.get(element, 'transaction_messages[0].content["@type"]');
           let type = item?.smart_contract_events[0] ? item?.smart_contract_events[0]?.cw721_activity?.action : null;
           if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
-            type = 'Execute_' + type[0]?.toUpperCase() + type?.substr(1)?.toLowerCase();
+            type = 'Contract: ' + type;
           }
           let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
           let toAddress = _.get(item, 'smart_contract_events[0].cw721_activity.to') || NULL_ADDRESS;
@@ -496,7 +496,7 @@ export function getTypeTx(element, index = 0) {
         } catch (e) {}
       }
       let action = Object.keys(dataTemp)[0];
-      type = 'Execute_' + action[0]?.toUpperCase() + action?.substr(1)?.toLowerCase();
+      type = 'Contract: ' + action;
     } catch (e) {}
   } else {
     type = _.find(TYPE_TRANSACTION, { label: type })?.value || type.split('.').pop();
