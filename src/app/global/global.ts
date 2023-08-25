@@ -275,6 +275,9 @@ export function convertDataTransaction(data, coinInfo) {
     const typeOrigin = _type;
     let amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
     let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
+    if (type.startsWith('Msg')) {
+      type = type?.replace('Msg', '');
+    }
 
     try {
       if (lstType[0]['@type'].indexOf('ibc') == -1) {
@@ -295,7 +298,7 @@ export function convertDataTransaction(data, coinInfo) {
       try {
         let dataTemp = JSON.parse(messages[0]?.msg);
         let action = Object.keys(dataTemp)[0];
-        type = 'Execute_' + action[0]?.toUpperCase() + action.substr(1)?.toLowerCase();
+        type = 'Contract: ' + action;
       } catch {}
     }
 
@@ -429,11 +432,14 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
           const typeOrigin = _.get(element, 'transaction_messages[0].content["@type"]');
           let type = item?.smart_contract_events[0] ? item?.smart_contract_events[0]?.cw721_activity?.action : null;
           if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
-            type = 'Execute_' + type[0]?.toUpperCase() + type?.substr(1)?.toLowerCase();
+            type = 'Contract: ' + type;
           }
           let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
           let toAddress = _.get(item, 'smart_contract_events[0].cw721_activity.to') || NULL_ADDRESS;
-          let contractAddress = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address');
+          let contractAddress = _.get(
+            item,
+            'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address',
+          );
           let tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
 
           return { type, fromAddress, toAddress, tokenId, contractAddress };
@@ -447,6 +453,9 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       denom = arrEvent[0]?.denom;
       amount = arrEvent[0]?.amount;
       type = arrEvent[0]?.type || lstTypeTemp[0]?.type?.split('.').pop();
+      if (type.startsWith('Msg')) {
+        type = type?.replace('Msg', '');
+      }
       tokenId = arrEvent[0]?.tokenId;
       contractAddress = arrEvent[0]?.contractAddress;
     }
@@ -487,10 +496,13 @@ export function getTypeTx(element, index = 0) {
         } catch (e) {}
       }
       let action = Object.keys(dataTemp)[0];
-      type = 'Execute_' + action[0]?.toUpperCase() + action?.substr(1)?.toLowerCase();
+      type = 'Contract: ' + action;
     } catch (e) {}
   } else {
     type = _.find(TYPE_TRANSACTION, { label: type })?.value || type.split('.').pop();
+    if (type.startsWith('Msg')) {
+      type = type?.replace('Msg', '');
+    }
   }
   return type;
 }
