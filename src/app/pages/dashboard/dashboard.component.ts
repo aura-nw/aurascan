@@ -143,7 +143,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   subscribeVisibleLogicalRangeChange() {
     this.logicalRangeChange$
       .pipe(
-        debounceTime(200),
+        debounceTime(500),
         switchMap(({ from, to }) => {
           if (from <= 0 && !this.endData) {
             const { value, unit } = CHART_CONFIG[this.chartRange];
