@@ -23,6 +23,7 @@ import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constant
 import { Globals, convertDataBlock, convertDataTransaction } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 import { Router } from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-dashboard',
@@ -91,6 +92,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
   destroy$ = new Subject();
+  isMobileMatched = false;
+  breakpoint$ = this.breakpointObserver
+    .observe([Breakpoints.Small, Breakpoints.XSmall])
+    .pipe(takeUntil(this.destroy$));
 
   constructor(
     public commonService: CommonService,
@@ -106,9 +111,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
-  ) {}
+    private breakpointObserver: BreakpointObserver,
+  ) {
+    this.breakpoint$.subscribe((state) => {
+      if (state) {
+        this.isMobileMatched = state.matches;
+      }
+    });
+  }
 
   ngOnInit(): void {
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet && this.isMobileMatched) {
+        const currentRoute = this.router.url;
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate([currentRoute]); // navigate to same route
+        });
+      }
+    });
     this.getInfoData();
     const period = 60000;
     this.timerUnSub = timer(period, period)
@@ -116,7 +136,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => this.getInfoData());
 
     this.initChart();
-
     this.getCoinInfo(this.chartRange);
     this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
     this.getVotingPeriod();
@@ -252,7 +271,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   getListBlock(): void {
     const payload = {
       limit: this.PAGE_SIZE,
-    }
+    };
     this.blockService.getDataBlock(payload).subscribe((res) => {
       if (res?.block?.length > 0) {
         const blocks = convertDataBlock(res);
@@ -322,26 +341,26 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  exportChart() {
-    const exportData = this.originalData.map((item) => {
-      const dateF = this.datepipe.transform(new Date(item.timestamp), 'dd-MM-yyyy:HH-mm-ss');
-      return {
-        date: dateF,
-        value: this.isPrice ? item.current_price : item.total_volume,
-      };
-    });
+  // exportChart() {
+  //   const exportData = this.originalData.map((item) => {
+  //     const dateF = this.datepipe.transform(new Date(item.timestamp), 'dd-MM-yyyy:HH-mm-ss');
+  //     return {
+  //       date: dateF,
+  //       value: this.isPrice ? item.current_price : item.total_volume,
+  //     };
+  //   });
 
-    exportChart(
-      [
-        {
-          table1: exportData,
-        },
-      ],
-      this.chartRange,
-      this.isPrice,
-      this.currDate,
-    );
-  }
+  //   exportChart(
+  //     [
+  //       {
+  //         table1: exportData,
+  //       },
+  //     ],
+  //     this.chartRange,
+  //     this.isPrice,
+  //     this.currDate,
+  //   );
+  // }
 
   initTooltip() {
     const container = document.getElementById('chart');
@@ -431,15 +450,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     // re-draw chart when connect coin98 app in mobile
-    this.walletService.wallet$.subscribe((wallet) => {
-      if (this.originalData.length === 0) {
-        this.originalData = this.cacheData;
-        this.chart.remove();
-        this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
-        this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
-        this.subscribeVisibleLogicalRangeChange();
-      }
-    });
+    // this.walletService.wallet$.subscribe((wallet) => {
+    //   if (wallet) {
+    //     if (this.originalData.length === 0) {
+    //       this.originalData = this.cacheData;
+    //       this.chart.remove();
+    //       this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
+    //       this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
+    //       this.subscribeVisibleLogicalRangeChange();
+    //     }
+    //   }
+    // });
   }
 
   navigateToCommunityPool(): void {
