@@ -18,7 +18,12 @@
                 <mat-option [value]="item.address" [class.mb-1]="i > 0 && i < listCollection.length">
                   <div class="d-flex option-contain">
                     <div class="option-lable">
-                      <span>{{ item.label + ' (' + item.quantity + ')' }}</span>
+                      <span class="d-none d-lg-inline-block">{{
+                        (item.label | cutStringPipe : 16) + ' (' + item.quantity + ')'
+                      }}</span>
+                      <span class="d-lg-none">{{
+                        (item.label | cutStringPipe : 35) + ' (' + item.quantity + ')'
+                      }}</span>
                     </div>
                   </div>
                 </mat-option>

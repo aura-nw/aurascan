@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { CodeTransaction } from '../../../../core/constants/transaction.enum';
 import { CommonService } from 'src/app/core/services/common.service';
-import { AccountTxType, TabsAccount } from 'src/app/core/constants/account.enum';
+import { AccountTxType, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 export interface CardMobSimpleValidatorAddress {
@@ -59,7 +59,7 @@ export class CardMobAccountComponent implements OnInit {
   @Input() currentType: string;
   @Input() expand: boolean = false;
 
-  tabsData = TabsAccount;
+  tabsData = TabsAccountLink;
   statusTransaction = CodeTransaction;
   address = 'toAddress';
 
