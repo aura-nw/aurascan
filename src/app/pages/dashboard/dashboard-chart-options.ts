@@ -95,6 +95,7 @@ export const CHART_CONFIG: {
     type: RangeType;
     value: number;
     unit: string;
+    step: number;
   };
 } = {
   ['24h']: {
@@ -102,23 +103,27 @@ export const CHART_CONFIG: {
     type: RangeType.minute,
     value: 2,
     unit: 'd',
+    step: 3,
   },
   ['7d']: {
     initRange: 168,
     type: RangeType.hour,
     value: 365,
     unit: 'd',
+    step: 1,
   },
   ['30d']: {
     initRange: 720,
     type: RangeType.hour,
     value: 365,
     unit: 'd',
+    step: 4,
   },
   ['12M']: {
     initRange: 365,
     type: RangeType.day,
     value: 60,
     unit: 'd',
+    step: 1,
   },
 };
