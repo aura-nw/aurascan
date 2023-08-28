@@ -81,7 +81,7 @@
                   <div>{{ data.nameTag | cutStringPipe : 25 }}</div>
                 </div>
                 <div *ngSwitchCase="'createdAt'">
-                  {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                  {{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}
                 </div>
                 <div *ngSwitchCase="'updatedAt'">
                   {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
