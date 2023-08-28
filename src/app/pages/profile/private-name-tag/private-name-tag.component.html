@@ -69,10 +69,10 @@
                   <a class="text--primary cursor-pointer" [routerLink]="['/account', data[template.matColumnDef]]">
                     <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                   </a>
-                  <pre class="text--gray-5 ellipsis-text" style="max-width: 300px">
-                      {{ data.note || '-' }}
-                    </pre
-                  >
+                  <div class="aura-tooltip-contain">
+                    <pre class="text--gray-5 ellipsis-text cursor-pointer aura-tooltip-object" style="max-width: 200px">{{ data.note || '-' }}</pre>
+                    <app-tooltip-customize [content]="data.note"> </app-tooltip-customize>
+                  </div>
                 </div>
                 <div *ngSwitchCase="'type'" class="text-capitalize">
                   {{ data[template.matColumnDef] }}
