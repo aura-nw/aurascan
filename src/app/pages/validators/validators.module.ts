@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskModule } from 'ngx-mask';
-import { SimplebarAngularModule } from 'simplebar-angular';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
@@ -41,7 +40,6 @@ import { ValidatorsComponent } from './validators.component';
     ReactiveFormsModule,
     TranslateModule,
     SharedModule,
-    SimplebarAngularModule,
     TableNoDataModule,
     PopupDelegateModule,
     PaginatorModule,
