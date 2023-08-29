@@ -423,7 +423,8 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
           let amountTemp = _.get(item, 'smart_contract_events[0].cw20_activities[0].amount');
           let decimal = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.decimal');
           let amount = balanceOf(amountTemp || 0, +decimal);
-          return { type, fromAddress, toAddress, amount, denom };
+          let contractAddress = _.get(item, 'smart_contract_events[0].smart_contract.address');
+          return { type, fromAddress, toAddress, amount, denom, contractAddress };
         });
         break;
       case TabsAccountLink.NftTxs:

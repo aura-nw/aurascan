@@ -180,6 +180,7 @@ export class UserService extends CommonService {
                 sender
               }
               smart_contract {
+                address
                 cw20_contract {
                   symbol
                   decimal
