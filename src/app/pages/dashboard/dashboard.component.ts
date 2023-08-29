@@ -238,8 +238,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
 
-    this.chart.priceScale().applyOptions({
-      autoScale: true,
+    this.chart.priceScale('left').applyOptions({
+      scaleMargins: {
+        top: 0.3,
+        bottom: 0.4,
+      }
     });
   }
 
