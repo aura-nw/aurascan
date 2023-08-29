@@ -19,7 +19,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!transactionLoading && !displayType" class="mb-0 text--gray-5">
+  <div *ngIf="!transactionLoading && !displayType" class="mb-0 text--gray-5 caption-mob fw-normal">
     {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
     found
   </div>
@@ -40,7 +40,7 @@
         (keydown)="$event.stopPropagation()">
         <h3 class="mb-0 fw-bold text--white mb-4">Filter</h3>
         <!-- Asset Transfer Type -->
-        <div class="d-flex flex-column p-0 mb-4">
+        <div class="d-flex flex-column p-0 mb-4" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <span class="text-sm mb-2">Asset Transfer Type</span>
           <div class="dropdown aura-dropdown btn-item">
             <button
@@ -284,10 +284,20 @@
                       *ngIf="index < data.limit">
                       <div class="item-show">
                         <div class="{{ item['toAddress'] === currentAddress ? 'text--green-3' : 'text--red-3' }}">
-                          {{ item['toAddress'] === currentAddress ? '↑' : '↓' }}
-                          <span [appBigNumber]="item[template.matColumnDef]" [decimal]="0" class="fw-semibold"> </span>
+                          {{ item['toAddress'] === currentAddress ? '+' : '-' }}
+                          <span [appBigNumber]="item[template.matColumnDef]" [decimal]="0"> </span>
                         </div>
-                        <span class="ml-1 text--primary">{{ item.denom || denom }}</span>
+                        <span class="ml-1 text--primary">
+                          <span *ngIf="modeQuery !== tabsData.FtsTxs">
+                            {{ item.denom || denom | stringEllipsis : 19 }}</span
+                          >
+                          <a
+                            class=""
+                            [routerLink]="['/tokens/token', item.contractAddress]"
+                            *ngIf="modeQuery === tabsData.FtsTxs">
+                            {{ item.denom | stringEllipsis : 19 }}
+                          </a>
+                        </span>
                       </div>
                     </div>
                   </ng-container>
@@ -302,7 +312,8 @@
                         <app-name-tag
                           [value]="item.fromAddress || currentAddress"
                           [isLink]="
-                            !(data.fromAddress?.startsWith('0000') || currentAddress?.startsWith('0000'))
+                            !(data.fromAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
+                            item.fromAddress !== currentAddress
                           "></app-name-tag>
                         <img
                           [src]="'assets/images/icons/arrow-right.png' | imageS3"
@@ -341,7 +352,8 @@
                         <app-name-tag
                           [value]="item.toAddress || currentAddress"
                           [isLink]="
-                            !(data.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000'))
+                            !(data.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
+                            item.toAddress !== currentAddress
                           "></app-name-tag>
                         <ng-container *ngIf="index === 0">
                           <div class="box-number" (click)="expandData(data)" *ngIf="data.arrEvent?.length > 1">
@@ -368,9 +380,10 @@
                       *ngIf="index < data.limit">
                       <div class="item-show">
                         <app-name-tag
+                          [iconContract]="true"
                           [url]="'contracts'"
                           [value]="item.contractAddress"
-                          [isLink]="!data.contractAddress?.startsWith('0000')"></app-name-tag>
+                          [isLink]="!item.contractAddress?.startsWith('0000')"></app-name-tag>
                       </div>
                     </div>
                   </ng-container>
@@ -382,7 +395,7 @@
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
                       <div
-                        class="item-show justify-content-between tokenId fw-semibold {{
+                        class="item-show justify-content-between tokenId {{
                           item['toAddress'] === currentAddress ? 'text--green-3' : 'text--red-3'
                         }}">
                         {{ item.tokenId || '-' | stringEllipsis : 10 }}
@@ -447,7 +460,7 @@
           info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
         },
         {
-          label: 'Amount',
+          label: 'Fee',
           class: 'text--gray-1 body-02-mob',
           info: (data.fee | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
         }
