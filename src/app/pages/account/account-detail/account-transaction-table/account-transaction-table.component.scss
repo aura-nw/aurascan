@@ -50,6 +50,12 @@
   }
 }
 
+.button-filter {
+  &[aria-expanded='true'] {
+    border: 2px solid var(--aura-white);
+  }
+}
+
 ::ng-deep {
   @media (max-width: 414px) {
     .nav-item {
@@ -99,31 +105,38 @@
 ::ng-deep .account-transaction-table.table-transfer tbody tr td {
   &:nth-child(5),
   &:nth-child(6),
-  &:nth-child(7) {
-    padding-top: var(--spacer-2) !important;
+  &:nth-child(7),
+  &:nth-child(8),
+  &:nth-child(9) {
+    padding-top: var(--spacer-0) !important;
   }
 }
 
-.account-transaction-table {  
+.account-transaction-table {
   .aura-status .status {
     background-color: unset;
     padding: 0;
   }
   app-name-tag {
-    min-height: 30px;
     display: flex;
     align-items: center;
   }
   .item-show {
-    height: 34px;
+    height: 56px;
     min-width: 180px;
     display: flex;
     align-items: center;
-    margin-bottom: var(--spacer-4);
+    &.tokenId {
+      min-width: 75px;
+    }
+    &.action {
+      min-width: 40px;
+    }
   }
   tr td {
     vertical-align: top;
     padding-top: var(--spacer-4);
+    height: 56px;
     &:nth-child(4),
     &:nth-child(5),
     &:nth-child(6) {
@@ -138,7 +151,7 @@
     transition: max-height 0.35s ease-in-out;
     max-height: 0;
     overflow: hidden;
-    &.show {
+    &.show-detail {
       max-height: 99999px;
     }
   }
@@ -161,4 +174,3 @@
   background-color: unset;
   color: white;
 }
-

@@ -354,7 +354,6 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
-
     const lstTypeTemp = _.get(element, 'transaction_messages');
     let type;
     if (lstTypeTemp) {
@@ -391,29 +390,29 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
         type = getTypeTx(element);
         break;
       case TabsAccountLink.AuraTxs:
-        arrEvent = _.get(element, 'transaction_messages')?.map((item, index) => {
-          let type = getTypeTx(element, index);
-          console.log(element);
-          let fromAddress;
-          let toAddress;
-          let amountTemp;
-          const coinSpentData = element?.data?.tx_response?.logs[index]?.events?.find(
-            (k) => k.type === 'coin_spent',
-          )?.attributes;
-          const coinReceiveData = element?.data?.tx_response?.logs[index]?.events?.find(
-            (k) => k.type === 'coin_received',
-          )?.attributes;
-
-          if (coinSpentData && coinReceiveData) {
-            let indexDefault = 2;
-            fromAddress = coinSpentData[coinSpentData?.length - indexDefault]?.value;
-            toAddress = coinReceiveData[coinReceiveData?.length - indexDefault]?.value;
-            amountTemp = coinSpentData[coinSpentData?.length - indexDefault - 1]?.value?.match(/\d+/g)[0];
+        const coinArrReceiver = _.get(element, 'data.tx_response.logs[0].events')?.find(
+          (k) => k.type === 'coin_received',
+        )?.attributes;
+        const coinArrSpent = _.get(element, 'data.tx_response.logs[0].events')?.find(
+          (k) => k.type === 'coin_spent',
+        )?.attributes;
+        let arrTemp = [];
+        for (let i = 0; i < coinArrReceiver?.length; i++) {
+          if (
+            (coinArrReceiver[i]?.key === 'receiver' && coinArrReceiver[i]?.value === currentAddress) ||
+            (coinArrSpent[i]?.key === 'spender' && coinArrSpent[i]?.value === currentAddress)
+          ) {
+            let type = getTypeTx(element, i);
+            toAddress = coinArrReceiver[i]?.value;
+            fromAddress = coinArrSpent[i]?.value;
+            let amountTemp = coinArrReceiver[i + 1]?.value?.match(/\d+/g)[0];
+            let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
+            let denom = coinInfo.coinDenom;
+            const result = { type, toAddress, fromAddress, amount, denom };
+            arrTemp.push(result);
           }
-          let denom = coinInfo.coinDenom;
-          let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
-          return { type, fromAddress, toAddress, amount, denom };
-        });
+        }
+        arrEvent = arrTemp;
         break;
       case TabsAccountLink.FtsTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
@@ -441,7 +440,6 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
             'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address',
           );
           let tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
-
           return { type, fromAddress, toAddress, tokenId, contractAddress };
         });
         break;

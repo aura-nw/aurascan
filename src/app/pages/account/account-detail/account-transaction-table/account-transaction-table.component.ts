@@ -46,11 +46,11 @@ export class AccountTransactionTableComponent {
 
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 14 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 14 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 16 },
     { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 7 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 14 },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 20 },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 19 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 17 },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 16 },
   ];
 
   displayedColumns: string[];
@@ -130,6 +130,7 @@ export class AccountTransactionTableComponent {
       startDate: null,
       endDate: null,
       type: [],
+      typeTransfer: null,
     };
   }
 
@@ -165,6 +166,15 @@ export class AccountTransactionTableComponent {
     this.tnxType = this.tnxType.filter(
       (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord.toLowerCase().trim()) > -1,
     );
+  }
+
+  changeTypeFilter(type) {
+    this.transactionFilter.typeTransfer = type;
+    document.getElementById('typeAction')!.classList.remove('show');
+  }
+
+  addShow() {
+    document.querySelectorAll('ul#typeAction')[0]!.classList.add('show');
   }
 
   clearFilterSearch() {
@@ -223,9 +233,13 @@ export class AccountTransactionTableComponent {
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.AuraTxs:
-        payload.compositeKey = 'coin_spent.spender';
-        if (this.currentType !== AccountTxType.Sent) {
-          payload.compositeKey = 'coin_received.receiver';
+        payload.compositeKey = ['coin_spent.spender', 'coin_received.receiver'];
+        if (this.transactionFilter.typeTransfer) {
+          if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
+            payload.compositeKey = ['coin_spent.spender'];
+          } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
+            payload.compositeKey = ['coin_received.receiver'];
+          }
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
@@ -233,10 +247,13 @@ export class AccountTransactionTableComponent {
         this.getListTxAuraByAddress(payload);
         break;
       case TabsAccountLink.FtsTxs:
-        if (this.currentType === AccountTxType.Sent) {
-          payload['sender'] = address;
-        } else {
-          payload['receiver'] = address;
+        payload['sender'] = payload['receiver'] = address;
+        if (this.transactionFilter.typeTransfer) {
+          if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
+            payload['receiver'] = '';
+          } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
+            payload['sender'] = '';
+          }
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
@@ -244,13 +261,18 @@ export class AccountTransactionTableComponent {
         this.getListFTByAddress(payload);
         break;
       case TabsAccountLink.NftTxs:
-        if (this.currentType === AccountTxType.Sent) {
-          payload['sender'] = address;
-        } else {
-          payload['receiver'] = address;
+        payload['sender'] = payload['receiver'] = address;
+        if (this.transactionFilter.typeTransfer) {
+          if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
+            payload['receiver'] = '';
+          } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
+            payload['sender'] = '';
+          }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'tokenId', headerCellDef: 'Token ID', headerWidth: 21 });
+        this.templates.push({ matColumnDef: 'contractAddress', headerCellDef: 'Contract', headerWidth: 11 });
+        this.templates.push({ matColumnDef: 'tokenId', headerCellDef: 'Token ID', headerWidth: 10 });
+        this.templates.push({ matColumnDef: 'action', headerCellDef: '', headerWidth: 15 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;
