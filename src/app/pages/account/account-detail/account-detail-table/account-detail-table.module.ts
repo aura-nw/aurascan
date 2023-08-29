@@ -8,13 +8,12 @@ import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskModule } from 'ngx-mask';
-import { SimplebarAngularModule } from 'simplebar-angular';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { CommonPipeModule } from '../../../../core/pipes/common-pipe.module';
 import { PaginatorModule } from '../../../../shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../../shared/components/table-no-data/table-no-data.module';
 import { AccountDetailTableComponent } from './account-detail-table.component';
-import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [AccountDetailTableComponent],
@@ -27,7 +26,6 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     MatPaginatorModule,
     TranslateModule,
     CommonPipeModule,
-    SimplebarAngularModule,
     RouterModule,
     TableNoDataModule,
     PaginatorModule,

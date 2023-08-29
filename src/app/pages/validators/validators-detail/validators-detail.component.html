@@ -189,89 +189,87 @@
           <!-- <div class="body-01 text--gray-5 mt-1 mt-lg-0">Total: {{ lengthBlock || 0 | number }} blocks</div> -->
         </div>
         <div class="card-body article-1 pt-4">
-          <ngx-simplebar>
-            <ng-container *ngIf="lengthBlock > 0; else noValues">
-              <div class="table-responsive aura-table-contain pb-1">
-                <table mat-table [dataSource]="dataSourceBlock" class="aura-table" *ngIf="!breakpoint.value.matches">
-                  <ng-container *ngFor="let template of templatesBlock; index as i">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="col-per-25 {{ i === 2 ? 'pl-5' : '' }}">
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
+          <ng-container *ngIf="lengthBlock > 0; else noValues">
+            <div class="table-responsive aura-table-contain pb-1">
+              <table mat-table [dataSource]="dataSourceBlock" class="aura-table" *ngIf="!breakpoint.value.matches">
+                <ng-container *ngFor="let template of templatesBlock; index as i">
+                  <ng-container [matColumnDef]="template.matColumnDef">
+                    <th mat-header-cell *matHeaderCellDef class="col-per-25 {{ i === 2 ? 'pl-5' : '' }}">
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
 
-                      <td mat-cell *matCellDef="let data">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef">
-                            <div *ngSwitchCase="'timestamp'">
-                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                            </div>
-                            <a
-                              *ngSwitchCase="'block_hash'"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/blocks', data.height]">
-                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
-                            </a>
-                            <a
-                              *ngSwitchCase="'height'"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/blocks', data.height]">
-                              {{ data[template.matColumnDef] }}
-                            </a>
-                            <div *ngSwitchDefault class="pl-5">{{ data[template.matColumnDef] }}</div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumnsBlock"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
-                  <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data pt-8" colspan="9999">
-                      <app-loading-sprint></app-loading-sprint>
+                    <td mat-cell *matCellDef="let data">
+                      <div>
+                        <ng-container [ngSwitch]="template.matColumnDef">
+                          <div *ngSwitchCase="'timestamp'">
+                            {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                          </div>
+                          <a
+                            *ngSwitchCase="'block_hash'"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/blocks', data.height]">
+                            {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                          </a>
+                          <a
+                            *ngSwitchCase="'height'"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/blocks', data.height]">
+                            {{ data[template.matColumnDef] }}
+                          </a>
+                          <div *ngSwitchDefault class="pl-5">{{ data[template.matColumnDef] }}</div>
+                        </ng-container>
+                      </div>
                     </td>
-                  </tr>
-                </table>
-                <ng-container *ngIf="breakpoint.value.matches">
-                  <div *ngIf="dataSourceBlock" class="custom-card-mob-simple titleMob">
-                    <app-card-mob-simple
-                      *ngFor="let data of dataSourceBlockMob"
-                      [link]="'/blocks/' + data.height"
-                      [content]="[
-                        {
-                          label: data.height,
-                          class: 'body-01 text--gray-1',
-                          info: commonService.getDateValue(data.timestamp)[0]
-                        },
-                        { label: 'Txs', class: 'body-01 text--gray-1', info: data.num_txs.toString() },
-                        {
-                          label: 'Voting Start',
-                          class: 'card__date text--gray-1 body-01-mob',
-                          info:
-                            '<span>' +
-                            (data.timestamp | customDate : 'yyyy-MM-dd') +
-                            '</span>' +
-                            '<span>' +
-                            (data.timestamp | customDate : 'HH:mm:ss') +
-                            '</span>'
-                        }
-                      ]"></app-card-mob-simple>
-                  </div>
+                  </ng-container>
                 </ng-container>
-                <app-paginator
-                  [length]="lengthBlock"
-                  [pageSize]="pageSize"
-                  (paginator)="paginatorEmit($event, 'block')"
-                  (pageEvent)="pageEvent($event, 'block')"
-                  [id]="'block'">
-                </app-paginator>
-              </div>
-            </ng-container>
-            <ng-template #noValues>
-              <app-loading-sprint *ngIf="isLoadingBlock"></app-loading-sprint>
-              <app-table-no-data *ngIf="!isLoadingBlock"></app-table-no-data>
-            </ng-template>
-          </ngx-simplebar>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsBlock"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell g-no-data pt-8" colspan="9999">
+                    <app-loading-sprint></app-loading-sprint>
+                  </td>
+                </tr>
+              </table>
+              <ng-container *ngIf="breakpoint.value.matches">
+                <div *ngIf="dataSourceBlock" class="custom-card-mob-simple titleMob">
+                  <app-card-mob-simple
+                    *ngFor="let data of dataSourceBlockMob"
+                    [link]="'/blocks/' + data.height"
+                    [content]="[
+                      {
+                        label: data.height,
+                        class: 'body-01 text--gray-1',
+                        info: commonService.getDateValue(data.timestamp)[0]
+                      },
+                      { label: 'Txs', class: 'body-01 text--gray-1', info: data.num_txs.toString() },
+                      {
+                        label: 'Voting Start',
+                        class: 'card__date text--gray-1 body-01-mob',
+                        info:
+                          '<span>' +
+                          (data.timestamp | customDate : 'yyyy-MM-dd') +
+                          '</span>' +
+                          '<span>' +
+                          (data.timestamp | customDate : 'HH:mm:ss') +
+                          '</span>'
+                      }
+                    ]"></app-card-mob-simple>
+                </div>
+              </ng-container>
+              <app-paginator
+                [length]="lengthBlock"
+                [pageSize]="pageSize"
+                (paginator)="paginatorEmit($event, 'block')"
+                (pageEvent)="pageEvent($event, 'block')"
+                [id]="'block'">
+              </app-paginator>
+            </div>
+          </ng-container>
+          <ng-template #noValues>
+            <app-loading-sprint *ngIf="isLoadingBlock"></app-loading-sprint>
+            <app-table-no-data *ngIf="!isLoadingBlock"></app-table-no-data>
+          </ng-template>
         </div>
       </div>
     </div>

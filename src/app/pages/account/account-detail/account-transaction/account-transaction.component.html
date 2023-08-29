@@ -33,18 +33,18 @@
 
     <!-- Aura Transfer -->
     <ng-container *ngIf="currentTab === tabsData.AuraTxs">
-      <app-account-transaction-table [modeQuery]="currentTab" [displayType]="true"></app-account-transaction-table>
+      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
     </ng-container>
 
     <!-- Fts Transaction -->
     <ng-container *ngIf="currentTab === tabsData.FtsTxs">
-      <app-account-transaction-table [modeQuery]="currentTab" [displayType]="true"></app-account-transaction-table>
+      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
       <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
     </ng-container>
 
     <!-- NFT Transactions -->
     <ng-container *ngIf="currentTab === tabsData.NftTxs">
-      <app-account-transaction-table [modeQuery]="currentTab" [displayType]="true"></app-account-transaction-table>
+      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
       <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
     </ng-container>
   </div>
