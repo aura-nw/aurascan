@@ -102,13 +102,16 @@
     }
   }
 }
-::ng-deep .account-transaction-table.table-transfer tbody tr td {
-  &:nth-child(5),
-  &:nth-child(6),
-  &:nth-child(7),
-  &:nth-child(8),
-  &:nth-child(9) {
-    padding-top: var(--spacer-0) !important;
+
+::ng-deep {
+  .table-transfer tr td {
+    &:nth-child(4),
+    &:nth-child(5),
+    &:nth-child(6),
+    &:nth-child(7),
+    &:nth-child(8) {
+      padding-top: var(--spacer-0) !important;
+    }
   }
 }
 
@@ -137,11 +140,6 @@
     vertical-align: top;
     padding-top: var(--spacer-4);
     height: 56px;
-    &:nth-child(4),
-    &:nth-child(5),
-    &:nth-child(6) {
-      padding-top: var(--spacer-4);
-    }
     &:nth-child(2) {
       padding-top: var(--spacer-2);
     }

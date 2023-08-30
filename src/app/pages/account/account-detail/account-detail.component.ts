@@ -217,16 +217,19 @@ export class AccountDetailComponent implements OnInit {
 
   getSBTPick() {
     const payload = {
+      limit: 100,
+      offset: 0,
       receiverAddress: this.currentAddress,
-      limit: LIMIT_NUM_SBT,
+      isEquipToken: true,
     };
 
-    this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      if (this.userAddress && this.currentAddress !== this.userAddress) {
-        res.data = res.data.filter((k) => k.picked);
-      }
-      this.totalSBT = res.data.length;
-    });
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
+      (res) => {
+        this.totalSBT = res.data.length;
+      },
+      () => {},
+      () => {},
+    );
   }
 
   extendLink(url) {
