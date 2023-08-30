@@ -11,19 +11,13 @@
               class="nft-filter"
               panelClass="tokenFilterPanel"
               [disableOptionCentering]="true"
-              placeholder="Select collection"
               [(value)]="nftFilter"
               (selectionChange)="getNftData()">
               <div *ngFor="let item of listCollection; let i = index">
                 <mat-option [value]="item.address" [class.mb-1]="i > 0 && i < listCollection.length">
                   <div class="d-flex option-contain">
                     <div class="option-lable">
-                      <span class="d-none d-lg-inline-block">{{
-                        (item.label | cutStringPipe : 16) + ' (' + item.quantity + ')'
-                      }}</span>
-                      <span class="d-lg-none">{{
-                        (item.label | cutStringPipe : 35) + ' (' + item.quantity + ')'
-                      }}</span>
+                      <span>{{ (item.label | cutStringPipe : 16) + ' (' + item.quantity + ')' }}</span>
                     </div>
                   </div>
                 </mat-option>

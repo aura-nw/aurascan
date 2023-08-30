@@ -24,7 +24,7 @@ export class NftListComponent implements OnChanges {
     pageSize: 10,
     pageIndex: 1,
   };
-  nftFilter = null;
+  nftFilter = '';
   nftList = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
@@ -33,7 +33,7 @@ export class NftListComponent implements OnChanges {
     {
       label: 'All',
       quantity: 0,
-      address: null,
+      address: '',
     },
   ];
 
@@ -55,7 +55,7 @@ export class NftListComponent implements OnChanges {
       limit: this.pageData.pageSize,
       keyword: this.textSearch,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
-      address: this.nftFilter,
+      address: this.nftFilter || null,
     };
 
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
