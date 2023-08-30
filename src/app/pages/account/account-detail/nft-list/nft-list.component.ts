@@ -24,7 +24,7 @@ export class NftListComponent implements OnChanges {
     pageSize: 10,
     pageIndex: 1,
   };
-  nftFilter = '';
+  nftFilter = null;
   nftList = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
@@ -61,17 +61,18 @@ export class NftListComponent implements OnChanges {
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
       (res) => {
         if (res?.cw721_token?.length > 0) {
-          this.nftList = res?.cw721_token;
-          this.pageData.length = res.cw721_token_aggregate?.aggregate?.count;
-
-          this.nftList?.forEach((element) => {
-            element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
-            element.token_name = _.get(element, 'cw721_contract.name');
-            if (!this.searchValue) {
-              this.totalValue += element.price * +element.balance || 0;
-            }
-          });
-          this.totalValueNft.emit(this.totalValue);
+          if (this.nftFilter !== null) {
+            this.nftList = res?.cw721_token;
+            this.nftList?.forEach((element) => {
+              element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
+              element.token_name = _.get(element, 'cw721_contract.name');
+              if (!this.searchValue) {
+                this.totalValue += element.price * +element.balance || 0;
+              }
+            });
+            this.totalValueNft.emit(this.totalValue);
+            this.pageData.length = res.cw721_token_aggregate?.aggregate?.count;
+          }
         } else {
           this.pageData.length = 0;
         }

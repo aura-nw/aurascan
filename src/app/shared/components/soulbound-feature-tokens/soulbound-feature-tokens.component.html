@@ -1,6 +1,6 @@
-<div class="sbt-contain" [ngClass]="!isSBTValidator ? 'text-end' : 'sbt-validator'">
+<div class="sbt-contain" [ngClass]="!isSBTValidator ? 'text-end' : 'sbt-validator'" *ngIf="!isLoading">
   <div class="d-flex w-100 justify-content-between mb-4" *ngIf="displayManage">
-    <h3 class="mb-0 fw-semibold text--white">ABTs ({{ soulboundList?.length || 0 }})</h3>
+    <h3 class="mb-0 fw-semibold text--white">ABTs ({{ totalABT || 0 }})</h3>
     <a
       [routerLink]="['/accountbound/account', accountAddress]"
       (click)="setLinkTab()"
@@ -26,25 +26,23 @@
   <div class="soulbound-list mt-4 mt-lg-0">
     <ng-container *ngIf="soulboundList && soulboundList?.length > 0; else noNFT">
       <ng-container class="" *ngFor="let token of soulboundList; let last = last">
-        <div class="soulbound__item">
-          <ng-container *ngIf="token.picked">
-            <div class="nft-cards__item">
-              <app-nft-card
-                [nftLink]="'/tokens/token-nft/' + token.contract_address + '/' + encodeData(token.token_id)"
-                [nftItem]="token"
-                [nftType]="getTypeFile(token)"></app-nft-card>
-              <div class="nft-cards__label">
-                <span class="text-gradient">CW-4973</span>
-              </div>
+        <div class="soulbound__item" *ngIf="token.picked">
+          <div class="nft-cards__item">
+            <app-nft-card
+              [nftLink]="'/tokens/token-nft/' + token.contract_address + '/' + encodeData(token.token_id)"
+              [nftItem]="token"
+              [nftType]="getTypeFile(token)"></app-nft-card>
+            <div class="nft-cards__label">
+              <span class="text-gradient">CW-4973</span>
             </div>
-          </ng-container>
+          </div>
         </div>
       </ng-container>
     </ng-container>
     <ng-template #noNFT>
-      <div class="w-100">
+      <div class="w-100" *ngIf="isAccountDetail">
         <app-table-no-data
-          [textNull]="'Kindly pick your featured ABTs'"
+          [textNull]=" wallet === accountAddress ? 'Kindly pick your featured ABTs' : 'No ABTs highlighted by the owner'"
           [img]="'assets/images/noItemABT.png'"></app-table-no-data>
       </div>
     </ng-template>

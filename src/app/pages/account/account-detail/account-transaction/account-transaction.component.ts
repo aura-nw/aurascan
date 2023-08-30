@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TABS_TITLE_ACCOUNT } from 'src/app/core/constants/account.constant';
-import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 
 @Component({
   selector: 'app-account-transaction',

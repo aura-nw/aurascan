@@ -49,9 +49,10 @@
               data-bs-toggle="dropdown"
               (click)="addShow()"
               aria-expanded="false">
-              <span>{{
-                transactionFilter.typeTransfer?.length > 0 ? transactionFilter.typeTransfer : 'Select Action'
+              <span class="body">{{
+                transactionFilter.typeTransfer?.length > 0 ? transactionFilter.typeTransfer : 'Select a type'
               }}</span>
+              <i class="ph-light ph-funnel-simple text--white h1"></i>
             </button>
             <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
               <li class="dropdown-item cursor-pointer" (click)="changeTypeFilter(null)">
@@ -349,12 +350,14 @@
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
                       <div class="item-show">
-                        <app-name-tag
-                          [value]="item.toAddress || currentAddress"
-                          [isLink]="
-                            !(data.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
-                            item.toAddress !== currentAddress
-                          "></app-name-tag>
+                        <div [style]="'min-width: 148px'">
+                          <app-name-tag
+                            [value]="item.toAddress || currentAddress"
+                            [isLink]="
+                              !(data.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
+                              item.toAddress !== currentAddress
+                            "></app-name-tag>
+                        </div>
                         <ng-container *ngIf="index === 0">
                           <div class="box-number" (click)="expandData(data)" *ngIf="data.arrEvent?.length > 1">
                             <ng-container *ngIf="data.arrEvent?.length > 100"> >99 </ng-container>

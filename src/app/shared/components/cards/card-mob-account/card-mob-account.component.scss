@@ -8,21 +8,6 @@
   & > * {
     color: var(--aura-white);
   }
-  .sub-label {
-    text-align: center;
-    display: flex;
-    align-items: center;
-    span {
-      white-space: nowrap;
-      overflow: hidden !important;
-      text-overflow: ellipsis;
-    }
-
-    &.label__status {
-      font-weight: 600;
-      width: 120px;
-    }
-  }
 
   .btn-mob {
     padding: 6px 12px;
@@ -45,15 +30,20 @@
   padding-top: var(--spacer-2);
   border-top: 1px solid var(--aura-gray-9);
   .content-expand {
-    max-height: 170px;
+    max-height: 250px;
     overflow-x: auto;
     padding-right: 10px;
     .item-expand {
       min-height: 24px;
       align-items: center;
       &:not(:last-child) {
-        margin-bottom: var(--spacer-2);
+        margin-bottom: var(--spacer-4);
       }
+    }
+    .txt-top-expand{
+      height: 26px;
+      display: flex;
+      align-items: center;
     }
   }
 }

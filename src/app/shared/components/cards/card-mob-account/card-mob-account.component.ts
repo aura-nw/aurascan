@@ -61,7 +61,6 @@ export class CardMobAccountComponent implements OnInit {
 
   tabsData = TabsAccountLink;
   statusTransaction = CodeTransaction;
-  address = 'toAddress';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(public commonService: CommonService, private environmentService: EnvironmentService) {}
@@ -70,9 +69,15 @@ export class CardMobAccountComponent implements OnInit {
     if (this.modeQuery !== this.tabsData.ExecutedTxs) {
       this.content[this.content.length - 1].label = 'Expand';
     }
-    if (this.currentType === AccountTxType.Received) {
-      this.address = 'fromAddress';
-    }
+
+    this.dataCard?.arrEvent?.forEach((element) => {
+      element.address = element.fromAddress;
+      element.isFromAddress = true;
+      if (element.toAddress !== this.currentAddress) {
+        element.address = element.toAddress;
+        element.isFromAddress = false;
+      }
+    });
     this.dataCard.expand = this.expand;
   }
 
