@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 export function balanceOf(amount: string | number, decimal = 6): number {
-  return +(new BigNumber(amount).toNumber() / Math.pow(10, 6)).toFixed(decimal);
+  return +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
 }
 
 export function parseLabel(label: number) {

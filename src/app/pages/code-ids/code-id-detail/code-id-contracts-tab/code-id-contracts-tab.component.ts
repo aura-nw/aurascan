@@ -28,7 +28,7 @@ export class CodeIdContractsTabComponent implements OnInit {
     { matColumnDef: 'contract_address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contracts' },
     { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
     { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'type', headerCellDef: 'Message' },
     { matColumnDef: 'created_at', headerCellDef: 'INSTANTIATED at' },
     { matColumnDef: 'verified_at', headerCellDef: 'Verified at' },
   ];

@@ -52,7 +52,7 @@ export class TokenService extends CommonService {
           address: payload?.keyword ? payload?.keyword : null,
           limit: payload?.limit,
           offset: payload?.offset,
-          date: payload?.date
+          date: payload?.date,
         },
         operationName: 'queryCW20ListToken',
       })
@@ -71,7 +71,7 @@ export class TokenService extends CommonService {
     if (textSearch?.length > 0) {
       textSearch = '%' + textSearch + '%';
     }
-    let querySort = `, order_by: {${payload.sort_column}: ${payload.sort_order}}`;
+    let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
     const operationsDoc = `
     query queryListCW721($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
       ${this.envDB} {
@@ -140,7 +140,7 @@ export class TokenService extends CommonService {
         query: operationsDoc,
         variables: {
           address: address,
-          date: date
+          date: date,
         },
         operationName: 'queryCW20Detail',
       })
@@ -235,11 +235,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTokenHolder(
-    limit: string | number,
-    offset: string | number,
-    contractAddress: string,
-  ): Observable<any> {
+  getListTokenHolder(limit: string | number, offset: string | number, contractAddress: string): Observable<any> {
     const operationsDoc = `query queryCW20ListHolder($address: String, $limit: Int, $offset: Int) {
       ${this.envDB} {
         cw20_holder(where: {cw20_contract: {smart_contract: {address: {_eq: $address}}}, amount: {_gt: "0"}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
@@ -260,16 +256,16 @@ export class TokenService extends CommonService {
     `;
 
     return this.http
-    .post<any>(this.graphUrl, {
-      query: operationsDoc,
-      variables: {
-        limit: limit,
-        offset: offset,
-        address: contractAddress,
-      },
-      operationName: 'queryCW20ListHolder',
-    })
-    .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: limit,
+          offset: offset,
+          address: contractAddress,
+        },
+        operationName: 'queryCW20ListHolder',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTokenHolderNFT(payload) {
@@ -308,9 +304,21 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/metrics/token-market?coinId=${coinId}`);
   }
 
-  getTokenMetrics({ rangeType, coinId, min, max }: { rangeType: RangeType; coinId: string; min: number; max: number }) {
+  getTokenMetrics({
+    rangeType,
+    coinId,
+    min,
+    max,
+    step,
+  }: {
+    rangeType: RangeType;
+    coinId: string;
+    min: number;
+    max: number;
+    step: number;
+  }) {
     return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
-      params: { rangeType, coinId, min, max },
+      params: { rangeType, coinId, min, max, step },
     });
   }
 

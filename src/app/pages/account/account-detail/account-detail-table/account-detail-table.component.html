@@ -1,4 +1,4 @@
-<ngx-simplebar *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
     <div class="table-responsive aura-table-contain">
       <ng-container *ngIf="!breakpoint.value.matches">
@@ -269,4 +269,4 @@
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>
   </ng-template>
-</ngx-simplebar>
+</ng-container>

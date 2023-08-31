@@ -68,17 +68,17 @@ a {
 }
 
 .label__status {
-  background: var(--aura-gray-8);
+  // background: var(--aura-gray-8);
   color: var(--aura-gray-light);
   border-radius: 4px;
   height: 34px;
-  padding: 0 16px;
+  // padding: 0 16px;
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis;
   @media (min-width: 992px) {
-    background: var(--aura-gray-9);
-    padding: 8px 16px;
+    // background: var(--aura-gray-9);
+    // padding: 8px 16px;
   }
   display: inline-flex;
   align-items: center;
