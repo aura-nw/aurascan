@@ -22,6 +22,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   @Input() soulboundListData = null;
   @Input() displayManage = false;
   @Input() isSBTValidator = false;
+  @Input() isAccountDetail = false;
   @Output() totalSBT = new EventEmitter<number>();
   @Output() totalPick = new EventEmitter<number>();
   @Output() closeDlg = new EventEmitter<number>();
@@ -29,6 +30,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
   isClick = false;
   soulboundList = [];
+  totalABT = 0;
   soulboundUnclaimedNum = 0;
   wallet = null;
   userAddress = null;
@@ -49,6 +51,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     this.userAddress = this.router.snapshot.paramMap.get('address');
     this.walletService.wallet$.subscribe((wallet) => {
       this.wallet = wallet?.bech32Address;
+      this.getABTNotify();
       this.getData();
       this.timerGetUpTime = setInterval(() => {
         this.getData();
@@ -59,11 +62,11 @@ export class SoulboundFeatureTokensComponent implements OnInit {
       this.totalNotify.emit(this.soulboundUnclaimedNum);
     });
 
-    setTimeout(() => {
-      if (this.wallet) {
-        this.getABTNotify();
-      }
-    }, 1000);
+    // setTimeout(() => {
+    //   if (this.wallet) {
+    //     this.getABTNotify();
+    //   }
+    // }, 1000);
   }
 
   getData() {
@@ -77,20 +80,27 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   }
 
   getSBTPick() {
-    let address = this.accountAddress || this.userAddress;
     const payload = {
-      receiverAddress: address,
-      limit: LIMIT_NUM_SBT,
+      limit: 100,
+      offset: 0,
+      receiverAddress: this.userAddress,
+      isEquipToken: true,
     };
 
-    this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      if (this.wallet !== address) {
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
+      (res) => {
+        this.totalABT = res.meta.count;
         res.data = res.data.filter((k) => k.picked);
-      }
-      this.soulboundList = res.data;
-      this.totalSBT.emit(res.meta.count);
-      this.totalPick.emit(res.data?.length || 0);
-    });
+        this.soulboundList = res.data;
+        this.totalSBT.emit(res.meta.count);
+      },
+      () => {
+        this.isLoading = false;
+      },
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 
   getSBTDetail(contractAddress, tokenID) {
@@ -129,7 +139,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   getABTNotify(): void {
     this.soulboundService.getNotify(this.wallet).subscribe(
       (res) => {
-        this.soulboundUnclaimedNum = res.data.notify;
+        this.soulboundUnclaimedNum = res.data?.notify || 0;
         this.totalNotify.emit(this.soulboundUnclaimedNum);
       },
       () => {},
@@ -148,5 +158,9 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     if (this.soulboundUnclaimedNum > 0) {
       localStorage.setItem('tabUnEquip', 'true');
     }
+  }
+
+  encodeData(data) {
+    return encodeURIComponent(data);
   }
 }

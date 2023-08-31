@@ -13,7 +13,6 @@ import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
-import local from '../../../../app/core/utils/storage/local';
 import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
   ACCOUNT_WALLET_COLOR_ENUM,
@@ -23,7 +22,6 @@ import {
   WalletAcount,
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
-import { IAccountDetail } from '../../../core/models/account.model';
 import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
@@ -36,7 +34,7 @@ import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options'
   templateUrl: './account-detail.component.html',
   styleUrls: ['./account-detail.component.scss'],
 })
-export class AccountDetailComponent implements OnInit, AfterViewInit {
+export class AccountDetailComponent implements OnInit {
   @ViewChild('assetTypeSelect') assetTypeSelect: MatSelect;
   @HostListener('window:scroll', ['$event'])
   closeOptionPanelSection(_) {
@@ -50,101 +48,12 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   currentAddress: string;
   currentKey = null;
-  currentAccountDetail: IAccountDetail;
+  currentAccountDetail: any;
   textSearch = '';
-  dataSourceToken: MatTableDataSource<any>;
-  dataSourceTokenBk: MatTableDataSource<any>;
 
-  templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'fee', headerCellDef: 'Fee' },
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-  ];
-
-  templatesDelegation: Array<TableTemplate> = [
-    { matColumnDef: 'validator_name', headerCellDef: 'Validator' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'reward', headerCellDef: 'Reward' },
-  ];
-  displayedColumnsDelegation: string[] = this.templatesDelegation.map((dta) => dta.matColumnDef);
-  dataSourceDelegation: MatTableDataSource<any>;
-
-  templatesUnBonding: Array<TableTemplate> = [
-    { matColumnDef: 'validator_name', headerCellDef: 'Validator' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'completion_time', headerCellDef: 'Completion Time' },
-  ];
-  displayedColumnsUnBonding: string[] = this.templatesUnBonding.map((dta) => dta.matColumnDef);
-  dataSourceUnBonding: MatTableDataSource<any>;
-
-  templatesReDelegation: Array<TableTemplate> = [
-    { matColumnDef: 'validator_src_name', headerCellDef: 'From' },
-    { matColumnDef: 'validator_dst_name', headerCellDef: 'To' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'completion_time', headerCellDef: 'Time' },
-  ];
-  displayedColumnsReDelegation: string[] = this.templatesReDelegation.map((dta) => dta.matColumnDef);
-  dataSourceReDelegation: MatTableDataSource<any>;
-
-  templatesVesting: Array<TableTemplate> = [
-    { matColumnDef: 'type_format', headerCellDef: 'Type' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'vesting_schedule', headerCellDef: 'Vesting Schedule' },
-  ];
-  displayedColumnsVesting: string[] = this.templatesVesting.map((dta) => dta.matColumnDef);
-  dataSourceVesting: MatTableDataSource<any>;
-
-  pageData: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: 20,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
-  nextKey = null;
-
-  pageDataToken: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
-
-  pageDataDelegation: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
-
-  pageDataUnbonding: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
-
-  pageDataRedelegation: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
-
-  pageDataVesting: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
-
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any> = new MatTableDataSource();
-  dataSourceMobile: any[];
-  pageEventType = PageEventType;
-  searchNullData = false;
   chartCustomOptions = chartCustomOptions;
 
   // loading param check
-  transactionLoading = true;
-  accDetailLoading = true;
-  chartLoading = true;
   userAddress = '';
   modalReference: any;
   isNoData = false;
@@ -158,32 +67,15 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   TABS = TABS_TITLE_ACCOUNT;
-  tabsData = TabsAccount;
-  stakeMode = StakeModeAccount;
-  TABS_STAKE = [
-    {
-      key: StakeModeAccount.Delegations,
-      label: 'Delegations',
-    },
-    {
-      key: StakeModeAccount.Unbondings,
-      label: 'Unbondings',
-    },
-    {
-      key: StakeModeAccount.Redelegations,
-      label: 'Redelegations',
-    },
-    {
-      key: StakeModeAccount.Vestings,
-      label: 'Vestings',
-    },
-  ];
-  currentTab = TabsAccount.Assets;
+
   currentStake = StakeModeAccount.Delegations;
+  stakeMode = StakeModeAccount;
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;
   totalSBT = 0;
+
+  isSent = true;
 
   constructor(
     private transactionService: TransactionService,
@@ -200,28 +92,14 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.chartOptions = CHART_OPTION();
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-  }
-
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
-        this.transactionLoading = true;
-        this.accDetailLoading = true;
-
-        this.dataSourceToken = new MatTableDataSource();
-        this.dataSourceDelegation = new MatTableDataSource();
-        this.dataSourceUnBonding = new MatTableDataSource();
-        this.dataSourceReDelegation = new MatTableDataSource();
-        this.dataSource = new MatTableDataSource();
-
         this.loadDataTemp();
         this.getAccountDetail();
-        this.getTxsFromHoroscope();
       }
     });
   }
@@ -252,86 +130,11 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       let data = JSON.parse(retrievedObject);
       let dataAccount = JSON.parse(data?.dataAccount);
       if (dataAccount && dataAccount.acc_address === this.currentAddress) {
-        this.accDetailLoading = false;
-        this.chartLoading = false;
         this.currentAccountDetail = dataAccount;
-        this.dataSourceToken.data = dataAccount.balances;
-        this.pageDataToken.length = dataAccount?.balances?.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
       }
     }
-  }
-
-  changePage(page: any): void {
-    switch (page.pageEventType) {
-      case this.pageEventType.Delegation:
-        this.pageDataDelegation.pageIndex = page.pageIndex;
-        break;
-      case this.pageEventType.Unbonding:
-        this.pageDataUnbonding.pageIndex = page.pageIndex;
-        break;
-      case this.pageEventType.Redelegation:
-        this.pageDataRedelegation.pageIndex = page.pageIndex;
-        break;
-      case this.pageEventType.Vestings:
-        this.pageDataVesting.pageIndex = page.pageIndex;
-        break;
-      case this.pageEventType.Token:
-        this.pageDataToken.pageIndex = page.pageIndex;
-        break;
-      default:
-        break;
-    }
-  }
-
-  getTxsFromHoroscope(nextKey = null): void {
-    const address = this.currentAddress;
-    let payload = {
-      limit: 40,
-      value: address,
-      heightLT: nextKey,
-    };
-    this.transactionService.getListTxCondition(payload).subscribe({
-      next: (data) => {
-        if (data?.transaction?.length > 0) {
-          this.nextKey = null;
-          if (data?.transaction?.length >= 40) {
-            this.nextKey = data?.transaction[data?.transaction?.length - 1].height;
-          }
-          const txs = convertDataTransaction(data, this.coinInfo);
-          txs.forEach((element) => {
-            if (element.type === 'Send') {
-              if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
-                element.type = 'Receive';
-              }
-            } else if (element.type === 'Multisend') {
-              if (element.messages[0]?.inputs[0]?.address !== this.currentAddress) {
-                element.type = 'Receive';
-              }
-            }
-          });
-
-          if (this.dataSource.data.length > 0) {
-            this.dataSource.data = [...this.dataSource.data, ...txs];
-          } else {
-            this.dataSource.data = [...txs];
-          }
-          this.dataSourceMobile = this.dataSource.data.slice(
-            this.pageData.pageIndex * this.pageData.pageSize,
-            this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-          );
-
-          this.pageData.length = this.dataSource.data.length;
-        }
-      },
-      error: () => {
-        this.transactionLoading = false;
-      },
-      complete: () => {
-        this.transactionLoading = false;
-      },
-    });
   }
 
   getAccountDetail(): void {
@@ -388,80 +191,11 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             f.amount = f.amount || '0';
             this.chartOptions.series.push(Number(f.amount));
           });
-          this.dataSourceToken.data = this.currentAccountDetail?.balances;
-          this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
-          this.dataSourceTokenBk = this.dataSourceToken;
-
-          this.dataSourceDelegation.data = this.currentAccountDetail?.delegations;
-          this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
-
-          this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations;
-          this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
-          this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations;
-          this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
-
-          if (this.currentAccountDetail?.vesting) {
-            this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
-            this.pageDataVesting.length = 1;
-          }
-
-          if (this.userAddress === this.currentAddress) {
-            local.removeItem('accountDetail');
-            //store data wallet info
-            let accountDetail = {};
-            accountDetail['dataAccount'] = JSON.stringify(this.currentAccountDetail);
-            accountDetail['dataChart'] = JSON.stringify(this.chartOptions);
-            local.setItem('accountDetail', accountDetail);
-          }
         }
       },
       () => {},
-      () => {
-        this.accDetailLoading = false;
-        this.chartLoading = false;
-      },
+      () => {},
     );
-  }
-
-  searchToken(): void {
-    this.searchNullData = false;
-
-    if (this.textSearch.length > 0) {
-      const data = this.dataSourceTokenBk.data.filter(
-        (f) => f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
-      );
-      if (data && data.length === 0) {
-        this.searchNullData = true;
-      }
-      this.dataSourceToken = this.dataSourceTokenBk;
-      this.dataSourceToken = new MatTableDataSource(data);
-    } else {
-      this.dataSourceToken = this.dataSourceTokenBk;
-    }
-  }
-
-  paginatorEmit(e: MatPaginator): void {
-    if (this.dataSource.paginator) {
-      e.page.next({
-        length: this.dataSource.paginator.length,
-        pageIndex: 0,
-        pageSize: this.dataSource.paginator.pageSize,
-        previousPageIndex: this.dataSource.paginator.pageIndex,
-      });
-      this.dataSource.paginator = e;
-    } else this.dataSource.paginator = e;
-  }
-
-  pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
-    this.pageData = e;
-
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getTxsFromHoroscope(this.nextKey);
-      this.currentKey = this.nextKey;
-    }
   }
 
   viewQrAddress(staticDataModal: any): void {
@@ -483,16 +217,19 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getSBTPick() {
     const payload = {
+      limit: 100,
+      offset: 0,
       receiverAddress: this.currentAddress,
-      limit: LIMIT_NUM_SBT,
+      isEquipToken: true,
     };
 
-    this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      if (this.userAddress && this.currentAddress !== this.userAddress) {
-        res.data = res.data.filter((k) => k.picked);
-      }
-      this.totalSBT = res.data.length;
-    });
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
+      (res) => {
+        this.totalSBT = res.data.length;
+      },
+      () => {},
+      () => {},
+    );
   }
 
   extendLink(url) {

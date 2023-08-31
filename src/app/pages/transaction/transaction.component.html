@@ -34,7 +34,7 @@
                       </a>
                       <div *ngSwitchCase="'type'" class="aura-status">
                         <div class="status">
-                          {{ data[template.matColumnDef] }}
+                          {{ data[template.matColumnDef] | cutStringPipe : 25 }}
                         </div>
                       </div>
                       <div *ngSwitchCase="'status'">
