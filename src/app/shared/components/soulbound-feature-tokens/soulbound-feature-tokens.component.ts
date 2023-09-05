@@ -15,7 +15,7 @@ import { SoulboundTokenDetailPopupComponent } from 'src/app/pages/soulbound-toke
   styleUrls: ['./soulbound-feature-tokens.component.scss'],
 })
 export class SoulboundFeatureTokensComponent implements OnInit {
-  @Input() reloadAPI: boolean = false;
+  @Input() reloadAPI: boolean = true;
   @Input() extend = true;
   @Input() accountAddress = null;
   @Input() soulboundListData = null;
@@ -51,16 +51,18 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     this.walletService.wallet$.subscribe((wallet) => {
       this.soulboundUnclaimedNum = 0;
       this.wallet = wallet?.bech32Address;
-      clearInterval(this.timerGetUpTime);
+      this.getABTNotify();
       this.getData();
-
-      if (this.userAddress === this.wallet) {
-        this.getABTNotify();
-        this.wSService.getNotifyValue.subscribe((res) => {
-          this.soulboundUnclaimedNum = res;
-          this.totalNotify.emit(this.soulboundUnclaimedNum);
-        });
+      if (this.reloadAPI) {
+        this.timerGetUpTime = setInterval(() => {
+          this.getData();
+        }, 30000);
       }
+    });
+
+    this.wSService.getNotifyValue.subscribe((res) => {
+      this.soulboundUnclaimedNum = res;
+      this.totalNotify.emit(this.soulboundUnclaimedNum);
     });
   }
 
@@ -78,10 +80,6 @@ export class SoulboundFeatureTokensComponent implements OnInit {
         this.getSBTPick();
       }, 1000);
     }
-
-    this.timerGetUpTime = setInterval(() => {
-      this.getData();
-    }, 30000);
   }
 
   getSBTPick() {

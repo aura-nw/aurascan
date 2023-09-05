@@ -1,5 +1,5 @@
 <div class="mb-4 mb-md-6">
-  <app-pagetitle title="Account Details"></app-pagetitle>
+  <app-pagetitle title="Account"></app-pagetitle>
 </div>
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!-- Summary info -->
@@ -121,6 +121,7 @@
         (totalPick)="totalSBT = $event"
         [displayManage]="true"
         [accountAddress]="currentAddress"
+        [reloadAPI]="false"
         [isAccountDetail]="true"></app-soulbound-feature-tokens>
     </div>
   </div>
@@ -136,7 +137,7 @@
     [currentAccountDetail]="currentAccountDetail"></app-account-stake>
 
   <!-- Transaction List-->
-  <app-account-transaction  [address]="currentAddress"></app-account-transaction>
+  <app-account-transaction [address]="currentAddress"></app-account-transaction>
 </section>
 
 <ng-template #reloadTemplate>
