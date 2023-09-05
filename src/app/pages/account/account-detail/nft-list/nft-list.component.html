@@ -16,14 +16,9 @@
               (selectionChange)="getNftData()">
               <div *ngFor="let item of listCollection; let i = index">
                 <mat-option [value]="item.address" [class.mb-1]="i > 0 && i < listCollection.length">
-                  <div class="d-lg-flex d-none option-contain">
+                  <div class="option-contain">
                     <div class="option-lable">
-                      <span>{{ (item.label | cutStringPipe : 16) + ' (' + item.quantity + ')' }}</span>
-                    </div>
-                  </div>
-                  <div class="d-lg-none d-flex option-contain">
-                    <div class="option-lable">
-                      <span>{{ (item.label | cutStringPipe : 32) + ' (' + item.quantity + ')' }}</span>
+                      <span>{{ (item.label | cutStringPipe : numLength) + ' (' + item.quantity + ')' }}</span>
                     </div>
                   </div>
                 </mat-option>
@@ -38,7 +33,7 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search for Token ID or Address"
+                placeholder="Search for Token ID or NFT Contract Address"
                 [(ngModel)]="searchValue"
                 [maxLength]="maxLengthSearch"
                 [ngModelOptions]="{ standalone: true }"

@@ -1,5 +1,5 @@
 <div class="mb-4 mb-md-6 d-flex align-items-center">
-  <app-pagetitle title="Account Details" [displayInfo]="false"></app-pagetitle>
+  <app-pagetitle title="Account" [displayInfo]="false"></app-pagetitle>
   <span class="body-01 text--gray-5">{{ currentAddress }}</span>
   <div class="aura-tooltip-contain">
     <button
@@ -117,6 +117,7 @@
         (totalPick)="totalSBT = $event"
         [displayManage]="true"
         [accountAddress]="currentAddress"
+        [reloadAPI]="false"
         [isAccountDetail]="true"></app-soulbound-feature-tokens>
     </div>
   </div>
