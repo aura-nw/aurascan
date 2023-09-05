@@ -1,18 +1,26 @@
-<div class="mb-4 mb-md-6 d-flex align-items-center">
-  <app-pagetitle title="Account" [displayInfo]="false"></app-pagetitle>
-  <span class="body-01 text--gray-5">{{ currentAddress }}</span>
-  <div class="aura-tooltip-contain">
-    <button
-      class="button aura-tooltip-object disabled-hover"
-      #tooltip
-      (click)="commonService.showToolTip(tooltip)"
-      [cdkCopyToClipboard]="currentAddress">
-      <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="16px" height="16px" />
-    </button>
-    <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
-  </div>
-</div>
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div class="mb-4 mb-md-6 d-flex align-items-center box-title" [class.justify-content-between]="breakpoint.value.matches">
+    <div class="d-lg-flex d-block align-items-center">
+      <app-pagetitle title="Account" [displayInfo]="false"></app-pagetitle>
+      <div class="d-lg-inline-flex d-block">
+        <span class="body-01 text--gray-5 caption-mob fw-normal">{{ currentAddress }}</span>
+      </div>
+    </div>
+  
+    <div class="btn-copy">
+      <div class="aura-tooltip-contain">
+        <button
+          class="button aura-tooltip-object disabled-hover"
+          #tooltip
+          (click)="commonService.showToolTip(tooltip)"
+          [cdkCopyToClipboard]="currentAddress">
+          <i class="ph ph-copy text--white body-01"></i>
+        </button>
+        <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+      </div>
+    </div>
+  </div>
+
   <!-- Summary info -->
   <div class="row">
     <div class="col-12 col-lg-3">
@@ -22,7 +30,7 @@
         </div>
         <div class="d-flex flex-column col-lg-auto col-12 py-4 px-4 pl-md-6 pb-md-6">
           <div>
-            <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Address Info</h3>
+            <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
               *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">

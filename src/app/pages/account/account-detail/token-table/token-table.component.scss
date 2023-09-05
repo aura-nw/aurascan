@@ -137,6 +137,9 @@
     right: unset !important;
     transform: translateX(-50%) !important;
     width: 200px;
+    li.active {
+      background-color: var(--aura-gray-8) !important;
+    }
   }
 
   .tokenFilterPanel {
