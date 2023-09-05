@@ -29,6 +29,7 @@ export class NftListComponent implements OnChanges {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
   textSearch = '';
+  searchNotFound = false;
   listCollection = [
     {
       label: 'All',
@@ -60,21 +61,25 @@ export class NftListComponent implements OnChanges {
 
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
       (res) => {
-        if (res?.cw721_token?.length > 0) {
-          if (this.nftFilter !== null) {
-            this.nftList = res?.cw721_token;
-            this.nftList?.forEach((element) => {
-              element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
-              element.token_name = _.get(element, 'cw721_contract.name');
-              if (!this.searchValue) {
-                this.totalValue += element.price * +element.balance || 0;
-              }
-            });
-            this.totalValueNft.emit(this.totalValue);
-            this.pageData.length = res.cw721_token_aggregate?.aggregate?.count;
+        if (res?.cw721_token?.length === 0) {
+          if (this.textSearch?.length > 0) {
+            this.searchNotFound = true;
           }
-        } else {
           this.pageData.length = 0;
+          return;
+        }
+
+        if (this.nftFilter !== null) {
+          this.nftList = res?.cw721_token;
+          this.nftList?.forEach((element) => {
+            element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
+            element.token_name = _.get(element, 'cw721_contract.name');
+            if (!this.searchValue) {
+              this.totalValue += element.price * +element.balance || 0;
+            }
+          });
+          this.totalValueNft.emit(this.totalValue);
+          this.pageData.length = res.cw721_token_aggregate?.aggregate?.count || 0;
         }
       },
       () => {},
@@ -110,6 +115,7 @@ export class NftListComponent implements OnChanges {
   resetSearch(): void {
     this.searchValue = '';
     this.textSearch = '';
+    this.searchNotFound = false;
     this.pageEvent(0);
   }
 

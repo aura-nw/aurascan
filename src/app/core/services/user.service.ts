@@ -158,9 +158,9 @@ export class UserService extends CommonService {
 
   getListFTByAddress(payload) {
     const operationsDoc = `
-    query Cw20TXMultilCondition($receiver: String = null, $sender: String = null, $contractAddr: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listTxMsgType: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $limit: Int = null, $txHash: String = null) {
+    query Cw20TXMultilCondition($receiver: String = null, $sender: String = null, $contractAddr: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listTxMsgType: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $limit: Int = null, $txHash: String = null, $actionIn: [String!] = null, $actionNotIn: [String!] = null) {
       ${this.envDB} {
-        transaction(where: {events: {smart_contract_events: {cw20_activities: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], action: {_neq: "instantiate"}}, smart_contract: {address: {_eq: $contractAddr}}}}, timestamp: {_gte: $startTime, _lte: $endTime}, _and: {height: {_gt: $heightGT, _lt: $heightLT}, hash: {_eq: $txHash}}, transaction_messages: {type: {_in: $listTxMsgType}}}, order_by: {height: desc}, limit: $limit) {
+        transaction(where: {events: {smart_contract_events: {cw20_activities: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], action: {_in: $actionIn, _nin: $actionNotIn}}, smart_contract: {address: {_eq: $contractAddr}}}}, timestamp: {_gte: $startTime, _lte: $endTime}, _and: {height: {_gt: $heightGT, _lt: $heightLT}, hash: {_eq: $txHash}}, transaction_messages: {type: {_in: $listTxMsgType}}}, order_by: {height: desc}, limit: $limit) {
           gas_used
           hash
           height
@@ -201,7 +201,11 @@ export class UserService extends CommonService {
           listTxMsgType: payload.listTxMsgType,
           startTime: payload.startTime,
           endTime: payload.endTime,
-          contractAddr: payload.contractAddr
+          contractAddr: payload.contractAddr,
+          heightLT: payload.heightLT,
+          txHash: payload.txHash,
+          actionIn: ['mint', 'burn', 'transfer', 'send', 'transfer_from', 'burn_from', 'send_from'],
+          actionNotIn: null,
         },
         operationName: 'Cw20TXMultilCondition',
       })
@@ -210,9 +214,9 @@ export class UserService extends CommonService {
 
   getListNFTByAddress(payload) {
     const operationsDoc = `
-    query Cw721TXMultilCondition($receiver: String = null, $sender: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listTxMsgType: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $limit: Int = null, $contractAddr: String = null, $tokenId: String = null, $txHash: String = null) {
+    query Cw721TXMultilCondition($receiver: String = null, $sender: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listTxMsgType: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $limit: Int = null, $contractAddr: String = null, $tokenId: String = null, $txHash: String = null, $neqCw4973: String, $eqCw4973: String = null, $actionIn: [String!] = null, $actionNotIn: [String!] = null) {
       ${this.envDB} {
-        transaction(where: {events: {smart_contract_events: {cw721_activity: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], cw721_token: {token_id: {_eq: $tokenId}}}, smart_contract: {name: {_neq: "crates.io:cw4973"}, address: {_eq: $contractAddr}}}}, timestamp: {_gte: $startTime, _lte: $endTime}, _and: {height: {_gt: $heightGT, _lt: $heightLT}, hash: {_eq: $txHash}}, transaction_messages: {type: {_in: $listTxMsgType}}}, order_by: {height: desc}, limit: $limit) {
+        transaction(where: {events: {smart_contract_events: {cw721_activity: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], cw721_token: {token_id: {_eq: $tokenId}}, action: {_in: $actionIn, _nin: $actionNotIn}}, smart_contract: {name: {_neq: $neqCw4973, _eq: $eqCw4973}, address: {_eq: $contractAddr}}}}, timestamp: {_gte: $startTime, _lte: $endTime}, _and: {height: {_gt: $heightGT, _lt: $heightLT}, hash: {_eq: $txHash}}, transaction_messages: {type: {_in: $listTxMsgType}}}, order_by: {height: desc}, limit: $limit) {
           gas_used
           hash
           height
@@ -222,7 +226,7 @@ export class UserService extends CommonService {
             content
             type
           }
-          events(where: {smart_contract_events: {cw721_activity: {id: {_is_null: false}, _or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}]}}}) {
+          events(where: {smart_contract_events: {cw721_activity: {id: {_is_null: false}, _or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], cw721_token: {token_id: {_eq: $tokenId}}}}}) {
             smart_contract_events {
               cw721_activity {
                 action
@@ -240,6 +244,11 @@ export class UserService extends CommonService {
               }
             }
           }
+          event_attribute_index(where: {composite_key: {_eq: "wasm.spender"}}) {
+            composite_key
+            key
+            value
+          }    
         }
       }
     }
@@ -253,6 +262,14 @@ export class UserService extends CommonService {
           listTxMsgType: payload.listTxMsgType,
           startTime: payload.startTime,
           endTime: payload.endTime,
+          contractAddr: payload.contractAddr,
+          heightLT: payload.heightLT,
+          txHash: payload.txHash,
+          tokenId: payload.tokenId,
+          actionIn: !payload.isTransferTab ? ['mint', 'burn', 'transfer_nft', 'send_nft'] : null,
+          actionNotIn: payload.isTransferTab ? ["approve", "instantiate"] : null,
+          neqCw4973: payload.isCW4973 ? null : 'crates.io:cw4973',
+          eqCw4973: payload.isCW4973 ?  "crates.io:cw4973" : null
         },
         operationName: 'Cw721TXMultilCondition',
       })

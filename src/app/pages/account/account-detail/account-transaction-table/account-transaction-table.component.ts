@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -34,6 +34,7 @@ export class AccountTransactionTableComponent {
   searchValue = '';
   templates: Array<TableTemplate>;
   tabsData = TabsAccountLink;
+  lengthAddress = LENGTH_CHARACTER.ADDRESS;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
@@ -261,6 +262,7 @@ export class AccountTransactionTableComponent {
         break;
       case TabsAccountLink.NftTxs:
         payload['sender'] = payload['receiver'] = address;
+        payload['isCw721'] = true;
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload['receiver'] = '';

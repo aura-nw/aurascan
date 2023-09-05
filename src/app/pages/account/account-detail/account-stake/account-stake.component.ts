@@ -10,7 +10,6 @@ import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from 'src/app/core/constants/c
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IAccountDetail } from 'src/app/core/models/account.model';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { AccountService } from 'src/app/core/services/account.service';
 import { Globals } from 'src/app/global/global';
 import { ChartOptions, chartCustomOptions } from '../chart-options';
 
@@ -24,8 +23,7 @@ export class AccountStakeComponent implements OnChanges {
   @Input() chartCustomOptions = chartCustomOptions;
   @Input() currentAccountDetail: IAccountDetail;
 
-  accDetailLoading = true;
-  isNoData = false;
+  stakeLoading = true;
   currentStake = StakeModeAccount.Delegations;
   stakeMode = StakeModeAccount;
   pageEventType = PageEventType;
@@ -126,29 +124,47 @@ export class AccountStakeComponent implements OnChanges {
     this.dataSourceDelegation = new MatTableDataSource();
     this.dataSourceUnBonding = new MatTableDataSource();
     this.dataSourceReDelegation = new MatTableDataSource();
+    this.dataSourceVesting = new MatTableDataSource();
 
-    this.dataSourceDelegation.data = this.currentAccountDetail?.delegations;
-    this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
+    if (this.currentAccountDetail?.delegations) {
+      this.dataSourceDelegation.data = this.currentAccountDetail?.delegations;
+      this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
+    }
+    if (this.currentAccountDetail?.unbonding_delegations) {
+      this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations;
+      this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
+    }
+    if (this.currentAccountDetail?.redelegations) {
+      this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations;
+      this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
+    }
+    if (this.currentAccountDetail?.vesting) {
+      this.dataSourceVesting.data = [this.currentAccountDetail?.vesting];
+      this.pageDataVesting.length = 1;
+    }
 
     setTimeout(() => {
-      this.accDetailLoading = false;
+      this.stakeLoading = false;
     }, 2000);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.currentAccountDetail) {
-      this.accDetailLoading = false;
-      this.dataSourceDelegation.data = this.currentAccountDetail?.delegations;
-      this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
-
-      this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations;
-      this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
-
-      this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations;
-      this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
-
+      this.stakeLoading = false;
+      if (this.currentAccountDetail?.delegations) {
+        this.dataSourceDelegation.data = this.currentAccountDetail?.delegations;
+        this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
+      }
+      if (this.currentAccountDetail?.unbonding_delegations) {
+        this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations;
+        this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
+      }
+      if (this.currentAccountDetail?.redelegations) {
+        this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations;
+        this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
+      }
       if (this.currentAccountDetail?.vesting) {
-        this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
+        this.dataSourceVesting.data = [this.currentAccountDetail?.vesting];
         this.pageDataVesting.length = 1;
       }
     }
