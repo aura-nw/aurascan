@@ -353,6 +353,8 @@
                         <div [style]="'min-width: 148px'">
                           <app-name-tag
                             [value]="item.toAddress || currentAddress"
+                            [url]="(item.toAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
+                            [iconContract]="(item.toAddress || currentAddress)?.length > lengthAddress"
                             [isLink]="
                               !(data.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
                               item.toAddress !== currentAddress
@@ -401,7 +403,7 @@
                         class="item-show justify-content-between tokenId {{
                           item['toAddress'] === currentAddress ? 'text--green-3' : 'text--red-3'
                         }}">
-                        {{ item.tokenId || '-' | stringEllipsis : 10 }}
+                        {{ item.tokenId || '-' | cutStringPipe : 5 : 5 }}
                       </div>
                     </div>
                   </ng-container>

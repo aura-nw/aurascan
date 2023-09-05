@@ -49,6 +49,12 @@
       ]"
       [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
       <ng-container *ngIf="!fullText">
+        <img
+          [src]="'assets/images/icons/token-contract.svg' | imageS3"
+          [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+          width="16px"
+          height="16px"
+          *ngIf="iconContract" />
         <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
       </ng-container>
       <ng-container *ngIf="fullText">

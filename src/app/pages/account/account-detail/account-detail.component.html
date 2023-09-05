@@ -1,5 +1,16 @@
-<div class="mb-4 mb-md-6">
-  <app-pagetitle title="Account Details"></app-pagetitle>
+<div class="mb-4 mb-md-6 d-flex align-items-center">
+  <app-pagetitle title="Account" [displayInfo]="false"></app-pagetitle>
+  <span class="body-01 text--gray-5">{{ currentAddress }}</span>
+  <div class="aura-tooltip-contain">
+    <button
+      class="button aura-tooltip-object disabled-hover"
+      #tooltip
+      (click)="commonService.showToolTip(tooltip)"
+      [cdkCopyToClipboard]="currentAddress">
+      <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="16px" height="16px" />
+    </button>
+    <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+  </div>
 </div>
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!-- Summary info -->
@@ -11,22 +22,7 @@
         </div>
         <div class="d-flex flex-column col-lg-auto col-12 py-4 px-4 pl-md-6 pb-md-6">
           <div>
-            <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Address</h3>
-            <div class="d-flex align-items-center">
-              <div class="body-01 text--white" id="currentAddress">
-                <span>{{ currentAddress | cutStringPipe : 8 : 8 }}</span>
-              </div>
-              <div class="aura-tooltip-contain ml-1">
-                <button
-                  class="button button-circle aura-tooltip-object disabled-hover"
-                  #tooltip
-                  (click)="commonService.showToolTip(tooltip)"
-                  [cdkCopyToClipboard]="currentAddress">
-                  <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="16px" height="16px" />
-                </button>
-                <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
-              </div>
-            </div>
+            <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Address Info</h3>
             <div
               *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
@@ -121,6 +117,7 @@
         (totalPick)="totalSBT = $event"
         [displayManage]="true"
         [accountAddress]="currentAddress"
+        [reloadAPI]="false"
         [isAccountDetail]="true"></app-soulbound-feature-tokens>
     </div>
   </div>
@@ -136,7 +133,7 @@
     [currentAccountDetail]="currentAccountDetail"></app-account-stake>
 
   <!-- Transaction List-->
-  <!-- <app-account-transaction  [address]="currentAddress"></app-account-transaction> -->
+  <!-- <app-account-transaction [address]="currentAddress"></app-account-transaction> -->
 </section>
 
 <ng-template #reloadTemplate>
