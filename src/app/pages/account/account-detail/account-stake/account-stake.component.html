@@ -1,6 +1,6 @@
 <div class="card mt-3" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card-body">
-    <h3 class="mb-0 fw-bold text--white mb-4">Stake</h3>
+    <h3 class="mb-0 fw-700 text--gray-light-2 mb-4">Stake</h3>
     <div class="row flex-column-reverse flex-lg-row">
       <div class="col-12 col-lg-8 right-border pr-lg-6">
         <div class="card card-h-100">
@@ -117,9 +117,9 @@
                     class="d-flex justify-content-between align-items-center body-02 body-01-mob chart-legend-item py-3 px-0">
                     <div class="d-flex align-items-center">
                       <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
-                      <span class="text--gray-5 body body-01-mob">{{ item.name }}</span>
+                      <span class="text--gray-5 body fw-semibold body-01-mob">{{ item.name }}</span>
                     </div>
-                    <span class="text--gray-1 body body-01-mob" [appBigNumber]="item.amount" [decimal]="0"></span>
+                    <span class="text--gray-1 fw-semibold body body-01-mob" [appBigNumber]="item.amount" [decimal]="0"></span>
                   </div>
                 </ng-container>
               </div>
