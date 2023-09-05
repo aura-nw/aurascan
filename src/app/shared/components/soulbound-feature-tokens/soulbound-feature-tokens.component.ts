@@ -158,7 +158,8 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   }
 
   setLinkTab() {
-    if (this.soulboundUnclaimedNum > 0) {
+    localStorage.setItem('tabUnEquip', null);
+    if (this.soulboundUnclaimedNum > 0 && this.wallet === this.userAddress) {
       localStorage.setItem('tabUnEquip', 'true');
     }
   }
