@@ -5,7 +5,7 @@
       <h3 class="mb-0 fw-bold text--white mb-4 mb-xl-0">NFTs ({{ listCollection[0]?.quantity || 0 }})</h3>
       <div class="d-flex flex-column flex-lg-row align-items-end justify-content-end gap-2">
         <div class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100">
-          <div class="body d-lg-flex d-none align-items-center justify-content-center mr-2">Collections</div>
+          <div class="body d-lg-flex d-none mr-2 text--gray-1">Collections</div>
           <mat-form-field class="w-100" appearance="outline" nftFilter>
             <mat-select
               class="nft-filter"
@@ -16,9 +16,9 @@
               (selectionChange)="getNftData()">
               <div *ngFor="let item of listCollection; let i = index">
                 <mat-option [value]="item.address" [class.mb-1]="i > 0 && i < listCollection.length">
-                  <div class="d-flex option-contain">
+                  <div class="option-contain">
                     <div class="option-lable">
-                      <span>{{ (item.label | cutStringPipe : 16) + ' (' + item.quantity + ')' }}</span>
+                      <span>{{ (item.label | cutStringPipe : numLength) + ' (' + item.quantity + ')' }}</span>
                     </div>
                   </div>
                 </mat-option>
@@ -33,7 +33,7 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search for Token ID or Address"
+                placeholder="Search for Token ID or NFT Contract Address"
                 [(ngModel)]="searchValue"
                 [maxLength]="maxLengthSearch"
                 [ngModelOptions]="{ standalone: true }"
@@ -109,10 +109,16 @@
       </div>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data
-        [textNull]="'Kindly select the collections'"
-        [img]="'assets/images/noItemNFT.png'"
-        *ngIf="!loading"></app-table-no-data>
+      <ng-container *ngIf="!loading">
+        <app-table-no-data
+          *ngIf="!searchNotFound"
+          [textNull]="'Kindly select the collections'"
+          [img]="'assets/images/noItemNFT.png'"></app-table-no-data>
+        <app-table-no-data
+          *ngIf="searchNotFound"
+          [textNull]="'No NFTs found'"
+          [img]="'assets/images/notFoundNFT.png'"></app-table-no-data>
+      </ng-container>
     </ng-template>
   </div>
 </div>
