@@ -64,18 +64,18 @@
               <button
                 class="button button-pill button--sm button-outline button-outline__in-card button-dropdown token-filter-none px-3"
                 type="button"
-                id="delegateAction1"
+                id="filterTypeAction"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <i class="ph-{{ 'faders-horizontal' }} text--white"></i>
               </button>
               <ul
                 class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm"
-                aria-labelledby="delegateAction1">
+                aria-labelledby="filterTypeAction">
                 <li
                   *ngFor="let item of listTokenType; let i = index"
                   (click)="tokenFilter = item.value; getListToken()"
-                  class="dropdown-item cursor-pointer">
+                  class="dropdown-item cursor-pointer" [class.active]="tokenFilter === item.value">
                   <span>{{ item.label + ' (' + item.quantity + ')' }}</span>
                 </li>
               </ul>
