@@ -23,8 +23,7 @@ export class AccountStakeComponent implements OnChanges {
   @Input() chartCustomOptions = chartCustomOptions;
   @Input() currentAccountDetail: IAccountDetail;
 
-  accDetailLoading = true;
-  isNoData = false;
+  stakeLoading = true;
   currentStake = StakeModeAccount.Delegations;
   stakeMode = StakeModeAccount;
   pageEventType = PageEventType;
@@ -145,13 +144,13 @@ export class AccountStakeComponent implements OnChanges {
     }
 
     setTimeout(() => {
-      this.accDetailLoading = false;
+      this.stakeLoading = false;
     }, 2000);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.currentAccountDetail) {
-      this.accDetailLoading = false;
+      this.stakeLoading = false;
       if (this.currentAccountDetail?.delegations) {
         this.dataSourceDelegation.data = this.currentAccountDetail?.delegations;
         this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
