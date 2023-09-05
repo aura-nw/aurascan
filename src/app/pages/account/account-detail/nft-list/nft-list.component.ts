@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
@@ -7,7 +8,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { Globals } from 'src/app/global/global';
-
 @Component({
   selector: 'app-nft-list',
   templateUrl: './nft-list.component.html',
@@ -24,12 +24,13 @@ export class NftListComponent implements OnChanges {
     pageSize: 10,
     pageIndex: 1,
   };
-  nftFilter = null;
+  nftFilter = '';
   nftList = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
   textSearch = '';
   searchNotFound = false;
+  numLength = 16;
   listCollection = [
     {
       label: 'All',
@@ -37,12 +38,21 @@ export class NftListComponent implements OnChanges {
       address: '',
     },
   ];
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private accountService: AccountService,
     public global: Globals,
     private environmentService: EnvironmentService,
-  ) {}
+    private layout: BreakpointObserver,
+  ) {
+    this.breakpoint$.subscribe((state) => {
+      this.numLength = 16;
+      if (state.matches) {
+        this.numLength = 32;
+      }
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {
@@ -69,18 +79,16 @@ export class NftListComponent implements OnChanges {
           return;
         }
 
-        if (this.nftFilter !== null) {
-          this.nftList = res?.cw721_token;
-          this.nftList?.forEach((element) => {
-            element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
-            element.token_name = _.get(element, 'cw721_contract.name');
-            if (!this.searchValue) {
-              this.totalValue += element.price * +element.balance || 0;
-            }
-          });
-          this.totalValueNft.emit(this.totalValue);
-          this.pageData.length = res.cw721_token_aggregate?.aggregate?.count || 0;
-        }
+        this.nftList = res?.cw721_token;
+        this.nftList?.forEach((element) => {
+          element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
+          element.token_name = _.get(element, 'cw721_contract.name');
+          if (!this.searchValue) {
+            this.totalValue += element.price * +element.balance || 0;
+          }
+        });
+        this.totalValueNft.emit(this.totalValue);
+        this.pageData.length = res.cw721_token_aggregate?.aggregate?.count || 0;
       },
       () => {},
       () => {
@@ -97,8 +105,8 @@ export class NftListComponent implements OnChanges {
     this.accountService.getListCollectionByOwner(payload).subscribe(
       (res) => {
         if (res?.cw721_contract?.length > 0) {
-          res.cw721_contract.forEach((item) => {
-            this.listCollection.push({
+          res.cw721_contract?.forEach((item) => {
+            this.listCollection?.push({
               label: item.name,
               quantity: item.cw721_tokens_aggregate.aggregate.count,
               address: item.smart_contract.address,

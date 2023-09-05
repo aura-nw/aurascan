@@ -125,7 +125,7 @@
                   item['address'] === item['fromAddress'] ? 'text--green-3' : 'text--red-3'
                 }}">
                 <i class="icon icon-nft text--white mr-1" [style]="'font-size: 16px'"></i>
-                {{ item.tokenId || '-' | stringEllipsis : 8 }}
+                {{ item.tokenId || '-' | cutStringPipe : 4 : 4 }}
               </div>
               <i
                 [style]="'margin-top: 2px'"
