@@ -105,9 +105,7 @@ export class AccountStakeComponent implements OnChanges {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   destroyed$ = new Subject();
-
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-
   timeStaking = `${this.environmentService.configValue.timeStaking}`;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
