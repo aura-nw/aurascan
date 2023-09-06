@@ -391,28 +391,30 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
         type = getTypeTx(element)?.type;
         break;
       case TabsAccountLink.AuraTxs:
-        const coinArrReceiver = _.get(element, 'data.tx_response.logs[0].events')?.find(
-          (k) => k.type === 'coin_received',
-        )?.attributes;
-        const coinArrSpent = _.get(element, 'data.tx_response.logs[0].events')?.find(
-          (k) => k.type === 'coin_spent',
-        )?.attributes;
         let arrTemp = [];
-        for (let i = 0; i < coinArrReceiver?.length; i++) {
-          if (
-            (coinArrReceiver[i]?.key === 'receiver' && coinArrReceiver[i]?.value === currentAddress) ||
-            (coinArrSpent[i]?.key === 'spender' && coinArrSpent[i]?.value === currentAddress)
-          ) {
-            let { type, action } = getTypeTx(element, i);
-            toAddress = coinArrReceiver[i]?.value;
-            fromAddress = coinArrSpent[i]?.value;
-            let amountTemp = coinArrReceiver[i + 1]?.value?.match(/\d+/g)[0];
-            let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
-            let denom = coinInfo.coinDenom;
-            const result = { type, toAddress, fromAddress, amount, denom, action };
-            arrTemp.push(result);
+        element?.data?.tx_response?.logs?.forEach((data) => {
+          const coinArrReceiver = _.get(data, 'events')?.find(
+            (k) => k.type === 'coin_received',
+          )?.attributes;
+          const coinArrSpent = _.get(data, 'events')?.find(
+            (k) => k.type === 'coin_spent',
+          )?.attributes;
+          for (let i = 0; i < coinArrReceiver?.length; i++) {
+            if (
+              (coinArrReceiver[i]?.key === 'receiver' && coinArrReceiver[i]?.value === currentAddress) ||
+              (coinArrSpent[i]?.key === 'spender' && coinArrSpent[i]?.value === currentAddress)
+            ) {
+              let { type, action } = getTypeTx(element, i);
+              toAddress = coinArrReceiver[i]?.value;
+              fromAddress = coinArrSpent[i]?.value;
+              let amountTemp = coinArrReceiver[i + 1]?.value?.match(/\d+/g)[0];
+              let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
+              let denom = coinInfo.coinDenom;
+              const result = { type, toAddress, fromAddress, amount, denom, action };
+              arrTemp.push(result);
+            }
           }
-        }
+        });
         arrEvent = arrTemp;
         break;
       case TabsAccountLink.FtsTxs:
