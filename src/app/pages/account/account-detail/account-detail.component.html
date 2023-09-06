@@ -1,18 +1,28 @@
-<div class="mb-4 mb-md-6 d-flex align-items-center">
-  <app-pagetitle title="Account" [displayInfo]="false"></app-pagetitle>
-  <span class="body-01 text--gray-5">{{ currentAddress }}</span>
-  <div class="aura-tooltip-contain">
-    <button
-      class="button aura-tooltip-object disabled-hover"
-      #tooltip
-      (click)="commonService.showToolTip(tooltip)"
-      [cdkCopyToClipboard]="currentAddress">
-      <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="16px" height="16px" />
-    </button>
-    <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
-  </div>
-</div>
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div
+    class="mb-4 mb-md-6 d-flex align-items-center box-title"
+    [class.justify-content-between]="breakpoint.value.matches">
+    <div class="d-lg-flex d-block align-items-center">
+      <app-pagetitle title="Account" [displayInfo]="false"></app-pagetitle>
+      <div class="d-lg-inline-flex d-block">
+        <span class="body-01 text--gray-5 caption-mob fw-normal">{{ currentAddress }}</span>
+      </div>
+    </div>
+
+    <div class="btn-copy">
+      <div class="aura-tooltip-contain">
+        <button
+          class="button aura-tooltip-object disabled-hover"
+          #tooltip
+          (click)="commonService.showToolTip(tooltip)"
+          [cdkCopyToClipboard]="currentAddress">
+          <i class="ph ph-copy text--white body-01"></i>
+        </button>
+        <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+      </div>
+    </div>
+  </div>
+
   <!-- Summary info -->
   <div class="row">
     <div class="col-12 col-lg-3">
@@ -20,9 +30,9 @@
         <div class="px-4 px-xl-0 py-4 py-lg-6 qr-code d-none d-lg-block">
           <app-qr [address]="currentAddress || ''"> </app-qr>
         </div>
-        <div class="d-flex flex-column col-lg-auto col-12 py-4 px-4 pl-md-6 pb-md-6">
+        <div class="d-flex flex-column col-lg-auto col-12 py-4 px-4 pl-md-6 pb-md-6 box-account-info">
           <div>
-            <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Address Info</h3>
+            <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
               *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
@@ -30,7 +40,7 @@
                 <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
                 <span class="d-flex d-lg-none justify-content-center">
                   <ng-container *ngIf="!commonService.checkDisplayTooltip(currentAddress)">
-                    {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 16) || '-' }}
+                    {{ commonService.setNameTag(currentAddress) || '-' }}
                   </ng-container>
                   <ng-container *ngIf="commonService.checkDisplayTooltip(currentAddress)">
                     {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8) || '-' }}
@@ -42,7 +52,7 @@
                   *ngIf="commonService.findUrlNameTag(currentAddress)">
                   <i
                     _ngcontent-wrg-c372=""
-                    class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer mt-1"></i>
+                    class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
                 </a>
               </div>
             </div>
@@ -51,7 +61,7 @@
             class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private">
             <span class="caption fw-normal">Set Private Name Tag</span>
           </button> -->
-          <div class="mt-6 mt-lg-3 d-flex justify-content-between align-items-center d-xl-block">
+          <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
             <div>
               <h3 class="fw-bold fw-semibold-mob mb-1 text--white">Total Value</h3>
               <span class="h1 mb-0 fw-700 mb-0 text-gradient d-inline" *ngIf="!isNoData">

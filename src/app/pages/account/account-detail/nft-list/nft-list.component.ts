@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { AccountService } from 'src/app/core/services/account.service';
@@ -69,6 +69,15 @@ export class NftListComponent implements OnChanges {
       address: this.nftFilter || null,
     };
 
+    if (this.nftFilter) {
+      if (this.textSearch.length === LENGTH_CHARACTER.CONTRACT && this.textSearch !== this.nftFilter) {
+        this.nftList = [];
+        this.searchNotFound = true;
+        this.pageData.length = 0;
+        return;
+      }
+    }
+
     this.accountService.getAssetCW721ByOwner(payload).subscribe(
       (res) => {
         if (res?.cw721_token?.length === 0) {
@@ -105,6 +114,13 @@ export class NftListComponent implements OnChanges {
     this.accountService.getListCollectionByOwner(payload).subscribe(
       (res) => {
         if (res?.cw721_contract?.length > 0) {
+          this.listCollection = [
+            {
+              label: 'All',
+              quantity: 0,
+              address: '',
+            },
+          ];
           res.cw721_contract?.forEach((item) => {
             this.listCollection?.push({
               label: item.name,

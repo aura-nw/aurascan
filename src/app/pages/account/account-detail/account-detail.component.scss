@@ -21,6 +21,10 @@ section.account-detail {
       }
     }
   }
+  .box-account-info{
+    flex-grow: 1;
+    min-height: 228px;
+  }
 }
 
 .button {
@@ -120,4 +124,16 @@ section.account-detail {
 
 .btn-private {
   width: fit-content;
+}
+
+@media (max-width: 414px) {
+  .box-title {
+    .btn-copy {
+      border: 1px solid #717582;
+      border-radius: 8px;
+      button {
+        padding: 8px;
+      }
+    }
+  }
 }
