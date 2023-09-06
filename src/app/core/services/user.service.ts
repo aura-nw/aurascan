@@ -124,7 +124,7 @@ export class UserService extends CommonService {
     const operationsDoc = `
     query QueryTxMsgOfAccount($compositeKeyIn: [String!] = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
       ${this.envDB} {
-        transaction(where: {event_attribute_index: {composite_key: {_in: $compositeKeyIn}, value: {_eq: $address}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
+        transaction(where: {event_attribute_index: {composite_key: {_in: $compositeKeyIn}, value: {_eq: $address}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}], events: {tx_msg_index: {_is_null: false}, type: {}}}, limit: $limit, order_by: {height: $orderHeight}) {
           hash
           height
           fee
@@ -267,9 +267,9 @@ export class UserService extends CommonService {
           txHash: payload.txHash,
           tokenId: payload.tokenId,
           actionIn: !payload.isTransferTab ? ['mint', 'burn', 'transfer_nft', 'send_nft'] : null,
-          actionNotIn: payload.isTransferTab ? ["approve", "instantiate"] : null,
+          actionNotIn: payload.isTransferTab ? ['approve', 'instantiate'] : null,
           neqCw4973: payload.isCW4973 ? null : 'crates.io:cw4973',
-          eqCw4973: payload.isCW4973 ?  "crates.io:cw4973" : null
+          eqCw4973: payload.isCW4973 ? 'crates.io:cw4973' : null,
         },
         operationName: 'Cw721TXMultilCondition',
       })

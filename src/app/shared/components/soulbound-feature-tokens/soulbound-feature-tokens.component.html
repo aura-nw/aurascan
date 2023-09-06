@@ -6,7 +6,7 @@
       (click)="setLinkTab()"
       [class.mr-2]="soulboundUnclaimedNum > 0 && wallet === userAddress"
       class="button button-pill button-outline button--sm position-relative aura-tooltip-contain d-inline-flex">
-      <span class="caption fw-normal">{{ wallet === accountAddress ? 'Manage your ABTs' : 'See more' }} </span>
+      <span class="caption fw-normal">{{ wallet === accountAddress ? 'Manage my ABTs' : 'See more' }} </span>
       <span
         class="nft__unclaimed-noti caption aura-tooltip-object"
         *ngIf="soulboundUnclaimedNum > 0 && wallet === userAddress"

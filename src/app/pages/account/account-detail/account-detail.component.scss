@@ -21,6 +21,10 @@ section.account-detail {
       }
     }
   }
+  .box-account-info{
+    flex-grow: 1;
+    min-height: 228px;
+  }
 }
 
 .button {

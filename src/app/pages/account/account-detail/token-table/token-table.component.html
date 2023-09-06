@@ -3,7 +3,7 @@
     <div class="card-body p-0">
       <!-- Title -->
       <div class="d-xl-flex justify-content-between align-items-center mb-4">
-        <h3 class="mb-0 fw-700 text--gray-light-2 mb-2 mb-xl-0">Coins & Tokens ({{ pageData?.length || 0 }})</h3>
+        <h3 class="mb-0 fw-700 text--gray-light-2 mb-xl-0">Coins & Tokens ({{ pageData?.length || 0 }})</h3>
         <div class="d-flex flex-lg-row align-items-center justify-content-end gap-2">
           <div
             class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100"
@@ -35,7 +35,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Search for Token Name or Address"
+                  placeholder="Search for Coins & Token name or Contract Address"
                   [(ngModel)]="searchValue"
                   [maxLength]="maxLengthSearch"
                   (keyup.enter)="searchToken()"
@@ -76,7 +76,7 @@
                   *ngFor="let item of listTokenType; let i = index"
                   (click)="tokenFilter = item.value; getListToken()"
                   class="dropdown-item cursor-pointer" [class.active]="tokenFilter === item.value">
-                  <span>{{ item.label + ' (' + item.quantity + ')' }}</span>
+                  <span class="body">{{ item.label + ' (' + item.quantity + ')' }}</span>
                 </li>
               </ul>
             </div>
