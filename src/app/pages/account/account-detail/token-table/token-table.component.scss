@@ -29,7 +29,10 @@
   height: 40px;
 
   @media (min-width: 991.99px) {
-    width: 312px;
+    width: 370px;
+  }
+  @media (min-width: 1281px) {
+    width: 420px;
   }
   width: 100%;
 }
