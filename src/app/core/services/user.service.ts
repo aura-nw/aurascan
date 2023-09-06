@@ -266,8 +266,12 @@ export class UserService extends CommonService {
           heightLT: payload.heightLT,
           txHash: payload.txHash,
           tokenId: payload.tokenId,
-          actionIn: !payload.isTransferTab ? ['mint', 'burn', 'transfer_nft', 'send_nft'] : null,
-          actionNotIn: payload.isTransferTab ? ['approve', 'instantiate'] : null,
+          actionIn: payload.isNFTDetail
+            ? null
+            : !payload.isTransferTab
+            ? ['mint', 'burn', 'transfer_nft', 'send_nft']
+            : null,
+          actionNotIn: payload.isNFTDetail ? null : payload.isTransferTab ? ['approve', 'instantiate', 'revoke'] : null,
           neqCw4973: payload.isCW4973 ? null : 'crates.io:cw4973',
           eqCw4973: payload.isCW4973 ? 'crates.io:cw4973' : null,
         },

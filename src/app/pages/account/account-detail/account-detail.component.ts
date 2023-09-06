@@ -11,10 +11,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
-import {
-  ACCOUNT_WALLET_COLOR_ENUM,
-  WalletAcount
-} from '../../../core/constants/account.enum';
+import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
@@ -57,7 +54,7 @@ export class AccountDetailComponent implements OnInit {
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;
-  totalSBT = 0;
+  totalSBTPick = 0;
 
   constructor(
     public commonService: CommonService,
@@ -206,7 +203,7 @@ export class AccountDetailComponent implements OnInit {
 
     this.soulboundService.getListSoulboundByAddress(payload).subscribe(
       (res) => {
-        this.totalSBT = res.data.length;
+        this.totalSBTPick = res.data.length;
       },
       () => {},
       () => {},
