@@ -14,7 +14,6 @@ import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 export class AccountTransactionComponent implements OnInit {
   @Input() address: string;
 
-  isNoData = false;
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
@@ -30,9 +29,5 @@ export class AccountTransactionComponent implements OnInit {
         this.currentTab = params.tab;
       }
     });
-  }
-
-  reloadData() {
-    location.reload();
   }
 }

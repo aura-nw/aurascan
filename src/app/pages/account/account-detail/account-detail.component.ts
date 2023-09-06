@@ -1,32 +1,24 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
-import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT } from '../../../core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
 import {
   ACCOUNT_WALLET_COLOR_ENUM,
-  PageEventType,
-  StakeModeAccount,
-  TabsAccount,
-  WalletAcount,
+  WalletAcount
 } from '../../../core/constants/account.enum';
-import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
-import { TableTemplate } from '../../../core/models/common.model';
+import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
-import { TransactionService } from '../../../core/services/transaction.service';
-import { Globals, convertDataTransaction } from '../../../global/global';
+import { Globals } from '../../../global/global';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
 
 @Component({
@@ -47,10 +39,7 @@ export class AccountDetailComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   currentAddress: string;
-  currentKey = null;
   currentAccountDetail: any;
-  textSearch = '';
-
   chartCustomOptions = chartCustomOptions;
 
   // loading param check
@@ -65,20 +54,12 @@ export class AccountDetailComponent implements OnInit {
 
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-
-  TABS = TABS_TITLE_ACCOUNT;
-
-  currentStake = StakeModeAccount.Delegations;
-  stakeMode = StakeModeAccount;
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;
   totalSBT = 0;
 
-  isSent = true;
-
   constructor(
-    private transactionService: TransactionService,
     public commonService: CommonService,
     private route: ActivatedRoute,
     private accountService: AccountService,

@@ -29,9 +29,6 @@ export class AccountTransactionTableComponent {
 
   transactionLoading = false;
   currentAddress: string;
-  tokenFilter = '';
-  textSearch = '';
-  searchValue = '';
   templates: Array<TableTemplate>;
   tabsData = TabsAccountLink;
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
@@ -66,9 +63,6 @@ export class AccountTransactionTableComponent {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile: any[];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  assetsLoading = true;
-  total = 0;
-  dataTable = [];
   transactionFilter: any;
   transactionTypeKeyWord = '';
   tnxType = [];

@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,7 +14,7 @@ import { Globals } from '../../../../global/global';
   templateUrl: './account-detail-table.component.html',
   styleUrls: ['./account-detail-table.component.scss'],
 })
-export class AccountDetailTableComponent implements OnInit, OnChanges, AfterViewInit {
+export class AccountDetailTableComponent implements OnInit, OnChanges {
   @Input() dataSource: MatTableDataSource<any>;
   @Input() templates: Array<TableTemplate>;
   @Input() displayedColumns: string[];
@@ -22,11 +22,9 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   @Input() pageEventType: string;
   @Input() textNull: string = 'NO DATA';
   @Output() pageEvent = new EventEmitter<PageEvent>();
-  validatorImgArr;
 
   pageType = PageEventType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  currentPage = 0;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   dataSourceMobile: any[];
 
@@ -39,8 +37,6 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   ) {}
 
   ngOnInit(): void {}
-
-  ngAfterViewInit(): void {}
 
   ngOnChanges(): void {
     if (this.dataSource?.data) {
