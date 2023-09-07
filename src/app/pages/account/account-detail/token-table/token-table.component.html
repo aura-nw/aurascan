@@ -102,9 +102,9 @@
                       class="d-flex align-items-center"
                       [routerLink]="['/tokens/token', element.contract_address]"
                       *ngIf="element.contract_address !== '-'">
-                      <div class="d-flex align-items-center token-asset">
+                      <div class="d-flex align-items-center">
                         <div class="ml-2 body-03 fw-semibold">
-                          {{ element.name | stringEllipsis : 19 }}
+                          {{ element.name | stringEllipsis : 30 }}
                         </div>
                         <div class="aura-tooltip-contain">
                           <div class="status cursor-pointer aura-tooltip-object">

@@ -63,7 +63,7 @@
           </button> -->
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
             <div>
-              <h3 class="fw-bold fw-semibold-mob mb-1 text--white">Total Value</h3>
+              <div class="h5 mb-1 text--white">Total Value</div>
               <span class="h1 mb-0 fw-700 mb-0 text-gradient d-inline" *ngIf="!isNoData">
                 $ {{ totalValueToken + totalValueNft || 0 | number : global.formatNumber2Decimal }}
               </span>
@@ -120,11 +120,11 @@
 
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!--SBT  -->
-  <div class="card" *ngIf="totalSBT > 0 || currentAddress === userAddress">
+  <div class="card" *ngIf="totalSBTPick > 0 || (currentAddress === userAddress && totalSBT > 0)">
     <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
       <app-soulbound-feature-tokens
         [extend]="true"
-        (totalPick)="totalSBT = $event"
+        (totalSBTPick)="totalSBTPick = $event"
         [displayManage]="true"
         [accountAddress]="currentAddress"
         [reloadAPI]="false"

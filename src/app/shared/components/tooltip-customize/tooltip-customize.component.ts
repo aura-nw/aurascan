@@ -7,6 +7,7 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2} from '@a
 })
 export class TooltipCustomizeComponent implements OnInit, AfterViewInit {
   @Input() content: string;
+  @Input() class: string;
   constructor(private renderer: Renderer2, private el: ElementRef) {
   }
 

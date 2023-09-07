@@ -111,11 +111,11 @@
     <ng-template #noValues>
       <ng-container *ngIf="!loading">
         <app-table-no-data
-          *ngIf="!searchNotFound"
+          *ngIf="!searchNotFound && listCollection[0]?.quantity > 0"
           [textNull]="'Kindly select the collections'"
           [img]="'assets/images/noItemNFT.png'"></app-table-no-data>
         <app-table-no-data
-          *ngIf="searchNotFound"
+          *ngIf="searchNotFound || listCollection[0]?.quantity <= 0"
           [textNull]="'No NFTs found'"
           [img]="'assets/images/notFoundNFT.png'"></app-table-no-data>
       </ng-container>

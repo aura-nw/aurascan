@@ -1,49 +1,3 @@
-.contract-address {
-  width: 125px;
-}
-
-.aura__change {
-  font-size: 1.4rem;
-  line-height: 1.8rem;
-
-  &--desc,
-  &--asc {
-    &::after {
-      top: -3px;
-      left: 0;
-      transform: unset;
-    }
-  }
-}
-
-.table-token {
-  overflow-y: auto;
-  height: 380px;
-
-  ::ng-deep table thead {
-    display: none;
-  }
-}
-
-.token-filter-form.aura-form.single-input-field .input-group {
-  height: 40px;
-
-  @media (min-width: 991.99px) {
-    width: 312px;
-  }
-  width: 100%;
-}
-
-.image-token {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-}
-
-.token-asset {
-  min-width: 175px;
-}
-
 @media (max-width: 991.99px) {
   .button-filter {
     padding: 8px;
@@ -94,6 +48,19 @@
 
 .row-tx:has(.ph-caret-up) {
   background: linear-gradient(0deg, #262838, #262838), linear-gradient(0deg, #0e7e6b, #0e7e6b);
+  td:first-child {
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      left: 1px;
+      width: 2px;
+      top: 1.5px;
+      bottom: 0;
+      background-color: #0e7e6b;
+    }
+  }
+
   ::ng-deep {
     .box-name-tag:not(.private-name-tag) {
       &:after {
@@ -107,9 +74,7 @@
   .table-transfer tr td {
     &:nth-child(4),
     &:nth-child(5),
-    &:nth-child(6),
-    &:nth-child(7),
-    &:nth-child(8) {
+    &:nth-child(6) {
       padding-top: var(--spacer-0) !important;
     }
   }
@@ -129,19 +94,31 @@
     min-width: 180px;
     display: flex;
     align-items: center;
-    &.tokenId {
-      min-width: 75px;
-    }
-    &.action {
-      min-width: 40px;
+    &.nft-column {
+      display: block;
+      height: 52px !important;
+      margin-top: 12px;
     }
   }
+  .tab-nft .item-show {
+    height: 64px;
+  }
+
   tr td {
     vertical-align: top;
     padding-top: var(--spacer-4);
-    height: 56px;
     &:nth-child(2) {
       padding-top: var(--spacer-2);
+    }
+  }
+
+  tr:has(.tab-nft) td {
+    &:nth-child(1),
+    &:nth-child(3) {
+      padding-top: var(--spacer-5) !important;
+    }
+    &:nth-child(2) {
+      padding-top: var(--spacer-3) !important;
     }
   }
 
@@ -171,4 +148,31 @@
 .btn-select-type {
   background-color: unset;
   color: white;
+}
+
+.account-transaction-table {
+  ::ng-deep {
+    .message-custom {
+      transform: translate(0, 12px) !important;
+    }
+  }
+  .box-token-transfer {
+    min-width: 60px;
+    display: flex;
+    justify-content: flex-start;
+    .token-transfer-status {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--spacer-2) var(--spacer-4);
+      color: var(--aura-green-3);
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 12px;
+      width: auto;
+      margin: auto;
+      &.status-out {
+        color: var(--aura-red-3);
+      }
+    }
+  }
 }

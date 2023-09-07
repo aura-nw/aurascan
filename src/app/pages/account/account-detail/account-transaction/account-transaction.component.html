@@ -9,14 +9,13 @@
       class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
       [class.mobile-tab]="breakpoint.value.matches">
       <ng-container *ngFor="let tab of TABS; index as index">
-        <li [ngbNavItem]="index">
+        <li [ngbNavItem]="index" class="tab-account-transaction">
           <a
             ngbNavLink
-            [routerLink]="['/account', address]"
-            [queryParams]="{ tab: tab.value }"
+            (click)="changeTab(tab.value)"
             [class.active]="currentTab === tab.value"
             class="button button-tab-menu body fw-semibold cursor-pointer">
-            <span class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--gray-light' }}">{{
+            <span class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--gray-1' : 'text--gray-light' }}">{{
               tab.label
             }}</span>
           </a>
