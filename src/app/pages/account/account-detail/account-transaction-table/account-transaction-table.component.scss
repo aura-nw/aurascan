@@ -1,49 +1,3 @@
-.contract-address {
-  width: 125px;
-}
-
-.aura__change {
-  font-size: 1.4rem;
-  line-height: 1.8rem;
-
-  &--desc,
-  &--asc {
-    &::after {
-      top: -3px;
-      left: 0;
-      transform: unset;
-    }
-  }
-}
-
-.table-token {
-  overflow-y: auto;
-  height: 380px;
-
-  ::ng-deep table thead {
-    display: none;
-  }
-}
-
-.token-filter-form.aura-form.single-input-field .input-group {
-  height: 40px;
-
-  @media (min-width: 991.99px) {
-    width: 312px;
-  }
-  width: 100%;
-}
-
-.image-token {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-}
-
-.token-asset {
-  min-width: 175px;
-}
-
 @media (max-width: 991.99px) {
   .button-filter {
     padding: 8px;
@@ -94,6 +48,19 @@
 
 .row-tx:has(.ph-caret-up) {
   background: linear-gradient(0deg, #262838, #262838), linear-gradient(0deg, #0e7e6b, #0e7e6b);
+  td:first-child {
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      left: 1px;
+      width: 2px;
+      top: 1.5px;
+      bottom: 0;
+      background-color: #0e7e6b;
+    }
+  }
+
   ::ng-deep {
     .box-name-tag:not(.private-name-tag) {
       &:after {
@@ -171,4 +138,12 @@
 .btn-select-type {
   background-color: unset;
   color: white;
+}
+
+.account-transaction-table {
+  ::ng-deep {
+    .message-custom {
+      transform: translate(0, 12px) !important;
+    }
+  }
 }
