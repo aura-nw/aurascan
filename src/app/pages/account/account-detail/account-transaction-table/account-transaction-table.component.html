@@ -19,9 +19,11 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!transactionLoading && !displayType" class="mb-0 text--gray-5 caption-mob fw-normal">
-    {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
-    found
+  <div class="mb-0 text--gray-5 caption-mob fw-normal">
+    <ng-container *ngIf="!transactionLoading && !displayType">
+      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+      found
+    </ng-container>
   </div>
   <div>
     <button
@@ -50,9 +52,6 @@
               id="typeActionBtn"
               aria-expanded="false">
               <span class="body">
-                <!-- {{
-                transactionFilter.typeTransfer?.length > 0 ? transactionFilter.typeTransfer : 'Select a type'
-              }} -->
                 <ng-container *ngIf="!transactionFilter.typeTransfer"> Select a type </ng-container>
                 <span *ngIf="transactionFilter.typeTransfer?.length > 0" class="text--white"
                   >{{ transactionFilter.typeTransfer }}
@@ -283,7 +282,7 @@
                 </div>
                 <div *ngSwitchCase="'fee'">
                   {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                  <span class="text--primary">{{ denom }}</span>
+                  <span class="text--white">{{ denom }}</span>
                 </div>
                 <div *ngSwitchCase="'amount'">
                   <ng-container *ngFor="let item of data.arrEvent; let index = index">
@@ -456,7 +455,7 @@
         {
           label: 'Fee',
           class: 'text--gray-1 body-02-mob',
-          info: (data.fee | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
+          info: (data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
         }
       ]"></app-card-mob-account>
   </div>
