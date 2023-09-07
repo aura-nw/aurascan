@@ -23,7 +23,7 @@
   </div>
   <div class="soulbound-list mt-4 mt-lg-0">
     <ng-container *ngIf="soulboundList && soulboundList?.length > 0; else noNFT">
-      <ng-container class="" *ngFor="let token of soulboundList; let last = last">
+      <ng-container *ngFor="let token of soulboundList; let last = last">
         <div class="soulbound__item" *ngIf="token.picked">
           <div class="nft-cards__item-border">
             <div class="nft-cards__item">

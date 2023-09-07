@@ -31,10 +31,9 @@
           <div class="mb-1">
             <span>Voting power - {{ currentValidatorDetail?.percent_power }}%</span>&nbsp;
             <span>({{ currentValidatorDetail?.power | mask : 'separator.6' }}</span>
-            <span class="text--primary ml-1">{{ denom }}</span
+            <span class="text--white ml-1">{{ denom }}</span
             >)
           </div>
-<!--          <div>Delegators - {{ totalDelegator }}</div>-->
         </div>
       </div>
       <div>
@@ -50,7 +49,7 @@
               MAX
             </button>
           </div>
-          <div class="input-group-append text--primary">{{ denom }}</div>
+          <div class="input-group-append text--white">{{ denom }}</div>
         </div>
         <div *ngIf="errorExceedAmount" class="text--danger mt-3">
           Insufficient available balance for transaction fee
