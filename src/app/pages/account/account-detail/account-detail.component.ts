@@ -55,6 +55,7 @@ export class AccountDetailComponent implements OnInit {
   totalValueNft = 0;
   totalAssets = 0;
   totalSBTPick = 0;
+  totalSBT = 0;
 
   constructor(
     public commonService: CommonService,
@@ -101,6 +102,7 @@ export class AccountDetailComponent implements OnInit {
         this.userAddress = wallet.bech32Address;
       }
       this.getSBTPick();
+      this.getTotalSBT();
     });
 
     let retrievedObject = localStorage.getItem('accountDetail');
@@ -204,6 +206,16 @@ export class AccountDetailComponent implements OnInit {
     this.soulboundService.getListSoulboundByAddress(payload).subscribe(
       (res) => {
         this.totalSBTPick = res.data.length;
+      },
+      () => {},
+      () => {},
+    );
+  }
+
+  getTotalSBT() {
+    this.soulboundService.countTotalABT(this.currentAddress).subscribe(
+      (res) => {
+        this.totalSBT = res.data;
       },
       () => {},
       () => {},
