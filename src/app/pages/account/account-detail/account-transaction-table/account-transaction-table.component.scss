@@ -74,9 +74,7 @@
   .table-transfer tr td {
     &:nth-child(4),
     &:nth-child(5),
-    &:nth-child(6),
-    &:nth-child(7),
-    &:nth-child(8) {
+    &:nth-child(6) {
       padding-top: var(--spacer-0) !important;
     }
   }
@@ -96,17 +94,18 @@
     min-width: 180px;
     display: flex;
     align-items: center;
-    &.tokenId {
-      min-width: 75px;
+    &.nft-column {
+      display: block;
+      height: 52px !important;
+      margin-top: 12px;
     }
-    &.action {
-      min-width: 40px;
-    }
+  }
+  .tab-nft .item-show {
+    height: 64px;
   }
   tr td {
     vertical-align: top;
     padding-top: var(--spacer-4);
-    height: 56px;
     &:nth-child(2) {
       padding-top: var(--spacer-2);
     }
@@ -144,6 +143,25 @@
   ::ng-deep {
     .message-custom {
       transform: translate(0, 12px) !important;
+    }
+  }
+  .box-token-transfer {
+    min-width: 60px;
+    display: flex;
+    justify-content: flex-start;
+    .token-transfer-status {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--spacer-2) var(--spacer-4);
+      color: var(--aura-green-3);
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 12px;
+      width: auto;
+      margin: auto;
+      &.status-out {
+        color: var(--aura-red-3);
+      }
     }
   }
 }

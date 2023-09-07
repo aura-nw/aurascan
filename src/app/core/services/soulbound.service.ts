@@ -136,4 +136,8 @@ export class SoulboundService extends CommonService {
   getNotify(receiveAddress): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/soulbound-token/notify/${receiveAddress}`);
   }
+
+  countTotalABT(receiveAddress): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/soulbound-token/count/${receiveAddress}`);
+  }
 }

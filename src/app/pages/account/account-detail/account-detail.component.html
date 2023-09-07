@@ -120,7 +120,7 @@
 
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!--SBT  -->
-  <div class="card" *ngIf="totalSBTPick > 0 || currentAddress === userAddress">
+  <div class="card" *ngIf="totalSBTPick > 0 || (currentAddress === userAddress && totalSBT > 0)">
     <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
       <app-soulbound-feature-tokens
         [extend]="true"
