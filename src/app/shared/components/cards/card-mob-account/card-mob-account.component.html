@@ -27,8 +27,7 @@
         <div *ngIf="dataCard.arrEvent?.length > 1" class="ml-1 text--gray-4">+{{ dataCard.arrEvent?.length - 1 }}</div>
       </div>
     </div>
-
-    <div class="">
+    <div>
       <ng-container *ngIf="modeQuery !== tabsData.ExecutedTxs">
         <i
           *ngIf="!dataCard.expand"
@@ -108,18 +107,15 @@
                 <span [appBigNumber]="item.amount" [decimal]="0"></span>
               </div>
 
-              <div class="text--primary ml-1">
+              <div [class.text--primary]="item.denom !== denom" [class.text--white]="item.denom === denom" class="ml-1">
                 <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">{{ item.denom || denom }}</ng-container>
-                <a
-                  class=""
-                  [routerLink]="['/tokens/token', item.contractAddress]"
-                  *ngIf="modeQuery === tabsData.FtsTxs">
+                <a [routerLink]="['/tokens/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
                   {{ item.denom | stringEllipsis : 19 }}
                 </a>
               </div>
             </ng-container>
 
-            <div *ngIf="modeQuery === tabsData.NftTxs" class="">
+            <div *ngIf="modeQuery === tabsData.NftTxs">
               <div
                 class="item-show justify-content-between tokenId txt-top-expand body-mob {{
                   item['address'] === item['fromAddress'] ? 'text--green-3' : 'text--red-3'
