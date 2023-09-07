@@ -44,10 +44,10 @@ export class AccountTransactionTableComponent {
 
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 14 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 16 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 14 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 17 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
     { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 17 },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 17 },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 18 },
   ];
 
   displayedColumns: string[];
@@ -142,7 +142,10 @@ export class AccountTransactionTableComponent {
         }
       }
     } else {
-      this.listTypeSelected = this.listTypeSelected?.replace(type?.value + ', ', '').replace(', ' + type?.value, '').replace(type?.value, '');
+      this.listTypeSelected = this.listTypeSelected
+        ?.replace(type?.value + ', ', '')
+        .replace(', ' + type?.value, '')
+        .replace(type?.value, '');
       if (type === 'all') {
         this.transactionFilter.type = [];
         this.listTypeSelected = '';
@@ -164,11 +167,12 @@ export class AccountTransactionTableComponent {
 
   changeTypeFilter(type) {
     this.transactionFilter.typeTransfer = type;
-    document.getElementById('typeAction')!.classList.remove('show');
-  }
-
-  addShow() {
-    document.querySelectorAll('ul#typeAction')[0]!.classList.add('show');
+    if (document.getElementById('typeAction')?.classList.contains('show')) {
+      document.getElementById('typeAction')?.classList.remove('show');
+    }
+    if (document.getElementById('typeActionBtn')?.classList.contains('show')) {
+      document.getElementById('typeActionBtn')?.classList.remove('show');
+    }
   }
 
   clearFilterSearch(isResetFilter = true) {
@@ -186,6 +190,7 @@ export class AccountTransactionTableComponent {
     this.pageData.length = 0;
     this.pageData.pageIndex = 0;
     this.nextKey = null;
+    this.currentKey = null;
     this.isSearch = isSearch;
     this.getTxsAddress();
   }
@@ -268,9 +273,7 @@ export class AccountTransactionTableComponent {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'contractAddress', headerCellDef: 'Contract', headerWidth: 11 });
-        this.templates.push({ matColumnDef: 'tokenId', headerCellDef: 'Token ID', headerWidth: 10 });
-        this.templates.push({ matColumnDef: 'action', headerCellDef: '', headerWidth: 15 });
+        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 15 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;

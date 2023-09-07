@@ -49,3 +49,16 @@
 .input-group.tnx-type-search {
   height: 40px;
 }
+
+.tab-account-transaction {
+  flex-grow: 0;
+  padding: 0px 32px;
+  white-space: nowrap;
+  .active span {
+    color: var(--aura-gray-1) !important;
+  }
+  @media (max-width: 414px) {
+    min-width: auto;
+    padding: 0px 24px;
+  }
+}
