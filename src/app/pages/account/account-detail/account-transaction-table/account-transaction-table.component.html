@@ -251,10 +251,12 @@
                     </div>
 
                     <app-tooltip-customize
+                      [class]="'message-custom'"
                       [content]="data[template.matColumnDef]"
                       *ngIf="modeQuery === tabsData.ExecutedTxs">
                     </app-tooltip-customize>
                     <app-tooltip-customize
+                      [class]="'message-custom'"
                       [content]="data.arrEvent | displayTypeToolTip"
                       *ngIf="modeQuery !== tabsData.ExecutedTxs">
                     </app-tooltip-customize>

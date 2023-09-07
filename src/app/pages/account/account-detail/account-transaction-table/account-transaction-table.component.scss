@@ -139,3 +139,11 @@
   background-color: unset;
   color: white;
 }
+
+.account-transaction-table {
+  ::ng-deep {
+    .message-custom {
+      transform: translate(0, 12px) !important;
+    }
+  }
+}
