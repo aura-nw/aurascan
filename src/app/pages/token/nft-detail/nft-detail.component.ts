@@ -191,27 +191,28 @@ export class NFTDetailComponent implements OnInit {
 
   async getDataTable(nextKey = null) {
     let payload = {
-      limit: 100,
+      limit: 200,
       heightLT: nextKey,
       contractAddr: this.contractAddress,
       isTransferTab: false,
       tokenId: this.nftId,
       isCW4973: this.isCW4973 ? true : false,
+      isNFTDetail: true,
     };
 
     this.userService.getListNFTByAddress(payload).subscribe(
       (res) => {
         if (res) {
-          this.nextKey = null;
-          if (res.transaction.length >= 100) {
-            this.nextKey = res?.transaction[res.transaction.length - 1].height;
-          }
           let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.NftTxs, false, null);
           txs.forEach((element, index) => {
-            element['from_address'] = element.fromAddress;
-            element['to_address'] = element.toAddress;
             element['token_id'] = element.tokenId;
             element['type'] = res.transaction[index]?.events[0]?.smart_contract_events[0]?.cw721_activity?.action;
+            element['from_address'] = element.fromAddress;
+            element['to_address'] = element.toAddress;
+            if (element['type'] === 'approve' || element['type'] === 'revoke') {
+              element['to_address'] =
+                element.eventAttr?.find((k) => k.composite_key === 'wasm.spender')?.value || element['to_address'];
+            }
             if (this.isCW4973) {
               if (element['type'] === 'mint') {
                 element['type'] = 'take';

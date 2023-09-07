@@ -142,7 +142,7 @@ export class AccountTransactionTableComponent {
         }
       }
     } else {
-      this.listTypeSelected = this.listTypeSelected?.replace(', ' + type?.value, '').replace(type?.value, '');
+      this.listTypeSelected = this.listTypeSelected?.replace(type?.value + ', ', '').replace(', ' + type?.value, '').replace(type?.value, '');
       if (type === 'all') {
         this.transactionFilter.type = [];
         this.listTypeSelected = '';
@@ -171,10 +171,13 @@ export class AccountTransactionTableComponent {
     document.querySelectorAll('ul#typeAction')[0]!.classList.add('show');
   }
 
-  clearFilterSearch() {
+  clearFilterSearch(isResetFilter = true) {
     this.tnxType = this.tnxTypeOrigin;
+    this.getListTypeFilter();
     this.transactionTypeKeyWord = '';
-    this.listTypeSelected = '';
+    if (isResetFilter) {
+      this.listTypeSelected = '';
+    }
   }
 
   searchType(isSearch = true) {
@@ -350,6 +353,7 @@ export class AccountTransactionTableComponent {
 
   handleGetData(data) {
     if (data?.transaction?.length > 0) {
+      this.nextKey = null;
       if (data?.transaction?.length >= 100) {
         this.nextKey = data?.transaction[data?.transaction?.length - 1]?.height;
       }

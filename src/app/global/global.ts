@@ -385,6 +385,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     let tokenId;
     let contractAddress;
     let action;
+    let eventAttr;
 
     switch (modeQuery) {
       case TabsAccountLink.ExecutedTxs:
@@ -452,7 +453,8 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
             'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address',
           );
           let tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
-          return { type, fromAddress, toAddress, tokenId, contractAddress };
+          let eventAttr = element.event_attribute_index;
+          return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
         });
         break;
     }
@@ -469,6 +471,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       tokenId = arrEvent[0]?.tokenId;
       contractAddress = arrEvent[0]?.contractAddress;
       action = arrEvent[0]?.action;
+      eventAttr = arrEvent[0]?.eventAttr;
     }
 
     if (type === 'Send' && setReceive) {
@@ -492,6 +495,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       arrEvent,
       limit,
       action,
+      eventAttr
     };
   });
   return txs;

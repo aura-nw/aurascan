@@ -22,8 +22,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   @Input() displayManage = false;
   @Input() isSBTValidator = false;
   @Input() isAccountDetail = false;
-  @Output() totalSBT = new EventEmitter<number>();
-  @Output() totalPick = new EventEmitter<number>();
+  @Output() totalSBTPick = new EventEmitter<number>();
   @Output() closeDlg = new EventEmitter<number>();
   @Output() totalNotify = new EventEmitter<number>();
 
@@ -95,7 +94,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
         this.totalABT = res.meta.count;
         res.data = res.data.filter((k) => k.picked);
         this.soulboundList = res.data;
-        this.totalSBT.emit(res.meta.count);
+        this.totalSBTPick.emit(res.meta.count);
       },
       () => {
         this.isLoading = false;

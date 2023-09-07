@@ -123,7 +123,7 @@
                       ? 'd-none'
                       : ''
                   }}"
-                  (click)="clearFilterSearch()">
+                  (click)="clearFilterSearch(false)">
                   <img
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
                     alt=""
@@ -251,10 +251,12 @@
                     </div>
 
                     <app-tooltip-customize
+                      [class]="'message-custom'"
                       [content]="data[template.matColumnDef]"
                       *ngIf="modeQuery === tabsData.ExecutedTxs">
                     </app-tooltip-customize>
                     <app-tooltip-customize
+                      [class]="'message-custom'"
                       [content]="data.arrEvent | displayTypeToolTip"
                       *ngIf="modeQuery !== tabsData.ExecutedTxs">
                     </app-tooltip-customize>
