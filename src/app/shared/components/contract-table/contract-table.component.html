@@ -69,7 +69,7 @@
                         >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</a
                       >
                     </ng-container>
-                    <div class="" *ngIf="!data[template.matColumnDef]">-</div>
+                    <div *ngIf="!data[template.matColumnDef]">-</div>
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
                     <div

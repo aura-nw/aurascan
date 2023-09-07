@@ -104,7 +104,7 @@
 
             <!-- RECEIVER -->
             <ng-container matColumnDef="receiver_address">
-              <th mat-header-cell *matHeaderCellDef class="">RECEIVER</th>
+              <th mat-header-cell *matHeaderCellDef>RECEIVER</th>
               <td mat-cell *matCellDef="let element" class="py-4">
                 <app-name-tag [value]="element.receiver_address"></app-name-tag>
               </td>
@@ -112,13 +112,13 @@
 
             <!-- TOKEN ID -->
             <ng-container matColumnDef="token_id">
-              <th mat-header-cell *matHeaderCellDef class="">TOKEN ID</th>
+              <th mat-header-cell *matHeaderCellDef>TOKEN ID</th>
               <td mat-cell *matCellDef="let element" class="py-4">{{ element.token_id }}</td>
             </ng-container>
 
             <!-- STATUS -->
             <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef class="">STATUS</th>
+              <th mat-header-cell *matHeaderCellDef>STATUS</th>
               <td mat-cell *matCellDef="let element" class="py-4 pl-4 fw-normal">
                 <div [ngSwitch]="element.status">
                   <div *ngSwitchCase="sbType.EQUIPPED" class="text--green-3 token-status">
