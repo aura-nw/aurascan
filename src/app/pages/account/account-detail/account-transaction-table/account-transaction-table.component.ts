@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -26,6 +26,10 @@ export class AccountTransactionTableComponent {
   @Input() address: string;
   @Input() modeQuery: string;
   @Input() displayType: boolean = false;
+  @Input() savedFilter: any = null;
+  @Input() savedTab: any;
+  @Output() filterCondition = new EventEmitter<any>();
+  @Output() tabName = new EventEmitter<string>();
 
   transactionLoading = false;
   currentAddress: string;
@@ -118,14 +122,19 @@ export class AccountTransactionTableComponent {
   }
 
   initTnxFilter() {
-    this.transactionTypeKeyWord = '';
-    this.listTypeSelected = '';
-    this.transactionFilter = {
-      startDate: null,
-      endDate: null,
-      type: [],
-      typeTransfer: null,
-    };
+    if (this.savedFilter !== null && this.savedTab === this.modeQuery) {
+      this.transactionFilter = this.savedFilter;
+      this.listTypeSelected = this.transactionFilter.type;
+    } else {
+      this.transactionTypeKeyWord = '';
+      this.listTypeSelected = '';
+      this.transactionFilter = {
+        startDate: null,
+        endDate: null,
+        type: [],
+        typeTransfer: null,
+      };
+    }
   }
 
   onChangeTnxFilterType(event, type: any) {
@@ -192,6 +201,10 @@ export class AccountTransactionTableComponent {
     this.nextKey = null;
     this.currentKey = null;
     this.isSearch = isSearch;
+    this.filterCondition.emit(this.transactionFilter);
+    console.log(this.modeQuery);
+
+    this.tabName.emit(this.modeQuery);
     this.getTxsAddress();
   }
 
