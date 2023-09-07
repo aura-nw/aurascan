@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -29,11 +29,9 @@ export class AccountTransactionTableComponent {
 
   transactionLoading = false;
   currentAddress: string;
-  tokenFilter = '';
-  textSearch = '';
-  searchValue = '';
   templates: Array<TableTemplate>;
   tabsData = TabsAccountLink;
+  lengthAddress = LENGTH_CHARACTER.ADDRESS;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
@@ -46,11 +44,10 @@ export class AccountTransactionTableComponent {
 
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 14 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 14 },
-    { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 7 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 14 },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 20 },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 19 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 17 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 17 },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 18 },
   ];
 
   displayedColumns: string[];
@@ -66,9 +63,6 @@ export class AccountTransactionTableComponent {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile: any[];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  assetsLoading = true;
-  total = 0;
-  dataTable = [];
   transactionFilter: any;
   transactionTypeKeyWord = '';
   tnxType = [];
@@ -130,6 +124,7 @@ export class AccountTransactionTableComponent {
       startDate: null,
       endDate: null,
       type: [],
+      typeTransfer: null,
     };
   }
 
@@ -147,7 +142,10 @@ export class AccountTransactionTableComponent {
         }
       }
     } else {
-      this.listTypeSelected = this.listTypeSelected?.replace(', ' + type?.value, '').replace(type?.value, '');
+      this.listTypeSelected = this.listTypeSelected
+        ?.replace(type?.value + ', ', '')
+        .replace(', ' + type?.value, '')
+        .replace(type?.value, '');
       if (type === 'all') {
         this.transactionFilter.type = [];
         this.listTypeSelected = '';
@@ -167,10 +165,23 @@ export class AccountTransactionTableComponent {
     );
   }
 
-  clearFilterSearch() {
+  changeTypeFilter(type) {
+    this.transactionFilter.typeTransfer = type;
+    if (document.getElementById('typeAction')?.classList.contains('show')) {
+      document.getElementById('typeAction')?.classList.remove('show');
+    }
+    if (document.getElementById('typeActionBtn')?.classList.contains('show')) {
+      document.getElementById('typeActionBtn')?.classList.remove('show');
+    }
+  }
+
+  clearFilterSearch(isResetFilter = true) {
     this.tnxType = this.tnxTypeOrigin;
+    this.getListTypeFilter();
     this.transactionTypeKeyWord = '';
-    this.listTypeSelected = '';
+    if (isResetFilter) {
+      this.listTypeSelected = '';
+    }
   }
 
   searchType(isSearch = true) {
@@ -179,6 +190,7 @@ export class AccountTransactionTableComponent {
     this.pageData.length = 0;
     this.pageData.pageIndex = 0;
     this.nextKey = null;
+    this.currentKey = null;
     this.isSearch = isSearch;
     this.getTxsAddress();
   }
@@ -223,9 +235,13 @@ export class AccountTransactionTableComponent {
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.AuraTxs:
-        payload.compositeKey = 'coin_spent.spender';
-        if (this.currentType !== AccountTxType.Sent) {
-          payload.compositeKey = 'coin_received.receiver';
+        payload.compositeKey = ['coin_spent.spender', 'coin_received.receiver'];
+        if (this.transactionFilter.typeTransfer) {
+          if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
+            payload.compositeKey = ['coin_spent.spender'];
+          } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
+            payload.compositeKey = ['coin_received.receiver'];
+          }
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
@@ -233,10 +249,13 @@ export class AccountTransactionTableComponent {
         this.getListTxAuraByAddress(payload);
         break;
       case TabsAccountLink.FtsTxs:
-        if (this.currentType === AccountTxType.Sent) {
-          payload['sender'] = address;
-        } else {
-          payload['receiver'] = address;
+        payload['sender'] = payload['receiver'] = address;
+        if (this.transactionFilter.typeTransfer) {
+          if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
+            payload['receiver'] = '';
+          } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
+            payload['sender'] = '';
+          }
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
@@ -244,13 +263,17 @@ export class AccountTransactionTableComponent {
         this.getListFTByAddress(payload);
         break;
       case TabsAccountLink.NftTxs:
-        if (this.currentType === AccountTxType.Sent) {
-          payload['sender'] = address;
-        } else {
-          payload['receiver'] = address;
+        payload['sender'] = payload['receiver'] = address;
+        payload['isCw721'] = true;
+        if (this.transactionFilter.typeTransfer) {
+          if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
+            payload['receiver'] = '';
+          } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
+            payload['sender'] = '';
+          }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'tokenId', headerCellDef: 'Token ID', headerWidth: 21 });
+        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 15 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;
@@ -333,6 +356,7 @@ export class AccountTransactionTableComponent {
 
   handleGetData(data) {
     if (data?.transaction?.length > 0) {
+      this.nextKey = null;
       if (data?.transaction?.length >= 100) {
         this.nextKey = data?.transaction[data?.transaction?.length - 1]?.height;
       }

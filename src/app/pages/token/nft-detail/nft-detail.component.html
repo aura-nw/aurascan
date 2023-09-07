@@ -102,7 +102,7 @@
               <div class="flex-shrink-0 flex-grow-1 w-auto">
                 <div class="body-01 text--gray-5 mb-1">Min. Price</div>
                 <div class="h3 mb-0 text--white">
-                  <span class="">- {{ denom }}</span>
+                  <span>- {{ denom }}</span>
                   <span class="text--gray-5 ml-2">(-)</span>
                 </div>
               </div>
@@ -112,7 +112,7 @@
               <div class="flex-shrink-0 flex-grow-1 w-auto">
                 <div class="body-01 text--gray-5 mb-1">Last Sale (Item)</div>
                 <div class="h3 mb-0 text--white">
-                  <span class="">N/A</span>
+                  <span>N/A</span>
                   <!--              <span class="text--gray-5 ml-2">($32.42)</span>-->
                 </div>
               </div>
@@ -122,7 +122,7 @@
               <div class="flex-shrink-0 flex-grow-1 w-auto">
                 <div class="body-01 text--gray-5 mb-1">Last Sale (Contract)</div>
                 <div class="h3 mb-0 text--white">
-                  <span class="">- {{ denom }}</span>
+                  <span>- {{ denom }}</span>
                   <span class="text--gray-5 ml-2">(-)</span>
                 </div>
               </div>
@@ -134,21 +134,21 @@
             <div class="card px-6 py-3 mb-4">
               <div class="body-02 text--gray-5 mb-1">Min. Price</div>
               <div class="h3 mb-0 text--white">
-                <span class="">- {{ denom }}</span>
+                <span>- {{ denom }}</span>
                 <span class="text--gray-5 ml-2">(-)</span>
               </div>
             </div>
             <div class="card px-6 py-3 mb-4">
               <div class="body-02 text--gray-5 mb-1">Last Sale (Item)</div>
               <div class="h3 mb-0 text--white">
-                <span class="">N/A</span>
+                <span>N/A</span>
                 <!--              <span class="text--gray-5 ml-2">($32.42)</span>-->
               </div>
             </div>
             <div class="card px-6 py-3 mb-4">
               <div class="body-02 text--gray-5 mb-1">Last Sale (Contract)</div>
               <div class="h3 mb-0 text--white">
-                <span class="">- {{ denom }}</span>
+                <span>- {{ denom }}</span>
                 <span class="text--gray-5 ml-2">(-)</span>
               </div>
             </div>
@@ -329,7 +329,7 @@
         class="aura-table nft-detail-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
-            <th mat-header-cell *matHeaderCellDef class="">
+            <th mat-header-cell *matHeaderCellDef>
               <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
 
@@ -376,10 +376,14 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'from_address'">
                   <div class="content-transfer">
-                    <ng-container *ngIf="data.modeExecute === modeExecuteTransaction.Take">
+                    <ng-container
+                      *ngIf="
+                        data.modeExecute === modeExecuteTransaction.Take ||
+                        data[template.matColumnDef]?.startsWith('0000')
+                      ">
                       <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                     </ng-container>
-                    <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take">
+                    <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take &&  !data[template.matColumnDef]?.startsWith('0000')">
                       <app-name-tag
                         [value]="data[template.matColumnDef]"
                         [isTokenDetail]="true"
@@ -401,26 +405,25 @@
                     class="ml-10 ml-lg-15" />
                 </ng-container>
                 <ng-container *ngSwitchCase="'to_address'">
-                  <app-name-tag
-                    [url]="data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account'"
-                    [value]="data[template.matColumnDef]"
-                    [type]="data.type"
-                    [isTokenDetail]="true"
+                  <ng-container
                     *ngIf="
-                      data.modeExecute !== modeExecuteTransaction.Burn &&
-                      data.modeExecute !== modeExecuteTransaction.UnEquip &&
-                      data[template.matColumnDef]
-                    "></app-name-tag>
-                  <app-name-tag
-                    [value]="data[template.matColumnDef]"
-                    [type]="data.type"
-                    [isTokenDetail]="true"
-                    *ngIf="
-                      data.modeExecute === modeExecuteTransaction.Burn ||
-                      data.modeExecute === modeExecuteTransaction.UnEquip
-                    "
-                    [isLink]="false"></app-name-tag>
-                  <span *ngIf="!data[template.matColumnDef]"> - </span>
+                      data.modeExecute === modeExecuteTransaction.Take ||
+                      data[template.matColumnDef]?.startsWith('0000')
+                    ">
+                    <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
+                  </ng-container>
+                  <ng-container *ngIf="!data[template.matColumnDef]?.startsWith('0000')">
+                    <app-name-tag
+                      [url]="data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account'"
+                      [value]="data[template.matColumnDef]"
+                      [type]="data.type"
+                      [isTokenDetail]="true"
+                      *ngIf="
+                        data.modeExecute !== modeExecuteTransaction.Burn &&
+                        data.modeExecute !== modeExecuteTransaction.UnEquip &&
+                        data[template.matColumnDef]
+                      "></app-name-tag>
+                  </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
                   <span *ngIf="data[template.matColumnDef]">

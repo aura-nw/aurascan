@@ -9,6 +9,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
@@ -79,6 +80,7 @@ export class TokenTableComponent implements OnChanges {
     private accountService: AccountService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -94,23 +96,27 @@ export class TokenTableComponent implements OnChanges {
       account_address: this.address,
       keyword: this.textSearch,
     };
-    if (this.dataTable.length > 0) {
+    if (this.dataTable?.length > 0) {
       let searchList;
       // Filter type token
       if (this.tokenFilter !== '') {
-        searchList = this.dataTable.filter((item) => item.type?.toLowerCase() === this.tokenFilter);
+        searchList = this.dataTable?.filter((item) => item.type?.toLowerCase() === this.tokenFilter);
       }
 
       // Search with text search
+      let txtSearch = this.textSearch.trim();
+      const addressNameTag = this.commonService.findNameTag(this.textSearch);
+      if (addressNameTag?.length > 0) {
+        txtSearch = addressNameTag;
+      }
+
       if (this.textSearch && searchList) {
-        const textSearch = this.textSearch.trim();
-        searchList = searchList.filter(
-          (item) => item.name?.toLowerCase().includes(textSearch.toLowerCase()) || item.contract_address == textSearch,
+        searchList = searchList?.filter(
+          (item) => item.name?.toLowerCase().includes(txtSearch.toLowerCase()) || item.contract_address == txtSearch,
         );
       } else if (this.tokenFilter === '') {
-        const textSearch = this.textSearch.trim();
-        searchList = this.dataTable.filter(
-          (item) => item.name?.toLowerCase().includes(textSearch.toLowerCase()) || item.contract_address == textSearch,
+        searchList = this.dataTable?.filter(
+          (item) => item.name?.toLowerCase().includes(txtSearch.toLowerCase()) || item.contract_address == txtSearch,
         );
       }
       this.dataSource.data = [...searchList];
@@ -133,7 +139,7 @@ export class TokenTableComponent implements OnChanges {
               return data;
             });
 
-            lstToken = lstToken.filter((k) => k?.symbol);
+            lstToken = lstToken?.filter((k) => k?.symbol);
             // store datatable
             this.dataTable = lstToken;
             // Sort and slice 20 frist record.
@@ -141,16 +147,16 @@ export class TokenTableComponent implements OnChanges {
             this.pageData.length = res.meta?.count || lstToken?.length;
             this.listTokenType.forEach((e) => {
               if (e.value === '') {
-                e.quantity = this.pageData.length;
+                e.quantity = this.pageData?.length || 0;
               } else {
-                e.quantity = this.dataTable.filter((ite) => ite.type.toLowerCase() === e.value).length;
+                e.quantity = this.dataTable?.filter((ite) => ite.type.toLowerCase() === e.value)?.length || 0;
               }
             });
           } else {
             this.pageData.length = 0;
             this.dataSource.data = [];
           }
-          this.totalAssets.emit(this.pageData.length);
+          this.totalAssets.emit(this.pageData?.length || 0);
         },
         () => {},
         () => {

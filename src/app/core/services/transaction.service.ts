@@ -146,93 +146,6 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTxMultiCondition(payload) {
-    const operationsDoc = `
-    query queryTransactionMultiCondition(
-      $limit: Int = 100
-      $order: order_by = desc
-      $compositeKey: String = null
-      $value: String = null
-      $key: String = null
-      $compositeKey2: String = null
-      $value2: String = null
-      $key2: String = null
-      $compositeKeyIn: [String!] = null
-      $valueIn: [String!] = null
-      $keyIn: [String!] = null
-      $compositeKeyIn2: [String!] = null
-      $valueIn2: [String!] = null
-      $keyIn2: [String!] = null
-      $heightGT: Int = null
-      $heightLT: Int = null
-      $indexGT: Int = null
-      $indexLT: Int = null
-      $hash: String = null
-      $height: Int = null
-    ) {
-      ${this.envDB} {
-        transaction(
-          limit: $limit
-          where: {
-            hash: { _eq: $hash }
-            height: { _eq: $height }
-            event_attribute_index: {
-              value: { _eq: $value, _in: $valueIn }
-              composite_key: { _eq: $compositeKey, _in: $compositeKeyIn }
-              key: { _eq: $key, _in: $keyIn }
-            }
-            _and: [
-              { height: { _gt: $heightGT } }
-              { index: { _gt: $indexGT } }
-              { height: { _lt: $heightLT } }
-              { index: { _lt: $indexLT } }
-              {
-                event_attribute_index: {
-                  value: { _eq: $value2, _in: $valueIn2 }
-                  composite_key: { _eq: $compositeKey2, _in: $compositeKeyIn2 }
-                  key: { _eq: $key2, _in: $keyIn2 }
-                }
-              }
-            ]
-          }
-          order_by: [{ height: $order}, {index: $order }]
-        ) {
-          id
-          height
-          hash
-          timestamp
-          code
-          gas_used
-          gas_wanted
-          data
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          limit: payload.limit,
-          order: 'desc',
-          hash: payload.hash,
-          compositeKey: payload.compositeKey,
-          value: payload.value,
-          key: payload.key,
-          heightGT: null,
-          heightLT: payload.heightLT,
-          indexGT: null,
-          indexLT: null,
-          height: null,
-          compositeKey2: payload.compositeKey2,
-          value2: payload.value2,
-          key2: payload.key2,
-        },
-        operationName: 'queryTransactionMultiCondition',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
   txsDetailLcd(txhash: string) {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs/${txhash}`);
   }
@@ -270,7 +183,7 @@ export class TransactionService extends CommonService {
             'timeout_packet.packet_sequence',
           ],
           value: sequence,
-          channel: channel
+          channel: channel,
         },
         operationName: 'queryListSequence',
       })

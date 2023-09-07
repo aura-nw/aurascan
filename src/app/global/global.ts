@@ -354,7 +354,6 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
-
     const lstTypeTemp = _.get(element, 'transaction_messages');
     let type;
     if (lstTypeTemp) {
@@ -385,64 +384,77 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     let arrEvent;
     let tokenId;
     let contractAddress;
+    let action;
+    let eventAttr;
 
     switch (modeQuery) {
       case TabsAccountLink.ExecutedTxs:
-        type = getTypeTx(element);
+        type = getTypeTx(element)?.type;
         break;
       case TabsAccountLink.AuraTxs:
-        arrEvent = _.get(element, 'transaction_messages')?.map((item, index) => {
-          let type = getTypeTx(element, index);
-          console.log(element);
-          let fromAddress;
-          let toAddress;
-          let amountTemp;
-          const coinSpentData = element?.data?.tx_response?.logs[index]?.events?.find(
-            (k) => k.type === 'coin_spent',
-          )?.attributes;
-          const coinReceiveData = element?.data?.tx_response?.logs[index]?.events?.find(
+        let arrTemp = [];
+        element?.data?.tx_response?.logs?.forEach((data) => {
+          const coinArrReceiver = _.get(data, 'events')?.find(
             (k) => k.type === 'coin_received',
           )?.attributes;
-
-          if (coinSpentData && coinReceiveData) {
-            let indexDefault = 2;
-            fromAddress = coinSpentData[coinSpentData?.length - indexDefault]?.value;
-            toAddress = coinReceiveData[coinReceiveData?.length - indexDefault]?.value;
-            amountTemp = coinSpentData[coinSpentData?.length - indexDefault - 1]?.value?.match(/\d+/g)[0];
+          const coinArrSpent = _.get(data, 'events')?.find(
+            (k) => k.type === 'coin_spent',
+          )?.attributes;
+          for (let i = 0; i < coinArrReceiver?.length; i++) {
+            if (
+              (coinArrReceiver[i]?.key === 'receiver' && coinArrReceiver[i]?.value === currentAddress) ||
+              (coinArrSpent[i]?.key === 'spender' && coinArrSpent[i]?.value === currentAddress)
+            ) {
+              let { type, action } = getTypeTx(element, i);
+              toAddress = coinArrReceiver[i]?.value;
+              fromAddress = coinArrSpent[i]?.value;
+              let amountTemp = coinArrReceiver[i + 1]?.value?.match(/\d+/g)[0];
+              let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
+              let denom = coinInfo.coinDenom;
+              const result = { type, toAddress, fromAddress, amount, denom, action };
+              arrTemp.push(result);
+            }
           }
-          let denom = coinInfo.coinDenom;
-          let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
-          return { type, fromAddress, toAddress, amount, denom };
         });
+        arrEvent = arrTemp;
         break;
       case TabsAccountLink.FtsTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
-          let type = getTypeTx(element, index);
+          let { type, action } = getTypeTx(element, index);
           let fromAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].from') || NULL_ADDRESS;
           let toAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].to') || NULL_ADDRESS;
           let denom = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.symbol');
           let amountTemp = _.get(item, 'smart_contract_events[0].cw20_activities[0].amount');
           let decimal = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.decimal');
           let amount = balanceOf(amountTemp || 0, +decimal);
-          return { type, fromAddress, toAddress, amount, denom };
+          let contractAddress = _.get(item, 'smart_contract_events[0].smart_contract.address');
+          return { type, fromAddress, toAddress, amount, denom, contractAddress, action };
         });
         break;
       case TabsAccountLink.NftTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
           const typeOrigin = _.get(element, 'transaction_messages[0].content["@type"]');
           let type = item?.smart_contract_events[0] ? item?.smart_contract_events[0]?.cw721_activity?.action : null;
+          let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
+          let toAddress =
+            _.get(item, 'smart_contract_events[0].cw721_activity.to') ||
+            _.get(item, 'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address') ||
+            NULL_ADDRESS;
+          if (type === 'burn') {
+            toAddress = NULL_ADDRESS;
+          }
+
           if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
             type = 'Contract: ' + type;
           }
-          let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
-          let toAddress = _.get(item, 'smart_contract_events[0].cw721_activity.to') || NULL_ADDRESS;
+
           let contractAddress = _.get(
             item,
             'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address',
           );
           let tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
-
-          return { type, fromAddress, toAddress, tokenId, contractAddress };
+          let eventAttr = element.event_attribute_index;
+          return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
         });
         break;
     }
@@ -458,6 +470,8 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       }
       tokenId = arrEvent[0]?.tokenId;
       contractAddress = arrEvent[0]?.contractAddress;
+      action = arrEvent[0]?.action;
+      eventAttr = arrEvent[0]?.eventAttr;
     }
 
     if (type === 'Send' && setReceive) {
@@ -480,13 +494,16 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       contractAddress,
       arrEvent,
       limit,
+      action,
+      eventAttr
     };
   });
   return txs;
 }
 
 export function getTypeTx(element, index = 0) {
-  let type = _.get(element, 'transaction_messages[0].content["@type"]');
+  let type = element?.transaction_messages[element?.transaction_messages?.length - 1]?.content["@type"];
+  let action;
   if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
     try {
       let dataTemp = _.get(element, 'transaction_messages[0].content.msg');
@@ -495,7 +512,7 @@ export function getTypeTx(element, index = 0) {
           dataTemp = JSON.parse(dataTemp);
         } catch (e) {}
       }
-      let action = Object.keys(dataTemp)[0];
+      action = Object.keys(dataTemp)[0];
       type = 'Contract: ' + action;
     } catch (e) {}
   } else {
@@ -504,5 +521,5 @@ export function getTypeTx(element, index = 0) {
       type = type?.replace('Msg', '');
     }
   }
-  return type;
+  return { type, action };
 }

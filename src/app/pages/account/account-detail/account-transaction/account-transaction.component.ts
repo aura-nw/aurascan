@@ -4,7 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TABS_TITLE_ACCOUNT } from 'src/app/core/constants/account.constant';
-import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-account-transaction',
@@ -14,7 +15,6 @@ import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enu
 export class AccountTransactionComponent implements OnInit {
   @Input() address: string;
 
-  isNoData = false;
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
@@ -22,7 +22,7 @@ export class AccountTransactionComponent implements OnInit {
   tabsData = TabsAccountLink;
   currentTab = TabsAccountLink.ExecutedTxs;
 
-  constructor(private layout: BreakpointObserver, private route: ActivatedRoute) {}
+  constructor(private layout: BreakpointObserver, private route: ActivatedRoute, private location: Location) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -32,7 +32,8 @@ export class AccountTransactionComponent implements OnInit {
     });
   }
 
-  reloadData() {
-    location.reload();
+  changeTab(value){
+    this.location.replaceState("/account/" + this.address + "?tab=" + value);
+    this.currentTab = value;
   }
 }

@@ -7,12 +7,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
-import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT } from '../../../core/constants/account.constant';
-import { ACCOUNT_WALLET_COLOR_ENUM, StakeModeAccount, WalletAcount } from '../../../core/constants/account.enum';
+import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
@@ -37,10 +36,7 @@ export class AccountDetailComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   currentAddress: string;
-  currentKey = null;
   currentAccountDetail: any;
-  textSearch = '';
-
   chartCustomOptions = chartCustomOptions;
 
   // loading param check
@@ -55,17 +51,11 @@ export class AccountDetailComponent implements OnInit {
 
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-
-  TABS = TABS_TITLE_ACCOUNT;
-
-  currentStake = StakeModeAccount.Delegations;
-  stakeMode = StakeModeAccount;
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;
+  totalSBTPick = 0;
   totalSBT = 0;
-
-  isSent = true;
 
   constructor(
     public commonService: CommonService,
@@ -113,6 +103,7 @@ export class AccountDetailComponent implements OnInit {
         this.userAddress = wallet.bech32Address;
       }
       this.getSBTPick();
+      this.getTotalSBT();
     });
 
     let retrievedObject = localStorage.getItem('accountDetail');
@@ -207,16 +198,29 @@ export class AccountDetailComponent implements OnInit {
 
   getSBTPick() {
     const payload = {
+      limit: 100,
+      offset: 0,
       receiverAddress: this.currentAddress,
-      limit: LIMIT_NUM_SBT,
+      isEquipToken: true,
     };
 
-    this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      if (this.userAddress && this.currentAddress !== this.userAddress) {
-        res.data = res.data.filter((k) => k.picked);
-      }
-      this.totalSBT = res.data.length;
-    });
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
+      (res) => {
+        this.totalSBTPick = res.data.length;
+      },
+      () => {},
+      () => {},
+    );
+  }
+
+  getTotalSBT() {
+    this.soulboundService.countTotalABT(this.currentAddress).subscribe(
+      (res) => {
+        this.totalSBT = res.data;
+      },
+      () => {},
+      () => {},
+    );
   }
 
   extendLink(url) {

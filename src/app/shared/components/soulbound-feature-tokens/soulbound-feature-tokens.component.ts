@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -16,19 +15,20 @@ import { SoulboundTokenDetailPopupComponent } from 'src/app/pages/soulbound-toke
   styleUrls: ['./soulbound-feature-tokens.component.scss'],
 })
 export class SoulboundFeatureTokensComponent implements OnInit {
-  @Input() reloadAPI: boolean = false;
+  @Input() reloadAPI: boolean = true;
   @Input() extend = true;
   @Input() accountAddress = null;
   @Input() soulboundListData = null;
   @Input() displayManage = false;
   @Input() isSBTValidator = false;
-  @Output() totalSBT = new EventEmitter<number>();
-  @Output() totalPick = new EventEmitter<number>();
+  @Input() isAccountDetail = false;
+  @Output() totalSBTPick = new EventEmitter<number>();
   @Output() closeDlg = new EventEmitter<number>();
   @Output() totalNotify = new EventEmitter<number>();
 
   isClick = false;
   soulboundList = [];
+  totalABT = 0;
   soulboundUnclaimedNum = 0;
   wallet = null;
   userAddress = null;
@@ -48,23 +48,27 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   ngOnInit(): void {
     this.userAddress = this.router.snapshot.paramMap.get('address');
     this.walletService.wallet$.subscribe((wallet) => {
+      this.soulboundUnclaimedNum = 0;
       this.wallet = wallet?.bech32Address;
       this.getABTNotify();
       this.getData();
-      this.timerGetUpTime = setInterval(() => {
-        this.getData();
-      }, 30000);
+      if (this.reloadAPI) {
+        this.timerGetUpTime = setInterval(() => {
+          this.getData();
+        }, 30000);
+      }
     });
+
     this.wSService.getNotifyValue.subscribe((res) => {
       this.soulboundUnclaimedNum = res;
       this.totalNotify.emit(this.soulboundUnclaimedNum);
     });
+  }
 
-    // setTimeout(() => {
-    //   if (this.wallet) {
-    //     this.getABTNotify();
-    //   }
-    // }, 1000);
+  ngOnDestroy(): void {
+    if (this.timerGetUpTime) {
+      clearInterval(this.timerGetUpTime);
+    }
   }
 
   getData() {
@@ -78,21 +82,27 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   }
 
   getSBTPick() {
-    let address = this.accountAddress || this.userAddress;
     const payload = {
-      receiverAddress: address,
-      limit: LIMIT_NUM_SBT,
+      limit: 100,
+      offset: 0,
+      receiverAddress: this.userAddress,
+      isEquipToken: true,
     };
 
-    this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      if (this.wallet !== address) {
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
+      (res) => {
+        this.totalABT = res.meta.count;
         res.data = res.data.filter((k) => k.picked);
-      }
-      this.soulboundList = res.data;
-
-      this.totalSBT.emit(res.meta.count);
-      this.totalPick.emit(res.data?.length || 0);
-    });
+        this.soulboundList = res.data;
+        this.totalSBTPick.emit(res.meta.count);
+      },
+      () => {
+        this.isLoading = false;
+      },
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 
   getSBTDetail(contractAddress, tokenID) {
@@ -147,7 +157,8 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   }
 
   setLinkTab() {
-    if (this.soulboundUnclaimedNum > 0) {
+    localStorage.setItem('tabUnEquip', null);
+    if (this.soulboundUnclaimedNum > 0 && this.wallet === this.userAddress) {
       localStorage.setItem('tabUnEquip', 'true');
     }
   }

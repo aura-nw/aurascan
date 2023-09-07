@@ -71,7 +71,7 @@ export class TokenService extends CommonService {
     if (textSearch?.length > 0) {
       textSearch = '%' + textSearch + '%';
     }
-    let querySort = `, order_by: {${payload.sort_column}: ${payload.sort_order}}`;
+    let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
     const operationsDoc = `
     query queryListCW721($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
       ${this.envDB} {

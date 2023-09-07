@@ -161,11 +161,10 @@
       </div>
 
       <div class="d-lg-none">
-        <!-- <span class="text--primary">textSearch: {{ textSearch }} pageData: {{ pageData?.length }}</span> -->
         <div *ngIf="!textSearch && pageData?.length === 0">
           <div class="d-flex d-lg-none justify-content-center align-items-center text-white">
             <img [src]="'assets/icons/icons-svg/white/info.svg' | imageS3" alt="" width="24" height="24" class="mr-2" />
-            <span class="">You have not yet registered type for any Code ID</span>
+            <span>You have not yet registered type for any Code ID</span>
           </div>
         </div>
         <ng-container *ngIf="!(textSearch?.length > 0 && pageData?.length === 0); else noValues">
