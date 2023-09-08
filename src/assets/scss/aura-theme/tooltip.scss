@@ -3,8 +3,7 @@ app-tooltip-customize {
   width: max-content;
   position: absolute;
   left: 50%;
-  bottom: 100% !important;
-  top: unset !important;
+  bottom: 100%;
   transform: translate(-50%, -16px);
   max-width: 0;
   max-height: 0;
@@ -12,8 +11,8 @@ app-tooltip-customize {
   transition: opacity .35s ease-in-out;
 
   &.tooltip--below {
-    bottom: 0 !important;
-    top: 100% !important;
+    bottom: 0;
+    top: 100%;
     transform: translate(-50%, 16px);
   }
 }
@@ -53,14 +52,14 @@ app-tooltip-customize {
 }
 
 app-tooltip-customize.tooltip--left {
-  left: unset !important;
+  left: unset;
   right: 0;
-  transform: translate(0, -32px) !important;
+  transform: translate(0, -32px);
 }
 
 
 app-tooltip-customize.tooltip--right {
-  right: unset !important;
+  right: unset;
   left: 0;
-  transform: translate(0, -16px) !important;
+  transform: translate(0, -16px);
 }
