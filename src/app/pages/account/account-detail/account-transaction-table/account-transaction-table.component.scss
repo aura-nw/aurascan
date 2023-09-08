@@ -128,12 +128,12 @@
     }
   }
 
-  .explain-data {
-    transition: max-height 0.35s ease-in-out;
-    max-height: 0;
+  .explain-data:not(:first-child) {
+    transition: all 0.35s ease-in-out;
+    height: 0;
     overflow: hidden;
     &.show-detail {
-      max-height: 99999px;
+      height: 56px;
     }
   }
   .box-number {
