@@ -17,7 +17,13 @@
     }
   }
 }
-
+.box-filter {
+  .filter-time {
+    .input-group {
+      height: 40px;
+    }
+  }
+}
 .tnx-filter-item {
   height: 44px;
 }
@@ -25,6 +31,9 @@
 .tnx-filter-box {
   max-height: 356px;
   overflow-y: auto;
+  @media (max-width: 1366px) {
+    max-height: 280px;
+  }
   ::ng-deep {
     .form-group label {
       line-height: 18px !important;
@@ -96,8 +105,8 @@
     align-items: center;
     &.nft-column {
       display: block;
-      height: 52px !important;
-      margin-top: 12px;
+      height: 56px !important;
+      margin-top: 8px;
     }
   }
   .tab-nft .item-show {
@@ -122,12 +131,12 @@
     }
   }
 
-  .explain-data {
-    transition: max-height 0.35s ease-in-out;
-    max-height: 0;
+  .explain-data:not(:first-child) {
+    transition: all 0.35s ease-in-out;
+    height: 0;
     overflow: hidden;
     &.show-detail {
-      max-height: 99999px;
+      height: 56px;
     }
   }
   .box-number {

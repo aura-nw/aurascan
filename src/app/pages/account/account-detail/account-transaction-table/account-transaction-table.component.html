@@ -35,9 +35,9 @@
       <span class="d-lg-flex d-none">Filter</span>
     </button>
 
-    <mat-menu #filterMenu="matMenu" class="aura-menu-panel tsx-filter-panel text--white mt-2" [hasBackdrop]="false">
+    <mat-menu #filterMenu="matMenu" class="aura-menu-panel tsx-filter-panel text--white mt-2">
       <div
-        class="body fw-500 aura-form single-input-field"
+        class="body fw-500 aura-form single-input-field box-filter"
         (click)="$event.stopPropagation()"
         (keydown)="$event.stopPropagation()">
         <h3 class="mb-0 fw-bold text--white mb-4">Filter</h3>
@@ -73,19 +73,50 @@
           </div>
         </div>
         <!-- Date -->
-        <div class="d-flex flex-column p-0 mb-4">
-          <span class="text-sm mb-2">From - To</span>
-          <div class="input-group align-items-center d-flex justify-content-between pr-1 cursor-pointer">
-            <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
-              <input matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate" />
-              <input matEndDate placeholder="End date" [(ngModel)]="transactionFilter.endDate" class="pl-3" />
-            </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <div class="d-flex p-0 mb-4">
+          <div class="filter-time col-5">
+            <span class="form-label text-sm">Start date</span>
+            <div class="input-group input-group--simply pr-0 mt-2 cursor-pointer" (click)="pickerStart.open()">
+              <input
+                readOnly
+                #start_date
+                [matDatepicker]="pickerStart"
+                [max]="maxDate"
+                [style]="'max-width: 70%'"
+                [(ngModel)]="transactionFilter.startDate"
+                (ngModelChange)="setDateRange()"
+                class="cursor-pointer"
+                placeholder="Select" />
+              <div class="mr-3 h6 mb-0 position-relative mt-1">
+                <i class="ph-thin ph-calendar-blank h3 text--white"></i>
+                <mat-datepicker #pickerStart></mat-datepicker>
+              </div>
+            </div>
           </div>
-          <mat-date-range-picker #picker></mat-date-range-picker>
+          <div class="col-2 d-flex justify-content-center align-items-center mt-6">-</div>
+          <div class="filter-time col-5">
+            <span class="form-label text-sm">End date</span>
+            <div class="input-group input-group--simply pr-0 mt-2 cursor-pointer" (click)="pickerEnd.open()">
+              <input
+                readOnly
+                #end_date
+                [matDatepicker]="pickerEnd"
+                [min]="minDate"
+                [max]="maxDate"
+                [style]="'max-width: 70%'"
+                [(ngModel)]="transactionFilter.endDate"
+                (ngModelChange)="setDateRange()"
+                class="cursor-pointer"
+                placeholder="Select" />
+              <div class="mr-3 h6 mb-0 position-relative mt-1">
+                <i class="ph-thin ph-calendar-blank h3 text--white"></i>
+                <mat-datepicker #pickerEnd></mat-datepicker>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- txn type -->
-        <div class="d-flex flex-column p-0 mb-4">
+        <div class="d-flex flex-column p-0 mb-4" *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs">
           <span class="text-sm mb-2">Message Type</span>
           <button
             [matMenuTriggerFor]="tnxTypeMenu"
@@ -173,7 +204,7 @@
         <!-- Button action group -->
         <div class="divider divider-horizontal"></div>
         <div class="d-flex justify-content-between align-items-center pt-4">
-          <button class="button button-pill button-outline button--xlg" (click)="initTnxFilter(); searchType(false)">
+          <button class="button button-pill button-outline button--xlg" (click)="initTnxFilter(true); searchType(false)">
             <span>Reset</span>
           </button>
           <div class="d-flex">
@@ -393,14 +424,7 @@
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
                       <div class="item-show nft-column">
-                        <div>
-                          <app-name-tag
-                            [iconContract]="true"
-                            [url]="'contracts'"
-                            [value]="item.contractAddress"
-                            [isLink]="!item.contractAddress?.startsWith('0000')"></app-name-tag>
-                        </div>
-                        <div class="justify-content-between tokenId mt-1">
+                        <div class="justify-content-between tokenId">
                           <a
                             *ngIf="item.tokenId"
                             [routerLink]="['/tokens/' + linkToken, data.contractAddress, item.tokenId]"
@@ -408,6 +432,13 @@
                             >#{{ item.tokenId | stringEllipsis : (item.tokenId?.length > 8 ? 5 : 8) }}</a
                           >
                           <ng-container *ngIf="!item.tokenId">-</ng-container>
+                        </div>
+                        <div class="mt-1">
+                          <app-name-tag
+                            [iconContract]="true"
+                            [url]="'contracts'"
+                            [value]="item.contractAddress"
+                            [isLink]="!item.contractAddress?.startsWith('0000')"></app-name-tag>
                         </div>
                       </div>
                     </div>
