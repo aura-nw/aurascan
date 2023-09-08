@@ -9,7 +9,6 @@
   }
 }
 ::ng-deep .mat-menu-panel.tsx-filter-panel {
-  padding: 0;
   max-width: unset;
   border-radius: var(--spacer-2);
   .mat-menu-content {
@@ -33,6 +32,7 @@
     }
   }
   @media (min-width: 991.98px) {
+    padding: 0;
     .aura-form {
       width: 388px;
       min-height: 295px;
