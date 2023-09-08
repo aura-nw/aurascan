@@ -93,10 +93,7 @@ export class AccountTransactionTableComponent {
     private userService: UserService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
-  ) {
-    this.minDate = new Date(2023, 2, 20);
-    this.maxDate = new Date().toISOString().slice(0, 10);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.initTnxFilter();
@@ -132,6 +129,7 @@ export class AccountTransactionTableComponent {
           this.listTypeSelected += ', ' + type;
         }
       });
+      this.setDateRange();
     } else {
       this.transactionTypeKeyWord = '';
       this.listTypeSelected = '';
@@ -141,6 +139,8 @@ export class AccountTransactionTableComponent {
         type: [],
         typeTransfer: null,
       };
+      this.minDate = new Date(2023, 2, 20);
+      this.maxDate = new Date().toISOString().slice(0, 10);
     }
   }
 
