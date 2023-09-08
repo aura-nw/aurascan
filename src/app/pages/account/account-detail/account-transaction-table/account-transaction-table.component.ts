@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -26,6 +26,10 @@ export class AccountTransactionTableComponent {
   @Input() address: string;
   @Input() modeQuery: string;
   @Input() displayType: boolean = false;
+  @Input() savedFilter: any = null;
+  @Input() savedTab: any;
+  @Output() filterCondition = new EventEmitter<any>();
+  @Output() tabName = new EventEmitter<string>();
 
   transactionLoading = false;
   currentAddress: string;
@@ -117,15 +121,27 @@ export class AccountTransactionTableComponent {
     });
   }
 
-  initTnxFilter() {
-    this.transactionTypeKeyWord = '';
-    this.listTypeSelected = '';
-    this.transactionFilter = {
-      startDate: null,
-      endDate: null,
-      type: [],
-      typeTransfer: null,
-    };
+  initTnxFilter(isReset = false) {
+    if (this.savedFilter !== null && this.savedTab === this.modeQuery && !isReset) {
+      this.transactionFilter = this.savedFilter;
+      this.transactionFilter.type.forEach((element, index) => {
+        let type = _.find(TYPE_TRANSACTION, { label: element })?.value;
+        if (!this.listTypeSelected) {
+          this.listTypeSelected = type;
+        } else {
+          this.listTypeSelected += ', ' + type;
+        }
+      });
+    } else {
+      this.transactionTypeKeyWord = '';
+      this.listTypeSelected = '';
+      this.transactionFilter = {
+        startDate: null,
+        endDate: null,
+        type: [],
+        typeTransfer: null,
+      };
+    }
   }
 
   onChangeTnxFilterType(event, type: any) {
@@ -177,6 +193,7 @@ export class AccountTransactionTableComponent {
 
   clearFilterSearch(isResetFilter = true) {
     this.tnxType = this.tnxTypeOrigin;
+    this.savedFilter = null;
     this.getListTypeFilter();
     this.transactionTypeKeyWord = '';
     if (isResetFilter) {
@@ -192,6 +209,8 @@ export class AccountTransactionTableComponent {
     this.nextKey = null;
     this.currentKey = null;
     this.isSearch = isSearch;
+    this.filterCondition.emit(this.transactionFilter);
+    this.tabName.emit(this.modeQuery);
     this.getTxsAddress();
   }
 
@@ -273,7 +292,7 @@ export class AccountTransactionTableComponent {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'Token ID', headerWidth: 15 });
+        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 15 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;
@@ -416,5 +435,10 @@ export class AccountTransactionTableComponent {
       this.getTxsAddress(this.nextKey);
       this.currentKey = this.nextKey;
     }
+  }
+
+  setDateRange() {
+    this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
+    this.minDate = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
   }
 }
