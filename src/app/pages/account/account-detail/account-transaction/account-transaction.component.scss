@@ -9,6 +9,7 @@
   }
 }
 ::ng-deep .mat-menu-panel.tsx-filter-panel {
+  padding: 0;
   max-width: unset;
   border-radius: var(--spacer-2);
   .mat-menu-content {

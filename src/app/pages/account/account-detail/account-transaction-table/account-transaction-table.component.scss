@@ -31,6 +31,9 @@
 .tnx-filter-box {
   max-height: 356px;
   overflow-y: auto;
+  @media (max-width: 1366px) {
+    max-height: 280px;
+  }
   ::ng-deep {
     .form-group label {
       line-height: 18px !important;
