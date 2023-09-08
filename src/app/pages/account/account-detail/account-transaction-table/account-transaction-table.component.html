@@ -73,8 +73,8 @@
           </div>
         </div>
         <!-- Date -->
-        <div class="d-flex flex-column p-0 mb-4">
-          <span class="text-sm mb-2">From - To</span>
+        <div class="d-flex p-0 mb-4">
+          <!-- <span class="text-sm mb-2">From - To</span>
           <div class="input-group align-items-center d-flex justify-content-between pr-1 cursor-pointer">
             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
               <input matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate" />
@@ -82,10 +82,52 @@
             </mat-date-range-input>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           </div>
-          <mat-date-range-picker #picker></mat-date-range-picker>
+          <mat-date-range-picker #picker></mat-date-range-picker> -->
+
+          <!-- <mat-form-field>
+            <input readOnly placeholder="mm/dd/yyyy" matInput [matDatepicker]="picker">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field> -->
+
+          <div class="filter-time col-5">
+            <label for="amount" class="form-label body-01">Start date</label>
+            <div class="input-group input-group--simply pr-0">
+              <input
+                readOnly
+                #start_date
+                [matDatepicker]="pickerStart"
+                [min]="currDate"
+                [style]="'max-width: 70%'"
+                [(ngModel)]="transactionFilter.startDate"
+                placeholder="yyyy-mm-dd" />
+              <div class="mr-5 h6 mb-0 text--white position-relative">
+                <i class="ph-calendar-blank-fill cursor-pointer" (click)="pickerStart.open()"></i>
+                <mat-datepicker #pickerStart></mat-datepicker>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 d-flex justify-content-center align-items-center mt-3">-</div>
+          <div class="filter-time col-5">
+            <label for="amount" class="form-label body-01">End date</label>
+            <div class="input-group input-group--simply pr-0">
+              <input
+                readOnly
+                #end_date
+                [matDatepicker]="pickerEnd"
+                [min]="currDate"
+                [style]="'max-width: 70%'"
+                [(ngModel)]="transactionFilter.startDate"
+                placeholder="yyyy-mm-dd" />
+              <div class="mr-5 h6 mb-0 text--white position-relative">
+                <i class="ph-calendar-blank-fill cursor-pointer" (click)="pickerEnd.open()"></i>
+                <mat-datepicker #pickerEnd></mat-datepicker>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- txn type -->
-        <div class="d-flex flex-column p-0 mb-4">
+        <div class="d-flex flex-column p-0 mb-4" *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs">
           <span class="text-sm mb-2">Message Type</span>
           <button
             [matMenuTriggerFor]="tnxTypeMenu"
@@ -393,14 +435,7 @@
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
                       <div class="item-show nft-column">
-                        <div>
-                          <app-name-tag
-                            [iconContract]="true"
-                            [url]="'contracts'"
-                            [value]="item.contractAddress"
-                            [isLink]="!item.contractAddress?.startsWith('0000')"></app-name-tag>
-                        </div>
-                        <div class="justify-content-between tokenId mt-1">
+                        <div class="justify-content-between tokenId">
                           <a
                             *ngIf="item.tokenId"
                             [routerLink]="['/tokens/' + linkToken, data.contractAddress, item.tokenId]"
@@ -408,6 +443,13 @@
                             >#{{ item.tokenId | stringEllipsis : (item.tokenId?.length > 8 ? 5 : 8) }}</a
                           >
                           <ng-container *ngIf="!item.tokenId">-</ng-container>
+                        </div>
+                        <div class="mt-1">
+                          <app-name-tag
+                            [iconContract]="true"
+                            [url]="'contracts'"
+                            [value]="item.contractAddress"
+                            [isLink]="!item.contractAddress?.startsWith('0000')"></app-name-tag>
                         </div>
                       </div>
                     </div>
