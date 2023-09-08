@@ -17,7 +17,13 @@
     }
   }
 }
-
+.box-filter {
+  .filter-time {
+    .input-group {
+      height: 40px;
+    }
+  }
+}
 .tnx-filter-item {
   height: 44px;
 }
@@ -96,8 +102,8 @@
     align-items: center;
     &.nft-column {
       display: block;
-      height: 52px !important;
-      margin-top: 12px;
+      height: 56px !important;
+      margin-top: 8px;
     }
   }
   .tab-nft .item-show {

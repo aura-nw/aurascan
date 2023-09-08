@@ -121,10 +121,17 @@ export class AccountTransactionTableComponent {
     });
   }
 
-  initTnxFilter() {
-    if (this.savedFilter !== null && this.savedTab === this.modeQuery) {
+  initTnxFilter(isReset = false) {
+    if (this.savedFilter !== null && this.savedTab === this.modeQuery && !isReset) {
       this.transactionFilter = this.savedFilter;
-      this.listTypeSelected = this.transactionFilter.type;
+      this.transactionFilter.type.forEach((element, index) => {
+        let type = _.find(TYPE_TRANSACTION, { label: element })?.value;
+        if (!this.listTypeSelected) {
+          this.listTypeSelected = type;
+        } else {
+          this.listTypeSelected += ', ' + type;
+        }
+      });
     } else {
       this.transactionTypeKeyWord = '';
       this.listTypeSelected = '';
@@ -186,6 +193,7 @@ export class AccountTransactionTableComponent {
 
   clearFilterSearch(isResetFilter = true) {
     this.tnxType = this.tnxTypeOrigin;
+    this.savedFilter = null;
     this.getListTypeFilter();
     this.transactionTypeKeyWord = '';
     if (isResetFilter) {
@@ -202,8 +210,6 @@ export class AccountTransactionTableComponent {
     this.currentKey = null;
     this.isSearch = isSearch;
     this.filterCondition.emit(this.transactionFilter);
-    console.log(this.modeQuery);
-
     this.tabName.emit(this.modeQuery);
     this.getTxsAddress();
   }
@@ -286,7 +292,7 @@ export class AccountTransactionTableComponent {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'Token ID', headerWidth: 15 });
+        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 15 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;
@@ -429,5 +435,10 @@ export class AccountTransactionTableComponent {
       this.getTxsAddress(this.nextKey);
       this.currentKey = this.nextKey;
     }
+  }
+
+  setDateRange() {
+    this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
+    this.minDate = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
   }
 }
