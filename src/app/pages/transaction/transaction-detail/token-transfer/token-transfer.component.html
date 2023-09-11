@@ -147,8 +147,8 @@
 
             <ng-template #defaultValues>-</ng-template>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsFTs"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsFTs"></tr>
           </table>
         </div>
         <!-- <div *ngIf="assetsLoading" class="mt-14">
