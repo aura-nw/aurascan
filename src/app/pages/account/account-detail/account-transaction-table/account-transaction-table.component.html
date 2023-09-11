@@ -60,13 +60,13 @@
               <i class="ph-light ph-funnel-simple text--white h1"></i>
             </button>
             <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
-              <li class="dropdown-item cursor-pointer" (click)="changeTypeFilter('All type')">
+              <li class="dropdown-item cursor-pointer py-2" (click)="changeTypeFilter('All type')">
                 <button type="button" class="button p-0">All type</button>
               </li>
-              <li class="dropdown-item cursor-pointer" (click)="changeTypeFilter(accountTxType.Sent)">
+              <li class="dropdown-item cursor-pointer py-2" (click)="changeTypeFilter(accountTxType.Sent)">
                 <button type="button" class="button p-0">Sent</button>
               </li>
-              <li class="dropdown-item cursor-pointer" (click)="changeTypeFilter(accountTxType.Received)">
+              <li class="dropdown-item cursor-pointer py-2" (click)="changeTypeFilter(accountTxType.Received)">
                 <button type="button" class="button p-0">Receive</button>
               </li>
             </ul>
@@ -84,11 +84,11 @@
                 [max]="maxDate"
                 [style]="'max-width: 70%'"
                 [(ngModel)]="transactionFilter.startDate"
-                (ngModelChange)="setDateRange()"
+                (ngModelChange)="setDateRange(true)"
                 class="cursor-pointer"
                 placeholder="Select" />
-              <div class="mr-3 h6 mb-0 position-relative mt-1">
-                <i class="ph-thin ph-calendar-blank h3 text--white"></i>
+              <div class="mr-2 mr-lg-3 h6 mb-0 position-relative mt-1">
+                <i class="ph-thin ph-calendar-blank h3 text--white h6-mob"></i>
                 <mat-datepicker #pickerStart></mat-datepicker>
               </div>
             </div>
@@ -108,8 +108,8 @@
                 (ngModelChange)="setDateRange()"
                 class="cursor-pointer"
                 placeholder="Select" />
-              <div class="mr-3 h6 mb-0 position-relative mt-1">
-                <i class="ph-thin ph-calendar-blank h3 text--white"></i>
+              <div class="mr-2 mr-lg-3 h6 mb-0 position-relative mt-1">
+                <i class="ph-thin ph-calendar-blank h3 text--white h6-mob"></i>
                 <mat-datepicker #pickerEnd></mat-datepicker>
               </div>
             </div>
@@ -176,6 +176,7 @@
                     type="checkbox"
                     id="all"
                     (change)="onChangeTnxFilterType($event, 'all')"
+                    [checked]="checkAll"
                     class="check-box check-box--dark" />
                   <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
                 </div>
@@ -204,7 +205,9 @@
         <!-- Button action group -->
         <div class="divider divider-horizontal"></div>
         <div class="d-flex justify-content-between align-items-center pt-4">
-          <button class="button button-pill button-outline button--xlg" (click)="initTnxFilter(true); searchType(false)">
+          <button
+            class="button button-pill button-outline button--xlg"
+            (click)="initTnxFilter(true); searchType(false)">
             <span>Reset</span>
           </button>
           <div class="d-flex">
@@ -349,8 +352,10 @@
                       <div class="item-show justify-content-between">
                         <app-name-tag
                           [value]="item.fromAddress || currentAddress"
+                          [url]="(item.fromAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
+                          [iconContract]="(item.fromAddress || currentAddress)?.length > lengthAddress"
                           [isLink]="
-                            !(data.fromAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
+                            !(item.fromAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
                             item.fromAddress !== currentAddress
                           "></app-name-tag>
                         <div class="box-token-transfer">
@@ -396,7 +401,7 @@
                             [url]="(item.toAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
                             [iconContract]="(item.toAddress || currentAddress)?.length > lengthAddress"
                             [isLink]="
-                              !(data.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
+                              !(item.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
                               item.toAddress !== currentAddress
                             "></app-name-tag>
                         </div>
