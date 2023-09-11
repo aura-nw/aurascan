@@ -23,6 +23,7 @@
       height: 40px;
     }
   }
+  padding: 16px;
   @media (max-width: 376px) {
     width: calc(100vw - 68px);
   }
@@ -38,7 +39,7 @@
     max-height: 280px;
   }
   @media (max-width: 414px) {
-    max-height: 180px;
+    max-height: 210px;
   }
   ::ng-deep {
     .form-group label {
