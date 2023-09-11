@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, Output, ViewChild} from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +15,8 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import {MatSelect} from "@angular/material/select";
+import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-account-transaction-table',
@@ -30,6 +32,13 @@ export class AccountTransactionTableComponent {
   @Input() savedTab: any;
   @Output() filterCondition = new EventEmitter<any>();
   @Output() tabName = new EventEmitter<string>();
+
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+
+  @HostListener('window:scroll', ['$event'])
+  closeFilterPanelSection(_) {
+    this.trigger.closeMenu();
+  }
 
   transactionLoading = false;
   currentAddress: string;
