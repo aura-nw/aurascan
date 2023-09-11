@@ -23,6 +23,9 @@
       height: 40px;
     }
   }
+  @media (max-width: 376px) {
+    width: calc(100vw - 68px);
+  }
 }
 .tnx-filter-item {
   height: 44px;
@@ -33,6 +36,9 @@
   overflow-y: auto;
   @media (max-width: 1366px) {
     max-height: 280px;
+  }
+  @media (max-width: 414px) {
+    max-height: 180px;
   }
   ::ng-deep {
     .form-group label {

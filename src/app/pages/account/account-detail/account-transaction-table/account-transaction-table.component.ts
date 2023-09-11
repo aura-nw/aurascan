@@ -197,6 +197,7 @@ export class AccountTransactionTableComponent {
     this.getListTypeFilter();
     this.transactionTypeKeyWord = '';
     if (isResetFilter) {
+      this.transactionFilter.type = [];
       this.listTypeSelected = '';
     }
   }
@@ -437,8 +438,10 @@ export class AccountTransactionTableComponent {
     }
   }
 
-  setDateRange() {
-    this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
+  setDateRange(isStartDate = false) {
+    if (isStartDate) {
+      this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
+    }
     this.minDate = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
   }
 }
