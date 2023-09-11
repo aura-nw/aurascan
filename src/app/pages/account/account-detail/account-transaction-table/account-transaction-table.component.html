@@ -176,6 +176,7 @@
                     type="checkbox"
                     id="all"
                     (change)="onChangeTnxFilterType($event, 'all')"
+                    [checked]="listTypeSelected.length > 0"
                     class="check-box check-box--dark" />
                   <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
                 </div>
