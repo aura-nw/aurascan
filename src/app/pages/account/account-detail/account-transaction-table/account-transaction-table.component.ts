@@ -72,6 +72,7 @@ export class AccountTransactionTableComponent {
   };
   nextKey = null;
   currentKey = null;
+  checkAll = false;
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile: any[];
@@ -142,6 +143,7 @@ export class AccountTransactionTableComponent {
     } else {
       this.transactionTypeKeyWord = '';
       this.listTypeSelected = '';
+      this.checkAll = false;
       this.transactionFilter = {
         startDate: null,
         endDate: null,
@@ -156,6 +158,7 @@ export class AccountTransactionTableComponent {
   onChangeTnxFilterType(event, type: any) {
     if (event.target.checked) {
       if (type === 'all') {
+        this.checkAll = true;
         this.transactionFilter.type = null;
         this.listTypeSelected = 'All';
       } else {
@@ -174,6 +177,7 @@ export class AccountTransactionTableComponent {
       if (type === 'all') {
         this.transactionFilter.type = [];
         this.listTypeSelected = '';
+        this.checkAll = false;
       } else {
         this.transactionFilter.type.forEach((element, index) => {
           if (element === type.label) {
