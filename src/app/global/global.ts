@@ -394,25 +394,26 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       case TabsAccountLink.AuraTxs:
         let arrTemp = [];
         element?.data?.tx_response?.logs?.forEach((data) => {
-          const coinArrReceiver = _.get(data, 'events')?.find(
-            (k) => k.type === 'coin_received',
-          )?.attributes;
-          const coinArrSpent = _.get(data, 'events')?.find(
-            (k) => k.type === 'coin_spent',
-          )?.attributes;
+          const coinArrReceiver = _.get(data, 'events')?.find((k) => k.type === 'coin_received')?.attributes;
+          const coinArrSpent = _.get(data, 'events')?.find((k) => k.type === 'coin_spent')?.attributes;
           for (let i = 0; i < coinArrReceiver?.length; i++) {
             if (
               (coinArrReceiver[i]?.key === 'receiver' && coinArrReceiver[i]?.value === currentAddress) ||
               (coinArrSpent[i]?.key === 'spender' && coinArrSpent[i]?.value === currentAddress)
             ) {
-              let { type, action } = getTypeTx(element, i);
-              toAddress = coinArrReceiver[i]?.value;
-              fromAddress = coinArrSpent[i]?.value;
-              let amountTemp = coinArrReceiver[i + 1]?.value?.match(/\d+/g)[0];
-              let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
-              let denom = coinInfo.coinDenom;
-              const result = { type, toAddress, fromAddress, amount, denom, action };
-              arrTemp.push(result);
+              if (
+                coinArrReceiver[i + 1]?.value?.indexOf(coinInfo.coinMinimalDenom) > -1 ||
+                coinArrReceiver[i - 1]?.value?.indexOf(coinInfo.coinMinimalDenom) > -1
+              ) {
+                let { type, action } = getTypeTx(element, i);
+                toAddress = coinArrReceiver[i]?.value;
+                fromAddress = coinArrSpent[i]?.value;
+                let amountTemp = (coinArrReceiver[i + 1] || coinArrReceiver[i - 1])?.value?.match(/\d+/g)[0];
+                let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
+                let denom = coinInfo.coinDenom;
+                const result = { type, toAddress, fromAddress, amount, denom, action };
+                arrTemp.push(result);
+              }
             }
           }
         });
@@ -495,14 +496,14 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       arrEvent,
       limit,
       action,
-      eventAttr
+      eventAttr,
     };
   });
   return txs;
 }
 
 export function getTypeTx(element, index = 0) {
-  let type = element?.transaction_messages[element?.transaction_messages?.length - 1]?.content["@type"];
+  let type = element?.transaction_messages[element?.transaction_messages?.length - 1]?.content['@type'];
   let action;
   if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
     try {

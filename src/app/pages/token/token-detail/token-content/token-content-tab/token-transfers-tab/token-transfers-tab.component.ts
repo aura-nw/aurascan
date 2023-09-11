@@ -152,7 +152,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         if (res) {
           this.nextKey = null;
           if (res.transaction.length >= 100) {
-            this.nextKey = res?.transaction[res.transaction.length - 1].height;
+            this.nextKey = res?.transaction[res.transaction.length - 1]?.height;
             this.hasMore.emit(true);
           } else {
             this.hasMore.emit(false);
@@ -163,7 +163,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           txs.forEach((element, index) => {
             element['from_address'] = element.fromAddress;
             element['to_address'] = element.toAddress;
-            element['token_id'] = element.tokenId;
+            element['token_id'] = element.arrEvent?.length > 1 ? 'More' : element.tokenId;
             element['type'] = res.transaction[index]?.events[0]?.smart_contract_events[0]?.cw721_activity?.action;
             if (this.typeContract === this.contractType.CW4973) {
               if (element['type'] === 'mint') {

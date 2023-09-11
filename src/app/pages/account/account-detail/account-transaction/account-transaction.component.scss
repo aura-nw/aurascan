@@ -2,10 +2,13 @@
   width: 420px;
 }
 ::ng-deep .mat-menu-panel.tnx-type-panel {
-  width: 388px;
+  width: 355px;
   max-width: unset;
   @media (max-width: 414px) {
-    transform: translateX(16px);
+    width: 310px;
+  }  
+  @media (max-width: 376px) {
+    width: 275px;
   }
 }
 ::ng-deep .mat-menu-panel.tsx-filter-panel {
@@ -35,8 +38,7 @@
   @media (min-width: 991.98px) {
     .aura-form {
       width: 388px;
-      min-height: 295px;
-      padding: 16px;
+      min-height: 300px;
     }
   }
 }
