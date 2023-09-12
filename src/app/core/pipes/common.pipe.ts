@@ -136,7 +136,7 @@ export class displayTypeToolTip implements PipeTransform {
         }
       }
     });
-    if (value?.length > 4) {
+    if (value?.length > 5) {
       result += ', ...';
     }
     return result;

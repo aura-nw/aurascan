@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from "@angular/material/menu";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -26,6 +27,17 @@ export class AccountTransactionTableComponent {
   @Input() address: string;
   @Input() modeQuery: string;
   @Input() displayType: boolean = false;
+  @Input() savedFilter: any = null;
+  @Input() savedTab: any;
+  @Output() filterCondition = new EventEmitter<any>();
+  @Output() tabName = new EventEmitter<string>();
+
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+
+  @HostListener('window:scroll', ['$event'])
+  closeFilterPanelSection(_) {
+    this.trigger.closeMenu();
+  }
 
   transactionLoading = false;
   currentAddress: string;
@@ -59,6 +71,7 @@ export class AccountTransactionTableComponent {
   };
   nextKey = null;
   currentKey = null;
+  checkAll = false;
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile: any[];
@@ -73,6 +86,8 @@ export class AccountTransactionTableComponent {
   isSearch = false;
   minDate;
   maxDate;
+  minDateEnd;
+  maxDateEnd;
   linkToken = 'token-nft';
   typeTx = [AccountTxType.Sent, AccountTxType.Received];
 
@@ -89,10 +104,7 @@ export class AccountTransactionTableComponent {
     private userService: UserService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
-  ) {
-    this.minDate = new Date(2023, 2, 20);
-    this.maxDate = new Date().toISOString().slice(0, 10);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.initTnxFilter();
@@ -117,20 +129,37 @@ export class AccountTransactionTableComponent {
     });
   }
 
-  initTnxFilter() {
-    this.transactionTypeKeyWord = '';
-    this.listTypeSelected = '';
-    this.transactionFilter = {
-      startDate: null,
-      endDate: null,
-      type: [],
-      typeTransfer: null,
-    };
+  initTnxFilter(isReset = false) {
+    if (this.savedFilter !== null && this.savedTab === this.modeQuery && !isReset) {
+      this.transactionFilter = this.savedFilter;
+      this.transactionFilter.type.forEach((element, index) => {
+        let type = _.find(TYPE_TRANSACTION, { label: element })?.value;
+        if (!this.listTypeSelected) {
+          this.listTypeSelected = type;
+        } else {
+          this.listTypeSelected += ', ' + type;
+        }
+      });
+      this.setDateRange();
+    } else {
+      this.transactionTypeKeyWord = '';
+      this.listTypeSelected = '';
+      this.checkAll = false;
+      this.transactionFilter = {
+        startDate: null,
+        endDate: null,
+        type: [],
+        typeTransfer: null,
+      };
+      this.minDate = this.minDateEnd = new Date(2023, 2, 20);
+      this.maxDateEnd = this.maxDate = new Date().toISOString().slice(0, 10);
+    }
   }
 
   onChangeTnxFilterType(event, type: any) {
     if (event.target.checked) {
       if (type === 'all') {
+        this.checkAll = true;
         this.transactionFilter.type = null;
         this.listTypeSelected = 'All';
       } else {
@@ -149,6 +178,7 @@ export class AccountTransactionTableComponent {
       if (type === 'all') {
         this.transactionFilter.type = [];
         this.listTypeSelected = '';
+        this.checkAll = false;
       } else {
         this.transactionFilter.type.forEach((element, index) => {
           if (element === type.label) {
@@ -177,9 +207,11 @@ export class AccountTransactionTableComponent {
 
   clearFilterSearch(isResetFilter = true) {
     this.tnxType = this.tnxTypeOrigin;
+    this.savedFilter = null;
     this.getListTypeFilter();
     this.transactionTypeKeyWord = '';
     if (isResetFilter) {
+      this.transactionFilter.type = [];
       this.listTypeSelected = '';
     }
   }
@@ -192,6 +224,8 @@ export class AccountTransactionTableComponent {
     this.nextKey = null;
     this.currentKey = null;
     this.isSearch = isSearch;
+    this.filterCondition.emit(this.transactionFilter);
+    this.tabName.emit(this.modeQuery);
     this.getTxsAddress();
   }
 
@@ -366,7 +400,8 @@ export class AccountTransactionTableComponent {
         setReceive = true;
       }
 
-      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive, this.currentAddress);
+      const coinConfig = this.environmentService.configValue.coins;
+      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive, this.currentAddress, coinConfig);
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
       } else {
@@ -416,5 +451,12 @@ export class AccountTransactionTableComponent {
       this.getTxsAddress(this.nextKey);
       this.currentKey = this.nextKey;
     }
+  }
+
+  setDateRange() {
+    this.maxDateEnd =  new Date().toISOString().slice(0, 10);
+    this.minDate = new Date(2023, 2, 20);
+    this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
+    this.minDateEnd = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
   }
 }

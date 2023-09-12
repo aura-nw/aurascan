@@ -19,9 +19,11 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!transactionLoading && !displayType" class="mb-0 text--gray-5 caption-mob fw-normal">
-    {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
-    found
+  <div class="mb-0 text--gray-5 caption-mob fw-normal">
+    <ng-container *ngIf="!transactionLoading && !displayType">
+      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+      found
+    </ng-container>
   </div>
   <div>
     <button
@@ -33,9 +35,9 @@
       <span class="d-lg-flex d-none">Filter</span>
     </button>
 
-    <mat-menu #filterMenu="matMenu" class="aura-menu-panel tsx-filter-panel text--white mt-2" [hasBackdrop]="false">
+    <mat-menu #filterMenu="matMenu" class="aura-menu-panel tsx-filter-panel text--white mt-2">
       <div
-        class="body fw-500 aura-form single-input-field"
+        class="body fw-500 aura-form single-input-field box-filter"
         (click)="$event.stopPropagation()"
         (keydown)="$event.stopPropagation()">
         <h3 class="mb-0 fw-bold text--white mb-4">Filter</h3>
@@ -50,9 +52,6 @@
               id="typeActionBtn"
               aria-expanded="false">
               <span class="body">
-                <!-- {{
-                transactionFilter.typeTransfer?.length > 0 ? transactionFilter.typeTransfer : 'Select a type'
-              }} -->
                 <ng-container *ngIf="!transactionFilter.typeTransfer"> Select a type </ng-container>
                 <span *ngIf="transactionFilter.typeTransfer?.length > 0" class="text--white"
                   >{{ transactionFilter.typeTransfer }}
@@ -61,32 +60,64 @@
               <i class="ph-light ph-funnel-simple text--white h1"></i>
             </button>
             <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
-              <li class="dropdown-item cursor-pointer" (click)="changeTypeFilter('All type')">
+              <li class="dropdown-item cursor-pointer py-2" (click)="changeTypeFilter('All type')">
                 <button type="button" class="button p-0">All type</button>
               </li>
-              <li class="dropdown-item cursor-pointer" (click)="changeTypeFilter(accountTxType.Sent)">
+              <li class="dropdown-item cursor-pointer py-2" (click)="changeTypeFilter(accountTxType.Sent)">
                 <button type="button" class="button p-0">Sent</button>
               </li>
-              <li class="dropdown-item cursor-pointer" (click)="changeTypeFilter(accountTxType.Received)">
+              <li class="dropdown-item cursor-pointer py-2" (click)="changeTypeFilter(accountTxType.Received)">
                 <button type="button" class="button p-0">Receive</button>
               </li>
             </ul>
           </div>
         </div>
         <!-- Date -->
-        <div class="d-flex flex-column p-0 mb-4">
-          <span class="text-sm mb-2">From - To</span>
-          <div class="input-group align-items-center d-flex justify-content-between pr-1 cursor-pointer">
-            <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
-              <input matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate" />
-              <input matEndDate placeholder="End date" [(ngModel)]="transactionFilter.endDate" class="pl-3" />
-            </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <div class="d-flex p-0 mb-4">
+          <div class="filter-time col-5">
+            <span class="form-label text-sm">Start date</span>
+            <div class="input-group input-group--simply pr-0 mt-2 cursor-pointer" (click)="pickerStart.open()">
+              <input
+                readOnly
+                #start_date
+                [matDatepicker]="pickerStart"
+                [min]="minDate"
+                [max]="maxDate"
+                [style]="'max-width: 70%'"
+                [(ngModel)]="transactionFilter.startDate"
+                (ngModelChange)="setDateRange()"
+                class="cursor-pointer"
+                placeholder="Select" />
+              <div class="mr-2 mr-lg-3 h6 mb-0 position-relative mt-1">
+                <i class="ph-thin ph-calendar-blank h3 text--white h6-mob"></i>
+                <mat-datepicker #pickerStart></mat-datepicker>
+              </div>
+            </div>
           </div>
-          <mat-date-range-picker #picker></mat-date-range-picker>
+          <div class="col-2 d-flex justify-content-center align-items-center mt-6">-</div>
+          <div class="filter-time col-5">
+            <span class="form-label text-sm">End date</span>
+            <div class="input-group input-group--simply pr-0 mt-2 cursor-pointer" (click)="pickerEnd.open()">
+              <input
+                readOnly
+                #end_date
+                [matDatepicker]="pickerEnd"
+                [min]="minDateEnd"
+                [max]="maxDateEnd"
+                [style]="'max-width: 70%'"
+                [(ngModel)]="transactionFilter.endDate"
+                (ngModelChange)="setDateRange()"
+                class="cursor-pointer"
+                placeholder="Select" />
+              <div class="mr-2 mr-lg-3 h6 mb-0 position-relative mt-1">
+                <i class="ph-thin ph-calendar-blank h3 text--white h6-mob"></i>
+                <mat-datepicker #pickerEnd></mat-datepicker>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- txn type -->
-        <div class="d-flex flex-column p-0 mb-4">
+        <div class="d-flex flex-column p-0 mb-4" *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs">
           <span class="text-sm mb-2">Message Type</span>
           <button
             [matMenuTriggerFor]="tnxTypeMenu"
@@ -146,6 +177,7 @@
                     type="checkbox"
                     id="all"
                     (change)="onChangeTnxFilterType($event, 'all')"
+                    [checked]="checkAll"
                     class="check-box check-box--dark" />
                   <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
                 </div>
@@ -174,7 +206,9 @@
         <!-- Button action group -->
         <div class="divider divider-horizontal"></div>
         <div class="d-flex justify-content-between align-items-center pt-4">
-          <button class="button button-pill button-outline button--xlg" (click)="initTnxFilter(); searchType(false)">
+          <button
+            class="button button-pill button-outline button--xlg"
+            (click)="initTnxFilter(true); searchType(false)">
             <span>Reset</span>
           </button>
           <div class="d-flex">
@@ -283,7 +317,7 @@
                 </div>
                 <div *ngSwitchCase="'fee'">
                   {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                  <span class="text--primary">{{ denom }}</span>
+                  <span class="text--white">{{ denom }}</span>
                 </div>
                 <div *ngSwitchCase="'amount'">
                   <ng-container *ngFor="let item of data.arrEvent; let index = index">
@@ -319,8 +353,10 @@
                       <div class="item-show justify-content-between">
                         <app-name-tag
                           [value]="item.fromAddress || currentAddress"
+                          [url]="(item.fromAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
+                          [iconContract]="(item.fromAddress || currentAddress)?.length > lengthAddress"
                           [isLink]="
-                            !(data.fromAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
+                            !(item.fromAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
                             item.fromAddress !== currentAddress
                           "></app-name-tag>
                         <div class="box-token-transfer">
@@ -366,7 +402,7 @@
                             [url]="(item.toAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
                             [iconContract]="(item.toAddress || currentAddress)?.length > lengthAddress"
                             [isLink]="
-                              !(data.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
+                              !(item.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
                               item.toAddress !== currentAddress
                             "></app-name-tag>
                         </div>
@@ -394,14 +430,7 @@
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
                       <div class="item-show nft-column">
-                        <div>
-                          <app-name-tag
-                            [iconContract]="true"
-                            [url]="'contracts'"
-                            [value]="item.contractAddress"
-                            [isLink]="!item.contractAddress?.startsWith('0000')"></app-name-tag>
-                        </div>
-                        <div class="justify-content-between tokenId mt-1">
+                        <div class="justify-content-between tokenId">
                           <a
                             *ngIf="item.tokenId"
                             [routerLink]="['/tokens/' + linkToken, data.contractAddress, item.tokenId]"
@@ -409,6 +438,13 @@
                             >#{{ item.tokenId | stringEllipsis : (item.tokenId?.length > 8 ? 5 : 8) }}</a
                           >
                           <ng-container *ngIf="!item.tokenId">-</ng-container>
+                        </div>
+                        <div class="mt-1">
+                          <app-name-tag
+                            [iconContract]="true"
+                            [url]="'contracts'"
+                            [value]="item.contractAddress"
+                            [isLink]="!item.contractAddress?.startsWith('0000')"></app-name-tag>
                         </div>
                       </div>
                     </div>
@@ -456,7 +492,7 @@
         {
           label: 'Fee',
           class: 'text--gray-1 body-02-mob',
-          info: (data.fee | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
+          info: (data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
         }
       ]"></app-card-mob-account>
   </div>

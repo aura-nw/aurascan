@@ -55,6 +55,9 @@
                     class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
                 </a>
               </div>
+
+              <app-tooltip-customize *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
+                  [content]="commonService.setNameTag(currentAddress)"></app-tooltip-customize>
             </div>
           </div>
 

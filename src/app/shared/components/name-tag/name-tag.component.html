@@ -12,7 +12,7 @@
       [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
-    <app-tooltip-customize class="{{ tooltipPosition }}" [content]="displayContent(paramUrl || value)">
+    <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
     </app-tooltip-customize>
   </div>
   <div class="aura-tooltip-contain">
@@ -28,7 +28,7 @@
       [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
       <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
     </a>
-    <app-tooltip-customize class="{{ tooltipPosition }}" [content]="displayContent(paramUrl || value)">
+    <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
     </app-tooltip-customize>
   </div>
 </ng-container>
@@ -66,7 +66,7 @@
         </a>
       </ng-container>
     </span>
-    <app-tooltip-customize class="{{ tooltipPosition }}" [content]="displayContent(paramUrl || value)">
+    <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
     </app-tooltip-customize>
   </div>
 </ng-template>
