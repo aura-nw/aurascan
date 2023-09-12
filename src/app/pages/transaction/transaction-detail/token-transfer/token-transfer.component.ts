@@ -1,35 +1,56 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { Globals } from 'src/app/global/global';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 
 @Component({
   selector: 'app-token-transfer',
   templateUrl: './token-transfer.component.html',
   styleUrls: ['./token-transfer.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class TokenTransferComponent implements OnInit {
-  @Input() isNFT: boolean;
-  dataSource = new MatTableDataSource<any>([]);
+  @Input() height: Number;
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  dataSourceFTs = new MatTableDataSource<any>([]);
+  dataSourceNFTs = new MatTableDataSource<any>([]);
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 10,
     pageIndex: 1,
   };
   templatesFTs: Array<TableTemplate> = [
-    { matColumnDef: 'asset', headerCellDef: 'asset' },
-    { matColumnDef: 'contractAddress', headerCellDef: 'contractAddress' },
-    { matColumnDef: 'price', headerCellDef: 'price' },
+    { matColumnDef: 'assets', headerCellDef: 'assets' },
     { matColumnDef: 'amount', headerCellDef: 'amount' },
-    { matColumnDef: 'value', headerCellDef: 'value' },
+    { matColumnDef: 'transfer', headerCellDef: 'transfer' },
+  ];
+
+  templatesNFTs: Array<TableTemplate> = [
+    { matColumnDef: 'nft', headerCellDef: 'nft' },
+    { matColumnDef: 'transfer', headerCellDef: 'transfer' },
+    { matColumnDef: 'action', headerCellDef: 'action' },
   ];
   displayedColumnsFTs: string[] = this.templatesFTs.map((dta) => dta.matColumnDef);
+  displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
 
-  constructor(public global: Globals, public router: Router) {}
+  constructor(
+    private environmentService: EnvironmentService,
+    public router: Router,
+    private transactionService: TransactionService,
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.transactionService.getListTransferFromTx(this.height).subscribe((res) => {
+      if (res?.cw721_activity.length > 0) {
+        this.dataSourceNFTs.data = res.cw721_activity;
+      }
+      if (res.cw20_activity.length > 0) {
+        this.dataSourceFTs.data = res.cw20_activity;
+      }
+    });
+  }
 }

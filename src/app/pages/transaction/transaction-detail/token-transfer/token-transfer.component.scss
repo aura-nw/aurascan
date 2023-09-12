@@ -1,0 +1,15 @@
+.transfer-card {
+    height: 372px;
+    .table-token {
+        ::ng-deep table thead {
+          display: none;
+        }
+      }
+    .transfer-token-info {
+        flex-direction: column;
+    }
+
+    .transfer-address-label {
+        width: 30px;
+    }
+}
