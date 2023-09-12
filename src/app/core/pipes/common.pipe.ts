@@ -5,6 +5,8 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from '../services/common.service';
 import { balanceOf } from '../utils/common/parsing';
 import { MaskPipe } from 'ngx-mask';
+import * as _ from 'lodash';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -127,11 +129,12 @@ export class displayTypeToolTip implements PipeTransform {
   transform(value: any): string {
     let result = '';
     value.forEach((element, index) => {
+      let type = _.find(TYPE_TRANSACTION, { label: element.type })?.value || element.type.split('.').pop();
       if (index <= 4) {
         if (result?.length > 0) {
-          result += ', ' + element.type;
+          result += ', ' + type;
         } else {
-          result += element.type;
+          result += type;
         }
       }
     });
