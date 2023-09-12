@@ -12,6 +12,7 @@ import {
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
+import { getDataIBC } from '../core/utils/common/info-common';
 Injectable();
 
 export class Globals {
@@ -350,7 +351,14 @@ export function convertDataBlock(data) {
   return block;
 }
 
-export function convertDataAccountTransaction(data, coinInfo, modeQuery, setReceive = false, currentAddress) {
+export function convertDataAccountTransaction(
+  data,
+  coinInfo,
+  modeQuery,
+  setReceive = false,
+  currentAddress,
+  coinConfig = null,
+) {
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
@@ -401,19 +409,25 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
               (coinArrReceiver[i]?.key === 'receiver' && coinArrReceiver[i]?.value === currentAddress) ||
               (coinArrSpent[i]?.key === 'spender' && coinArrSpent[i]?.value === currentAddress)
             ) {
+              let { type, action } = getTypeTx(element, i);
+              toAddress = coinArrReceiver[i]?.value;
+              fromAddress = coinArrSpent[i]?.value;
+              const rawAmount = (coinArrReceiver[i + 1] || coinArrReceiver[i - 1])?.value;
+              let amountTemp = rawAmount?.match(/\d+/g)[0];
+              let amount;
+              let denom = coinInfo.coinDenom;
               if (
-                coinArrReceiver[i + 1]?.value?.indexOf(coinInfo.coinMinimalDenom) > -1 ||
-                coinArrReceiver[i - 1]?.value?.indexOf(coinInfo.coinMinimalDenom) > -1
+                coinArrReceiver[i + 1]?.value?.indexOf('ibc') > -1 ||
+                coinArrReceiver[i - 1]?.value?.indexOf('ibc') > -1
               ) {
-                let { type, action } = getTypeTx(element, i);
-                toAddress = coinArrReceiver[i]?.value;
-                fromAddress = coinArrSpent[i]?.value;
-                let amountTemp = (coinArrReceiver[i + 1] || coinArrReceiver[i - 1])?.value?.match(/\d+/g)[0];
-                let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
-                let denom = coinInfo.coinDenom;
-                const result = { type, toAddress, fromAddress, amount, denom, action };
-                arrTemp.push(result);
+                const dataIBC = getDataIBC(rawAmount, coinConfig);
+                amount = balanceOf(Number(amountTemp) || 0, dataIBC['decimal'] || 6);
+                denom = dataIBC['display'];
+              } else {
+                amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
               }
+              const result = { type, toAddress, fromAddress, amount, denom, action };
+              arrTemp.push(result);
             }
           }
         });
