@@ -130,10 +130,15 @@ export class UserService extends CommonService {
           fee
           timestamp
           code
-          data
           transaction_messages {
             type
             content
+          }
+          events(where: {type: {_eq: "transfer"}, tx_msg_index: {_is_null: false}}) {
+            event_attributes {
+              composite_key
+              value
+            }
           }
         }
       }

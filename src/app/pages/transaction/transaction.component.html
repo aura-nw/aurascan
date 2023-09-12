@@ -33,8 +33,18 @@
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'type'" class="aura-status">
-                        <div class="status">
-                          {{ data[template.matColumnDef] | cutStringPipe : 25 }}
+                        <div class="aura-status aura-tooltip-contain">
+                          <div class="status cursor-pointer aura-tooltip-object">
+                            {{ data[template.matColumnDef] | stringEllipsis : 25 }}
+                            <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                              +{{ data.lstType?.length - 1 }}
+                            </div>
+                          </div>
+
+                          <app-tooltip-customize
+                            [class]="'message-custom'"
+                            [content]="data.lstType | displayTypeToolTip">
+                          </app-tooltip-customize>
                         </div>
                       </div>
                       <div *ngSwitchCase="'status'">

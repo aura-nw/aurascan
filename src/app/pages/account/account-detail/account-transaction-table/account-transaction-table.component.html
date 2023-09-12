@@ -292,13 +292,7 @@
 
                     <app-tooltip-customize
                       [class]="'message-custom'"
-                      [content]="data[template.matColumnDef]"
-                      *ngIf="modeQuery === tabsData.ExecutedTxs">
-                    </app-tooltip-customize>
-                    <app-tooltip-customize
-                      [class]="'message-custom'"
-                      [content]="data.lstTypeTemp | displayTypeToolTip"
-                      *ngIf="modeQuery !== tabsData.ExecutedTxs">
+                      [content]="data.lstTypeTemp | displayTypeToolTip">
                     </app-tooltip-customize>
                   </div>
                 </div>
@@ -330,9 +324,17 @@
                           <span [appBigNumber]="item[template.matColumnDef]" [decimal]="0"> </span>
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
-                          <span *ngIf="modeQuery !== tabsData.FtsTxs">
-                            {{ item.denom || denom | stringEllipsis : 19 }}</span
-                          >
+                          <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
+                            <div [class.aura-tooltip-object]="item.denomOrigin">
+                              {{ item.denom || denom | stringEllipsis : 19 }}
+                            </div>
+
+                            <app-tooltip-customize
+                              [className]="'tooltip--left'"
+                              [class]="'message-custom'"
+                              [content]="item.denomOrigin">
+                            </app-tooltip-customize>
+                          </div>
                           <a
                             class=""
                             [routerLink]="['/tokens/token', item.contractAddress]"
@@ -356,7 +358,7 @@
                           [url]="(item.fromAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
                           [iconContract]="(item.fromAddress || currentAddress)?.length > lengthAddress"
                           [isLink]="
-                            !(item.fromAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
+                            !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                             item.fromAddress !== currentAddress
                           "></app-name-tag>
                         <div class="box-token-transfer">
@@ -402,7 +404,7 @@
                             [url]="(item.toAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
                             [iconContract]="(item.toAddress || currentAddress)?.length > lengthAddress"
                             [isLink]="
-                              !(item.toAddress?.startsWith('0000') || currentAddress?.startsWith('0000')) &&
+                              !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                               item.toAddress !== currentAddress
                             "></app-name-tag>
                         </div>
@@ -444,7 +446,7 @@
                             [iconContract]="true"
                             [url]="'contracts'"
                             [value]="item.contractAddress"
-                            [isLink]="!item.contractAddress?.startsWith('0000')"></app-name-tag>
+                            [isLink]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                         </div>
                       </div>
                     </div>

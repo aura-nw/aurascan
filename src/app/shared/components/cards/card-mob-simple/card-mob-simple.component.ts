@@ -50,6 +50,7 @@ export class CardMobSimpleComponent implements OnInit {
   @Input() content: CardMobSimpleContent[];
   @Input() tokenData: CardMobSimpleToken;
   @Input() tokenAmount: CardMobSimpleAmount;
+  @Input() dataCard: any;
 
   statusTransaction = CodeTransaction;
 
