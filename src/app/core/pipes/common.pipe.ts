@@ -129,7 +129,8 @@ export class displayTypeToolTip implements PipeTransform {
   transform(value: any): string {
     let result = '';
     value.forEach((element, index) => {
-      let type = _.find(TYPE_TRANSACTION, { label: element.type })?.value || element.type.split('.').pop();
+      const typeMsg = element.type || element['@type'];
+      let type = _.find(TYPE_TRANSACTION, { label: typeMsg })?.value || typeMsg.split('.').pop();
       if (index <= 4) {
         if (result?.length > 0) {
           result += ', ' + type;
