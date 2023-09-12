@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import {Component, EventEmitter, HostListener, Input, Output, ViewChild} from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from "@angular/material/menu";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -15,8 +16,6 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import {MatSelect} from "@angular/material/select";
-import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-account-transaction-table',
@@ -87,6 +86,8 @@ export class AccountTransactionTableComponent {
   isSearch = false;
   minDate;
   maxDate;
+  minDateEnd;
+  maxDateEnd;
   linkToken = 'token-nft';
   typeTx = [AccountTxType.Sent, AccountTxType.Received];
 
@@ -150,8 +151,8 @@ export class AccountTransactionTableComponent {
         type: [],
         typeTransfer: null,
       };
-      this.minDate = new Date(2023, 2, 20);
-      this.maxDate = new Date().toISOString().slice(0, 10);
+      this.minDate = this.minDateEnd = new Date(2023, 2, 20);
+      this.maxDateEnd = this.maxDate = new Date().toISOString().slice(0, 10);
     }
   }
 
@@ -451,10 +452,10 @@ export class AccountTransactionTableComponent {
     }
   }
 
-  setDateRange(isStartDate = false) {
-    if (isStartDate) {
-      this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
-    }
-    this.minDate = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
+  setDateRange() {
+    this.maxDateEnd =  new Date().toISOString().slice(0, 10);
+    this.minDate = new Date(2023, 2, 20);
+    this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
+    this.minDateEnd = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
   }
 }
