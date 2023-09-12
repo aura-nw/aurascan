@@ -8,12 +8,14 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2} from '@a
 export class TooltipCustomizeComponent implements OnInit, AfterViewInit {
   @Input() content: string;
   @Input() class: string;
+  @Input() requestGetPosition: boolean = true;
   constructor(private renderer: Renderer2, private el: ElementRef) {
   }
 
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
+    if(!this.requestGetPosition) return;
     let parent = this.renderer.parentNode(this.el.nativeElement);
     if(!parent) return;
     let sibling = parent.querySelector('.aura-tooltip-object:not(.disabled-hover)');
