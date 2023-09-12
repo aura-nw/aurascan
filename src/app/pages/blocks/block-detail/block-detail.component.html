@@ -164,7 +164,19 @@
                           {{ data[template.matColumnDef] }}
                         </a>
                         <div *ngSwitchCase="'type'" class="g-type aura-status">
-                          <span class="status">{{ data[template.matColumnDef] }}</span>
+                          <div class="aura-status aura-tooltip-contain">
+                            <div class="aura-tooltip-object d-flex">
+                              {{ data[template.matColumnDef] | cutStringPipe : 20 }}
+                              <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                                +{{ data.lstType?.length - 1 }}
+                              </div>
+                            </div>
+
+                            <app-tooltip-customize
+                              [class]="'message-custom'"
+                              [content]="data.lstType | displayTypeToolTip">
+                            </app-tooltip-customize>
+                          </div>
                         </div>
                         <div *ngSwitchCase="'status'">
                           <div [ngSwitch]="data[template.matColumnDef]">
@@ -218,6 +230,7 @@
             <app-card-mob-simple
               *ngFor="let data of dataSource.data"
               [link]="'/transaction/' + data.tx_hash"
+              [dataCard]="data"
               [title]="{
                 size: 'md',
                 label: data.tx_hash | cutStringPipe : 6 : 6,

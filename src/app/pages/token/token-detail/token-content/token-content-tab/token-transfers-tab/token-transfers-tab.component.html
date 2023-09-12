@@ -106,14 +106,14 @@
                           <ng-container
                             *ngIf="
                               data.modeExecute === modeExecuteTransaction.Take ||
-                              data[template.matColumnDef]?.startsWith('0000')
+                              data[template.matColumnDef]?.startsWith('Null')
                             ">
                             <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                           </ng-container>
                           <ng-container
                             *ngIf="
                               data.modeExecute !== modeExecuteTransaction.Take &&
-                              !data[template.matColumnDef]?.startsWith('0000')
+                              !data[template.matColumnDef]?.startsWith('Null')
                             ">
                             <app-name-tag
                               [value]="data[template.matColumnDef]"
@@ -153,13 +153,13 @@
                           [url]="'/tokens/' + linkToken + '/' + contractAddress + '?a='"
                           [type]="data.type"
                           *ngIf="
-                            !data[template.matColumnDef]?.startsWith('0000') && data[template.matColumnDef]
+                            !data[template.matColumnDef]?.startsWith('Null') && data[template.matColumnDef]
                           "></app-name-tag>
                         <app-name-tag
                           [value]="data[template.matColumnDef]"
                           [isLink]="false"
                           [isTokenDetail]="true"
-                          *ngIf="data[template.matColumnDef]?.startsWith('0000')"></app-name-tag>
+                          *ngIf="data[template.matColumnDef]?.startsWith('Null')"></app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]"> - </span>
                       </div>
                     </ng-container>
@@ -171,7 +171,7 @@
                           data['status'] === 'Fail' ||
                           data['token_id'] === 'More' ||
                           data.modeExecute === modeExecuteTransaction.UnEquip || 
-                          data['to_address']?.startsWith('0000')
+                          data['to_address']?.startsWith('Null')
                         "
                         [routerLink]="['/tokens/' + linkToken, contractAddress, data.token_id]">
                         <span *ngIf="typeContract === contractType.CW721">View NFT</span>

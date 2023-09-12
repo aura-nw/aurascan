@@ -134,5 +134,6 @@ export function getDataIBC(value, coinConfig) {
   } else {
     result = { display: temp, decimals: 6 };
   }
+  result['denom'] = result['denom'] || temp;
   return result;
 }

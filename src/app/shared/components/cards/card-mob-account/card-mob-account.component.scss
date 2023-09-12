@@ -40,10 +40,14 @@
         margin-bottom: var(--spacer-4);
       }
     }
-    .txt-top-expand{
+    .txt-top-expand {
       height: 26px;
       display: flex;
       align-items: center;
+    }
+    .txt-from-to {
+      width: 40px;
+      margin-top: 1px;
     }
   }
 }
