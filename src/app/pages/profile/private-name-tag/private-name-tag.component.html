@@ -65,12 +65,17 @@
                     (click)="updateFavorite(data)"
                     *ngIf="data.isFavorite" />
                 </div>
-                <div *ngSwitchCase="'address'" class="d-flex flex-column">
+                <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
                   <a class="text--primary cursor-pointer" [routerLink]="['/account', data[template.matColumnDef]]">
                     <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                   </a>
                   <div class="aura-tooltip-contain">
-                    <pre class="text--gray-5 ellipsis-text cursor-pointer aura-tooltip-object" style="max-width: 200px">{{ data.note || '-' }}</pre>
+                    <pre
+                      class="text--gray-5 ellipsis-text"
+                      [class.aura-tooltip-object]="data.note"
+                      style="max-width: 200px; width: fit-content"
+                      >{{ data.note || '-' }}</pre
+                    >
                     <app-tooltip-customize [content]="data.note"> </app-tooltip-customize>
                   </div>
                 </div>

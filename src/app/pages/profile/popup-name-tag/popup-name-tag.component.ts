@@ -71,6 +71,7 @@ export class PopupNameTagComponent implements OnInit {
     this.isValidAddress = true;
     this.privateNameForm.controls['isFavorite'].setValue(data.isFavorite);
     this.privateNameForm.controls['isAccount'].setValue(data.type === 'account' ? true : false);
+    this.isAccount = data.type === 'account' ? true : false;
     this.privateNameForm.controls['address'].setValue(data.address);
     this.privateNameForm.controls['name'].setValue(data.nameTag);
     this.privateNameForm.controls['note'].setValue(data.note);
