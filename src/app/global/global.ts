@@ -511,6 +511,7 @@ export function convertDataAccountTransaction(
       limit,
       action,
       eventAttr,
+      lstTypeTemp
     };
   });
   return txs;
