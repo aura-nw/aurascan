@@ -1,29 +1,14 @@
-.box-contract-info {
-  table.aura-basic-table {
-    min-height: 224px;
-    tr,
-    td {
-      color: var(--aura-gray-1);
-      height: 56px;
-      padding: 0px var(--spacer-4);
-    }
-
-    tr:first-child td:first-child {
-      width: 40%;
-      color: var(--aura-white);
-    }
+.box-contract-overview {
+  .card__header {
+    padding: var(--spacer-4);
+    padding-bottom: 0;
   }
-
-  @media (max-width: 992px) {
-    margin-bottom: 16px;
-  }
-
-  @media (max-width: 414px) {
-    tr td {
-      width: 40%;
-    }
+  .card__body {
+    padding: var(--spacer-4);
+    padding-top: 0;
   }
 }
+
 
 .box-name-tag {
   height: 26px;
@@ -37,6 +22,7 @@
   border-radius: 4px 0px 0px 4px;
   padding-left: var(--spacer-2);
   padding-right: var(--spacer-5);
+  color: var(--aura-gray-2);
   &.private-name-tag {
     padding: 0 var(--spacer-2);
     background-color: unset;

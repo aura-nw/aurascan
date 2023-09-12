@@ -11,3 +11,8 @@
   width: 15px;
   height: 15px;
 }
+::ng-deep .contract__card-info .card {
+  @media (min-width: 991.98px) {
+    min-height: 237px;
+  }
+}

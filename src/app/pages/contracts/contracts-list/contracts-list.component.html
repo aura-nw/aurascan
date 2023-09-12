@@ -149,11 +149,33 @@
                   <ng-container *ngIf="template.matColumnDef === 'name'">
                     {{ (data[template.matColumnDef] | cutStringPipe : 16) || '-' }}
                   </ng-container>
+
+                  <ng-container *ngIf="template.matColumnDef === 'token_tracker'">
+                    <a class="pr-8"
+                       *ngIf="data['code'].type === contractRegisterType.CW20 && data['cw20_contract'].name"
+                       [routerLink]="['/tokens/token/', data['address']]">
+                      {{ data['cw20_contract']?.name | stringEllipsis: 16}}
+                    </a>
+                    <a class="pr-8"
+                       *ngIf="data['code'].type === contractRegisterType.CW721 && data['name'] !== typeCW4973"
+                       [routerLink]="['/tokens/token-nft/', data['address']]">
+                      {{ data['cw721_contract']?.name | stringEllipsis: 16 }}
+                    </a>
+                    <a class="pr-8"
+                       *ngIf="data['code'].type !== contractRegisterType.CW20 && data['name'] === typeCW4973"
+                       [routerLink]="['/tokens/token-abt/', data['address']]">
+                      {{ data['cw721_contract']?.name | stringEllipsis: 16 }}
+                    </a>
+                    <span *ngIf="!data['code']?.type ||
+                                 (data['code']?.type === contractRegisterType.CW20 && !data['cw20_contract']?.name) ||
+                                 (data['code']?.type === contractRegisterType.CW721 && !data['cw721_contract']?.name)"> - </span>
+                  </ng-container>
                   <ng-container
                     *ngIf="
                       (!template.isUrl || data[template.matColumnDef] === '') &&
                       template.matColumnDef !== 'contract_verification' &&
-                      template.matColumnDef !== 'name'
+                      template.matColumnDef !== 'name' &&
+                      template.matColumnDef !== 'token_tracker'
                     ">
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <ng-container *ngSwitchDefault>

@@ -26,14 +26,28 @@
   </div>
 
   <div class="row">
-    <div class="col-12 col-lg-6">
-      <app-contracts-overview-card
-        [contractDetail]="contractDetail"
-        *ngIf="contractDetail"></app-contracts-overview-card>
+    <div class="col-12 col-lg-4">
+      <div class="contract__card-info">
+        <app-contracts-overview-card
+            [contractDetail]="contractDetail"
+            *ngIf="contractDetail"></app-contracts-overview-card>
+      </div>
     </div>
 
-    <div class="col-12 col-lg-6">
-      <app-contract-info-card [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contract-info-card>
+    <div class="col-12 col-lg-4">
+      <div class="contract__card-info">
+        <app-contract-info-card
+            [type]="'information'"
+            [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contract-info-card>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="contract__card-info">
+        <app-contract-info-card
+            [type]="'moreInfo'"
+            [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contract-info-card>
+      </div>
     </div>
   </div>
 
