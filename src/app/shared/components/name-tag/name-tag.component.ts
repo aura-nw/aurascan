@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { Router } from '@angular/router';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -10,7 +10,7 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./name-tag.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NameTagComponent implements OnInit {
+export class NameTagComponent implements OnInit, OnChanges {
   @Input() value = '';
   @Input() url = 'account';
   @Input() fullText = false;
@@ -49,5 +49,8 @@ export class NameTagComponent implements OnInit {
   extendLink(url) {
     url = url.match(/^https?:/) ? url : '//' + url;
     return url;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
   }
 }
