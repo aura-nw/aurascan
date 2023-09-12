@@ -116,3 +116,23 @@ export function checkTypeFile(nft: any) {
   }
   return content_type;
 }
+
+export function getDataIBC(value, coinConfig) {
+  let result = {};
+  let temp;
+  if (value.indexOf('ibc') >= 0) {
+    try {
+      if (!value.startsWith('ibc')) {
+        let temp = value?.match(/\d+/g)[0];
+        value = value?.replace(temp, '');
+      }
+    } catch {}
+    result = { display: value, decimals: 6 };
+    temp = value.slice(value.indexOf('ibc'));
+    result = coinConfig.find((k) => k.denom === temp) || {};
+    result['display'] = result['display'] || value;
+  } else {
+    result = { display: temp, decimals: 6 };
+  }
+  return result;
+}

@@ -400,7 +400,8 @@ export class AccountTransactionTableComponent {
         setReceive = true;
       }
 
-      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive, this.currentAddress);
+      const coinConfig = this.environmentService.configValue.coins;
+      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive, this.currentAddress, coinConfig);
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
       } else {
