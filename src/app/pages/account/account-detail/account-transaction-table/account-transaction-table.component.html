@@ -81,10 +81,11 @@
                 readOnly
                 #start_date
                 [matDatepicker]="pickerStart"
+                [min]="minDate"
                 [max]="maxDate"
                 [style]="'max-width: 70%'"
                 [(ngModel)]="transactionFilter.startDate"
-                (ngModelChange)="setDateRange(true)"
+                (ngModelChange)="setDateRange()"
                 class="cursor-pointer"
                 placeholder="Select" />
               <div class="mr-2 mr-lg-3 h6 mb-0 position-relative mt-1">
@@ -101,8 +102,8 @@
                 readOnly
                 #end_date
                 [matDatepicker]="pickerEnd"
-                [min]="minDate"
-                [max]="maxDate"
+                [min]="minDateEnd"
+                [max]="maxDateEnd"
                 [style]="'max-width: 70%'"
                 [(ngModel)]="transactionFilter.endDate"
                 (ngModelChange)="setDateRange()"

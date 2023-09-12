@@ -87,6 +87,8 @@ export class AccountTransactionTableComponent {
   isSearch = false;
   minDate;
   maxDate;
+  minDateEnd;
+  maxDateEnd;
   linkToken = 'token-nft';
   typeTx = [AccountTxType.Sent, AccountTxType.Received];
 
@@ -150,8 +152,8 @@ export class AccountTransactionTableComponent {
         type: [],
         typeTransfer: null,
       };
-      this.minDate = new Date(2023, 2, 20);
-      this.maxDate = new Date().toISOString().slice(0, 10);
+      this.minDate = this.minDateEnd = new Date(2023, 2, 20);
+      this.maxDateEnd = this.maxDate = new Date().toISOString().slice(0, 10);
     }
   }
 
@@ -451,10 +453,10 @@ export class AccountTransactionTableComponent {
     }
   }
 
-  setDateRange(isStartDate = false) {
-    if (isStartDate) {
-      this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
-    }
-    this.minDate = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
+  setDateRange() {
+    this.maxDateEnd =  new Date().toISOString().slice(0, 10);
+    this.minDate = new Date(2023, 2, 20);
+    this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
+    this.minDateEnd = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
   }
 }
