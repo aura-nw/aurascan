@@ -285,8 +285,8 @@
                   <div class="aura-status aura-tooltip-contain">
                     <div class="status cursor-pointer aura-tooltip-object">
                       {{ data[template.matColumnDef] | stringEllipsis : 25 }}
-                      <div *ngIf="data.arrEvent?.length > 1" class="ml-1 text--gray-4">
-                        +{{ data.arrEvent?.length - 1 }}
+                      <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+                        +{{ data.lstTypeTemp?.length - 1 }}
                       </div>
                     </div>
 
@@ -297,7 +297,7 @@
                     </app-tooltip-customize>
                     <app-tooltip-customize
                       [class]="'message-custom'"
-                      [content]="data.arrEvent | displayTypeToolTip"
+                      [content]="data.lstTypeTemp | displayTypeToolTip"
                       *ngIf="modeQuery !== tabsData.ExecutedTxs">
                     </app-tooltip-customize>
                   </div>
