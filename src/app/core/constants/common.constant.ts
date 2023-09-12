@@ -61,7 +61,7 @@ export const LENGTH_CHARACTER = {
   TRANSACTION: 64
 };
 
-export const NULL_ADDRESS = "0".repeat(LENGTH_CHARACTER.ADDRESS);
+export const NULL_ADDRESS = 'Null address';
 
 export const TOKEN_ID_GET_PRICE = {
   AURA: 'aura-network',
