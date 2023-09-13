@@ -379,11 +379,11 @@
                     <ng-container
                       *ngIf="
                         data.modeExecute === modeExecuteTransaction.Take ||
-                        data[template.matColumnDef]?.startsWith('0000')
+                        data[template.matColumnDef]?.startsWith('Null')
                       ">
                       <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                     </ng-container>
-                    <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take &&  !data[template.matColumnDef]?.startsWith('0000')">
+                    <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take &&  !data[template.matColumnDef]?.startsWith('Null')">
                       <app-name-tag
                         [value]="data[template.matColumnDef]"
                         [isTokenDetail]="true"
@@ -408,11 +408,11 @@
                   <ng-container
                     *ngIf="
                       data.modeExecute === modeExecuteTransaction.Take ||
-                      data[template.matColumnDef]?.startsWith('0000')
+                      data[template.matColumnDef]?.startsWith('Null')
                     ">
                     <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                   </ng-container>
-                  <ng-container *ngIf="!data[template.matColumnDef]?.startsWith('0000')">
+                  <ng-container *ngIf="!data[template.matColumnDef]?.startsWith('Null')">
                     <app-name-tag
                       [url]="data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account'"
                       [value]="data[template.matColumnDef]"

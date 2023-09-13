@@ -56,7 +56,7 @@
 
               <app-tooltip-customize
                 *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
-                [content]="commonService.setNameTag(currentAddress)"></app-tooltip-customize>
+                [content]="'Public name: ' + commonService.setNameTag(userAddress)"></app-tooltip-customize>
             </div>
           </div>
           <!-- <button

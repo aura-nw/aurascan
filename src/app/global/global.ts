@@ -12,6 +12,7 @@ import {
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
+import { getDataIBC } from '../core/utils/common/info-common';
 Injectable();
 
 export class Globals {
@@ -332,6 +333,7 @@ export function convertDataTransaction(data, coinInfo) {
       messages,
       tx,
       typeOrigin,
+      lstType,
     };
   });
   return txs;
@@ -350,7 +352,14 @@ export function convertDataBlock(data) {
   return block;
 }
 
-export function convertDataAccountTransaction(data, coinInfo, modeQuery, setReceive = false, currentAddress) {
+export function convertDataAccountTransaction(
+  data,
+  coinInfo,
+  modeQuery,
+  setReceive = false,
+  currentAddress,
+  coinConfig = null,
+) {
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
@@ -393,28 +402,28 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
         break;
       case TabsAccountLink.AuraTxs:
         let arrTemp = [];
-        element?.data?.tx_response?.logs?.forEach((data) => {
-          const coinArrReceiver = _.get(data, 'events')?.find((k) => k.type === 'coin_received')?.attributes;
-          const coinArrSpent = _.get(data, 'events')?.find((k) => k.type === 'coin_spent')?.attributes;
-          for (let i = 0; i < coinArrReceiver?.length; i++) {
-            if (
-              (coinArrReceiver[i]?.key === 'receiver' && coinArrReceiver[i]?.value === currentAddress) ||
-              (coinArrSpent[i]?.key === 'spender' && coinArrSpent[i]?.value === currentAddress)
-            ) {
-              if (
-                coinArrReceiver[i + 1]?.value?.indexOf(coinInfo.coinMinimalDenom) > -1 ||
-                coinArrReceiver[i - 1]?.value?.indexOf(coinInfo.coinMinimalDenom) > -1
-              ) {
-                let { type, action } = getTypeTx(element, i);
-                toAddress = coinArrReceiver[i]?.value;
-                fromAddress = coinArrSpent[i]?.value;
-                let amountTemp = (coinArrReceiver[i + 1] || coinArrReceiver[i - 1])?.value?.match(/\d+/g)[0];
-                let amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
-                let denom = coinInfo.coinDenom;
-                const result = { type, toAddress, fromAddress, amount, denom, action };
-                arrTemp.push(result);
-              }
+        element?.events?.forEach((data, i) => {
+          toAddress = data.event_attributes.find((k) => k.composite_key === 'transfer.recipient')?.value;
+          fromAddress = data.event_attributes.find((k) => k.composite_key === 'transfer.sender')?.value;
+          if (toAddress === currentAddress || fromAddress === currentAddress) {
+            let { type, action } = getTypeTx(element, i);
+            toAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.recipient')?.value;
+            fromAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.sender')?.value;
+            let rawAmount = data.event_attributes?.find((k) => k.composite_key === 'transfer.amount')?.value;
+            let amountTemp = rawAmount?.match(/\d+/g)[0];
+            let amount;
+            let denom = coinInfo.coinDenom;
+            let denomOrigin;
+            if (rawAmount?.indexOf('ibc') > -1) {
+              const dataIBC = getDataIBC(rawAmount, coinConfig);
+              amount = balanceOf(Number(amountTemp) || 0, dataIBC['decimal'] || 6);
+              denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
+              denomOrigin = dataIBC['denom'];
+            } else {
+              amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
             }
+            const result = { type, toAddress, fromAddress, amount, denom, action, denomOrigin };
+            arrTemp.push(result);
           }
         });
         arrEvent = arrTemp;
@@ -497,6 +506,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       limit,
       action,
       eventAttr,
+      lstTypeTemp,
     };
   });
   return txs;

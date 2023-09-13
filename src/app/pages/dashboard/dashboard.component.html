@@ -447,7 +447,19 @@
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchCase="'type'">
-                            <span class="label__status">{{ data[template.matColumnDef] | cutStringPipe : 20 }}</span>
+                            <div class="aura-status aura-tooltip-contain">
+                              <div class="label__status aura-tooltip-object">
+                                {{ data[template.matColumnDef] | cutStringPipe : 20 }}
+                                <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                                  +{{ data.lstType?.length - 1 }}
+                                </div>
+                              </div>
+
+                              <app-tooltip-customize
+                                [class]="'message-custom'"
+                                [content]="data.lstType | displayTypeToolTip">
+                              </app-tooltip-customize>
+                            </div>
                           </div>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                         </ng-container>
