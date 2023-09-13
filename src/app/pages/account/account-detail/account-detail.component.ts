@@ -17,6 +17,7 @@ import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { Globals } from '../../../global/global';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { isContract } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-account-detail',
@@ -56,6 +57,7 @@ export class AccountDetailComponent implements OnInit {
   totalAssets = 0;
   totalSBTPick = 0;
   totalSBT = 0;
+  isContractAddress = false;
 
   constructor(
     public commonService: CommonService,
@@ -77,6 +79,7 @@ export class AccountDetailComponent implements OnInit {
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
+        this.isContractAddress = isContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
       }
