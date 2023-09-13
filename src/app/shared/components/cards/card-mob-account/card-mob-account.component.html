@@ -67,23 +67,23 @@
         <div class="d-flex align-items-center justify-content-between item-expand">
           <div class="fw-normal">
             <div class="d-flex align-items-center txt-top-expand">
-              <span class="caption fw-normal text--gray-4" [style]="'width: 40px'">
+              <span class="caption fw-normal text--gray-4 txt-from-to">
                 {{ item['address'] === item['toAddress'] ? 'To:' : 'From:' }}
               </span>
               <ng-container *ngIf="!commonService.checkDisplayTooltip(item['address'])">
                 <app-name-tag
                   [value]="item['address']"
-                  [isLink]="!item['address']?.startsWith('0000')"
+                  [isLink]="!item['address']?.startsWith('Null')"
                   [maxCharacter]="12"></app-name-tag>
               </ng-container>
               <ng-container *ngIf="commonService.checkDisplayTooltip(item['address'])">
                 <a
-                  *ngIf="!item['address']?.startsWith('0000')"
+                  *ngIf="!item['address']?.startsWith('Null')"
                   class="text--primary cursor-pointer block-link"
                   [routerLink]="['/account', item['address']]">
                   {{ item['address'] | cutStringPipe : 6 : 6 }}
                 </a>
-                <span *ngIf="item['address']?.startsWith('0000') || currentAddress?.startsWith('0000')">
+                <span *ngIf="item['address']?.startsWith('Null') || currentAddress?.startsWith('Null')">
                   {{ (item['address'] | cutStringPipe : 6 : 6) || '-' }}
                 </span>
               </ng-container>
@@ -112,7 +112,9 @@
               </div>
 
               <div [class.text--primary]="item.denom !== denom" [class.text--white]="item.denom === denom" class="ml-1">
-                <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">{{ item.denom || denom }}</ng-container>
+                <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">{{
+                  item.denom || denom | stringEllipsis : 19
+                }}</ng-container>
                 <a [routerLink]="['/tokens/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
                   {{ item.denom | stringEllipsis : 19 }}
                 </a>
