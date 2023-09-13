@@ -269,12 +269,12 @@ export class AccountTransactionTableComponent {
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.AuraTxs:
-        payload.compositeKey = ['coin_spent.spender', 'coin_received.receiver'];
+        payload.compositeKey = ['transfer.sender', 'transfer.recipient'];
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
-            payload.compositeKey = ['coin_spent.spender'];
+            payload.compositeKey = ['transfer.sender'];
           } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
-            payload.compositeKey = ['coin_received.receiver'];
+            payload.compositeKey = ['transfer.recipient'];
           }
         }
         this.templates = [...this.templatesToken];
