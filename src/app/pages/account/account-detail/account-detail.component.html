@@ -1,10 +1,16 @@
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div
-    class="mb-4 mb-md-6 d-flex align-items-center box-title"
+    class="mb-1 mb-md-6 d-flex align-items-center box-title"
     [class.justify-content-between]="breakpoint.value.matches">
-    <div class="d-lg-flex d-block align-items-center">
+    <div class="d-flex d-block align-items-center">
       <app-pagetitle title="Account" [displayInfo]="false"></app-pagetitle>
-      <div class="d-lg-inline-flex d-block">
+      <a
+        [routerLink]="['/contracts/', currentAddress]"
+        *ngIf="isContractAddress && breakpoint.value.matches"
+        class="contract-label text--primary ml-6 caption fw-normal"
+        >Contract</a
+      >
+      <div class="d-none d-lg-block">
         <span class="body-01 text--gray-5 caption-mob fw-normal">{{ currentAddress }}</span>
       </div>
     </div>
@@ -21,7 +27,15 @@
         <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
       </div>
     </div>
-    <div *ngIf="isContractAddress" class="contract-label">Contract</div>
+    <div class="aura-tooltip-contain" *ngIf="!breakpoint.value.matches && isContractAddress">
+      <div class="status cursor-pointer aura-tooltip-object">
+        <a [routerLink]="['/contracts/', currentAddress]" class="contract-label text--gray-3">Contract</a>
+      </div>
+      <app-tooltip-customize [content]="'Go to Contract Details'"> </app-tooltip-customize>
+    </div>
+  </div>
+  <div class="d-lg-none mb-2">
+    <span class="body-01 text--gray-5 caption-mob fw-normal  break-word">{{ currentAddress }}</span>
   </div>
   <!-- Summary info -->
   <div class="row">
