@@ -1,10 +1,22 @@
 <div *ngIf="contractDetail">
-  <div *ngIf="type === 'information'" class="card box-contract-overview mb-4 mb-lg-5">
-    <div class="card__header">
+  <div *ngIf="type === 'information'" class="card box-contract-overview mb-0 mb-lg-5">
+    <div class="card__header d-flex align-items-center justify-content-between"
+         data-bs-toggle="collapse"
+         data-bs-target="#title2"
+         aria-controls="title2"
+         aria-expanded="false">
       <h6 class="h3-mob mb-0 text--white fw-semibold">Information</h6>
+      <button
+          class="button d-lg-none"
+          type="button">
+        <img
+            src="assets/icons/icons-svg/white/chevron-down.svg"
+            alt=""
+            width="20px"/>
+      </button>
     </div>
-    <div class="divider divider-horizontal my-4"></div>
-    <div class="card__body body-02 body-mob">
+    <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
+    <div class="card__body body-02 body-mob collapse" id="title2">
       <div>
         <div class="text--gray-4 caption fw-normal mb-1">Contract Name</div>
         <div class="text--gray-light">{{ contractDetail.name }} </div>
@@ -41,12 +53,24 @@
 <!--      </div>-->
     </div>
   </div>
-  <div *ngIf="type === 'moreInfo'" class="card box-contract-overview mb-4 mb-lg-5">
-    <div class="card__header">
+  <div *ngIf="type === 'moreInfo'" class="card box-contract-overview moreInfo mb-4 mb-lg-5">
+    <div class="card__header d-flex align-items-center justify-content-between"
+         data-bs-toggle="collapse"
+         data-bs-target="#title3"
+         aria-controls="title3"
+         aria-expanded="false">
       <h6 class="h3-mob mb-0 text--white fw-semibold">More Info</h6>
+      <button
+          class="button d-lg-none"
+          type="button">
+        <img
+            src="assets/icons/icons-svg/white/chevron-down.svg"
+            alt=""
+            width="20px"/>
+      </button>
     </div>
-    <div class="divider divider-horizontal my-4"></div>
-    <div class="card__body body-02 body-mob">
+    <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
+    <div class="card__body body-02 body-mob collapse" id="title3">
       <div>
         <div class="text--gray-4 caption fw-normal mb-1">Contract Type</div>
         <div class="text--gray-light">{{ contractDetail.code?.type ?? '-' }} </div>
