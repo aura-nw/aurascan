@@ -1,8 +1,9 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
@@ -16,6 +17,7 @@ export class TokenTransferComponent implements OnInit {
   @Input() height: Number;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  nullAddress = NULL_ADDRESS;
   dataSourceFTs = new MatTableDataSource<any>([]);
   dataSourceNFTs = new MatTableDataSource<any>([]);
   pageData: PageEvent = {
@@ -36,11 +38,13 @@ export class TokenTransferComponent implements OnInit {
   ];
   displayedColumnsFTs: string[] = this.templatesFTs.map((dta) => dta.matColumnDef);
   displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private environmentService: EnvironmentService,
     public router: Router,
     private transactionService: TransactionService,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
@@ -52,5 +56,9 @@ export class TokenTransferComponent implements OnInit {
         this.dataSourceFTs.data = res.cw20_activity;
       }
     });
+  }
+
+  navigateToNFTDetail(address: string, tokenId: number): void {
+    this.router.navigate([`/tokens/token-nft/${address}/${tokenId}`]);
   }
 }
