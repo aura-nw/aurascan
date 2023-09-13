@@ -24,21 +24,23 @@
   </div>
   <div class="soulbound-list mt-4 mt-lg-0">
     <ng-container *ngIf="soulboundList && soulboundList?.length > 0; else noNFT">
-      <ng-container *ngFor="let token of soulboundList; let last = last">
-        <div class="soulbound__item" *ngIf="token.picked">
-          <div class="nft-cards__item-border">
-            <div class="nft-cards__item">
-              <app-nft-card
-                [nftLink]="'/tokens/token-nft/' + token.contract_address + '/' + encodeData(token.token_id)"
-                [nftItem]="token"
-                [nftType]="getTypeFile(token)"></app-nft-card>
-              <div class="nft-cards__label">
-                <span class="text-gradient">CW-4973</span>
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5">
+        <div *ngFor="let token of soulboundList; let last = last">
+          <div class="soulbound__item" *ngIf="token.picked">
+            <div class="nft-cards__item-border">
+              <div class="nft-cards__item">
+                <app-nft-card
+                    [nftLink]="'/tokens/token-nft/' + token.contract_address + '/' + encodeData(token.token_id)"
+                    [nftItem]="token"
+                    [nftType]="getTypeFile(token)"></app-nft-card>
+                <div class="nft-cards__label">
+                  <span class="text-gradient">CW-4973</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </ng-container>
+      </div>
     </ng-container>
     <ng-template #noNFT>
       <div class="w-100" *ngIf="isAccountDetail">
