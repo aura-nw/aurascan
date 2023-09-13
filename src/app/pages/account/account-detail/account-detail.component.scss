@@ -24,6 +24,13 @@ section.account-detail {
   .box-account-info{
     flex-grow: 1;
     min-height: 228px;
+    padding: 24px;
+    @media (max-width: 1366px) {
+      padding: 12px;
+    }
+    @media (max-width: 992px) {
+      padding: 16px;
+    }
   }
 }
 
