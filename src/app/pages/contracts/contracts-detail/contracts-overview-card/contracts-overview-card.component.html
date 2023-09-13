@@ -27,7 +27,7 @@
         <ng-container>
           <div class="d-flex align-items-center">
             <a
-                class="text--primary break-word"
+                class="text--primary break-word v-ellipsis--des"
                 [routerLink]="['/tokens/token/', contractDetail?.address]"
                 *ngIf="
                     contractDetail?.code?.type === contractRegisterType.CW20 &&
@@ -56,7 +56,7 @@
                   contractDetail?.cw721_contract?.name &&
                   contractDetail?.cw721_contract?.symbol
                 "
-              class="text--primary break-word"
+              class="text--primary break-word v-ellipsis--des"
               [routerLink]="['/tokens/' + linkNft, contractDetail?.address]">
             {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
           </a>
