@@ -30,7 +30,7 @@
         <div class="px-4 px-xl-0 py-4 py-lg-6 qr-code d-none d-lg-block">
           <app-qr [address]="currentAddress || ''"> </app-qr>
         </div>
-        <div class="d-flex flex-column col-lg-auto col-12 py-4 px-4 pl-md-6 pb-md-6 box-account-info">
+        <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
@@ -56,7 +56,7 @@
 
               <app-tooltip-customize
                 *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
-                [content]="'Public name: ' + commonService.setNameTag(userAddress)"></app-tooltip-customize>
+                [content]="'Public name: ' + commonService.setNameTag(currentAddress)"></app-tooltip-customize>
             </div>
           </div>
           <!-- <button
