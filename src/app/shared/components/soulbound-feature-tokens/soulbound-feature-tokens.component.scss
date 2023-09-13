@@ -90,7 +90,7 @@
 }
 @media (min-width: 991.98px) {
   .sbt-contain {
-    padding: 0 24px;
+    padding: 0 8px;
     min-height: 190px;
   }
   .sbt-page {
@@ -98,7 +98,12 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-end;
-    //width: 1000px;
+  }
+}
+
+@media (min-width: 1367px) {
+  .sbt-contain {
+    padding: 0 24px;
   }
 }
 

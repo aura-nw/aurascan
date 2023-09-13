@@ -1,5 +1,4 @@
-<div class="sbt-contain {{sbtClass}}"
-     [ngClass]="!isSBTValidator ? 'text-end' : 'sbt-validator'" *ngIf="!isLoading">
+<div class="sbt-contain {{ sbtClass }}" [ngClass]="!isSBTValidator ? 'text-end' : 'sbt-validator'" *ngIf="!isLoading">
   <div class="d-flex w-100 justify-content-between mb-4" *ngIf="displayManage">
     <h3 class="mb-0 fw-700 text--gray-light-2">ABTs ({{ totalABT || 0 }})</h3>
     <a
@@ -25,7 +24,10 @@
   </div>
   <div class="soulbound-list mt-4 mt-lg-0 d-flex align-items-center">
     <ng-container *ngIf="soulboundList && soulboundList?.length > 0; else noNFT">
-      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5 w-100 flex-nowrap flex-grow-1 pb-2 {{isAccountDetail ? 'AccountDetail' : null}}">
+      <div
+        class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5 w-100 flex-nowrap flex-grow-1 pb-2 {{
+          isAccountDetail ? 'AccountDetail' : null
+        }}">
         <div *ngFor="let token of soulboundList; let last = last" [class.sbt-card-contain]="sbtPage">
           <div class="soulbound__item" *ngIf="token.picked">
             <div class="nft-cards__item-border">
