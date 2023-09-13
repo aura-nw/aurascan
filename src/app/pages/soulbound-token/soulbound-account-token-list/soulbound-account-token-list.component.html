@@ -1,5 +1,5 @@
 <div class="mb-4 mb-md-6">
-  <app-pagetitle title="ABT Creator"></app-pagetitle>
+  <app-pagetitle title="Account Bound Token (ABT)"></app-pagetitle>
 </div>
 <section class="soulbound-list text--white">
   <!-- Summary info -->
@@ -50,7 +50,7 @@
               </a>
             </div>
             <app-tooltip-customize
-              [class.tooltip--right]="true"
+              [className]="'tooltip--right'"
               [content]="'Public name: ' + commonService.setNameTag(userAddress)">
             </app-tooltip-customize>
           </div>

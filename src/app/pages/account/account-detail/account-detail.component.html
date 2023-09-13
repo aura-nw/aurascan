@@ -50,11 +50,13 @@
                   target="_blank"
                   [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
                   *ngIf="commonService.findUrlNameTag(currentAddress)">
-                  <i
-                    _ngcontent-wrg-c372=""
-                    class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
+                  <i _ngcontent-wrg-c372="" class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
                 </a>
               </div>
+
+              <app-tooltip-customize
+                *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
+                [content]="'Public name: ' + commonService.setNameTag(userAddress)"></app-tooltip-customize>
             </div>
           </div>
           <!-- <button
