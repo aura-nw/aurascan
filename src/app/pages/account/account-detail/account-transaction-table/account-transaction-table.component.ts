@@ -32,13 +32,6 @@ export class AccountTransactionTableComponent {
   @Output() filterCondition = new EventEmitter<any>();
   @Output() tabName = new EventEmitter<string>();
 
-  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-
-  @HostListener('window:scroll', ['$event'])
-  closeFilterPanelSection(_) {
-    this.trigger.closeMenu();
-  }
-
   transactionLoading = false;
   currentAddress: string;
   templates: Array<TableTemplate>;
@@ -190,9 +183,13 @@ export class AccountTransactionTableComponent {
   }
 
   searchTransactionType() {
-    this.tnxType = this.tnxType.filter(
-      (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord.toLowerCase().trim()) > -1,
-    );
+    if(this.transactionTypeKeyWord.toLowerCase().length === 0 || this.transactionTypeKeyWord.toLowerCase() === '') {
+      this.clearFilterSearch();
+    } else {
+      this.tnxType = this.tnxType.filter(
+        (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord.toLowerCase().trim()) > -1,
+      );
+    }
   }
 
   changeTypeFilter(type) {
@@ -269,12 +266,12 @@ export class AccountTransactionTableComponent {
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.AuraTxs:
-        payload.compositeKey = ['coin_spent.spender', 'coin_received.receiver'];
+        payload.compositeKey = ['transfer.sender', 'transfer.recipient'];
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
-            payload.compositeKey = ['coin_spent.spender'];
+            payload.compositeKey = ['transfer.sender'];
           } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
-            payload.compositeKey = ['coin_received.receiver'];
+            payload.compositeKey = ['transfer.recipient'];
           }
         }
         this.templates = [...this.templatesToken];
