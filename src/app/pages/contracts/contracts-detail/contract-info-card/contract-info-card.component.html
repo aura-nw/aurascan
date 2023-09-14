@@ -1,93 +1,87 @@
 <div *ngIf="contractDetail">
   <div *ngIf="type === 'information'" class="card box-contract-overview mb-0 mb-lg-5">
-    <div class="card__header d-flex align-items-center justify-content-between"
-         data-bs-toggle="collapse"
-         data-bs-target="#title2"
-         aria-controls="title2"
-         aria-expanded="false">
+    <div
+      class="card__header d-flex align-items-center justify-content-between"
+      data-bs-toggle="collapse"
+      data-bs-target="#title2"
+      aria-controls="title2"
+      aria-expanded="false">
       <h6 class="h3-mob mb-0 text--white fw-semibold">Information</h6>
-      <button
-          class="button d-lg-none"
-          type="button">
-        <img
-            src="assets/icons/icons-svg/white/chevron-down.svg"
-            alt=""
-            width="20px"/>
+      <button class="button d-lg-none" type="button">
+        <img src="assets/icons/icons-svg/white/chevron-down.svg" alt="" width="20px" />
       </button>
     </div>
     <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
     <div class="card__body body-02 body-mob collapse" id="title2">
       <div>
         <div class="text--gray-4 caption fw-normal mb-1">Contract Name</div>
-        <div class="text--gray-light">{{ contractDetail.name }} </div>
+        <div class="text--gray-light">{{ contractDetail.name }}</div>
       </div>
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
         <ng-container
-            *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
+          *ngIf="commonService.setNameTag(contractDetail?.address) !== contractDetail?.address; else NoNameTag">
           <div class="box-name-tag">
             <span class="d-none d-lg-flex">{{ commonService.setNameTag(contractDetail?.address) || '-' }}</span>
             <span class="d-flex d-lg-none justify-content-center">
-                  <ng-container *ngIf="!commonService.checkDisplayTooltip(contractDetail?.address)">
-                    {{ (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 16) || '-' }}
-                  </ng-container>
-                  <ng-container *ngIf="commonService.checkDisplayTooltip(contractDetail?.address)">
-                    {{ (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 8 : 8) || '-' }}
-                  </ng-container>
-                </span>
-            <a target="_blank"
-               [href]="extendLink(commonService.findUrlNameTag(contractDetail?.address))"
-               *ngIf="commonService.findUrlNameTag(contractDetail?.address)">
+              <ng-container *ngIf="!commonService.checkDisplayTooltip(contractDetail?.address)">
+                {{ (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 16) || '-' }}
+              </ng-container>
+              <ng-container *ngIf="commonService.checkDisplayTooltip(contractDetail?.address)">
+                {{ (commonService.setNameTag(contractDetail?.address) | cutStringPipe : 8 : 8) || '-' }}
+              </ng-container>
+            </span>
+            <a
+              target="_blank"
+              [href]="extendLink(commonService.findUrlNameTag(contractDetail?.address))"
+              *ngIf="commonService.findUrlNameTag(contractDetail?.address)">
               <i class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer mb-1"></i>
             </a>
           </div>
         </ng-container>
         <ng-template #NoNameTag>-</ng-template>
       </div>
-<!--      <div class="mt-3">-->
-<!--        <div class="text&#45;&#45;gray-4 caption fw-normal mb-1">Private Name Tag</div>-->
-<!--        <button-->
-<!--          class="button button-outline button-outline&#45;&#45;gradient button-outline__in-card button-pill mt-2 btn-private">-->
-<!--          <span class="caption fw-normal">Set Private Name Tag</span>-->
-<!--        </button>-->
-<!--      </div>-->
+      <div class="mt-3">
+        <div class="text&#45;&#45;gray-4 caption fw-normal mb-1">Private Name Tag</div>
+        <button
+          class="button button-outline button-outline&#45;&#45;gradient button-outline__in-card button-pill mt-2 btn-private">
+          <span class="caption fw-normal">Set Private Name Tag</span>
+        </button>
+      </div>
     </div>
   </div>
   <div *ngIf="type === 'moreInfo'" class="card box-contract-overview moreInfo mb-4 mb-lg-5">
-    <div class="card__header d-flex align-items-center justify-content-between"
-         data-bs-toggle="collapse"
-         data-bs-target="#title3"
-         aria-controls="title3"
-         aria-expanded="false">
+    <div
+      class="card__header d-flex align-items-center justify-content-between"
+      data-bs-toggle="collapse"
+      data-bs-target="#title3"
+      aria-controls="title3"
+      aria-expanded="false">
       <h6 class="h3-mob mb-0 text--white fw-semibold">More Info</h6>
-      <button
-          class="button d-lg-none"
-          type="button">
-        <img
-            src="assets/icons/icons-svg/white/chevron-down.svg"
-            alt=""
-            width="20px"/>
+      <button class="button d-lg-none" type="button">
+        <img src="assets/icons/icons-svg/white/chevron-down.svg" alt="" width="20px" />
       </button>
     </div>
     <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
     <div class="card__body body-02 body-mob collapse" id="title3">
       <div>
         <div class="text--gray-4 caption fw-normal mb-1">Contract Type</div>
-        <div class="text--gray-light">{{ contractDetail.code?.type ?? '-' }} </div>
+        <div class="text--gray-light">{{ contractDetail.code?.type ?? '-' }}</div>
       </div>
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Contract Version</div>
-        <div class="text--gray-light">{{ contractDetail.code?.code_id_verifications[0]?.compiler_version ?? '-' }} </div>
+        <div class="text--gray-light">{{ contractDetail.code?.code_id_verifications[0]?.compiler_version ?? '-' }}</div>
       </div>
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Contract Creator</div>
         <div class="text--gray-light">
           <span class="mr-1 mr-lg-2">
             <app-name-tag
-                [value]="contractDetail?.creator"
-                [widthAuto]="true"
-                [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
-          </span> at txn
+              [value]="contractDetail?.creator"
+              [widthAuto]="true"
+              [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
+          </span>
+          at txn
           <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
             {{ contractDetail?.tx_hash | cutStringPipe : 6 : 6 }}
           </a>
