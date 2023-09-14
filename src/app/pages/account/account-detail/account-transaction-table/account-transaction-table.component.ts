@@ -32,13 +32,6 @@ export class AccountTransactionTableComponent {
   @Output() filterCondition = new EventEmitter<any>();
   @Output() tabName = new EventEmitter<string>();
 
-  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-
-  @HostListener('window:scroll', ['$event'])
-  closeFilterPanelSection(_) {
-    this.trigger.closeMenu();
-  }
-
   transactionLoading = false;
   currentAddress: string;
   templates: Array<TableTemplate>;
@@ -190,9 +183,13 @@ export class AccountTransactionTableComponent {
   }
 
   searchTransactionType() {
-    this.tnxType = this.tnxType.filter(
-      (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord.toLowerCase().trim()) > -1,
-    );
+    if(this.transactionTypeKeyWord.toLowerCase().length === 0 || this.transactionTypeKeyWord.toLowerCase() === '') {
+      this.clearFilterSearch();
+    } else {
+      this.tnxType = this.tnxType.filter(
+        (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord.toLowerCase().trim()) > -1,
+      );
+    }
   }
 
   changeTypeFilter(type) {
