@@ -102,7 +102,7 @@ export class AppComponent implements OnInit {
         const enterpriseUrl = _.get(element, 'enterpriseUrl');
         let privateData = privateName?.data?.find((k) => k.address === address);
         if (privateData) {
-          name_tag_private = privateData.name_tag;
+          name_tag_private = privateData.nameTag;
           isPrivate = true;
         }
         return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private };
@@ -112,13 +112,13 @@ export class AppComponent implements OnInit {
       const isSameUser = (listTemp, privateName) => listTemp?.address === privateName.address;
       const onlyInLeft = (left, right, compareFunction) =>
         left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
-      const onlyInB = onlyInLeft(privateName?.data, listTemp, isSameUser);
-      onlyInB.forEach((element) => {
-        element['name_tag_private'] = element.name_tag;
-        element['name_tag'] = null;
+      const lstPrivate = onlyInLeft(privateName?.data, listTemp, isSameUser);
+      lstPrivate.forEach((element) => {
+        element['name_tag_private'] = element.nameTag;
+        element['nameTag'] = null;
         element['isPrivate'] = true;
       });
-      const result = [...listTemp, ...onlyInB];
+      const result = [...listTemp, ...lstPrivate];
       this.globals.listNameTag = this.commonService.listNameTag = result;
     });
   }

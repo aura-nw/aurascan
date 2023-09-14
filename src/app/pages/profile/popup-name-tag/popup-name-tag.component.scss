@@ -46,6 +46,9 @@
         background: var(--aura-gray-8);
       }
     }
+    .txt-note {
+      width: -webkit-fill-available;
+    }
   }
   ::ng-deep {
     .mat-slide-toggle-thumb {

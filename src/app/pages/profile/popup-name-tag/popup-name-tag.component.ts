@@ -25,6 +25,8 @@ export class PopupNameTagComponent implements OnInit {
   publicNameTag = '-';
   isValidAddress = false;
   isError = false;
+  isEditMode = false;
+  idEdit = null;
 
   nameTagType = {
     Account: 'account',
@@ -68,12 +70,18 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   setDataFrom(data) {
+    if (data.nameTag || data.name_tag_private) {
+      this.isEditMode = true;
+      this.idEdit = this.data.id || data.id;
+    }
+
     this.isValidAddress = true;
-    this.privateNameForm.controls['isFavorite'].setValue(data.isFavorite);
-    this.privateNameForm.controls['isAccount'].setValue(data.type === 'account' ? true : false);
-    this.isAccount = data.type === 'account' ? true : false;
+    const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS ? true : false;
+    this.privateNameForm.controls['isAccount'].setValue(isAccount);
+    this.isAccount = isAccount;
+    this.privateNameForm.controls['isFavorite'].setValue(data.isFavorite || false);
     this.privateNameForm.controls['address'].setValue(data.address);
-    this.privateNameForm.controls['name'].setValue(data.nameTag);
+    this.privateNameForm.controls['name'].setValue(data.nameTag || data.name_tag_private);
     this.privateNameForm.controls['note'].setValue(data.note);
     this.checkPublicNameTag();
   }
@@ -100,16 +108,16 @@ export class PopupNameTagComponent implements OnInit {
     this.isSubmit = true;
     const { isFavorite, isAccount, address, name, note } = this.privateNameForm.value;
 
-    const payload = {
+    let payload = {
       isFavorite: isFavorite,
       type: isAccount ? this.nameTagType.Account : this.nameTagType.Contract,
       address: address,
       nameTag: name,
       note: note,
-      id: this.data.id,
+      id: this.idEdit,
     };
 
-    if (this.data) {
+    if (this.isEditMode) {
       this.editPrivateName(payload);
     } else {
       this.createPrivateName(payload);

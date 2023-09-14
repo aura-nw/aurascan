@@ -228,9 +228,11 @@ export class AccountDetailComponent implements OnInit {
     return url;
   }
 
-  editPrivateName() {
+  editPrivateName(nameTag = null) {
     const userEmail = localStorage.getItem('userEmail');
+    const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.currentAddress);
     if (userEmail) {
+      localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {
       this.router.navigate(['/login']);

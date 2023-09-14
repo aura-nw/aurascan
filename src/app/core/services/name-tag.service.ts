@@ -32,4 +32,11 @@ export class NameTagService extends CommonService {
     const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
     return this.http.patch<any>(`${this.apiUrl}/user/private-name-tag/${payload.id}`, params);
   }
+
+  getListPrivateNameTagNextKey(payload) {
+    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
+    return this.http.get<any>(`${this.apiUrl}/private-name-tag`, {
+      params,
+    });
+  }
 }

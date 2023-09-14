@@ -13,6 +13,7 @@ import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
+import { isContract } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -46,6 +47,8 @@ export class PrivateNameTagComponent implements OnInit {
   destroy$ = new Subject();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataTable = [];
+  nextKey = null;
+  currentKey = null;
 
   constructor(
     public commonService: CommonService,
@@ -63,6 +66,13 @@ export class PrivateNameTagComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const dataNameTag = localStorage.getItem('setAddressNameTag');
+    if (dataNameTag) {
+      const data = JSON.parse(dataNameTag);
+      this.openPopup(data);
+      localStorage.removeItem('setAddressNameTag');
+    }
+
     this.commonService.listNameTag = this.global.listNameTag;
     this.getListPrivateName();
   }
@@ -76,11 +86,6 @@ export class PrivateNameTagComponent implements OnInit {
     this.onKeyUp();
   }
 
-  pageEvent(e: PageEvent): void {
-    this.pageData.pageIndex = e.pageIndex;
-    this.getListPrivateName();
-  }
-
   getListPrivateName(nextKey = null) {
     this.textSearch = this.textSearch?.trim();
     const payload = {
@@ -88,10 +93,16 @@ export class PrivateNameTagComponent implements OnInit {
       keyword: this.textSearch,
     };
 
-    this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
-      this.countFav = res.data?.filter((k) => k.isFavorite === 1)?.length || 0;
-      this.dataSource.data = res.data;
-      this.pageData.length = res?.meta?.count || 0;
+    this.nameTagService.getListPrivateNameTagNextKey(payload).subscribe((res) => {
+      if (res.data?.nameTags?.length >= 100) {
+        this.nextKey = res.data[res.data?.nameTags?.length - 1].id;
+      }
+      this.countFav = res.data?.nameTags?.filter((k) => k.isFavorite === 1)?.length || 0;
+      res.data?.nameTags.forEach((element) => {
+        element['type'] = isContract(element.address) ? 'contract' : 'account';
+      });
+      this.dataSource.data = res.data?.nameTags;
+      this.pageData.length = res?.data?.count || 0;
     });
   }
 
@@ -144,8 +155,6 @@ export class PrivateNameTagComponent implements OnInit {
     });
   }
 
-  editPrivateNameTag() {}
-
   updateFavorite(data) {
     const payload = {
       id: data.id,
@@ -161,5 +170,16 @@ export class PrivateNameTagComponent implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  pageEvent(e: PageEvent): void {
+    const { length, pageIndex, pageSize } = e;
+    const next = length <= (pageIndex + 2) * pageSize;
+    this.pageData = e;
+
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
+      this.getListPrivateName(this.nextKey);
+      this.currentKey = this.nextKey;
+    }
   }
 }

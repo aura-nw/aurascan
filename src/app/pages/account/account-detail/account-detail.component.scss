@@ -4,24 +4,7 @@ section.account-detail {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
   }
-  form.search-form {
-    .input-group {
-      background-color: var(--aura-bg-form);
-    }
-    input {
-      width: 100%;
-      @media (min-width: 992px) {
-        width: 150px;
-      }
-      @media (min-width: 1200px) {
-        width: 250px;
-      }
-      @media (min-width: 1440px) {
-        width: 405px;
-      }
-    }
-  }
-  .box-account-info{
+  .box-account-info {
     flex-grow: 1;
     min-height: 228px;
     padding: 24px;

@@ -34,7 +34,7 @@
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
-              *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
+              *ngIf="commonService.setNameTag(currentAddress, null, false) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
               <div class="d-inline-flex aura-tooltip-object align-items-center">
                 <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress, null, false) || '-' }}</span>
@@ -56,7 +56,7 @@
 
               <app-tooltip-customize
                 *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
-                [content]="'Public name: ' + commonService.setNameTag(currentAddress)"></app-tooltip-customize>
+                [content]="'Public name: ' + commonService.setNameTag(currentAddress, null, false)"></app-tooltip-customize>
             </div>
           </div>
 
@@ -80,7 +80,9 @@
                 </ng-container>
               </span>
             </div>
-            <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
+            <i
+              class="ph ph-note-pencil ml-2 body-01 cursor-pointer"
+              (click)="editPrivateName(commonService.setNameTag(currentAddress))"></i>
           </div>
 
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
