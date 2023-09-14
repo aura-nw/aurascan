@@ -145,7 +145,7 @@
                   placeholder="Search for Tnx Type"
                   [(ngModel)]="transactionTypeKeyWord"
                   [ngModelOptions]="{ standalone: true }"
-                  (keyup.enter)="searchTransactionType()"
+                  (ngModelChange)="searchTransactionType()"
                   name="search"
                   autocomplete="off" />
                 <button
