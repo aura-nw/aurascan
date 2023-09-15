@@ -101,6 +101,31 @@ export class ValidatorService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListNameValidator(payload) {
+    const operationsDoc = `
+    query getListNameValidator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
+      ${this.envDB} {
+        validator(limit: $limit, offset: $offset, order_by: {tokens: desc}, where: {operator_address: {_eq: $operatorAddress}, status: {_neq: "UNRECOGNIZED"}}) {
+          account_address
+          description
+          operator_address
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload?.limit || 200,
+          offset: payload?.offset || 0,
+          operatorAddress: payload?.operatorAddress || null,
+        },
+        operationName: 'getListNameValidator',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   validatorsDetailListPower(address: string, limit = 10, nextKey = null) {
     const operationsDoc = `
     query validatorsDetailListPower($operator_address: String, $limit: Int = 10, $nextKey: Int = null) {
