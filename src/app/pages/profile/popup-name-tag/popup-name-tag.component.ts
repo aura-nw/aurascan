@@ -23,7 +23,7 @@ export class PopupNameTagComponent implements OnInit {
   maxLengthNote = 200;
   currentCodeID;
   publicNameTag = '-';
-  isValidAddress = false;
+  isValidAddress = true;
   isError = false;
   isEditMode = false;
   idEdit = null;
@@ -46,6 +46,8 @@ export class PopupNameTagComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    //set temp quota = 100
+    this.quota = 100;
     this.formInit();
     if (this.data?.address) {
       this.setDataFrom(this.data);
@@ -71,12 +73,12 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   setDataFrom(data) {
+    this.isValidAddress = true;
     if (data.nameTag || data.name_tag_private) {
       this.isEditMode = true;
       this.idEdit = this.data.id || data.id;
     }
 
-    this.isValidAddress = true;
     const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS ? true : false;
     this.privateNameForm.controls['isAccount'].setValue(isAccount);
     this.isAccount = isAccount;
@@ -93,7 +95,6 @@ export class PopupNameTagComponent implements OnInit {
 
   checkFormValid() {
     this.getAddress['value'] = this.getAddress?.value.trim();
-    this.isValidAddress = false;
 
     if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
       if (
@@ -101,7 +102,11 @@ export class PopupNameTagComponent implements OnInit {
         (this.getAddress.value.trim()?.length === LENGTH_CHARACTER.CONTRACT && !this.isAccount)
       ) {
         this.isValidAddress = true;
+      } else {
+        this.isValidAddress = false;
       }
+    } else {
+      this.isValidAddress = false;
     }
   }
 
@@ -175,6 +180,7 @@ export class PopupNameTagComponent implements OnInit {
 
   changeType(type) {
     this.isAccount = type;
+    this.isValidAddress = false;
     this.isError = false;
     this.privateNameForm.value.isAccount = type;
     this.checkFormValid();
