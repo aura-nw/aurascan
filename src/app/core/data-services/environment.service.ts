@@ -25,6 +25,7 @@ export interface IConfiguration {
   horoscopePathApi: string;
   notice: { content: string; url: string };
   googleClientId: string;
+  quotaSetPrivateName: number;
 }
 
 @Injectable()
@@ -50,7 +51,8 @@ export class EnvironmentService {
     horoscopePathGraphql: '',
     horoscopePathApi: '',
     notice: { content: '', url: '' },
-    googleClientId: ''
+    googleClientId: '',
+    quotaSetPrivateName: null
   });
 
   get configValue(): IConfiguration {
@@ -88,7 +90,8 @@ export class EnvironmentService {
           horoscopePathGraphql: config['horoscopePathGraphql'],
           horoscopePathApi: config['horoscopePathApi'],
           notice: config['notice'] || { content: '', url: '' },
-          googleClientId: config['googleClientId'] || '3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08.apps.googleusercontent.com'
+          googleClientId: config['googleClientId'] || '3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08.apps.googleusercontent.com',
+          quotaSetPrivateName: config['quotaSetPrivateName'] || 10
         };
 
         this.config.next(data);

@@ -67,7 +67,7 @@ export class PrivateNameTagComponent implements OnInit {
 
   ngOnInit(): void {
     const dataNameTag = localStorage.getItem('setAddressNameTag');
-    if (dataNameTag) {
+    if (dataNameTag && dataNameTag !== 'undefined') {
       const data = JSON.parse(dataNameTag);
       this.openPopup(data);
       localStorage.removeItem('setAddressNameTag');
@@ -113,14 +113,14 @@ export class PrivateNameTagComponent implements OnInit {
     if (data) {
       dialogConfig.data = data;
     }
+    dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: this.pageData?.length } };
     let dialogRef = this.dialog.open(PopupNameTagComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         setTimeout(() => {
           this.getListPrivateName();
-        }, 500);
-        this.toastr.loading(result);
+        }, 1000);
       }
     });
   }

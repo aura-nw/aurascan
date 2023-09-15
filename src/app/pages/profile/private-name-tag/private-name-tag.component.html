@@ -74,14 +74,14 @@
                     <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                   </a>
                   <div class="aura-tooltip-contain">
-                    <pre
+                    <div
                       class="text--gray-5 ellipsis-text"
                       [class.aura-tooltip-object]="data.note"
                       style="max-width: 200px; width: fit-content"
-                      >{{ data.note || '-' }}</pre
+                      >{{ data.note || '-' }}</div
                     >
                     <app-tooltip-customize
-                      [content]="'<pre>' + data.note + '</pre>'"
+                      [content]="'<div>' + data.note + '</div>'"
                       [class]="'txt-note'"
                       [className]="'tooltip--below'">
                     </app-tooltip-customize>

@@ -32,6 +32,7 @@ export class PopupNameTagComponent implements OnInit {
     Account: 'account',
     Contract: 'contract',
   };
+  quota = this.environmentService.configValue.quotaSetPrivateName;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -46,7 +47,7 @@ export class PopupNameTagComponent implements OnInit {
 
   ngOnInit(): void {
     this.formInit();
-    if (this.data) {
+    if (this.data?.address) {
       this.setDataFrom(this.data);
     }
   }
@@ -125,6 +126,12 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   createPrivateName(payload) {
+    if (this.data.currentLength > this.quota) {
+      this.isError = true;
+      this.toastr.error('You have reached out of ' + this.quota + ' max limitation of private name tag');
+      return;
+    }
+
     this.nameTagService.createPrivateName(payload).subscribe({
       next: (res) => {
         if (res.code && res.code !== 200) {
@@ -153,7 +160,6 @@ export class PopupNameTagComponent implements OnInit {
         }
 
         this.closeDialog(true);
-
         this.toastr.successWithTitle('Private name tag edited!', 'Success');
       },
       error: (error) => {

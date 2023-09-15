@@ -51,11 +51,9 @@
 
 ::ng-deep {
   .txt-note {
-    pre {
+    div {
       max-width: 400px;
       word-break: break-all;
-      white-space: pre-line;
-      color: white;
       margin-bottom: 0;
     }
     &:before {

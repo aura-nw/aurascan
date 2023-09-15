@@ -30,16 +30,16 @@
             </div>
           </div>
           <div
-            *ngIf="commonService.setNameTag(userAddress) !== userAddress"
+            *ngIf="commonService.setNameTag(userAddress, null, false) !== userAddress"
             class="name-tag cursor-pointer mt-1 aura-tooltip-contain d-inline-flex">
             <div class="d-inline-flex aura-tooltip-object align-items-center">
-              <span class="d-none d-lg-flex">{{ commonService.setNameTag(userAddress) || '-' }}</span>
+              <span class="d-none d-lg-flex">{{ commonService.setNameTag(userAddress, null, false) || '-' }}</span>
               <span class="d-flex d-lg-none justify-content-center">
                 <ng-container *ngIf="!commonService.checkDisplayTooltip(userAddress)">
-                  {{ commonService.setNameTag(userAddress) || '-' }}
+                  {{ commonService.setNameTag(userAddress, null, false) || '-' }}
                 </ng-container>
                 <ng-container *ngIf="commonService.checkDisplayTooltip(userAddress)">
-                  {{ (commonService.setNameTag(userAddress) | cutStringPipe : 8 : 8) || '-' }}
+                  {{ (commonService.setNameTag(userAddress, null, false) | cutStringPipe : 8 : 8) || '-' }}
                 </ng-container>
               </span>
               <a
@@ -55,6 +55,37 @@
             </app-tooltip-customize>
           </div>
         </div>
+
+        <!-- Private Name Tag -->
+        <button
+          class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private"
+          *ngIf="!commonService.checkPrivate(userAddress)"
+          (click)="editPrivateName()">
+          <span class="caption fw-normal"> Set Private Name Tag </span>
+        </button>
+        <div
+          *ngIf="commonService.checkPrivate(userAddress)"
+          class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
+          <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
+            <span class="d-none d-lg-flex">{{ commonService.setNameTag(userAddress) || '-' }}</span>
+            <span class="d-flex d-lg-none justify-content-center">
+              <ng-container *ngIf="!commonService.checkDisplayTooltip(userAddress)">
+                {{ (commonService.setNameTag(userAddress) | cutStringPipe : 16) || '-' }}
+              </ng-container>
+              <ng-container *ngIf="commonService.checkDisplayTooltip(userAddress)">
+                {{ (commonService.setNameTag(userAddress) | cutStringPipe : 8 : 8) || '-' }}
+              </ng-container>
+            </span>
+          </div>
+
+          <app-tooltip-customize
+            *ngIf="!commonService.checkDisplayTooltip(userAddress)"
+            [content]="'Private name: ' + commonService.setNameTag(userAddress)"></app-tooltip-customize>
+          <i
+            class="ph ph-note-pencil ml-2 body-01 cursor-pointer"
+            (click)="editPrivateName(commonService.setNameTag(userAddress))"></i>
+        </div>
+
         <div class="mt-6 mt-lg-4">
           <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">
             <ng-container *ngIf="activeId !== 1">Total Equipped Badges</ng-container>

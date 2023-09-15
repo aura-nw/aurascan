@@ -232,7 +232,11 @@ export class AccountDetailComponent implements OnInit {
     const userEmail = localStorage.getItem('userEmail');
     const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.currentAddress);
     if (userEmail) {
-      localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
+      if (dataNameTag) {
+        localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
+      } else {
+        localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
+      }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {
       this.router.navigate(['/login']);
