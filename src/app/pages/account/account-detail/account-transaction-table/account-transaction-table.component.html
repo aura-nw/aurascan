@@ -120,6 +120,7 @@
         <div class="d-flex flex-column p-0 mb-4" *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs">
           <span class="text-sm mb-2">Message Type</span>
           <button
+            #tnxTypeMenuBtn
             [matMenuTriggerFor]="tnxTypeMenu"
             class="input-group align-items-center d-flex justify-content-between text--gray-4 cursor-pointer"
             type="button">
@@ -189,16 +190,24 @@
                     <input
                       type="checkbox"
                       id="type-{{ i }}"
-                      [checked]="
-                        (this.transactionFilter?.type?.length > 0 &&
-                          this.transactionFilter?.type?.includes(type.label)) ||
-                        this.transactionFilter.type === null
-                      "
+                      [checked]="checkedTnx(type)"
                       (change)="onChangeTnxFilterType($event, type)"
-                      class="check-box check-box--dark" />
+                      class="check-box check-box--dark {{ checkedTnx(type)}}" />
                     <label for="type-{{ i }}" class="ml-2 mb-0 text-justify pl-1"> {{ type.value }} </label>
                   </div>
                 </div>
+              </div>
+              <div class="panel__btn-group px-4">
+                <button class="button button--xlg button-outline button-outline__in-card button-pill"
+                        type="button" (click)="$event.stopPropagation();tnxTypeMenuBtn.click();clearFilterType()"
+                >
+                  <span>Cancel</span>
+                </button>
+                <button class="button button--xlg button-outline button-outline__in-card button-pill ml-4"
+                        type="button"
+                        (click)="$event.stopPropagation();tnxTypeMenuBtn.click();executeFilterType()">
+                  <span>Select</span>
+                </button>
               </div>
             </div>
           </mat-menu>

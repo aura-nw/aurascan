@@ -16,6 +16,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import {logs} from "@cosmjs/stargate";
 
 @Component({
   selector: 'app-account-transaction-table',
@@ -74,6 +75,9 @@ export class AccountTransactionTableComponent {
   tnxType = [];
   tnxTypeOrigin = [];
   listTypeSelected = '';
+  listTypeSelectedTemp = [];
+  listTypeSelectedTnx = [];
+  arrTypeFilter = [];
   currentType = AccountTxType.Sent;
   accountTxType = AccountTxType;
   isSearch = false;
@@ -127,15 +131,17 @@ export class AccountTransactionTableComponent {
       this.transactionFilter = this.savedFilter;
       this.transactionFilter.type.forEach((element, index) => {
         let type = _.find(TYPE_TRANSACTION, { label: element })?.value;
-        if (!this.listTypeSelected) {
-          this.listTypeSelected = type;
-        } else {
-          this.listTypeSelected += ', ' + type;
-        }
+        // if (!this.listTypeSelectedTemp) {
+        //   this.listTypeSelectedTemp = type;
+        // } else {
+        //   this.listTypeSelectedTemp += ', ' + type;
+        // }
+        // this.listTypeSelected = this.listTypeSelectedTemp;
       });
       this.setDateRange();
     } else {
       this.transactionTypeKeyWord = '';
+      this.listTypeSelectedTemp = [];
       this.listTypeSelected = '';
       this.checkAll = false;
       this.transactionFilter = {
@@ -150,33 +156,24 @@ export class AccountTransactionTableComponent {
   }
 
   onChangeTnxFilterType(event, type: any) {
-    if (event.target.checked) {
-      if (type === 'all') {
+    if(type === 'all') {
+      if(event.target.checked) {
         this.checkAll = true;
         this.transactionFilter.type = null;
-        this.listTypeSelected = 'All';
+        this.listTypeSelectedTemp = this.tnxType;
       } else {
-        this.transactionFilter.type.push(type.label);
-        if (!this.listTypeSelected) {
-          this.listTypeSelected = type.value;
-        } else {
-          this.listTypeSelected += ', ' + type.value;
-        }
+        this.transactionFilter.type = [];
+        this.listTypeSelectedTemp = [];
+        this.checkAll = false;
       }
     } else {
-      this.listTypeSelected = this.listTypeSelected
-        ?.replace(type?.value + ', ', '')
-        .replace(', ' + type?.value, '')
-        .replace(type?.value, '');
-      if (type === 'all') {
-        this.transactionFilter.type = [];
-        this.listTypeSelected = '';
-        this.checkAll = false;
+      if(event.target.checked) {
+        this.arrTypeFilter.push(type.label);
+        this.transactionFilter.type.push(type.label);
+        this.listTypeSelectedTemp.push(type);
       } else {
-        this.transactionFilter.type.forEach((element, index) => {
-          if (element === type.label) {
-            this.transactionFilter.type.splice(index, 1);
-          }
+        this.listTypeSelectedTemp.forEach((element,index)=>{
+          if(element.label === type.label) this.listTypeSelectedTemp.splice(index,1);
         });
       }
     }
@@ -209,7 +206,7 @@ export class AccountTransactionTableComponent {
     this.transactionTypeKeyWord = '';
     if (isResetFilter) {
       this.transactionFilter.type = [];
-      this.listTypeSelected = '';
+      this.listTypeSelectedTemp = [];
     }
   }
 
@@ -455,5 +452,47 @@ export class AccountTransactionTableComponent {
     this.minDate = new Date(2023, 2, 20);
     this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
     this.minDateEnd = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
+  }
+
+  executeFilterType() {
+    this.listTypeSelectedTnx = [...this.listTypeSelectedTemp];
+    this.listTypeSelected = '';
+    for(let i = 0; i<= this.listTypeSelectedTemp.length; i++) {
+      this.listTypeSelected += this.listTypeSelectedTemp[i].value + (i < this.listTypeSelectedTemp.length - 1 ? ', ' : '');
+    }
+  }
+  checkedTnx(type: any){
+    // console.log(type)
+    // console.log(this.listTypeSelectedTnx)
+    console.log(type.label);
+    let result = false;
+    if (this.listTypeSelectedTnx?.length > 0 &&
+      this.listTypeSelectedTnx?.includes(type.label) ||
+      this.transactionFilter.type === null ){
+      result = true;
+    }
+    return result;
+
+
+    // return this.listTypeSelectedTnx.includes(type);
+  }
+
+  clearFilterType() {
+    // this.listTypeSelected = '';
+    this.transactionFilter.type = null;
+    this.tnxType = this.tnxTypeOrigin;
+    this.savedFilter = null;
+    this.getListTypeFilter();
+    this.transactionTypeKeyWord = '';
+    this.listTypeSelectedTemp = [];
+    this.checkAll = false;
+    this.transactionFilter = {
+      startDate: null,
+      endDate: null,
+      type: this.listTypeSelected,
+      typeTransfer: null,
+    };
+    console.log(this.listTypeSelectedTnx)
+    // console.log(this.transactionFilter.type);
   }
 }

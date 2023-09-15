@@ -52,7 +52,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 90%;
+  max-width: 200px;
+  @media (min-width: 375.98px) {
+    max-width: 250px;
+  }
 }
 
 .icon-expand {
@@ -191,4 +194,12 @@
       }
     }
   }
+}
+.panel__btn-group {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  background-color: var(--aura-gray-9);
+  margin: 0 -4px -12px -4px;
 }
