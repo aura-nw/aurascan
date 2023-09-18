@@ -97,7 +97,7 @@ export class TransactionDetailComponent implements OnInit {
               setTimeout(() => {
                 const lengthChar = document.getElementById('contentError')?.innerText?.length;
                 const widthContent = document.getElementById('contentError')?.offsetWidth;
-                
+
                 // cal width text/content
                 if (lengthChar * 7.1 > widthContent * 3) {
                   this.isDisplayMore = true;
@@ -124,7 +124,7 @@ export class TransactionDetailComponent implements OnInit {
   }
 
   getListValidator(): void {
-    this.validatorService.getDataValidator(null).subscribe((res) => {
+    this.validatorService.getListNameValidator(null).subscribe((res) => {
       if (res.validator?.length > 0) {
         this.listValidator = res.validator;
       }
