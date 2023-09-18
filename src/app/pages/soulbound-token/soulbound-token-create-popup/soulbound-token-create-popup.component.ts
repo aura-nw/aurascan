@@ -5,7 +5,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { isContract } from 'src/app/core/utils/common/validation';
+import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-soulbound-token-create-popup',
@@ -55,7 +55,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     soulboundTokenURI = soulboundTokenURI.trim();
     receiverAddress = receiverAddress.trim();
 
-    if (!isContract(receiverAddress)) {
+    if (!isAddress(receiverAddress)) {
       this.isAddressInvalid = true;
       return;
     }
