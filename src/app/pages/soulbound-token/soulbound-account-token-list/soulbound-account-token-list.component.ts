@@ -113,7 +113,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     return url;
   }
 
-  editPrivateName(nameTag = null) {
+  editPrivateName() {
     const userEmail = localStorage.getItem('userEmail');
     const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.userAddress);
     if (userEmail) {

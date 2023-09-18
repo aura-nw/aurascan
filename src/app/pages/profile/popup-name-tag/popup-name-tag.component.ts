@@ -115,7 +115,7 @@ export class PopupNameTagComponent implements OnInit {
     const { isFavorite, isAccount, address, name, note } = this.privateNameForm.value;
 
     let payload = {
-      isFavorite: isFavorite,
+      isFavorite: isFavorite == 1 ? true : false,
       type: isAccount ? this.nameTagType.Account : this.nameTagType.Contract,
       address: address,
       nameTag: name,

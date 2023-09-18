@@ -113,6 +113,7 @@ section.account-detail {
 }
 
 .box-private {
+  width: fit-content;
   .private-name-tag {
     height: 24px;
     padding: 0 var(--spacer-2);
@@ -120,10 +121,6 @@ section.account-detail {
     border-radius: 16px;
     border: 1px solid var(--aura-gray-8);
   }
-}
-
-.btn-private {
-  width: fit-content;
 }
 
 @media (max-width: 414px) {

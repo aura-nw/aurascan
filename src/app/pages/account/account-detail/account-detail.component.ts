@@ -231,7 +231,7 @@ export class AccountDetailComponent implements OnInit {
     return url;
   }
 
-  editPrivateName(nameTag = null) {
+  editPrivateName() {
     const userEmail = localStorage.getItem('userEmail');
     const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.currentAddress);
     if (userEmail) {

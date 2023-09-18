@@ -130,7 +130,10 @@ export class CommonService {
   findNameTag(keySearch, listNameTag = []) {
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     if (this.listNameTag?.length > 0) {
-      const result = this.listNameTag?.find((k) => k.name_tag?.trim() === keySearch?.trim())?.address || '';
+      const result =
+        this.listNameTag?.find(
+          (k) => k.name_tag_private?.trim() === keySearch?.trim() || k.name_tag?.trim() === keySearch?.trim(),
+        )?.address || '';
       return result;
     }
   }

@@ -99,13 +99,15 @@ export class AppComponent implements OnInit {
         let name_tag = _.get(element, 'name_tag');
         let isPrivate = false;
         let name_tag_private = null;
+        let id;
         const enterpriseUrl = _.get(element, 'enterpriseUrl');
         let privateData = privateName?.data?.find((k) => k.address === address);
         if (privateData) {
           name_tag_private = privateData.nameTag;
           isPrivate = true;
+          id = privateData.id;
         }
-        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private };
+        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id};
       });
 
       // get other data of private list
