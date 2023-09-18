@@ -1,0 +1,38 @@
+<div class="card popup-common">
+  <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
+    <div class="h2 h4-mob mb-0 fw-bold text--white">
+      <!-- {{ !abtDetail.rejectAll ? 'Reject new ABTs from creator' : 'Reject all new ABTs from this creator' }} -->
+      {{ data.title }}
+    </div>
+    <img
+      src="assets/icons/icons-svg/white/close.svg"
+      alt=""
+      width="24px"
+      height="24px"
+      class="cursor-pointer ml-10"
+      (click)="closeDialog()" />
+  </div>
+  <div class="card-body body-01">
+    {{ data.content }}
+    <!-- <div *ngIf="abtDetail.rejectAll">
+      You will no longer receive ABTs from this Creator and this process cannot be reverted.
+    </div>
+    <div *ngIf="!abtDetail.rejectAll">
+      Are you sure to reject this ABT? It will be removed from your unclaimed list and this process cannot be reverted.
+    </div> -->
+  </div>
+  <div class="divider divider-horizontal"></div>
+  <!-- Button group -->
+  <div class="d-flex align-items-center justify-content-end px-6 py-6">
+    <button class="button button-pill button-outline button--xlg ml-4" type="button" (click)="closeDialog()">
+      <span>Cancel </span>
+    </button>
+    <button
+      class="button button-pill button-flat button--xlg ml-4"
+      type="button"
+      [disabled]="isLoading"
+      (click)="submitAction(true)">
+      <span>Remove </span>
+    </button>
+  </div>
+</div>

@@ -5,10 +5,8 @@ const REGEX = {
 };
 
 export function isContract(adr: string): boolean {
-  if (adr) {
-    const regex = new RegExp(REGEX.CONTRACT_ADDRESS);
-
-    return (regex.test(adr) && adr.length === LENGTH_CHARACTER.CONTRACT);
+  if (adr?.startsWith('aura') && adr?.length === LENGTH_CHARACTER.CONTRACT) {
+    return true;
   }
   return false;
 }

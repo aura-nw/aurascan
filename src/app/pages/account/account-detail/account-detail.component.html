@@ -44,20 +44,20 @@
         <div class="px-4 px-xl-0 py-4 py-lg-6 qr-code d-none d-lg-block">
           <app-qr [address]="currentAddress || ''"> </app-qr>
         </div>
-        <div class="d-flex flex-column col-lg-auto col-12 py-4 px-4 pl-md-6 pb-md-6 box-account-info">
+        <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
-              *ngIf="commonService.setNameTag(currentAddress) !== currentAddress"
+              *ngIf="commonService.setNameTag(currentAddress, null, false) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
               <div class="d-inline-flex aura-tooltip-object align-items-center">
-                <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+                <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress, null, false) || '-' }}</span>
                 <span class="d-flex d-lg-none justify-content-center">
                   <ng-container *ngIf="!commonService.checkDisplayTooltip(currentAddress)">
-                    {{ commonService.setNameTag(currentAddress) || '-' }}
+                    {{ (commonService.setNameTag(currentAddress, null, false) | cutStringPipe : 16) || '-' }}
                   </ng-container>
                   <ng-container *ngIf="commonService.checkDisplayTooltip(currentAddress)">
-                    {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8) || '-' }}
+                    {{ (commonService.setNameTag(currentAddress, null, false) | cutStringPipe : 8 : 8) || '-' }}
                   </ng-container>
                 </span>
                 <a
@@ -70,13 +70,43 @@
 
               <app-tooltip-customize
                 *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
-                [content]="'Public name: ' + commonService.setNameTag(userAddress)"></app-tooltip-customize>
+                [content]="
+                  'Public name: ' + commonService.setNameTag(currentAddress, null, false)
+                "></app-tooltip-customize>
             </div>
           </div>
-          <!-- <button
-            class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private">
-            <span class="caption fw-normal">Set Private Name Tag</span>
-          </button> -->
+
+          <button
+            class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private"
+            *ngIf="!commonService.checkPrivate(currentAddress)"
+            (click)="editPrivateName()">
+            <span class="caption fw-normal"> Set Private Name Tag </span>
+          </button>
+          <div
+            *ngIf="commonService.checkPrivate(currentAddress)"
+            class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
+            <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
+              <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+              <span class="d-flex d-lg-none justify-content-center">
+                <ng-container *ngIf="!commonService.checkDisplayTooltip(currentAddress)">
+                  {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 16) || '-' }}
+                </ng-container>
+                <ng-container *ngIf="commonService.checkDisplayTooltip(currentAddress)">
+                  {{ (commonService.setNameTag(currentAddress) | cutStringPipe : 8 : 8) || '-' }}
+                </ng-container>
+              </span>
+            </div>
+
+            <app-tooltip-customize
+              *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
+              [content]="
+                'Private name: ' + commonService.setNameTag(currentAddress)
+              "></app-tooltip-customize>
+            <i
+              class="ph ph-note-pencil ml-2 body-01 cursor-pointer"
+              (click)="editPrivateName(commonService.setNameTag(currentAddress))"></i>
+          </div>
+
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
             <div>
               <div class="h5 mb-1 text--white">Total Value</div>

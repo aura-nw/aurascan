@@ -60,13 +60,13 @@
               <i class="ph-light ph-funnel-simple text--white h1"></i>
             </button>
             <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
-              <li class="dropdown-item cursor-pointer py-2" (click)="changeTypeFilter('All type')">
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
                 <button type="button" class="button p-0">All type</button>
               </li>
-              <li class="dropdown-item cursor-pointer py-2" (click)="changeTypeFilter(accountTxType.Sent)">
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Sent)">
                 <button type="button" class="button p-0">Sent</button>
               </li>
-              <li class="dropdown-item cursor-pointer py-2" (click)="changeTypeFilter(accountTxType.Received)">
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Received)">
                 <button type="button" class="button p-0">Receive</button>
               </li>
             </ul>

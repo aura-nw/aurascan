@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
@@ -69,6 +69,7 @@ export class AccountDetailComponent implements OnInit {
     private modalService: NgbModal,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
+    private router: Router,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -228,5 +229,20 @@ export class AccountDetailComponent implements OnInit {
   extendLink(url) {
     url = url.match(/^https?:/) ? url : '//' + url;
     return url;
+  }
+
+  editPrivateName(nameTag = null) {
+    const userEmail = localStorage.getItem('userEmail');
+    const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.currentAddress);
+    if (userEmail) {
+      if (dataNameTag) {
+        localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
+      } else {
+        localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
+      }
+      this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

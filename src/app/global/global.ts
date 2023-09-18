@@ -443,19 +443,14 @@ export function convertDataAccountTransaction(
         break;
       case TabsAccountLink.NftTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
-          const typeOrigin = _.get(element, 'transaction_messages[0].content["@type"]');
-          let type = item?.smart_contract_events[0] ? item?.smart_contract_events[0]?.cw721_activity?.action : null;
+          let {type, action} = getTypeTx(element, index);
           let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
           let toAddress =
             _.get(item, 'smart_contract_events[0].cw721_activity.to') ||
             _.get(item, 'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address') ||
             NULL_ADDRESS;
-          if (type === 'burn') {
+          if (action === 'burn') {
             toAddress = NULL_ADDRESS;
-          }
-
-          if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
-            type = 'Contract: ' + type;
           }
 
           let contractAddress = _.get(
@@ -475,7 +470,7 @@ export function convertDataAccountTransaction(
       denom = arrEvent[0]?.denom;
       amount = arrEvent[0]?.amount;
       type = arrEvent[0]?.type || lstTypeTemp[0]?.type?.split('.').pop();
-      if (type.startsWith('Msg')) {
+      if (type?.startsWith('Msg')) {
         type = type?.replace('Msg', '');
       }
       tokenId = arrEvent[0]?.tokenId;

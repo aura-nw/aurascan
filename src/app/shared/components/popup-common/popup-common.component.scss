@@ -1,0 +1,16 @@
+::ng-deep {
+  .sizeNormal {
+    max-width: 500px !important;
+  }
+
+  .mat-dialog-container {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    overflow: visible;
+    .card .popup-common {
+      max-width: 550px;
+      min-width: 300px;
+    }
+  }
+}
