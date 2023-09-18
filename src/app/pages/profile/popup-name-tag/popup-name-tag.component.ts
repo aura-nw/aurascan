@@ -46,8 +46,6 @@ export class PopupNameTagComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //set temp quota = 100
-    this.quota = 100;
     this.formInit();
     if (this.data?.address) {
       this.setDataFrom(this.data);
