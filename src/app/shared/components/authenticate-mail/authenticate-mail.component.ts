@@ -60,6 +60,10 @@ export class AuthenticateMailComponent implements OnDestroy {
     if (this.route.snapshot['_routerState']?.url === '/profile') {
       this.router.navigate(['/']);
     }
+
+    setTimeout(() => {
+      location.reload();
+    }, 500);
   }
 
   linkLogin() {

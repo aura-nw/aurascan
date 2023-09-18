@@ -24,7 +24,7 @@ export interface TableData {
   time: Date;
   from: string;
   to: string;
-  label: string;
+  // label: string;
   value: number;
   fee: number;
   gas_used: number;
@@ -186,10 +186,10 @@ export class ContractTableComponent implements OnInit, OnChanges {
           break;
       }
 
-      const label =
-        contract.messages[0].sender === this.contractInfo?.contractsAddress
-          ? ContractTransactionType.OUT
-          : ContractTransactionType.IN;
+      // const label =
+      //   contract.messages[0].sender === this.contractInfo?.contractsAddress
+      //     ? ContractTransactionType.OUT
+      //     : ContractTransactionType.IN;
 
       const tableDta: TableData = {
         txHash: contract.tx_hash,
@@ -199,7 +199,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
         blockId: contract.blockId,
         time: new Date(contract.timestamp),
         from,
-        label,
+        // label,
         to,
         value: balanceOf(value) || 0,
         fee: +contract.fee,

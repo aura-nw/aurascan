@@ -5,6 +5,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from '../../../../global/global';
+import {ContractRegisterType} from "src/app/core/constants/contract.enum";
 
 @Component({
   selector: 'app-contracts-overview-card',
@@ -16,7 +17,8 @@ export class ContractsOverviewCardComponent implements OnInit, OnChanges {
   contractBalance;
   contractPrice;
   priceToken = 0;
-  lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
+  contractRegisterType = ContractRegisterType;
+  linkNft = 'token-nft';
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(

@@ -13,8 +13,8 @@
 
   ::ng-deep {
     .box-name-tag {
-      background-color: var(--aura-gray-8) !important;
       &:not(.private-name-tag) {
+        background-color: var(--aura-gray-8) !important;
         &:after {
           border-right: 15px solid var(--aura-gray-9) !important;
         }
