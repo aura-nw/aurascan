@@ -10,3 +10,10 @@ export function isContract(adr: string): boolean {
   }
   return false;
 }
+
+export function isAddress(adr: string): boolean {
+  if (adr?.startsWith('aura') && adr?.length === LENGTH_CHARACTER.ADDRESS) {
+    return true;
+  }
+  return false;
+}
