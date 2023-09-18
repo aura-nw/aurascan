@@ -97,7 +97,7 @@ export class TransactionDetailComponent implements OnInit {
               setTimeout(() => {
                 const lengthChar = document.getElementById('contentError')?.innerText?.length;
                 const widthContent = document.getElementById('contentError')?.offsetWidth;
-                
+
                 // cal width text/content
                 if (lengthChar * 7.1 > widthContent * 3) {
                   this.isDisplayMore = true;

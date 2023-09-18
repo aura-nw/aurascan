@@ -1,0 +1,31 @@
+.transfer-card {
+
+  .card-nodata,
+  .table-token {
+    height: 321px;
+    margin-bottom: 0;
+    overflow-y: auto;
+
+    ::ng-deep table thead {
+      display: none;
+    }
+
+    .hide-td {
+      display: none;
+    }
+
+    @media (max-width: 992px) {
+      .nft-list .mat-cell {
+        padding-right: 0 !important;
+      }
+    }
+  }
+
+  .transfer-token-info {
+    flex-direction: column;
+  }
+
+  .transfer-address-label {
+    width: 30px;
+  }
+}
