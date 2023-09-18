@@ -9,11 +9,11 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { isContract } from 'src/app/core/utils/common/validation';
 import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
-import { isContract } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -130,7 +130,9 @@ export class PrivateNameTagComponent implements OnInit {
       panelClass: 'sizeNormal',
       data: {
         title: 'Remove Private Name Tag',
-        content: 'Are you sure to remove private name tag for the address ' + data.address + ' ' + data.nameTag + ' ?',
+        content:
+          'Are you sure to remove private name tag for the address ' + data.address + ' (' + data.nameTag + ') ?',
+        class: 'text--gray-1',
       },
     });
 
