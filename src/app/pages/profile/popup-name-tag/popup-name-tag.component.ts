@@ -87,8 +87,8 @@ export class PopupNameTagComponent implements OnInit {
     this.checkPublicNameTag();
   }
 
-  closeDialog(hash = null) {
-    this.dialogRef.close(hash);
+  closeDialog(status = null) {
+    this.dialogRef.close(status);
   }
 
   checkFormValid() {
