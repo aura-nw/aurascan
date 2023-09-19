@@ -2,9 +2,15 @@
 
   .card-nodata,
   .table-token {
-    height: 321px;
+    height: 192px;
     margin-bottom: 0;
     overflow-y: auto;
+
+    .aura-table {
+      tr.mat-row {
+        height: 64px;
+      }
+    }
 
     ::ng-deep table thead {
       display: none;
