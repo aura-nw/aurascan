@@ -26,42 +26,22 @@
 
     <ng-container *ngIf="currentTab === tabsData.ExecutedTxs">
       <!-- Executed Transaction -->
-      <app-account-transaction-table
-        [savedFilter]="savedFilter"
-        [savedTab]="savedTab"
-        (tabName)="savedTab = $event"
-        [modeQuery]="currentTab"
-        (filterCondition)="savedFilter = $event"></app-account-transaction-table>
+      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
     </ng-container>
 
     <!-- Aura Transfer -->
     <ng-container *ngIf="currentTab === tabsData.AuraTxs">
-      <app-account-transaction-table
-        [savedFilter]="savedFilter"
-        [savedTab]="savedTab"
-        (tabName)="savedTab = $event"
-        [modeQuery]="currentTab"
-        (filterCondition)="savedFilter = $event"></app-account-transaction-table>
+      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
     </ng-container>
 
     <!-- Fts Transaction -->
     <ng-container *ngIf="currentTab === tabsData.FtsTxs">
-      <app-account-transaction-table
-        [savedFilter]="savedFilter"
-        [savedTab]="savedTab"
-        (tabName)="savedTab = $event"
-        [modeQuery]="currentTab"
-        (filterCondition)="savedFilter = $event"></app-account-transaction-table>
+      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
     </ng-container>
 
     <!-- NFT Transactions -->
     <ng-container *ngIf="currentTab === tabsData.NftTxs">
-      <app-account-transaction-table
-        [savedFilter]="savedFilter"
-        [savedTab]="savedTab"
-        (tabName)="savedTab = $event"
-        [modeQuery]="currentTab"
-        (filterCondition)="savedFilter = $event"></app-account-transaction-table>
+      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
     </ng-container>
   </div>
 </div>

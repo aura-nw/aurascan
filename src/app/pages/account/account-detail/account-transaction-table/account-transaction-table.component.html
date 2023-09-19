@@ -22,33 +22,33 @@
   <div class="mb-0 text--gray-5 caption-mob fw-normal">
     <div class="box-filter tsx-filter-panel d-flex align-items-center mb-4" *ngIf="displayFilter">
       <div class="d-flex align-items-center">
-        <div class="dropdown aura-dropdown btn-item mr-6 body" *ngIf="!transactionFilter.startDate || !transactionFilter.endDate">
+        <div
+          class="dropdown aura-dropdown btn-item mr-6 body"
+          *ngIf="!transactionFilter.startDate || !transactionFilter.endDate">
           <div class="align-items-center d-flex justify-content-between calendar-contain">
             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
               <input matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate" readonly />
-              <input matEndDate placeholder="End date" [(ngModel)]="transactionFilter.endDate" class="pl-3" readonly
-              (ngModelChange)="searchType()"/>
+              <input
+                matEndDate
+                placeholder="End date"
+                [(ngModel)]="transactionFilter.endDate"
+                class="pl-3"
+                readonly
+                (ngModelChange)="searchType()" />
             </mat-date-range-input>
             <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true">
               <mat-icon matDatepickerToggleIcon>
-                <i
-                    *ngIf="picker.opened"
-                    matIconSuffix
-                    class="ph ph-caret-down text--white body icon-expand"></i>
-                <i
-                    *ngIf="!picker.opened"
-                    matIconSuffix
-                    class="ph ph-caret-up text--white body cursor-pointer"></i>
+                <i *ngIf="picker.opened" matIconSuffix class="ph ph-caret-down text--white body icon-expand"></i>
+                <i *ngIf="!picker.opened" matIconSuffix class="ph ph-caret-up text--white body cursor-pointer"></i>
               </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
           </div>
         </div>
-        <div *ngIf="transactionFilter.startDate && transactionFilter.endDate"
-            class="mr-6 filter-result">
-          <span>{{transactionFilter.startDate | date : 'MM/dd/yyyy'}}</span>
+        <div *ngIf="transactionFilter.startDate && transactionFilter.endDate" class="mr-6 filter-result">
+          <span>{{ transactionFilter.startDate | date : 'MM/dd/yyyy' }}</span>
           <span class="mx-4">-</span>
-          <span>{{transactionFilter.endDate | date : 'MM/dd/yyyy'}}</span>
+          <span>{{ transactionFilter.endDate | date : 'MM/dd/yyyy' }}</span>
           <i class="ph-thin ph-x cursor-pointer ml-2" (click)="clearFilter(modeFilter.date)"></i>
         </div>
         <div class="dropdown aura-dropdown btn-item mr-6" *ngIf="modeQuery !== tabsData.ExecutedTxs">
@@ -99,8 +99,8 @@
               <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
             </div>
           </button>
-          <div class="filter-result" *ngIf="transactionFilter.type?.length > 0">
-            {{ checkAll ? 'All' : transactionFilter.type?.length }} Msg Types selected
+          <div class="filter-result" *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
+            {{ checkAll ? 'All' : transactionFilter.type?.length + (isSearchOther ? 1 : 0) || 1 }} Msg Types selected
             <i class="ph-thin ph-x cursor-pointer ml-2" (click)="clearFilter(modeFilter.msgType)"></i>
           </div>
           <mat-menu
@@ -157,7 +157,7 @@
                 <div class="divider divider-horizontal my-2"></div>
                 <div class="tnx-filter-box" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
                   <div
-                    *ngFor="let type of tnxTypeOrigin; let i = index"
+                    *ngFor="let type of tnxType; let i = index"
                     class="form-group d-flex align-items-center tnx-filter-item px-2">
                     <input
                       type="checkbox"
@@ -170,14 +170,13 @@
                 </div>
               </div>
               <div class="panel__btn-group px-4">
-                <button
-                  class="button button--xlg button-outline button-outline__in-card button-pill"
-                  type="button">
+                <button class="button button--xlg button-outline button-outline__in-card button-pill" type="button">
                   <span>Cancel</span>
                 </button>
                 <button
                   class="button button--xlg button-outline button-outline__in-card button-pill ml-4"
                   type="button"
+                  [disabled]="listTypeSelectedTemp?.length === 0"
                   (click)="$event.stopPropagation(); executeFilterType()">
                   <span>Select</span>
                 </button>
@@ -186,8 +185,13 @@
           </mat-menu>
         </div>
       </div>
-      <div *ngIf="(transactionFilter.startDate && transactionFilter.endDate) || transactionFilter.typeTransfer || transactionFilter.type"
-          class="d-flex align-items-center">
+      <div
+        *ngIf="
+          (transactionFilter.startDate && transactionFilter.endDate) ||
+          transactionFilter.typeTransfer ||
+          transactionFilter.type
+        "
+        class="d-flex align-items-center">
         <div class="divider divider-vertical mx-6"></div>
         <button class="button button-link body-01 px-0" (click)="clearFilter(modeFilter.all)">
           <span>Clear all</span>

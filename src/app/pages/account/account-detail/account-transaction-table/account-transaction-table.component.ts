@@ -26,8 +26,6 @@ export class AccountTransactionTableComponent {
   @Input() address: string;
   @Input() modeQuery: string;
   @Input() displayType: boolean = false;
-  @Input() savedFilter: any = null;
-  @Input() savedTab: any;
   @Output() filterCondition = new EventEmitter<any>();
   @Output() tabName = new EventEmitter<string>();
 
@@ -132,24 +130,17 @@ export class AccountTransactionTableComponent {
   }
 
   initTnxFilter(isReset = false) {
-    if (this.savedFilter !== null && this.savedTab === this.modeQuery && !isReset) {
-      this.transactionFilter = this.savedFilter;
-      this.transactionFilter.type?.forEach((element, index) => {
-        let type = _.find(TYPE_TRANSACTION, { label: element })?.value;
-      });
-    } else {
-      this.transactionTypeKeyWord = '';
-      this.listTypeSelectedTemp = [];
-      this.checkAll = false;
-      this.transactionFilter = {
-        startDate: null,
-        endDate: null,
-        type: null,
-        typeTransfer: null,
-      };
-      this.minDate = this.minDateEnd = new Date(2023, 2, 20);
-      this.maxDateEnd = this.maxDate = new Date().toISOString().slice(0, 10);
-    }
+    this.transactionTypeKeyWord = '';
+    this.listTypeSelectedTemp = [];
+    this.checkAll = false;
+    this.transactionFilter = {
+      startDate: null,
+      endDate: null,
+      type: null,
+      typeTransfer: null,
+    };
+    this.minDate = this.minDateEnd = new Date(2023, 2, 20);
+    this.maxDateEnd = this.maxDate = new Date().toISOString().slice(0, 10);
   }
 
   onChangeTnxFilterType(event, type: any) {
@@ -175,11 +166,11 @@ export class AccountTransactionTableComponent {
   }
 
   searchTransactionType() {
-    if (this.transactionTypeKeyWord.toLowerCase().length === 0 || this.transactionTypeKeyWord.toLowerCase() === '') {
-      this.clearFilterSearch();
+    if (this.transactionTypeKeyWord?.toLowerCase().length === 0 || this.transactionTypeKeyWord?.toLowerCase() === '') {
+      this.tnxType = this.tnxTypeOrigin;
     } else {
       this.tnxType = this.tnxType?.filter(
-        (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord.toLowerCase().trim()) > -1,
+        (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord?.toLowerCase().trim()) > -1,
       );
     }
   }
@@ -197,7 +188,6 @@ export class AccountTransactionTableComponent {
 
   clearFilterSearch(isResetFilter = true) {
     this.tnxType = this.tnxTypeOrigin;
-    this.savedFilter = null;
     this.getListTypeFilter();
     this.transactionTypeKeyWord = '';
     if (isResetFilter) {
@@ -242,13 +232,24 @@ export class AccountTransactionTableComponent {
       address: address,
       heightLT: nextKey,
       compositeKey: null,
-      listTxMsgType: this.isSearchOther ? null : this.transactionFilter.type,
-      listTxMsgTypeNotIn: this.isSearchOther ? this.tnxTypeOrigin : null,
+      listTxMsgType: null,
       startTime: this.getConvertDate(this.transactionFilter.startDate) || null,
       endTime: this.getConvertDate(this.transactionFilter.endDate, true) || null,
     };
 
-    console.log(payload);
+    if (this.isSearchOther) {
+      const isSameType = (listIn, listNotIn) => listIn?.label === listNotIn;
+      const onlyInLeft = (left, right, compareFunction) =>
+        left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
+      const lstTemp = onlyInLeft(this.tnxTypeOrigin, this.transactionFilter.type, isSameType);
+      let result = [];
+      lstTemp.forEach((element) => {
+        result.push(element.label);
+      });
+      payload['listTxMsgTypeNotIn'] = result || null;
+    } else {
+      payload['listTxMsgType'] = this.transactionFilter.type || null;
+    }
 
     switch (this.modeQuery) {
       case TabsAccountLink.ExecutedTxs:
@@ -457,8 +458,9 @@ export class AccountTransactionTableComponent {
       this.listTypeSelectedTemp?.forEach((element, index) => {
         if (element.label === 'Others') {
           this.isSearchOther = true;
+        } else {
+          lstTemp.push(element.label);
         }
-        lstTemp.push(element.label);
       });
     }
     this.transactionFilter.type = lstTemp || null;
@@ -468,7 +470,6 @@ export class AccountTransactionTableComponent {
   clearFilterType() {
     this.transactionFilter.type = null;
     this.tnxType = this.tnxTypeOrigin;
-    this.savedFilter = null;
     this.getListTypeFilter();
     this.transactionTypeKeyWord = '';
     this.listTypeSelectedTemp = [];
@@ -499,6 +500,7 @@ export class AccountTransactionTableComponent {
       this.checkAll = false;
       this.isSearchOther = false;
       this.getListTypeFilter();
+      this.transactionTypeKeyWord = null;
     }
     if (mode === this.modeFilter.date || mode === this.modeFilter.all) {
       this.transactionFilter.startDate = null;
