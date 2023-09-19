@@ -122,27 +122,27 @@ export class UserService extends CommonService {
 
   getListTxAuraByAddress(payload) {
     const operationsDoc = `
-    query QueryTxMsgOfAccount($compositeKeyIn: [String!] = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
-      ${this.envDB} {
-        transaction(where: {event_attribute_index: {composite_key: {_in: $compositeKeyIn}, value: {_eq: $address}, event: {tx_msg_index: {_is_null: false}}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
-          hash
-          height
-          fee
-          timestamp
-          code
-          transaction_messages {
-            type
-            content
-          }
-          events(where: {type: {_eq: "transfer"}, tx_msg_index: {_is_null: false}}) {
-            event_attributes {
-              composite_key
-              value
-            }
-          }
+   query QueryTxMsgOfAccount($compositeKeyIn: [String!] = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
+  ${this.envDB} {
+    transaction(where: {event_attribute_index: {composite_key: {in: $compositeKeyIn}, value: {eq: $address}, event: {tx_msg_index: {is_null: false}}}, timestamp: {lte: $endTime, gte: $startTime}, transaction_messages: {type: {in: $listTxMsgType, nin: $listTxMsgTypeNotIn}}, and: [{height: {gt: $heightGT, lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
+      hash
+      height
+      fee
+      timestamp
+      code
+      transaction_messages {
+        type
+        content
+      }
+      events(where: {type: {eq: "transfer"}, tx_msg_index: {is_null: false}}) {
+        event_attributes {
+          composite_key
+          value
         }
       }
     }
+  }
+}
     `;
     return this.http
       .post<any>(this.graphUrl, {

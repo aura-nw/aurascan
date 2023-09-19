@@ -43,6 +43,10 @@
     height: 33px;
     display: flex;
     align-items: center;
+    width: 180px;
+    @media (min-width: 991.98px) {
+      width: 220px;
+    }
   }
   .mat-date-range-input {
     width: 80%;
@@ -231,7 +235,7 @@ mat-date-range-input {
   padding: 0 16px;
 }
 .calendar-contain {
-  max-width: 245px;
+  width: 250px;
   border: 1px solid var(--aura-gray-8) !important;
   border-radius: 8px;
 }
@@ -241,4 +245,29 @@ mat-date-range-input {
     border: 1px solid #717582;
     border-radius: 8px;
   }
+}
+.filter-contain {
+  flex-wrap: nowrap;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  overflow: hidden;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.btn-tns {
+  min-width: 200px;
+}
+.btn-mess {
+  min-width: 155px;
+}
+#filter-result-date {
+  min-width: 220px;
+}
+#filter-result-tns {
+  min-width: 220px;
+}
+#filter-result-mess {
+  min-width: 220px;
 }

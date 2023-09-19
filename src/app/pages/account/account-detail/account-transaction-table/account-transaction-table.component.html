@@ -1,3 +1,12 @@
+<div class="d-lg-none text-end mb-4">
+  <button
+      (click)="displayFilter = !displayFilter"
+      class="button button-pill button--sm button-outline button-outline__in-card button-filter px-4"
+      type="button">
+    <i class="ph ph-funnel-simple text--white mr-2 body-01"></i>
+    <span>Filter</span>
+  </button>
+</div>
 <div class="d-flex justify-content-between" [ngClass]="displayType ? 'mb-3' : 'mb-4'">
   <div *ngIf="displayType">
     <div class="d-flex d-lg-none align-items-center">
@@ -19,7 +28,7 @@
       </div>
     </div>
   </div>
-  <div class="mb-0 text--gray-5 caption-mob fw-normal">
+  <div class="mb-0 text--gray-5 caption-mob fw-normal filter-contain">
     <div class="box-filter tsx-filter-panel d-flex align-items-center mb-4" *ngIf="displayFilter">
       <div class="d-flex align-items-center">
         <div class="dropdown aura-dropdown btn-item mr-6 body" *ngIf="!transactionFilter.startDate || !transactionFilter.endDate">
@@ -45,7 +54,7 @@
           </div>
         </div>
         <div *ngIf="transactionFilter.startDate && transactionFilter.endDate"
-            class="mr-6 filter-result">
+            class="mr-6 filter-result" id="filter-result-date">
           <span>{{transactionFilter.startDate | date : 'MM/dd/yyyy'}}</span>
           <span class="mx-4">-</span>
           <span>{{transactionFilter.endDate | date : 'MM/dd/yyyy'}}</span>
@@ -53,7 +62,7 @@
         </div>
         <div class="dropdown aura-dropdown btn-item mr-6" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <button
-            class="mat-menu-trigger input-group align-items-center d-flex justify-content-between text--white cursor-pointer"
+            class="mat-menu-trigger input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-tns"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
@@ -69,7 +78,8 @@
               <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
             </div>
           </button>
-          <div class="filter-result" *ngIf="transactionFilter.typeTransfer?.length > 0">
+          <div class="filter-result" id="filter-result-tns"
+               *ngIf="transactionFilter.typeTransfer?.length > 0">
             {{ transactionFilter.typeTransfer }}
             <i class="ph-thin ph-x cursor-pointer ml-2" (click)="clearFilter(modeFilter.type)"></i>
           </div>
@@ -90,7 +100,7 @@
           <button
             #tnxTypeMenuBtn
             [matMenuTriggerFor]="tnxTypeMenu"
-            class="input-group align-items-center d-flex justify-content-between text--white cursor-pointer"
+            class="input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-mess"
             type="button"
             *ngIf="!transactionFilter.type">
             <span class="body ellipsis-text"> Message type </span>
@@ -99,7 +109,8 @@
               <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
             </div>
           </button>
-          <div class="filter-result" *ngIf="transactionFilter.type?.length > 0">
+          <div class="filter-result" id="filter-result-mess"
+               *ngIf="transactionFilter.type?.length > 0">
             {{ checkAll ? 'All' : transactionFilter.type?.length }} Msg Types selected
             <i class="ph-thin ph-x cursor-pointer ml-2" (click)="clearFilter(modeFilter.msgType)"></i>
           </div>
@@ -199,13 +210,13 @@
       found
     </ng-container>
   </div>
-  <div>
+  <div class="d-none d-lg-block">
     <button
       (click)="displayFilter = !displayFilter"
       class="button button-pill button--sm button-outline button-outline__in-card button-filter"
       type="button">
       <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
-      <span class="d-lg-flex d-none">Filter</span>
+      <span>Filter</span>
     </button>
   </div>
 </div>
