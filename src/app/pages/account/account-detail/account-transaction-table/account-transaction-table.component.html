@@ -3,7 +3,7 @@
     !displayFilter ? 'justify-content-between' : 'justify-content-end'
   }}">
   <div *ngIf="!transactionLoading && !displayType && !displayFilter" class="caption text--gray-5">
-    {{ nextKey ? 'More than >' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+    {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
     found
   </div>
   <div class="d-flex align-items-center">
@@ -236,13 +236,13 @@
       </div>
     </div>
     <div class="d-none d-lg-block" *ngIf="!transactionLoading && !displayType">
-      {{ nextKey ? 'More than >' : 'A total of' }} {{ pageData?.length }} transaction{{
+      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{
         pageData?.length > 1 ? 's' : ''
       }}
       found
     </div>
     <div class="d-lg-none" *ngIf="!transactionLoading && !displayType && displayFilter">
-      {{ nextKey ? 'More than >' : 'A total of' }} {{ pageData?.length }} transaction{{
+      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{
         pageData?.length > 1 ? 's' : ''
       }}
       found
