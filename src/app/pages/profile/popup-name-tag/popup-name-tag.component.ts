@@ -18,7 +18,8 @@ export class PopupNameTagComponent implements OnInit {
   isSubmit = false;
   errorSpendLimit = '';
   formValid = true;
-  isAccount = true;
+  isAccount = false;
+  isContract = false;
   maxLengthNameTag = 35;
   maxLengthNote = 200;
   currentCodeID;
@@ -63,7 +64,7 @@ export class PopupNameTagComponent implements OnInit {
   formInit() {
     this.privateNameForm = this.fb.group({
       isFavorite: [0],
-      isAccount: [true, [Validators.required]],
+      isAccount: [false, [Validators.required]],
       address: ['', [Validators.required]],
       name: ['', [Validators.required, Validators.maxLength(this.maxLengthNameTag)]],
       note: ['', [Validators.maxLength(200)]],
@@ -77,9 +78,11 @@ export class PopupNameTagComponent implements OnInit {
       this.idEdit = this.data.id || data.id;
     }
 
-    const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS ? true : false;
+    const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
+
     this.privateNameForm.controls['isAccount'].setValue(isAccount);
     this.isAccount = isAccount;
+    this.isContract = !this.isAccount;
     this.privateNameForm.controls['isFavorite'].setValue(data.isFavorite || false);
     this.privateNameForm.controls['address'].setValue(data.address);
     this.privateNameForm.controls['name'].setValue(data.nameTag || data.name_tag_private);
@@ -95,14 +98,8 @@ export class PopupNameTagComponent implements OnInit {
     this.getAddress['value'] = this.getAddress?.value.trim();
 
     if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
-      if (
-        (this.getAddress.value.trim()?.length === LENGTH_CHARACTER.ADDRESS && this.isAccount) ||
-        (this.getAddress.value.trim()?.length === LENGTH_CHARACTER.CONTRACT && !this.isAccount)
-      ) {
-        this.isValidAddress = true;
-      } else {
-        this.isValidAddress = false;
-      }
+      this.isValidAddress = (this.getAddress.value.trim()?.length === LENGTH_CHARACTER.ADDRESS && this.isAccount) ||
+        (this.getAddress.value.trim()?.length === LENGTH_CHARACTER.CONTRACT && !this.isAccount);
     } else {
       this.isValidAddress = false;
     }
@@ -111,16 +108,14 @@ export class PopupNameTagComponent implements OnInit {
   onSubmit() {
     this.isSubmit = true;
     const { isFavorite, isAccount, address, name, note } = this.privateNameForm.value;
-
     let payload = {
-      isFavorite: isFavorite == 1 ? true : false,
+      isFavorite: isFavorite == 1,
       type: isAccount ? this.nameTagType.Account : this.nameTagType.Contract,
       address: address,
       nameTag: name,
       note: note,
       id: this.idEdit,
     };
-
     if (this.isEditMode) {
       this.editPrivateName(payload);
     } else {
@@ -178,6 +173,7 @@ export class PopupNameTagComponent implements OnInit {
 
   changeType(type) {
     this.isAccount = type;
+    this.isContract = !this.isAccount;
     this.isValidAddress = false;
     this.isError = false;
     this.privateNameForm.value.isAccount = type;
