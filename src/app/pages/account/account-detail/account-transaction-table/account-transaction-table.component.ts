@@ -89,6 +89,7 @@ export class AccountTransactionTableComponent {
     date: 'date',
     type: 'type',
     msgType: 'msgType',
+    all : 'all'
   };
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -482,14 +483,16 @@ export class AccountTransactionTableComponent {
   }
 
   clearFilter(mode = this.modeFilter.date) {
-    if (mode === this.modeFilter.type) {
+    if (mode === this.modeFilter.type || mode === this.modeFilter.all) {
       this.transactionFilter.typeTransfer = null;
-    } else if (mode === this.modeFilter.msgType) {
+    }
+    if (mode === this.modeFilter.msgType || mode === this.modeFilter.all) {
       this.transactionFilter.type = null;
       this.listTypeSelectedTemp = [];
       this.checkAll = false;
       this.getListTypeFilter();
-    } else {
+    }
+    if (mode === this.modeFilter.date || mode === this.modeFilter.all){
       this.transactionFilter.startDate = null;
       this.transactionFilter.endDate = null;
     }

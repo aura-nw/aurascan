@@ -20,31 +20,37 @@
     </div>
   </div>
   <div class="mb-0 text--gray-5 caption-mob fw-normal">
-    <div class="box-filter tsx-filter-panel" *ngIf="displayFilter">
-      <div class="d-flex align-items-center p-0 mb-4">
-        <div class="dropdown aura-dropdown btn-item mr-6">
-          <div class="input-group align-items-center d-flex justify-content-between pr-1 cursor-pointer">
+    <div class="box-filter tsx-filter-panel d-flex align-items-center mb-4" *ngIf="displayFilter">
+      <div class="d-flex align-items-center">
+        <div class="dropdown aura-dropdown btn-item mr-6 body" *ngIf="!transactionFilter.startDate || !transactionFilter.endDate">
+          <div class="align-items-center d-flex justify-content-between calendar-contain">
             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
               <input matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate" readonly />
-              <input matEndDate placeholder="End date" [(ngModel)]="transactionFilter.endDate" class="pl-3" readonly />
+              <input matEndDate placeholder="End date" [(ngModel)]="transactionFilter.endDate" class="pl-3" readonly
+              (ngModelChange)="searchType()"/>
             </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="picker">
-              <!-- <mat-icon matDatepickerToggleIcon>arrow_drop_down</mat-icon> -->
+            <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true">
+              <mat-icon matDatepickerToggleIcon>
+                <i
+                    *ngIf="picker.opened"
+                    matIconSuffix
+                    class="ph ph-caret-down text--white body icon-expand"></i>
+                <i
+                    *ngIf="!picker.opened"
+                    matIconSuffix
+                    class="ph ph-caret-up text--white body cursor-pointer"></i>
+              </mat-icon>
             </mat-datepicker-toggle>
-            <div class="ml-3">
-              <i
-                *ngIf="!transactionFilter.startDate"
-                matIconSuffix
-                class="ph ph-caret-down text--white body icon-expand"></i>
-              <i
-                *ngIf="transactionFilter.startDate"
-                matIconSuffix
-                class="ph ph-caret-up text--white body cursor-pointer"></i>
-            </div>
+            <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
           </div>
-          <mat-date-range-picker #picker></mat-date-range-picker>
         </div>
-
+        <div *ngIf="transactionFilter.startDate && transactionFilter.endDate"
+            class="mr-6 filter-result">
+          <span>{{transactionFilter.startDate | date : 'MM/dd/yyyy'}}</span>
+          <span class="mx-4">-</span>
+          <span>{{transactionFilter.endDate | date : 'MM/dd/yyyy'}}</span>
+          <i class="ph-thin ph-x cursor-pointer ml-2" (click)="clearFilter(modeFilter.date)"></i>
+        </div>
         <div class="dropdown aura-dropdown btn-item mr-6" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <button
             class="mat-menu-trigger input-group align-items-center d-flex justify-content-between text--white cursor-pointer"
@@ -100,8 +106,7 @@
           <mat-menu
             #tnxTypeMenu="matMenu"
             class="aura-menu-panel tnx-type-panel text--white mt-2 p-2"
-            [yPosition]="'above'"
-            [hasBackdrop]="false">
+            [yPosition]="'above'">
             <div class="aura-form single-input-field">
               <div
                 class="input-group tnx-type-search mb-2"
@@ -167,8 +172,7 @@
               <div class="panel__btn-group px-4">
                 <button
                   class="button button--xlg button-outline button-outline__in-card button-pill"
-                  type="button"
-                  (click)="$event.stopPropagation()">
+                  type="button">
                   <span>Cancel</span>
                 </button>
                 <button
@@ -181,6 +185,13 @@
             </div>
           </mat-menu>
         </div>
+      </div>
+      <div *ngIf="(transactionFilter.startDate && transactionFilter.endDate) || transactionFilter.typeTransfer || transactionFilter.type"
+          class="d-flex align-items-center">
+        <div class="divider divider-vertical mx-6"></div>
+        <button class="button button-link body-01 px-0" (click)="clearFilter(modeFilter.all)">
+          <span>Clear all</span>
+        </button>
       </div>
     </div>
     <ng-container *ngIf="!transactionLoading && !displayType">

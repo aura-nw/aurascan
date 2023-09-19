@@ -18,27 +18,29 @@
   }
 }
 .box-filter {
-  .filter-time {
-    .input-group {
-      height: 40px;
-    }
+  .button-link {
+    color: var(--aura-blue-3link);
+  }
+  .divider.divider-vertical {
+    min-height: 33px;
   }
   .input-group {
+    height: 33px;
     background-color: transparent;
     border: 1px solid var(--aura-gray-8) !important;
-    padding: 8px 16px;
+    padding: 0 16px;
     border-radius: 8px;
   }
-  padding: 16px;
   @media (max-width: 376px) {
     width: calc(100vw - 68px);
   }
   .filter-result {
-    padding: var(--spacer-2) var(--spacer-4);
+    padding: 0 var(--spacer-4);
     color: var(--aura-blue-3link);
     border: 1px solid var(--aura-blue-4);
     background: #222f3d;
     border-radius: 8px;
+    height: 33px;
     display: flex;
     align-items: center;
   }
@@ -222,6 +224,17 @@
   margin: 0 -4px -12px -4px;
 }
 
+mat-date-range-input {
+  height: 31px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+.calendar-contain {
+  max-width: 245px;
+  border: 1px solid var(--aura-gray-8) !important;
+  border-radius: 8px;
+}
 ::ng-deep {
   .mat-datepicker-content .mat-calendar {
     background: #24262e;
