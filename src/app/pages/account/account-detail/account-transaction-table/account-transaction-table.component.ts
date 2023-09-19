@@ -1,7 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { MatMenuTrigger } from "@angular/material/menu";
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -27,8 +26,6 @@ export class AccountTransactionTableComponent {
   @Input() address: string;
   @Input() modeQuery: string;
   @Input() displayType: boolean = false;
-  @Input() savedFilter: any = null;
-  @Input() savedTab: any;
   @Output() filterCondition = new EventEmitter<any>();
   @Output() tabName = new EventEmitter<string>();
 
@@ -37,6 +34,7 @@ export class AccountTransactionTableComponent {
   templates: Array<TableTemplate>;
   tabsData = TabsAccountLink;
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
+  displayFilter = true;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
@@ -73,7 +71,8 @@ export class AccountTransactionTableComponent {
   transactionTypeKeyWord = '';
   tnxType = [];
   tnxTypeOrigin = [];
-  listTypeSelected = '';
+  listTypeSelectedTemp = [];
+  arrTypeFilter = [];
   currentType = AccountTxType.Sent;
   accountTxType = AccountTxType;
   isSearch = false;
@@ -83,11 +82,21 @@ export class AccountTransactionTableComponent {
   maxDateEnd;
   linkToken = 'token-nft';
   typeTx = [AccountTxType.Sent, AccountTxType.Received];
+  listTypeDefine = [];
+  modeFilter = {
+    date: 'date',
+    type: 'type',
+    msgType: 'msgType',
+    all: 'all',
+  };
+  isSearchOther = false;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+
+  countFilter = 0;
 
   constructor(
     public global: Globals,
@@ -123,71 +132,47 @@ export class AccountTransactionTableComponent {
   }
 
   initTnxFilter(isReset = false) {
-    if (this.savedFilter !== null && this.savedTab === this.modeQuery && !isReset) {
-      this.transactionFilter = this.savedFilter;
-      this.transactionFilter.type.forEach((element, index) => {
-        let type = _.find(TYPE_TRANSACTION, { label: element })?.value;
-        if (!this.listTypeSelected) {
-          this.listTypeSelected = type;
-        } else {
-          this.listTypeSelected += ', ' + type;
-        }
-      });
-      this.setDateRange();
-    } else {
-      this.transactionTypeKeyWord = '';
-      this.listTypeSelected = '';
-      this.checkAll = false;
-      this.transactionFilter = {
-        startDate: null,
-        endDate: null,
-        type: [],
-        typeTransfer: null,
-      };
-      this.minDate = this.minDateEnd = new Date(2023, 2, 20);
-      this.maxDateEnd = this.maxDate = new Date().toISOString().slice(0, 10);
-    }
+    this.transactionTypeKeyWord = '';
+    this.listTypeSelectedTemp = [];
+    this.checkAll = false;
+    this.transactionFilter = {
+      startDate: null,
+      endDate: null,
+      type: null,
+      typeTransfer: null,
+    };
+    this.minDate = this.minDateEnd = new Date(2023, 2, 20);
+    this.maxDateEnd = this.maxDate = new Date().toISOString().slice(0, 10);
   }
 
   onChangeTnxFilterType(event, type: any) {
-    if (event.target.checked) {
-      if (type === 'all') {
+    if (type === 'all') {
+      if (event.target.checked) {
         this.checkAll = true;
-        this.transactionFilter.type = null;
-        this.listTypeSelected = 'All';
+        this.listTypeSelectedTemp = this.tnxType;
       } else {
-        this.transactionFilter.type.push(type.label);
-        if (!this.listTypeSelected) {
-          this.listTypeSelected = type.value;
-        } else {
-          this.listTypeSelected += ', ' + type.value;
-        }
+        this.listTypeSelectedTemp = [];
+        this.checkAll = false;
       }
     } else {
-      this.listTypeSelected = this.listTypeSelected
-        ?.replace(type?.value + ', ', '')
-        .replace(', ' + type?.value, '')
-        .replace(type?.value, '');
-      if (type === 'all') {
-        this.transactionFilter.type = [];
-        this.listTypeSelected = '';
-        this.checkAll = false;
+      this.checkAll = false;
+      if (event.target.checked) {
+        this.arrTypeFilter.push(type.label);
+        this.listTypeSelectedTemp?.push(type);
       } else {
-        this.transactionFilter.type.forEach((element, index) => {
-          if (element === type.label) {
-            this.transactionFilter.type.splice(index, 1);
-          }
+        this.listTypeSelectedTemp?.forEach((element, index) => {
+          if (element.label === type.label) this.listTypeSelectedTemp?.splice(index, 1);
         });
       }
     }
   }
 
   searchTransactionType() {
-    if(this.transactionTypeKeyWord.toLowerCase().length === 0 || this.transactionTypeKeyWord.toLowerCase() === '') {
-      this.clearFilterSearch();
+    if (this.transactionTypeKeyWord?.toLowerCase().length === 0 || this.transactionTypeKeyWord?.toLowerCase() === '') {
+      this.tnxType = this.tnxTypeOrigin;
     } else {
-      this.tnxType = this.tnxType.filter(
-        (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord.toLowerCase().trim()) > -1,
+      this.tnxType = this.tnxType?.filter(
+        (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord?.toLowerCase().trim()) > -1,
       );
     }
   }
@@ -200,20 +185,21 @@ export class AccountTransactionTableComponent {
     if (document.getElementById('typeActionBtn')?.classList.contains('show')) {
       document.getElementById('typeActionBtn')?.classList.remove('show');
     }
+    this.searchType();
   }
 
   clearFilterSearch(isResetFilter = true) {
     this.tnxType = this.tnxTypeOrigin;
-    this.savedFilter = null;
     this.getListTypeFilter();
     this.transactionTypeKeyWord = '';
     if (isResetFilter) {
       this.transactionFilter.type = [];
-      this.listTypeSelected = '';
+      this.listTypeSelectedTemp = [];
     }
   }
 
   searchType(isSearch = true) {
+    this.setFilterNum();
     this.transactionLoading = true;
     this.dataSource = new MatTableDataSource();
     this.pageData.length = 0;
@@ -254,8 +240,18 @@ export class AccountTransactionTableComponent {
       endTime: this.getConvertDate(this.transactionFilter.endDate, true) || null,
     };
 
-    if (this.transactionFilter?.type?.length > 0) {
-      payload.listTxMsgType = this.transactionFilter?.type;
+    if (this.isSearchOther) {
+      const isSameType = (listIn, listNotIn) => listIn?.label === listNotIn;
+      const onlyInLeft = (left, right, compareFunction) =>
+        left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
+      const lstTemp = onlyInLeft(this.tnxTypeOrigin, this.transactionFilter.type, isSameType);
+      let result = [];
+      lstTemp.forEach((element) => {
+        result.push(element.label);
+      });
+      payload['listTxMsgTypeNotIn'] = result || null;
+    } else {
+      payload['listTxMsgType'] = this.transactionFilter.type || null;
     }
 
     switch (this.modeQuery) {
@@ -325,6 +321,8 @@ export class AccountTransactionTableComponent {
         return obj;
       });
       this.tnxType = this.tnxType?.filter((k) => k.value);
+      this.listTypeDefine = [...this.tnxType];
+      this.tnxType.push({ label: 'Others', value: 'Others' });
       this.tnxTypeOrigin = [...this.tnxType];
     });
   }
@@ -398,7 +396,14 @@ export class AccountTransactionTableComponent {
       }
 
       const coinConfig = this.environmentService.configValue.coins;
-      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive, this.currentAddress, coinConfig);
+      let txs = convertDataAccountTransaction(
+        data,
+        this.coinInfo,
+        this.modeQuery,
+        setReceive,
+        this.currentAddress,
+        coinConfig,
+      );
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
       } else {
@@ -450,10 +455,68 @@ export class AccountTransactionTableComponent {
     }
   }
 
-  setDateRange() {
-    this.maxDateEnd =  new Date().toISOString().slice(0, 10);
-    this.minDate = new Date(2023, 2, 20);
-    this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
-    this.minDateEnd = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
+  executeFilterType() {
+    let lstTemp = [];
+    if (this.listTypeSelectedTemp?.length > 0) {
+      this.listTypeSelectedTemp?.forEach((element, index) => {
+        if (element.label === 'Others') {
+          this.isSearchOther = true;
+        } else {
+          lstTemp.push(element.label);
+        }
+      });
+    }
+    this.transactionFilter.type = lstTemp || null;
+    this.searchType();
+  }
+
+  clearFilterType() {
+    this.transactionFilter.type = null;
+    this.tnxType = this.tnxTypeOrigin;
+    this.getListTypeFilter();
+    this.transactionTypeKeyWord = '';
+    this.listTypeSelectedTemp = [];
+    this.checkAll = false;
+    this.transactionFilter = {
+      startDate: null,
+      endDate: null,
+      type: null,
+      typeTransfer: null,
+    };
+  }
+
+  checkedTnx(type: any) {
+    let result = false;
+    if (this.listTypeSelectedTemp?.length > 0 && this.listTypeSelectedTemp.find((k) => k.label === type.label)) {
+      result = true;
+    }
+    return result;
+  }
+
+  clearFilter(mode = this.modeFilter.date) {
+    if (mode === this.modeFilter.type || mode === this.modeFilter.all) {
+      this.transactionFilter.typeTransfer = null;
+    }
+    if (mode === this.modeFilter.msgType || mode === this.modeFilter.all) {
+      this.transactionFilter.type = null;
+      this.listTypeSelectedTemp = [];
+      this.checkAll = false;
+      this.isSearchOther = false;
+      this.getListTypeFilter();
+      this.transactionTypeKeyWord = null;
+    }
+    if (mode === this.modeFilter.date || mode === this.modeFilter.all) {
+      this.transactionFilter.startDate = null;
+      this.transactionFilter.endDate = null;
+    }
+    this.searchType();
+  }
+
+  setFilterNum() {
+    this.countFilter =
+      +(this.transactionFilter.type?.length || 0) +
+      +(this.isSearchOther ? 1 : 0) +
+      +(this.transactionFilter.typeTransfer ? 1 : 0) +
+      +(this.transactionFilter.endDate ? 1 : 0);
   }
 }

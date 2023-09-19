@@ -99,3 +99,6 @@ app-paginator {
   --mat-mdc-button-persistent-ripple-color: transparent !important;
   --mat-mdc-button-ripple-color: transparent !important;
 }
+.mat-button-focus-overlay {
+  background-color: transparent!important;
+}

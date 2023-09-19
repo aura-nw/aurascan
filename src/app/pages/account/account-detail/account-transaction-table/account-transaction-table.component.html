@@ -1,4 +1,35 @@
-<div class="d-flex justify-content-between align-items-center" [ngClass]="displayType ? 'mb-3' : 'mb-4'">
+<div
+  class="d-lg-none d-flex align-items-center mb-4 {{
+    !displayFilter ? 'justify-content-between' : 'justify-content-end'
+  }}">
+  <div *ngIf="!transactionLoading && !displayType && !displayFilter" class="caption text--gray-5">
+    {{ nextKey ? 'More than >' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+    found
+  </div>
+  <div class="d-flex align-items-center">
+    <button
+      *ngIf="
+        (transactionFilter.startDate && transactionFilter.endDate) ||
+        transactionFilter.typeTransfer ||
+        transactionFilter.type
+      "
+      class="button button-link body-01 px-0 mr-6"
+      (click)="clearFilter(modeFilter.all)">
+      <span>Clear all</span>
+    </button>
+    <button
+      (click)="displayFilter = !displayFilter"
+      class="button button-pill button--sm button-outline button-outline__in-card button-filter px-4"
+      type="button">
+      <i class="ph ph-funnel-simple text--white mr-2 body-01"></i>
+      <span>Filter</span>
+      <span *ngIf="countFilter > 0" class="nft__unclaimed-noti caption aura-tooltip-object" [class.noti--pill]="true">
+        {{ countFilter }}
+      </span>
+    </button>
+  </div>
+</div>
+<div class="d-flex justify-content-between" [ngClass]="displayType ? 'mb-3' : 'mb-4'">
   <div *ngIf="displayType">
     <div class="d-flex d-lg-none align-items-center">
       <div class="dropdown aura-dropdown">
@@ -19,121 +50,100 @@
       </div>
     </div>
   </div>
-  <div class="mb-0 text--gray-5 caption-mob fw-normal">
-    <ng-container *ngIf="!transactionLoading && !displayType">
-      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
-      found
-    </ng-container>
-  </div>
-  <div>
-    <button
-      #menuTrigger="matMenuTrigger"
-      [matMenuTriggerFor]="filterMenu"
-      class="button button-pill button--sm button-outline button-outline__in-card button-filter"
-      type="button">
-      <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
-      <span class="d-lg-flex d-none">Filter</span>
-    </button>
-
-    <mat-menu #filterMenu="matMenu" class="aura-menu-panel tsx-filter-panel text--white mt-2">
-      <div
-        class="body fw-500 aura-form single-input-field box-filter"
-        (click)="$event.stopPropagation()"
-        (keydown)="$event.stopPropagation()">
-        <h3 class="mb-0 fw-bold text--white mb-4">Filter</h3>
-        <!-- Asset Transfer Type -->
-        <div class="d-flex flex-column p-0 mb-4" *ngIf="modeQuery !== tabsData.ExecutedTxs">
-          <span class="text-sm mb-2">Asset Transfer Type</span>
-          <div class="dropdown aura-dropdown btn-item">
-            <button
-              class="mat-menu-trigger input-group align-items-center d-flex justify-content-between text--gray-4 cursor-pointer"
-              type="button"
-              data-bs-toggle="dropdown"
-              id="typeActionBtn"
-              aria-expanded="false">
-              <span class="body">
-                <ng-container *ngIf="!transactionFilter.typeTransfer"> Select a type </ng-container>
-                <span *ngIf="transactionFilter.typeTransfer?.length > 0" class="text--white"
-                  >{{ transactionFilter.typeTransfer }}
-                </span>
-              </span>
-              <i class="ph-light ph-funnel-simple text--white h1"></i>
-            </button>
-            <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
-                <button type="button" class="button p-0">All type</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Sent)">
-                <button type="button" class="button p-0">Sent</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Received)">
-                <button type="button" class="button p-0">Receive</button>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <!-- Date -->
-        <div class="d-flex p-0 mb-4">
-          <div class="filter-time col-5">
-            <span class="form-label text-sm">Start date</span>
-            <div class="input-group input-group--simply pr-0 mt-2 cursor-pointer" (click)="pickerStart.open()">
+  <div class="mb-0 text--gray-5 caption-mob fw-normal filter-contain">
+    <div class="box-filter tsx-filter-panel d-flex align-items-center mb-4" *ngIf="displayFilter">
+      <div class="d-flex align-items-center">
+        <div
+          class="dropdown aura-dropdown btn-item mr-6 body"
+          *ngIf="!transactionFilter.startDate || !transactionFilter.endDate">
+          <div class="align-items-center d-flex justify-content-between calendar-contain">
+            <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
+              <input matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate" readonly />
               <input
-                readOnly
-                #start_date
-                [matDatepicker]="pickerStart"
-                [min]="minDate"
-                [max]="maxDate"
-                [style]="'max-width: 70%'"
-                [(ngModel)]="transactionFilter.startDate"
-                (ngModelChange)="setDateRange()"
-                class="cursor-pointer"
-                placeholder="Select" />
-              <div class="mr-2 mr-lg-3 h6 mb-0 position-relative mt-1">
-                <i class="ph-thin ph-calendar-blank h3 text--white h6-mob"></i>
-                <mat-datepicker #pickerStart></mat-datepicker>
-              </div>
-            </div>
-          </div>
-          <div class="col-2 d-flex justify-content-center align-items-center mt-6">-</div>
-          <div class="filter-time col-5">
-            <span class="form-label text-sm">End date</span>
-            <div class="input-group input-group--simply pr-0 mt-2 cursor-pointer" (click)="pickerEnd.open()">
-              <input
-                readOnly
-                #end_date
-                [matDatepicker]="pickerEnd"
-                [min]="minDateEnd"
-                [max]="maxDateEnd"
-                [style]="'max-width: 70%'"
+                matEndDate
+                placeholder="End date"
                 [(ngModel)]="transactionFilter.endDate"
-                (ngModelChange)="setDateRange()"
-                class="cursor-pointer"
-                placeholder="Select" />
-              <div class="mr-2 mr-lg-3 h6 mb-0 position-relative mt-1">
-                <i class="ph-thin ph-calendar-blank h3 text--white h6-mob"></i>
-                <mat-datepicker #pickerEnd></mat-datepicker>
-              </div>
-            </div>
+                class="pl-3"
+                readonly
+                (ngModelChange)="searchType()" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true">
+              <mat-icon matDatepickerToggleIcon>
+                <i *ngIf="!picker.opened" matIconSuffix class="ph ph-caret-down text--white body icon-expand"></i>
+                <i *ngIf="picker.opened" matIconSuffix class="ph ph-caret-up text--white body cursor-pointer"></i>
+              </mat-icon>
+            </mat-datepicker-toggle>
+            <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
           </div>
         </div>
-        <!-- txn type -->
-        <div class="d-flex flex-column p-0 mb-4" *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs">
-          <span class="text-sm mb-2">Message Type</span>
+        <div
+          *ngIf="transactionFilter.startDate && transactionFilter.endDate"
+          class="mr-6 filter-result"
+          id="filter-result-date">
+          <span>{{ transactionFilter.startDate | date : 'MM/dd/yyyy' }}</span>
+          <span class="mx-4">-</span>
+          <span>{{ transactionFilter.endDate | date : 'MM/dd/yyyy' }}</span>
+          <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.date)"></i>
+        </div>
+        <div class="dropdown aura-dropdown btn-item mr-6" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <button
-            [matMenuTriggerFor]="tnxTypeMenu"
-            class="input-group align-items-center d-flex justify-content-between text--gray-4 cursor-pointer"
-            type="button">
-            <span class="box-type-selected">
-              <ng-container *ngIf="listTypeSelected?.length === 0"> Select a type </ng-container>
-              <span *ngIf="listTypeSelected" class="text--white">{{ listTypeSelected }} </span>
+            class="mat-menu-trigger input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-tns"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            *ngIf="!transactionFilter.typeTransfer">
+            <span class="body">
+              <ng-container *ngIf="!transactionFilter.typeTransfer"> Asset Transfer Type </ng-container>
+              <span *ngIf="transactionFilter.typeTransfer?.length > 0" class="text--white"
+                >{{ transactionFilter.typeTransfer }}
+              </span>
             </span>
-            <i class="ph-light ph-funnel-simple text--white h1"></i>
+            <div class="ml-3">
+              <i *ngIf="!transactionFilter.startDate" class="ph ph-caret-down text--white body icon-expand"></i>
+              <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
+            </div>
           </button>
+          <div class="filter-result" id="filter-result-tns" *ngIf="transactionFilter.typeTransfer?.length > 0">
+            <span class="body">{{ transactionFilter.typeTransfer }}</span>
+            <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.type)"></i>
+          </div>
+          <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
+            <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
+              <button type="button" class="button p-0">All type</button>
+            </li>
+            <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Sent)">
+              <button type="button" class="button p-0">Sent</button>
+            </li>
+            <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Received)">
+              <button type="button" class="button p-0">Receive</button>
+            </li>
+          </ul>
+        </div>
+
+        <div *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs">
+          <button
+            #tnxTypeMenuBtn
+            [matMenuTriggerFor]="tnxTypeMenu"
+            class="input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-mess"
+            type="button"
+            *ngIf="!transactionFilter.type">
+            <span class="body ellipsis-text"> Message type </span>
+            <div class="ml-3 mt-1">
+              <i *ngIf="!transactionFilter.startDate" class="ph ph-caret-down text--white body icon-expand"></i>
+              <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
+            </div>
+          </button>
+          <div
+            class="filter-result"
+            id="filter-result-mess"
+            *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
+            {{ checkAll ? 'All' : transactionFilter.type?.length + (isSearchOther ? 1 : 0) || 1 }} Msg Types selected
+            <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.msgType)"></i>
+          </div>
           <mat-menu
             #tnxTypeMenu="matMenu"
             class="aura-menu-panel tnx-type-panel text--white mt-2 p-2"
-            [yPosition]="'above'"
-            [hasBackdrop]="false">
+            [yPosition]="'above'">
             <div class="aura-form single-input-field">
               <div
                 class="input-group tnx-type-search mb-2"
@@ -176,8 +186,8 @@
                   <input
                     type="checkbox"
                     id="all"
-                    (change)="onChangeTnxFilterType($event, 'all')"
                     [checked]="checkAll"
+                    (change)="onChangeTnxFilterType($event, 'all')"
                     class="check-box check-box--dark" />
                   <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
                 </div>
@@ -188,50 +198,67 @@
                     class="form-group d-flex align-items-center tnx-filter-item px-2">
                     <input
                       type="checkbox"
+                      [checked]="checkedTnx(type)"
                       id="type-{{ i }}"
-                      [checked]="
-                        (this.transactionFilter?.type?.length > 0 &&
-                          this.transactionFilter?.type?.includes(type.label)) ||
-                        this.transactionFilter.type === null
-                      "
                       (change)="onChangeTnxFilterType($event, type)"
                       class="check-box check-box--dark" />
                     <label for="type-{{ i }}" class="ml-2 mb-0 text-justify pl-1"> {{ type.value }} </label>
                   </div>
                 </div>
               </div>
+              <div class="panel__btn-group px-4">
+                <button class="button button--xlg button-outline button-outline__in-card button-pill" type="button">
+                  <span>Cancel</span>
+                </button>
+                <button
+                  class="button button--xlg button-outline button-outline__in-card button-pill ml-4"
+                  type="button"
+                  [disabled]="listTypeSelectedTemp?.length === 0"
+                  (click)="$event.stopPropagation(); executeFilterType()">
+                  <span>Select</span>
+                </button>
+              </div>
             </div>
           </mat-menu>
         </div>
-        <!-- Button action group -->
-        <div class="divider divider-horizontal"></div>
-        <div class="d-flex justify-content-between align-items-center pt-4">
-          <button
-            class="button button-pill button-outline button--xlg"
-            (click)="initTnxFilter(true); searchType(false)">
-            <span>Reset</span>
-          </button>
-          <div class="d-flex">
-            <button
-              class="button button-pill button-outline button--xlg ml-2 ml-lg-0"
-              (click)="menuTrigger.closeMenu()">
-              <span>Cancel</span>
-            </button>
-            <button
-              class="button button-pill button-outline button-apply ml-2 ml-lg-4 button--xlg"
-              [disabled]="
-                !transactionFilter.startDate &&
-                !transactionFilter.endDate &&
-                !listTypeSelected &&
-                !transactionFilter.typeTransfer
-              "
-              (click)="menuTrigger.closeMenu(); searchType()">
-              <span>Apply</span>
-            </button>
-          </div>
-        </div>
       </div>
-    </mat-menu>
+      <div
+        *ngIf="
+          (transactionFilter.startDate && transactionFilter.endDate) ||
+          transactionFilter.typeTransfer ||
+          transactionFilter.type
+        "
+        class="d-none d-lg-flex align-items-center">
+        <div class="divider divider-vertical mx-6"></div>
+        <button class="button button-link body-01 px-0" (click)="clearFilter(modeFilter.all)">
+          <span>Clear all</span>
+        </button>
+      </div>
+    </div>
+    <div class="d-none d-lg-block" *ngIf="!transactionLoading && !displayType">
+      {{ nextKey ? 'More than >' : 'A total of' }} {{ pageData?.length }} transaction{{
+        pageData?.length > 1 ? 's' : ''
+      }}
+      found
+    </div>
+    <div class="d-lg-none" *ngIf="!transactionLoading && !displayType && displayFilter">
+      {{ nextKey ? 'More than >' : 'A total of' }} {{ pageData?.length }} transaction{{
+        pageData?.length > 1 ? 's' : ''
+      }}
+      found
+    </div>
+  </div>
+  <div class="d-none d-lg-block">
+    <button
+      (click)="displayFilter = !displayFilter"
+      class="button button-pill button--sm button-outline button-outline__in-card button-filter"
+      type="button">
+      <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
+      <span>Filter</span>
+      <span *ngIf="countFilter > 0" class="nft__unclaimed-noti caption aura-tooltip-object" [class.noti--pill]="true">
+        {{ countFilter }}
+      </span>
+    </button>
   </div>
 </div>
 <div *ngIf="!transactionLoading && displayType" class="mb-3">
@@ -290,9 +317,7 @@
                       </div>
                     </div>
 
-                    <app-tooltip-customize
-                      [class]="'message-custom'"
-                      [content]="data.lstTypeTemp | displayTypeToolTip">
+                    <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | displayTypeToolTip">
                     </app-tooltip-customize>
                   </div>
                 </div>
@@ -468,7 +493,7 @@
       </tr>
     </table>
   </div>
-  <div class="d-lg-none">
+  <div class="d-lg-none card-mob-account">
     <app-card-mob-account
       *ngFor="let data of dataSourceMobile; first as isFirst"
       [link]="'/transaction/' + data.tx_hash"
@@ -506,11 +531,13 @@
   </app-paginator>
 </ng-container>
 <ng-template #noValues>
-  <app-table-no-data *ngIf="!transactionLoading && !isSearch"></app-table-no-data>
-  <app-table-no-data
-    *ngIf="!transactionLoading && isSearch"
-    textNull="No data with this type of message"></app-table-no-data>
+  <div class="noData">
+    <app-table-no-data *ngIf="!transactionLoading && !isSearch"></app-table-no-data>
+    <app-table-no-data
+      *ngIf="!transactionLoading && isSearch"
+      textNull="No data with this type of message"></app-table-no-data>
+  </div>
 </ng-template>
-<div *ngIf="transactionLoading" class="">
+<div *ngIf="transactionLoading" class="noData">
   <app-loading-sprint></app-loading-sprint>
 </div>
