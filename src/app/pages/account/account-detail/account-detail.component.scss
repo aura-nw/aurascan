@@ -17,6 +17,9 @@ section.account-detail {
     @media (max-width: 992px) {
       padding: 16px;
     }
+    .btn-private {
+      width: fit-content;
+    }
   }
 }
 
