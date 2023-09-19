@@ -2,7 +2,7 @@
   <div class="txt-title">Private name tag</div>
   <button
     (click)="openPopup()"
-    class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card"
+    class="button button--md button-pill button-primary button-flat"
     type="button">
     <span>Create</span>
   </button>
@@ -47,7 +47,7 @@
             <div *ngIf="template.headerCellDef === 'Fav'" class="d-flex aura-tooltip-contain ml-lg-3 ml-2">
               <i class="ph ph-info body-01 aura-tooltip-object"></i>
               <app-tooltip-customize
-                [content]="'Click the star icon to mark your favorite address <br> on the top of the list'">
+                [content]="'Click the star icon to mark your favorite address <br> on the top of the list'" [class]="'fw-normal'">
               </app-tooltip-customize>
             </div>
             <div [innerHTML]="template.headerCellDef | translate" *ngIf="template.headerCellDef !== 'Fav'"></div>
@@ -78,7 +78,7 @@
                       class="text--gray-5 ellipsis-text"
                       [class.aura-tooltip-object]="data.note"
                       style="max-width: 200px; width: fit-content">
-                      {{ data.note || '-' }}
+                      {{ data.note || 'Note:-' }}
                     </div>
                     <app-tooltip-customize
                       [content]="'<div>' + data.note + '</div>'"
