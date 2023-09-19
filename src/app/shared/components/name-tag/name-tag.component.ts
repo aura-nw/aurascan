@@ -56,7 +56,7 @@ export class NameTagComponent implements OnInit {
       result += '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag, false);
     }
     if (this.commonService.checkPrivate(value)) {
-      result += '<br>' + 'Private name tag: ' + this.commonService.setNameTag(value, this.global.listNameTag);
+      result += '<br>' + 'Private name: ' + this.commonService.setNameTag(value, this.global.listNameTag);
     }
     return result;
   }
