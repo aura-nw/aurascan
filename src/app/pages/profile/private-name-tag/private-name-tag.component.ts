@@ -97,7 +97,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: 100,
-      keyword: this.textSearch,
+      keyword: this.textSearch || '',
     };
 
     this.nameTagService.getListPrivateNameTagNextKey(payload).subscribe((res) => {
@@ -144,7 +144,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result !== 'canceled') {
+      if (result && result !== 'canceled') {
         this.deleteNameTag(data.id);
       }
     });
@@ -160,7 +160,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       this.toastr.successWithTitle('Private name tag removed!', 'Success');
       setTimeout(() => {
         this.getListPrivateName();
-      }, 500);
+      }, 1000);
     });
   }
 
@@ -173,7 +173,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     this.nameTagService.updatePrivateNameTag(payload).subscribe((res) => {
       setTimeout(() => {
         this.getListPrivateName();
-      }, 500);
+      }, 1000);
     });
   }
 
