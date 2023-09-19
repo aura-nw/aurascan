@@ -84,6 +84,7 @@ export class ContractService extends CommonService {
         smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}, status: {_eq: "LATEST"}}) {
           address
           name
+          label
           code_id
           code {
             type
@@ -95,6 +96,12 @@ export class ContractService extends CommonService {
           }
           updated_at
           creator
+          cw20_contract {
+            name
+          }
+          cw721_contract {
+            name
+          }
         }
         smart_contract_aggregate(where: {${typeQuery} ${updateQuery} address: {_eq: $address}, creator: {_eq: $creator}, status: {_eq: "LATEST"}}) {
           aggregate {

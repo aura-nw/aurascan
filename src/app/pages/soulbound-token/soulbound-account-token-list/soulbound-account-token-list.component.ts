@@ -5,6 +5,7 @@ import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constan
 import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-soulbound-account-token-list',
@@ -44,7 +45,8 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     private walletService: WalletService,
     private cdr: ChangeDetectorRef,
     private soulboundService: SoulboundService,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private global: Globals
   ) {}
 
   ngOnInit(): void {
@@ -109,5 +111,20 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   extendLink(url) {
     url = url.match(/^https?:/) ? url : '//' + url;
     return url;
+  }
+
+  editPrivateName() {
+    const userEmail = localStorage.getItem('userEmail');
+    const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.userAddress);
+    if (userEmail) {
+      if (dataNameTag) {
+        localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
+      } else {
+        localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.userAddress }));
+      }
+      this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

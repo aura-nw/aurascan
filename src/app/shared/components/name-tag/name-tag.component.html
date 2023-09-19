@@ -6,16 +6,13 @@
       class="text--primary text-break d-flex"
       [ngClass]="[
         isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
-        widthAuto ? 'w-auto' : ''
+        widthAuto ? 'w-auto' : '',
+        commonService.checkPrivate(paramUrl || value) ? 'private-name-tag' : ''
       ]"
       [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
-    <app-tooltip-customize
-      [className]="tooltipPosition"
-      [content]="
-        (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
-      ">
+    <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
     </app-tooltip-customize>
   </div>
   <div class="aura-tooltip-contain">
@@ -25,16 +22,13 @@
       class="text--primary text-break d-flex"
       [ngClass]="[
         isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
-        widthAuto ? 'w-auto' : ''
+        widthAuto ? 'w-auto' : '',
+        commonService.checkPrivate(paramUrl || value) ? 'private-name-tag' : ''
       ]"
       [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
       <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
     </a>
-    <app-tooltip-customize
-      [className]="tooltipPosition"
-      [content]="
-        (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
-      ">
+    <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
     </app-tooltip-customize>
   </div>
 </ng-container>
@@ -45,7 +39,8 @@
       class="text-break"
       [ngClass]="[
         isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
-        widthAuto ? 'w-auto' : ''
+        widthAuto ? 'w-auto' : '',
+        commonService.checkPrivate(paramUrl || value) ? 'private-name-tag' : ''
       ]"
       [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
       <ng-container *ngIf="!fullText">
@@ -69,11 +64,7 @@
         </a>
       </ng-container>
     </span>
-    <app-tooltip-customize
-      [className]="tooltipPosition"
-      [content]="
-        (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
-      ">
+    <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
     </app-tooltip-customize>
   </div>
 </ng-template>
