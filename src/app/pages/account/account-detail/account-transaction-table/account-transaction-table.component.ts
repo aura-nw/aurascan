@@ -89,8 +89,9 @@ export class AccountTransactionTableComponent {
     date: 'date',
     type: 'type',
     msgType: 'msgType',
-    all : 'all'
+    all: 'all',
   };
+  isSearchOther = false;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -241,10 +242,13 @@ export class AccountTransactionTableComponent {
       address: address,
       heightLT: nextKey,
       compositeKey: null,
-      listTxMsgType: this.transactionFilter.type || null,
+      listTxMsgType: this.isSearchOther ? null : this.transactionFilter.type,
+      listTxMsgTypeNotIn: this.isSearchOther ? this.tnxTypeOrigin : null,
       startTime: this.getConvertDate(this.transactionFilter.startDate) || null,
       endTime: this.getConvertDate(this.transactionFilter.endDate, true) || null,
     };
+
+    console.log(payload);
 
     switch (this.modeQuery) {
       case TabsAccountLink.ExecutedTxs:
@@ -314,7 +318,7 @@ export class AccountTransactionTableComponent {
       });
       this.tnxType = this.tnxType?.filter((k) => k.value);
       this.listTypeDefine = [...this.tnxType];
-      // this.tnxType.push({ label: 'Others', value: 'Others' });
+      this.tnxType.push({ label: 'Others', value: 'Others' });
       this.tnxTypeOrigin = [...this.tnxType];
     });
   }
@@ -451,6 +455,9 @@ export class AccountTransactionTableComponent {
     let lstTemp = [];
     if (this.listTypeSelectedTemp?.length > 0) {
       this.listTypeSelectedTemp?.forEach((element, index) => {
+        if (element.label === 'Others') {
+          this.isSearchOther = true;
+        }
         lstTemp.push(element.label);
       });
     }
@@ -490,9 +497,10 @@ export class AccountTransactionTableComponent {
       this.transactionFilter.type = null;
       this.listTypeSelectedTemp = [];
       this.checkAll = false;
+      this.isSearchOther = false;
       this.getListTypeFilter();
     }
-    if (mode === this.modeFilter.date || mode === this.modeFilter.all){
+    if (mode === this.modeFilter.date || mode === this.modeFilter.all) {
       this.transactionFilter.startDate = null;
       this.transactionFilter.endDate = null;
     }
