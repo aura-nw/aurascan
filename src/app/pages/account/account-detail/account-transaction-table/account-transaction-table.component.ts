@@ -149,7 +149,7 @@ export class AccountTransactionTableComponent {
     if (type === 'all') {
       if (event.target.checked) {
         this.checkAll = true;
-        this.listTypeSelectedTemp = this.tnxType;
+        this.listTypeSelectedTemp = this.tnxTypeOrigin;
       } else {
         this.listTypeSelectedTemp = [];
         this.checkAll = false;
