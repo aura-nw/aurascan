@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,22 +14,16 @@ import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-private-name-tag',
   templateUrl: './private-name-tag.component.html',
   styleUrls: ['./private-name-tag.component.scss'],
 })
-export class PrivateNameTagComponent implements OnInit {
+export class PrivateNameTagComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
-
-  countFav = 0;
-  modalReference: any;
-  pageData: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 8 },
@@ -41,7 +35,13 @@ export class PrivateNameTagComponent implements OnInit {
     { matColumnDef: 'action', headerCellDef: '', headerWidth: 8 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-
+  countFav = 0;
+  modalReference: any;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 5,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   textSearch = '';
   searchSubject = new Subject();
   destroy$ = new Subject();
@@ -49,6 +49,7 @@ export class PrivateNameTagComponent implements OnInit {
   dataTable = [];
   nextKey = null;
   currentKey = null;
+  maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor(
     public commonService: CommonService,
@@ -56,14 +57,8 @@ export class PrivateNameTagComponent implements OnInit {
     private dialog: MatDialog,
     private toastr: NgxToastrService,
     private global: Globals,
-  ) {
-    this.searchSubject
-      .asObservable()
-      .pipe(debounceTime(500), takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.pageChange.selectPage(0);
-      });
-  }
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     const dataNameTag = localStorage.getItem('setAddressNameTag');
@@ -75,6 +70,18 @@ export class PrivateNameTagComponent implements OnInit {
 
     this.commonService.listNameTag = this.global.listNameTag;
     this.getListPrivateName();
+    this.searchSubject
+      .asObservable()
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.pageChange.selectPage(0);
+      });
+  }
+
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onKeyUp() {
@@ -120,7 +127,7 @@ export class PrivateNameTagComponent implements OnInit {
       if (result) {
         setTimeout(() => {
           this.getListPrivateName();
-        }, 1000);
+        }, 4000);
       }
     });
   }
@@ -182,6 +189,16 @@ export class PrivateNameTagComponent implements OnInit {
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getListPrivateName(this.nextKey);
       this.currentKey = this.nextKey;
+    } else {
+      this.getListPrivateName();
+    }
+  }
+
+  navigateAddress(address): void {
+    if (isContract(address)) {
+      this.router.navigate(['/contracts', address]);
+    } else {
+      this.router.navigate(['/account', address]);
     }
   }
 }

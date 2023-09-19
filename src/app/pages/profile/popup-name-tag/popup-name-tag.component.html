@@ -74,7 +74,7 @@
                 placeholder="aura..."
                 class="input-address"
                 (change)="checkPublicNameTag()"
-                (blur)="checkFormValid(); isError = false"
+                (input)="checkFormValid(); isError = false"
                 autocomplete="off" />
             </div>
             <span *ngIf="isEditMode">{{ getAddress.value }}</span>

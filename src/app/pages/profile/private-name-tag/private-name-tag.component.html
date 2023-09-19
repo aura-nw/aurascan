@@ -19,7 +19,7 @@
             class="form-control pl-0"
             placeholder="Search for Address or Name tag"
             [(ngModel)]="textSearch"
-            [maxLength]="35"
+            [maxLength]="maxLengthSearch"
             (keyup)="onKeyUp()"
             name="search"
             autocomplete="off" />
@@ -70,16 +70,16 @@
                     *ngIf="data.isFavorite" />
                 </div>
                 <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
-                  <a class="text--primary cursor-pointer" [routerLink]="['/account', data[template.matColumnDef]]">
+                  <a class="text--primary cursor-pointer" (click)="navigateAddress(data[template.matColumnDef])">
                     <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                   </a>
                   <div class="aura-tooltip-contain">
                     <div
                       class="text--gray-5 ellipsis-text"
                       [class.aura-tooltip-object]="data.note"
-                      style="max-width: 200px; width: fit-content"
-                      >{{ data.note || '-' }}</div
-                    >
+                      style="max-width: 200px; width: fit-content">
+                      {{ data.note || '-' }}
+                    </div>
                     <app-tooltip-customize
                       [content]="'<div>' + data.note + '</div>'"
                       [class]="'txt-note'"
