@@ -1,7 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { MatMenuTrigger } from "@angular/material/menu";
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -16,7 +15,6 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import {logs} from "@cosmjs/stargate";
 
 @Component({
   selector: 'app-account-transaction-table',
@@ -38,6 +36,7 @@ export class AccountTransactionTableComponent {
   templates: Array<TableTemplate>;
   tabsData = TabsAccountLink;
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
+  displayFilter = true;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
@@ -74,9 +73,7 @@ export class AccountTransactionTableComponent {
   transactionTypeKeyWord = '';
   tnxType = [];
   tnxTypeOrigin = [];
-  listTypeSelected = '';
   listTypeSelectedTemp = [];
-  listTypeSelectedTnx = [];
   arrTypeFilter = [];
   currentType = AccountTxType.Sent;
   accountTxType = AccountTxType;
@@ -87,6 +84,12 @@ export class AccountTransactionTableComponent {
   maxDateEnd;
   linkToken = 'token-nft';
   typeTx = [AccountTxType.Sent, AccountTxType.Received];
+  listTypeDefine = [];
+  modeFilter = {
+    date: 'date',
+    type: 'type',
+    msgType: 'msgType',
+  };
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -129,25 +132,17 @@ export class AccountTransactionTableComponent {
   initTnxFilter(isReset = false) {
     if (this.savedFilter !== null && this.savedTab === this.modeQuery && !isReset) {
       this.transactionFilter = this.savedFilter;
-      this.transactionFilter.type.forEach((element, index) => {
+      this.transactionFilter.type?.forEach((element, index) => {
         let type = _.find(TYPE_TRANSACTION, { label: element })?.value;
-        // if (!this.listTypeSelectedTemp) {
-        //   this.listTypeSelectedTemp = type;
-        // } else {
-        //   this.listTypeSelectedTemp += ', ' + type;
-        // }
-        // this.listTypeSelected = this.listTypeSelectedTemp;
       });
-      this.setDateRange();
     } else {
       this.transactionTypeKeyWord = '';
       this.listTypeSelectedTemp = [];
-      this.listTypeSelected = '';
       this.checkAll = false;
       this.transactionFilter = {
         startDate: null,
         endDate: null,
-        type: [],
+        type: null,
         typeTransfer: null,
       };
       this.minDate = this.minDateEnd = new Date(2023, 2, 20);
@@ -156,34 +151,32 @@ export class AccountTransactionTableComponent {
   }
 
   onChangeTnxFilterType(event, type: any) {
-    if(type === 'all') {
-      if(event.target.checked) {
+    if (type === 'all') {
+      if (event.target.checked) {
         this.checkAll = true;
-        this.transactionFilter.type = null;
         this.listTypeSelectedTemp = this.tnxType;
       } else {
-        this.transactionFilter.type = [];
         this.listTypeSelectedTemp = [];
         this.checkAll = false;
       }
     } else {
-      if(event.target.checked) {
+      this.checkAll = false;
+      if (event.target.checked) {
         this.arrTypeFilter.push(type.label);
-        this.transactionFilter.type.push(type.label);
-        this.listTypeSelectedTemp.push(type);
+        this.listTypeSelectedTemp?.push(type);
       } else {
-        this.listTypeSelectedTemp.forEach((element,index)=>{
-          if(element.label === type.label) this.listTypeSelectedTemp.splice(index,1);
+        this.listTypeSelectedTemp?.forEach((element, index) => {
+          if (element.label === type.label) this.listTypeSelectedTemp?.splice(index, 1);
         });
       }
     }
   }
 
   searchTransactionType() {
-    if(this.transactionTypeKeyWord.toLowerCase().length === 0 || this.transactionTypeKeyWord.toLowerCase() === '') {
+    if (this.transactionTypeKeyWord.toLowerCase().length === 0 || this.transactionTypeKeyWord.toLowerCase() === '') {
       this.clearFilterSearch();
     } else {
-      this.tnxType = this.tnxType.filter(
+      this.tnxType = this.tnxType?.filter(
         (k) => k.value.toLowerCase().indexOf(this.transactionTypeKeyWord.toLowerCase().trim()) > -1,
       );
     }
@@ -197,6 +190,7 @@ export class AccountTransactionTableComponent {
     if (document.getElementById('typeActionBtn')?.classList.contains('show')) {
       document.getElementById('typeActionBtn')?.classList.remove('show');
     }
+    this.searchType();
   }
 
   clearFilterSearch(isResetFilter = true) {
@@ -246,14 +240,10 @@ export class AccountTransactionTableComponent {
       address: address,
       heightLT: nextKey,
       compositeKey: null,
-      listTxMsgType: null,
+      listTxMsgType: this.transactionFilter.type || null,
       startTime: this.getConvertDate(this.transactionFilter.startDate) || null,
       endTime: this.getConvertDate(this.transactionFilter.endDate, true) || null,
     };
-
-    if (this.transactionFilter?.type?.length > 0) {
-      payload.listTxMsgType = this.transactionFilter?.type;
-    }
 
     switch (this.modeQuery) {
       case TabsAccountLink.ExecutedTxs:
@@ -322,6 +312,8 @@ export class AccountTransactionTableComponent {
         return obj;
       });
       this.tnxType = this.tnxType?.filter((k) => k.value);
+      this.listTypeDefine = [...this.tnxType];
+      // this.tnxType.push({ label: 'Others', value: 'Others' });
       this.tnxTypeOrigin = [...this.tnxType];
     });
   }
@@ -395,7 +387,14 @@ export class AccountTransactionTableComponent {
       }
 
       const coinConfig = this.environmentService.configValue.coins;
-      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive, this.currentAddress, coinConfig);
+      let txs = convertDataAccountTransaction(
+        data,
+        this.coinInfo,
+        this.modeQuery,
+        setReceive,
+        this.currentAddress,
+        coinConfig,
+      );
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
       } else {
@@ -447,38 +446,18 @@ export class AccountTransactionTableComponent {
     }
   }
 
-  setDateRange() {
-    this.maxDateEnd =  new Date().toISOString().slice(0, 10);
-    this.minDate = new Date(2023, 2, 20);
-    this.maxDate = this.datePipe.transform(this.transactionFilter?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
-    this.minDateEnd = this.datePipe.transform(this.transactionFilter?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
-  }
-
   executeFilterType() {
-    this.listTypeSelectedTnx = [...this.listTypeSelectedTemp];
-    this.listTypeSelected = '';
-    for(let i = 0; i<= this.listTypeSelectedTemp.length; i++) {
-      this.listTypeSelected += this.listTypeSelectedTemp[i].value + (i < this.listTypeSelectedTemp.length - 1 ? ', ' : '');
+    let lstTemp = [];
+    if (this.listTypeSelectedTemp?.length > 0) {
+      this.listTypeSelectedTemp?.forEach((element, index) => {
+        lstTemp.push(element.label);
+      });
     }
-  }
-  checkedTnx(type: any){
-    // console.log(type)
-    // console.log(this.listTypeSelectedTnx)
-    console.log(type.label);
-    let result = false;
-    if (this.listTypeSelectedTnx?.length > 0 &&
-      this.listTypeSelectedTnx?.includes(type.label) ||
-      this.transactionFilter.type === null ){
-      result = true;
-    }
-    return result;
-
-
-    // return this.listTypeSelectedTnx.includes(type);
+    this.transactionFilter.type = lstTemp || null;
+    this.searchType();
   }
 
   clearFilterType() {
-    // this.listTypeSelected = '';
     this.transactionFilter.type = null;
     this.tnxType = this.tnxTypeOrigin;
     this.savedFilter = null;
@@ -489,10 +468,31 @@ export class AccountTransactionTableComponent {
     this.transactionFilter = {
       startDate: null,
       endDate: null,
-      type: this.listTypeSelected,
+      type: null,
       typeTransfer: null,
     };
-    console.log(this.listTypeSelectedTnx)
-    // console.log(this.transactionFilter.type);
+  }
+
+  checkedTnx(type: any) {
+    let result = false;
+    if (this.listTypeSelectedTemp?.length > 0 && this.listTypeSelectedTemp.find((k) => k.label === type.label)) {
+      result = true;
+    }
+    return result;
+  }
+
+  clearFilter(mode = this.modeFilter.date) {
+    if (mode === this.modeFilter.type) {
+      this.transactionFilter.typeTransfer = null;
+    } else if (mode === this.modeFilter.msgType) {
+      this.transactionFilter.type = null;
+      this.listTypeSelectedTemp = [];
+      this.checkAll = false;
+      this.getListTypeFilter();
+    } else {
+      this.transactionFilter.startDate = null;
+      this.transactionFilter.endDate = null;
+    }
+    this.searchType();
   }
 }

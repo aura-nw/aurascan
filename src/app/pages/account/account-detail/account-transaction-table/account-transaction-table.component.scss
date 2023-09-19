@@ -23,9 +23,27 @@
       height: 40px;
     }
   }
+  .input-group {
+    background-color: transparent;
+    border: 1px solid var(--aura-gray-8) !important;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
   padding: 16px;
   @media (max-width: 376px) {
     width: calc(100vw - 68px);
+  }
+  .filter-result {
+    padding: var(--spacer-2) var(--spacer-4);
+    color: var(--aura-blue-3link);
+    border: 1px solid var(--aura-blue-4);
+    background: #222f3d;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+  }
+  .mat-date-range-input {
+    width: 80%;
   }
 }
 .tnx-filter-item {
@@ -202,4 +220,12 @@
   justify-content: end;
   background-color: var(--aura-gray-9);
   margin: 0 -4px -12px -4px;
+}
+
+::ng-deep {
+  .mat-datepicker-content .mat-calendar {
+    background: #24262e;
+    border: 1px solid #717582;
+    border-radius: 8px;
+  }
 }
