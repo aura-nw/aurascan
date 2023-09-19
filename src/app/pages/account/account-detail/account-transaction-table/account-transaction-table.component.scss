@@ -5,6 +5,7 @@
 }
 
 .button-filter {
+  position: relative;
   &[aria-expanded='true'] {
     border: 2px solid var(--aura-white);
   }
@@ -18,9 +19,6 @@
   }
 }
 .box-filter {
-  .button-link {
-    color: var(--aura-blue-3link);
-  }
   .divider.divider-vertical {
     min-height: 33px;
   }
@@ -35,6 +33,7 @@
     width: calc(100vw - 68px);
   }
   .filter-result {
+    white-space: nowrap;
     padding: 0 var(--spacer-4);
     color: var(--aura-blue-3link);
     border: 1px solid var(--aura-blue-4);
@@ -45,7 +44,7 @@
     align-items: center;
   }
   .mat-date-range-input {
-    width: 80%;
+    width: 100%;
   }
 }
 .tnx-filter-item {
@@ -231,7 +230,7 @@ mat-date-range-input {
   padding: 0 16px;
 }
 .calendar-contain {
-  max-width: 245px;
+  width: 250px;
   border: 1px solid var(--aura-gray-8) !important;
   border-radius: 8px;
 }
@@ -240,5 +239,59 @@ mat-date-range-input {
     background: #24262e;
     border: 1px solid #717582;
     border-radius: 8px;
+  }
+}
+.filter-contain {
+  flex-wrap: nowrap;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  overflow: hidden;
+  overflow-x: scroll;
+  padding-bottom: 200px;
+  @media (min-width: 991.98px) {
+    overflow: visible;
+    padding-bottom: 0;
+  }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.btn-tns {
+  min-width: 200px;
+}
+.btn-mess {
+  min-width: 155px;
+}
+
+.button-link {
+  color: var(--aura-blue-3link);
+}
+
+.nft__unclaimed-noti {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--aura-red-3);
+  color: white;
+  transform: translate(50%, -50%);
+  &.noti--pill {
+    width: auto;
+    border-radius: 24px;
+    padding: 4px 8px;
+  }
+}
+.card-mob-account {
+  margin-top: -200px;
+}
+.noData {
+  margin-top: -200px;
+  @media (min-width: 991.98px) {
+    margin-top: 0;
   }
 }

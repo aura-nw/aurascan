@@ -96,6 +96,8 @@ export class AccountTransactionTableComponent {
   coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
+  countFilter = 0;
+
   constructor(
     public global: Globals,
     private environmentService: EnvironmentService,
@@ -197,6 +199,7 @@ export class AccountTransactionTableComponent {
   }
 
   searchType(isSearch = true) {
+    this.setFilterNum();
     this.transactionLoading = true;
     this.dataSource = new MatTableDataSource();
     this.pageData.length = 0;
@@ -507,5 +510,13 @@ export class AccountTransactionTableComponent {
       this.transactionFilter.endDate = null;
     }
     this.searchType();
+  }
+
+  setFilterNum() {
+    this.countFilter =
+      +(this.transactionFilter.type?.length || 0) +
+      +(this.isSearchOther ? 1 : 0) +
+      +(this.transactionFilter.typeTransfer ? 1 : 0) +
+      +(this.transactionFilter.endDate ? 1 : 0);
   }
 }
