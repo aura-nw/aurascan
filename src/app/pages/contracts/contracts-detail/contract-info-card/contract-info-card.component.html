@@ -57,8 +57,8 @@
         </button>
         <div
           *ngIf="commonService.checkPrivate(contractDetail?.address)"
-          class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center text--white">
-          <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
+          class="mt-2 d-inline-flex box-private align-items-center text--white">
+          <div class="d-inline-flex align-items-center private-name-tag">
             <span class="d-none d-lg-flex">{{ commonService.setNameTag(contractDetail?.address) || '-' }}</span>
             <span class="d-flex d-lg-none justify-content-center">
               <ng-container *ngIf="!commonService.checkDisplayTooltip(contractDetail?.address)">
@@ -69,13 +69,7 @@
               </ng-container>
             </span>
           </div>
-
-          <app-tooltip-customize
-            *ngIf="!commonService.checkDisplayTooltip(contractDetail?.address)"
-            [content]="'Private name: ' + commonService.setNameTag(contractDetail?.address)"></app-tooltip-customize>
-          <i
-            class="ph ph-note-pencil ml-2 body-01 cursor-pointer"
-            (click)="editPrivateName()"></i>
+          <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
         </div>
       </div>
     </div>

@@ -74,12 +74,12 @@
                 placeholder="aura..."
                 class="input-address"
                 (change)="checkPublicNameTag()"
-                (blur)="checkFormValid(); isError = false"
+                (input)="checkFormValid(); isError = false"
                 autocomplete="off" />
             </div>
             <span *ngIf="isEditMode">{{ getAddress.value }}</span>
             <div
-              *ngIf="((getAddress.touched && getAddress.dirty) || getAddress?.value?.length > 0) && !isValidAddress"
+              *ngIf="((getAddress.touched && getAddress.dirty) && getAddress?.value?.length > 0) && !isValidAddress"
               class="text--danger mt-2 caption fw-normal">
               Invalid aura address format
             </div>

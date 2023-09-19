@@ -29,13 +29,15 @@
     </div>
     <div class="aura-tooltip-contain" *ngIf="!breakpoint.value.matches && isContractAddress">
       <div class="status cursor-pointer aura-tooltip-object">
-        <a [routerLink]="['/contracts/', currentAddress]" class="contract-label text--gray-3">Contract</a>
+        <div class="contract-label">
+          <a class="text--gray-3" [routerLink]="['/contracts/', currentAddress]">Contract</a>
+        </div>
       </div>
       <app-tooltip-customize [content]="'Go to Contract Details'"> </app-tooltip-customize>
     </div>
   </div>
   <div class="d-lg-none mb-2">
-    <span class="body-01 text--gray-5 caption-mob fw-normal  break-word">{{ currentAddress }}</span>
+    <span class="body-01 text--gray-5 caption-mob fw-normal break-word">{{ currentAddress }}</span>
   </div>
   <!-- Summary info -->
   <div class="row">
@@ -99,12 +101,8 @@
 
             <app-tooltip-customize
               *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
-              [content]="
-                'Private name: ' + commonService.setNameTag(currentAddress)
-              "></app-tooltip-customize>
-            <i
-              class="ph ph-note-pencil ml-2 body-01 cursor-pointer"
-              (click)="editPrivateName()"></i>
+              [content]="'Private name: ' + commonService.setNameTag(currentAddress)"></app-tooltip-customize>
+            <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
           </div>
 
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
