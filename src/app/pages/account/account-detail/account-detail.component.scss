@@ -182,4 +182,7 @@ section.account-detail {
       left: -6px;
     }
   }
+  a:hover {
+    color: var(--aura-primary) !important;
+  }
 }
