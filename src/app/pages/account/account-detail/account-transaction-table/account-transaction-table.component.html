@@ -1,11 +1,26 @@
-<div class="d-lg-none text-end mb-4">
-  <button
-      (click)="displayFilter = !displayFilter"
-      class="button button-pill button--sm button-outline button-outline__in-card button-filter px-4"
-      type="button">
-    <i class="ph ph-funnel-simple text--white mr-2 body-01"></i>
-    <span>Filter</span>
-  </button>
+<div class="d-lg-none d-flex align-items-center mb-4 {{!displayFilter ? 'justify-content-between' : 'justify-content-end'}}">
+  <div *ngIf="!transactionLoading && !displayType && !displayFilter" class="caption text--gray-5">
+    {{ nextKey ? 'More than >' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+    found
+  </div>
+  <div class="d-flex align-items-center">
+    <button *ngIf="(transactionFilter.startDate && transactionFilter.endDate) || transactionFilter.typeTransfer || transactionFilter.type"
+        class="button button-link body-01 px-0 mr-6" (click)="clearFilter(modeFilter.all)">
+      <span>Clear all</span>
+    </button>
+    <button
+        (click)="displayFilter = !displayFilter"
+        class="button button-pill button--sm button-outline button-outline__in-card button-filter px-4"
+        type="button">
+      <i class="ph ph-funnel-simple text--white mr-2 body-01"></i>
+      <span>Filter</span>
+      <span *ngIf="countFilter > 0"
+          class="nft__unclaimed-noti caption aura-tooltip-object"
+          [class.noti--pill]="true">
+        {{ countFilter }}
+      </span>
+    </button>
+  </div>
 </div>
 <div class="d-flex justify-content-between" [ngClass]="displayType ? 'mb-3' : 'mb-4'">
   <div *ngIf="displayType">
@@ -205,10 +220,14 @@
         </button>
       </div>
     </div>
-    <ng-container *ngIf="!transactionLoading && !displayType">
-      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+    <div class="d-none d-lg-block" *ngIf="!transactionLoading && !displayType">
+      {{ nextKey ? 'More than >' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
       found
-    </ng-container>
+    </div>
+    <div class="d-lg-none" *ngIf="!transactionLoading && !displayType && displayFilter">
+      {{ nextKey ? 'More than >' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+      found
+    </div>
   </div>
   <div class="d-none d-lg-block">
     <button
@@ -217,6 +236,11 @@
       type="button">
       <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
       <span>Filter</span>
+      <span *ngIf="countFilter > 0"
+            class="nft__unclaimed-noti caption aura-tooltip-object"
+            [class.noti--pill]="true">
+        {{ countFilter }}
+      </span>
     </button>
   </div>
 </div>
@@ -452,7 +476,7 @@
       </tr>
     </table>
   </div>
-  <div class="d-lg-none">
+  <div class="d-lg-none card-mob-account">
     <app-card-mob-account
       *ngFor="let data of dataSourceMobile; first as isFirst"
       [link]="'/transaction/' + data.tx_hash"
@@ -490,11 +514,13 @@
   </app-paginator>
 </ng-container>
 <ng-template #noValues>
-  <app-table-no-data *ngIf="!transactionLoading && !isSearch"></app-table-no-data>
-  <app-table-no-data
-    *ngIf="!transactionLoading && isSearch"
-    textNull="No data with this type of message"></app-table-no-data>
+  <div class="noDta">
+    <app-table-no-data *ngIf="!transactionLoading && !isSearch"></app-table-no-data>
+    <app-table-no-data
+        *ngIf="!transactionLoading && isSearch"
+        textNull="No data with this type of message"></app-table-no-data>
+  </div>
 </ng-template>
-<div *ngIf="transactionLoading" class="">
+<div *ngIf="transactionLoading" class="noDta">
   <app-loading-sprint></app-loading-sprint>
 </div>
