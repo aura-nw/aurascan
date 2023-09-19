@@ -11,21 +11,21 @@
       class="cursor-pointer ml-10"
       (click)="closeDialog()" />
   </div>
-  <div class="card-body body-01 {{data.class}}">
+  <div class="card-body body-01 {{ data.class }}">
     {{ data.content }}
   </div>
   <div class="divider divider-horizontal"></div>
   <!-- Button group -->
   <div class="d-flex align-items-center justify-content-end px-6 py-6">
     <button class="button button-pill button-outline button--xlg ml-4" type="button" (click)="closeDialog()">
-      <span>Cancel </span>
+      <span class="body-01">Cancel</span>
     </button>
     <button
       class="button button-pill button-flat button--xlg ml-4"
       type="button"
       [disabled]="isLoading"
       (click)="submitAction(true)">
-      <span>Remove </span>
+      <span class="body-01">Remove</span>
     </button>
   </div>
 </div>

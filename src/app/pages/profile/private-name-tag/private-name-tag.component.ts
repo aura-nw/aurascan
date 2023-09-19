@@ -138,7 +138,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       data: {
         title: 'Remove Private Name Tag',
         content:
-          'Are you sure to remove private name tag for the address ' + data.address + ' (' + data.nameTag + ') ?',
+          'Are you sure to remove private name tag for the address ' + data.address + ' (' + data.nameTag + ')?',
         class: 'text--gray-1',
       },
     });

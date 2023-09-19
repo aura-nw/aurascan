@@ -30,7 +30,7 @@
     <div class="aura-tooltip-contain" *ngIf="!breakpoint.value.matches && isContractAddress">
       <div class="status cursor-pointer aura-tooltip-object">
         <div class="contract-label">
-          <a class="text--gray-3" [routerLink]="['/contracts/', currentAddress]">Contract</a>
+          <a class="text--primary" [routerLink]="['/contracts/', currentAddress]">Contract</a>
         </div>
       </div>
       <app-tooltip-customize [content]="'Go to Contract Details'"> </app-tooltip-customize>

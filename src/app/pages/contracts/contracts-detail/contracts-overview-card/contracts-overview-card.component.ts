@@ -1,11 +1,9 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from '../../../../global/global';
-import {ContractRegisterType} from "src/app/core/constants/contract.enum";
 
 @Component({
   selector: 'app-contracts-overview-card',
@@ -20,6 +18,8 @@ export class ContractsOverviewCardComponent implements OnInit, OnChanges {
   contractRegisterType = ContractRegisterType;
   linkNft = 'token-nft';
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  verifiedStatus = '';
+  verifiedText = '';
 
   constructor(
     public global: Globals,
@@ -37,6 +37,8 @@ export class ContractsOverviewCardComponent implements OnInit, OnChanges {
       if (res?.length > 0) {
         this.priceToken = res[0].current_price;
         this.contractPrice = this.contractBalance * this.priceToken || 0;
+        this.verifiedStatus = res[0].verify_status;
+        this.verifiedText = res[0].verifiedText;
       }
     });
   }

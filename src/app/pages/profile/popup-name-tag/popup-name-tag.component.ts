@@ -143,7 +143,7 @@ export class PopupNameTagComponent implements OnInit {
           return;
         }
 
-        this.closeDialog();
+        this.closeDialog(true);
         this.toastr.successWithTitle('Private name tag created!', 'Success');
       },
       error: (error) => {
@@ -163,7 +163,7 @@ export class PopupNameTagComponent implements OnInit {
         }
 
         this.closeDialog(true);
-        this.toastr.successWithTitle('Private name tag edited!', 'Success');
+        this.toastr.successWithTitle('Private name tag updated!', 'Success');
       },
       error: (error) => {
         this.isError = true;
