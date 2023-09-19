@@ -66,30 +66,9 @@ export class UserService extends CommonService {
 
   getListTxByAddress(payload) {
     const operationsDoc = `
-    query QueryTxOfAccount(
-      $compositeKey: String = null, 
-      $address: String = null, 
-      $startTime: timestamptz = null,
-      $endTime: timestamptz = null,
-      $limit: Int = null,
-      $listTxMsgType: [String!] = null,
-      $heightGT: Int = null,
-      $heightLT: Int = null,
-      $orderHeight: order_by = desc
-    ) {
+    query QueryTxOfAccount($compositeKey: String = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
       ${this.envDB} {
-        transaction(
-          where: {
-            event_attribute_index: {
-              composite_key: {_eq: $compositeKey}, 
-              value: {_eq: $address}}, 
-            timestamp: {_lte: $endTime, _gte: $startTime}
-            transaction_messages: {type: {_in: $listTxMsgType}}
-            _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]
-          },
-          limit: $limit,
-          order_by: {height: $orderHeight}
-        ) {
+        transaction(where: {event_attribute_index: {composite_key: {_eq: $compositeKey}, value: {_eq: $address}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
           hash
           height
           fee
@@ -112,6 +91,7 @@ export class UserService extends CommonService {
           address: payload.address,
           heightLT: payload.heightLT,
           listTxMsgType: payload.listTxMsgType,
+          listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
           startTime: payload.startTime,
           endTime: payload.endTime,
         },
@@ -122,9 +102,9 @@ export class UserService extends CommonService {
 
   getListTxAuraByAddress(payload) {
     const operationsDoc = `
-    query QueryTxMsgOfAccount($compositeKeyIn: [String!] = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
+    query QueryTxMsgOfAccount($compositeKeyIn: [String!] = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
       ${this.envDB} {
-        transaction(where: {event_attribute_index: {composite_key: {_in: $compositeKeyIn}, value: {_eq: $address}, event: {tx_msg_index: {_is_null: false}}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
+        transaction(where: {event_attribute_index: {composite_key: {_in: $compositeKeyIn}, value: {_eq: $address}, event: {tx_msg_index: {_is_null: false}}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
           hash
           height
           fee
@@ -153,6 +133,7 @@ export class UserService extends CommonService {
           address: payload.address,
           heightLT: payload.heightLT,
           listTxMsgType: payload.listTxMsgType,
+          listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
           startTime: payload.startTime,
           endTime: payload.endTime,
         },
@@ -163,9 +144,9 @@ export class UserService extends CommonService {
 
   getListFTByAddress(payload) {
     const operationsDoc = `
-    query Cw20TXMultilCondition($receiver: String = null, $sender: String = null, $contractAddr: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listTxMsgType: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $limit: Int = null, $txHash: String = null, $actionIn: [String!] = null, $actionNotIn: [String!] = null) {
+    query Cw20TXMultilCondition($receiver: String = null, $sender: String = null, $contractAddr: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $limit: Int = null, $txHash: String = null, $actionIn: [String!] = null, $actionNotIn: [String!] = null) {
       ${this.envDB} {
-        transaction(where: {events: {smart_contract_events: {cw20_activities: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], action: {_in: $actionIn, _nin: $actionNotIn}}, smart_contract: {address: {_eq: $contractAddr}}}}, timestamp: {_gte: $startTime, _lte: $endTime}, _and: {height: {_gt: $heightGT, _lt: $heightLT}, hash: {_eq: $txHash}}, transaction_messages: {type: {_in: $listTxMsgType}}}, order_by: {height: desc}, limit: $limit) {
+        transaction(where: {events: {smart_contract_events: {cw20_activities: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], action: {_in: $actionIn, _nin: $actionNotIn}}, smart_contract: {address: {_eq: $contractAddr}}}}, timestamp: {_gte: $startTime, _lte: $endTime}, _and: {height: {_gt: $heightGT, _lt: $heightLT}, hash: {_eq: $txHash}}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}}, order_by: {height: desc}, limit: $limit) {
           gas_used
           hash
           height
@@ -219,9 +200,9 @@ export class UserService extends CommonService {
 
   getListNFTByAddress(payload) {
     const operationsDoc = `
-    query Cw721TXMultilCondition($receiver: String = null, $sender: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listTxMsgType: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $limit: Int = null, $contractAddr: String = null, $tokenId: String = null, $txHash: String = null, $neqCw4973: String, $eqCw4973: String = null, $actionIn: [String!] = null, $actionNotIn: [String!] = null) {
+    query Cw721TXMultilCondition($receiver: String = null, $sender: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $limit: Int = null, $contractAddr: String = null, $tokenId: String = null, $txHash: String = null, $neqCw4973: String, $eqCw4973: String = null, $actionIn: [String!] = null, $actionNotIn: [String!] = null) {
       ${this.envDB} {
-        transaction(where: {events: {smart_contract_events: {cw721_activity: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], cw721_token: {token_id: {_eq: $tokenId}}, action: {_in: $actionIn, _nin: $actionNotIn}}, smart_contract: {name: {_neq: $neqCw4973, _eq: $eqCw4973}, address: {_eq: $contractAddr}}}}, timestamp: {_gte: $startTime, _lte: $endTime}, _and: {height: {_gt: $heightGT, _lt: $heightLT}, hash: {_eq: $txHash}}, transaction_messages: {type: {_in: $listTxMsgType}}}, order_by: {height: desc}, limit: $limit) {
+        transaction(where: {events: {smart_contract_events: {cw721_activity: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], cw721_token: {token_id: {_eq: $tokenId}}, action: {_in: $actionIn, _nin: $actionNotIn}}, smart_contract: {name: {_neq: $neqCw4973, _eq: $eqCw4973}, address: {_eq: $contractAddr}}}}, timestamp: {_gte: $startTime, _lte: $endTime}, _and: {height: {_gt: $heightGT, _lt: $heightLT}, hash: {_eq: $txHash}}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}}, order_by: {height: desc}, limit: $limit) {
           gas_used
           hash
           height
@@ -253,7 +234,7 @@ export class UserService extends CommonService {
             composite_key
             key
             value
-          }    
+          }
         }
       }
     }
