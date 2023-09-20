@@ -52,16 +52,8 @@
             <div
               *ngIf="commonService.setNameTag(currentAddress, null, false) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
-              <div class="d-inline-flex aura-tooltip-object align-items-center">
-                <span class="d-none d-lg-flex">{{ commonService.setNameTag(currentAddress, null, false) || '-' }}</span>
-                <span class="d-flex d-lg-none justify-content-center">
-                  <ng-container *ngIf="!commonService.checkDisplayTooltip(currentAddress)">
-                    {{ (commonService.setNameTag(currentAddress, null, false) | cutStringPipe : 16) || '-' }}
-                  </ng-container>
-                  <ng-container *ngIf="commonService.checkDisplayTooltip(currentAddress)">
-                    {{ (commonService.setNameTag(currentAddress, null, false) | cutStringPipe : 8 : 8) || '-' }}
-                  </ng-container>
-                </span>
+              <div class="d-inline-flex w-100 aura-tooltip-object align-items-center justify-content-between">
+                <span class="line-claim g-ellipsis">{{ commonService.setNameTag(currentAddress, null, false) || '-' }}</span>
                 <a
                   target="_blank"
                   [href]="extendLink(commonService.findUrlNameTag(currentAddress))"

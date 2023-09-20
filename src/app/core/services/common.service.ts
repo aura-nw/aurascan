@@ -128,12 +128,16 @@ export class CommonService {
   }
 
   findNameTag(keySearch, listNameTag = []) {
+    const userEmail = localStorage.getItem('userEmail');
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     if (this.listNameTag?.length > 0) {
-      const result =
-        this.listNameTag?.find(
-          (k) => k.name_tag_private?.trim() === keySearch?.trim() || k.name_tag?.trim() === keySearch?.trim(),
-        )?.address || '';
+      let result;
+      if (userEmail) {
+        result = this.listNameTag?.find((k) => k.name_tag_private?.trim() === keySearch?.trim())?.address || '';
+      }
+      if (!result) {
+        result = this.listNameTag?.find((k) => k.name_tag?.trim() === keySearch?.trim())?.address || '';
+      }
       return result;
     }
   }
