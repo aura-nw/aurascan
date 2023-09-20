@@ -139,31 +139,30 @@ section.account-detail {
 }
 
 .name-tag {
-  width: 275px;
+  max-width: 100%;
   .line-claim {
-    width: 100%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
   }
 }
-
-@media (max-width: 1300px) {
-  .name-tag {
-    width: 250px;
-    .line-claim {
-      width: 80%;
-    }
-  }
-}
-
 
 .box-private {
-  width: fit-content;
-
   .private-name-tag {
     height: 24px;
+    min-width: 0;
     padding: 0 var(--spacer-2);
     background-color: var(--aura-gray-10);
     border-radius: 16px;
     border: 1px solid var(--aura-gray-8);
+    font-size: 12px;
+    .line-claim {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
+    }
   }
 }
 
