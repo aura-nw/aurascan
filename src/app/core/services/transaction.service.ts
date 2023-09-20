@@ -189,4 +189,48 @@ export class TransactionService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
+
+  getListTransferFromTx(height): Observable<any> {
+    const operationsDoc = `
+    query TxTransferDetail($height: Int) {
+      ${this.envDB} {
+        cw20_activity(where: {height: {_eq: $height}}) {
+          amount
+          from
+          to
+          cw20_contract {
+            smart_contract {
+              address
+            }
+            symbol
+            decimal
+            marketing_info
+            name
+          }
+        }
+        cw721_activity(where: {height: {_eq: $height}, cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}}) {
+          from
+          to
+          cw721_token {
+            token_id
+          }
+          cw721_contract {
+            smart_contract {
+              address
+            }
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          height: height,
+        },
+        operationName: 'TxTransferDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 }

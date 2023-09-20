@@ -77,5 +77,6 @@
     "content": "Aurascan will be temporarily unavailable due to Xstaxy network upgrades on Jun 12th, 14:00 UTC",
     "url": "https://aurascan.io/votings/4"
   },
-  "googleClientId": "3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08.apps.googleusercontent.com"
+  "googleClientId": "3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08.apps.googleusercontent.com",
+  "quotaSetPrivateName": 10
 }

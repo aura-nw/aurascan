@@ -110,6 +110,13 @@
       </div>
     </div>
 
+    <ng-container *ngIf="!isRawData">
+      <h2 class="text--white">Token Transfer</h2>
+      <div class="mb-6">
+        <app-token-transfer [height]="transaction?.height"></app-token-transfer>
+      </div>
+    </ng-container>
+
     <ng-container *ngIf="!isRawData && transaction?.messages">
       <h2 class="text--white">Messages</h2>
       <app-transaction-messages
