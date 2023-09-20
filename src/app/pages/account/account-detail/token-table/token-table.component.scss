@@ -1,6 +1,7 @@
 .contract-address {
   width: 125px;
 }
+
 .aura__change {
   font-size: 1.4rem;
   line-height: 1.8rem;
@@ -14,19 +15,24 @@
     }
   }
 }
+
 .box-search-data {
   min-width: 410px;
+
   .box-search-token {
     max-height: 350px;
     width: 90%;
+
     @media (min-width: 992px) {
       width: 410px;
     }
+
     .logo-token {
       margin-top: 3px;
       width: 20px;
       height: 20px;
     }
+
     .box-price {
       background-color: rgba(94, 230, 208, 0.2);
       border-radius: 4px;
@@ -34,9 +40,11 @@
       padding: 2px 6px;
       margin-left: 8px;
     }
+
     .search-result {
       border: 1px solid transparent;
       transition: border-color 0.35s ease-in-out;
+
       &:hover {
         border: 1px solid var(--aura-primary);
         border-radius: 4px;
@@ -55,11 +63,10 @@
   min-width: 175px;
 }
 
-@media (max-width: 991.99px) {
-  .aura-table th.mat-header-cell {
-    min-width: 150px;
-  }
-  .aura-table th.mat-header-cell:nth-child(3) {
-    min-width: 200px;
-  }
+.aura-table th.mat-header-cell {
+  min-width: 150px;
+}
+
+.aura-table th.mat-header-cell:nth-child(3) {
+  min-width: 200px;
 }
