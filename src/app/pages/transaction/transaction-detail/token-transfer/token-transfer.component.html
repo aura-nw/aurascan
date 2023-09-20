@@ -29,7 +29,7 @@
                             width="20"
                             height="20" />
                           <div class="ml-3 d-flex transfer-token-info">
-                            <span *ngIf="data.cw20_contract.symbol" class="caption text-sm">{{
+                            <span *ngIf="data.cw20_contract.symbol" class="caption text-sm mb-1">{{
                               data.cw20_contract.symbol
                             }}</span>
                             <span
@@ -52,7 +52,7 @@
                       </div>
                       <ng-container *ngIf="!breakpoint.value.matches">
                         <div *ngSwitchCase="'amount'" class="d-flex transfer-token-info">
-                          <span class="caption fw-normal text--gray-4">Amount</span>
+                          <span class="caption fw-normal text--gray-4 mb-1">Amount</span>
                           <span
                             class="body-02"
                             [appBigNumber]="data[template.matColumnDef]"
@@ -142,24 +142,49 @@
                                 <i class="ph-arrow-square-out-fill text--gray-1 body-01 h5-mob mb-0"></i>
                               </div>
                             </div>
-                            <div>
-                              <app-name-tag [value]="data.to" [iconContract]="true" [url]="'contracts'"></app-name-tag>
+                            <div *ngIf="!breakpoint.value.matches">
+                              <app-name-tag [maxCharacter]="30" [value]="data.to" [iconContract]="true" [url]="'contracts'"></app-name-tag>
+                            </div>
+                            <div *ngIf="breakpoint.value.matches">
+                              <app-name-tag
+                                [maxCharacter]="14"
+                                [value]="data.to"
+                                [iconContract]="true"
+                                [url]="'contracts'"></app-name-tag>
                             </div>
                           </div>
                         </div>
 
                         <div *ngSwitchCase="'transfer'">
-                          <div class="mb-1">
+                          <div class="mb-1 d-flex align-items-center">
                             <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
                               >From</span
                             >
-                            <app-name-tag [value]="data.from || nullAddress" [url]="'contracts'"></app-name-tag>
+                            <app-name-tag
+                              *ngIf="!breakpoint.value.matches"
+                              [maxCharacter]="30"
+                              [value]="data.from || nullAddress"
+                              [url]="'contracts'"></app-name-tag>
+                            <app-name-tag
+                              *ngIf="breakpoint.value.matches"
+                              [maxCharacter]="14"
+                              [value]="data.from || nullAddress"
+                              [url]="'contracts'"></app-name-tag>
                           </div>
-                          <div>
+                          <div class="d-flex align-items-center">
                             <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
                               >To</span
                             >
-                            <app-name-tag [value]="data.to || nullAddress" [url]="'contracts'"></app-name-tag>
+                            <app-name-tag
+                              *ngIf="!breakpoint.value.matches"
+                              [maxCharacter]="30"
+                              [value]="data.to || nullAddress"
+                              [url]="'contracts'"></app-name-tag>
+                            <app-name-tag
+                              *ngIf="breakpoint.value.matches"
+                              [maxCharacter]="14"
+                              [value]="data.to || nullAddress"
+                              [url]="'contracts'"></app-name-tag>
                           </div>
                         </div>
                         <ng-container *ngIf="!breakpoint.value.matches">

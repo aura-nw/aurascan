@@ -79,7 +79,7 @@
             </div>
             <span *ngIf="isEditMode">{{ getAddress.value }}</span>
             <div
-              *ngIf="((getAddress.touched && getAddress.dirty) && getAddress?.value?.length > 0) && !isValidAddress"
+              *ngIf="getAddress.touched && getAddress.dirty && getAddress?.value?.length > 0 && !isValidAddress"
               class="text--danger mt-2 caption fw-normal">
               Invalid aura address format
             </div>
@@ -147,7 +147,12 @@
           class="button button--md button-outline button-pill button-flat ml-4 btn btn-create"
           type="button"
           (click)="onSubmit()"
-          [disabled]="privateNameForm.status === 'INVALID' || !isValidAddress || isError">
+          [disabled]="
+            privateNameForm.status === 'INVALID' ||
+            !isValidAddress ||
+            isError ||
+            (isAccount === false && isContract === false)
+          ">
           <span class="text--black">
             {{ isEditMode ? 'Edit' : 'Create' }}
           </span>
