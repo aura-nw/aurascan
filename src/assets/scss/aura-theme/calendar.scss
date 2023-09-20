@@ -5,8 +5,12 @@ mat-datepicker-toggle .mat-icon-button {
   align-items: center;
   justify-content: center;
 }
+.mat-datepicker-content {
+  margin-top: 8px !important;
+}
 .mat-date-range-input-separator {
-  margin-left: 16px !important;
+  margin: 0 !important;
+  margin-left: 10px !important;
   opacity: 1 !important;
 }
 .mat-date-range-input-inner {

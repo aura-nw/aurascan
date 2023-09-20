@@ -519,4 +519,16 @@ export class AccountTransactionTableComponent {
       +(this.transactionFilter.typeTransfer ? 1 : 0) +
       +(this.transactionFilter.endDate ? 1 : 0);
   }
+
+  datePickerClickTrigger() {
+    const toggle = document.getElementById('datepicker-toggle');
+    if(toggle) {
+      const btn = toggle.children[0];
+      if(btn instanceof HTMLElement) btn.click();
+    }
+  }
+
+  resetMsgTypeCheckbox() {
+    this.listTypeSelectedTemp = [];
+  }
 }
