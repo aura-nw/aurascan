@@ -201,6 +201,8 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getListPrivateName(this.nextKey);
       this.currentKey = this.nextKey;
+    } else {
+      this.getListPrivateName();
     }
   }
 
