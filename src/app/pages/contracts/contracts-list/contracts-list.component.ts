@@ -25,7 +25,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },
     { matColumnDef: 'name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'label', headerCellDef: 'Label' },
-    { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
+    { matColumnDef: 'compiler_version', headerCellDef: 'Contract Ver' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
