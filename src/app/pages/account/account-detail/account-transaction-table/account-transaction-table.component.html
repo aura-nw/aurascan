@@ -56,18 +56,19 @@
         <div
           class="dropdown aura-dropdown btn-item mr-6 body"
           *ngIf="!transactionFilter.startDate || !transactionFilter.endDate">
-          <div class="align-items-center d-flex justify-content-between calendar-contain">
+          <div class="align-items-center d-flex justify-content-between calendar-contain cursor-pointer"
+               (click)="datePickerClickTrigger()">
             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
-              <input matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate" readonly />
+              <input class="cursor-pointer" matStartDate placeholder="Start date" [(ngModel)]="transactionFilter.startDate" readonly />
               <input
                 matEndDate
                 placeholder="End date"
                 [(ngModel)]="transactionFilter.endDate"
-                class="pl-3"
+                class="pl-3 cursor-pointer"
                 readonly
                 (ngModelChange)="searchType()" />
             </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true">
+            <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true" id="datepicker-toggle">
               <mat-icon matDatepickerToggleIcon>
                 <i *ngIf="!picker.opened" matIconSuffix class="ph ph-caret-down text--white body icon-expand"></i>
                 <i *ngIf="picker.opened" matIconSuffix class="ph ph-caret-up text--white body cursor-pointer"></i>
@@ -81,7 +82,7 @@
           class="mr-6 filter-result"
           id="filter-result-date">
           <span>{{ transactionFilter.startDate | date : 'MM/dd/yyyy' }}</span>
-          <span class="mx-4">-</span>
+          <span class="mx-1">-</span>
           <span>{{ transactionFilter.endDate | date : 'MM/dd/yyyy' }}</span>
           <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.date)"></i>
         </div>
@@ -207,7 +208,9 @@
                 </div>
               </div>
               <div class="panel__btn-group px-4">
-                <button class="button button--xlg button-outline button-outline__in-card button-pill" type="button">
+                <button class="button button--xlg button-outline button-outline__in-card button-pill"
+                        (click)="resetMsgTypeCheckbox()"
+                        type="button">
                   <span>Reset</span>
                 </button>
                 <button
