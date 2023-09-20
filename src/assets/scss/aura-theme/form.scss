@@ -8,7 +8,7 @@
       border-radius: 8px;
       justify-content: space-between;
       align-items: center;
-      height: 48px;
+      height: 40px;
       padding: 0 var(--spacer-4);
       &:focus {
         border-color: 1px solid var(--aura-white) !important;
@@ -87,7 +87,7 @@
   .input-group {
     display: flex;
     width: 100%;
-    height: 48px;
+    height: 40px;
     border: 1px solid #494C58;
     border-radius: 8px;
     padding: 0 var(--spacer-4);
@@ -167,7 +167,7 @@
       color: #E6E7E8;
       font-size: 1.4rem;
       font-weight: 400;
-      height: 48px;
+      height: 40px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;

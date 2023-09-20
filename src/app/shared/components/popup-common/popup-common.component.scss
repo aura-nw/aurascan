@@ -1,6 +1,9 @@
 ::ng-deep {
   .sizeNormal {
-    max-width: 500px !important;
+    max-width: 90vw !important;
+    @media (min-width: 991.98px) {
+      max-width: 500px !important;
+    }
   }
 
   .mat-dialog-container {

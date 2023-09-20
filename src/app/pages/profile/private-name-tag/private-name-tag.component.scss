@@ -19,16 +19,21 @@
 
 .private-name-table {
   th.mat-header-cell:nth-child(1) {
-    min-width: 60px;
-  }
-  th.mat-header-cell:nth-child(7) {
     min-width: 80px;
   }
-  th.mat-header-cell:nth-child(2),
-  th.mat-header-cell:nth-child(4),
+  th.mat-header-cell:nth-child(7) {
+    min-width: 100px;
+  }
+    th.mat-header-cell:nth-child(4) {
+    min-width: 260px;
+  }
+  th.mat-header-cell:nth-child(2) {
+    min-width: 190px;
+  }
+  th.mat-header-cell:nth-child(3),
   th.mat-header-cell:nth-child(5),
   th.mat-header-cell:nth-child(6) {
-    min-width: 150px;
+  min-width: 140px;
   }
 }
 
@@ -67,4 +72,19 @@
       border-bottom: unset !important;
     }
   }
+}
+// Mobile card
+.card-name-tag {
+  border: 1px solid var(--aura-gray-9);
+  border-radius: 8px;
+  padding: 12px;
+  &:not(:last-child) {
+    margin-bottom: var(--spacer-4);
+  }
+}
+.card__title {
+  max-width: calc(100% - 80px);
+}
+.label__content {
+  min-width: 120px;
 }
