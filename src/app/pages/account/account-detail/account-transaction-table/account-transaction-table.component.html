@@ -54,8 +54,8 @@
     <div class="box-filter tsx-filter-panel d-flex align-items-center mb-4" *ngIf="displayFilter">
       <div class="d-flex align-items-center">
         <div
-          class="dropdown aura-dropdown btn-item mr-6 body"
-          *ngIf="!transactionFilter.startDate || !transactionFilter.endDate">
+          class="dropdown aura-dropdown btn-item body"
+          [class.menu-hidden]="transactionFilter.endDate">
           <div class="align-items-center d-flex justify-content-between calendar-contain cursor-pointer"
                (click)="datePickerClickTrigger()">
             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
@@ -79,14 +79,15 @@
         </div>
         <div
           *ngIf="transactionFilter.startDate && transactionFilter.endDate"
-          class="mr-6 filter-result"
+          class="mr-6 filter-result cursor-pointer"
+          (click)="datePickerClickTrigger()"
           id="filter-result-date">
           <span>{{ transactionFilter.startDate | date : 'MM/dd/yyyy' }}</span>
           <span class="mx-1">-</span>
           <span>{{ transactionFilter.endDate | date : 'MM/dd/yyyy' }}</span>
           <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.date)"></i>
         </div>
-        <div class="dropdown aura-dropdown btn-item mr-6" *ngIf="modeQuery !== tabsData.ExecutedTxs">
+        <div class="dropdown aura-dropdown btn-item mx-6" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <button
             class="mat-menu-trigger input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-tns"
             type="button"
@@ -225,7 +226,7 @@
                    (click)="$event.stopPropagation()"
                    (keydown)="$event.stopPropagation()">
                 <button class="button button--xlg button-outline button-outline__in-card button-pill"
-                        (click)="resetMsgTypeCheckbox(); tnxTypeMenuBtn.click()"
+                        (click)="transactionFilter?.type?.length === 0 ? resetMsgTypeCheckbox() : clearFilter(modeFilter.msgType); tnxTypeMenuBtn.click()"
                         type="button">
                   <span>Reset</span>
                 </button>
