@@ -2,13 +2,16 @@
 
   .card-nodata,
   .table-token {
-    height: 192px;
+    height: 193px;
     margin-bottom: 0;
     overflow-y: auto;
 
     .aura-table {
       tr.mat-row {
         height: 64px;
+      }
+      td.mat-cell:first-of-type {
+        padding-left: 14px;
       }
     }
 
