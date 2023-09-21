@@ -202,10 +202,10 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
         payload['txHash'] = this.keyWord;
       } else {
-        if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
-          payload['sender'] = this.keyWord;
-          payload['receiver'] = this.keyWord;
-        }
+        // if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+        payload['sender'] = this.keyWord;
+        payload['receiver'] = this.keyWord;
+        // }
       }
     }
 
