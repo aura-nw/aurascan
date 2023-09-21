@@ -236,6 +236,13 @@ export class AccountTransactionTableComponent {
 
   getTxsAddress(nextKey = null): void {
     const address = this.currentAddress;
+    let startDate = null;
+    let endDate = null;
+
+    if (this.transactionFilter.startDate && this.transactionFilter.endDate) {
+      startDate = this.getConvertDate(this.transactionFilter.startDate);
+      endDate = this.getConvertDate(this.transactionFilter.endDate, true);
+    }
 
     let payload = {
       limit: 100,
@@ -243,8 +250,8 @@ export class AccountTransactionTableComponent {
       heightLT: nextKey,
       compositeKey: null,
       listTxMsgType: null,
-      startTime: this.getConvertDate(this.transactionFilter.startDate) || null,
-      endTime: this.getConvertDate(this.transactionFilter.endDate, true) || null,
+      startTime: startDate || null,
+      endTime: endDate || null,
     };
 
     if (this.isSearchOther) {
