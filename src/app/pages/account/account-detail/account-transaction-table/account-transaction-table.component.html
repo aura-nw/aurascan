@@ -147,7 +147,9 @@
             #tnxTypeMenu="matMenu"
             class="aura-menu-panel tnx-type-panel text--white mt-2 p-2"
             [yPosition]="'above'">
-            <div class="aura-form single-input-field">
+            <div class="aura-form single-input-field py-2 px-2"
+                 (click)="$event.stopPropagation()"
+                 (keydown)="$event.stopPropagation()">
               <div
                 class="input-group tnx-type-search mb-2"
                 (click)="$event.stopPropagation()"
@@ -193,7 +195,7 @@
               </div>
               <div>
                 <div
-                  class="form-group d-flex align-items-center tnx-filter-item px-2"
+                  class="form-group d-flex align-items-center tnx-filter-item mx-2"
                   (click)="$event.stopPropagation()"
                   (keydown)="$event.stopPropagation()">
                   <input
@@ -208,7 +210,7 @@
                 <div class="tnx-filter-box" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
                   <div
                     *ngFor="let type of tnxType; let i = index"
-                    class="form-group d-flex align-items-center tnx-filter-item px-2">
+                    class="form-group d-flex align-items-center tnx-filter-item mx-2">
                     <input
                       type="checkbox"
                       [checked]="checkedTnx(type)"
@@ -219,9 +221,11 @@
                   </div>
                 </div>
               </div>
-              <div class="panel__btn-group px-4">
+              <div class="panel__btn-group px-4"
+                   (click)="$event.stopPropagation()"
+                   (keydown)="$event.stopPropagation()">
                 <button class="button button--xlg button-outline button-outline__in-card button-pill"
-                        (click)="resetMsgTypeCheckbox()"
+                        (click)="resetMsgTypeCheckbox(); tnxTypeMenuBtn.click()"
                         type="button">
                   <span>Reset</span>
                 </button>
@@ -229,7 +233,7 @@
                   class="button button--xlg button-outline button-outline__in-card button-pill ml-4"
                   type="button"
                   [disabled]="listTypeSelectedTemp?.length === 0"
-                  (click)="executeFilterType()">
+                  (click)="executeFilterType(); tnxTypeMenuBtn.click()">
                   <span>Select</span>
                 </button>
               </div>
