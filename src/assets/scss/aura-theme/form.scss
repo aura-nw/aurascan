@@ -292,7 +292,7 @@
       color: var(--aura-gray-8);
       &::before {
         opacity: 1;
-        background: var(--aura-gray-8);
+        background: url(../../images/icons/radio-box--dark-checked-disable.svg) center no-repeat;
       }
       &::after {
         opacity: 0;
