@@ -290,6 +290,14 @@
     &:disabled ~ label {
       cursor: not-allowed !important;
       color: var(--aura-gray-8);
+      &::after {
+        opacity: 1;
+        background: url(../../images/icons/radio-box--dark--disable.svg) center no-repeat;
+      }
+    }
+    &:checked:disabled ~ label {
+      cursor: not-allowed !important;
+      color: var(--aura-gray-8);
       &::before {
         opacity: 1;
         background: url(../../images/icons/radio-box--dark-checked-disable.svg) center no-repeat;
