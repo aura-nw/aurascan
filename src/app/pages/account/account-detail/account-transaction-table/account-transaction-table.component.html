@@ -83,7 +83,7 @@
         </div>
         <div
           *ngIf="transactionFilter.startDate && transactionFilter.endDate"
-          class="mr-6 filter-result cursor-pointer"
+          class="filter-result cursor-pointer"
           (click)="datePickerClickTrigger()"
           id="filter-result-date">
           <span>{{ transactionFilter.startDate | date : 'MM/dd/yyyy' }}</span>
