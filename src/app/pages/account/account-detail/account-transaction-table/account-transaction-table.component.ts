@@ -167,6 +167,12 @@ export class AccountTransactionTableComponent {
     }
   }
 
+  removeFilterType(type: any) {
+    this.listTypeSelectedTemp?.forEach((element, index) => {
+      if (element.label === type.label) this.listTypeSelectedTemp?.splice(index, 1);
+    });
+  }
+
   searchTransactionType() {
     if (this.transactionTypeKeyWord?.toLowerCase().length === 0 || this.transactionTypeKeyWord?.toLowerCase() === '') {
       this.tnxType = this.tnxTypeOrigin;
@@ -530,5 +536,9 @@ export class AccountTransactionTableComponent {
 
   resetMsgTypeCheckbox() {
     this.listTypeSelectedTemp = [];
+  }
+
+  initTnxFilterPanel() {
+    this.listTypeSelectedTemp = this.tnxTypeOrigin.filter(type => this.transactionFilter.type.includes(type.label));
   }
 }

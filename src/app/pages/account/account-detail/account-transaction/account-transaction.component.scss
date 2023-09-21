@@ -2,6 +2,8 @@
   width: 420px;
 }
 ::ng-deep .mat-menu-panel.tnx-type-panel {
+  padding: 0 !important;
+  overflow: hidden;
   width: 355px;
   max-width: unset;
   @media (max-width: 414px) {
