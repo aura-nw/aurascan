@@ -12,6 +12,9 @@
   @media (max-width: 376px) {
     width: 275px;
   }
+  .mat-menu-content {
+    padding: 0;
+  }
 }
 ::ng-deep .mat-menu-panel.tsx-filter-panel {
   padding: 0;
