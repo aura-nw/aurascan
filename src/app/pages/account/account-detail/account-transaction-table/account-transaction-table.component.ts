@@ -168,6 +168,7 @@ export class AccountTransactionTableComponent {
   }
 
   removeFilterType(type: any) {
+    this.checkAll = false;
     this.listTypeSelectedTemp?.forEach((element, index) => {
       if (element.label === type.label) this.listTypeSelectedTemp?.splice(index, 1);
     });
