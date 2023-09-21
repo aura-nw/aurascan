@@ -30,10 +30,14 @@
   th.mat-header-cell:nth-child(2) {
     min-width: 190px;
   }
-  th.mat-header-cell:nth-child(3),
-  th.mat-header-cell:nth-child(5),
+  th.mat-header-cell:nth-child(3) {
+    min-width: 120px;
+  }
+  th.mat-header-cell:nth-child(5) {
+    min-width: 140px;
+  }
   th.mat-header-cell:nth-child(6) {
-  min-width: 140px;
+    min-width: 160px;
   }
 }
 
@@ -87,4 +91,7 @@
 }
 .label__content {
   min-width: 120px;
+}
+.action-mob {
+  height: 44px;
 }

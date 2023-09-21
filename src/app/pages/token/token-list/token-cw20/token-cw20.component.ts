@@ -216,7 +216,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   sortData(sort: Sort) {
     this.dataSource.data.forEach((data) => {
       data.circulating_market_cap = +data.circulating_market_cap;
-      data.volume = +data.volume_24h;
+      data.volume = +data.volume;
       data.price = +data.price;
       data.holders = +data.holders;
     });
