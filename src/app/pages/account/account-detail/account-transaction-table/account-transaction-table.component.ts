@@ -316,7 +316,7 @@ export class AccountTransactionTableComponent {
 
     setTimeout(() => {
       this.transactionLoading = false;
-    }, 5000);
+    }, 2000);
   }
 
   getListTypeFilter() {
@@ -528,9 +528,9 @@ export class AccountTransactionTableComponent {
 
   datePickerClickTrigger() {
     const toggle = document.getElementById('datepicker-toggle');
-    if(toggle) {
+    if (toggle) {
       const btn = toggle.children[0];
-      if(btn instanceof HTMLElement) btn.click();
+      if (btn instanceof HTMLElement) btn.click();
     }
   }
 
@@ -539,6 +539,10 @@ export class AccountTransactionTableComponent {
   }
 
   initTnxFilterPanel() {
-    this.listTypeSelectedTemp = this.tnxTypeOrigin.filter(type => this.transactionFilter.type.includes(type.label));
+    if (this.transactionFilter.type) {
+      this.listTypeSelectedTemp = this.tnxTypeOrigin.filter((type) => this.transactionFilter.type.includes(type.label));
+    } else {
+      this.listTypeSelectedTemp = [];
+    }
   }
 }
