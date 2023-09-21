@@ -57,7 +57,7 @@ export class AccountTransactionTableComponent {
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
+    pageSize: 10,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   nextKey = null;
