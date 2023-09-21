@@ -39,13 +39,14 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   modalReference: any;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
+    pageSize: 10,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   textSearch = '';
   searchSubject = new Subject();
   destroy$ = new Subject();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataSourceMobile = [];
   dataTable = [];
   nextKey = null;
   currentKey = null;
@@ -110,6 +111,14 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       });
       this.dataSource.data = res.data?.nameTags;
       this.pageData.length = res?.data?.count || 0;
+
+      if (this.dataSource?.data) {
+        this.dataSourceMobile = this.dataSource.data?.slice(
+          this.pageData.pageIndex * this.pageData.pageSize,
+          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        );
+      }
+
     });
   }
 
@@ -159,7 +168,9 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
 
       this.toastr.successWithTitle('Private name tag removed!', 'Success');
       setTimeout(() => {
-        this.getListPrivateName();
+        this.pageData.length--;
+        this.pageData.pageIndex = 0;
+        this.pageEvent(this.pageData)
       }, 1000);
     });
   }
@@ -184,6 +195,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
     const next = length <= (pageIndex + 2) * pageSize;
+    this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
     this.pageData = e;
 
     if (next && this.nextKey && this.currentKey !== this.nextKey) {

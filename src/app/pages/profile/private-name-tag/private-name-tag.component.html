@@ -1,8 +1,8 @@
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between mt-4 mt-lg-0">
   <div class="txt-title">Private name tag</div>
   <button
     (click)="openPopup()"
-    class="button button--md button-pill button-primary button-flat"
+    class="button button--xlg button--ssm-mob button-pill button-primary button-flat"
     type="button">
     <span>Create</span>
   </button>
@@ -11,8 +11,8 @@
 <div class="mt-4">
   <div class="d-lg-flex align-items-center justify-content-between">
     <div class="txt-total-name">Total {{ countFav }}/{{ pageData?.length }} addresses tagged</div>
-    <div class="filter-group d-flex align-items-center flex-nowrap">
-      <form class="aura-form single-input-field search-form private-search-form d-none d-lg-block">
+    <div class="filter-group d-flex align-items-center flex-nowrap mt-2 mt-lg-0">
+      <form class="aura-form single-input-field search-form private-search-form">
         <div class="input-group px-6">
           <input
             type="text"
@@ -40,7 +40,7 @@
   </div>
 
   <div class="overflow-scroll-x mt-4" *ngIf="pageData?.length > 0; else noValues">
-    <table mat-table [dataSource]="dataSource" class="aura-table private-name-table">
+    <table mat-table [dataSource]="dataSource" class="aura-table private-name-table d-none d-lg-block">
       <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
           <th mat-header-cell *matHeaderCellDef>
@@ -99,7 +99,7 @@
                 <div *ngSwitchCase="'updatedAt'">
                   {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                 </div>
-                <div *ngSwitchCase="'action'">
+                <div *ngSwitchCase="'action'" class="text-end">
                   <div class="aura-tooltip-contain">
                     <i
                       class="ph ph-note-pencil body-01 cursor-pointer aura-tooltip-object"
@@ -119,6 +119,77 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+    <div class="d-lg-none">
+      <div *ngFor="let data of dataSourceMobile" class="card-name-tag">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="card__title">
+            <a class="text--primary cursor-pointer" (click)="navigateAddress(data.address)">
+              <span>{{ data.address | cutStringPipe : 8 : 8 }}</span>
+            </a>
+            <div class="text--gray-5 ellipsis-text w-100"
+                 [class.aura-tooltip-object]="data.note">
+              {{ data.note || 'Note:-' }}
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-end">
+            <div class="mr-3">
+              <i
+                  class="ph ph-push-pin body-01 cursor-pointer"
+                  *ngIf="!data.isFavorite"
+                  (click)="updateFavorite(data)"></i>
+              <img
+                  [src]="'assets/icons/icons-svg/white/push-pin.svg' | imageS3"
+                  alt=""
+                  width="16"
+                  height="16"
+                  class="cursor-pointer"
+                  (click)="updateFavorite(data)"
+                  *ngIf="data.isFavorite" />
+            </div>
+            <div class="dropdown aura-dropdown">
+              <button class="button px-2"
+                      id="delegateAction2"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                <img src="assets/icons/icons-svg/white/DotsThreeOutlineVertical.svg" alt="">
+              </button>
+              <ul class="dropdown-menu aura-dropdown-menu .border-sm border-gray-9 border-radius--sm"
+                  aria-labelledby="delegateAction2">
+                <li class="dropdown-item cursor-pointer d-flex align-items-center px-2"
+                    (click)="openPopup(data)">
+                  <i class="ph ph-note-pencil body-01 cursor-pointer aura-tooltip-object mr-2"></i>
+                  <span>Edit</span>
+                </li>
+                <li class="dropdown-item cursor-pointer d-flex align-items-center px-2"
+                    (click)="openPopupDelete(data)">
+                  <i class="ph ph-x body-01 cursor-pointer aura-tooltip-object mr-2"></i>
+                  <span>Remove</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="divider divider-horizontal my-2"></div>
+        <div class="card__content">
+          <div class="d-flex align-items-center mb-2">
+            <div class="caption text--gray-4 label__content">Type</div>
+            <div class="text--white">Contract</div>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <div class="caption text--gray-4 label__content">Private name tag</div>
+            <div class="text--white ellipsis-text">{{ data.nameTag }}</div>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <div class="caption text--gray-4 label__content">Added time</div>
+            <div class="text--white">{{ data.createdAt | customDate : 'yyyy-MM-dd' }}</div>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <div class="caption text--gray-4 label__content">Updated time</div>
+            <div class="text--white">{{commonService.getDateValue(data.updatedAt)[0]}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="d-flex justify-content-center justify-content-md-end">
