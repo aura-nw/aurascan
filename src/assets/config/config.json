@@ -45,7 +45,8 @@
     "features": ["ibc-transfer"],
     "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
     "logo": "https://i.imgur.com/zi0mTYb.png",
-    "explorer": "https://explorer.dev.aura.network/"
+    "explorer": "https://explorer.dev.aura.network/",
+    "beta": "false"
   },
   "image_s3": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
   "urlIndexer": "https://indexer.dev.aurascan.io/api/v1",
