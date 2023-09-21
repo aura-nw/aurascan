@@ -90,9 +90,9 @@
           <button
             class="mat-menu-trigger input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-tns"
             type="button"
+            [class.menu-hidden]="transactionFilter.typeTransfer"
             data-bs-toggle="dropdown"
-            aria-expanded="false"
-            *ngIf="!transactionFilter.typeTransfer">
+            aria-expanded="false">
             <span class="body">
               <ng-container *ngIf="!transactionFilter.typeTransfer"> Asset Transfer Type </ng-container>
               <span *ngIf="transactionFilter.typeTransfer?.length > 0" class="text--white"
@@ -104,10 +104,6 @@
               <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
             </div>
           </button>
-          <div class="filter-result" id="filter-result-tns" *ngIf="transactionFilter.typeTransfer?.length > 0">
-            <span class="body">{{ transactionFilter.typeTransfer }}</span>
-            <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.type)"></i>
-          </div>
           <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
             <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
               <button type="button" class="button p-0">All type</button>
@@ -119,6 +115,11 @@
               <button type="button" class="button p-0">Receive</button>
             </li>
           </ul>
+          <div class="filter-result" id="filter-result-tns" *ngIf="transactionFilter.typeTransfer?.length > 0"
+               (click)="typeAction.classList.contains('show') ? typeAction.classList.remove('show') : typeAction.classList.add('show')">
+            <span class="body">{{ transactionFilter.typeTransfer }}</span>
+            <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.type)"></i>
+          </div>
         </div>
 
         <div *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs">
@@ -126,8 +127,8 @@
             #tnxTypeMenuBtn
             [matMenuTriggerFor]="tnxTypeMenu"
             class="input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-mess"
-            type="button"
-            *ngIf="!transactionFilter.type">
+            [class.menu-hidden]="transactionFilter.type"
+            type="button">
             <span class="body ellipsis-text"> Message type </span>
             <div class="ml-3 mt-1">
               <i *ngIf="!transactionFilter.startDate" class="ph ph-caret-down text--white body icon-expand"></i>
@@ -135,8 +136,9 @@
             </div>
           </button>
           <div
-            class="filter-result"
+            class="filter-result cursor-pointer"
             id="filter-result-mess"
+            (click)="tnxTypeMenuBtn.click(); initTnxFilterPanel()"
             *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
             {{ checkAll ? 'All' : transactionFilter.type?.length + (isSearchOther ? 1 : 0) || 1 }} Msg Types selected
             <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.msgType)"></i>
@@ -145,7 +147,9 @@
             #tnxTypeMenu="matMenu"
             class="aura-menu-panel tnx-type-panel text--white mt-2 p-2"
             [yPosition]="'above'">
-            <div class="aura-form single-input-field">
+            <div class="aura-form single-input-field py-2 px-2"
+                 (click)="$event.stopPropagation()"
+                 (keydown)="$event.stopPropagation()">
               <div
                 class="input-group tnx-type-search mb-2"
                 (click)="$event.stopPropagation()"
@@ -179,9 +183,19 @@
                     height="24" />
                 </button>
               </div>
+              <div class="tag-filter-box"
+                   [class.has-result]="listTypeSelectedTemp.length > 0"
+                   (click)="$event.stopPropagation()"
+                   (keydown)="$event.stopPropagation()">
+                <span *ngIf="listTypeSelectedTemp.length === 0">Selected Items ...</span>
+                <div class="filter-result" *ngFor="let type of listTypeSelectedTemp">
+                  <span class="caption">{{ type.value }}</span>
+                  <i class="ph-thin ph-x cursor-pointer ml-1 body-02" (click)="removeFilterType(type)"></i>
+                </div>
+              </div>
               <div>
                 <div
-                  class="form-group d-flex align-items-center tnx-filter-item px-2"
+                  class="form-group d-flex align-items-center tnx-filter-item mx-2"
                   (click)="$event.stopPropagation()"
                   (keydown)="$event.stopPropagation()">
                   <input
@@ -196,7 +210,7 @@
                 <div class="tnx-filter-box" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
                   <div
                     *ngFor="let type of tnxType; let i = index"
-                    class="form-group d-flex align-items-center tnx-filter-item px-2">
+                    class="form-group d-flex align-items-center tnx-filter-item mx-2">
                     <input
                       type="checkbox"
                       [checked]="checkedTnx(type)"
@@ -207,9 +221,11 @@
                   </div>
                 </div>
               </div>
-              <div class="panel__btn-group px-4">
+              <div class="panel__btn-group px-4"
+                   (click)="$event.stopPropagation()"
+                   (keydown)="$event.stopPropagation()">
                 <button class="button button--xlg button-outline button-outline__in-card button-pill"
-                        (click)="resetMsgTypeCheckbox()"
+                        (click)="resetMsgTypeCheckbox(); tnxTypeMenuBtn.click()"
                         type="button">
                   <span>Reset</span>
                 </button>
@@ -217,7 +233,7 @@
                   class="button button--xlg button-outline button-outline__in-card button-pill ml-4"
                   type="button"
                   [disabled]="listTypeSelectedTemp?.length === 0"
-                  (click)="$event.stopPropagation(); executeFilterType()">
+                  (click)="executeFilterType(); tnxTypeMenuBtn.click()">
                   <span>Select</span>
                 </button>
               </div>
