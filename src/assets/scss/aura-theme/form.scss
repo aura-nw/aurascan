@@ -253,6 +253,7 @@
     & ~ label {
       position: relative;
       &::before, &::after {
+        border-radius: 50%;
         content: '';
         position: absolute;
         top: 2px;
@@ -284,7 +285,17 @@
         &::after {
           background: url(../../images/icons/radio-box--dark-checked.svg) center no-repeat;
         }
-
+      }
+    }
+    &:disabled ~ label {
+      cursor: not-allowed !important;
+      color: var(--aura-gray-8);
+      &::before {
+        opacity: 1;
+        background: var(--aura-gray-8);
+      }
+      &::after {
+        opacity: 0;
       }
     }
   }
