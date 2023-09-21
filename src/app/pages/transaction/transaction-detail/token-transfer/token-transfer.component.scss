@@ -2,7 +2,7 @@
 
   .card-nodata,
   .table-token {
-    height: 193px;
+    height: 194px;
     margin-bottom: 0;
     overflow-y: auto;
 
@@ -36,5 +36,12 @@
 
   .transfer-address-label {
     width: 30px;
+  }
+
+  .transfer-address {
+    min-width: 180px;
+    @media (max-width: 992px) {
+      min-width: 150px;
+    }
   }
 }
