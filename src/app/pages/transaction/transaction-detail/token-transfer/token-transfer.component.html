@@ -3,11 +3,11 @@
     <div class="card mb-0 transfer-card">
       <div class="card-body p-0">
         <div class="d-xl-flex justify-content-between align-items-center">
-          <h5 class="card-header w-100 card-header-gray mb-3 text--gray-light-2 mb-xl-0 py-4">
+          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
             Fungible Token (FT) Transfer
           </h5>
         </div>
-        <div class="pb-4">
+        <div class="pb-2">
           <div class="table-responsive table-token" *ngIf="dataSourceFTs.data.length > 0; else noFTValues">
             <table mat-table [dataSource]="dataSourceFTs" class="aura-table">
               <ng-container *ngFor="let template of templatesFTs; index as i">
@@ -61,17 +61,23 @@
                       </ng-container>
 
                       <div *ngSwitchCase="'transfer'" class="d-inline-block pr-lg-5">
-                        <div class="mb-1 text-start">
+                        <div class="mb-1 text-start d-flex">
                           <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
                             >From</span
                           >
-                          <app-name-tag [value]="data.from || nullAddress" [url]="'contracts'"></app-name-tag>
+                          <app-name-tag
+                            [isLink]="data.from ? true : false"
+                            [value]="data.from || nullAddress"
+                            [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                         </div>
-                        <div class="text-start">
+                        <div class="text-start d-flex">
                           <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
                             >To</span
                           >
-                          <app-name-tag [value]="data.to || nullAddress" [url]="'contracts'"></app-name-tag>
+                          <app-name-tag
+                            [isLink]="data.to ? true : false"
+                            [value]="data.to || nullAddress"
+                            [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                         </div>
                       </div>
                     </ng-container>
@@ -105,11 +111,11 @@
     <div class="card mb-0 transfer-card">
       <div class="card-body p-0">
         <div class="d-xl-flex justify-content-between align-items-center">
-          <h5 class="card-header w-100 card-header-gray mb-3 text--gray-light-2 mb-xl-0 py-4">
+          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
             Non-Fungible Token (NFT) Transfer
           </h5>
         </div>
-        <div class="pb-4">
+        <div class="pb-2">
           <div class="table-responsive table-token" *ngIf="dataSourceNFTs.data.length > 0; else noValues">
             <table mat-table [dataSource]="dataSourceNFTs" class="aura-table nft-list">
               <ng-container *ngFor="let template of templatesNFTs; index as i">
@@ -143,14 +149,15 @@
                               </div>
                             </div>
                             <div *ngIf="!breakpoint.value.matches">
-                              <app-name-tag [maxCharacter]="30" [value]="data.to" [iconContract]="true" [url]="'contracts'"></app-name-tag>
+                              <app-name-tag [maxCharacter]="30" [isLink]="data.to ? true : false" [value]="data.to" [iconContract]="true" [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                             </div>
                             <div *ngIf="breakpoint.value.matches">
                               <app-name-tag
                                 [maxCharacter]="14"
+                                [isLink]="data.to ? true : false"
                                 [value]="data.to"
                                 [iconContract]="true"
-                                [url]="'contracts'"></app-name-tag>
+                                [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                             </div>
                           </div>
                         </div>
@@ -162,14 +169,16 @@
                             >
                             <app-name-tag
                               *ngIf="!breakpoint.value.matches"
+                              [isLink]="data.from ? true : false"
                               [maxCharacter]="30"
                               [value]="data.from || nullAddress"
-                              [url]="'contracts'"></app-name-tag>
+                              [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                             <app-name-tag
                               *ngIf="breakpoint.value.matches"
+                              [isLink]="data.from ? true : false"
                               [maxCharacter]="14"
                               [value]="data.from || nullAddress"
-                              [url]="'contracts'"></app-name-tag>
+                              [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                           </div>
                           <div class="d-flex align-items-center">
                             <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
@@ -177,14 +186,16 @@
                             >
                             <app-name-tag
                               *ngIf="!breakpoint.value.matches"
+                              [isLink]="data.to ? true : false"
                               [maxCharacter]="30"
                               [value]="data.to || nullAddress"
-                              [url]="'contracts'"></app-name-tag>
+                              [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                             <app-name-tag
                               *ngIf="breakpoint.value.matches"
+                              [isLink]="data.to ? true : false"
                               [maxCharacter]="14"
                               [value]="data.to || nullAddress"
-                              [url]="'contracts'"></app-name-tag>
+                              [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                           </div>
                         </div>
                         <ng-container *ngIf="!breakpoint.value.matches">

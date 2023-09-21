@@ -1,4 +1,4 @@
-<div class="d-flex flex-column justify-content-center align-items-center m-5 text-center text--gray-3 {{classText}}">
+<div class="d-flex flex-column justify-content-center align-items-center m-5 text-center text--gray-3 {{classText}} {{class === 'img-height' ? 'clear-margin' : ''}}">
   <img [src]="img | imageS3" alt="" [class]="class" />
   {{ textNull }}
 </div>

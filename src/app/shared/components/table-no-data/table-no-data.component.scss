@@ -4,3 +4,9 @@
         height: 95px;
       }
 }
+
+@media (max-width: 992px) {
+    .clear-margin {
+        margin: 12px !important;
+    }
+}

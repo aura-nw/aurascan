@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
@@ -60,5 +60,12 @@ export class TokenTransferComponent implements OnInit {
 
   navigateToNFTDetail(address: string, tokenId: number): void {
     this.router.navigate([`/tokens/token-nft/${address}/${tokenId}`]);
+  }
+
+  isContractAddress(address) {
+    if (address?.startsWith('aura') && address?.length === LENGTH_CHARACTER.CONTRACT) {
+      return true;
+    }
+    return false;
   }
 }
