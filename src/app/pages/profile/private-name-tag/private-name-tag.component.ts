@@ -169,7 +169,6 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       this.toastr.successWithTitle('Private name tag removed!', 'Success');
       setTimeout(() => {
         this.pageData.length--;
-        this.pageData.pageIndex = 0;
         this.pageEvent(this.pageData)
       }, 1000);
     });

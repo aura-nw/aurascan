@@ -34,7 +34,7 @@ export class AccountTransactionTableComponent {
   templates: Array<TableTemplate>;
   tabsData = TabsAccountLink;
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
-  displayFilter = true;
+  displayFilter = false;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
