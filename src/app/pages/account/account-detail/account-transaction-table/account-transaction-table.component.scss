@@ -1,0 +1,328 @@
+@media (max-width: 991.99px) {
+  .button-filter {
+    padding: 8px;
+  }
+}
+
+.button-filter {
+  position: relative;
+  &[aria-expanded='true'] {
+    border: 2px solid var(--aura-white);
+  }
+}
+
+::ng-deep {
+  @media (max-width: 414px) {
+    .nav-item {
+      min-width: 138px;
+    }
+  }
+}
+.box-filter {
+  .divider.divider-vertical {
+    min-height: 33px;
+  }
+  .input-group {
+    height: 33px;
+    background-color: transparent;
+    border: 1px solid var(--aura-gray-8);
+    padding: 0 16px;
+    border-radius: 8px;
+  }
+  @media (max-width: 376px) {
+    width: calc(100vw - 68px);
+  }
+  .mat-date-range-input {
+    width: 100%;
+  }
+}
+.tnx-filter-item {
+  height: 44px;
+}
+
+.tnx-filter-box {
+  max-height: 220px;
+  overflow-y: auto;
+  @media (max-width: 1366px) {
+    max-height: 150px;
+  }
+  @media (max-width: 414px) {
+    max-height: 130px;
+  }
+  ::ng-deep {
+    .form-group label {
+      line-height: 18px !important;
+    }
+  }
+}
+
+.box-type-selected {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  @media (min-width: 375.98px) {
+    max-width: 250px;
+  }
+}
+
+.icon-expand {
+  &.active {
+    cursor: pointer;
+    color: var(--aura-white) !important;
+  }
+}
+
+.row-tx:has(.ph-caret-up) {
+  background: linear-gradient(0deg, #262838, #262838), linear-gradient(0deg, #0e7e6b, #0e7e6b);
+  td:first-child {
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      left: 1px;
+      width: 2px;
+      top: 1.5px;
+      bottom: 0;
+      background-color: #0e7e6b;
+    }
+  }
+
+  ::ng-deep {
+    .box-name-tag:not(.private-name-tag) {
+      &:after {
+        border-right: 15px solid #262838 !important;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .table-transfer tr td {
+    &:nth-child(4),
+    &:nth-child(5),
+    &:nth-child(6) {
+      padding-top: var(--spacer-0) !important;
+    }
+  }
+}
+
+.account-transaction-table {
+  .aura-status .status {
+    background-color: unset;
+    padding: 0;
+  }
+  app-name-tag {
+    display: flex;
+    align-items: center;
+  }
+  .item-show {
+    height: 56px;
+    min-width: 180px;
+    display: flex;
+    align-items: center;
+    &.nft-column {
+      display: block;
+      height: 56px !important;
+      margin-top: 8px;
+    }
+  }
+  .tab-nft .item-show {
+    height: 64px;
+  }
+
+  tr td {
+    vertical-align: top;
+    padding-top: var(--spacer-4);
+    &:nth-child(2) {
+      padding-top: var(--spacer-2);
+    }
+  }
+
+  tr:has(.tab-nft) td {
+    &:nth-child(1),
+    &:nth-child(3) {
+      padding-top: var(--spacer-5) !important;
+    }
+    &:nth-child(2) {
+      padding-top: var(--spacer-3) !important;
+    }
+  }
+
+  .explain-data:not(:first-child) {
+    transition: all 0.35s ease-in-out;
+    height: 0;
+    overflow: hidden;
+    &.show-detail {
+      height: 56px;
+    }
+  }
+  .box-number {
+    border: solid 1px var(--aura-gray-8);
+    border-radius: 4px;
+    margin-left: var(--spacer-3);
+    padding: 2px 6px 2px 6px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    .icon-expand {
+      margin-bottom: 2px;
+    }
+  }
+}
+
+.btn-select-type {
+  background-color: unset;
+  color: white;
+}
+
+.account-transaction-table {
+  ::ng-deep {
+    .message-custom {
+      transform: translate(0, 8px) !important;
+    }
+  }
+  .box-token-transfer {
+    min-width: 60px;
+    display: flex;
+    justify-content: flex-start;
+    .token-transfer-status {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--spacer-2) var(--spacer-4);
+      color: var(--aura-green-3);
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 12px;
+      width: auto;
+      margin: auto;
+      &.status-out {
+        color: var(--aura-red-3);
+      }
+    }
+  }
+}
+.panel__btn-group {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  background-color: var(--aura-gray-9);
+  margin: 0 -8px -16px -8px;
+}
+
+mat-date-range-input {
+  height: 31px;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+.calendar-contain {
+  width: 225px;
+  border: 1px solid var(--aura-gray-8) !important;
+  border-radius: 8px;
+}
+::ng-deep {
+  .mat-datepicker-content .mat-calendar {
+    background: #24262e;
+    border: 1px solid #717582;
+    border-radius: 8px;
+  }
+}
+.filter-contain {
+  flex-wrap: nowrap;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  overflow: hidden;
+  overflow-x: scroll;
+  padding-bottom: 200px;
+  @media (min-width: 991.98px) {
+    overflow: visible;
+    padding-bottom: 0;
+  }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.btn-tns {
+  min-width: 200px;
+}
+.btn-mess {
+  min-width: 155px;
+}
+
+.button-link {
+  color: var(--aura-blue-3link);
+}
+
+.nft__unclaimed-noti {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--aura-red-3);
+  color: white;
+  transform: translate(50%, -50%);
+  &.noti--pill {
+    width: auto;
+    border-radius: 24px;
+    padding: 4px 8px;
+  }
+}
+.card-mob-account {
+  margin-top: -200px;
+}
+.noData {
+  margin-top: -200px;
+  @media (min-width: 991.98px) {
+    margin-top: 0;
+  }
+}
+.filter-result {
+  white-space: nowrap;
+  padding: 0 var(--spacer-4);
+  color: var(--aura-blue-3link);
+  border: 1px solid var(--aura-blue-4);
+  background: #222f3d;
+  border-radius: 8px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+}
+.menu-hidden {
+  height: 0 !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  border: none !important;
+}
+.tag-filter-box {
+  min-height: 40px;
+  border: 1px solid var(--aura-gray-9);
+  border-radius: 8px;
+  color: var(--aura-gray-5);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  max-height: 100px;
+  overflow-y: auto;
+  &.has-result {
+    padding: 4px;
+    padding-right: 14px;
+    flex-wrap: wrap;
+  }
+  .filter-result {
+    height: 24px;
+    padding: 0 var(--spacer-2);
+    margin-bottom: var(--spacer-1);
+    &:not(:last-child) {
+      margin-right: var(--spacer-1);
+    }
+  }
+}

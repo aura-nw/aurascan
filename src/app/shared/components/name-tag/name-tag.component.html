@@ -12,7 +12,7 @@
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
     <app-tooltip-customize
-      class="{{ tooltipPosition }}"
+      [className]="tooltipPosition"
       [content]="
         (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
       ">
@@ -31,7 +31,7 @@
       <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
     </a>
     <app-tooltip-customize
-      class="{{ tooltipPosition }}"
+      [className]="tooltipPosition"
       [content]="
         (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
       ">
@@ -49,6 +49,12 @@
       ]"
       [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
       <ng-container *ngIf="!fullText">
+        <img
+          [src]="'assets/images/icons/token-contract.svg' | imageS3"
+          [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+          width="16px"
+          height="16px"
+          *ngIf="iconContract" />
         <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
       </ng-container>
       <ng-container *ngIf="fullText">
@@ -59,14 +65,12 @@
       </ng-container>
       <ng-container *ngIf="extendUrl && extendUrlLink">
         <a target="_blank" [href]="extendLink(extendUrlLink)">
-          <i
-            _ngcontent-wrg-c372=""
-            class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer"></i>
+          <i class="ph-arrow-square-out-fill text--white body-01 h4-mob ml-1 cursor-pointer"></i>
         </a>
       </ng-container>
     </span>
     <app-tooltip-customize
-      class="{{ tooltipPosition }}"
+      [className]="tooltipPosition"
       [content]="
         (paramUrl || value) + '<br>' + 'Public name: ' + commonService.setNameTag(paramUrl || value, global.listNameTag)
       ">
@@ -111,7 +115,7 @@
   </ng-container>
   <ng-container *ngIf="extendUrl && extendUrlLink">
     <a target="_blank" [href]="extendLink(extendUrlLink)">
-      <i _ngcontent-wrg-c372="" class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1"></i>
+      <i class="ph-arrow-square-out-fill text--white body-01 h4-mob ml-1"></i>
     </a>
   </ng-container>
 </ng-template>

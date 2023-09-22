@@ -42,9 +42,9 @@
         {{ value == '-' ? value : (value | percent : global.formatNumber2Decimal) }}
       </ng-container>
       <ng-container *ngSwitchDefault>{{ value || '-' }}</ng-container>
-      <ng-container *ngIf="denom?.display && value !== '-'"
-        ><span class="text--primary" *ngIf="value">{{ denom?.display }}</span></ng-container
-      >
+      <ng-container *ngIf="denom?.display && value !== '-'">
+        <span class="text--white" *ngIf="value">{{ denom?.display }}</span>
+      </ng-container>
     </ng-container>
   </div>
 </div>
