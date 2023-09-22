@@ -39,7 +39,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   modalReference: any;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 2,
+    pageSize: 10,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   textSearch = '';
