@@ -57,7 +57,9 @@
           <div
             class="col-auto"
             [ngClass]="publicNameTag?.length > 0 && publicNameTag != '-' ? 'box-name-tag ml-2' : ''">
+            <span class="g-ellipsis w-100">
             {{ publicNameTag }}
+            </span>
           </div>
         </div>
 
@@ -79,7 +81,7 @@
             </div>
             <span *ngIf="isEditMode">{{ getAddress.value }}</span>
             <div
-              *ngIf="getAddress.touched && getAddress.dirty && getAddress?.value?.length > 0 && !isValidAddress"
+              *ngIf="getAddress.touched && getAddress.dirty && getAddress?.value?.length > 0 && !isValidAddress && (isAccount || isContract)"
               class="text--danger mt-2 caption fw-normal">
               Invalid aura address format
             </div>
