@@ -159,15 +159,16 @@ export class AccountTransactionTableComponent {
       if (event.target.checked) {
         this.arrTypeFilter.push(type.label);
         this.listTypeSelectedTemp?.push(type);
+        if (this.listTypeSelectedTemp.length === this.tnxTypeOrigin.length) {
+          this.checkAll = true;
+        }
       } else {
         this.listTypeSelectedTemp?.forEach((element, index) => {
-          if (element.label === type.label) this.listTypeSelectedTemp?.splice(index, 1);
+          if (element.label === type.label) {
+            this.listTypeSelectedTemp?.splice(index, 1);
+          }
         });
       }
-    }
-
-    if (this.listTypeSelectedTemp.length === this.tnxTypeOrigin.length) {
-      this.checkAll = true;
     }
   }
 
