@@ -98,7 +98,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     if (this.typeContract !== this.contractType.CW20) {
       this.linkToken = this.typeContract === this.contractType.CW721 ? 'token-nft' : 'token-abt';
     }
-
+    this.getListData();
     this.timerGetUpTime = setInterval(() => {
       if (this.pageData.pageIndex === 0) {
         this.currentKey = null;
