@@ -39,7 +39,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   modalReference: any;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 2,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   textSearch = '';
@@ -113,12 +113,19 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       this.pageData.length = res?.data?.count || 0;
 
       if (this.dataSource?.data) {
-        this.dataSourceMobile = this.dataSource.data?.slice(
+        let dataMobTemp = this.dataSource.data?.slice(
           this.pageData.pageIndex * this.pageData.pageSize,
           this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
         );
+        if(dataMobTemp.length !== 0) {
+          this.dataSourceMobile = dataMobTemp
+        } else {
+          this.dataSourceMobile = this.dataSource.data?.slice(
+            (this.pageData.pageIndex - 1) * this.pageData.pageSize,
+            (this.pageData.pageIndex - 1) * this.pageData.pageSize + this.pageData.pageSize,
+          );
+        }
       }
-
     });
   }
 
@@ -196,6 +203,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     const next = length <= (pageIndex + 2) * pageSize;
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
     this.pageData = e;
+    this.pageData.previousPageIndex = e.pageIndex;
 
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getListPrivateName(this.nextKey);
