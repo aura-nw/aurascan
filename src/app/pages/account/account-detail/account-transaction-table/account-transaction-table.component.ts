@@ -324,7 +324,7 @@ export class AccountTransactionTableComponent {
 
     setTimeout(() => {
       this.transactionLoading = false;
-    }, 2000);
+    }, 5000);
   }
 
   getListTypeFilter() {
