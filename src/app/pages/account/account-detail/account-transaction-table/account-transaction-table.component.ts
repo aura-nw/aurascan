@@ -165,6 +165,10 @@ export class AccountTransactionTableComponent {
         });
       }
     }
+
+    if (this.listTypeSelectedTemp.length === this.tnxTypeOrigin.length) {
+      this.checkAll = true;
+    }
   }
 
   removeFilterType(type: any) {
@@ -475,9 +479,8 @@ export class AccountTransactionTableComponent {
       this.listTypeSelectedTemp?.forEach((element, index) => {
         if (element.label === 'Others') {
           this.isSearchOther = true;
-        } else {
-          lstTemp.push(element.label);
         }
+        lstTemp.push(element.label);
       });
     }
     this.transactionFilter.type = lstTemp || null;
