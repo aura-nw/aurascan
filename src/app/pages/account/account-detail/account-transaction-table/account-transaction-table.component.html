@@ -73,9 +73,14 @@
                 (ngModelChange)="searchType()" />
             </mat-date-range-input>
             <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true" id="datepicker-toggle">
-              <mat-icon matDatepickerToggleIcon>
-                <i *ngIf="!picker.opened" matIconSuffix class="ph ph-caret-down text--white body icon-expand"></i>
-                <i *ngIf="picker.opened" matIconSuffix class="ph ph-caret-up text--white body cursor-pointer"></i>
+              <mat-icon matDatepickerToggleIcon class="d-flex align-items-center">
+                <i *ngIf="!picker.opened && !transactionFilter.startDate" matIconSuffix class="ph ph-caret-down text--white body icon-expand"></i>
+                <i *ngIf="picker.opened && !transactionFilter.startDate" matIconSuffix class="ph ph-caret-up text--white body cursor-pointer"></i>
+                <img *ngIf="transactionFilter.startDate"
+                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
+                     alt="" width="24" height="24"
+                     (click)="clearFilter(modeFilter.date)"
+                />
               </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
