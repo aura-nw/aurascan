@@ -19,25 +19,25 @@
 
 .private-name-table {
   th.mat-header-cell:nth-child(1) {
-    min-width: 80px;
-  }
-  th.mat-header-cell:nth-child(7) {
-    min-width: 100px;
-  }
-    th.mat-header-cell:nth-child(4) {
-    min-width: 260px;
+    width: 80px;
   }
   th.mat-header-cell:nth-child(2) {
-    min-width: 190px;
+    width: 210px;
   }
   th.mat-header-cell:nth-child(3) {
-    min-width: 90px;
+    width: 90px;
+  }
+  th.mat-header-cell:nth-child(4) {
+    width: 270px;
   }
   th.mat-header-cell:nth-child(5) {
-    min-width: 140px;
+    width: 140px;
   }
   th.mat-header-cell:nth-child(6) {
-    min-width: 160px;
+    width: 160px;
+  }
+  th.mat-header-cell:nth-child(7) {
+    width: 100px;
   }
 }
 
