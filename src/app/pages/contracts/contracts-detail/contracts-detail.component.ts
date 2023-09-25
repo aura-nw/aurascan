@@ -40,7 +40,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
       });
     }
     this.subscription = this.contractService.contractObservable.subscribe((res) => {
-      if (res) {
+      if (res?.instantiate_hash) {
         res.tx_hash = res.instantiate_hash;
         res.execute_msg_schema = _.get(res, 'code.code_id_verifications[0].execute_msg_schema');
         res.instantiate_msg_schema = _.get(res, 'code.code_id_verifications[0].instantiate_msg_schema');

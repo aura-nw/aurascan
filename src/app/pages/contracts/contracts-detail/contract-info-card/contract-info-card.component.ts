@@ -3,6 +3,7 @@ import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { CommonService } from 'src/app/core/services/common.service';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-contract-info-card',
@@ -14,10 +15,14 @@ export class ContractInfoCardComponent implements OnInit, OnChanges {
   contractRegisterType = ContractRegisterType;
   linkNft = 'token-nft';
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
+  verifiedStatus = '';
+  verifiedText = '';
 
-  constructor(public commonService: CommonService) {}
+  constructor(public commonService: CommonService, private tokenService: TokenService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getStatusVerify();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     setTimeout(() => {
@@ -30,5 +35,14 @@ export class ContractInfoCardComponent implements OnInit, OnChanges {
   extendLink(url) {
     url = url.match(/^https?:/) ? url : '//' + url;
     return url;
+  }
+
+  getStatusVerify(){
+    this.tokenService.getTokenMarketData({ contractAddress: this.contractDetail.address }).subscribe((res) => {
+      if (res?.length > 0) {
+        this.verifiedStatus = res[0].verify_status;
+        this.verifiedText = res[0].verify_text;
+      }
+    });
   }
 }
