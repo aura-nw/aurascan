@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -8,8 +8,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { Globals } from 'src/app/global/global';
-import {MatMenuTrigger} from "@angular/material/menu";
-import {MatSelect} from "@angular/material/select";
 @Component({
   selector: 'app-nft-list',
   templateUrl: './nft-list.component.html',
@@ -43,13 +41,6 @@ export class NftListComponent implements OnChanges {
   ];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  @ViewChild('nftFilterPanel') nftFilterPanel : MatSelect;
-
-  @HostListener('window:scroll', ['$event'])
-  closeFilterPanelSection(_) {
-    this.nftFilterPanel.close();
-  }
-
   constructor(
     private accountService: AccountService,
     public global: Globals,
@@ -68,6 +59,11 @@ export class NftListComponent implements OnChanges {
     if (changes.address) {
       this.pageEvent(0);
     }
+  }
+
+  filterCollecttion() {
+    this.pageData.pageIndex = 1;
+    this.getNftData();
   }
 
   getNftData() {
@@ -146,6 +142,7 @@ export class NftListComponent implements OnChanges {
       () => {},
     );
   }
+
   setNFTFilterLabel(nft) {
     this.nftFilterLabel = nft.label + ' (' + nft.quantity + ')';
   }

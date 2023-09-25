@@ -8,25 +8,25 @@
           <div class="body d-lg-flex d-none mr-2 text--gray-1">Collections</div>
           <div class="dropdown aura-dropdown w-100">
             <button
-                class="button button-pill button--sm button-outline button-outline__in-card px-3 justify-content-between"
-                type="button"
-                id="nftFilter"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
+              class="button button-pill button--sm button-outline button-outline__in-card px-3 justify-content-between"
+              type="button"
+              id="nftFilter"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
               <span>{{ nftFilterLabel }}</span>
               <i class="ph ph-caret-down text--white h3"></i>
               <i class="ph ph-caret-up text--white h3"></i>
             </button>
             <ul
-                class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm"
-                aria-labelledby="nftFilter">
+              class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm"
+              aria-labelledby="nftFilter">
               <li
-                  *ngFor="let item of listCollection; let i = index"
-                  (click)="nftFilter = item.address; getNftData(); setNFTFilterLabel(item)"
-                  [class.item-border]="i===0"
-                  [class.mb-1]="i > 0"
-                  class="dropdown-item cursor-pointer"
-                  [class.active]="nftFilter === item.address">
+                *ngFor="let item of listCollection; let i = index"
+                (click)="nftFilter = item.address; filterCollecttion(); setNFTFilterLabel(item)"
+                [class.item-border]="i === 0"
+                [class.mb-1]="i > 0"
+                class="dropdown-item cursor-pointer"
+                [class.active]="nftFilter === item.address">
                 <span class="body">{{ (item.label | cutStringPipe : numLength) + ' (' + item.quantity + ')' }}</span>
               </li>
             </ul>
