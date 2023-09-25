@@ -139,85 +139,12 @@
 }
 
 ::ng-deep {
-  .mat-form-field[tokenFilter] {
-    background-color: var(--aura-gray-10);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    width: 150px;
-    height: 40px;
-
-    @media (min-width: 991.98px) {
-      width: 100%;
-    }
-
-    &.mat-focused {
-      border-color: var(--aura-white);
-    }
-
-    .mat-form-field-wrapper {
-      width: 100%;
-      padding-bottom: 0;
-    }
-
-    .mat-form-field-flex {
-      padding: 0 16px;
-      background: transparent;
-      height: 40px;
-    }
-
-    .mat-form-field-infix {
-      padding: 4px 0 0.75em 0;
-    }
-
-    .mat-select-placeholder,
-    mat-select-trigger {
-      position: relative;
-      color: var(--aura-gray-5);
-      font-size: 1.4rem;
-      line-height: 1.6rem;
-    }
-
-    .mat-select-value {
-      color: var(--aura-gray-1);
-    }
-
-    .mat-form-field-underline {
-      display: none;
-    }
-
-    .mat-select-arrow-wrapper {
-      transform: translateY(-26%);
-
-      .mat-select-arrow {
-        border: solid var(--aura-white);
-        border-width: 0 1px 1px 0;
-        display: inline-block;
-        padding: 4px;
-        transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
-      }
-    }
-  }
-
-  mat-select.token-filter[aria-expanded='true'] {
-    .mat-select-arrow {
-      border-width: 1px 0 0 1px !important;
-    }
-    .mat-select-arrow-wrapper {
-      transform: translateY(2%);
-    }
-  }
-
-  .token-filter-none::after,
-  .token-filter-none::before {
-    display: none;
-  }
-
   .filter-dropdown {
     right: unset !important;
     transform: translateX(-50%) !important;
     width: 200px;
+    max-height: 285px;
+    overflow-y: auto !important;
   }
 
   .mat-option {
