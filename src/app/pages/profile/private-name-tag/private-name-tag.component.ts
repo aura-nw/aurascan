@@ -99,11 +99,13 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     const payload = {
       limit: 100,
       keyword: this.textSearch || '',
+      nextKey: nextKey
     };
 
     this.nameTagService.getListPrivateNameTagNextKey(payload).subscribe((res) => {
+      this.nextKey = null;
       if (res.data?.nameTags?.length >= 100) {
-        this.nextKey = res.data[res.data?.nameTags?.length - 1].id;
+        this.nextKey = res.data[res.data?.nameTags?.length - 1]?.id;
       }
       this.countFav = res.data?.nameTags?.filter((k) => k.isFavorite === 1)?.length || 0;
       res.data?.nameTags.forEach((element) => {
