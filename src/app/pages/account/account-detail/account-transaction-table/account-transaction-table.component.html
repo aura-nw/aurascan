@@ -29,7 +29,11 @@
     </button>
   </div>
 </div>
-<div class="d-flex justify-content-between" [ngClass]="displayType ? 'mb-3' : 'mb-4'">
+<div class="d-flex justify-content-between align-items-center" [ngClass]="displayType ? 'mb-3' : 'mb-4'">
+  <div class="d-none d-lg-block text--gray-5" *ngIf="!transactionLoading && !displayFilter">
+    {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+    found
+  </div>
   <div *ngIf="displayType">
     <div class="d-flex d-lg-none align-items-center">
       <div class="dropdown aura-dropdown">
@@ -51,7 +55,7 @@
     </div>
   </div>
   <div class="mb-0 text--gray-5 caption-mob fw-normal filter-contain">
-    <div class="box-filter tsx-filter-panel d-flex align-items-center mb-4" *ngIf="displayFilter">
+    <div class="box-filter tsx-filter-panel d-flex align-items-center mb-4 mb-lg-0" *ngIf="displayFilter">
       <div class="d-flex align-items-center">
         <div class="dropdown aura-dropdown btn-item body" [class.menu-hidden]="transactionFilter.endDate">
           <div
@@ -279,14 +283,6 @@
         </button>
       </div>
     </div>
-    <div class="d-none d-lg-block" *ngIf="!transactionLoading && !displayType">
-      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
-      found
-    </div>
-    <div class="d-lg-none" *ngIf="!transactionLoading && !displayType && displayFilter">
-      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
-      found
-    </div>
   </div>
   <div class="d-none d-lg-block">
     <button
@@ -301,7 +297,13 @@
     </button>
   </div>
 </div>
-<div *ngIf="!transactionLoading && displayType" class="mb-3">
+<div class="box-filter__desc text--gray-5">
+  <div class="d-lg-none mb-4 caption-mob" *ngIf="!transactionLoading && !displayType && displayFilter">
+    {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+    found
+  </div>
+</div>
+<div *ngIf="!transactionLoading && displayFilter" class="d-none d-lg-block text--gray-5 mb-3">
   {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
   found
 </div>
