@@ -11,26 +11,26 @@
             <div class="body d-lg-flex d-none align-items-center justify-content-center mr-2 text--gray-1">Type</div>
             <div class="dropdown aura-dropdown">
               <button
-                  class="button button-pill button--sm button-outline button-outline__in-card token-filter-none px-3 justify-content-between"
-                  type="button"
-                  #tokenFilterBtn
-                  id="tokenFilter"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                class="button button-pill button--sm button-outline button-outline__in-card token-filter-none px-3 justify-content-between"
+                type="button"
+                #tokenFilterBtn
+                id="tokenFilter"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
                 <span>{{ tokenFilterLabel }}</span>
                 <i class="ph ph-caret-down text--white h3"></i>
                 <i class="ph ph-caret-up text--white h3"></i>
               </button>
               <ul
-                  class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm"
-                  aria-labelledby="tokenFilter">
+                class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm"
+                aria-labelledby="tokenFilter">
                 <li
-                    *ngFor="let item of listTokenType; let i = index"
-                    (click)="tokenFilter = item.value; getListToken(); setTokenFilterLabel(item)"
-                    class="dropdown-item cursor-pointer"
-                    [class.item-border]="i===0"
-                    [class.mb-1]="i > 0"
-                    [class.active]="tokenFilter === item.value">
+                  *ngFor="let item of listTokenType; let i = index"
+                  (click)="tokenFilter = item.value; getListToken(); setTokenFilterLabel(item)"
+                  class="dropdown-item cursor-pointer"
+                  [class.item-border]="i === 0"
+                  [class.mb-1]="i > 0"
+                  [class.active]="tokenFilter === item.value">
                   <span class="body">{{ item.label + ' (' + item.quantity + ')' }}</span>
                 </li>
               </ul>
