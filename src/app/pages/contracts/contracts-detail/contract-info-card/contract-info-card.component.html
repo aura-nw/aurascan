@@ -60,9 +60,9 @@
                       width="18"
                       height="18"
                       class="ml-1 mb-1"
-                      *ngIf="contractDetail.verify_status === 'VERIFIED'" />
+                      *ngIf="verifiedStatus === 'VERIFIED'" />
                   </div>
-                  <app-tooltip-customize [content]="contractDetail.verify_text || 'Verified by Aura Network'">
+                  <app-tooltip-customize [content]="verifiedText || 'Verified by Aura Network'">
                   </app-tooltip-customize>
                 </div>
               </div>
