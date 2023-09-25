@@ -3,11 +3,11 @@ import ExcelExport from 'export-xlsx';
 export function exportChart(data: any, range: string, isPrice: boolean, currDate: string) {
   let type = '';
   switch (range) {
-    case '60m':
-      type = 'in 60 minutes';
-      break;
     case '24h':
       type = 'in about 24 hours';
+      break;
+    case '7d':
+      type = 'in 7 days';
       break;
     case '30d':
       type = 'in 30 days';

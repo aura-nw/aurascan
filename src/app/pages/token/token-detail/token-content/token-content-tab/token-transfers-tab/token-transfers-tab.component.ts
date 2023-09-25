@@ -2,21 +2,18 @@ import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnIni
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import {
-  LENGTH_CHARACTER,
-  PAGE_EVENT,
-} from '../../../../../../core/constants/common.constant';
+import { UserService } from 'src/app/core/services/user.service';
+import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { Globals } from '../../../../../../global/global';
+import { Globals, convertDataAccountTransaction } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -87,7 +84,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private transactionService: TransactionService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -95,18 +92,17 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       this.keyWord = params?.a || '';
     });
 
-    this.getListTransactionToken();
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
     if (this.typeContract !== this.contractType.CW20) {
       this.linkToken = this.typeContract === this.contractType.CW721 ? 'token-nft' : 'token-abt';
     }
-
+    this.getListData();
     this.timerGetUpTime = setInterval(() => {
       if (this.pageData.pageIndex === 0) {
         this.currentKey = null;
-        this.getListTransactionToken(null, true);
+        this.getListData(null, true);
       }
     }, 5000);
   }
@@ -117,26 +113,103 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async getListTransactionToken(nextKey = null, isReload = false) {
+  getListData(nextKey = null, isReload = false) {
+    if (this.typeContract !== this.contractType.CW20) {
+      this.getListTransactionTokenCW721(nextKey, isReload);
+    } else {
+      this.getListTransactionTokenCW20(nextKey, isReload);
+    }
+  }
+
+  async getListTransactionTokenCW721(nextKey = null, isReload = false) {
     let payload = {
       limit: 100,
-      value: this.contractAddress,
-      compositeKey: 'execute._contract_address',
+      address: this.keyWord,
       heightLT: nextKey,
+      contractAddr: this.contractAddress,
+      isTransferTab: true,
     };
+
+    if (this.typeContract === this.contractType.CW4973) {
+      payload['isCW4973'] = true;
+    }
 
     if (this.keyWord) {
       if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
-        payload['hash'] = this.keyWord;
+        payload['txHash'] = this.keyWord;
       } else {
-        payload['value2'] = this.keyWord;
-        if (!(this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd))) {
-          payload['key2'] = 'token_id';
+        if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+          payload['sender'] = this.keyWord;
+          payload['receiver'] = this.keyWord;
+        } else {
+          payload['tokenId'] = this.keyWord;
         }
       }
     }
 
-    this.transactionService.getListTxMultiCondition(payload).subscribe(
+    this.userService.getListNFTByAddress(payload).subscribe(
+      (res) => {
+        if (res) {
+          this.nextKey = null;
+          if (res.transaction.length >= 100) {
+            this.nextKey = res?.transaction[res.transaction.length - 1]?.height;
+            this.hasMore.emit(true);
+          } else {
+            this.hasMore.emit(false);
+          }
+
+          let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.NftTxs, false, null);
+
+          txs.forEach((element, index) => {
+            element['from_address'] = element.fromAddress;
+            element['to_address'] = element.toAddress;
+            element['token_id'] = element.arrEvent?.length > 1 ? 'More' : element.tokenId;
+            element['type'] = res.transaction[index]?.events[0]?.smart_contract_events[0]?.cw721_activity?.action;
+            if (this.typeContract === this.contractType.CW4973) {
+              if (element['type'] === 'mint') {
+                element['type'] = 'take';
+              } else if (element['type'] === 'burn') {
+                element['type'] = 'unequip';
+              }
+            }
+          });
+          if (this.dataSource.data.length > 0 && !isReload) {
+            this.dataSource.data = [...this.dataSource.data, ...txs];
+          } else {
+            this.dataSource.data = [...txs];
+          }
+
+          this.pageData.length = this.dataSource.data.length;
+          this.resultLength.emit(this.pageData.length);
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
+  }
+
+  async getListTransactionTokenCW20(nextKey = null, isReload = false) {
+    let payload = {
+      limit: 100,
+      address: this.keyWord,
+      heightLT: nextKey,
+      contractAddr: this.contractAddress,
+    };
+
+    if (this.keyWord) {
+      if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
+        payload['txHash'] = this.keyWord;
+      } else {
+        // if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+        payload['sender'] = this.keyWord;
+        payload['receiver'] = this.keyWord;
+        // }
+      }
+    }
+
+    this.userService.getListFTByAddress(payload).subscribe(
       (res) => {
         if (res) {
           this.nextKey = null;
@@ -146,15 +219,20 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           } else {
             this.hasMore.emit(false);
           }
-          res.transaction?.forEach((trans) => {
-            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-          });
 
+          let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.FtsTxs, false, null);
+          txs.forEach((element, index) => {
+            element['from_address'] = element.fromAddress;
+            element['to_address'] = element.toAddress;
+            element['type'] = element?.action;
+            element['amountToken'] = element.amount;
+          });
           if (this.dataSource.data.length > 0 && !isReload) {
-            this.dataSource.data = [...this.dataSource.data, ...res.transaction];
+            this.dataSource.data = [...this.dataSource.data, ...txs];
           } else {
-            this.dataSource.data = [...res.transaction];
+            this.dataSource.data = [...txs];
           }
+
           this.pageData.length = this.dataSource.data.length;
           this.resultLength.emit(this.pageData.length);
         }
@@ -186,7 +264,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     const next = length <= (pageIndex + 2) * pageSize;
     this.pageData = e;
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getListTransactionToken(this.nextKey);
+      this.getListData(this.nextKey);
       this.currentKey = this.nextKey;
     }
   }

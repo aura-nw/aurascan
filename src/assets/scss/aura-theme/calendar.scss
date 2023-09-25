@@ -1,0 +1,60 @@
+mat-datepicker-toggle .mat-icon-button {
+  height: 31px;
+  width: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mat-datepicker-content {
+  margin-top: 8px !important;
+}
+.mat-date-range-input-separator {
+  margin: 0 !important;
+  margin-left: 10px !important;
+  opacity: 1 !important;
+}
+.mat-date-range-input-inner {
+  color: var(--aura-white) !important;
+}
+.mat-date-range-input-inner::-webkit-input-placeholder {
+  color: var(--aura-white);
+}
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled) > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  background-color: transparent;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 2px;
+    height: 4px;
+    border-radius: 4px;
+    width: 0;
+    background: linear-gradient(113.1deg, #5EE6D0 13.45%, #BFC6FF 50.33%, #FFBA69 85.05%);
+    transition: width .35s ease-in-out;
+  }
+}
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):not(.mat-calendar-body-active):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  &:before {
+    width: 12px;
+  }
+  font-weight: 900;
+  background: var(--aura-gradient-general);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  }
+.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  border-radius: 8px;
+  background: #2BBBA3 !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  font-weight: 400 !important;
+  &:before {
+    content: unset;
+  }
+}
+.mat-calendar-body-selected {
+  background-color: var(--aura-gray-9);
+  border-radius: 8px !important;
+  color: var(--aura-white) !important;
+}

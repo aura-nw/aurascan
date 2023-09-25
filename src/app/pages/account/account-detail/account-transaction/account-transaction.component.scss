@@ -1,0 +1,74 @@
+.filter-container {
+  width: 420px;
+}
+::ng-deep .mat-menu-panel.tnx-type-panel {
+  padding: 0 !important;
+  overflow: hidden;
+  width: 355px;
+  max-width: unset;
+  @media (max-width: 414px) {
+    width: 310px;
+  }  
+  @media (max-width: 376px) {
+    width: 275px;
+  }
+  .mat-menu-content {
+    padding: 0;
+  }
+}
+::ng-deep .mat-menu-panel.tsx-filter-panel {
+  padding: 0;
+  max-width: unset;
+  border-radius: var(--spacer-2);
+  .mat-menu-content {
+    padding: 0;
+  }
+  .mat-date-range-input {
+    width: auto;
+  }
+  .mat-date-range-input-start-wrapper {
+    width: 100%;
+  }
+  .aura-form .input-group {
+    background-color: transparent;
+    border-color: var(--aura-gray-8) !important;
+    input {
+      width: 110px;
+      max-width: 100%;
+      white-space: unset;
+      overflow: unset;
+      text-overflow: unset;
+    }
+  }
+  @media (min-width: 991.98px) {
+    .aura-form {
+      width: 388px;
+      min-height: 300px;
+    }
+  }
+}
+.button-apply:disabled {
+  background-color: var(--aura-gray-8);
+  span {
+    color: var(--aura-black);
+  }
+  &:hover {
+    border-color: transparent;
+  }
+}
+.input-group.tnx-type-search {
+  height: 40px;
+}
+
+.tab-account-transaction {
+  flex-grow: 0;
+  padding: 0px 32px;
+  white-space: nowrap;
+  .active span {
+    color: var(--aura-gray-1) !important;
+  }
+  @media (max-width: 414px) {
+    min-width: auto;
+    padding: 0px 24px;
+  }
+}

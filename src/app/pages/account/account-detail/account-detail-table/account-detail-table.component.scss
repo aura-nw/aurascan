@@ -12,13 +12,19 @@
     .text-jailed {
       min-width: 30px;
     }
+
     .label-jailed span {
       margin-left: 10px;
     }
   }
 }
+
 .ellipsis-text {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.unbonding-val-name {
+  width: 120px;
 }

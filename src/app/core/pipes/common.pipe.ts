@@ -5,6 +5,9 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from '../services/common.service';
 import { balanceOf } from '../utils/common/parsing';
 import { MaskPipe } from 'ngx-mask';
+import * as _ from 'lodash';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -119,5 +122,42 @@ export class convertLogAmount implements PipeTransform {
 export class decodeData implements PipeTransform {
   transform(value: string): string {
     return atob(value);
+  }
+}
+
+@Pipe({ name: 'displayTypeToolTip' })
+export class displayTypeToolTip implements PipeTransform {
+  transform(value: any): string {
+    let result = '';
+    value.forEach((element, index) => {
+      const typeMsg = element.type || element['@type'];
+      let type;
+      if (typeMsg === TRANSACTION_TYPE_ENUM.ExecuteContract) {
+        try {
+          let dataTemp = _.get(element, 'content.msg') || _.get(element, 'msg');
+          if (typeof dataTemp === 'string') {
+            try {
+              dataTemp = JSON.parse(dataTemp);
+            } catch (e) {}
+          }
+          let action = Object.keys(dataTemp)[0];
+          type = 'Contract: ' + action;
+        } catch (e) {}
+      } else {
+        type = _.find(TYPE_TRANSACTION, { label: typeMsg })?.value || typeMsg.split('.').pop();
+      }
+
+      if (index <= 4) {
+        if (result?.length > 0) {
+          result += ', ' + type;
+        } else {
+          result += type;
+        }
+      }
+    });
+    if (value?.length > 5) {
+      result += ', ...';
+    }
+    return result;
   }
 }

@@ -4,7 +4,7 @@
     <div class="card">
       <div class="card-body">
         <div class="table-responsive d-none d-lg-block">
-          <table mat-table [dataSource]="dataSource" class="aura-table">
+          <table mat-table [dataSource]="dataSource" class="aura-table tx">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
                 <th
@@ -33,8 +33,18 @@
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'type'" class="aura-status">
-                        <div class="status">
-                          {{ data[template.matColumnDef] }}
+                        <div class="aura-status aura-tooltip-contain">
+                          <div class="status cursor-pointer aura-tooltip-object">
+                            {{ data[template.matColumnDef] | stringEllipsis : 25 }}
+                            <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                              +{{ data.lstType?.length - 1 }}
+                            </div>
+                          </div>
+
+                          <app-tooltip-customize
+                            [class]="'message-custom'"
+                            [content]="data.lstType | displayTypeToolTip">
+                          </app-tooltip-customize>
                         </div>
                       </div>
                       <div *ngSwitchCase="'status'">
@@ -52,7 +62,7 @@
                       </div>
                       <div *ngSwitchCase="'fee'">
                         {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                        <span class="text--primary">{{ denom }}</span>
+                        <span class="text--white">{{ denom }}</span>
                       </div>
                       <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                     </ng-container>
@@ -86,7 +96,7 @@
               {
                 label: 'Fee',
                 class: 'body-01-mob text--gray-1',
-                info: (+data.fee | mask: 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
+                info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
               },
               {
                 label: 'Time',
