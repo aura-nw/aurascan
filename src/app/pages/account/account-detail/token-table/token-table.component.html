@@ -9,25 +9,32 @@
             class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100"
             *ngIf="!breakpoint.value.matches">
             <div class="body d-lg-flex d-none align-items-center justify-content-center mr-2 text--gray-1">Type</div>
-            <mat-form-field class="w-100" appearance="outline" tokenFilter>
-              <mat-select
-                class="token-filter"
-                panelClass="tokenFilterPanel"
-                (selectionChange)="getListToken()"
-                [(value)]="tokenFilter"
-                [disableOptionCentering]="true">
-                <div *ngFor="let item of listTokenType; let i = index">
-                  <mat-option [value]="item.value" [class.mb-1]="i > 0 && i < listTokenType.length">
-                    <div class="d-flex option-contain">
-                      <div class="option-lable">
-                        <span class="body-mob">{{ item.label + ' (' + item.quantity + ')' }}</span>
-                      </div>
-                    </div>
-                  </mat-option>
-                  <div class="divider divider-horizontal my-2" *ngIf="i === 0"></div>
-                </div>
-              </mat-select>
-            </mat-form-field>
+            <div class="dropdown aura-dropdown">
+              <button
+                class="button button-pill button--sm button-outline button-outline__in-card token-filter-none px-3 justify-content-between"
+                type="button"
+                #tokenFilterBtn
+                id="tokenFilter"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span>{{ tokenFilterLabel }}</span>
+                <i class="ph ph-caret-down text--white h3"></i>
+                <i class="ph ph-caret-up text--white h3"></i>
+              </button>
+              <ul
+                class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm"
+                aria-labelledby="tokenFilter">
+                <li
+                  *ngFor="let item of listTokenType; let i = index"
+                  (click)="tokenFilter = item.value; getListToken(); setTokenFilterLabel(item)"
+                  class="dropdown-item cursor-pointer"
+                  [class.item-border]="i === 0"
+                  [class.mb-1]="i > 0"
+                  [class.active]="tokenFilter === item.value">
+                  <span class="body">{{ item.label + ' (' + item.quantity + ')' }}</span>
+                </li>
+              </ul>
+            </div>
           </div>
           <div class="position-relative ml-lg-4 w-lg-auto w-100">
             <form (ngSubmit)="searchToken()" class="aura-form single-input-field token-filter-form w-100" #searchForm>
@@ -62,7 +69,7 @@
           <div class="ml-2" *ngIf="breakpoint.value.matches">
             <div class="dropdown aura-dropdown">
               <button
-                class="button button-pill button--sm button-outline button-outline__in-card button-dropdown token-filter-none px-3"
+                class="button button-pill button--sm button-outline button-outline__in-card token-filter-none px-3"
                 type="button"
                 id="filterTypeAction"
                 data-bs-toggle="dropdown"
@@ -75,7 +82,7 @@
                 <li
                   *ngFor="let item of listTokenType; let i = index"
                   (click)="tokenFilter = item.value; getListToken()"
-                  class="dropdown-item cursor-pointer"
+                  class="dropdown-item cursor-pointer mb-1"
                   [class.active]="tokenFilter === item.value">
                   <span class="body">{{ item.label + ' (' + item.quantity + ')' }}</span>
                 </li>

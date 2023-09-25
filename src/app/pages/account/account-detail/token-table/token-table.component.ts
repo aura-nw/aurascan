@@ -23,6 +23,7 @@ export class TokenTableComponent implements OnChanges {
   @Output() totalValue = new EventEmitter<number>();
   @Output() totalAssets = new EventEmitter<number>();
   tokenFilter = '';
+  tokenFilterLabel = 'All (0)';
   textSearch = '';
   searchValue = '';
   templates: Array<TableTemplate> = [
@@ -157,6 +158,7 @@ export class TokenTableComponent implements OnChanges {
             this.dataSource.data = [];
           }
           this.totalAssets.emit(this.pageData?.length || 0);
+          this.setTokenFilterLabel(this.listTokenType[0]);
         },
         () => {},
         () => {
@@ -164,6 +166,10 @@ export class TokenTableComponent implements OnChanges {
         },
       );
     }
+  }
+
+  setTokenFilterLabel(token) {
+    this.tokenFilterLabel = token.label + ' (' + token.quantity + ')';
   }
 
   convertValue(value: any, decimal: number) {

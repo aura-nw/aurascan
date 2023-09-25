@@ -236,7 +236,7 @@ mat-date-range-input {
   scrollbar-width: none;  /* Firefox */
   overflow: hidden;
   overflow-x: scroll;
-  padding-bottom: 200px;
+  padding-bottom: 184px;
   @media (min-width: 991.98px) {
     overflow: visible;
     padding-bottom: 0;
@@ -275,10 +275,7 @@ mat-date-range-input {
     padding: 4px 8px;
   }
 }
-.card-mob-account {
-  margin-top: -200px;
-}
-.noData {
+.noData,.box-filter__desc {
   margin-top: -200px;
   @media (min-width: 991.98px) {
     margin-top: 0;
