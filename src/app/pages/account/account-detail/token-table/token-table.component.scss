@@ -126,11 +126,6 @@
     }
   }
 
-  .token-filter-none::after,
-  .token-filter-none::before {
-    display: none;
-  }
-
   .filter-dropdown {
     right: unset !important;
     transform: translateX(-50%) !important;
@@ -157,5 +152,39 @@
     border-radius: 4px;
     color: var(--aura-white) !important;
     padding: 0 8px !important;
+  }
+}
+#tokenFilter {
+  min-width: 200px;
+  text-align: left;
+  &[aria-expanded='true'] {
+    i.ph-caret-down {
+      display: none;
+    }
+    i.ph-caret-up {
+      display: flex;
+    }
+  }
+  &[aria-expanded='false'] {
+    i.ph-caret-down {
+      display: flex;
+    }
+    i.ph-caret-up {
+      display: none;
+    }
+  }
+}
+.item-border {
+  position: relative;
+  margin-bottom: 7px;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    bottom: -5px;
+    height: 1px;
+    background-color: var(--aura-gray-8);
   }
 }

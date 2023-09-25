@@ -27,6 +27,7 @@ export class NftListComponent implements OnChanges {
     pageIndex: 1,
   };
   nftFilter = '';
+  nftFilterLabel = 'All (0)';
   nftList = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
@@ -138,11 +139,15 @@ export class NftListComponent implements OnChanges {
             });
           });
           this.listCollection[0].quantity = res?.cw721_token_aggregate?.aggregate?.count;
+          this.setNFTFilterLabel(this.listCollection[0]);
         }
       },
       () => {},
       () => {},
     );
+  }
+  setNFTFilterLabel(nft) {
+    this.nftFilterLabel = nft.label + ' (' + nft.quantity + ')';
   }
 
   resetSearch(): void {
