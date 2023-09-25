@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,15 +16,21 @@ import { MappingErrorService } from '../../../app/core/services/mapping-error.se
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { SharedModule } from '../../../app/shared/shared.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
+import { TokenTransferComponent } from './transaction-detail/token-transfer/token-transfer.component';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 import { MessagesItemComponent } from './transaction-detail/transaction-messages/messages-item/messages-item.component';
 import { TransactionMessagesComponent } from './transaction-detail/transaction-messages/transaction-messages.component';
 import { TransactionRoutingModule } from './transaction-routing.module';
 import { TransactionComponent } from './transaction.component';
-import {ClipboardModule} from '@angular/cdk/clipboard';
 
 @NgModule({
-  declarations: [TransactionComponent, TransactionDetailComponent, TransactionMessagesComponent, MessagesItemComponent],
+  declarations: [
+    TransactionComponent,
+    TransactionDetailComponent,
+    TransactionMessagesComponent,
+    MessagesItemComponent,
+    TokenTransferComponent,
+  ],
   imports: [
     CommonModule,
     TransactionRoutingModule,
@@ -41,7 +48,7 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
     CommonDirectiveModule,
     NameTagModule,
     TooltipCustomizeModule,
-    ClipboardModule
+    ClipboardModule,
   ],
   providers: [TransactionService, MappingErrorService, ProposalService, MaskPipe],
 })

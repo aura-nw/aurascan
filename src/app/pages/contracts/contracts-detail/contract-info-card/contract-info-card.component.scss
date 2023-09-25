@@ -1,32 +1,49 @@
-.box-contract-info {
-  table.aura-basic-table {
-    min-height: 224px;
-    tr,
-    td {
-      color: var(--aura-gray-1);
-      height: 56px;
-      padding: 0px var(--spacer-4);
-    }
-
-    tr:first-child td:first-child {
-      width: 40%;
-      color: var(--aura-white);
-    }
+.box-contract-overview {
+  border-radius: 0;
+  @media (min-width: 991.98px) {
+    border-radius: 12px;
+  }
+  &.moreInfo {
+    border-bottom-left-radius: var(--spacer-2);
+    border-bottom-right-radius: var(--spacer-2);
+    overflow: hidden;
   }
 
-  @media (max-width: 992px) {
-    margin-bottom: 16px;
+  .card__header {
+    padding: var(--spacer-4);
+    background-color: var(--aura-gray-9);
+    @media (min-width: 991.98px) {
+      padding-bottom: 0;
+      background-color: transparent;
+    }
+    &[aria-expanded='true'] {
+      img {
+        transform: rotate(180deg);
+      }
+    }
   }
-
-  @media (max-width: 414px) {
-    tr td {
-      width: 40%;
+  .card__body {
+    padding: 0 var(--spacer-4);
+    position: static !important;
+    background-color: var(--aura-gray-10) !important;
+    display: block !important;
+    border: none !important;
+    transition: all .35s ease-in-out;
+    overflow: hidden;
+    height: unset !important;
+    @media (max-width: 992px) {
+      max-height: 0;
+      &.show {
+        padding: var(--spacer-4);
+        max-height: 9999px;
+      }
     }
   }
 }
 
 .box-name-tag {
   height: 26px;
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   font-size: 1.2rem;
@@ -37,12 +54,7 @@
   border-radius: 4px 0px 0px 4px;
   padding-left: var(--spacer-2);
   padding-right: var(--spacer-5);
-  &.private-name-tag {
-    padding: 0 var(--spacer-2);
-    background-color: unset;
-    border-radius: 16px;
-    border: 1px solid var(--aura-gray-8);
-  }
+  color: var(--aura-gray-light);
   &:not(.private-name-tag) {
     position: relative;
     &:after {
@@ -54,8 +66,34 @@
       top: 0;
       bottom: 0;
       border-top: 13px solid transparent;
-      border-right: 15px solid #24262E;
+      border-right: 15px solid #24262e;
       border-bottom: 13px solid transparent;
+    }
+  }
+  .line-claim {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+}
+
+.box-private{
+  max-width: 100%;
+  .private-name-tag {
+    min-width: 0;
+    height: 24px;
+    padding: 0 var(--spacer-2);
+    background-color: var(--aura-gray-10);
+    border-radius: 16px;
+    border: 1px solid var(--aura-gray-8);
+    font-size: 1.2rem;
+    font-weight: 400;
+    .line-claim {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
     }
   }
 }

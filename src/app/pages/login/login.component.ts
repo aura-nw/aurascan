@@ -142,6 +142,10 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('userEmail', JSON.stringify(res.email));
               localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
               this.route.navigate(['/profile']);
+
+              setTimeout(() => {
+                location.reload();
+              }, 500);
             }
           },
           error: (error) => {
@@ -238,6 +242,10 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
             localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
             window.location.href = '/profile';
+
+            setTimeout(() => {
+              location.reload();
+            }, 500);
           },
           error: (error) => {
             this.addError(error?.details?.message);

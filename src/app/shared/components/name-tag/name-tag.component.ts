@@ -1,5 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit } from '@angular/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
@@ -10,7 +9,7 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./name-tag.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NameTagComponent implements OnInit, OnChanges {
+export class NameTagComponent implements OnInit {
   @Input() value = '';
   @Input() url = 'account';
   @Input() fullText = false;
@@ -51,6 +50,14 @@ export class NameTagComponent implements OnInit, OnChanges {
     return url;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  displayContent(value) {
+    let result = value;
+    if (!this.commonService.checkPublic(value)) {
+      result += '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag, false);
+    }
+    if (this.commonService.checkPrivate(value)) {
+      result += '<br>' + 'Private name: ' + this.commonService.setNameTag(value, this.global.listNameTag);
+    }
+    return result;
   }
 }

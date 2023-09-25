@@ -1,0 +1,31 @@
+<div class="card popup-common">
+  <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
+    <div class="h2 h3-mob mb-0 fw-bold text--white">
+      {{ data.title }}
+    </div>
+    <img
+      src="assets/icons/icons-svg/white/close.svg"
+      alt=""
+      width="24px"
+      height="24px"
+      class="cursor-pointer ml-5"
+      (click)="closeDialog()" />
+  </div>
+  <div class="card-body body-01 {{ data.class }}">
+    {{ data.content }}
+  </div>
+  <div class="divider divider-horizontal"></div>
+  <!-- Button group -->
+  <div class="d-flex align-items-center justify-content-end px-6 py-6">
+    <button class="button button-pill button-outline button--xlg ml-4" type="button" (click)="closeDialog()">
+      <span class="body-01">Cancel</span>
+    </button>
+    <button
+      class="button button-pill button-flat button--xlg ml-4"
+      type="button"
+      [disabled]="isLoading"
+      (click)="submitAction(true)">
+      <span class="body-01">Remove</span>
+    </button>
+  </div>
+</div>
