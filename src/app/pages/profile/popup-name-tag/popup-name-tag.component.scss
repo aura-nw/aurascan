@@ -1,0 +1,111 @@
+.card.card-private-name {
+  @media (min-width: 992px) {
+    width: 800px;
+  }
+  @media (max-width: 414px) {
+    max-height: 80vh;
+  }
+  .card-header {
+    background-color: var(--aura-gray-9);
+  }
+  .card-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    .box-content {
+      min-height: 536px;
+      overflow-y: auto;
+      padding: var(--spacer-6);
+      padding-right: 28px;
+      border-bottom: 1px solid var(--aura-gray-9);
+    }
+  }
+  .private-name-form {
+    .form-label {
+      font-size: 12px;
+      color: var(--aura-gray-3);
+    }
+    .input-group {
+      background-color: var(--aura-gray-10) !important;
+      height: 40px;
+      input {
+        max-width: 95%;
+      }
+    }
+    .text-area {
+      background-color: var(--aura-gray-10) !important;
+      padding: var(--spacer-4);
+      border-radius: var(--spacer-2);
+      &::placeholder{
+        color: var(--aura-gray-4);
+      }
+    }
+    .btn {
+      height: 40px;
+      padding: 0 24px;
+    }
+    .btn-create {
+      border: none;
+      &:disabled {
+        background: var(--aura-gray-8);
+      }
+    }
+    .txt-note {
+      width: -webkit-fill-available;
+    }
+  }
+  ::ng-deep {
+    .mat-slide-toggle-thumb {
+      width: 14px !important;
+      height: 14px !important;
+    }
+    .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+      background-color: #2bbba3;
+    }
+    .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+      background-color: var(--aura-white);
+    }
+    .mat-slide-toggle-bar {
+      height: 20px !important;
+      border-radius: 12px !important;
+    }
+    .mat-slide-toggle-thumb-container {
+      width: 14px !important;
+      height: 14px !important;
+      top: 3px !important;
+      transform: translate3d(4px, 0, 0) !important;
+    }
+    .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
+      transform: translate3d(18px, 0, 0) !important;
+    }
+  }
+}
+
+.box-name-tag {
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.6rem;
+  word-break: break-word;
+  background-color: var(--aura-gray-9);
+  border-radius: 4px 0px 0px 4px;
+  padding-left: var(--spacer-2);
+  padding-right: var(--spacer-5);
+  color: var(--aura-gray-light);
+  &:not(.private-name-tag) {
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      border-top: 13px solid transparent;
+      border-right: 15px solid #24262e;
+      border-bottom: 13px solid transparent;
+    }
+  }
+}

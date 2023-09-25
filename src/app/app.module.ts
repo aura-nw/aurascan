@@ -58,6 +58,8 @@ import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
 import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
+import { NameTagService } from './core/services/name-tag.service';
+import { UserService } from './core/services/user.service';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -174,6 +176,8 @@ export class MaterialModule {}
     FeeGrantService,
     SoulboundService,
     MappingErrorService,
+    NameTagService,
+    UserService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
