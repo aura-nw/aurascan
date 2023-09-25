@@ -508,7 +508,7 @@ export function convertDataAccountTransaction(
 }
 
 export function getTypeTx(element, index = 0) {
-  let type = element?.transaction_messages[element?.transaction_messages?.length - 1]?.content['@type'];
+  let type = element?.transaction_messages[0]?.content['@type'];
   let action;
   if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
     try {
