@@ -54,6 +54,9 @@ export class TokenTransferComponent implements OnInit {
       }
       if (res.cw20_activity.length > 0) {
         this.dataSourceFTs.data = res.cw20_activity;
+        res.cw20_activity.forEach((element) => {
+          element.decimal = element.decimal || element.cw20_contract?.decimal || 6;
+        });
       }
     });
   }

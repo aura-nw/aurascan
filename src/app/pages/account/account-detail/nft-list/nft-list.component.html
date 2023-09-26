@@ -13,14 +13,19 @@
               id="nftFilter"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-              <span class="d-none d-lg-inline-block">{{ nftFilterItem?.label | stringEllipsis : 16 }} ({{ nftFilterItem?.quantity }})</span>
-              <span class="d-lg-none">{{ nftFilterItem?.label | stringEllipsis : 35 }} ({{ nftFilterItem?.quantity }})</span>
+              <span class="d-none d-lg-inline-block"
+                >{{ nftFilterItem?.label | stringEllipsis : 16 }} ({{ nftFilterItem?.quantity }})</span
+              >
+              <span class="d-lg-none"
+                >{{ nftFilterItem?.label | stringEllipsis : 35 }} ({{ nftFilterItem?.quantity }})</span
+              >
               <i class="ph ph-caret-down text--white h3"></i>
               <i class="ph ph-caret-up text--white h3"></i>
             </button>
             <ul
-              class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm nftFilterPanel"
-              aria-labelledby="nftFilter">
+              class="dropdown-menu filter-dropdown-collecttion border-sm border-gray-9 border-radius--sm "
+              aria-labelledby="nftFilter"
+              *ngIf="listCollection?.length > 0">
               <li
                 *ngFor="let item of listCollection; let i = index"
                 (click)="nftFilter = item.address; filterCollecttion(); setNFTFilter(item)"
