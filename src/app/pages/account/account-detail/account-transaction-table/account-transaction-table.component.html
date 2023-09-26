@@ -405,7 +405,7 @@
                           <app-tooltip-customize [content]="item.amountTemp | convertSmallNumber : item.decimal">
                           </app-tooltip-customize>
                           <div
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) > 0.001"
+                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001"
                             [appBigNumber]="item.amountTemp"
                             [decimal]="item.decimal"></div>
                         </div>
