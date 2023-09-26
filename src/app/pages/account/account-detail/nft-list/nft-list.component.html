@@ -13,8 +13,8 @@
               id="nftFilter"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-              <span class="d-none d-lg-inline-block">{{ nftFilterItem.label | stringEllipsis : 16 }} ({{ nftFilterItem.quantity }})</span>
-              <span class="d-lg-none">{{ nftFilterItem.label | stringEllipsis : 35 }} ({{ nftFilterItem.quantity }})</span>
+              <span class="d-none d-lg-inline-block">{{ nftFilterItem?.label | stringEllipsis : 16 }} ({{ nftFilterItem?.quantity }})</span>
+              <span class="d-lg-none">{{ nftFilterItem?.label | stringEllipsis : 35 }} ({{ nftFilterItem?.quantity }})</span>
               <i class="ph ph-caret-down text--white h3"></i>
               <i class="ph ph-caret-up text--white h3"></i>
             </button>
