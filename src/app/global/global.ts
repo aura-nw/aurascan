@@ -414,6 +414,7 @@ export function convertDataAccountTransaction(
             let amount;
             let denom = coinInfo.coinDenom;
             let denomOrigin;
+            let decimal = 6;
             if (rawAmount?.indexOf('ibc') > -1) {
               const dataIBC = getDataIBC(rawAmount, coinConfig);
               amount = balanceOf(Number(amountTemp) || 0, dataIBC['decimal'] || 6);
@@ -422,7 +423,7 @@ export function convertDataAccountTransaction(
             } else {
               amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
             }
-            const result = { type, toAddress, fromAddress, amount, denom, action, denomOrigin };
+            const result = { type, toAddress, fromAddress, amount, denom, action, denomOrigin, amountTemp, decimal };
             arrTemp.push(result);
           }
         });
