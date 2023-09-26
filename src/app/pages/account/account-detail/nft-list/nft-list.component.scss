@@ -14,10 +14,12 @@
 }
 
 #nftFilter {
-  min-width: 200px;
+  width: 100%;
+  @media (min-width: 991.98px) {
+    width: 220px;
+  }
   text-align: left;
   height: 40px;
-  width: 100%;
   &[aria-expanded='true'] {
     i.ph-caret-down {
       display: none;
@@ -67,6 +69,6 @@
 }
 
 .nftFilterPanel {
-  min-height: 285px;
+  min-height: 85px;
   width: 100%;
 }
