@@ -2,18 +2,18 @@
   class="d-lg-none d-flex align-items-center mb-4 {{
     !displayFilter ? 'justify-content-between' : 'justify-content-end'
   }}">
-  <div *ngIf="!transactionLoading && !displayType && !displayFilter" class="caption text--gray-5">
+  <div class="caption text--gray-5 {{(!transactionLoading && !displayType && !displayFilter) ? 'visible' : 'invisible'}}">
     {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
     found
   </div>
   <div class="d-flex align-items-center">
     <button
       *ngIf="
-        (transactionFilter.startDate && transactionFilter.endDate) ||
+        ((transactionFilter.startDate && transactionFilter.endDate) ||
         transactionFilter.typeTransfer ||
-        transactionFilter.type
+        transactionFilter.type) && displayFilter
       "
-      class="button button-link body-01 px-0 mr-6"
+      class="button button-link body-01 px-0 mr-6 d-lg-none"
       (click)="clearFilter(modeFilter.all)">
       <span>Clear all</span>
     </button>
@@ -104,6 +104,7 @@
           <button
             class="mat-menu-trigger input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-tns"
             type="button"
+            id="typeTransfer"
             [class.menu-hidden]="transactionFilter.typeTransfer"
             data-bs-toggle="dropdown"
             aria-expanded="false">
@@ -114,8 +115,8 @@
               </span>
             </span>
             <div class="ml-3">
-              <i *ngIf="!transactionFilter.startDate" class="ph ph-caret-down text--white body icon-expand"></i>
-              <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
+              <i class="ph ph-caret-down text--white body"></i>
+              <i class="ph ph-caret-up text--white body"></i>
             </div>
           </button>
           <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
