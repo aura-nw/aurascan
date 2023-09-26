@@ -438,12 +438,12 @@ export function convertDataAccountTransaction(
           let decimal = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.decimal');
           let amount = balanceOf(amountTemp || 0, +decimal);
           let contractAddress = _.get(item, 'smart_contract_events[0].smart_contract.address');
-          return { type, fromAddress, toAddress, amount, denom, contractAddress, action };
+          return { type, fromAddress, toAddress, amount, denom, contractAddress, action, amountTemp, decimal };
         });
         break;
       case TabsAccountLink.NftTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
-          let {type, action} = getTypeTx(element, index);
+          let { type, action } = getTypeTx(element, index);
           let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
           let toAddress =
             _.get(item, 'smart_contract_events[0].cw721_activity.to') ||

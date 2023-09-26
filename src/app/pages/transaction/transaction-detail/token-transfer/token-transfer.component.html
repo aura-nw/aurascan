@@ -49,9 +49,18 @@
                         </div>
                       </div>
                       <ng-container *ngIf="!breakpoint.value.matches">
-                        <div *ngSwitchCase="'amount'" class="d-flex transfer-token-info">
+                        <div *ngSwitchCase="'amount'" class="d-flex transfer-token-info aura-tooltip-contain">
                           <span class="caption fw-normal text--gray-4 mb-1">Amount</span>
+                          <div
+                            class="aura-tooltip-object"
+                            *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) < 0.001">
+                            <0,001
+                          </div>
+                          <app-tooltip-customize
+                            [content]="data[template.matColumnDef] | convertSmallNumber: data.decimal">
+                          </app-tooltip-customize>
                           <span
+                            *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) > 0.001"
                             class="body-02"
                             [appBigNumber]="data[template.matColumnDef]"
                             [decimal]="data.cw20_contract.decimal"></span>

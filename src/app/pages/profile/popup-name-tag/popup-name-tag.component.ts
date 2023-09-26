@@ -125,7 +125,7 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   createPrivateName(payload) {
-    if (this.data.currentLength > this.quota) {
+    if (this.data.currentLength >= this.quota) {
       this.isError = true;
       this.toastr.error('You have reached out of ' + this.quota + ' max limitation of private name tag');
       return;
