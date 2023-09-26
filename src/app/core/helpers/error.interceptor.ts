@@ -13,8 +13,6 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((err) => {
         // check status unauthorized, refresh token
-        console.log(err);
-
         if (err?.error?.statusCode === 401 && err?.error?.message == 'Unauthorized') {
           const payload = {
             refreshToken: localStorage.getItem('refreshToken').replace(/"/g, ''),
