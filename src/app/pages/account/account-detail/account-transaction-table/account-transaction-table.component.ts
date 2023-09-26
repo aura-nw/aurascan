@@ -5,6 +5,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
+import { Subject, of } from 'rxjs';
+import { map, mergeMap, repeat, takeLast, takeUntil } from 'rxjs/operators';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -346,18 +348,53 @@ export class AccountTransactionTableComponent {
     });
   }
 
+  getMergeMapTxByAddress(payload) {
+    let data = [];
+    const destroy$ = new Subject();
+    return of(null).pipe(
+      mergeMap(() => {
+        return this.userService.getListTxByAddress(payload);
+      }),
+      map((res) => {
+        const txs = res?.transaction;
+        // Get more data when response data less than 100 records
+        if (payload.heightGT > 0 && data.length < 100) {
+          data = [...data, ...txs];
+          let heightLT = payload.heightGT;
+          let heightGT = heightLT - 1000000 > 0 ? heightLT - 1000000 : 0;
+          payload.heightLT = heightLT;
+          payload.heightGT = heightGT;
+          payload.limit = 100 - data.length > 0 ? 100 - data.length : 100;
+        } else {
+          destroy$.next();
+          destroy$.complete();
+        }
+        return data;
+      }),
+      repeat(),
+      takeUntil(destroy$),
+    );
+  }
+
   getListTxByAddress(payload) {
-    this.userService.getListTxByAddress(payload).subscribe({
-      next: (data) => {
-        this.handleGetData(data);
-      },
-      error: () => {
-        this.transactionLoading = false;
-      },
-      complete: () => {
-        this.transactionLoading = false;
-      },
-    });
+    let heightLT = payload.heightLT || this.global.dataHeader.total_blocks;
+    let heightGT = heightLT - 1000000 > 0 ? heightLT - 1000000 : 0;
+    payload.heightLT = heightLT;
+    payload.heightGT = heightGT;
+
+    this.getMergeMapTxByAddress(payload)
+      .pipe(takeLast(1))
+      .subscribe({
+        next: (data) => {
+          this.handleGetData({ transaction: data });
+        },
+        error: () => {
+          this.transactionLoading = false;
+        },
+        complete: () => {
+          this.transactionLoading = false;
+        },
+      });
   }
 
   getListTxAuraByAddress(payload) {
