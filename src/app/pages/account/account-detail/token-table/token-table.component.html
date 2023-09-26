@@ -204,7 +204,7 @@
                 <app-tooltip-customize [content]="element.balance | convertSmallNumber : element.decimal">
                 </app-tooltip-customize>
                 <div
-                  *ngIf="(element.balance | balanceOf : element.decimals) > 0.001"
+                  *ngIf="(element.balance | balanceOf : element.decimals) >= 0.001"
                   [appBigNumber]="element.balance"
                   [decimal]="element.decimals"></div>
               </div>

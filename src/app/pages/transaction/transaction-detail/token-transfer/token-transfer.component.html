@@ -60,7 +60,7 @@
                             [content]="data[template.matColumnDef] | convertSmallNumber: data.decimal">
                           </app-tooltip-customize>
                           <span
-                            *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) > 0.001"
+                            *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) >= 0.001"
                             class="body-02"
                             [appBigNumber]="data[template.matColumnDef]"
                             [decimal]="data.cw20_contract.decimal"></span>
