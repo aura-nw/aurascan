@@ -2,7 +2,8 @@
   class="d-lg-none d-flex align-items-center mb-4 {{
     !displayFilter ? 'justify-content-between' : 'justify-content-end'
   }}">
-  <div class="caption text--gray-5 {{(!transactionLoading && !displayType && !displayFilter) ? 'visible' : 'invisible'}}">
+  <div
+    class="caption text--gray-5 {{ !transactionLoading && !displayType && !displayFilter ? 'visible' : 'invisible' }}">
     {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
     found
   </div>
@@ -10,12 +11,13 @@
     <button
       *ngIf="
         ((transactionFilter.startDate && transactionFilter.endDate) ||
-        transactionFilter.typeTransfer ||
-        transactionFilter.type) && displayFilter
+          transactionFilter.typeTransfer ||
+          transactionFilter.type) &&
+        displayFilter
       "
       class="button button-link body-01 px-0 mr-6 d-lg-none"
       (click)="clearFilter(modeFilter.all)">
-      <span>Clear all</span>
+      <span class="clear-all-text-mob">Clear all</span>
     </button>
     <button
       (click)="displayFilter = !displayFilter"
@@ -78,13 +80,21 @@
             </mat-date-range-input>
             <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true" id="datepicker-toggle">
               <mat-icon matDatepickerToggleIcon class="d-flex align-items-center">
-                <i *ngIf="!picker.opened && !transactionFilter.startDate" matIconSuffix class="ph ph-caret-down text--white body icon-expand"></i>
-                <i *ngIf="picker.opened && !transactionFilter.startDate" matIconSuffix class="ph ph-caret-up text--white body cursor-pointer"></i>
-                <img *ngIf="transactionFilter.startDate"
-                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
-                     alt="" width="24" height="24"
-                     (click)="clearFilter(modeFilter.date)"
-                />
+                <i
+                  *ngIf="!picker.opened && !transactionFilter.startDate"
+                  matIconSuffix
+                  class="ph ph-caret-down text--white body icon-expand"></i>
+                <i
+                  *ngIf="picker.opened && !transactionFilter.startDate"
+                  matIconSuffix
+                  class="ph ph-caret-up text--white body cursor-pointer"></i>
+                <img
+                  *ngIf="transactionFilter.startDate"
+                  [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
+                  alt=""
+                  width="24"
+                  height="24"
+                  (click)="clearFilter(modeFilter.date)" />
               </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
