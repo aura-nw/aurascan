@@ -13,7 +13,8 @@
               id="nftFilter"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-              <span>{{ nftFilterItem.label | stringEllipsis : 16 }} ({{ nftFilterItem.quantity }})</span>
+              <span class="d-none d-lg-inline-block">{{ nftFilterItem.label | stringEllipsis : 16 }} ({{ nftFilterItem.quantity }})</span>
+              <span class="d-lg-none">{{ nftFilterItem.label | stringEllipsis : 35 }} ({{ nftFilterItem.quantity }})</span>
               <i class="ph ph-caret-down text--white h3"></i>
               <i class="ph ph-caret-up text--white h3"></i>
             </button>
@@ -25,7 +26,7 @@
                 (click)="nftFilter = item.address; filterCollecttion(); setNFTFilter(item)"
                 [class.item-border]="i === 0"
                 [class.mb-1]="i > 0"
-                class="dropdown-item cursor-pointer"
+                class="dropdown-item cursor-pointer px-4 px-lg-2"
                 [class.active]="nftFilter === item.address">
                 <span class="body">{{ (item.label | cutStringPipe : numLength) + ' (' + item.quantity + ')' }}</span>
               </li>
