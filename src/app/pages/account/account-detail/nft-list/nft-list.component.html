@@ -114,6 +114,9 @@
         </div>
       </div>
     </ng-container>
+    <div *ngIf="loading" class="mt-20">
+      <app-loading-sprint></app-loading-sprint>
+    </div>
     <ng-template #noValues>
       <ng-container *ngIf="!loading">
         <app-table-no-data
