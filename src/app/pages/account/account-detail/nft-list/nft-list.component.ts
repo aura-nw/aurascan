@@ -63,6 +63,7 @@ export class NftListComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.getListCollection();
+    this.setNFTFilter(this.listCollection[0]);
   }
 
   filterCollecttion() {
