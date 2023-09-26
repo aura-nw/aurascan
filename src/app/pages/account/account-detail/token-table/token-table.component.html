@@ -201,7 +201,7 @@
                 <div class="aura-tooltip-object" *ngIf="(element.balance | balanceOf : element.decimals) < 0.001">
                   <0,001
                 </div>
-                <app-tooltip-customize [content]="convertSmallNumber(element.balance, element.decimals)">
+                <app-tooltip-customize [content]="element.balance | convertSmallNumber : element.decimal">
                 </app-tooltip-customize>
                 <div
                   *ngIf="(element.balance | balanceOf : element.decimals) > 0.001"
