@@ -144,7 +144,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         setTimeout(() => {
-          this.getListPrivateName();
+          this.pageChange.selectPage(0);
         }, 4000);
       }
     });
