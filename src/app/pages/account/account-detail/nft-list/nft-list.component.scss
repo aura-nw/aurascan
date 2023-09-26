@@ -17,6 +17,7 @@
   min-width: 200px;
   text-align: left;
   height: 40px;
+  width: 100%;
   &[aria-expanded='true'] {
     i.ph-caret-down {
       display: none;
@@ -65,3 +66,7 @@
   }
 }
 
+.nftFilterPanel {
+  min-height: 285px;
+  width: 100%;
+}
