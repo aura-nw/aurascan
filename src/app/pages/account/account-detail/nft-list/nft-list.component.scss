@@ -1,6 +1,7 @@
 .aura-form.single-input-field {
   .input-group {
     padding: 0 var(--spacer-3);
+
     input {
       font-size: 1.4rem;
       line-height: 1.9rem;
@@ -15,31 +16,39 @@
 
 #nftFilter {
   width: 100%;
+
   @media (min-width: 991.98px) {
     width: 220px;
   }
+
   text-align: left;
   height: 40px;
+
   &[aria-expanded='true'] {
     i.ph-caret-down {
       display: none;
     }
+
     i.ph-caret-up {
       display: flex;
     }
   }
+
   &[aria-expanded='false'] {
     i.ph-caret-down {
       display: flex;
     }
+
     i.ph-caret-up {
       display: none;
     }
   }
 }
+
 .item-border {
   position: relative;
   margin-bottom: 7px;
+
   &:before {
     content: '';
     position: absolute;
@@ -58,17 +67,30 @@
   }
 }
 
-::ng-deep {
-  .filter-dropdown {
-    right: unset !important;
-    transform: translateX(-50%) !important;
-    width: 200px;
-    max-height: 285px;
-    overflow-y: auto !important;
-  }
-}
-
-.nftFilterPanel {
-  min-height: 85px;
+.dropdown-menu.filter-dropdown-collecttion {
   width: 100%;
+  max-height: 225px;
+  overflow-y: auto !important;
+  background-color: var(--aura-gray-10);
+  border-radius: 8px;
+  padding: var(--spacer-2);
+  border: 1px solid var(--aura-gray-8);
+  overflow: hidden;
+  box-shadow: none;
+
+  li.dropdown-item {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    border-radius: 4px;
+    padding: var(--spacer-3) var(--spacer-2);
+    background-color: var(--aura-gray-10);
+
+    &>* {
+      color: var(--aura-white);
+    }
+
+    &:hover {
+      background-color: var(--aura-gray-9);
+    }
+  }
 }
