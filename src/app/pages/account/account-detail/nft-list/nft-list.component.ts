@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -13,7 +13,7 @@ import { Globals } from 'src/app/global/global';
   templateUrl: './nft-list.component.html',
   styleUrls: ['./nft-list.component.scss'],
 })
-export class NftListComponent implements OnChanges {
+export class NftListComponent implements OnInit, OnChanges {
   @Input() address: string;
   @Output() totalValueNft = new EventEmitter<number>();
   image_s3 = this.environmentService.configValue.image_s3;
@@ -59,6 +59,10 @@ export class NftListComponent implements OnChanges {
     if (changes.address) {
       this.pageEvent(0);
     }
+  }
+
+  ngOnInit(): void {
+    this.getListCollection();
   }
 
   filterCollecttion() {
@@ -166,7 +170,6 @@ export class NftListComponent implements OnChanges {
       this.pageData.pageIndex = 1;
     }
     this.getNftData();
-    this.getListCollection();
   }
 
   handleRouterLink(link): void {
