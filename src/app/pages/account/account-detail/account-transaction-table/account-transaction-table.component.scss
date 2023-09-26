@@ -275,7 +275,7 @@ mat-date-range-input {
     padding: 4px 8px;
   }
 }
-.noData,.box-filter__desc {
+.box-filter__desc {
   margin-top: -200px;
   @media (min-width: 991.98px) {
     margin-top: 0;
@@ -320,6 +320,25 @@ mat-date-range-input {
     margin-bottom: var(--spacer-1);
     &:not(:last-child) {
       margin-right: var(--spacer-1);
+    }
+  }
+}
+
+#typeTransfer {
+  &[aria-expanded='true'] {
+    i.ph-caret-down {
+      display: none;
+    }
+    i.ph-caret-up {
+      display: flex;
+    }
+  }
+  &[aria-expanded='false'] {
+    i.ph-caret-down {
+      display: flex;
+    }
+    i.ph-caret-up {
+      display: none;
     }
   }
 }
