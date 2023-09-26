@@ -13,7 +13,7 @@
               id="nftFilter"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-              <span>{{ nftFilterLabel }}</span>
+              <span>{{ nftFilterItem.label | stringEllipsis : 16 }} ({{nftFilterItem.quantity}})</span>
               <i class="ph ph-caret-down text--white h3"></i>
               <i class="ph ph-caret-up text--white h3"></i>
             </button>
@@ -22,7 +22,7 @@
               aria-labelledby="nftFilter">
               <li
                 *ngFor="let item of listCollection; let i = index"
-                (click)="nftFilter = item.address; filterCollecttion(); setNFTFilterLabel(item)"
+                (click)="nftFilter = item.address; filterCollecttion(); setNFTFilter(item)"
                 [class.item-border]="i === 0"
                 [class.mb-1]="i > 0"
                 class="dropdown-item cursor-pointer"
@@ -115,10 +115,6 @@
     </ng-container>
     <ng-template #noValues>
       <ng-container *ngIf="!loading">
-        <app-table-no-data
-          *ngIf="!searchNotFound && listCollection[0]?.quantity > 0"
-          [textNull]="'Kindly select the collections'"
-          [img]="'assets/images/noItemNFT.png'"></app-table-no-data>
         <app-table-no-data
           *ngIf="searchNotFound || listCollection[0]?.quantity <= 0"
           [textNull]="'No NFTs found'"

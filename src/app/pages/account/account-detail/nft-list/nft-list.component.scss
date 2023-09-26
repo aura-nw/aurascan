@@ -16,6 +16,7 @@
 #nftFilter {
   min-width: 200px;
   text-align: left;
+  height: 40px;
   &[aria-expanded='true'] {
     i.ph-caret-down {
       display: none;
