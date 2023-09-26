@@ -23,6 +23,7 @@ export class TokenTableComponent implements OnChanges {
   @Output() totalValue = new EventEmitter<number>();
   @Output() totalAssets = new EventEmitter<number>();
   tokenFilter = '';
+  tokenFilterItem = null;
   textSearch = '';
   searchValue = '';
   templates: Array<TableTemplate> = [
@@ -157,6 +158,7 @@ export class TokenTableComponent implements OnChanges {
             this.dataSource.data = [];
           }
           this.totalAssets.emit(this.pageData?.length || 0);
+          this.setTokenFilter(this.listTokenType[0]);
         },
         () => {},
         () => {
@@ -164,6 +166,10 @@ export class TokenTableComponent implements OnChanges {
         },
       );
     }
+  }
+
+  setTokenFilter(token) {
+    this.tokenFilterItem = token;
   }
 
   convertValue(value: any, decimal: number) {
@@ -187,11 +193,5 @@ export class TokenTableComponent implements OnChanges {
       this.total = res.data || 0;
       this.totalValue.emit(this.total);
     });
-  }
-
-  convertSmallNumber(amount: number, decimal: number) {
-    let valueString = (new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toString();
-    let res = valueString.match(/(.*)e-(\d)/);
-    return res ? '0.' + new Array(parseInt(res[2], 10)).join('0') + res[1].replace('.', '') : valueString;
   }
 }
