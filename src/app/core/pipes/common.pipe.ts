@@ -167,7 +167,7 @@ export class convertSmallNumber implements PipeTransform {
   constructor() {}
   transform(amount: number, decimal: number = 6): any {
     let valueString = (new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toString();
-    return displayFullNumber(valueString);
+    return displayFullNumber(valueString) !== '0.001' ? displayFullNumber(valueString) : '';
   }
 }
 

@@ -173,7 +173,7 @@
             id="filter-result-mess"
             (click)="tnxTypeMenuBtn.click(); initTnxFilterPanel()"
             *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
-            {{ checkAll ? 'All' : transactionFilter.type?.length + (isSearchOther ? 1 : 0) || 1 }} Msg Types selected
+            {{ checkAll ? 'All' : transactionFilter.type?.length || 1 }} Msg Types selected
             <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.msgType)"></i>
           </div>
           <mat-menu
