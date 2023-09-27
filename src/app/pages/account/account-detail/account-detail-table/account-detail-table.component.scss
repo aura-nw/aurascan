@@ -19,10 +19,10 @@
   }
 }
 
-.ellipsis-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.table-mobile {
+  .ellipsis-text {
+    display: inline-block;
+  }
 }
 
 .unbonding-val-name {
