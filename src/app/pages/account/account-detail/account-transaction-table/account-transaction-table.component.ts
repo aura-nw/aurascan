@@ -383,12 +383,8 @@ export class AccountTransactionTableComponent {
     );
   }
 
-  async getListTxByAddress(payload) {
-    let heightLT = payload.heightLT;
-    if (!heightLT) {
-      heightLT =
-        +(await this.userService.getLatestBlock()).data?.block?.header?.height || this.global.dataHeader.total_blocks;
-    }
+  getListTxByAddress(payload) {
+    const heightLT = payload.heightLT || this.global.dataHeader.total_blocks + 500;
     const heightGT = heightLT > HEIGHT_LIMIT ? heightLT - HEIGHT_LIMIT : 0;
     payload.heightLT = heightLT;
     payload.heightGT = heightGT;
@@ -437,12 +433,8 @@ export class AccountTransactionTableComponent {
     );
   }
 
-  async getListTxAuraByAddress(payload) {
-    let heightLT = payload.heightLT;
-    if (!heightLT) {
-      heightLT =
-        +(await this.userService.getLatestBlock()).data?.block?.header?.height || this.global.dataHeader.total_blocks;
-    }
+  getListTxAuraByAddress(payload) {
+    const heightLT = payload.heightLT || this.global.dataHeader.total_blocks + 500;
     let heightGT = heightLT - HEIGHT_LIMIT > 0 ? heightLT - HEIGHT_LIMIT : 0;
     payload.heightLT = heightLT;
     payload.heightGT = heightGT;
