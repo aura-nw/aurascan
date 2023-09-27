@@ -65,8 +65,11 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     const dataNameTag = localStorage.getItem('setAddressNameTag');
     if (dataNameTag && dataNameTag !== 'undefined') {
       const data = JSON.parse(dataNameTag);
-      this.openPopup(data);
       localStorage.removeItem('setAddressNameTag');
+
+      setTimeout(() => {
+        this.openPopup(data);
+      }, 500);
     }
 
     this.commonService.listNameTag = this.global.listNameTag;
@@ -99,7 +102,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     const payload = {
       limit: 100,
       keyword: this.textSearch || '',
-      nextKey: nextKey
+      nextKey: nextKey,
     };
 
     this.nameTagService.getListPrivateNameTagNextKey(payload).subscribe((res) => {
@@ -119,8 +122,8 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
           this.pageData.pageIndex * this.pageData.pageSize,
           this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
         );
-        if(dataMobTemp.length !== 0) {
-          this.dataSourceMobile = dataMobTemp
+        if (dataMobTemp.length !== 0) {
+          this.dataSourceMobile = dataMobTemp;
         } else {
           this.dataSourceMobile = this.dataSource.data?.slice(
             (this.pageData.pageIndex - 1) * this.pageData.pageSize,
@@ -139,6 +142,8 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       dialogConfig.data = data;
     }
     dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: this.pageData?.length } };
+    console.log(dialogConfig.data);
+    
     let dialogRef = this.dialog.open(PopupNameTagComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -155,8 +160,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       panelClass: 'sizeNormal',
       data: {
         title: 'Remove Private Name Tag',
-        content:
-          'Are you sure to remove private name tag for the address ' + data.address + ' (' + data.nameTag + ')?',
+        content: 'Are you sure to remove private name tag for the address ' + data.address + ' (' + data.nameTag + ')?',
         class: 'text--gray-1',
       },
     });
@@ -178,7 +182,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       this.toastr.successWithTitle('Private name tag removed!', 'Success');
       setTimeout(() => {
         this.pageData.length--;
-        this.pageEvent(this.pageData)
+        this.pageEvent(this.pageData);
       }, 1000);
     });
   }
