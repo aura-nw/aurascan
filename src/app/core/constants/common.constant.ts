@@ -74,3 +74,6 @@ export enum MEDIA_TYPE {
   _3D = '3d',
   AUDIO = 'audio',
 }
+
+export const HEIGHT_LIMIT = 1000000;
+export const RECORD_PER_PAGE = 100;

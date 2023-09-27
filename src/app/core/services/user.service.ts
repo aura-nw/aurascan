@@ -69,7 +69,7 @@ export class UserService extends CommonService {
     const operationsDoc = `
     query QueryTxOfAccount($compositeKey: String = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
       ${this.envDB} {
-        transaction(where: {event_attribute_index: {composite_key: {_eq: $compositeKey}, value: {_eq: $address}, block_height: {_lt: $heightLT, _gt: $heightGT}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}}, limit: $limit, order_by: {height: $orderHeight}) {
+        transaction(where: {event_attribute_index: {composite_key: {_eq: $compositeKey}, value: {_eq: $address}, block_height: {_lt: $heightLT, _gte: $heightGT}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}}, limit: $limit, order_by: {height: $orderHeight}) {
           hash
           height
           fee
@@ -106,7 +106,7 @@ export class UserService extends CommonService {
     const operationsDoc = `
     query QueryTxMsgOfAccount($compositeKeyIn: [String!] = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
       ${this.envDB} {
-        transaction(where: {event_attribute_index: {composite_key: {_in: $compositeKeyIn}, value: {_eq: $address}, event: {tx_msg_index: {_is_null: false}}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
+        transaction(where: {event_attribute_index: {composite_key: {_in: $compositeKeyIn}, value: {_eq: $address}, block_height: {_lt: $heightLT, _gte: $heightGT}, event: {tx_msg_index: {_is_null: false}}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}}, limit: $limit, order_by: {height: $orderHeight}) {
           hash
           height
           fee
@@ -134,6 +134,7 @@ export class UserService extends CommonService {
           compositeKeyIn: payload.compositeKey,
           address: payload.address,
           heightLT: payload.heightLT,
+          heightGT: payload.heightGT,
           listTxMsgType: payload.listTxMsgType,
           listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
           startTime: payload.startTime,
