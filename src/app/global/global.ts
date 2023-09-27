@@ -414,6 +414,7 @@ export function convertDataAccountTransaction(
             let amount;
             let denom = coinInfo.coinDenom;
             let denomOrigin;
+            let decimal = 6;
             if (rawAmount?.indexOf('ibc') > -1) {
               const dataIBC = getDataIBC(rawAmount, coinConfig);
               amount = balanceOf(Number(amountTemp) || 0, dataIBC['decimal'] || 6);
@@ -422,7 +423,7 @@ export function convertDataAccountTransaction(
             } else {
               amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
             }
-            const result = { type, toAddress, fromAddress, amount, denom, action, denomOrigin };
+            const result = { type, toAddress, fromAddress, amount, denom, action, denomOrigin, amountTemp, decimal };
             arrTemp.push(result);
           }
         });
@@ -438,12 +439,12 @@ export function convertDataAccountTransaction(
           let decimal = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.decimal');
           let amount = balanceOf(amountTemp || 0, +decimal);
           let contractAddress = _.get(item, 'smart_contract_events[0].smart_contract.address');
-          return { type, fromAddress, toAddress, amount, denom, contractAddress, action };
+          return { type, fromAddress, toAddress, amount, denom, contractAddress, action, amountTemp, decimal };
         });
         break;
       case TabsAccountLink.NftTxs:
         arrEvent = _.get(element, 'events')?.map((item, index) => {
-          let {type, action} = getTypeTx(element, index);
+          let { type, action } = getTypeTx(element, index);
           let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
           let toAddress =
             _.get(item, 'smart_contract_events[0].cw721_activity.to') ||
@@ -508,7 +509,7 @@ export function convertDataAccountTransaction(
 }
 
 export function getTypeTx(element, index = 0) {
-  let type = element?.transaction_messages[element?.transaction_messages?.length - 1]?.content['@type'];
+  let type = element?.transaction_messages[0]?.content['@type'];
   let action;
   if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
     try {

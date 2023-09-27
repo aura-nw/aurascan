@@ -2,7 +2,7 @@
   <div class="card mb-0">
     <div class="card-body p-0">
       <!-- Title -->
-      <div class="d-xl-flex justify-content-between align-items-center mb-4">
+      <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!assetsLoading">
         <h3 class="mb-3 fw-700 text--gray-light-2 mb-xl-0">Coins & Tokens ({{ pageData?.length || 0 }})</h3>
         <div class="d-flex flex-lg-row align-items-center justify-content-end gap-2">
           <div
@@ -17,7 +17,7 @@
                 id="tokenFilter"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <span>{{ tokenFilterItem.label | stringEllipsis : 16 }} ({{tokenFilterItem.quantity}})</span>
+                <span>{{ tokenFilterItem?.label | stringEllipsis : 16 }} ({{ tokenFilterItem?.quantity }})</span>
                 <i class="ph ph-caret-down text--white h3"></i>
                 <i class="ph ph-caret-up text--white h3"></i>
               </button>
@@ -202,10 +202,10 @@
                   <div class="aura-tooltip-object" *ngIf="(element.balance | balanceOf : element.decimals) < 0.001">
                     <0,001
                   </div>
-                  <app-tooltip-customize [content]="convertSmallNumber(element.balance, element.decimals)">
+                  <app-tooltip-customize [content]="element.balance | convertSmallNumber : element.decimals">
                   </app-tooltip-customize>
                   <div
-                    *ngIf="(element.balance | balanceOf : element.decimals) > 0.001"
+                    *ngIf="(element.balance | balanceOf : element.decimals) >= 0.001"
                     [appBigNumber]="element.balance"
                     [decimal]="element.decimals"></div>
                 </div>
@@ -238,15 +238,15 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
         </div>
-        <div *ngIf="assetsLoading" class="mt-14">
-          <app-loading-sprint></app-loading-sprint>
-        </div>
       </ng-container>
-      <ng-template #noValues>
-        <div class="card" *ngIf="!assetsLoading">
-          <app-table-no-data [textNull]="'No coins & tokens'"></app-table-no-data>
-        </div>
-      </ng-template>
+    </div>
+    <ng-template #noValues>
+      <div class="card" *ngIf="!assetsLoading">
+        <app-table-no-data [textNull]="'No coins & tokens'"></app-table-no-data>
+      </div>
+    </ng-template>
+    <div *ngIf="assetsLoading" class="mt-14">
+      <app-loading-sprint></app-loading-sprint>
     </div>
   </div>
 </section>

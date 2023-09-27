@@ -173,7 +173,7 @@
             id="filter-result-mess"
             (click)="tnxTypeMenuBtn.click(); initTnxFilterPanel()"
             *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
-            {{ checkAll ? 'All' : transactionFilter.type?.length + (isSearchOther ? 1 : 0) || 1 }} Msg Types selected
+            {{ checkAll ? 'All' : transactionFilter.type?.length || 1 }} Msg Types selected
             <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.msgType)"></i>
           </div>
           <mat-menu
@@ -398,8 +398,16 @@
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
                       <div class="item-show">
-                        <div>
-                          <span [appBigNumber]="item[template.matColumnDef]" [decimal]="0"> </span>
+                        <div class="aura-tooltip-contain">
+                          <div class="aura-tooltip-object" *ngIf="(item.amountTemp | balanceOf : item.decimal) < 0.001">
+                            <0,001
+                          </div>
+                          <app-tooltip-customize [content]="item.amountTemp | convertSmallNumber : item.decimal">
+                          </app-tooltip-customize>
+                          <div
+                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001"
+                            [appBigNumber]="item.amountTemp"
+                            [decimal]="item.decimal"></div>
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
                           <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
