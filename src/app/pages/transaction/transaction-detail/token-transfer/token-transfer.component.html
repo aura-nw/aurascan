@@ -40,16 +40,23 @@
                               class="body-02 d-none d-xl-inline"
                               >{{ data.cw20_contract.name }}</span
                             >
-                            <span
-                              *ngIf="breakpoint.value.matches"
-                              class="body-02"
-                              [appBigNumber]="data.amount"
-                              [decimal]="data.cw20_contract.decimal"></span>
+                            <ng-container *ngIf="breakpoint.value.matches">
+                              <span
+                                class="aura-tooltip-object"
+                                *ngIf="(data.amount | balanceOf : data.decimal) < 0.001">
+                                <0,001
+                              </span>
+                              <span
+                                *ngIf="(data.amount | balanceOf : data.decimal) >= 0.001"
+                                class="body-02"
+                                [appBigNumber]="data.amount"
+                                [decimal]="data.decimal"></span>
+                            </ng-container>
                           </div>
                         </div>
                       </div>
                       <ng-container *ngIf="!breakpoint.value.matches">
-                        <div *ngSwitchCase="'amount'" class="d-flex transfer-token-info aura-tooltip-contain">
+                        <div *ngSwitchCase="'amount'" class="d-flex transfer-token-info aura-tooltip-contain w-fit-content">
                           <span class="caption fw-normal text--gray-4 mb-1">Amount</span>
                           <div
                             class="aura-tooltip-object"
@@ -57,7 +64,7 @@
                             <0,001
                           </div>
                           <app-tooltip-customize
-                            [content]="data[template.matColumnDef] | convertSmallNumber: data.decimal">
+                            [content]="data[template.matColumnDef] | convertSmallNumber : data.decimal">
                           </app-tooltip-customize>
                           <span
                             *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) >= 0.001"

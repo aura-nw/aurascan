@@ -48,8 +48,6 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile = [];
   dataTable = [];
-  nextKey = null;
-  currentKey = null;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor(
@@ -97,25 +95,21 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     this.onKeyUp();
   }
 
-  getListPrivateName(nextKey = null) {
+  getListPrivateName() {
     this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: 100,
       keyword: this.textSearch || '',
-      nextKey: nextKey,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
 
-    this.nameTagService.getListPrivateNameTagNextKey(payload).subscribe((res) => {
-      this.nextKey = null;
-      if (res.data?.nameTags?.length >= 100) {
-        this.nextKey = res.data[res.data?.nameTags?.length - 1]?.id;
-      }
-      this.countFav = res.data?.nameTags?.filter((k) => k.isFavorite === 1)?.length || 0;
-      res.data?.nameTags.forEach((element) => {
+    this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
+      this.countFav = res.data?.filter((k) => k.isFavorite === 1)?.length || 0;
+      res.data?.forEach((element) => {
         element['type'] = isContract(element.address) ? 'contract' : 'account';
       });
-      this.dataSource.data = res.data?.nameTags;
-      this.pageData.length = res?.data?.count || 0;
+      this.dataSource.data = res.data;
+      this.pageData.length = res?.meta?.count || 0;
 
       if (this.dataSource?.data) {
         let dataMobTemp = this.dataSource.data?.slice(
@@ -142,8 +136,6 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       dialogConfig.data = data;
     }
     dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: this.pageData?.length } };
-    console.log(dialogConfig.data);
-    
     let dialogRef = this.dialog.open(PopupNameTagComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -205,18 +197,8 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   }
 
   pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
-    this.pageData = e;
-    this.pageData.previousPageIndex = e.pageIndex;
-
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getListPrivateName(this.nextKey);
-      this.currentKey = this.nextKey;
-    } else {
-      this.getListPrivateName();
-    }
+    this.pageData.pageIndex = e.pageIndex;
+    this.getListPrivateName();
   }
 
   navigateAddress(address): void {
