@@ -194,7 +194,7 @@ export class TransactionService extends CommonService {
     const operationsDoc = `
     query TxTransferDetail($height: Int) {
       ${this.envDB} {
-        cw20_activity(where: {height: {_eq: $height}}) {
+        cw20_activity(where: {height: {_eq: $height}, amount :{_is_null: false}}) {
           amount
           from
           to
@@ -208,7 +208,7 @@ export class TransactionService extends CommonService {
             name
           }
         }
-        cw721_activity(where: {height: {_eq: $height}, cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}}) {
+        cw721_activity(where: {height: {_eq: $height}, cw721_token: {token_id: {_is_null: false}}, cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}}) {
           from
           to
           cw721_token {
