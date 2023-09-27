@@ -159,7 +159,7 @@ export class AccountTransactionTableComponent {
       if (event.target.checked) {
         this.arrTypeFilter.push(type.label);
         this.listTypeSelectedTemp?.push(type);
-        if (this.listTypeSelectedTemp.length === this.tnxTypeOrigin.length) {
+        if (this.listTypeSelectedTemp?.length === this.tnxTypeOrigin?.length) {
           this.checkAll = true;
         }
       } else {
@@ -552,7 +552,7 @@ export class AccountTransactionTableComponent {
   initTnxFilterPanel() {
     if (this.transactionFilter.type) {
       this.listTypeSelectedTemp = this.tnxTypeOrigin.filter((type) => this.transactionFilter.type.includes(type.label));
-      if (this.listTypeSelectedTemp.length === this.tnxTypeOrigin.length) {
+      if (this.listTypeSelectedTemp?.length === this.tnxTypeOrigin?.length) {
         this.checkAll = true;
       }
     } else {
