@@ -8,7 +8,13 @@ import * as _ from 'lodash';
 import { Subject, of } from 'rxjs';
 import { map, mergeMap, repeat, takeLast, takeUntil } from 'rxjs/operators';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, HEIGHT_LIMIT, LENGTH_CHARACTER, PAGE_EVENT, RECORD_PER_PAGE } from 'src/app/core/constants/common.constant';
+import {
+  DATEFORMAT,
+  HEIGHT_LIMIT,
+  LENGTH_CHARACTER,
+  PAGE_EVENT,
+  RECORD_PER_PAGE,
+} from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -377,8 +383,12 @@ export class AccountTransactionTableComponent {
     );
   }
 
-  getListTxByAddress(payload) {
-    const heightLT = payload.heightLT || this.global.dataHeader.total_blocks;
+  async getListTxByAddress(payload) {
+    let heightLT = payload.heightLT;
+    if (!heightLT) {
+      heightLT =
+        +(await this.userService.getLatestBlock()).data?.block?.header?.height || this.global.dataHeader.total_blocks;
+    }
     const heightGT = heightLT > HEIGHT_LIMIT ? heightLT - HEIGHT_LIMIT : 0;
     payload.heightLT = heightLT;
     payload.heightGT = heightGT;
@@ -427,8 +437,12 @@ export class AccountTransactionTableComponent {
     );
   }
 
-  getListTxAuraByAddress(payload) {
-    let heightLT = payload.heightLT || this.global.dataHeader.total_blocks;
+  async getListTxAuraByAddress(payload) {
+    let heightLT = payload.heightLT;
+    if (!heightLT) {
+      heightLT =
+        +(await this.userService.getLatestBlock()).data?.block?.header?.height || this.global.dataHeader.total_blocks;
+    }
     let heightGT = heightLT - HEIGHT_LIMIT > 0 ? heightLT - HEIGHT_LIMIT : 0;
     payload.heightLT = heightLT;
     payload.heightGT = heightGT;

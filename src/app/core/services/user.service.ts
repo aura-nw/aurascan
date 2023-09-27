@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
+import { LCD_COSMOS } from '../constants/url.constant';
+import axios from 'axios';
 
 @Injectable()
 export class UserService extends CommonService {
@@ -267,5 +269,9 @@ export class UserService extends CommonService {
         operationName: 'Cw721TXMultilCondition',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getLatestBlock() {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.BLOCK}/latest`);
   }
 }
