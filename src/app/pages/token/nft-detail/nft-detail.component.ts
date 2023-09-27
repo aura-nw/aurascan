@@ -206,7 +206,7 @@ export class NFTDetailComponent implements OnInit {
           let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.NftTxs, false, null);
           txs.forEach((element, index) => {
             element['token_id'] = element.tokenId;
-            element['type'] = res.transaction[index]?.events[0]?.smart_contract_events[0]?.cw721_activity?.action;
+            element['type'] = element.arrEvent[0]?.type?.replace('Contract: ', '');
             element['from_address'] = element.fromAddress;
             element['to_address'] = element.toAddress;
             if (element['type'] === 'approve' || element['type'] === 'revoke') {

@@ -34,13 +34,22 @@
             tokenDetail?.isNFTContract ? 'no-border-bottom pb-0' : 'pb-3'
           }}">
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
-          <span *ngIf="!tokenDetail?.isNFTContract">
-            <span
-              *ngIf="infoSearch['balance']"
-              [appBigNumber]="infoSearch['balance']"
-              [decimal]="tokenDetail.decimals || 0"></span>
+          <ng-container *ngIf="!tokenDetail?.isNFTContract">
+            <div class="aura-tooltip-contain">
+              <span
+                class="aura-tooltip-object"
+                *ngIf="(infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001">
+                <0,001
+              </span>
+              <app-tooltip-customize [content]="infoSearch['balance'] | convertSmallNumber : tokenDetail.decimals">
+              </app-tooltip-customize>
+              <span
+                *ngIf="(infoSearch['balance'] | balanceOf) >= 0.001"
+                [appBigNumber]="infoSearch['balance']"
+                [decimal]="tokenDetail.decimals || 0"></span>
+            </div>
             {{ tokenDetail.symbol || tokenDetail.name }}
-          </span>
+          </ng-container>
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
         </div>
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
@@ -52,7 +61,8 @@
               [appBigNumber]="infoSearch['balance']"
               [decimal]="tokenDetail.decimals || 0"
               [tokenPrice]="tokenDetail.price"></div>
-            (<div
+            (
+            <div
               *ngIf="infoSearch['balance']"
               class="d-inline"
               [appBigNumber]="infoSearch['balance']"
