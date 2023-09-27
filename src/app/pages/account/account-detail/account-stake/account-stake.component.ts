@@ -74,7 +74,7 @@ export class AccountStakeComponent implements OnChanges {
   dataSourceReDelegation: MatTableDataSource<any>;
 
   templatesVesting: Array<TableTemplate> = [
-    { matColumnDef: 'type_format', headerCellDef: 'Message' },
+    { matColumnDef: 'type_format', headerCellDef: 'Type' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'vesting_schedule', headerCellDef: 'Vesting Schedule' },
   ];

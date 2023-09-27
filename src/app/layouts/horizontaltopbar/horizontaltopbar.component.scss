@@ -89,10 +89,7 @@ form.aura-form.single-input-field {
             content: '';
             position: absolute;
             right: -24px;
-            top: -3px;
-            @media (min-width: 1200px) {
-              top: 0;
-            }
+            top: 4px;
             width: 24px;
             height: 24px;
             background: url('../../../assets/icons/icons-svg/basic/chevron-down.svg') center no-repeat;
