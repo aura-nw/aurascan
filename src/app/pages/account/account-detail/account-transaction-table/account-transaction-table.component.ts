@@ -554,6 +554,7 @@ export class AccountTransactionTableComponent {
     if (this.transactionFilter.type) {
       this.listTypeSelectedTemp = this.tnxTypeOrigin.filter((type) => this.transactionFilter.type.includes(type.label));
     } else {
+      this.checkAll = false;
       this.listTypeSelectedTemp = [];
     }
   }
