@@ -47,7 +47,8 @@
             <div *ngIf="template.headerCellDef === 'Fav'" class="d-flex aura-tooltip-contain ml-lg-3 ml-2">
               <i class="ph ph-info body-01 aura-tooltip-object"></i>
               <app-tooltip-customize
-                [content]="'Click the star icon to mark your favorite address <br> on the top of the list'" [class]="'fw-normal'">
+                [content]="'Click the star icon to mark your favorite address <br> on the top of the list'"
+                [class]="'fw-normal'">
               </app-tooltip-customize>
             </div>
             <div [innerHTML]="template.headerCellDef | translate" *ngIf="template.headerCellDef !== 'Fav'"></div>
@@ -70,7 +71,7 @@
                     *ngIf="data.isFavorite" />
                 </div>
                 <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
-                  <a class="text--primary cursor-pointer" (click)="navigateAddress(data[template.matColumnDef])">
+                  <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
                     <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                   </a>
                   <div class="aura-tooltip-contain">
@@ -123,45 +124,44 @@
       <div *ngFor="let data of dataSourceMobile" class="card-name-tag">
         <div class="d-flex align-items-center justify-content-between">
           <div class="card__title">
-            <a class="text--primary cursor-pointer" (click)="navigateAddress(data.address)">
+            <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
               <span class="fw-semibold">{{ data.address | cutStringPipe : 8 : 8 }}</span>
             </a>
-            <div class="text--gray-5 ellipsis-text w-100"
-                 [class.aura-tooltip-object]="data.note">
+            <div class="text--gray-5 ellipsis-text w-100" [class.aura-tooltip-object]="data.note">
               {{ data.note || 'Note:-' }}
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-end">
             <div class="mr-3 d-flex align-items-center justify-content-center">
               <i
-                  class="ph ph-push-pin body-01 cursor-pointer text--white"
-                  *ngIf="!data.isFavorite"
-                  (click)="updateFavorite(data)"></i>
+                class="ph ph-push-pin body-01 cursor-pointer text--white"
+                *ngIf="!data.isFavorite"
+                (click)="updateFavorite(data)"></i>
               <img
-                  [src]="'assets/icons/icons-svg/white/push-pin.svg' | imageS3"
-                  alt=""
-                  width="16"
-                  height="16"
-                  class="cursor-pointer"
-                  (click)="updateFavorite(data)"
-                  *ngIf="data.isFavorite" />
+                [src]="'assets/icons/icons-svg/white/push-pin.svg' | imageS3"
+                alt=""
+                width="16"
+                height="16"
+                class="cursor-pointer"
+                (click)="updateFavorite(data)"
+                *ngIf="data.isFavorite" />
             </div>
             <div class="dropdown aura-dropdown">
-              <button class="button px-2"
-                      id="delegateAction2"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false">
-                <img src="assets/icons/icons-svg/white/DotsThreeOutlineVertical.svg" alt="">
+              <button class="button px-2" id="delegateAction2" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="assets/icons/icons-svg/white/DotsThreeOutlineVertical.svg" alt="" />
               </button>
-              <ul class="dropdown-menu aura-dropdown-menu .border-sm border-gray-9 border-radius--sm"
-                  aria-labelledby="delegateAction2">
-                <li class="dropdown-item cursor-pointer d-flex align-items-center px-2 action-mob mb-1"
-                    (click)="openPopup(data)">
+              <ul
+                class="dropdown-menu aura-dropdown-menu border-sm border-gray-9 border-radius--sm"
+                aria-labelledby="delegateAction2">
+                <li
+                  class="dropdown-item cursor-pointer d-flex align-items-center px-2 action-mob mb-1"
+                  (click)="openPopup(data)">
                   <i class="ph ph-note-pencil h3 cursor-pointer aura-tooltip-object mr-2"></i>
                   <span class="body-02">Edit</span>
                 </li>
-                <li class="dropdown-item cursor-pointer d-flex align-items-center px-2 action-mob"
-                    (click)="openPopupDelete(data)">
+                <li
+                  class="dropdown-item cursor-pointer d-flex align-items-center px-2 action-mob"
+                  (click)="openPopupDelete(data)">
                   <i class="ph ph-x h3 cursor-pointer aura-tooltip-object mr-2"></i>
                   <span class="body-02">Remove</span>
                 </li>
@@ -173,7 +173,7 @@
         <div class="card__content">
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Type</div>
-            <div class="text--white">Contract</div>
+            <div class="text--white text-capitalize">{{ data.type }}</div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Private name tag</div>
@@ -185,7 +185,7 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Updated time</div>
-            <div class="text--white">{{commonService.getDateValue(data.updatedAt)[0]}}</div>
+            <div class="text--white">{{ commonService.getDateValue(data.updatedAt)[0] }}</div>
           </div>
         </div>
       </div>

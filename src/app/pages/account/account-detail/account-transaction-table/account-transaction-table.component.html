@@ -219,10 +219,10 @@
               </div>
               <div
                 class="tag-filter-box"
-                [class.has-result]="listTypeSelectedTemp.length > 0"
+                [class.has-result]="listTypeSelectedTemp?.length > 0"
                 (click)="$event.stopPropagation()"
                 (keydown)="$event.stopPropagation()">
-                <span *ngIf="listTypeSelectedTemp.length === 0">Selected Items ...</span>
+                <span *ngIf="listTypeSelectedTemp?.length === 0">Selected Items ...</span>
                 <div class="filter-result" *ngFor="let type of listTypeSelectedTemp">
                   <span class="caption">{{ type.value }}</span>
                   <i class="ph-thin ph-x cursor-pointer ml-1 body-02" (click)="removeFilterType(type)"></i>

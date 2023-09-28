@@ -66,7 +66,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       localStorage.removeItem('setAddressNameTag');
 
       setTimeout(() => {
-        this.openPopup(data);
+        this.openPopup(data, true);
       }, 500);
     }
 
@@ -128,11 +128,12 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     });
   }
 
-  openPopup(data = null) {
+  openPopup(data = null, isGetDetail = false) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'grant-overlay-panel';
     dialogConfig.disableClose = true;
     if (data) {
+      data['isGetDetail'] = isGetDetail;
       dialogConfig.data = data;
     }
     dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: this.pageData?.length } };
@@ -141,8 +142,8 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         setTimeout(() => {
-          this.pageChange.selectPage(0);
-        }, 4000);
+          this.getListPrivateName();
+        }, 3000);
       }
     });
   }
@@ -175,7 +176,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.pageData.length--;
         this.pageEvent(this.pageData);
-      }, 1000);
+      }, 2000);
     });
   }
 
@@ -188,7 +189,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     this.nameTagService.updatePrivateNameTag(payload).subscribe((res) => {
       setTimeout(() => {
         this.getListPrivateName();
-      }, 1000);
+      }, 2000);
     });
   }
 
@@ -201,11 +202,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     this.getListPrivateName();
   }
 
-  navigateAddress(address): void {
-    if (isContract(address)) {
-      this.router.navigate(['/contracts', address]);
-    } else {
-      this.router.navigate(['/account', address]);
-    }
+  urlType(address) {
+    return isContract(address) ? '/contracts' : '/account';
   }
 }
