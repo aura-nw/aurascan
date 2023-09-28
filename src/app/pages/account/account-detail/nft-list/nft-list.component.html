@@ -13,19 +13,25 @@
               id="nftFilter"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-              <span>{{ nftFilterItem.label | stringEllipsis : 16 }} ({{ nftFilterItem.quantity }})</span>
+              <span class="d-none d-lg-inline-block"
+                >{{ nftFilterItem?.label | stringEllipsis : 16 }} ({{ nftFilterItem?.quantity }})</span
+              >
+              <span class="d-lg-none"
+                >{{ nftFilterItem?.label | stringEllipsis : 35 }} ({{ nftFilterItem?.quantity }})</span
+              >
               <i class="ph ph-caret-down text--white h3"></i>
               <i class="ph ph-caret-up text--white h3"></i>
             </button>
             <ul
-              class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm nftFilterPanel"
-              aria-labelledby="nftFilter">
+              class="dropdown-menu filter-dropdown-collecttion border-sm border-gray-9 border-radius--sm "
+              aria-labelledby="nftFilter"
+              *ngIf="listCollection?.length > 0">
               <li
                 *ngFor="let item of listCollection; let i = index"
                 (click)="nftFilter = item.address; filterCollecttion(); setNFTFilter(item)"
                 [class.item-border]="i === 0"
                 [class.mb-1]="i > 0"
-                class="dropdown-item cursor-pointer"
+                class="dropdown-item cursor-pointer px-4 px-lg-2"
                 [class.active]="nftFilter === item.address">
                 <span class="body">{{ (item.label | cutStringPipe : numLength) + ' (' + item.quantity + ')' }}</span>
               </li>
@@ -113,6 +119,9 @@
         </div>
       </div>
     </ng-container>
+    <div *ngIf="loading" class="mt-20">
+      <app-loading-sprint></app-loading-sprint>
+    </div>
     <ng-template #noValues>
       <ng-container *ngIf="!loading">
         <app-table-no-data

@@ -194,10 +194,4 @@ export class TokenTableComponent implements OnChanges {
       this.totalValue.emit(this.total);
     });
   }
-
-  convertSmallNumber(amount: number, decimal: number) {
-    let valueString = (new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toString();
-    let res = valueString.match(/(.*)e-(\d)/);
-    return res ? '0.' + new Array(parseInt(res[2], 10)).join('0') + res[1].replace('.', '') : valueString;
-  }
 }

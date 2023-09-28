@@ -48,8 +48,6 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile = [];
   dataTable = [];
-  nextKey = null;
-  currentKey = null;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor(
@@ -65,8 +63,11 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     const dataNameTag = localStorage.getItem('setAddressNameTag');
     if (dataNameTag && dataNameTag !== 'undefined') {
       const data = JSON.parse(dataNameTag);
-      this.openPopup(data);
       localStorage.removeItem('setAddressNameTag');
+
+      setTimeout(() => {
+        this.openPopup(data);
+      }, 500);
     }
 
     this.commonService.listNameTag = this.global.listNameTag;
@@ -94,33 +95,29 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     this.onKeyUp();
   }
 
-  getListPrivateName(nextKey = null) {
+  getListPrivateName() {
     this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: 100,
       keyword: this.textSearch || '',
-      nextKey: nextKey
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
 
-    this.nameTagService.getListPrivateNameTagNextKey(payload).subscribe((res) => {
-      this.nextKey = null;
-      if (res.data?.nameTags?.length >= 100) {
-        this.nextKey = res.data[res.data?.nameTags?.length - 1]?.id;
-      }
-      this.countFav = res.data?.nameTags?.filter((k) => k.isFavorite === 1)?.length || 0;
-      res.data?.nameTags.forEach((element) => {
+    this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
+      this.countFav = res.data?.filter((k) => k.isFavorite === 1)?.length || 0;
+      res.data?.forEach((element) => {
         element['type'] = isContract(element.address) ? 'contract' : 'account';
       });
-      this.dataSource.data = res.data?.nameTags;
-      this.pageData.length = res?.data?.count || 0;
+      this.dataSource.data = res.data;
+      this.pageData.length = res?.meta?.count || 0;
 
       if (this.dataSource?.data) {
         let dataMobTemp = this.dataSource.data?.slice(
           this.pageData.pageIndex * this.pageData.pageSize,
           this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
         );
-        if(dataMobTemp.length !== 0) {
-          this.dataSourceMobile = dataMobTemp
+        if (dataMobTemp.length !== 0) {
+          this.dataSourceMobile = dataMobTemp;
         } else {
           this.dataSourceMobile = this.dataSource.data?.slice(
             (this.pageData.pageIndex - 1) * this.pageData.pageSize,
@@ -144,7 +141,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         setTimeout(() => {
-          this.getListPrivateName();
+          this.pageChange.selectPage(0);
         }, 4000);
       }
     });
@@ -155,8 +152,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       panelClass: 'sizeNormal',
       data: {
         title: 'Remove Private Name Tag',
-        content:
-          'Are you sure to remove private name tag for the address ' + data.address + ' (' + data.nameTag + ')?',
+        content: 'Are you sure to remove private name tag for the address ' + data.address + ' (' + data.nameTag + ')?',
         class: 'text--gray-1',
       },
     });
@@ -178,7 +174,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       this.toastr.successWithTitle('Private name tag removed!', 'Success');
       setTimeout(() => {
         this.pageData.length--;
-        this.pageEvent(this.pageData)
+        this.pageEvent(this.pageData);
       }, 1000);
     });
   }
@@ -201,18 +197,8 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   }
 
   pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
-    this.pageData = e;
-    this.pageData.previousPageIndex = e.pageIndex;
-
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getListPrivateName(this.nextKey);
-      this.currentKey = this.nextKey;
-    } else {
-      this.getListPrivateName();
-    }
+    this.pageData.pageIndex = e.pageIndex;
+    this.getListPrivateName();
   }
 
   navigateAddress(address): void {
