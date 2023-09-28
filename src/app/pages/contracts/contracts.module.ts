@@ -30,7 +30,6 @@ import { WriteContractModule } from './contracts-detail/contracts-contents/contr
 import { ContractsDetailComponent } from './contracts-detail/contracts-detail.component';
 import { ContractsOverviewCardComponent } from './contracts-detail/contracts-overview-card/contracts-overview-card.component';
 import { ContractsListComponent } from './contracts-list/contracts-list.component';
-import { ContractsRegisterComponent } from './contracts-register/contracts-register.component';
 import { ContractsRoutingModule } from './contracts-routing.module';
 import { ContractsTransactionsComponent } from './contracts-transactions/contracts-transactions.component';
 import { ContractVerifyStepsComponent } from './contracts-verify/contract-verify-steps/contract-verify-steps.component';
@@ -48,7 +47,6 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     CodeContractComponent,
     ContractsVerifyComponent,
     ContractVerifyStepsComponent,
-    ContractsRegisterComponent,
   ],
   imports: [
     CommonModule,
