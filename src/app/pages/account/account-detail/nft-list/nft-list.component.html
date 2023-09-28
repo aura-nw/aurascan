@@ -12,18 +12,19 @@
               type="button"
               id="nftFilter"
               data-bs-toggle="dropdown"
-              aria-expanded="false">
+              aria-expanded="false"
+              [disabled]="listCollection?.length === 1">
               <span class="d-none d-lg-inline-block"
                 >{{ nftFilterItem?.label | stringEllipsis : 16 }} ({{ nftFilterItem?.quantity }})</span
               >
               <span class="d-lg-none"
-                >{{ nftFilterItem?.label | stringEllipsis : 35 }} ({{ nftFilterItem?.quantity }})</span
+                >{{ nftFilterItem?.label | stringEllipsis : 22 }} ({{ nftFilterItem?.quantity }})</span
               >
               <i class="ph ph-caret-down text--white h3"></i>
               <i class="ph ph-caret-up text--white h3"></i>
             </button>
             <ul
-              class="dropdown-menu filter-dropdown-collecttion border-sm border-gray-9 border-radius--sm "
+              class="dropdown-menu filter-dropdown-collecttion border-sm border-gray-9 border-radius--sm"
               aria-labelledby="nftFilter"
               *ngIf="listCollection?.length > 0">
               <li
