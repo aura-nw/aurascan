@@ -58,3 +58,15 @@ mat-datepicker-toggle .mat-icon-button {
   border-radius: 8px !important;
   color: var(--aura-white) !important;
 }
+
+.mat-datepicker-content .mat-calendar {
+  background: #24262e;
+  border: 1px solid #717582;
+  border-radius: 8px;
+}
+mat-date-range-input {
+  height: 31px;
+  display: flex !important;
+  align-items: center;
+  padding-left: 16px;
+}

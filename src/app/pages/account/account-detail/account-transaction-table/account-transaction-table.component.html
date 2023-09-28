@@ -60,8 +60,9 @@
     <div class="box-filter tsx-filter-panel d-flex align-items-center mb-4 mb-lg-0" *ngIf="displayFilter">
       <div class="d-flex align-items-center">
         <div class="dropdown aura-dropdown btn-item body" [class.menu-hidden]="transactionFilter.endDate">
-          <div
-            class="align-items-center d-flex justify-content-between calendar-contain cursor-pointer"
+          <div [style]="'width: 225px'"
+            class="align-items-center d-flex justify-content-between calendar-contain
+            border-sm border-gray-8 border-radius--sm cursor-pointer"
             (click)="datePickerClickTrigger()">
             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
               <input
@@ -112,6 +113,7 @@
         </div>
         <div class="dropdown aura-dropdown btn-item ml-6" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <button
+            [style]="'min-width: 200px'"
             class="input-group align-items-center d-flex justify-content-between cursor-pointer btn-tns"
             type="button"
             id="typeTransfer"
@@ -154,6 +156,7 @@
             #tnxTypeMenuBtn
             (menuClosed)="initTnxFilterPanel()"
             [matMenuTriggerFor]="tnxTypeMenu"
+            [style]="'min-width: 155px'"
             class="input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-mess"
             [class.menu-hidden]="transactionFilter.type"
             type="button">
@@ -252,7 +255,7 @@
                 </div>
               </div>
               <div
-                class="panel__btn-group px-4"
+                class="panel__btn-group px-4 d-flex align-items-center justify-content-end"
                 (click)="$event.stopPropagation()"
                 (keydown)="$event.stopPropagation()">
                 <button
@@ -297,7 +300,7 @@
       type="button">
       <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
       <span>Filter</span>
-      <span *ngIf="countFilter > 0" class="nft__unclaimed-noti caption aura-tooltip-object" [class.noti--pill]="true">
+      <span *ngIf="countFilter > 0" class="nft__unclaimed-noti caption aura-tooltip-object text--white" [class.noti--pill]="true">
         {{ countFilter }}
       </span>
     </button>
@@ -442,9 +445,9 @@
                             !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                             item.fromAddress !== currentAddress
                           "></app-name-tag>
-                        <div class="box-token-transfer">
+                        <div class="box-token-transfer d-flex">
                           <span
-                            class="token-transfer-status d-flex"
+                            class="token-transfer-status d-inline-flex align-items-center caption"
                             [ngClass]="{ 'status-out': item['toAddress'] !== currentAddress }">
                             <ng-container *ngIf="item['toAddress'] === currentAddress"> IN </ng-container>
                             <ng-container *ngIf="item['toAddress'] !== currentAddress"> OUT </ng-container>
@@ -490,7 +493,7 @@
                             "></app-name-tag>
                         </div>
                         <ng-container *ngIf="index === 0">
-                          <div class="box-number" (click)="expandData(data)" *ngIf="data.arrEvent?.length > 1">
+                          <div class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8" (click)="expandData(data)" *ngIf="data.arrEvent?.length > 1">
                             <ng-container *ngIf="data.arrEvent?.length > 100"> >99 </ng-container>
                             <ng-container *ngIf="data.arrEvent?.length <= 100">
                               +{{ data.arrEvent?.length - 1 }}
