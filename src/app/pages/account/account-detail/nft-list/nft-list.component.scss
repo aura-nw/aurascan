@@ -69,6 +69,11 @@
   .input-group {
     height: 40px;
   }
+  .button {
+    &:disabled {
+      border-color: var(--aura-gray-8);
+    }
+  }
 }
 
 .dropdown-menu.filter-dropdown-collecttion {
@@ -81,7 +86,7 @@
   border: 1px solid var(--aura-gray-8);
   overflow: hidden;
   box-shadow: none;
-  margin: 3px 0px !important;
+  margin: 4px 0px !important;
 
   li.dropdown-item {
     font-size: 1.6rem;
