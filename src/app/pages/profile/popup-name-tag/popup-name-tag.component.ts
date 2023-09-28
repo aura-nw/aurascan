@@ -50,7 +50,11 @@ export class PopupNameTagComponent implements OnInit {
   ngOnInit(): void {
     this.formInit();
     if (this.data?.address) {
-      this.setDataFrom(this.data);
+      if (this.data.isGetDetail) {
+        this.getDetailNameTag(this.data?.address);
+      } else {
+        this.setDataFrom(this.data);
+      }
     }
   }
 
@@ -200,5 +204,17 @@ export class PopupNameTagComponent implements OnInit {
         this.publicNameTag = temp;
       }
     }
+  }
+
+  getDetailNameTag(address = null) {
+    const payload = {
+      limit: 1,
+      keyword: address || '',
+      offset: 0,
+    };
+
+    this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
+      this.setDataFrom(res?.data[0] || this.data);
+    });
   }
 }
