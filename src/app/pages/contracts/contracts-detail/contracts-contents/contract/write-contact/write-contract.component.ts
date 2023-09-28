@@ -240,17 +240,14 @@ export class WriteContractComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        result = result === 'custom' ? 0 : result;
         let amount = msg['fieldList'].find((k) => k.fieldName === 'amount')?.value || '';
         //check amount is exit
-        if (amount === '' && result === 'custom') {
-          //To do
-        } else {
-          const numPow = amount.toString()
-            ? Math.pow(10, result).toString().substring(1)
-            : Math.pow(10, result).toString();
-          amount = amount.toString() + numPow;
-          msg['fieldList'].find((k) => k.fieldName === 'amount').value = amount.toString();
-        }
+        const numPow = amount.toString()
+          ? Math.pow(10, result).toString().substring(1)
+          : Math.pow(10, result).toString();
+        amount = amount.toString() + numPow;
+        msg['fieldList'].find((k) => k.fieldName === 'amount').value = amount.toString();
       }
     });
   }
