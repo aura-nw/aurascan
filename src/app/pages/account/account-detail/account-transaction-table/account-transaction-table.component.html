@@ -112,21 +112,28 @@
         </div>
         <div class="dropdown aura-dropdown btn-item ml-6" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <button
-            class="mat-menu-trigger input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-tns"
+            class="input-group align-items-center d-flex justify-content-between cursor-pointer btn-tns"
             type="button"
             id="typeTransfer"
-            [class.menu-hidden]="transactionFilter.typeTransfer"
+            [class.filter-result]="transactionFilter.typeTransfer"
             data-bs-toggle="dropdown"
-            aria-expanded="false">
+            aria-expanded="false"
+            #trigger>
             <span class="body">
               <ng-container *ngIf="!transactionFilter.typeTransfer"> Asset Transfer Type </ng-container>
-              <span *ngIf="transactionFilter.typeTransfer?.length > 0" class="text--white"
-                >{{ transactionFilter.typeTransfer }}
-              </span>
+              <span *ngIf="transactionFilter.typeTransfer?.length > 0">{{ transactionFilter.typeTransfer }} </span>
             </span>
-            <div class="ml-3">
-              <i class="ph ph-caret-down text--white body"></i>
-              <i class="ph ph-caret-up text--white body"></i>
+            <div class="ml-3 d-flex align-items-center">
+              <ng-container *ngIf="!transactionFilter.typeTransfer">
+                <i class="ph ph-caret-down text--white body"></i>
+                <i class="ph ph-caret-up text--white body"></i>
+              </ng-container>
+              <ng-container *ngIf="transactionFilter.typeTransfer">
+                <i
+                  (click)="clearFilter(modeFilter.type); trigger.click()"
+                  class="ph-thin ph-x cursor-pointer ml-2 body">
+                </i>
+              </ng-container>
             </div>
           </button>
           <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
@@ -140,18 +147,6 @@
               <button type="button" class="button p-0">Receive</button>
             </li>
           </ul>
-          <div
-            class="filter-result"
-            id="filter-result-tns"
-            *ngIf="transactionFilter.typeTransfer?.length > 0"
-            (click)="
-              typeAction.classList.contains('show')
-                ? typeAction.classList.remove('show')
-                : typeAction.classList.add('show')
-            ">
-            <span class="body">{{ transactionFilter.typeTransfer }}</span>
-            <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.type)"></i>
-          </div>
         </div>
 
         <div *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs" class="ml-6">
