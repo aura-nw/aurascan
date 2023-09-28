@@ -97,5 +97,8 @@
     &:hover {
       background-color: var(--aura-gray-9);
     }
+    &.active {
+      background-color: var(--aura-gray-8) !important;
+    }
   }
 }

@@ -72,7 +72,20 @@
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amountToken'">
-                      <div [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></div>
+                      <div class="aura-tooltip-contain">
+                        <div
+                          class="aura-tooltip-object"
+                          *ngIf="(data.arrEvent[0]?.amountTemp | balanceOf : data.arrEvent[0]?.decimal) < 0.001">
+                          <0,001
+                        </div>
+                        <app-tooltip-customize
+                          [content]="data.arrEvent[0]?.amountTemp | convertSmallNumber : data.arrEvent[0]?.decimal">
+                        </app-tooltip-customize>
+                        <div
+                          *ngIf="(data.arrEvent[0]?.amountTemp | balanceOf) >= 0.001"
+                          [appBigNumber]="data.arrEvent[0]?.amountTemp"
+                          [decimal]="data.arrEvent[0]?.decimal"></div>
+                      </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'status'">
                       <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
@@ -170,7 +183,7 @@
                           !data.token_id ||
                           data['status'] === 'Fail' ||
                           data['token_id'] === 'More' ||
-                          data.modeExecute === modeExecuteTransaction.UnEquip || 
+                          data.modeExecute === modeExecuteTransaction.UnEquip ||
                           data['to_address']?.startsWith('Null')
                         "
                         [routerLink]="['/tokens/' + linkToken, contractAddress, data.token_id]">
