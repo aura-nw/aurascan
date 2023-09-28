@@ -4,7 +4,7 @@
   }
 }
 
-.proposal__summary-total {
+::ng-deep.proposal__summary-total {
   color: var(--aura-white);
 
   .vote-bar {
