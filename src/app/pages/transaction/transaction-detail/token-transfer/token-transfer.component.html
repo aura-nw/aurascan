@@ -7,7 +7,7 @@
         </div>
         <div class="pb-2">
           <div class="table-responsive table-token" *ngIf="dataSourceFTs.data.length > 0; else noFTValues">
-            <table mat-table [dataSource]="dataSourceFTs" class="aura-table">
+            <table mat-table [dataSource]="dataSourceFTs" class="aura-table none-header">
               <ng-container *ngFor="let template of templatesFTs; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
                   <th *matHeaderCellDef></th>
@@ -145,7 +145,7 @@
         </div>
         <div class="pb-2">
           <div class="table-responsive table-token" *ngIf="dataSourceNFTs.data.length > 0; else noValues">
-            <table mat-table [dataSource]="dataSourceNFTs" class="aura-table nft-list">
+            <table mat-table [dataSource]="dataSourceNFTs" class="aura-table nft-list none-header">
               <ng-container *ngFor="let template of templatesNFTs; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
                   <th *matHeaderCellDef></th>

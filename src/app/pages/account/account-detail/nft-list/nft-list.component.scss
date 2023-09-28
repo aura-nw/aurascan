@@ -1,4 +1,8 @@
-.aura-form.single-input-field {
+.aura-form.single-input-field.account-search-form {
+  width: 100%;
+  @media (min-width: 992px) {
+    width: 370px;
+  }
   .input-group {
     padding: 0 var(--spacer-3);
 
