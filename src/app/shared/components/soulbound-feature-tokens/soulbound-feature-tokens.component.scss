@@ -7,32 +7,33 @@
   transition: opacity 0.35s ease-in-out;
 }
 .soulbound-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 20px;
+  width: 100%;
   flex-grow: 1;
-  @media (min-width: 991.98px) {
-    justify-content: flex-end;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    height: 0;
   }
   .soulbound__item {
+    flex-basis: 50%;
+    box-sizing: border-box;
     .nft-card {
-      //min-height: 120px;
+      min-height: 120px;
       max-width: 90px;
     }
-    padding: var(--spacer-2) var(--spacer-3);
     @media (min-width: 413.98px) {
-      padding: var(--spacer-2);
       .nft-card {
         max-width: 100px;
       }
     }
+    @media (min-width: 912px) {
+      flex-wrap: wrap;
+      flex-basis: 20%;
+      min-width: 180px;
+    }
     &:not(:last-child) {
-      @media (min-width: 1200px) {
-        margin-right: var(--spacer-1);
-      }
-      @media (min-width: 1600px) {
-        margin-right: var(--spacer-2);
+      margin-right: var(--spacer-2);
+      @media (min-width: 912px) {
+        margin-right: var(--spacer-6);
       }
     }
     &:hover {
@@ -75,14 +76,34 @@
     padding: 4px 8px;
   }
 }
+.sbt-card-contain {
+  width: 130px;
+  @media (min-width: 991.98px) {
+    width: 130px;
+  }
+  @media (min-width: 1440.98px) {
+    width: 140px;
+  }
+  @media (min-width: 1660.98px) {
+    width: 150px;
+  }
+}
 @media (min-width: 991.98px) {
   .sbt-contain {
+    padding: 0 8px;
+    min-height: 190px;
+  }
+  .sbt-page {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    min-height: 190px;
+    justify-content: flex-start;
     align-items: flex-end;
-    padding: 0px 12px;
+  }
+}
+
+@media (min-width: 1367px) {
+  .sbt-contain {
+    padding: 0 24px;
   }
 }
 

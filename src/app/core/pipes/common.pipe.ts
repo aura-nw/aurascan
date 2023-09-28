@@ -5,6 +5,9 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from '../services/common.service';
 import { balanceOf } from '../utils/common/parsing';
 import { MaskPipe } from 'ngx-mask';
+import * as _ from 'lodash';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -120,4 +123,68 @@ export class decodeData implements PipeTransform {
   transform(value: string): string {
     return atob(value);
   }
+}
+
+@Pipe({ name: 'displayTypeToolTip' })
+export class displayTypeToolTip implements PipeTransform {
+  transform(value: any): string {
+    let result = '';
+    value.forEach((element, index) => {
+      const typeMsg = element.type || element['@type'];
+      let type;
+      if (typeMsg === TRANSACTION_TYPE_ENUM.ExecuteContract) {
+        try {
+          let dataTemp = _.get(element, 'content.msg') || _.get(element, 'msg');
+          if (typeof dataTemp === 'string') {
+            try {
+              dataTemp = JSON.parse(dataTemp);
+            } catch (e) {}
+          }
+          let action = Object.keys(dataTemp)[0];
+          type = 'Contract: ' + action;
+        } catch (e) {}
+      } else {
+        type = _.find(TYPE_TRANSACTION, { label: typeMsg })?.value || typeMsg.split('.').pop();
+      }
+
+      if (index <= 4) {
+        if (result?.length > 0) {
+          result += ', ' + type;
+        } else {
+          result += type;
+        }
+      }
+    });
+    if (value?.length > 5) {
+      result += ', ...';
+    }
+    return result;
+  }
+}
+
+@Pipe({ name: 'convertSmallNumber' })
+export class convertSmallNumber implements PipeTransform {
+  constructor() {}
+  transform(amount: number, decimal: number = 6): any {
+    let valueString = (new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toString();
+    return displayFullNumber(valueString) !== '0.001' ? displayFullNumber(valueString) : '';
+  }
+}
+
+function displayFullNumber(x) {
+  if (Math.abs(x) < 1.0) {
+    var e = parseInt(x.toString().split('e-')[1]);
+    if (e) {
+      x *= Math.pow(10, e - 1);
+      x = '0.' + new Array(e).join('0') + x.toString().substring(2);
+    }
+  } else {
+    var e = parseInt(x.toString().split('+')[1]);
+    if (e > 20) {
+      e -= 20;
+      x /= Math.pow(10, e);
+      x += new Array(e + 1).join('0');
+    }
+  }
+  return x;
 }

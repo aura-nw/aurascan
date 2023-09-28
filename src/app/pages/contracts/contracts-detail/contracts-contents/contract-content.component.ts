@@ -10,7 +10,7 @@ import { isContract } from 'src/app/core/utils/common/validation';
 import { convertDataTransaction } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-contract-content[contractsAddress]',
   templateUrl: './contract-content.component.html',
@@ -56,6 +56,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     private router: Router,
     private aRoute: ActivatedRoute,
     private environmentService: EnvironmentService,
+    private location: Location
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
@@ -107,11 +108,9 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   }
 
   changeTab(tabId): void {
-    this.router.navigate([], {
-      relativeTo: this.aRoute,
-      queryParams: { tabId: tabId || ContractTab.Transactions },
-      queryParamsHandling: 'merge',
-    });
+    tabId = tabId || 'transactions'
+    this.location.replaceState("/contracts/" + this.contractInfo.contractsAddress + "?tabId=" + tabId);
+    this.countCurrent = tabId;
   }
 
   getTransaction(isInit = true): void {

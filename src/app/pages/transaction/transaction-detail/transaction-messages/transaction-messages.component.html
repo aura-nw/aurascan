@@ -1,4 +1,4 @@
-<div class="" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<div *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div *ngIf="!isTransactionTypeDefault">
     <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1">
       {{ checkTypeMessage() }}
@@ -160,7 +160,7 @@
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask : 'separator.6' }}
-        <span class="text--primary">{{
+        <span class="text--white">{{
           transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom | convertLogAmount : true
         }}</span>
       </div>
@@ -218,7 +218,7 @@
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.acknowledgement?.amount | balanceOf | mask : 'separator.6' }}
-        <span class="text--primary">{{ denom }}</span>
+        <span class="text--white">{{ denom }}</span>
       </div>
     </div>
     <app-messages-item
