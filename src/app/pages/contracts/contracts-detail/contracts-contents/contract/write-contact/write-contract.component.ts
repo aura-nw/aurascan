@@ -242,11 +242,15 @@ export class WriteContractComponent implements OnInit {
       if (result) {
         let amount = msg['fieldList'].find((k) => k.fieldName === 'amount')?.value || '';
         //check amount is exit
-        const numPow = amount.toString()
-          ? Math.pow(10, result).toString().substring(1)
-          : Math.pow(10, result).toString();
-        amount = amount.toString() + numPow;
-        msg['fieldList'].find((k) => k.fieldName === 'amount').value = amount.toString();
+        if (amount === '' && result === 'custom') {
+          //To do
+        } else {
+          const numPow = amount.toString()
+            ? Math.pow(10, result).toString().substring(1)
+            : Math.pow(10, result).toString();
+          amount = amount.toString() + numPow;
+          msg['fieldList'].find((k) => k.fieldName === 'amount').value = amount.toString();
+        }
       }
     });
   }
