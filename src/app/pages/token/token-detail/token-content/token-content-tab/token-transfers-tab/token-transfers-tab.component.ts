@@ -164,7 +164,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['from_address'] = element.fromAddress;
             element['to_address'] = element.toAddress;
             element['token_id'] = element.arrEvent?.length > 1 ? 'More' : element.tokenId;
-            element['type'] = res.transaction[index]?.events[0]?.smart_contract_events[0]?.cw721_activity?.action;
+            element['type'] = element.arrEvent[0]?.type?.replace('Contract: ', '');
             if (this.typeContract === this.contractType.CW4973) {
               if (element['type'] === 'mint') {
                 element['type'] = 'take';
@@ -225,7 +225,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['from_address'] = element.fromAddress;
             element['to_address'] = element.toAddress;
             element['type'] = element?.action;
-            element['amountToken'] = element.amount;
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];

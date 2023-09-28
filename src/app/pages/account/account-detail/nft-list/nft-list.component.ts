@@ -50,7 +50,7 @@ export class NftListComponent implements OnInit, OnChanges {
     this.breakpoint$.subscribe((state) => {
       this.numLength = 16;
       if (state.matches) {
-        this.numLength = 32;
+        this.numLength = 20;
       }
     });
   }
