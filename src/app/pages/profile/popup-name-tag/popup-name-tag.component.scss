@@ -29,6 +29,9 @@
       height: 40px;
       input {
         max-width: 95%;
+        @media (min-width: 991.98px) {
+          max-width: 100%;
+        }
       }
     }
     .text-area {
