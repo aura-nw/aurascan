@@ -12,7 +12,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 export class PopupAddZeroComponent implements OnInit {
   selectedZeroes: string;
   lstZeroes = LIST_ZEROES;
-  numberCustom;
+  numberCustom = null;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
@@ -31,7 +31,7 @@ export class PopupAddZeroComponent implements OnInit {
     this.closeDialog(this.numberCustom || this.selectedZeroes);
   }
 
-  checkCustomValue(){
+  checkCustomValue() {
     this.numberCustom = this.numberCustom > 18 ? 18 : this.numberCustom;
   }
 
