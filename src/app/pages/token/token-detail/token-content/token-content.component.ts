@@ -175,7 +175,7 @@ export class TokenContentComponent implements OnInit {
     };
 
     this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
-      this.infoSearch['balance'] = res.cw721_token_aggregate.aggregate.count || 0;
+      this.infoSearch['balance'] = res.cw721_token_aggregate?.aggregate?.count || 0;
     });
   }
 }

@@ -220,7 +220,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
           let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.FtsTxs, false, null);
           txs.forEach((element, index) => {
-            element['arrEvent'] = element.arrEvent.filter((k) => k.contractAddress === this.contractAddress);
+            element['arrEvent'] = element.arrEvent?.filter((k) => k.contractAddress === this.contractAddress);
             element['from_address'] = element.arrEvent[0]?.fromAddress;
             element['to_address'] = element.arrEvent[0]?.toAddress;
             element['type'] = element?.action;
