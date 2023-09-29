@@ -202,10 +202,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
         payload['txHash'] = this.keyWord;
       } else {
-        // if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
         payload['sender'] = this.keyWord;
         payload['receiver'] = this.keyWord;
-        // }
       }
     }
 
@@ -222,8 +220,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
           let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.FtsTxs, false, null);
           txs.forEach((element, index) => {
-            element['from_address'] = element.fromAddress;
-            element['to_address'] = element.toAddress;
+            element['arrEvent'] = element.arrEvent?.filter((k) => k.contractAddress === this.contractAddress);
+            element['from_address'] = element.arrEvent[0]?.fromAddress;
+            element['to_address'] = element.arrEvent[0]?.toAddress;
             element['type'] = element?.action;
           });
           if (this.dataSource.data.length > 0 && !isReload) {
