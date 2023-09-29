@@ -9,6 +9,7 @@ import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
 import { CommonService } from 'src/app/core/services/common.service';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-token-content',
@@ -52,6 +53,7 @@ export class TokenContentComponent implements OnInit {
     public global: Globals,
     private layout: BreakpointObserver,
     public commonService: CommonService,
+    private tokenService: TokenService,
   ) {}
 
   ngOnInit(): void {
@@ -150,10 +152,10 @@ export class TokenContentComponent implements OnInit {
     }
     const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
     try {
-      const data = await client.queryContractSmart(this.contractAddress, queryData);
       if (this.tokenDetail.isNFTContract) {
-        this.infoSearch['balance'] = data?.tokens?.length;
+        this.countBalanceNFT(address);
       } else {
+        const data = await client.queryContractSmart(this.contractAddress, queryData);
         this.infoSearch['balance'] = data?.balance;
       }
     } catch (error) {}
@@ -161,5 +163,19 @@ export class TokenContentComponent implements OnInit {
 
   getMoreTx(event) {
     this.hasMore.emit(event);
+  }
+
+  countBalanceNFT(address) {
+    let payload = {
+      limit: 20,
+      offset: 0,
+      contractAddress: this.contractAddress,
+      owner: address,
+      token_id: null,
+    };
+
+    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
+      this.infoSearch['balance'] = res.cw721_token_aggregate.aggregate.count || 0;
+    });
   }
 }
