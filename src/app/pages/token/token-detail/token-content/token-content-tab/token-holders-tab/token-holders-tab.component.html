@@ -65,7 +65,7 @@
                         <span
                           *ngIf="(data[template.matColumnDef] | balanceOf: decimalValue) >= 0.001"
                           [appBigNumber]="data[template.matColumnDef]"
-                          [decimal]="decimalValue"></span>
+                          [decimal]="decimalValue || 0"></span>
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'amount'">
