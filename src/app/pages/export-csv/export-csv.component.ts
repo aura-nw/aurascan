@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-export-csv',
@@ -16,6 +15,8 @@ export class ExportCsvComponent implements OnInit {
   isFilterDate = true;
   dateStart;
   dateEnd;
+  isValidAddress = false;
+  userEmail;
 
   constructor(
     private fb: FormBuilder,
@@ -25,9 +26,38 @@ export class ExportCsvComponent implements OnInit {
     private toastr: NgxToastrService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.formInit();
+    // check exit email
+    this.userEmail = localStorage.getItem('userEmail');
+  }
 
-  onSubmit(){}
+  formInit() {
+    this.csvForm = this.fb.group({
+      dataType: null,
+      address: ['', [Validators.required]],
+      isFilterDate: true,
+      starDate: null,
+      endDate: null,
+      blockFrom: null,
+      blockTo: null,
+      displayPrivate: false,
+    });
 
-  setDateRange(){}
+    console.log(this.csvForm);
+  }
+
+  onSubmit() {
+    console.log(this.csvForm.value);
+    
+  }
+
+  setDateRange() {}
+
+  changeDisplayPrivate() {}
+
+  changeType(isFilterDate = false) {
+    this.isFilterDate = isFilterDate;
+    this.csvForm.isFilterDate = this.isFilterDate;
+  }
 }

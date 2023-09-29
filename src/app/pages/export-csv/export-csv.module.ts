@@ -7,6 +7,7 @@ import { ExportCsvComponent } from './export-csv.component';
 import { ExportCsvRoutingModule } from './export-csv-routing.module';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 @NgModule({
   declarations: [ExportCsvComponent],
   imports: [
@@ -18,6 +19,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     CommonPipeModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSlideToggleModule
   ],
   providers: [UserService],
   exports: [ExportCsvComponent],
