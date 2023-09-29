@@ -26,6 +26,7 @@
               aria-labelledby="nftFilter"
               *ngIf="listCollection?.length > 0">
               <li
+                style="height: 48px"
                 *ngFor="let item of listCollection; let i = index"
                 (click)="nftFilter = item.address; filterCollecttion(); setNFTFilter(item)"
                 [class.item-border]="i === 0"
@@ -33,7 +34,7 @@
                 class="dropdown-item cursor-pointer px-4 px-lg-2"
                 [class.active]="nftFilter === item.address">
                 <div class="d-flex body">
-                  <div class="txt-collection-name">{{ item.label }}</div>
+                  <span class="txt-collection-name">{{ item.label }}</span>
                   <span>({{ item.quantity }})</span>
                 </div>
               </li>
@@ -91,13 +92,13 @@
                   <div class="nft__info d-flex">
                     <span class="mr-1 text--gray-1">Token:</span>
                     <div
-                      class="text--primary hover-link box-name"
+                      class="hover-link box-name"
                       (click)="handleRouterLink('/tokens/token-nft/' + item.contract_address)">
-                      <span class="d-none d-lg-inline-block txt-collection-name">{{ item.token_name }}</span>
-                      <span class="d-inline-block d-lg-none txt-collection-name">{{ item.token_name }}</span>
+                      <span class="d-none d-lg-inline-block txt-token-name text--primary">{{ item.token_name }}</span>
+                      <span class="d-inline-block d-lg-none txt-token-name text--primary">{{ item.token_name }}</span>
                     </div>
                   </div>
-                  <div class="mt-1 nft__info">
+                  <div class="mt-lg-1 nft__info">
                     <span class="mr-1 text--gray-1">Token ID:</span>
                     <span
                       class="text--primary hover-link"
