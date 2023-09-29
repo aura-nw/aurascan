@@ -1,0 +1,137 @@
+<h1 class="text--white">Export Data (Download CSV file)</h1>
+
+<div class="text--gray-2 mb-6">The earliest 1,000 record within the selected range will be exported</div>
+
+<div class="col-6">
+  <form [formGroup]="csvForm" (ngSubmit)="onSubmit()" class="aura-form single-input-field csv-form" autocomplete="off">
+    <!-- Export data type -->
+    <div class="d-flex align-items-center mb-6">
+      <div class="col-3">
+        <label class="form-label body-01">Export data type</label>
+      </div>
+      <div class="col-9">
+        <div class="form-group">
+          <div class="input-group" [class.form-control--error]="false">
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Enter your email"
+              class="input-email"
+              name="inputEmail"
+              (blur)="isError = false"
+              autocomplete="off" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="d-flex align-items-center mb-6">
+      <div class="col-3">
+        <label class="form-label body-01">Address</label>
+      </div>
+      <div class="col-9">
+        <div class="form-group">
+          <div class="input-group" [class.form-control--error]="false">
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="aura..."
+              class="input-email"
+              name="inputEmail"
+              (blur)="isError = false"
+              autocomplete="off" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data range -->
+    <div class="d-flex align-items-center">
+      <div class="col-3">
+        <label class="form-label body-01">Data range</label>
+      </div>
+      <div class="col-9">
+        <div class="d-flex align-items-center">
+          <div class="form-group d-flex align-items-center">
+            <input
+              type="radio"
+              value="filterRange"
+              id="date"
+              class="radio-box radio-box--dark"
+              [checked]="isFilterDate" />
+            <label for="account" class="ml-2 mb-0 text-justify">Date</label>
+          </div>
+          <div class="form-group d-flex align-items-center ml-8">
+            <input
+              type="radio"
+              value="filterRange"
+              id="block"
+              class="radio-box radio-box--dark"
+              [checked]="!isFilterDate" />
+            <label for="contract" class="ml-2 mb-0 text-justify">Block Height</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Mode -->
+    <div class="offset-3 d-flex align-items-center">
+      <ng-container *ngIf="isFilterDate">
+        <div class="filter-time col-5">
+          <div class="input-group input-group--simply pr-0 mt-2 cursor-pointer" (click)="pickerStart.open()">
+            <input
+              readOnly
+              #start_date
+              [matDatepicker]="pickerStart"
+              [style]="'max-width: 70%'"
+              [(ngModel)]="dateStart"
+              (ngModelChange)="setDateRange()"
+              class="cursor-pointer"
+              placeholder="Start date" />
+            <div class="mr-3 h6 mb-0 position-relative mt-1">
+              <i class="ph-thin ph-calendar-blank h3 text--white"></i>
+              <mat-datepicker #pickerStart></mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="col-2 d-flex justify-content-center align-items-center">-</div>
+        <div class="filter-time col-5">
+          <div class="input-group input-group--simply pr-0 mt-2 cursor-pointer" (click)="pickerEnd.open()">
+            <input
+              readOnly
+              #end_date
+              [matDatepicker]="pickerEnd"
+              [style]="'max-width: 70%'"
+              [(ngModel)]="dateEnd"
+              (ngModelChange)="setDateRange()"
+              class="cursor-pointer"
+              placeholder="End date" />
+            <div class="mr-3 h6 mb-0 position-relative mt-1">
+              <i class="ph-thin ph-calendar-blank h3 text--white"></i>
+              <mat-datepicker #pickerEnd></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isFilterDate">
+        <input
+          [type]="'text'"
+          placeholder="From Block"
+          formControlName="address"
+          (blur)="isError = false"
+          name="inputBlock"
+          autocomplete="off" />
+        -
+        <input
+          [type]="'text'"
+          placeholder="To Block"
+          formControlName="address"
+          (blur)="isError = false"
+          name="inputBlock"
+          autocomplete="off" />
+      </ng-container>
+    </div>
+  </form>
+</div>
