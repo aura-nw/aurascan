@@ -82,7 +82,7 @@
                           [content]="data.arrEvent[0]?.amountTemp | convertSmallNumber : data.arrEvent[0]?.decimal">
                         </app-tooltip-customize>
                         <div
-                          *ngIf="(data.arrEvent[0]?.amountTemp | balanceOf) >= 0.001"
+                          *ngIf="(data.arrEvent[0]?.amountTemp | balanceOf: data.arrEvent[0]?.decimal) >= 0.001"
                           [appBigNumber]="data.arrEvent[0]?.amountTemp"
                           [decimal]="data.arrEvent[0]?.decimal"></div>
                       </div>
