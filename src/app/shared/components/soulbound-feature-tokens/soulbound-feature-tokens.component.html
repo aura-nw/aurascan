@@ -35,7 +35,7 @@
               <div class="nft-cards__item">
                 <app-nft-card
                   nftId="{{ 'nft#' + i }}"
-                  [nftLink]="'/tokens/token-nft/' + token.contract_address + '/' + encodeData(token.token_id)"
+                  [nftLink]="'/tokens/token-abt/' + token.contract_address + '/' + encodeData(token.token_id)"
                   [nftItem]="token"
                   [nftType]="getTypeFile(token)"></app-nft-card>
                 <div class="nft-cards__label">
