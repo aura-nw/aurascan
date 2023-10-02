@@ -1,14 +1,14 @@
-<h1 class="text--white fw-700">Export Data (Download CSV file)</h1>
+<h1 class="text--white fw-700">Export Data <br class="d-lg-none"/> (Download CSV file)</h1>
 <div class="text--gray-2 mb-6">The earliest 1,000 record within the selected range will be exported</div>
 
-<div class="col-6">
+<div class="col-12 col-lg-6">
   <form [formGroup]="csvForm" (ngSubmit)="onSubmit()" class="aura-form single-input-field csv-form" autocomplete="off">
     <!-- Export data type -->
-    <div class="d-flex align-items-center mb-6">
-      <div class="col-3">
+    <div class="row mb-6 align-items-center">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
         <span class="form-label body-02 text--gray-4">Export data type</span>
       </div>
-      <div class="col-9">
+      <div class="col-12 col-lg-9">
         <div class="form-group">
           <div class="dropdown aura-dropdown btn-item">
             <button
@@ -31,22 +31,28 @@
                 </ng-container>
               </div>
             </button>
-            <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
-                <button type="button" class="button p-0">All type</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.ExecutedTxs)">
-                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.ExecutedTxs }}</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.AuraTxs)">
-                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.AuraTxs }}</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.FtsTxs)">
-                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.FtsTxs }}</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.NftTxs)">
-                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.NftTxs }}</button>
-              </li>
+            <ul class="dropdown-menu aura-dropdown-menu p-0" id="typeAction" #typeAction>
+              <!-- Group 1-->
+              <div>
+                <h5 class="dropdown-menu__title">
+                  Account transaction
+                </h5>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
+                  <button type="button" class="button px-2">All type</button>
+                </li>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.ExecutedTxs)">
+                  <button type="button" class="button px-2 text-capitalize">{{ tabsAccount.ExecutedTxs }}</button>
+                </li>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.AuraTxs)">
+                  <button type="button" class="button px-2 text-capitalize">{{ tabsAccount.AuraTxs }}</button>
+                </li>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.FtsTxs)">
+                  <button type="button" class="button px-2 text-capitalize">{{ tabsAccount.FtsTxs }}</button>
+                </li>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.NftTxs)">
+                  <button type="button" class="button px-2 text-capitalize">{{ tabsAccount.NftTxs }}</button>
+                </li>
+              </div>
             </ul>
           </div>
         </div>
@@ -54,11 +60,11 @@
     </div>
 
     <!-- Address -->
-    <div class="d-flex align-items-center mb-6">
-      <div class="col-3">
+    <div class="row mb-6 align-items-center">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
         <span class="form-label body-02 text--gray-4">Address</span>
       </div>
-      <div class="col-9">
+      <div class="col-12 col-lg-9">
         <div class="form-group">
           <div class="input-group" [class.form-control--error]="false">
             <input
@@ -74,11 +80,11 @@
     </div>
 
     <!-- Data range -->
-    <div class="d-flex align-items-center mb-6">
-      <div class="col-3">
+    <div class="row mb-6 align-items-center">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
         <span class="form-label body-02 text--gray-4">Data range</span>
       </div>
-      <div class="col-9">
+      <div class="col-12 col-lg-9">
         <div class="d-flex align-items-center">
           <div class="form-group d-flex align-items-center">
             <input
@@ -88,7 +94,7 @@
               class="radio-box radio-box--dark"
               [checked]="isFilterDate"
               (change)="changeType(true)" />
-            <label for="date" class="ml-2 mb-0 text-justify">Date</label>
+            <label for="date" class="ml-2 pl-1 mb-0 text-justify">Date</label>
           </div>
           <div class="form-group d-flex align-items-center ml-8">
             <input
@@ -98,25 +104,25 @@
               class="radio-box radio-box--dark"
               [checked]="!isFilterDate"
               (change)="changeType()" />
-            <label for="block" class="ml-2 mb-0 text-justify">Block Height</label>
+            <label for="block" class="ml-2 pl-1 mb-0 text-justify">Block Height</label>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Filter Mode -->
-    <div class="offset-3 d-flex align-items-center mb-6">
+    <div class="offset-lg-3 d-flex align-items-center mb-3">
       <ng-container *ngIf="isFilterDate">
-        <div class="filter-time col-5">
-          <div class="input-group input-group--simply pr-0 cursor-pointer" (click)="pickerStart.open()">
+        <div class="col-6 pr-3">
+          <div class="input-group input-group--simply px-0 cursor-pointer"
+               (click)="pickerStart.open()">
             <input
               readOnly
               #start_date
               [matDatepicker]="pickerStart"
-              [style]="'max-width: 70%'"
               [(ngModel)]="dateStart"
               (ngModelChange)="setDateRange()"
-              class="cursor-pointer"
+              class="cursor-pointer pl-4"
               placeholder="Start date" />
             <div class="mr-3 h6 mb-0 position-relative mt-1">
               <i class="ph-thin ph-calendar-blank h3 text--white"></i>
@@ -124,17 +130,15 @@
             </div>
           </div>
         </div>
-        <div class="col-2 text--white d-flex justify-content-center">-</div>
-        <div class="filter-time col-5">
-          <div class="input-group input-group--simply pr-0 cursor-pointer" (click)="pickerEnd.open()">
+        <div class="filter-last-item col-6 pl-3">
+          <div class="input-group input-group--simply px-0 cursor-pointer" (click)="pickerEnd.open()">
             <input
               readOnly
               #end_date
               [matDatepicker]="pickerEnd"
-              [style]="'max-width: 70%'"
               [(ngModel)]="dateEnd"
               (ngModelChange)="setDateRange()"
-              class="cursor-pointer"
+              class="cursor-pointer pl-4"
               placeholder="End date" />
             <div class="mr-3 h6 mb-0 position-relative mt-1">
               <i class="ph-thin ph-calendar-blank h3 text--white"></i>
@@ -145,7 +149,7 @@
       </ng-container>
 
       <ng-container *ngIf="!isFilterDate">
-        <div class="col-5">
+        <div class="col-6 pr-3">
           <div class="input-group">
             <input
               [type]="'text'"
@@ -156,8 +160,7 @@
               autocomplete="off" />
           </div>
         </div>
-        <div class="col-2 text--white d-flex justify-content-center">-</div>
-        <div class="col-5">
+        <div class="filter-last-item col-6 pl-3">
           <div class="input-group">
             <input
               [type]="'text'"
@@ -176,14 +179,14 @@
         (click)="changeDisplayPrivate()"
         formControlName="displayPrivate"
         [disabled]="!userEmail"
-        class="aura-tooltip-object">
+        class="aura-tooltip-object csv-hint">
         <span class="text--gray-8">Include Private name tags in data downloaded</span>
       </mat-slide-toggle>
       <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
     </div>
 
     <!-- button group -->
-    <div class="d-flex px-6 py-6 justify-content-end">
+    <div class="d-flex px-6 py-6 justify-content-end mt-6 mt-lg-0">
       <button class="button button--md button-pill button-outline btn" type="button">
         <span>Reset</span>
       </button>
