@@ -71,16 +71,6 @@
   }
 }
 
-.box-type-selected {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 200px;
-  @media (min-width: 375.98px) {
-    max-width: 250px;
-  }
-}
-
 .icon-expand {
   &.active {
     cursor: pointer;
@@ -103,22 +93,18 @@
     }
   }
 
-  ::ng-deep {
-    .box-name-tag:not(.private-name-tag) {
-      &:after {
-        border-right: 15px solid #262838 !important;
-      }
+  ::ng-deep .box-name-tag:not(.private-name-tag) {
+    &:after {
+      border-right: 15px solid #262838;
     }
   }
 }
 
-::ng-deep {
-  .table-transfer tr td {
-    &:nth-child(4),
-    &:nth-child(5),
-    &:nth-child(6) {
-      padding-top: var(--spacer-0) !important;
-    }
+.table-transfer tr td {
+  &:nth-child(4),
+  &:nth-child(5),
+  &:nth-child(6) {
+    padding-top: var(--spacer-0) !important;
   }
 }
 
@@ -185,14 +171,6 @@
       margin-bottom: 2px;
     }
   }
-}
-
-.btn-select-type {
-  background-color: unset;
-  color: white;
-}
-
-.account-transaction-table {
   ::ng-deep {
     .message-custom {
       transform: translate(0, 8px) !important;
@@ -218,6 +196,12 @@
     }
   }
 }
+
+.btn-select-type {
+  background-color: unset;
+  color: white;
+}
+
 .panel__btn-group {
   height: 72px;
   display: flex;

@@ -1,13 +1,13 @@
 import { formatDate } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
+import * as _ from 'lodash';
+import { MaskPipe } from 'ngx-mask';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from '../services/common.service';
 import { balanceOf } from '../utils/common/parsing';
-import { MaskPipe } from 'ngx-mask';
-import * as _ from 'lodash';
-import { TYPE_TRANSACTION } from '../constants/transaction.constant';
-import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {

@@ -103,6 +103,7 @@ export class ValidatorsDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.commonService['listNameTag'] = this.global?.listNameTag;
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.loadData();
     this.getDetail(true);

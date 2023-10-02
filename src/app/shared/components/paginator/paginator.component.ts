@@ -121,8 +121,8 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.current) {
       const pageIndex = this.current.pageIndex;
 
-      this.current.isFirst = pageIndex > 0 ? false : true;
-      this.current.isLast = pageIndex < this.pageLength - 1 ? false : true;
+      this.current.isFirst = pageIndex <= 0;
+      this.current.isLast = pageIndex >= this.pageLength - 1;
 
       if (pageIndex <= this.PAGE.avgIdx || this.pageLength <= this.PAGE.max) {
         this.current.list = list.slice(0, this.PAGE.max);
@@ -136,6 +136,10 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
       this.current.list.forEach((e) => {
         e.isActive = e.index === pageIndex;
       });
+
+      if(this.current.pageIndex >= this.pageList.length) {
+        this.pageList[this.pageList.length - 1].isActive = true;
+      }
     } else {
       this.current = {
         pageIndex: 0,

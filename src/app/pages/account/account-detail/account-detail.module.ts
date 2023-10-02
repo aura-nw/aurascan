@@ -29,7 +29,6 @@ import { AccountStakeComponent } from './account-stake/account-stake.component';
 import { AccountTransactionTableComponent } from './account-transaction-table/account-transaction-table.component';
 import { AccountTransactionComponent } from './account-transaction/account-transaction.component';
 import { NftListComponent } from './nft-list/nft-list.component';
-import { SoulboundTokenComponent } from './soulbound-token/soulbound-token.component';
 import { TokenTableComponent } from './token-table/token-table.component';
 
 @NgModule({
@@ -37,7 +36,6 @@ import { TokenTableComponent } from './token-table/token-table.component';
     AccountDetailComponent,
     TokenTableComponent,
     NftListComponent,
-    SoulboundTokenComponent,
     AccountStakeComponent,
     AccountTransactionComponent,
     AccountTransactionTableComponent,
