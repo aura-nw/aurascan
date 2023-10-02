@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractTransactionType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
@@ -62,6 +62,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   isLoading = true;
   isMoreTx = false;
+  lengthAddress = LENGTH_CHARACTER.ADDRESS;
 
   constructor(
     public translate: TranslateService,

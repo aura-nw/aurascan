@@ -5,11 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import {
-  LENGTH_CHARACTER,
-  MEDIA_TYPE,
-  PAGE_EVENT,
-} from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
@@ -25,10 +21,12 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { Globals } from 'src/app/global/global';
+import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
 import * as _ from 'lodash';
+import { UserService } from 'src/app/core/services/user.service';
+import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 
 @Component({
   selector: 'app-nft-detail',
@@ -72,6 +70,7 @@ export class NFTDetailComponent implements OnInit {
   linkToken = 'token-nft';
   animationUrl: string;
   imageUrl: string;
+  isCW4973 = false;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
@@ -82,13 +81,13 @@ export class NFTDetailComponent implements OnInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   network = this.environmentService.configValue.chain_info;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     public commonService: CommonService,
     public global: Globals,
     public route: Router,
     private environmentService: EnvironmentService,
-    private transactionService: TransactionService,
     private router: ActivatedRoute,
     private soulboundService: SoulboundService,
     private walletService: WalletService,
@@ -97,6 +96,7 @@ export class NFTDetailComponent implements OnInit {
     private dialog: MatDialog,
     public translate: TranslateService,
     private layout: BreakpointObserver,
+    private userService: UserService,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -108,7 +108,6 @@ export class NFTDetailComponent implements OnInit {
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.nftId = this.router.snapshot.paramMap.get('nftId');
-    this.getDataTable();
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
@@ -141,12 +140,15 @@ export class NFTDetailComponent implements OnInit {
             res['type'] = ContractRegisterType.CW4973;
             this.isSoulBound = true;
             this.linkToken = 'token-abt';
+            this.isCW4973 = true;
           } else {
             this.toastr.error('Token invalid');
             this.loading = false;
             return;
           }
         }
+
+        this.getDataTable();
 
         this.nftDetail = {
           ...res,
@@ -188,33 +190,35 @@ export class NFTDetailComponent implements OnInit {
   }
 
   async getDataTable(nextKey = null) {
-    const payload = {
-      limit: 100,
-      value: this.contractAddress,
-      compositeKey: 'execute._contract_address',
-      key2: 'token_id',
-      value2: this.nftId,
+    let payload = {
+      limit: 200,
       heightLT: nextKey,
+      contractAddr: this.contractAddress,
+      isTransferTab: false,
+      tokenId: this.nftId,
+      isCW4973: this.isCW4973 ? true : false,
+      isNFTDetail: true,
     };
 
-    this.transactionService.getListTxMultiCondition(payload).subscribe(
+    this.userService.getListNFTByAddress(payload).subscribe(
       (res) => {
         if (res) {
-          this.nextKey = null;
-          if (res.transaction.length >= 100) {
-            this.nextKey = res?.transaction[res.transaction.length - 1].height;
-          }
-          res?.transaction.forEach((trans) => {
-            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-          });
-          let txs = [];
-          res?.transaction.forEach((element, index) => {
-            txs.push(element);
-            if (element.type === 'buy') {
-              let txTransfer = { ...element };
-              txTransfer['type'] = 'transfer';
-              txTransfer['price'] = 0;
-              txs.push(txTransfer);
+          let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.NftTxs, false, null);
+          txs.forEach((element, index) => {
+            element['token_id'] = element.tokenId;
+            element['type'] = element.arrEvent[0]?.type?.replace('Contract: ', '');
+            element['from_address'] = element.fromAddress;
+            element['to_address'] = element.toAddress;
+            if (element['type'] === 'approve' || element['type'] === 'revoke') {
+              element['to_address'] =
+                element.eventAttr?.find((k) => k.composite_key === 'wasm.spender')?.value || element['to_address'];
+            }
+            if (this.isCW4973) {
+              if (element['type'] === 'mint') {
+                element['type'] = 'take';
+              } else if (element['type'] === 'burn') {
+                element['type'] = 'unequip';
+              }
             }
           });
           this.dataSource.data = txs;

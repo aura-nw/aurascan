@@ -52,7 +52,7 @@
       autocomplete="off">
       <ng-container *ngIf="mode === screenType.Forgot">
         <div class="text-center mb-6">
-          <img class="" src="assets/images/pages/key_left.png" />
+          <img src="assets/images/pages/key_left.png" />
           <div class="body-01 text--gray-2 mt-6">
             Kindly enter the email linked to your account, we'll send you a link to reset password
           </div>
@@ -265,7 +265,7 @@
     verify@aura.network
   </div>
   <div class="mt-6 mb-6 mb-lg-0">
-    <span class="">Have not received any email?</span>
+    <span>Have not received any email?</span>
     <a class="text--primary fw-semibold ml-1 cursor-pointer" (click)="resendMail()">Resend</a>
     <div *ngIf="errorMessage?.length > 0" class="text--danger mt-2 caption fw-normal">
       <div>{{ errorMessage[errorMessage?.length - 1] }}</div>

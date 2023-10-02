@@ -6,7 +6,6 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { from, interval } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../../../app/global/global';
 import {
   PROPOSAL_STATUS,
@@ -66,7 +65,6 @@ export class SummaryInfoComponent implements OnInit {
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private numberPipe: DecimalPipe,
-    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -111,6 +109,8 @@ export class SummaryInfoComponent implements OnInit {
 
             if (this.proposalDetail?.content?.amount) {
               this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
+              const IBC_info = this.commonService.mappingNameIBC(this.proposalDetail?.content?.amount[0]?.denom);
+              this.proposalDetail['denom'] = IBC_info['display'];
             }
             return this.commonService.status().pipe(
               mergeMap((res) => {

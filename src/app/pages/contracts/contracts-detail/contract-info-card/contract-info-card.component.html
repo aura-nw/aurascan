@@ -25,9 +25,7 @@
                   target="_blank"
                   [href]="extendLink(commonService.findUrlNameTag(contractDetail?.address))"
                   *ngIf="commonService.findUrlNameTag(contractDetail?.address)">
-                  <i
-                    _ngcontent-wrg-c372=""
-                    class="ph-arrow-square-out-fill text--primary body-01 h4-mob ml-1 cursor-pointer mb-1"></i>
+                  <i class="ph-arrow-square-out-fill text--white body-01 h4-mob ml-1 cursor-pointer mb-1"></i>
                 </a>
               </div>
             </ng-container>
@@ -62,9 +60,9 @@
                       width="18"
                       height="18"
                       class="ml-1 mb-1"
-                      *ngIf="contractDetail.verify_status === 'VERIFIED'" />
+                      *ngIf="verifiedStatus === 'VERIFIED'" />
                   </div>
-                  <app-tooltip-customize [content]="contractDetail.verify_text || 'Verified by Aura Network'">
+                  <app-tooltip-customize [content]="verifiedText || 'Verified by Aura Network'">
                   </app-tooltip-customize>
                 </div>
               </div>

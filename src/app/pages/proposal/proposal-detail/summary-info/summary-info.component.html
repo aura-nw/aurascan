@@ -72,14 +72,14 @@
           <div class="col-auto col-md-2 text--gray-4">Initial Deposit</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
             {{ proposalDetail.initial_deposit | mask : 'separator.6' }}
-            <span class="text--primary">{{ denom }}</span>
+            <span class="text--white">{{ denom }}</span>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Total Deposit</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
             {{ proposalDetail.pro_total_deposits | mask : 'separator.6' }}
-            <span class="text--primary"> {{ denom }}</span>
+            <span class="text--white"> {{ denom }}</span>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
@@ -205,7 +205,7 @@
           <div class="col-auto col-md-2 text--gray-5">Request Amount</div>
           <div class="col-auto col-md-10 mt-0">
             {{ proposalDetail.request_amount | mask : 'separator.6' }}
-            <span class="text--primary"> {{ denom }}</span>
+            <span [class.text--primary]="proposalDetail.denom !== denom">{{ proposalDetail.denom }}</span>
           </div>
         </div>
         <div class="divider divider-horizontal mt-3 mt-lg-5"></div>
@@ -234,7 +234,7 @@
           <div class="col-auto col-md-2">Total:</div>
           <div class="col-auto col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.pro_total_vote | mask : 'separator.6' }}
-            <span class="text--primary">{{ denom }}</span>
+            <span class="text--white">{{ denom }}</span>
           </div>
         </div>
         <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
@@ -336,7 +336,7 @@
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_yes || 0 | mask : 'separator.6' }}</span>
-                <span class="text--primary ml-1">{{ denom }}</span>
+                <span class="text--white ml-1">{{ denom }}</span>
               </p>
             </li>
             <li data-style="danger">
@@ -348,7 +348,7 @@
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_no || 0 | mask : 'separator.6' }}</span>
-                <span class="text--primary ml-1">{{ denom }}</span>
+                <span class="text--white ml-1">{{ denom }}</span>
               </p>
             </li>
             <li data-style="info">
@@ -360,7 +360,7 @@
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | mask : 'separator.6' }}</span>
-                <span class="text--primary ml-1">{{ denom }}</span>
+                <span class="text--white ml-1">{{ denom }}</span>
               </p>
             </li>
             <li data-style="secondary">
@@ -372,7 +372,7 @@
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_abstain || 0 | mask : 'separator.6' }}</span>
-                <span class="text--primary ml-1">{{ denom }}</span>
+                <span class="text--white ml-1">{{ denom }}</span>
               </p>
             </li>
           </ul>
@@ -414,7 +414,7 @@
         </div>
       </ng-container>
 
-      <div *ngIf="votingBarLoading" class="">
+      <div *ngIf="votingBarLoading">
         <app-loading-sprint></app-loading-sprint>
       </div>
     </div>

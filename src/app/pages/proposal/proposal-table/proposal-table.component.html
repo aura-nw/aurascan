@@ -54,7 +54,7 @@
                         (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])
                           | mask : 'separator.6' || '-'
                       }}
-                      <span class="text--primary ml-1">{{ denom }}</span>
+                      <span class="text--white ml-1">{{ denom }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'vote_option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}
@@ -235,7 +235,7 @@
                   info: data.amount
                     ? '<span class=mr-1>' +
                       (data.amount | mask : 'separator.6') +
-                      '</span><span class=text--primary>' +
+                      '</span><span class=text--white>' +
                       denom +
                       '</span>'
                     : '-'

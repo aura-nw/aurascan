@@ -28,8 +28,6 @@
                             "core-js",
                             "qrcode",
                             "@cosmjs/stargate",
-                            "simplebar",
-                            "simplebar-angular",
                             "@cosmjs/cosmwasm-stargate",
                             "@cosmjs/math",
                             "@cosmjs/amino",

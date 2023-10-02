@@ -6,18 +6,18 @@
     A total of {{ pageData?.length | number }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
   </div>
   <div *ngIf="pageData?.length > 0" class="divider divider-horizontal my-4 d-lg-none"></div>
-  <div class="transfer-table-container overflow-scroll-x aura-table-contain">
+  <div class="transfer-table-container overflow-scroll-x">
     <ng-container *ngIf="pageData?.length > 0; else noValues">
       <table mat-table [dataSource]="dataSource" class="aura-table">
         <ng-container *ngFor="let template of template; index as i">
           <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
             <ng-container *ngSwitchCase="'type'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-15">
-                <div [innerHTML]="template.headerCellDef | translate"></div>
+              <th mat-header-cell *matHeaderCellDef class="col-per-13">
+                <div [innerHTML]="template.headerCellDef | translate" class="ml-5"></div>
               </th>
             </ng-container>
             <ng-container *ngSwitchCase="'tx_hash'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-17">
+              <th mat-header-cell *matHeaderCellDef class="col-per-15">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
@@ -37,6 +37,11 @@
               </th>
             </ng-container>
             <ng-container *ngSwitchCase="'details'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+            </ng-container>
+            <ng-container *ngSwitchCase="'timestamp'">
               <th mat-header-cell *matHeaderCellDef class="col-per-15">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
@@ -67,8 +72,20 @@
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amountToken'">
-                      <!-- {{ data[template.matColumnDef] | mask : 'separator.6' }} -->
-                      <div [appBigNumber]="data[template.matColumnDef]" [decimal]="decimalValue"></div>
+                      <div class="aura-tooltip-contain">
+                        <div
+                          class="aura-tooltip-object"
+                          *ngIf="(data.arrEvent[0]?.amountTemp | balanceOf : data.arrEvent[0]?.decimal) < 0.001">
+                          <0,001
+                        </div>
+                        <app-tooltip-customize
+                          [content]="data.arrEvent[0]?.amountTemp | convertSmallNumber : data.arrEvent[0]?.decimal">
+                        </app-tooltip-customize>
+                        <div
+                          *ngIf="(data.arrEvent[0]?.amountTemp | balanceOf: data.arrEvent[0]?.decimal) >= 0.001"
+                          [appBigNumber]="data.arrEvent[0]?.amountTemp"
+                          [decimal]="data.arrEvent[0]?.decimal"></div>
+                      </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'status'">
                       <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
@@ -99,10 +116,18 @@
                     <ng-container *ngSwitchCase="'from_address'">
                       <div class="d-flex align-items-center">
                         <div class="content-transfer">
-                          <ng-container *ngIf="data.modeExecute === modeExecuteTransaction.Take">
+                          <ng-container
+                            *ngIf="
+                              data.modeExecute === modeExecuteTransaction.Take ||
+                              data[template.matColumnDef]?.startsWith('Null')
+                            ">
                             <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                           </ng-container>
-                          <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take">
+                          <ng-container
+                            *ngIf="
+                              data.modeExecute !== modeExecuteTransaction.Take &&
+                              !data[template.matColumnDef]?.startsWith('Null')
+                            ">
                             <app-name-tag
                               [value]="data[template.matColumnDef]"
                               [isHref]="true"
@@ -111,12 +136,6 @@
                               *ngIf="
                                 data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
                               "></app-name-tag>
-                            <app-name-tag
-                              [value]="data[template.matColumnDef]"
-                              [isLink]="false"
-                              [isTokenDetail]="true"
-                              *ngIf="data.modeExecute === modeExecuteTransaction.Mint"></app-name-tag>
-                            <span class="" *ngIf="!data[template.matColumnDef]"> - </span>
                           </ng-container>
                         </div>
                         <ng-container *ngIf="!isSearchAddress">
@@ -147,18 +166,13 @@
                           [url]="'/tokens/' + linkToken + '/' + contractAddress + '?a='"
                           [type]="data.type"
                           *ngIf="
-                            data.modeExecute !== modeExecuteTransaction.Burn &&
-                            data.modeExecute !== modeExecuteTransaction.UnEquip &&
-                            data[template.matColumnDef]
+                            !data[template.matColumnDef]?.startsWith('Null') && data[template.matColumnDef]
                           "></app-name-tag>
                         <app-name-tag
                           [value]="data[template.matColumnDef]"
                           [isLink]="false"
                           [isTokenDetail]="true"
-                          *ngIf="
-                            data.modeExecute === modeExecuteTransaction.Burn ||
-                            data.modeExecute === modeExecuteTransaction.UnEquip
-                          "></app-name-tag>
+                          *ngIf="data[template.matColumnDef]?.startsWith('Null')"></app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]"> - </span>
                       </div>
                     </ng-container>
@@ -169,7 +183,8 @@
                           !data.token_id ||
                           data['status'] === 'Fail' ||
                           data['token_id'] === 'More' ||
-                          data.modeExecute === modeExecuteTransaction.UnEquip
+                          data.modeExecute === modeExecuteTransaction.UnEquip ||
+                          data['to_address']?.startsWith('Null')
                         "
                         [routerLink]="['/tokens/' + linkToken, contractAddress, data.token_id]">
                         <span *ngIf="typeContract === contractType.CW721">View NFT</span>
