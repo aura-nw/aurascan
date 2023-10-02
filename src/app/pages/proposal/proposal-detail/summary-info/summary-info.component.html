@@ -201,11 +201,15 @@
             </div>
           </div>
         </div>
-        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob" *ngIf="proposalDetail.request_amount">
+        <div
+          class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob"
+          *ngIf="proposalDetail?.content?.amount">
           <div class="col-auto col-md-2 text--gray-5">Request Amount</div>
           <div class="col-auto col-md-10 mt-0">
             {{ proposalDetail.request_amount | mask : 'separator.6' }}
-wtext--white"
+            <span [class.text--primary]="dataDenomRequest.display !== denom">{{
+              dataDenomRequest?.display || denom
+            }}</span>
           </div>
         </div>
         <div class="divider divider-horizontal mt-3 mt-lg-5"></div>
