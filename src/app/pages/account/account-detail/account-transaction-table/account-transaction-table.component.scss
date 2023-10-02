@@ -28,6 +28,21 @@
     border: 1px solid var(--aura-gray-8);
     padding: 0 16px;
     border-radius: 8px;
+    color: var(--aura-white);
+
+    &.filter-result {
+      white-space: nowrap;
+      padding: 0 var(--spacer-4);
+      color: var(--aura-blue-3link);
+      border: 1px solid var(--aura-blue-4);
+      background: #222f3d;
+      border-radius: 8px;
+      height: 33px;
+      display: flex;
+      align-items: center;
+      width: fit-content;
+      min-width: fit-content;
+    }
   }
   @media (max-width: 376px) {
     width: calc(100vw - 68px);

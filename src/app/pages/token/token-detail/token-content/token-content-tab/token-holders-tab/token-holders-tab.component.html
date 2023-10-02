@@ -53,7 +53,20 @@
                         "></app-name-tag>
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
-                      <div [appBigNumber]="data[template.matColumnDef]" [decimal]="decimalValue"></div>
+                      <div class="aura-tooltip-contain">
+                        <span
+                          class="aura-tooltip-object"
+                          *ngIf="(data[template.matColumnDef] | balanceOf : decimalValue) < 0.001">
+                          <0,001
+                        </span>
+                        <app-tooltip-customize
+                          [content]="data[template.matColumnDef] | convertSmallNumber : decimalValue">
+                        </app-tooltip-customize>
+                        <span
+                          *ngIf="(data[template.matColumnDef] | balanceOf: decimalValue) >= 0.001"
+                          [appBigNumber]="data[template.matColumnDef]"
+                          [decimal]="decimalValue || 0"></span>
+                      </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'amount'">
                       {{ data[template.matColumnDef] || 0 }}

@@ -65,6 +65,11 @@
   .input-group {
     height: 40px;
   }
+  .button {
+    &:disabled {
+      border-color: var(--aura-gray-8);
+    }
+  }
 }
 
 .dropdown-menu.filter-dropdown-collecttion {
@@ -77,7 +82,7 @@
   border: 1px solid var(--aura-gray-8);
   overflow: hidden;
   box-shadow: none;
-  margin: 3px 0px !important;
+  margin: 4px 0px !important;
 
   li.dropdown-item {
     font-size: 1.6rem;
@@ -86,7 +91,7 @@
     padding: var(--spacer-3) var(--spacer-2);
     background-color: var(--aura-gray-10);
 
-    &>* {
+    & > * {
       color: var(--aura-white);
     }
 
@@ -95,6 +100,44 @@
     }
     &.active {
       background-color: var(--aura-gray-8) !important;
+    }
+  }
+}
+
+.txt-collection-name {
+  max-width: 95%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 2px;
+  color: var(--aura-white);
+  &.label {
+    max-width: 235px;
+  }
+  @media (min-width: 991.98px) {
+    max-width: 87%;
+    &.label {
+      max-width: 145px;
+    }
+  }
+}
+
+.nft-cards__item {
+  .box-name {
+    max-width: -webkit-fill-available;
+    .txt-token-name { 
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      @media (max-width: 414.98px) {
+        max-width: 90px;
+      }
+      @media (min-width: 991.98px) {
+        max-width: 150px;
+      }
+      @media (min-width: 1367px) {
+        max-width: 180px;
+      }
     }
   }
 }
