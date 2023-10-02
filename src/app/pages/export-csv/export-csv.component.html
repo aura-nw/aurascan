@@ -94,7 +94,7 @@
               class="radio-box radio-box--dark"
               [checked]="isFilterDate"
               (change)="changeType(true)" />
-            <label for="date" class="ml-2 mb-0 text-justify">Date</label>
+            <label for="date" class="ml-2 pl-1 mb-0 text-justify">Date</label>
           </div>
           <div class="form-group d-flex align-items-center ml-8">
             <input
@@ -104,7 +104,7 @@
               class="radio-box radio-box--dark"
               [checked]="!isFilterDate"
               (change)="changeType()" />
-            <label for="block" class="ml-2 mb-0 text-justify">Block Height</label>
+            <label for="block" class="ml-2 pl-1 mb-0 text-justify">Block Height</label>
           </div>
         </div>
       </div>
@@ -130,7 +130,7 @@
             </div>
           </div>
         </div>
-        <div class="filter-time col-6 pl-3">
+        <div class="filter-last-item col-6 pl-3">
           <div class="input-group input-group--simply px-0 cursor-pointer" (click)="pickerEnd.open()">
             <input
               readOnly
@@ -149,7 +149,7 @@
       </ng-container>
 
       <ng-container *ngIf="!isFilterDate">
-        <div class="col-5">
+        <div class="col-6 pr-3">
           <div class="input-group">
             <input
               [type]="'text'"
@@ -160,8 +160,7 @@
               autocomplete="off" />
           </div>
         </div>
-        <div class="col-2 text--white d-flex justify-content-center">-</div>
-        <div class="col-5">
+        <div class="filter-last-item col-6 pl-3">
           <div class="input-group">
             <input
               [type]="'text'"
