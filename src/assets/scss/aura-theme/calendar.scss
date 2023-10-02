@@ -7,6 +7,17 @@ mat-datepicker-toggle .mat-icon-button {
 }
 .mat-datepicker-content {
   margin-top: 8px !important;
+  background-color: var(--aura-gray-10);
+  border: 1px solid #9DA1AC;
+  border-radius: 8px !important;
+}
+.mat-calendar-body-cell-content {
+  border-radius: 8px !important;
+}
+.mat-calendar-body-selected {
+  border: 1px solid #FFFFFF;
+  background-color: transparent;
+  color: var(--aura-white);
 }
 .mat-date-range-input-separator {
   margin: 0 !important;
@@ -69,4 +80,7 @@ mat-date-range-input {
   display: flex !important;
   align-items: center;
   padding-left: 16px;
+}
+.cdk-overlay-container--grant {
+  z-index: 2500 !important;
 }

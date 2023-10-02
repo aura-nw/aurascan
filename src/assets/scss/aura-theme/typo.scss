@@ -159,3 +159,9 @@ $textColors: (
 .button-link {
   color: var(--aura-blue-3link);
 }
+.line-claim {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
