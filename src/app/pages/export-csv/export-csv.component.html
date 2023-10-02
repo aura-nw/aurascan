@@ -31,22 +31,28 @@
                 </ng-container>
               </div>
             </button>
-            <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
-                <button type="button" class="button p-0">All type</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.ExecutedTxs)">
-                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.ExecutedTxs }}</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.AuraTxs)">
-                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.AuraTxs }}</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.FtsTxs)">
-                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.FtsTxs }}</button>
-              </li>
-              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.NftTxs)">
-                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.NftTxs }}</button>
-              </li>
+            <ul class="dropdown-menu aura-dropdown-menu p-0" id="typeAction" #typeAction>
+              <!-- Group 1-->
+              <div>
+                <h5 class="dropdown-menu__title">
+                  Account transaction
+                </h5>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
+                  <button type="button" class="button px-2">All type</button>
+                </li>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.ExecutedTxs)">
+                  <button type="button" class="button px-2 text-capitalize">{{ tabsAccount.ExecutedTxs }}</button>
+                </li>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.AuraTxs)">
+                  <button type="button" class="button px-2 text-capitalize">{{ tabsAccount.AuraTxs }}</button>
+                </li>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.FtsTxs)">
+                  <button type="button" class="button px-2 text-capitalize">{{ tabsAccount.FtsTxs }}</button>
+                </li>
+                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.NftTxs)">
+                  <button type="button" class="button px-2 text-capitalize">{{ tabsAccount.NftTxs }}</button>
+                </li>
+              </div>
             </ul>
           </div>
         </div>
@@ -107,16 +113,16 @@
     <!-- Filter Mode -->
     <div class="offset-3 d-flex align-items-center mb-6">
       <ng-container *ngIf="isFilterDate">
-        <div class="filter-time col-5">
-          <div class="input-group input-group--simply pr-0 cursor-pointer" (click)="pickerStart.open()">
+        <div class="col-6 pr-lg-3">
+          <div class="input-group input-group--simply px-0 cursor-pointer"
+               (click)="pickerStart.open()">
             <input
               readOnly
               #start_date
               [matDatepicker]="pickerStart"
-              [style]="'max-width: 70%'"
               [(ngModel)]="dateStart"
               (ngModelChange)="setDateRange()"
-              class="cursor-pointer"
+              class="cursor-pointer pl-4"
               placeholder="Start date" />
             <div class="mr-3 h6 mb-0 position-relative mt-1">
               <i class="ph-thin ph-calendar-blank h3 text--white"></i>
@@ -124,17 +130,15 @@
             </div>
           </div>
         </div>
-        <div class="col-2 text--white d-flex justify-content-center">-</div>
-        <div class="filter-time col-5">
-          <div class="input-group input-group--simply pr-0 cursor-pointer" (click)="pickerEnd.open()">
+        <div class="filter-time col-6 pl-lg-3">
+          <div class="input-group input-group--simply px-0 cursor-pointer" (click)="pickerEnd.open()">
             <input
               readOnly
               #end_date
               [matDatepicker]="pickerEnd"
-              [style]="'max-width: 70%'"
               [(ngModel)]="dateEnd"
               (ngModelChange)="setDateRange()"
-              class="cursor-pointer"
+              class="cursor-pointer pl-4"
               placeholder="End date" />
             <div class="mr-3 h6 mb-0 position-relative mt-1">
               <i class="ph-thin ph-calendar-blank h3 text--white"></i>

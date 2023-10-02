@@ -23,3 +23,25 @@
     }
   }
 }
+.filter-time {
+  @media (min-width: 991.98px) {
+    position: relative;
+    &:before {
+      content: '-';
+      color: var(--aura-white);
+      position: absolute;
+      top: 50%;
+      left: -4px;
+      transform: translateY(-50%);
+    }
+  }
+}
+.dropdown-menu__title {
+  height: 44px;
+  background-color: var(--aura-gray-9);
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  color: var(--aura-white);
+}
