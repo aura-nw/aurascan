@@ -158,7 +158,7 @@
                       <ng-container [ngSwitch]="template.matColumnDef">
                         <div *ngSwitchCase="'nft'">
                           <div class="d-flex transfer-token-info">
-                            <div *ngIf="!breakpoint.value.matches">
+                            <div *ngIf="!breakpoint.value.matches" class="mb-1">
                               <span class="caption fw-normal text--gray-4 mr-1">Token ID</span>
                               <span>{{ data?.cw721_token?.token_id }}</span>
                             </div>
