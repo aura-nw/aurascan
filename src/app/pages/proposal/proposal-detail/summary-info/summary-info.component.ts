@@ -56,6 +56,7 @@ export class SummaryInfoComponent implements OnInit {
   };
   activeId = 0;
   reload$;
+  dataDenomRequest: any;
 
   constructor(
     private proposalService: ProposalService,
@@ -110,7 +111,11 @@ export class SummaryInfoComponent implements OnInit {
             }
 
             if (this.proposalDetail?.content?.amount) {
-              this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
+              this.dataDenomRequest = this.commonService.mappingNameIBC(this.proposalDetail?.content?.amount[0]?.denom);
+              this.proposalDetail['request_amount'] = balanceOf(
+                this.proposalDetail?.content?.amount[0]?.amount,
+                this.dataDenomRequest['decimals'],
+              );
             }
             return this.commonService.status().pipe(
               mergeMap((res) => {
