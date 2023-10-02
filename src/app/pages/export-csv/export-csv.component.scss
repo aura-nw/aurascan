@@ -54,3 +54,8 @@
     white-space: break-spaces;
   }
 }
+.button-group button.button {
+  @media (max-width: 991.98px) {
+    width: 100%;
+  }
+}
