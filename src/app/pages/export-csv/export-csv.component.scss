@@ -4,3 +4,22 @@
     color: var(--aura-gray-8);
   }
 }
+
+#typeExport {
+  &[aria-expanded='true'] {
+    i.ph-caret-down {
+      display: none;
+    }
+    i.ph-caret-up {
+      display: flex;
+    }
+  }
+  &[aria-expanded='false'] {
+    i.ph-caret-down {
+      display: flex;
+    }
+    i.ph-caret-up {
+      display: none;
+    }
+  }
+}

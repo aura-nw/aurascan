@@ -10,15 +10,44 @@
       </div>
       <div class="col-9">
         <div class="form-group">
-          <div class="input-group" [class.form-control--error]="false">
-            <input
-              type="email"
-              formControlName="email"
-              placeholder="Enter your email"
-              class="input-email"
-              name="inputEmail"
-              (blur)="isError = false"
-              autocomplete="off" />
+          <div class="dropdown aura-dropdown btn-item">
+            <button
+              class="input-group align-items-center d-flex justify-content-between cursor-pointer btn-tns"
+              type="button"
+              id="typeExport"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              #trigger>
+              <span class="body">
+                <ng-container *ngIf="!csvForm.value.dataType"> Select export data type </ng-container>
+              </span>
+              <div class="ml-3 d-flex align-items-center">
+                <ng-container *ngIf="!csvForm.value.dataType">
+                  <i class="ph ph-caret-down text--white body"></i>
+                  <i class="ph ph-caret-up text--white body"></i>
+                </ng-container>
+                <ng-container *ngIf="csvForm.value.dataType">
+                  <i (click)="trigger.click()" class="ph-thin ph-x cursor-pointer ml-2 body"> </i>
+                </ng-container>
+              </div>
+            </button>
+            <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
+                <button type="button" class="button p-0">All type</button>
+              </li>
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.ExecutedTxs)">
+                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.ExecutedTxs }}</button>
+              </li>
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.AuraTxs)">
+                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.AuraTxs }}</button>
+              </li>
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.FtsTxs)">
+                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.FtsTxs }}</button>
+              </li>
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.NftTxs)">
+                <button type="button" class="button p-0 text-capitalize">{{ tabsAccount.NftTxs }}</button>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -33,11 +62,10 @@
         <div class="form-group">
           <div class="input-group" [class.form-control--error]="false">
             <input
-              type="email"
-              formControlName="email"
+              type="text"
+              formControlName="address"
               placeholder="aura..."
-              class="input-email"
-              name="inputEmail"
+              name="inputAddress"
               (blur)="isError = false"
               autocomplete="off" />
           </div>
@@ -50,7 +78,6 @@
       <div class="col-3">
         <span class="form-label body-02 text--gray-4">Data range</span>
       </div>
-      {{ csvForm.isFilterDate }}
       <div class="col-9">
         <div class="d-flex align-items-center">
           <div class="form-group d-flex align-items-center">
@@ -144,9 +171,16 @@
       </ng-container>
     </div>
 
-    <mat-slide-toggle (click)="changeDisplayPrivate()" formControlName="displayPrivate" [disabled]="!userEmail">
-      <span class="text--gray-8">Include Private name tags in data downloaded</span>
-    </mat-slide-toggle>
+    <div [class.aura-tooltip-contain]="!userEmail">
+      <mat-slide-toggle
+        (click)="changeDisplayPrivate()"
+        formControlName="displayPrivate"
+        [disabled]="!userEmail"
+        class="aura-tooltip-object">
+        <span class="text--gray-8">Include Private name tags in data downloaded</span>
+      </mat-slide-toggle>
+      <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
+    </div>
 
     <!-- button group -->
     <div class="d-flex px-6 py-6 justify-content-end">

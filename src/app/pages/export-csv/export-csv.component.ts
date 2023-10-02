@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TabsAccount } from 'src/app/core/constants/account.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
@@ -17,6 +18,7 @@ export class ExportCsvComponent implements OnInit {
   dateEnd;
   isValidAddress = false;
   userEmail;
+  tabsAccount = TabsAccount;
 
   constructor(
     private fb: FormBuilder,
@@ -59,5 +61,15 @@ export class ExportCsvComponent implements OnInit {
   changeType(isFilterDate = false) {
     this.isFilterDate = isFilterDate;
     this.csvForm.isFilterDate = this.isFilterDate;
+  }
+
+  changeTypeFilter(type) {
+    this.csvForm.value.dataType = type;
+    if (document.getElementById('typeAction')?.classList.contains('show')) {
+      document.getElementById('typeAction')?.classList.remove('show');
+    }
+    if (document.getElementById('typeActionBtn')?.classList.contains('show')) {
+      document.getElementById('typeActionBtn')?.classList.remove('show');
+    }
   }
 }
