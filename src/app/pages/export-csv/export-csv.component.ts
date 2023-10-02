@@ -45,13 +45,9 @@ export class ExportCsvComponent implements OnInit {
       blockTo: null,
       displayPrivate: false,
     });
-
-    console.log(this.csvForm);
   }
 
   onSubmit() {
-    console.log(this.csvForm.value);
-    
   }
 
   setDateRange() {}
