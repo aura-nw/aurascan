@@ -1,55 +1,74 @@
 .page-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 16px 0px;
+
+  .page {
+    margin: 0 2px;
+    min-width: 24px;
+    height: 24px;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    padding: 24px 16px;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--aura-white);
+    padding: 0 4px;
 
-    .page {
-        margin: 0 2px;
-        min-width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        color: var(--aura-white);
-        padding: 0 4px;
-
-        &.active {
-            color: var(--aura-primary);
-            border: 1px solid var(--aura-primary);
-            border-radius: 4px;
-        }
-
-        &.disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        &-next {
-            background: url("../../../../assets/icons/icons-svg/white/chevron-right.svg") center no-repeat;
-            font-size: 0px;
-
-            &:disabled {
-                background: url("../../../../assets/icons/icons-svg/basic/chevron-right.svg") center no-repeat;
-            }
-        }
-
-        &-prev {
-            background: url("../../../../assets/icons/icons-svg/white/chevron-left.svg") center no-repeat;
-            font-size: 0px;
-
-            &:disabled {
-                background: url("../../../../assets/icons/icons-svg/basic/chevron-right.svg") center no-repeat;
-            }
-        }
+    &.active {
+      color: var(--aura-primary);
+      border: 1px solid var(--aura-primary);
+      border-radius: 4px;
     }
+
+    &.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    &-next {
+      background: url('../../../../assets/icons/icons-svg/white/chevron-right.svg') center no-repeat;
+      font-size: 0px;
+
+      &:disabled {
+        background: url('../../../../assets/icons/icons-svg/basic/chevron-right.svg') center no-repeat;
+      }
+    }
+
+    &-prev {
+      background: url('../../../../assets/icons/icons-svg/white/chevron-left.svg') center no-repeat;
+      font-size: 0px;
+
+      &:disabled {
+        background: url('../../../../assets/icons/icons-svg/basic/chevron-right.svg') center no-repeat;
+      }
+    }
+  }
 }
 
 .position-paginator {
-    justify-content: flex-end;
+  justify-content: flex-end;
 
-    @media (max-width: 991.99px) {
-        justify-content: center;
+  @media (max-width: 991.99px) {
+    justify-content: center;
+  }
+}
+
+#pageRecord {
+  &[aria-expanded='true'] {
+    i.ph-caret-down {
+      display: none;
     }
+    i.ph-caret-up {
+      display: flex;
+    }
+  }
+  &[aria-expanded='false'] {
+    i.ph-caret-down {
+      display: flex;
+    }
+    i.ph-caret-up {
+      display: none;
+    }
+  }
 }

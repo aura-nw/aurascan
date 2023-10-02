@@ -583,7 +583,8 @@
     [length]="pageData.length"
     [pageSize]="pageData.pageSize"
     (paginator)="paginatorEmit($event)"
-    (pageEvent)="pageEvent($event)">
+    (pageEvent)="pageEvent($event)"
+    [showSelectRecord]="true">
   </app-paginator>
 </ng-container>
 <ng-template #noValues>
