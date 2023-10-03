@@ -182,6 +182,7 @@ export class TransactionService extends CommonService {
           id
           height
           hash
+          timestamp
           event_attributes{
             value
             composite_key
