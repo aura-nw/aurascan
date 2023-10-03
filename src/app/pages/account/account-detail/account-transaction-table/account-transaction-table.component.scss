@@ -93,12 +93,6 @@
   }
 }
 
-::ng-deep .box-name-tag:not(.private-name-tag) {
-  &:after {
-    border-right: 15px solid var(--aura-gray-10);
-  }
-}
-
 .account-transaction-table {
   .aura-status .status {
     background-color: unset;

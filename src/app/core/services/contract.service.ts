@@ -86,6 +86,7 @@ export class ContractService extends CommonService {
           name
           label
           code_id
+          version
           code {
             type
             code_id_verifications(order_by: {updated_at: desc}) {
@@ -134,7 +135,9 @@ export class ContractService extends CommonService {
           address
           creator
           instantiate_hash
-          name     
+          name
+          version
+          label     
           cw721_contract {
             name
             symbol
