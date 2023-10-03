@@ -72,7 +72,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       desktopOnly: true,
       isNameTag: true,
     },
-    { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
