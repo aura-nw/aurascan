@@ -3,7 +3,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PROPOSAL_TABLE_MODE } from 'src/app/core/constants/proposal.constant';
-import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
