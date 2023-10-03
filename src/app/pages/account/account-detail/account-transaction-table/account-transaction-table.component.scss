@@ -234,13 +234,6 @@ mat-date-range-input {
   border: 1px solid var(--aura-gray-8) !important;
   border-radius: 8px;
 }
-::ng-deep {
-  .mat-datepicker-content .mat-calendar {
-    background: #24262e;
-    border: 1px solid #717582;
-    border-radius: 8px;
-  }
-}
 .filter-contain {
   flex-wrap: nowrap;
   -ms-overflow-style: none;  /* IE and Edge */
