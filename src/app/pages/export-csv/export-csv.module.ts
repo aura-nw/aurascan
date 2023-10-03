@@ -9,6 +9,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
+import { NgxMaskModule } from 'ngx-mask';
 @NgModule({
   declarations: [ExportCsvComponent],
   imports: [
@@ -22,6 +23,7 @@ import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-custom
     MatNativeDateModule,
     MatSlideToggleModule,
     TooltipCustomizeModule,
+    NgxMaskModule
   ],
   providers: [UserService],
   exports: [ExportCsvComponent],

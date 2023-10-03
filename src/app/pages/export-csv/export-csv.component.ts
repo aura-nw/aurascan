@@ -1,9 +1,12 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TabsAccount } from 'src/app/core/constants/account.enum';
+import { DATEFORMAT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-export-csv',
@@ -16,9 +19,15 @@ export class ExportCsvComponent implements OnInit {
   isFilterDate = true;
   dateStart;
   dateEnd;
-  isValidAddress = false;
+  isValidAddress = true;
+  isValidBlock = true;
   userEmail;
   tabsAccount = TabsAccount;
+  dataType = '';
+  minDate;
+  minDateEnd;
+  maxDate;
+  maxDateEnd;
 
   constructor(
     private fb: FormBuilder,
@@ -26,12 +35,16 @@ export class ExportCsvComponent implements OnInit {
     private route: Router,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
-    this.formInit();
     // check exit email
     this.userEmail = localStorage.getItem('userEmail');
+
+    this.minDate = this.minDateEnd = new Date(2023, 2, 20);
+    this.maxDate = this.maxDateEnd = new Date().toISOString().slice(0, 10);
+    this.formInit();
   }
 
   formInit() {
@@ -39,33 +52,86 @@ export class ExportCsvComponent implements OnInit {
       dataType: null,
       address: ['', [Validators.required]],
       isFilterDate: true,
-      starDate: null,
+      startDate: null,
       endDate: null,
-      blockFrom: null,
-      blockTo: null,
+      fromBlock: null,
+      toBlock: null,
       displayPrivate: false,
     });
   }
 
-  onSubmit() {
+  downloadCSV() {
+    this.csvForm.value.dataType = this.dataType;
+    this.csvForm.value.isFilterDate = this.isFilterDate;
+    console.log(this.csvForm.value);
   }
 
-  setDateRange() {}
+  get getAddress() {
+    return this.csvForm.get('address');
+  }
+
+  get getFromBlock() {
+    return this.csvForm.get('fromBlock');
+  }
+
+  get getToBlock() {
+    return this.csvForm.get('toBlock');
+  }
+
+  setDateRange() {
+    this.maxDateEnd = new Date().toISOString().slice(0, 10);
+    this.minDate = new Date(2023, 2, 20);
+    this.maxDate = this.datePipe.transform(this.csvForm.value?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
+    this.minDateEnd = this.datePipe.transform(this.csvForm.value?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
+  }
 
   changeDisplayPrivate() {}
 
   changeType(isFilterDate = false) {
     this.isFilterDate = isFilterDate;
-    this.csvForm.isFilterDate = this.isFilterDate;
+    this.csvForm.value.isFilterDate = this.isFilterDate;
+    this.checkFormValid();
   }
 
   changeTypeFilter(type) {
-    this.csvForm.value.dataType = type;
-    if (document.getElementById('typeAction')?.classList.contains('show')) {
-      document.getElementById('typeAction')?.classList.remove('show');
+    this.dataType = type;
+    this.csvForm.value.dataType = this.dataType;
+  }
+
+  checkFormValid(): boolean {
+    this.getAddress['value'] = this.getAddress?.value?.trim();
+    let { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
+
+    this.isValidAddress = true;
+    this.isValidBlock = true;
+
+    if (address.length > 0) {
+      if (!(isAddress(address) || isContract(address))) {
+        this.isValidAddress = false;
+        return false;
+      }
     }
-    if (document.getElementById('typeActionBtn')?.classList.contains('show')) {
-      document.getElementById('typeActionBtn')?.classList.remove('show');
+
+    //check null/invalid block
+    if (!this.isFilterDate) {
+      if (!fromBlock || !toBlock) {
+        return false;
+      } else if (+fromBlock > +toBlock) {
+        this.isValidBlock = false;
+        return false;
+      }
     }
+
+    //check null start date + end date
+    if ((this.isFilterDate && !startDate) || !endDate) {
+      return false;
+    }
+
+    //check null export data type
+    if (!this.dataType) {
+      return false;
+    }
+
+    return true;
   }
 }
