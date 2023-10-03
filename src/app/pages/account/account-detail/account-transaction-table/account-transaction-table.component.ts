@@ -90,6 +90,7 @@ export class AccountTransactionTableComponent {
     all: 'all',
   };
   isSearchOther = false;
+  isChangePageSize = false;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -253,7 +254,7 @@ export class AccountTransactionTableComponent {
     }
 
     let payload = {
-      limit: 100,
+      limit: this.pageData.pageSize * 10,
       address: address,
       heightLT: nextKey,
       compositeKey: null,
@@ -426,6 +427,7 @@ export class AccountTransactionTableComponent {
         this.currentAddress,
         coinConfig,
       );
+
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
       } else {
@@ -564,5 +566,11 @@ export class AccountTransactionTableComponent {
       this.checkAll = false;
       this.listTypeSelectedTemp = [];
     }
+  }
+
+  pageChangeRecord(event){
+    this.pageData.pageSize = event;
+    this.dataSource = new MatTableDataSource();
+    this.getTxsAddress(this.nextKey);
   }
 }
