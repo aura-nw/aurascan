@@ -166,7 +166,7 @@
                         <div *ngSwitchCase="'type'" class="g-type aura-status">
                           <div class="aura-status aura-tooltip-contain">
                             <div class="aura-tooltip-object d-flex">
-                              {{ data[template.matColumnDef] | cutStringPipe : 20 }}
+                              {{ data[template.matColumnDef] }}
                               <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
                                 +{{ data.lstType?.length - 1 }}
                               </div>
