@@ -91,11 +91,11 @@
       background-color: #0e7e6b;
     }
   }
+}
 
-  ::ng-deep .box-name-tag:not(.private-name-tag) {
-    &:after {
-      border-right: 15px solid #262838;
-    }
+::ng-deep .box-name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
   }
 }
 
@@ -201,6 +201,10 @@
   }
   &::-webkit-scrollbar {
     display: none;
+  }
+  .aura-dropdown-menu {
+    inset: unset !important;
+    width: 100%;
   }
 }
 
