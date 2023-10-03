@@ -20,15 +20,18 @@ import { CommonService } from 'src/app/core/services/common.service';
   styleUrls: ['./contracts-list.component.scss'],
 })
 export class ContractsListComponent implements OnInit, OnDestroy {
+  typeCW4973 = TYPE_CW4973;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },
     { matColumnDef: 'name', headerCellDef: 'Contract Name' },
+    { matColumnDef: 'label', headerCellDef: 'Label' },
+    { matColumnDef: 'compiler_version', headerCellDef: 'Contract Ver' },
+    { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'type', headerCellDef: 'Type Contract' },
-    { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
-    { matColumnDef: 'contract_verification', headerCellDef: 'Verified' },
     { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', isShort: true, isNameTag: true },
   ];
+  contractRegisterType = ContractRegisterType;
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,

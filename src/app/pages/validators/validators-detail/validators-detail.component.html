@@ -371,7 +371,9 @@
                       {
                         label: '',
                         class: !commonService.checkDisplayTooltip(data.delegator_address)
-                          ? 'name-tag text--primary'
+                          ? commonService.checkPrivate(data.delegator_address)
+                            ? 'name-tag private-name-tag text--primary'
+                            : 'name-tag text--primary'
                           : 'text--primary',
                         info: !commonService.checkDisplayTooltip(data.delegator_address)
                           ? (commonService.setNameTag(data.delegator_address) | cutStringPipe : 16)

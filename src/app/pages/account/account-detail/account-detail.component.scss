@@ -4,32 +4,26 @@ section.account-detail {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
   }
-  form.search-form {
-    .input-group {
-      background-color: var(--aura-bg-form);
-    }
-    input {
-      width: 100%;
-      @media (min-width: 992px) {
-        width: 150px;
-      }
-      @media (min-width: 1200px) {
-        width: 250px;
-      }
-      @media (min-width: 1440px) {
-        width: 405px;
-      }
-    }
-  }
-  .box-account-info{
+
+  .box-account-info {
     flex-grow: 1;
     min-height: 228px;
-    padding: 24px;
+    padding: 20px;
+
     @media (max-width: 1366px) {
       padding: 12px;
+
+      .private-name-tag {
+        font-size: 1.2rem;
+      }
     }
+
     @media (max-width: 992px) {
       padding: 16px;
+    }
+
+    .btn-private {
+      width: fit-content;
     }
   }
 }
@@ -45,11 +39,13 @@ section.account-detail {
     justify-content: center;
   }
 }
+
 .link-reset-data {
   text-decoration: underline;
   color: aqua;
   cursor: pointer;
 }
+
 @media (max-width: 991.98px) {
   .g-ellipsis-address {
     width: 310px;
@@ -58,19 +54,23 @@ section.account-detail {
     overflow: hidden !important;
     text-overflow: ellipsis;
   }
+
   .box-account {
     padding: var(--spacer-4) !important;
   }
+
   ::ng-deep {
     .modal-dialog .modal-content {
       padding-bottom: 52px !important;
     }
   }
+
   .header-mob {
     padding-bottom: 0px !important;
     font-size: 2rem !important;
     font-weight: 500;
   }
+
   .aura-form {
     .select-input-field {
       height: auto;
@@ -78,6 +78,7 @@ section.account-detail {
       border: 1px solid var(--aura-white);
     }
   }
+
   ::ng-deep {
     .mat-tab-label-content {
       font-size: 1.6rem !important;
@@ -85,12 +86,7 @@ section.account-detail {
     }
   }
 }
-::ng-deep.account-search-form {
-  width: 100%;
-  @media (min-width: 992px) {
-    width: 370px;
-  }
-}
+
 .account__tab-item {
   min-width: 160px;
 }
@@ -98,6 +94,7 @@ section.account-detail {
 .aura-table.transaction-table th.mat-header-cell {
   min-width: 150px;
 }
+
 .aura-table.transaction-table th.mat-header-cell:nth-child(1),
 .aura-table.transaction-table th.mat-header-cell:nth-child(2),
 .aura-table.transaction-table th.mat-header-cell:nth-child(7) {
@@ -107,16 +104,20 @@ section.account-detail {
 .button-switch-stage {
   &__1 {
     width: 100%;
+
     @media (min-width: 568.98px) {
       max-width: 168px;
     }
+
     button {
       padding: 0 14px;
     }
   }
+
   &__2 {
     width: 100%;
     max-width: unset;
+
     @media (min-width: 991.98px) {
       max-width: 239px;
     }
@@ -129,8 +130,32 @@ section.account-detail {
   }
 }
 
-.btn-private {
-  width: fit-content;
+.name-tag {
+  max-width: 100%;
+  .line-claim {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+}
+
+.box-private {
+  .private-name-tag {
+    height: 24px;
+    min-width: 0;
+    padding: 0 var(--spacer-2);
+    background-color: var(--aura-gray-10);
+    border-radius: 16px;
+    border: 1px solid var(--aura-gray-8);
+    font-size: 12px;
+    .line-claim {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 @media (max-width: 414px) {
@@ -138,9 +163,65 @@ section.account-detail {
     .btn-copy {
       border: 1px solid #717582;
       border-radius: 8px;
+
       button {
         padding: 8px;
       }
+    }
+  }
+}
+
+.contract-label {
+  height: 20px;
+
+  @media (min-width: 991.98px) {
+    height: 32px;
+  }
+
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: var(--aura-gray-9);
+  padding-right: 12px;
+  padding-left: 8px;
+  margin-left: 16px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid var(--aura-gray-9);
+
+    @media (min-width: 991.98px) {
+      border-top: 16px solid transparent;
+      border-bottom: 16px solid transparent;
+      border-right: 20px solid var(--aura-gray-9);
+      left: -20px;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background-color: var(--aura-gray-3);
+    border-radius: 50%;
+    left: 0px;
+
+    @media (min-width: 991.98px) {
+      left: -6px;
     }
   }
 }

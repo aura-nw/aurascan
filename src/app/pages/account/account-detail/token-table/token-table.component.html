@@ -94,7 +94,7 @@
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
         <!-- Table -->
         <div class="table-responsive table-token" *ngIf="!assetsLoading">
-          <table mat-table matSort [dataSource]="dataSource" class="aura-table coin-table">
+          <table mat-table matSort [dataSource]="dataSource" class="aura-table coin-table none-header">
             <!-- Asset Column -->
             <ng-container matColumnDef="asset">
               <th *matHeaderCellDef></th>

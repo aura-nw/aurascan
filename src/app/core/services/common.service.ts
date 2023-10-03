@@ -117,16 +117,27 @@ export class CommonService {
     });
   }
 
-  setNameTag(address, listNameTag = []) {
+  setNameTag(address, listNameTag = [], getPrivate = true) {
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     const nameTag = this.listNameTag?.find((k) => k.address === address);
-    return nameTag?.name_tag || address;
+    let result = nameTag?.name_tag || address;
+    if (getPrivate) {
+      result = nameTag?.name_tag_private || result;
+    }
+    return result;
   }
 
   findNameTag(keySearch, listNameTag = []) {
+    const userEmail = localStorage.getItem('userEmail');
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     if (this.listNameTag?.length > 0) {
-      const result = this.listNameTag?.find((k) => k.name_tag?.trim() === keySearch?.trim())?.address || '';
+      let result;
+      if (userEmail) {
+        result = this.listNameTag?.find((k) => k.name_tag_private?.trim() === keySearch?.trim())?.address || '';
+      }
+      if (!result) {
+        result = this.listNameTag?.find((k) => k.name_tag?.trim() === keySearch?.trim())?.address || '';
+      }
       return result;
     }
   }
@@ -156,6 +167,25 @@ export class CommonService {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
     if (nameTag?.enterpriseUrl?.length > 0) {
       result = nameTag?.enterpriseUrl;
+    }
+    return result;
+  }
+
+  checkPublic(address, listNameTag = []): boolean {
+    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
+    let result = false;
+    const nameTag = this.listNameTag?.find((k) => k.address === address && k.name_tag?.length > 0);
+    if (!nameTag || nameTag?.name_tag === address) {
+      result = true;
+    }
+    return result;
+  }
+
+  checkPrivate(address): boolean {
+    let result = false;
+    const nameTag = this.listNameTag?.find((k) => k.address === address && k.isPrivate);
+    if (nameTag?.name_tag_private) {
+      result = true;
     }
     return result;
   }

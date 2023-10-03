@@ -19,10 +19,6 @@
 .table-token {
   overflow-y: auto;
   height: 380px;
-
-  ::ng-deep table thead {
-    display: none;
-  }
 }
 
 .token-filter-form.aura-form.single-input-field .input-group {

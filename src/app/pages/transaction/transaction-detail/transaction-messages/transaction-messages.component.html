@@ -1,4 +1,4 @@
-<div *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<div *ngIf="{ value: breakpoint$ | async } as breakpoint" class="box-tx-detail">
   <div *ngIf="!isTransactionTypeDefault">
     <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1">
       {{ checkTypeMessage() }}
