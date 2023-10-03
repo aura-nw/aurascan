@@ -27,7 +27,7 @@
     <button
       class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4 ml-4"
       type="button"
-      [routerLink]="['/export-csv']">
+      (click)="linkExportPage()">
       <i class="ph ph-export text--white mr-2 body-01"></i>
       <span>Export CSV</span>
     </button>
@@ -313,7 +313,7 @@
     <button
       class="button button-pill button--sm button-outline button-outline__in-card button-filter px-4 ml-6"
       type="button"
-      [routerLink]="['/export-csv']">
+      (click)="linkExportPage()">
       <i class="ph ph-export text--white mr-2 body-01"></i>
       <span>Export CSV</span>
     </button>

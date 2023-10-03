@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
@@ -188,5 +188,18 @@ export class CommonService {
       result = true;
     }
     return result;
+  }
+
+  exportCSV(payload): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('content-type', 'text/csv; charset=utf-8')
+      .set('Access-Control-Allow-Origin', '*');
+
+    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
+    // let url =
+    //   'http://10.9.0.57:3000/api/v1/export-csv?dataType=execute&address=aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx&dataRangeType=height&min=1000000&max=15000000&includePVN=false';
+    // window.open(url, '_blank');
+    // return this._http.get<any>(`${this.apiUrl}/export-csv`, { params, headers: headers })
+    return this._http.get<any>(`${this.apiUrl}/export-csv`, { params });
   }
 }

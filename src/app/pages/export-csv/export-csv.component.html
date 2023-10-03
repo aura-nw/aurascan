@@ -27,32 +27,39 @@
               #trigger>
               <span class="body text--gray-4">
                 <ng-container *ngIf="!dataType"> Select export data type </ng-container>
-                <span *ngIf="dataType?.length > 0" class="text--white"> {{ dataType }} </span>
+                <span *ngIf="dataType?.length > 0" class="text--white"> {{ mappingDataExport(dataType) }} </span>
               </span>
               <div class="ml-3 d-flex align-items-center">
-                <ng-container *ngIf="!csvForm.value.dataType">
-                  <i class="ph ph-caret-down text--white body"></i>
-                  <i class="ph ph-caret-up text--white body"></i>
-                </ng-container>
-                <ng-container *ngIf="csvForm.value.dataType">
-                  <i (click)="trigger.click()" class="ph-thin ph-x cursor-pointer ml-2 body"> </i>
-                </ng-container>
+                <i class="ph ph-caret-down text--white body"></i>
+                <i class="ph ph-caret-up text--white body"></i>
               </div>
             </button>
             <ul class="dropdown-menu aura-dropdown-menu p-0" id="typeAction" #typeAction>
               <!-- Group 1-->
               <div>
                 <h5 class="dropdown-menu__title">Account transaction</h5>
-                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.ExecutedTxs)">
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === tabsData.ExecutedTxs"
+                  (click)="changeTypeFilter(tabsData.ExecutedTxs)">
                   <button type="button" class="button px-2">{{ tabsAccount.ExecutedTxs }}</button>
                 </li>
-                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.AuraTxs)">
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === tabsData.AuraTxs"
+                  (click)="changeTypeFilter(tabsData.AuraTxs)">
                   <button type="button" class="button px-2">{{ tabsAccount.AuraTxs }}</button>
                 </li>
-                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.FtsTxs)">
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === tabsData.FtsTxs"
+                  (click)="changeTypeFilter(tabsData.FtsTxs)">
                   <button type="button" class="button px-2">{{ tabsAccount.FtsTxs }}</button>
                 </li>
-                <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(tabsAccount.NftTxs)">
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === tabsData.NftTxs"
+                  (click)="changeTypeFilter(tabsData.NftTxs)">
                   <button type="button" class="button px-2">{{ tabsAccount.NftTxs }}</button>
                 </li>
               </div>
@@ -212,3 +219,5 @@
     </div>
   </form>
 </div>
+
+<button (click)="downloadCSV2()">Downlad CSV</button>
