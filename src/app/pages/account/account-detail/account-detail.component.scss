@@ -12,10 +12,6 @@ section.account-detail {
 
     @media (max-width: 1366px) {
       padding: 12px;
-
-      .private-name-tag {
-        font-size: 1.2rem;
-      }
     }
 
     @media (max-width: 992px) {
@@ -132,30 +128,6 @@ section.account-detail {
 
 .name-tag {
   max-width: 100%;
-  .line-claim {
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
-  }
-}
-
-.box-private {
-  .private-name-tag {
-    height: 24px;
-    min-width: 0;
-    padding: 0 var(--spacer-2);
-    background-color: var(--aura-gray-10);
-    border-radius: 16px;
-    border: 1px solid var(--aura-gray-8);
-    font-size: 12px;
-    .line-claim {
-      display: inline-block;
-      white-space: nowrap;
-      overflow: hidden !important;
-      text-overflow: ellipsis;
-    }
-  }
 }
 
 @media (max-width: 414px) {

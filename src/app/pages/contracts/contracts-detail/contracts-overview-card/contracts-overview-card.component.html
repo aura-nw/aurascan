@@ -42,7 +42,7 @@
               contractDetail?.cw20_contract?.symbol
             ">
             <a
-              class="text--primary break-word v-ellipsis--des line-claim"
+              class="text--primary break-word v-ellipsis--des line-claim-v"
               [routerLink]="['/tokens/token/', contractDetail?.address]">
               {{ contractDetail?.cw20_contract?.name }} ({{ contractDetail?.cw20_contract?.symbol }})
             </a>
@@ -65,7 +65,7 @@
               contractDetail?.cw721_contract?.name &&
               contractDetail?.cw721_contract?.symbol
             "
-            class="text--primary break-word v-ellipsis--des line-claim"
+            class="text--primary break-word v-ellipsis--des line-claim-v"
             [routerLink]="['/tokens/' + linkNft, contractDetail?.address]">
             {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
           </a>
