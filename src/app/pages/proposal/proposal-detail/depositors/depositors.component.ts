@@ -55,8 +55,9 @@ export class DepositorsComponent implements OnInit, OnDestroy {
       compositeKey: 'proposal_deposit.proposal_id'
     };
 
-    this.transactionService.getListTxCondition(payload).subscribe({
+    this.transactionService.getProposalDeposit(payload).subscribe({
       next: (res) => {
+        console.log(res)
         let dataList: any[] = [];
         if (res?.transaction?.length > 0) {
           dataList = res?.transaction?.filter(
