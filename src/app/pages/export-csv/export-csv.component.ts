@@ -39,7 +39,6 @@ export class ExportCsvComponent implements OnInit {
 
     //get data config from account detail
     const dataConfig = localStorage.getItem('setDataExport');
-    localStorage.removeItem('setDataExport');
 
     if (dataConfig?.length > 0) {
       this.setDataConfig(dataConfig);

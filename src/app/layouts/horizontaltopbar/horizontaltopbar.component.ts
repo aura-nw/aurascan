@@ -446,4 +446,11 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
     return false;
   }
+
+  removeConfigCSV(data) {
+    console.log(data);
+    if (data.link === '/export-csv') {
+      localStorage.removeItem('setDataExport');
+    }
+  }
 }

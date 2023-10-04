@@ -255,7 +255,7 @@ export class AccountTransactionTableComponent {
     }
 
     let payload = {
-      limit: this.pageData.pageSize * 10,
+      limit: 100,
       address: address,
       heightLT: nextKey,
       compositeKey: null,
