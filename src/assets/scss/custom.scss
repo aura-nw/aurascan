@@ -784,7 +784,6 @@ body {
   width: fit-content;
 }
 
-
 .nft__unclaimed-noti {
   width: 24px;
   height: 24px;
@@ -800,4 +799,9 @@ body {
     border-radius: 24px;
     padding: 4px 8px;
   }
+}
+
+input:-internal-autofill-selected {
+  background-color: transparent !important;
+  color: var(--aura-gray-1) !important;
 }
