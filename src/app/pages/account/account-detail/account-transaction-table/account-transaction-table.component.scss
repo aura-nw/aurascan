@@ -79,6 +79,11 @@
 
 .row-tx:has(.ph-caret-up) {
   background: linear-gradient(0deg, #262838, #262838), linear-gradient(0deg, #0e7e6b, #0e7e6b);
+  ::ng-deep.box-name-tag:not(.private-name-tag) {
+    &:after {
+      border-right: 15px solid #262838;
+    }
+  }
   td:first-child {
     position: relative;
     &::before {
