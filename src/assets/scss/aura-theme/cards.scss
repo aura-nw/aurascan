@@ -97,7 +97,7 @@
   }
   .nft__body {
     padding: var(--spacer-3);
-    // margin-top: var(--spacer-2);
+    min-height: 74px;
   }
   .nft__info {
     // overflow: hidden;
