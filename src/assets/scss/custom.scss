@@ -801,3 +801,15 @@ body {
     padding: 4px 8px;
   }
 }
+
+.card .box-name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
+  }
+}
+
+.card .name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
+  }
+}
