@@ -39,7 +39,6 @@ export class NameTagComponent implements OnInit {
 
     setTimeout(() => {
       this.commonService['listNameTag'] = this.commonService['listNameTag'] || this.global?.listNameTag;
-      console.log(this.global);
     }, 1000);
   }
 
