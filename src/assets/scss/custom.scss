@@ -680,12 +680,6 @@ body {
   padding-left: var(--spacer-2);
   padding-right: var(--spacer-5);
   color: var(--aura-gray-light);
-  &.private-name-tag {
-    padding: 0 var(--spacer-2);
-    background-color: var(--aura-gray-10);
-    border-radius: 16px;
-    border: 1px solid var(--aura-gray-8);
-  }
   &:not(.private-name-tag) {
     position: relative;
     &:after {
@@ -784,6 +778,39 @@ body {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+}
+
+.w-fit-content {
+  width: fit-content;
+}
+
+.nft__unclaimed-noti {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--aura-red-3);
+  font-size: 10px;
+  font-weight: 600;
+  &.noti--pill {
+    width: auto;
+    border-radius: 24px;
+    padding: 4px 8px;
+  }
+}
+
+.card .box-name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
+  }
+}
+
+.card .name-tag:not(.private-name-tag) {
+  &:after {
+    border-right: 15px solid var(--aura-gray-10);
   }
 }
 

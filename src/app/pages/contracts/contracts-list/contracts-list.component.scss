@@ -22,13 +22,13 @@
   text-overflow: ellipsis;
 }
 
-
 .aura-table.contract-table th.mat-header-cell:nth-child(1) {
   min-width: 220px;
 }
 .aura-table.contract-table th.mat-header-cell:nth-child(5) {
-  max-width: 150px;
+  max-width: 100px;
 }
+.aura-table.contract-table th.mat-header-cell:nth-child(4),
 .aura-table.contract-table th.mat-header-cell:nth-child(7) {
   max-width: 130px;
 }

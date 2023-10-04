@@ -1,9 +1,0 @@
-.contract-title {
-  ::ng-deep {
-    .box-name-tag:not(.private-name-tag) {
-      &:after {
-        border-right: 15px solid var(--aura-black) !important;
-      }
-    }
-  }
-}

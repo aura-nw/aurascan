@@ -69,20 +69,8 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--aura-red-3);
   color: white;
   transform: translate(50%, -50%);
-  &.noti--pill {
-    width: auto;
-    border-radius: 24px;
-    padding: 4px 8px;
-  }
 }
 .sbt-card-contain {
   width: 130px;
