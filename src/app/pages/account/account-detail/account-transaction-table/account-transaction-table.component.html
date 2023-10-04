@@ -120,7 +120,7 @@
           <span>{{ transactionFilter.endDate | date : 'MM/dd/yyyy' }}</span>
           <i class="ph-thin ph-x cursor-pointer body" (click)="clearFilter(modeFilter.date)"></i>
         </div>
-        <div class="dropdown aura-dropdown btn-item ml-6" *ngIf="modeQuery !== tabsData.ExecutedTxs">
+        <div class="dropdown aura-dropdown btn-item ml-6 flex-shrink-0" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <button
             [style]="'min-width: max-content'"
             class="input-group align-items-center d-flex justify-content-between cursor-pointer btn-tns"
