@@ -272,6 +272,9 @@
       display: none;
     }
   }
+  &:not(.filter-result) {
+    min-width: 200px !important;
+  }
 }
 
 .table-transfer tr td {
