@@ -4,9 +4,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { isAddress, isContract } from 'src/app/core/utils/common/validation';
-import {saveAs} from "file-saver";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-export-csv',
@@ -30,12 +29,7 @@ export class ExportCsvComponent implements OnInit {
   maxDateEnd;
   tabsData = TabsAccountLink;
 
-  constructor(
-    private fb: FormBuilder,
-    private commonService: CommonService,
-    private toastr: NgxToastrService,
-    private datePipe: DatePipe,
-  ) {}
+  constructor(private fb: FormBuilder, private commonService: CommonService, private datePipe: DatePipe) {}
 
   ngOnInit(): void {
     this.formInit();
@@ -45,7 +39,7 @@ export class ExportCsvComponent implements OnInit {
 
     //get data config from account detail
     const dataConfig = localStorage.getItem('setDataExport');
-    console.log(dataConfig);
+    localStorage.removeItem('setDataExport');
 
     if (dataConfig?.length > 0) {
       this.setDataConfig(dataConfig);
@@ -90,9 +84,12 @@ export class ExportCsvComponent implements OnInit {
   downloadCSV() {
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    console.log(this.csvForm.value);
+    let { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
 
-    const { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
+    if (startDate || endDate) {
+      startDate = this.getConvertDate(startDate);
+      endDate = this.getConvertDate(endDate, true);
+    }
 
     let payload = {
       dataType: dataType,
@@ -102,30 +99,21 @@ export class ExportCsvComponent implements OnInit {
       max: this.isFilterDate ? endDate : toBlock,
     };
 
-    this.commonService.exportCSV(payload).subscribe((buffer) => {
-      console.log(buffer);
-      
-      const data: Blob = new Blob([buffer], {
-        type: "text/csv;charset=utf-8"
-      });
-      // you may improve this code to customize the name 
-      // of the export based on date or some other factors
-      saveAs(data, "products.csv");
+    this.commonService.exportCSV(payload, displayPrivate).subscribe((buffer) => {
+      this.handleDownloadFile(buffer, payload);
     });
-    //   // saveAs(resp, `file.csv`)
-    // });
+  }
+
+  handleDownloadFile(buffer, payload) {
+    const data: Blob = new Blob([buffer], {
+      type: 'text/csv;charset=utf-8',
+    });
+    const fileName = 'export-account-' + payload.dataType + '-' + payload.address + '.csv';
+    saveAs(data, fileName);
   }
 
   get getAddress() {
     return this.csvForm.get('address');
-  }
-
-  get getFromBlock() {
-    return this.csvForm.get('fromBlock');
-  }
-
-  get getToBlock() {
-    return this.csvForm.get('toBlock');
   }
 
   setDateRange() {
@@ -134,8 +122,6 @@ export class ExportCsvComponent implements OnInit {
     this.maxDate = this.datePipe.transform(this.csvForm.value?.endDate, DATEFORMAT.DATE_ONLY) || this.maxDate;
     this.minDateEnd = this.datePipe.transform(this.csvForm.value?.startDate, DATEFORMAT.DATE_ONLY) || this.minDate;
   }
-
-  changeDisplayPrivate() {}
 
   changeType(isFilterDate = false) {
     this.isFilterDate = isFilterDate;
@@ -150,7 +136,7 @@ export class ExportCsvComponent implements OnInit {
 
   checkFormValid(): boolean {
     this.getAddress['value'] = this.getAddress?.value?.trim();
-    const { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
+    const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
 
     this.isValidAddress = true;
     this.isValidBlock = true;
@@ -182,17 +168,13 @@ export class ExportCsvComponent implements OnInit {
     return true;
   }
 
-  downloadCSV2(): void {
-    // this.commonService.downloadCSV({
-    //   search: this.search,
-    //   sellerId: this.sellerId
-    // }).subscribe((buffer) => {
-    //   const data: Blob = new Blob([buffer], {
-    //     type: "text/csv;charset=utf-8"
-    //   });
-    //   // you may improve this code to customize the name 
-    //   // of the export based on date or some other factors
-    //   saveAs(data, "products.csv");
-    // });
+  getConvertDate(date, lastDate = false) {
+    if (!date) {
+      return null;
+    }
+
+    let temp = this.datePipe.transform(date, DATEFORMAT.DATE_ONLY);
+    let subStringDate = lastDate ? 'T24:00:000Z' : 'T00:00:000Z';
+    return temp + subStringDate;
   }
 }

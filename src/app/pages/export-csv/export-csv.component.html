@@ -195,7 +195,6 @@
 
     <div [class.aura-tooltip-contain]="!userEmail">
       <mat-slide-toggle
-        (click)="changeDisplayPrivate()"
         formControlName="displayPrivate"
         [disabled]="!userEmail"
         class="aura-tooltip-object csv-hint">
@@ -219,5 +218,3 @@
     </div>
   </form>
 </div>
-
-<button (click)="downloadCSV2()">Downlad CSV</button>

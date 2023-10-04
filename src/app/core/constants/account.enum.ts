@@ -53,7 +53,7 @@ export enum TabsAccount {
 }
 
 export enum TabsAccountLink {
-  ExecutedTxs = 'execute',
+  ExecutedTxs = 'executed',
   AuraTxs = 'coin-transfer',
   FtsTxs = 'token-transfer',
   NftTxs = 'nft-transfer',
