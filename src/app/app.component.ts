@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  getListNameTag(): void {
+  async getListNameTag() {
     const payload = {
       limit: 500,
       nextKey: 0,
@@ -83,7 +83,7 @@ export class AppComponent implements OnInit {
     // get list name tag if not login email
     const userEmail = localStorage.getItem('userEmail');
     if (!userEmail) {
-      this.commonService.getListNameTag(payload).subscribe((res) => {
+      await this.commonService.getListNameTag(payload).subscribe((res) => {
         this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
       });
       return;
