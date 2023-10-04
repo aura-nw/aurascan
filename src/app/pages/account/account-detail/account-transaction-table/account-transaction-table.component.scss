@@ -1,11 +1,8 @@
-@media (max-width: 991.99px) {
-  .button-filter {
-    padding: 8px;
-  }
-}
-
 .button-filter {
   position: relative;
+  @media (max-width: 991.99px) {
+    padding: 8px;
+  }
   &[aria-expanded='true'] {
     border: 2px solid var(--aura-white);
   }
@@ -18,6 +15,7 @@
     }
   }
 }
+
 .box-filter {
   .divider.divider-vertical {
     min-height: 33px;
@@ -51,6 +49,7 @@
     width: 100%;
   }
 }
+
 .tnx-filter-item {
   height: 44px;
 }
@@ -80,6 +79,11 @@
 
 .row-tx:has(.ph-caret-up) {
   background: linear-gradient(0deg, #262838, #262838), linear-gradient(0deg, #0e7e6b, #0e7e6b);
+  ::ng-deep.box-name-tag:not(.private-name-tag) {
+    &:after {
+      border-right: 15px solid #262838;
+    }
+  }
   td:first-child {
     position: relative;
     &::before {
@@ -91,20 +95,6 @@
       bottom: 0;
       background-color: #0e7e6b;
     }
-  }
-
-  ::ng-deep .box-name-tag:not(.private-name-tag) {
-    &:after {
-      border-right: 15px solid #262838;
-    }
-  }
-}
-
-.table-transfer tr td {
-  &:nth-child(4),
-  &:nth-child(5),
-  &:nth-child(6) {
-    padding-top: var(--spacer-0) !important;
   }
 }
 
@@ -159,14 +149,9 @@
     }
   }
   .box-number {
-    border: solid 1px var(--aura-gray-8);
     border-radius: 4px;
-    margin-left: var(--spacer-3);
     padding: 2px 6px 2px 6px;
-    display: flex;
-    align-items: center;
     font-size: 12px;
-    cursor: pointer;
     .icon-expand {
       margin-bottom: 2px;
     }
@@ -178,16 +163,10 @@
   }
   .box-token-transfer {
     min-width: 60px;
-    display: flex;
-    justify-content: flex-start;
     .token-transfer-status {
-      display: inline-flex;
-      align-items: center;
       padding: var(--spacer-2) var(--spacer-4);
       color: var(--aura-green-3);
       border-radius: 4px;
-      font-weight: 600;
-      font-size: 12px;
       width: auto;
       margin: auto;
       &.status-out {
@@ -204,31 +183,10 @@
 
 .panel__btn-group {
   height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: end;
   background-color: var(--aura-gray-9);
   margin: 0 -8px -16px -8px;
 }
 
-mat-date-range-input {
-  height: 31px;
-  display: flex;
-  align-items: center;
-  padding-left: 16px;
-}
-.calendar-contain {
-  width: 225px;
-  border: 1px solid var(--aura-gray-8) !important;
-  border-radius: 8px;
-}
-::ng-deep {
-  .mat-datepicker-content .mat-calendar {
-    background: #24262e;
-    border: 1px solid #717582;
-    border-radius: 8px;
-  }
-}
 .filter-contain {
   flex-wrap: nowrap;
   -ms-overflow-style: none;  /* IE and Edge */
@@ -243,36 +201,17 @@ mat-date-range-input {
   &::-webkit-scrollbar {
     display: none;
   }
-}
-.btn-tns {
-  min-width: 200px;
-}
-.btn-mess {
-  min-width: 155px;
-}
-
-.button-link {
-  color: var(--aura-blue-3link);
+  .aura-dropdown-menu {
+    inset: unset !important;
+    width: 100%;
+  }
 }
 
 .nft__unclaimed-noti {
   position: absolute;
   top: 0;
   right: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--aura-red-3);
-  color: white;
   transform: translate(50%, -50%);
-  &.noti--pill {
-    width: auto;
-    border-radius: 24px;
-    padding: 4px 8px;
-  }
 }
 .box-filter__desc {
   margin-top: -200px;
@@ -290,13 +229,6 @@ mat-date-range-input {
   height: 33px;
   display: flex;
   align-items: center;
-}
-.menu-hidden {
-  height: 0 !important;
-  width: 0 !important;
-  min-width: 0 !important;
-  overflow: hidden !important;
-  border: none !important;
 }
 .tag-filter-box {
   min-height: 40px;
@@ -339,5 +271,16 @@ mat-date-range-input {
     i.ph-caret-up {
       display: none;
     }
+  }
+  &:not(.filter-result) {
+    min-width: 200px !important;
+  }
+}
+
+.table-transfer tr td {
+  &:nth-child(4),
+  &:nth-child(5),
+  &:nth-child(6) {
+    padding-top: var(--spacer-0) !important;
   }
 }

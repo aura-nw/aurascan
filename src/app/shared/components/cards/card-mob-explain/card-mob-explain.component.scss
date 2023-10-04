@@ -27,6 +27,11 @@
       }
     }
   }
+  .name-tag:not(.private-name-tag) {
+    &:after {
+      border-right: 15px solid var(--aura-gray-9);
+    }
+  }
 }
 .button-explain:has(.rotate) {
   transform: rotate(180deg);
