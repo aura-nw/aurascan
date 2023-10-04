@@ -571,6 +571,7 @@ export class AccountTransactionTableComponent {
 
   pageChangeRecord(event) {
     this.transactionLoading = true;
+    this.nextKey = null;
     this.pageData.pageSize = event;
     this.dataSource = new MatTableDataSource();
     this.getTxsAddress(this.nextKey);
