@@ -97,7 +97,7 @@
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
                 <th mat-header-cell *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate" [style.min-width]="'165px'"></div>
+                  <div [innerHTML]="template.headerCellDef | translate" [style.min-width]="'175px'"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
                   <ng-container *ngIf="template.isNameTag">
@@ -158,7 +158,7 @@
 
                   <ng-container *ngIf="template.matColumnDef === 'token_tracker'">
                     <div class="aura-tooltip-contain">
-                      <a class="pr-8 aura-tooltip-object" *ngIf="data['token_tracker']" [routerLink]="data.url">
+                      <a class="aura-tooltip-object" *ngIf="data['token_tracker']" [routerLink]="data.url">
                         {{ data['token_tracker'] | stringEllipsis : 16 }}
                       </a>
                       <span
