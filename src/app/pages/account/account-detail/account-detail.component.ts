@@ -50,8 +50,6 @@ export class AccountDetailComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;

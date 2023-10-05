@@ -1,15 +1,15 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { CommonService } from 'src/app/core/services/common.service';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { Globals } from 'src/app/global/global';
+import { Component, Input, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { CommonService } from 'src/app/core/services/common.service';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-contract-info-card',
   templateUrl: './contract-info-card.component.html',
   styleUrls: ['./contract-info-card.component.scss'],
 })
-export class ContractInfoCardComponent implements OnInit, OnChanges {
+export class ContractInfoCardComponent implements OnInit {
   @Input() type: 'information' | 'moreInfo' = 'information';
   @Input() contractDetail: any;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
@@ -17,8 +17,6 @@ export class ContractInfoCardComponent implements OnInit, OnChanges {
   constructor(public commonService: CommonService, private global: Globals, private router: Router) {}
 
   ngOnInit(): void {}
-
-  ngOnChanges(changes: SimpleChanges): void {}
 
   extendLink(url) {
     url = url.match(/^https?:/) ? url : '//' + url;
