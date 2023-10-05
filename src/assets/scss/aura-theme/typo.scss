@@ -159,6 +159,15 @@ $textColors: (
 .button-link {
   color: var(--aura-blue-3link);
 }
+
+.hover-link, a.text--primary {
+  cursor: pointer;
+  transition: all .35s ease-in-out;
+  &:hover {
+    color: var(--aura-green-3) !important;
+  }
+}
+
 .line-claim {
   display: inline-block;
   white-space: nowrap;
