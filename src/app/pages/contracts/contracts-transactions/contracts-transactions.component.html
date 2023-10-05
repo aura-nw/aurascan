@@ -1,36 +1,34 @@
-<div *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <div *ngIf="contractInfo">
-    <h1 class="mb-2 text--white">Transactions</h1>
-    <div class="body-02 text--gray-5 d-flex">
-      for
-      <span class="ml-1 text-break contract-title">
-        <app-name-tag
-          [tooltipPosition]="'tooltip--right'"
-          [value]="contractAddress"
-          [url]="'contracts'"
-          [fullText]="true"
-          [widthAuto]="true"
-          [fullTextMob]="true"></app-name-tag>
-      </span>
+<div *ngIf="contractInfo">
+  <h1 class="mb-2 text--white">Transactions</h1>
+  <div class="body-02 text--gray-5 d-flex">
+    for
+    <span class="ml-1 text-break contract-title">
+      <app-name-tag
+        [tooltipPosition]="'tooltip--right'"
+        [value]="contractAddress"
+        [url]="'contracts'"
+        [fullText]="true"
+        [widthAuto]="true"
+        [fullTextMob]="true"></app-name-tag>
+    </span>
+  </div>
+</div>
+<section>
+  <div class="card mt-6">
+    <div class="card-body">
+      <app-loading-sprint *ngIf="isLoadingTX"></app-loading-sprint>
+      <app-contract-table
+        *ngIf="!isLoadingTX"
+        [length]="contractTransaction['count']"
+        [pageSize]="pageSize"
+        [label]="label?.toString()"
+        [nextKey]="nextKey"
+        [dataList]="contractTransaction"
+        [templates]="templates"
+        [contractInfo]="contractInfo"
+        [viewAll]="true"
+        (onChangePage)="onChangePage($event)"
+        (onViewSelected)="filterTransaction($event)"></app-contract-table>
     </div>
   </div>
-  <section>
-    <div class="card mt-6">
-      <div class="card-body">
-        <app-loading-sprint *ngIf="isLoadingTX"></app-loading-sprint>
-        <app-contract-table
-          *ngIf="!isLoadingTX"
-          [length]="contractTransaction['count']"
-          [pageSize]="pageSize"
-          [label]="label?.toString()"
-          [nextKey]="nextKey"
-          [dataList]="contractTransaction"
-          [templates]="templates"
-          [contractInfo]="contractInfo"
-          [viewAll]="true"
-          (onChangePage)="onChangePage($event)"
-          (onViewSelected)="filterTransaction($event)"></app-contract-table>
-      </div>
-    </div>
-  </section>
-</div>
+</section>

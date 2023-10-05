@@ -1,4 +1,3 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -78,8 +77,6 @@ export class AccountTransactionTableComponent {
   isSearch = false;
   minDate;
   maxDate;
-  minDateEnd;
-  maxDateEnd;
   linkToken = 'token-nft';
   typeTx = [AccountTxType.Sent, AccountTxType.Received];
   listTypeDefine = [];
@@ -90,18 +87,14 @@ export class AccountTransactionTableComponent {
     all: 'all',
   };
   isSearchOther = false;
-
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
-
   countFilter = 0;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     public global: Globals,
     private environmentService: EnvironmentService,
-    private layout: BreakpointObserver,
     public commonService: CommonService,
     private userService: UserService,
     private route: ActivatedRoute,
@@ -131,7 +124,7 @@ export class AccountTransactionTableComponent {
     });
   }
 
-  initTnxFilter(isReset = false) {
+  initTnxFilter() {
     this.transactionTypeKeyWord = '';
     this.listTypeSelectedTemp = [];
     this.checkAll = false;
@@ -141,8 +134,8 @@ export class AccountTransactionTableComponent {
       type: null,
       typeTransfer: null,
     };
-    this.minDate = this.minDateEnd = new Date(2023, 2, 20);
-    this.maxDateEnd = this.maxDate = new Date().toISOString().slice(0, 10);
+    this.minDate = new Date(2023, 2, 20);
+    this.maxDate = new Date().toISOString().slice(0, 10);
   }
 
   onChangeTnxFilterType(event, type: any) {
