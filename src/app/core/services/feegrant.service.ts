@@ -8,8 +8,6 @@ import { CommonService } from './common.service';
 
 @Injectable()
 export class FeeGrantService extends CommonService {
-  chainInfo = this.environmentService.configValue.chain_info;
-
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }

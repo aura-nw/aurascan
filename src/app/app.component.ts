@@ -16,7 +16,6 @@ import * as _ from 'lodash';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  // chainInfo = this.env.configValue.chain_info;
   // TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
   // isTestnet = this.TESTNET.includes(
   //   this.chainInfo?.chainId || ''

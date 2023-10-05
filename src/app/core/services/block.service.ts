@@ -9,7 +9,6 @@ import { CommonService } from './common.service';
 @Injectable()
 export class BlockService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
-  chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
