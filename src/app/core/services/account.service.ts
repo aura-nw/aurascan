@@ -9,8 +9,6 @@ import { LENGTH_CHARACTER } from '../constants/common.constant';
 
 @Injectable()
 export class AccountService extends CommonService {
-  chainInfo = this.environmentService.configValue.chain_info;
-
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
