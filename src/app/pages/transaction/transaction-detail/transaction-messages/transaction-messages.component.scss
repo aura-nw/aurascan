@@ -179,13 +179,8 @@ mat-expansion-panel:last-child .mat-expansion-panel-content .content-log {
 }
 
 .mat-expansion-panel {
-  background: none;
-  box-shadow: none !important;
   mat-expansion-panel-header {
     padding: 0 12px;
-    .mat-expanded {
-      height: 48px;
-    }
     .txt-header::after {
       font-family: 'Font Awesome 5 Free';
       font-weight: 700;
@@ -198,8 +193,5 @@ mat-expansion-panel:last-child .mat-expansion-panel-content .content-log {
         content: '\f077';
       }
     }
-  }
-  .mat-expansion-panel-header.mat-expanded {
-    height: 48px;
   }
 }
