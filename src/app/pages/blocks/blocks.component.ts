@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
 import { Globals, convertDataBlock } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -25,14 +24,10 @@ export class BlocksComponent implements OnInit {
   pageSize = 20;
   loading = true;
 
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-
   constructor(
     private blockService: BlockService,
     public commonService: CommonService,
     private globals: Globals,
-    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +36,7 @@ export class BlocksComponent implements OnInit {
 
   getList(): void {
     const payload = {
-      limit: 20,
+      limit: this.pageSize,
     };
     this.blockService.getDataBlock(payload).subscribe(
       (res) => {

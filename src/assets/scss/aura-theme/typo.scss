@@ -174,3 +174,11 @@ $textColors: (
   overflow: hidden !important;
   text-overflow: ellipsis;
 }
+
+.line-claim-v {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
