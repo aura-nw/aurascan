@@ -150,7 +150,15 @@
                   <ng-container *ngIf="template.matColumnDef === 'name'">
                     <div class="aura-tooltip-contain">
                       <span class="aura-tooltip-object">
-                        {{ (data[template.matColumnDef] | cutStringPipe : 16) || '-' }}
+                        {{ (data[template.matColumnDef] | cutStringPipe : 20) || '-' }}
+                      </span>
+                      <app-tooltip-customize [content]="data[template.matColumnDef]"></app-tooltip-customize>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'label'">
+                    <div class="aura-tooltip-contain">
+                      <span class="aura-tooltip-object">
+                        {{ (data[template.matColumnDef] | cutStringPipe : 20) || '-' }}
                       </span>
                       <app-tooltip-customize [content]="data[template.matColumnDef]"></app-tooltip-customize>
                     </div>
@@ -177,7 +185,8 @@
                       (!template.isUrl || data[template.matColumnDef] === '') &&
                       template.matColumnDef !== 'contract_verification' &&
                       template.matColumnDef !== 'name' &&
-                      template.matColumnDef !== 'token_tracker'
+                      template.matColumnDef !== 'token_tracker' &&
+                      template.matColumnDef !== 'label'
                     ">
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <ng-container *ngSwitchDefault>
