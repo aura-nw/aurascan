@@ -32,7 +32,10 @@
                             "@cosmjs/math",
                             "@cosmjs/amino",
                             "buffer",
-                            "exceljs"
+                            "exceljs",
+                            "jsonschema",
+                            "moment",
+                            "lodash"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",
