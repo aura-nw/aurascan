@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
@@ -49,6 +49,6 @@ import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.m
     PaginatorModule,
     TooltipCustomizeModule,
   ],
-  providers: [FormBuilder, UserService, NameTagService],
+  providers: [UntypedFormBuilder, UserService, NameTagService],
 })
 export class ProfileModule {}

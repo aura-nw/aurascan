@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
@@ -50,6 +50,6 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     APaginatorModule,
     NameTagModule
   ],
-  providers: [FormBuilder, FeeGrantService, TransactionService, MappingErrorService, AccountService],
+  providers: [UntypedFormBuilder, FeeGrantService, TransactionService, MappingErrorService, AccountService],
 })
 export class FeeGrantModule {}

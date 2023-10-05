@@ -1,7 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
@@ -64,6 +64,6 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     TooltipCustomizeModule,
     ClipboardModule,
   ],
-  providers: [FormBuilder, SoulboundService],
+  providers: [UntypedFormBuilder, SoulboundService],
 })
 export class SoulboundTokenModule {}

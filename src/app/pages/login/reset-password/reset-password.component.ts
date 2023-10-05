@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 
@@ -19,7 +19,7 @@ export class ResetPasswordComponent implements OnInit {
   codeVerify = '';
   errorMessage = '';
 
-  constructor(private fb: FormBuilder, private router: ActivatedRoute, private userService: UserService) {}
+  constructor(private fb: UntypedFormBuilder, private router: ActivatedRoute, private userService: UserService) {}
 
   ngOnInit(): void {
     this.codeVerify = this.router.snapshot?.params?.code;

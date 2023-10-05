@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
@@ -36,7 +36,7 @@ export class PopupAddGrantComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public environmentService: EnvironmentService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
@@ -76,11 +76,11 @@ export class PopupAddGrantComponent implements OnInit {
     this.addContracts();
   }
 
-  get contracts(): FormArray {
-    return this.grantForm.get('execute_contract') as FormArray;
+  get contracts(): UntypedFormArray {
+    return this.grantForm.get('execute_contract') as UntypedFormArray;
   }
 
-  newContract(): FormGroup {
+  newContract(): UntypedFormGroup {
     return this.fb.group({
       address: ['', { validators: [Validators.required] }],
     });

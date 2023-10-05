@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
@@ -39,7 +39,7 @@ export class PopupNameTagComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupNameTagComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public environmentService: EnvironmentService,
     public translate: TranslateService,
     private commonService: CommonService,

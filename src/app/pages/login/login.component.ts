@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   clientId = this.environmentService.configValue.googleClientId;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private userService: UserService,
     private router: ActivatedRoute,
     private route: Router,

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -13,7 +13,7 @@ import { isAddress, isContract } from 'src/app/core/utils/common/validation';
   styleUrls: ['./soulbound-token-create-popup.component.scss'],
 })
 export class SoulboundTokenCreatePopupComponent implements OnInit {
-  createSBTokenForm: FormGroup;
+  createSBTokenForm: UntypedFormGroup;
   isAddressInvalid = false;
   isCurrentAddress = false;
   isReject = false;
@@ -33,9 +33,9 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
   }
 
   formInit() {
-    this.createSBTokenForm = new FormGroup({
-      soulboundTokenURI: new FormControl('', Validators.required),
-      receiverAddress: new FormControl('', Validators.required),
+    this.createSBTokenForm = new UntypedFormGroup({
+      soulboundTokenURI: new UntypedFormControl('', Validators.required),
+      receiverAddress: new UntypedFormControl('', Validators.required),
     });
   }
 
