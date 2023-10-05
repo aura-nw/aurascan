@@ -1,10 +1,8 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { Globals } from 'src/app/global/global';
@@ -16,7 +14,7 @@ import { Globals } from 'src/app/global/global';
 export class NftListComponent implements OnInit, OnChanges {
   @Input() address: string;
   @Output() totalValueNft = new EventEmitter<number>();
-  image_s3 = this.environmentService.configValue.image_s3;
+
   searchValue = '';
   loading = true;
   pageData: PageEvent = {
@@ -31,7 +29,6 @@ export class NftListComponent implements OnInit, OnChanges {
   totalValue = 0;
   textSearch = '';
   searchNotFound = false;
-  numLength = 16;
   listCollection = [
     {
       label: 'All',
@@ -39,21 +36,8 @@ export class NftListComponent implements OnInit, OnChanges {
       address: '',
     },
   ];
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(
-    private accountService: AccountService,
-    public global: Globals,
-    private environmentService: EnvironmentService,
-    private layout: BreakpointObserver,
-  ) {
-    this.breakpoint$.subscribe((state) => {
-      this.numLength = 16;
-      if (state.matches) {
-        this.numLength = 20;
-      }
-    });
-  }
+  constructor(private accountService: AccountService, public global: Globals) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {
