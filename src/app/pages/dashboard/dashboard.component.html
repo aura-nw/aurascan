@@ -190,7 +190,7 @@
         <div class="card-body px-4 py-4 px-lg-6 card-body--gradient-black d-flex flex-column justify-content-between">
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
-              <img src="assets/icons/icons-svg/basic/bonded-token.svg" alt="" class="icon-brand" />
+              <img [src]="'assets/icons/icons-svg/basic/bonded-token.svg' | imageS3" alt="" class="icon-brand" />
               <div class="ml-4">
                 <div class="body text--gray-1">Bonded Token</div>
               </div>
@@ -202,7 +202,7 @@
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
-              <img src="assets/icons/icons-svg/basic/chart-col-up.svg" alt="" class="icon-brand" />
+              <img [src]="'assets/icons/icons-svg/basic/chart-col-up.svg' | imageS3" alt="" class="icon-brand" />
               <div class="ml-4">
                 <div class="body text--gray-1">Inflation rate</div>
               </div>
@@ -214,7 +214,7 @@
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
-              <img src="assets/icons/icons-svg/basic/staking-coins.svg" alt="" class="icon-brand" />
+              <img [src]="'assets/icons/icons-svg/basic/staking-coins.svg' | imageS3" alt="" class="icon-brand" />
               <div class="ml-4">
                 <div class="body text--gray-1">Staking APR</div>
               </div>
@@ -333,7 +333,7 @@
           <div
             class="d-flex flex-column align-items-center justify-content-center h-100"
             *ngIf="voting_Period_arr.length === 0">
-            <img src="assets/images/icons/empty_state_illus.svg" alt="" />
+            <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt="" />
             <div class="text--gray-3">No proposal within the voting period</div>
           </div>
         </div>
