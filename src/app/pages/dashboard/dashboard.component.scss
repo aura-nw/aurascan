@@ -90,7 +90,7 @@ ul {
 }
 .voting-dropdown-button {
   height: 36px;
-  span.g-ellipsis {
+  span.line-claim {
     width: 90%;
   }
 }
@@ -106,6 +106,9 @@ ul {
       &:hover button {
         color: var(--aura-white);
       }
+    }
+    .line-claim {
+      width: 80px;
     }
   }
   inset: auto auto auto 0 !important;

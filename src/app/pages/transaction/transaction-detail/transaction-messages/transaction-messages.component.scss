@@ -65,12 +65,8 @@
   }
 }
 
-.box-tx-detail {
-  .ellipsis-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-  }
+.box-tx-detail .line-claim-v {
+  -webkit-line-clamp: 3;
 }
 
 .box-multisend {

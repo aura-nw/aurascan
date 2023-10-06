@@ -92,3 +92,7 @@ app-tooltip-customize.tooltip--right {
   background-color: var(--aura-gray-9);
   padding: 8px;
 }
+.mat-tooltip {
+  font-size: 1.2rem !important;
+  max-width: unset !important;
+}

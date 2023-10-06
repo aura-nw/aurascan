@@ -254,14 +254,14 @@
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <span class="body text-start g-ellipsis">{{
+                    <span class="body text-start line-claim">{{
                       curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
                     }}</span>
                   </button>
                   <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light py-2 px-2">
                     <ng-container *ngFor="let item of voting_Period_arr">
                       <li class="dropdown-item cursor-pointer py-3 px-2">
-                        <button type="button" class="button p-0 body-03 g-ellipsis text--gray-light" (click)="curr_voting_Period = item">
+                        <button type="button" class="button p-0 body-03 line-claim text--gray-light" (click)="curr_voting_Period = item">
                           {{ item.content.title }}
                         </button>
                       </li>
