@@ -58,14 +58,14 @@ export const CHART_RANGE = {
 export const LENGTH_CHARACTER = {
   ADDRESS: 43,
   CONTRACT: 63,
-  TRANSACTION: 64
+  TRANSACTION: 64,
 };
 
 export const NULL_ADDRESS = 'Null address';
 
 export const TOKEN_ID_GET_PRICE = {
   AURA: 'aura-network',
-  BTC: 'bitcoin'
+  BTC: 'bitcoin',
 };
 
 export enum MEDIA_TYPE {
@@ -74,3 +74,6 @@ export enum MEDIA_TYPE {
   _3D = '3d',
   AUDIO = 'audio',
 }
+
+export const CW20_TRACKING = ['mint', 'burn', 'transfer', 'send', 'transfer_from', 'burn_from', 'send_from'];
+export const CW721_TRACKING = ['mint', 'burn', 'transfer_nft', 'send_nft'];
