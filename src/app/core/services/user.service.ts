@@ -7,8 +7,6 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class UserService extends CommonService {
-  chainInfo = this.environmentService.configValue.chain_info;
-
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }

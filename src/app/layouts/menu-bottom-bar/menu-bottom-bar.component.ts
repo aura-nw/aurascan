@@ -1,12 +1,11 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { from } from "rxjs";
+import { delay, mergeMap } from "rxjs/operators";
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { MenuName, MENU_MOB } from 'src/app/layouts/horizontaltopbar/menu';
+import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
 import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
-import {from} from "rxjs";
-import {delay, mergeMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-menu-bottom-bar',
@@ -18,26 +17,15 @@ export class MenuBottomBarComponent implements OnInit {
   menuName = MenuName;
   menuLink = [];
   overlayPanel = false;
-  wallet = null;
-  lengthSBT = 0;
-  isAllowInABTWhiteList = true;
   currentAddress;
   @ViewChild('popover') public popover: NgbPopover;
 
   constructor(
     public router: Router,
     private walletService: WalletService,
-    private soulboundService: SoulboundService,
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
-      if (wallet) {
-        this.getListSmartContract(wallet.bech32Address);
-        this.wallet = wallet;
-      }
-    });
-
     for (let menu of this.menu) {
       if (!menu.subItems) {
         this.menuLink.push(menu.link);
@@ -51,8 +39,6 @@ export class MenuBottomBarComponent implements OnInit {
     }
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
-      // or
-      return true;
     };
 
     // check account is in whitelist (Account Bound Token)
@@ -66,7 +52,6 @@ export class MenuBottomBarComponent implements OnInit {
           this.currentAddress = this.walletService.wallet?.bech32Address;
         } else {
           this.currentAddress = null;
-          this.isAllowInABTWhiteList = false;
         }
       });
   }
@@ -151,20 +136,5 @@ export class MenuBottomBarComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  getListSmartContract(currentAddress) {
-    const payload = {
-      limit: 10,
-      offset: 0,
-      minterAddress: currentAddress,
-    };
-
-    this.lengthSBT = 0;
-    this.soulboundService.getListSoulbound(payload).subscribe((res) => {
-      if (res.data.length > 0) {
-        this.lengthSBT = res.meta.count;
-      }
-    });
   }
 }

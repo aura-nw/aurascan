@@ -29,6 +29,7 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <app-name-tag
+                [fullText]="true"
                 [value]="transactionsData.top_amount_sent[0]?.address"
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>
@@ -51,6 +52,7 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <app-name-tag
+                [fullText]="true"
                 [value]="transactionsData.top_amount_received[0]?.address"
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>
@@ -73,6 +75,7 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <app-name-tag
+                [fullText]="true"
                 [value]="transactionsData.top_tx_sent[0]?.address"
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>
@@ -91,6 +94,7 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <app-name-tag
+                [fullText]="true"
                 [value]="transactionsData.top_gas_used[0]?.address"
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>

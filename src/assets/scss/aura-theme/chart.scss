@@ -1,3 +1,8 @@
+.apexcharts-tooltip-series-group.apexcharts-active,
+.apexcharts-tooltip-title
+{
+  color: var(--aura-white) !important;
+}
 .chart__options {
   .divider.divider-vertical {
     min-height: 22px;

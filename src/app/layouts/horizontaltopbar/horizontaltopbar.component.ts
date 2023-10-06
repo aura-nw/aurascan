@@ -6,8 +6,7 @@ import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
+import { LENGTH_CHARACTER } from '../../../app/core/constants/common.constant';
 import { EventService } from '../../core/services/event.service';
 import { LanguageService } from '../../core/services/language.service';
 import { TransactionService } from '../../core/services/transaction.service';
@@ -35,17 +34,14 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   countryName: any;
   valueset: any;
   searchValue = null;
-  env = null;
   pageTitle = null;
   innerWidth;
   menuName = MenuName;
   menuLink = [];
-  wallet = null;
-  lengthSBT = 0;
+  currentAddress = null;
+
   prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
-  currentAddress;
-  isAllowInABTWhiteList = true;
 
   /**
    * Language Listing
@@ -76,7 +72,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     private walletService: WalletService,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
-    private soulboundService: SoulboundService,
     private commonService: CommonService,
   ) {
     router.events.subscribe((event) => {
@@ -86,9 +81,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     });
 
     this.walletService.wallet$.subscribe((wallet) => {
-      this.wallet = wallet;
       if (wallet) {
-        this.getListSmartContract(wallet.bech32Address);
         this.menuItems.forEach((item) => {
           if (item.name === this.menuName.Account) {
             // check if item is account
@@ -145,13 +138,11 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
           this.currentAddress = this.walletService.wallet?.bech32Address;
         } else {
           this.currentAddress = null;
-          this.isAllowInABTWhiteList = false;
         }
       });
   }
 
   checkEnv() {
-    this.env = this.environmentService.configValue.env;
     this.innerWidth = window.innerWidth;
     this.pageTitle =
       this.innerWidth > 992
@@ -378,21 +369,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         this.menuLink.push(arr);
       }
     }
-  }
-
-  getListSmartContract(currentAddress) {
-    const payload = {
-      limit: 10,
-      offset: 0,
-      minterAddress: currentAddress,
-    };
-
-    this.lengthSBT = 0;
-    this.soulboundService.getListSoulbound(payload).subscribe((res) => {
-      if (res.data.length > 0) {
-        this.lengthSBT = res.meta.count;
-      }
-    });
   }
 
   checkMenuActive(menuLink: string) {
