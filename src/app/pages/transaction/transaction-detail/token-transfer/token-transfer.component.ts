@@ -50,14 +50,9 @@ export class TokenTransferComponent implements OnInit {
   ngOnInit(): void {
     this.transactionService.getListTransferFromTx(this.height).subscribe((res) => {
       if (res?.cw721_activity?.length > 0) {
-        res.cw721_activity.forEach((element) => {
-          if (element.action === 'approve' || element.action === 'revoke') {
-            element.to =
-              element.smart_contract_event?.smart_contract_event_attributes?.find((k) => k.key === 'spender')?.value ||
-              element['to'];
-          }
-        });
-        this.dataSourceNFTs.data = res.cw721_activity;
+        // remove record approve && revoke
+        const arrCW721 = res.cw721_activity?.filter((k) => k.action !== 'approve' && k.action !== 'revoke');
+        this.dataSourceNFTs.data = arrCW721;
       }
       if (res.cw20_activity?.length > 0) {
         this.dataSourceFTs.data = res.cw20_activity;
