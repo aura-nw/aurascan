@@ -57,7 +57,7 @@
     </div>
   </div>
   <div class="mb-0 text--gray-5 caption-mob fw-normal filter-contain">
-    <div class="box-filter tsx-filter-panel d-flex align-items-center mb-4 mb-lg-0" *ngIf="displayFilter">
+    <div class="box-filter txs-filter-panel d-flex align-items-center mb-4 mb-lg-0" *ngIf="displayFilter">
       <div class="d-flex align-items-center">
         <div class="dropdown aura-dropdown btn-item body" [class.menu-hidden]="transactionFilter.endDate">
           <div [style]="'width: 225px'"
@@ -216,7 +216,7 @@
                 </button>
               </div>
               <div
-                class="tag-filter-box"
+                class="tag-filter-box d-flex align-items-center"
                 [class.has-result]="listTypeSelectedTemp?.length > 0"
                 (click)="$event.stopPropagation()"
                 (keydown)="$event.stopPropagation()">
@@ -360,7 +360,7 @@
                     (click)="data.expand = false"></i>
                 </div>
                 <div *ngSwitchCase="'type'">
-                  <div class="aura-status aura-tooltip-contain">
+                  <div class="aura-status aura-tooltip-contain p-0">
                     <div class="status cursor-pointer aura-tooltip-object">
                       {{ data[template.matColumnDef] | stringEllipsis : 25 }}
                       <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
@@ -395,7 +395,7 @@
                       class="explain-data"
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
-                      <div class="item-show">
+                      <div class="item-show d-flex align-items-center">
                         <div class="aura-tooltip-contain">
                           <div class="aura-tooltip-object" *ngIf="(item.amountTemp | balanceOf : item.decimal) < 0.001">
                             <0,001
@@ -436,7 +436,7 @@
                       class="explain-data"
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
-                      <div class="item-show justify-content-between">
+                      <div class="item-show d-flex justify-content-between align-items-center">
                         <app-name-tag
                           [value]="item.fromAddress || currentAddress"
                           [url]="(item.fromAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
@@ -481,7 +481,7 @@
                       class="explain-data"
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
-                      <div class="item-show">
+                      <div class="item-show d-flex align-items-center">
                         <div [style]="'min-width: 148px'">
                           <app-name-tag
                             [value]="item.toAddress || currentAddress"
@@ -515,7 +515,7 @@
                       class="explain-data"
                       [class.show-detail]="data.expand || index === 0"
                       *ngIf="index < data.limit">
-                      <div class="item-show nft-column">
+                      <div class="item-show d-flex nft-column mb-2 justify-content-center">
                         <div class="justify-content-between tokenId">
                           <a
                             *ngIf="item.tokenId"

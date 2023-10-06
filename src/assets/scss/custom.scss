@@ -666,7 +666,8 @@ body {
   }
 }
 
-.name-tag, .name-tag-label a{
+.name-tag,
+.name-tag-label a {
   height: 26px;
   display: inline-flex;
   align-items: center;
@@ -780,10 +781,9 @@ body {
   }
 }
 
-.w-fit-content{
+.w-fit-content {
   width: fit-content;
 }
-
 
 .nft__unclaimed-noti {
   width: 24px;
@@ -800,4 +800,14 @@ body {
     border-radius: 24px;
     padding: 4px 8px;
   }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--aura-gray-1);
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
 }

@@ -9,8 +9,6 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ProposalService extends CommonService {
-  chainInfo = this.environmentService.configValue.chain_info;
-  maxValidator = `${this.environmentService.configValue.maxValidator}`;
   reloadList$ = new Subject();
 
   reloadList() {
