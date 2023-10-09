@@ -88,18 +88,7 @@ export class ProfileSettingsComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        if (error?.details?.message === 'Unauthorized') {
-          const payload = {
-            refreshToken: localStorage.getItem('refreshToken').replace(/"/g, ''),
-          };
-          this.userService.refreshToken(payload).subscribe((res) => {
-            localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
-            localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
-            this.onSubmit();
-          });
-        } else {
-          this.errorMessage = error?.details?.message;
-        }
+        this.errorMessage = error?.details?.message;
       },
     });
   }

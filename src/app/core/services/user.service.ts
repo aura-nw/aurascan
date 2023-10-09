@@ -7,8 +7,6 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class UserService extends CommonService {
-  chainInfo = this.environmentService.configValue.chain_info;
-
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
@@ -42,6 +40,7 @@ export class UserService extends CommonService {
   }
 
   refreshToken(payload): Observable<any> {
+    this.apiUrl = this.apiUrl || this.environmentService.configValue.beUri;
     return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
   }
 

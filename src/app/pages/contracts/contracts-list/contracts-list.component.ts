@@ -20,15 +20,18 @@ import { CommonService } from 'src/app/core/services/common.service';
   styleUrls: ['./contracts-list.component.scss'],
 })
 export class ContractsListComponent implements OnInit, OnDestroy {
+  typeCW4973 = TYPE_CW4973;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },
     { matColumnDef: 'name', headerCellDef: 'Contract Name' },
+    { matColumnDef: 'label', headerCellDef: 'Label' },
+    { matColumnDef: 'version', headerCellDef: 'Contract Ver' },
+    { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'type', headerCellDef: 'Type Contract' },
-    { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
-    { matColumnDef: 'contract_verification', headerCellDef: 'Verified' },
     { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', isShort: true, isNameTag: true },
   ];
+  contractRegisterType = ContractRegisterType;
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -51,7 +54,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     public translate: TranslateService,
     private contractService: ContractService,
     private datePipe: DatePipe,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnDestroy(): void {
@@ -86,6 +89,25 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     this.contractService.getListContract(payload).subscribe((res) => {
       if (res?.smart_contract?.length) {
         res?.smart_contract.forEach((item) => {
+          if (item?.code?.type === this.contractRegisterType.CW20 && item['cw20_contract']?.name) {
+            item.url = '/tokens/token/' + item.address;
+            item.token_tracker = item['cw20_contract']?.name;
+          } else if (
+            item?.code?.type === this.contractRegisterType.CW721 &&
+            item?.name !== this.typeCW4973 &&
+            item['cw721_contract']?.name
+          ) {
+            item.url = '/tokens/token-nft/' + item.address;
+            item.token_tracker = item['cw721_contract']?.name;
+          } else if (
+            item['code'].type === this.contractRegisterType.CW721 &&
+            item['name'] === this.typeCW4973 &&
+            item['cw721_contract']?.name
+          ) {
+            item.url = '/tokens/token-abt/' + item.address;
+            item.token_tracker = item['cw721_contract']?.name;
+          }
+
           item.verified_at = this.datePipe.transform(
             item.code?.code_id_verifications[0]?.verified_at,
             DATEFORMAT.DATETIME_UTC,

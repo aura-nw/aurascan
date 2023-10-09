@@ -1,5 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
@@ -10,7 +9,7 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./name-tag.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NameTagComponent implements OnInit, OnChanges {
+export class NameTagComponent implements OnInit {
   @Input() value = '';
   @Input() url = 'account';
   @Input() fullText = false;
@@ -37,13 +36,14 @@ export class NameTagComponent implements OnInit, OnChanges {
     if (this.extendUrl) {
       this.extendUrlLink = this.commonService.findUrlNameTag(this.value || this.paramUrl);
     }
+
+    setTimeout(() => {
+      this.commonService['listNameTag'] = this.commonService['listNameTag'] || this.global?.listNameTag;
+    }, 1000);
   }
 
   isContractAddress(address) {
-    if (address?.startsWith('aura') && address?.length === LENGTH_CHARACTER.CONTRACT) {
-      return true;
-    }
-    return false;
+    return address?.startsWith('aura') && address?.length === LENGTH_CHARACTER.CONTRACT;
   }
 
   extendLink(url) {
@@ -51,6 +51,14 @@ export class NameTagComponent implements OnInit, OnChanges {
     return url;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  displayContent(value) {
+    let result = value;
+    if (!this.commonService.checkPublic(value)) {
+      result += '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag, false);
+    }
+    if (this.commonService.checkPrivate(value)) {
+      result += '<br>' + 'Private name: ' + this.commonService.setNameTag(value, this.global.listNameTag);
+    }
+    return result;
   }
 }

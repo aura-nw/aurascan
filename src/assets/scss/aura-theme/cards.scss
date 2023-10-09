@@ -97,7 +97,7 @@
   }
   .nft__body {
     padding: var(--spacer-3);
-    // margin-top: var(--spacer-2);
+    min-height: 74px;
   }
   .nft__info {
     // overflow: hidden;
@@ -143,5 +143,21 @@
   }
   .divider.divider-horizontal {
     background-color: var(--aura-gray-8);
+  }
+}
+
+.card {
+  .box-name-tag:not(.private-name-tag),
+  .name-tag:not(.private-name-tag) {
+    &:after {
+      border-right: 15px solid var(--aura-gray-10);
+    }
+  }
+}
+.nft-cards {
+  .box-name-tag:not(.private-name-tag) {
+    &:after {
+      border-right: 15px solid var(--aura-black);
+    }
   }
 }

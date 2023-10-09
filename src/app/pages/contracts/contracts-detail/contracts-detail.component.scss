@@ -11,3 +11,20 @@
   width: 15px;
   height: 15px;
 }
+
+::ng-deep .contract__card-info .card {
+  @media (min-width: 991.98px) {
+    min-height: 247px;
+  }
+}
+
+.mb-haft {
+  margin-bottom: 1.5px;
+}
+
+@media (max-width: 414px) {
+  .btn-mobile {
+    border: 1px solid #717582;
+    border-radius: 8px;
+  }
+}

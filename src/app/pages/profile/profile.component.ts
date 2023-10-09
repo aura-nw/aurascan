@@ -14,19 +14,22 @@ export class ProfileComponent implements OnInit {
   PROFILE_TAB = [
     {
       key: ProfileTab.Setting,
-      value: 'Profile settings'
+      value: 'Profile settings',
     },
-    // {
-    //   key: ProfileTab.PrivateNameTag,
-    //   value: 'Private name tag'
-    // },
+    {
+      key: ProfileTab.PrivateNameTag,
+      value: 'Private name tag',
+    },
     // {
     //   key: ProfileTab.WatchList,
     //   value: 'Watchlist'
     // }
-  ]
+  ];
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     // check exit email

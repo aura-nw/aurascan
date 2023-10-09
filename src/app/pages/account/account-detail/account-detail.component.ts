@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
@@ -17,6 +17,7 @@ import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { Globals } from '../../../global/global';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { isContract } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-account-detail',
@@ -49,13 +50,12 @@ export class AccountDetailComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;
   totalSBTPick = 0;
   totalSBT = 0;
+  isContractAddress = false;
 
   constructor(
     public commonService: CommonService,
@@ -67,6 +67,7 @@ export class AccountDetailComponent implements OnInit {
     private modalService: NgbModal,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
+    private router: Router,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -77,6 +78,7 @@ export class AccountDetailComponent implements OnInit {
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
+        this.isContractAddress = isContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
       }
@@ -225,5 +227,20 @@ export class AccountDetailComponent implements OnInit {
   extendLink(url) {
     url = url.match(/^https?:/) ? url : '//' + url;
     return url;
+  }
+
+  editPrivateName() {
+    const userEmail = localStorage.getItem('userEmail');
+    const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.currentAddress);
+    if (userEmail) {
+      if (dataNameTag) {
+        localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
+      } else {
+        localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
+      }
+      this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }
