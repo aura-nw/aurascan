@@ -23,8 +23,7 @@
           <div class="row h-100">
             <div class="col-12 col-lg-4">
               <div
-                class="card-info card-info--gradient-black
-                mb-0 card-summary-info p-0 h-100 d-flex align-items-center">
+                class="card-info card-info--gradient-black mb-0 card-summary-info p-0 h-100 d-flex align-items-center">
                 <div class="d-flex flex-column px-lg-4 flex-shrink-0 flex-grow-1">
                   <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
@@ -146,8 +145,8 @@
     </div>
     <div class="col-12 col-lg-4 d-lg-flex flex-column justify-content-between">
       <div class="card mb-4 mb-md-6 card__item">
-        <div class="card-body px-4 py-4 px-lg-6 border-radius--sm
-        card-body--gradient-black d-flex flex-column justify-content-between">
+        <div
+          class="card-body px-4 py-4 px-lg-6 border-radius--sm card-body--gradient-black d-flex flex-column justify-content-between">
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
               <i class="ph-cube-light icon-brand text--gray-3"></i>
@@ -189,11 +188,16 @@
         </div>
       </div>
       <div class="card mb-4 mb-md-0 card__item">
-        <div class="card-body px-4 py-4 px-lg-6 border-radius--sm
-        card-body--gradient-black d-flex flex-column justify-content-between">
+        <div
+          class="card-body px-4 py-4 px-lg-6 border-radius--sm card-body--gradient-black d-flex flex-column justify-content-between">
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
-              <img src="assets/icons/icons-svg/basic/bonded-token.svg" alt="" class="icon-brand" width="32px" height="32px" />
+              <img
+                src="assets/icons/icons-svg/basic/bonded-token.svg"
+                alt=""
+                class="icon-brand"
+                width="32px"
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Bonded Token</div>
               </div>
@@ -205,7 +209,12 @@
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
-              <img src="assets/icons/icons-svg/basic/chart-col-up.svg" alt="" class="icon-brand" width="32px" height="32px" />
+              <img
+                src="assets/icons/icons-svg/basic/chart-col-up.svg"
+                alt=""
+                class="icon-brand"
+                width="32px"
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Inflation rate</div>
               </div>
@@ -217,7 +226,12 @@
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
-              <img src="assets/icons/icons-svg/basic/staking-coins.svg" alt="" class="icon-brand" width="32px" height="32px" />
+              <img
+                src="assets/icons/icons-svg/basic/staking-coins.svg"
+                alt=""
+                class="icon-brand"
+                width="32px"
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Staking APR</div>
               </div>
@@ -267,7 +281,10 @@
                   <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light py-2 px-2">
                     <ng-container *ngFor="let item of voting_Period_arr">
                       <li class="dropdown-item cursor-pointer py-3 px-2">
-                        <button type="button" class="button p-0 body-03 line-claim text--gray-light" (click)="curr_voting_Period = item">
+                        <button
+                          type="button"
+                          class="button p-0 body-03 line-claim text--gray-light"
+                          (click)="curr_voting_Period = item">
                           {{ item.content.title }}
                         </button>
                       </li>
