@@ -178,4 +178,10 @@ export class ExportCsvComponent implements OnInit {
     let subStringDate = lastDate ? 'T24:00:000Z' : 'T00:00:000Z';
     return temp + subStringDate;
   }
+
+  resetData(){
+    this.formInit();
+    this.dataType = '';
+    this.isFilterDate = true;
+  }
 }

@@ -113,7 +113,7 @@
     <ng-container *ngIf="!isRawData">
       <h2 class="text--white">Token Transfer</h2>
       <div class="mb-6">
-        <app-token-transfer [height]="transaction?.height"></app-token-transfer>
+        <app-token-transfer [transaction]="transaction"></app-token-transfer>
       </div>
     </ng-container>
 
