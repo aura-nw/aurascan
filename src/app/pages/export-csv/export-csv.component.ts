@@ -145,6 +145,8 @@ export class ExportCsvComponent implements OnInit {
         this.isValidAddress = false;
         return false;
       }
+    } else {
+      return false;
     }
 
     //check null/invalid block
