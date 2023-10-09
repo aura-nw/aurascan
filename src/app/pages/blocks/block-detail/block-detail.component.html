@@ -124,7 +124,7 @@
         <ng-container *ngIf="isRawData">
           <ng-container *ngIf="blockDetail?.json_data; else noValues">
             <div class="body">
-              <pre id="json" class="raw-content text--gray-1 px-4" [innerHtml]="blockDetail?.json_data | appJson"></pre>
+              <pre id="json" class="raw-content body-03 text--gray-1 px-4" [innerHtml]="blockDetail?.json_data | appJson"></pre>
             </div>
           </ng-container>
         </ng-container>
@@ -260,7 +260,7 @@
     <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
       <h2 class="card-header mb-0 text--white pb-0">Events</h2>
       <div class="card-body body">
-        <div class="col-12 text--gray-1 box-event-log">
+        <div class="col-12 text--gray-1 box-event-log border-radius--sm">
           <div class="item-event-log">
             <mat-expansion-panel
               hideToggle
@@ -278,8 +278,8 @@
               <div class="content-log">
                 <ng-container *ngFor="let data of item?.attributes; let idx = index">
                   <div class="ml-5 mb-2 row">
-                    <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key | decodeData }}</span>
-                    <span class="col-12 col-lg-9 body-01 text-break"> {{ data.value | decodeData }} </span>
+                    <span class="col-12 col-lg-3 text--gray-4 body-02 fw-normal">{{ data.key }}</span>
+                    <span class="col-12 col-lg-9 body-01 text-break"> {{ data.value }} </span>
                   </div>
                 </ng-container>
               </div>

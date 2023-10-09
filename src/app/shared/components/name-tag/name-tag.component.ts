@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';

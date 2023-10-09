@@ -4,7 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -19,14 +18,8 @@ export class WriteContractComponent implements OnInit {
   @Input() contractDetailData: any;
 
   isExpand = false;
-  isConnectedWallet = false;
-  walletAddress = '';
   userAddress = '';
   walletAccount: any;
-
-  chainInfo = this.environmentService.configValue.chain_info;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   jsValidator = new Validator();
   root: any[];
@@ -35,14 +28,13 @@ export class WriteContractComponent implements OnInit {
     public walletService: WalletService,
     private toastr: NgxToastrService,
     public translate: TranslateService,
-    private environmentService: EnvironmentService,
     private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
-        this.userAddress = wallet.bech32Address;
+        this.userAddress = wallet?.bech32Address;
       } else {
         this.userAddress = null;
       }
@@ -57,15 +49,6 @@ export class WriteContractComponent implements OnInit {
         this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
       }
     } catch {}
-
-    this.walletService.wallet$.subscribe((wallet) => {
-      if (wallet) {
-        this.isConnectedWallet = true;
-        this.walletAddress = this.walletService.wallet?.bech32Address;
-      } else {
-        this.isConnectedWallet = false;
-      }
-    });
   }
 
   expandMenu(closeAll = false): void {
@@ -241,12 +224,12 @@ export class WriteContractComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         result = result === 'custom' ? 0 : result;
-        let amount = msg['fieldList'].find((k) => k.fieldName === 'amount')?.value || '';
+        let amount = msg['fieldList']?.find((k) => k.fieldName === 'amount')?.value || '';
         //check amount is exit
         const numPow = amount.toString()
-          ? Math.pow(10, result).toString().substring(1)
-          : Math.pow(10, result).toString();
-        amount = amount.toString() + numPow;
+          ? Math.pow(10, result)?.toString().substring(1)
+          : Math.pow(10, result)?.toString();
+        amount = amount?.toString() + numPow;
         msg['fieldList'].find((k) => k.fieldName === 'amount').value = amount.toString();
       }
     });

@@ -8,7 +8,6 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class SoulboundService extends CommonService {
-  chainInfo = this.environmentService.configValue.chain_info;
   apiUrl = `${this.environmentService.configValue.beUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {

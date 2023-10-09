@@ -29,17 +29,15 @@
     color: var(--aura-white);
 
     &.filter-result {
-      white-space: nowrap;
-      padding: 0 var(--spacer-4);
       color: var(--aura-blue-3link);
       border: 1px solid var(--aura-blue-4);
       background: #222f3d;
-      border-radius: 8px;
       height: 33px;
-      display: flex;
-      align-items: center;
       width: fit-content;
+<<<<<<< HEAD
       min-width: max-content;
+=======
+>>>>>>> develop
     }
   }
   @media (max-width: 376px) {
@@ -101,21 +99,14 @@
 .account-transaction-table {
   .aura-status .status {
     background-color: unset;
-    padding: 0;
-  }
-  app-name-tag {
-    display: flex;
-    align-items: center;
   }
   .item-show {
     height: 56px;
     min-width: 180px;
-    display: flex;
-    align-items: center;
     &.nft-column {
-      display: block;
+      flex-direction: column;
+      align-items: flex-start;
       height: 56px !important;
-      margin-top: 8px;
     }
   }
   .tab-nft .item-show {
@@ -188,7 +179,6 @@
 }
 
 .filter-contain {
-  flex-wrap: nowrap;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
   overflow: hidden;
@@ -235,8 +225,6 @@
   border: 1px solid var(--aura-gray-9);
   border-radius: 8px;
   color: var(--aura-gray-5);
-  display: flex;
-  align-items: center;
   padding: 0 14px;
   max-height: 100px;
   overflow-y: auto;
