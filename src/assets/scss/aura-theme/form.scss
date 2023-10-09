@@ -371,7 +371,7 @@
       & > * {
         color: var(--aura-white);
       }
-      &:hover {
+      &:hover, &.active {
         background-color: var(--aura-gray-9);
       }
     }

@@ -16,7 +16,9 @@
             [class.active]="currentTab === tab.value"
             class="button button-tab-menu body fw-semibold cursor-pointer">
             <span
-              class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--gray-1' : 'text--gray-light' }}"
+              class="h5 fw-semibold mb-0 text-uppercase {{
+                customNav.activeId === index ? 'text--gray-1' : 'text--gray-light'
+              }}"
               >{{ tab.label }}</span
             >
           </a>
@@ -26,22 +28,34 @@
 
     <ng-container *ngIf="currentTab === tabsData.ExecutedTxs">
       <!-- Executed Transaction -->
-      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
+      <app-account-transaction-table
+        [modeQuery]="currentTab"
+        (lstType)="lstTypeFilter = $event"
+        [tnxTypeOrigin]="lstTypeFilter"></app-account-transaction-table>
     </ng-container>
 
     <!-- Aura Transfer -->
     <ng-container *ngIf="currentTab === tabsData.AuraTxs">
-      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
+      <app-account-transaction-table
+        [modeQuery]="currentTab"
+        (lstType)="lstTypeFilter = $event"
+        [tnxTypeOrigin]="lstTypeFilter"></app-account-transaction-table>
     </ng-container>
 
     <!-- Fts Transaction -->
     <ng-container *ngIf="currentTab === tabsData.FtsTxs">
-      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
+      <app-account-transaction-table
+        [modeQuery]="currentTab"
+        (lstType)="lstTypeFilter = $event"
+        [tnxTypeOrigin]="lstTypeFilter"></app-account-transaction-table>
     </ng-container>
 
     <!-- NFT Transactions -->
     <ng-container *ngIf="currentTab === tabsData.NftTxs">
-      <app-account-transaction-table [modeQuery]="currentTab"></app-account-transaction-table>
+      <app-account-transaction-table
+        [modeQuery]="currentTab"
+        (lstType)="lstTypeFilter = $event"
+        [tnxTypeOrigin]="lstTypeFilter"></app-account-transaction-table>
     </ng-container>
   </div>
 </div>
