@@ -14,7 +14,7 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
   styleUrls: ['./token-transfer.component.scss'],
 })
 export class TokenTransferComponent implements OnInit {
-  @Input() height: Number;
+  @Input() transaction: Number;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   nullAddress = NULL_ADDRESS;
@@ -48,7 +48,10 @@ export class TokenTransferComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.transactionService.getListTransferFromTx(this.height).subscribe((res) => {
+    if (this.transaction['status'] == 'Fail') {
+      return;
+    }
+    this.transactionService.getListTransferFromTx(this.transaction['height']).subscribe((res) => {
       if (res?.cw721_activity?.length > 0) {
         // remove record approve && revoke
         const arrCW721 = res.cw721_activity?.filter((k) => k.action !== 'approve' && k.action !== 'revoke');
