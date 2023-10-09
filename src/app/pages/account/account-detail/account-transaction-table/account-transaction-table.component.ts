@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -99,6 +99,7 @@ export class AccountTransactionTableComponent {
     private userService: UserService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -423,6 +424,7 @@ export class AccountTransactionTableComponent {
         this.currentAddress,
         coinConfig,
       );
+
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
       } else {
@@ -561,5 +563,18 @@ export class AccountTransactionTableComponent {
       this.checkAll = false;
       this.listTypeSelectedTemp = [];
     }
+  }
+
+  pageChangeRecord(event) {
+    this.transactionLoading = true;
+    this.nextKey = null;
+    this.pageData.pageSize = event;
+    this.dataSource = new MatTableDataSource();
+    this.getTxsAddress(this.nextKey);
+  }
+
+  linkExportPage() {
+    localStorage.setItem('setDataExport', JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }));
+    this.router.navigate(['/export-csv']);
   }
 }
