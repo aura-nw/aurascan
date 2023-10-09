@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
+import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 
 @Injectable()
 export class UserService extends CommonService {
@@ -189,7 +190,7 @@ export class UserService extends CommonService {
           contractAddr: payload.contractAddr,
           heightLT: payload.heightLT,
           txHash: payload.txHash,
-          actionIn: ['mint', 'burn', 'transfer', 'send', 'transfer_from', 'burn_from', 'send_from'],
+          actionIn: CW20_TRACKING,
           actionNotIn: null,
         },
         operationName: 'Cw20TXMultilCondition',
@@ -251,11 +252,7 @@ export class UserService extends CommonService {
           heightLT: payload.heightLT,
           txHash: payload.txHash,
           tokenId: payload.tokenId,
-          actionIn: payload.isNFTDetail
-            ? null
-            : !payload.isTransferTab
-            ? ['mint', 'burn', 'transfer_nft', 'send_nft']
-            : null,
+          actionIn: payload.isNFTDetail ? null : !payload.isTransferTab ? CW721_TRACKING : null,
           actionNotIn: payload.isNFTDetail ? null : payload.isTransferTab ? ['approve', 'instantiate', 'revoke'] : null,
           neqCw4973: payload.isCW4973 ? null : 'crates.io:cw4973',
           eqCw4973: payload.isCW4973 ? 'crates.io:cw4973' : null,
