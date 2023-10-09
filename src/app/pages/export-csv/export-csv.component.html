@@ -124,7 +124,7 @@
     </div>
 
     <!-- Filter Mode -->
-    <div class="offset-lg-3 d-flex align-items-center mb-3">
+    <div class="offset-lg-3 d-flex align-items-center mb-6">
       <ng-container *ngIf="isFilterDate">
         <div class="col-6 pr-3">
           <div class="input-group input-group--simply px-0 cursor-pointer" (click)="pickerStart.open()">
@@ -194,10 +194,7 @@
     </div>
 
     <div [class.aura-tooltip-contain]="!userEmail">
-      <mat-slide-toggle
-        formControlName="displayPrivate"
-        [disabled]="!userEmail"
-        class="aura-tooltip-object csv-hint">
+      <mat-slide-toggle formControlName="displayPrivate" [disabled]="!userEmail" class="aura-tooltip-object csv-hint">
         <span class="text--gray-8">Include Private name tags in data downloaded</span>
       </mat-slide-toggle>
       <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
@@ -205,7 +202,7 @@
 
     <!-- button group -->
     <div class="d-flex py-6 justify-content-center justify-content-lg-end mt-6 mt-lg-0 button-group">
-      <button class="button button--md button-pill button-outline" type="button">
+      <button class="button button--md button-pill button-outline" type="button" (click)="resetData()">
         <span>Reset</span>
       </button>
       <button
