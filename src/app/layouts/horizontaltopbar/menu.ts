@@ -157,6 +157,12 @@ export const MENU: MenuItem[] = [
         link: '/accountbound',
         icon: 'medal',
       },
+      {
+        id: 3,
+        label: 'Export Data (.CSV)',
+        link: '/export-csv',
+        icon: 'export',
+      }
     ],
   },
 ];
@@ -287,6 +293,12 @@ export const MENU_MOB: MenuItem[] = [
         label: 'ABT Creator',
         link: '/accountbound',
         icon: 'medal',
+      },
+      {
+        id: 3,
+        label: 'Export Data (.CSV)',
+        link: '/export-csv',
+        icon: 'export',
       },
     ],
   },

@@ -66,6 +66,11 @@ const routes: Routes = [
         path: 'profile',
         loadChildren: () => import('./pages/profile/profile.module').then((m) => m.ProfileModule),
       },
+      {
+        path: 'export-csv',
+        loadChildren: () =>
+          import('./pages/export-csv/export-csv.module').then((m) => m.ExportCsvModule),
+      },
     ],
   },
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },

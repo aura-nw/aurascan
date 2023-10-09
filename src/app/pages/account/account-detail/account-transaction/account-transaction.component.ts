@@ -21,6 +21,7 @@ export class AccountTransactionComponent implements OnInit {
   TABS = TABS_TITLE_ACCOUNT;
   tabsData = TabsAccountLink;
   currentTab = TabsAccountLink.ExecutedTxs;
+  lstTypeFilter = [];
 
   constructor(private layout: BreakpointObserver, private route: ActivatedRoute, private location: Location) {}
 

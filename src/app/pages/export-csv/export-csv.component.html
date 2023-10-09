@@ -1,0 +1,220 @@
+<h1 class="text--white fw-700">
+  Export Data <br class="d-lg-none" />
+  (Download CSV file)
+</h1>
+<div class="text--gray-2 mb-6">The earliest 1,000 record within the selected range will be exported</div>
+
+<div class="col-12 col-lg-6">
+  <form
+    [formGroup]="csvForm"
+    (ngSubmit)="downloadCSV()"
+    class="aura-form single-input-field csv-form"
+    autocomplete="off">
+    <!-- Export data type -->
+    <div class="row mb-6 align-items-center">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
+        <span class="form-label body-02 text--gray-4 input-require">Export data type</span>
+      </div>
+      <div class="col-12 col-lg-9">
+        <div class="form-group">
+          <div class="dropdown aura-dropdown btn-item">
+            <button
+              class="input-group align-items-center d-flex justify-content-between cursor-pointer btn-tns"
+              type="button"
+              id="typeExport"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              #trigger>
+              <span class="body text--gray-4">
+                <ng-container *ngIf="!dataType"> Select export data type </ng-container>
+                <span *ngIf="dataType?.length > 0" class="text--white"> {{ mappingDataExport(dataType) }} </span>
+              </span>
+              <div class="ml-3 d-flex align-items-center">
+                <i class="ph ph-caret-down text--white body"></i>
+                <i class="ph ph-caret-up text--white body"></i>
+              </div>
+            </button>
+            <ul class="dropdown-menu aura-dropdown-menu p-0" id="typeAction" #typeAction>
+              <!-- Group 1-->
+              <div>
+                <h5 class="dropdown-menu__title">Account transaction</h5>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === tabsData.ExecutedTxs"
+                  (click)="changeTypeFilter(tabsData.ExecutedTxs)">
+                  <button type="button" class="button px-2">{{ tabsAccount.ExecutedTxs }}</button>
+                </li>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === tabsData.AuraTxs"
+                  (click)="changeTypeFilter(tabsData.AuraTxs)">
+                  <button type="button" class="button px-2">{{ tabsAccount.AuraTxs }}</button>
+                </li>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === tabsData.FtsTxs"
+                  (click)="changeTypeFilter(tabsData.FtsTxs)">
+                  <button type="button" class="button px-2">{{ tabsAccount.FtsTxs }}</button>
+                </li>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === tabsData.NftTxs"
+                  (click)="changeTypeFilter(tabsData.NftTxs)">
+                  <button type="button" class="button px-2">{{ tabsAccount.NftTxs }}</button>
+                </li>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="row mb-6 align-items-center">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
+        <span class="form-label body-02 text--gray-4 input-require">Address</span>
+      </div>
+      <div class="col-12 col-lg-9">
+        <div class="form-group">
+          <div class="input-group" [class.form-control--error]="false">
+            <input
+              type="text"
+              formControlName="address"
+              placeholder="aura..."
+              name="inputAddress"
+              (input)="checkFormValid(); isError = false"
+              autocomplete="off" />
+          </div>
+          <div *ngIf="getAddress?.value?.length > 0 && !isValidAddress" class="text--danger mt-2 caption fw-normal">
+            Invalid aura address format
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data range -->
+    <div class="row mb-6 align-items-center">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
+        <span class="form-label body-02 text--gray-4 input-require">Data range</span>
+      </div>
+      <div class="col-12 col-lg-9">
+        <div class="d-flex align-items-center">
+          <div class="form-group d-flex align-items-center">
+            <input
+              type="radio"
+              value="filterRange"
+              id="date"
+              class="radio-box radio-box--dark"
+              [checked]="isFilterDate"
+              (change)="changeType(true)" />
+            <label for="date" class="ml-2 pl-1 mb-0 text-justify">Date</label>
+          </div>
+          <div class="form-group d-flex align-items-center ml-8">
+            <input
+              type="radio"
+              value="filterRange"
+              id="block"
+              class="radio-box radio-box--dark"
+              [checked]="!isFilterDate"
+              (change)="changeType()" />
+            <label for="block" class="ml-2 pl-1 mb-0 text-justify">Block Height</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Mode -->
+    <div class="offset-lg-3 d-flex align-items-center mb-3">
+      <ng-container *ngIf="isFilterDate">
+        <div class="col-6 pr-3">
+          <div class="input-group input-group--simply px-0 cursor-pointer" (click)="pickerStart.open()">
+            <input
+              readOnly
+              #start_date
+              formControlName="startDate"
+              [matDatepicker]="pickerStart"
+              [min]="minDate"
+              [max]="maxDate"
+              (ngModelChange)="setDateRange()"
+              class="cursor-pointer pl-4"
+              placeholder="Start date" />
+            <div class="mr-3 h6 mb-0 position-relative mt-1">
+              <i class="ph-thin ph-calendar-blank h3 text--white"></i>
+              <mat-datepicker #pickerStart></mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="filter-last-item col-6 pl-3">
+          <div class="input-group input-group--simply px-0 cursor-pointer" (click)="pickerEnd.open()">
+            <input
+              readOnly
+              #end_date
+              formControlName="endDate"
+              [matDatepicker]="pickerEnd"
+              [min]="minDateEnd"
+              [max]="maxDateEnd"
+              (ngModelChange)="setDateRange()"
+              class="cursor-pointer pl-4"
+              placeholder="End date" />
+            <div class="mr-3 h6 mb-0 position-relative mt-1">
+              <i class="ph-thin ph-calendar-blank h3 text--white"></i>
+              <mat-datepicker #pickerEnd></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isFilterDate">
+        <div class="col-6 pr-3">
+          <div class="input-group">
+            <input
+              placeholder="From Block"
+              formControlName="fromBlock"
+              (blur)="isError = false"
+              mask="000000000000"
+              (ngModelChange)="checkFormValid()"
+              autocomplete="off" />
+          </div>
+        </div>
+        <div class="filter-last-item col-6 pl-3">
+          <div class="input-group">
+            <input
+              placeholder="To Block"
+              formControlName="toBlock"
+              (blur)="isError = false"
+              mask="000000000000"
+              (ngModelChange)="checkFormValid()"
+              autocomplete="off" />
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div *ngIf="!isValidBlock" class="offset-lg-3 text--danger mt-2 caption fw-normal">
+      "To Block" height need to be greater than "From Block" height
+    </div>
+
+    <div [class.aura-tooltip-contain]="!userEmail">
+      <mat-slide-toggle
+        formControlName="displayPrivate"
+        [disabled]="!userEmail"
+        class="aura-tooltip-object csv-hint">
+        <span class="text--gray-8">Include Private name tags in data downloaded</span>
+      </mat-slide-toggle>
+      <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
+    </div>
+
+    <!-- button group -->
+    <div class="d-flex py-6 justify-content-center justify-content-lg-end mt-6 mt-lg-0 button-group">
+      <button class="button button--md button-pill button-outline" type="button">
+        <span>Reset</span>
+      </button>
+      <button
+        class="button button--md button-outline--gradient button-pill button-flat ml-4 btn-create"
+        type="button"
+        (click)="downloadCSV()"
+        [disabled]="!checkFormValid()">
+        <span class="text--white"> Download </span>
+      </button>
+    </div>
+  </form>
+</div>
