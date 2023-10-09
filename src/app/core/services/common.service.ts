@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
@@ -188,5 +188,17 @@ export class CommonService {
       result = true;
     }
     return result;
+  }
+
+  exportCSV(payload, getPrivate = false): Observable<any> {
+    const options = {
+      responseType: 'blob' as 'json',
+    };
+    const privateUrl = getPrivate ? '/private-name-tag' : '';
+
+    return this._http.get<any>(
+      `${this.apiUrl}/export-csv${privateUrl}?dataType=${payload.dataType}&address=${payload.address}&dataRangeType=${payload.dataRangeType}&min=${payload.min}&max=${payload.max}`,
+      options,
+    );
   }
 }
