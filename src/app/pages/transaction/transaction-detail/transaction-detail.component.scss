@@ -30,3 +30,7 @@
 ::ng-deep app-transaction-messages .card-info:not(:last-child) {
   margin-bottom: 16px;
 }
+
+#contentError.line-claim-v {
+  -webkit-line-clamp: 3;
+}

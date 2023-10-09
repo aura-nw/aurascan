@@ -34,15 +34,14 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   countryName: any;
   valueset: any;
   searchValue = null;
-  env = null;
   pageTitle = null;
   innerWidth;
   menuName = MenuName;
   menuLink = [];
-  wallet = null;
+  currentAddress = null;
+
   prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
-  currentAddress;
 
   /**
    * Language Listing
@@ -82,7 +81,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     });
 
     this.walletService.wallet$.subscribe((wallet) => {
-      this.wallet = wallet;
       if (wallet) {
         this.menuItems.forEach((item) => {
           if (item.name === this.menuName.Account) {
@@ -145,7 +143,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   checkEnv() {
-    this.env = this.environmentService.configValue.env;
     this.innerWidth = window.innerWidth;
     this.pageTitle =
       this.innerWidth > 992
@@ -424,5 +421,11 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     }
 
     return false;
+  }
+
+  removeConfigCSV(data) {
+    if (data.link === '/export-csv') {
+      localStorage.removeItem('setDataExport');
+    }
   }
 }

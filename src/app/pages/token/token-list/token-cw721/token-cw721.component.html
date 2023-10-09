@@ -42,7 +42,7 @@
           <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef>#</th>
-              <td mat-cell *matCellDef="let element; let i = index" class="vertical-align-top py-4">
+              <td mat-cell *matCellDef="let element; let i = index" class="py-4">
                 <span>{{ (pageData.pageIndex - 1) * pageData.pageSize + i + 1 }}</span>
               </td>
             </ng-container>

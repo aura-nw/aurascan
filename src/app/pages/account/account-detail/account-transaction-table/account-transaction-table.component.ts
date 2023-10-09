@@ -1,9 +1,8 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -26,8 +25,10 @@ export class AccountTransactionTableComponent {
   @Input() address: string;
   @Input() modeQuery: string;
   @Input() displayType: boolean = false;
+  @Input() tnxTypeOrigin = [];
   @Output() filterCondition = new EventEmitter<any>();
   @Output() tabName = new EventEmitter<string>();
+  @Output() lstType = new EventEmitter<any>();
 
   transactionLoading = false;
   currentAddress: string;
@@ -70,7 +71,6 @@ export class AccountTransactionTableComponent {
   transactionFilter: any;
   transactionTypeKeyWord = '';
   tnxType = [];
-  tnxTypeOrigin = [];
   listTypeSelectedTemp = [];
   arrTypeFilter = [];
   currentType = AccountTxType.Sent;
@@ -78,11 +78,8 @@ export class AccountTransactionTableComponent {
   isSearch = false;
   minDate;
   maxDate;
-  minDateEnd;
-  maxDateEnd;
   linkToken = 'token-nft';
   typeTx = [AccountTxType.Sent, AccountTxType.Received];
-  listTypeDefine = [];
   modeFilter = {
     date: 'date',
     type: 'type',
@@ -90,28 +87,29 @@ export class AccountTransactionTableComponent {
     all: 'all',
   };
   isSearchOther = false;
-
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
-
   countFilter = 0;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     public global: Globals,
     private environmentService: EnvironmentService,
-    private layout: BreakpointObserver,
     public commonService: CommonService,
     private userService: UserService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.initTnxFilter();
     if (this.tnxTypeOrigin?.length === 0) {
       this.getListTypeFilter();
+    } else {
+      this.tnxType = this.tnxTypeOrigin;
+      this.tnxTypeOrigin = [...this.tnxType];
+      this.lstType.emit(this.tnxTypeOrigin);
     }
 
     this.route.queryParams.subscribe((params) => {
@@ -131,7 +129,7 @@ export class AccountTransactionTableComponent {
     });
   }
 
-  initTnxFilter(isReset = false) {
+  initTnxFilter() {
     this.transactionTypeKeyWord = '';
     this.listTypeSelectedTemp = [];
     this.checkAll = false;
@@ -141,8 +139,8 @@ export class AccountTransactionTableComponent {
       type: null,
       typeTransfer: null,
     };
-    this.minDate = this.minDateEnd = new Date(2023, 2, 20);
-    this.maxDateEnd = this.maxDate = new Date().toISOString().slice(0, 10);
+    this.minDate = new Date(2023, 2, 20);
+    this.maxDate = new Date().toISOString().slice(0, 10);
   }
 
   onChangeTnxFilterType(event, type: any) {
@@ -343,9 +341,9 @@ export class AccountTransactionTableComponent {
         return obj;
       });
       this.tnxType = this.tnxType?.filter((k) => k.value);
-      this.listTypeDefine = [...this.tnxType];
       this.tnxType.push({ label: 'Others', value: 'Others' });
       this.tnxTypeOrigin = [...this.tnxType];
+      this.lstType.emit(this.tnxTypeOrigin);
     });
   }
 
@@ -426,6 +424,7 @@ export class AccountTransactionTableComponent {
         this.currentAddress,
         coinConfig,
       );
+
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
       } else {
@@ -564,5 +563,18 @@ export class AccountTransactionTableComponent {
       this.checkAll = false;
       this.listTypeSelectedTemp = [];
     }
+  }
+
+  pageChangeRecord(event) {
+    this.transactionLoading = true;
+    this.nextKey = null;
+    this.pageData.pageSize = event;
+    this.dataSource = new MatTableDataSource();
+    this.getTxsAddress(this.nextKey);
+  }
+
+  linkExportPage() {
+    localStorage.setItem('setDataExport', JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }));
+    this.router.navigate(['/export-csv']);
   }
 }

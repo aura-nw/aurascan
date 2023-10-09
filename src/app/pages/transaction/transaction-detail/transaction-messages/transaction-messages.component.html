@@ -1,4 +1,4 @@
-<div *ngIf="{ value: breakpoint$ | async } as breakpoint" class="box-tx-detail">
+<div class="box-tx-detail">
   <div *ngIf="!isTransactionTypeDefault">
     <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1">
       {{ checkTypeMessage() }}
@@ -425,8 +425,8 @@
 
   <ng-template #multiSend>
     <div class="card-info box-multisend">
-      <div class="card-text header-title">
-        <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+      <div class="card-text header-title d-flex align-items-center">
+        <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2" />
         Multisend
       </div>
       <div class="body-multisend">
@@ -489,7 +489,7 @@
                     <ng-container *ngFor="let data of item.attributes; let idx = index">
                       <div class="ml-5 mb-2 row">
                         <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key }}</span>
-                        <span class="col-12 col-lg-9 text-break">
+                        <span class="col-12 col-lg-9 break-all">
                           {{ data.value }}
                         </span>
                       </div>
@@ -507,8 +507,8 @@
   <ng-template #messageHeader let-data="data">
     <div class="mb-3 d-flex box-header">
       <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+        <div class="card-text header-title d-flex align-items-center">
+          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2" />
           {{ data.label || displayTitleTX() }}
         </div>
       </div>

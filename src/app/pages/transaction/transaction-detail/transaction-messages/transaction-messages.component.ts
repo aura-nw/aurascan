@@ -1,4 +1,3 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import * as _ from 'lodash';
@@ -18,7 +17,7 @@ import {
   pipeTypeData,
 } from '../../../../core/constants/transaction.enum';
 import { formatWithSchema } from '../../../../core/helpers/date';
-import { Globals, getAmount } from '../../../../global/global';
+import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -34,7 +33,6 @@ export class TransactionMessagesComponent implements OnInit {
   voteConstant = PROPOSAL_VOTE;
   transactionDetailType: TypeTransaction;
   eTransType = TRANSACTION_TYPE_ENUM;
-  amount = 0;
   amountClaim = 0;
   amountCommission = 0;
   commissionAutoClaim = 0;
@@ -74,21 +72,16 @@ export class TransactionMessagesComponent implements OnInit {
   };
   currentIndex = 0;
   transactionTypeArr = [];
-  pipeData = pipeTypeData;
-  eventLogData = [];
-  idxLog = 0;
   codeTransaction = CodeTransaction;
   isDisplay = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     public global: Globals,
     private datePipe: DatePipe,
     private environmentService: EnvironmentService,
-    private layout: BreakpointObserver,
     public commonService: CommonService,
     private transactionService: TransactionService,
     private proposalService: ProposalService,
@@ -146,13 +139,6 @@ export class TransactionMessagesComponent implements OnInit {
       }, 2000);
     }
 
-    //get amount of transaction
-    this.amount = getAmount(
-      this.transactionDetail?.messages,
-      this.transactionDetail?.type,
-      this.transactionDetail?.raw_log,
-      this.coinMinimalDenom,
-    );
     const typeTrans = this.typeTransaction.find(
       (f) => f.label.toLowerCase() === this.transactionDetail?.type.toLowerCase(),
     );

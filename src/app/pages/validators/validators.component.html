@@ -316,7 +316,7 @@
                           </div>
                         </div>
                         <h5
-                          class="text--primary mb-0 text-break"
+                          class="text--primary mb-0 break-all"
                           [class.text-title]="validator?.jailed && validator['status'] !== statusValidator.Active">
                           {{ validator.title }}
                         </h5>
@@ -412,7 +412,7 @@
           </div>
           <div class="ml-2">
             <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
-              <span class="modal__title text-break">{{ validatorDetail?.title }}</span>
+              <span class="modal__title break-all">{{ validatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
               Commission - {{ validatorDetail?.commission | percent : globals.formatNumber2Decimal }}
