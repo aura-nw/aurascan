@@ -22,7 +22,7 @@
       </app-tooltip-customize>
     </a>
   </div>
-  <div class="soulbound-list mt-4 mt-lg-0 d-flex align-items-center">
+  <div class="soulbound-list mt-lg-0 d-flex align-items-center" [class.mt-0]="isSBTValidator" [class.mt-4]="!isSBTValidator">
     <ng-container *ngIf="soulboundList && soulboundList?.length > 0; else noNFT">
       <div
         id="nft-cards"
