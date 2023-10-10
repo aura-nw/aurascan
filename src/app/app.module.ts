@@ -133,7 +133,7 @@ export class MaterialModule {}
     NgbTooltipModule,
     NgbPopoverModule,
     NgbNavModule,
-    // ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
+    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
     // NgxMaskModule.forRoot(maskConfig),
     ReactiveFormsModule,
     FormsModule,
