@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
@@ -14,8 +15,6 @@ import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -36,7 +35,6 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   countFav = 0;
-  modalReference: any;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 10,
@@ -47,7 +45,6 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   destroy$ = new Subject();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile = [];
-  dataTable = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor(
@@ -56,7 +53,6 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private toastr: NgxToastrService,
     private global: Globals,
-    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -98,7 +94,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   getListPrivateName() {
     this.textSearch = this.textSearch?.trim();
     const payload = {
-      limit: 100,
+      limit: 10,
       keyword: this.textSearch || '',
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
