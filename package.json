@@ -55,7 +55,7 @@
     "ngx-json-viewer": "^3.0.2",
     "ngx-mask": "^12.0.0",
     "ngx-progressbar": "^6.1.1",
-    "ngx-toastr": "^16.2.0",
+    "ngx-toastr": "^17.0.2",
     "path": "^0.12.7",
     "phosphor-icons": "^1.4.2",
     "rxjs": "~6.6.0",
