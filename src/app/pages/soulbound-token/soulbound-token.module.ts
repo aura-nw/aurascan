@@ -5,7 +5,7 @@ import { UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/f
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { ClickOutsideModule } from 'ng-click-outside';
+import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -59,7 +59,7 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     SoulboundFeatureTokensModule,
     ModelViewModule,
     AudioPlayerModule,
-    ClickOutsideModule,
+    NgClickOutsideDirective,
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,

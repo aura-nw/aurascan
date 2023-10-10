@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { ClickOutsideModule } from 'ng-click-outside';
+import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
@@ -65,7 +65,7 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ReactiveFormsModule,
     QrModule,
     SharedModule,
-    ClickOutsideModule,
+    NgClickOutsideDirective,
     WriteContractModule,
     ReadContractModule,
     PopupAddZeroModule,

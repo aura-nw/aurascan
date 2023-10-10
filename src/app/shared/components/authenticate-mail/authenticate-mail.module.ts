@@ -4,7 +4,7 @@ import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/lega
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { ClickOutsideModule } from 'ng-click-outside';
+import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AuthenticateMailComponent } from './authenticate-mail.component';
 
@@ -14,7 +14,7 @@ import { AuthenticateMailComponent } from './authenticate-mail.component';
     CommonModule,
     MatMenuModule,
     RouterModule,
-    ClickOutsideModule,
+    NgClickOutsideDirective,
     TranslateModule,
     MatDialogModule,
     CommonPipeModule,

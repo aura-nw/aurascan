@@ -5,7 +5,7 @@ import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-m
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { ClickOutsideModule } from 'ng-click-outside';
+import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { QrModule } from '../qr/qr.module';
 import { WalletConnectComponent } from './wallet-connect.component';
@@ -20,13 +20,13 @@ import { WalletListComponent } from './wallet-list/wallet-list.component';
     NgApexchartsModule,
     MatMenuModule,
     RouterModule,
-    ClickOutsideModule,
+    NgClickOutsideDirective,
     QrModule,
     TranslateModule,
     MatDialogModule,
     CommonPipeModule,
     ClipboardModule,
-    TooltipCustomizeModule
+    TooltipCustomizeModule,
   ],
   exports: [WalletConnectComponent],
 })
