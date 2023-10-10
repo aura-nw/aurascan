@@ -68,8 +68,7 @@ const routes: Routes = [
       },
       {
         path: 'export-csv',
-        loadChildren: () =>
-          import('./pages/export-csv/export-csv.module').then((m) => m.ExportCsvModule),
+        loadChildren: () => import('./pages/export-csv/export-csv.module').then((m) => m.ExportCsvModule),
       },
     ],
   },
@@ -83,7 +82,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy', scrollPositionRestoration: 'enabled' })],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
