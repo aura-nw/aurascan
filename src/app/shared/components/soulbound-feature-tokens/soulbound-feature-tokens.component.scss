@@ -14,10 +14,7 @@
     display: flex;
     >div {
       min-width: 110px;
-      margin-right: 15px;
-      &:last-child {
-        margin-right: 0;
-      }
+      margin-right: 5px;
       @media (min-width: 912px) {
         margin-right: 30px;
       }
