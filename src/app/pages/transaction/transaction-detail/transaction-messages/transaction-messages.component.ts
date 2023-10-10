@@ -7,6 +7,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { isContract } from 'src/app/core/utils/common/validation';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
@@ -990,5 +991,12 @@ export class TransactionMessagesComponent implements OnInit {
 
   changeShowData(idx) {
     this.isDisplay[idx] = !this.isDisplay[idx];
+  }
+
+  isContractAddress(address) {
+    if (isContract(address)) {
+      return true;
+    }
+    return false;
   }
 }
