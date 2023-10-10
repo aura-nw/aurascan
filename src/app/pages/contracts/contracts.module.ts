@@ -6,7 +6,7 @@ import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
@@ -60,7 +60,8 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     MatTableModule,
     NgbNavModule,
     CommonPipeModule,
-    NgxMaskModule,
+    NgxMaskPipe,
+    NgxMaskDirective,
     ContractTableModule,
     ReactiveFormsModule,
     QrModule,

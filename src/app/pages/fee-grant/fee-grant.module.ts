@@ -6,7 +6,7 @@ import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
@@ -46,7 +46,8 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     ReactiveFormsModule,
     MatDatepickerModule,
     NgClickOutsideDirective,
-    NgxMaskModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     APaginatorModule,
     NameTagModule,
   ],

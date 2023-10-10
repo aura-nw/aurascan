@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaskPipe, NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
@@ -23,7 +23,8 @@ import { BlocksComponent } from './blocks.component';
     CommonModule,
     BlocksRoutingModule,
     MaterialModule,
-    NgxMaskModule,
+    NgxMaskPipe,
+    NgxMaskDirective,
     CommonPipeModule,
     FormsModule,
     ReactiveFormsModule,
@@ -36,6 +37,6 @@ import { BlocksComponent } from './blocks.component';
     TooltipCustomizeModule,
     ClipboardModule,
   ],
-  providers: [BlockService, MaskPipe],
+  providers: [BlockService],
 })
 export class BlocksModule {}

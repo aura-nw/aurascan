@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { UserService } from 'src/app/core/services/user.service';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
@@ -56,14 +56,15 @@ import { TokenTableComponent } from './token-table/token-table.component';
     QrModule,
     NgbNavModule,
     NftCardModule,
-    NgxMaskModule,
+    NgxMaskPipe,
+    NgxMaskDirective,
     SoulboundFeatureTokensModule,
     CommonDirectiveModule,
     APaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
-    RouterModule
+    RouterModule,
   ],
   providers: [TransactionService, AccountService, DecimalPipe, UserService],
 })

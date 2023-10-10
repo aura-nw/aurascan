@@ -4,7 +4,7 @@ import { UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/f
 import { MatIconModule } from '@angular/material/icon';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
@@ -39,7 +39,8 @@ import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.m
     MaterialModule,
     TranslateModule,
     CommonPipeModule,
-    NgxMaskModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     LoadingImageModule,
     ReactiveFormsModule,
     NameTagModule,

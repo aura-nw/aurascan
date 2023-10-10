@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
@@ -72,7 +72,8 @@ import { UserService } from 'src/app/core/services/user.service';
     NgbPopoverModule,
     CommonPipeModule,
     ContractPopoverModule,
-    NgxMaskModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     WriteContractModule,
     ReadContractModule,
     ModelViewModule,

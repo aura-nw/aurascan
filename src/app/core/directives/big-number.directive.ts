@@ -1,11 +1,11 @@
 import { AfterViewInit, Directive, ElementRef, Input, SimpleChanges } from '@angular/core';
 import BigNumber from 'bignumber.js';
-import { MaskPipe } from 'ngx-mask';
+import { NgxMaskPipe } from 'ngx-mask';
 import { Globals } from 'src/app/global/global';
 import { IntlFormat } from '../utils/common/parsing';
 @Directive({
   selector: 'span[appBigNumber],div[appBigNumber]',
-  providers: [MaskPipe],
+  providers: [NgxMaskPipe],
 })
 export class BigNumberDirective implements AfterViewInit {
   @Input() decimal: number = 6;
@@ -15,18 +15,17 @@ export class BigNumberDirective implements AfterViewInit {
   @Input() votingPower: boolean = false;
 
   element: HTMLElement;
-  constructor(private mask: MaskPipe, public elRef: ElementRef, public global: Globals) {
+  constructor(private mask: NgxMaskPipe, public elRef: ElementRef, public global: Globals) {
     this.element = elRef.nativeElement;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes.appBigNumber.currentValue !== changes.appBigNumber.previousValue){
+    if (changes.appBigNumber.currentValue !== changes.appBigNumber.previousValue) {
       this.convertNumber();
     }
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   convertNumber() {
     const newAmount = new BigNumber(this.appBigNumber);

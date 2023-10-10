@@ -4,7 +4,7 @@ import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy
 import { RouterModule } from '@angular/router';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { DateFnsModule } from 'ngx-date-fns';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
@@ -26,12 +26,13 @@ import { NameTagModule } from '../name-tag/name-tag.module';
     MatTableModule,
     CommonPipeModule,
     DateFnsModule,
-    NgxMaskModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     DropdownModule,
     RouterModule,
     ContractPopoverModule,
     SharedModule,
-    NameTagModule
+    NameTagModule,
   ],
   exports: [ContractTableComponent],
 })

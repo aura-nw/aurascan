@@ -7,7 +7,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { CommonPipeModule } from '../../../../core/pipes/common-pipe.module';
@@ -30,8 +30,9 @@ import { AccountDetailTableComponent } from './account-detail-table.component';
     TableNoDataModule,
     PaginatorModule,
     LoadingImageModule,
-    NgxMaskModule,
-    CommonDirectiveModule
+    NgxMaskPipe,
+    NgxMaskDirective,
+    CommonDirectiveModule,
   ],
   exports: [AccountDetailTableComponent],
 })

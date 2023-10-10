@@ -2,7 +2,7 @@ import { formatDate } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { MaskPipe } from 'ngx-mask';
+import { NgxMaskPipe } from 'ngx-mask';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -103,7 +103,7 @@ export class ConvertUauraToAura implements PipeTransform {
 
 @Pipe({ name: 'convertLogAmount' })
 export class convertLogAmount implements PipeTransform {
-  constructor(private commonService: CommonService, private mask: MaskPipe) {}
+  constructor(private commonService: CommonService, private mask: NgxMaskPipe) {}
   transform(value: string, getDenomOnly = false): string {
     let amount = value.match(/\d+/g)[0];
     let data = this.commonService.mappingNameIBC(value);

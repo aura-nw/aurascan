@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import * as moment from 'moment';
-import { MaskPipe } from 'ngx-mask';
+import { NgxMaskPipe } from 'ngx-mask';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { CHART_RANGE } from 'src/app/core/constants/common.constant';
@@ -50,7 +50,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     public translate: TranslateService,
     private statisticService: StatisticService,
     public datepipe: DatePipe,
-    private maskService: MaskPipe,
+    private maskService: NgxMaskPipe,
     public global: Globals,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');

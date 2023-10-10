@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbCarouselModule, NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaskPipe, NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { BlockService } from 'src/app/core/services/block.service';
@@ -27,7 +27,8 @@ import { DashboardComponent } from './dashboard.component';
     NgbDropdownModule,
     NgbNavModule,
     MaterialModule,
-    NgxMaskModule,
+    NgxMaskPipe,
+    NgxMaskDirective,
     CommonPipeModule,
     FormsModule,
     ReactiveFormsModule,
@@ -36,6 +37,6 @@ import { DashboardComponent } from './dashboard.component';
     NgbCarouselModule,
     TooltipCustomizeModule,
   ],
-  providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService, CommonService, MaskPipe],
+  providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService, CommonService],
 })
 export class DashboardModule {}

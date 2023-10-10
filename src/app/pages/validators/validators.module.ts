@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
@@ -34,7 +34,8 @@ import { ValidatorsComponent } from './validators.component';
     CommonModule,
     ValidatorsRoutingModule,
     MaterialModule,
-    NgxMaskModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     CommonPipeModule,
     FormsModule,
     ReactiveFormsModule,

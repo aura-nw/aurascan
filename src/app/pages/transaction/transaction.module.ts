@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import { MaskPipe, NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
@@ -35,7 +35,8 @@ import { TransactionComponent } from './transaction.component';
     CommonModule,
     TransactionRoutingModule,
     MaterialModule,
-    NgxMaskModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     CommonPipeModule,
     FormsModule,
     ReactiveFormsModule,
@@ -50,6 +51,6 @@ import { TransactionComponent } from './transaction.component';
     TooltipCustomizeModule,
     ClipboardModule,
   ],
-  providers: [TransactionService, MappingErrorService, ProposalService, MaskPipe],
+  providers: [TransactionService, MappingErrorService, ProposalService],
 })
 export class TransactionModule {}
