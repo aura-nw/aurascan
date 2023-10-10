@@ -35,7 +35,12 @@
                             "exceljs",
                             "jsonschema",
                             "moment",
-                            "lodash"
+                            "lodash",
+                            "long",
+                            "file-saver",
+                            "js-sha256",
+                            "apexcharts",
+                            "@cordobo/qrcode"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",

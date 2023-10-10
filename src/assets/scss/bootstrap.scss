@@ -8,10 +8,10 @@ File: Custom Bootstrap Css File
 */
 
 //Core files
-@import "~/node_modules/bootstrap/scss/functions";
-@import "~/node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
 @import "variables";
-@import "~/node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/bootstrap/scss/bootstrap";
 @import "custom/components/reboot";
 @import "custom/components/badge";
 @import "custom/components/card";
