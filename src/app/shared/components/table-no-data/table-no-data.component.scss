@@ -1,0 +1,12 @@
+.img-height {
+    height: 110px;
+    @media (max-width: 414px) {
+        height: 95px;
+      }
+}
+
+@media (max-width: 992px) {
+    .clear-margin {
+        margin: 12px !important;
+    }
+}

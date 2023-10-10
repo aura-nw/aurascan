@@ -22,16 +22,27 @@
   text-overflow: ellipsis;
 }
 
-.aura-table.contract-table th.mat-header-cell:nth-child(3) {
-  max-width: 130px;
-}
-
 .aura-table.contract-table th.mat-header-cell:nth-child(1) {
   min-width: 220px;
 }
-
-.aura-table.contract-table th.mat-header-cell:nth-child(5) {
-  max-width: 150px;
+.aura-table.contract-table th.mat-header-cell:nth-child(2) {
+  min-width: 210px;
+}
+.aura-table.contract-table th.mat-header-cell:nth-child(3) {
+  min-width: 190px;
+}
+.aura-table.contract-table th.mat-header-cell:nth-child(5),
+.aura-table.contract-table th.mat-header-cell:nth-child(7) {
+  max-width: 100px;
+}
+.aura-table.contract-table th.mat-header-cell:nth-child(6) {
+  min-width: 180px;
+}
+.aura-table.contract-table th.mat-header-cell:nth-child(8) {
+  min-width: 180px;
+}
+.aura-table.contract-table th.mat-header-cell:nth-child(4) {
+  max-width: 130px;
 }
 .filter-group {
   overflow: auto;

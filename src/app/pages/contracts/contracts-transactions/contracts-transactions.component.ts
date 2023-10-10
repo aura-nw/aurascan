@@ -1,4 +1,3 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -9,7 +8,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { convertDataTransaction } from 'src/app/global/global';
+import { Globals, convertDataTransaction } from 'src/app/global/global';
 import { TableData } from 'src/app/shared/components/contract-table/contract-table.component';
 
 @Component({
@@ -52,17 +51,16 @@ export class ContractsTransactionsComponent implements OnInit {
     limit: 100,
   };
 
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     public translate: TranslateService,
     private router: Router,
-    private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private transactionService: TransactionService,
     public commonService: CommonService,
+    private global: Globals
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
@@ -76,6 +74,7 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.commonService['listNameTag'] = this.commonService['listNameTag'] || this.global?.listNameTag;
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractInfo.contractsAddress = this.contractAddress;
     this.payload['value'] = this.contractAddress;
@@ -206,13 +205,5 @@ export class ContractsTransactionsComponent implements OnInit {
     } else {
       this.router.navigate([`/contracts/transactions/${this.contractAddress}`]);
     }
-  }
-
-  checkResponse(response): TableData[] {
-    if (response.data && Array.isArray(response.data)) {
-      this.contractInfo.count = response.meta.count || 0;
-      return response;
-    }
-    return [];
   }
 }

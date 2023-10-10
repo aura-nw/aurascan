@@ -1,11 +1,9 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
 import { CodeTransaction } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
@@ -21,7 +19,6 @@ export class TransactionDetailComponent implements OnInit {
   txHash = '';
   transaction = null;
   codeTransaction = CodeTransaction;
-  typeTransaction = TYPE_TRANSACTION;
   isRawData = false;
   errorMessage = '';
   TAB = [
@@ -34,14 +31,11 @@ export class TransactionDetailComponent implements OnInit {
       value: 'JSON',
     },
   ];
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   chainId = this.environmentService.configValue.chainId;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
-  env = this.environmentService.configValue.env;
   loading = true;
-  isReload = false;
   listValidator = [];
   seeLess = false;
   isDisplayMore = false;
@@ -54,7 +48,6 @@ export class TransactionDetailComponent implements OnInit {
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
-    private layout: BreakpointObserver,
     private validatorService: ValidatorService,
   ) {}
 
@@ -97,7 +90,7 @@ export class TransactionDetailComponent implements OnInit {
               setTimeout(() => {
                 const lengthChar = document.getElementById('contentError')?.innerText?.length;
                 const widthContent = document.getElementById('contentError')?.offsetWidth;
-                
+
                 // cal width text/content
                 if (lengthChar * 7.1 > widthContent * 3) {
                   this.isDisplayMore = true;
@@ -109,7 +102,6 @@ export class TransactionDetailComponent implements OnInit {
           } else {
             setTimeout(() => {
               this.getDetail();
-              this.isReload = true;
             }, 10000);
           }
         },

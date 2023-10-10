@@ -216,7 +216,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   sortData(sort: Sort) {
     this.dataSource.data.forEach((data) => {
       data.circulating_market_cap = +data.circulating_market_cap;
-      data.volume = +data.volume_24h;
+      data.volume = +data.volume;
       data.price = +data.price;
       data.holders = +data.holders;
     });
@@ -252,16 +252,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
         .sort((a, b) => this.compare(a.change, b.change, !isAsc));
       this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
     }
-
-    // if (sort.active === 'holders') {
-    //   let lstUp = this.sortedData
-    //     .filter((data) => data.isValueUp)
-    //     ?.sort((a, b) => this.compare(a.holders, b.holders, isAsc));
-    //   let lstDown = this.sortedData
-    //     .filter((data) => !data.isValueUp)
-    //     .sort((a, b) => this.compare(a.holders, b.holders, !isAsc));
-    //   this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
-    // }
 
     let dataFilter = this.sortedData;
     this.pageData = {

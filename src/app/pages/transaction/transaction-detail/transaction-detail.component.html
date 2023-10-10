@@ -12,11 +12,11 @@
       </div>
     </div>
 
-    <div class="text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+    <div class="text--white">
       <div class="box-error mb-4" *ngIf="errorMessage && !isRawData">
         <div class="mb-1">
           <div class="fw-semibold mb-1 body-01">Error:</div>
-          <span class="body" id="contentError" [class.ellipsis-text]="!seeLess">{{ errorMessage }}</span>
+          <span class="body" id="contentError" [class.line-claim-v]="!seeLess">{{ errorMessage }}</span>
         </div>
         <div *ngIf="isDisplayMore" class="cursor-pointer mt-1 w-auto txt-see-more">
           <span (click)="seeLess = true" *ngIf="!seeLess">See more</span>
@@ -109,6 +109,13 @@
         <pre *ngIf="isRawData" id="json" class="raw-content text--gray-1" [innerHtml]="transaction.tx | appJson"></pre>
       </div>
     </div>
+
+    <!-- <ng-container *ngIf="!isRawData">
+      <h2 class="text--white">Token Transfer</h2>
+      <div class="mb-6">
+        <app-token-transfer [height]="transaction?.height"></app-token-transfer>
+      </div>
+    </ng-container> -->
 
     <ng-container *ngIf="!isRawData && transaction?.messages">
       <h2 class="text--white">Messages</h2>

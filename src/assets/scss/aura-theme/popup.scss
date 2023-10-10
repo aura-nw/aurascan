@@ -34,7 +34,7 @@
 }
 .grant-overlay-panel {
   @media (max-width: 567px) {
-    max-width: 100vw !important;
+    max-width: 95vw !important;
   }
   .mat-dialog-container {
     background: none;
@@ -51,4 +51,11 @@
   padding: var(--spacer-4);
   background-color: var(--aura-gray-10);
   margin-bottom: 6px;
+}
+.menu-hidden {
+  height: 0 !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  border: none !important;
 }

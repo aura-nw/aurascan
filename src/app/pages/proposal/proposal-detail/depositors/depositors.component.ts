@@ -3,7 +3,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PROPOSAL_TABLE_MODE } from 'src/app/core/constants/proposal.constant';
-import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
@@ -52,32 +51,24 @@ export class DepositorsComponent implements OnInit, OnDestroy {
       key: 'proposal_id',
       value: this.proposalId?.toString(),
       limit: 100, // get all
-      compositeKey: 'proposal_deposit.proposal_id'
+      compositeKey: 'proposal_deposit.proposal_id',
     };
 
-    this.transactionService.getListTxCondition(payload).subscribe({
+    this.transactionService.getProposalDeposit(payload).subscribe({
       next: (res) => {
         let dataList: any[] = [];
         if (res?.transaction?.length > 0) {
-          dataList = res?.transaction?.filter(
-            (transaction) =>
-              transaction?.data?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
-              (transaction?.data?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
-                transaction?.data?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
-          );
-
-          dataList.forEach((item) => {
-            if (item.data?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
-              item.depositors = item.data?.tx?.body?.messages[0]?.proposer;
-              item.amount = balanceOf(item.data?.tx?.body?.messages[0].initial_deposit[0].amount);
-            } else {
-              item.depositors = item.data?.tx?.body?.messages[0]?.depositor;
-              item.amount = balanceOf(item.data?.tx?.body?.messages[0].amount[0].amount);
-            }
-            item.txhash = item?.hash;
-            item.timestamp = item?.timestamp;
+          dataList = res?.transaction;
+          dataList.forEach((tx) => {
+            tx['event_attributes'].forEach((item) => {
+              if (item.composite_key === 'proposal_deposit.amount') {
+                tx.amount = balanceOf(item?.value.replace(this.coinMinimalDenom, ''));
+              }
+              if (item.composite_key === 'transfer.sender') {
+                tx.depositors = item?.value;
+              }
+            });
           });
-
           this.depositorsList = dataList;
           this.dataLength = dataList?.length || 0;
 

@@ -1,68 +1,76 @@
-<div class="card box-contract-overview mb-4 mb-lg-5">
-  <div class="table-responsive">
-    <table class="aura-basic-table w-100 body-02 body-mob">
-      <tr>
-        <td colspan="2">
-          <div class="d-flex justify-content-between align-items-center">
-            <h6 class="h3-mob mb-0 text--white">Contract Overview</h6>
-            <div class="justify-content-end">
-              <div class="d-flex justify-content-end"></div>
+<div class="card box-contract-overview mb-0 mb-lg-5 dropdown">
+  <div
+    class="card__header d-flex align-items-center justify-content-between"
+    data-bs-toggle="collapse"
+    data-bs-target="#title1"
+    aria-controls="title1"
+    aria-expanded="false">
+    <h6 class="h4-mob mb-0 text--white fw-semibold">Contract Overview</h6>
+    <button class="button d-lg-none" type="button">
+      <img src="assets/icons/icons-svg/white/chevron-down.svg" alt="" width="20px" />
+    </button>
+  </div>
+  <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
+  <div class="card__body body-02 body-mob collapse" id="title1">
+    <div>
+      <div class="text--gray-4 caption fw-normal mb-1">AURA Balance</div>
+      <div class="d-flex align-items-center">
+        <div class="text--gray-light mr-1">
+          <span [appBigNumber]="contractBalance" [decimal]="6"></span> {{ denom }}
+        </div>
+        <a class="text--primary" [routerLink]="['/account', contractDetail.address]"> More info</a>
+      </div>
+    </div>
+    <div class="mt-3">
+      <div class="text--gray-4 caption fw-normal mb-1">Value</div>
+      <div class="text--gray-light">
+        <span [appBigNumber]="contractBalance" [decimal]="6" [tokenPrice]="global.price.aura"></span>
+        <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
+          (${{ global.price.aura | mask : 'separator.6' }}/{{ denom | uppercase }})
+        </span>
+      </div>
+    </div>
+    <div class="mt-3">
+      <div class="text--gray-4 caption fw-normal mb-1">Token Tracker</div>
+      <div>
+        <ng-container>
+          <div
+            class="d-flex align-items-center"
+            *ngIf="
+              contractDetail?.code?.type === contractRegisterType.CW20 &&
+              contractDetail?.cw20_contract?.name &&
+              contractDetail?.cw20_contract?.symbol
+            ">
+            <a
+              class="text--primary break-word v-ellipsis--des line-claim-v"
+              [routerLink]="['/tokens/token/', contractDetail?.address]">
+              {{ contractDetail?.cw20_contract?.name }} ({{ contractDetail?.cw20_contract?.symbol }})
+            </a>
+            <div class="aura-tooltip-contain">
+              <div class="status cursor-pointer aura-tooltip-object">
+                <img
+                  [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                  alt=""
+                  width="18"
+                  height="18"
+                  class="ml-1 mb-1"
+                  *ngIf="verifiedStatus === 'VERIFIED'" />
+              </div>
+              <app-tooltip-customize [content]="verifiedText || 'Verified by Aura Network'"> </app-tooltip-customize>
             </div>
           </div>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="text--gray-5 body-02-mob">Balance:</td>
-        <td>
-          <span [appBigNumber]="contractBalance" [decimal]="6"></span>
-          {{ denom }}
-        </td>
-      </tr>
-
-      <tr class="d-lg-none">
-        <td colspan="3">
-          <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
-          <div>
-            <span class="mr-1 mr-lg-2">
-              <app-name-tag
-                [value]="contractDetail?.creator"
-                [widthAuto]="true"
-                [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
-            </span>
-            at txn
-            <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-              {{ contractDetail?.tx_hash | cutStringPipe : 6 : 6 }}
-            </a>
-          </div>
-        </td>
-      </tr>
-
-      <tr class="d-none d-lg-table-row">
-        <td class="text--gray-5 body-02-mob">Contract Creator:</td>
-        <td colspan="2">
-          <span class="mr-1 mr-lg-2">
-            <app-name-tag
-              [value]="contractDetail?.creator"
-              [widthAuto]="true"
-              [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
-          </span>
-          at txn
-          <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-            {{ contractDetail?.tx_hash | cutStringPipe : 8 : 8 }}
+          <a
+            *ngIf="
+              contractDetail?.code?.type !== contractRegisterType.CW20 &&
+              contractDetail?.cw721_contract?.name &&
+              contractDetail?.cw721_contract?.symbol
+            "
+            class="text--primary break-word v-ellipsis--des line-claim-v"
+            [routerLink]="['/tokens/' + linkNft, contractDetail?.address]">
+            {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
           </a>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="text--gray-5 body-02-mob border_none">Aura Value:</td>
-        <td class="border_none">
-          <span [appBigNumber]="contractBalance" [decimal]="6" [tokenPrice]="global.price.aura"></span>
-          <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
-            (${{ global.price.aura | mask : 'separator.6' }}/{{ denom | uppercase }})
-          </span>
-        </td>
-      </tr>
-    </table>
+        </ng-container>
+      </div>
+    </div>
   </div>
 </div>

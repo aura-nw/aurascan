@@ -96,6 +96,7 @@
           <div *ngIf="dataSource?.data?.length > 0">
             <app-card-mob-explain
               *ngFor="let data of dataSource?.data"
+              [data]="data"
               [title]="{
                 label: data.content.title,
                 labelLink: '/votings/' + data.proposal_id,
@@ -104,8 +105,9 @@
               [status]="getStatus(data.status)"
               [content]="[
                 {
+                  address: distributionAcc,
                   label: 'Sender',
-                  class: !commonService.checkDisplayTooltip(distributionAcc) ? 'name-tag-label' : '',
+                  class: !commonService.checkDisplayTooltip(distributionAcc) ? 'name-tag' : '',
                   info: !commonService.checkDisplayTooltip(distributionAcc)
                     ? '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
@@ -119,8 +121,9 @@
                       '</a>'
                 },
                 {
+                  address: data.content.recipient,
                   label: 'Recipient',
-                  class: !commonService.checkDisplayTooltip(data.content.recipient) ? 'name-tag-label' : '',
+                  class: !commonService.checkDisplayTooltip(data.content.recipient) ? 'name-tag' : '',
                   info: !commonService.checkDisplayTooltip(data.content.recipient)
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.content.recipient) +
@@ -146,7 +149,7 @@
                     data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
                       ? '<span>' +
                         (data.voting_end_time | customDate : 'yyyy-MM-dd') +
-                        '</span>' +
+                        '</span>' + ' ' + 
                         '<span>' +
                         (data.voting_end_time | customDate : 'HH:mm:ss') +
                         '</span>'

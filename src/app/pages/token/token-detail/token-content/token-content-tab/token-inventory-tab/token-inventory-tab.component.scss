@@ -9,13 +9,14 @@
     background-color: var(--aura-gray-8);
     border-radius: 4px 0px 0px 4px;
     padding-left: var(--spacer-1);
-    padding-right: var(--spacer-2);
-    min-width: 90px;
+    padding-right: var(--spacer-5);
+    // min-width: 90px;
     &.private-name-tag {
       padding: 0 var(--spacer-2);
-      background-color: unset;
+      background-color: var(--aura-gray-10);
       border-radius: 16px;
       border: 1px solid var(--aura-gray-8);
+      padding-right: var(--spacer-2);
     }
     &:not(.private-name-tag) {
       position: relative;
@@ -30,18 +31,6 @@
         border-top: 13px solid transparent;
         border-right: 15px solid var(--aura-black);
         border-bottom: 13px solid transparent;
-      }
-    }
-  }
-}
-
-.box-nft {
-  ::ng-deep {
-    .box-name-tag {
-      &:not(.private-name-tag) {
-        &:after {
-          border-right: 15px solid var(--aura-black) !important;
-        }
       }
     }
   }

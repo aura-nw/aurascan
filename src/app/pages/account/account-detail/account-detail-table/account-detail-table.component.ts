@@ -58,12 +58,11 @@ export class AccountDetailTableComponent implements OnInit, OnChanges {
           }
         }
         // get ValidatorAddressArr
-        if (this.pageEventType !== 'Redelegation') {
-          operatorAddArr.push(f.validator_address);
-        }
         if (this.pageEventType === 'Redelegation') {
           operatorAddArr.push(f.validator_src_address);
           operatorAddArr.push(f.validator_dst_address);
+        } else {
+          operatorAddArr.push(f.validator_address);
         }
       });
     }

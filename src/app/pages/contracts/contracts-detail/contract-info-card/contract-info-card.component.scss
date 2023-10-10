@@ -1,61 +1,42 @@
-.box-contract-info {
-  table.aura-basic-table {
-    min-height: 224px;
-    tr,
-    td {
-      color: var(--aura-gray-1);
-      height: 56px;
-      padding: 0px var(--spacer-4);
+.box-contract-overview {
+  border-radius: 0;
+  @media (min-width: 991.98px) {
+    border-radius: 12px;
+  }
+  &.moreInfo {
+    border-bottom-left-radius: var(--spacer-2);
+    border-bottom-right-radius: var(--spacer-2);
+    overflow: hidden;
+  }
+
+  .card__header {
+    padding: var(--spacer-4);
+    background-color: var(--aura-gray-9);
+    @media (min-width: 991.98px) {
+      padding-bottom: 0;
+      background-color: transparent;
     }
-
-    tr:first-child td:first-child {
-      width: 40%;
-      color: var(--aura-white);
+    &[aria-expanded='true'] {
+      img {
+        transform: rotate(180deg);
+      }
     }
   }
-
-  @media (max-width: 992px) {
-    margin-bottom: 16px;
-  }
-
-  @media (max-width: 414px) {
-    tr td {
-      width: 40%;
-    }
-  }
-}
-
-.box-name-tag {
-  height: 26px;
-  display: inline-flex;
-  align-items: center;
-  font-size: 1.2rem;
-  font-weight: 400;
-  line-height: 1.6rem;
-  word-break: break-word;
-  background-color: var(--aura-gray-9);
-  border-radius: 4px 0px 0px 4px;
-  padding-left: var(--spacer-2);
-  padding-right: var(--spacer-5);
-  &.private-name-tag {
-    padding: 0 var(--spacer-2);
-    background-color: unset;
-    border-radius: 16px;
-    border: 1px solid var(--aura-gray-8);
-  }
-  &:not(.private-name-tag) {
-    position: relative;
-    &:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      border-top: 13px solid transparent;
-      border-right: 15px solid #24262E;
-      border-bottom: 13px solid transparent;
+  .card__body {
+    padding: 0 var(--spacer-4);
+    position: static !important;
+    background-color: var(--aura-gray-10) !important;
+    display: block !important;
+    border: none !important;
+    transition: all .35s ease-in-out;
+    overflow: hidden;
+    height: unset !important;
+    @media (max-width: 992px) {
+      max-height: 0;
+      &.show {
+        padding: var(--spacer-4);
+        max-height: 9999px;
+      }
     }
   }
 }

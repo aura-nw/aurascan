@@ -22,11 +22,6 @@ ul {
   padding: 0;
   list-style: none;
 }
-button, .button {
-  outline: none;
-  border: none;
-  box-shadow: none;
-}
 a {
   color: var(--aura-light-gray);
   text-decoration: none;
@@ -47,11 +42,6 @@ a {
     background: var(--aura-gradient-general) !important;
   }
 }
-// @media (min-width: 1400px) {
-//   .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
-//     max-width: 1920px;
-//   }
-// }
 .container, .container-fluid, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .navbar-header {
   padding-right: var(--bs-gutter-x, 6px) !important;
   padding-left: var(--bs-gutter-x, 6px) !important;
@@ -61,38 +51,29 @@ a {
   }
 }
 
-.apexcharts-tooltip-series-group.apexcharts-active,
-.apexcharts-tooltip-title
-{
-  color: var(--aura-white) !important;
-}
-
 .label__status {
-  // background: var(--aura-gray-8);
   color: var(--aura-gray-light);
   border-radius: 4px;
   height: 34px;
-  // padding: 0 16px;
-  white-space: nowrap; 
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  @media (min-width: 992px) {
-    // background: var(--aura-gray-9);
-    // padding: 8px 16px;
-  }
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
+
 app-paginator {
   overflow: hidden;
 }
-.hover-link, a.text--primary {
-  cursor: pointer;
-  transition: all .35s ease-in-out;
-  &:hover {
-    color: var(--aura-green-3) !important;
-  }
+
+.mat-expansion-panel {
+  background: none;
+  box-shadow: none !important;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+  height: 48px;
 }
 
 .mat-mdc-icon-button {
