@@ -37,7 +37,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule, NgbNavModule, NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { NgProgressModule } from 'ngx-progressbar';
 import { ToastrModule } from 'ngx-toastr';
@@ -60,10 +59,6 @@ import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
 import { NameTagService } from './core/services/name-tag.service';
 import { UserService } from './core/services/user.service';
-
-export function createTranslateLoader(http: HttpClient): any {
-  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
-}
 
 const maskConfig: Partial<IConfig> = {
   thousandSeparator: ',',
@@ -115,7 +110,7 @@ export const MY_FORMATS = {
     MatFormFieldModule,
     SchemaViewerModule,
   ],
-  declarations: [],
+  // declarations: [],
 })
 export class MaterialModule {}
 
@@ -124,16 +119,11 @@ export class MaterialModule {}
   imports: [
     TranslateModule.forRoot({
       defaultLanguage: 'en',
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient],
-      },
     }),
-    NgProgressModule.withConfig({
-      spinnerPosition: 'left',
-      color: 'blue',
-    }),
+    // NgProgressModule.withConfig({
+    //   spinnerPosition: 'left',
+    //   color: 'blue',
+    // }),
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
@@ -143,8 +133,8 @@ export class MaterialModule {}
     NgbTooltipModule,
     NgbPopoverModule,
     NgbNavModule,
-    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
-    NgxMaskModule.forRoot(maskConfig),
+    // ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
+    // NgxMaskModule.forRoot(maskConfig),
     ReactiveFormsModule,
     FormsModule,
     MatDatepickerModule,
