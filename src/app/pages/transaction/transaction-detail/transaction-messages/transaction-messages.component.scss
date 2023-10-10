@@ -80,7 +80,7 @@
   }
   .body-multisend {
     max-height: 440px;
-    overflow-y: scroll;
+    overflow-y: auto;
     .txt-label {
       min-width: 75px;
     }
@@ -99,7 +99,12 @@
   }
 
   @media (max-width: 1366px) {
-    overflow-y: scroll;
+    overflow-y: auto;
+  }
+  .box-name-tag {
+    &:after {
+      border-right: 15px solid var(--aura-gray-10) !important;
+    }
   }
 }
 
