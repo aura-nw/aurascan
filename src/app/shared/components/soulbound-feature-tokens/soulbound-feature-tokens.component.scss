@@ -10,6 +10,16 @@
   width: 100%;
   flex-grow: 1;
   overflow-x: auto;
+  .sbt-validator {
+    display: flex;
+    >div {
+      min-width: 110px;
+      margin-right: 30px;
+    }
+    &__label {
+      display: none;
+    }
+  }
   &::-webkit-scrollbar {
     height: 0;
   }
@@ -29,6 +39,10 @@
       flex-wrap: wrap;
       flex-basis: 20%;
       min-width: 180px;
+      &.sbt-validator {
+        min-width: auto;
+        max-width: 110px;
+      }
     }
     &:not(:last-child) {
       margin-right: var(--spacer-2);

@@ -26,11 +26,13 @@
     <ng-container *ngIf="soulboundList && soulboundList?.length > 0; else noNFT">
       <div
         id="nft-cards"
-        class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5 w-100 flex-nowrap flex-grow-1 pb-2 {{
-          isAccountDetail ? 'AccountDetail' : null
+        class="{{
+          !isSBTValidator
+            ? 'AccountDetail row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5 w-100 flex-nowrap flex-grow-1 pb-2'
+            : 'sbt-validator'
         }}">
         <div *ngFor="let token of soulboundList; let last = last; let i = index" [class.sbt-card-contain]="sbtPage">
-          <div class="soulbound__item" *ngIf="token.picked">
+          <div class="soulbound__item" [class.sbt-validator]="isSBTValidator" *ngIf="token.picked">
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
                 <app-nft-card
@@ -38,7 +40,7 @@
                   [nftLink]="'/tokens/token-abt/' + token.contract_address + '/' + encodeData(token.token_id)"
                   [nftItem]="token"
                   [nftType]="getTypeFile(token)"></app-nft-card>
-                <div class="nft-cards__label">
+                <div class="nft-cards__label" [class.sbt-validator]="isSBTValidator">
                   <span class="text-gradient">CW-4973</span>
                 </div>
               </div>
