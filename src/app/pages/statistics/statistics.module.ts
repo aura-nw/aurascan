@@ -4,7 +4,7 @@ import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { MaskPipe, NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
@@ -35,9 +35,10 @@ import { TopStatisticsComponent } from './top-statistics/top-statistics.componen
     MatTableModule,
     TranslateModule,
     TableNoDataModule,
-    NgxMaskModule,
-    NameTagModule
+    NgxMaskDirective,
+    NgxMaskPipe,
+    NameTagModule,
   ],
-  providers: [StatisticService, MaskPipe],
+  providers: [StatisticService],
 })
 export class StatisticsModule {}
