@@ -26,6 +26,12 @@
     }
   }
 }
+
+.icon-close {
+  width: 24px;
+  cursor: pointer;
+}
+
 @each $icon-name in $icon-variables {
   .icon-#{$icon-name} {
     &::before {
