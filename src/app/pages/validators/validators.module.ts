@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
@@ -27,6 +27,7 @@ import { DelegateItemComponent } from './validators-detail/delegate-item/delegat
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
 import { ValidatorsComponent } from './validators.component';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [ValidatorsComponent, ValidatorsDetailComponent, UserWalletInfoComponent, DelegateItemComponent],
@@ -60,6 +61,7 @@ import { ValidatorsComponent } from './validators.component';
     MappingErrorService,
     DecimalPipe,
     ProposalService,
+    provideEnvironmentNgxMask(MASK_CONFIG),
   ],
 })
 export class ValidatorsModule {}

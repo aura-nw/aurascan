@@ -12,10 +12,6 @@ const routes: Routes = [
         loadChildren: () => import('./pages/dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
       {
-        path: 'dashboard',
-        loadChildren: () => import('./pages/dashboard/dashboard.module').then((m) => m.DashboardModule),
-      },
-      {
         path: 'validators',
         loadChildren: () => import('./pages/validators/validators.module').then((m) => m.ValidatorsModule),
       },

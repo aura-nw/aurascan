@@ -9,7 +9,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
 @NgModule({
   declarations: [ExportCsvComponent],
   imports: [
@@ -25,7 +26,7 @@ import { NgxMaskPipe } from 'ngx-mask';
     TooltipCustomizeModule,
     NgxMaskPipe,
   ],
-  providers: [UserService],
+  providers: [UserService, provideEnvironmentNgxMask(MASK_CONFIG)],
   exports: [ExportCsvComponent],
 })
 export class ExportCsvModule {}

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
@@ -16,6 +16,7 @@ import { CommunityPoolAssetComponent } from './asset-list/community-pool-asset.c
 import { CommunityPoolRoutingModule } from './community-pool-routing.module';
 import { CommunityPoolComponent } from './community-pool.component';
 import { CommunityPoolProposalComponent } from './proposal-list/community-pool-proposal.component';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [CommunityPoolAssetComponent, CommunityPoolProposalComponent, CommunityPoolComponent],
@@ -35,6 +36,6 @@ import { CommunityPoolProposalComponent } from './proposal-list/community-pool-p
     APaginatorModule,
     NameTagModule,
   ],
-  providers: [ProposalService],
+  providers: [ProposalService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class CommunityPoolModule {}

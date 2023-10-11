@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
-import { MatSortModule } from '@angular/material/sort';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatSortModule } from '@angular/material/sort';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { CommonPipeModule } from '../../../../core/pipes/common-pipe.module';
@@ -35,5 +36,6 @@ import { AccountDetailTableComponent } from './account-detail-table.component';
     CommonDirectiveModule,
   ],
   exports: [AccountDetailTableComponent],
+  providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class AccountDetailTableModule {}

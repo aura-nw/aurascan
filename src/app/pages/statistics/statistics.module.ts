@@ -4,7 +4,7 @@ import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
@@ -16,6 +16,7 @@ import { StatisticsRoutingModule } from './statistics-routing.module';
 import { TopStatisticOverviewComponent } from './top-statistics/top-statistic-overview/top-statistic-overview.component';
 import { TopStatisticTransactionComponent } from './top-statistics/top-statistic-transaction/top-statistic-transaction.component';
 import { TopStatisticsComponent } from './top-statistics/top-statistics.component';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,6 @@ import { TopStatisticsComponent } from './top-statistics/top-statistics.componen
     NgxMaskPipe,
     NameTagModule,
   ],
-  providers: [StatisticService],
+  providers: [StatisticService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class StatisticsModule {}

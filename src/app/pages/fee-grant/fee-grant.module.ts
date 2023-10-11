@@ -6,7 +6,7 @@ import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
@@ -23,6 +23,7 @@ import { MyGrantersComponent } from './my-granters/my-granters.component';
 import { PopupAddGrantComponent } from './popup-add-grant/popup-add-grant.component';
 import { PopupNoticeComponent } from './popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,13 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     APaginatorModule,
     NameTagModule,
   ],
-  providers: [UntypedFormBuilder, FeeGrantService, TransactionService, MappingErrorService, AccountService],
+  providers: [
+    UntypedFormBuilder,
+    FeeGrantService,
+    TransactionService,
+    MappingErrorService,
+    AccountService,
+    provideEnvironmentNgxMask(MASK_CONFIG),
+  ],
 })
 export class FeeGrantModule {}

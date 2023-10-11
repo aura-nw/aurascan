@@ -6,7 +6,7 @@ import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MaterialModule } from 'src/app/material.module';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
@@ -34,6 +34,7 @@ import { ContractsRoutingModule } from './contracts-routing.module';
 import { ContractsTransactionsComponent } from './contracts-transactions/contracts-transactions.component';
 import { ContractVerifyStepsComponent } from './contracts-verify/contract-verify-steps/contract-verify-steps.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,7 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ClipboardModule,
     CommonDirectiveModule,
   ],
-  providers: [ContractService],
+  providers: [ContractService, provideEnvironmentNgxMask(MASK_CONFIG)],
   exports: [ContractVerifyStepsComponent],
 })
 export class ContractsModule {}

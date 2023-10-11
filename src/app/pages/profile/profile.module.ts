@@ -4,7 +4,7 @@ import { UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/f
 import { MatIconModule } from '@angular/material/icon';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
@@ -22,6 +22,7 @@ import { ProfileComponent } from './profile.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,6 @@ import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.m
     PaginatorModule,
     TooltipCustomizeModule,
   ],
-  providers: [UntypedFormBuilder, UserService, NameTagService],
+  providers: [UntypedFormBuilder, UserService, NameTagService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class ProfileModule {}

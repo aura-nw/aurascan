@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
@@ -22,6 +22,7 @@ import { MessagesItemComponent } from './transaction-detail/transaction-messages
 import { TransactionMessagesComponent } from './transaction-detail/transaction-messages/transaction-messages.component';
 import { TransactionRoutingModule } from './transaction-routing.module';
 import { TransactionComponent } from './transaction.component';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,6 @@ import { TransactionComponent } from './transaction.component';
     TooltipCustomizeModule,
     ClipboardModule,
   ],
-  providers: [TransactionService, MappingErrorService, ProposalService],
+  providers: [TransactionService, MappingErrorService, ProposalService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class TransactionModule {}

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbNavModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
@@ -27,6 +27,7 @@ import { ProposalRoutingModule } from './proposal-routing.module';
 import { ProposalTableComponent } from './proposal-table/proposal-table.component';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,12 @@ import { ProposalComponent } from './proposal.component';
     NameTagModule,
     TooltipCustomizeModule,
   ],
-  providers: [ProposalService, MappingErrorService, DecimalPipe, ValidatorService],
+  providers: [
+    ProposalService,
+    MappingErrorService,
+    DecimalPipe,
+    ValidatorService,
+    provideEnvironmentNgxMask(MASK_CONFIG),
+  ],
 })
 export class ProposalModule {}

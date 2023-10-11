@@ -6,7 +6,8 @@ import { RouterModule } from '@angular/router';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { UserService } from 'src/app/core/services/user.service';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
@@ -14,10 +15,10 @@ import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { MaterialModule } from '../../../material.module';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { AccountService } from '../../../core/services/account.service';
 import { TransactionService } from '../../../core/services/transaction.service';
+import { MaterialModule } from '../../../material.module';
 import { PaginatorModule } from '../../../shared/components/paginator/paginator.module';
 import { QrModule } from '../../../shared/components/qr/qr.module';
 import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
@@ -66,6 +67,6 @@ import { TokenTableComponent } from './token-table/token-table.component';
     ClipboardModule,
     RouterModule,
   ],
-  providers: [TransactionService, AccountService, DecimalPipe, UserService],
+  providers: [TransactionService, AccountService, DecimalPipe, UserService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class AccountDetailModule {}

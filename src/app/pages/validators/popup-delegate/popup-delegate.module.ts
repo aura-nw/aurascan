@@ -8,10 +8,11 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
 import { PopupDelegateComponent } from './popup-delegate.component';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [PopupDelegateComponent],
@@ -30,5 +31,6 @@ import { PopupDelegateComponent } from './popup-delegate.component';
     NgxMaskPipe,
   ],
   exports: [PopupDelegateComponent],
+  providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class PopupDelegateModule {}
