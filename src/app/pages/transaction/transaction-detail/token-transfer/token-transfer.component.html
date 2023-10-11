@@ -3,7 +3,7 @@
     <div class="card mb-0 transfer-card">
       <div class="card-body p-0">
         <div class="d-xl-flex justify-content-between align-items-center">
-          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">Fungible Token (FT) Transfer</h5>
+          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">Coin Token Transfer</h5>
         </div>
         <div class="pb-2">
           <div class="table-responsive table-token" *ngIf="dataSourceFTs.data.length > 0; else noFTValues">
@@ -56,7 +56,9 @@
                         </div>
                       </div>
                       <ng-container *ngIf="!breakpoint.value.matches">
-                        <div *ngSwitchCase="'amount'" class="d-flex transfer-token-info aura-tooltip-contain w-fit-content">
+                        <div
+                          *ngSwitchCase="'amount'"
+                          class="d-flex transfer-token-info aura-tooltip-contain w-fit-content">
                           <span class="caption fw-normal text--gray-4 mb-1">Amount</span>
                           <div
                             class="aura-tooltip-object"
@@ -70,7 +72,7 @@
                             *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) >= 0.001"
                             class="body-02"
                             [appBigNumber]="data[template.matColumnDef]"
-                            [decimal]="data.cw20_contract.decimal"></span>
+                            [decimal]="data.decimal"></span>
                         </div>
                       </ng-container>
 
@@ -139,9 +141,7 @@
     <div class="card mb-0 transfer-card">
       <div class="card-body p-0">
         <div class="d-xl-flex justify-content-between align-items-center">
-          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
-            Non-Fungible Token (NFT) Transfer
-          </h5>
+          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">NFT Transfer</h5>
         </div>
         <div class="pb-2">
           <div class="table-responsive table-token" *ngIf="dataSourceNFTs.data.length > 0; else noValues">
