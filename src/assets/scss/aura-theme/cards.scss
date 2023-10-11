@@ -89,6 +89,9 @@
         font-size: 1.4rem;
       }
     }
+    &.sbt-validator {
+      display: none !important;
+    }
   }
   .token-id {
     overflow: hidden;
