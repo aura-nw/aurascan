@@ -155,8 +155,6 @@ export class TransactionService extends CommonService {
       $value: String = null
       $heightGT: Int = null
       $heightLT: Int = null
-      $indexGT: Int = null
-      $indexLT: Int = null
       $hash: String = null
       $height: Int = null
     ) {
@@ -170,13 +168,8 @@ export class TransactionService extends CommonService {
               value: { _eq: $value}
               composite_key: { _eq: "proposal_deposit.proposal_id"}
               key: { _eq: "proposal_id"}
+              block_height: { _lte: $heightLT, _gte: $heightGT }
             }
-            _and: [
-              { height: { _gt: $heightGT } }
-              { index: { _gt: $indexGT } }
-              { height: { _lt: $heightLT } }
-              { index: { _lt: $indexLT } }
-            ]
           }
           order_by: [{ height: $order}, {index: $order }]
         ) {
@@ -199,10 +192,8 @@ export class TransactionService extends CommonService {
           limit: 100,
           order: 'desc',
           value: payload.value,
-          heightGT: null,
-          indexGT: null,
-          indexLT: null,
-          height: null,
+          heightGT: payload.heightGT,
+          heightLT: payload.heightLT,
         },
         operationName: 'queryProposalDeposit',
       })
