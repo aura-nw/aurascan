@@ -314,7 +314,7 @@ export class TransactionService extends CommonService {
               }
             }
           }
-          aura_transfer: event(
+          coin_transfer: event(
             where: {
               tx_msg_index: {_is_null: false}
               event_attributes: {
@@ -324,12 +324,6 @@ export class TransactionService extends CommonService {
               }
             }
           ) {
-            transaction {
-              timestamp
-              transaction_messages {
-                type
-              }
-            }
             event_attributes {
               composite_key
               value
