@@ -13,7 +13,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { MAX_NUMBER_INPUT, NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
+import { MAX_NUMBER_INPUT, NUMBER_2_DIGIT, NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR, VOTING_POWER_LEVEL } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
 import { DataDelegateDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -23,7 +23,6 @@ import { MappingErrorService } from '../../../app/core/services/mapping-error.se
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
-import { Globals } from '../../../app/global/global';
 
 @Component({
   selector: 'app-validators',
@@ -107,6 +106,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
+  number2Digit = NUMBER_2_DIGIT;
 
   chainInfo = this.environmentService.configValue.chain_info;
   denom = this.chainInfo.currencies[0].coinDenom;
@@ -114,7 +114,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   constructor(
     private validatorService: ValidatorService,
-    public globals: Globals,
     private modalService: NgbModal,
     private accountService: AccountService,
     public commonService: CommonService,
@@ -129,7 +128,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    // this.getBlocksMiss();
     this.getCountProposal();
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -152,9 +150,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * ngOnDestroy
-   */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();

@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, map, mergeMap, repeat, takeLast, ta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { DATEFORMAT, NUMBER_ONLY_DECIMAL, PAGE_EVENT } from '../../../../core/constants/common.constant';
+import { DATEFORMAT, NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL, PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
@@ -55,6 +55,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   searchSubject = new Subject();
   destroy$ = new Subject();
   dataTable = [];
+  number2Digit = NUMBER_2_DIGIT;
 
   constructor(
     public translate: TranslateService,

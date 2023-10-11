@@ -3,13 +3,12 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import * as _ from 'lodash';
-import { NUMBER_ONLY_DECIMAL, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
-import { Globals } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -26,7 +25,7 @@ export class TokenHoldersTabComponent implements OnInit {
   CW20Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
     { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
-    { matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12},
+    { matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12 },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 12 },
     { matColumnDef: 'value', headerCellDef: 'value', headerWidth: 12 },
   ];
@@ -54,11 +53,11 @@ export class TokenHoldersTabComponent implements OnInit {
   numberTop = 0;
   totalHolder = 0;
   numberOnlyDecimal = NUMBER_ONLY_DECIMAL;
+  number2Digit = NUMBER_2_DIGIT;
 
   chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(
-    public global: Globals,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,

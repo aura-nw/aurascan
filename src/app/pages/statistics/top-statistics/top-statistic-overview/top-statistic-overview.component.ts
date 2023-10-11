@@ -1,10 +1,9 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AURA_TOP_STATISTIC_RANGE } from 'src/app/core/constants/chart.constant';
-import { StatisticService } from 'src/app/core/services/statistic.service';
-import { formatDate } from '@angular/common';
-import { Globals } from 'src/app/global/global';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { StatisticService } from 'src/app/core/services/statistic.service';
 
 @Component({
   selector: 'app-top-statistic-overview',
@@ -18,10 +17,11 @@ export class TopStatisticOverviewComponent implements OnInit {
   preDay;
   loading = true;
   transactionsData;
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
+
   constructor(
-    public global: Globals,
     private statisticService: StatisticService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,

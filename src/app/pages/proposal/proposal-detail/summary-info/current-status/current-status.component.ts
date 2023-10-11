@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Globals } from 'src/app/global/global';
+import { NUMBER_2_DIGIT } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-current-status',
@@ -10,5 +10,8 @@ export class CurrentStatusComponent {
   @Input() proposalDetail;
   @Input() currentSubTitle: string;
   @Input() currentStatus: { value: string; class: string; key: string };
-  constructor(public global: Globals) {}
+
+  number2Digit = NUMBER_2_DIGIT;
+
+  constructor() {}
 }

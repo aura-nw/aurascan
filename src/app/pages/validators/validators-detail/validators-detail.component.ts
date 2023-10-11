@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
+import { NUMBER_2_DIGIT, NUM_BLOCK } from 'src/app/core/constants/common.constant';
 import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -78,15 +78,16 @@ export class ValidatorsDetailComponent implements OnInit {
   currentNextKeyDelegator = null;
 
   isOpenDialog = false;
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  timeInterval = this.environmentService.configValue.timeInterval;
   soulboundList = [];
   arrBlockUptime = [];
   arrLastBlock = [];
   isLeftPage = false;
   typeActive = 'BOND_STATUS_BONDED';
+  number2Digit = NUMBER_2_DIGIT;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  timeInterval = this.environmentService.configValue.timeInterval;
 
   constructor(
     private route: ActivatedRoute,
