@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { from, interval } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { Globals } from '../../../../../app/global/global';
 import {
@@ -57,6 +58,7 @@ export class SummaryInfoComponent implements OnInit {
   activeId = 0;
   reload$;
   dataDenomRequest: any;
+  numberOnlyDecimal = NUMBER_ONLY_DECIMAL;
 
   constructor(
     private proposalService: ProposalService,
@@ -404,7 +406,7 @@ export class SummaryInfoComponent implements OnInit {
 
     if (key === '') {
       let numberVote: string;
-      numberVote = this.numberPipe.transform(abs, this.global.formatNumberOnlyDecimal);
+      numberVote = this.numberPipe.transform(abs, this.numberOnlyDecimal);
       return (isNegative ? '-' : '') + numberVote + key;
     }
     return (isNegative ? '-' : '') + abs + key;
