@@ -78,10 +78,10 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'percent_hold'">
                       <span *ngIf="this.typeContract === contractType.CW20"
-                        >{{ data[template.matColumnDef] | number : global.formatNumber2Decimal }}%</span
+                        >{{ data[template.matColumnDef] | number : number2Digit }}%</span
                       >
                       <ng-container *ngIf="this.typeContract !== contractType.CW20">
-                        <span>{{ data.percent_hold || 0 | number : global.formatNumber2Decimal }} %</span>
+                        <span>{{ data.percent_hold || 0 | number : number2Digit }} %</span>
                         <div class="percentage-bar mt-2">
                           <div class="percentage-bar__process" [style.width]="(data.width_chart || 0) + '%'"></div>
                         </div>

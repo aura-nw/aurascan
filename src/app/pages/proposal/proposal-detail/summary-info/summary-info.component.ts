@@ -6,9 +6,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { from, interval } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { Globals } from '../../../../../app/global/global';
+import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
 import {
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
@@ -59,17 +57,16 @@ export class SummaryInfoComponent implements OnInit {
   reload$;
   dataDenomRequest: any;
   numberOnlyDecimal = NUMBER_ONLY_DECIMAL;
+  number2Digit = NUMBER_2_DIGIT;
 
   constructor(
     private proposalService: ProposalService,
-    public global: Globals,
     private walletService: WalletService,
     public dialog: MatDialog,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private numberPipe: DecimalPipe,
-    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -183,9 +180,7 @@ export class SummaryInfoComponent implements OnInit {
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
-                    this.numberPipe
-                      .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
-                      .toString(),
+                    this.numberPipe.transform(this.proposalDetail.veto_threshold, this.number2Digit).toString(),
                   );
                 }
               } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
@@ -193,9 +188,7 @@ export class SummaryInfoComponent implements OnInit {
               } else {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                   '{{proposalDetail.noWithVetoPercent}}',
-                  this.numberPipe
-                    .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
-                    .toString(),
+                  this.numberPipe.transform(this.proposalDetail.veto_threshold, this.number2Digit).toString(),
                 );
               }
             } else {
@@ -265,22 +258,22 @@ export class SummaryInfoComponent implements OnInit {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
           this.currentSubTitle =
             'This proposal may pass when the voting period is over because current quorum is more than ' +
-            this.numberPipe.transform(proposalDetail.quorum, this.global.formatNumber2Decimal).toString() +
+            this.numberPipe.transform(proposalDetail.quorum, this.number2Digit).toString() +
             '% and there are more than ' +
-            this.numberPipe.transform(proposalDetail.threshold, this.global.formatNumber2Decimal).toString() +
+            this.numberPipe.transform(proposalDetail.threshold, this.number2Digit).toString() +
             '% of Yes votes.';
         } else {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
           this.currentSubTitle =
             'The proportion of NoWithVeto votes is superior to ' +
-            this.numberPipe.transform(proposalDetail.veto_threshold, this.global.formatNumber2Decimal).toString() +
+            this.numberPipe.transform(proposalDetail.veto_threshold, this.number2Digit).toString() +
             '%';
         }
       } else {
         this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
         this.currentSubTitle =
           'The proportion of Yes votes is inferior to ' +
-          this.numberPipe.transform(proposalDetail.threshold, this.global.formatNumber2Decimal).toString() +
+          this.numberPipe.transform(proposalDetail.threshold, this.number2Digit).toString() +
           '%';
       }
     } else {
@@ -289,7 +282,7 @@ export class SummaryInfoComponent implements OnInit {
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubTitle =
         'Current quorum is less than ' +
-        this.numberPipe.transform(proposalDetail.quorum, this.global.formatNumber2Decimal).toString() +
+        this.numberPipe.transform(proposalDetail.quorum, this.number2Digit).toString() +
         '% and this proposal requires more participation';
     }
     this.proposalDetail = {

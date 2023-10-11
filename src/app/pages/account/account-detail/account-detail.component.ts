@@ -12,7 +12,7 @@ import { EnvironmentService } from '../../../../app/core/data-services/environme
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants/account.enum';
-import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
+import { DATE_TIME_WITH_MILLISECOND, NUMBER_2_DIGIT } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { Globals } from '../../../global/global';
@@ -56,6 +56,7 @@ export class AccountDetailComponent implements OnInit {
   totalSBTPick = 0;
   totalSBT = 0;
   isContractAddress = false;
+  number2Digit = NUMBER_2_DIGIT;
 
   constructor(
     public commonService: CommonService,

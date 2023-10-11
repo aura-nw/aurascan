@@ -177,7 +177,7 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'commission'">
-                          {{ data[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
+                          {{ data[template.matColumnDef] | percent : number2Digit }}
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
                           <div [style.min-width]="'120px'" class="text-end aura-tooltip-contain">
@@ -233,7 +233,7 @@
                         </div>
                         <div *ngSwitchCase="'uptime'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ calculatorUpTime(data['account_address']) | number : globals.formatNumber2Decimal }}%
+                            {{ calculatorUpTime(data['account_address']) | number : number2Digit }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
@@ -353,7 +353,7 @@
                           </ng-container>
                           <ng-container *ngSwitchCase="'Commission'">
                             <div class="text--gray-1">
-                              {{ validator[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
+                              {{ validator[template.matColumnDef] | percent : number2Digit }}
                             </div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Participation'">
@@ -415,7 +415,7 @@
               <span class="modal__title break-all">{{ validatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ validatorDetail?.commission | percent : globals.formatNumber2Decimal }}
+              Commission - {{ validatorDetail?.commission | percent : number2Digit }}
             </div>
           </div>
         </div>
@@ -505,7 +505,7 @@
                     <span class="option__name">{{ item.title | translate }}</span>
                   </div>
                   <div class="option-label text--gray-1">
-                    Commission - {{ item.commission | translate | percent : globals.formatNumber2Decimal }}
+                    Commission - {{ item.commission | translate | percent : number2Digit }}
                   </div>
                 </div>
               </mat-option>

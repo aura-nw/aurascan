@@ -314,7 +314,7 @@
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{
                       curr_voting_Period
-                        ? (curr_voting_Period.tally.yes | number : global.formatNumber2Decimal)
+                        ? (curr_voting_Period.tally.yes | number : number2Digit)
                         : '0,0'
                     }}%
                   </div>
@@ -323,7 +323,7 @@
                   <div class="text--gray-2">No</div>
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{
-                      curr_voting_Period ? (curr_voting_Period.tally.no | number : global.formatNumber2Decimal) : '0,0'
+                      curr_voting_Period ? (curr_voting_Period.tally.no | number : number2Digit) : '0,0'
                     }}%
                   </div>
                 </div>
@@ -332,7 +332,7 @@
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{
                       curr_voting_Period
-                        ? (curr_voting_Period.tally.no_with_veto | number : global.formatNumber2Decimal)
+                        ? (curr_voting_Period.tally.no_with_veto | number : number2Digit)
                         : '0,0'
                     }}%
                   </div>
@@ -342,7 +342,7 @@
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{
                       curr_voting_Period
-                        ? (curr_voting_Period.tally.abstain | number : global.formatNumber2Decimal)
+                        ? (curr_voting_Period.tally.abstain | number : number2Digit)
                         : '0,0'
                     }}%
                   </div>
