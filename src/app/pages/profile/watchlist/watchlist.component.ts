@@ -14,7 +14,6 @@ import { isContract } from 'src/app/core/utils/common/validation';
 import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
-import { PopupNameTagComponent } from '../private-name-tag/popup-name-tag/popup-name-tag.component';
 import { PopupWatchlistComponent } from './popup-watchlist/popup-watchlist.component';
 
 @Component({
@@ -69,7 +68,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
     }
 
     this.commonService.listNameTag = this.global.listNameTag;
-    this.getListPrivateName();
+    this.getWatchlist();
     this.searchSubject
       .asObservable()
       .pipe(debounceTime(500), takeUntil(this.destroy$))
@@ -93,7 +92,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
     this.onKeyUp();
   }
 
-  getListPrivateName() {
+  getWatchlist() {
     this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: 10,
@@ -140,13 +139,13 @@ export class WatchListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         setTimeout(() => {
-          this.getListPrivateName();
+          this.getWatchlist();
         }, 3000);
       }
     });
   }
 
-  openPopupDelete(data) {
+  openPopupRemove(data) {
     let dialogRef = this.dialog.open(PopupCommonComponent, {
       panelClass: 'sizeNormal',
       data: {
@@ -155,15 +154,15 @@ export class WatchListComponent implements OnInit, OnDestroy {
         class: 'text--gray-1',
       },
     });
- 
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result && result !== 'canceled') {
-        this.deleteNameTag(data.id);
+        this.removeAddress(data.id);
       }
     });
   }
 
-  deleteNameTag(id) {
+  removeAddress(id) {
     this.nameTagService.deletePrivateNameTag(id).subscribe((res) => {
       if (res.code && res.code !== 200) {
         this.toastr.error(res.message || 'Error');
@@ -186,7 +185,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
 
     this.nameTagService.updatePrivateNameTag(payload).subscribe((res) => {
       setTimeout(() => {
-        this.getListPrivateName();
+        this.getWatchlist();
       }, 2000);
     });
   }
@@ -197,7 +196,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    this.getListPrivateName();
+    this.getWatchlist();
   }
 
   urlType(address) {

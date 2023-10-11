@@ -111,7 +111,7 @@
                     <app-tooltip-customize [content]="'Edit'"> </app-tooltip-customize>
                   </div>
                   <div class="aura-tooltip-contain ml-6">
-                    <i class="ph ph-x body-01 cursor-pointer aura-tooltip-object" (click)="openPopupDelete(data)"></i>
+                    <i class="ph ph-x body-01 cursor-pointer aura-tooltip-object" (click)="openPopupRemove(data)"></i>
                     <app-tooltip-customize [content]="'Remove'"> </app-tooltip-customize>
                   </div>
                 </div>
@@ -164,7 +164,7 @@
                 </li>
                 <li
                   class="dropdown-item cursor-pointer d-flex align-items-center px-2 action-mob"
-                  (click)="openPopupDelete(data)">
+                  (click)="openPopupRemove(data)">
                   <i class="ph ph-x h3 cursor-pointer aura-tooltip-object mr-2"></i>
                   <span class="body-02">Remove</span>
                 </li>
