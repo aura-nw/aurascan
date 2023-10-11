@@ -33,3 +33,18 @@
     }
   }
 }
+.custom-apex-tooltip {
+  padding: 8px;
+  border: 1px var(--aura-light-gray);
+  transition: all 1s;
+
+  .tooltip {
+    &-title {
+      margin-bottom: 12px;
+    }
+
+    &-amount {
+      font-weight: 400;
+    }
+  }
+}

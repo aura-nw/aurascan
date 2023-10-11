@@ -15,11 +15,6 @@
   .width-txhash {
     width: 30%;
   }
-  ::ng-deep {
-    .message-custom {
-      transform: translate(0, 8px) !important;
-    }
-  }
 }
 
 @media (max-width: 992px) {
@@ -44,31 +39,6 @@
 ::ng-deep {
   .floating-tooltip-2 {
     width: 100px;
-    height: 80px;
-    position: absolute;
-    display: none;
-    box-sizing: border-box;
-    font-size: 12px;
-    color: var(--aura-white);
-    background-color: #3b403d;
-    text-align: left;
-    z-index: 1000;
-    top: 12px;
-    left: 12px;
-    pointer-events: none;
-    border-radius: 8px;
-  }
-  .floating-tooltip__header {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    background-color: var(--aura-gray-8);
-    padding: 8px;
-  }
-  .floating-tooltip__body {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    background-color: var(--aura-gray-9);
-    padding: 8px;
   }
   .line-chart {
     position: absolute;
@@ -112,61 +82,33 @@
     border-top-right-radius: 0;
   }
 }
-.card-body--gradient-black {
+.card-body--gradient-black, .card-info--gradient-black {
   background: var(--aura-gradient-black);
-  border-radius: 8px;
-}
-.card-info--gradient-black {
-  padding: var(--spacer-3) var(--spacer-6);
-  background: var(--aura-gradient-black);
-}
-.button-ghost--sm {
-  padding: 0;
-  width: 32px;
 }
 ul {
   list-style: disc;
 }
-.icon--social {
-  padding: var(--spacer-3);
-  font-size: 2rem;
-  color: var(--aura-gray-2);
-  border-radius: 8px;
-  &:hover {
-    color: var(--aura-white);
-    background-color: var(--aura-gray-9);
-  }
-}
 .voting-dropdown-button {
-  padding: 0 var(--spacer-4);
-  justify-content: start;
   height: 36px;
-  span {
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  span.line-claim {
     width: 90%;
   }
 }
 .dropdown-menu {
   &.aura-dropdown-menu.aura-dropdown-menu--light {
-    padding: var(--spacer-2);
     li.dropdown-item {
       border-radius: 4px;
-      padding: var(--spacer-3) var(--spacer-2);
       button {
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        display: inline-block;
         width: 100%;
         text-align: start;
-        color: var(--aura-gray-light);
       }
       &:hover button {
         color: var(--aura-white);
       }
+    }
+    .line-claim {
+      width: 80px;
     }
   }
   inset: auto auto auto 0 !important;
@@ -178,8 +120,6 @@ ul {
 }
 .card-child {
   background: rgba(19, 20, 25, 0.4);
-  border-radius: 8px;
-  padding: var(--spacer-3) var(--spacer-4);
 }
 ::ng-deep {
   .mat-tooltip-panel-above {
@@ -215,30 +155,7 @@ i.icon-brand {
   }
 }
 img.icon-brand {
-  width: 32px;
-  height: 32px;
   object-fit: cover;
-}
-.voting-period-btn--disable {
-  align-items: center;
-  padding: 8px 16px;
-  width: 100%;
-  height: 34px;
-  background: var(--aura-gray-8);
-  color: var(--aura-gray-3);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 18px;
-  border: 1px solid #494c58;
-  border-radius: 8px;
-  max-width: 100%;
-  text-overflow: ellipsis;
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden !important;
-}
-.summary-info {
-  line-height: 1.8rem !important;
 }
 .carousel {
   height: 150px;
@@ -255,13 +172,10 @@ img.icon-brand {
     }
     width: 100%;
     object-fit: cover;
-    border-radius: 8px;
   }
 }
 .voting-card {
   @media (min-width: 991.98px) {
     max-height: 196px;
-    padding-top: 0;
-    padding-bottom: 0;
   }
 }
