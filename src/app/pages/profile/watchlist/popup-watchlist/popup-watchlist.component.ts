@@ -23,7 +23,6 @@ export class PopupWatchlistComponent implements OnInit {
   isContract = false;
   maxLengthNameTag = 35;
   maxLengthNote = 200;
-  currentCodeID;
   publicNameTag = '-';
   privateNameTag = '-';
   isValidAddress = true;
@@ -35,7 +34,6 @@ export class PopupWatchlistComponent implements OnInit {
     Account: 'account',
     Contract: 'contract',
   };
-  quota = this.environmentService.configValue.quotaSetPrivateName;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -67,9 +65,14 @@ export class PopupWatchlistComponent implements OnInit {
     return this.watchlistForm.get('isFavorite');
   }
 
+  get getNotiMode() {
+    return this.watchlistForm.get('isNotiMode');
+  }
+
   formInit() {
     this.watchlistForm = this.fb.group({
       isFavorite: [0],
+      isNotiMode: [0],
       isAccount: [false, [Validators.required]],
       address: ['', [Validators.required]],
       name: ['', [Validators.required, Validators.maxLength(this.maxLengthNameTag)]],
@@ -83,18 +86,17 @@ export class PopupWatchlistComponent implements OnInit {
       this.isEditMode = true;
       this.idEdit = this.data.id || data.id;
     }
-
     const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
 
     this.watchlistForm.controls['isAccount'].setValue(isAccount);
     this.isAccount = isAccount;
     this.isContract = !this.isAccount;
     this.watchlistForm.controls['isFavorite'].setValue(data.isFavorite || false);
+    this.watchlistForm.controls['isNotiMode'].setValue(data.isNotiMode || false);
     this.watchlistForm.controls['address'].setValue(data.address);
     this.watchlistForm.controls['name'].setValue(data.nameTag || data.name_tag_private);
     this.watchlistForm.controls['note'].setValue(data.note);
-    this.checkPublicNameTag();
-    this.checkPrivateNameTag();
+    this.checkNameTag();
   }
 
   closeDialog(status = null) {
@@ -124,58 +126,62 @@ export class PopupWatchlistComponent implements OnInit {
       id: this.idEdit,
     };
     if (this.isEditMode) {
-      this.editPrivateName(payload);
+      this.editAddressInWatchlist(payload);
     } else {
-      this.createPrivateName(payload);
+      this.addAddressToWatchlist(payload);
     }
   }
 
-  createPrivateName(payload) {
-    if (this.data.currentLength >= this.quota) {
-      this.isError = true;
-      this.toastr.error('You have reached out of ' + this.quota + ' max limitation of private name tag');
-      return;
-    }
+  addAddressToWatchlist(payload) {
+    // if (this.data.currentLength >= this.quota) {
+    //   this.isError = true;
+    //   this.toastr.error('You have reached out of ' + this.quota + ' max limitation of private name tag');
+    //   return;
+    // }
 
-    this.nameTagService.createPrivateName(payload).subscribe({
-      next: (res) => {
-        if (res.code && res.code !== 200) {
-          this.isError = true;
-          this.toastr.error(res.message || 'Error');
-          return;
-        }
+    // this.nameTagService.createPrivateName(payload).subscribe({
+    //   next: (res) => {
+    //     if (res.code && res.code !== 200) {
+    //       this.isError = true;
+    //       this.toastr.error(res.message || 'Error');
+    //       return;
+    //     }
 
-        this.closeDialog(true);
-        this.toastr.successWithTitle('Private name tag created!', 'Success');
-      },
-      error: (error) => {
-        this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
-      },
-    });
+    //     this.closeDialog(true);
+    //     this.toastr.successWithTitle('Private name tag created!', 'Success');
+    //   },
+    //   error: (error) => {
+    //     this.isError = true;
+    //     this.toastr.error(error?.details.message[0] || 'Error');
+    //   },
+    // });
   }
 
-  editPrivateName(payload) {
-    this.nameTagService.updatePrivateNameTag(payload).subscribe({
-      next: (res) => {
-        if (res.code && res.code !== 200) {
-          this.isError = true;
-          this.toastr.error(res.message || 'Error');
-          return;
-        }
+  editAddressInWatchlist(payload) {
+    // this.nameTagService.updatePrivateNameTag(payload).subscribe({
+    //   next: (res) => {
+    //     if (res.code && res.code !== 200) {
+    //       this.isError = true;
+    //       this.toastr.error(res.message || 'Error');
+    //       return;
+    //     }
 
-        this.closeDialog(true);
-        this.toastr.successWithTitle('Private name tag updated!', 'Success');
-      },
-      error: (error) => {
-        this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
-      },
-    });
+    //     this.closeDialog(true);
+    //     this.toastr.successWithTitle('Private name tag updated!', 'Success');
+    //   },
+    //   error: (error) => {
+    //     this.isError = true;
+    //     this.toastr.error(error?.details.message[0] || 'Error');
+    //   },
+    // });
   }
 
   changeFavorite() {
     this.watchlistForm.value.isFavorite = !this.watchlistForm.value.isFavorite;
+  }
+
+  changeNotiMode() {
+    this.watchlistForm.value.isNotiMode = !this.watchlistForm.value.isNotiMode;
   }
 
   changeType(type) {
@@ -197,24 +203,17 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm.value.name = event.target.value;
   }
 
-  checkPublicNameTag() {
+  checkNameTag() {
     this.publicNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const temp = this.commonService.setNameTag(this.getAddress.value, null, false);
-      if (temp !== this.getAddress.value) {
-        this.publicNameTag = temp;
+      const tempPublic = this.commonService.setNameTag(this.getAddress.value, null, false);
+      const tempPrivate = this.commonService.setNameTag(this.getAddress.value, null, true);
+      if (tempPublic !== this.getAddress.value) {
+        this.publicNameTag = tempPublic;
       }
-    }
-  }
-
-  checkPrivateNameTag() {
-    this.privateNameTag = '-';
-    this.getAddress.value = this.getAddress.value.trim();
-    if (this.getAddress.status === 'VALID') {
-      const temp = this.commonService.setNameTag(this.getAddress.value, null, true);
-      if (temp !== this.getAddress.value) {
-        this.privateNameTag = temp;
+      if (tempPrivate !== this.getAddress.value) {
+        this.privateNameTag = tempPrivate;
       }
     }
   }

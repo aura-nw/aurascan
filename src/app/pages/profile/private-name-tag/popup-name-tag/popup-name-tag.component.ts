@@ -23,7 +23,6 @@ export class PopupNameTagComponent implements OnInit {
   isContract = false;
   maxLengthNameTag = 35;
   maxLengthNote = 200;
-  currentCodeID;
   publicNameTag = '-';
   isValidAddress = true;
   isError = false;

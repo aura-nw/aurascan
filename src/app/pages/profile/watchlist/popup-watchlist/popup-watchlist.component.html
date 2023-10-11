@@ -67,7 +67,7 @@
                 formControlName="address"
                 placeholder="aura..."
                 class="input-address"
-                (change)="checkPublicNameTag()"
+                (change)="checkNameTag()"
                 (input)="checkFormValid(); isError = false"
                 autocomplete="off" />
             </div>
@@ -139,62 +139,62 @@
           <span class="caption fw-normal text--gray-4 mb-2"
             >Kindly note that we only support to save notifications for 1 month.</span
           >
-          <mat-slide-toggle (click)="changeFavorite()" formControlName="isFavorite">
+          <mat-slide-toggle (click)="changeNotiMode()" formControlName="isNotiMode">
             <span>Notification Mode</span>
           </mat-slide-toggle>
           <span class="caption fw-normal text--gray-4 ml-11">Group activities limit: 0/20</span>
         </div>
         <!-- Activities group -->
         <div class="d-flex mt-4">
-          <span class="caption fw-normal text--gray-4 col-lg-3">Tracking activity group</span>
+          <span class="caption fw-normal text--gray-4 col-lg-3 mt-4">Tracking activity group</span>
           <div class="col-lg-9 d-flex flex-column activities-group py-3 px-3">
             <div
-              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-2"
               (click)="$event.stopPropagation()"
               (keydown)="$event.stopPropagation()">
               <input type="checkbox" id="all" class="check-box check-box--dark" />
               <label for="all" class="ml-2 mb-0 text-justify pl-1"> Transaction Executed </label>
             </div>
             <div
-              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-2"
               (click)="$event.stopPropagation()"
               (keydown)="$event.stopPropagation()">
               <input type="checkbox" id="all" class="check-box check-box--dark" />
               <label for="all" class="ml-2 mb-0 text-justify pl-1"> Token Sent </label>
             </div>
             <div
-              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-2"
               (click)="$event.stopPropagation()"
               (keydown)="$event.stopPropagation()">
               <input type="checkbox" id="all" class="check-box check-box--dark" />
               <label for="all" class="ml-2 mb-0 text-justify pl-1"> Token Received </label>
             </div>
             <div
-              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-2"
               (click)="$event.stopPropagation()"
               (keydown)="$event.stopPropagation()">
               <input type="checkbox" id="all" class="check-box check-box--dark" />
               <label for="all" class="ml-2 mb-0 text-justify pl-1"> NFT Sent </label>
             </div>
             <div
-              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-2"
               (click)="$event.stopPropagation()"
               (keydown)="$event.stopPropagation()">
               <input type="checkbox" id="all" class="check-box check-box--dark" />
               <label for="all" class="ml-2 mb-0 text-justify pl-1"> NFT Received </label>
             </div>
             <div
-              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-2"
               (click)="$event.stopPropagation()"
               (keydown)="$event.stopPropagation()">
               <input type="checkbox" id="all" class="check-box check-box--dark" />
               <label for="all" class="ml-2 mb-0 text-justify pl-1"> Native Coin Sent (Aura coin, ibc) </label>
             </div>
-            <mat-slide-toggle (click)="changeFavorite()" formControlName="isFavorite" class="ml-4 mb-1">
+            <mat-slide-toggle (click)="changeFavorite()" formControlName="isFavorite" class="ml-4 mb-2">
               <span>Inactive noti with Auto restake messages</span>
             </mat-slide-toggle>
             <div
-              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-2"
               (click)="$event.stopPropagation()"
               (keydown)="$event.stopPropagation()">
               <input type="checkbox" id="all" class="check-box check-box--dark" />
