@@ -8,7 +8,7 @@ import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table
 import { SharedModule } from 'src/app/shared/shared.module';
 import { WriteContractComponent } from './write-contract.component';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MaterialModule } from '../../../../../../app.module';
+import { MaterialModule } from '../../../../../../material.module';
 
 @NgModule({
   declarations: [WriteContractComponent],

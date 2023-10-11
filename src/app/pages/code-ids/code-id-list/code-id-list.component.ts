@@ -29,7 +29,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   showBoxSearch = false;
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
     { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail' },

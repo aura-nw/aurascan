@@ -21,7 +21,7 @@ import { Globals } from '../../../../global/global';
 export class TokenCw4973Component implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },

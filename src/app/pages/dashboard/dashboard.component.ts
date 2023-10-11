@@ -91,7 +91,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   cacheData = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   isMobileMatched = false;
   breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
   currentAddress = null;

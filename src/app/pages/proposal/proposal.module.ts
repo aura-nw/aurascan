@@ -3,13 +3,16 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbNavModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
-import { MaterialModule } from '../../app.module';
 import { MappingErrorService } from '../../core/services/mapping-error.service';
 import { ProposalService } from '../../core/services/proposal.service';
+import { MaterialModule } from '../../material.module';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../shared/shared.module';
@@ -24,9 +27,6 @@ import { ProposalRoutingModule } from './proposal-routing.module';
 import { ProposalTableComponent } from './proposal-table/proposal-table.component';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
-import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 
 @NgModule({
   declarations: [
@@ -51,7 +51,8 @@ import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-custom
     CommonPipeModule,
     NgbProgressbarModule,
     NgbNavModule,
-    NgxMaskModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     TableNoDataModule,
     PaginatorModule,
     LoadingImageModule,

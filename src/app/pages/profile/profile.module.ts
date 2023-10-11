@@ -11,7 +11,7 @@ import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-pagina
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
-import { MaterialModule } from '../../app.module';
+import { MaterialModule } from '../../material.module';
 import { CommonPipeModule } from '../../core/pipes/common-pipe.module';
 import { SharedModule } from '../../shared/shared.module';
 import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';

@@ -11,7 +11,7 @@ import { LoadingImageModule } from 'src/app/shared/components/loading-image/load
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { MaterialModule } from '../../../app/app.module';
+import { MaterialModule } from '../../../app/material.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { AccountService } from '../../../app/core/services/account.service';
 import { BlockService } from '../../../app/core/services/block.service';

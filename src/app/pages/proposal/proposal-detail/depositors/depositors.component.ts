@@ -24,7 +24,7 @@ export class DepositorsComponent implements OnInit, OnDestroy {
   proposalDeposit = PROPOSAL_TABLE_MODE.DEPOSITORS;
 
   pageData = { pageIndex: 0, pageSize: 5 };
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
 
   constructor(
     private proposalService: ProposalService,

@@ -52,7 +52,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   isLoading = true;
 
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   dataTable = [];
 
   constructor(
@@ -96,7 +96,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       date: this.datePipe.transform(now, DATEFORMAT.DATE_ONLY),
     };
     let cw20Total = [];
-    const destroy_cw20$ = new Subject();
+    const destroy_cw20$ = new Subject<void>();
     return of(null).pipe(
       mergeMap(() => {
         return this.tokenService.getListToken(payload);

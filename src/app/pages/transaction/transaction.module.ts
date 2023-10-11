@@ -10,7 +10,7 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { MaterialModule } from '../../../app/app.module';
+import { MaterialModule } from '../../../app/material.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';

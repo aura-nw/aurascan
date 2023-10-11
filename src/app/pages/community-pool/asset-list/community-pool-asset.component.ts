@@ -49,7 +49,7 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   listCoin = this.environmentService.configValue.coins;
   listAssetLcd = [];
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   statusConstant = PROPOSAL_STATUS;
 
   constructor(

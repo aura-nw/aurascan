@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { NgbCarouselModule, NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
-import { MaterialModule } from 'src/app/app.module';
+import { MaterialModule } from 'src/app/material.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';

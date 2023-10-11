@@ -69,7 +69,7 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   currentTabId = VOTE_OPTION.UNSPECIFIED;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
 
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
     this.proposalService.reloadList$.pipe(takeUntil(this.destroyed$)).subscribe((event) => {

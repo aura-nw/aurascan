@@ -1,10 +1,10 @@
 import { DatePipe } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -38,7 +38,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule, NgbNavModule, NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { IConfig, NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
-import { ToastrModule } from 'ngx-toastr';
+import { NgProgressModule } from 'ngx-progressbar';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EnvironmentService } from './core/data-services/environment.service';
@@ -58,6 +58,7 @@ import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
 import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
+import { ToastrModule } from 'ngx-toastr';
 
 const maskConfig: Partial<IConfig> = {
   thousandSeparator: ',',
@@ -76,53 +77,15 @@ export const MY_FORMATS = {
 };
 
 @NgModule({
-  exports: [
-    MatAutocompleteModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatChipsModule,
-    MatCheckboxModule,
-    MatStepperModule,
-    MatDialogModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
-    SchemaViewerModule,
-  ],
-  declarations: [],
-})
-export class MaterialModule {}
-
-@NgModule({
   declarations: [AppComponent],
   imports: [
     TranslateModule.forRoot({
       defaultLanguage: 'en',
     }),
-    // NgProgressModule.withConfig({
-    //   spinnerPosition: 'left',
-    //   color: 'blue',
-    // }),
+    NgProgressModule.withConfig({
+      spinnerPosition: 'left',
+      color: 'blue',
+    }),
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
@@ -132,8 +95,7 @@ export class MaterialModule {}
     NgbTooltipModule,
     NgbPopoverModule,
     NgbNavModule,
-    // ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
-    // NgxMaskModule.forRoot(maskConfig),
+    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
     NgxMaskDirective,
     NgxMaskPipe,
     ReactiveFormsModule,
@@ -141,6 +103,7 @@ export class MaterialModule {}
     MatDatepickerModule,
     MatNativeDateModule,
     MediaExpandModule,
+    SchemaViewerModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

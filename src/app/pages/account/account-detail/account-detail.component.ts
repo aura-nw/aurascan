@@ -45,7 +45,7 @@ export class AccountDetailComponent implements OnInit {
   modalReference: any;
   isNoData = false;
 
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.configValue.timeStaking}`;

@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
-import { MaterialModule } from 'src/app/app.module';
+import { MaterialModule } from 'src/app/material.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';

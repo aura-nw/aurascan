@@ -27,7 +27,7 @@ export class AuthenticateMailComponent implements OnDestroy {
     }),
   );
 
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   constructor(
     private envService: EnvironmentService,
     private layout: BreakpointObserver,

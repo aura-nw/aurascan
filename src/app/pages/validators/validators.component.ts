@@ -90,7 +90,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   isLoading = false;
   isClaimRewardLoading = false;
   _routerSubscription: Subscription;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
   pageYOffset = 0;

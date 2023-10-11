@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { ReadContractComponent } from './read-contract.component';
-import { MaterialModule } from '../../../../../../app.module';
+import { MaterialModule } from '../../../../../../material.module';
 
 @NgModule({
   declarations: [ReadContractComponent],

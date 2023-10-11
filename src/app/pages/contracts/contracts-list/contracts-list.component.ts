@@ -44,7 +44,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   dataSource = new MatTableDataSource<any>();
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
 
   ContractRegisterType = ContractRegisterType;
   ContractVerifyType = ContractVerifyType;

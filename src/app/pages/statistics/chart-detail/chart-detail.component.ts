@@ -32,7 +32,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   areaSeries: ISeriesApi<'Area'> = null;
   logicalRangeChange$ = new Subject<{ from; to }>();
   endData = false;
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   prevYearNumber = 1;
   originalData = [];
 
