@@ -1,0 +1,232 @@
+<div class="card card-watchlist">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="h2 h3-mob mb-0 text--white w-100 fw-700 fw-semibold-mob">
+        {{ isEditMode ? 'Edit address in' : 'Add address to' }} watchlist
+      </div>
+      <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <form
+      [formGroup]="watchlistForm"
+      (ngSubmit)="onSubmit()"
+      *ngIf="watchlistForm"
+      class="aura-form single-input-field watchlist-form"
+      autocomplete="off">
+      <!-- General -->
+      <div class="box-content">
+        <div class="d-flex flex-column">
+          <span class="h5 text--white mb-2">General information</span>
+          <mat-slide-toggle (click)="changeFavorite()" formControlName="isFavorite">
+            <span>Set favorite in watchlist</span>
+          </mat-slide-toggle>
+        </div>
+        <!-- Type -->
+        <div class="row mt-4">
+          <div class="col-lg-3 col-12">
+            <label class="form-label mb-0">Type</label>
+          </div>
+          <div class="col-auto">
+            <div class="d-flex align-items-center">
+              <div class="form-group d-flex align-items-center">
+                <input
+                  type="radio"
+                  value="account"
+                  id="account"
+                  class="radio-box radio-box--dark"
+                  [checked]="isAccount"
+                  [disabled]="isEditMode"
+                  (change)="changeType(true)" />
+                <label for="account" class="ml-2 mb-0 text-justify">Account</label>
+              </div>
+              <div class="form-group d-flex align-items-center ml-8">
+                <input
+                  type="radio"
+                  value="contract"
+                  id="contract"
+                  class="radio-box radio-box--dark"
+                  [checked]="isContract"
+                  [disabled]="isEditMode"
+                  (change)="changeType(false)" />
+                <label for="contract" class="ml-2 mb-0 text-justify">Contract</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="row mt-4 align-items-center">
+          <div class="col-lg-3 col-12">
+            <label class="form-label">Address</label>
+          </div>
+          <div class="col-lg-9 col-12">
+            <div class="input-group form-check-input pr-0" *ngIf="!isEditMode">
+              <input
+                type="text"
+                formControlName="address"
+                placeholder="aura..."
+                class="input-address"
+                (change)="checkPublicNameTag()"
+                (input)="checkFormValid(); isError = false"
+                autocomplete="off" />
+            </div>
+            <span *ngIf="isEditMode">{{ getAddress.value }}</span>
+            <div
+              *ngIf="getAddress?.value?.length > 0 && !isValidAddress && (isAccount || isContract)"
+              class="text--danger mt-2 caption fw-normal">
+              Invalid aura address format
+            </div>
+          </div>
+        </div>
+
+        <!-- Public Name Tag -->
+        <div class="row mt-4">
+          <div class="col-lg-3 col-12">
+            <label class="form-label">Public Name Tag</label>
+          </div>
+          <div
+            class="col-auto"
+            [ngClass]="publicNameTag?.length > 0 && publicNameTag != '-' ? 'box-name-tag ml-2' : ''">
+            <span class="line-claim w-100">
+              {{ publicNameTag }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Private Name Tag -->
+        <div class="row mt-4 align-items-center">
+          <div class="col-lg-3 col-12">
+            <label class="form-label">Private Name Tag</label>
+          </div>
+          <div
+            class="col-auto"
+            [ngClass]="privateNameTag?.length > 0 && privateNameTag != '-' ? 'private-name-tag ml-2' : ''">
+            <span class="line-claim w-100">
+              {{ privateNameTag }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Personal Note -->
+        <div class="row mt-4">
+          <div class="col-lg-3 col-12 mt-2">
+            <label class="form-label">Personal Note (Optional)</label>
+          </div>
+          <div class="col-lg-9 col-12">
+            <textarea
+              rows="5"
+              matInput
+              formControlName="note"
+              (blur)="isError = false"
+              [maxLength]="maxLengthNote"
+              placeholder="Enter note"
+              class="form-check-input col-12 text-area txt-note"
+              style="height: auto"></textarea>
+          </div>
+        </div>
+        <div class="d-flex offset-lg-3 text--gray-4 mt-2 caption fw-normal font-italic">
+          <div class="ml-lg-1">
+            Character limit: {{ watchlistForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br />
+            A personal note of this address. Kindly note that DO NOT input any passwords or private key here
+          </div>
+        </div>
+      </div>
+      <!-- Notification -->
+      <div class="box-content">
+        <div class="d-flex flex-column">
+          <span class="h5 text--white mb-1">Notification</span>
+          <span class="caption fw-normal text--gray-4 mb-2"
+            >Kindly note that we only support to save notifications for 1 month.</span
+          >
+          <mat-slide-toggle (click)="changeFavorite()" formControlName="isFavorite">
+            <span>Notification Mode</span>
+          </mat-slide-toggle>
+          <span class="caption fw-normal text--gray-4 ml-11">Group activities limit: 0/20</span>
+        </div>
+        <!-- Activities group -->
+        <div class="d-flex mt-4">
+          <span class="caption fw-normal text--gray-4 col-lg-3">Tracking activity group</span>
+          <div class="col-lg-9 d-flex flex-column activities-group py-3 px-3">
+            <div
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              (click)="$event.stopPropagation()"
+              (keydown)="$event.stopPropagation()">
+              <input type="checkbox" id="all" class="check-box check-box--dark" />
+              <label for="all" class="ml-2 mb-0 text-justify pl-1"> Transaction Executed </label>
+            </div>
+            <div
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              (click)="$event.stopPropagation()"
+              (keydown)="$event.stopPropagation()">
+              <input type="checkbox" id="all" class="check-box check-box--dark" />
+              <label for="all" class="ml-2 mb-0 text-justify pl-1"> Token Sent </label>
+            </div>
+            <div
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              (click)="$event.stopPropagation()"
+              (keydown)="$event.stopPropagation()">
+              <input type="checkbox" id="all" class="check-box check-box--dark" />
+              <label for="all" class="ml-2 mb-0 text-justify pl-1"> Token Received </label>
+            </div>
+            <div
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              (click)="$event.stopPropagation()"
+              (keydown)="$event.stopPropagation()">
+              <input type="checkbox" id="all" class="check-box check-box--dark" />
+              <label for="all" class="ml-2 mb-0 text-justify pl-1"> NFT Sent </label>
+            </div>
+            <div
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              (click)="$event.stopPropagation()"
+              (keydown)="$event.stopPropagation()">
+              <input type="checkbox" id="all" class="check-box check-box--dark" />
+              <label for="all" class="ml-2 mb-0 text-justify pl-1"> NFT Received </label>
+            </div>
+            <div
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              (click)="$event.stopPropagation()"
+              (keydown)="$event.stopPropagation()">
+              <input type="checkbox" id="all" class="check-box check-box--dark" />
+              <label for="all" class="ml-2 mb-0 text-justify pl-1"> Native Coin Sent (Aura coin, ibc) </label>
+            </div>
+            <mat-slide-toggle (click)="changeFavorite()" formControlName="isFavorite" class="ml-4 mb-1">
+              <span>Inactive noti with Auto restake messages</span>
+            </mat-slide-toggle>
+            <div
+              class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-1"
+              (click)="$event.stopPropagation()"
+              (keydown)="$event.stopPropagation()">
+              <input type="checkbox" id="all" class="check-box check-box--dark" />
+              <label for="all" class="ml-2 mb-0 text-justify pl-1"> Native Coin Received (Aura coin, ibc) </label>
+            </div>
+            <mat-slide-toggle (click)="changeFavorite()" formControlName="isFavorite" class="ml-4">
+              <span>Inactive noti with Auto restake messages</span>
+            </mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+
+      <!-- button group -->
+      <div class="d-flex px-6 py-6 justify-content-end">
+        <button class="button button--md button-pill button-outline btn" type="button" (click)="closeDialog()">
+          <span>Cancel</span>
+        </button>
+        <button
+          class="button button--md button-outline button-pill button-flat ml-4 btn btn-create"
+          type="button"
+          (click)="onSubmit()"
+          [disabled]="
+            watchlistForm.status === 'INVALID' ||
+            !isValidAddress ||
+            isError ||
+            (isAccount === false && isContract === false)
+          ">
+          <span class="text--black">
+            {{ isEditMode ? 'Edit' : 'Add' }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -20,10 +20,10 @@ export class ProfileComponent implements OnInit {
       key: ProfileTab.PrivateNameTag,
       value: 'Private name tag',
     },
-    // {
-    //   key: ProfileTab.WatchList,
-    //   value: 'Watchlist'
-    // }
+    {
+      key: ProfileTab.WatchList,
+      value: 'Watchlist'
+    }
   ];
 
   constructor(

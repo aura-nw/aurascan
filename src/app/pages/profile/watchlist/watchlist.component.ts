@@ -14,22 +14,24 @@ import { isContract } from 'src/app/core/utils/common/validation';
 import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
-import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
+import { PopupNameTagComponent } from '../private-name-tag/popup-name-tag/popup-name-tag.component';
+import { PopupWatchlistComponent } from './popup-watchlist/popup-watchlist.component';
 
 @Component({
-  selector: 'app-private-name-tag',
-  templateUrl: './private-name-tag.component.html',
-  styleUrls: ['./private-name-tag.component.scss'],
+  selector: 'app-watchlist',
+  templateUrl: './watchlist.component.html',
+  styleUrls: ['./watchlist.component.scss'],
 })
-export class PrivateNameTagComponent implements OnInit, OnDestroy {
+export class WatchListComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 8 },
     { matColumnDef: 'address', headerCellDef: 'Address', headerWidth: 12 },
     { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 6 },
-    { matColumnDef: 'name_tag', headerCellDef: 'Private Name Tag', headerWidth: 12 },
-    { matColumnDef: 'createdAt', headerCellDef: 'Added Time', headerWidth: 10 },
+    { matColumnDef: 'public_name_tag', headerCellDef: 'Public Name Tag', headerWidth: 12 },
+    { matColumnDef: 'private_name_tag', headerCellDef: 'Private Name Tag', headerWidth: 12 },
+    { matColumnDef: 'group', headerCellDef: 'Group Tracking', headerWidth: 10 },
     { matColumnDef: 'updatedAt', headerCellDef: 'Updated Time', headerWidth: 10 },
     { matColumnDef: 'action', headerCellDef: '', headerWidth: 8 },
   ];
@@ -133,7 +135,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       dialogConfig.data = data;
     }
     dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: this.pageData?.length } };
-    let dialogRef = this.dialog.open(PopupNameTagComponent, dialogConfig);
+    let dialogRef = this.dialog.open(PopupWatchlistComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
