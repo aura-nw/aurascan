@@ -1,6 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
 
@@ -52,7 +53,7 @@ export class CurrentTurnoutComponent implements OnInit {
 
     if (key === '') {
       let numberVote: string;
-      numberVote = this.numberPipe.transform(abs, this.global.formatNumberOnlyDecimal);
+      numberVote = this.numberPipe.transform(abs, NUMBER_ONLY_DECIMAL);
       return (isNegative ? '-' : '') + numberVote + key;
     }
     return (isNegative ? '-' : '') + abs + key;

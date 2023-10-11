@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NUMBER_CONVERT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
+import { MAX_NUMBER_INPUT, NUMBER_CONVERT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE } from 'src/app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -37,6 +37,7 @@ export class DelegateItemComponent implements OnInit {
   totalDelegator = 0;
   dialogOpen = false;
   isValidatorJail = false;
+  maxNumberInput = MAX_NUMBER_INPUT;
 
   chainInfo = this.environmentService.configValue.chain_info;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;

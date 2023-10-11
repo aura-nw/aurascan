@@ -7,11 +7,10 @@ import * as moment from 'moment';
 import { MaskPipe } from 'ngx-mask';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { CHART_RANGE } from 'src/app/core/constants/common.constant';
+import { CHART_RANGE, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportStatisticChart } from 'src/app/core/helpers/export';
 import { StatisticService } from 'src/app/core/services/statistic.service';
-import { Globals } from 'src/app/global/global';
 import {
   CHART_CONFIG,
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
@@ -44,6 +43,8 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   toolTipWidth = 80;
   toolTipHeight = 80;
   toolTipMargin = 15;
+  numberOnlyDecimal = NUMBER_ONLY_DECIMAL;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -51,7 +52,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     private statisticService: StatisticService,
     public datepipe: DatePipe,
     private maskService: MaskPipe,
-    public global: Globals,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
     if (

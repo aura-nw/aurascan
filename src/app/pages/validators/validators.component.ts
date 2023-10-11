@@ -13,7 +13,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
+import { MAX_NUMBER_INPUT, NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR, VOTING_POWER_LEVEL } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
 import { DataDelegateDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -83,6 +83,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       label: 'INACTIVE',
     },
   ];
+  maxNumberInput = MAX_NUMBER_INPUT;
 
   timerUnSub: Subscription;
   errorExceedAmount = false;
