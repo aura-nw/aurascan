@@ -173,7 +173,7 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
   overflow: hidden;
-  overflow-x: scroll;
+  overflow-x: auto;
   padding-bottom: 184px;
   @media (min-width: 991.98px) {
     overflow: visible;
