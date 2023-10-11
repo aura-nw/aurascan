@@ -17,7 +17,6 @@ Injectable();
 
 export class Globals {
   dataHeader = new CommonDataDto();
-  formatNumber2Decimal = '1.2-2';
   price = {
     aura: 0,
     btc: 0,

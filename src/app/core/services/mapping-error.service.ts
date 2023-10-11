@@ -9,7 +9,7 @@ import { CommonService } from './common.service';
 import { NgxToastrService } from './ngx-toastr.service';
 import { TransactionService } from './transaction.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MappingErrorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   timeStaking = `${this.environmentService.configValue.timeStaking}`;

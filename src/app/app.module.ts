@@ -157,7 +157,6 @@ export class MaterialModule {}
     { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
     { provide: DEFAULT_TIMEOUT, useValue: 60000 },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
-    EnvironmentService,
     DatePipe,
     Globals,
     {
@@ -171,13 +170,6 @@ export class MaterialModule {}
       useClass: LoadingInterceptor,
       multi: true,
     },
-    CommonService,
-    TokenService,
-    FeeGrantService,
-    SoulboundService,
-    MappingErrorService,
-    NameTagService,
-    UserService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
