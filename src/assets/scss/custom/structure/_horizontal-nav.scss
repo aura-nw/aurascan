@@ -15,18 +15,10 @@
         background: $topnav-bg;
         margin-top: $header-height;
     }
-    
-    
+
     .topnav-menu {
         margin: 0;
         padding: 0;
-    }
-
-    .menu-title{
-        padding: 12px 24px !important;
-        @media (max-width: 991.98px) {
-            padding: 12px 16px !important;
-        }
     }
 }
 
@@ -58,24 +50,9 @@
         }
 
         .dropdown {
-            &.mega-dropdown{
-                // position: static;
-                .mega-dropdown-menu{
-                    left: 0px;
-                    right: auto;
-                }
-            }
             .dropdown-menu {
                 margin-top: 0;
                 border-radius: 0 0 $dropdown-border-radius $dropdown-border-radius;
-
-                .arrow-down {
-                    &::after {
-                        right: 15px;
-                        transform: rotate(-135deg) translateY(-50%);
-                        position: absolute;
-                    }
-                }
 
                 .dropdown {
                     .dropdown-menu {
@@ -104,26 +81,6 @@
     }
 }
 
-.arrow-down {
-    display: inline-block;
-
-    &:after {
-        border-color: initial;
-        border-style: solid;
-        border-width: 0 0 3px 3px;
-        content: "";
-        height: .4em;
-        display: inline-block;
-        right: 5px;
-        top: 50%;
-        margin-left: 10px;
-        transform: rotate(-45deg) translateY(-50%);
-        transform-origin: top;
-        transition: all .3s ease-out;
-        width: .4em;
-    }
-}
-
 
 @include media-breakpoint-down(xl) {
     .topnav-menu {
@@ -143,7 +100,7 @@
 }
 
 @include media-breakpoint-down(lg) {
-    
+
     .topnav {
         max-height: 360px;
         overflow-y: auto;
@@ -160,101 +117,6 @@
                 border: none;
                 box-shadow: none;
                 padding-left: 24px;
-                &.dropdown-mega-menu-xl{
-                    width: auto;
-    
-                    .row{
-                        margin: 0px;
-                    }
-                }
-            }
-
-            .dropdown-item {
-                position: relative;
-                background-color: transparent;
-
-                &.active,
-                &:active {
-                    color: $primary;
-                }
-            }
-        }
-
-        .arrow-down {
-            &::after {
-                right: 15px;
-                position: absolute;
-            }
-        }
-    }
-}
-
-
-// Colored Topbar 
-
-body[data-layout="horizontal"][data-topbar="colored"] {
-    #page-topbar{
-        background-color: $primary;
-        box-shadow: none;
-    }
-
-    .app-search {
-    
-        .form-control {
-            background-color: rgba($topbar-search-bg,0.07);
-            color: $white;
-        }
-        span,
-        input.form-control::-webkit-input-placeholder {
-            color: rgba($white,0.5);
-        }
-    }
-    .header-item {
-        color: $header-dark-item-color;
-    
-        &:hover {
-            color: $header-dark-item-color;
-        }
-    }
-
-    .navbar-header {
-        .dropdown .show {
-            &.header-item{
-                background-color: rgba($white,0.1);
-            }
-        }
-
-        .waves-effect .waves-ripple {
-            background: rgba($white, 0.4);
-        }
-    }
-
-    .noti-icon {
-        i {
-            color: $header-dark-item-color;
-        }
-    }
-
-    @include media-breakpoint-up(lg) {
-        .topnav{
-            background-color: $primary;
-            .navbar-nav {
-        
-                .nav-link {
-                    color: rgba($white, 0.6);
-                    
-                    &:focus, &:hover{
-                        color: rgba($white, 0.9);
-                    }
-                }
-        
-                > .dropdown{
-                    &.active{
-                      >a {
-                            color: rgba($white, 0.9) !important;
-                        }
-                    }
-                }
             }
         }
     }
@@ -313,10 +175,6 @@ body[data-layout-mode="dark"] {
                     }
                 }
             }
-        }
-
-        .menu-title{
-            color: rgba($menu-dark-item-color,0.6);
         }
     }
 }

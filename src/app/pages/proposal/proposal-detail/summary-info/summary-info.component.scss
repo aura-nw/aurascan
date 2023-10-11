@@ -174,13 +174,9 @@
   }
 }
 
-.g-ellipsis__type {
+.pro__type {
   @media (max-width: 991.99px) {
     width: 200px;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
   }
 }
 .nav-tabs-proposal.aura-nav-tabs.nav-tabs {

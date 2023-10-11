@@ -143,7 +143,7 @@
               <div class="divider divider-horizontal mt-6"></div>
             </div>
             <div class="card-footer">
-              <div class="top-border">
+              <div class="border-top">
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="body-03 text--gray-3">
                     <span *ngIf="lastedItem.vote_option"
@@ -370,7 +370,7 @@
             <ng-container matColumnDef="title">
               <th mat-header-cell *matHeaderCellDef>Title</th>
               <td mat-cell *matCellDef="let element" class="title-cell">
-                <a [routerLink]="[element.proposal_id]" class="text-clamp">{{ element.content.title }}</a>
+                <a [routerLink]="[element.proposal_id]" class="line-claim-v">{{ element.content.title }}</a>
               </td>
             </ng-container>
 
@@ -445,7 +445,7 @@
               label: '#' + data.proposal_id,
               titleClass: 'text--white h5 mb-0',
               subLabelContent: data.content.title,
-              subLabelClass: 'text--primary g-ellipsis h5-mob mb-0'
+              subLabelClass: 'text--primary line-claim h5-mob mb-0'
             }"
             [content]="[
               {

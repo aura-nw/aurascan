@@ -143,11 +143,6 @@
       margin-bottom: 2px;
     }
   }
-  ::ng-deep {
-    .message-custom {
-      transform: translate(0, 8px) !important;
-    }
-  }
   .box-token-transfer {
     min-width: 60px;
     .token-transfer-status {
@@ -178,7 +173,7 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
   overflow: hidden;
-  overflow-x: scroll;
+  overflow-x: auto;
   padding-bottom: 184px;
   @media (min-width: 991.98px) {
     overflow: visible;

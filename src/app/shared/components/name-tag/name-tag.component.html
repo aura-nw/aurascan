@@ -3,7 +3,7 @@
     <a
       *ngIf="!isHref"
       [routerLink]="['/' + url, paramUrl || value]"
-      class="text--primary text-break d-flex"
+      class="text--primary break-all d-flex"
       [ngClass]="[
         isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
@@ -19,7 +19,7 @@
     <a
       *ngIf="isHref"
       [href]="url + value"
-      class="text--primary text-break d-flex"
+      class="text--primary break-all d-flex"
       [ngClass]="[
         isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
@@ -36,7 +36,7 @@
 <ng-template #displayText>
   <div class="aura-tooltip-contain">
     <span
-      class="text-break"
+      class="break-all"
       [ngClass]="[
         isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',

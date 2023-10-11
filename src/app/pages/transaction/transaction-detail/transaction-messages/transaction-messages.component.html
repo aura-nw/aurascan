@@ -32,7 +32,7 @@
                       <div class="d-flex flex-wrap mb-2">
                         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Byte Code</div>
                         <div class="col-12 col-lg-9 text--gray-1">
-                          <div [class.ellipsis-text]="!seeLessArr[i]" class="overflow-hidden">
+                          <div [class.line-claim-v]="!seeLessArr[i]" class="overflow-hidden">
                             {{ item?.value }}
                           </div>
                           <div
@@ -495,7 +495,7 @@
                     <ng-container *ngFor="let data of item.attributes; let idx = index">
                       <div class="ml-5 mb-2 row">
                         <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key }}</span>
-                        <span class="col-12 col-lg-9 text-break">
+                        <span class="col-12 col-lg-9 break-all">
                           {{ data.value }}
                         </span>
                       </div>

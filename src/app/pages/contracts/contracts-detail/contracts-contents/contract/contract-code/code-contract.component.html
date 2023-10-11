@@ -32,7 +32,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <div
         class="w-100 text-nowrap body-03 content-info mr-6"
-        [ngClass]="{ 'g-ellipsis content-info-ellipsis': breakpoint.value.matches }">
+        [ngClass]="{ 'line-claim content-info-ellipsis': breakpoint.value.matches }">
         {{ contractDetailData?.code?.code_id_verifications[0]?.github_url }}
       </div>
       <div class="d-flex justify-content-end aura-tooltip-contain">
@@ -55,7 +55,7 @@
       <div class="d-flex justify-content-between align-items-center">
         <div
           class="w-100 text-nowrap body-03 content-info mr-6"
-          [ngClass]="{ 'g-ellipsis content-info-ellipsis': breakpoint.value.matches }">
+          [ngClass]="{ 'line-claim content-info-ellipsis': breakpoint.value.matches }">
           {{
             contractDetailData?.code?.code_id_verifications[0]?.s3_location.split('/')[
               contractDetailData?.code?.code_id_verifications[0]?.s3_location.split('/').length - 1
