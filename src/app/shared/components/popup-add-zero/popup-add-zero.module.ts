@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
-import { PopupAddZeroComponent } from './popup-add-zero.component';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { MaterialModule } from 'src/app/material.module';
+import { PopupAddZeroComponent } from './popup-add-zero.component';
 
 @NgModule({
   declarations: [PopupAddZeroComponent],
-  imports: [CommonModule, MatSelectModule, CommonPipeModule, FormsModule],
+  imports: [CommonModule, MaterialModule, CommonPipeModule, FormsModule],
   exports: [PopupAddZeroComponent],
 })
 export class PopupAddZeroModule {}

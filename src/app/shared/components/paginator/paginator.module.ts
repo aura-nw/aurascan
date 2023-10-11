@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { MaterialModule } from 'src/app/material.module';
 import { PaginatorComponent } from './paginator.component';
-import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
 
 @NgModule({
   declarations: [PaginatorComponent],
-  imports: [CommonModule, MatPaginatorModule],
+  imports: [CommonModule, MaterialModule],
   exports: [PaginatorComponent],
 })
 export class PaginatorModule {}

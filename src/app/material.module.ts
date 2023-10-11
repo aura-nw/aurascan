@@ -30,17 +30,25 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
+/* 
+Form Field, Input, Select, Autocomplete
+
+*/
+
 @NgModule({
   exports: [
     MatAutocompleteModule,
     MatButtonToggleModule,
-
-    MatCheckboxModule,
     MatStepperModule,
-    MatDialogModule,
     MatExpansionModule,
     MatGridListModule,
     MatIconModule,
+    MatSidenavModule,
+    MatSortModule,
+    MatToolbarModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatDialogModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
@@ -51,14 +59,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatSelectModule,
     MatDatepickerModule,
     MatButtonModule,
-    MatSidenavModule,
     MatSlideToggleModule,
     MatSnackBarModule,
-    MatSortModule,
     MatTableModule,
     MatTabsModule,
-    MatToolbarModule,
-    MatNativeDateModule,
     MatFormFieldModule,
     MatCardModule,
     MatChipsModule,

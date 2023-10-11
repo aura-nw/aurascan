@@ -1,7 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -12,21 +10,21 @@ import { WalletConnectComponent } from './wallet-connect.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.module';
 import { WalletListComponent } from './wallet-list/wallet-list.component';
+import { MaterialModule } from 'src/app/material.module';
 
 @NgModule({
   declarations: [WalletConnectComponent, WalletListComponent],
   imports: [
     CommonModule,
     NgApexchartsModule,
-    MatMenuModule,
     RouterModule,
     NgClickOutsideDirective,
     QrModule,
     TranslateModule,
-    MatDialogModule,
     CommonPipeModule,
     ClipboardModule,
     TooltipCustomizeModule,
+    MaterialModule,
   ],
   exports: [WalletConnectComponent],
 })

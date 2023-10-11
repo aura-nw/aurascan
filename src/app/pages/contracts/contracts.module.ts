@@ -2,7 +2,6 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
@@ -58,7 +57,6 @@ import { MASK_CONFIG } from 'src/app/app.config';
     FormsModule,
     MaterialModule,
     DropdownModule,
-    MatTableModule,
     NgbNavModule,
     CommonPipeModule,
     NgxMaskPipe,
