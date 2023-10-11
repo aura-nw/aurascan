@@ -49,17 +49,9 @@ import { GlobalErrorHandler } from './core/helpers/global-error';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 import { DEFAULT_TIMEOUT, RequestTimeoutHttpInterceptor } from './core/helpers/timeout.interceptor';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
-import { CommonService } from './core/services/common.service';
-import { FeeGrantService } from './core/services/feegrant.service';
-import { MappingErrorService } from './core/services/mapping-error.service';
-import { SoulboundService } from './core/services/soulbound.service';
-import { TokenService } from './core/services/token.service';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
-import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
-import { NameTagService } from './core/services/name-tag.service';
-import { UserService } from './core/services/user.service';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -113,7 +105,6 @@ export const MY_FORMATS = {
     MatToolbarModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    SchemaViewerModule,
   ],
   declarations: [],
 })
