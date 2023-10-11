@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import * as _ from 'lodash';
 import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -38,6 +39,8 @@ export class TokenTransferComponent implements OnInit {
   ];
   displayedColumnsFTs: string[] = this.templatesFTs.map((dta) => dta.matColumnDef);
   displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
@@ -51,14 +54,32 @@ export class TokenTransferComponent implements OnInit {
     if (this.transaction['status'] == 'Fail') {
       return;
     }
-    this.transactionService.getListTransferFromTx(this.transaction['height']).subscribe((res) => {
+
+    this.transactionService.getListTransferFromTx(this.transaction['tx_hash']).subscribe((res) => {
+      // res.cw20_activity = null;
+      console.log(res);
+      
+      let coinTransfer = res.aura_transfer?.map((element) => {
+        let cw20_contract = {};
+        cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
+        cw20_contract['name'] = cw20_contract['name'] || this.denom;
+        const amountTemp = element.event_attributes.find((k) => k.composite_key === 'transfer.amount')?.value;
+        let amount = +amountTemp.match(/\d+/g)[0];
+        let decimal = cw20_contract['decimal'] || this.coinDecimals;
+
+        const from = element.event_attributes.find((k) => k.composite_key === 'transfer.sender')?.value;
+        const to = element.event_attributes.find((k) => k.composite_key === 'transfer.recipient')?.value;
+        return { amount, cw20_contract, from, to, decimal };
+      });
+
       if (res?.cw721_activity?.length > 0) {
         // remove record approve && revoke
         const arrCW721 = res.cw721_activity?.filter((k) => k.action !== 'approve' && k.action !== 'revoke');
         this.dataSourceNFTs.data = arrCW721;
       }
-      if (res.cw20_activity?.length > 0) {
-        this.dataSourceFTs.data = res.cw20_activity;
+      if (res.cw20_activity?.length > 0 || coinTransfer?.length > 0) {
+        this.dataSourceFTs.data = [...coinTransfer];
+
         res.cw20_activity.forEach((element) => {
           element.decimal = element.decimal || element.cw20_contract?.decimal || 6;
         });
