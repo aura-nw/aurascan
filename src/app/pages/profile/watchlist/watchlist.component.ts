@@ -150,12 +150,12 @@ export class WatchListComponent implements OnInit, OnDestroy {
     let dialogRef = this.dialog.open(PopupCommonComponent, {
       panelClass: 'sizeNormal',
       data: {
-        title: 'Remove Private Name Tag',
-        content: 'Are you sure to remove private name tag for the address ' + data.address + ' (' + data.nameTag + ')?',
+        title: 'Remove Address from watchlist',
+        content: 'Are you sure to remove this address from watchlist' + data.address + ')?',
         class: 'text--gray-1',
       },
     });
-
+ 
     dialogRef.afterClosed().subscribe((result) => {
       if (result && result !== 'canceled') {
         this.deleteNameTag(data.id);
@@ -170,7 +170,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.toastr.successWithTitle('Private name tag removed!', 'Success');
+      this.toastr.successWithTitle('Address removed from watchlist!', 'Success');
       setTimeout(() => {
         this.pageData.length--;
         this.pageEvent(this.pageData);

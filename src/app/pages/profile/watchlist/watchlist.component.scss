@@ -42,6 +42,11 @@
   th.mat-header-cell:nth-child(8) {
     width: 100px;
   }
+  .box-name-tag {
+    &:after {
+      border-right: 15px solid var(--aura-gray-10) !important;
+    }
+  }
 }
 
 .txt-total-address {

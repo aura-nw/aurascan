@@ -91,7 +91,7 @@
                 <div *ngSwitchCase="'type'" class="text-capitalize">
                   {{ data[template.matColumnDef] }}
                 </div>
-                <div *ngSwitchCase="'public_name_tag'" class="profile-private-name-tag pe-auto">
+                <div *ngSwitchCase="'public_name_tag'" class="box-name-tag pe-auto">
                   <div>{{ data.nameTag | cutStringPipe : 15 }}</div>
                 </div>
                 <div *ngSwitchCase="'private_name_tag'" class="profile-private-name-tag pe-auto">
