@@ -115,8 +115,10 @@
                 {
                   label: 'Voter',
                   class: !commonService.checkDisplayTooltip(data.voter)
-                    ? 'name-tag-label mb-0 text--primary'
-                    : 'mb-0 text--primary',
+                    ? commonService.checkPrivate(data.voter)
+                      ? 'name-tag private-name-tag mb-0 text--primary'
+                      : 'name-tag text--primary mb-0'
+                    : 'text--primary',
                   info: !data?.voter
                     ? '-'
                     : !commonService.checkDisplayTooltip(data.voter)
@@ -203,7 +205,11 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: !commonService.checkDisplayTooltip(data.depositors) ? 'name-tag-label mb-0' : 'mb-0',
+                  class: !commonService.checkDisplayTooltip(data.voter)
+                    ? commonService.checkPrivate(data.voter)
+                      ? 'name-tag private-name-tag mb-0 text--primary'
+                      : 'name-tag text--primary mb-0'
+                    : 'text--primary',
                   info: !data?.depositors
                     ? '-'
                     : !commonService.checkDisplayTooltip(data.depositors)

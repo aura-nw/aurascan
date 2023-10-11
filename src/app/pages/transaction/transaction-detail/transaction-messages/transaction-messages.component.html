@@ -433,15 +433,21 @@
         <ng-container *ngFor="let item of transactionDetail?.messages[0]?.outputs; let i = index">
           <div class="d-flex justify-content-between mx-4 my-5">
             <div class="txt-label">From</div>
-            <a
-              class="text--primary txt-address"
-              [routerLink]="['/account', transactionDetail?.messages[0]?.inputs[0]?.address]">
-              {{ transactionDetail?.messages[0]?.inputs[0]?.address }}
-            </a>
+            <div class="txt-address">
+              <app-name-tag
+                [url]="isContractAddress(transactionDetail?.messages[0]?.inputs[0]?.address) ? 'contracts' : 'account'"
+                [value]="transactionDetail?.messages[0]?.inputs[0]?.address"
+                [fullText]="true"
+                [fullTextMob]="true"></app-name-tag>
+            </div>
             <div class="txt-label">To</div>
-            <a class="text--primary txt-address" [routerLink]="['/account', item?.address]">
-              {{ item?.address }}
-            </a>
+            <div class="txt-address">
+              <app-name-tag
+                [url]="isContractAddress(item?.address) ? 'contracts' : 'account'"
+                [fullText]="true"
+                [fullTextMob]="true"
+                [value]="item?.address"></app-name-tag>
+            </div>
             <div class="txt-amount">
               <i class="ph-currency-circle-dollar mx-auto h3 mr-2 mb-0 text--white"></i>
               <div class="ml-2">
