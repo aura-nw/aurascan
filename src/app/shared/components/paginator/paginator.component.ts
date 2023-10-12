@@ -10,7 +10,7 @@ import {
   Output,
   SimpleChanges,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
@@ -25,17 +25,21 @@ import * as _ from 'lodash';
 export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() paginator: EventEmitter<MatPaginator> = new EventEmitter<MatPaginator>();
   @Output() pageEvent: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
+  @Output() pageChangeRecord = new EventEmitter<number>();
 
   @Input() length: number;
   @Input() actualLength: number;
 
   @Input() pageSize: number;
   @Input() pageOption: number;
+  @Input() showSelectRecord = false;
 
   @ViewChild(MatPaginator) _paginator: MatPaginator;
 
   pageList: { index: number; isActive: boolean }[] = [];
   pageLength: number;
+
+  pageRecordSize = [10, 25, 50];
 
   current: {
     pageIndex: number;
@@ -137,7 +141,7 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
         e.isActive = e.index === pageIndex;
       });
 
-      if(this.current.pageIndex >= this.pageList.length) {
+      if (this.current.pageIndex >= this.pageList.length) {
         this.pageList[this.pageList.length - 1].isActive = true;
       }
     } else {
@@ -170,5 +174,10 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
   resetPageMax() {
     this.PAGE.max = 5;
     this.PAGE.avgIdx = 2;
+  }
+
+  changeRecord(pageSize = 10){
+    this.pageSize = pageSize;
+    this.pageChangeRecord.emit(this.pageSize)
   }
 }

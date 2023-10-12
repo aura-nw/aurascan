@@ -1,0 +1,67 @@
+.toast-info {
+  background-color: var(--aura-blue-6);
+  background-image: url('../../../assets/icons/icons-svg/white/loading-action.svg');
+  font-size: 1.4rem;
+  .toast-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+  }
+}
+
+.toast-container {
+  @media (max-width: 413px) {
+    width: 93%;
+  }
+}
+
+.toast-container .ngx-toastr {
+  width: 350px;
+}
+
+.toast-warning {
+  background-color: var(--aura-yellow-4);
+}
+.toast-container a {
+  text-decoration: underline !important;
+}
+
+.aura-toast {
+  position: relative;
+  border-radius: 16px;
+  padding: 20px 16px;
+  min-width: 343px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--aura-white);
+  &.toast-success {
+    background: var(--aura-green-4);
+  }
+  &.toast-error {
+    background: var(--aura-red-4);
+  }
+  .toast-title {
+    padding-left: 26px;
+    position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .toast-message {
+    padding-left: 26px;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+}
+
+.toast-success .toast-title:before {
+  background: url('../../../assets/icons/icons-svg/white/toast-success.svg') center;
+  background-size: cover;
+}
+.toast-error .toast-title:before {
+  background: url('../../../assets/icons/icons-svg/white/error-notice.svg') center;
+  background-size: cover;
+}

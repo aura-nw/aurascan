@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 
 @Injectable()
 export class TransactionService extends CommonService {
@@ -154,8 +155,6 @@ export class TransactionService extends CommonService {
       $value: String = null
       $heightGT: Int = null
       $heightLT: Int = null
-      $indexGT: Int = null
-      $indexLT: Int = null
       $hash: String = null
       $height: Int = null
     ) {
@@ -169,13 +168,8 @@ export class TransactionService extends CommonService {
               value: { _eq: $value}
               composite_key: { _eq: "proposal_deposit.proposal_id"}
               key: { _eq: "proposal_id"}
+              block_height: { _lte: $heightLT, _gte: $heightGT }
             }
-            _and: [
-              { height: { _gt: $heightGT } }
-              { index: { _gt: $indexGT } }
-              { height: { _lt: $heightLT } }
-              { index: { _lt: $indexLT } }
-            ]
           }
           order_by: [{ height: $order}, {index: $order }]
         ) {
@@ -196,12 +190,10 @@ export class TransactionService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: 100,
-          order: "desc",
+          order: 'desc',
           value: payload.value,
-          heightGT: null,
-          indexGT: null,
-          indexLT: null,
-          height: null
+          heightGT: payload.heightGT,
+          heightLT: payload.heightLT,
         },
         operationName: 'queryProposalDeposit',
       })
@@ -254,9 +246,10 @@ export class TransactionService extends CommonService {
 
   getListTransferFromTx(height): Observable<any> {
     const operationsDoc = `
-    query TxTransferDetail($height: Int) {
+    query TxTransferDetail($height: Int, $listFilterCW20: [String!] = null, $listFilterCW721: [String!] = null) {
       ${this.envDB} {
-        cw20_activity(where: {height: {_eq: $height}, amount :{_is_null: false}}) {
+        cw20_activity(where: {height: {_eq: $height}, amount: {_is_null: false}, action: {_in: $listFilterCW20}}) {
+          action
           amount
           from
           to
@@ -270,7 +263,7 @@ export class TransactionService extends CommonService {
             name
           }
         }
-        cw721_activity(where: {height: {_eq: $height}, cw721_token: {token_id: {_is_null: false}}, cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}}) {
+        cw721_activity(where: {height: {_eq: $height}, action: {_in: $listFilterCW721}, cw721_token: {token_id: {_is_null: false}}, cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}}) {
           action
           from
           to
@@ -297,6 +290,8 @@ export class TransactionService extends CommonService {
         query: operationsDoc,
         variables: {
           height: height,
+          listFilterCW20: CW20_TRACKING,
+          listFilterCW721: CW721_TRACKING,
         },
         operationName: 'TxTransferDetail',
       })

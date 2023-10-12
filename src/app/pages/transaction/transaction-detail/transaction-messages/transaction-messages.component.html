@@ -32,7 +32,7 @@
                       <div class="d-flex flex-wrap mb-2">
                         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Byte Code</div>
                         <div class="col-12 col-lg-9 text--gray-1">
-                          <div [class.ellipsis-text]="!seeLessArr[i]" class="overflow-hidden">
+                          <div [class.line-claim-v]="!seeLessArr[i]" class="overflow-hidden">
                             {{ item?.value }}
                           </div>
                           <div
@@ -433,15 +433,21 @@
         <ng-container *ngFor="let item of transactionDetail?.messages[0]?.outputs; let i = index">
           <div class="d-flex justify-content-between mx-4 my-5">
             <div class="txt-label">From</div>
-            <a
-              class="text--primary txt-address"
-              [routerLink]="['/account', transactionDetail?.messages[0]?.inputs[0]?.address]">
-              {{ transactionDetail?.messages[0]?.inputs[0]?.address }}
-            </a>
+            <div class="txt-address">
+              <app-name-tag
+                [url]="isContractAddress(transactionDetail?.messages[0]?.inputs[0]?.address) ? 'contracts' : 'account'"
+                [value]="transactionDetail?.messages[0]?.inputs[0]?.address"
+                [fullText]="true"
+                [fullTextMob]="true"></app-name-tag>
+            </div>
             <div class="txt-label">To</div>
-            <a class="text--primary txt-address" [routerLink]="['/account', item?.address]">
-              {{ item?.address }}
-            </a>
+            <div class="txt-address">
+              <app-name-tag
+                [url]="isContractAddress(item?.address) ? 'contracts' : 'account'"
+                [fullText]="true"
+                [fullTextMob]="true"
+                [value]="item?.address"></app-name-tag>
+            </div>
             <div class="txt-amount">
               <i class="ph-currency-circle-dollar mx-auto h3 mr-2 mb-0 text--white"></i>
               <div class="ml-2">
@@ -489,7 +495,7 @@
                     <ng-container *ngFor="let data of item.attributes; let idx = index">
                       <div class="ml-5 mb-2 row">
                         <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key }}</span>
-                        <span class="col-12 col-lg-9 text-break">
+                        <span class="col-12 col-lg-9 break-all">
                           {{ data.value }}
                         </span>
                       </div>

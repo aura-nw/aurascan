@@ -33,7 +33,7 @@
                         <a
                           href="https://www.coingecko.com/en/coins/aura-network"
                           target="_blank"
-                          class="ml-2 button button--sm button-ghost button-ghost--sm aura-tooltip-object">
+                          class="ml-2 p-0 button button--ssm button-ghost aura-tooltip-object">
                           <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
                         </a>
                         <app-tooltip-customize [content]="'Open CoinGecko'"> </app-tooltip-customize>
@@ -145,7 +145,8 @@
     </div>
     <div class="col-12 col-lg-4 d-lg-flex flex-column justify-content-between">
       <div class="card mb-4 mb-md-6 card__item">
-        <div class="card-body px-4 py-4 px-lg-6 card-body--gradient-black d-flex flex-column justify-content-between">
+        <div
+          class="card-body px-4 py-4 px-lg-6 border-radius--sm card-body--gradient-black d-flex flex-column justify-content-between">
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
               <i class="ph-cube-light icon-brand text--gray-3"></i>
@@ -163,7 +164,7 @@
               <i class="ph-graph-light icon-brand text--gray-3"></i>
               <div class="ml-4 d-flex align-items-center">
                 <div class="body text--gray-1">Community Pool</div>
-                <div class="ml-2 button button--sm button-ghost button-ghost--sm" (click)="navigateToCommunityPool()">
+                <div class="ml-2 p-0 button button--ssm button-ghost" (click)="navigateToCommunityPool()">
                   <i class="ph-arrow-square-out-fill text--gray-1 body-01 h3-mob mb-0"></i>
                 </div>
               </div>
@@ -187,10 +188,16 @@
         </div>
       </div>
       <div class="card mb-4 mb-md-0 card__item">
-        <div class="card-body px-4 py-4 px-lg-6 card-body--gradient-black d-flex flex-column justify-content-between">
+        <div
+          class="card-body px-4 py-4 px-lg-6 border-radius--sm card-body--gradient-black d-flex flex-column justify-content-between">
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
-              <img [src]="'assets/icons/icons-svg/basic/bonded-token.svg' | imageS3" alt="" class="icon-brand" />
+              <img
+                [src]="'assets/icons/icons-svg/basic/bonded-token.svg' | imageS3"
+                alt=""
+                class="icon-brand"
+                width="32px"
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Bonded Token</div>
               </div>
@@ -202,7 +209,12 @@
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
-              <img [src]="'assets/icons/icons-svg/basic/chart-col-up.svg' | imageS3" alt="" class="icon-brand" />
+              <img
+                [src]="'assets/icons/icons-svg/basic/chart-col-up.svg' | imageS3"
+                alt=""
+                class="icon-brand"
+                width="32px"
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Inflation rate</div>
               </div>
@@ -214,7 +226,12 @@
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
-              <img [src]="'assets/icons/icons-svg/basic/staking-coins.svg' | imageS3" alt="" class="icon-brand" />
+              <img
+                [src]="'assets/icons/icons-svg/basic/staking-coins.svg' | imageS3"
+                alt=""
+                class="icon-brand"
+                width="32px"
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Staking APR</div>
               </div>
@@ -244,7 +261,7 @@
     <div class="col-12 col-lg-4 mb-4 mb-lg-6">
       <div class="card card__item h-100">
         <div
-          class="card-body d-flex flex-column justify-content-center voting-card {{
+          class="card-body py-lg-0 d-flex flex-column justify-content-center voting-card {{
             voting_Period_arr.length === 0 ? 'py-4 py-lg-6' : ''
           }}">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Votings</div>
@@ -253,18 +270,21 @@
               <div class="flex-shrink-0 flex-grow-1 d-flex w-25">
                 <div class="dropdown aura-dropdown w-100">
                   <button
-                    class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
+                    class="button voting-dropdown-button py-0 px-4 justify-content-start button-pill button-outline button-dropdown w-100"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <span class="body text-start">{{
+                    <span class="body text-start line-claim">{{
                       curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
                     }}</span>
                   </button>
-                  <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light">
+                  <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light py-2 px-2">
                     <ng-container *ngFor="let item of voting_Period_arr">
-                      <li class="dropdown-item cursor-pointer">
-                        <button type="button" class="button p-0 body-03" (click)="curr_voting_Period = item">
+                      <li class="dropdown-item cursor-pointer py-3 px-2">
+                        <button
+                          type="button"
+                          class="button p-0 body-03 line-claim text--gray-light"
+                          (click)="curr_voting_Period = item">
                           {{ item.content.title }}
                         </button>
                       </li>
@@ -287,7 +307,7 @@
                 </a>
               </div>
             </div>
-            <div class="mt-3 card-child">
+            <div class="mt-3 card-child border-radius--sm py-3 px-4">
               <div class="d-flex align-items-center justify-content-between body-03">
                 <div>
                   <div class="text--gray-2">Yes</div>
@@ -374,7 +394,7 @@
                           </div>
                           <a
                             *ngSwitchCase="'proposer'"
-                            class="text--primary cursor-pointer text-break"
+                            class="text--primary cursor-pointer break-all"
                             [routerLink]="['/validators', data.operator_address]">
                             {{ data[template.matColumnDef] | stringEllipsis : 10 }}
                           </a>

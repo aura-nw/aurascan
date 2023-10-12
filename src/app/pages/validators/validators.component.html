@@ -239,7 +239,7 @@
                         </div>
                         <a
                           *ngSwitchCase="'title'"
-                          class="text--primary cursor-pointer text-clamp box-title-validator pl-5"
+                          class="text--primary cursor-pointer line-claim-v box-title-validator pl-5"
                           [routerLink]="['/validators', data.operator_address]">
                           <div class="avatar-wrapper validator-avatar-wrapper">
                             <div class="validator-avatar">
@@ -296,7 +296,7 @@
                   <div class="cursor-pointer table-header__title">
                     <div class="d-flex body-mob text--primary fw-semibold">
                       <a
-                        class="box-title-validator text--primary g-flex-start-center"
+                        class="box-title-validator text--primary d-flex align-items-center"
                         [routerLink]="['/validators', validator.operator_address]">
                         <div class="avatar-wrapper">
                           <span class="validator-avatar">
@@ -316,7 +316,7 @@
                           </div>
                         </div>
                         <h5
-                          class="text--primary mb-0 text-break"
+                          class="text--primary mb-0 break-all"
                           [class.text-title]="validator?.jailed && validator['status'] !== statusValidator.Active">
                           {{ validator.title }}
                         </h5>
@@ -412,7 +412,7 @@
           </div>
           <div class="ml-2">
             <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
-              <span class="modal__title text-break">{{ validatorDetail?.title }}</span>
+              <span class="modal__title break-all">{{ validatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
               Commission - {{ validatorDetail?.commission | percent : globals.formatNumber2Decimal }}
