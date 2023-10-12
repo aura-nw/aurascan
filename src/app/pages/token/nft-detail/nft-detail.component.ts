@@ -1,6 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+} from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,12 +16,10 @@ import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
@@ -41,7 +42,6 @@ export class NFTDetailComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   templates: Array<TableTemplate> = [
-    // { matColumnDef: 'popover', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
@@ -244,25 +244,6 @@ export class NFTDetailComponent implements OnInit {
       this.getDataTable(this.nextKey);
       this.currentKey = this.nextKey;
     }
-  }
-
-  getPopoverData(data): IContractPopoverData {
-    return {
-      amount: data?.value || 0,
-      code: Number(data?.tx_response?.code),
-      fee: data?.fee || 0,
-      from_address: data?.from_address || '',
-      to_address: data?.to_address || '',
-      price: 0,
-      status: data?.status,
-      symbol: this.denom,
-      tokenAddress: '',
-      tx_hash: data?.tx_hash || '',
-      gas_used: data?.tx_response?.gas_used,
-      gas_wanted: data?.tx_response?.gas_wanted,
-      nftDetail: this.nftDetail,
-      modeExecute: data?.modeExecute,
-    };
   }
 
   async unEquipSBT() {

@@ -82,7 +82,7 @@
                           [content]="data.arrEvent[0]?.amountTemp | convertSmallNumber : data.arrEvent[0]?.decimal">
                         </app-tooltip-customize>
                         <div
-                          *ngIf="(data.arrEvent[0]?.amountTemp | balanceOf: data.arrEvent[0]?.decimal) >= 0.001"
+                          *ngIf="(data.arrEvent[0]?.amountTemp | balanceOf : data.arrEvent[0]?.decimal) >= 0.001"
                           [appBigNumber]="data.arrEvent[0]?.amountTemp"
                           [decimal]="data.arrEvent[0]?.decimal"></div>
                       </div>
@@ -204,19 +204,6 @@
                         {{ data[template.matColumnDef] | stringEllipsis : 16 }}
                       </a>
                     </ng-container>
-                    <div *ngSwitchCase="'action'">
-                      <button
-                        mat-icon-button
-                        aria-label="Example icon-button with a menu"
-                        placement="right"
-                        [ngbPopover]="popContent"
-                        popoverClass="custom-popover token-popover">
-                        <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
-                      </button>
-                      <ng-template #popContent class="popContent">
-                        <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
-                      </ng-template>
-                    </div>
                     <ng-container *ngSwitchDefault>
                       {{ data[template.matColumnDef] }}
                     </ng-container>
