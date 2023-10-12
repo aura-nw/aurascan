@@ -1,8 +1,9 @@
 //Core files
 @import '../../../node_modules/bootstrap/scss/functions';
 @import '../../../node_modules/bootstrap/scss/variables';
-@import 'variables';
 @import '../../../node_modules/bootstrap/scss/mixins.scss';
+
+@import 'variables';
 // Structure
 @import 'custom/structure/topbar';
 @import 'custom/structure/vertical';
@@ -15,3 +16,6 @@
 // Custom Scss
 @import './custom.scss';
 @import './spacer.scss';
+
+// Custom material components
+@import 'custom/material/material.scss';
