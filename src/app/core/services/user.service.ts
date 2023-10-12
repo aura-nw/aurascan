@@ -66,9 +66,9 @@ export class UserService extends CommonService {
 
   getListTxByAddress(payload) {
     const operationsDoc = `
-    query QueryTxOfAccount($compositeKey: String = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
+    query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc, $address: String = null) {
       ${this.envDB} {
-        transaction(where: {event_attribute_index: {composite_key: {_eq: $compositeKey}, value: {_eq: $address}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
+        transaction(where: {timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}, sender: {_eq: $address}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
           hash
           height
           fee
@@ -87,7 +87,6 @@ export class UserService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload.limit || 40,
-          compositeKey: payload.compositeKey,
           address: payload.address,
           heightLT: payload.heightLT,
           listTxMsgType: payload.listTxMsgType,

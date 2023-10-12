@@ -155,8 +155,6 @@ export class TransactionService extends CommonService {
       $value: String = null
       $heightGT: Int = null
       $heightLT: Int = null
-      $indexGT: Int = null
-      $indexLT: Int = null
       $hash: String = null
       $height: Int = null
     ) {
@@ -170,13 +168,8 @@ export class TransactionService extends CommonService {
               value: { _eq: $value}
               composite_key: { _eq: "proposal_deposit.proposal_id"}
               key: { _eq: "proposal_id"}
+              block_height: { _lte: $heightLT, _gte: $heightGT }
             }
-            _and: [
-              { height: { _gt: $heightGT } }
-              { index: { _gt: $indexGT } }
-              { height: { _lt: $heightLT } }
-              { index: { _lt: $indexLT } }
-            ]
           }
           order_by: [{ height: $order}, {index: $order }]
         ) {
@@ -199,10 +192,8 @@ export class TransactionService extends CommonService {
           limit: 100,
           order: 'desc',
           value: payload.value,
-          heightGT: null,
-          indexGT: null,
-          indexLT: null,
-          height: null,
+          heightGT: payload.heightGT,
+          heightLT: payload.heightLT,
         },
         operationName: 'queryProposalDeposit',
       })
@@ -253,54 +244,91 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTransferFromTx(height): Observable<any> {
+  getListTransferFromTx(hash): Observable<any> {
     const operationsDoc = `
-    query TxTransferDetail($height: Int, $listFilterCW20: [String!] = null, $listFilterCW721: [String!] = null) {
-      ${this.envDB} {
-        cw20_activity(where: {height: {_eq: $height}, amount: {_is_null: false}, action: {_in: $listFilterCW20}}) {
-          action
-          amount
-          from
-          to
-          cw20_contract {
-            smart_contract {
-              address
+      query TxTransferDetail(
+        $height: Int
+        $listFilterCW20: [String!] = null
+        $listFilterCW721: [String!] = null
+        $txHash: String = null
+        $compositeKeyIn: [String!] = null
+        $heightLTE: Int = null
+        $heightGTE: Int = null
+      ) {
+        ${this.envDB} {
+          cw20_activity(
+            where: {
+              tx_hash: { _eq: $txHash }
+              amount: { _is_null: false }
+              action: { _in: $listFilterCW20 }
             }
-            symbol
-            decimal
-            marketing_info
-            name
-          }
-        }
-        cw721_activity(where: {height: {_eq: $height}, action: {_in: $listFilterCW721}, cw721_token: {token_id: {_is_null: false}}, cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}}) {
-          action
-          from
-          to
-          cw721_token {
-            token_id
-          }
-          cw721_contract {
-            smart_contract {
-              address
+          ) {
+            action
+            amount
+            from
+            to
+            cw20_contract {
+              smart_contract {
+                address
+              }
+              symbol
+              decimal
+              marketing_info
+              name
             }
           }
-          smart_contract_event {
-            smart_contract_event_attributes {
+          cw721_activity(
+            where: {
+              tx_hash: { _eq: $txHash }
+              action: { _in: $listFilterCW721 }
+              cw721_token: { token_id: { _is_null: false } }
+              cw721_contract: {
+                smart_contract: { name: { _neq: "crates.io:cw4973" } }
+              }
+            }
+          ) {
+            action
+            from
+            to
+            cw721_token {
+              token_id
+            }
+            cw721_contract {
+              smart_contract {
+                address
+              }
+            }
+            smart_contract_event {
+              smart_contract_event_attributes {
+                value
+                key
+              }
+            }
+          }
+          coin_transfer: event(
+            where: {
+              tx_msg_index: {_is_null: false}
+              event_attributes: {
+                composite_key: { _in: $compositeKeyIn }
+                transaction: { hash: { _eq: $txHash } }
+                block_height: { _lte: $heightLTE, _gte: $heightGTE }
+              }
+            }
+          ) {
+            event_attributes {
+              composite_key
               value
-              key
             }
           }
         }
       }
-    }
     `;
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          height: height,
-          listFilterCW20: CW20_TRACKING,
-          listFilterCW721: CW721_TRACKING,
+          txHash: hash,
+          compositeKeyIn: ['transfer.sender', 'transfer.recipient'],
         },
         operationName: 'TxTransferDetail',
       })
