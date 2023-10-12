@@ -58,7 +58,6 @@ export class TokenTransferComponent implements OnInit {
     }
 
     this.transactionService.getListTransferFromTx(this.transaction['tx_hash']).subscribe((res) => {
-      // res.cw20_activity = [];
       let coinTransfer = res.coin_transfer?.map((element) => {
         let cw20_contract = {};
         cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
