@@ -12,6 +12,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
       {
+        path: 'dashboard',
+        redirectTo: '',
+      },
+      {
         path: 'validators',
         loadChildren: () => import('./pages/validators/validators.module').then((m) => m.ValidatorsModule),
       },
@@ -66,9 +70,9 @@ const routes: Routes = [
         path: 'export-csv',
         loadChildren: () => import('./pages/export-csv/export-csv.module').then((m) => m.ExportCsvModule),
       },
+      { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
     ],
   },
-  { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
   {
     path: 'raw-data',
     loadChildren: () => import('./pages/schema-viewer/schema-viewer.module').then((m) => m.SchemaViewerModule),

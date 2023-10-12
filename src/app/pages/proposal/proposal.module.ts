@@ -1,4 +1,4 @@
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbNavModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
@@ -64,7 +64,6 @@ import { MASK_CONFIG } from 'src/app/app.config';
   providers: [
     ProposalService,
     MappingErrorService,
-    DecimalPipe,
     ValidatorService,
     provideEnvironmentNgxMask(MASK_CONFIG),
   ],

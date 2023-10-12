@@ -28,7 +28,7 @@ export interface IConfiguration {
   quotaSetPrivateName: number;
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class EnvironmentService {
   private config: BehaviorSubject<IConfiguration> = new BehaviorSubject({
     fabric: '',

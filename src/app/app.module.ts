@@ -19,17 +19,10 @@ import { GlobalErrorHandler } from './core/helpers/global-error';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 import { DEFAULT_TIMEOUT, RequestTimeoutHttpInterceptor } from './core/helpers/timeout.interceptor';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
-import { CommonService } from './core/services/common.service';
-import { FeeGrantService } from './core/services/feegrant.service';
-import { MappingErrorService } from './core/services/mapping-error.service';
-import { NameTagService } from './core/services/name-tag.service';
-import { SoulboundService } from './core/services/soulbound.service';
-import { TokenService } from './core/services/token.service';
-import { UserService } from './core/services/user.service';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
-import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
+import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -59,7 +52,6 @@ import { MediaExpandModule } from './shared/components/media-expand/media-expand
     { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
     { provide: DEFAULT_TIMEOUT, useValue: 60000 },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
-    EnvironmentService,
     DatePipe,
     Globals,
     {
@@ -73,13 +65,6 @@ import { MediaExpandModule } from './shared/components/media-expand/media-expand
       useClass: LoadingInterceptor,
       multi: true,
     },
-    CommonService,
-    TokenService,
-    FeeGrantService,
-    SoulboundService,
-    MappingErrorService,
-    NameTagService,
-    UserService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

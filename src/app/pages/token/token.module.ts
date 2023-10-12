@@ -13,7 +13,6 @@ import { UserService } from 'src/app/core/services/user.service';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
-import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
@@ -70,7 +69,6 @@ import { TokenRoutingModule } from './token-routing.module';
     FormsModule,
     NgbPopoverModule,
     CommonPipeModule,
-    ContractPopoverModule,
     NgxMaskDirective,
     NgxMaskPipe,
     WriteContractModule,

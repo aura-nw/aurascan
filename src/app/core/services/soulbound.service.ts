@@ -6,7 +6,7 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SoulboundService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
 

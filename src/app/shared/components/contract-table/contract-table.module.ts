@@ -29,7 +29,6 @@ import { ContractTableComponent } from './contract-table.component';
     NgxMaskPipe,
     DropdownModule,
     RouterModule,
-    ContractPopoverModule,
     SharedModule,
     NameTagModule,
   ],

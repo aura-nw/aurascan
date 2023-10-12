@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class NameTagService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
 

@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -42,7 +42,6 @@ import { DashboardComponent } from './dashboard.component';
     DatePipe,
     BlockService,
     TransactionService,
-    DecimalPipe,
     ProposalService,
     CommonService,
     provideEnvironmentNgxMask(MASK_CONFIG),

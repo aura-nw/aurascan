@@ -69,8 +69,7 @@
                   <ul>
                     <li class="primary aura-tooltip-contain" [style.width]="lastedItem.tally?.yes + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize
-                        [content]="'Yes ' + (lastedItem.tally?.yes | number : global.formatNumber2Decimal) + '%'">
+                      <app-tooltip-customize [content]="'Yes ' + (lastedItem.tally?.yes | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                     <li
@@ -78,8 +77,7 @@
                       *ngIf="lastedItem.tally?.no"
                       [style.width]="lastedItem.tally?.no + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize
-                        [content]="'No ' + (lastedItem.tally?.no | number : global.formatNumber2Decimal) + '%'">
+                      <app-tooltip-customize [content]="'No ' + (lastedItem.tally?.no | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                     <li
@@ -88,11 +86,7 @@
                       [style.width]="lastedItem.tally?.no_with_veto + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
                       <app-tooltip-customize
-                        [content]="
-                          'No with veto ' +
-                          (lastedItem.tally?.no_with_veto | number : global.formatNumber2Decimal) +
-                          '%'
-                        ">
+                        [content]="'No with veto ' + (lastedItem.tally?.no_with_veto | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                     <li
@@ -101,9 +95,7 @@
                       [style.width]="lastedItem.tally?.abstain + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
                       <app-tooltip-customize
-                        [content]="
-                          'Abstain ' + (lastedItem.tally?.abstain | number : global.formatNumber2Decimal) + '%'
-                        ">
+                        [content]="'Abstain ' + (lastedItem.tally?.abstain | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                   </ul>
@@ -134,7 +126,7 @@
                           lastedItem.tally?.no,
                           lastedItem.tally?.no_with_veto,
                           lastedItem.tally?.abstain
-                        ).value | number : global.formatNumber2Decimal
+                        ).value | formatDigit : 2
                       }}% </span
                     >&nbsp;
                   </div>
@@ -253,8 +245,7 @@
                     <ul class="mt-4 ul-mobile">
                       <li class="primary aura-tooltip-contain" [style.width]="lastedItem.tally?.yes + '%'">
                         <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize
-                          [content]="'Yes ' + lastedItem.tally?.yes | number : global.formatNumber2Decimal + '%'">
+                        <app-tooltip-customize [content]="'Yes ' + (lastedItem.tally?.yes | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                       <li
@@ -262,8 +253,7 @@
                         *ngIf="lastedItem.tally?.no"
                         [style.width]="lastedItem.tally?.no + '%'">
                         <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize
-                          [content]="'No ' + lastedItem.tally?.no | number : global.formatNumber2Decimal + '%'">
+                        <app-tooltip-customize [content]="'No ' + (lastedItem.tally?.no | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                       <li
@@ -272,10 +262,7 @@
                         [style.width]="lastedItem.tally?.no_with_veto + '%'">
                         <div class="aura-tooltip-object w-100"></div>
                         <app-tooltip-customize
-                          [content]="
-                            'No with veto ' + lastedItem.tally?.no_with_veto
-                              | number : global.formatNumber2Decimal + '%'
-                          ">
+                          [content]="'No with veto ' + (lastedItem.tally?.no_with_veto | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                       <li
@@ -284,9 +271,7 @@
                         [style.width]="lastedItem.tally.abstain + '%'">
                         <div class="aura-tooltip-object w-100"></div>
                         <app-tooltip-customize
-                          [content]="
-                            'Abstain ' + lastedItem.tally.abstain | number : global.formatNumber2Decimal + '%'
-                          ">
+                          [content]="'Abstain ' + (lastedItem.tally.abstain | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                     </ul>
@@ -317,7 +302,7 @@
                             lastedItem.tally?.no,
                             lastedItem.tally?.no_with_veto,
                             lastedItem.tally.abstain
-                          ).value | number : global.formatNumber2Decimal
+                          ).value | formatDigit : 2
                         }}%
                       </span>
                     </div>

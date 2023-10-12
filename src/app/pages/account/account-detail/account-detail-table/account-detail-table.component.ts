@@ -7,7 +7,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { PageEventType } from '../../../../../app/core/constants/account.enum';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { CommonService } from '../../../../core/services/common.service';
-import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-account-detail-table',
@@ -30,7 +29,6 @@ export class AccountDetailTableComponent implements OnInit, OnChanges {
 
   constructor(
     public translate: TranslateService,
-    public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,

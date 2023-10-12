@@ -11,7 +11,6 @@ import { CHART_RANGE } from 'src/app/core/constants/common.constant';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportStatisticChart } from 'src/app/core/helpers/export';
 import { StatisticService } from 'src/app/core/services/statistic.service';
-import { Globals } from 'src/app/global/global';
 import {
   CHART_CONFIG,
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
@@ -44,14 +43,14 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   toolTipWidth = 80;
   toolTipHeight = 80;
   toolTipMargin = 15;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public translate: TranslateService,
     private statisticService: StatisticService,
     public datepipe: DatePipe,
-    private maskService: NgxMaskPipe,
-    public global: Globals,
+    private maskService: NgxMaskPipe
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
     if (

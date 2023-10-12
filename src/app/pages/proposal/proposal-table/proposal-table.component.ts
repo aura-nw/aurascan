@@ -16,7 +16,6 @@ import { TableTemplate } from '../../../../app/core/models/common.model';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
-import { Globals } from '../../../global/global';
 
 interface CustomPageEvent {
   next?: number;
@@ -95,7 +94,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   };
 
   constructor(
-    public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,

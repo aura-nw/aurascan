@@ -11,7 +11,6 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
-import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw4973',
@@ -40,7 +39,6 @@ export class TokenCw4973Component implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    public global: Globals,
     public tokenService: TokenService,
     public soulboundService: SoulboundService,
     public commonService: CommonService,

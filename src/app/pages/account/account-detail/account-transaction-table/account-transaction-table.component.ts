@@ -12,7 +12,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
+import { convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -93,7 +93,6 @@ export class AccountTransactionTableComponent {
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
-    public global: Globals,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
     private userService: UserService,
