@@ -1,5 +1,5 @@
 import { LayoutModule } from '@angular/cdk/layout';
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
@@ -57,7 +57,6 @@ import { ValidatorsComponent } from './validators.component';
     TransactionService,
     AccountService,
     MappingErrorService,
-    DecimalPipe,
     ProposalService,
   ],
 })

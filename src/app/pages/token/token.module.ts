@@ -9,10 +9,10 @@ import { NgxMaskModule } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
 import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
-import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
@@ -39,7 +39,6 @@ import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component
 import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
-import { UserService } from 'src/app/core/services/user.service';
 
 @NgModule({
   declarations: [
@@ -71,7 +70,6 @@ import { UserService } from 'src/app/core/services/user.service';
     FormsModule,
     NgbPopoverModule,
     CommonPipeModule,
-    ContractPopoverModule,
     NgxMaskModule,
     WriteContractModule,
     ReadContractModule,

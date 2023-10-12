@@ -1,4 +1,4 @@
-import { DecimalPipe } from '@angular/common';
+import { formatNumber } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
@@ -15,11 +15,7 @@ export class CurrentTurnoutComponent implements OnInit {
   @Input() isNotReached;
   @Input() quorumStatus;
 
-  constructor(
-    public dialog: MatDialog,
-    public commonService: CommonService,
-    private numberPipe: DecimalPipe,
-  ) {}
+  constructor(public dialog: MatDialog, public commonService: CommonService) {}
 
   ngOnInit(): void {}
   formatNumber(number: number, args?: any): any {
@@ -51,7 +47,7 @@ export class CurrentTurnoutComponent implements OnInit {
 
     if (key === '') {
       let numberVote: string;
-      numberVote = this.numberPipe.transform(abs, NUMBER_ONLY_DECIMAL);
+      numberVote = formatNumber(abs, NUMBER_ONLY_DECIMAL);
       return (isNegative ? '-' : '') + numberVote + key;
     }
     return (isNegative ? '-' : '') + abs + key;

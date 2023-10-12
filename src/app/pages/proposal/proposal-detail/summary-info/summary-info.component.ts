@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DecimalPipe } from '@angular/common';
+import { formatNumber } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
@@ -66,7 +66,6 @@ export class SummaryInfoComponent implements OnInit {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     public commonService: CommonService,
-    private numberPipe: DecimalPipe,
   ) {}
 
   ngOnInit(): void {
@@ -180,7 +179,7 @@ export class SummaryInfoComponent implements OnInit {
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
-                    this.numberPipe.transform(this.proposalDetail.veto_threshold, this.number2Digit).toString(),
+                    formatNumber(this.proposalDetail.veto_threshold, this.number2Digit).toString(),
                   );
                 }
               } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
@@ -188,7 +187,7 @@ export class SummaryInfoComponent implements OnInit {
               } else {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                   '{{proposalDetail.noWithVetoPercent}}',
-                  this.numberPipe.transform(this.proposalDetail.veto_threshold, this.number2Digit).toString(),
+                  formatNumber(this.proposalDetail.veto_threshold, this.number2Digit).toString(),
                 );
               }
             } else {
@@ -258,22 +257,22 @@ export class SummaryInfoComponent implements OnInit {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
           this.currentSubTitle =
             'This proposal may pass when the voting period is over because current quorum is more than ' +
-            this.numberPipe.transform(proposalDetail.quorum, this.number2Digit).toString() +
+            formatNumber(proposalDetail.quorum, this.number2Digit).toString() +
             '% and there are more than ' +
-            this.numberPipe.transform(proposalDetail.threshold, this.number2Digit).toString() +
+            formatNumber(proposalDetail.threshold, this.number2Digit).toString() +
             '% of Yes votes.';
         } else {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
           this.currentSubTitle =
             'The proportion of NoWithVeto votes is superior to ' +
-            this.numberPipe.transform(proposalDetail.veto_threshold, this.number2Digit).toString() +
+            formatNumber(proposalDetail.veto_threshold, this.number2Digit) +
             '%';
         }
       } else {
         this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
         this.currentSubTitle =
           'The proportion of Yes votes is inferior to ' +
-          this.numberPipe.transform(proposalDetail.threshold, this.number2Digit).toString() +
+          formatNumber(this.proposalDetail.threshold, this.number2Digit).toString() +
           '%';
       }
     } else {
@@ -282,7 +281,7 @@ export class SummaryInfoComponent implements OnInit {
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubTitle =
         'Current quorum is less than ' +
-        this.numberPipe.transform(proposalDetail.quorum, this.number2Digit).toString() +
+        formatNumber(this.proposalDetail.quorum, this.number2Digit).toString() +
         '% and this proposal requires more participation';
     }
     this.proposalDetail = {
@@ -399,7 +398,7 @@ export class SummaryInfoComponent implements OnInit {
 
     if (key === '') {
       let numberVote: string;
-      numberVote = this.numberPipe.transform(abs, this.numberOnlyDecimal);
+      numberVote = formatNumber(abs, this.numberOnlyDecimal);
       return (isNegative ? '-' : '') + numberVote + key;
     }
     return (isNegative ? '-' : '') + abs + key;

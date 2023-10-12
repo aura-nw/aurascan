@@ -32,19 +32,6 @@
               </th>
               <td mat-cell *matCellDef="let data" [ngClass]="template.isNameTag ? 'nameTag' : ''">
                 <ng-container [ngSwitch]="template.type">
-                  <ng-container *ngSwitchCase="'popover'">
-                    <button
-                      mat-icon-button
-                      aria-label="Contract Transaction Detail"
-                      placement="right"
-                      [ngbPopover]="popContent"
-                      popoverClass="custom-popover">
-                      <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
-                    </button>
-                    <ng-template #popContent class="popContent">
-                      <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
-                    </ng-template>
-                  </ng-container>
                   <ng-container *ngSwitchCase="'hash-url-se'">
                     <a class="text--primary cursor-pointer hash-link">
                       {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}

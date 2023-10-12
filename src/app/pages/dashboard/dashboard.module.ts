@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -36,6 +36,6 @@ import { DashboardComponent } from './dashboard.component';
     NgbCarouselModule,
     TooltipCustomizeModule,
   ],
-  providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService, CommonService, MaskPipe],
+  providers: [DatePipe, BlockService, TransactionService, ProposalService, CommonService, MaskPipe],
 })
 export class DashboardModule {}

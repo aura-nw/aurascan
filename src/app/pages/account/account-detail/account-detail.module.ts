@@ -1,5 +1,5 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -65,6 +65,6 @@ import { TokenTableComponent } from './token-table/token-table.component';
     ClipboardModule,
     RouterModule
   ],
-  providers: [TransactionService, AccountService, DecimalPipe, UserService],
+  providers: [TransactionService, AccountService, UserService],
 })
 export class AccountDetailModule {}
