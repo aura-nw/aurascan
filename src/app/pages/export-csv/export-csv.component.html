@@ -198,7 +198,7 @@
 
     <div [class.aura-tooltip-contain]="!userEmail">
       <mat-slide-toggle formControlName="displayPrivate" [disabled]="!userEmail" class="aura-tooltip-object csv-hint">
-        <span class="text--gray-7" [class.text--white]="userEmail">Include Private name tags in data downloaded</span>
+        <span class="txt-toggle" [class.text--white]="userEmail">Include Private name tags in data downloaded</span>
       </mat-slide-toggle>
       <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
     </div>
