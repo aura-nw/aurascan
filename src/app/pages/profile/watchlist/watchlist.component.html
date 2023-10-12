@@ -10,7 +10,12 @@
 
 <div class="mt-4">
   <div class="d-lg-flex align-items-center justify-content-between">
-    <div class="txt-total-address">Total {{ countFav }}/{{ pageData?.length }} addresses added. Total {{ countFav }}/{{ pageData?.length }} activities group tracking</div>
+    <div class="txt-total-address">
+      Total {{ countFav }}/{{ pageData?.length }} addresses added. Total {{ countFav }}/{{
+        pageData?.length
+      }}
+      activities group tracking
+    </div>
     <div class="filter-group d-flex align-items-center flex-nowrap mt-2 mt-lg-0">
       <form class="aura-form single-input-field search-form watchlist-search-form">
         <div class="input-group px-6">
@@ -92,10 +97,10 @@
                   {{ data[template.matColumnDef] }}
                 </div>
                 <div *ngSwitchCase="'public_name_tag'" class="box-name-tag pe-auto">
-                  <div>{{ data.nameTag | cutStringPipe : 15 }}</div>
+                  <div>{{ commonService.setNameTag(data.address, null, false) | cutStringPipe : 15 }}</div>
                 </div>
                 <div *ngSwitchCase="'private_name_tag'" class="profile-private-name-tag pe-auto">
-                  <div>{{ data.nameTag | cutStringPipe : 15 }}</div>
+                  <div>{{ commonService.setNameTag(data.address, null, true) | cutStringPipe : 15 }}</div>
                 </div>
                 <div *ngSwitchCase="'createdAt'">
                   {{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}

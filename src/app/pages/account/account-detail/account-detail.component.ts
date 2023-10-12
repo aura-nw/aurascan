@@ -44,6 +44,7 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
+  userEmail = null;
 
   destroyed$ = new Subject();
   timerUnSub: Subscription;
@@ -73,6 +74,7 @@ export class AccountDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userEmail = localStorage.getItem('userEmail');
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
@@ -242,5 +244,9 @@ export class AccountDetailComponent implements OnInit {
     } else {
       this.router.navigate(['/login']);
     }
+  }
+
+  navigateWatchlist(address: string, tokenId: number): void {
+    this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
   }
 }
