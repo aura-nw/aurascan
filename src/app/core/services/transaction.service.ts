@@ -329,6 +329,8 @@ export class TransactionService extends CommonService {
         variables: {
           txHash: hash,
           compositeKeyIn: ['transfer.sender', 'transfer.recipient'],
+          listFilterCW20: CW20_TRACKING,
+          listFilterCW721: CW721_TRACKING,
         },
         operationName: 'TxTransferDetail',
       })
