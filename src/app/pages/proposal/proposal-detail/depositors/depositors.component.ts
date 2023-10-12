@@ -14,7 +14,8 @@ import { ProposalService } from '../../../../../app/core/services/proposal.servi
   styleUrls: ['./depositors.component.scss'],
 })
 export class DepositorsComponent implements OnInit, OnDestroy {
-  @Input() proposalId: number;
+  @Input() proposalDetail: any;
+
   depositorsList: any[] = [];
   tableData = [];
   loading = true;
@@ -47,13 +48,28 @@ export class DepositorsComponent implements OnInit, OnDestroy {
   }
 
   getDepositorsList(): void {
-    const payload = {
-      key: 'proposal_id',
-      value: this.proposalId?.toString(),
-      limit: 100, // get all
-      compositeKey: 'proposal_deposit.proposal_id',
-    };
+    this.proposalService
+      .getBlockSubmitTime(this.proposalDetail?.submit_time, this.proposalDetail?.deposit_end_time)
+      .subscribe({
+        next: (res) => {
+          const payload = {
+            key: 'proposal_id',
+            value: this.proposalDetail?.proposal_id?.toString(),
+            limit: 100, // get all
+            compositeKey: 'proposal_deposit.proposal_id',
+            heightGT: res.startBlock[0]?.height,
+            heightLT: res.endBlock[0]?.height,
+          };
 
+          this.getDataDeposit(payload);
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
+  }
+
+  getDataDeposit(payload): void {
     this.transactionService.getProposalDeposit(payload).subscribe({
       next: (res) => {
         let dataList: any[] = [];
@@ -71,7 +87,6 @@ export class DepositorsComponent implements OnInit, OnDestroy {
           });
           this.depositorsList = dataList;
           this.dataLength = dataList?.length || 0;
-
           const { pageIndex, pageSize } = this.pageData;
           this.tableData = this.depositorsList.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
         }
