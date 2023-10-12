@@ -35,7 +35,7 @@
                       <div *ngSwitchCase="'type'" class="aura-status">
                         <div class="aura-status aura-tooltip-contain">
                           <div class="status cursor-pointer aura-tooltip-object">
-                            {{ data[template.matColumnDef] | stringEllipsis : 25 }}
+                            {{ data[template.matColumnDef] | stringEllipsis : 35 }}
                             <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
                               +{{ data.lstType?.length - 1 }}
                             </div>

@@ -193,7 +193,7 @@
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
               <img
-                src="assets/icons/icons-svg/basic/bonded-token.svg"
+                [src]="'assets/icons/icons-svg/basic/bonded-token.svg' | imageS3"
                 alt=""
                 class="icon-brand"
                 width="32px"
@@ -210,7 +210,7 @@
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
               <img
-                src="assets/icons/icons-svg/basic/chart-col-up.svg"
+                [src]="'assets/icons/icons-svg/basic/chart-col-up.svg' | imageS3"
                 alt=""
                 class="icon-brand"
                 width="32px"
@@ -227,7 +227,7 @@
           <div class="d-flex align-items-center justify-content-between py-1">
             <div class="d-flex align-items-center">
               <img
-                src="assets/icons/icons-svg/basic/staking-coins.svg"
+                [src]="'assets/icons/icons-svg/basic/staking-coins.svg' | imageS3"
                 alt=""
                 class="icon-brand"
                 width="32px"
@@ -353,7 +353,7 @@
           <div
             class="d-flex flex-column align-items-center justify-content-center h-100"
             *ngIf="voting_Period_arr.length === 0">
-            <img src="assets/images/icons/empty_state_illus.svg" alt="" />
+            <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt="" />
             <div class="text--gray-3">No proposal within the voting period</div>
           </div>
         </div>
