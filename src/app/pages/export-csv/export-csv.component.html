@@ -2,8 +2,9 @@
   Export Data <br class="d-lg-none" />
   (Download CSV file)
 </h1>
-<div class="text--gray-2 mb-6 d-flex align-items-center">
-  <i class="ph ph-info body-01 mr-1"></i>The earliest 1,000 records within the selected range will be exported
+<div class="text--gray-2 mb-6 d-flex">
+  <i class="ph ph-info body-01 mr-1" style="margin-top: 2px"></i>
+  The earliest 1,000 records within the selected range will be exported
 </div>
 
 <div class="col-12 col-lg-6">
@@ -197,7 +198,7 @@
 
     <div [class.aura-tooltip-contain]="!userEmail">
       <mat-slide-toggle formControlName="displayPrivate" [disabled]="!userEmail" class="aura-tooltip-object csv-hint">
-        <span class="text--gray-8" [class.text--white]="userEmail  ">Include Private name tags in data downloaded</span>
+        <span class="text--gray-8" [class.text--white]="userEmail">Include Private name tags in data downloaded</span>
       </mat-slide-toggle>
       <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
     </div>

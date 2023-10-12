@@ -126,12 +126,14 @@ export class ProposalComponent implements OnInit {
       })
       .subscribe((res) => {
         if (res?.proposal) {
-          let tempDta = res.proposal;
-          tempDta.forEach((pro) => {
-            pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
+          let tempData = res.proposal;
+          tempData?.forEach((pro) => {
+            if (pro.total_deposit?.length > 0) {
+              pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0]?.amount);
+            }
           });
 
-          this.dataSource.data = tempDta;
+          this.dataSource.data = tempData;
         }
         this.length = res.proposal_aggregate.aggregate.count;
       });
