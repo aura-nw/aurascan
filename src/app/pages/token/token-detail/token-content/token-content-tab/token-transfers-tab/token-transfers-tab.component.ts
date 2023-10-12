@@ -1,11 +1,10 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute } from '@angular/router';
 import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { UserService } from 'src/app/core/services/user.service';
 import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
@@ -30,7 +29,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
-    // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'status', headerCellDef: 'Result' },
@@ -41,7 +39,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ];
 
   NFTTemplates: Array<TableTemplate> = [
-    // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'status', headerCellDef: 'Result' },
@@ -268,25 +265,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
-  }
-
-  getPopoverData(data): IContractPopoverData {
-    return {
-      amount: data?.amountToken || 0,
-      code: Number(data?.tx_response?.code),
-      fee: data?.fee || 0,
-      from_address: data?.from_address || '',
-      to_address: data?.to_address || '',
-      price: 0,
-      status: data?.status,
-      symbol: this.denom,
-      tokenAddress: data?.contract_address,
-      tx_hash: data?.tx_hash || '',
-      gas_used: data?.tx_response?.gas_used,
-      gas_wanted: data?.tx_response?.gas_wanted,
-      nftDetail: this.nftDetail,
-      modeExecute: data?.modeExecute,
-    };
   }
 
   encodeData(data) {

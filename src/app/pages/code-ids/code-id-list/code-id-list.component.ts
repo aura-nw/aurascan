@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -29,7 +29,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   showBoxSearch = false;
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
     { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail' },

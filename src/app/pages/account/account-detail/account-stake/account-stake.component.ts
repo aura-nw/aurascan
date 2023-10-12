@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ACCOUNT_WALLET_COLOR } from 'src/app/core/constants/account.constant';
@@ -104,7 +104,7 @@ export class AccountStakeComponent implements OnChanges {
     pageSize: PAGE_EVENT.PAGE_SIZE,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.configValue.timeStaking}`;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;

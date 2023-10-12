@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MatSelect } from '@angular/material/select';
+import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -45,7 +45,7 @@ export class AccountDetailComponent implements OnInit {
   modalReference: any;
   isNoData = false;
 
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.configValue.timeStaking}`;

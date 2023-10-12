@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';

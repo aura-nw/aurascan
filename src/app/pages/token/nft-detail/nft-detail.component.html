@@ -335,19 +335,6 @@
 
             <td mat-cell *matCellDef="let data; let i = index">
               <ng-container [ngSwitch]="template.matColumnDef">
-                <ng-container *ngSwitchCase="'popover'">
-                  <button
-                    mat-icon-button
-                    aria-label="Contract Transaction Detail"
-                    placement="right"
-                    [ngbPopover]="popContent"
-                    popoverClass="custom-popover">
-                    <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
-                  </button>
-                  <ng-template #popContent class="popContent">
-                    <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
-                  </ng-template>
-                </ng-container>
                 <ng-container *ngSwitchCase="'tx_hash'">
                   <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
                     {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
@@ -383,7 +370,11 @@
                       ">
                       <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                     </ng-container>
-                    <ng-container *ngIf="data.modeExecute !== modeExecuteTransaction.Take &&  !data[template.matColumnDef]?.startsWith('Null')">
+                    <ng-container
+                      *ngIf="
+                        data.modeExecute !== modeExecuteTransaction.Take &&
+                        !data[template.matColumnDef]?.startsWith('Null')
+                      ">
                       <app-name-tag
                         [value]="data[template.matColumnDef]"
                         [isTokenDetail]="true"

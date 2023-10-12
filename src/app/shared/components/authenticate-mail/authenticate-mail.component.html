@@ -2,11 +2,11 @@
   <button
     *ngIf="!userEmail"
     type="button"
-    class="button button--xlg button--sm-mob button-pill button-flat body-01 button-login-menu"
+    class="button button--xlg button--sm-mob button-pill button-flat body-01"
     (click)="linkLogin()">
     <span class="caption-mob fw-normal">Login</span>
   </button>
-  <div *ngIf="userEmail" class="dropdown aura-dropdown connected">
+  <div *ngIf="userEmail" class="dropdown aura-dropdown">
     <button
       class="button button--xlg button--sm-mob button-circle button-user"
       id="userMenu"

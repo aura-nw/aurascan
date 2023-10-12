@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
@@ -90,7 +90,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   isLoading = false;
   isClaimRewardLoading = false;
   _routerSubscription: Subscription;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
   pageYOffset = 0;

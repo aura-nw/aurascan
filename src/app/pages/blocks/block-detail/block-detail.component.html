@@ -124,7 +124,10 @@
         <ng-container *ngIf="isRawData">
           <ng-container *ngIf="blockDetail?.json_data; else noValues">
             <div class="body">
-              <pre id="json" class="raw-content body-03 text--gray-1 px-4" [innerHtml]="blockDetail?.json_data | appJson"></pre>
+              <pre
+                id="json"
+                class="raw-content body-03 text--gray-1 px-4"
+                [innerHtml]="blockDetail?.json_data | appJson"></pre>
             </div>
           </ng-container>
         </ng-container>
@@ -263,6 +266,7 @@
         <div class="col-12 text--gray-1 box-event-log border-radius--sm">
           <div class="item-event-log">
             <mat-expansion-panel
+              class="mat-expansion-panel"
               hideToggle
               *ngFor="let item of blockDetail?.events; first as isFirst; let i = index"
               [expanded]="isFirst">

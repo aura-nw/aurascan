@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+} from '@angular/material/legacy-dialog';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
@@ -59,7 +62,7 @@ export class MyGranteesComponent implements OnInit {
   };
   isNoData = true;
   currentAddress = null;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   timerGetFeeGrant: any;
   isSearchData = false;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
