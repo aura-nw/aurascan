@@ -258,7 +258,7 @@ export class TransactionService extends CommonService {
         ${this.envDB} {
           cw20_activity(
             where: {
-              height: { _eq: $height }
+              tx_hash: { _eq: $txHash }
               amount: { _is_null: false }
               action: { _in: $listFilterCW20 }
             }
