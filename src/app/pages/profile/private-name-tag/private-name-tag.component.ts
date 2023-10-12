@@ -94,13 +94,13 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   getListPrivateName() {
     this.textSearch = this.textSearch?.trim();
     const payload = {
-      limit: 10,
+      limit: this.pageData.pageSize,
       keyword: this.textSearch || '',
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
 
     this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
-      this.countFav = res.data?.filter((k) => k.isFavorite === 1)?.length || 0;
+      this.countFav = res.meta.countFavorite || 0;
       res.data?.forEach((element) => {
         element['type'] = isContract(element.address) ? 'contract' : 'account';
       });
@@ -171,7 +171,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       this.toastr.successWithTitle('Private name tag removed!', 'Success');
       setTimeout(() => {
         this.pageData.length--;
-        this.pageEvent(this.pageData);
+        this.pageChange.selectPage(0);
       }, 2000);
     });
   }
