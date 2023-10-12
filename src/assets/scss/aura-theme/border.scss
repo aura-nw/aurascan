@@ -22,7 +22,7 @@
 }
 
 .border-top {
-  border-top: solid 1px var(--aura-light-gray);
+  border-top: solid 1px var(--aura-light-gray) !important;
   padding-top: var(--spacer-5);
 }
 .border-right {

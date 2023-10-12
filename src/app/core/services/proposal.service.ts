@@ -257,4 +257,29 @@ export class ProposalService extends CommonService {
     }
     return result;
   }
+
+  getBlockSubmitTime(submitTime, endTime) {
+    const operationsDoc = `
+    query getBlockSubmitTime($submitTime: timestamptz = null, $endTime: timestamptz = null) {
+      ${this.envDB} {
+        startBlock: block(limit: 1, order_by: {time: asc} where: {time: {_gte: $submitTime}}) {
+          height
+        }
+        endBlock: block(limit: 1, order_by: {time: desc} where: {time: {_lte: $endTime}}) {
+          height
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          submitTime: submitTime,
+          endTime: endTime,
+        },
+        operationName: 'getBlockSubmitTime',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 }
