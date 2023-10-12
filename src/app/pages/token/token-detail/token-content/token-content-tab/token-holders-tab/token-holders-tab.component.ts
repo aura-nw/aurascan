@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import * as _ from 'lodash';
-import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -52,8 +52,6 @@ export class TokenHoldersTabComponent implements OnInit {
   totalQuantity = 0;
   numberTop = 0;
   totalHolder = 0;
-  numberOnlyDecimal = NUMBER_ONLY_DECIMAL;
-  number2Digit = NUMBER_2_DIGIT;
 
   chainInfo = this.environmentService.configValue.chain_info;
 

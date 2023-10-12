@@ -1,7 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
+import { NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
@@ -14,8 +14,6 @@ export class CurrentTurnoutComponent implements OnInit {
   @Input() proposalDetail;
   @Input() isNotReached;
   @Input() quorumStatus;
-
-  number2Digit = NUMBER_2_DIGIT;
 
   constructor(
     public dialog: MatDialog,

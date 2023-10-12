@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import * as _ from 'lodash';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
-import * as _ from 'lodash';
-import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-token-overview',
@@ -16,9 +15,6 @@ export class TokenOverviewComponent implements OnInit {
   @Input() tokenDetail: any;
   params = '';
   contractType = ContractRegisterType;
-
-  numberOnlyDecimal = NUMBER_ONLY_DECIMAL;
-  number2Digit = NUMBER_2_DIGIT;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 

@@ -6,7 +6,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { tap } from 'rxjs/operators';
-import { NUMBER_2_DIGIT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
@@ -61,7 +61,6 @@ export class ProposalComponent implements OnInit {
     pageSize: this.layout.isMatched([Breakpoints.Small, Breakpoints.XSmall]) ? 5 : 10,
     pageIndex: 1,
   };
-  number2Digit = NUMBER_2_DIGIT;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 

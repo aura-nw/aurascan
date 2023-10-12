@@ -1,4 +1,4 @@
-import { formatDate } from '@angular/common';
+import { formatDate, formatNumber } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
@@ -187,4 +187,12 @@ function displayFullNumber(x) {
     }
   }
   return x;
+}
+
+@Pipe({ name: 'formatDigit' })
+export class formatDigit implements PipeTransform {
+  transform(amount: number, digit = 0) {
+    let digitConvert = '1.' + digit + '-' + digit;
+    return formatNumber(amount, 'en-GB', digitConvert);
+  }
 }

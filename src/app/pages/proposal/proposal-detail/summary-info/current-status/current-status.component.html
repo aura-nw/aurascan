@@ -18,7 +18,7 @@
       <div class="vote-bar__info" [style.left]="proposalDetail.threshold + '%'">
         <span class="caption">
           <span class="text--gray-5">Threshold:</span>
-          <span class="text--gray-1 ml-1">{{ proposalDetail.threshold | number: number2Digit }}%</span>
+          <span class="text--gray-1 ml-1">{{ proposalDetail.threshold | formatDigit : 2 }}%</span>
         </span>
       </div>
     </div>
@@ -29,7 +29,7 @@
           <span class="body-03"> Yes </span>
         </div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
-          {{ proposalDetail.currentYesPercent | number: number2Digit }}%
+          {{ proposalDetail.currentYesPercent | formatDigit : 2 }}%
         </div>
         <div class="col-5 col-lg-4 text-end h6 mb-0 fw-normal text--gray-5 body-02-mob">
           {{ proposalDetail.pro_votes_yes | mask: 'separator.6' }}
@@ -43,7 +43,7 @@
           <span class="body-03"> No </span>
         </div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
-          {{ proposalDetail.currentNoPercent | number: number2Digit }}%
+          {{ proposalDetail.currentNoPercent | formatDigit : 2 }}%
         </div>
         <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5 body-02-mob">
           {{ proposalDetail.pro_votes_no | mask: 'separator.6' }}
@@ -57,7 +57,7 @@
           <span class="body-03"> NoWithVeto</span>
         </div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
-          {{ proposalDetail.currentNoWithVetoPercent | number: number2Digit }}%
+          {{ proposalDetail.currentNoWithVetoPercent | formatDigit : 2 }}%
         </div>
         <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5 body-02-mob">
           {{ proposalDetail.pro_votes_no_with_veto | mask: 'separator.6' }}

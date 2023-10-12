@@ -20,7 +20,7 @@ import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, NUMBER_2_DIGIT, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
+import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransaction } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
@@ -94,7 +94,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   isMobileMatched = false;
   breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
   currentAddress = null;
-  number2Digit = NUMBER_2_DIGIT;
 
   constructor(
     public commonService: CommonService,

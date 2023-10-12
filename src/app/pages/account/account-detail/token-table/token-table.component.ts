@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
-import { NUMBER_2_DIGIT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
@@ -73,7 +73,6 @@ export class TokenTableComponent implements OnChanges {
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
-  number2Digit = NUMBER_2_DIGIT;
 
   constructor(
     private accountService: AccountService,

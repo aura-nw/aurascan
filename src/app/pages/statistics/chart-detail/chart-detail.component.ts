@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { MaskPipe } from 'ngx-mask';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { CHART_RANGE, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
+import { CHART_RANGE } from 'src/app/core/constants/common.constant';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportStatisticChart } from 'src/app/core/helpers/export';
 import { StatisticService } from 'src/app/core/services/statistic.service';
@@ -43,7 +43,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   toolTipWidth = 80;
   toolTipHeight = 80;
   toolTipMargin = 15;
-  numberOnlyDecimal = NUMBER_ONLY_DECIMAL;
 
   constructor(
     private route: ActivatedRoute,

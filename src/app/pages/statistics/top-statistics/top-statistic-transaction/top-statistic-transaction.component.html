@@ -52,8 +52,8 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | number : number2Digit) > (0.01 | number)
-                          ? (element.percentage | number : number2Digit)
+                        (element.percentage | formatDigit : 2) > (0.01 | number)
+                          ? (element.percentage | formatDigit : 2)
                           : '< 0.01' ?? 0
                       }}%
                     </td>
@@ -108,8 +108,8 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | number : number2Digit) > (0.01 | number)
-                          ? (element.percentage | number : number2Digit)
+                        (element.percentage | formatDigit : 2) > (0.01 | number)
+                          ? (element.percentage | formatDigit : 2)
                           : '< 0.01' ?? 0
                       }}%
                     </td>
@@ -163,8 +163,8 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | number : number2Digit) > (0.01 | number)
-                          ? (element.percentage | number : number2Digit)
+                        (element.percentage | formatDigit : 2) > (0.01 | number)
+                          ? (element.percentage | formatDigit : 2)
                           : '< 0.01' ?? 0
                       }}%
                     </td>
@@ -218,8 +218,8 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | number : number2Digit) > (0.01 | number)
-                          ? (element.percentage | number : number2Digit)
+                        (element.percentage | formatDigit : 2) > (0.01 | number)
+                          ? (element.percentage | formatDigit : 2)
                           : '< 0.01' ?? 0
                       }}%
                     </td>

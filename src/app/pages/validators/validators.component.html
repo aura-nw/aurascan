@@ -233,7 +233,7 @@
                         </div>
                         <div *ngSwitchCase="'uptime'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ calculatorUpTime(data['account_address']) | number : number2Digit }}%
+                            {{ calculatorUpTime(data['account_address']) | formatDigit : 2 }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
