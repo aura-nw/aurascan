@@ -58,22 +58,29 @@ export class TokenTransferComponent implements OnInit {
     }
 
     this.transactionService.getListTransferFromTx(this.transaction['tx_hash']).subscribe((res) => {
-      let coinTransfer = res.coin_transfer?.map((element) => {
-        let cw20_contract = {};
-        cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
-        cw20_contract['name'] = cw20_contract['name'] || this.denom;
-        const amountTemp = element.event_attributes.find((k) => k.composite_key === 'transfer.amount')?.value;
-        let decimal = cw20_contract['decimal'] || this.coinDecimals;
-        if (amountTemp.indexOf('ibc') >= 0) {
-          let dataAmount = this.commonService.mappingNameIBC(amountTemp);
-          cw20_contract['name'] = dataAmount['name'];
-          cw20_contract['symbol'] = dataAmount['display'];
-          decimal = dataAmount['decimal'];
-        }
-        let amount = +amountTemp.match(/\d+/g)[0];
-        const from = element.event_attributes.find((k) => k.composite_key === 'transfer.sender')?.value;
-        const to = element.event_attributes.find((k) => k.composite_key === 'transfer.recipient')?.value;
-        return { amount, cw20_contract, from, to, decimal };
+      let coinTransfer = [];
+      res.coin_transfer?.forEach((element) => {
+        const arrAmount = element.event_attributes
+          .find((k) => k.composite_key === 'transfer.amount')
+          ?.value?.split(',');
+        coinTransfer = arrAmount.map((amountTemp) => {
+          let cw20_contract = {};
+          let dataAmount = {};
+          cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
+          cw20_contract['name'] = cw20_contract['name'] || this.denom;
+          let decimal = cw20_contract['decimal'] || this.coinDecimals;
+          if (amountTemp.indexOf('ibc') >= 0) {
+            dataAmount = this.commonService.mappingNameIBC(amountTemp);
+            cw20_contract['name'] = dataAmount['name'];
+            cw20_contract['symbol'] = dataAmount['display'];
+            decimal = dataAmount['decimal'];
+          }
+          let amount = +amountTemp.match(/\d+/g)[0];
+          const from = element.event_attributes.find((k) => k.composite_key === 'transfer.sender')?.value;
+          const to = element.event_attributes.find((k) => k.composite_key === 'transfer.recipient')?.value;
+
+          return { amount, cw20_contract, from, to, decimal };
+        });
       });
 
       if (res?.cw721_activity?.length > 0) {
