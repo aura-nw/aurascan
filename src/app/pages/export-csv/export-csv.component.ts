@@ -6,6 +6,7 @@ import { DATEFORMAT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 import { saveAs } from 'file-saver';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
 @Component({
   selector: 'app-export-csv',
@@ -16,8 +17,6 @@ export class ExportCsvComponent implements OnInit {
   csvForm;
   isError = false;
   isFilterDate = true;
-  dateStart;
-  dateEnd;
   isValidAddress = true;
   isValidBlock = true;
   userEmail;
@@ -28,8 +27,15 @@ export class ExportCsvComponent implements OnInit {
   maxDate;
   maxDateEnd;
   tabsData = TabsAccountLink;
+  msgErrorLimit =
+    '"You have reached the limit for the number of consecutive data exports, please try again after 5 minutes."';
 
-  constructor(private fb: FormBuilder, private commonService: CommonService, private datePipe: DatePipe) {}
+  constructor(
+    private fb: FormBuilder,
+    private commonService: CommonService,
+    private datePipe: DatePipe,
+    private toastr: NgxToastrService,
+  ) {}
 
   ngOnInit(): void {
     this.formInit();
@@ -98,8 +104,13 @@ export class ExportCsvComponent implements OnInit {
       max: this.isFilterDate ? endDate : toBlock,
     };
 
-    this.commonService.exportCSV(payload, displayPrivate).subscribe((buffer) => {
-      this.handleDownloadFile(buffer, payload);
+    this.commonService.exportCSV(payload, displayPrivate).subscribe({
+      next: (res) => {
+        this.handleDownloadFile(res, payload);
+      },
+      error: () => {
+        this.toastr.error(this.msgErrorLimit);
+      },
     });
   }
 
@@ -179,7 +190,7 @@ export class ExportCsvComponent implements OnInit {
     return temp + subStringDate;
   }
 
-  resetData(){
+  resetData() {
     this.formInit();
     this.dataType = '';
     this.isFilterDate = true;
