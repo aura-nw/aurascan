@@ -97,18 +97,6 @@
     }
   }
 }
-::ng-deep {
-  .nft-detail-table.aura-table {
-    position: relative;
-    thead {
-      position: sticky;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 2;
-    }
-  }
-}
 
 .btn-share {
   padding: 0px;
