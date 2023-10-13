@@ -137,8 +137,8 @@
       <h2 class="card-header mb-0 text--white pb-0">Transactions</h2>
       <div class="card-body body">
         <ng-container *ngIf="!loadingTxs && dataSource?.data?.length > 0; else noValues">
-          <div class="table-responsive d-none d-lg-block">
-            <table mat-table [dataSource]="dataSource" class="aura-table">
+          <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
+            <table mat-table [dataSource]="dataSource" class="aura-table keep-header">
               <ng-container *ngFor="let template of templates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
                   <th mat-header-cell *matHeaderCellDef>
@@ -226,7 +226,7 @@
               </tr>
             </table>
           </div>
-          <div class="d-lg-none" *ngIf="dataSource?.data?.length > 0">
+          <div class="d-lg-none box-block-tx" *ngIf="dataSource?.data?.length > 0">
             <app-card-mob-simple
               *ngFor="let data of dataSource.data"
               [link]="'/transaction/' + data.tx_hash"

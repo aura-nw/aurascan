@@ -1,5 +1,4 @@
-<div
-  class="d-lg-none d-block mb-4">
+<div class="d-lg-none d-block mb-4">
   <div class="d-flex align-items-center justify-content-end">
     <button
       *ngIf="
@@ -67,9 +66,9 @@
     <div class="box-filter txs-filter-panel d-flex align-items-center mb-4 mb-lg-0" *ngIf="displayFilter">
       <div class="d-flex align-items-center">
         <div class="dropdown aura-dropdown btn-item body" [class.menu-hidden]="transactionFilter.endDate">
-          <div [style]="'width: 225px'"
-            class="align-items-center d-flex justify-content-between calendar-contain
-            border-sm border-gray-8 border-radius--sm cursor-pointer"
+          <div
+            [style]="'width: 225px'"
+            class="align-items-center d-flex justify-content-between calendar-contain border-sm border-gray-8 border-radius--sm cursor-pointer"
             (click)="datePickerClickTrigger()">
             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
               <input
@@ -138,9 +137,7 @@
                 <i class="ph ph-caret-up text--white body"></i>
               </ng-container>
               <ng-container *ngIf="transactionFilter.typeTransfer">
-                <i
-                  (click)="clearFilter(modeFilter.type); trigger.click()"
-                  class="ph-thin ph-x cursor-pointer body">
+                <i (click)="clearFilter(modeFilter.type); trigger.click()" class="ph-thin ph-x cursor-pointer body">
                 </i>
               </ng-container>
             </div>
@@ -307,7 +304,10 @@
       type="button">
       <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
       <span>Filter</span>
-      <span *ngIf="countFilter > 0" class="nft__unclaimed-noti caption aura-tooltip-object text--white" [class.noti--pill]="true">
+      <span
+        *ngIf="countFilter > 0"
+        class="nft__unclaimed-noti caption aura-tooltip-object text--white"
+        [class.noti--pill]="true">
         {{ countFilter }}
       </span>
     </button>
@@ -411,13 +411,15 @@
                       *ngIf="index < data.limit">
                       <div class="item-show d-flex align-items-center">
                         <div class="aura-tooltip-contain">
-                          <div class="aura-tooltip-object" *ngIf="(item.amountTemp | balanceOf : item.decimal) < 0.001">
+                          <div
+                            class="aura-tooltip-object"
+                            *ngIf="(item.amountTemp | balanceOf : item.decimal) < 0.001 && item.amountTemp != 0">
                             <0,001
                           </div>
                           <app-tooltip-customize [content]="item.amountTemp | convertSmallNumber : item.decimal">
                           </app-tooltip-customize>
                           <div
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001"
+                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001 || item.amountTemp == 0"
                             [appBigNumber]="item.amountTemp"
                             [decimal]="item.decimal"></div>
                         </div>
@@ -507,7 +509,10 @@
                             "></app-name-tag>
                         </div>
                         <ng-container *ngIf="index === 0">
-                          <div class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8" (click)="expandData(data)" *ngIf="data.arrEvent?.length > 1">
+                          <div
+                            class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8"
+                            (click)="expandData(data)"
+                            *ngIf="data.arrEvent?.length > 1">
                             <ng-container *ngIf="data.arrEvent?.length > 100"> >99 </ng-container>
                             <ng-container *ngIf="data.arrEvent?.length <= 100">
                               +{{ data.arrEvent?.length - 1 }}
