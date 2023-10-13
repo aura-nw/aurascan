@@ -53,7 +53,7 @@
               *ngIf="commonService.setNameTag(currentAddress, null, false) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
               <div class="d-inline-flex w-100 aura-tooltip-object align-items-center justify-content-between">
-                <span class="line-claim">{{ (commonService.setNameTag(currentAddress, null, false)) || '-' }}</span>
+                <span class="line-claim">{{ commonService.setNameTag(currentAddress, null, false) || '-' }}</span>
                 <a
                   target="_blank"
                   [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
