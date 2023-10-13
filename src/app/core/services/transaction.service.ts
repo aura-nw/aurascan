@@ -244,11 +244,25 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTransferFromTx(height): Observable<any> {
+  getListTransferFromTx(hash): Observable<any> {
     const operationsDoc = `
-    query TxTransferDetail($height: Int, $listFilterCW20: [String!] = null, $listFilterCW721: [String!] = null) {
+    query TxTransferDetail(
+      $listFilterCW20: [String!] = null
+      $listFilterCW721: [String!] = null
+      $txHash: String = null
+      $msgTypeNotIn: [String!] = null
+      $compositeKeyIn: [String!] = null
+      $heightGTE: Int = null
+      $heightLTE: Int = null
+    ) {
       ${this.envDB} {
-        cw20_activity(where: {height: {_eq: $height}, amount: {_is_null: false}, action: {_in: $listFilterCW20}}) {
+        cw20_activity(
+          where: {
+            tx_hash: { _eq: $txHash }
+            amount: { _is_null: false }
+            action: { _in: $listFilterCW20 }
+          }
+        ) {
           action
           amount
           from
@@ -263,7 +277,16 @@ export class TransactionService extends CommonService {
             name
           }
         }
-        cw721_activity(where: {height: {_eq: $height}, action: {_in: $listFilterCW721}, cw721_token: {token_id: {_is_null: false}}, cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}}) {
+        cw721_activity(
+          where: {
+            tx_hash: { _eq: $txHash }
+            action: { _in: $listFilterCW721 }
+            cw721_token: { token_id: { _is_null: false } }
+            cw721_contract: {
+              smart_contract: { name: { _neq: "crates.io:cw4973" } }
+            }
+          }
+        ) {
           action
           from
           to
@@ -282,6 +305,23 @@ export class TransactionService extends CommonService {
             }
           }
         }
+        coin_transfer: transaction(
+          where: {
+            hash: { _eq: $txHash }
+            transaction_messages: { type: { _nin: $msgTypeNotIn } }
+          }
+        ) {
+          event_attributes(
+            where: {
+              composite_key: { _in: $compositeKeyIn }
+              event: { tx_msg_index: { _is_null: false } }
+              block_height: { _lte: $heightLTE, _gte: $heightGTE }
+            }
+          ) {
+            composite_key
+            value
+          }
+        }
       }
     }
     `;
@@ -289,7 +329,8 @@ export class TransactionService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          height: height,
+          txHash: hash,
+          compositeKeyIn: ['coin_spent.spender', 'coin_received.receiver', 'coin_spent.amount', 'coin_received.amount'],
           listFilterCW20: CW20_TRACKING,
           listFilterCW721: CW721_TRACKING,
         },
