@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -61,6 +62,15 @@ export class TokenTransferComponent implements OnInit {
       let coinTransfer = [];
       res.coin_transfer?.forEach((event) => {
         event.event_attributes.forEach((element, index) => {
+          //get first data with Undelegate && Delegate
+          if (
+            (this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Undelegate ||
+              this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Delegate) &&
+            index > 4
+          ) {
+            return;
+          }
+
           if (element.composite_key === 'coin_received.receiver') {
             const arrAmount = event.event_attributes[index + 1].value?.split(',');
             arrAmount.forEach((amountTemp) => {
@@ -81,7 +91,7 @@ export class TokenTransferComponent implements OnInit {
                 from = event.event_attributes[0]?.value;
               }
               const to = event.event_attributes[index].value;
-              coinTransfer.push({amount, cw20_contract, from, to, decimal});
+              coinTransfer.push({ amount, cw20_contract, from, to, decimal });
             });
           }
         });
