@@ -1,6 +1,6 @@
 <mat-paginator class="d-none" [pageSize]="pageSize"> </mat-paginator>
 
-<div class="page-list row">
+<div class="row" [class.page-list]="showSelectRecord || pageLength > 1">
   <div class="d-flex align-items-center col-12 col-lg-6 mb-6 mb-lg-0 content-record">
     <ng-container *ngIf="showSelectRecord">
       Show
