@@ -59,27 +59,31 @@ export class TokenTransferComponent implements OnInit {
 
     this.transactionService.getListTransferFromTx(this.transaction['tx_hash']).subscribe((res) => {
       let coinTransfer = [];
-      res.coin_transfer?.forEach((element) => {
-        const arrAmount = element.event_attributes
-          .find((k) => k.composite_key === 'transfer.amount')
-          ?.value?.split(',');
-        coinTransfer = arrAmount.map((amountTemp) => {
-          let cw20_contract = {};
-          let dataAmount = {};
-          cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
-          cw20_contract['name'] = cw20_contract['name'] || this.denom;
-          let decimal = cw20_contract['decimal'] || this.coinDecimals;
-          if (amountTemp.indexOf('ibc') >= 0) {
-            dataAmount = this.commonService.mappingNameIBC(amountTemp);
-            cw20_contract['name'] = dataAmount['name'];
-            cw20_contract['symbol'] = dataAmount['display'];
-            decimal = dataAmount['decimal'];
+      res.coin_transfer?.forEach((event) => {
+        event.event_attributes.forEach((element, index) => {
+          if (element.composite_key === 'coin_received.receiver') {
+            const arrAmount = event.event_attributes[index + 1].value?.split(',');
+            arrAmount.forEach((amountTemp) => {
+              let cw20_contract = {};
+              let dataAmount = {};
+              cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
+              cw20_contract['name'] = cw20_contract['name'] || this.denom;
+              let decimal = cw20_contract['decimal'] || this.coinDecimals;
+              if (amountTemp.indexOf('ibc') >= 0) {
+                dataAmount = this.commonService.mappingNameIBC(amountTemp);
+                cw20_contract['name'] = dataAmount['name'];
+                cw20_contract['symbol'] = dataAmount['display'];
+                decimal = dataAmount['decimal'];
+              }
+              let amount = +amountTemp.match(/\d+/g)[0];
+              let from = event.event_attributes[index - 2]?.value;
+              if (event.event_attributes[index - 2].composite_key === 'coin_received.receiver') {
+                from = event.event_attributes[0]?.value;
+              }
+              const to = event.event_attributes[index].value;
+              coinTransfer.push({amount, cw20_contract, from, to, decimal});
+            });
           }
-          let amount = +amountTemp.match(/\d+/g)[0];
-          const from = element.event_attributes.find((k) => k.composite_key === 'transfer.sender')?.value;
-          const to = element.event_attributes.find((k) => k.composite_key === 'transfer.recipient')?.value;
-
-          return { amount, cw20_contract, from, to, decimal };
         });
       });
 
