@@ -1,6 +1,23 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule, inject } from '@angular/core';
+import { Router, RouterModule, Routes, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ConfigurationService } from './core/data-services/configuration.service';
 import { LayoutComponent } from './layouts/layout.component';
+
+const isEnabled = (
+  functionName: string,
+): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> => {
+  const config = inject(ConfigurationService);
+  const router = inject(Router);
+
+  const features = config.configValue['chainConfig']?.features;
+
+  if (features.findIndex((item) => item === functionName) >= 0 || !features) {
+    return true;
+  }
+
+  return router.navigate(['']);
+};
 
 const routes: Routes = [
   {
@@ -50,11 +67,13 @@ const routes: Routes = [
       {
         path: 'fee-grant',
         loadChildren: () => import('./pages/fee-grant/fee-grant.module').then((m) => m.FeeGrantModule),
+        canMatch: [() => isEnabled('fee-grant')],
       },
       {
         path: 'accountbound',
         loadChildren: () =>
           import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule),
+        canMatch: [() => isEnabled('abt')],
       },
       {
         path: 'community-pool',
