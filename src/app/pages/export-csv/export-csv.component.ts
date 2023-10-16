@@ -27,6 +27,7 @@ export class ExportCsvComponent implements OnInit {
   maxDate;
   maxDateEnd;
   tabsData = TabsAccountLink;
+  isDownload = false;
   msgErrorLimit =
     '"You have reached the limit for the number of consecutive data exports, please try again after 5 minutes."';
 
@@ -87,6 +88,10 @@ export class ExportCsvComponent implements OnInit {
   }
 
   downloadCSV() {
+    //return if downloading
+    if (this.isDownload) {
+      return;
+    }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
     let { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
@@ -104,11 +109,13 @@ export class ExportCsvComponent implements OnInit {
       max: this.isFilterDate ? endDate : toBlock,
     };
 
+    this.isDownload = true;
     this.commonService.exportCSV(payload, displayPrivate).subscribe({
       next: (res) => {
         this.handleDownloadFile(res, payload);
       },
       error: () => {
+        this.isDownload = false;
         this.toastr.error(this.msgErrorLimit);
       },
     });
@@ -120,6 +127,7 @@ export class ExportCsvComponent implements OnInit {
     });
     const fileName = 'export-account-' + payload.dataType + '-' + payload.address + '.csv';
     saveAs(data, fileName);
+    this.isDownload = false;
   }
 
   get getAddress() {
@@ -142,6 +150,11 @@ export class ExportCsvComponent implements OnInit {
   changeTypeFilter(type) {
     this.dataType = type;
     this.csvForm.value.dataType = this.dataType;
+    if (type !== this.tabsData.ExecutedTxs) {
+      this.isFilterDate = true;
+      this.csvForm.value.isFilterDate = this.isFilterDate;
+    }
+    this.checkFormValid();
   }
 
   checkFormValid(): boolean {
@@ -174,6 +187,10 @@ export class ExportCsvComponent implements OnInit {
 
     //check null export data type
     if (!this.dataType) {
+      return false;
+    }
+
+    if (this.isDownload) {
       return false;
     }
 
