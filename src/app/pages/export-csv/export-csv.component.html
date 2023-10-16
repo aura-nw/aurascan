@@ -117,6 +117,7 @@
               type="radio"
               value="filterRange"
               id="block"
+              [disabled]="!(!dataType || dataType === this.tabsData.ExecutedTxs)"
               class="radio-box radio-box--dark"
               [checked]="!isFilterDate"
               (change)="changeType()" />
@@ -127,7 +128,7 @@
     </div>
 
     <!-- Filter Mode -->
-    <div class="offset-lg-3 d-flex align-items-center mb-6">
+    <div class="row offset-lg-3 d-flex align-items-center mb-6">
       <ng-container *ngIf="isFilterDate">
         <div class="col-6 pr-3">
           <div class="input-group input-group--simply px-0 cursor-pointer" (click)="pickerStart.open()">
@@ -191,28 +192,38 @@
           </div>
         </div>
       </ng-container>
-    </div>
-    <div *ngIf="!isValidBlock" class="offset-lg-3 text--danger mt-2 caption fw-normal">
-      "To Block" height need to be greater than "From Block" height
+      <div *ngIf="!isValidBlock" class="text--danger mt-2 caption fw-normal">
+        "To Block" height need to be greater than "From Block" height
+      </div>
     </div>
 
     <div [class.aura-tooltip-contain]="!userEmail">
-      <mat-slide-toggle formControlName="displayPrivate" [disabled]="!userEmail" class="aura-tooltip-object csv-hint">
-        <span class="txt-toggle" [class.text--white]="userEmail">Include Private name tags in data downloaded</span>
-      </mat-slide-toggle>
+      <div class="aura-tooltip-object d-flex">
+        <mat-slide-toggle formControlName="displayPrivate" [disabled]="!userEmail" class="csv-hint"> </mat-slide-toggle>
+        <span class="txt-toggle ml-2" [class.text--white]="userEmail"
+          >Include Private name tags in data downloaded</span
+        >
+      </div>
       <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
     </div>
 
     <!-- button group -->
-    <div class="d-flex py-6 justify-content-center justify-content-lg-end mt-6 mt-lg-0 button-group">
+    <div class="d-flex py-6 justify-content-center justify-content-lg-end mt-3 mt-lg-0 button-group">
       <button class="button button--md button-pill button-outline" type="button" (click)="resetData()">
         <span>Reset</span>
       </button>
       <button
-        class="button button--md button-outline--gradient button-pill button-flat ml-4 btn-create"
+        class="button button--md button-outline--gradient button-pill button-flat btn-create ml-4"
         type="button"
+        [class.pl-1]="isDownload"
         (click)="downloadCSV()"
         [disabled]="!checkFormValid()">
+        <img
+          [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+          alt=""
+          width="20"
+          height="20"
+          *ngIf="isDownload" />
         <span class="text--white"> Download </span>
       </button>
     </div>

@@ -6,6 +6,7 @@ import { DATEFORMAT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 import { saveAs } from 'file-saver';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
 @Component({
   selector: 'app-export-csv',
@@ -16,8 +17,6 @@ export class ExportCsvComponent implements OnInit {
   csvForm;
   isError = false;
   isFilterDate = true;
-  dateStart;
-  dateEnd;
   isValidAddress = true;
   isValidBlock = true;
   userEmail;
@@ -28,8 +27,16 @@ export class ExportCsvComponent implements OnInit {
   maxDate;
   maxDateEnd;
   tabsData = TabsAccountLink;
+  isDownload = false;
+  msgErrorLimit =
+    '"You have reached the limit for the number of consecutive data exports, please try again after 5 minutes."';
 
-  constructor(private fb: FormBuilder, private commonService: CommonService, private datePipe: DatePipe) {}
+  constructor(
+    private fb: FormBuilder,
+    private commonService: CommonService,
+    private datePipe: DatePipe,
+    private toastr: NgxToastrService,
+  ) {}
 
   ngOnInit(): void {
     this.formInit();
@@ -81,6 +88,10 @@ export class ExportCsvComponent implements OnInit {
   }
 
   downloadCSV() {
+    //return if downloading
+    if (this.isDownload) {
+      return;
+    }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
     let { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
@@ -98,8 +109,15 @@ export class ExportCsvComponent implements OnInit {
       max: this.isFilterDate ? endDate : toBlock,
     };
 
-    this.commonService.exportCSV(payload, displayPrivate).subscribe((buffer) => {
-      this.handleDownloadFile(buffer, payload);
+    this.isDownload = true;
+    this.commonService.exportCSV(payload, displayPrivate).subscribe({
+      next: (res) => {
+        this.handleDownloadFile(res, payload);
+      },
+      error: () => {
+        this.isDownload = false;
+        this.toastr.error(this.msgErrorLimit);
+      },
     });
   }
 
@@ -109,6 +127,7 @@ export class ExportCsvComponent implements OnInit {
     });
     const fileName = 'export-account-' + payload.dataType + '-' + payload.address + '.csv';
     saveAs(data, fileName);
+    this.isDownload = false;
   }
 
   get getAddress() {
@@ -131,6 +150,11 @@ export class ExportCsvComponent implements OnInit {
   changeTypeFilter(type) {
     this.dataType = type;
     this.csvForm.value.dataType = this.dataType;
+    if (type !== this.tabsData.ExecutedTxs) {
+      this.isFilterDate = true;
+      this.csvForm.value.isFilterDate = this.isFilterDate;
+    }
+    this.checkFormValid();
   }
 
   checkFormValid(): boolean {
@@ -166,6 +190,10 @@ export class ExportCsvComponent implements OnInit {
       return false;
     }
 
+    if (this.isDownload) {
+      return false;
+    }
+
     return true;
   }
 
@@ -179,7 +207,7 @@ export class ExportCsvComponent implements OnInit {
     return temp + subStringDate;
   }
 
-  resetData(){
+  resetData() {
     this.formInit();
     this.dataType = '';
     this.isFilterDate = true;
