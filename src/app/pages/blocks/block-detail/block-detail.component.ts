@@ -101,7 +101,7 @@ export class BlockDetailComponent implements OnInit {
       limit: 1,
       height: this.blockHeight,
     };
-    this.blockService.getDataBlock(payload).subscribe(
+    this.blockService.getDataBlockDetail(payload).subscribe(
       async (res) => {
         if (res?.block?.length > 0) {
           const block = convertDataBlock(res)[0];

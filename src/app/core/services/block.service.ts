@@ -24,7 +24,7 @@ export class BlockService extends CommonService {
     query queryBlock($limit: Int = 100, $order: order_by = desc, $height: Int = null, $hash: String = null, $operatorAddress: String = null, $heightGT: Int = null, $heightLT: Int = null) {
       ${this.envDB} {
         block(limit: $limit, order_by: {height: $order}, where: {height: {_eq: $height, _gt: $heightGT, _lt: $heightLT}, hash: {_eq: $hash}, validator: {operator_address: {_eq: $operatorAddress}}}) {
-          data
+          txs: data(path: "block.data.txs")
           validator {
             operator_address
             description
@@ -49,6 +49,35 @@ export class BlockService extends CommonService {
           heightLT: payload.nextHeight,
         },
         operationName: 'queryBlock',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getDataBlockDetail(payload) {
+    const operationsDoc = `
+    query queryBlockDetail($limit: Int = 100, $height: Int = null) {
+      ${this.envDB} {
+        block(limit: $limit, where: {height: {_eq: $height}}) {
+          data
+          validator {
+            operator_address
+            description
+          }
+          hash
+          height
+          time
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          height: payload.height,
+        },
+        operationName: 'queryBlockDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
