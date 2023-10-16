@@ -62,13 +62,14 @@ export class TokenTransferComponent implements OnInit {
       let coinTransfer = [];
       res.coin_transfer?.forEach((event) => {
         event.event_attributes.forEach((element, index) => {
-          //get first data with Undelegate && Delegate
+          //get first data with UnDelegate && Delegate
           if (
-            (this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Undelegate ||
-              this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Delegate) &&
-            index > 4
+            this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Undelegate ||
+            this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Delegate
           ) {
-            return;
+            if (event.event_attributes?.length < 8 || index >= 3) {
+              return;
+            }
           }
 
           if (element.composite_key === 'coin_received.receiver') {
