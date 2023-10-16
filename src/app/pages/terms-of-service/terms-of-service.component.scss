@@ -1,0 +1,22 @@
+.box-terms {
+  background-color: var(--aura-gray-10);
+  color: var(--aura-white);
+  .bg-terms {
+    background-color: #0e7e6b;
+  }
+  .img-logo {
+    height: 24px;
+    @media (min-width: 992px) {
+      height: 60px;
+    }
+  }
+  .h6 {
+    color: var(--aura-white);
+  }
+  .card-body {
+    padding: 96px 96px 24px 96px;
+  }
+  .fill-gray {
+    color: var(--aura-gray-10);
+  }
+}
