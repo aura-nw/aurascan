@@ -141,7 +141,15 @@ export class ValidatorsDetailComponent implements OnInit {
 
   getDetail(isInit = false): void {
     if (!this.isLeftPage) {
-      this.validatorService.getDataValidator(null).subscribe(
+      let payload = null;
+      // check is exit data rank
+      if (this.currentValidatorDetail?.rank) {
+        payload = {};
+        payload['limit'] = 1;
+        payload['operatorAddress'] = this.currentAddress;
+      }
+
+      this.validatorService.getDataValidator(payload).subscribe(
         (res) => {
           if (res.status === 404 || res.validator?.length === 0) {
             this.router.navigate(['/']);
@@ -168,7 +176,10 @@ export class ValidatorsDetailComponent implements OnInit {
             bonded_height: data?.start_height || 1,
             jailed: data.jailed ? 1 : 0,
             status: data.status === this.typeActive ? this.statusValidator.Active : data?.status,
-            rank: arrRank?.findIndex((k) => k.operator_address === this.currentAddress) + 1 || 1,
+            rank:
+              this.currentValidatorDetail?.rank ||
+              arrRank?.findIndex((k) => k.operator_address === this.currentAddress) + 1 ||
+              1,
           };
 
           const percentSelfBonded =
