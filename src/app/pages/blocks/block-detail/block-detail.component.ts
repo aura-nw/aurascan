@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Buffer } from 'buffer';
 import { sha256 } from 'js-sha256';
@@ -13,7 +13,7 @@ import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { Globals, convertDataBlock, convertDataTransaction } from '../../../../app/global/global';
+import { convertDataBlock, convertDataTransaction } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -75,7 +75,6 @@ export class BlockDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private blockService: BlockService,
-    public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
@@ -101,7 +100,7 @@ export class BlockDetailComponent implements OnInit {
       limit: 1,
       height: this.blockHeight,
     };
-    this.blockService.getDataBlock(payload).subscribe(
+    this.blockService.getDataBlockDetail(payload).subscribe(
       async (res) => {
         if (res?.block?.length > 0) {
           const block = convertDataBlock(res)[0];

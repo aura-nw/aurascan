@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 import { CodeTransaction } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
@@ -36,7 +35,6 @@ export class TransactionDetailComponent implements OnInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   loading = true;
-  listValidator = [];
   seeLess = false;
   isDisplayMore = false;
 
@@ -48,7 +46,6 @@ export class TransactionDetailComponent implements OnInit {
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
-    private validatorService: ValidatorService,
   ) {}
 
   ngOnInit(): void {
@@ -97,8 +94,6 @@ export class TransactionDetailComponent implements OnInit {
                 }
               }, 500);
             }
-
-            this.getListValidator();
           } else {
             setTimeout(() => {
               this.getDetail();
@@ -113,14 +108,6 @@ export class TransactionDetailComponent implements OnInit {
     } else {
       this.loading = false;
     }
-  }
-
-  getListValidator(): void {
-    this.validatorService.getListNameValidator(null).subscribe((res) => {
-      if (res.validator?.length > 0) {
-        this.listValidator = res.validator;
-      }
-    });
   }
 
   changeType(type: boolean): void {

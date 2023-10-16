@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 
@@ -20,7 +20,7 @@ export class ProfileSettingsComponent implements OnInit {
   isError = false;
   textTitle = 'Change password';
 
-  constructor(private fb: FormBuilder, private userService: UserService, private toastr: NgxToastrService) {}
+  constructor(private fb: UntypedFormBuilder, private userService: UserService, private toastr: NgxToastrService) {}
 
   ngOnInit(): void {
     this.userEmail = localStorage.getItem('userEmail')?.replace(/"/g, '');

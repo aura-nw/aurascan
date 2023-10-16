@@ -11,7 +11,7 @@ export interface IConfiguration {
   urlSocket: string;
   validator_s3: string;
   image_s3: string;
-  chain_info: ChainInfo | null;
+  chain_info: ChainInfo | any;
   coins: any;
   env: string;
   indexerUri: string;
@@ -28,7 +28,7 @@ export interface IConfiguration {
   quotaSetPrivateName: number;
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class EnvironmentService {
   private config: BehaviorSubject<IConfiguration> = new BehaviorSubject({
     fabric: '',

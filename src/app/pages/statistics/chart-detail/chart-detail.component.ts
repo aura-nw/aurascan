@@ -4,14 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import * as moment from 'moment';
-import { MaskPipe } from 'ngx-mask';
+import { NgxMaskPipe } from 'ngx-mask';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { CHART_RANGE } from 'src/app/core/constants/common.constant';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportStatisticChart } from 'src/app/core/helpers/export';
 import { StatisticService } from 'src/app/core/services/statistic.service';
-import { Globals } from 'src/app/global/global';
 import {
   CHART_CONFIG,
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
@@ -32,7 +31,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   areaSeries: ISeriesApi<'Area'> = null;
   logicalRangeChange$ = new Subject<{ from; to }>();
   endData = false;
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   prevYearNumber = 1;
   originalData = [];
 
@@ -44,14 +43,14 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   toolTipWidth = 80;
   toolTipHeight = 80;
   toolTipMargin = 15;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public translate: TranslateService,
     private statisticService: StatisticService,
     public datepipe: DatePipe,
-    private maskService: MaskPipe,
-    public global: Globals,
+    private maskService: NgxMaskPipe
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
     if (

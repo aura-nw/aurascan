@@ -32,7 +32,15 @@
                             "@cosmjs/math",
                             "@cosmjs/amino",
                             "buffer",
-                            "exceljs"
+                            "exceljs",
+                            "jsonschema",
+                            "moment",
+                            "lodash",
+                            "long",
+                            "file-saver",
+                            "js-sha256",
+                            "apexcharts",
+                            "@cordobo/qrcode"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",
@@ -49,11 +57,10 @@
                         ],
                         "styles": [
                             "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+                            "src/styles.scss",
                             "src/assets/scss/bootstrap.scss",
                             "src/assets/scss/app.scss",
-                            "src/assets/scss/custom-material.scss",
                             "src/assets/scss/icons.scss",
-                            "src/styles.scss",
                             "./node_modules/phosphor-icons/src/css/icons.css"
                         ],
                         "scripts": [
@@ -133,6 +140,5 @@
                 }
             }
         }
-    },
-    "defaultProject": "aura"
+    }
 }

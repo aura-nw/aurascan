@@ -5,11 +5,10 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { Globals } from 'src/app/global/global';
-import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
-import { TokenTab } from '../../../../core/constants/token.enum';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
+import { TokenTab } from '../../../../core/constants/token.enum';
 
 @Component({
   selector: 'app-token-content',
@@ -50,7 +49,6 @@ export class TokenContentComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private environmentService: EnvironmentService,
-    public global: Globals,
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private tokenService: TokenService,

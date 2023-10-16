@@ -218,21 +218,20 @@ button, .button {
 
     &:before {
       opacity: 1;
-      background: url("../../icons/icons-svg/white/caret-down.svg") center no-repeat;
+      background: url('../../icons/icons-svg/white/caret-down-white.svg') center no-repeat;
     }
     &:after {
       opacity: 0;
-      background: url("../../icons/icons-svg/color/caret-down.svg") center no-repeat;
+      background: url('../../icons/icons-svg/color/caret-down-gradient.svg') center no-repeat;
     }
     &.button-flat {
-      &:before {
-        background: url("../../icons/icons-svg/black/caret-down.svg") center no-repeat;
-      }
+      &:before,
       &:after {
-        background: url("../../icons/icons-svg/black/caret-down.svg") center no-repeat;
+        background: url('../../icons/icons-svg/black/caret-down-black.svg') center no-repeat;
       }
     }
-    &.button-outline--gradient:hover, &.button-outline--gradient[aria-expanded = 'true'] {
+    &.button-outline--gradient:hover,
+    &.button-outline--gradient[aria-expanded='true'] {
       &:before {
         opacity: 0;
       }

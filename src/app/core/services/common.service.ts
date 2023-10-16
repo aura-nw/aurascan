@@ -9,7 +9,7 @@ import { DATEFORMAT } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.configValue.coins;
@@ -25,6 +25,7 @@ export class CommonService {
   envDB = this._environmentService.configValue.horoscopeSelectedChain;
   chainId = this._environmentService.configValue.chainId;
   listNameTag = [];
+  listValidator = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;

@@ -479,6 +479,7 @@
               <div class="item-event-log" *ngIf="index === idx">
                 <span class="caption fw-normal">{{ element.events.type }}</span>
                 <mat-expansion-panel
+                  class="custom-expansion-panel"
                   hideToggle
                   *ngFor="let item of element.events; first as isFirst; let i = index"
                   [expanded]="isFirst">

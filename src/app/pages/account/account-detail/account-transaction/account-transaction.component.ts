@@ -15,7 +15,7 @@ import { Location } from '@angular/common';
 export class AccountTransactionComponent implements OnInit {
   @Input() address: string;
 
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
   TABS = TABS_TITLE_ACCOUNT;
@@ -33,8 +33,8 @@ export class AccountTransactionComponent implements OnInit {
     });
   }
 
-  changeTab(value){
-    this.location.replaceState("/account/" + this.address + "?tab=" + value);
+  changeTab(value) {
+    this.location.replaceState('/account/' + this.address + '?tab=' + value);
     this.currentTab = value;
   }
 }

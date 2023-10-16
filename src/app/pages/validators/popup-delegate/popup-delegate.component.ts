@@ -1,9 +1,8 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
-import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { DIALOG_STAKE_MODE } from '../../../core/constants/validator.enum';
-import { Globals } from '../../../global/global';
+import { EnvironmentService } from '../../../core/data-services/environment.service';
 
 @Component({
   selector: 'popup-delegate',
@@ -20,7 +19,6 @@ export class PopupDelegateComponent implements OnInit, OnChanges {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     public translate: TranslateService,
-    public global: Globals,
     private environmentService: EnvironmentService,
   ) {}
 

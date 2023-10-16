@@ -4,7 +4,7 @@
       <h6 class="mb-0 text--gray-1 fw-semibold-mob">Current Turnout</h6>
       <div class="caption text--gray-5">
         <h5 class="text--gray-1 mr-lg-2 mb-0 d-inline">
-          {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
+          {{ proposalDetail.pro_turnout | formatDigit : 2 }}%
         </h5>
         <span class="body-03 caption-mob">
           ({{ formatNumber(proposalDetail.pro_total_vote) || 0 }} of
@@ -14,7 +14,7 @@
     </div>
     <div class="mt-1 caption text--gray-5 content--fixed-height body-03-mob">
       The result of governance will only be applied when quorum is more than
-      {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}% of the total votes.
+      {{ proposalDetail.quorum | formatDigit : 2 }}% of the total votes.
     </div>
   </div>
   <div class="mt-6">
@@ -26,7 +26,7 @@
       <div class="vote-bar__info" [style.left]="proposalDetail.quorum + '%'">
         <span class="caption">
           <span class="text--gray-5">Quorum:</span>
-          <span class="text--gray-1 ml-1">{{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%</span>
+          <span class="text--gray-1 ml-1">{{ proposalDetail.quorum | formatDigit : 2 }}%</span>
           <span class="text--green-3 ml-1">{{ quorumStatus }}</span>
         </span>
       </div>
@@ -36,7 +36,7 @@
       <div class="row flex-grow-1 align-items-center">
         <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">Voted</div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
-          {{ proposalDetail.voted_percent | number: global.formatNumber2Decimal }}%
+          {{ proposalDetail.voted_percent | formatDigit : 2 }}%
         </div>
         <div class="col-5 col-lg-4 text-end body-01 mb-0 fw-normal text--gray-5 body-02-mob">
           {{ proposalDetail.voted | mask: 'separator.6' }}
@@ -48,7 +48,7 @@
       <div class="row flex-grow-1 align-items-center">
         <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">Voted Abstain</div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
-          {{ proposalDetail.voted_abstain_percent | number: global.formatNumber2Decimal }}%
+          {{ proposalDetail.voted_abstain_percent | formatDigit : 2 }}%
         </div>
         <div class="col-5 col-lg-4 text-end body-01 mb-0 text--gray-5 body-02-mob">
           {{ proposalDetail.pro_votes_abstain | mask: 'separator.6' }}
@@ -60,7 +60,7 @@
       <div class="row flex-grow-1 align-items-center">
         <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">Did not vote</div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
-          {{ 100 - proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
+          {{ 100 - proposalDetail.pro_turnout | formatDigit : 2 }}%
         </div>
         <div class="col-5 col-lg-4 text-end body-01 mb-0 text--gray-5 body-02-mob">
           {{ proposalDetail.total_bonded_token - proposalDetail.pro_total_vote | mask: 'separator.6' }}

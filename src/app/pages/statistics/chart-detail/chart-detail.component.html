@@ -22,7 +22,7 @@
             <span>
               {{ chartType === 'unique-addresses' ? 'Highest increase of' : 'Highest number of' }}
             </span>
-            <span class="text--primary">{{ maxAmount | number : global.formatNumberOnlyDecimal }}</span>
+            <span class="text--primary">{{ maxAmount | formatDigit }}</span>
             <br class="d-lg-none" />
             <span class="mr-1" *ngIf="chartType === 'daily-transactions'"> transactions on</span>
             <span class="mr-1" *ngIf="chartType === 'unique-addresses'"> new addresses was recorded on</span>
@@ -40,7 +40,7 @@
             <span>
               {{ chartType === 'unique-addresses' ? 'Lowest increase of' : 'Lowest number of' }}
             </span>
-            <span class="mr-1 text--primary">{{ minAmount | number : global.formatNumberOnlyDecimal }}</span>
+            <span class="mr-1 text--primary">{{ minAmount | formatDigit }}</span>
             <br class="d-lg-none" />
             <span class="mr-1" *ngIf="chartType === 'daily-transactions'">transactions on</span>
             <span class="mr-1" *ngIf="chartType === 'unique-addresses'">new addresses was recorded on</span>

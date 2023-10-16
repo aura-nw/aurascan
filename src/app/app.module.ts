@@ -1,139 +1,34 @@
 import { DatePipe } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatChipsModule } from '@angular/material/chips';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSortModule } from '@angular/material/sort';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatTableModule } from '@angular/material/table';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule, NgbNavModule, NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { TranslateModule } from '@ngx-translate/core';
 import { NgProgressModule } from 'ngx-progressbar';
 import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MAT_DATE_FORMATS_VALUE, NG_PROGRESS_MODULE_CONFIG, TRANSLATE_MODULE_CONFIG } from './app.config';
 import { EnvironmentService } from './core/data-services/environment.service';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
 import { GlobalErrorHandler } from './core/helpers/global-error';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 import { DEFAULT_TIMEOUT, RequestTimeoutHttpInterceptor } from './core/helpers/timeout.interceptor';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
-import { CommonService } from './core/services/common.service';
-import { FeeGrantService } from './core/services/feegrant.service';
-import { MappingErrorService } from './core/services/mapping-error.service';
-import { SoulboundService } from './core/services/soulbound.service';
-import { TokenService } from './core/services/token.service';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
-import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
-import { NameTagService } from './core/services/name-tag.service';
-import { UserService } from './core/services/user.service';
-
-export function createTranslateLoader(http: HttpClient): any {
-  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
-}
-
-const maskConfig: Partial<IConfig> = {
-  thousandSeparator: ',',
-};
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'YYYY-MM-DD',
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'YYYY-MM-DD',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
-
-@NgModule({
-  exports: [
-    MatAutocompleteModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatChipsModule,
-    MatCheckboxModule,
-    MatStepperModule,
-    MatDialogModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
-    SchemaViewerModule,
-  ],
-  declarations: [],
-})
-export class MaterialModule {}
+import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    TranslateModule.forRoot({
-      defaultLanguage: 'en',
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient],
-      },
-    }),
-    NgProgressModule.withConfig({
-      spinnerPosition: 'left',
-      color: 'blue',
-    }),
+    TranslateModule.forRoot(TRANSLATE_MODULE_CONFIG),
+    NgProgressModule.withConfig(NG_PROGRESS_MODULE_CONFIG),
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
@@ -144,12 +39,12 @@ export class MaterialModule {}
     NgbPopoverModule,
     NgbNavModule,
     ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
-    NgxMaskModule.forRoot(maskConfig),
+    // NgxMaskDirective,
+    // NgxMaskPipe,
     ReactiveFormsModule,
     FormsModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MediaExpandModule,
+    SchemaViewerModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -157,7 +52,6 @@ export class MaterialModule {}
     { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
     { provide: DEFAULT_TIMEOUT, useValue: 60000 },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
-    EnvironmentService,
     DatePipe,
     Globals,
     {
@@ -171,19 +65,12 @@ export class MaterialModule {}
       useClass: LoadingInterceptor,
       multi: true,
     },
-    CommonService,
-    TokenService,
-    FeeGrantService,
-    SoulboundService,
-    MappingErrorService,
-    NameTagService,
-    UserService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_DATE_FORMATS_VALUE },
   ],
   bootstrap: [AppComponent],
 })

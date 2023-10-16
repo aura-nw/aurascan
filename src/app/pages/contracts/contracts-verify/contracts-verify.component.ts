@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -41,24 +41,24 @@ export class ContractsVerifyComponent implements OnInit {
   }
 
   githubCommitPattern = /https:\/\/github.com\/[\w-\/]+\/commit\/\w+/;
-  contractForm: FormGroup;
+  contractForm: UntypedFormGroup;
 
   get formControls() {
     return this.contractForm.controls;
   }
 
   ngOnInit(): void {
-    this.contractForm = new FormGroup({
-      codeId: new FormControl({ value: this.code_id, disabled: true }, { validators: [Validators.required] }),
-      link: new FormControl('', {
+    this.contractForm = new UntypedFormGroup({
+      codeId: new UntypedFormControl({ value: this.code_id, disabled: true }, { validators: [Validators.required] }),
+      link: new UntypedFormControl('', {
         validators: [Validators.required, Validators.maxLength(200), Validators.pattern(this.githubCommitPattern)],
       }),
-      wasm_file: new FormControl('', {
+      wasm_file: new UntypedFormControl('', {
         validators: [Validators.required, Validators.maxLength(200)],
       }),
-      url: new FormControl(''),
-      compiler_version: new FormControl('', { validators: [Validators.required] }),
-      commit: new FormControl(''),
+      url: new UntypedFormControl(''),
+      compiler_version: new UntypedFormControl('', { validators: [Validators.required] }),
+      commit: new UntypedFormControl(''),
     });
     this.checkStatusVerify();
   }

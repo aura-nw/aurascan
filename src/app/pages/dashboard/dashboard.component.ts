@@ -1,15 +1,16 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { Router } from '@angular/router';
 import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import * as moment from 'moment';
-import { MaskPipe } from 'ngx-mask';
+import { NgxMaskService } from 'ngx-mask';
 import { Subject, Subscription, of, timer } from 'rxjs';
 import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
-import { exportChart } from 'src/app/core/helpers/export';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
@@ -22,8 +23,6 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransaction } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import { Router } from '@angular/router';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-dashboard',
@@ -91,7 +90,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   cacheData = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   isMobileMatched = false;
   breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
   currentAddress = null;
@@ -105,7 +104,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     public datepipe: DatePipe,
     private proposalService: ProposalService,
-    private maskService: MaskPipe,
+    private maskService: NgxMaskService,
     private token: TokenService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
@@ -242,7 +241,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       scaleMargins: {
         top: 0.3,
         bottom: 0.4,
-      }
+      },
     });
   }
 
@@ -392,7 +391,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           label +
           '</div>' +
           '<div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0;">' +
-          this.maskService.transform(price as number, 'separator') +
+          this.maskService.applyMask((price as number).toString(), 'separator') +
           '</div><div>' +
           dateStr +
           '' +

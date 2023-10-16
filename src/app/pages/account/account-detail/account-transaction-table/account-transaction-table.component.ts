@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
@@ -12,7 +12,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
+import { convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -93,7 +93,6 @@ export class AccountTransactionTableComponent {
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
-    public global: Globals,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
     private userService: UserService,

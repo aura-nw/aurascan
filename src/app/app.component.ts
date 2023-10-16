@@ -5,10 +5,10 @@ import { TokenService } from './core/services/token.service';
 import { getInfo } from './core/utils/common/info-common';
 import { Globals } from './global/global';
 // import eruda from 'eruda';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import * as _ from 'lodash';
 import { forkJoin } from 'rxjs';
 import { NameTagService } from './core/services/name-tag.service';
-import * as _ from 'lodash';
+import { ValidatorService } from './core/services/validator.service';
 
 @Component({
   selector: 'app-root',
@@ -25,15 +25,18 @@ export class AppComponent implements OnInit {
     private globals: Globals,
     private tokenService: TokenService,
     private nameTagService: NameTagService,
+    private validatorService: ValidatorService
   ) {}
   ngOnInit(): void {
     this.getListNameTag();
     this.getInfoCommon();
     this.getPriceToken();
+    this.getListValidator();
 
     setInterval(() => {
       this.getInfoCommon();
       this.getPriceToken();
+      this.getListValidator();
     }, 60000);
 
     setInterval(() => {
@@ -121,6 +124,14 @@ export class AppComponent implements OnInit {
       });
       const result = [...listTemp, ...lstPrivate];
       this.globals.listNameTag = this.commonService.listNameTag = result;
+    });
+  }
+
+  getListValidator(): void {
+    this.validatorService.getListNameValidator(null).subscribe((res) => {
+      if (res.validator?.length > 0) {
+        this.commonService.listValidator = res.validator;
+      }
     });
   }
 }

@@ -1,14 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as moment from 'moment';
 import { tap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
-import { Globals } from '../../../app/global/global';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
@@ -62,11 +61,12 @@ export class ProposalComponent implements OnInit {
     pageSize: this.layout.isMatched([Breakpoints.Small, Breakpoints.XSmall]) ? 5 : 10,
     pageIndex: 1,
   };
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
-    public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,

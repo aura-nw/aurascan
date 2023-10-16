@@ -6,7 +6,7 @@ import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
 import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UserService extends CommonService {
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
