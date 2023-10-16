@@ -31,7 +31,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     }),
   );
 
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   constructor(
     private walletService: WalletService,
     private envService: EnvironmentService,
@@ -39,7 +39,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {
     this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state === 'open') {

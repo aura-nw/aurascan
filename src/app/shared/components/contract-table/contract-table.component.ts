@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -68,7 +68,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
     public translate: TranslateService,
     public global: Globals,
     private environmentService: EnvironmentService,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnChanges(): void {
@@ -109,25 +109,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   viewSelected(e: DropdownElement): void {
     this.onViewSelected.emit(e);
-  }
-
-  getPopoverData(data): IContractPopoverData {
-    return {
-      amount: data?.value || 0,
-      code: 0,
-      fee: data?.fee || 0,
-      from_address: data?.from || '',
-      to_address: data?.to || '',
-      price: 0,
-      status: data.status,
-      symbol: this.denom,
-      tokenAddress: this.contractInfo?.contractsAddress,
-      tx_hash: data?.txHash || '',
-      gas_used: data?.gas_used,
-      gas_wanted: data?.gas_wanted,
-      nftDetail: undefined,
-      modeExecute: data?.modeExecute,
-    };
   }
 
   parseLabel(id: string): string {

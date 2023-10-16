@@ -9,7 +9,7 @@ import { DATEFORMAT } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.configValue.coins;

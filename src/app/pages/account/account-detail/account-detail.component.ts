@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MatSelect } from '@angular/material/select';
+import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -8,6 +8,7 @@ import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { isContract } from 'src/app/core/utils/common/validation';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -17,7 +18,6 @@ import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { Globals } from '../../../global/global';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
-import { isContract } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-account-detail',
@@ -45,7 +45,7 @@ export class AccountDetailComponent implements OnInit {
   modalReference: any;
   isNoData = false;
 
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.configValue.timeStaking}`;

@@ -1,6 +1,5 @@
 // regular style toast
-@import '~ngx-toastr/toastr';
-
+@import 'ngx-toastr/toastr';
 
 body {
   * {
@@ -19,7 +18,6 @@ body {
 .cdk-overlay-container {
   z-index: 1100 !important;
 }
-
 
 // vote bar (similar process bar)
 

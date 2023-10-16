@@ -33,7 +33,7 @@ export class WalletService implements OnDestroy {
   }`;
 
   coin98Client: Coin98Client;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   wallet$: Observable<WalletKey>;
 
   private _wallet$: BehaviorSubject<WalletKey>;

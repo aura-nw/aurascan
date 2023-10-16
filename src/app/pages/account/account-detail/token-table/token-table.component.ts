@@ -1,8 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import BigNumber from 'bignumber.js';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -11,7 +10,6 @@ import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-table',
@@ -77,7 +75,6 @@ export class TokenTableComponent implements OnChanges {
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
 
   constructor(
-    public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,

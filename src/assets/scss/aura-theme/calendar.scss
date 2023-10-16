@@ -1,9 +1,12 @@
-mat-datepicker-toggle .mat-icon-button {
-  height: 31px;
-  width: 31px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+mat-datepicker-toggle.mat-datepicker-toggle {
+  .mat-mdc-button-base,
+  .mat-icon-button {
+    height: 31px;
+    width: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 .mat-datepicker-content {
   margin-top: 8px !important;
