@@ -375,7 +375,10 @@ export function convertDataAccountTransaction(
 
     let denom = coinInfo.coinDenom;
     const _amount = _.get(element, 'events[0].event_attributes[2].value');
-    let amount = balanceOf(_amount?.match(/\d+/g)[0]);
+    let amount;
+    if (_amount) {
+      amount = balanceOf(_amount?.match(/\d+/g)[0]);
+    }
 
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
@@ -406,7 +409,7 @@ export function convertDataAccountTransaction(
             toAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.recipient')?.value;
             fromAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.sender')?.value;
             let rawAmount = data.event_attributes?.find((k) => k.composite_key === 'transfer.amount')?.value;
-            let amountTemp = rawAmount?.match(/\d+/g)[0];
+            let amountTemp = rawAmount ? rawAmount?.match(/\d+/g)[0] : 0;
             let amount;
             let denom = coinInfo.coinDenom;
             let denomOrigin;

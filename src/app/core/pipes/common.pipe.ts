@@ -144,7 +144,7 @@ export class displayTypeToolTip implements PipeTransform {
           type = 'Contract: ' + action;
         } catch (e) {}
       } else {
-        type = _.find(TYPE_TRANSACTION, { label: typeMsg })?.value || typeMsg.split('.').pop();
+        type = _.find(TYPE_TRANSACTION, { label: typeMsg })?.value || typeMsg.split('.').pop().replace('Msg', '');
       }
 
       if (index <= 4) {

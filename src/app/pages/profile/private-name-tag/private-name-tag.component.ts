@@ -104,6 +104,13 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
 
     this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
       this.countFav = res.meta.countFavorite || 0;
+      if (this.textSearch?.length > 0) {
+        this.countFav = 0;
+        //check record isFavorite
+        if (res.data?.length > 0 && res.data[0].isFavorite == 1) {
+          this.countFav = 1;
+        }
+      }
       res.data?.forEach((element) => {
         element['type'] = isContract(element.address) ? 'contract' : 'account';
       });

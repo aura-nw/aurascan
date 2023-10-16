@@ -7,3 +7,11 @@
   overflow-y: auto;
   background-color: transparent;
 }
+
+.box-block-tx {
+  @media (max-width: 415px) {
+    max-height: 465px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+}
