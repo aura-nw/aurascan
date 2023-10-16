@@ -144,9 +144,7 @@ export class ValidatorsDetailComponent implements OnInit {
       let payload = null;
       // check is exit data rank
       if (this.currentValidatorDetail?.rank) {
-        payload = {};
-        payload['limit'] = 1;
-        payload['operatorAddress'] = this.currentAddress;
+        payload = { limit: 1, operatorAddress: this.currentAddress };
       }
 
       this.validatorService.getDataValidator(payload).subscribe(
