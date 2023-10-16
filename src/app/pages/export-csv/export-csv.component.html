@@ -117,6 +117,7 @@
               type="radio"
               value="filterRange"
               id="block"
+              [disabled]="!(!dataType || dataType === this.tabsData.ExecutedTxs)"
               class="radio-box radio-box--dark"
               [checked]="!isFilterDate"
               (change)="changeType()" />
@@ -207,15 +208,22 @@
     </div>
 
     <!-- button group -->
-    <div class="d-flex py-6 justify-content-center justify-content-lg-end mt-6 mt-lg-0 button-group">
+    <div class="d-flex py-6 justify-content-center justify-content-lg-end mt-3 mt-lg-0 button-group">
       <button class="button button--md button-pill button-outline" type="button" (click)="resetData()">
         <span>Reset</span>
       </button>
       <button
-        class="button button--md button-outline--gradient button-pill button-flat ml-4 btn-create"
+        class="button button--md button-outline--gradient button-pill button-flat btn-create ml-4"
         type="button"
+        [class.pl-1]="isDownload"
         (click)="downloadCSV()"
         [disabled]="!checkFormValid()">
+        <img
+          [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+          alt=""
+          width="20"
+          height="20"
+          *ngIf="isDownload" />
         <span class="text--white"> Download </span>
       </button>
     </div>
