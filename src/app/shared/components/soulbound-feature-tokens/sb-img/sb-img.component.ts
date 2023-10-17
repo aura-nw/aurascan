@@ -8,7 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 })
 export class SbImgComponent implements OnInit {
   @Input() token;
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   isError = false;
   previewImg = '';
@@ -26,7 +26,7 @@ export class SbImgComponent implements OnInit {
   }
 
   replaceImgIpfs(value) {
-    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
+    return this.environmentService.ipfsDomain + value.replace('://', '/');
   }
 
   error(): void {

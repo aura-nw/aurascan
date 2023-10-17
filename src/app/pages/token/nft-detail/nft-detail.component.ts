@@ -72,16 +72,16 @@ export class NFTDetailComponent implements OnInit {
   imageUrl: string;
   isCW4973 = false;
 
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   userAddress = '';
   ContractVerifyType = ContractVerifyType;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  network = this.environmentService.configValue.chain_info;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  network = this.environmentService.chainInfo;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     public commonService: CommonService,
@@ -323,7 +323,7 @@ export class NFTDetailComponent implements OnInit {
   }
 
   replaceImgIpfs(value) {
-    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
+    return this.environmentService.ipfsDomain + value.replace('://', '/');
   }
 
   expandMedia(): void {

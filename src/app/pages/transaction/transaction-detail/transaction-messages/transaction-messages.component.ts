@@ -75,8 +75,8 @@ export class TransactionMessagesComponent implements OnInit {
   codeTransaction = CodeTransaction;
   isDisplay = [];
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
 
   constructor(
     private datePipe: DatePipe,

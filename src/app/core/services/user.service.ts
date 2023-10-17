@@ -41,7 +41,7 @@ export class UserService extends CommonService {
   }
 
   refreshToken(payload): Observable<any> {
-    this.apiUrl = this.apiUrl || this.environmentService.configValue.beUri;
+    this.apiUrl = this.apiUrl || this.environmentService.backend;
     return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
   }
 

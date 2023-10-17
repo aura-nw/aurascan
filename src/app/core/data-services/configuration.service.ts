@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
+import * as _ from 'lodash';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 export interface IConfiguration {
@@ -53,12 +54,20 @@ export interface IConfiguration {
 }
 
 @Injectable({ providedIn: 'root' })
-export class ConfigurationService {
+export class ConfigurationServiceDelete {
   configUri = './assets/config/config.nois.json';
   private config: BehaviorSubject<IConfiguration>;
 
   get configValue(): IConfiguration {
     return this.config.value;
+  }
+
+  get chainInfo() {
+    return _.get(this.config.value, 'chainConfig.chain_info');
+  }
+
+  get chainId() {
+    return _.get(this.config.value, 'chainConfig.chain_info.chainId');
   }
 
   constructor(private http: HttpClient) {}

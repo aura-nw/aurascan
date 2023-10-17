@@ -6,7 +6,7 @@ import { CommonService } from './common.service';
 
 @Injectable({ providedIn: 'root' })
 export class NameTagService extends CommonService {
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);

@@ -25,7 +25,7 @@ export class TokenInventoryComponent implements OnInit {
   nftData = new MatTableDataSource<any>();
   contractAddress = '';
   keyWord = '';
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   linkToken = 'token-nft';
 
   constructor(
@@ -33,7 +33,7 @@ export class TokenInventoryComponent implements OnInit {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private router: Router,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

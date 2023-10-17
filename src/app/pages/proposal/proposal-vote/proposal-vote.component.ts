@@ -1,5 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -15,8 +18,8 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 })
 export class ProposalVoteComponent implements OnInit {
   keyVote = null;
-  chainId = this.environmentService.configValue.chainId;
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainId = this.environmentService.chainId;
+  chainInfo = this.environmentService.chainInfo;
   isLoading = false;
 
   constructor(

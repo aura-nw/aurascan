@@ -68,8 +68,8 @@ export class BlockDetailComponent implements OnInit {
     }),
   );
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     private route: ActivatedRoute,

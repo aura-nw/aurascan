@@ -51,7 +51,7 @@ export class ContractsTransactionsComponent implements OnInit {
     limit: 100,
   };
 
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     public translate: TranslateService,
@@ -67,9 +67,7 @@ export class ContractsTransactionsComponent implements OnInit {
     valueColumn &&
       ((v) => {
         v.suffix =
-          `<span class="text--primary">` +
-          this.environmentService.configValue.chain_info.currencies[0].coinDenom +
-          `</span>`;
+          `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
       })(valueColumn);
   }
 

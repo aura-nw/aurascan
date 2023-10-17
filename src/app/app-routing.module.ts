@@ -1,13 +1,13 @@
 import { NgModule, inject } from '@angular/core';
 import { Router, RouterModule, Routes, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ConfigurationService } from './core/data-services/configuration.service';
 import { LayoutComponent } from './layouts/layout.component';
+import { EnvironmentService } from './core/data-services/environment.service';
 
 const isEnabled = (
   functionName: string,
 ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> => {
-  const config = inject(ConfigurationService);
+  const config = inject(EnvironmentService);
   const router = inject(Router);
 
   const features = config.configValue['chainConfig']?.features;
