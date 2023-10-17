@@ -20,15 +20,18 @@ export class BlockService extends CommonService {
   }
 
   getDataBlock(payload) {
+    const getValidator = !payload.getValidator
+      ? `validator {
+            operator_address 
+            description 
+          }`
+      : '';
     const operationsDoc = `
     query queryBlock($limit: Int = 100, $order: order_by = desc, $height: Int = null, $hash: String = null, $operatorAddress: String = null, $heightGT: Int = null, $heightLT: Int = null) {
       ${this.envDB} {
         block(limit: $limit, order_by: {height: $order}, where: {height: {_eq: $height, _gt: $heightGT, _lt: $heightLT}, hash: {_eq: $hash}, validator: {operator_address: {_eq: $operatorAddress}}}) {
           txs: data(path: "block.data.txs")
-          validator {
-            operator_address
-            description
-          }
+          ${getValidator}
           hash
           height
           time
@@ -45,6 +48,36 @@ export class BlockService extends CommonService {
           hash: null,
           height: payload.height,
           operatorAddress: payload.address,
+          heightGT: null,
+          heightLT: payload.nextHeight,
+        },
+        operationName: 'queryBlock',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getDataBlockWithOperator(payload) {
+    const operationsDoc = `
+    query queryBlock($limit: Int = 100, $order: order_by = desc, $height: Int = null, $consensus_hex_address: String = null, $heightGT: Int = null, $heightLT: Int = null) {
+      ${this.envDB} {
+        block(limit: $limit, order_by: {height: $order}, where: {height: {_eq: $height, _gt: $heightGT, _lt: $heightLT}, 
+          proposer_address: {_eq: $consensus_hex_address}}) {
+          txs: data(path: "block.data.txs")
+          hash
+          height
+          time
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+          height: payload.height,
+          consensus_hex_address: payload.consensus_hex_address,
           heightGT: null,
           heightLT: payload.nextHeight,
         },

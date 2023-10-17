@@ -414,10 +414,10 @@ export class SummaryInfoComponent implements OnInit {
     setTimeout(() => {
       const editor = document.getElementById('marked');
       if (editor) {
-        editor.innerHTML = marked.parse(this.proposalDetail.content.description);
+        editor.innerHTML = marked.parse(this.proposalDetail?.content?.description);
         return;
       }
-    }, 1000);
+    }, 2000);
   }
 
   getProposalMoreInfo(data: any) {
