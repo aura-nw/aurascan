@@ -102,6 +102,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   typeActive = 'BOND_STATUS_BONDED';
   countProposal = 0;
   dataUserDelegate;
+  loadingData = true;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -164,65 +165,71 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getList(): void {
-    this.validatorService.getDataValidator(null).subscribe((res) => {
-      this.lstUptime = res.validator;
-      if (res.validator?.length > 0) {
-        let dataFilter = res.validator.filter((event) =>
-          this.typeValidator === this.statusValidator.Active
-            ? event.status === this.typeActive
-            : event.status !== this.typeActive,
-        );
+    this.validatorService.getDataValidator(null).subscribe(
+      (res) => {
+        this.lstUptime = res.validator;
+        if (res.validator?.length > 0) {
+          let dataFilter = res.validator.filter((event) =>
+            this.typeValidator === this.statusValidator.Active
+              ? event.status === this.typeActive
+              : event.status !== this.typeActive,
+          );
 
-        res.validator.forEach((val) => {
-          val.power = balanceOf(val.tokens);
-          val.width_chart = val.uptime / 100;
-          val.title = val.description?.moniker;
-          val.commission = (+val.commission?.commission_rates?.rate || +val?.commission?.rate || 0).toFixed(4);
-          val.percent_power = val.percent_voting_power.toFixed(2);
-          val.participation = val.vote_aggregate?.aggregate?.count || 0;
-          val.identity = val.description.identity;
+          res.validator.forEach((val) => {
+            val.power = balanceOf(val.tokens);
+            val.width_chart = val.uptime / 100;
+            val.title = val.description?.moniker;
+            val.commission = (+val.commission?.commission_rates?.rate || +val?.commission?.rate || 0).toFixed(4);
+            val.percent_power = val.percent_voting_power.toFixed(2);
+            val.participation = val.vote_aggregate?.aggregate?.count || 0;
+            val.identity = val.description.identity;
 
-          if (val.status === this.typeActive) {
-            val.status = this.statusValidator.Active;
+            if (val.status === this.typeActive) {
+              val.status = this.statusValidator.Active;
+            }
+
+            let equalPT = 0;
+            const numValidatorActive = res.validator_aggregate?.aggregate?.count || 0;
+            if (numValidatorActive > 0) {
+              equalPT = Number((100 / numValidatorActive).toFixed(2));
+            }
+            if (Number(val.percent_power) < equalPT) {
+              val.voting_power_level = VOTING_POWER_LEVEL.GREEN;
+            } else if (Number(val.percent_power) < 3 * equalPT) {
+              val.voting_power_level = VOTING_POWER_LEVEL.YELLOW;
+            } else {
+              val.voting_power_level = VOTING_POWER_LEVEL.RED;
+            }
+          });
+
+          this.lstValidatorOrigin = res.validator;
+          this.rawData = res.validator;
+
+          //get init list Redelegate validator
+          if (this.typeValidator === this.statusValidator.Active && !(this.lstValidator?.length > 0)) {
+            this.lstValidator = dataFilter;
           }
 
-          let equalPT = 0;
-          const numValidatorActive = res.validator_aggregate?.aggregate?.count || 0;
-          if (numValidatorActive > 0) {
-            equalPT = Number((100 / numValidatorActive).toFixed(2));
+          Object.keys(dataFilter).forEach((key) => {
+            if (this.dataSource.data[key]) {
+              Object.assign(this.dataSource.data[key], dataFilter[key]);
+            } else {
+              this.dataSource.data[key] = dataFilter[key];
+            }
+          });
+          if (this.typeValidator === this.statusValidator.Active) {
+            this.maxPercentPower = this.dataSource?.data[0]?.percent_power;
           }
-          if (Number(val.percent_power) < equalPT) {
-            val.voting_power_level = VOTING_POWER_LEVEL.GREEN;
-          } else if (Number(val.percent_power) < 3 * equalPT) {
-            val.voting_power_level = VOTING_POWER_LEVEL.YELLOW;
-          } else {
-            val.voting_power_level = VOTING_POWER_LEVEL.RED;
-          }
-        });
 
-        this.lstValidatorOrigin = res.validator;
-        this.rawData = res.validator;
-
-        //get init list Redelegate validator
-        if (this.typeValidator === this.statusValidator.Active && !(this.lstValidator?.length > 0)) {
-          this.lstValidator = dataFilter;
+          this.dataSource.sort = this.sort;
+          this.searchValidator();
         }
-
-        Object.keys(dataFilter).forEach((key) => {
-          if (this.dataSource.data[key]) {
-            Object.assign(this.dataSource.data[key], dataFilter[key]);
-          } else {
-            this.dataSource.data[key] = dataFilter[key];
-          }
-        });
-        if (this.typeValidator === this.statusValidator.Active) {
-          this.maxPercentPower = this.dataSource?.data[0]?.percent_power;
-        }
-
-        this.dataSource.sort = this.sort;
-        this.searchValidator();
-      }
-    });
+      },
+      () => {},
+      () => {
+        this.loadingData = false;
+      },
+    );
   }
 
   getCountProposal() {

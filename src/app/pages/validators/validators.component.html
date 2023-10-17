@@ -12,7 +12,7 @@
       (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
   </section>
 
-  <div class="card box-validators">
+  <div class="card box-validators" *ngIf="!loadingData">
     <div class="card-header card-header-dark d-lg-flex justify-content-between pb-2">
       <div>
         <h2 class="h3-mob mb-0 text--white">Validators</h2>
@@ -667,4 +667,8 @@
       </div>
     </div>
   </ng-template>
+</div>
+
+<div *ngIf="loadingData" class="mt-20">
+  <app-loading-sprint></app-loading-sprint>
 </div>

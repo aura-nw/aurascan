@@ -377,7 +377,10 @@
             <span>View more</span>
           </button>
         </div>
-        <div class="card-body pt-4 pt-lg-2 box-dashboard">
+        <div *ngIf="isLoadingBlock" class="mt-20">
+          <app-loading-sprint></app-loading-sprint>
+        </div>
+        <div class="card-body pt-4 pt-lg-2 box-dashboard" *ngIf="!isLoadingBlock">
           <ng-container *ngIf="dataSourceBlock; else noValues">
             <div class="table-responsive">
               <table mat-table [dataSource]="dataSourceBlock" class="aura-table body blocks">
@@ -441,7 +444,10 @@
             <span>View more</span>
           </button>
         </div>
-        <div class="card-body pt-4 pt-lg-2 box-dashboard">
+        <div *ngIf="isLoadingTx" class="mt-20">
+          <app-loading-sprint></app-loading-sprint>
+        </div>
+        <div class="card-body pt-4 pt-lg-2 box-dashboard" *ngIf="!isLoadingTx">
           <ng-container *ngIf="dataSourceTx; else noValues">
             <div class="table-responsive">
               <table mat-table [dataSource]="dataSourceTx" class="aura-table transaction body">
@@ -512,3 +518,4 @@
     </div>
   </div>
 </section>
+
