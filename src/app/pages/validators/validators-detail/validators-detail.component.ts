@@ -84,6 +84,7 @@ export class ValidatorsDetailComponent implements OnInit {
   isLeftPage = false;
   typeActive = 'BOND_STATUS_BONDED';
   number2Digit = NUMBER_2_DIGIT;
+  hexAddress = null;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -105,7 +106,6 @@ export class ValidatorsDetailComponent implements OnInit {
   ngOnInit(): void {
     this.commonService['listNameTag'] = this.global?.listNameTag;
     this.currentAddress = this.route.snapshot.paramMap.get('id');
-    this.loadData();
     this.getDetail(true);
     this.timerGetBlock = setInterval(() => {
       this.getLastHeight();
@@ -113,7 +113,6 @@ export class ValidatorsDetailComponent implements OnInit {
 
     this.timerGetUpTime = setInterval(() => {
       this.getDetail();
-      this.loadData(false);
     }, 20000);
   }
 
@@ -184,6 +183,9 @@ export class ValidatorsDetailComponent implements OnInit {
             (this.currentValidatorDetail.self_delegation_balance / this.currentValidatorDetail.tokens) * 100;
           this.currentValidatorDetail.percent_self_bonded = percentSelfBonded.toFixed(2) + '%';
 
+          this.hexAddress = this.currentValidatorDetail?.consensus_hex_address;
+          this.loadData(isInit);
+
           if (this.currentValidatorDetail?.consensus_hex_address && isInit) {
             this.getUptime();
 
@@ -208,13 +210,13 @@ export class ValidatorsDetailComponent implements OnInit {
   getListBlockWithOperator(nextKeyBlock = null, isInit = true): void {
     let payload = {
       limit: 100,
-      address: this.currentAddress,
+      consensus_hex_address: this.hexAddress,
       nextHeight: null,
     };
     if (nextKeyBlock !== null) {
       payload.nextHeight = nextKeyBlock;
     }
-    this.blockService.getDataBlock(payload).subscribe(
+    this.blockService.getDataBlockWithOperator(payload).subscribe(
       (res) => {
         this.nextKeyBlock = res?.block[res?.block?.length - 1]?.height;
         if (res.block.length > 0) {
