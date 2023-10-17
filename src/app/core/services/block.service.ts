@@ -20,15 +20,18 @@ export class BlockService extends CommonService {
   }
 
   getDataBlock(payload) {
+    const getValidator = !payload.getValidator
+      ? `validator {
+            operator_address 
+            description 
+          }`
+      : '';
     const operationsDoc = `
     query queryBlock($limit: Int = 100, $order: order_by = desc, $height: Int = null, $hash: String = null, $operatorAddress: String = null, $heightGT: Int = null, $heightLT: Int = null) {
       ${this.envDB} {
         block(limit: $limit, order_by: {height: $order}, where: {height: {_eq: $height, _gt: $heightGT, _lt: $heightLT}, hash: {_eq: $hash}, validator: {operator_address: {_eq: $operatorAddress}}}) {
           txs: data(path: "block.data.txs")
-          validator {
-            operator_address
-            description
-          }
+          ${getValidator}
           hash
           height
           time
