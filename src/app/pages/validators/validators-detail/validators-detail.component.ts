@@ -113,7 +113,7 @@ export class ValidatorsDetailComponent implements OnInit {
     this.timerGetUpTime = setInterval(() => {
       this.getDetail();
       this.loadData(false);
-    }, 5000);
+    }, 20000);
   }
 
   loadData(isInit = true) {
@@ -185,6 +185,14 @@ export class ValidatorsDetailComponent implements OnInit {
 
           if (this.currentValidatorDetail?.consensus_hex_address && isInit) {
             this.getUptime();
+
+            setTimeout(() => {
+              const editor = document.getElementById('marked');
+              if (editor && this.currentValidatorDetail) {
+                editor.innerHTML = marked.parse(this.currentValidatorDetail?.details);
+                return;
+              }
+            }, 2000);
           }
 
           this.getTotalSBT(this.currentValidatorDetail.acc_address);
@@ -391,16 +399,6 @@ export class ValidatorsDetailComponent implements OnInit {
       default:
         break;
     }
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const editor = document.getElementById('marked');
-      if (editor && this.currentValidatorDetail) {
-        editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
-        return;
-      }
-    }, 1000);
   }
 
   openDialog() {
