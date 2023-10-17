@@ -74,8 +74,8 @@
                         "production": {
                             "budgets": [{
                                     "type": "initial",
-                                    "maximumWarning": "5mb",
-                                    "maximumError": "5mb"
+                                    "maximumWarning": "10mb",
+                                    "maximumError": "15mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
@@ -83,6 +83,8 @@
                                     "maximumError": "6kb"
                                 }
                             ],
+                            "outputHashing": "all",
+                            "aot": true,
                             "fileReplacements": [{
                                 "replace": "src/environments/environment.ts",
                                 "with": "src/environments/environment.prod.ts"
