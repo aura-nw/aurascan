@@ -84,6 +84,7 @@ export class ValidatorsDetailComponent implements OnInit {
   isLeftPage = false;
   typeActive = 'BOND_STATUS_BONDED';
   number2Digit = NUMBER_2_DIGIT;
+  hexAddress = null;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -105,7 +106,6 @@ export class ValidatorsDetailComponent implements OnInit {
   ngOnInit(): void {
     this.commonService['listNameTag'] = this.global?.listNameTag;
     this.currentAddress = this.route.snapshot.paramMap.get('id');
-    this.loadData();
     this.getDetail(true);
     this.timerGetBlock = setInterval(() => {
       this.getLastHeight();
@@ -113,8 +113,7 @@ export class ValidatorsDetailComponent implements OnInit {
 
     this.timerGetUpTime = setInterval(() => {
       this.getDetail();
-      this.loadData(false);
-    }, 5000);
+    }, 20000);
   }
 
   loadData(isInit = true) {
@@ -141,7 +140,13 @@ export class ValidatorsDetailComponent implements OnInit {
 
   getDetail(isInit = false): void {
     if (!this.isLeftPage) {
-      this.validatorService.getDataValidator(null).subscribe(
+      let payload = null;
+      // check is exit data rank
+      if (this.currentValidatorDetail?.rank) {
+        payload = { limit: 1, operatorAddress: this.currentAddress };
+      }
+
+      this.validatorService.getDataValidator(payload).subscribe(
         (res) => {
           if (res.status === 404 || res.validator?.length === 0) {
             this.router.navigate(['/']);
@@ -168,15 +173,29 @@ export class ValidatorsDetailComponent implements OnInit {
             bonded_height: data?.start_height || 1,
             jailed: data.jailed ? 1 : 0,
             status: data.status === this.typeActive ? this.statusValidator.Active : data?.status,
-            rank: arrRank?.findIndex((k) => k.operator_address === this.currentAddress) + 1 || 1,
+            rank:
+              this.currentValidatorDetail?.rank ||
+              arrRank?.findIndex((k) => k.operator_address === this.currentAddress) + 1 ||
+              1,
           };
 
           const percentSelfBonded =
             (this.currentValidatorDetail.self_delegation_balance / this.currentValidatorDetail.tokens) * 100;
           this.currentValidatorDetail.percent_self_bonded = percentSelfBonded.toFixed(2) + '%';
 
+          this.hexAddress = this.currentValidatorDetail?.consensus_hex_address;
+          this.loadData(isInit);
+
           if (this.currentValidatorDetail?.consensus_hex_address && isInit) {
             this.getUptime();
+
+            setTimeout(() => {
+              const editor = document.getElementById('marked');
+              if (editor && this.currentValidatorDetail) {
+                editor.innerHTML = marked.parse(this.currentValidatorDetail?.details);
+                return;
+              }
+            }, 2000);
           }
 
           this.getTotalSBT(this.currentValidatorDetail.acc_address);
@@ -191,13 +210,13 @@ export class ValidatorsDetailComponent implements OnInit {
   getListBlockWithOperator(nextKeyBlock = null, isInit = true): void {
     let payload = {
       limit: 100,
-      address: this.currentAddress,
+      consensus_hex_address: this.hexAddress,
       nextHeight: null,
     };
     if (nextKeyBlock !== null) {
       payload.nextHeight = nextKeyBlock;
     }
-    this.blockService.getDataBlock(payload).subscribe(
+    this.blockService.getDataBlockWithOperator(payload).subscribe(
       (res) => {
         this.nextKeyBlock = res?.block[res?.block?.length - 1]?.height;
         if (res.block.length > 0) {
@@ -383,16 +402,6 @@ export class ValidatorsDetailComponent implements OnInit {
       default:
         break;
     }
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const editor = document.getElementById('marked');
-      if (editor && this.currentValidatorDetail) {
-        editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
-        return;
-      }
-    }, 1000);
   }
 
   openDialog() {
