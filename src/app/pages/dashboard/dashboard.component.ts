@@ -69,6 +69,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   max = 1000;
   currDate;
   isPrice = true;
+  isLoadingBlock = true;
+  isLoadingTx = true;
+  errTextBlock = null;
+  errTextTx = null;
 
   curr_voting_Period;
   voting_Period_arr = [];
@@ -274,29 +278,30 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const payload = {
       limit: this.PAGE_SIZE,
     };
-    this.blockService.getDataBlock(payload).subscribe(
-      (res) => {
+    this.blockService.getDataBlock(payload).subscribe({
+      next: (res) => {
         if (res?.block?.length > 0) {
           const blocks = convertDataBlock(res);
           this.dataSourceBlock = new MatTableDataSource(blocks);
+          this.isLoadingBlock = false;
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
         this.isLoadingBlock = false;
+        this.errTextBlock = e.status + ' ' + e.statusText;
       },
-    );
+    });
   }
 
   getListTransaction(): void {
     const payload = {
       limit: this.PAGE_SIZE,
     };
-    this.transactionService.getListTx(payload).subscribe(
-      (res) => {
+    this.transactionService.getListTx(payload).subscribe({
+      next: (res) => {
         this.dataSourceTx.data = [];
         if (res?.transaction?.length > 0) {
-          const txs = convertDataTransactionSimple(res, this.coinInfo);
+          const txs = convertDataTransaction(res, this.coinInfo);
 
           if (this.dataSourceTx.data.length > 0) {
             this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
@@ -304,11 +309,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.dataSourceTx.data = [...txs];
           }
           this.dataTx = txs;
+          this.isLoadingTx = false;
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
         this.isLoadingTx = false;
+        this.errTextTx = e.status + ' ' + e.statusText;
       },
     );
   }
