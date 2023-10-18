@@ -73,7 +73,14 @@ export class TokenTransferComponent implements OnInit {
           }
 
           if (element.composite_key === 'coin_received.receiver') {
-            const arrAmount = event.event_attributes[index + 1].value?.split(',');
+            let indexData;
+            // check index of receiver
+            if (index % 2 !== 0) {
+              indexData = index - 1;
+            } else {
+              indexData = index + 1;
+            }
+            const arrAmount = event.event_attributes[indexData]?.value?.split(',');
             arrAmount.forEach((amountTemp) => {
               let cw20_contract = {};
               let dataAmount = {};
