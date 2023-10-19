@@ -80,7 +80,6 @@ export class ConfigurationServiceDelete {
     return lastValueFrom(this.loadConfig())
       .then((config: any) => {
         const configuration: IConfiguration = config as IConfiguration;
-        console.log(config);
         if (this.config) {
           this.config.next(configuration);
           return;

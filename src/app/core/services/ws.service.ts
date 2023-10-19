@@ -55,9 +55,6 @@ export class WSService {
     if (this.socket?.connected) {
       return;
     }
-
-    console.log(this.socketUrl);
-
     this.socket = io(this.socketUrl, {
       path: '/ws/socket.io',
       autoConnect: true,
