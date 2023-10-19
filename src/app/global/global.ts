@@ -408,22 +408,27 @@ export function convertDataAccountTransaction(
             let { type, action } = getTypeTx(element, i);
             toAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.recipient')?.value;
             fromAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.sender')?.value;
-            let rawAmount = data.event_attributes?.find((k) => k.composite_key === 'transfer.amount')?.value;
-            let amountTemp = rawAmount ? rawAmount?.match(/\d+/g)[0] : 0;
-            let amount;
-            let denom = coinInfo.coinDenom;
-            let denomOrigin;
-            let decimal = 6;
-            if (rawAmount?.indexOf('ibc') > -1) {
-              const dataIBC = getDataIBC(rawAmount, coinConfig);
-              amount = balanceOf(Number(amountTemp) || 0, dataIBC['decimal'] || 6);
-              denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
-              denomOrigin = dataIBC['denom'];
-            } else {
-              amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
-            }
-            const result = { type, toAddress, fromAddress, amount, denom, action, denomOrigin, amountTemp, decimal };
-            arrTemp.push(result);
+            const arrAmount = data.event_attributes
+              ?.find((k) => k.composite_key === 'transfer.amount')
+              ?.value?.split(',');
+            arrAmount?.forEach((rawAmount) => {
+              let amountTemp = rawAmount ? rawAmount?.match(/\d+/g)[0] : 0;
+              let amount;
+              let denom = coinInfo.coinDenom;
+              let denomOrigin;
+              let decimal = 6;
+              if (rawAmount?.indexOf('ibc') > -1) {
+                const dataIBC = getDataIBC(rawAmount, coinConfig);
+                amount = balanceOf(Number(amountTemp) || 0, dataIBC['decimal'] || 6);
+                denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
+                denomOrigin = dataIBC['denom'];
+              } else {
+                amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
+              }
+
+              const result = { type, toAddress, fromAddress, amount, denom, action, denomOrigin, amountTemp, decimal };
+              arrTemp.push(result);
+            });
           }
         });
         arrEvent = arrTemp;
