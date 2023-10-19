@@ -1,5 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+} from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
@@ -102,7 +106,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   }
 
   replaceImgIpfs(value) {
-    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
+    return this.environmentService.ipfsDomain + value.replace('://', '/');
   }
 
   error(): void {

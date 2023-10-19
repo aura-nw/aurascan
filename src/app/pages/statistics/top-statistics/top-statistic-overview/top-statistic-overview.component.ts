@@ -18,8 +18,8 @@ export class TopStatisticOverviewComponent implements OnInit {
   loading = true;
   transactionsData;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinDecimals = this.environmentService.chainInfo.currencies[0].coinDecimals;
 
   constructor(
     private statisticService: StatisticService,

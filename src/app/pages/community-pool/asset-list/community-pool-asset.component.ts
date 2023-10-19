@@ -43,10 +43,10 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   dataSourceMob: any[];
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  image_s3 = this.environmentService.configValue.image_s3;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
-  listCoin = this.environmentService.configValue.coins;
+  listCoin = this.environmentService.coins;
   listAssetLcd = [];
   searchSubject = new Subject();
   destroy$ = new Subject<void>();

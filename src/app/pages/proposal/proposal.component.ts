@@ -26,7 +26,7 @@ export class ProposalComponent implements OnInit {
   statusConstant = PROPOSAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: number } = null;
-  chainId = this.environmentService.configValue.chainId;
+  chainId = this.environmentService.chainId;
   // data table
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'ID' },
@@ -62,7 +62,7 @@ export class ProposalComponent implements OnInit {
     pageIndex: 1,
   };
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
     private proposalService: ProposalService,

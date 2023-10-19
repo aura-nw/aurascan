@@ -1,6 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -17,7 +20,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
   isAddressInvalid = false;
   isCurrentAddress = false;
   isReject = false;
-  network = this.environmentService.configValue.chain_info;
+  network = this.environmentService.chainInfo;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

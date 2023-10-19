@@ -29,8 +29,8 @@ export class TransactionComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   loading = true;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     private transactionService: TransactionService,
@@ -46,7 +46,7 @@ export class TransactionComponent implements OnInit {
   getListTx(): void {
     const payload = {
       limit: this.pageSize,
-    }
+    };
     this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {

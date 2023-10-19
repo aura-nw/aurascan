@@ -19,35 +19,20 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "paths": {
-      "crypto": [
-        "./node_modules/crypto-browserify"
-      ],
-      "stream": [
-        "./node_modules/stream-browserify"
-      ],
-      "assert": [
-        "./node_modules/assert"
-      ],
-      "http": [
-        "./node_modules/stream-http"
-      ],
-      "https": [
-        "./node_modules/https-browserify"
-      ],
-      "os": [
-        "./node_modules/os-browserify"
-      ],
-      "src/*": [
-        "./src/*"
-      ]
+      "crypto": ["./node_modules/crypto-browserify"],
+      "stream": ["./node_modules/stream-browserify"],
+      "assert": ["./node_modules/assert"],
+      "http": ["./node_modules/stream-http"],
+      "https": ["./node_modules/https-browserify"],
+      "os": ["./node_modules/os-browserify"],
+      "src/*": ["./src/*"]
     },
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "types": ["google-one-tap", "google.accounts"]
   },
+
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
