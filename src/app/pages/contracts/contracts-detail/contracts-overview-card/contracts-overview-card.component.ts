@@ -17,7 +17,7 @@ export class ContractsOverviewCardComponent implements OnInit, OnChanges {
   priceToken = 0;
   contractRegisterType = ContractRegisterType;
   linkNft = 'token-nft';
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   verifiedStatus = '';
   verifiedText = '';
 

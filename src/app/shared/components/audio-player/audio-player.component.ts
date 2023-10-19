@@ -16,7 +16,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   browserEnv = 'default';
   showCustomControl = false;
   paused = true;
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   isError = false;
   constructor(private environmentService: EnvironmentService) {}

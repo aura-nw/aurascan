@@ -69,10 +69,10 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   contractType = ContractRegisterType;
   timerGetUpTime: any;
 
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     public global: Globals,

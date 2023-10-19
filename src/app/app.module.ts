@@ -21,8 +21,9 @@ import { DEFAULT_TIMEOUT, RequestTimeoutHttpInterceptor } from './core/helpers/t
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
-import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
+import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
+import { ConfigurationServiceDelete } from './core/data-services/configuration.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -52,6 +53,7 @@ import { MediaExpandModule } from './shared/components/media-expand/media-expand
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     DatePipe,
     Globals,
+    EnvironmentService,
     {
       provide: APP_INITIALIZER,
       useFactory: (environmentService: EnvironmentService) => () => environmentService.load(),

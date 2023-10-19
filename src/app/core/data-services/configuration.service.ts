@@ -29,14 +29,14 @@ export interface IConfiguration {
       logo: string;
     }[];
     features: string[];
-    chain_info: ChainInfo & { gasPriceStep: any };
+    chain_info: ChainInfo;
   };
   image: {
     validator: string;
     assets: string;
   };
   api: {
-    backend: string;
+    be: string;
     socket: string;
     ipfsDomain: string;
     googleClientId: string;
@@ -53,62 +53,21 @@ export interface IConfiguration {
   };
 }
 
-@Injectable()
-export class EnvironmentService {
-  configUri = './assets/config/config.json';
-  private config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
+@Injectable({ providedIn: 'root' })
+export class ConfigurationServiceDelete {
+  configUri = './assets/config/config.nois.json';
+  private config: BehaviorSubject<IConfiguration>;
 
   get configValue(): IConfiguration {
-    return this.config?.value;
-  }
-
-  get environment() {
-    return _.get(this.configValue, 'environment');
-  }
-
-  get chainConfig() {
-    return _.get(this.configValue, 'chainConfig');
+    return this.config.value;
   }
 
   get chainInfo() {
-    return _.get(this.configValue, 'chainConfig.chain_info');
+    return _.get(this.config.value, 'chainConfig.chain_info');
   }
 
   get chainId() {
-    return _.get(this.configValue, 'chainConfig.chain_info.chainId');
-  }
-
-  get stakingTime() {
-    return _.get(this.configValue, 'chainConfig.stakingTime');
-  }
-
-  get coins() {
-    return _.get(this.configValue, 'chainConfig.coins');
-  }
-
-  get imageUrl() {
-    return _.get(this.configValue, 'image.assets');
-  }
-
-  get ipfsDomain() {
-    return _.get(this.configValue, 'api.ipfsDomain');
-  }
-
-  get backend() {
-    return _.get(this.configValue, 'api.backend');
-  }
-
-  get horoscope() {
-    return _.get(this.configValue, 'api.horoscope');
-  }
-
-  get socketUrl() {
-    return _.get(this.configValue, 'api.socket');
-  }
-
-  get googleClientId() {
-    const _google = _.get(this.configValue, 'api.google');
-    return `${_google.clientId}.${_google.url}`;
+    return _.get(this.config.value, 'chainConfig.chain_info.chainId');
   }
 
   constructor(private http: HttpClient) {}
@@ -121,7 +80,6 @@ export class EnvironmentService {
     return lastValueFrom(this.loadConfig())
       .then((config: any) => {
         const configuration: IConfiguration = config as IConfiguration;
-
         if (this.config) {
           this.config.next(configuration);
           return;

@@ -10,8 +10,8 @@ import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 
 @Injectable()
 export class TransactionService extends CommonService {
-  apiUrl = `${this.environmentService.configValue.beUri}`;
-  chainInfo = this.environmentService.configValue.chain_info;
+  apiUrl = `${this.environmentService.backend}`;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -56,6 +56,7 @@ export class TransactionService extends CommonService {
       }
     }
     `;
+    
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
@@ -88,7 +89,7 @@ export class TransactionService extends CommonService {
       $hash: String = null
       $height: Int = null
     ) {
-      serenity {
+      ${this.envDB} {
         transaction(
           limit: $limit
           where: {

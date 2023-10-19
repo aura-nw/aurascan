@@ -50,7 +50,8 @@ export class CommunityPoolProposalComponent implements OnInit {
   );
   length: number;
   dataSource: MatTableDataSource<any>;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  listCoin = this.environmentService.coins;
   statusConstant = PROPOSAL_STATUS;
   distributionAcc = '';
   isLoading = true;

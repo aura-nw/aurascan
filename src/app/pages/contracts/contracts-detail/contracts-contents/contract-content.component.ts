@@ -48,7 +48,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<void>();
   timerGetUpTime: any;
 
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     private contractService: ContractService,
@@ -63,9 +63,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     valueColumn &&
       ((v) => {
         v.suffix =
-          `<span class="text--primary">` +
-          this.environmentService.configValue.chain_info.currencies[0].coinDenom +
-          `</span>`;
+          `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
       })(valueColumn);
   }
 

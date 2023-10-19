@@ -62,7 +62,7 @@ export class CardMobAccountComponent implements OnInit {
   tabsData = TabsAccountLink;
   statusTransaction = CodeTransaction;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   constructor(public commonService: CommonService, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {

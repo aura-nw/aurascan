@@ -52,7 +52,7 @@ export class MyGrantersComponent implements OnInit {
   isNoData = true;
   isSearchData = false;
   currentAddress = null;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
     public commonService: CommonService,

@@ -15,8 +15,8 @@ import { Globals } from 'src/app/global/global';
 export class ContractService extends CommonService {
   private contract$ = new BehaviorSubject<any>(null);
   contractObservable: Observable<any>;
-  chainInfo = this.environmentService.configValue.chain_info;
-  apiUrl = `${this.environmentService.configValue.beUri}`;
+  chainInfo = this.environmentService.chainInfo;
+  apiUrl = `${this.environmentService.backend}`;
 
   get contract() {
     return this.contract$.value;

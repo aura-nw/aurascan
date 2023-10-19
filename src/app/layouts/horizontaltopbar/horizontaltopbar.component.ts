@@ -40,8 +40,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   menuLink = [];
   currentAddress = null;
 
-  prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
-  prefixNormalAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
+  prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   /**
    * Language Listing
@@ -146,8 +146,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     this.innerWidth = window.innerWidth;
     this.pageTitle =
       this.innerWidth > 992
-        ? this.environmentService.configValue.evnLabel.desktop
-        : this.environmentService.configValue.evnLabel.mobile;
+        ? this.environmentService.environment.label.desktop
+        : this.environmentService.environment.label.mobile;
   }
 
   /**

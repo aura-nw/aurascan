@@ -89,8 +89,8 @@ export class AccountTransactionTableComponent {
   isSearchOther = false;
   countFilter = 0;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     private environmentService: EnvironmentService,
@@ -414,7 +414,7 @@ export class AccountTransactionTableComponent {
         setReceive = true;
       }
 
-      const coinConfig = this.environmentService.configValue.coins;
+      const coinConfig = this.environmentService.coins;
       let txs = convertDataAccountTransaction(
         data,
         this.coinInfo,
