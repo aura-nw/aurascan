@@ -20,6 +20,7 @@ export class TransactionDetailComponent implements OnInit {
   codeTransaction = CodeTransaction;
   isRawData = false;
   errorMessage = '';
+  errText = null;
   TAB = [
     {
       id: 0,
@@ -62,8 +63,8 @@ export class TransactionDetailComponent implements OnInit {
         limit: 1,
         hash: this.txHash,
       };
-      this.transactionService.getListTxDetail(payload).subscribe(
-        (res) => {
+      this.transactionService.getListTxDetail(payload).subscribe({
+        next: (res) => {
           if (res?.transaction?.length > 0) {
             const txs = convertDataTransaction(res, this.coinInfo);
             this.transaction = txs[0];
@@ -94,17 +95,18 @@ export class TransactionDetailComponent implements OnInit {
                 }
               }, 500);
             }
+            this.loading = false;
           } else {
             setTimeout(() => {
               this.getDetail();
             }, 10000);
           }
         },
-        () => {},
-        () => {
+        error: (e) => {
           this.loading = false;
+          this.errText = e.status + ' ' + e.statusText;
         },
-      );
+      });
     } else {
       this.loading = false;
     }
