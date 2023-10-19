@@ -28,12 +28,12 @@
                             height="20" />
                           <div class="ml-3 d-flex transfer-token-info">
                             <span *ngIf="data.cw20_contract.symbol" class="caption text-sm mb-1">{{
-                              data.cw20_contract.symbol | stringEllipsis : 12
+                              data.cw20_contract.symbol | stringEllipsis : 20
                             }}</span>
                             <span
                               *ngIf="data.cw20_contract.name && !breakpoint.value.matches"
                               class="body-02 d-xl-none"
-                              >{{ data.cw20_contract.name | stringEllipsis : 16 }}</span
+                              >{{ data.cw20_contract.name | stringEllipsis : 25 }}</span
                             >
                             <span
                               *ngIf="data.cw20_contract.name && !breakpoint.value.matches"
