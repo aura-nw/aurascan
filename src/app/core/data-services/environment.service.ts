@@ -55,7 +55,7 @@ export interface IConfiguration {
 
 @Injectable()
 export class EnvironmentService {
-  configUri = './assets/config/config.nois.json';
+  configUri = './assets/config/config.json';
   private config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
 
   get configValue(): IConfiguration {
