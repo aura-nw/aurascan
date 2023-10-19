@@ -28,6 +28,7 @@ export class TransactionComponent implements OnInit {
   pageSize = 20;
   typeTransaction = TYPE_TRANSACTION;
   loading = true;
+  errText = null;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
@@ -47,8 +48,8 @@ export class TransactionComponent implements OnInit {
     const payload = {
       limit: this.pageSize,
     };
-    this.transactionService.getListTx(payload).subscribe(
-      (res) => {
+    this.transactionService.getListTx(payload).subscribe({
+      next: (res) => {
         if (res?.transaction?.length > 0) {
           const txs = convertDataTransactionSimple(res, this.coinInfo);
           if (this.dataSource.data.length > 0) {
@@ -58,12 +59,13 @@ export class TransactionComponent implements OnInit {
           }
           this.dataTx = txs;
         }
-      },
-      () => {},
-      () => {
         this.loading = false;
       },
-    );
+      error: (e) => {
+        this.loading = false;
+        this.errText = e.status + ' ' + e.statusText;
+      },
+    });
   }
 
   checkAmountValue(amount: number, txHash: string) {

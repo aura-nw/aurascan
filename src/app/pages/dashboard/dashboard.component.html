@@ -401,7 +401,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell g-no-data" colspan="9999">
-                    <app-table-no-data></app-table-no-data>
+                    {{ 'NO DATA' | translate }}
                   </td>
                 </tr>
               </table>
@@ -489,7 +489,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsTx"></tr>
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell g-no-data" colspan="9999">
-                    <app-table-no-data></app-table-no-data>
+                    {{ 'NO DATA' | translate }}
                   </td>
                 </tr>
               </table>
