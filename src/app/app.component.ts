@@ -25,13 +25,25 @@ export class AppComponent implements OnInit {
     private globals: Globals,
     private tokenService: TokenService,
     private nameTagService: NameTagService,
-    private validatorService: ValidatorService
+    private validatorService: ValidatorService,
   ) {}
   ngOnInit(): void {
     this.getListNameTag();
     this.getInfoCommon();
     this.getPriceToken();
-    this.getListValidator();
+
+    // get list name validator form local storage
+    const listValidatorName = localStorage.getItem('listValidator');
+    if (!listValidatorName) {
+      this.getListValidator();
+    } else {
+      try {
+        let data = JSON.parse(listValidatorName);
+        this.commonService.listValidator = data;
+      } catch (e) {
+        this.getListValidator();
+      }
+    }
 
     setInterval(() => {
       this.getInfoCommon();
@@ -42,6 +54,10 @@ export class AppComponent implements OnInit {
     setInterval(() => {
       this.getListNameTag();
     }, 20000);
+
+    setInterval(() => {
+      this.getListValidator();
+    }, 600000);
 
     // if (this.isTestnet) {
     //   let el = document.createElement('div');
@@ -109,7 +125,7 @@ export class AppComponent implements OnInit {
           isPrivate = true;
           id = privateData.id;
         }
-        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id};
+        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
       });
 
       // get other data of private list
@@ -131,6 +147,7 @@ export class AppComponent implements OnInit {
     this.validatorService.getListNameValidator(null).subscribe((res) => {
       if (res.validator?.length > 0) {
         this.commonService.listValidator = res.validator;
+        localStorage.setItem('listValidator', JSON.stringify(this.commonService.listValidator));
       }
     });
   }
