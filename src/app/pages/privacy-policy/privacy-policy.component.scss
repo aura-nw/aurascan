@@ -1,4 +1,4 @@
-.box-terms {
+.box-privacy {
   background-color: var(--aura-gray-10);
   color: var(--aura-white);
   border-radius: 0 0 12px 12px;
@@ -24,7 +24,7 @@
   p {
     color: var(--aura-gray-2);
   }
-  .bg-terms {
+  .bg-privacy {
     background-color: var(--aura-aqua-6);
     padding: 28px 96px 10px;
     @media (max-width: 414px) {
@@ -41,40 +41,23 @@
   .card-body {
     padding: 32px 96px 24px 96px;
   }
-  .item-terms {
+  .item-privacy {
     margin-bottom: 12px;
     @media (max-width: 414px) {
       margin-left: 8px;
     }
     > div:nth-child(2) {
-      margin-left: 24px;
-      @media (max-width: 414px) {
-        margin-left: 8px;
-      }
-    }
-    .w-order-list {
-      min-width: 32px;
-      margin-left: 20px;
-    }
-    &.box-conduct .w-order-list {
-      min-width: 50px;
-      margin-left: 22px;
+      margin-left: 30px;
       @media (max-width: 414px) {
         margin-left: 4px;
       }
     }
-    &.box-service .w-order-list {
-      margin-left: 72px;
+    .w-order-list {
+      min-width: 55px;
+      margin-left: 18px;
       @media (max-width: 414px) {
-        margin-left: 15px;
-        min-width: 36px;
-      }
-    }
-    &.box-risk .w-order-list {
-      margin-left: 22px;
-      min-width: 45px;
-      @media (max-width: 414px) {
-        margin-left: 6px;
+        min-width: 50px;
+        margin-left: 4px;
       }
     }
   }
