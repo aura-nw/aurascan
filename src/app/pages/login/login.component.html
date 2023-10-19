@@ -45,6 +45,15 @@
         </ng-container>
       </div>
     </ng-container>
+
+    <div class="text--gray-4 mb-4" *ngIf="mode === screenType.Login">
+      Login by email to manage your profile, personal note, watchlist and more.
+    </div>
+
+    <div class="text--gray-4 mb-4" *ngIf="mode === screenType.Register">
+      Register new account to manage your profile, personal note, watchlist and more.
+    </div>
+
     <form
       [formGroup]="loginForm"
       (ngSubmit)="onSubmit()"
@@ -196,7 +205,10 @@
           </div>
 
           <div class="mt-lg-6 mt-4 body-mob">
-            By continuing, you agree to our <a class="text--primary fw-semibold cursor-pointer">Terms of Use</a>
+            By continuing, you agree to our
+            <a class="text--primary fw-semibold cursor-pointer" target="_blank" routerLink="/terms"
+              >Terms and Conditions</a
+            >
           </div>
         </div>
       </ng-container>
@@ -212,6 +224,12 @@
             ">
             <span class="body-01">Register</span>
           </button>
+        </div>
+        <div class="mt-lg-6 mt-4 body-mob text-center text--gray-4">
+          By continuing, you agree to our
+          <a class="text--primary fw-semibold cursor-pointer" target="_blank" routerLink="/terms"
+            >Terms and Conditions</a
+          >
         </div>
       </ng-container>
 

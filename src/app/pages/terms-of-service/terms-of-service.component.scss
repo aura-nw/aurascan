@@ -1,0 +1,81 @@
+.box-terms {
+  background-color: var(--aura-gray-10);
+  color: var(--aura-white);
+  border-radius: 0 0 12px 12px;
+  margin-bottom: 16px;
+  .header-ellipse {
+    background-color: var(--aura-aqua-6);
+    height: 114px;
+    width: 100%;
+    border-radius: 50%;
+    z-index: 10000;
+    margin-top: -60px;
+    @media (max-width: 414px) {
+      height: 33px;
+      margin-top: -18px;
+    }
+  }
+  .box-content {
+    padding: 16px 12px 12px 12px;
+    @media (min-width: 992px) {
+      padding: 20px 96px 24px 96px;
+    }
+  }
+  p {
+    color: var(--aura-gray-2);
+  }
+  .bg-terms {
+    background-color: var(--aura-aqua-6);
+    padding: 28px 96px 10px;
+    @media (max-width: 414px) {
+      padding: 28px 20px 0px;
+      text-align: center;
+    }
+  }
+  .img-logo {
+    height: 24px;
+    @media (min-width: 992px) {
+      height: 60px;
+    }
+  }
+  .card-body {
+    padding: 32px 96px 24px 96px;
+  }
+  .item-terms {
+    margin-bottom: 12px;
+    @media (max-width: 414px) {
+      margin-left: 8px;
+    }
+    >div:nth-child(2) {
+      margin-left: 24px;
+      @media (max-width: 414px) {
+        margin-left: 8px;
+      }
+    }
+    .w-order-list {
+      min-width: 32px;
+      margin-left: 20px;
+    }
+    &.box-conduct .w-order-list {
+      min-width: 55px;
+      margin-left: 22px;
+      @media (max-width: 414px) {
+        margin-left: 4px;
+      }
+    }
+    &.box-service .w-order-list {
+      margin-left: 68px;
+      @media (max-width: 414px) {
+        margin-left: 15px;
+        min-width: 36px;
+      }
+    }
+    &.box-risk .w-order-list {
+      margin-left: 22px;
+      min-width: 45px;
+      @media (max-width: 414px) {
+        margin-left: 6px;
+      }
+    }
+  }
+}

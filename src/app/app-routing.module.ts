@@ -68,8 +68,15 @@ const routes: Routes = [
       },
       {
         path: 'export-csv',
-        loadChildren: () =>
-          import('./pages/export-csv/export-csv.module').then((m) => m.ExportCsvModule),
+        loadChildren: () => import('./pages/export-csv/export-csv.module').then((m) => m.ExportCsvModule),
+      },
+      {
+        path: 'terms',
+        loadChildren: () => import('./pages/terms-of-service/terms-of-service.module').then((m) => m.TermsModule),
+      },
+      {
+        path: 'privacyPolicy',
+        loadChildren: () => import('./pages/privacy-policy/privacy-policy.module').then((m) => m.PrivacyModule),
       },
     ],
   },
