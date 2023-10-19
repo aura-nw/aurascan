@@ -94,6 +94,10 @@ const routes: Routes = [
         path: 'terms',
         loadChildren: () => import('./pages/terms-of-service/terms-of-service.module').then((m) => m.TermsModule),
       },
+      {
+        path: 'privacyPolicy',
+        loadChildren: () => import('./pages/privacy-policy/privacy-policy.module').then((m) => m.PrivacyModule),
+      },
     ],
   },
   {
