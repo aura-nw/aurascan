@@ -108,7 +108,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public datepipe: DatePipe,
     private proposalService: ProposalService,
     private maskService: NgxMaskService,
-    private maskService: MaskPipe,
     private token: TokenService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
