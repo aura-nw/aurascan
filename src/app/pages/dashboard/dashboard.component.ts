@@ -281,8 +281,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         if (res?.block?.length > 0) {
           const blocks = convertDataBlock(res);
           this.dataSourceBlock = new MatTableDataSource(blocks);
-          this.isLoadingBlock = false;
         }
+        this.isLoadingBlock = false;
       },
       error: (e) => {
         this.isLoadingBlock = false;
@@ -307,8 +307,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.dataSourceTx.data = [...txs];
           }
           this.dataTx = txs;
-          this.isLoadingTx = false;
         }
+        this.isLoadingTx = false;
       },
       error: (e) => {
         this.isLoadingTx = false;
