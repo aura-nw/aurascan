@@ -344,7 +344,7 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   openDialog(data): void {
-    let dialogRef = this.dialog.open(ProposalVoteComponent, {
+    this.dialog.open(ProposalVoteComponent, {
       width: '431px',
       data: data,
     });

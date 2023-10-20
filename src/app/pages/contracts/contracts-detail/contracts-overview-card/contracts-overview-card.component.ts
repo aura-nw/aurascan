@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -30,7 +30,7 @@ export class ContractsOverviewCardComponent implements OnInit, OnChanges {
 
   ngOnInit() {}
 
-  async ngOnChanges(changes: SimpleChanges) {
+  async ngOnChanges() {
     const balanceReq = await this.contractService.getContractBalance(this.contractDetail.address);
     this.contractBalance = balanceReq?.data?.balances[0]?.amount ? balanceReq?.data?.balances[0]?.amount : 0;
     this.tokenService.getTokenMarketData({ contractAddress: this.contractDetail.address }).subscribe((res) => {
