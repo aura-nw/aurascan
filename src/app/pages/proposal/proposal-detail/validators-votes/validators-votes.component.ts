@@ -91,14 +91,10 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   getValidatorVotes(voteOption = null): void {
     if (this.proposalId) {
       this.proposalService
-        .getValidatorVotesFromIndexer(this.proposalId, {
-          limit: 100,
-          voteOption,
-        })
+        .getValidatorVotesFromIndexer(this.proposalId, { limit: 100, voteOption })
         .pipe(
           map((res) => {
             const validator = res.validator;
-
             const validatorsMap = validator.map((item, index) => {
               const validator_name = item.description?.moniker;
               const timestamp = _.get(item, 'vote[0].updated_at');

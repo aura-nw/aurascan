@@ -35,7 +35,7 @@ export class VotesComponent implements OnChanges, OnDestroy {
 
   voteDataList: IVotes[] = [];
   countVote: Map<string, number> = new Map<string, number>();
-
+  errTxt = null;
   voteDataListLoading = true;
   PROPOSAL_TABLE_MODE_VOTES = PROPOSAL_TABLE_MODE.VOTES;
 
@@ -81,11 +81,11 @@ export class VotesComponent implements OnChanges, OnDestroy {
           this.countVote.set(VOTE_OPTION.NO, res[VOTE_OPTION.NO]?.aggregate.count || 0);
           this.countVote.set(VOTE_OPTION.NO_WITH_VETO, res[VOTE_OPTION.NO_WITH_VETO]?.aggregate.count || 0);
         }
-
         this.voteDataListLoading = false;
       },
       error: (error) => {
         this.voteDataListLoading = true;
+        this.errTxt = error.status + ' ' + error.statusText;
       },
     });
   }
@@ -108,8 +108,15 @@ export class VotesComponent implements OnChanges, OnDestroy {
       this.currentTabId = tabId || 'all';
     }
 
-    this.proposalService.getListVoteFromIndexer(this.payloads, voteOption).subscribe((res) => {
-      this.voteDataList = res.vote;
+    this.proposalService.getListVoteFromIndexer(this.payloads, voteOption).subscribe({
+      next: (res) => {
+        this.voteDataList = res.vote;
+        this.voteDataListLoading = false;
+      },
+      error: (e) => {
+        this.voteDataListLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
     });
   }
 }
