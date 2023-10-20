@@ -28,7 +28,6 @@ export class AppComponent implements OnInit {
     private validatorService: ValidatorService,
   ) {}
   ngOnInit(): void {
-    this.getListNameTag();
     this.getInfoCommon();
     this.getPriceToken();
 
@@ -45,15 +44,25 @@ export class AppComponent implements OnInit {
       }
     }
 
+    // get name tag form local storage
+    const listNameTag = localStorage.getItem('listNameTag');
+    const userEmail = localStorage.getItem('userEmail');
+    if (listNameTag && !userEmail) {
+      try {
+        let data = JSON.parse(listNameTag);
+        this.globals.listNameTag = this.commonService.listNameTag = data;
+      } catch (e) {
+        this.getListNameTag();
+      }
+    } else {
+      this.getListNameTag();
+    }
+
     setInterval(() => {
       this.getInfoCommon();
       this.getPriceToken();
-      this.getListValidator();
-    }, 60000);
-
-    setInterval(() => {
       this.getListNameTag();
-    }, 20000);
+    }, 60000);
 
     setInterval(() => {
       this.getListValidator();
@@ -103,6 +112,7 @@ export class AppComponent implements OnInit {
     if (!userEmail) {
       await this.commonService.getListNameTag(payload).subscribe((res) => {
         this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
+        localStorage.setItem('listNameTag', JSON.stringify(res.data?.nameTags));
       });
       return;
     }
