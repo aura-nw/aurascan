@@ -167,7 +167,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getList(): void {
-    this.validatorService.getDataValidator(null).subscribe(
+    this.validatorService.getListValidator(null).subscribe(
       (res) => {
         this.lstUptime = res.validator;
         if (res.validator?.length > 0) {
