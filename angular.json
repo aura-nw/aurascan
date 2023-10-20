@@ -54,7 +54,6 @@
                             "src/assets/scss/app.scss",
                             "src/assets/scss/custom-material.scss",
                             "src/assets/scss/icons.scss",
-                            "src/styles.scss",
                             "./node_modules/phosphor-icons/src/css/icons.css"
                         ],
                         "scripts": [
