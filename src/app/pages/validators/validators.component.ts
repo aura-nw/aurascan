@@ -55,13 +55,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   rawData: any[];
   sortedData: any;
   clicked = false;
-  totalDelegator = 0;
   amountFormat = undefined;
   isExceedAmount = false;
   userAddress = '';
   selectedValidator: string;
-  searchNullData = false;
-  listStakingValidator = [];
   validatorDetail: any;
   statusValidator = STATUS_VALIDATOR;
   typeValidator = STATUS_VALIDATOR.Active;
@@ -74,8 +71,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstValidator = [];
   lstReValidator = [];
   lstUndelegate = [];
-  numberCode = 0;
-  arrBlocksMiss = [];
   lstValidatorOrigin = [];
   lstUptime = [];
   TABS = [
@@ -89,6 +84,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     },
   ];
   maxNumberInput = MAX_NUMBER_INPUT;
+  abc;
 
   timerUnSub: Subscription;
   errorExceedAmount = false;
@@ -103,7 +99,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
   staking_APR = 0;
-  validatorImgArr;
   maxPercentPower = 0;
   typeActive = 'BOND_STATUS_BONDED';
   countProposal = 0;
