@@ -313,10 +313,6 @@ export class TransactionService extends CommonService {
       $listFilterCW20: [String!] = null
       $listFilterCW721: [String!] = null
       $txHash: String = null
-      $msgTypeNotIn: [String!] = null
-      $compositeKeyIn: [String!] = null
-      $heightGTE: Int = null
-      $heightLTE: Int = null
     ) {
       ${this.envDB} {
         cw20_activity(
@@ -368,23 +364,6 @@ export class TransactionService extends CommonService {
             }
           }
         }
-        coin_transfer: transaction(
-          where: {
-            hash: { _eq: $txHash }
-            transaction_messages: { type: { _nin: $msgTypeNotIn } }
-          }
-        ) {
-          event_attributes(
-            where: {
-              composite_key: { _in: $compositeKeyIn }
-              event: { tx_msg_index: { _is_null: false } }
-              block_height: { _lte: $heightLTE, _gte: $heightGTE }
-            }
-          ) {
-            composite_key
-            value
-          }
-        }
       }
     }
     `;
@@ -393,7 +372,6 @@ export class TransactionService extends CommonService {
         query: operationsDoc,
         variables: {
           txHash: hash,
-          compositeKeyIn: ['coin_spent.spender', 'coin_received.receiver', 'coin_spent.amount', 'coin_received.amount'],
           listFilterCW20: CW20_TRACKING,
           listFilterCW721: CW721_TRACKING,
         },
