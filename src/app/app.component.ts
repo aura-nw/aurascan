@@ -25,23 +25,48 @@ export class AppComponent implements OnInit {
     private globals: Globals,
     private tokenService: TokenService,
     private nameTagService: NameTagService,
-    private validatorService: ValidatorService
+    private validatorService: ValidatorService,
   ) {}
   ngOnInit(): void {
-    this.getListNameTag();
     this.getInfoCommon();
     this.getPriceToken();
-    this.getListValidator();
+
+    // get list name validator form local storage
+    const listValidatorName = localStorage.getItem('listValidator');
+    if (!listValidatorName) {
+      this.getListValidator();
+    } else {
+      try {
+        let data = JSON.parse(listValidatorName);
+        this.commonService.listValidator = data;
+      } catch (e) {
+        this.getListValidator();
+      }
+    }
+
+    // get name tag form local storage
+    const listNameTag = localStorage.getItem('listNameTag');
+    const userEmail = localStorage.getItem('userEmail');
+    if (listNameTag && !userEmail) {
+      try {
+        let data = JSON.parse(listNameTag);
+        this.globals.listNameTag = this.commonService.listNameTag = data;
+      } catch (e) {
+        this.getListNameTag();
+      }
+    } else {
+      this.getListNameTag();
+    }
 
     setInterval(() => {
       this.getInfoCommon();
       this.getPriceToken();
-      this.getListValidator();
+      this.getListNameTag();
     }, 60000);
 
     setInterval(() => {
-      this.getListNameTag();
-    }, 20000);
+      this.getListValidator();
+    }, 600000);
 
     // if (this.isTestnet) {
     //   let el = document.createElement('div');
@@ -87,6 +112,7 @@ export class AppComponent implements OnInit {
     if (!userEmail) {
       await this.commonService.getListNameTag(payload).subscribe((res) => {
         this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
+        localStorage.setItem('listNameTag', JSON.stringify(res.data?.nameTags));
       });
       return;
     }
@@ -109,7 +135,7 @@ export class AppComponent implements OnInit {
           isPrivate = true;
           id = privateData.id;
         }
-        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id};
+        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
       });
 
       // get other data of private list
@@ -131,6 +157,7 @@ export class AppComponent implements OnInit {
     this.validatorService.getListNameValidator(null).subscribe((res) => {
       if (res.validator?.length > 0) {
         this.commonService.listValidator = res.validator;
+        localStorage.setItem('listValidator', JSON.stringify(this.commonService.listValidator));
       }
     });
   }
