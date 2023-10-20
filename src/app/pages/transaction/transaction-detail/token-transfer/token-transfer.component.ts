@@ -58,53 +58,39 @@ export class TokenTransferComponent implements OnInit {
       return;
     }
 
-    this.transactionService.getListTransferFromTx(this.transaction['tx_hash']).subscribe((res) => {
-      let coinTransfer = [];
-      res.coin_transfer?.forEach((event) => {
-        event.event_attributes.forEach((element, index) => {
-          //get first data with UnDelegate && Delegate
-          if (
-            this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Undelegate ||
-            this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Delegate
-          ) {
-            if (event.event_attributes?.length < 8 || index >= 3) {
-              return;
-            }
-          }
+    let coinTransfer = [];
+    this.transaction['tx'].events?.forEach((element, index) => {
+      //skip case index = 0, tx fee
+      if (index === 0) {
+        return;
+      }
 
-          if (element.composite_key === 'coin_received.receiver') {
-            let indexData;
-            // check index of receiver
-            if (index % 2 !== 0) {
-              indexData = index - 1;
-            } else {
-              indexData = index + 1;
-            }
-            const arrAmount = event.event_attributes[indexData]?.value?.split(',');
-            arrAmount.forEach((amountTemp) => {
-              let cw20_contract = {};
-              let dataAmount = {};
-              cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
-              cw20_contract['name'] = cw20_contract['name'] || this.denom;
-              let decimal = cw20_contract['decimal'] || this.coinDecimals;
-              if (amountTemp.indexOf('ibc') >= 0) {
-                dataAmount = this.commonService.mappingNameIBC(amountTemp);
-                cw20_contract['name'] = dataAmount['name'];
-                cw20_contract['symbol'] = dataAmount['display'];
-                decimal = dataAmount['decimal'];
-              }
-              let amount = +amountTemp.match(/\d+/g)[0];
-              let from = event.event_attributes[index - 2]?.value;
-              if (event.event_attributes[index - 2].composite_key === 'coin_received.receiver') {
-                from = event.event_attributes[0]?.value;
-              }
-              const to = event.event_attributes[index].value;
-              coinTransfer.push({ amount, cw20_contract, from, to, decimal });
-            });
+      if (element.type === 'coin_spent') {
+        const from = element.attributes?.find((k) => k.key === 'spender')?.value;
+        let to;
+        if (this.transaction['tx'].events[index + 1]?.type === 'coin_received') {
+          to = this.transaction['tx'].events[index + 1].attributes?.find((k) => k.key === 'receiver')?.value;
+        }
+        const amount = element.attributes?.find((k) => k.key === 'amount')?.value?.split(',');
+        amount?.forEach((amountTemp) => {
+          let cw20_contract = {};
+          let decimal = cw20_contract['decimal'] || this.coinDecimals;
+          let dataAmount = {};
+          cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
+          cw20_contract['name'] = cw20_contract['name'] || this.denom;
+          if (amountTemp.indexOf('ibc') >= 0) {
+            dataAmount = this.commonService.mappingNameIBC(amountTemp);
+            cw20_contract['name'] = dataAmount['name'];
+            cw20_contract['symbol'] = dataAmount['display'];
+            decimal = dataAmount['decimal'];
           }
+          let amount = +amountTemp.match(/\d+/g)[0];
+          coinTransfer.push({ amount, cw20_contract, from, to, decimal });
         });
-      });
+      }
+    });
 
+    this.transactionService.getListTransferFromTx(this.transaction['tx_hash']).subscribe((res) => {
       if (res?.cw721_activity?.length > 0) {
         // remove record approve && revoke
         const arrCW721 = res.cw721_activity?.filter((k) => k.action !== 'approve' && k.action !== 'revoke');
