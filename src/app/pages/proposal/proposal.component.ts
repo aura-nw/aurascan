@@ -27,7 +27,7 @@ export class ProposalComponent implements OnInit {
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: number } = null;
   chainId = this.environmentService.chainId;
-  errTxt = null;
+  errTxt: string;
   isLoading = true;
   // data table
   templates: Array<TableTemplate> = [

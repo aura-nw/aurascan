@@ -50,7 +50,7 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   voteDataListLoading = true;
   countVote: Map<string, number> = new Map<string, number>();
   proposalValidatorVote = PROPOSAL_TABLE_MODE.VALIDATORS_VOTES;
-  errTxt = null;
+  errTxt: string;
 
   voteData = {
     all: null,

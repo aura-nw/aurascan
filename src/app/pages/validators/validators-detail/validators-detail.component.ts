@@ -74,9 +74,9 @@ export class ValidatorsDetailComponent implements OnInit {
   nextKey = null;
   currentNextKey = null;
   nextKeyBlock = null;
-  errTxtProposedBlock = null;
-  errTxtDelegators = null;
-  errTxtPowerEvent = null;
+  errTxtProposedBlock: string;
+  errTxtDelegators: string;
+  errTxtPowerEvent: string;
   nextKeyDelegator = null;
   currentNextKeyDelegator = null;
 

@@ -35,7 +35,7 @@ export class VotesComponent implements OnChanges, OnDestroy {
 
   voteDataList: IVotes[] = [];
   countVote: Map<string, number> = new Map<string, number>();
-  errTxt = null;
+  errTxt: string;
   voteDataListLoading = true;
   PROPOSAL_TABLE_MODE_VOTES = PROPOSAL_TABLE_MODE.VOTES;
 
