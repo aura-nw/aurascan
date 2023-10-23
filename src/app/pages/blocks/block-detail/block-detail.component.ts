@@ -55,6 +55,8 @@ export class BlockDetailComponent implements OnInit {
   loadingTxs = true;
   isRawData = false;
   isCurrentMobile;
+  errTxt: string;
+  errTxtTx: string;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
     tap((data) => {
@@ -101,8 +103,8 @@ export class BlockDetailComponent implements OnInit {
       limit: 1,
       height: this.blockHeight,
     };
-    this.blockService.getDataBlockDetail(payload).subscribe(
-      async (res) => {
+    this.blockService.getDataBlockDetail(payload).subscribe({
+      next: async (res) => {
         if (res?.block?.length > 0) {
           const block = convertDataBlock(res)[0];
           block['round'] = _.get(res.block[0], 'data.block.last_commit.round');
@@ -126,9 +128,17 @@ export class BlockDetailComponent implements OnInit {
               limit: 1,
               hash: tx,
             };
-            this.transactionService.getListTx(payload).subscribe((res) => {
-              if (res?.transaction[0]) {
-                txs.push(res?.transaction[0]);
+            this.transactionService.getListTx(payload).subscribe({
+              next: (res) => {
+                if (res?.transaction[0]) {
+                  txs.push(res?.transaction[0]);
+                }
+              },
+              error: (e) => {
+                this.loadingTxs = false;
+                
+                this.errTxtTx = e.status + ' ' + e.statusText;
+                console.log(this.errTxtTx);
               }
             });
           }
@@ -154,12 +164,13 @@ export class BlockDetailComponent implements OnInit {
             this.getDetailByHeight();
           }, 10000);
         }
-      },
-      () => {},
-      () => {
         this.loading = false;
       },
-    );
+      error: (e) => {
+        this.loading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
+    });
   }
 
   checkAmountValue(amount: number, txHash: string) {
