@@ -7,7 +7,9 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 import { saveAs } from 'file-saver';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
+declare var grecaptcha: any;
 @Component({
   selector: 'app-export-csv',
   templateUrl: './export-csv.component.html',
@@ -28,18 +30,22 @@ export class ExportCsvComponent implements OnInit {
   maxDateEnd;
   tabsData = TabsAccountLink;
   isDownload = false;
-  msgErrorLimit =
-    '"You have reached the limit for the number of consecutive data exports, please try again after 5 minutes."';
+  responseCaptcha;
+  isValidCaptcha = false;
+
+  siteKey = this.environmentService.configValue.siteKeyCaptcha;
 
   constructor(
     private fb: FormBuilder,
     private commonService: CommonService,
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
+    private environmentService: EnvironmentService
   ) {}
 
   ngOnInit(): void {
     this.formInit();
+    this.renderCaptcha();
 
     // check exit email
     this.userEmail = localStorage.getItem('userEmail');
@@ -87,7 +93,7 @@ export class ExportCsvComponent implements OnInit {
     }
   }
 
-  downloadCSV() {
+  downloadCSV(responseCaptcha) {
     //return if downloading
     if (this.isDownload) {
       return;
@@ -107,6 +113,7 @@ export class ExportCsvComponent implements OnInit {
       dataRangeType: this.isFilterDate ? 'date' : 'height',
       min: this.isFilterDate ? startDate : fromBlock,
       max: this.isFilterDate ? endDate : toBlock,
+      responseCaptcha: responseCaptcha,
     };
 
     this.isDownload = true;
@@ -116,7 +123,7 @@ export class ExportCsvComponent implements OnInit {
       },
       error: () => {
         this.isDownload = false;
-        this.toastr.error(this.msgErrorLimit);
+        this.toastr.error('Error when download, try again later');
       },
     });
   }
@@ -128,6 +135,7 @@ export class ExportCsvComponent implements OnInit {
     const fileName = 'export-account-' + payload.dataType + '-' + payload.address + '.csv';
     saveAs(data, fileName);
     this.isDownload = false;
+    this.responseCaptcha = grecaptcha.reset();
   }
 
   get getAddress() {
@@ -194,6 +202,11 @@ export class ExportCsvComponent implements OnInit {
       return false;
     }
 
+    //check valid captcha
+    if (!this.isValidCaptcha) {
+      return false;
+    }
+
     return true;
   }
 
@@ -211,5 +224,29 @@ export class ExportCsvComponent implements OnInit {
     this.formInit();
     this.dataType = '';
     this.isFilterDate = true;
+  }
+
+  getReponseCaptcha() {
+    this.downloadCSV(grecaptcha.getResponse(this.responseCaptcha));
+  }
+
+  verifyCallback() {
+    this.isValidCaptcha = true;
+    this.checkFormValid();
+  }
+
+  errorCallback() {
+    this.isValidCaptcha = false;
+    this.checkFormValid();
+  }
+
+  renderCaptcha() {
+    this.responseCaptcha = grecaptcha.render('box_recaptcha', {
+      sitekey: this.siteKey,
+      callback: this.verifyCallback.bind(this),
+      theme: 'dark',
+      'expired-callback': this.errorCallback.bind(this),
+      'error-callback': this.errorCallback.bind(this),
+    });
   }
 }

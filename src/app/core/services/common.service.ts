@@ -192,8 +192,10 @@ export class CommonService {
   }
 
   exportCSV(payload, getPrivate = false): Observable<any> {
+    const headers = new HttpHeaders().append('recaptcha', payload.responseCaptcha);
     const options = {
       responseType: 'blob' as 'json',
+      headers,
     };
     const privateUrl = getPrivate ? '/private-name-tag' : '';
 
