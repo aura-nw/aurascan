@@ -135,6 +135,7 @@ export class ExportCsvComponent implements OnInit {
     const fileName = 'export-account-' + payload.dataType + '-' + payload.address + '.csv';
     saveAs(data, fileName);
     this.isDownload = false;
+    this.isValidCaptcha = false;
     this.responseCaptcha = grecaptcha.reset();
   }
 
