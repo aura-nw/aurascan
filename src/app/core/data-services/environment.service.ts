@@ -21,6 +21,7 @@ export interface IConfiguration {
     stakingTime: string;
     blockTime: number;
     quotaSetPrivateName: number;
+    siteKeyCaptcha: string;
     coins: {
       name: string;
       display: string;

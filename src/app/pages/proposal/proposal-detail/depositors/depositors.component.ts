@@ -63,9 +63,6 @@ export class DepositorsComponent implements OnInit, OnDestroy {
 
           this.getDataDeposit(payload);
         },
-        complete: () => {
-          this.loading = false;
-        },
       });
   }
 

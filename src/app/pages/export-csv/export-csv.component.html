@@ -10,7 +10,7 @@
 <div class="col-12 col-lg-6">
   <form
     [formGroup]="csvForm"
-    (ngSubmit)="downloadCSV()"
+    (ngSubmit)="getReponseCaptcha()"
     class="aura-form single-input-field csv-form"
     autocomplete="off">
     <!-- Export data type -->
@@ -207,16 +207,16 @@
       <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
     </div>
 
-    <!-- button group -->
-    <div class="d-flex py-6 justify-content-center justify-content-lg-end mt-3 mt-lg-0 button-group">
+    <div id="box_recaptcha" class="mt-6"></div>
+    <br />
+    <div class="d-flex mb-6 justify-content-center justify-content-lg-end mt-3 mt-lg-0 button-group">
       <button class="button button--md button-pill button-outline" type="button" (click)="resetData()">
         <span>Reset</span>
       </button>
       <button
         class="button button--md button-outline--gradient button-pill button-flat btn-create ml-4"
-        type="button"
+        type="submit"
         [class.pl-1]="isDownload"
-        (click)="downloadCSV()"
         [disabled]="!checkFormValid()">
         <img
           [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"

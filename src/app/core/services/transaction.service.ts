@@ -241,7 +241,7 @@ export class TransactionService extends CommonService {
           height
           hash
           timestamp
-          event_attributes{
+          event_attributes (where: {block_height: { _lte: $heightLT, _gte: $heightGT }}){
             value
             composite_key
           }
