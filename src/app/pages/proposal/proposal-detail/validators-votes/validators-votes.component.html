@@ -23,6 +23,7 @@
         [type]="proposalValidatorVote"
         [length]="pageDataValidator.length"
         [data]="voteDataList"
+        [errTxt]="errTxt"
         (pageEventChange)="pageEventChange($event)"
         *ngIf="!voteDataListLoading"></app-proposal-table>
       <div *ngIf="voteDataListLoading">
