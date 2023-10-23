@@ -64,6 +64,11 @@ export class AppComponent implements OnInit {
       this.getListNameTag();
     }, 60000);
 
+    let intervalGetNameTag = userEmail ? 20000 : 600000;
+    setInterval(() => {
+      this.getListNameTag();
+    }, intervalGetNameTag);
+
     setInterval(() => {
       this.getListValidator();
     }, 600000);
