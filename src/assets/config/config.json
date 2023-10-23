@@ -15,6 +15,7 @@
     "stakingTime": "86400",
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
+    "siteKeyCaptcha": "6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc",
     "coins": [
       {
         "name": "Serenity Aura",
