@@ -1,5 +1,6 @@
 <h1 class="mb-4 mb-lg-6 text--white">Contracts</h1>
-<div class="d-lg-flex align-items-center justify-content-between">
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+<div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt">
   <div class="filter-group d-flex align-items-center flex-nowrap">
     <button
       class="button button-pill button-flat"
@@ -221,6 +222,6 @@
     </div>
   </ng-container>
   <ng-template #noValues>
-    <app-table-no-data></app-table-no-data>
+    <app-table-no-data [textNull]="errTxt"></app-table-no-data>
   </ng-template>
 </section>
