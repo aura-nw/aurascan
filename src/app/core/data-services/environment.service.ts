@@ -26,6 +26,7 @@ export interface IConfiguration {
   notice: { content: string; url: string };
   googleClientId: string;
   quotaSetPrivateName: number;
+  siteKeyCaptcha: string;
 }
 
 @Injectable()
@@ -52,7 +53,8 @@ export class EnvironmentService {
     horoscopePathApi: '',
     notice: { content: '', url: '' },
     googleClientId: '',
-    quotaSetPrivateName: null
+    quotaSetPrivateName: null,
+    siteKeyCaptcha: null
   });
 
   get configValue(): IConfiguration {
@@ -91,7 +93,8 @@ export class EnvironmentService {
           horoscopePathApi: config['horoscopePathApi'],
           notice: config['notice'] || { content: '', url: '' },
           googleClientId: config['googleClientId'] || '3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08.apps.googleusercontent.com',
-          quotaSetPrivateName: config['quotaSetPrivateName'] || 10
+          quotaSetPrivateName: config['quotaSetPrivateName'] || 10,
+          siteKeyCaptcha: config['siteKeyCaptcha'] || '6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc'
         };
 
         this.config.next(data);
