@@ -102,6 +102,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   countProposal = 0;
   dataUserDelegate;
   loadingData = true;
+  errTxt: string;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -160,8 +161,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getList(): void {
-    this.validatorService.getListValidator(null).subscribe(
-      (res) => {
+    this.validatorService.getListValidator(null).subscribe({
+      next: (res) => {
         this.lstUptime = res.validator;
         if (res.validator?.length > 0) {
           let dataFilter = res.validator.filter((event) =>
@@ -219,12 +220,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.dataSource.sort = this.sort;
           this.searchValidator();
         }
-      },
-      () => {},
-      () => {
         this.loadingData = false;
       },
-    );
+      error: (e) => {
+        this.loadingData = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      }
+    });
   }
 
   getCountProposal() {

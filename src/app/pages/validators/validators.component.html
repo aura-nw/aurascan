@@ -30,7 +30,7 @@
           >
         </div>
       </div>
-      <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches">
+      <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches && !errTxt">
         <div class="input-group">
           <input
             type="text"
@@ -384,7 +384,7 @@
         </ng-container>
       </ng-container>
       <ng-template #noValues>
-        <app-table-no-data></app-table-no-data>
+        <app-table-no-data [textNull]="errTxt"></app-table-no-data>
       </ng-template>
     </div>
   </div>
