@@ -1,6 +1,8 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import * as moment from 'moment';
 import { MaskPipe } from 'ngx-mask';
@@ -9,7 +11,6 @@ import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
-import { exportChart } from 'src/app/core/helpers/export';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
@@ -20,10 +21,8 @@ import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
-import { Globals, convertDataBlock, convertDataTransaction } from '../../global/global';
+import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import { Router } from '@angular/router';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-dashboard',
@@ -93,8 +92,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   endData = false;
   destroy$ = new Subject();
   isMobileMatched = false;
-  breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
   currentAddress = null;
+  isLoadingBlock = true;
+  isLoadingTx = true;
+
+  breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
 
   constructor(
     public commonService: CommonService,
@@ -242,7 +244,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       scaleMargins: {
         top: 0.3,
         bottom: 0.4,
-      }
+      },
     });
   }
 
@@ -272,31 +274,43 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const payload = {
       limit: this.PAGE_SIZE,
     };
-    this.blockService.getDataBlock(payload).subscribe((res) => {
-      if (res?.block?.length > 0) {
-        const blocks = convertDataBlock(res);
-        this.dataSourceBlock = new MatTableDataSource(blocks);
-      }
-    });
+    this.blockService.getDataBlock(payload).subscribe(
+      (res) => {
+        if (res?.block?.length > 0) {
+          const blocks = convertDataBlock(res);
+          this.dataSourceBlock = new MatTableDataSource(blocks);
+        }
+      },
+      () => {},
+      () => {
+        this.isLoadingBlock = false;
+      },
+    );
   }
 
   getListTransaction(): void {
     const payload = {
       limit: this.PAGE_SIZE,
     };
-    this.transactionService.getListTx(payload).subscribe((res) => {
-      this.dataSourceTx.data = [];
-      if (res?.transaction?.length > 0) {
-        const txs = convertDataTransaction(res, this.coinInfo);
+    this.transactionService.getListTx(payload).subscribe(
+      (res) => {
+        this.dataSourceTx.data = [];
+        if (res?.transaction?.length > 0) {
+          const txs = convertDataTransactionSimple(res, this.coinInfo);
 
-        if (this.dataSourceTx.data.length > 0) {
-          this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
-        } else {
-          this.dataSourceTx.data = [...txs];
+          if (this.dataSourceTx.data.length > 0) {
+            this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
+          } else {
+            this.dataSourceTx.data = [...txs];
+          }
+          this.dataTx = txs;
         }
-        this.dataTx = txs;
-      }
-    });
+      },
+      () => {},
+      () => {
+        this.isLoadingTx = false;
+      },
+    );
   }
 
   getCoinInfo(type: string) {

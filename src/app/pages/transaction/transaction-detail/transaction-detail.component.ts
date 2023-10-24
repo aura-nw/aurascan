@@ -62,7 +62,7 @@ export class TransactionDetailComponent implements OnInit {
         limit: 1,
         hash: this.txHash,
       };
-      this.transactionService.getListTx(payload).subscribe(
+      this.transactionService.getListTxDetail(payload).subscribe(
         (res) => {
           if (res?.transaction?.length > 0) {
             const txs = convertDataTransaction(res, this.coinInfo);

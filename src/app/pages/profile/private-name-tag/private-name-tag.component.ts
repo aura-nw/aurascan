@@ -15,6 +15,7 @@ import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -46,6 +47,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  quota = this.environmentService.configValue.quotaSetPrivateName;
 
   constructor(
     public commonService: CommonService,
@@ -53,6 +55,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private toastr: NgxToastrService,
     private global: Globals,
+    private environmentService: EnvironmentService
   ) {}
 
   ngOnInit(): void {
@@ -94,13 +97,20 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   getListPrivateName() {
     this.textSearch = this.textSearch?.trim();
     const payload = {
-      limit: 10,
+      limit: this.pageData.pageSize,
       keyword: this.textSearch || '',
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
 
     this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
-      this.countFav = res.data?.filter((k) => k.isFavorite === 1)?.length || 0;
+      this.countFav = res.meta.countFavorite || 0;
+      if (this.textSearch?.length > 0) {
+        this.countFav = 0;
+        //check record isFavorite
+        if (res.data?.length > 0 && res.data[0].isFavorite == 1) {
+          this.countFav = 1;
+        }
+      }
       res.data?.forEach((element) => {
         element['type'] = isContract(element.address) ? 'contract' : 'account';
       });
@@ -171,7 +181,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       this.toastr.successWithTitle('Private name tag removed!', 'Success');
       setTimeout(() => {
         this.pageData.length--;
-        this.pageEvent(this.pageData);
+        this.pageChange.selectPage(0);
       }, 2000);
     });
   }

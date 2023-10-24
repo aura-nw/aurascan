@@ -10,7 +10,7 @@
 
 <div class="mt-4">
   <div class="d-lg-flex align-items-center justify-content-between">
-    <div class="txt-total-name">Total {{ countFav }}/{{ pageData?.length }} addresses tagged</div>
+    <div class="txt-total-name">Total {{ pageData?.length }}/{{ quota }} addresses tagged</div>
     <div class="filter-group d-flex align-items-center flex-nowrap mt-2 mt-lg-0">
       <form class="aura-form single-input-field search-form private-search-form">
         <div class="input-group px-6">
@@ -76,7 +76,7 @@
                   </a>
                   <div class="aura-tooltip-contain">
                     <div
-                      class="text--gray-5 ellipsis-text"
+                      class="text--gray-5 line-claim"
                       [class.aura-tooltip-object]="data.note"
                       style="max-width: 200px; width: fit-content">
                       {{ data.note || 'Note:-' }}
@@ -127,7 +127,7 @@
             <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
               <span class="fw-semibold">{{ data.address | cutStringPipe : 8 : 8 }}</span>
             </a>
-            <div class="text--gray-5 ellipsis-text w-100" [class.aura-tooltip-object]="data.note">
+            <div class="text--gray-5 line-claim w-100" [class.aura-tooltip-object]="data.note">
               {{ data.note || 'Note:-' }}
             </div>
           </div>
@@ -177,7 +177,7 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Private name tag</div>
-            <div class="text--white ellipsis-text">{{ data.nameTag }}</div>
+            <div class="text--white line-claim">{{ data.nameTag }}</div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Added time</div>
