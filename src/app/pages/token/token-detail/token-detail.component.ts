@@ -18,7 +18,7 @@ export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
   tokenDetail: any;
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   contractType = ContractRegisterType;
 

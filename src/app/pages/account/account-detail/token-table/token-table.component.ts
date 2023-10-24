@@ -68,10 +68,10 @@ export class TokenTableComponent implements OnChanges {
   dataTable = [];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
-  image_s3 = this.environmentService.configValue.image_s3;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinMiniDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
 
   constructor(

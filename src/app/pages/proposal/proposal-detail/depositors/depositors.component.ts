@@ -20,7 +20,7 @@ export class DepositorsComponent implements OnInit, OnDestroy {
   tableData = [];
   loading = true;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   dataLength = 0;
   proposalDeposit = PROPOSAL_TABLE_MODE.DEPOSITORS;
 
@@ -62,9 +62,6 @@ export class DepositorsComponent implements OnInit, OnDestroy {
           };
 
           this.getDataDeposit(payload);
-        },
-        complete: () => {
-          this.loading = false;
         },
       });
   }

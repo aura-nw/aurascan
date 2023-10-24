@@ -49,7 +49,7 @@ export class AccountDetailComponent implements OnInit {
   destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-  timeStaking = `${this.environmentService.configValue.timeStaking}`;
+  timeStaking = `${this.environmentService.stakingTime}`;
 
   totalValueToken = 0;
   totalValueNft = 0;

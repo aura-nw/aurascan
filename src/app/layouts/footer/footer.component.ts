@@ -12,7 +12,7 @@ import { EnvironmentService } from '../../core/data-services/environment.service
  * Footer Component
  */
 export class FooterComponent implements OnInit {
-  chainId = this.environmentService.configValue.chainId;
+  chainId = this.environmentService.chainId;
 
   dashboardURL = 'dashboard';
   blocksURL = 'blocks';

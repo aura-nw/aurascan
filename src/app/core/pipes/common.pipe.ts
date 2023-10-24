@@ -65,7 +65,7 @@ export class ImageURL implements PipeTransform {
     const replacePath = /\..\//gi;
     value = value.replace(replacePath, '');
     const replaceLink = /assets\//gi;
-    value = value.replace(replaceLink, this.environmentService.configValue.image_s3);
+    value = value.replace(replaceLink, this.environmentService.imageUrl);
     return value;
   }
 }
@@ -90,7 +90,7 @@ export class BalanceOf implements PipeTransform {
 export class ReplaceIpfs implements PipeTransform {
   constructor(private environmentService: EnvironmentService) {}
   transform(value: string): string {
-    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
+    return this.environmentService.ipfsDomain + value.replace('://', '/');
   }
 }
 

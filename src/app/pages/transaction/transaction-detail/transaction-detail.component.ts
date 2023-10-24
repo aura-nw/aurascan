@@ -31,9 +31,9 @@ export class TransactionDetailComponent implements OnInit {
     },
   ];
 
-  chainId = this.environmentService.configValue.chainId;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  chainId = this.environmentService.chainId;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
   loading = true;
   seeLess = false;
   isDisplayMore = false;
@@ -62,7 +62,7 @@ export class TransactionDetailComponent implements OnInit {
         limit: 1,
         hash: this.txHash,
       };
-      this.transactionService.getListTx(payload).subscribe(
+      this.transactionService.getListTxDetail(payload).subscribe(
         (res) => {
           if (res?.transaction?.length > 0) {
             const txs = convertDataTransaction(res, this.coinInfo);

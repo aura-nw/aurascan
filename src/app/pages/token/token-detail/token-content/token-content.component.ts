@@ -41,10 +41,10 @@ export class TokenContentComponent implements OnInit {
   activeTabID = 0;
   textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     private route: ActivatedRoute,

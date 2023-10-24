@@ -12,8 +12,8 @@ import { LCD_COSMOS } from '../constants/url.constant';
   providedIn: 'root',
 })
 export class ValidatorService extends CommonService {
-  apiUrl = `${this.environmentService.configValue.beUri}`;
-  chainInfo = this.environmentService.configValue.chain_info;
+  apiUrl = `${this.environmentService.backend}`;
+  chainInfo = this.environmentService.chainInfo;
   stakingAPRSubject: BehaviorSubject<number>;
 
   constructor(
@@ -51,16 +51,8 @@ export class ValidatorService extends CommonService {
           commission
           consensus_address
           consensus_hex_address
-          created_at
-          consensus_pubkey
-          delegator_shares
-          delegators_count
-          delegators_last_height
           description
-          index_offset
           jailed
-          jailed_until
-          min_self_delegation
           missed_blocks_counter
           operator_address
           percent_voting_power
@@ -68,11 +60,42 @@ export class ValidatorService extends CommonService {
           start_height
           status
           tokens
-          tombstoned
-          unbonding_height
-          unbonding_time
           uptime
+          image_url
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload?.limit || 200,
+          offset: payload?.offset || 0,
+          operatorAddress: payload?.operatorAddress || null,
+        },
+        operationName: 'getDataValidator',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListValidator(payload) {
+    const operationsDoc = `
+    query getListValidator($offset: Int = 0, $limit: Int = 10, $operatorAddress: String = null) {
+      ${this.envDB} {
+        validator(limit: $limit, offset: $offset, order_by: {tokens: desc}, where: {operator_address: {_eq: $operatorAddress}, status: {_neq: "UNRECOGNIZED"}}) {
+          account_address
+          commission
+          consensus_address
+          consensus_hex_address
+          description
+          jailed
           missed_blocks_counter
+          operator_address
+          percent_voting_power
+          status
+          tokens
+          uptime
           image_url
           vote_aggregate {
             aggregate {
@@ -96,7 +119,7 @@ export class ValidatorService extends CommonService {
           offset: payload?.offset || 0,
           operatorAddress: payload?.operatorAddress || null,
         },
-        operationName: 'getDataValidator',
+        operationName: 'getListValidator',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

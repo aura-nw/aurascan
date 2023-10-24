@@ -43,7 +43,7 @@ export class TokenCw721Component implements OnInit {
   isSorting = true;
   searchSubject = new Subject();
   destroy$ = new Subject<void>();
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   constructor(

@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   isError = false;
   errorResendMsg = 'Only can do resend email after 5 minute, please wait and click Resend again.';
 
-  clientId = this.environmentService.configValue.googleClientId;
+  clientId = this.environmentService.googleClientId;
 
   constructor(
     private fb: UntypedFormBuilder,

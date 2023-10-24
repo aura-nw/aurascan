@@ -162,9 +162,10 @@ $textColors: (
   color: var(--aura-blue-3link);
 }
 
-.hover-link, a.text--primary {
+.hover-link,
+a.text--primary {
   cursor: pointer;
-  transition: all .35s ease-in-out;
+  transition: all 0.35s ease-in-out;
   &:hover {
     color: var(--aura-green-3) !important;
   }

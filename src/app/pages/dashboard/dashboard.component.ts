@@ -21,7 +21,7 @@ import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
-import { Globals, convertDataBlock, convertDataTransaction } from '../../global/global';
+import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
 @Component({
@@ -54,8 +54,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   dataTx: any[];
   timerUnSub: Subscription;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   chart: IChartApi = null;
   areaSeries: ISeriesApi<'Area'> = null;
@@ -92,8 +92,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   endData = false;
   destroy$ = new Subject<void>();
   isMobileMatched = false;
-  breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
   currentAddress = null;
+  isLoadingBlock = true;
+  isLoadingTx = true;
+
+  breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
 
   constructor(
     public commonService: CommonService,
@@ -271,31 +274,43 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const payload = {
       limit: this.PAGE_SIZE,
     };
-    this.blockService.getDataBlock(payload).subscribe((res) => {
-      if (res?.block?.length > 0) {
-        const blocks = convertDataBlock(res);
-        this.dataSourceBlock = new MatTableDataSource(blocks);
-      }
-    });
+    this.blockService.getDataBlock(payload).subscribe(
+      (res) => {
+        if (res?.block?.length > 0) {
+          const blocks = convertDataBlock(res);
+          this.dataSourceBlock = new MatTableDataSource(blocks);
+        }
+      },
+      () => {},
+      () => {
+        this.isLoadingBlock = false;
+      },
+    );
   }
 
   getListTransaction(): void {
     const payload = {
       limit: this.PAGE_SIZE,
     };
-    this.transactionService.getListTx(payload).subscribe((res) => {
-      this.dataSourceTx.data = [];
-      if (res?.transaction?.length > 0) {
-        const txs = convertDataTransaction(res, this.coinInfo);
+    this.transactionService.getListTx(payload).subscribe(
+      (res) => {
+        this.dataSourceTx.data = [];
+        if (res?.transaction?.length > 0) {
+          const txs = convertDataTransactionSimple(res, this.coinInfo);
 
-        if (this.dataSourceTx.data.length > 0) {
-          this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
-        } else {
-          this.dataSourceTx.data = [...txs];
+          if (this.dataSourceTx.data.length > 0) {
+            this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
+          } else {
+            this.dataSourceTx.data = [...txs];
+          }
+          this.dataTx = txs;
         }
-        this.dataTx = txs;
-      }
-    });
+      },
+      () => {},
+      () => {
+        this.isLoadingTx = false;
+      },
+    );
   }
 
   getCoinInfo(type: string) {

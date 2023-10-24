@@ -1,6 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
@@ -20,7 +25,7 @@ import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
 })
 export class PopupAddGrantComponent implements OnInit {
   grantForm;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   periodShow = false;
   allContractAllowActive = false;
   currDate;
@@ -31,7 +36,7 @@ export class PopupAddGrantComponent implements OnInit {
   isSubmit = false;
   isRevoking = false;
   dayConvert = 24 * 60 * 60;
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
@@ -176,7 +181,7 @@ export class PopupAddGrantComponent implements OnInit {
                 executeContract: execute_contract,
               },
               senderAddress: granter,
-              network: this.environmentService.configValue.chain_info,
+              network: this.environmentService.chainInfo,
               signingType: ESigningType.Keplr,
               chainId: this.walletService.chainId,
             });

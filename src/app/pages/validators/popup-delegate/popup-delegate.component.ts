@@ -14,19 +14,15 @@ export class PopupDelegateComponent implements OnInit, OnChanges {
   boxNoticeShow = false;
   availableToken = 0;
   dialogMode = DIALOG_STAKE_MODE;
-  timeStaking = `${this.environmentService.configValue.timeStaking}`;
+  timeStaking = `${this.environmentService.stakingTime}`;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  constructor(
-    public translate: TranslateService,
-    private environmentService: EnvironmentService,
-  ) {}
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  constructor(public translate: TranslateService, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.availableToken = +this.data?.availableToken + +this.data?.delegableVesting;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-  }
+  ngOnChanges(changes: SimpleChanges): void {}
 }

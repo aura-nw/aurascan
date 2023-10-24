@@ -53,7 +53,7 @@ export class TokenHoldersTabComponent implements OnInit {
   numberTop = 0;
   totalHolder = 0;
 
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     private tokenService: TokenService,

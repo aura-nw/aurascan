@@ -10,16 +10,16 @@ import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 
 @Injectable()
 export class TransactionService extends CommonService {
-  apiUrl = `${this.environmentService.configValue.beUri}`;
-  chainInfo = this.environmentService.configValue.chain_info;
+  apiUrl = `${this.environmentService.backend}`;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
 
-  getListTx(payload) {
+  getListTxDetail(payload) {
     const operationsDoc = `
-    query queryListTopTransaction(
+    query queryTxDetail(
       $limit: Int = 100
       $order: order_by = desc
       $heightGT: Int = null
@@ -52,6 +52,70 @@ export class TransactionService extends CommonService {
           gas_used
           gas_wanted
           data
+        }
+      }
+    }
+    `;
+    
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+          hash: payload.hash,
+          value: payload.value,
+          key: payload.key,
+          heightGT: null,
+          heightLT: payload.heightLT,
+          indexGT: null,
+          indexLT: null,
+          height: null,
+        },
+        operationName: 'queryTxDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListTx(payload) {
+    const operationsDoc = `
+    query queryListTopTransaction(
+      $limit: Int = 100
+      $order: order_by = desc
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $indexGT: Int = null
+      $indexLT: Int = null
+      $hash: String = null
+      $height: Int = null
+    ) {
+      ${this.envDB} {
+        transaction(
+          limit: $limit
+          where: {
+            hash: { _eq: $hash }
+            height: { _eq: $height }
+            _and: [
+              { height: { _gt: $heightGT } }
+              { index: { _gt: $indexGT } }
+              { height: { _lt: $heightLT } }
+              { index: { _lt: $indexLT } }
+            ]
+          }
+          order_by: [{ height: $order }, { index: $order }]
+        ) {
+          id
+          height
+          hash
+          timestamp
+          code
+          gas_used
+          gas_wanted
+          fee
+          transaction_messages {
+            type
+            content
+          }
         }
       }
     }
@@ -177,7 +241,7 @@ export class TransactionService extends CommonService {
           height
           hash
           timestamp
-          event_attributes{
+          event_attributes (where: {block_height: { _lte: $heightLT, _gte: $heightGT }}){
             value
             composite_key
           }
@@ -250,10 +314,6 @@ export class TransactionService extends CommonService {
       $listFilterCW20: [String!] = null
       $listFilterCW721: [String!] = null
       $txHash: String = null
-      $msgTypeNotIn: [String!] = null
-      $compositeKeyIn: [String!] = null
-      $heightGTE: Int = null
-      $heightLTE: Int = null
     ) {
       ${this.envDB} {
         cw20_activity(
@@ -305,23 +365,6 @@ export class TransactionService extends CommonService {
             }
           }
         }
-        coin_transfer: transaction(
-          where: {
-            hash: { _eq: $txHash }
-            transaction_messages: { type: { _nin: $msgTypeNotIn } }
-          }
-        ) {
-          event_attributes(
-            where: {
-              composite_key: { _in: $compositeKeyIn }
-              event: { tx_msg_index: { _is_null: false } }
-              block_height: { _lte: $heightLTE, _gte: $heightGTE }
-            }
-          ) {
-            composite_key
-            value
-          }
-        }
       }
     }
     `;
@@ -330,7 +373,6 @@ export class TransactionService extends CommonService {
         query: operationsDoc,
         variables: {
           txHash: hash,
-          compositeKeyIn: ['coin_spent.spender', 'coin_received.receiver', 'coin_spent.amount', 'coin_received.amount'],
           listFilterCW20: CW20_TRACKING,
           listFilterCW721: CW721_TRACKING,
         },

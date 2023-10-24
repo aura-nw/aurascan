@@ -293,45 +293,45 @@
     <app-messages-item [label]="'Client ID'" [value]="data?.client_id"></app-messages-item>
     <app-messages-item
       [label]="'block'"
-      [value]="data?.header?.signed_header?.header?.version?.block"></app-messages-item>
-    <app-messages-item [label]="'app'" [value]="data?.header?.signed_header?.header?.version?.app"></app-messages-item>
-    <app-messages-item [label]="'chain_id'" [value]="data?.header?.signed_header?.header?.chain_id"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.version?.block"></app-messages-item>
+    <app-messages-item [label]="'app'" [value]="data[keyIbc]?.signed_header?.header?.version?.app"></app-messages-item>
+    <app-messages-item [label]="'chain_id'" [value]="data[keyIbc]?.signed_header?.header?.chain_id"></app-messages-item>
     <app-messages-item
       [label]="'height'"
-      [value]="data?.header?.signed_header?.header?.height"
+      [value]="data[keyIbc]?.signed_header?.header?.height"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <app-messages-item [label]="'time'" [value]="data?.header?.signed_header?.header?.time"></app-messages-item>
+    <app-messages-item [label]="'time'" [value]="data[keyIbc]?.signed_header?.header?.time"></app-messages-item>
     <app-messages-item
       [label]="'hash'"
-      [value]="data?.header?.signed_header?.header?.last_block_id?.part_set_header?.hash"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.last_block_id?.part_set_header?.hash"></app-messages-item>
     <app-messages-item
       [label]="'total'"
-      [value]="data?.header?.signed_header?.header?.last_block_id?.part_set_header?.total"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.last_block_id?.part_set_header?.total"></app-messages-item>
     <app-messages-item
       [label]="'last_commit_hash'"
-      [value]="data?.header?.signed_header?.header?.last_commit_hash"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.last_commit_hash"></app-messages-item>
     <app-messages-item
       [label]="'data_hash'"
-      [value]="data?.header?.signed_header?.header?.data_hash"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.data_hash"></app-messages-item>
     <app-messages-item
       [label]="'validators_hash'"
-      [value]="data?.header?.signed_header?.header?.validators_hash"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.validators_hash"></app-messages-item>
     <app-messages-item
       [label]="'next_validators_hash'"
-      [value]="data?.header?.signed_header?.header?.next_validators_hash"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.next_validators_hash"></app-messages-item>
     <app-messages-item
       [label]="'consensus_hash'"
-      [value]="data?.header?.signed_header?.header?.consensus_hash"></app-messages-item>
-    <app-messages-item [label]="'app_hash'" [value]="data?.header?.signed_header?.header?.app_hash"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.consensus_hash"></app-messages-item>
+    <app-messages-item [label]="'app_hash'" [value]="data[keyIbc]?.signed_header?.header?.app_hash"></app-messages-item>
     <app-messages-item
       [label]="'last_results_hash'"
-      [value]="data?.header?.signed_header?.header?.last_results_hash"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.last_results_hash"></app-messages-item>
     <app-messages-item
       [label]="'evidence_hash'"
-      [value]="data?.header?.signed_header?.header?.evidence_hash"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.evidence_hash"></app-messages-item>
     <app-messages-item
       [label]="'proposer_address'"
-      [value]="data?.header?.signed_header?.header?.proposer_address"></app-messages-item>
+      [value]="data[keyIbc]?.signed_header?.header?.proposer_address"></app-messages-item>
   </ng-template>
 
   <ng-template #ibcChannelOpen let-data="data">

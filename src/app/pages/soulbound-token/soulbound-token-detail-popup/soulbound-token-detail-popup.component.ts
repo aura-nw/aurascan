@@ -1,5 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+} from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
@@ -43,19 +47,19 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.soulboundDetail?.ipfs?.image) {
-      this.imageUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
+      this.imageUrl = this.commonService.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
     }
     if (this.soulboundDetail?.ipfs?.animation_url) {
       if (!this.soulboundDetail?.ipfs?.image) {
         if (this.getTypeFile(this.soulboundDetail) === MEDIA_TYPE.IMG) {
-          this.imageUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
+          this.imageUrl = this.commonService.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
         } else {
-          this.animationUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
+          this.animationUrl = this.commonService.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
         }
       } else if (this.getTypeFile(this.soulboundDetail) !== MEDIA_TYPE.IMG) {
-        this.animationUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
+        this.animationUrl = this.commonService.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
       } else {
-        this.imageUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
+        this.imageUrl = this.commonService.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
       }
     }
   }
@@ -99,10 +103,6 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
       }
       this.dialogRef.close('reject');
     });
-  }
-
-  replaceImgIpfs(value) {
-    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
   }
 
   error(): void {

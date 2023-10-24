@@ -86,9 +86,9 @@ export class ValidatorsDetailComponent implements OnInit {
   number2Digit = NUMBER_2_DIGIT;
   hexAddress = null;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  timeInterval = this.environmentService.configValue.timeInterval;
+  timeInterval = this.environmentService.chainConfig.blockTime;
 
   constructor(
     private route: ActivatedRoute,

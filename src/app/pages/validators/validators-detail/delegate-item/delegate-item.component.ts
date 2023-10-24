@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MAX_NUMBER_INPUT, NUMBER_2_DIGIT, NUMBER_CONVERT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
+import {
+  MAX_NUMBER_INPUT,
+  NUMBER_2_DIGIT,
+  NUMBER_CONVERT,
+  TIME_OUT_CALL_API,
+} from 'src/app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE } from 'src/app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -39,9 +44,9 @@ export class DelegateItemComponent implements OnInit {
   maxNumberInput = MAX_NUMBER_INPUT;
   number2Digit = NUMBER_2_DIGIT;
 
-  chainInfo = this.environmentService.configValue.chain_info;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  chainInfo = this.environmentService.chainInfo;
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
     public commonService: CommonService,
