@@ -74,6 +74,7 @@ export class TransactionMessagesComponent implements OnInit {
   transactionTypeArr = [];
   codeTransaction = CodeTransaction;
   isDisplay = [];
+  keyIbc = 'client_message';
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
@@ -87,6 +88,11 @@ export class TransactionMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // set key ibc update client when old type
+    if (this.transactionDetail?.messages[0]?.header) {
+      this.keyIbc = 'header';
+    }
+
     this.currentIndex = 0;
     // check if contract type not belongTo TypeTransaction enum
     if (Object.values(TRANSACTION_TYPE_ENUM).includes(this.transactionDetail?.type)) {

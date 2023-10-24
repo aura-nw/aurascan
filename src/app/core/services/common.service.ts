@@ -203,4 +203,11 @@ export class CommonService {
       options,
     );
   }
+
+  replaceImgIpfs(value) {
+    if (value.match(/^https?:/)) {
+      return value;
+    }
+    return this._environmentService.configValue.ipfsDomain + value.replace('://', '/');
+  }
 }
