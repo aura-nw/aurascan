@@ -69,24 +69,38 @@ export class TokenTransferComponent implements OnInit {
         const from = element.attributes?.find((k) => k.key === 'spender')?.value;
         let to;
         if (this.transaction['tx'].events[index + 1]?.type === 'coin_received') {
-          to = this.transaction['tx'].events[index + 1].attributes?.find((k) => k.key === 'receiver')?.value;
+          to = this.transaction['tx']?.events[index + 1]?.attributes?.find((k) => k.key === 'receiver')?.value;
         }
-        const amount = element.attributes?.find((k) => k.key === 'amount')?.value?.split(',');
-        amount?.forEach((amountTemp) => {
-          let cw20_contract = {};
-          let decimal = cw20_contract['decimal'] || this.coinDecimals;
-          let dataAmount = {};
-          cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
-          cw20_contract['name'] = cw20_contract['name'] || this.denom;
-          if (amountTemp.indexOf('ibc') >= 0) {
-            dataAmount = this.commonService.mappingNameIBC(amountTemp);
-            cw20_contract['name'] = dataAmount['name'];
-            cw20_contract['symbol'] = dataAmount['display'];
-            decimal = dataAmount['decimal'];
-          }
-          let amount = +amountTemp.match(/\d+/g)[0];
-          coinTransfer.push({ amount, cw20_contract, from, to, decimal });
-        });
+        let arrAmount;
+        if (this.transaction['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+          this.transaction['messages'][0]?.outputs.forEach((element) => {
+            to = element.address;
+            let cw20_contract = {};
+            let data = this.commonService.mappingNameIBC(element?.coins[0]?.denom);
+            let decimal = cw20_contract['decimal'] || data['decimals'] || this.coinDecimals;
+            cw20_contract['symbol'] = cw20_contract['symbol'] || data['display'] || this.denom;
+            cw20_contract['name'] = cw20_contract['name'] || data['display'] || this.denom;
+            let amount = element?.coins[0]?.amount.match(/\d+/g)[0];
+            coinTransfer.push({ amount, cw20_contract, from, to, decimal });
+          });
+        } else {
+          arrAmount = element.attributes?.find((k) => k.key === 'amount')?.value?.split(',');
+          arrAmount?.forEach((amountTemp) => {
+            let cw20_contract = {};
+            let decimal = cw20_contract['decimal'] || this.coinDecimals;
+            let dataAmount = {};
+            cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
+            cw20_contract['name'] = cw20_contract['name'] || this.denom;
+            if (amountTemp.indexOf('ibc') >= 0) {
+              dataAmount = this.commonService.mappingNameIBC(amountTemp);
+              cw20_contract['name'] = dataAmount['name'];
+              cw20_contract['symbol'] = dataAmount['display'];
+              decimal = dataAmount['decimal'];
+            }
+            let amount = +amountTemp.match(/\d+/g)[0];
+            coinTransfer.push({ amount, cw20_contract, from, to, decimal });
+          });
+        }
       }
     });
 
