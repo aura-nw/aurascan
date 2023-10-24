@@ -15,7 +15,8 @@ export class TopStatisticOverviewComponent implements OnInit {
   currentRange = AURA_TOP_STATISTIC_RANGE.Range1;
   currentDay;
   preDay;
-  loading = true;
+  isLoading = true;
+  errTxt: string;
   transactionsData;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -46,14 +47,15 @@ export class TopStatisticOverviewComponent implements OnInit {
       filterValue = 'thirty_days';
     }
 
-    this.statisticService.getListAccountStatistic().subscribe(
-      (res) => {
+    this.statisticService.getListAccountStatistic().subscribe({
+      next: (res) => {
         this.transactionsData = res[filterValue];
+        this.isLoading = false;
       },
-      () => {},
-      () => {
-        this.loading = false;
+      error: (e) => {
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
       },
-    );
+    });
   }
 }

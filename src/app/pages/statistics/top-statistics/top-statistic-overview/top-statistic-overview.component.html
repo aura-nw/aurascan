@@ -13,13 +13,13 @@
 <div class="card mt-6 box-statistic">
   <div class="card-body">
     <div class="body-01 fw-semibold text--gray-1">Transactions</div>
-    <div class="row mt-4" *ngIf="loading">
+    <div class="row mt-4" *ngIf="isLoading">
       <app-loading-sprint></app-loading-sprint>
     </div>
-    <div class="row mt-4" *ngIf="!loading && !transactionsData">
-      <app-table-no-data></app-table-no-data>
+    <div class="row mt-4" *ngIf="!isLoading && !transactionsData">
+      <app-table-no-data [textNull]="errTxt"></app-table-no-data>
     </div>
-    <div class="row mt-4" *ngIf="!loading && transactionsData">
+    <div class="row mt-4" *ngIf="!isLoading && transactionsData">
       <div class="col-12 col-lg-6 mb-4" *ngIf="transactionsData.top_amount_sent">
         <div class="card-info px-6 py-6">
           <div class="d-flex justify-content-between align-items-center">
