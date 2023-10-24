@@ -34,10 +34,10 @@ export class ChartStatsComponent implements OnInit {
   constructor(public translate: TranslateService, private statisticService: StatisticService) {}
 
   ngOnInit() {
-    this.getDailyTransactionData();
     this.dailyTransactionChartInit();
     this.uniqueAddressChartInit();
     this.dailyAddressChartInit();
+    this.getDailyTransactionData();
   }
 
   dailyTransactionChartInit() {
