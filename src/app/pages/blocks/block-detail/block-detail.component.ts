@@ -136,9 +136,7 @@ export class BlockDetailComponent implements OnInit {
               },
               error: (e) => {
                 this.loadingTxs = false;
-                
                 this.errTxtTx = e.status + ' ' + e.statusText;
-                console.log(this.errTxtTx);
               }
             });
           }
