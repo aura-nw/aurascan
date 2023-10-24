@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig
+} from '@angular/material/legacy-dialog';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -43,7 +46,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
   };
   textSearch = '';
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -101,7 +104,14 @@ export class WatchListComponent implements OnInit, OnDestroy {
     };
 
     this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
-      this.countFav = res.data?.filter((k) => k.isFavorite === 1)?.length || 0;
+      this.countFav = res.meta.countFavorite || 0;
+      if (this.textSearch?.length > 0) {
+        this.countFav = 0;
+        //check record isFavorite
+        if (res.data?.length > 0 && res.data[0].isFavorite == 1) {
+          this.countFav = 1;
+        }
+      }
       res.data?.forEach((element) => {
         element['type'] = isContract(element.address) ? 'contract' : 'account';
       });
