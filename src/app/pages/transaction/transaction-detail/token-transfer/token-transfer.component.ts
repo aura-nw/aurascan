@@ -59,8 +59,6 @@ export class TokenTransferComponent implements OnInit {
     }
 
     let coinTransfer = [];
-    console.log(this.transaction);
-
     this.transaction['tx'].events?.forEach((element, index) => {
       //skip case index = 0, tx fee
       if (index === 0) {
