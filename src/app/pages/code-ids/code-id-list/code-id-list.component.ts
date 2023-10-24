@@ -28,6 +28,8 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   showBoxSearch = false;
+  isLoading = true;
+  errTxt: string;
   searchSubject = new Subject();
   destroy$ = new Subject<void>();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
@@ -41,7 +43,6 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
     { matColumnDef: 'verified_at', headerCellDef: 'Verified at' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  contractResult = CONTRACT_RESULT;
   contractVerifyType = ContractVerifyType;
 
   constructor(private contractService: ContractService, public commonService: CommonService) {}
@@ -83,19 +84,27 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
       payload['keyword'] = addressNameTag;
     }
 
-    this.contractService.getListCodeId(payload).subscribe((res) => {
-      res?.code?.forEach((k) => {
-        k.instantiates = k.smart_contracts_aggregate?.aggregate?.count || 0;
-        k.tx_hash = k.store_hash;
-        k.verified_at = k.code_id_verifications[0]?.verified_at;
-        k.contract_verification = k.code_id_verifications[0]?.verification_status;
-        if (k.type === ContractRegisterType.CW721 && k.smart_contracts[0]?.name === TYPE_CW4973) {
-          k.type = ContractRegisterType.CW4973;
-        }
-      });
-
-      this.dataSource.data = res.code;
-      this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
+    this.contractService.getListCodeId(payload).subscribe({
+      next: (res) => {
+        res?.code?.forEach((k) => {
+          k.instantiates = k.smart_contracts_aggregate?.aggregate?.count || 0;
+          k.tx_hash = k.store_hash;
+          k.verified_at = k.code_id_verifications[0]?.verified_at;
+          k.contract_verification = k.code_id_verifications[0]?.verification_status;
+          if (k.type === ContractRegisterType.CW721 && k.smart_contracts[0]?.name === TYPE_CW4973) {
+            k.type = ContractRegisterType.CW4973;
+          }
+        });
+        this.dataSource.data = res.code;
+        this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
+      },
+      error: (e) => {
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 

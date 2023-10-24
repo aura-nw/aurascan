@@ -40,11 +40,12 @@ export class TokenCw721Component implements OnInit {
   sort: MatSort;
   sortBy = 'transfer_24h';
   sortOrder = 'desc';
-  isSorting = true;
   searchSubject = new Subject();
   destroy$ = new Subject<void>();
   image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  isLoading = true;
+  errTxt: string;
 
   constructor(
     public translate: TranslateService,
@@ -85,9 +86,18 @@ export class TokenCw721Component implements OnInit {
       keySearch = addressNameTag;
     }
 
-    this.tokenService.getListCW721Token(payload, keySearch).subscribe((res) => {
-      this.dataSource = new MatTableDataSource<any>(res.list_token);
-      this.pageData.length = res.total_token?.aggregate?.count;
+    this.tokenService.getListCW721Token(payload, keySearch).subscribe({
+      next: (res) => {
+        this.dataSource = new MatTableDataSource<any>(res.list_token);
+        this.pageData.length = res.total_token?.aggregate?.count;
+      },
+      error: (e) => {
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 

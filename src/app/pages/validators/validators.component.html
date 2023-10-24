@@ -1,6 +1,6 @@
 <div class="validator-container" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <section class="user-wallet-info">
-    <app-user-wallet-info
+    <app-staking-info
       [breakpoint]="breakpoint"
       [userAddress]="userAddress"
       [dataDelegate]="dataDelegate"
@@ -9,7 +9,8 @@
       [modalManage]="modalManage"
       [denom]="denom"
       [isLoading]="isClaimRewardLoading"
-      (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
+      (onViewDialog)="handleViewPopup($event)">
+    </app-staking-info>
   </section>
 
   <div class="card box-validators" *ngIf="!loadingData">
@@ -29,7 +30,7 @@
           >
         </div>
       </div>
-      <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches">
+      <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches && !errTxt">
         <div class="input-group">
           <input
             type="text"
@@ -383,7 +384,7 @@
         </ng-container>
       </ng-container>
       <ng-template #noValues>
-        <app-table-no-data></app-table-no-data>
+        <app-table-no-data [textNull]="errTxt"></app-table-no-data>
       </ng-template>
     </div>
   </div>
@@ -520,11 +521,7 @@
               <span class="text--white"> {{ denom }} </span>
             </div>
             <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-              <input
-                [(ngModel)]="amountFormat"
-                [max]="maxNumberInput"
-                mask="separator.6"
-                (blur)="resetCheck()" />
+              <input [(ngModel)]="amountFormat" [max]="maxNumberInput" mask="separator.6" (blur)="resetCheck()" />
               <div class="d-flex align-items-center py-1 mr-4">
                 <button
                   class="button button-primary active button-flat button--sm button-max fw-semibold"
@@ -627,7 +624,7 @@
             <button
               type="button"
               class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient d-flex"
-              (click)="handleStaking()"
+              (click)="handleDelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <img
                 class="mr-2"

@@ -40,11 +40,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-
+  errTxt: string;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   sortedData: any;
   sort: MatSort;
-  filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   image_s3 = this.environmentService.imageUrl;
@@ -154,58 +153,65 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       // Get the frist time data init screen
       this.getAllCW20Token()
         .pipe(takeLast(1))
-        .subscribe(
-          (res) => {
-            this.tokenService.getTokenMarketData().subscribe((tokenMarket) => {
-              // Flat data for mapping response api
-              const dataFlat = res?.map((item) => {
-                let changePercent = 0;
-                const tokenFind = tokenMarket?.find(
-                  (f) => String(f.contract_address) === item?.smart_contract?.address,
-                );
-                if (item.cw20_total_holder_stats?.length > 1) {
-                  changePercent =
-                    (item.cw20_total_holder_stats[1].total_holder * 100) /
-                      item.cw20_total_holder_stats[0].total_holder -
-                    100;
-                }
-                return {
-                  coin_id: tokenFind?.coin_id || '',
-                  contract_address: item.smart_contract.address || '',
-                  name: item.name || '',
-                  symbol: item.symbol || '',
-                  image: item.marketing_info?.logo?.url ? item.marketing_info?.logo?.url : tokenFind?.image || '',
-                  description: tokenFind?.description || '',
-                  verify_status: tokenFind?.verify_status || '',
-                  verify_text: tokenFind?.verify_text || '',
-                  circulating_market_cap: +tokenFind?.circulating_market_cap || 0,
-                  onChainMarketCap: +tokenFind?.circulating_market_cap || 0,
-                  volume: +tokenFind?.total_volume || 0,
-                  price: +tokenFind?.current_price || 0,
-                  isHolderUp: changePercent >= 0 ? true : false,
-                  isValueUp: tokenFind?.price_change_percentage_24h >= 0 ? true : false,
-                  change: tokenFind?.price_change_percentage_24h || 0,
-                  holderChange: Math.abs(changePercent),
-                  holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
-                  max_total_supply: tokenFind?.max_supply || 0,
-                  fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,
-                };
-              });
-              // store datatable
-              this.dataTable = dataFlat;
-              // Sort and slice 20 frist record.
-              const result = dataFlat
-                ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
-                .slice(payload?.offset, payload?.offset + payload?.limit);
-              this.dataSource = new MatTableDataSource<any>(result);
-              this.pageData.length = res?.length;
+        .subscribe({
+          next: (res) => {
+            this.tokenService.getTokenMarketData().subscribe({
+              next: (tokenMarket) => {
+                // Flat data for mapping response api
+                const dataFlat = res?.map((item) => {
+                  let changePercent = 0;
+                  const tokenFind = tokenMarket?.find(
+                    (f) => String(f.contract_address) === item?.smart_contract?.address,
+                  );
+                  if (item.cw20_total_holder_stats?.length > 1) {
+                    changePercent =
+                      (item.cw20_total_holder_stats[1].total_holder * 100) /
+                        item.cw20_total_holder_stats[0].total_holder -
+                      100;
+                  }
+                  return {
+                    coin_id: tokenFind?.coin_id || '',
+                    contract_address: item.smart_contract.address || '',
+                    name: item.name || '',
+                    symbol: item.symbol || '',
+                    image: item.marketing_info?.logo?.url ? item.marketing_info?.logo?.url : tokenFind?.image || '',
+                    description: tokenFind?.description || '',
+                    verify_status: tokenFind?.verify_status || '',
+                    verify_text: tokenFind?.verify_text || '',
+                    circulating_market_cap: +tokenFind?.circulating_market_cap || 0,
+                    onChainMarketCap: +tokenFind?.circulating_market_cap || 0,
+                    volume: +tokenFind?.total_volume || 0,
+                    price: +tokenFind?.current_price || 0,
+                    isHolderUp: changePercent >= 0 ? true : false,
+                    isValueUp: tokenFind?.price_change_percentage_24h >= 0 ? true : false,
+                    change: tokenFind?.price_change_percentage_24h || 0,
+                    holderChange: Math.abs(changePercent),
+                    holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
+                    max_total_supply: tokenFind?.max_supply || 0,
+                    fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,
+                  };
+                });
+                // store datatable
+                this.dataTable = dataFlat;
+                // Sort and slice 20 frist record.
+                const result = dataFlat
+                  ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+                  .slice(payload?.offset, payload?.offset + payload?.limit);
+                this.dataSource = new MatTableDataSource<any>(result);
+                this.pageData.length = res?.length;
+                this.isLoading = false;
+              },
+              error: (e) => {
+                this.isLoading = false;
+                this.errTxt = e.status + ' ' + e.statusText;
+              },
             });
           },
-          (e) => {},
-          () => {
+          error: (e) => {
             this.isLoading = false;
+            this.errTxt = e.status + ' ' + e.statusText;
           },
-        );
+        });
     }
   }
 

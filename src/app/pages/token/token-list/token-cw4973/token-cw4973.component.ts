@@ -36,6 +36,8 @@ export class TokenCw4973Component implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  errTxt: string;
+  isLoading = true;
 
   constructor(
     public translate: TranslateService,
@@ -77,9 +79,16 @@ export class TokenCw4973Component implements OnInit {
       payload['keyword'] = addressNameTag;
     }
 
-    this.soulboundService.getListABT(payload).subscribe((res) => {
-      this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
-      this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;
+    this.soulboundService.getListABT(payload).subscribe({
+      next: (res) => {
+        this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
+        this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;
+        this.isLoading = false;
+      },
+      error: (e) =>{
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      }
     });
   }
 

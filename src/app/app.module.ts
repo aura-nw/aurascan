@@ -39,8 +39,6 @@ import { MediaExpandModule } from './shared/components/media-expand/media-expand
     NgbPopoverModule,
     NgbNavModule,
     ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
-    // NgxMaskDirective,
-    // NgxMaskPipe,
     ReactiveFormsModule,
     FormsModule,
     MediaExpandModule,

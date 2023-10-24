@@ -1,5 +1,6 @@
 <app-pagetitle title="Aura Charts & Statistics"></app-pagetitle>
-<section class="chart-stats mt-8 mt-lg-6">
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+<section class="chart-stats mt-8 mt-lg-6 {{!isLoading && !errTxt ? 'd-block' : 'd-none'}}">
   <div class="card">
     <div class="card-body">
       <div class="container-fluid px-0">
@@ -49,3 +50,4 @@
     </div>
   </div>
 </section>
+<app-table-no-data *ngIf="errTxt" [textNull]="errTxt"></app-table-no-data>

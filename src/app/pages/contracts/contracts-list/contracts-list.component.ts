@@ -41,6 +41,8 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   filterButtons = [];
   listContract = [];
   textSearch = '';
+  isLoading = true;
+  errTxt: string;
 
   dataSource = new MatTableDataSource<any>();
   searchSubject = new Subject();
@@ -86,46 +88,55 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       contractType: this.filterButtons?.length > 0 && this.filterButtons?.length < 4 ? this.filterButtons : null,
     };
 
-    this.contractService.getListContract(payload).subscribe((res) => {
-      if (res?.smart_contract?.length) {
-        res?.smart_contract.forEach((item) => {
-          if (item?.code?.type === this.contractRegisterType.CW20 && item['cw20_contract']?.name) {
-            item.url = '/tokens/token/' + item.address;
-            item.token_tracker = item['cw20_contract']?.name;
-          } else if (
-            item?.code?.type === this.contractRegisterType.CW721 &&
-            item?.name !== this.typeCW4973 &&
-            item['cw721_contract']?.name
-          ) {
-            item.url = '/tokens/token-nft/' + item.address;
-            item.token_tracker = item['cw721_contract']?.name;
-          } else if (
-            item['code'].type === this.contractRegisterType.CW721 &&
-            item['name'] === this.typeCW4973 &&
-            item['cw721_contract']?.name
-          ) {
-            item.url = '/tokens/token-abt/' + item.address;
-            item.token_tracker = item['cw721_contract']?.name;
-          }
+    this.contractService.getListContract(payload).subscribe({
+      next: (res) => {
+        if (res?.smart_contract?.length) {
+          res?.smart_contract.forEach((item) => {
+            if (item?.code?.type === this.contractRegisterType.CW20 && item['cw20_contract']?.name) {
+              item.url = '/tokens/token/' + item.address;
+              item.token_tracker = item['cw20_contract']?.name;
+            } else if (
+              item?.code?.type === this.contractRegisterType.CW721 &&
+              item?.name !== this.typeCW4973 &&
+              item['cw721_contract']?.name
+            ) {
+              item.url = '/tokens/token-nft/' + item.address;
+              item.token_tracker = item['cw721_contract']?.name;
+            } else if (
+              item['code'].type === this.contractRegisterType.CW721 &&
+              item['name'] === this.typeCW4973 &&
+              item['cw721_contract']?.name
+            ) {
+              item.url = '/tokens/token-abt/' + item.address;
+              item.token_tracker = item['cw721_contract']?.name;
+            }
 
-          item.verified_at = this.datePipe.transform(
-            item.code?.code_id_verifications[0]?.verified_at,
-            DATEFORMAT.DATETIME_UTC,
-          );
-          item.type = item.code.type;
-          if (item.type === ContractRegisterType.CW721 && item?.name === TYPE_CW4973) {
-            item.type = ContractRegisterType.CW4973;
-          }
-          item.compiler_version = item.code?.code_id_verifications[0]?.compiler_version;
-          item.contract_verification = item.code.code_id_verifications[0]?.verification_status;
-        });
-        this.dataSource.data = res.smart_contract;
-        this.pageData.length = res.smart_contract_aggregate?.aggregate?.count;
-      } else {
-        this.dataSource.data = [];
-        this.listContract = [];
-        this.pageData.length = 0;
-      }
+            item.verified_at = this.datePipe.transform(
+              item.code?.code_id_verifications[0]?.verified_at,
+              DATEFORMAT.DATETIME_UTC,
+            );
+            item.type = item.code.type;
+            if (item.type === ContractRegisterType.CW721 && item?.name === TYPE_CW4973) {
+              item.type = ContractRegisterType.CW4973;
+            }
+            item.compiler_version = item.code?.code_id_verifications[0]?.compiler_version;
+            item.contract_verification = item.code.code_id_verifications[0]?.verification_status;
+          });
+          this.dataSource.data = res.smart_contract;
+          this.pageData.length = res.smart_contract_aggregate?.aggregate?.count;
+        } else {
+          this.dataSource.data = [];
+          this.listContract = [];
+          this.pageData.length = 0;
+        }
+      },
+      error: (e) => {
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 
