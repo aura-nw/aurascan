@@ -220,12 +220,14 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.dataSource.sort = this.sort;
           this.searchValidator();
         }
-        this.loadingData = false;
       },
       error: (e) => {
         this.loadingData = false;
         this.errTxt = e.status + ' ' + e.statusText;
-      }
+      },
+      complete: () => {
+        this.loadingData = false;
+      },
     });
   }
 

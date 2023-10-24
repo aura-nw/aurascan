@@ -40,12 +40,14 @@ export class BlocksComponent implements OnInit {
         if (res?.block?.length > 0) {
           const blocks = convertDataBlock(res);
           this.dataSource = new MatTableDataSource(blocks);
-          this.loading = false;
         }
       },
       error: (e) => {
         this.loading = false;
         this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.loading = false;
       },
     });
   }

@@ -67,6 +67,9 @@ export class DepositorsComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.errTxt = e.status + ' ' + e.statusText;
         },
+        complete: () => {
+          this.loading = false;
+        },
       });
   }
 

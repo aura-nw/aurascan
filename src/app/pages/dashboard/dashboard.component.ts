@@ -282,11 +282,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           const blocks = convertDataBlock(res);
           this.dataSourceBlock = new MatTableDataSource(blocks);
         }
-        this.isLoadingBlock = false;
       },
       error: (e) => {
         this.isLoadingBlock = false;
         this.errTextBlock = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoadingBlock = false;
       },
     });
   }
@@ -308,11 +310,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           }
           this.dataTx = txs;
         }
-        this.isLoadingTx = false;
       },
       error: (e) => {
         this.isLoadingTx = false;
         this.errTextTx = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoadingTx = false;
       },
     });
   }

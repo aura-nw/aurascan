@@ -129,11 +129,13 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           this.listContract = [];
           this.pageData.length = 0;
         }
-        this.isLoading = false;
       },
       error: (e) => {
         this.isLoading = false;
         this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }

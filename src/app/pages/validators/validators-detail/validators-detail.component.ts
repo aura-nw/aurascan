@@ -235,11 +235,13 @@ export class ValidatorsDetailComponent implements OnInit {
           );
           this.lengthBlock = this.dataSourceBlock.data.length;
         }
-        this.isLoadingBlock = false;
       },
       error: (e) => {
         this.isLoadingBlock = false;
         this.errTxtProposedBlock = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoadingBlock = false;
       },
     });
   }
@@ -344,12 +346,14 @@ export class ValidatorsDetailComponent implements OnInit {
             this.pageIndexPower * this.pageSize + this.pageSize,
           );
           this.lengthPower = this.dataSourcePower.data.length;
-          this.isLoadingPower = false;
         }
       },
       error: (e) => {
         this.isLoadingPower = false;
         this.errTxtPowerEvent = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoadingPower = false;
       },
     });
   }

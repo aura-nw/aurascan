@@ -97,11 +97,13 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
         });
         this.dataSource.data = res.code;
         this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
-        this.isLoading = false;
       },
       error: (e) => {
         this.isLoading = false;
         this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }

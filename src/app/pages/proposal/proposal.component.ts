@@ -110,12 +110,14 @@ export class ProposalComponent implements OnInit {
               getVoted();
             });
           }
-          this.isLoading = false;
         }
       },
       error: (e) => {
         this.isLoading = false;
         this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }

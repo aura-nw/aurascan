@@ -59,11 +59,13 @@ export class TransactionComponent implements OnInit {
           }
           this.dataTx = txs;
         }
-        this.loading = false;
       },
       error: (e) => {
         this.loading = false;
         this.errText = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.loading = false;
       },
     });
   }

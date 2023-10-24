@@ -137,7 +137,10 @@ export class BlockDetailComponent implements OnInit {
               error: (e) => {
                 this.loadingTxs = false;
                 this.errTxtTx = e.status + ' ' + e.statusText;
-              }
+              },
+              complete: () => {
+                this.loadingTxs = false;
+              },
             });
           }
 
@@ -162,11 +165,13 @@ export class BlockDetailComponent implements OnInit {
             this.getDetailByHeight();
           }, 10000);
         }
-        this.loading = false;
       },
       error: (e) => {
         this.loading = false;
         this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.loading = false;
       },
     });
   }

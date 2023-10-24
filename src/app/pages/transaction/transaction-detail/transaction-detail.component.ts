@@ -95,7 +95,6 @@ export class TransactionDetailComponent implements OnInit {
                 }
               }, 500);
             }
-            this.loading = false;
           } else {
             setTimeout(() => {
               this.getDetail();
@@ -105,6 +104,9 @@ export class TransactionDetailComponent implements OnInit {
         error: (e) => {
           this.loading = false;
           this.errText = e.status + ' ' + e.statusText;
+        },
+        complete: () => {
+          this.loading = false;
         },
       });
     } else {

@@ -254,11 +254,13 @@ export class ChartStatsComponent implements OnInit {
           this.drawChart(valueArrUnique, timeArr, 'uniqueAddress');
           this.drawChart(valueArrActive, timeArr, 'dailyAddress');
         }
-        this.isLoading = false;
       },
       error: (e) => {
         this.isLoading = false;
         this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }

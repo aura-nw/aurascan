@@ -210,12 +210,14 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
           this.minAmountDate = formatDate(dayMin, 'dd/MM/yyyy', 'en-US');
           this.drawChartFirstTime(dataX, dataY);
           this.chartEvent();
-          this.isLoading = false;
         }
       },
       error: (e) => {
         this.isLoading = false;
         this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
     this.initTooltip();

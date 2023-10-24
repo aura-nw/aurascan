@@ -106,11 +106,13 @@ export class CommunityPoolProposalComponent implements OnInit {
           this.dataSource = new MatTableDataSource(res.proposal);
         }
         this.length = res.proposal_aggregate.aggregate.count;
-        this.isLoading = false;
       },
       error: (e) => {
         this.isLoading = false;
         this.errText = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }

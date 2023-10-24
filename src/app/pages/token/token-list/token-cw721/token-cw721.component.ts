@@ -90,11 +90,13 @@ export class TokenCw721Component implements OnInit {
       next: (res) => {
         this.dataSource = new MatTableDataSource<any>(res.list_token);
         this.pageData.length = res.total_token?.aggregate?.count;
-        this.isLoading = false;
       },
       error: (e) => {
         this.isLoading = false;
         this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }

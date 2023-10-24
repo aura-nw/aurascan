@@ -67,11 +67,13 @@ export class TopStatisticTransactionComponent implements OnInit {
         } else {
           this.transactionsData = null;
         }
-        this.isLoading = false;
       },
       error: (e) => {
         this.isLoading = false;
         this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }
