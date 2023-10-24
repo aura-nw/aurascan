@@ -208,6 +208,6 @@ export class CommonService {
     if (value.match(/^https?:/)) {
       return value;
     }
-    return this._environmentService.configValue.ipfsDomain + value.replace('://', '/');
+    return this._environmentService.ipfsDomain + value.replace('://', '/');
   }
 }

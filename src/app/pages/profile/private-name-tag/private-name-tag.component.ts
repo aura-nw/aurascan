@@ -50,7 +50,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  quota = this.environmentService.configValue.quotaSetPrivateName;
+  quota = this.environmentService.chainConfig.quotaSetPrivateName;
 
   constructor(
     public commonService: CommonService,
