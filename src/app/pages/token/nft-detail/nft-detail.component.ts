@@ -341,10 +341,6 @@ export class NFTDetailComponent implements OnInit {
     return typeof data === 'object' && data !== null;
   }
 
-  replaceImgIpfs(value) {
-    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
-  }
-
   expandMedia(): void {
     let content;
     if (this.getTypeFile(this.nftDetail) === MEDIA_TYPE.IMG) {
