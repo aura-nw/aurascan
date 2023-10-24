@@ -84,8 +84,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     },
   ];
   maxNumberInput = MAX_NUMBER_INPUT;
-  abc;
-
   timerUnSub: Subscription;
   errorExceedAmount = false;
   isHandleStake = false;
@@ -392,8 +390,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     const halftime = 10000;
     const currentUrl = this.router.url;
     if (this.userAddress && currentUrl.includes('/validators')) {
-      this.accountService.getAccountDetail(this.userAddress).subscribe(
-        (dataWallet) => {
+      this.accountService.getAccountDetail(this.userAddress).subscribe({
+        next: (dataWallet) => {
           if (dataWallet) {
             this.dataDelegate = {
               ...this.dataDelegate,
@@ -403,7 +401,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               stakingToken: dataWallet?.data?.stake_reward,
             };
           }
-
           this.getDataUser();
           this.getListUndelegate();
           setTimeout(() => {
@@ -411,13 +408,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.getList();
           }, halftime);
         },
-        (error) => {
+        error: (error) => {
           setTimeout(() => {
             this.getDataWallet();
             this.getList();
           }, halftime);
         },
-      );
+      });
     }
   }
 
@@ -482,10 +479,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.errorExceedAmount = false;
   }
 
-  handleStaking() {
+  handleDelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const executeStaking = async () => {
+      const executeDelegate = async () => {
         this.isLoading = true;
         const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
@@ -504,8 +501,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
         this.checkStatusExecuteBlock(hash, error);
       };
-
-      executeStaking();
+      executeDelegate();
     }
   }
 

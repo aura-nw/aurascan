@@ -5,11 +5,11 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
 
 @Component({
-  selector: 'app-user-wallet-info',
-  templateUrl: './user-wallet-info.component.html',
-  styleUrls: ['./user-wallet-info.component.scss'],
+  selector: 'app-staking-info',
+  templateUrl: './staking-info.component.html',
+  styleUrls: ['./staking-info.component.scss'],
 })
-export class UserWalletInfoComponent implements OnChanges {
+export class StakingInfoComponent implements OnChanges {
   @Input() breakpoint: any;
   @Input() userAddress: string;
   @Input() dataDelegate: any;
