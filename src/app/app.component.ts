@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   // isTestnet = this.TESTNET.includes(
   //   this.chainInfo?.chainId || ''
   // );
+  isFirstLoad = true;
   constructor(
     private commonService: CommonService,
     private globals: Globals,
@@ -47,10 +48,11 @@ export class AppComponent implements OnInit {
     // get name tag form local storage
     const listNameTag = localStorage.getItem('listNameTag');
     const userEmail = localStorage.getItem('userEmail');
-    if (listNameTag && !userEmail) {
+    if (listNameTag && !userEmail && this.isFirstLoad) {
       try {
         let data = JSON.parse(listNameTag);
         this.globals.listNameTag = this.commonService.listNameTag = data;
+        this.isFirstLoad = false;
       } catch (e) {
         this.getListNameTag();
       }
@@ -63,6 +65,11 @@ export class AppComponent implements OnInit {
       this.getPriceToken();
       this.getListNameTag();
     }, 60000);
+
+    let intervalGetNameTag = userEmail ? 20000 : 60000;
+    setInterval(() => {
+      this.getListNameTag();
+    }, intervalGetNameTag);
 
     setInterval(() => {
       this.getListValidator();
