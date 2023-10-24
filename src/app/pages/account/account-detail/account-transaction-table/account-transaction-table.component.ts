@@ -8,6 +8,7 @@ import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.e
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { LIST_TRANSACTION_FILTER } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -334,17 +335,16 @@ export class AccountTransactionTableComponent {
   }
 
   getListTypeFilter() {
-    this.userService.getListTypeFilter().subscribe((res) => {
-      this.tnxType = res?.transaction_message?.map((element) => {
-        let type = _.find(TYPE_TRANSACTION, { label: element?.type })?.value;
-        const obj = { label: element?.type, value: type };
-        return obj;
-      });
-      this.tnxType = this.tnxType?.filter((k) => k.value);
-      this.tnxType.push({ label: 'Others', value: 'Others' });
-      this.tnxTypeOrigin = [...this.tnxType];
-      this.lstType.emit(this.tnxTypeOrigin);
+    let lstFilter = LIST_TRANSACTION_FILTER;
+    this.tnxType = lstFilter?.map((element) => {
+      let type = _.find(TYPE_TRANSACTION, { label: element?.type });
+      const obj = { label: element?.type, value: type ? type['value'] : null };
+      return obj;
     });
+    this.tnxType = this.tnxType?.filter((k) => k.value);
+    this.tnxType.push({ label: 'Others', value: 'Others' });
+    this.tnxTypeOrigin = [...this.tnxType];
+    this.lstType.emit(this.tnxTypeOrigin);
   }
 
   getListTxByAddress(payload) {
