@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit,
 import { Router } from '@angular/router';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
@@ -25,7 +26,12 @@ export class NftCardComponent implements OnInit, AfterViewInit {
   animationUrl: string;
   imageUrl: string;
 
-  constructor(private environmentService: EnvironmentService, private router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private environmentService: EnvironmentService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private commonService: CommonService,
+  ) {}
 
   ngAfterViewInit(): void {
     if (this.video) {
@@ -56,19 +62,19 @@ export class NftCardComponent implements OnInit, AfterViewInit {
 
     // account bound token
     if (this.nftItem?.token_img) {
-      this.imageUrl = this.replaceImgIpfs(this.nftItem?.token_img);
+      this.imageUrl = this.commonService.replaceImgIpfs(this.nftItem?.token_img);
     }
     if (this.nftItem?.animation_url) {
       if (!this.nftItem?.token_img) {
         if (this.nftItem.img_type === 'image/gif') {
-          this.imageUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
+          this.imageUrl = this.commonService.replaceImgIpfs(this.nftItem?.animation_url);
         } else {
-          this.animationUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
+          this.animationUrl = this.commonService.replaceImgIpfs(this.nftItem?.animation_url);
         }
       } else if (this.getTypeFile(this.nftItem) !== MEDIA_TYPE.IMG) {
-        this.animationUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
+        this.animationUrl = this.commonService.replaceImgIpfs(this.nftItem?.animation_url);
       } else {
-        this.imageUrl = this.replaceImgIpfs(this.nftItem?.token_img);
+        this.imageUrl = this.commonService.replaceImgIpfs(this.nftItem?.token_img);
       }
     }
   }
@@ -107,9 +113,5 @@ export class NftCardComponent implements OnInit, AfterViewInit {
     if (!this.disableLink) {
       this.router.navigate([link]);
     }
-  }
-
-  replaceImgIpfs(value) {
-    return this.environmentService.ipfsDomain + value.replace('://', '/');
   }
 }

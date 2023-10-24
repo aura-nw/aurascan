@@ -18,6 +18,7 @@ import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -49,6 +50,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  quota = this.environmentService.chainConfig.quotaSetPrivateName;
 
   constructor(
     public commonService: CommonService,
@@ -56,6 +58,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private toastr: NgxToastrService,
     private global: Globals,
+    private environmentService: EnvironmentService
   ) {}
 
   ngOnInit(): void {
