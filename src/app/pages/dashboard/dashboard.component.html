@@ -359,12 +359,12 @@
             type="button"
             class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/blocks'"
-            *ngIf="dataSourceBlock.data.length > 0">
+            *ngIf="dataSourceBlock?.data?.length > 0">
             <span>View more</span>
           </button>
         </div>
         <div class="card-body pt-4 pt-lg-2">
-          <ng-container *ngIf="dataSourceBlock.data.length > 0 && !isLoadingBlock; else noValues">
+          <ng-container *ngIf="dataSourceBlock?.data?.length > 0 && !isLoadingBlock; else noValues">
             <div class="table-responsive">
               <table mat-table [dataSource]="dataSourceBlock" class="aura-table body blocks">
                 <ng-container *ngFor="let template of templatesBlock; index as i">
@@ -428,7 +428,7 @@
             type="button"
             class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/transaction'"
-            *ngIf="dataSourceTx.data.length > 0">
+            *ngIf="dataSourceTx?.data?.length > 0">
             <span>View more</span>
           </button>
         </div>
