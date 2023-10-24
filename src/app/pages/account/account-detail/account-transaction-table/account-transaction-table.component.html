@@ -115,7 +115,7 @@
           <span>{{ transactionFilter.startDate | date : 'MM/dd/yyyy' }}</span>
           <span class="mx-1">-</span>
           <span>{{ transactionFilter.endDate | date : 'MM/dd/yyyy' }}</span>
-          <i class="ph-thin ph-x cursor-pointer body" (click)="clearFilter(modeFilter.date)"></i>
+          <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.date)"></i>
         </div>
         <div class="dropdown aura-dropdown btn-item ml-6 flex-shrink-0" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <button
@@ -131,7 +131,7 @@
               <ng-container *ngIf="!transactionFilter.typeTransfer"> Asset Transfer Type </ng-container>
               <span *ngIf="transactionFilter.typeTransfer?.length > 0">{{ transactionFilter.typeTransfer }} </span>
             </span>
-            <div class="ml-3 d-flex align-items-center">
+            <div class="ml-1 d-flex align-items-center">
               <ng-container *ngIf="!transactionFilter.typeTransfer">
                 <i class="ph ph-caret-down text--white body"></i>
                 <i class="ph ph-caret-up text--white body"></i>
@@ -176,7 +176,7 @@
             (click)="tnxTypeMenuBtn.click(); initTnxFilterPanel()"
             *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
             {{ checkAll ? 'All' : transactionFilter.type?.length || 1 }} Msg Types selected
-            <i class="ph-thin ph-x cursor-pointer body" (click)="clearFilter(modeFilter.msgType)"></i>
+            <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.msgType)"></i>
           </div>
           <mat-menu
             #tnxTypeMenu="matMenu"
