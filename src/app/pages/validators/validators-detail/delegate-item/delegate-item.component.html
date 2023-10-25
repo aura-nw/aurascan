@@ -23,7 +23,7 @@
               <span class="modal__title break-all">{{ currentValidatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ currentValidatorDetail?.commission | percent : globals.formatNumber2Decimal }}
+              Commission - {{ currentValidatorDetail?.commission | percent : number2Digit }}
             </div>
           </div>
         </div>
@@ -40,7 +40,7 @@
         <popup-delegate [data]="dataDelegate"></popup-delegate>
 
         <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-          <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
+          <input type="number" [max]="maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
           <div class="d-flex align-items-center py-1 mr-4">
             <button
               class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"

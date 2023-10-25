@@ -1,4 +1,4 @@
-FROM node:14-alpine as build-stage
+FROM node:16-alpine as build-stage
 RUN mkdir -p /data/app
 WORKDIR /data/app
 COPY . /data/app

@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -50,10 +50,12 @@ export class CommunityPoolProposalComponent implements OnInit {
   );
   length: number;
   dataSource: MatTableDataSource<any>;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  listCoin = this.environmentService.configValue.coins;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  listCoin = this.environmentService.coins;
   statusConstant = PROPOSAL_STATUS;
   distributionAcc = '';
+  isLoading = true;
+  errText = null;
 
   constructor(
     public translate: TranslateService,
@@ -98,11 +100,20 @@ export class CommunityPoolProposalComponent implements OnInit {
       offset: (index - 1) * this.pageData.pageSize,
       type: '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal',
     };
-    this.proposalService.getProposalData(payload).subscribe((res) => {
-      if (res?.proposal) {
-        this.dataSource = new MatTableDataSource(res.proposal);
-      }
-      this.length = res.proposal_aggregate.aggregate.count;
+    this.proposalService.getProposalData(payload).subscribe({
+      next: (res) => {
+        if (res?.proposal) {
+          this.dataSource = new MatTableDataSource(res.proposal);
+        }
+        this.length = res.proposal_aggregate.aggregate.count;
+      },
+      error: (e) => {
+        this.isLoading = false;
+        this.errText = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 }

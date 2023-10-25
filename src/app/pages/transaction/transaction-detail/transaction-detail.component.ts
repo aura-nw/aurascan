@@ -20,6 +20,7 @@ export class TransactionDetailComponent implements OnInit {
   codeTransaction = CodeTransaction;
   isRawData = false;
   errorMessage = '';
+  errText = null;
   TAB = [
     {
       id: 0,
@@ -31,9 +32,9 @@ export class TransactionDetailComponent implements OnInit {
     },
   ];
 
-  chainId = this.environmentService.configValue.chainId;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  chainId = this.environmentService.chainId;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
   loading = true;
   seeLess = false;
   isDisplayMore = false;
@@ -62,8 +63,8 @@ export class TransactionDetailComponent implements OnInit {
         limit: 1,
         hash: this.txHash,
       };
-      this.transactionService.getListTxDetail(payload).subscribe(
-        (res) => {
+      this.transactionService.getListTxDetail(payload).subscribe({
+        next: (res) => {
           if (res?.transaction?.length > 0) {
             const txs = convertDataTransaction(res, this.coinInfo);
             this.transaction = txs[0];
@@ -100,11 +101,14 @@ export class TransactionDetailComponent implements OnInit {
             }, 10000);
           }
         },
-        () => {},
-        () => {
+        error: (e) => {
+          this.loading = false;
+          this.errText = e.status + ' ' + e.statusText;
+        },
+        complete: () => {
           this.loading = false;
         },
-      );
+      });
     } else {
       this.loading = false;
     }

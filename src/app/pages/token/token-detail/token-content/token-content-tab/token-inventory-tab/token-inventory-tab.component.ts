@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -25,7 +25,7 @@ export class TokenInventoryComponent implements OnInit {
   nftData = new MatTableDataSource<any>();
   contractAddress = '';
   keyWord = '';
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   linkToken = 'token-nft';
 
   constructor(
@@ -33,7 +33,7 @@ export class TokenInventoryComponent implements OnInit {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private router: Router,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

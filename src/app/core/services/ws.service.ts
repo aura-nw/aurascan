@@ -17,7 +17,7 @@ interface RedisResponse {
   providedIn: 'root',
 })
 export class WSService {
-  socketUrl = `${this.environmentService.configValue.urlSocket}`;
+  socketUrl = `${this.environmentService.socketUrl}`;
 
   public wsData: BehaviorSubject<any>;
   public data$: Observable<any>;
@@ -55,7 +55,6 @@ export class WSService {
     if (this.socket?.connected) {
       return;
     }
-
     this.socket = io(this.socketUrl, {
       path: '/ws/socket.io',
       autoConnect: true,

@@ -95,6 +95,7 @@ form.aura-form.single-input-field {
             background: url('../../../assets/icons/icons-svg/basic/chevron-down.svg') center no-repeat;
             background-size: auto;
             transition: background 0.35s ease-in-out;
+            border: none;
           }
           &.active {
             &:after {

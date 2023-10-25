@@ -20,7 +20,7 @@ export interface CardMobContent {
   styleUrls: ['./card-mob-explain.component.scss'],
 })
 export class CardMobExplainComponent implements OnInit {
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   @Input() title: CardMobExplainTitle;
   @Input() status: any;
   @Input() content: CardMobContent[];

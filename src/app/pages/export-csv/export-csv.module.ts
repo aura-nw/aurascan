@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { UserService } from 'src/app/core/services/user.service';
-import { ExportCsvComponent } from './export-csv.component';
-import { ExportCsvRoutingModule } from './export-csv-routing.module';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MaterialModule } from 'src/app/material.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { NgxMaskModule } from 'ngx-mask';
+import { ExportCsvRoutingModule } from './export-csv-routing.module';
+import { ExportCsvComponent } from './export-csv.component';
 @NgModule({
   declarations: [ExportCsvComponent],
   imports: [
@@ -19,13 +18,11 @@ import { NgxMaskModule } from 'ngx-mask';
     CommonModule,
     ReactiveFormsModule,
     CommonPipeModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSlideToggleModule,
     TooltipCustomizeModule,
-    NgxMaskModule
+    NgxMaskPipe,
+    MaterialModule,
   ],
-  providers: [UserService],
+  providers: [UserService, provideEnvironmentNgxMask(MASK_CONFIG)],
   exports: [ExportCsvComponent],
 })
 export class ExportCsvModule {}

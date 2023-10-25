@@ -1,6 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
@@ -20,7 +25,7 @@ import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
 })
 export class PopupAddGrantComponent implements OnInit {
   grantForm;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   periodShow = false;
   allContractAllowActive = false;
   currDate;
@@ -31,12 +36,12 @@ export class PopupAddGrantComponent implements OnInit {
   isSubmit = false;
   isRevoking = false;
   dayConvert = 24 * 60 * 60;
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public environmentService: EnvironmentService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
@@ -76,11 +81,11 @@ export class PopupAddGrantComponent implements OnInit {
     this.addContracts();
   }
 
-  get contracts(): FormArray {
-    return this.grantForm.get('execute_contract') as FormArray;
+  get contracts(): UntypedFormArray {
+    return this.grantForm.get('execute_contract') as UntypedFormArray;
   }
 
-  newContract(): FormGroup {
+  newContract(): UntypedFormGroup {
     return this.fb.group({
       address: ['', { validators: [Validators.required] }],
     });
@@ -176,7 +181,7 @@ export class PopupAddGrantComponent implements OnInit {
                 executeContract: execute_contract,
               },
               senderAddress: granter,
-              network: this.environmentService.configValue.chain_info,
+              network: this.environmentService.chainInfo,
               signingType: ESigningType.Keplr,
               chainId: this.walletService.chainId,
             });

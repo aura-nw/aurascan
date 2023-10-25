@@ -25,15 +25,14 @@ export type WalletKey = Partial<Key> | AccountResponse;
   providedIn: 'root',
 })
 export class WalletService implements OnDestroy {
-  apiUrl = `${this.environmentService.configValue.beUri}`;
-  chainId = this.environmentService.configValue.chainId;
-  chainInfo = this.environmentService.configValue.chain_info;
-  graphUrl = `${
-    this.environmentService.configValue.horoscopeUrl + this.environmentService.configValue.horoscopePathGraphql
-  }`;
+  apiUrl = `${this.environmentService.backend}`;
+  chainId = this.environmentService.chainId;
+  chainInfo = this.environmentService.chainInfo;
+
+  graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
 
   coin98Client: Coin98Client;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   wallet$: Observable<WalletKey>;
 
   private _wallet$: BehaviorSubject<WalletKey>;
@@ -313,7 +312,7 @@ export class WalletService implements OnDestroy {
   }
 
   private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
-    const envDB = this.environmentService.configValue.horoscopeSelectedChain;
+    const envDB = this.environmentService.horoscope.chain;
     const operationsDoc = `
     query getAccountInfo ($address: String) {
       ${envDB} {

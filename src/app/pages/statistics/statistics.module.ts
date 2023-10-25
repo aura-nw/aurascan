@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { MaskPipe, NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { StatisticService } from 'src/app/core/services/statistic.service';
+import { MaterialModule } from 'src/app/material.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -32,12 +33,13 @@ import { TopStatisticsComponent } from './top-statistics/top-statistics.componen
     CommonPipeModule,
     NgApexchartsModule,
     NgbNavModule,
-    MatTableModule,
     TranslateModule,
     TableNoDataModule,
-    NgxMaskModule,
-    NameTagModule
+    NgxMaskDirective,
+    NgxMaskPipe,
+    NameTagModule,
+    MaterialModule,
   ],
-  providers: [StatisticService, MaskPipe],
+  providers: [StatisticService, provideEnvironmentNgxMask(MASK_CONFIG), NgxMaskPipe],
 })
 export class StatisticsModule {}

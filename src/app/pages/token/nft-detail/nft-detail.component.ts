@@ -1,10 +1,15 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+} from '@angular/material/legacy-dialog';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
+import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { LENGTH_CHARACTER, MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -13,20 +18,16 @@ import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { convertDataAccountTransaction, Globals } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
-import * as _ from 'lodash';
-import { UserService } from 'src/app/core/services/user.service';
-import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 
 @Component({
   selector: 'app-nft-detail',
@@ -41,7 +42,6 @@ export class NFTDetailComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   templates: Array<TableTemplate> = [
-    // { matColumnDef: 'popover', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
@@ -72,16 +72,16 @@ export class NFTDetailComponent implements OnInit {
   imageUrl: string;
   isCW4973 = false;
 
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   userAddress = '';
   ContractVerifyType = ContractVerifyType;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  network = this.environmentService.configValue.chain_info;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  network = this.environmentService.chainInfo;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     public commonService: CommonService,
@@ -244,25 +244,6 @@ export class NFTDetailComponent implements OnInit {
       this.getDataTable(this.nextKey);
       this.currentKey = this.nextKey;
     }
-  }
-
-  getPopoverData(data): IContractPopoverData {
-    return {
-      amount: data?.value || 0,
-      code: Number(data?.tx_response?.code),
-      fee: data?.fee || 0,
-      from_address: data?.from_address || '',
-      to_address: data?.to_address || '',
-      price: 0,
-      status: data?.status,
-      symbol: this.denom,
-      tokenAddress: '',
-      tx_hash: data?.tx_hash || '',
-      gas_used: data?.tx_response?.gas_used,
-      gas_wanted: data?.tx_response?.gas_wanted,
-      nftDetail: this.nftDetail,
-      modeExecute: data?.modeExecute,
-    };
   }
 
   async unEquipSBT() {

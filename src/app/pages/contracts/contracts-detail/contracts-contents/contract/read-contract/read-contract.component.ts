@@ -13,7 +13,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 export class ReadContractComponent implements OnInit {
   @Input() contractDetailData: any;
   isExpand = false;
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainInfo = this.environmentService.chainInfo;
   jsValidator = new Validator();
   root: any[];
 
