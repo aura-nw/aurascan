@@ -206,7 +206,6 @@ export class ValidatorService extends CommonService {
           height
           hash
           block_signatures(where: {validator_address: {_eq: $cons_address}}) {
-            signature
             block_id_flag
             timestamp
           }
