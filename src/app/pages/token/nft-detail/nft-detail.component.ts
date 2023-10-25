@@ -123,8 +123,7 @@ export class NFTDetailComponent implements OnInit {
   }
 
   getNFTDetail() {
-    const encoded = encodeURIComponent(this.nftId);
-    this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe(
+    this.contractService.getNFTDetail(this.contractAddress, this.nftId).subscribe(
       (res) => {
         res = res.data[0];
 
