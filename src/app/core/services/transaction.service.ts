@@ -135,7 +135,7 @@ export class TransactionService extends CommonService {
           indexLT: null,
           height: null,
         },
-        operationName: 'queryTxDetail',
+        operationName: 'queryListTopTransaction',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
