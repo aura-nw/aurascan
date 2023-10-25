@@ -88,7 +88,7 @@ export class TransactionService extends CommonService {
       $hash: String = null
       $height: Int = null
     ) {
-      serenity {
+      ${this.envDB} {
         transaction(
           limit: $limit
           where: {
