@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
@@ -11,7 +11,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { IAccountDetail } from 'src/app/core/models/account.model';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { Globals } from 'src/app/global/global';
-import { ChartOptions, chartCustomOptions } from '../chart-options';
+import { chartCustomOptions, ChartOptions } from '../chart-options';
 
 @Component({
   selector: 'app-account-stake',
@@ -146,7 +146,7 @@ export class AccountStakeComponent implements OnChanges {
     }, 2000);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.currentAccountDetail) {
       this.stakeLoading = false;
       if (this.currentAccountDetail?.delegations) {

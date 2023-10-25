@@ -4,12 +4,11 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { ContractTransactionType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { DROPDOWN_ELEMENT, IContractPopoverData, ITableContract } from 'src/app/core/models/contract.model';
+import { DROPDOWN_ELEMENT, ITableContract } from 'src/app/core/models/contract.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';

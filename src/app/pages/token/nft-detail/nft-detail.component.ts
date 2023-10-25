@@ -8,6 +8,8 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
+import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { LENGTH_CHARACTER, MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -20,14 +22,12 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { convertDataAccountTransaction, Globals } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
-import * as _ from 'lodash';
-import { UserService } from 'src/app/core/services/user.service';
-import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 
 @Component({
   selector: 'app-nft-detail',
@@ -123,8 +123,7 @@ export class NFTDetailComponent implements OnInit {
   }
 
   getNFTDetail() {
-    const encoded = encodeURIComponent(this.nftId);
-    this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe(
+    this.contractService.getNFTDetail(this.contractAddress, this.nftId).subscribe(
       (res) => {
         res = res.data[0];
 

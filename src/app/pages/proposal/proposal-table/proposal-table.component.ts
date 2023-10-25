@@ -36,6 +36,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @Input() tabId: string;
   @Input() data: any[];
   @Input() length: number;
+  @Input() errTxt: string;
 
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
   @Output() isNextPage = new EventEmitter<boolean>();
@@ -78,7 +79,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
 
   displayedColumns: string[];
   template: Array<TableTemplate> = [];
-
   dataSource: MatTableDataSource<any>;
   pageSize = 5;
   pageIndex = 0;

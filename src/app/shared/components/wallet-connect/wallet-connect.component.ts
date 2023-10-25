@@ -2,12 +2,11 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
+import { CommonService } from 'src/app/core/services/common.service';
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { WalletService } from '../../../core/services/wallet.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-wallet-connect',
@@ -38,8 +37,6 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     private dlgService: DialogService,
     private layout: BreakpointObserver,
     public commonService: CommonService,
-    private route: ActivatedRoute,
-    private router: Router,
   ) {
     this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state === 'open') {

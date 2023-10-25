@@ -312,39 +312,25 @@
                 <div>
                   <div class="text--gray-2">Yes</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{
-                      curr_voting_Period
-                        ? (curr_voting_Period.tally.yes | formatDigit : 2)
-                        : '0,0'
-                    }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.yes | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
                   <div class="text--gray-2">No</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{
-                      curr_voting_Period ? (curr_voting_Period.tally.no | formatDigit : 2) : '0,0'
-                    }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
                   <div class="text--gray-2">Veto</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{
-                      curr_voting_Period
-                        ? (curr_voting_Period.tally.no_with_veto | formatDigit : 2)
-                        : '0,0'
-                    }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no_with_veto | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
                   <div class="text--gray-2">Abstain</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{
-                      curr_voting_Period
-                        ? (curr_voting_Period.tally.abstain | formatDigit : 2)
-                        : '0,0'
-                    }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.abstain | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
               </div>
@@ -366,22 +352,19 @@
   <div class="row">
     <!-- Block -->
     <div class="col-xl-6">
-      <div class="card">
+      <div class="card box-dashboard">
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <h2 class="text--white mb-0">Blocks</h2>
           <button
             type="button"
             class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/blocks'"
-            *ngIf="dataSourceBlock">
+            *ngIf="dataSourceBlock?.data?.length > 0">
             <span>View more</span>
           </button>
         </div>
-        <div *ngIf="isLoadingBlock" class="mt-20">
-          <app-loading-sprint></app-loading-sprint>
-        </div>
-        <div class="card-body pt-4 pt-lg-2 box-dashboard" *ngIf="!isLoadingBlock">
-          <ng-container *ngIf="dataSourceBlock; else noValues">
+        <div class="card-body pt-4 pt-lg-2">
+          <ng-container *ngIf="dataSourceBlock?.data?.length > 0 && !isLoadingBlock; else noValues">
             <div class="table-responsive">
               <table mat-table [dataSource]="dataSourceBlock" class="aura-table body blocks">
                 <ng-container *ngFor="let template of templatesBlock; index as i">
@@ -418,14 +401,19 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell g-no-data" colspan="9999">
-                    <app-table-no-data></app-table-no-data>
+                    {{ 'NO DATA' | translate }}
                   </td>
                 </tr>
               </table>
             </div>
           </ng-container>
+          <div class="mt-20" *ngIf="isLoadingBlock">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
           <ng-template #noValues>
-            <app-table-no-data></app-table-no-data>
+            <ng-container *ngIf="!isLoadingBlock">
+              <app-table-no-data class="mt-18" [textNull]="errTextBlock"></app-table-no-data>
+            </ng-container>
           </ng-template>
         </div>
       </div>
@@ -433,22 +421,19 @@
 
     <!-- Transaction -->
     <div class="col-xl-6">
-      <div class="card">
+      <div class="card box-dashboard">
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <h2 class="text--white mb-0">Transactions</h2>
           <button
             type="button"
             class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/transaction'"
-            *ngIf="dataSourceTx">
+            *ngIf="dataSourceTx?.data?.length > 0">
             <span>View more</span>
           </button>
         </div>
-        <div *ngIf="isLoadingTx" class="mt-20">
-          <app-loading-sprint></app-loading-sprint>
-        </div>
-        <div class="card-body pt-4 pt-lg-2 box-dashboard" *ngIf="!isLoadingTx">
-          <ng-container *ngIf="dataSourceTx; else noValues">
+        <div class="card-body pt-4 pt-lg-2">
+          <ng-container *ngIf="dataSourceTx.data.length > 0 && !isLoadingBlock; else noValues">
             <div class="table-responsive">
               <table mat-table [dataSource]="dataSourceTx" class="aura-table transaction body">
                 <ng-container *ngFor="let template of templatesTx; index as i">
@@ -504,18 +489,22 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsTx"></tr>
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell g-no-data" colspan="9999">
-                    <app-table-no-data></app-table-no-data>
+                    {{ 'NO DATA' | translate }}
                   </td>
                 </tr>
               </table>
             </div>
           </ng-container>
+          <div class="mt-20" *ngIf="isLoadingTx">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
           <ng-template #noValues>
-            <app-table-no-data></app-table-no-data>
+            <ng-container *ngIf="!isLoadingTx">
+              <app-table-no-data class="mt-18" [textNull]="errTextTx"></app-table-no-data>
+            </ng-container>
           </ng-template>
         </div>
       </div>
     </div>
   </div>
 </section>
-

@@ -8,7 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { isAddress, isContract } from 'src/app/core/utils/common/validation';
+import { isAddress } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-soulbound-token-create-popup',

@@ -3,10 +3,10 @@ import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
-import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { NgxMaskService } from 'ngx-mask';
-import { Subject, Subscription, of, timer } from 'rxjs';
+import { of, Subject, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -21,7 +21,7 @@ import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
-import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
+import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
 @Component({
@@ -69,6 +69,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   max = 1000;
   currDate;
   isPrice = true;
+  isLoadingBlock = true;
+  isLoadingTx = true;
+  errTextBlock = null;
+  errTextTx = null;
 
   curr_voting_Period;
   voting_Period_arr = [];
@@ -93,8 +97,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   destroy$ = new Subject<void>();
   isMobileMatched = false;
   currentAddress = null;
-  isLoadingBlock = true;
-  isLoadingTx = true;
 
   breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
 
@@ -274,26 +276,29 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const payload = {
       limit: this.PAGE_SIZE,
     };
-    this.blockService.getDataBlock(payload).subscribe(
-      (res) => {
+    this.blockService.getDataBlock(payload).subscribe({
+      next: (res) => {
         if (res?.block?.length > 0) {
           const blocks = convertDataBlock(res);
           this.dataSourceBlock = new MatTableDataSource(blocks);
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        this.isLoadingBlock = false;
+        this.errTextBlock = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
         this.isLoadingBlock = false;
       },
-    );
+    });
   }
 
   getListTransaction(): void {
     const payload = {
       limit: this.PAGE_SIZE,
     };
-    this.transactionService.getListTx(payload).subscribe(
-      (res) => {
+    this.transactionService.getListTx(payload).subscribe({
+      next: (res) => {
         this.dataSourceTx.data = [];
         if (res?.transaction?.length > 0) {
           const txs = convertDataTransactionSimple(res, this.coinInfo);
@@ -306,11 +311,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.dataTx = txs;
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        this.isLoadingTx = false;
+        this.errTextTx = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
         this.isLoadingTx = false;
       },
-    );
+    });
   }
 
   getCoinInfo(type: string) {

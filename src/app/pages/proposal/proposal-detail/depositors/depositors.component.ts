@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PROPOSAL_TABLE_MODE } from 'src/app/core/constants/proposal.constant';
@@ -23,6 +23,7 @@ export class DepositorsComponent implements OnInit, OnDestroy {
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   dataLength = 0;
   proposalDeposit = PROPOSAL_TABLE_MODE.DEPOSITORS;
+  errTxt: string;
 
   pageData = { pageIndex: 0, pageSize: 5 };
   destroyed$ = new Subject<void>();
@@ -60,8 +61,14 @@ export class DepositorsComponent implements OnInit, OnDestroy {
             heightGT: res.startBlock[0]?.height,
             heightLT: res.endBlock[0]?.height,
           };
-
           this.getDataDeposit(payload);
+        },
+        error: (e) => {
+          this.loading = false;
+          this.errTxt = e.status + ' ' + e.statusText;
+        },
+        complete: () => {
+          this.loading = false;
         },
       });
   }
@@ -90,6 +97,10 @@ export class DepositorsComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.loading = false;
+      },
+      error: (e) => {
+        this.loading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
       },
     });
   }

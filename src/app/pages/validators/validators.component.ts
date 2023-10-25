@@ -55,13 +55,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   rawData: any[];
   sortedData: any;
   clicked = false;
-  totalDelegator = 0;
   amountFormat = undefined;
   isExceedAmount = false;
   userAddress = '';
   selectedValidator: string;
-  searchNullData = false;
-  listStakingValidator = [];
   validatorDetail: any;
   statusValidator = STATUS_VALIDATOR;
   typeValidator = STATUS_VALIDATOR.Active;
@@ -74,8 +71,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstValidator = [];
   lstReValidator = [];
   lstUndelegate = [];
-  numberCode = 0;
-  arrBlocksMiss = [];
   lstValidatorOrigin = [];
   lstUptime = [];
   TABS = [
@@ -89,7 +84,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     },
   ];
   maxNumberInput = MAX_NUMBER_INPUT;
-
   timerUnSub: Subscription;
   errorExceedAmount = false;
   isHandleStake = false;
@@ -103,12 +97,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
   staking_APR = 0;
-  validatorImgArr;
   maxPercentPower = 0;
   typeActive = 'BOND_STATUS_BONDED';
   countProposal = 0;
   dataUserDelegate;
   loadingData = true;
+  errTxt: string;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -167,8 +161,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getList(): void {
-    this.validatorService.getListValidator(null).subscribe(
-      (res) => {
+    this.validatorService.getListValidator(null).subscribe({
+      next: (res) => {
         this.lstUptime = res.validator;
         if (res.validator?.length > 0) {
           let dataFilter = res.validator.filter((event) =>
@@ -227,11 +221,14 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.searchValidator();
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        this.loadingData = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
         this.loadingData = false;
       },
-    );
+    });
   }
 
   getCountProposal() {
@@ -397,8 +394,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     const halftime = 10000;
     const currentUrl = this.router.url;
     if (this.userAddress && currentUrl.includes('/validators')) {
-      this.accountService.getAccountDetail(this.userAddress).subscribe(
-        (dataWallet) => {
+      this.accountService.getAccountDetail(this.userAddress).subscribe({
+        next: (dataWallet) => {
           if (dataWallet) {
             this.dataDelegate = {
               ...this.dataDelegate,
@@ -408,7 +405,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               stakingToken: dataWallet?.data?.stake_reward,
             };
           }
-
           this.getDataUser();
           this.getListUndelegate();
           setTimeout(() => {
@@ -416,13 +412,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.getList();
           }, halftime);
         },
-        (error) => {
+        error: (error) => {
           setTimeout(() => {
             this.getDataWallet();
             this.getList();
           }, halftime);
         },
-      );
+      });
     }
   }
 
@@ -487,10 +483,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.errorExceedAmount = false;
   }
 
-  handleStaking() {
+  handleDelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const executeStaking = async () => {
+      const executeDelegate = async () => {
         this.isLoading = true;
         const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
@@ -509,8 +505,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
         this.checkStatusExecuteBlock(hash, error);
       };
-
-      executeStaking();
+      executeDelegate();
     }
   }
 

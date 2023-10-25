@@ -18,7 +18,8 @@ export class TopStatisticTransactionComponent implements OnInit {
   currentRange = AURA_TOP_STATISTIC_RANGE.Range1;
   currentDay;
   preDay;
-  loading = true;
+  isLoading = true;
+  errTxt: string;
   transactionsData;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'rank' },
@@ -55,8 +56,8 @@ export class TopStatisticTransactionComponent implements OnInit {
       filterValue = 'thirty_days';
     }
 
-    this.statisticService.getListAccountStatistic().subscribe(
-      (res) => {
+    this.statisticService.getListAccountStatistic().subscribe({
+      next: (res) => {
         if (res && res[filterValue]) {
           this.transactionsData = res[filterValue];
           this.AURASendersDS.data = res[filterValue]?.top_amount_sent;
@@ -67,10 +68,13 @@ export class TopStatisticTransactionComponent implements OnInit {
           this.transactionsData = null;
         }
       },
-      () => {},
-      () => {
-        this.loading = false;
+      error: (e) => {
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
       },
-    );
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 }

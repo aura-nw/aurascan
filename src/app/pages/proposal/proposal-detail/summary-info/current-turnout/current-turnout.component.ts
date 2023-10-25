@@ -47,7 +47,7 @@ export class CurrentTurnoutComponent implements OnInit {
 
     if (key === '') {
       let numberVote: string;
-      numberVote = formatNumber(abs, NUMBER_ONLY_DECIMAL);
+      numberVote = formatNumber(abs, 'en-GB', NUMBER_ONLY_DECIMAL);
       return (isNegative ? '-' : '') + numberVote + key;
     }
     return (isNegative ? '-' : '') + abs + key;

@@ -10,13 +10,13 @@
     </button>
   </div>
 </div>
-<div class="row mt-6" *ngIf="loading">
+<div class="row mt-6" *ngIf="isLoading">
   <app-loading-sprint></app-loading-sprint>
 </div>
-<div class="row mt-6" *ngIf="!loading && !transactionsData">
-  <app-table-no-data></app-table-no-data>
+<div class="row mt-6" *ngIf="!isLoading && !transactionsData">
+  <app-table-no-data [textNull]="errTxt"></app-table-no-data>
 </div>
-<div class="row mt-6 box-statistic" *ngIf="!loading && transactionsData">
+<div class="row mt-6 box-statistic" *ngIf="!isLoading && transactionsData">
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-body">

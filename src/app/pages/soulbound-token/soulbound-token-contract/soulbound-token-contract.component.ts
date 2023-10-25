@@ -2,18 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { SB_TYPE, SOUL_BOUND_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-soulbound-token-contract',
@@ -48,7 +48,6 @@ export class SoulboundTokenContractComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     public dialog: MatDialog,
     private soulboundService: SoulboundService,
     private walletService: WalletService,

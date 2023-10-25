@@ -34,6 +34,8 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
   prevYearNumber = 1;
   originalData = [];
+  isLoading = true;
+  errTxt: string;
 
   maxAmount = 0;
   minAmount = 0;
@@ -50,7 +52,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     public translate: TranslateService,
     private statisticService: StatisticService,
     public datepipe: DatePipe,
-    private maskService: NgxMaskPipe
+    private maskService: NgxMaskPipe,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
     if (
@@ -166,48 +168,57 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     const currTime = new Date();
     const prevTime = new Date(currTime.getFullYear() - 1, 0, 1);
 
-    this.statisticService.getDataStatistic(prevTime, currTime).subscribe((res) => {
-      if (res?.daily_statistics.length > 0) {
-        let dataY = [];
-        let dataX = [];
-        let dayMax;
-        let dayMin;
-        let tempArr = [...res.daily_statistics];
+    this.statisticService.getDataStatistic(prevTime, currTime).subscribe({
+      next: (res) => {
+        if (res?.daily_statistics.length > 0) {
+          let dataY = [];
+          let dataX = [];
+          let dayMax;
+          let dayMin;
+          let tempArr = [...res.daily_statistics];
 
-        switch (this.chartType) {
-          case 'daily-transactions':
-            tempArr.sort((a, b) => a.daily_txs - b.daily_txs);
-            this.maxAmount = tempArr[tempArr.length - 1].daily_txs;
-            this.minAmount = tempArr[0].daily_txs;
-            dayMax = new Date(tempArr[tempArr.length - 1].date);
-            dayMin = new Date(tempArr[0].date);
-            dataX = res.daily_statistics.map((data) => data.daily_txs);
-            break;
-          case 'unique-addresses':
-            tempArr.sort((a, b) => a.unique_addresses - b.unique_addresses);
-            this.maxAmount = tempArr[tempArr.length - 1].unique_addresses;
-            this.minAmount = tempArr[0].unique_addresses;
-            dayMax = new Date(tempArr[tempArr.length - 1].date);
-            dayMin = new Date(tempArr[0].date);
-            dataX = res.daily_statistics.map((data) => data.unique_addresses);
-            break;
-          case 'daily_active_addresses':
-            tempArr.sort((a, b) => a.daily_active_addresses - b.daily_active_addresses);
-            this.maxAmount = tempArr[tempArr.length - 1].daily_active_addresses;
-            this.minAmount = tempArr[0].daily_active_addresses;
-            dayMax = new Date(tempArr[tempArr.length - 1].date);
-            dayMin = new Date(tempArr[0].date);
-            dataX = res.daily_statistics.map((data) => data.daily_active_addresses);
-            break;
-          default:
-            break;
+          switch (this.chartType) {
+            case 'daily-transactions':
+              tempArr.sort((a, b) => a.daily_txs - b.daily_txs);
+              this.maxAmount = tempArr[tempArr.length - 1].daily_txs;
+              this.minAmount = tempArr[0].daily_txs;
+              dayMax = new Date(tempArr[tempArr.length - 1].date);
+              dayMin = new Date(tempArr[0].date);
+              dataX = res.daily_statistics.map((data) => data.daily_txs);
+              break;
+            case 'unique-addresses':
+              tempArr.sort((a, b) => a.unique_addresses - b.unique_addresses);
+              this.maxAmount = tempArr[tempArr.length - 1].unique_addresses;
+              this.minAmount = tempArr[0].unique_addresses;
+              dayMax = new Date(tempArr[tempArr.length - 1].date);
+              dayMin = new Date(tempArr[0].date);
+              dataX = res.daily_statistics.map((data) => data.unique_addresses);
+              break;
+            case 'daily_active_addresses':
+              tempArr.sort((a, b) => a.daily_active_addresses - b.daily_active_addresses);
+              this.maxAmount = tempArr[tempArr.length - 1].daily_active_addresses;
+              this.minAmount = tempArr[0].daily_active_addresses;
+              dayMax = new Date(tempArr[tempArr.length - 1].date);
+              dayMin = new Date(tempArr[0].date);
+              dataX = res.daily_statistics.map((data) => data.daily_active_addresses);
+              break;
+            default:
+              break;
+          }
+          dataY = res.daily_statistics.map((data) => data.date);
+          this.maxAmountDate = formatDate(dayMax, 'dd/MM/yyyy', 'en-US');
+          this.minAmountDate = formatDate(dayMin, 'dd/MM/yyyy', 'en-US');
+          this.drawChartFirstTime(dataX, dataY);
+          this.chartEvent();
         }
-        dataY = res.daily_statistics.map((data) => data.date);
-        this.maxAmountDate = formatDate(dayMax, 'dd/MM/yyyy', 'en-US');
-        this.minAmountDate = formatDate(dayMin, 'dd/MM/yyyy', 'en-US');
-        this.drawChartFirstTime(dataX, dataY);
-        this.chartEvent();
-      }
+      },
+      error: (e) => {
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
     this.initTooltip();
   }

@@ -40,6 +40,6 @@ import { TopStatisticsComponent } from './top-statistics/top-statistics.componen
     NameTagModule,
     MaterialModule,
   ],
-  providers: [StatisticService, provideEnvironmentNgxMask(MASK_CONFIG)],
+  providers: [StatisticService, provideEnvironmentNgxMask(MASK_CONFIG), NgxMaskPipe],
 })
 export class StatisticsModule {}
