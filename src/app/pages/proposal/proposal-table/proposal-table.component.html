@@ -278,6 +278,6 @@
     <app-a-paginator [paginator]="pageData" [length]="length" (pageChange)="pageEvent($event)"> </app-a-paginator>
   </div>
   <ng-template #noValues>
-    <app-table-no-data></app-table-no-data>
+    <app-table-no-data [textNull]="errTxt"></app-table-no-data>
   </ng-template>
 </div>

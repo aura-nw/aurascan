@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { getInfo } from 'src/app/core/utils/common/info-common';
 import { Globals, convertDataBlock } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -23,12 +23,9 @@ export class BlocksComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   pageSize = 20;
   loading = true;
+  errTxt: string;
 
-  constructor(
-    private blockService: BlockService,
-    public commonService: CommonService,
-    private globals: Globals,
-  ) {}
+  constructor(private blockService: BlockService, public commonService: CommonService, private globals: Globals) {}
 
   ngOnInit(): void {
     this.getList();
@@ -38,18 +35,21 @@ export class BlocksComponent implements OnInit {
     const payload = {
       limit: this.pageSize,
     };
-    this.blockService.getDataBlock(payload).subscribe(
-      (res) => {
+    this.blockService.getDataBlock(payload).subscribe({
+      next: (res) => {
         if (res?.block?.length > 0) {
           const blocks = convertDataBlock(res);
           this.dataSource = new MatTableDataSource(blocks);
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        this.loading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
         this.loading = false;
       },
-    );
+    });
   }
 
   getInfoCommon(): void {

@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
@@ -43,14 +43,16 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   dataSourceMob: any[];
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  image_s3 = this.environmentService.configValue.image_s3;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
-  listCoin = this.environmentService.configValue.coins;
+  listCoin = this.environmentService.coins;
   listAssetLcd = [];
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   statusConstant = PROPOSAL_STATUS;
+  isLoading = true;
+  errText = null;
 
   constructor(
     public translate: TranslateService,
@@ -110,46 +112,51 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
       );
       this.pageData.length = this.filterSearchData.length;
     } else {
-      const res = await this.tokenService.getListAssetCommunityPool();
-      this.listAssetLcd = _.get(res, 'data.pool');
+      try {
+        const res = await this.tokenService.getListAssetCommunityPool();
+        this.listAssetLcd = _.get(res, 'data.pool');
 
-      this.listAssetLcd.forEach((element) => {
-        let findItem = this.listCoin.find((i) => i.denom === element.denom);
-        if (findItem) {
-          element.decimal = findItem.decimal;
-          element.symbol = findItem.display;
-          element.logo = findItem.logo;
-          element.name = findItem.name;
+        this.listAssetLcd.forEach((element) => {
+          let findItem = this.listCoin.find((i) => i.denom === element.denom);
+          if (findItem) {
+            element.decimal = findItem.decimal;
+            element.symbol = findItem.display;
+            element.logo = findItem.logo;
+            element.name = findItem.name;
+          } else {
+            element.decimal = 6;
+            element.symbol = '';
+            element.logo = '';
+            element.name = 'Aura';
+            element.amount = element.amount / NUMBER_CONVERT;
+            auraAsset = element;
+          }
+        });
+        this.listAssetLcd = this.listAssetLcd.filter((k) => k.symbol !== '');
+        this.listAssetLcd = this.listAssetLcd.sort((a, b) => {
+          return this.compare(balanceOf(a.amount, a.decimal), balanceOf(b.amount, b.decimal), false);
+        });
+        this.listAssetLcd.unshift(auraAsset);
+        this.filterSearchData = this.listAssetLcd;
+        if (!this.dataSource) {
+          this.dataSource = new MatTableDataSource<any>(this.listAssetLcd);
+          this.dataSourceMob = this.listAssetLcd.slice(
+            this.pageData.pageIndex * this.pageSizeMob,
+            this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
+          );
         } else {
-          element.decimal = 6;
-          element.symbol = '';
-          element.logo = '';
-          element.name = 'Aura';
-          element.amount = element.amount / NUMBER_CONVERT;
-          auraAsset = element;
+          this.dataSource.data = this.listAssetLcd;
+          this.dataSourceMob = this.listAssetLcd.slice(
+            this.pageData.pageIndex * this.pageSizeMob,
+            this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
+          );
         }
-      });
-      this.listAssetLcd = this.listAssetLcd.filter((k) => k.symbol !== '');
-      this.listAssetLcd = this.listAssetLcd.sort((a, b) => {
-        return this.compare(balanceOf(a.amount, a.decimal), balanceOf(b.amount, b.decimal), false);
-      });
-      this.listAssetLcd.unshift(auraAsset);
-      this.filterSearchData = this.listAssetLcd;
-      if (!this.dataSource) {
-        this.dataSource = new MatTableDataSource<any>(this.listAssetLcd);
-        this.dataSourceMob = this.listAssetLcd.slice(
-          this.pageData.pageIndex * this.pageSizeMob,
-          this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
-        );
-      } else {
-        this.dataSource.data = this.listAssetLcd;
-        this.dataSourceMob = this.listAssetLcd.slice(
-          this.pageData.pageIndex * this.pageSizeMob,
-          this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
-        );
+        this.pageData.length = this.listAssetLcd.length;
+      } catch (e) {
+        this.errText = e['status'] + ' ' + e['statusText'];
       }
-      this.pageData.length = this.listAssetLcd.length;
     }
+    this.isLoading = false;
   }
 
   paginatorEmit(event): void {

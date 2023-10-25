@@ -1,6 +1,23 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule, inject } from '@angular/core';
+import { Router, RouterModule, Routes, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
 import { LayoutComponent } from './layouts/layout.component';
+import { EnvironmentService } from './core/data-services/environment.service';
+
+const isEnabled = (
+  functionName: string,
+): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> => {
+  const config = inject(EnvironmentService);
+  const router = inject(Router);
+
+  const features = config.configValue['chainConfig']?.features;
+
+  if (features.findIndex((item) => item === functionName) >= 0 || !features) {
+    return true;
+  }
+
+  return router.navigate(['']);
+};
 
 const routes: Routes = [
   {
@@ -13,7 +30,7 @@ const routes: Routes = [
       },
       {
         path: 'dashboard',
-        loadChildren: () => import('./pages/dashboard/dashboard.module').then((m) => m.DashboardModule),
+        redirectTo: '',
       },
       {
         path: 'validators',
@@ -50,11 +67,13 @@ const routes: Routes = [
       {
         path: 'fee-grant',
         loadChildren: () => import('./pages/fee-grant/fee-grant.module').then((m) => m.FeeGrantModule),
+        canMatch: [() => isEnabled('fee-grant')],
       },
       {
         path: 'accountbound',
         loadChildren: () =>
           import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule),
+        canMatch: [() => isEnabled('abt')],
       },
       {
         path: 'community-pool',
@@ -70,6 +89,7 @@ const routes: Routes = [
         path: 'export-csv',
         loadChildren: () => import('./pages/export-csv/export-csv.module').then((m) => m.ExportCsvModule),
       },
+      { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
       {
         path: 'terms',
         loadChildren: () => import('./pages/terms-of-service/terms-of-service.module').then((m) => m.TermsModule),
@@ -80,7 +100,6 @@ const routes: Routes = [
       },
     ],
   },
-  { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
   {
     path: 'raw-data',
     loadChildren: () => import('./pages/schema-viewer/schema-viewer.module').then((m) => m.SchemaViewerModule),
@@ -90,7 +109,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy', scrollPositionRestoration: 'enabled' })],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

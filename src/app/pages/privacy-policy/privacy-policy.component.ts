@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-privacy-policy',
@@ -7,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./privacy-policy.component.scss'],
 })
 export class PrivacyComponent implements OnInit {
-  constructor(private router: ActivatedRoute) {}
+  constructor() {}
 
   ngOnInit(): void {}
 }

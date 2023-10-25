@@ -29,6 +29,10 @@
   }
 }
 
+.box-dashboard {
+  min-height: 413px;
+}
+
 .divider.divider-vertical {
   min-height: 16px;
 }
@@ -69,8 +73,8 @@
     }
   }
   &__3 {
-   background-color: unset;
-   max-width: unset;
+    background-color: unset;
+    max-width: unset;
   }
 }
 .card-summary-info {
@@ -82,7 +86,8 @@
     border-top-right-radius: 0;
   }
 }
-.card-body--gradient-black, .card-info--gradient-black {
+.card-body--gradient-black,
+.card-info--gradient-black {
   background: var(--aura-gradient-black);
 }
 ul {

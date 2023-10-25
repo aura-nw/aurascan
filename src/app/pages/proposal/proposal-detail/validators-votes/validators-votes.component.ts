@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
@@ -49,8 +49,8 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   voteDataList: IValidatorVotes[] = [];
   voteDataListLoading = true;
   countVote: Map<string, number> = new Map<string, number>();
-  tabAll = 0;
   proposalValidatorVote = PROPOSAL_TABLE_MODE.VALIDATORS_VOTES;
+  errTxt: string;
 
   voteData = {
     all: null,
@@ -69,7 +69,7 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   currentTabId = VOTE_OPTION.UNSPECIFIED;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
 
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
     this.proposalService.reloadList$.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
@@ -91,14 +91,10 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
   getValidatorVotes(voteOption = null): void {
     if (this.proposalId) {
       this.proposalService
-        .getValidatorVotesFromIndexer(this.proposalId, {
-          limit: 100,
-          voteOption,
-        })
+        .getValidatorVotesFromIndexer(this.proposalId, { limit: 100, voteOption })
         .pipe(
           map((res) => {
             const validator = res.validator;
-
             const validatorsMap = validator.map((item, index) => {
               const validator_name = item.description?.moniker;
               const timestamp = _.get(item, 'vote[0].updated_at');
@@ -123,15 +119,15 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
             return validatorsMap || null;
           }),
         )
-        .subscribe(
-          (validatorVote) => {
+        .subscribe({
+          next: (validatorVote) => {
             this.rawData = validatorVote;
             this.voteDataListLoading = false;
             this.loadValidatorVotes(validatorVote);
           },
-          (_error) => {
+          error: (_error) => {
             this.voteDataListLoading = false;
-
+            this.errTxt = _error.status + ' ' + _error.statusText;
             this.countVote.set(VOTE_OPTION.UNSPECIFIED, 0);
             this.countVote.set(VOTE_OPTION.YES, 0);
             this.countVote.set(VOTE_OPTION.ABSTAIN, 0);
@@ -139,7 +135,7 @@ export class ValidatorsVotesComponent implements OnInit, OnDestroy {
             this.countVote.set(VOTE_OPTION.NO_WITH_VETO, 0);
             this.countVote.set(VOTE_OPTION.NULL, 0);
           },
-        );
+        });
     }
   }
 

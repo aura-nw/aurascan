@@ -29,8 +29,8 @@
   <div class="box-content text--white mt-3">
     <ng-container *ngFor="let msg of root; index as index">
       <!-- <p>{{ index + 1 }}.{{ getRequired(msg) }} <br />{{ msg | json }}</p> -->
-      <mat-expansion-panel hideToggle *ngIf="msg.fieldName">
-        <mat-expansion-panel-header class="content-contract">
+      <mat-expansion-panel hideToggle *ngIf="msg.fieldName" class="custom-expansion-panel outline">
+        <mat-expansion-panel-header class="content-contract txt-header">
           <mat-panel-title class="item-content body-02 text--gray-1">
             {{ index + 1 }}. {{ msg.fieldName }}
           </mat-panel-title>
@@ -64,34 +64,34 @@
                 class="form-check-input {{ item.isRequired }} {{ item.fieldName }} col-12 mb-4"
                 style="height: auto"></textarea>
 
-                <mat-form-field 
-                  contract
-                  appearance="fill" 
-                  *ngIf="item.type?.includes('boolean')"
-                  [class.error-null]="item.isError"
-                  class="col-12 mb-4">
-                  <mat-select
-                    [(ngModel)]="item.value"
-                    panelClass="contractPanel"
-                    (selectionChange)="resetError(msg)"
-                    [disableOptionCentering]="true"
-                    placeholder="{{ item.fieldName }} ({{ item.type }})">
-                    <mat-option [value]="true">
-                      <div class="d-flex option-contain">
-                        <div class="option-lable">
-                          <span>true</span>
-                        </div>
+              <mat-form-field
+                contract
+                appearance="fill"
+                *ngIf="item.type?.includes('boolean')"
+                [class.error-null]="item.isError"
+                class="col-12 mb-4">
+                <mat-select
+                  [(ngModel)]="item.value"
+                  panelClass="contractPanel"
+                  (selectionChange)="resetError(msg)"
+                  [disableOptionCentering]="true"
+                  placeholder="{{ item.fieldName }} ({{ item.type }})">
+                  <mat-option [value]="true">
+                    <div class="d-flex option-contain">
+                      <div class="option-lable">
+                        <span>true</span>
                       </div>
-                    </mat-option>
-                    <mat-option [value]="false">
-                      <div class="d-flex option-contain">
-                        <div class="option-lable">
-                          <span>false</span>
-                        </div>
+                    </div>
+                  </mat-option>
+                  <mat-option [value]="false">
+                    <div class="d-flex option-contain">
+                      <div class="option-lable">
+                        <span>false</span>
                       </div>
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </ng-container>
 

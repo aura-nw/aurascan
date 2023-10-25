@@ -1,103 +1,134 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
-import { BehaviorSubject } from 'rxjs';
+import * as _ from 'lodash';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 export interface IConfiguration {
-  fabric: string;
-  beUri: string;
-  chainId: string;
-  timeStaking: string;
-  urlSocket: string;
-  validator_s3: string;
-  image_s3: string;
-  chain_info: ChainInfo | null;
-  coins: any;
-  env: string;
-  indexerUri: string;
-  timeInterval: number;
-  ipfsDomain: string;
-  evnLabel: any;
-  maxValidator: number;
-  horoscopeSelectedChain: string;
-  horoscopeUrl: string;
-  horoscopePathGraphql: string;
-  horoscopePathApi: string;
-  notice: { content: string; url: string };
-  googleClientId: string;
-  quotaSetPrivateName: number;
-  siteKeyCaptcha: string;
+  environment: {
+    name: string;
+    label: {
+      desktop: string;
+      mobile: string;
+    };
+    logo: string;
+    notice: {
+      content: string;
+      url: string;
+    };
+  };
+  chainConfig: {
+    stakingTime: string;
+    blockTime: number;
+    quotaSetPrivateName: number;
+    siteKeyCaptcha: string;
+    coins: {
+      name: string;
+      display: string;
+      denom: string;
+      decimal: number;
+      logo: string;
+    }[];
+    features: string[];
+    chain_info: ChainInfo & { gasPriceStep: any };
+  };
+  image: {
+    validator: string;
+    assets: string;
+  };
+  api: {
+    backend: string;
+    socket: string;
+    ipfsDomain: string;
+    googleClientId: string;
+    google: {
+      url: string;
+      clientId: string;
+    };
+    horoscope: {
+      url: string;
+      graphql: string;
+      rest: string;
+      chain: string;
+    };
+  };
 }
 
 @Injectable()
 export class EnvironmentService {
-  private config: BehaviorSubject<IConfiguration> = new BehaviorSubject({
-    fabric: '',
-    beUri: '',
-    chainId: '',
-    timeStaking: '',
-    urlSocket: '',
-    validator_s3: '',
-    image_s3: '',
-    chain_info: null,
-    coins: '',
-    env: '',
-    indexerUri: '',
-    timeInterval: null,
-    ipfsDomain: '',
-    evnLabel: '',
-    maxValidator: null,
-    horoscopeSelectedChain: '',
-    horoscopeUrl: '',
-    horoscopePathGraphql: '',
-    horoscopePathApi: '',
-    notice: { content: '', url: '' },
-    googleClientId: '',
-    quotaSetPrivateName: null,
-    siteKeyCaptcha: null
-  });
+  configUri = './assets/config/config.json';
+  private config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
 
   get configValue(): IConfiguration {
-    return this.config.value;
+    return this.config?.value;
+  }
+
+  get environment() {
+    return _.get(this.configValue, 'environment');
+  }
+
+  get chainConfig() {
+    return _.get(this.configValue, 'chainConfig');
+  }
+
+  get chainInfo() {
+    return _.get(this.configValue, 'chainConfig.chain_info');
+  }
+
+  get chainId() {
+    return _.get(this.configValue, 'chainConfig.chain_info.chainId');
+  }
+
+  get stakingTime() {
+    return _.get(this.configValue, 'chainConfig.stakingTime');
+  }
+
+  get coins() {
+    return _.get(this.configValue, 'chainConfig.coins');
+  }
+
+  get imageUrl() {
+    return _.get(this.configValue, 'image.assets');
+  }
+
+  get ipfsDomain() {
+    return _.get(this.configValue, 'api.ipfsDomain');
+  }
+
+  get backend() {
+    return _.get(this.configValue, 'api.backend');
+  }
+
+  get horoscope() {
+    return _.get(this.configValue, 'api.horoscope');
+  }
+
+  get socketUrl() {
+    return _.get(this.configValue, 'api.socket');
+  }
+
+  get googleClientId() {
+    const _google = _.get(this.configValue, 'api.google');
+    return `${_google.clientId}.${_google.url}`;
   }
 
   constructor(private http: HttpClient) {}
 
+  loadConfig() {
+    return this.http.get<IConfiguration>(this.configUri);
+  }
+
   async load(): Promise<void> {
-    return this.http
-      .get('./assets/config/config.json')
-      .toPromise()
+    return lastValueFrom(this.loadConfig())
       .then((config: any) => {
-        const chainId = config['chainId'] || 'serenity-testnet-001';
-        const chain_info = config['chain_info'];
+        const configuration: IConfiguration = config as IConfiguration;
 
-        const data: IConfiguration = {
-          fabric: config['fabric'],
-          beUri: config['cosmos'],
-          chainId,
-          timeStaking: config['timeStaking'] || '1814400',
-          urlSocket: config['urlSocket'],
-          validator_s3: config['validator_s3'],
-          image_s3: config['image_s3'] || 'https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/',
-          chain_info,
-          coins: config['coins'],
-          env: config['env'],
-          indexerUri: config['urlIndexer'],
-          timeInterval: config['timeInterval'] || 4000,
-          ipfsDomain: config['ipfsDomain'],
-          evnLabel: config['evnLabel'],
-          maxValidator: config['maxValidator'] || 200,
-          horoscopeSelectedChain: config['horoscopeSelectedChain'],
-          horoscopeUrl: config['horoscopeUrl'],
-          horoscopePathGraphql: config['horoscopePathGraphql'],
-          horoscopePathApi: config['horoscopePathApi'],
-          notice: config['notice'] || { content: '', url: '' },
-          googleClientId: config['googleClientId'] || '3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08.apps.googleusercontent.com',
-          quotaSetPrivateName: config['quotaSetPrivateName'] || 10,
-          siteKeyCaptcha: config['siteKeyCaptcha'] || '6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc'
-        };
+        if (this.config) {
+          this.config.next(configuration);
+          return;
+        }
 
-        this.config.next(data);
+        this.config = new BehaviorSubject(configuration);
       })
       .catch((err: any) => {
         console.error(err);

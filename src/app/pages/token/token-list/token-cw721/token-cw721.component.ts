@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -40,11 +40,12 @@ export class TokenCw721Component implements OnInit {
   sort: MatSort;
   sortBy = 'transfer_24h';
   sortOrder = 'desc';
-  isSorting = true;
   searchSubject = new Subject();
-  destroy$ = new Subject();
-  image_s3 = this.environmentService.configValue.image_s3;
+  destroy$ = new Subject<void>();
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  isLoading = true;
+  errTxt: string;
 
   constructor(
     public translate: TranslateService,
@@ -85,9 +86,18 @@ export class TokenCw721Component implements OnInit {
       keySearch = addressNameTag;
     }
 
-    this.tokenService.getListCW721Token(payload, keySearch).subscribe((res) => {
-      this.dataSource = new MatTableDataSource<any>(res.list_token);
-      this.pageData.length = res.total_token?.aggregate?.count;
+    this.tokenService.getListCW721Token(payload, keySearch).subscribe({
+      next: (res) => {
+        this.dataSource = new MatTableDataSource<any>(res.list_token);
+        this.pageData.length = res.total_token?.aggregate?.count;
+      },
+      error: (e) => {
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 

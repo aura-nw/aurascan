@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+} from '@angular/material/legacy-dialog';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
@@ -16,7 +19,6 @@ import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { Globals } from 'src/app/global/global';
 import { PopupAddGrantComponent } from 'src/app/pages/fee-grant/popup-add-grant/popup-add-grant.component';
 import { PopupRevokeComponent } from 'src/app/pages/fee-grant/popup-revoke/popup-revoke.component';
 
@@ -59,14 +61,13 @@ export class MyGranteesComponent implements OnInit {
   };
   isNoData = true;
   currentAddress = null;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   timerGetFeeGrant: any;
   isSearchData = false;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
     public commonService: CommonService,
-    public global: Globals,
     public translate: TranslateService,
     private environmentService: EnvironmentService,
     private dialog: MatDialog,

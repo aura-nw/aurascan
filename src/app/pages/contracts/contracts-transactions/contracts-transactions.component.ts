@@ -43,7 +43,7 @@ export class ContractsTransactionsComponent implements OnInit {
   lengthTxsExecute = 0;
   txsInstantiate = [];
   currentPage = 0;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   modeTxType = { Out: 0, In: 1, Instantiate: 2 };
   hashIns = '';
   hasLoadIns = false;
@@ -51,7 +51,7 @@ export class ContractsTransactionsComponent implements OnInit {
     limit: 100,
   };
 
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     public translate: TranslateService,
@@ -60,16 +60,14 @@ export class ContractsTransactionsComponent implements OnInit {
     private route: ActivatedRoute,
     private transactionService: TransactionService,
     public commonService: CommonService,
-    private global: Globals
+    private global: Globals,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
     valueColumn &&
       ((v) => {
         v.suffix =
-          `<span class="text--primary">` +
-          this.environmentService.configValue.chain_info.currencies[0].coinDenom +
-          `</span>`;
+          `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
       })(valueColumn);
   }
 
@@ -90,7 +88,7 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next(true);
+    this.destroyed$.next();
     this.destroyed$.complete();
 
     if (this.timerGetUpTime) {

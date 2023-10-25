@@ -45,10 +45,10 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   dataInstantiate = [];
   loadingContract = true;
 
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   timerGetUpTime: any;
 
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     private contractService: ContractService,
@@ -56,21 +56,19 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     private router: Router,
     private aRoute: ActivatedRoute,
     private environmentService: EnvironmentService,
-    private location: Location
+    private location: Location,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
     valueColumn &&
       ((v) => {
         v.suffix =
-          `<span class="text--primary">` +
-          this.environmentService.configValue.chain_info.currencies[0].coinDenom +
-          `</span>`;
+          `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
       })(valueColumn);
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next(true);
+    this.destroyed$.next();
     this.destroyed$.complete();
 
     if (this.timerGetUpTime) {
@@ -108,8 +106,8 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   }
 
   changeTab(tabId): void {
-    tabId = tabId || 'transactions'
-    this.location.replaceState("/contracts/" + this.contractInfo.contractsAddress + "?tabId=" + tabId);
+    tabId = tabId || 'transactions';
+    this.location.replaceState('/contracts/' + this.contractInfo.contractsAddress + '?tabId=' + tabId);
     this.countCurrent = tabId;
   }
 

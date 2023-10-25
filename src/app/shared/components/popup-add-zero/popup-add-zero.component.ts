@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { LIST_ZEROES } from 'src/app/core/constants/contract.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WalletService } from 'src/app/core/services/wallet.service';

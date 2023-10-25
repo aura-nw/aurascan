@@ -1,6 +1,6 @@
 <div class="validator-container" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <section class="user-wallet-info">
-    <app-user-wallet-info
+    <app-staking-info
       [breakpoint]="breakpoint"
       [userAddress]="userAddress"
       [dataDelegate]="dataDelegate"
@@ -9,7 +9,8 @@
       [modalManage]="modalManage"
       [denom]="denom"
       [isLoading]="isClaimRewardLoading"
-      (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
+      (onViewDialog)="handleViewPopup($event)">
+    </app-staking-info>
   </section>
 
   <div class="card box-validators" *ngIf="!loadingData">
@@ -29,7 +30,7 @@
           >
         </div>
       </div>
-      <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches">
+      <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches && !errTxt">
         <div class="input-group">
           <input
             type="text"
@@ -177,7 +178,7 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'commission'">
-                          {{ data[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
+                          {{ data[template.matColumnDef] | percent : number2Digit }}
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
                           <div [style.min-width]="'120px'" class="text-end aura-tooltip-contain">
@@ -233,7 +234,7 @@
                         </div>
                         <div *ngSwitchCase="'uptime'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ calculatorUpTime(data['account_address']) | number : globals.formatNumber2Decimal }}%
+                            {{ calculatorUpTime(data['account_address']) | formatDigit : 2 }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
@@ -353,7 +354,7 @@
                           </ng-container>
                           <ng-container *ngSwitchCase="'Commission'">
                             <div class="text--gray-1">
-                              {{ validator[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
+                              {{ validator[template.matColumnDef] | percent : number2Digit }}
                             </div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Participation'">
@@ -383,7 +384,7 @@
         </ng-container>
       </ng-container>
       <ng-template #noValues>
-        <app-table-no-data></app-table-no-data>
+        <app-table-no-data [textNull]="errTxt"></app-table-no-data>
       </ng-template>
     </div>
   </div>
@@ -415,7 +416,7 @@
               <span class="modal__title break-all">{{ validatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ validatorDetail?.commission | percent : globals.formatNumber2Decimal }}
+              Commission - {{ validatorDetail?.commission | percent : number2Digit }}
             </div>
           </div>
         </div>
@@ -441,7 +442,7 @@
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
               mask="separator.6"
-              [max]="globals.maxNumberInput"
+              [max]="maxNumberInput"
               [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
               [(ngModel)]="amountFormat"
               (blur)="resetCheck()" />
@@ -458,7 +459,7 @@
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-            <input [max]="globals.maxNumberInput" mask="separator.6" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
+            <input [max]="maxNumberInput" mask="separator.6" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
             <div class="d-flex align-items-center py-1 mr-4">
               <button
                 class="button button-primary active button-flat button--sm button-max fw-semibold"
@@ -505,7 +506,7 @@
                     <span class="option__name">{{ item.title | translate }}</span>
                   </div>
                   <div class="option-label text--gray-1">
-                    Commission - {{ item.commission | translate | percent : globals.formatNumber2Decimal }}
+                    Commission - {{ item.commission | translate | percent : number2Digit }}
                   </div>
                 </div>
               </mat-option>
@@ -520,11 +521,7 @@
               <span class="text--white"> {{ denom }} </span>
             </div>
             <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-              <input
-                [(ngModel)]="amountFormat"
-                [max]="globals.maxNumberInput"
-                mask="separator.6"
-                (blur)="resetCheck()" />
+              <input [(ngModel)]="amountFormat" [max]="maxNumberInput" mask="separator.6" (blur)="resetCheck()" />
               <div class="d-flex align-items-center py-1 mr-4">
                 <button
                   class="button button-primary active button-flat button--sm button-max fw-semibold"
@@ -627,7 +624,7 @@
             <button
               type="button"
               class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient d-flex"
-              (click)="handleStaking()"
+              (click)="handleDelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <img
                 class="mr-2"

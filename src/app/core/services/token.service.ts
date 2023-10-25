@@ -9,9 +9,9 @@ import { RangeType } from '../models/common.model';
 import { CommonService } from './common.service';
 import * as _ from 'lodash';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
