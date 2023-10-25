@@ -17,9 +17,9 @@ export class TransactionService extends CommonService {
     super(http, environmentService);
   }
 
-  getListTx(payload) {
+  getListTxDetail(payload) {
     const operationsDoc = `
-    query queryListTopTransaction(
+    query queryTxDetail(
       $limit: Int = 100
       $order: order_by = desc
       $heightGT: Int = null
@@ -52,6 +52,69 @@ export class TransactionService extends CommonService {
           gas_used
           gas_wanted
           data
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+          hash: payload.hash,
+          value: payload.value,
+          key: payload.key,
+          heightGT: null,
+          heightLT: payload.heightLT,
+          indexGT: null,
+          indexLT: null,
+          height: null,
+        },
+        operationName: 'queryTxDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListTx(payload) {
+    const operationsDoc = `
+    query queryListTopTransaction(
+      $limit: Int = 100
+      $order: order_by = desc
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $indexGT: Int = null
+      $indexLT: Int = null
+      $hash: String = null
+      $height: Int = null
+    ) {
+      serenity {
+        transaction(
+          limit: $limit
+          where: {
+            hash: { _eq: $hash }
+            height: { _eq: $height }
+            _and: [
+              { height: { _gt: $heightGT } }
+              { index: { _gt: $indexGT } }
+              { height: { _lt: $heightLT } }
+              { index: { _lt: $indexLT } }
+            ]
+          }
+          order_by: [{ height: $order }, { index: $order }]
+        ) {
+          id
+          height
+          hash
+          timestamp
+          code
+          gas_used
+          gas_wanted
+          fee
+          transaction_messages {
+            type
+            content
+          }
         }
       }
     }
@@ -155,8 +218,6 @@ export class TransactionService extends CommonService {
       $value: String = null
       $heightGT: Int = null
       $heightLT: Int = null
-      $indexGT: Int = null
-      $indexLT: Int = null
       $hash: String = null
       $height: Int = null
     ) {
@@ -170,13 +231,8 @@ export class TransactionService extends CommonService {
               value: { _eq: $value}
               composite_key: { _eq: "proposal_deposit.proposal_id"}
               key: { _eq: "proposal_id"}
+              block_height: { _lte: $heightLT, _gte: $heightGT }
             }
-            _and: [
-              { height: { _gt: $heightGT } }
-              { index: { _gt: $indexGT } }
-              { height: { _lt: $heightLT } }
-              { index: { _lt: $indexLT } }
-            ]
           }
           order_by: [{ height: $order}, {index: $order }]
         ) {
@@ -184,7 +240,7 @@ export class TransactionService extends CommonService {
           height
           hash
           timestamp
-          event_attributes{
+          event_attributes (where: {block_height: { _lte: $heightLT, _gte: $heightGT }}){
             value
             composite_key
           }
@@ -199,10 +255,8 @@ export class TransactionService extends CommonService {
           limit: 100,
           order: 'desc',
           value: payload.value,
-          heightGT: null,
-          indexGT: null,
-          indexLT: null,
-          height: null,
+          heightGT: payload.heightGT,
+          heightLT: payload.heightLT,
         },
         operationName: 'queryProposalDeposit',
       })
@@ -253,11 +307,21 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTransferFromTx(height): Observable<any> {
+  getListTransferFromTx(hash): Observable<any> {
     const operationsDoc = `
-    query TxTransferDetail($height: Int, $listFilterCW20: [String!] = null, $listFilterCW721: [String!] = null) {
+    query TxTransferDetail(
+      $listFilterCW20: [String!] = null
+      $listFilterCW721: [String!] = null
+      $txHash: String = null
+    ) {
       ${this.envDB} {
-        cw20_activity(where: {height: {_eq: $height}, amount: {_is_null: false}, action: {_in: $listFilterCW20}}) {
+        cw20_activity(
+          where: {
+            tx_hash: { _eq: $txHash }
+            amount: { _is_null: false }
+            action: { _in: $listFilterCW20 }
+          }
+        ) {
           action
           amount
           from
@@ -272,7 +336,16 @@ export class TransactionService extends CommonService {
             name
           }
         }
-        cw721_activity(where: {height: {_eq: $height}, action: {_in: $listFilterCW721}, cw721_token: {token_id: {_is_null: false}}, cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}}) {
+        cw721_activity(
+          where: {
+            tx_hash: { _eq: $txHash }
+            action: { _in: $listFilterCW721 }
+            cw721_token: { token_id: { _is_null: false } }
+            cw721_contract: {
+              smart_contract: { name: { _neq: "crates.io:cw4973" } }
+            }
+          }
+        ) {
           action
           from
           to
@@ -298,7 +371,7 @@ export class TransactionService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          height: height,
+          txHash: hash,
           listFilterCW20: CW20_TRACKING,
           listFilterCW721: CW721_TRACKING,
         },

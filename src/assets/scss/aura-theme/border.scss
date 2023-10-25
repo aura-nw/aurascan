@@ -17,6 +17,14 @@
   border-radius: 8px !important;
 }
 
+.border-none {
+  border: none !important;
+}
+
+.border-top {
+  border-top: solid 1px var(--aura-light-gray) !important;
+  padding-top: var(--spacer-5);
+}
 .border-right {
   border-right: 1px solid var(--aura-gray-9);
 }

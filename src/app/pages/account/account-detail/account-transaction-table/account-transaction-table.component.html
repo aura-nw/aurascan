@@ -1,13 +1,5 @@
-<div
-  class="d-lg-none d-flex align-items-center mb-4 {{
-    !displayFilter ? 'justify-content-between' : 'justify-content-end'
-  }}">
-  <div
-    class="caption text--gray-5 {{ !transactionLoading && !displayType && !displayFilter ? 'visible' : 'invisible' }}">
-    {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
-    found
-  </div>
-  <div class="d-flex align-items-center">
+<div class="d-lg-none d-block mb-4">
+  <div class="d-flex align-items-center justify-content-end">
     <button
       *ngIf="
         ((transactionFilter.startDate && transactionFilter.endDate) ||
@@ -15,13 +7,13 @@
           transactionFilter.type) &&
         displayFilter
       "
-      class="button button-link body-01 px-0 mr-6 d-lg-none"
+      class="button button-link body-01 px-0 mr-4 d-lg-none"
       (click)="clearFilter(modeFilter.all)">
       <span class="text-nowrap">Clear all</span>
     </button>
     <button
       (click)="displayFilter = !displayFilter"
-      class="button button-pill button--sm button-outline button-outline__in-card button-filter px-4"
+      class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4"
       type="button">
       <i class="ph ph-funnel-simple text--white mr-2 body-01"></i>
       <span>Filter</span>
@@ -29,6 +21,20 @@
         {{ countFilter }}
       </span>
     </button>
+    <button
+      class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4 ml-4"
+      type="button"
+      (click)="linkExportPage()">
+      <i class="ph ph-export text--white mr-2 body-01"></i>
+      <span>Export CSV</span>
+    </button>
+  </div>
+  <div
+    class="caption fw-normal text--gray-5 {{
+      !transactionLoading && !displayType && !displayFilter ? 'visible mt-3' : 'invisible'
+    }}">
+    {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+    found
   </div>
 </div>
 <div class="d-flex justify-content-between align-items-center" [ngClass]="displayType ? 'mb-3' : 'mb-4'">
@@ -60,9 +66,9 @@
     <div class="box-filter txs-filter-panel d-flex align-items-center mb-4 mb-lg-0" *ngIf="displayFilter">
       <div class="d-flex align-items-center">
         <div class="dropdown aura-dropdown btn-item body" [class.menu-hidden]="transactionFilter.endDate">
-          <div [style]="'width: 225px'"
-            class="align-items-center d-flex justify-content-between calendar-contain
-            border-sm border-gray-8 border-radius--sm cursor-pointer"
+          <div
+            [style]="'width: 225px'"
+            class="align-items-center d-flex justify-content-between calendar-contain border-sm border-gray-8 border-radius--sm cursor-pointer"
             (click)="datePickerClickTrigger()">
             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
               <input
@@ -109,7 +115,7 @@
           <span>{{ transactionFilter.startDate | date : 'MM/dd/yyyy' }}</span>
           <span class="mx-1">-</span>
           <span>{{ transactionFilter.endDate | date : 'MM/dd/yyyy' }}</span>
-          <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.date)"></i>
+          <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.date)"></i>
         </div>
         <div class="dropdown aura-dropdown btn-item ml-6 flex-shrink-0" *ngIf="modeQuery !== tabsData.ExecutedTxs">
           <button
@@ -125,15 +131,13 @@
               <ng-container *ngIf="!transactionFilter.typeTransfer"> Asset Transfer Type </ng-container>
               <span *ngIf="transactionFilter.typeTransfer?.length > 0">{{ transactionFilter.typeTransfer }} </span>
             </span>
-            <div class="ml-3 d-flex align-items-center">
+            <div class="ml-1 d-flex align-items-center">
               <ng-container *ngIf="!transactionFilter.typeTransfer">
                 <i class="ph ph-caret-down text--white body"></i>
                 <i class="ph ph-caret-up text--white body"></i>
               </ng-container>
               <ng-container *ngIf="transactionFilter.typeTransfer">
-                <i
-                  (click)="clearFilter(modeFilter.type); trigger.click()"
-                  class="ph-thin ph-x cursor-pointer ml-2 body">
+                <i (click)="clearFilter(modeFilter.type); trigger.click()" class="ph-thin ph-x cursor-pointer body">
                 </i>
               </ng-container>
             </div>
@@ -160,7 +164,7 @@
             class="input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-mess"
             [class.menu-hidden]="transactionFilter.type"
             type="button">
-            <span class="body ellipsis-text"> Message type </span>
+            <span class="body line-claim"> Message type </span>
             <div class="ml-3 mt-1">
               <i *ngIf="!transactionFilter.startDate" class="ph ph-caret-down text--white body icon-expand"></i>
               <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
@@ -172,7 +176,7 @@
             (click)="tnxTypeMenuBtn.click(); initTnxFilterPanel()"
             *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
             {{ checkAll ? 'All' : transactionFilter.type?.length || 1 }} Msg Types selected
-            <i class="ph-thin ph-x cursor-pointer ml-2 body" (click)="clearFilter(modeFilter.msgType)"></i>
+            <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.msgType)"></i>
           </div>
           <mat-menu
             #tnxTypeMenu="matMenu"
@@ -300,9 +304,19 @@
       type="button">
       <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
       <span>Filter</span>
-      <span *ngIf="countFilter > 0" class="nft__unclaimed-noti caption aura-tooltip-object text--white" [class.noti--pill]="true">
+      <span
+        *ngIf="countFilter > 0"
+        class="nft__unclaimed-noti caption aura-tooltip-object text--white"
+        [class.noti--pill]="true">
         {{ countFilter }}
       </span>
+    </button>
+    <button
+      class="button button-pill button--sm button-outline button-outline__in-card button-filter px-4 ml-6"
+      type="button"
+      (click)="linkExportPage()">
+      <i class="ph ph-export text--white mr-2 body-01"></i>
+      <span>Export CSV</span>
     </button>
   </div>
 </div>
@@ -397,13 +411,15 @@
                       *ngIf="index < data.limit">
                       <div class="item-show d-flex align-items-center">
                         <div class="aura-tooltip-contain">
-                          <div class="aura-tooltip-object" *ngIf="(item.amountTemp | balanceOf : item.decimal) < 0.001">
+                          <div
+                            class="aura-tooltip-object"
+                            *ngIf="(item.amountTemp | balanceOf : item.decimal) < 0.001 && item.amountTemp != 0">
                             <0,001
                           </div>
                           <app-tooltip-customize [content]="item.amountTemp | convertSmallNumber : item.decimal">
                           </app-tooltip-customize>
                           <div
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001"
+                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001 || item.amountTemp == 0"
                             [appBigNumber]="item.amountTemp"
                             [decimal]="item.decimal"></div>
                         </div>
@@ -493,7 +509,10 @@
                             "></app-name-tag>
                         </div>
                         <ng-container *ngIf="index === 0">
-                          <div class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8" (click)="expandData(data)" *ngIf="data.arrEvent?.length > 1">
+                          <div
+                            class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8"
+                            (click)="expandData(data)"
+                            *ngIf="data.arrEvent?.length > 1">
                             <ng-container *ngIf="data.arrEvent?.length > 100"> >99 </ng-container>
                             <ng-container *ngIf="data.arrEvent?.length <= 100">
                               +{{ data.arrEvent?.length - 1 }}
@@ -586,7 +605,9 @@
     [length]="pageData.length"
     [pageSize]="pageData.pageSize"
     (paginator)="paginatorEmit($event)"
-    (pageEvent)="pageEvent($event)">
+    (pageEvent)="pageEvent($event)"
+    (pageChangeRecord)="pageChangeRecord($event)"
+    [showSelectRecord]="true">
   </app-paginator>
 </ng-container>
 <ng-template #noValues>

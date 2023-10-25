@@ -45,25 +45,6 @@ export class UserService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
   }
 
-  getListTypeFilter() {
-    const operationsDoc = `
-    query GetListType {
-      ${this.envDB} {
-        transaction_message(distinct_on: type) {
-          type
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {},
-        operationName: 'GetListType',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
   getListTxByAddress(payload) {
     const operationsDoc = `
     query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc, $address: String = null) {

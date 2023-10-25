@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-sb-img',
@@ -13,20 +14,16 @@ export class SbImgComponent implements OnInit {
   isError = false;
   previewImg = '';
 
-  constructor(private environmentService: EnvironmentService) {}
+  constructor(private environmentService: EnvironmentService, private commonService: CommonService) {}
 
   ngOnInit(): void {
     if (this.token.token_img) {
-      this.previewImg = this.replaceImgIpfs(this.token.token_img);
+      this.previewImg = this.commonService.replaceImgIpfs(this.token.token_img);
     } else if (this.token.animation_url) {
       if (this.token.img_type === 'image/gif') {
-        this.previewImg = this.replaceImgIpfs(this.token.animation_url);
+        this.previewImg = this.commonService.replaceImgIpfs(this.token.animation_url);
       }
     }
-  }
-
-  replaceImgIpfs(value) {
-    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
   }
 
   error(): void {
