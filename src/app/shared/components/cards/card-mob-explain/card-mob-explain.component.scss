@@ -9,7 +9,7 @@
     color: var(--aura-white);
   }
   .card__content {
-    max-height: 0;
+    max-height: 100px;
     &.show {
       transition: all .35s ease-in-out;
       max-height: 900px;

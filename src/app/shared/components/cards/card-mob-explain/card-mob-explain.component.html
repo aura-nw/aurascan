@@ -11,21 +11,16 @@
         </div>
       </div>
     </div>
-    <button
-      class="button button-explain"
-      (click)="
-        cardContent.classList.contains('show')
-          ? cardContent.classList.remove('show')
-          : cardContent.classList.add('show')
-      ">
-      <img
-        src="assets/icons/icons-svg/white/chevron-down-white.svg"
-        alt=""
-        width="20px"
-        [class.rotate]="cardContent.classList.contains('show')" />
-    </button>
+    <div>
+      <i
+        *ngIf="!data.expand"
+        class="ph ph-caret-down text--white h3 icon-expand"
+        (click)="expandData(data)"
+        [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
+      <i *ngIf="data.expand" class="ph ph-caret-up text--white h3 cursor-pointer" (click)="data.expand = false"></i>
+    </div>
   </div>
-  <div class="card__content mt-4" #cardContent>
+  <div class="card__content my-4" *ngIf="data.expand">
     <div class="card__content-item" *ngFor="let data of content; let idx = index">
       <div class="text--gray-4">{{ data.label }}</div>
       <div

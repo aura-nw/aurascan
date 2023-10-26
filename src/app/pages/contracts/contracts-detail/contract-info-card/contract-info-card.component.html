@@ -15,7 +15,10 @@
     <div class="card__body body-02 body-mob collapse" id="title2">
       <div>
         <div class="text--gray-4 caption fw-normal mb-1">Contract Name</div>
-        <div class="text--gray-light">{{ contractDetail.name }} ({{ contractDetail.version }})</div>
+        <div class="text--gray-light" *ngIf="contractDetail.name">
+          {{ contractDetail.name }} ({{ contractDetail.version }})
+        </div>
+        <div class="text--gray-light" *ngIf="!contractDetail.name">-</div>
       </div>
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
