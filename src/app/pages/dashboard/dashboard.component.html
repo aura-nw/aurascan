@@ -433,7 +433,7 @@
           </button>
         </div>
         <div class="card-body pt-4 pt-lg-2">
-          <ng-container *ngIf="dataSourceTx.data.length > 0 && !isLoadingBlock; else noValues">
+          <ng-container *ngIf="dataSourceTx?.data?.length > 0 && !isLoadingTx; else noValues">
             <div class="table-responsive">
               <table mat-table [dataSource]="dataSourceTx" class="aura-table transaction body">
                 <ng-container *ngFor="let template of templatesTx; index as i">
