@@ -15,8 +15,8 @@ const isEnabled = (
   if (features.findIndex((item) => item === functionNames) >= 0 || !features) {
     return true;
   }
-
-  return router.navigate(['']);
+  return true;
+  // return router.navigate(['']);
 };
 
 const routes: Routes = [
