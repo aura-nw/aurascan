@@ -29,4 +29,12 @@ export class CardMobExplainComponent implements OnInit {
   constructor(private environmentService: EnvironmentService, public commonService: CommonService) {}
 
   ngOnInit(): void {}
+
+  expandData(data) {
+    if (data.arrEvent?.length <= 1) {
+      return;
+    }
+    data.limit = 6;
+    data.expand = !data.expand;
+  }
 }
