@@ -192,7 +192,7 @@
             <ng-container matColumnDef="amount">
               <th *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element">
-                <span class="text--gray-4 caption fw-normal">Amount</span>
+                <span class="text--gray-4 caption fw-normal">{{ 'COMMON.AMOUNT' | translate }}</span>
                 <ng-container *ngIf="element.contract_address === '-'">
                   <div [appBigNumber]="element.balance" [decimal]="0"></div>
                 </ng-container>

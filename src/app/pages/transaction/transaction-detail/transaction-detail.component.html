@@ -5,27 +5,33 @@
 <ng-container *ngIf="!loading">
   <ng-container *ngIf="transaction; else noValues">
     <div class="d-lg-flex justify-content-between align-items-center mb-4 mb-lg-6">
-      <h1 class="text--white mb-0">Transaction Details</h1>
+      <h1 class="text--white mb-0">
+        {{ 'PAGES.TRANSACTION_DETAILS.transactionDetails' | translate }}
+      </h1>
       <div class="button-switch-stage button-fixed mt-4 mt-lg-0">
-        <button class="button" [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
-        <button class="button" [class.active]="isRawData" (click)="changeType(true)">JSON</button>
+        <button class="button" [class.active]="!isRawData" (click)="changeType(false)">
+          {{ 'PAGES.TRANSACTION_DETAILS.summary' | translate }}
+        </button>
+        <button class="button" [class.active]="isRawData" (click)="changeType(true)">
+          {{ 'PAGES.TRANSACTION_DETAILS.JSON' | translate }}
+        </button>
       </div>
     </div>
 
     <div class="text--white">
       <div class="box-error mb-4" *ngIf="errorMessage && !isRawData">
         <div class="mb-1">
-          <div class="fw-semibold mb-1 body-01">Error:</div>
+          <div class="fw-semibold mb-1 body-01">Error: {{ 'LABEL.ERROR' | translate }}:</div>
           <span class="body" id="contentError" [class.line-claim-v]="!seeLess">{{ errorMessage }}</span>
         </div>
         <div *ngIf="isDisplayMore" class="cursor-pointer mt-1 w-auto txt-see-more">
-          <span (click)="seeLess = true" *ngIf="!seeLess">See more</span>
-          <span (click)="seeLess = false" *ngIf="seeLess">See less</span>
+          <span (click)="seeLess = true" *ngIf="!seeLess">{{ 'COMMON.SEE_MORE' | translate }}</span>
+          <span (click)="seeLess = false" *ngIf="seeLess">{{ 'COMMON.SEE_LESS' | translate }}</span>
         </div>
       </div>
       <div class="d-flex align-items-baseline">
         <h2 id="popupCopy" class="mb-0 text--white pb-0 pr-0">
-          {{ !isRawData ? 'Information' : 'Raw Data' }}
+          {{ (!isRawData ? 'LABEL.INFORMATION' : 'LABEL.RAW_DATA') | translate }}
         </h2>
         <div class="aura-tooltip-contain">
           <button
@@ -42,18 +48,20 @@
       <div class="body py-4">
         <div *ngIf="!isRawData">
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Chain Id</div>
+            <div class="col-auto col-lg-2 text--gray-4">
+              {{ 'PAGES.TRANSACTION_DETAILS.chainId' | translate }}
+            </div>
             <div class="col-auto col-lg-10 text--gray-1 mb-0">{{ transaction?.chainid }}</div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">TxHash</div>
+            <div class="col-auto col-lg-2 text--gray-4">{{ 'LABEL.TXHASH' | translate }}</div>
             <div class="col-auto col-lg-10 text--gray-1">
               <span class="d-none d-lg-block">{{ transaction?.tx_hash }}</span>
               <span class="d-lg-none">{{ transaction?.tx_hash | cutStringPipe : 8 : 8 }}</span>
             </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Status</div>
+            <div class="col-auto col-lg-2 text--gray-4">{{ 'COMMON.STATUS' | translate }}</div>
             <div class="col-auto col-lg-10 d-flex align-items-center">
               <img
                 [src]="
@@ -69,7 +77,7 @@
             </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Height</div>
+            <div class="col-auto col-lg-2 text--gray-4">{{ 'COMMON.HEIGHT' | translate }}</div>
             <div class="col-auto col-lg-10">
               <a class="text--primary" routerLink="/blocks/{{ transaction?.height }}">
                 {{ transaction?.height | number }}
@@ -77,7 +85,7 @@
             </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Time</div>
+            <div class="col-auto col-lg-2 text--gray-4">{{ 'COMMON.TIME' | translate }}</div>
             <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
               <div>{{ commonService.getDateValue(transaction?.timestamp)[0] }}</div>
               <div class="d-flex align-items-center ml-1 text--gray-4">
@@ -90,15 +98,15 @@
             </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Fee</div>
+            <div class="col-auto col-lg-2 text--gray-4">{{ 'LABEL.FEE' | translate }}</div>
             <div class="col-auto col-lg-10 text--gray-1">
               {{ +transaction?.fee | mask : 'separator.6' }} <span class="text--white">{{ denom }}</span>
             </div>
           </div>
           <div class="row body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-              <div>Gas</div>
-              <div class="ml-md-1">(used / wanted)</div>
+              <div>{{ 'PAGES.TRANSACTION_DETAILS.gas' | translate }}</div>
+              <div class="ml-md-1">({{ 'PAGES.TRANSACTION_DETAILS.used_wanted' | translate }})</div>
             </div>
             <div class="col-auto col-lg-10 text--gray-1">
               {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
@@ -111,35 +119,22 @@
     </div>
 
     <ng-container *ngIf="!isRawData">
-      <h2 class="text--white">Asset Transfer</h2>
+      <h2 class="text--white">{{ 'PAGES.TRANSACTION_DETAILS.assetTransfer' | translate }}</h2>
       <div class="mb-6">
         <app-token-transfer [transaction]="transaction"></app-token-transfer>
       </div>
     </ng-container>
 
     <ng-container *ngIf="!isRawData && transaction?.messages">
-      <h2 class="text--white">Messages</h2>
+      <h2 class="text--white">{{ 'PAGES.TRANSACTION_DETAILS.messages' | translate }}</h2>
       <app-transaction-messages
         [transactionDetail]="transaction"
         [listValidator]="commonService.listValidator || []"
         *ngIf="commonService.listValidator?.length > 0">
       </app-transaction-messages>
     </ng-container>
-
-    <div class="card text--white" *ngIf="!isRawData && transaction?.read_set">
-      <div class="card-header title-small">Read</div>
-      <div class="card-body py-4">
-        <ngx-json-viewer [json]="!isRawData && transaction?.read_set"></ngx-json-viewer>
-      </div>
-    </div>
-
-    <div class="card text--white" *ngIf="!isRawData && transaction?.write_set">
-      <div class="card-header title-small">Write</div>
-      <div class="card-body py-4" *ngIf="transaction?.write_set">
-        <ngx-json-viewer [json]="transaction?.write_set"></ngx-json-viewer>
-      </div>
-    </div>
   </ng-container>
+
   <ng-template #noValues>
     <app-table-no-data [textNull]="errText"></app-table-no-data>
   </ng-template>

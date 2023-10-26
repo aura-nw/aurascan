@@ -2,16 +2,19 @@
   <div class="box-notice">
     <div class="warning-icon mr-3"></div>
     <div>
-      <div class="h6 mb-1 fw-semibold text--white">Staking will lock your funds for {{ timeStaking }}+ day(s)</div>
+      <div class="h6 mb-1 fw-semibold text--white">
+        {{ 'MESSAGES.STAKING_WILL_LOCK' | translate : { timeStaking: timeStaking } }}
+      </div>
       <div class="small-body mt-2 text--gray-5">
-        You will need to undelegate in order for your staked assets to be liquid again. This process will take
-        {{ timeStaking }} day(s) to complete.
+        {{ 'MESSAGES.UNDELEGATE_LOCK' | translate : { timeStaking: timeStaking } }}
       </div>
     </div>
   </div>
   <div class="box-token mt-8 body-02">
     <div class="d-lg-flex mb-4 mb-xl-6">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5">My delegation</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5">
+        My delegation {{ 'PAGES.VALIDATOR.myDelegation' | translate }}
+      </div>
       <div class="body-01 text--gray-1">
         {{
           !data.validatorDetail?.amount_staked || +data.validatorDetail?.amount_staked < 0.000001
@@ -22,13 +25,15 @@
       </div>
     </div>
     <div class="d-lg-flex mb-4 mb-xl-6">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5">Delegable Balance</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5">
+        Delegable Balance {{ 'PAGES.VALIDATOR.delegableBalance' | translate }}
+      </div>
       <div class="body-01 text--gray-1">
         {{ !availableToken || +availableToken < 0.000001 ? '0' : (+availableToken | mask : 'separator.6') }}
         <span class="text--white"> {{ denom }}</span>
       </div>
     </div>
-    <div class="text--gray-5">Amount to Delegate</div>
+    <div class="text--gray-5">Amount to Delegate {{ 'PAGES.VALIDATOR.amountToDelegate' | translate }}</div>
   </div>
 </ng-container>
 
@@ -39,20 +44,14 @@
     (click)="boxNoticeShow = !boxNoticeShow">
     <div class="warning-icon mr-3"></div>
     <div class="text--gray-5">
-      <div class="mb-2 box-notice__info">
-        You can <span class="fw-bold text--white">"Delegate"</span> more to this validator
-      </div>
-      <div class="mb-2 box-notice__info">
-        Or use <span class="fw-bold text--white">"Redelagate"</span> to switch your assets to another validator.
-      </div>
-      <div class="box-notice__info">
-        Or use <span class="fw-bold text--white">"Undelegate"</span> to start the unbonding period.
-      </div>
+      <div [innerHTML]="'PAGES.VALIDATOR.manageNotice' | translate"></div>
     </div>
   </div>
   <div class="body-01 text--white">
     <div class="d-lg-flex mb-3 mb-xl-6">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">My delegation</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">
+        My delegation {{ 'PAGES.VALIDATOR.myDelegation' | translate }}
+      </div>
       <div class="text--gray-1">
         {{
           !data.validatorDetail?.amount_staked || +data.validatorDetail?.amount_staked < 0.000001
@@ -63,7 +62,9 @@
       </div>
     </div>
     <div class="d-lg-flex mb-3 mb-xl-6">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">Pending Reward</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">
+        Pending Reward {{ 'PAGES.VALIDATOR.pendingReward' | translate }}
+      </div>
       <div class="text--gray-1">
         {{
           !data.validatorDetail?.pending_reward || +data.validatorDetail?.pending_reward < 0.000001
@@ -74,7 +75,9 @@
       </div>
     </div>
     <div class="d-lg-flex">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">Delegable Balance</div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">
+        Delegable Balance {{ 'PAGES.VALIDATOR.delegableBalance' | translate }}
+      </div>
       <div class="text--gray-1">
         {{ !availableToken || +availableToken < 0.000001 ? '0' : (+availableToken | mask : 'separator.6') }}
         <span class="text--white"> {{ denom }}</span>
@@ -87,18 +90,20 @@
   <div class="box-notice">
     <div class="warning-icon mr-3"></div>
     <div class="text--gray-5">
-      <div class="text--white h6 mb-2">Once the unbonding period begins you will:</div>
-      <div>- not receive staking rewards</div>
-      <div>- not be able to cancel the unbonding</div>
-      <div>- need to wait {{ timeStaking }} day(s) for the amount to be liquid</div>
+      <div [innerHTML]="'PAGES.VALIDATOR.undelegateNotice' | translate : { timeStaking: timeStaking }"></div>
     </div>
   </div>
 
   <div class="box-notice mt-3 mb-5">
     <div class="warning-icon mr-3"></div>
     <div>
-      <div class="text--white h6 mb-2">Trying to switch validators?</div>
-      <div class="text--gray-5">Use the 'Redelegate' feature to instantly stake your assets to another validator.</div>
+      <div class="text--white h6 mb-2">
+        Trying to switch validators? {{ 'PAGES.VALIDATOR.switchValidators' | translate }}
+      </div>
+      <div class="text--gray-5">
+        Use the 'Redelegate' feature to instantly stake your assets to another validator.
+        {{ 'PAGES.VALIDATOR.stakeAnotherValidator' | translate }}
+      </div>
     </div>
   </div>
 </ng-container>

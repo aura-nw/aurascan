@@ -50,7 +50,7 @@ export class AccountStakeComponent implements OnChanges {
 
   templatesDelegation: Array<TableTemplate> = [
     { matColumnDef: 'validator_name', headerCellDef: 'Validator' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
     { matColumnDef: 'reward', headerCellDef: 'Reward' },
   ];
   displayedColumnsDelegation: string[] = this.templatesDelegation.map((dta) => dta.matColumnDef);
@@ -58,24 +58,24 @@ export class AccountStakeComponent implements OnChanges {
 
   templatesUnBonding: Array<TableTemplate> = [
     { matColumnDef: 'validator_name', headerCellDef: 'Validator' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
     { matColumnDef: 'completion_time', headerCellDef: 'Completion Time' },
   ];
   displayedColumnsUnBonding: string[] = this.templatesUnBonding.map((dta) => dta.matColumnDef);
   dataSourceUnBonding: MatTableDataSource<any>;
 
   templatesReDelegation: Array<TableTemplate> = [
-    { matColumnDef: 'validator_src_name', headerCellDef: 'From' },
-    { matColumnDef: 'validator_dst_name', headerCellDef: 'To' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'completion_time', headerCellDef: 'Time' },
+    { matColumnDef: 'validator_src_name', headerCellDef: 'COMMON.FROM' },
+    { matColumnDef: 'validator_dst_name', headerCellDef: 'COMMON.TO' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
+    { matColumnDef: 'completion_time', headerCellDef: 'COMMON.TIME' },
   ];
   displayedColumnsReDelegation: string[] = this.templatesReDelegation.map((dta) => dta.matColumnDef);
   dataSourceReDelegation: MatTableDataSource<any>;
 
   templatesVesting: Array<TableTemplate> = [
-    { matColumnDef: 'type_format', headerCellDef: 'Type' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'type_format', headerCellDef: 'LABEL.TYPE' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
     { matColumnDef: 'vesting_schedule', headerCellDef: 'Vesting Schedule' },
   ];
   displayedColumnsVesting: string[] = this.templatesVesting.map((dta) => dta.matColumnDef);

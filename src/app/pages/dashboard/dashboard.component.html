@@ -43,7 +43,7 @@
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                       <i class="ph-coins-thin icon-info text--gray-3"></i>
                       <div class="ml-4">
-                        <div class="mb-2 body-03 text--gray-1">Price</div>
+                        <div class="mb-2 body-03 text--gray-1">{{ 'LABEL.PRICE' | translate }}</div>
                         <div class="text--white h4 mb-0 fw-semibold">
                           <span>{{ tokenInfo ? '$' + (tokenInfo?.current_price | number : '1.2-4') : '-' }}</span>
                           <span
@@ -66,7 +66,7 @@
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                       <i class="ph-chart-line-up-thin icon-info text--gray-3"></i>
                       <div class="ml-4">
-                        <div class="mb-2 body-03 text--gray-1">Market Cap</div>
+                        <div class="mb-2 body-03 text--gray-1">{{ 'PAGES.DASHBOARDS.marketCap' | translate }}</div>
                         <div class="text--white h4 mb-0 fw-semibold">
                           <span>{{ tokenInfo ? '$' + (tokenInfo.market_cap | number : '1.0-0') : '-' }}</span>
                         </div>
@@ -76,7 +76,7 @@
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                       <i class="ph-arrows-down-up-thin icon-info text--gray-3"></i>
                       <div class="ml-4">
-                        <div class="mb-2 body-03 text--gray-1">24h Vol Trading</div>
+                        <div class="mb-2 body-03 text--gray-1">{{ 'PAGES.DASHBOARDS.vol24h' | translate }}</div>
                         <div class="text--white h4 mb-0 fw-semibold">
                           <span>{{ tokenInfo ? '$' + (tokenInfo.total_volume | number : '1.0-0') : '-' }}</span>
                         </div>
@@ -96,7 +96,7 @@
                       disabled
                       [class.active]="isPrice"
                       (click)="isPrice = true; getCoinInfo(chartRange)">
-                      <span>Price chart</span>
+                      <span>{{ 'PAGES.DASHBOARDS.priceChart' | translate }}</span>
                     </button>
                     <!-- <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
                       <span>Volume</span>
@@ -151,7 +151,7 @@
             <div class="d-flex align-items-center">
               <i class="ph-cube-light icon-brand text--gray-3"></i>
               <div class="ml-4">
-                <div class="body text--gray-1">Height</div>
+                <div class="body text--gray-1">{{ 'COMMON.HEIGHT' | translate }}</div>
               </div>
             </div>
             <div *ngIf="global?.dataHeader?.total_blocks > 0" class="h4 mb-0 fw-semibold text--white">
@@ -163,7 +163,7 @@
             <div class="d-flex align-items-center">
               <i class="ph-graph-light icon-brand text--gray-3"></i>
               <div class="ml-4 d-flex align-items-center">
-                <div class="body text--gray-1">Community Pool</div>
+                <div class="body text--gray-1">{{ 'PAGES.DASHBOARDS.communityPool' | translate }}</div>
                 <div class="ml-2 p-0 button button--ssm button-ghost" (click)="navigateToCommunityPool()">
                   <i class="ph-arrow-square-out-fill text--gray-1 body-01 h3-mob mb-0"></i>
                 </div>
@@ -178,7 +178,7 @@
             <div class="d-flex align-items-center">
               <i class="ph-file-light icon-brand text--gray-3"></i>
               <div class="ml-4">
-                <div class="body text--gray-1">Transactions</div>
+                <div class="body text--gray-1">{{ 'COMMON.TRANSACTIONS' | translate }}</div>
               </div>
             </div>
             <div *ngIf="global?.dataHeader?.total_transactions >= 0" class="h4 mb-0 fw-semibold text--white">
@@ -199,7 +199,7 @@
                 width="32px"
                 height="32px" />
               <div class="ml-4">
-                <div class="body text--gray-1">Bonded Token</div>
+                <div class="body text--gray-1">{{ 'PAGES.DASHBOARDS.bondedToken' | translate }}</div>
               </div>
             </div>
             <div *ngIf="global?.dataHeader?.bonded_tokens" class="h4 mb-0 fw-semibold text--white">
@@ -216,7 +216,7 @@
                 width="32px"
                 height="32px" />
               <div class="ml-4">
-                <div class="body text--gray-1">Inflation rate</div>
+                <div class="body text--gray-1">{{ 'PAGES.DASHBOARDS.inflationRate' | translate }}</div>
               </div>
             </div>
             <div *ngIf="global?.dataHeader?.inflation" class="h4 mb-0 fw-semibold text--white">
@@ -233,7 +233,7 @@
                 width="32px"
                 height="32px" />
               <div class="ml-4">
-                <div class="body text--gray-1">Staking APR</div>
+                <div class="body text--gray-1">{{ 'PAGES.DASHBOARDS.stakingAPR' | translate }}</div>
               </div>
             </div>
             <div class="h4 mb-0 fw-semibold text--white">{{ staking_APR.toFixed(2) || 0 }}%</div>
@@ -264,7 +264,7 @@
           class="card-body py-lg-0 d-flex flex-column justify-content-center voting-card {{
             voting_Period_arr.length === 0 ? 'py-4 py-lg-6' : ''
           }}">
-          <div class="h2 h3-mob fw-semibold mb-0 text--white">Votings</div>
+          <div class="h2 h3-mob fw-semibold mb-0 text--white">{{ 'PAGES.DASHBOARDS.votings' | translate }}</div>
           <div *ngIf="voting_Period_arr.length > 0">
             <div class="mt-4 d-flex align-items-center">
               <div class="flex-shrink-0 flex-grow-1 d-flex w-25">
@@ -297,13 +297,13 @@
                   *ngIf="!curr_voting_Period"
                   [disabled]="true"
                   class="button button--sm button-outline button-pill px-4">
-                  <span class="caption fw-normal">View detail</span>
+                  <span class="caption fw-normal">{{ 'PAGES.DASHBOARDS.viewDetail' | translate }}</span>
                 </button>
                 <a
                   *ngIf="curr_voting_Period"
                   href="/votings/{{ curr_voting_Period.proposal_id }}"
                   class="button button--sm button-outline button-pill px-4">
-                  <span class="caption fw-normal">View detail</span>
+                  <span class="caption fw-normal">{{ 'PAGES.DASHBOARDS.viewDetail' | translate }}</span>
                 </a>
               </div>
             </div>
@@ -340,7 +340,7 @@
             class="d-flex flex-column align-items-center justify-content-center h-100"
             *ngIf="voting_Period_arr.length === 0">
             <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt="" />
-            <div class="text--gray-3">No proposal within the voting period</div>
+            <div class="text--gray-3">{{ 'MESSAGES.NO_PROPOSAL_PERIOD' | translate }}</div>
           </div>
         </div>
       </div>
@@ -354,13 +354,13 @@
     <div class="col-xl-6">
       <div class="card box-dashboard">
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
-          <h2 class="text--white mb-0">Blocks</h2>
+          <h2 class="text--white mb-0">{{ 'COMMON.BLOCKS' | translate }}</h2>
           <button
             type="button"
             class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/blocks'"
             *ngIf="dataSourceBlock?.data?.length > 0">
-            <span>View more</span>
+            <span>{{ 'PAGES.DASHBOARDS.viewMore' | translate }}</span>
           </button>
         </div>
         <div class="card-body pt-4 pt-lg-2">
@@ -423,13 +423,13 @@
     <div class="col-xl-6">
       <div class="card box-dashboard">
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
-          <h2 class="text--white mb-0">Transactions</h2>
+          <h2 class="text--white mb-0">{{ 'COMMON.TRANSACTIONS' | translate }}</h2>
           <button
             type="button"
             class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/transaction'"
             *ngIf="dataSourceTx?.data?.length > 0">
-            <span>View more</span>
+            <span>{{ 'PAGES.DASHBOARDS.viewMore' | translate }}</span>
           </button>
         </div>
         <div class="card-body pt-4 pt-lg-2">
@@ -441,8 +441,8 @@
                     <th
                       mat-header-cell
                       *matHeaderCellDef
-                      [class.width-txhash]="template.headerCellDef === 'Tx Hash'"
-                      [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
+                      [class.width-txhash]="template.headerCellDef === ('LABEL.TX_HASH' | translate)"
+                      [ngClass]="template.headerCellDef === ('LABEL.TYPE' | translate) ? 'width-type' : ''">
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">

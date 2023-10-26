@@ -54,7 +54,7 @@
             *ngIf="data.info"
             class="{{ data.class ? data.class : 'text--gray-1' }} mb-0"
             [ngStyle]="{ 'margin-top': '2px' }"
-            [ngClass]="data.label === 'Result' && data['status'] === 'Fail' ? 'text--red-3' : ''"
+            [ngClass]="data.label === 'LABEL.RESULT' && data['status'] === 'Fail' ? 'text--red-3' : ''"
             [innerHTML]="data.info"></div>
         </div>
       </div>

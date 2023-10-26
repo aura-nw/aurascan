@@ -5,14 +5,14 @@
       <div class="row justify-content-between">
         <div class="col-12 col-lg-4">
           <div class="mb-1 mb-lg-2 d-flex justify-content-between">
-            <span class="body-02 body-01-mob text--gray-3">Available Balance: </span>
+            <span class="body-02 body-01-mob text--gray-3">{{ 'PAGES.VALIDATOR.availableBalance' | translate }}:</span>
             <h6 class="mb-0">
               <span class="text--gray-1" [appBigNumber]="+dataStakeInfo['availableToken'] || 0" [decimal]="0"></span>
               <span class="ml-1 text--white">{{ denom }}</span>
             </h6>
           </div>
           <div class="mb-3 mb-lg-0 d-flex justify-content-between">
-            <span class="body-02 body-01-mob text--gray-3">Total Staked: </span>
+            <span class="body-02 body-01-mob text--gray-3">{{ 'PAGES.VALIDATOR.totalStaked' | translate }}:</span>
             <h6 class="mb-0">
               <span class="text--gray-1" [appBigNumber]="+dataStakeInfo['delegatedToken'] || 0" [decimal]="0"></span>
               <span class="ml-1 text--white">{{ denom }}</span>
@@ -32,7 +32,10 @@
               width="20"
               height="20"
               *ngIf="isLoading" />
-            <span class="text--black">Claim Reward: {{ +dataDelegate.stakingToken || 0 | mask : 'separator.6' }}</span>
+            <span class="text--black"
+              >{{ 'PAGES.VALIDATOR.claimReward' | translate }}:
+              {{ +dataDelegate.stakingToken || 0 | mask : 'separator.6' }}</span
+            >
             <span class="ml-1 text--black">{{ denom }}</span>
           </button>
         </div>
@@ -88,7 +91,7 @@
                           class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
                           [disabled]="clicked"
                           (click)="clicked = true; viewDialog(false, modalManage, data['validator_address'])">
-                          <span class="body-02 text--gray-1">Manage</span>
+                          <span class="body-02 text--gray-1">{{ 'PAGES.VALIDATOR.manage' | translate }}</span>
                         </button>
                       </div>
                       <div *ngSwitchDefault>
@@ -150,7 +153,7 @@
                     class="button button--sm button-pill button-outline button-outline__in-card"
                     [disabled]="clicked"
                     (click)="clicked = true; viewDialog(false, modalManage, validator['validator_address'])">
-                    <span class="body-02 text--gray-1">Manage</span>
+                    <span class="body-02 text--gray-1">{{ 'PAGES.VALIDATOR.manage' | translate }}</span>
                   </button>
                 </div>
               </div>
@@ -179,7 +182,7 @@
   <div class="card box-undelegate" *ngIf="lstUndelegate?.length > 0">
     <div
       class="d-flex justify-content-between card-header card-header-dark card-header-gray-des body-02 body-01-mob text--gray-3">
-      Undelegating
+      {{ 'PAGES.VALIDATOR.undelegating' | translate }}
     </div>
     <div class="card-body" *ngIf="!breakpoint.value.matches">
       <ng-container *ngFor="let validator of lstUndelegate">

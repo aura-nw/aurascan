@@ -42,12 +42,12 @@ export class NFTDetailComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
-    { matColumnDef: 'type', headerCellDef: 'Method' },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From' },
-    { matColumnDef: 'to_address', headerCellDef: 'To' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TXN_HASH' },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.METHOD' },
+    { matColumnDef: 'status', headerCellDef: 'LABEL.RESULT' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
+    { matColumnDef: 'from_address', headerCellDef: 'COMMON.FROM' },
+    { matColumnDef: 'to_address', headerCellDef: 'COMMON.TO' },
     { matColumnDef: 'price', headerCellDef: 'Price' },
   ];
 

@@ -23,13 +23,13 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   typeCW4973 = TYPE_CW4973;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },
-    { matColumnDef: 'name', headerCellDef: 'Contract Name' },
-    { matColumnDef: 'label', headerCellDef: 'Label' },
+    { matColumnDef: 'name', headerCellDef: 'LABEL.CONTRACT_NAME' },
+    { matColumnDef: 'label', headerCellDef: 'LABEL.LABEL' },
     { matColumnDef: 'version', headerCellDef: 'Contract Ver' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.TYPE' },
     { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', isShort: true, isNameTag: true },
+    { matColumnDef: 'creator', headerCellDef: 'LABEL.CREATOR', isUrl: '/account', isShort: true, isNameTag: true },
   ];
   contractRegisterType = ContractRegisterType;
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);

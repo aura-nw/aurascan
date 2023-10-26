@@ -31,7 +31,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 8 },
     { matColumnDef: 'address', headerCellDef: 'Address', headerWidth: 12 },
-    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 6 },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.TYPE', headerWidth: 6 },
     { matColumnDef: 'name_tag', headerCellDef: 'Private Name Tag', headerWidth: 12 },
     { matColumnDef: 'createdAt', headerCellDef: 'Added Time', headerWidth: 10 },
     { matColumnDef: 'updatedAt', headerCellDef: 'Updated Time', headerWidth: 10 },

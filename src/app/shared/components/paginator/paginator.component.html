@@ -37,8 +37,8 @@
   </div>
 
   <ul class="d-flex position-paginator pb-0 px-0 small-body col-12 col-lg-6" *ngIf="length && pageLength > 1">
-    <li class="page page-first" (click)="changePageMax(0); selectPage(0)" [class.disabled]="current.isFirst">First</li>
-    <li class="page page-prev" (click)="prevPage()" [class.disabled]="current.isFirst">Prev</li>
+    <li class="page page-first" (click)="changePageMax(0); selectPage(0)" [class.disabled]="current.isFirst">{{ 'PAGINATOR.FIRST' | translate }}</li>
+    <li class="page page-prev" (click)="prevPage()" [class.disabled]="current.isFirst">{{ 'PAGINATOR.PREV' | translate }}</li>
     <ng-container *ngFor="let page of current.list">
       <li
         class="page"
@@ -47,12 +47,12 @@
         {{ page.index + 1 }}
       </li>
     </ng-container>
-    <li class="page page-next" (click)="nextPage()" [class.disabled]="current.isLast">Next</li>
+    <li class="page page-next" (click)="nextPage()" [class.disabled]="current.isLast">{{ 'PAGINATOR.NEXT' | translate }}</li>
     <li
       class="page page-last"
       (click)="changePageMax(pageLength); selectPage(pageLength - 1)"
       [class.disabled]="current.isLast">
-      Last
+      {{ 'PAGINATOR.LAST' | translate }}
     </li>
   </ul>
 </div>

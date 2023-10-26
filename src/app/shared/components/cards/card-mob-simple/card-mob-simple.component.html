@@ -37,7 +37,7 @@
       <div
         *ngFor="let data of content; let i = index"
         class="{{ i > 0 ? 'mt-3' : '' }} d-flex justify-content-between small-body">
-        <div class="body-01 text--gray-4" *ngIf="data.label">{{ data.label }}</div>
+        <div class="body-01 text--gray-4" *ngIf="data.label">{{ data.label | translate }}</div>
         <h6 *ngIf="data.info" class="{{ data.class ? data.class : 'text--gray-1' }} mb-0" [innerHTML]="data.info"></h6>
       </div>
     </div>
@@ -72,7 +72,7 @@
       <span class="body fw-semibold text--gray-1"> {{ tokenData.info }}</span>
     </div>
     <div *ngIf="tokenAmount" class="body-03-mob h5 mb-0 d-flex align-items-center justify-content-between">
-      <div class="text--gray-4">Amount</div>
+      <div class="text--gray-4">{{ 'COMMON.AMOUNT' | translate }}</div>
       <span class="text--gray-1" *ngIf="tokenAmount.isAura" [appBigNumber]="tokenAmount.amount" [decimal]="0"></span>
       <span
         class="text--gray-1"

@@ -45,7 +45,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="token">
-              <th mat-header-cell *matHeaderCellDef>Token</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'COMMON.TOKEN' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex text-nowrap">
                   <a [routerLink]="['/tokens/token-abt', element.smart_contract.address]" class="text--primary">
@@ -59,13 +59,13 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="tokenContract">
-              <th mat-header-cell *matHeaderCellDef>Token Contract</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'TOKEN.tokenContract' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <app-name-tag [value]="element.smart_contract?.address" [url]="'contracts'"></app-name-tag>
               </td>
             </ng-container>
             <ng-container matColumnDef="attestor">
-              <th mat-header-cell *matHeaderCellDef>Creator</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'LABEL.CREATOR' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <app-name-tag [value]="element.smart_contract?.creator"></app-name-tag>
               </td>

@@ -24,9 +24,9 @@ export class StakingInfoComponent implements OnChanges {
   dataSourceWallet = new MatTableDataSource<any>();
   dataStakeInfo = {};
   templatesWallet: Array<TableTemplate> = [
-    { matColumnDef: 'validator_name', headerCellDef: 'Name', desktopOnly: true },
-    { matColumnDef: 'amount_staked', headerCellDef: 'Amount Staked' },
-    { matColumnDef: 'pending_reward', headerCellDef: 'Pending Reward' },
+    { matColumnDef: 'validator_name', headerCellDef: 'LABEL.NAME', desktopOnly: true },
+    { matColumnDef: 'amount_staked', headerCellDef: 'LABEL.AMOUNT_STAKED' },
+    { matColumnDef: 'pending_reward', headerCellDef: 'PAGES.VALIDATOR.pendingReward' },
     { matColumnDef: 'action', headerCellDef: '', desktopOnly: true },
   ];
   displayedColumnsWallet: string[] = this.templatesWallet.map((dta) => dta.matColumnDef);

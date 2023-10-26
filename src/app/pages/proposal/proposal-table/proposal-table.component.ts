@@ -46,7 +46,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true, isNameTag: true },
     { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
     { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME', desktopOnly: true },
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
@@ -60,7 +60,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     },
     { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
     { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME', desktopOnly: true },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
@@ -73,8 +73,8 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       isNameTag: true,
     },
     { matColumnDef: 'hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
   ];
 
   displayedColumns: string[];

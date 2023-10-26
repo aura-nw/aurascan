@@ -38,26 +38,26 @@ export class ValidatorsDetailComponent implements OnInit {
 
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
   templatesBlock: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'block_hash', headerCellDef: 'Block Hash' },
-    { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'height', headerCellDef: 'COMMON.HEIGHT' },
+    { matColumnDef: 'block_hash', headerCellDef: 'LABEL.BLOCK_HASH' },
+    { matColumnDef: 'num_txs', headerCellDef: 'LABEL.TXS' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
   ];
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
 
   dataSourceDelegator: MatTableDataSource<any> = new MatTableDataSource();
   templatesDelegator: Array<TableTemplate> = [
-    { matColumnDef: 'delegator_address', headerCellDef: 'Delegator Address' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'delegator_address', headerCellDef: 'LABEL.DELEGATOR_ADDRESS' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
   ];
   displayedColumnsDelegator: string[] = this.templatesDelegator.map((dta) => dta.matColumnDef);
 
   dataSourcePower: MatTableDataSource<any> = new MatTableDataSource();
   templatesPower: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'height', headerCellDef: 'COMMON.HEIGHT' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TXHASH' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
   ];
   displayedColumnsPower: string[] = this.templatesPower.map((dta) => dta.matColumnDef);
   dataSourcePowerMob: any[];

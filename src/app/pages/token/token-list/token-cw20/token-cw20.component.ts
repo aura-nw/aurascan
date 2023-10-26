@@ -31,7 +31,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     { matColumnDef: 'volume', headerCellDef: 'volume' },
     { matColumnDef: 'circulating_market_cap', headerCellDef: 'circulatingMarketCap' },
     { matColumnDef: 'onChainMarketCap', headerCellDef: 'onChainMarketCap' },
-    { matColumnDef: 'holders', headerCellDef: 'holders' },
+    { matColumnDef: 'holders', headerCellDef: 'LABEL.HOLDERS' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 

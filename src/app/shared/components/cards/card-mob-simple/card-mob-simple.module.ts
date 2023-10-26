@@ -5,10 +5,11 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { LoadingImageModule } from '../../loading-image/loading-image.module';
 import { CardMobSimpleComponent } from './card-mob-simple.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [CardMobSimpleComponent],
-  imports: [CommonModule, RouterModule, CommonPipeModule, LoadingImageModule, CommonDirectiveModule],
+  imports: [CommonModule, RouterModule, CommonPipeModule, LoadingImageModule, CommonDirectiveModule, TranslateModule],
   exports: [CardMobSimpleComponent],
 })
 export class CardMobSimpleModule {}

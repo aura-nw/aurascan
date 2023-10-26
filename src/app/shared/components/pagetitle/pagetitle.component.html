@@ -11,16 +11,20 @@
         </ol>
         <div class="text--white d-flex align-items-center" *ngIf="displayInfo">
           <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.total_blocks">
-            <span class="h4 text--white">Height:</span> {{ global?.dataHeader?.total_blocks | number }}
+            <span class="h4 text--white">{{ 'COMMON.HEIGHT' | translate }}:</span>
+            {{ global?.dataHeader?.total_blocks | number }}
           </div>
           <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.bonded_tokens">
-            <span class="h4 text--white">Bonded:</span> {{ global?.dataHeader?.bonded_tokens }}
+            <span class="h4 text--white">{{ 'LABEL.BONDED' | translate }}:</span>
+            {{ global?.dataHeader?.bonded_tokens }}
           </div>
           <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.inflation">
-            <span class="h4 text--white">Inflation:</span> {{ global?.dataHeader?.inflation }}
+            <span class="h4 text--white">{{ 'LABEL.INFLATION' | translate }}:</span>
+            {{ global?.dataHeader?.inflation }}
           </div>
           <div class="body-01 mb-0">
-            <span class="h4 text--white">Community Pool:</span> {{ global?.dataHeader?.community_pool_format || 0 }}
+            <span class="h4 text--white">{{ 'PAGES.DASHBOARDS.communityPool' | translate }}:</span>
+            {{ global?.dataHeader?.community_pool_format || 0 }}
           </div>
         </div>
       </div>

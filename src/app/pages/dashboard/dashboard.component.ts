@@ -35,19 +35,19 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
 
   templatesBlock: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
+    { matColumnDef: 'height', headerCellDef: 'COMMON.HEIGHT' },
+    { matColumnDef: 'proposer', headerCellDef: 'LABEL.PROPOSER' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
   ];
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
 
   templatesTx: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'type', headerCellDef: 'Message' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TX_HASH' },
+    { matColumnDef: 'height', headerCellDef: 'COMMON.HEIGHT' },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.MASSAGE' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
   ];
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();

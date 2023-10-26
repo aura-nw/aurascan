@@ -123,7 +123,7 @@
                   </a>
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between body-01">
-                    <div class="text--gray-4">Amount</div>
+                    <div class="text--gray-4">{{ 'COMMON.AMOUNT' | translate }}</div>
                     <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
                       <span class="text--white"> {{ denom }}</span>
@@ -161,7 +161,7 @@
                   </a>
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between body-01">
-                    <div class="text--gray-4">Amount</div>
+                    <div class="text--gray-4">{{ 'COMMON.AMOUNT' | translate }}</div>
                     <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
                       <span class="text--white"> {{ denom }}</span>
@@ -221,14 +221,14 @@
                   </div>
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between body-01">
-                    <div class="text--gray-4">Amount</div>
+                    <div class="text--gray-4">{{ 'COMMON.AMOUNT' | translate }}</div>
                     <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
                       <span class="text--white"> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
-                    <div class="text--gray-4">Time</div>
+                    <div class="text--gray-4">{{ 'COMMON.TIME' | translate }}</div>
                     <div class="d-flex align-items-center">
                       <span>{{ item.completion_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
@@ -240,7 +240,7 @@
                   <span class="text--white h5 mb-0">{{ item.type_format }}</span>
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between">
-                    <div class="text--gray-4">Amount</div>
+                    <div class="text--gray-4">{{ 'COMMON.AMOUNT' | translate }}</div>
                     <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
                       <span class="text--white"> {{ denom }}</span>

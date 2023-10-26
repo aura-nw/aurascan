@@ -3,7 +3,9 @@
     <div class="card mb-0 transfer-card">
       <div class="card-body p-0">
         <div class="d-xl-flex justify-content-between align-items-center">
-          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">Coin Token Transfer</h5>
+          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
+            {{ 'PAGES.TRANSACTION_DETAILS.coinTokenTransfer' | translate }}
+          </h5>
         </div>
         <div class="pb-2">
           <div class="table-responsive table-token" *ngIf="dataSourceFTs?.data?.length > 0; else noFTValues">
@@ -59,7 +61,7 @@
                         <div
                           *ngSwitchCase="'amount'"
                           class="d-flex transfer-token-info aura-tooltip-contain w-fit-content">
-                          <span class="caption fw-normal text--gray-4 mb-1">Amount</span>
+                          <span class="caption fw-normal text--gray-4 mb-1">{{ 'COMMON.AMOUNT' | translate }}</span>
                           <div
                             class="aura-tooltip-object"
                             *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) < 0.001">
@@ -78,9 +80,9 @@
 
                       <div *ngSwitchCase="'transfer'" class="d-inline-block transfer-address">
                         <div class="mb-1 text-start d-flex align-items-center">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >From</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            {{ 'PAGES.TRANSACTION_DETAILS.from' | translate }}
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
                             [isLink]="data.from ? true : false"
@@ -94,9 +96,9 @@
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                         </div>
                         <div class="text-start d-flex align-items-center">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >To</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            {{ 'PAGES.TRANSACTION_DETAILS.to' | translate }}
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
                             [isLink]="data.to ? true : false"
@@ -128,7 +130,7 @@
         <ng-template #noFTValues>
           <div class="card card-nodata">
             <app-table-no-data
-              [textNull]="'No FTs transfer activity due to this transaction'"
+              [textNull]="'MESSAGES.NO_FT_TRANSFER' | translate"
               [img]="'assets/images/notFoundNFT.png'"
               [class]="'img-height'"
               [classText]="'body'"></app-table-no-data>
@@ -141,7 +143,9 @@
     <div class="card mb-0 transfer-card">
       <div class="card-body p-0">
         <div class="d-xl-flex justify-content-between align-items-center">
-          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">NFT Transfer</h5>
+          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
+            {{ 'PAGES.TRANSACTION_DETAILS.NFT_Transfer' | translate }}
+          </h5>
         </div>
         <div class="pb-2">
           <div class="table-responsive table-token" *ngIf="dataSourceNFTs.data.length > 0; else noValues">
@@ -159,7 +163,9 @@
                         <div *ngSwitchCase="'nft'">
                           <div class="d-flex transfer-token-info">
                             <div *ngIf="!breakpoint.value.matches" class="mb-1">
-                              <span class="caption fw-normal text--gray-4 mr-1">Token ID</span>
+                              <span class="caption fw-normal text--gray-4 mr-1">
+                                {{ 'COMMON.TOKEN_ID' | translate }}
+                              </span>
                               <span>{{ data?.cw721_token?.token_id }}</span>
                             </div>
                             <div *ngIf="breakpoint.value.matches" class="d-flex mb-1">
@@ -197,9 +203,9 @@
 
                         <div *ngSwitchCase="'transfer'">
                           <div class="mb-1 d-flex align-items-center">
-                            <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                              >From</span
-                            >
+                            <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                              {{ 'COMMON.FROM' | translate }}
+                            </span>
                             <app-name-tag
                               *ngIf="!breakpoint.value.matches"
                               [isLink]="data.from ? true : false"
@@ -214,9 +220,9 @@
                               [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                           </div>
                           <div class="d-flex align-items-center">
-                            <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                              >To</span
-                            >
+                            <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                              {{ 'COMMON.TO' | translate }}
+                            </span>
                             <app-name-tag
                               *ngIf="!breakpoint.value.matches"
                               [isLink]="data.to ? true : false"
@@ -240,7 +246,7 @@
                                 data?.cw721_contract?.smart_contract?.address,
                                 data?.cw721_token?.token_id
                               ]">
-                              <span>NFT</span>
+                              <span>{{ 'COMMON.NFT' | translate }}</span>
                             </button>
                           </div>
                         </ng-container>
@@ -263,7 +269,7 @@
         <ng-template #noValues>
           <div class="card card-nodata">
             <app-table-no-data
-              [textNull]="'No NFTs transfer activity due to this transaction'"
+              [textNull]="'MESSAGES.NO_NFT_TRANSFER' | translate"
               [img]="'assets/images/notFoundNFT.png'"
               [class]="'img-height'"
               [classText]="'body'"></app-table-no-data>

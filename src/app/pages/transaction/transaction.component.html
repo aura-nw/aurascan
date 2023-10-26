@@ -1,4 +1,4 @@
-<app-pagetitle title="Transactions" [displayInfo]="true"></app-pagetitle>
+<app-pagetitle title="{{ 'COMMON.TRANSACTIONS' | translate }}" [displayInfo]="true"></app-pagetitle>
 <section *ngIf="!loading" class="mt-4 mt-md-6">
   <ng-container *ngIf="dataTx?.length > 0; else noValues">
     <div class="card">
@@ -10,7 +10,10 @@
                 <th
                   mat-header-cell
                   *matHeaderCellDef
-                  [class.col-per-13]="template.headerCellDef === 'Height' || template.headerCellDef === 'Result'">
+                  [class.col-per-13]="
+                    template.headerCellDef === ('COMMON.HEIGHT' | translate) ||
+                    template.headerCellDef === ('LABEL.RESULT' | translate)
+                  ">
                   <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
 
@@ -87,26 +90,26 @@
             [title]="{
               size: 'md',
               titleClass: 'h6-mob',
-              label: data.tx_hash | cutStringPipe: 6:6,
+              label: data.tx_hash | cutStringPipe : 6 : 6,
               subLabelContent: data.type,
               subLabelClass: 'label__status',
               status: data.code
             }"
             [content]="[
               {
-                label: 'Fee',
+                label: 'LABEL.FEE',
                 class: 'body-01-mob text--gray-1',
-                info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
+                info: (+data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
               },
               {
-                label: 'Time',
+                label: 'COMMON.TIME',
                 class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +
-                  (data.timestamp | customDate: 'yyyy-MM-dd') +
+                  (data.timestamp | customDate : 'yyyy-MM-dd') +
                   '</span>' +
                   '<span>' +
-                  (data.timestamp | customDate: 'HH:mm:ss') +
+                  (data.timestamp | customDate : 'HH:mm:ss') +
                   '</span>'
               }
             ]"></app-card-mob-simple>

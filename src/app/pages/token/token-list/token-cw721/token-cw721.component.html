@@ -50,7 +50,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="token">
-              <th mat-header-cell *matHeaderCellDef>Token</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'COMMON.TOKEN' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
                   <div>
@@ -68,7 +68,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="tokenContract">
-              <th mat-header-cell *matHeaderCellDef>Token Contract</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'TOKEN.tokenContract' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <app-name-tag
                   [value]="element.cw721_contract?.smart_contract?.address"

@@ -39,13 +39,13 @@
                             (click)="seeLessArr[i] = true"
                             class="text--primary cursor-pointer mt-1"
                             *ngIf="!seeLessArr[i]">
-                            See More
+                            {{ 'COMMON.SEE_MORE' | translate }}
                           </div>
                           <div
                             (click)="seeLessArr[i] = false"
                             class="text--primary cursor-pointer mt-1"
                             *ngIf="seeLessArr[i]">
-                            See Less
+                            {{ 'COMMON.SEE_LESS' | translate }}
                           </div>
                         </div>
                       </div>
@@ -62,7 +62,7 @@
 
               <ng-container *ngIf="element.length == 0">
                 <div class="d-flex flex-wrap mb-2">
-                  <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
+                  <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'PAGES.TRANSACTION_DETAILS.message' | translate }}</div>
                   <div class="col-12 col-lg-9">
                     <pre
                       id="json"
@@ -127,7 +127,7 @@
       <div class="card text--white">
         <div class="card-body body">
           <div class="d-flex flex-wrap mb-2">
-            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
+            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'PAGES.TRANSACTION_DETAILS.message' | translate }}</div>
             <div class="col-12 col-lg-9">
               <pre id="json" class="raw-content text--white px-4" [innerHtml]="item | appJson"></pre>
             </div>
@@ -157,7 +157,7 @@
       [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="d-flex flex-wrap mb-2">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'COMMON.AMOUNT' | translate }}</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask : 'separator.6' }}
         <span class="text--white">{{
@@ -181,7 +181,7 @@
       [value]="getLongValue(data?.packet?.sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="d-flex flex-wrap mb-2" *ngIf="ibcData?.receive?.denom">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'COMMON.AMOUNT' | translate }}</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.amount | balanceOf | mask : 'separator.6' }}
         <span class="text--primary">{{ ibcData?.receive?.denom }}</span>
@@ -215,7 +215,7 @@
       [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="d-flex flex-wrap mb-2">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'COMMON.AMOUNT' | translate }}</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.acknowledgement?.amount | balanceOf | mask : 'separator.6' }}
         <span class="text--white">{{ denom }}</span>
@@ -432,7 +432,7 @@
       <div class="body-multisend">
         <ng-container *ngFor="let item of transactionDetail?.messages[0]?.outputs; let i = index">
           <div class="d-flex justify-content-between mx-4 my-5">
-            <div class="txt-label">From</div>
+            <div class="txt-label">{{ 'COMMON.FROM' | translate }}</div>
             <div class="txt-address">
               <app-name-tag
                 [url]="isContractAddress(transactionDetail?.messages[0]?.inputs[0]?.address) ? 'contracts' : 'account'"
@@ -440,7 +440,7 @@
                 [fullText]="true"
                 [fullTextMob]="true"></app-name-tag>
             </div>
-            <div class="txt-label">To</div>
+            <div class="txt-label">{{ 'COMMON.TO' | translate }}</div>
             <div class="txt-address">
               <app-name-tag
                 [url]="isContractAddress(item?.address) ? 'contracts' : 'account'"
@@ -471,9 +471,9 @@
   <ng-template #logEvent let-data="data" let-idx="idx">
     <ng-container *ngIf="transactionDetail.code === codeTransaction.Success">
       <div class="d-flex flex-wrap mb-2">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Event Log</div>
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'PAGES.TRANSACTION_DETAILS.eventLog' | translate }}</div>
         <div class="col-12 col-lg-9 text--gray-1">
-          <mat-slide-toggle (click)="changeShowData(idx)">Show all events</mat-slide-toggle>
+          <mat-slide-toggle (click)="changeShowData(idx)">{{ 'PAGES.TRANSACTION_DETAILS.showAllEvents' | translate }}</mat-slide-toggle>
           <div class="box-event-log mt-2" *ngIf="isDisplay[idx]">
             <ng-container *ngFor="let element of data; let index = index">
               <div class="item-event-log" *ngIf="index === idx">

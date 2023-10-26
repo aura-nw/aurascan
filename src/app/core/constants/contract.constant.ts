@@ -33,10 +33,10 @@ export const CONTRACT_RESULT = {
 export const MAX_LENGTH_SEARCH_CONTRACT = 200;
 
 export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
-  { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
-  { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 12 },
-  { matColumnDef: 'status', headerCellDef: 'Result', type: 'result', headerWidth: 9 },
-  { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
+  { matColumnDef: 'txHash', headerCellDef: 'LABEL.TXN_HASH', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
+  { matColumnDef: 'method', headerCellDef: 'LABEL.METHOD', type: 'status', headerWidth: 12 },
+  { matColumnDef: 'status', headerCellDef: 'LABEL.RESULT', type: 'result', headerWidth: 9 },
+  { matColumnDef: 'time', headerCellDef: 'COMMON.TIME', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
   { matColumnDef: 'blockHeight', headerCellDef: 'Block', type: 'hash-url', headerWidth: 6, isUrl: '/blocks' },
   { matColumnDef: 'from', headerCellDef: 'Message Sender', type: 'hash-url', headerWidth: 12, isUrl: '/account', isNameTag: true },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },

@@ -29,24 +29,24 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
-    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From' },
-    { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'amountToken', headerCellDef: 'Amount', isShort: true },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TXN_HASH', isShort: true },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.METHOD', isShort: true },
+    { matColumnDef: 'status', headerCellDef: 'LABEL.RESULT' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
+    { matColumnDef: 'from_address', headerCellDef: 'COMMON.FROM' },
+    { matColumnDef: 'to_address', headerCellDef: 'COMMON.TO' },
+    { matColumnDef: 'amountToken', headerCellDef: 'COMMON.AMOUNT', isShort: true },
   ];
 
   NFTTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
-    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From' },
-    { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'token_id', headerCellDef: 'Token ID' },
-    { matColumnDef: 'details', headerCellDef: 'Details' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TXN_HASH', isShort: true },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.METHOD', isShort: true },
+    { matColumnDef: 'status', headerCellDef: 'LABEL.RESULT' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
+    { matColumnDef: 'from_address', headerCellDef: 'COMMON.FROM' },
+    { matColumnDef: 'to_address', headerCellDef: 'COMMON.TO' },
+    { matColumnDef: 'token_id', headerCellDef: 'COMMON.TOKEN_ID' },
+    { matColumnDef: 'details', headerCellDef: 'LABEL.DETAILS' },
   ];
 
   displayedColumns: string[];

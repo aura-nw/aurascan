@@ -41,12 +41,12 @@ export class BlockDetailComponent implements OnInit {
   ];
 
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
-    { matColumnDef: 'type', headerCellDef: 'Message' },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'fee', headerCellDef: 'Fee' },
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TX_HASH' },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.MASSAGE' },
+    { matColumnDef: 'status', headerCellDef: 'LABEL.RESULT' },
+    { matColumnDef: 'fee', headerCellDef: 'LABEL.FEE' },
+    { matColumnDef: 'height', headerCellDef: 'COMMON.HEIGHT' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();

@@ -28,7 +28,7 @@ export class CommunityPoolProposalComponent implements OnInit {
     { matColumnDef: 'status', headerCellDef: 'Status' },
     { matColumnDef: 'sender', headerCellDef: 'Sender' },
     { matColumnDef: 'recipient', headerCellDef: 'recipient' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
     { matColumnDef: 'voting_end_time', headerCellDef: 'Voting End' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);

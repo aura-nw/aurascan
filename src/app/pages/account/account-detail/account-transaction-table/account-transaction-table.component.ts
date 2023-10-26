@@ -39,20 +39,20 @@ export class AccountTransactionTableComponent {
   displayFilter = false;
 
   templatesExecute: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 20 },
-    { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 12 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
-    { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 20 },
-    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 12 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TX_HASH', headerWidth: 18 },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.MASSAGE', headerWidth: 20 },
+    { matColumnDef: 'status', headerCellDef: 'LABEL.RESULT', headerWidth: 12 },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME', headerWidth: 15 },
+    { matColumnDef: 'fee', headerCellDef: 'LABEL.FEE', headerWidth: 20 },
+    { matColumnDef: 'height', headerCellDef: 'COMMON.HEIGHT', headerWidth: 12 },
   ];
 
   templatesToken: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 14 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 17 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 17 },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 24 },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 20 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TX_HASH', headerWidth: 14 },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.MASSAGE', headerWidth: 17 },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME', headerWidth: 17 },
+    { matColumnDef: 'fromAddress', headerCellDef: 'COMMON.FROM', headerWidth: 24 },
+    { matColumnDef: 'toAddress', headerCellDef: 'COMMON.TO', headerWidth: 20 },
   ];
 
   displayedColumns: string[];
@@ -291,7 +291,7 @@ export class AccountTransactionTableComponent {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
+        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT', headerWidth: 17 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListTxAuraByAddress(payload);
         break;
@@ -305,7 +305,7 @@ export class AccountTransactionTableComponent {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
+        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT', headerWidth: 17 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListFTByAddress(payload);
         break;

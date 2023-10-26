@@ -13,11 +13,11 @@ import { CommonService } from '../../../app/core/services/common.service';
 })
 export class BlocksComponent implements OnInit {
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'block_hash', headerCellDef: 'Block Hash' },
-    { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
-    { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'height', headerCellDef: 'COMMON.HEIGHT' },
+    { matColumnDef: 'block_hash', headerCellDef: 'LABEL.BLOCK_HASH' },
+    { matColumnDef: 'proposer', headerCellDef: 'LABEL.PROPOSER' },
+    { matColumnDef: 'num_txs', headerCellDef: 'LABEL.TXS' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;

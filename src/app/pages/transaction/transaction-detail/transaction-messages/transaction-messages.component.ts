@@ -178,7 +178,7 @@ export class TransactionMessagesComponent implements OnInit {
             link: { url: '/account', data: data?.to_address, nameTag: true },
           });
           result.push({
-            key: 'Amount',
+            key: 'COMMON.AMOUNT',
             value: data?.amount[0]?.amount,
             denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
@@ -199,7 +199,7 @@ export class TransactionMessagesComponent implements OnInit {
             link: { url: '/account', data: data?.delegator_address, nameTag: true },
           });
           result.push({
-            key: 'Validator Address',
+            key: 'LABEL.VALIDATOR_ADDRESS',
             value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
             link: { url: '/validators', data: data?.validator_address, nameTag: true },
           });
@@ -211,7 +211,7 @@ export class TransactionMessagesComponent implements OnInit {
             pipeType = pipeTypeData.Number;
           }
           result.push({
-            key: 'Amount',
+            key: 'COMMON.AMOUNT',
             value: amount || '-',
             denom: dataDenom,
             pipeType: pipeType,
@@ -249,7 +249,7 @@ export class TransactionMessagesComponent implements OnInit {
             link: { url: '/validators', data: data?.validator_dst_address, nameTag: true },
           });
           result.push({
-            key: 'Amount',
+            key: 'COMMON.AMOUNT',
             value: data.amount?.amount,
             denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
@@ -318,7 +318,7 @@ export class TransactionMessagesComponent implements OnInit {
         case this.eTransType.ExecuteContract:
           this.displayMsgRaw(index);
           result.push({
-            key: 'Contract',
+            key: 'LABEL.CONTRACT',
             value: this.commonService.setNameTag(data?.contract),
             link: { url: '/contracts', data: data?.contract, nameTag: true },
           });
@@ -334,11 +334,11 @@ export class TransactionMessagesComponent implements OnInit {
         case this.eTransType.InstantiateContract2:
           this.displayMsgRaw(index);
           result.push({
-            key: 'Contract',
+            key: 'LABEL.CONTRACT',
             value: this.commonService.setNameTag(this.getDataJson('_contract_address')),
             link: { url: '/contracts', data: this.getDataJson('_contract_address'), nameTag: true },
           });
-          result.push({ key: 'Label', value: data?.label });
+          result.push({ key: 'LABEL.LABEL', value: data?.label });
           result.push({
             key: 'Sender',
             value: this.commonService.setNameTag(data?.sender),
@@ -397,18 +397,18 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.EditValidator:
-          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators' } });
-          result.push({ key: 'Details', value: data.description?.details });
+          result.push({ key: 'LABEL.VALIDATOR_ADDRESS', value: data.validator_address, link: { url: '/validators' } });
+          result.push({ key: 'LABEL.DETAILS', value: data.description?.details });
           result.push({ key: 'Moniker', value: data.description?.moniker });
           result.push({
-            key: 'Website',
+            key: 'PAGES.VALIDATOR_DETAIL.website',
             value: data.description?.website,
             link: { url: data.description?.website, target: true },
           });
           result.push({ key: 'Security Contact', value: data.description?.security_contact });
           result.push({ key: 'Identity', value: data.description?.identity });
           result.push({
-            key: 'Commission Rate',
+            key: 'LABEL.COMMISSION_RATE',
             value: this.checkRateFloatNumber(data?.commission_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
@@ -432,23 +432,23 @@ export class TransactionMessagesComponent implements OnInit {
             value: this.commonService.setNameTag(data.delegator_address),
             link: { url: '/account', data: data.delegator_address, nameTag: true },
           });
-          result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators' } });
+          result.push({ key: 'LABEL.VALIDATOR_ADDRESS', value: data.validator_address, link: { url: '/validators' } });
           result.push({
-            key: 'Amount',
+            key: 'COMMON.AMOUNT',
             value: data.value?.amount,
             denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
-          result.push({ key: 'Details', value: data.description?.details });
+          result.push({ key: 'LABEL.DETAILS', value: data.description?.details });
           result.push({ key: 'Moniker', value: data.description?.moniker });
           result.push({
-            key: 'Website',
+            key: 'PAGES.VALIDATOR_DETAIL.website',
             value: data.description?.website || '-',
             link: { url: data.description?.website },
           });
           result.push({ key: 'Identity', value: data.description?.identity });
           result.push({
-            key: 'Commission Rate',
+            key: 'LABEL.COMMISSION_RATE',
             value: this.checkRateFloatNumber(data?.commission?.rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
@@ -467,7 +467,7 @@ export class TransactionMessagesComponent implements OnInit {
 
         case this.eTransType.Unjail:
           result.push({
-            key: 'Validator Address',
+            key: 'LABEL.VALIDATOR_ADDRESS',
             value: this.transactionDetail?.tx?.tx?.body?.messages[0]?.validator_addr,
             link: { url: '/validators' },
           });
@@ -475,13 +475,13 @@ export class TransactionMessagesComponent implements OnInit {
 
         case this.eTransType.SubmitProposalTx:
           result.push({
-            key: 'Amount',
+            key: 'COMMON.AMOUNT',
             value: data.initial_deposit[0]?.amount,
             pipeType: pipeTypeData.BalanceOf,
             denom: data.initial_deposit[0]?.amount > 0 ? { display: this.denom } : null,
           });
           result.push({
-            key: 'Proposer',
+            key: 'LABEL.PROPOSER',
             value: this.commonService.setNameTag(data.proposer),
             link: { url: '/account', data: data.proposer, nameTag: true },
           });
@@ -513,7 +513,7 @@ export class TransactionMessagesComponent implements OnInit {
             value: this.commonService.setNameTag(data.grantee),
             link: { url: '/account', data: data.grantee, nameTag: true },
           });
-          result.push({ key: 'Type', value: this.typeGrantAllowance });
+          result.push({ key: 'LABEL.TYPE', value: this.typeGrantAllowance });
           result.push({
             key: 'Spend Limit',
             value: this.spendLimitAmount,
@@ -577,7 +577,7 @@ export class TransactionMessagesComponent implements OnInit {
             link: { url: '/account', data: data.depositor, nameTag: true },
           });
           result.push({
-            key: 'Amount',
+            key: 'COMMON.AMOUNT',
             value: data?.amount[0]?.amount,
             denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
@@ -592,7 +592,7 @@ export class TransactionMessagesComponent implements OnInit {
             link: { url: '/account', data: data.depositor, nameTag: true },
           });
           result.push({
-            key: 'Amount',
+            key: 'COMMON.AMOUNT',
             value: data?.amount[0]?.amount,
             denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
@@ -605,7 +605,7 @@ export class TransactionMessagesComponent implements OnInit {
             value: this.commonService.setNameTag(data.sender),
             link: { url: '/account', data: data.sender, nameTag: true },
           });
-          result.push({ key: 'Contract', value: data.contract, link: { url: '/contracts' } });
+          result.push({ key: 'LABEL.CONTRACT', value: data.contract, link: { url: '/contracts' } });
           result.push({ key: 'Code ID', value: data.code_id, link: { url: '/code-ids/detail' } });
           break;
 
@@ -624,14 +624,14 @@ export class TransactionMessagesComponent implements OnInit {
 
         case this.eTransType.GetRewardCommission:
           result.push({
-            key: 'Validator Address',
+            key: 'LABEL.VALIDATOR_ADDRESS',
             value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
             link: { url: '/validators', data: data?.validator_address },
           });
 
           if (this.commissionAutoClaim > 0) {
             result.push({
-              key: 'Amount',
+              key: 'COMMON.AMOUNT',
               value: this.commissionAutoClaim,
               denom: dataDenom,
               pipeType: pipeTypeData.Number,

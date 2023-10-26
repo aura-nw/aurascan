@@ -16,17 +16,17 @@
   <div class="card box-validators" *ngIf="!loadingData">
     <div class="card-header card-header-dark d-lg-flex justify-content-between pb-2">
       <div>
-        <h2 class="h3-mob mb-0 text--white">Validators</h2>
+        <h2 class="h3-mob mb-0 text--white">Validators {{ 'MENUITEMS.VALIDATORS' | translate }}</h2>
         <div class="d-flex body mt-2 text--gray-1">
           <div>
-            <span>Staking APR:</span>
+            <span>Staking APR: {{ 'PAGES.DASHBOARDS.stakingAPR' | translate }}:</span>
             <span class="fw-semibold ml-1">{{ staking_APR.toFixed(2) || 0 }}%</span>
           </div>
           <a
             href="https://docs.aura.network/product/aurascan/getting-started/stake/choose-a-trust-validator"
             target="_blank"
             class="text--primary ml-2"
-            >How to stake?</a
+            >How to stake? {{ 'PAGES.VALIDATOR.howToStake' | translate }}</a
           >
         </div>
       </div>
@@ -129,7 +129,7 @@
                         <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
                         <app-tooltip-customize
                           [content]="
-                            'Validator\'s availability in the last ' + numBlock + ' blocks.'
+                            'MESSAGES.LAST_NUM_BLOCK' | translate : { numBlock: numBlock }
                           "></app-tooltip-customize>
                       </div>
                     </th>
@@ -138,10 +138,7 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-power">
                       <div class="aura-tooltip-contain">
                         <div class="pl-5 aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="
-                            'The more AURA delegated to a validator, the higher the validator\'s voting power.'
-                          ">
+                        <app-tooltip-customize [content]="'MESSAGES.MORE_VOTING_POWER' | translate">
                         </app-tooltip-customize>
                       </div>
                     </th>
@@ -150,8 +147,7 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
                       <div class="aura-tooltip-contain">
                         <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="'The proportion of staking reward being taken by the validator as a commission.'">
+                        <app-tooltip-customize [content]="'MESSAGES.COMMISSION_REWARD' | translate">
                         </app-tooltip-customize>
                       </div>
                     </th>
@@ -161,7 +157,7 @@
                       <div class="aura-tooltip-contain">
                         <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
                         <app-tooltip-customize
-                          [content]="'Vote participation stat for the last ' + countProposal || 0 + 'proposals.'">
+                          [content]="'MESSAGES.VOTE_PARTICIPATION' | translate : { countProposal: countProposal || 0 }">
                         </app-tooltip-customize>
                       </div>
                     </th>
@@ -222,10 +218,7 @@
                                   (data['status'] !== statusValidator.Active && !data['jailed'])) &&
                                 data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH
                               "></i>
-                            <app-tooltip-customize
-                              [content]="
-                                'Validators with too much voting power will lessen the security and decentralization of the network.'
-                              ">
+                            <app-tooltip-customize [content]="'MESSAGES.VALIDATOR_TOO_MUCH_VOTING' | translate">
                             </app-tooltip-customize>
                           </div>
                         </div>
@@ -270,7 +263,9 @@
                             [disabled]="clicked"
                             *ngIf="!data['jailed']"
                             (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)">
-                            <span class="body-02 text--gray-1">Delegate</span>
+                            <span class="body-02 text--gray-1"
+                              >Delegate {{ 'PAGES.VALIDATOR.delegate' | translate }}</span
+                            >
                           </button>
                         </div>
                         <div *ngSwitchDefault class="text-center">{{ data[template.matColumnDef] }}</div>
@@ -331,7 +326,7 @@
                       [disabled]="clicked"
                       *ngIf="!validator?.jailed"
                       (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
-                      <span class="text--gray-1 body-02-mob">Delegate</span>
+                      <span class="text--gray-1 body-02-mob">Delegate {{ 'PAGES.VALIDATOR.delegate' | translate }}</span>
                     </button>
                   </div>
                 </div>
@@ -416,13 +411,13 @@
               <span class="modal__title break-all">{{ validatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ validatorDetail?.commission | percent : number2Digit }}
+              Commission {{ 'PAGES.VALIDATOR.commission' | translate }} - {{ validatorDetail?.commission | percent : number2Digit }}
             </div>
           </div>
         </div>
         <div class="body-01 text--gray-5">
           <div class="mb-1">
-            <span>Voting power - {{ validatorDetail?.percent_power }}%</span>&nbsp;
+            <span>Voting power {{ 'PAGES.VALIDATOR.votingPower' | translate }} - {{ validatorDetail?.percent_power }}%</span>&nbsp;
             <span>({{ validatorDetail?.power | mask : 'separator.6' }}</span>
             <span class="text--white ml-1">{{ denom }}</span
             >)
@@ -433,7 +428,7 @@
         <popup-delegate [data]="dataDelegate"></popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
           <div class="mt-2 h6 text--white mb-0">
-            <span>Available for undelegation</span>
+            <span>Available for undelegation  {{ 'PAGES.VALIDATOR.availableForUndelegation' | translate }}</span>
             <span class="ml-3 fw-normal">
               {{ dataDelegate?.validatorDetail?.amount_staked | mask : 'separator.6' }}
             </span>
@@ -451,7 +446,7 @@
                 class="button button-primary active button-flat button--sm button-max fw-semibold"
                 type="button"
                 (click)="getMaxToken(dialogMode.Undelegate)">
-                MAX
+                MAX {{ 'COMMON.MAX' | translate }}
               </button>
             </div>
             <div class="input-group-append h6 mb-0 text--white">{{ denom }}</div>
@@ -465,18 +460,18 @@
                 class="button button-primary active button-flat button--sm button-max fw-semibold"
                 type="button"
                 (click)="getMaxToken(dialogMode.Delegate)">
-                MAX
+                MAX {{ 'COMMON.MAX' | translate }}
               </button>
             </div>
             <div class="input-group-append text--white">{{ denom }}</div>
           </div>
           <div *ngIf="errorExceedAmount" class="text--danger mt-3">
-            Insufficient available balance for transaction fee
+            Insufficient available balance for transaction fee {{ 'MESSAGES.INSUFFICIENT_AVAILABLE' | translate }}
           </div>
         </ng-container>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
           <div class="divider divider-horizontal mb-6"></div>
-          <div class="h6 body-02-mob mb-3 text--white">Redelegate to:</div>
+          <div class="h6 body-02-mob mb-3 text--white">Redelegate to: {{ 'PAGES.VALIDATOR.redelegateTo' | translate }}</div>
           <mat-form-field appearance="fill" dense>
             <mat-select
               class="list-token"
@@ -506,7 +501,7 @@
                     <span class="option__name">{{ item.title | translate }}</span>
                   </div>
                   <div class="option-label text--gray-1">
-                    Commission - {{ item.commission | translate | percent : number2Digit }}
+                    Commission {{ 'PAGES.VALIDATOR.commission' | translate }} - {{ item.commission | translate | percent : number2Digit }}
                   </div>
                 </div>
               </mat-option>
@@ -514,7 +509,7 @@
           </mat-form-field>
           <div *ngIf="selectedValidator">
             <div class="mt-6 body-01 body-02-mob">
-              <span>Available for redelegation</span>
+              <span>Available for redelegation {{ 'PAGES.VALIDATOR.availableForRedelegation' | translate }}</span>
               <span class="ml-3">
                 {{ dataDelegate?.validatorDetail?.amount_staked | mask : 'separator.6' }}
               </span>
@@ -527,7 +522,7 @@
                   class="button button-primary active button-flat button--sm button-max fw-semibold"
                   type="button"
                   (click)="getMaxToken(dialogMode.Undelegate)">
-                  MAX
+                  MAX {{ 'COMMON.MAX' | translate }}
                 </button>
               </div>
               <div class="input-group-append text--white">{{ denom }}</div>
@@ -547,7 +542,7 @@
                 id="delegateAction"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <span>Select Action</span>
+                <span>Select Action {{ 'PAGES.VALIDATOR.selectAction' | translate }}</span>
               </button>
               <ul class="dropdown-menu aura-dropdown-menu delegateAction" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
@@ -558,7 +553,7 @@
                     width="20"
                     height="20"
                     *ngIf="isLoading" />
-                  <button type="button" class="button p-0">Undelegate</button>
+                  <button type="button" class="button p-0">Undelegate {{ 'PAGES.VALIDATOR.undelegate' | translate }}</button>
                 </li>
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Redelegate)">
                   <img
@@ -568,7 +563,7 @@
                     width="20"
                     height="20"
                     *ngIf="isLoading" />
-                  <button type="button" class="button p-0">Redelegate</button>
+                  <button type="button" class="button p-0">Redelegate {{ 'PAGES.VALIDATOR.redelegate' | translate }}</button>
                 </li>
               </ul>
             </div>
@@ -584,7 +579,7 @@
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span>Delegate</span>
+              <span>Delegate {{ 'PAGES.VALIDATOR.delegate' | translate }}</span>
             </button>
           </div>
           <div
@@ -594,7 +589,7 @@
               type="button"
               class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4"
               (click)="changeTypePopup(dialogMode.Manage)">
-              <span>Back</span>
+              <span>Back {{ 'COMMON.BACK' | translate }}</span>
             </button>
             <button
               type="button"
@@ -608,7 +603,7 @@
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span>Undelegate</span>
+              <span>Undelegate {{ 'PAGES.VALIDATOR.undelegate' | translate }}</span>
             </button>
           </div>
           <div
@@ -619,7 +614,7 @@
               class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4"
               (click)="!isOpenStaking ? changeTypePopup(dialogMode.Manage) : closeDialog(modal)"
               *ngIf="!isOpenStaking">
-              <span>Back</span>
+              <span>Back {{ 'COMMON.BACK' | translate }}</span>
             </button>
             <button
               type="button"
@@ -633,7 +628,7 @@
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span>Delegate</span>
+              <span>Delegate {{ 'PAGES.VALIDATOR.delegate' | translate }}</span>
             </button>
           </div>
           <div
@@ -643,7 +638,7 @@
               type="button"
               class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4"
               (click)="changeTypePopup(dialogMode.Manage)">
-              <span>Back</span>
+              <span>Back {{ 'COMMON.BACK' | translate }}</span>
             </button>
             <button
               type="button"
@@ -657,7 +652,7 @@
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span>Redelegate</span>
+              <span>Redelegate {{ 'PAGES.VALIDATOR.redelegate' | translate }}</span>
             </button>
           </div>
         </ng-container>
