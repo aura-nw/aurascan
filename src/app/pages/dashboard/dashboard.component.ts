@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoadingBlock = true;
   isLoadingTx = true;
   errTextBlock = null;
-  errTextTx = null;
+  errTextTxs = null;
 
   curr_voting_Period;
   voting_Period_arr = [];
@@ -313,7 +313,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (e) => {
         this.isLoadingTx = false;
-        this.errTextTx = e.status + ' ' + e.statusText;
+        this.errTextTxs = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingTx = false;
