@@ -1,7 +1,8 @@
 <h1 class="text--white mb-lg-0">Fee Grant</h1>
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <!-- Tabs -->
 <ul
-  *ngIf="currentAddress"
+  *ngIf="currentAddress && !isLoading"
   ngbNav
   #customNav="ngbNav"
   [activeId]="!isGrantees ? 1 : 0"
@@ -15,13 +16,13 @@
   </ng-container>
 </ul>
 <!-- Main -->
-<div class="mt-4 mt-lg-8" *ngIf="currentAddress">
+<div class="mt-4 mt-lg-8" *ngIf="currentAddress && !isLoading">
   <ng-container>
     <app-my-grantees *ngIf="isGrantees"></app-my-grantees>
     <app-my-granters *ngIf="!isGrantees"></app-my-granters>
   </ng-container>
 </div>
-<ng-container *ngIf="!currentAddress">
+<ng-container *ngIf="!currentAddress && !isLoading">
   <div class="mt-lg-5 card">
     <div class="card-body">
       <div class="mt-4">
