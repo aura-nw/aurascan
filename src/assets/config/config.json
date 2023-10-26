@@ -15,7 +15,6 @@
     "stakingTime": "86400",
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
-    "siteKeyCaptcha": "6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc",
     "coins": [
       {
         "name": "Serenity Aura",
@@ -39,28 +38,7 @@
         "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
       }
     ],
-    "features": [
-      "dashboard",
-      "charts",
-      "transaction",
-      "validator",
-      "voting",
-      "block",
-      "cw20",
-      "cw721",
-      "cw4973",
-      "nft",
-      "contract",
-      "code-id",
-      "verify-code-id",
-      "statistics",
-      "fee-grant",
-      "abt",
-      "account",
-      "login",
-      "profile",
-      "private-name-tag"
-    ],
+    "features": [],
     "chain_info": {
       "chainId": "aura-testnet-2",
       "chainName": "aura devnet",
@@ -121,7 +99,8 @@
     "ipfsDomain": "https://ipfs.io/",
     "google": {
       "url": "apps.googleusercontent.com",
-      "clientId": "3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08"
+      "clientId": "3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08",
+      "siteKeyCaptcha": "6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc"
     },
     "horoscope": {
       "url": "https://indexer-v2.dev.aurascan.io/api",
