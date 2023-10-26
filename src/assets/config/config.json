@@ -2,8 +2,8 @@
   "environment": {
     "name": "develop",
     "label": {
-      "desktop": "Develop Testnet Network",
-      "mobile": "Develop Testnet"
+      "desktop": "Nois Testnet",
+      "mobile": "Nois Testnet"
     },
     "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/logo/aura-explorer-logo@mob.png",
     "notice": {
@@ -17,13 +17,11 @@
     "quotaSetPrivateName": 10,
     "coins": [],
     "features": [
-      "validators",
-      "blocks",
       "transaction",
+      "validators",
       "votings",
+      "blocks",
       "tokens",
-      "tokens-nft",
-      "token-abt",
       "statistics",
       "contracts",
       "code-ids",

@@ -95,8 +95,7 @@ const routes: Routes = [
       },
       {
         path: 'user',
-        loadChildren: () => import('./pages/login/login.module').then((m) => m.LoginModule),
-        canMatch: [() => isEnabled('user')],
+        redirectTo: 'login',
       },
       {
         path: 'profile',
