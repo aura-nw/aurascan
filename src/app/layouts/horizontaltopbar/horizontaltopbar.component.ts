@@ -66,29 +66,29 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
       }
     });
 
-    const features = this.environmentService.chainConfig.features;
+    // const features = this.environmentService.chainConfig.features;
 
-    this.menuItems.forEach((item) => {
-      if (item.subItems) {
-        item.subItems.forEach((subItem) => {
-          const links = subItem.link.split('/');
+    // this.menuItems.forEach((item) => {
+    //   if (item.subItems) {
+    //     item.subItems.forEach((subItem) => {
+    //       const links = subItem.link.split('/');
 
-          // Check disabled for statistics menu,
-          if (['statistics', 'tokens'].includes(links[1])) {
-            const foundIndex = features.findIndex((item) => item === links[1]);
-            item.disabled = foundIndex < 0 ? true : false;
-            return;
-          }
+    //       // Check disabled for statistics menu,
+    //       if (['statistics', 'tokens'].includes(links[1])) {
+    //         const foundIndex = features.findIndex((item) => item === links[1]);
+    //         item.disabled = foundIndex < 0 ? true : false;
+    //         return;
+    //       }
 
-          // Check disabled submenu
-          const path = links.pop();
+    //       // Check disabled submenu
+    //       const path = links.pop();
 
-          const foundIndex = features.findIndex((item) => item === path);
+    //       const foundIndex = features.findIndex((item) => item === path);
 
-          subItem.disabled = foundIndex < 0 ? true : false;
-        });
-      }
-    });
+    //       subItem.disabled = foundIndex < 0 ? true : false;
+    //     });
+    //   }
+    // });
   }
 
   ngOnInit(): void {
