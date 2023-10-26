@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 
 export interface IConfiguration {
   environment: {
@@ -118,11 +120,7 @@ export class EnvironmentService {
   constructor(private http: HttpClient) {}
 
   loadConfig() {
-    return this.http.get<IConfiguration>(this.configUri);
-  }
-
-  async load(): Promise<void> {
-    return lastValueFrom(this.loadConfig())
+    return lastValueFrom(this.http.get<IConfiguration>(this.configUri))
       .then((config: any) => {
         const configuration: IConfiguration = config as IConfiguration;
 
@@ -136,5 +134,20 @@ export class EnvironmentService {
       .catch((err: any) => {
         console.error(err);
       });
+  }
+
+  async load(): Promise<void> {
+    await this.loadConfig();
+    await this.extendsTxType();
+  }
+
+  extendsTxType(): Promise<void> {
+    return lastValueFrom(this.http.get('./assets/config/tx_type_config.json')).then((typeConfigs) => {
+      (typeConfigs as any[]).forEach((data) => {
+        TRANSACTION_TYPE_ENUM[data.label] = data.label;
+        TypeTransaction[data.value] = data.value;
+        TYPE_TRANSACTION.push({ label: TRANSACTION_TYPE_ENUM[data.label], value: TypeTransaction[data.value] });
+      });
+    });
   }
 }
