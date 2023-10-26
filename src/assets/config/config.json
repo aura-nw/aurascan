@@ -15,7 +15,6 @@
     "stakingTime": "86400",
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
-    "siteKeyCaptcha": "6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc",
     "coins": [
       {
         "name": "Serenity Aura",
@@ -121,7 +120,8 @@
     "ipfsDomain": "https://ipfs.io/",
     "google": {
       "url": "apps.googleusercontent.com",
-      "clientId": "3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08"
+      "clientId": "3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08",
+      "siteKeyCaptcha": "6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc"
     },
     "horoscope": {
       "url": "https://indexer-v2.dev.aurascan.io/api",
