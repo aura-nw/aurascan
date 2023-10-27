@@ -47,9 +47,9 @@
         "bech32PrefixConsAddr": "noisvalcons",
         "bech32PrefixConsPub": "noisvalconspub"
       },
-      "currencies": [{ "coinDenom": "unois", "coinMinimalDenom": "unois", "coinDecimals": 6 }],
-      "feeCurrencies": [{ "coinDenom": "unois", "coinMinimalDenom": "unois", "coinDecimals": 6 }],
-      "stakeCurrency": { "coinDenom": "unois", "coinMinimalDenom": "unois", "coinDecimals": 6 },
+      "currencies": [{ "coinDenom": "NOIS", "coinMinimalDenom": "unois", "coinDecimals": 6 }],
+      "feeCurrencies": [{ "coinDenom": "NOIS", "coinMinimalDenom": "unois", "coinDecimals": 6 }],
+      "stakeCurrency": { "coinDenom": "NOIS", "coinMinimalDenom": "unois", "coinDecimals": 6 },
       "coinType": 118,
       "gasPriceStep": { "low": 0.001, "average": 0.0025, "high": 0.004 },
       "features": ["ibc-transfer"],
