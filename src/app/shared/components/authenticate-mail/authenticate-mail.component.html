@@ -12,7 +12,7 @@
       id="userMenu"
       data-bs-toggle="dropdown"
       aria-expanded="false">
-      <img src="assets/icons/icons-svg/color/User.svg" alt="" />
+      <img [src]="'assets/icons/icons-svg/color/user-profile.svg' | imageS3" alt="" />
     </button>
     <ul class="dropdown-menu aura-dropdown-menu user-dropdown-menu walletMenu" aria-labelledby="userMenu">
       <li class="dropdown-item caption-mob cursor-pointer" [routerLink]="['/profile']">

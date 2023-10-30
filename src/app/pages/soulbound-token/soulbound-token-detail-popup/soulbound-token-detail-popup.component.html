@@ -1,13 +1,7 @@
 <div class="card">
   <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
     <div class="h2 h4-mob mb-0 fw-bold text--white">{{ soulboundDetail?.ipfs?.name ?? 'Token detail' }}</div>
-    <img
-      src="assets/icons/icons-svg/white/close.svg"
-      alt=""
-      width="24px"
-      height="24px"
-      class="cursor-pointer"
-      (click)="closeDialog()" />
+    <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
   </div>
   <div class="card-body body-01">
     <div class="row">
@@ -98,22 +92,26 @@
   <div class="d-flex align-items-center justify-content-end px-6 py-6">
     <div class="dropdown aura-dropdown mr-lg-4 btn-item" *ngIf="soulboundDetail.status === abtType.UNCLAIMED">
       <button
-          class="button button--xlg button--md-mob button-pill button-outline w-100 button-dropdown-split px-0"
-          type="button">
+        class="button button--xlg button--md-mob button-pill button-outline w-100 button-dropdown-split px-0"
+        type="button">
         <span class="px-2 px-sm-6" (click)="handleRejectABT()">{{ ABT_ACTION.Reject }}</span>
-        <span class="dropdown-split__arrow"
-              [clickOutsideEnabled]="true"
-              (clickOutside)="dropdownList.classList.remove('show')"
-              (click)="dropdownList.classList.add('show')"
-        >
-          <img [src]="'assets/icons/icons-svg/white/chevron-down.svg' | imageS3" alt="" width="20px">
+        <span
+          class="dropdown-split__arrow"
+          [clickOutsideEnabled]="true"
+          (clickOutside)="dropdownList.classList.remove('show')"
+          (click)="dropdownList.classList.add('show')">
+          <img [src]="'assets/icons/icons-svg/white/chevron-down.svg' | imageS3" alt="" width="20px" />
         </span>
       </button>
-      <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--outline"
-          #dropdownList
-          aria-labelledby="dropdownAction">
-        <li class="dropdown-item cursor-pointer" (click)="handleRejectABT(true)" *ngIf="currentABTAction === ABT_ACTION.Reject">
-          <button type="button" class="button p-0">{{ABT_ACTION.RejectAll}}</button>
+      <ul
+        class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--outline"
+        #dropdownList
+        aria-labelledby="dropdownAction">
+        <li
+          class="dropdown-item cursor-pointer"
+          (click)="handleRejectABT(true)"
+          *ngIf="currentABTAction === ABT_ACTION.Reject">
+          <button type="button" class="button p-0">{{ ABT_ACTION.RejectAll }}</button>
         </li>
       </ul>
     </div>

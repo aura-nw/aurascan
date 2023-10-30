@@ -1,0 +1,73 @@
+.csv-form {
+  .input-group {
+    background-color: var(--aura-gray-10);
+    color: var(--aura-gray-8);
+  }
+  .txt-toggle {
+    color: var(--aura-gray-7);
+    @media (min-width: 992px) {
+      margin-top: 2px;
+    }
+  }
+}
+
+#typeExport {
+  &[aria-expanded='true'] {
+    i.ph-caret-down {
+      display: none;
+    }
+    i.ph-caret-up {
+      display: flex;
+    }
+  }
+  &[aria-expanded='false'] {
+    i.ph-caret-down {
+      display: flex;
+    }
+    i.ph-caret-up {
+      display: none;
+    }
+  }
+}
+.filter-last-item {
+  position: relative;
+  &:before {
+    content: '-';
+    color: var(--aura-white);
+    position: absolute;
+    top: 50%;
+    left: -4px;
+    transform: translateY(-50%);
+  }
+}
+.dropdown-menu__title {
+  height: 44px;
+  background-color: var(--aura-gray-9);
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  color: var(--aura-white);
+}
+#typeAction {
+  min-height: 44px;
+}
+::ng-deep .csv-hint {
+  .mat-slide-toggle-label {
+    margin-top: 0px;
+  }
+  .mat-slide-toggle-content {
+    white-space: break-spaces;
+  }
+}
+.button-group button.button {
+  @media (max-width: 991.98px) {
+    width: 100%;
+  }
+}
+
+.csv-form {
+  input {
+    max-width: 100%;
+  }
+}

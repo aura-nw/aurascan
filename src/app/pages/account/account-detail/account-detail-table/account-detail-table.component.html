@@ -14,7 +14,7 @@
                   <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
                     <a
                       *ngSwitchCase="'validator_name'"
-                      class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative text-break"
+                      class="text--primary cursor-pointer line-claim-v box-title-validator d-flex align-items-center position-relative break-all"
                       [routerLink]="['/validators', data['validator_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
@@ -53,7 +53,7 @@
                     </div>
                     <a
                       *ngSwitchCase="'validator_src_name'"
-                      class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
+                      class="text--primary cursor-pointer line-claim-v box-title-validator d-flex align-items-center position-relative"
                       [routerLink]="['/validators', data['validator_src_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
@@ -69,7 +69,7 @@
                     </a>
                     <a
                       *ngSwitchCase="'validator_dst_name'"
-                      class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
+                      class="text--primary cursor-pointer line-claim-v box-title-validator d-flex align-items-center position-relative"
                       [routerLink]="['/validators', data['validator_dst_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
@@ -124,14 +124,14 @@
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
-                    <div class="txt-right">
+                    <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
                       <span class="text--white"> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Reward</div>
-                    <div class="txt-right">
+                    <div class="text-end">
                       <span [appBigNumber]="item.reward" [decimal]="0"></span>
                       <span class="text--white"> {{ denom }}</span>
                     </div>
@@ -152,7 +152,7 @@
                         </span>
                       </div>
                       <span
-                        class="h5 mb-0 text--primary unbonding-val-name ellipsis-text"
+                        class="h5 mb-0 text--primary unbonding-val-name line-claim"
                         [class.text-jailed]="item['jailed']">
                         {{ item.validator_name }}
                       </span>
@@ -162,7 +162,7 @@
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
-                    <div class="txt-right">
+                    <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
                       <span class="text--white"> {{ denom }}</span>
                     </div>
@@ -179,7 +179,7 @@
                 <div *ngSwitchCase="pageType.Redelegation">
                   <div class="d-flex justify-content-between">
                     <a
-                      class="fw-normal text--primary body-01 ellipsis-text mr-4 w-50"
+                      class="fw-normal text--primary body-01 line-claim mr-4 w-50"
                       [routerLink]="['/validators', item['validator_src_address']]">
                       <div class="d-flex align-items-center pl-1">
                         <div class="avatar-wrapper">
@@ -192,14 +192,14 @@
                           </span>
                         </div>
                         <span
-                          class="h5 mb-0 text--primary ellipsis-text"
+                          class="h5 mb-0 text--primary line-claim"
                           [class.text-jailed]="item['validator_src_jailed']">
                           {{ item.validator_src_name }}
                         </span>
                       </div>
                     </a>
                     <a
-                      class="fw-normal text--primary body-01 ellipsis-text w-50"
+                      class="fw-normal text--primary body-01 line-claim w-50"
                       [routerLink]="['/validators', item['validator_dst_address']]">
                       <div class="d-flex align-items-center pl-1">
                         <div class="avatar-wrapper">
@@ -212,7 +212,7 @@
                           </span>
                         </div>
                         <span
-                          class="h5 mb-0 text--primary ellipsis-text"
+                          class="h5 mb-0 text--primary line-claim"
                           [class.text-jailed]="item['validator_dst_jailed']">
                           {{ item.validator_dst_name }}
                         </span>
@@ -222,7 +222,7 @@
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
-                    <div class="txt-right">
+                    <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
                       <span class="text--white"> {{ denom }}</span>
                     </div>
@@ -241,7 +241,7 @@
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between">
                     <div class="text--gray-4">Amount</div>
-                    <div class="txt-right">
+                    <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
                       <span class="text--white"> {{ denom }}</span>
                     </div>

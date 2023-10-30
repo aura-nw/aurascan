@@ -5,7 +5,7 @@ import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.consta
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { Globals, convertDataTransaction } from '../../../app/global/global';
+import { Globals, convertDataTransactionSimple } from '../../../app/global/global';
 
 @Component({
   selector: 'app-transaction',
@@ -50,7 +50,7 @@ export class TransactionComponent implements OnInit {
     this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
-          const txs = convertDataTransaction(res, this.coinInfo);
+          const txs = convertDataTransactionSimple(res, this.coinInfo);
           if (this.dataSource.data.length > 0) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
           } else {

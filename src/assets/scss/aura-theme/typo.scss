@@ -105,6 +105,7 @@ $textColors: (
   'gray-5',
   'gray-6',
   'gray-7',
+  'gray-8',
   'green-4',
   'green-3',
   'green-2',
@@ -160,9 +161,10 @@ $textColors: (
   color: var(--aura-blue-3link);
 }
 
-.hover-link, a.text--primary {
+.hover-link,
+a.text--primary {
   cursor: pointer;
-  transition: all .35s ease-in-out;
+  transition: all 0.35s ease-in-out;
   &:hover {
     color: var(--aura-green-3) !important;
   }
@@ -181,4 +183,41 @@ $textColors: (
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+  word-break: break-all;
+}
+
+.line-claim-v2 {
+  -webkit-line-clamp: 2;
+}
+
+.line-claim-v--des {
+  @media (min-width: 991.98px) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.json {
+  &-key {
+    color: #569cd6;
+  }
+
+  &-value {
+    color: #aac19e;
+  }
+
+  &-string {
+    color: #ce9178;
+  }
+}
+
+.break-word {
+  word-break: break-word;
+}
+
+.break-all {
+  word-break: break-all;
 }

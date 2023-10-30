@@ -7,7 +7,7 @@ function parseValue(item) {
   } else {
     const type = item.type;
     switch (true) {
-      case ['any', 'object'].includes(type):
+      case ['any', 'object', 'array'].includes(type):
         try {
           value = JSON.parse(item.value);
         } catch (e) {

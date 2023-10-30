@@ -1,7 +1,7 @@
 <section class="mt-12 mb-6 verify-step">
   <div class="notice-warning mb-8" *ngIf="errorMessage">
     <div class="notice-icon">
-      <img src="assets/icons/icons-svg/color/warning-red.svg" alt="icon" />
+      <img [src]="'assets/icons/icons-svg/color/warning-red.svg' | imageS3" alt="icon" />
       <span class="body-03 text--red-3 fw-semibold"> ERROR: </span>
     </div>
     <span class="body-03 text--white notice-content">{{errorMessage}}</span>

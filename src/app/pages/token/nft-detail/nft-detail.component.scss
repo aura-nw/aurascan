@@ -95,31 +95,6 @@
       display: flex;
       align-items: center;
     }
-    .g-ellipsis {
-      width: unset;
-      max-width: 100px;
-      @media (min-width: 576px) {
-        max-width: 200px;
-      }
-      @media (min-width: 768px) {
-        max-width: 300px;
-      }
-      @media (min-width: 1200px) {
-        max-width: 100%;
-      }
-    }
-  }
-}
-::ng-deep {
-  .nft-detail-table.aura-table {
-    position: relative;
-    thead {
-      position: sticky;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 2;
-    }
   }
 }
 
