@@ -148,9 +148,10 @@ export class LoginComponent implements OnInit {
               }, 500);
             }
           },
-          error: (error) => {
-            this.addError(error?.details?.message);
-            this.errorCode = error?.details?.code;
+          error: (err) => {
+            const error = err?.error?.error?.details;
+            this.addError(error?.message);
+            this.errorCode = error?.code;
             this.isError = true;
           },
         });
@@ -163,9 +164,10 @@ export class LoginComponent implements OnInit {
             this.mode = this.screenType?.Verify;
             this.isForgotScreen = false;
           },
-          error: (error) => {
-            this.errorCode = error?.details?.code;
-            this.addError(error?.details?.message[0]);
+          error: (err) => {
+            const error = err?.error?.error?.details;
+            this.errorCode = error?.code;
+            this.addError(error?.message[0]);
             this.isError = true;
           },
         });
@@ -189,13 +191,14 @@ export class LoginComponent implements OnInit {
         this.errorMessage = [];
         this.mode = this.screenType.Verify;
       },
-      error: (error) => {
+      error: (err) => {
+        const error = err?.error?.error?.details;
         this.errorMessage = [];
-        this.errorCode = error?.details?.code;
-        if (error?.details?.message.indexOf('registered') >= 0 || error?.details?.message.indexOf('verified') >= 0) {
-          this.addError(error?.details?.message);
+        this.errorCode = error?.code;
+        if (error?.message.indexOf('registered') >= 0 || error?.message.indexOf('verified') >= 0) {
+          this.addError(error?.message);
         } else {
-          this.toastr.error(error.details?.message);
+          this.toastr.error(error?.message);
         }
         this.isError = true;
       },
@@ -206,15 +209,15 @@ export class LoginComponent implements OnInit {
     if (this.isForgotScreen) {
       this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
         next: (res) => {},
-        error: (error) => {
-          this.toastr.error(error.details?.message);
+        error: (err) => {
+          this.toastr.error(err?.error?.error?.details?.message);
         },
       });
     } else {
       this.userService.resendVerifyEmail(this.loginForm.value?.email).subscribe({
         next: (res) => {},
-        error: (error) => {
-          this.toastr.error(error.details?.message);
+        error: (err) => {
+          this.toastr.error(err?.error?.error?.details?.message);
         },
       });
     }
@@ -247,8 +250,8 @@ export class LoginComponent implements OnInit {
               location.reload();
             }, 500);
           },
-          error: (error) => {
-            this.addError(error?.details?.message);
+          error: (err) => {
+            this.addError(err?.error?.error?.details?.message);
           },
         });
       }
