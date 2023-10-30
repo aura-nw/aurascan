@@ -25,7 +25,7 @@ export class CommunityPoolProposalComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'ID' },
     { matColumnDef: 'title', headerCellDef: 'Title' },
-    { matColumnDef: 'status', headerCellDef: 'Status' },
+    { matColumnDef: 'status', headerCellDef: 'COMMON.STATUS' },
     { matColumnDef: 'sender', headerCellDef: 'Sender' },
     { matColumnDef: 'recipient', headerCellDef: 'recipient' },
     { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },

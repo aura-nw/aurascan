@@ -28,7 +28,7 @@ export class TokenTableComponent implements OnChanges {
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'contractAddress', headerCellDef: 'contractAddress' },
     { matColumnDef: 'price', headerCellDef: 'price' },
-    { matColumnDef: 'amount', headerCellDef: 'amount' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
     { matColumnDef: 'value', headerCellDef: 'value' },
   ];
 

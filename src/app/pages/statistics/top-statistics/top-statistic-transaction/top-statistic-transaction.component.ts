@@ -23,7 +23,7 @@ export class TopStatisticTransactionComponent implements OnInit {
   transactionsData;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'rank' },
-    { matColumnDef: 'address', headerCellDef: 'address' },
+    { matColumnDef: 'address', headerCellDef: 'COMMON.ADDRESS' },
     { matColumnDef: 'total', headerCellDef: 'total' },
     { matColumnDef: 'percentage', headerCellDef: 'percentage' },
   ];

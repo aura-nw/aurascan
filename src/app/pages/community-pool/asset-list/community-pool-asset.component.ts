@@ -28,7 +28,7 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'name', headerCellDef: 'name' },
     { matColumnDef: 'symbol', headerCellDef: 'symbol' },
-    { matColumnDef: 'amount', headerCellDef: 'amount' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);

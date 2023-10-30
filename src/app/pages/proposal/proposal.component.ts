@@ -33,7 +33,7 @@ export class ProposalComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'ID' },
     { matColumnDef: 'title', headerCellDef: 'Title' },
-    { matColumnDef: 'status', headerCellDef: 'Status' },
+    { matColumnDef: 'status', headerCellDef: 'COMMON.STATUS' },
     { matColumnDef: 'votingStart', headerCellDef: 'Voting Start' },
     { matColumnDef: 'submitTime', headerCellDef: 'Submit Time' },
     { matColumnDef: 'totalDeposit', headerCellDef: 'Total Deposit' },

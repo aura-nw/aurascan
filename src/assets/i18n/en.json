@@ -124,6 +124,10 @@
       "tokenContract" : "Token Contract",
       "changeP": "Change (%)",
       "volume24h": "Volume (24H)"
+    },
+    "CONTRACT": {
+      "contractVer": "Contract Ver",
+      "tokenTracker": "Token Tracker"
     }
   },
   "WALLET": {
@@ -223,9 +227,9 @@
     "COMMISSION_RATE": "Commission Rate",
     "CONTRACT": "Contract",
     "HOLDERS": "Holders",
-    "price": "Price",
-    "CREATOR": "Creator"
-
+    "PRICE": "Price",
+    "CREATOR": "Creator",
+    "CODE_ID": "Code ID"
   },
   "PAGINATOR": {
     "FIRST": "First",

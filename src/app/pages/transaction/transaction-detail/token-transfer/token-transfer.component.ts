@@ -30,7 +30,7 @@ export class TokenTransferComponent implements OnInit {
   };
   templatesFTs: Array<TableTemplate> = [
     { matColumnDef: 'assets', headerCellDef: 'assets' },
-    { matColumnDef: 'amount', headerCellDef: 'amount' },
+    { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
     { matColumnDef: 'transfer', headerCellDef: 'transfer' },
   ];
 

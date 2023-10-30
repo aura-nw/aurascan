@@ -34,7 +34,7 @@ export const MAX_LENGTH_SEARCH_CONTRACT = 200;
 
 export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   { matColumnDef: 'txHash', headerCellDef: 'LABEL.TXN_HASH', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
-  { matColumnDef: 'method', headerCellDef: 'LABEL.METHOD', type: 'status', headerWidth: 12 },
+  { matColumnDef: 'method', headerCellDef: 'LABEL.METHOD', type: 'COMMON.STATUS', headerWidth: 12 },
   { matColumnDef: 'status', headerCellDef: 'LABEL.RESULT', type: 'result', headerWidth: 9 },
   { matColumnDef: 'time', headerCellDef: 'COMMON.TIME', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
   { matColumnDef: 'blockHeight', headerCellDef: 'Block', type: 'hash-url', headerWidth: 6, isUrl: '/blocks' },

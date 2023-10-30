@@ -22,13 +22,13 @@ import { CommonService } from 'src/app/core/services/common.service';
 export class ContractsListComponent implements OnInit, OnDestroy {
   typeCW4973 = TYPE_CW4973;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },
+    { matColumnDef: 'address', headerCellDef: 'COMMON.ADDRESS', isUrl: '/contracts', isShort: true, isNameTag: true },
     { matColumnDef: 'name', headerCellDef: 'LABEL.CONTRACT_NAME' },
     { matColumnDef: 'label', headerCellDef: 'LABEL.LABEL' },
-    { matColumnDef: 'version', headerCellDef: 'Contract Ver' },
+    { matColumnDef: 'version', headerCellDef: 'PAGES.CONTRACT.contractVer' },
     { matColumnDef: 'type', headerCellDef: 'LABEL.TYPE' },
-    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
-    { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
+    { matColumnDef: 'token_tracker', headerCellDef: 'PAGES.CONTRACT.tokenTracker' },
+    { matColumnDef: 'code_id', headerCellDef: 'LABEL.CODE_ID' },
     { matColumnDef: 'creator', headerCellDef: 'LABEL.CREATOR', isUrl: '/account', isShort: true, isNameTag: true },
   ];
   contractRegisterType = ContractRegisterType;

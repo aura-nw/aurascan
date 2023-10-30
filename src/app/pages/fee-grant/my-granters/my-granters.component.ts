@@ -25,19 +25,19 @@ export class MyGrantersComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   dataSource = new MatTableDataSource<any>();
   templatesActive: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TX_HASH' },
     { matColumnDef: 'granter', headerCellDef: 'GRANTER' },
-    { matColumnDef: 'type', headerCellDef: 'TYPE' },
-    { matColumnDef: 'timestamp', headerCellDef: 'TIME' },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.TYPE' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
     { matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT' },
     { matColumnDef: 'expiration', headerCellDef: 'EXPIRATION' },
     { matColumnDef: 'spendable', headerCellDef: 'SPENDABLE' },
   ];
   templatesInActive: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TX_HASH' },
     { matColumnDef: 'granter', headerCellDef: 'GRANTER' },
-    { matColumnDef: 'type', headerCellDef: 'TYPE' },
-    { matColumnDef: 'timestamp', headerCellDef: 'TIME' },
+    { matColumnDef: 'type', headerCellDef: 'LABEL.TYPE' },
+    { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
     { matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT' },
     { matColumnDef: 'expiration', headerCellDef: 'EXPIRATION' },
     { matColumnDef: 'reason', headerCellDef: 'REASON' },

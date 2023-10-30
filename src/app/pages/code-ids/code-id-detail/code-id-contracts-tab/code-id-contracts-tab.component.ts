@@ -26,7 +26,7 @@ export class CodeIdContractsTabComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
     { matColumnDef: 'contract_address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contracts' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TX_HASH', isUrl: '/transaction' },
     { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account' },
     { matColumnDef: 'type', headerCellDef: 'LABEL.MASSAGE' },
     { matColumnDef: 'created_at', headerCellDef: 'INSTANTIATED at' },

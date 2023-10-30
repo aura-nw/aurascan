@@ -24,16 +24,16 @@ export class TokenHoldersTabComponent implements OnInit {
 
   CW20Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
-    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
-    { matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12 },
+    { matColumnDef: 'owner', headerCellDef: 'COMMON.ADDRESS', headerWidth: 30 },
+    { matColumnDef: 'balance', headerCellDef: 'COMMON.AMOUNT', headerWidth: 12 },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 12 },
     { matColumnDef: 'value', headerCellDef: 'value', headerWidth: 12 },
   ];
 
   CW721Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
-    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
-    { matColumnDef: 'quantity', headerCellDef: 'amount', headerWidth: 12 },
+    { matColumnDef: 'owner', headerCellDef: 'COMMON.ADDRESS', headerWidth: 30 },
+    { matColumnDef: 'quantity', headerCellDef: 'COMMON.AMOUNT', headerWidth: 12 },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 15 },
   ];
 

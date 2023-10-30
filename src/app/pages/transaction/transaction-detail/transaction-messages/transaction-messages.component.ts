@@ -606,7 +606,7 @@ export class TransactionMessagesComponent implements OnInit {
             link: { url: '/account', data: data.sender, nameTag: true },
           });
           result.push({ key: 'LABEL.CONTRACT', value: data.contract, link: { url: '/contracts' } });
-          result.push({ key: 'Code ID', value: data.code_id, link: { url: '/code-ids/detail' } });
+          result.push({ key: 'LABEL.CODE_ID', value: data.code_id, link: { url: '/code-ids/detail' } });
           break;
 
         case this.eTransType.ModifyWithdrawAddress:

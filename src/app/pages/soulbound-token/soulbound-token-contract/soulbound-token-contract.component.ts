@@ -36,7 +36,7 @@ export class SoulboundTokenContractComponent implements OnInit {
     { matColumnDef: 'token_uri', headerCellDef: 'token_uri' },
     { matColumnDef: 'receiver_address', headerCellDef: 'receiver_address' },
     { matColumnDef: 'token_id', headerCellDef: 'token_id' },
-    { matColumnDef: 'status', headerCellDef: 'status' },
+    { matColumnDef: 'status', headerCellDef: 'COMMON.STATUS' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   loading = true;

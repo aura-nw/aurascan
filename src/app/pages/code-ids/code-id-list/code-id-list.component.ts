@@ -34,8 +34,8 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
+    { matColumnDef: 'code_id', headerCellDef: 'LABEL.CODE_ID', isUrl: '/code-ids/detail' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'LABEL.TX_HASH', isUrl: '/transaction' },
     { matColumnDef: 'creator', headerCellDef: 'LABEL.CREATOR', isUrl: '/account' },
     { matColumnDef: 'type', headerCellDef: 'LABEL.TYPE' },
     { matColumnDef: 'instantiates', headerCellDef: 'INSTANTIATES' },
