@@ -47,12 +47,11 @@ export class AppComponent implements OnInit {
 
     // get name tag form local storage
     const listNameTag = localStorage.getItem('listNameTag');
-    const userEmail = localStorage.getItem('userEmail');
-    if (listNameTag && !userEmail && this.isFirstLoad) {
+    if (listNameTag) {
       try {
         let data = JSON.parse(listNameTag);
         this.globals.listNameTag = this.commonService.listNameTag = data;
-        this.isFirstLoad = false;
+        this.getListNameTag();
       } catch (e) {
         this.getListNameTag();
       }
@@ -62,17 +61,11 @@ export class AppComponent implements OnInit {
 
     setInterval(() => {
       this.getInfoCommon();
-      this.getPriceToken();
-      this.getListNameTag();
     }, 60000);
-
-    let intervalGetNameTag = userEmail ? 20000 : 60000;
-    setInterval(() => {
-      this.getListNameTag();
-    }, intervalGetNameTag);
 
     setInterval(() => {
       this.getListValidator();
+      this.getPriceToken();
     }, 600000);
 
     // if (this.isTestnet) {
@@ -95,10 +88,6 @@ export class AppComponent implements OnInit {
   getPriceToken(): void {
     this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.AURA).subscribe((res) => {
       this.globals.price.aura = res.data || 0;
-    });
-
-    this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.BTC).subscribe((res) => {
-      this.globals.price.btc = res.data || 0;
     });
   }
 
@@ -157,6 +146,7 @@ export class AppComponent implements OnInit {
       });
       const result = [...listTemp, ...lstPrivate];
       this.globals.listNameTag = this.commonService.listNameTag = result;
+      localStorage.setItem('listNameTag', JSON.stringify(result));
     });
   }
 
