@@ -203,7 +203,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
               },
               error: (e) => {
                 this.isLoading = false;
-                this.errTxt = e.status + ' ' + e.statusText;
+                this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
               },
             });
           },

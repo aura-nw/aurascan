@@ -45,13 +45,14 @@ export class SoulboundTokenContractComponent implements OnInit {
   selectedType = '';
   lstTypeSB = SOUL_BOUND_TYPE;
   sbType = SB_TYPE;
+  errTxt: string;
 
   constructor(
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private soulboundService: SoulboundService,
     private walletService: WalletService,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -105,7 +106,7 @@ export class SoulboundTokenContractComponent implements OnInit {
     this.textSearch = this.searchValue = this.searchValue.trim();
     if (this.pageChange) {
       this.pageChange?.selectPage(0);
-    } 
+    }
     this.getListToken();
   }
 
@@ -125,11 +126,19 @@ export class SoulboundTokenContractComponent implements OnInit {
       payload['keyword'] = addressNameTag;
     }
 
-    this.soulboundService.getSBContractDetail(payload).subscribe((res) => {
-      this.dataSource.data = res.data;
-      this.pageData.length = res.meta.count;
+    this.soulboundService.getSBContractDetail(payload).subscribe({
+      next: (res) => {
+        this.dataSource.data = res.data;
+        this.pageData.length = res.meta.count;
+      },
+      error: (e) => {
+        this.loading = false;
+        this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
-    this.loading = false;
   }
 
   openDialog(): void {
