@@ -27,9 +27,9 @@ export class TokenTableComponent implements OnChanges {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'contractAddress', headerCellDef: 'contractAddress' },
-    { matColumnDef: 'price', headerCellDef: 'price' },
+    { matColumnDef: 'price', headerCellDef: 'LABEL.PRICE' },
     { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
-    { matColumnDef: 'value', headerCellDef: 'value' },
+    { matColumnDef: 'value', headerCellDef: 'LABEL.VALUE' },
   ];
 
   listTokenType = [

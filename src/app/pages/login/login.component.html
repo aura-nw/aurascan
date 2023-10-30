@@ -9,9 +9,15 @@
         height="18px"
         (click)="changeMode(screenType.Login)"
         *ngIf="mode !== screenType.Login" />
-      <div class="mb-0 text--white w-100" *ngIf="mode === screenType.Login">Log in to AuraScan</div>
-      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Register">Register to AuraScan</div>
-      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Forgot">Forgot password</div>
+      <div class="mb-0 text--white w-100" *ngIf="mode === screenType.Login">
+        {{ 'PAGES.LOGIN.loginTitle' | translate }}
+      </div>
+      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Register">
+        {{ 'PAGES.LOGIN.registerTitle' | translate }}
+      </div>
+      <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Forgot">
+        {{ 'PAGES.LOGIN.forgotPassword' | translate }}
+      </div>
     </div>
   </div>
   <div class="card-body">
@@ -31,9 +37,10 @@
             <div>
               <ng-container *ngIf="errorCode === 'EU001' && (mode === screenType.Login || mode === screenType.Forgot)">
                 <ng-container *ngIf="i === 0">
+                  <div [innerHTML]="'MESSAGES.CLICK_VERIFY_LINK' | translate"></div>
                   Please click on the verification link sent to your mail to complete the registration process.<br />
                   In case you've not yet received any email.
-                  <a (click)="resendMail()" class="text--primary cursor-pointer">Resend</a>
+                  <a (click)="resendMail()" class="text--primary cursor-pointer">Resend {{ 'PAGES.LOGIN.resend' }}</a>
                 </ng-container>
                 <ng-container *ngIf="i !== 0">{{ error }}</ng-container>
               </ng-container>
@@ -47,11 +54,11 @@
     </ng-container>
 
     <div class="text--gray-4 mb-4" *ngIf="mode === screenType.Login">
-      Login by email to manage your profile, personal note, watchlist and more.
+      {{ 'PAGES.LOGIN.noticeLogin' | translate }}
     </div>
 
     <div class="text--gray-4 mb-4" *ngIf="mode === screenType.Register">
-      Register new account to manage your profile, personal note, watchlist and more.
+      {{ 'PAGES.LOGIN.noticeRegister' | translate }}
     </div>
 
     <form
@@ -64,6 +71,7 @@
           <img [src]="'assets/images/pages/key_left.png' | imageS3" />
           <div class="body-01 text--gray-2 mt-6">
             Kindly enter the email linked to your account, we'll send you a link to reset password
+            {{ 'PAGES.LOGIN.sendLinkReset' | translate }}
           </div>
         </div>
       </ng-container>
@@ -71,7 +79,7 @@
       <div class="row">
         <div class="col-12">
           <div class="form-group">
-            <label class="form-label body-01 text--white">Email</label>
+            <label class="form-label body-01 text--white">{{ 'PAGES.LOGIN.email' | translate }}</label>
             <div
               class="input-group"
               [class.form-control--error]="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty">
@@ -87,7 +95,7 @@
             <div
               *ngIf="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty"
               class="text--danger mt-2 caption fw-normal">
-              Invalid email format
+              {{ 'MESSAGES.INVALID_EMAIL_FORMAT' | translate }}
             </div>
           </div>
         </div>
@@ -96,7 +104,7 @@
       <div class="row mt-lg-6 mt-4" *ngIf="mode !== screenType.Forgot">
         <div class="col-12">
           <div class="form-group">
-            <label class="form-label body-01 text--white">Password</label>
+            <label class="form-label body-01 text--white">{{ 'PAGES.LOGIN.password' | translate }}</label>
             <div class="input-group pr-0" [class.form-control--error]="getPassword.errors?.pattern && checkPassword">
               <input
                 [type]="hidePassword ? 'password' : 'text'"
@@ -111,8 +119,7 @@
             </div>
 
             <div *ngIf="getPassword.errors?.pattern && checkPassword" class="text--danger mt-2 caption fw-normal">
-              The password need to be more than 8 characters in length with at least one upper case, 1 lower case, 1
-              number and 1 special character
+              {{ 'MESSAGES.RULE_PASSWORD' | translate }}
             </div>
           </div>
         </div>
@@ -122,7 +129,7 @@
         <div class="row mt-lg-6 mt-4">
           <div class="col-12">
             <div class="form-group">
-              <label class="form-label body-01 text--white">Confirm password</label>
+              <label class="form-label body-01 text--white">{{ 'PAGES.LOGIN.confirmPassword' | translate }}</label>
               <div
                 class="input-group pr-0"
                 [class.form-control--error]="
@@ -156,6 +163,7 @@
                 "
                 class="text--danger mt-2 caption fw-normal">
                 The password confirmation does not match
+                {{ 'MESSAGES.PASSWORD_NOT_MATCH' | translate }}
               </div>
             </div>
           </div>
@@ -164,7 +172,9 @@
 
       <ng-container *ngIf="mode === screenType.Login">
         <div class="py-lg-6 py-4">
-          <a class="text--primary h4 cursor-pointer" (click)="changeMode(screenType.Forgot)">Forgot password</a>
+          <a class="text--primary h4 cursor-pointer" (click)="changeMode(screenType.Forgot)">{{
+            'PAGES.LOGIN.forgotPassword' | translate
+          }}</a>
         </div>
         <div class="d-flex justify-content-end">
           <button
@@ -172,15 +182,15 @@
             type="submit"
             (click)="showVerifyMail()"
             [disabled]="loginForm.status === 'INVALID' || isError">
-            <span class="body-01">Log in</span>
+            <span class="body-01">Log in {{ 'BUTTON.LOGIN' | translate }}</span>
           </button>
         </div>
         <div class="text-center text--gray-4">
           <div class="mt-4 body-01">
-            <span class="text--gray-4">Don’t have an account?</span>
-            <a class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
-              >Register</a
-            >
+            <span class="text--gray-4">{{ 'PAGES.LOGIN.notHaveAccount' | translate }} </span>
+            <a class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)">{{
+              'BUTTON.REGISTER' | translate
+            }}</a>
           </div>
           <div class="py-6 text--white body-01">or</div>
 
@@ -205,10 +215,10 @@
           </div>
 
           <div class="mt-lg-6 mt-4 body-mob">
-            <span class="body-02">By continuing, you agree to our</span>
-            <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms"
-              >Terms and Conditions</a
-            >
+            <span class="body-02">{{ 'PAGES.LOGIN.noticeTerms' | translate }}</span>
+            <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms">{{
+              'PAGES.LOGIN.noticeTermsLink' | translate
+            }}</a>
           </div>
         </div>
       </ng-container>
@@ -222,14 +232,14 @@
             [disabled]="
               loginForm.status === 'INVALID' || loginForm.value.password !== loginForm.value.confirmPassword || isError
             ">
-            <span class="body-01">Register</span>
+            <span class="body-01">{{ 'BUTTON.REGISTER' | translate }}</span>
           </button>
         </div>
         <div class="mt-lg-6 mt-4 body-mob text-center text--gray-4">
-          <span class="body-02">By continuing, you agree to our</span>
-          <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms"
-            >Terms and Conditions</a
-          >
+          <span class="body-02">{{ 'PAGES.LOGIN.noticeTerms' | translate }}</span>
+          <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms">{{
+            'PAGES.LOGIN.noticeTermsLink' | translate
+          }}</a>
         </div>
       </ng-container>
 
@@ -240,7 +250,7 @@
             type="button"
             (click)="resetPassword()"
             [disabled]="loginForm.get('email')?.invalid || isError">
-            <span class="body-01">Continue</span>
+            <span class="body-01">{{ 'BUTTON.CONTINUE' | translate }}</span>
           </button>
         </div>
       </ng-container>
@@ -250,14 +260,13 @@
 
 <div *ngIf="mode === screenType.Welcome" class="card-welcome text-center">
   <img class="img-welcome" [src]="'assets/images/pages/planet.png' | imageS3" />
-  <div class="title-welcome">Welcome to AuraScan</div>
+  <div class="title-welcome">{{ 'PAGES.LOGIN.welcomeTitle' | translate }}</div>
   <span class="body-01 text--gray-2">
-    Congratulation! You have successfully registered an account. Please Login in to your account and experience the
-    blazing-fast blockchain explorer from Aura Network!
+    {{ 'PAGES.LOGIN.noticeSuccessfullyRegistered' | translate }}
   </span>
   <div class="mt-6 mb-8">
     <button class="button button-outline button-outline--gradient button--xlg button-pill" [routerLink]="['/login']">
-      <span class="body-01">Log in</span>
+      <span class="body-01">{{ 'BUTTON.LOGIN' | translate }}</span>
     </button>
   </div>
 </div>
@@ -270,21 +279,26 @@
   </div>
   <div class="body-01 text--gray-2">
     <ng-container *ngIf="!isForgotScreen">
-      <span>A verification link has been sent to {{ emailFormat }}.</span><br />
-      <span>Please click on the link to verify your email account.</span>
+      <div [innerHTML]="'LOGIN.sentVerifyLink' | translate : { emailFormat: emailFormat }"></div>
+      A verification link has been sent to {{ emailFormat }}.<br />
+      Please click on the link to verify your email account.
     </ng-container>
     <ng-container *ngIf="isForgotScreen">
+      <div [innerHTML]="'LOGIN.sentPasswordReset' | translate : { emailFormat: emailFormat }"></div>
       A password reset link has been sent to {{ emailFormat }}.<br />
       Please click on the link to change your password.
     </ng-container>
   </div>
   <div class="body mt-6" *ngIf="!isForgotScreen">
+    {{ 'PAGES.LOGIN.checkMail' | translate }}
     In case you cannot find the email, please check the spam folder and ensure your spam filters allow email from
     verify@aura.network
   </div>
   <div class="mt-6 mb-6 mb-lg-0">
-    <span>Have not received any email?</span>
-    <a class="text--primary fw-semibold ml-1 cursor-pointer" (click)="resendMail()">Resend</a>
+    <span>Have not received any email? {{ 'PAGES.LOGIN.notHaveEmail' | translate }}</span>
+    <a class="text--primary fw-semibold ml-1 cursor-pointer" (click)="resendMail()"
+      >Resend {{ 'PAGES.LOGIN.resend' }}</a
+    >
     <div *ngIf="errorMessage?.length > 0" class="text--danger mt-2 caption fw-normal">
       <div>{{ errorMessage[errorMessage?.length - 1] }}</div>
     </div>

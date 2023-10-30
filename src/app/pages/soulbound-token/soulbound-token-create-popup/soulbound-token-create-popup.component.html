@@ -1,6 +1,6 @@
 <div class="card sb-create-card">
   <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
-    <div class="h1 mb-0 fw-bold text--white">Create New</div>
+    <div class="h1 mb-0 fw-bold text--white">{{ 'PAGES.TOKEN.createNew' | translate }}</div>
     <img
       [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
       alt=""
@@ -11,11 +11,11 @@
   </div>
   <div class="card-body body-01">
     <div>
-      <div>Creator’s Address</div>
+      <div>{{ 'PAGES.TOKEN.creatorAddress' | translate }}</div>
       <div class="mt-2 address-text">{{ data.currentAddress }}</div>
     </div>
     <div class="mt-4 mt-lg-6">
-      <div>Contract Address</div>
+      <div>{{ 'LABEL.CONTRACT_ADDRESS' | translate }}</div>
       <div class="mt-2 address-text">{{ data.contractAddress }}</div>
     </div>
     <form
@@ -26,7 +26,9 @@
       autocomplete="off">
       <!-- Account Bound Token URI -->
       <div class="form-group mt-4 mt-lg-6">
-        <label for="soulboundTokenURI" class="form-label required body-01">Account Bound Token URI</label>
+        <label for="soulboundTokenURI" class="form-label required body-01">
+          {{ 'PAGES.TOKEN.abtURI' | translate }}
+        </label>
         <input
           id="soulboundTokenURI"
           formControlName="soulboundTokenURI"
@@ -61,23 +63,23 @@
           (ngModelChange)="resetCheck()"
           [class.form-control--error]="createSBTokenForm.get('receiverAddress')?.invalid && ngForm.submitted" />
         <div class="error" *ngIf="isAddressInvalid && ngForm.submitted">
-          This is not aura's externally owned account
+          This is not aura's externally owned account {{ 'MESSAGES.NOT_AURA_ACCOUNT' }}
         </div>
         <div class="error" *ngIf="isCurrentAddress && ngForm.submitted">
-          You can not attest a Account Bound Token for yourself
+          You can not attest a Account Bound Token for yourself {{ 'MESSAGES.ATTEST_YOURSELF' }}
         </div>
       </div>
 
       <!-- Button group -->
       <div class="d-flex align-items-center justify-content-end mt-8">
         <button class="button button-pill button-outline button--md" type="button" (click)="closeDialog()">
-          <span>Cancel</span>
+          <span>{{ 'BUTTON.CANCEL' }}</span>
         </button>
         <button
           class="button button-pill button-outline button-outline--gradient button-outline__in-card button--md ml-4"
           [disabled]="!createSBTokenForm.valid || isAddressInvalid || isCurrentAddress || isReject"
           type="submit">
-          <span>Create</span>
+          <span>{{ 'BUTTON.CREATE' }}</span>
         </button>
       </div>
     </form>

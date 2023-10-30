@@ -8,7 +8,9 @@
           <div
             class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100"
             *ngIf="!breakpoint.value.matches">
-            <div class="body d-lg-flex d-none align-items-center justify-content-center mr-2 text--gray-1">Type</div>
+            <div class="body d-lg-flex d-none align-items-center justify-content-center mr-2 text--gray-1">
+              {{ 'LABEL.TYPE' | translate }}
+            </div>
             <div class="dropdown aura-dropdown">
               <button
                 class="button button-pill button--sm button-outline button-outline__in-card token-filter-none px-3 justify-content-between"
@@ -158,7 +160,7 @@
               <th *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <div class="d-flex flex-column">
-                  <span class="text--gray-4 caption fw-normal">Contract</span>
+                  <span class="text--gray-4 caption fw-normal">{{ 'LABEL.CONTRACT' | translate }}</span>
                   <app-name-tag
                     [value]="element.contract_address"
                     *ngIf="element.contract_address !== '-'"
@@ -174,7 +176,7 @@
               <th *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element">
                 <div class="d-flex flex-column">
-                  <span class="text--gray-4 caption fw-normal">Price</span>
+                  <span class="text--gray-4 caption fw-normal">{{ 'LABEL.PRICE' | translate }}</span>
                   <div class="d-flex" *ngIf="element.price > 0; else defaultValues">
                     <span>${{ +element.price | mask : 'separator.6' }} </span>
                     <span class="text--gray-4 caption fw-normal ml-1 mr-1">|</span>
@@ -215,7 +217,7 @@
               <th *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element">
                 <div class="d-flex flex-column">
-                  <span class="text--gray-4 caption fw-normal">Value</span>
+                  <span class="text--gray-4 caption fw-normal">{{ 'LABEL.VALUE' | translate }}</span>
                   <span *ngIf="element.price > 0; else defaultValues">
                     <ng-container *ngIf="element.contract_address === '-'">
                       ${{ element.price * element.balance | formatDigit : 2 }}

@@ -1,6 +1,8 @@
 <div class="card">
   <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
-    <div class="h2 h4-mob mb-0 fw-bold text--white">{{ soulboundDetail?.ipfs?.name ?? 'Token detail' }}</div>
+    <div class="h2 h4-mob mb-0 fw-bold text--white">
+      {{ soulboundDetail?.ipfs?.name ?? ('PAGES.TOKEN.tokenDetails' | translate) }}
+    </div>
     <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
   </div>
   <div class="card-body body-01">
@@ -41,7 +43,7 @@
       </div>
       <div class="col-12 col-lg-7 mt-4 mt-lg-0">
         <div class="nft__desc">
-          <div class="h5 text--white">Contract</div>
+          <div class="h5 text--white">{{ 'LABEL.CONTRACT' | translate }}</div>
           <div class="mt-4 mb-4 mt-lg-2 body text--gray-1 box-desc">
             {{ soulboundDetail.contract_address || '-' }}
           </div>
@@ -49,7 +51,7 @@
           <div class="mt-4 mb-4 mt-lg-2 body text--gray-1 box-desc">
             {{ soulboundDetail.minter_address || '-' }}
           </div>
-          <div class="h5 text--white">Description</div>
+          <div class="h5 text--white">{{ 'PAGES.TOKEN.description' | translate }}</div>
           <div class="mt-4 mt-lg-2 body text--gray-1 box-desc __description">
             {{ soulboundDetail.ipfs?.description || '-' }}
           </div>
@@ -57,7 +59,7 @@
       </div>
     </div>
     <div class="divider divider-horizontal my-6"></div>
-    <div class="h5 mb-4 text--white">Properties</div>
+    <div class="h5 mb-4 text--white">{{ 'LABEL.PROPERTIES' | translate }}</div>
     <div class="row">
       <ng-container *ngIf="soulboundDetail.ipfs?.attributes">
         <span *ngIf="!isObject(soulboundDetail.ipfs?.attributes)" class="px-1 px-lg-2">-</span>
@@ -120,7 +122,7 @@
       type="button"
       [disabled]="isLoading"
       (click)="equipSB()">
-      <span>Equip</span>
+      <span>{{ 'PAGES.TOKEN.equip' }}</span>
     </button>
   </div>
 </div>

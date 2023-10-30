@@ -144,7 +144,7 @@
   <ng-template #ibcTransfer let-data="data">
     {{ getDataIBC(ibcListMapping.Transfer) }}
     <app-messages-item
-      [label]="'Sender'"
+      [label]="'LABEL.SENDER'"
       [value]="transactionDetail?.messages[0]?.sender"
       [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Receiver'" [value]="transactionDetail?.messages[0]?.receiver"></app-messages-item>
@@ -204,7 +204,7 @@
       [label]="'Receiver'"
       [value]="ibcData?.receiver"
       [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
-    <app-messages-item [label]="'Sender'" [value]="ibcData?.sender"></app-messages-item>
+    <app-messages-item [label]="'LABEL.SENDER'" [value]="ibcData?.sender"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
 
@@ -228,7 +228,7 @@
     <app-messages-item [label]="'Origin Denom'" [value]="ibcData?.acknowledgement?.denom"></app-messages-item>
     <app-messages-item [label]="'Receiver'" [value]="ibcData?.acknowledgement?.receiver"></app-messages-item>
     <app-messages-item
-      [label]="'Sender'"
+      [label]="'LABEL.SENDER'"
       [value]="ibcData?.acknowledgement?.sender"
       [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
@@ -305,7 +305,7 @@
       [label]="'hash'"
       [value]="data[keyIbc]?.signed_header?.header?.last_block_id?.part_set_header?.hash"></app-messages-item>
     <app-messages-item
-      [label]="'total'"
+      [label]="'LABEL.TOTAL'"
       [value]="data[keyIbc]?.signed_header?.header?.last_block_id?.part_set_header?.total"></app-messages-item>
     <app-messages-item
       [label]="'last_commit_hash'"

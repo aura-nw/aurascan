@@ -23,7 +23,7 @@ export class TokenCw721Component implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'id', headerCellDef: 'LABEL.ID' },
     { matColumnDef: 'token', headerCellDef: 'name' },
     { matColumnDef: 'tokenContract', headerCellDef: 'tokenContract' },
     { matColumnDef: 'total_activity', headerCellDef: 'total_activity' },

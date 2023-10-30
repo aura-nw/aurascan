@@ -31,9 +31,9 @@ export class SoulboundContractListComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'id', headerCellDef: 'LABEL.ID' },
     { matColumnDef: 'contract_address', headerCellDef: 'contract_address' },
-    { matColumnDef: 'total', headerCellDef: 'total' },
+    { matColumnDef: 'total', headerCellDef: 'LABEL.TOTAL' },
     { matColumnDef: 'claimed_qty', headerCellDef: 'claimed_qty' },
     { matColumnDef: 'unclaimed_qty', headerCellDef: 'unclaimed_qty' },
     { matColumnDef: 'action', headerCellDef: 'action' },

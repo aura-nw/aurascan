@@ -22,10 +22,10 @@ export class TopStatisticTransactionComponent implements OnInit {
   errTxt: string;
   transactionsData;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'rank' },
+    { matColumnDef: 'rank', headerCellDef: 'LABEL.RANK' },
     { matColumnDef: 'address', headerCellDef: 'COMMON.ADDRESS' },
-    { matColumnDef: 'total', headerCellDef: 'total' },
-    { matColumnDef: 'percentage', headerCellDef: 'percentage' },
+    { matColumnDef: 'total', headerCellDef: 'LABEL.TOTAL' },
+    { matColumnDef: 'percentage', headerCellDef: 'LABEL.PERCENTAGE' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 

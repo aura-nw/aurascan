@@ -24,9 +24,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'id', headerCellDef: 'LABEL.ID' },
     { matColumnDef: 'token', headerCellDef: 'name' },
-    { matColumnDef: 'price', headerCellDef: 'price' },
+    { matColumnDef: 'price', headerCellDef: 'LABEL.PRICE' },
     { matColumnDef: 'change', headerCellDef: 'change' },
     { matColumnDef: 'volume', headerCellDef: 'volume' },
     { matColumnDef: 'circulating_market_cap', headerCellDef: 'circulatingMarketCap' },

@@ -6,6 +6,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [LoginComponent, ResetPasswordComponent],
   imports: [
@@ -15,6 +16,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     CommonModule,
     ReactiveFormsModule,
     CommonPipeModule,
+    TranslateModule
   ],
   providers: [UserService],
   exports: [LoginComponent],

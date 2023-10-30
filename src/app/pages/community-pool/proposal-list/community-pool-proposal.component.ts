@@ -23,10 +23,10 @@ export class CommunityPoolProposalComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'ID' },
+    { matColumnDef: 'id', headerCellDef: 'LABEL.ID' },
     { matColumnDef: 'title', headerCellDef: 'Title' },
     { matColumnDef: 'status', headerCellDef: 'COMMON.STATUS' },
-    { matColumnDef: 'sender', headerCellDef: 'Sender' },
+    { matColumnDef: 'sender', headerCellDef: 'LABEL.SENDER' },
     { matColumnDef: 'recipient', headerCellDef: 'recipient' },
     { matColumnDef: 'amount', headerCellDef: 'COMMON.AMOUNT' },
     { matColumnDef: 'voting_end_time', headerCellDef: 'Voting End' },

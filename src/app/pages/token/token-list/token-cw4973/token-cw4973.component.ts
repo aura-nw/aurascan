@@ -23,7 +23,7 @@ export class TokenCw4973Component implements OnInit {
   destroy$ = new Subject<void>();
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'id', headerCellDef: 'LABEL.ID' },
     { matColumnDef: 'token', headerCellDef: 'name' },
     { matColumnDef: 'tokenContract', headerCellDef: 'tokenContract' },
     { matColumnDef: 'attestor', headerCellDef: 'attestor' },

@@ -1,7 +1,7 @@
 <div class="card card-grant">
   <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">
-      <div class="h1 mb-0 text--white w-100 fw-700">Add New Grant</div>
+      <div class="h1 mb-0 text--white w-100 fw-700">{{ 'PAGES.FEE_GRANT.addNewGrant' | translate }}</div>
       <img
         class="icon-close"
         [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
@@ -20,16 +20,20 @@
       <div class="row">
         <div class="col-12">
           <div class="form-group">
-            <label for="grantee_address" class="form-label required body-01">Grantee's address</label>
+            <label for="grantee_address" class="form-label required body-01">{{
+              'PAGES.FEE_GRANT.granteeAddress' | translate
+            }}</label>
             <input
               id="grantee_address"
               formControlName="grantee_address"
               type="text"
               class="form-control form-check-input"
-              placeholder="Grantee's address"
+              placeholder="{{ 'PAGES.FEE_GRANT.granteeAddress' | translate }}"
               (ngModelChange)="checkFormValid()"
               [class.form-control--error]="grantForm.get('grantee_address')?.invalid && isSubmit" />
-            <div class="error" *ngIf="isInvalidAddress">This is not aura's externally owned account</div>
+            <div class="error" *ngIf="isInvalidAddress">
+              {{ 'MESSAGES.NOT_AURA_ACCOUNT' | translate }}
+            </div>
           </div>
         </div>
       </div>
@@ -38,7 +42,7 @@
       <div class="row mt-6">
         <div class="col-12">
           <div class="form-group">
-            <label for="amount" class="form-label body-01">Spend Limit Amount</label>
+            <label for="amount" class="form-label body-01">{{ 'PAGES.FEE_GRANT.spendLimitAmount' | translate }}</label>
             <div class="input-group form-check-input pr-0">
               <input
                 id="amount"
@@ -60,7 +64,7 @@
       <div class="row mt-6">
         <div class="col-12">
           <div class="expiration_time">
-            <label for="amount" class="form-label body-01">Expiration Time</label>
+            <label for="amount" class="form-label body-01">{{ 'PAGES.FEE_GRANT.expirationTime' | translate }}</label>
             <div class="input-group input-group--simply form-check-input pr-0">
               <input
                 readOnly
@@ -79,7 +83,9 @@
                 <img src="assets/icons/icons-svg/white/close.svg" alt="" />
               </button>
               <div class="mr-5 h6 mb-0 text--primary position-relative">
-                <i class="ph-calendar-blank-fill h2 text--white fw-normal d-block cursor-pointer" (click)="picker.open()"></i>
+                <i
+                  class="ph-calendar-blank-fill h2 text--white fw-normal d-block cursor-pointer"
+                  (click)="picker.open()"></i>
                 <mat-datepicker #picker></mat-datepicker>
               </div>
             </div>
@@ -89,7 +95,9 @@
       <!-- Periodically granted -->
       <div class="row mt-6">
         <div class="col-6 col-lg-4">
-          <label class="form-label required body-01 mb-0">Periodically granted</label>
+          <label class="form-label required body-01 mb-0">{{
+            'PAGES.FEE_GRANT.periodicallyGranted' | translate
+          }}</label>
         </div>
         <div class="col-6 col-lg-auto">
           <div class="d-flex align-items-center">
@@ -101,7 +109,7 @@
                 class="radio-box radio-box--dark"
                 [checked]="periodShow"
                 (change)="changePeriodStage(true)" />
-              <label for="granted" class="ml-2 mb-0 text-justify">Yes</label>
+              <label for="granted" class="ml-2 mb-0 text-justify">{{ 'LABEL.YES' | translate }}</label>
             </div>
             <div class="form-group d-flex align-items-center ml-8">
               <input
@@ -111,7 +119,7 @@
                 class="radio-box radio-box--dark"
                 [checked]="!periodShow"
                 (change)="changePeriodStage(false)" />
-              <label for="not-granted" class="ml-2 mb-0 text-justify">No</label>
+              <label for="not-granted" class="ml-2 mb-0 text-justify">{{ 'LABEL.NO' | translate }}</label>
             </div>
           </div>
         </div>
@@ -121,7 +129,9 @@
         <div class="col-12">
           <div class="card-explain">
             <div class="form-group">
-              <label for="period_amount" class="form-label body-01 required">Period Spend Limit Amount</label>
+              <label for="period_amount" class="form-label body-01 required">{{
+                'PAGES.FEE_GRANT.periodSpendLimitAmount' | translate
+              }}</label>
               <div
                 class="input-group form-check-input pr-0"
                 [class.form-control--error]="grantForm.get('period_amount')?.invalid && isSubmit">
@@ -131,7 +141,7 @@
                   (focus)="addClassFocus(period_amount)"
                   [clickOutsideEnabled]="true"
                   (clickOutside)="removeClassFocus(period_amount)"
-                  [placeholder]="'COMMON.AMOUNT'"
+                  [placeholder]="'COMMON.AMOUNT' | translate"
                   mask="separator.6"
                   separatorLimit="9999"
                   (ngModelChange)="checkFormValid()"
@@ -141,17 +151,19 @@
                     class="button button-flat button--sm button-max body-02"
                     type="button"
                     (click)="getMaxToken('period_amount')">
-                    Max
+                    {{ 'BUTTON.MAX' | translate }}
                   </button>
                 </div>
                 <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
               </div>
               <div class="error" *ngIf="errorSpendLimit">
-                Period Spend Limit Amount must less than Spend Limit Amount
+                {{ 'MESSAGES.PERIOD_LESS_SPEND' | translate }}
               </div>
             </div>
             <div class="form-group mt-4">
-              <label for="period_day" class="form-label body-01 required">Period</label>
+              <label for="period_day" class="form-label body-01 required">{{
+                'PAGES.FEE_GRANT.period' | translate
+              }}</label>
               <div
                 class="input-group form-check-input pr-0"
                 [class.form-control--error]="grantForm.get('period_day')?.invalid && isSubmit">
@@ -169,7 +181,7 @@
                 <div class="input-group-append h6 fw-normal mb-0">days</div>
               </div>
               <div class="error" *ngIf="isInvalidPeriod">
-                The first period end time need to be sooner than Expiration Time
+                {{ 'MESSAGES.END_TIME_SOONER' | translate }}
               </div>
             </div>
           </div>
@@ -178,7 +190,7 @@
       <!-- Allowed Activities -->
       <div class="row mt-6">
         <div class="col-6 col-lg-4">
-          <label class="form-label body-01 mb-0">Allowed Activities</label>
+          <label class="form-label body-01 mb-0">{{ 'PAGES.FEE_GRANT.allowedActivities' | translate }}</label>
         </div>
         <div class="col-6 col-lg-auto">
           <div class="d-lg-flex align-items-center">
@@ -200,7 +212,9 @@
                 class="check-box check-box--dark"
                 formControlName="isExecute"
                 (ngModelChange)="checkFormValid()" />
-              <label for="execute-contract" class="ml-2 mb-0 text-justify"> Execute Contract </label>
+              <label for="execute-contract" class="ml-2 mb-0 text-justify">
+                {{ 'PAGES.FEE_GRANT.executeContract' | translate }}</label
+              >
             </div>
           </div>
         </div>
@@ -231,7 +245,7 @@
                 <label for="specified" class=" ml-2 mb-0 text-justify">Specified smart contracts</label>
               </div>
             </div> -->
-            Specified smart contracts
+            {{ 'PAGES.FEE_GRANT.specifiedSmartContracts' | translate }}
             <div *ngIf="!allContractAllowActive">
               <div class="divider divider-horizontal mt-4"></div>
               <div formArrayName="execute_contract">
@@ -263,7 +277,7 @@
                 class="button mt-8 mb-4 d-flex align-items-center justify-content-center button-add mx-auto"
                 (click)="addContracts()">
                 <i class="ph-plus-fill text--white"></i>
-                <span class="h5 mb-0 fw-normal text--gray-light ml-2">Add more</span>
+                <span class="h5 mb-0 fw-normal text--gray-light ml-2">{{ 'BUTTON.ADD_MORE' | translate }}</span>
               </button>
             </div>
           </div>
@@ -274,21 +288,20 @@
         <div class="card-note">
           <div class="d-flex align-items-center">
             <img src="assets/icons/icons-svg/color/warning.svg" alt="" width="20px" />
-            <div class="body fw-semibold ml-2">NOTE</div>
+            <div class="body fw-semibold ml-2 text-uppercase">{{ 'LABEL.NOTE' | translate }}</div>
           </div>
           <div class="mt-2 body">
-            If field “Spend Limit Amount” is empty, there is no spend limit and any amount can be spent.<br />
-            If field “Expiration Time” is empty, there is no expiry date for the granted amount.
+            <div [innerHTML]="'PAGES.FEE_GRANT.noticeAddGrant' | translate"></div>
           </div>
         </div>
       </div>
       <!-- button group -->
       <div class="d-flex mt-4 py-6 justify-content-end">
         <button class="button button--md button-pill button-outline" type="button" (click)="dialogRef.close()">
-          <span>Cancel</span>
+          <span>{{ 'BUTTON.CANCEL' | translate }}</span>
         </button>
         <button class="button button--md button-pill button-flat ml-4" type="submit" [disabled]="!formValid">
-          <span>Grant</span>
+          <span>{{ 'BUTTON.GRANT' | translate }}</span>
         </button>
       </div>
     </form>

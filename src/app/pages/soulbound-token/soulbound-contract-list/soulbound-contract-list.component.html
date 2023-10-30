@@ -51,7 +51,7 @@
 
             <!-- Contract address -->
             <ng-container matColumnDef="contract_address">
-              <th mat-header-cell *matHeaderCellDef class="col-per-30">CONTRACT ADDRESS</th>
+              <th mat-header-cell *matHeaderCellDef class="col-per-30">{{ 'LABEL.CONTRACT_ADDRESS' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="py-4">
                 <div class="d-flex justify-content-start">
                   <app-name-tag
@@ -88,7 +88,7 @@
                 <button
                   class="button border-radius--sm button-outline button--sm text--white"
                   (click)="openDialog(element.smart_contract?.address)">
-                  Create New
+                  {{ 'PAGES.TOKEN.createNew' | translate }}
                 </button>
               </td>
             </ng-container>

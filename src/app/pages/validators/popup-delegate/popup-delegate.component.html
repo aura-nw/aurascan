@@ -13,7 +13,7 @@
   <div class="box-token mt-8 body-02">
     <div class="d-lg-flex mb-4 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5">
-        My delegation {{ 'PAGES.VALIDATOR.myDelegation' | translate }}
+        {{ 'PAGES.VALIDATOR.myDelegation' | translate }}
       </div>
       <div class="body-01 text--gray-1">
         {{
@@ -26,14 +26,14 @@
     </div>
     <div class="d-lg-flex mb-4 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5">
-        Delegable Balance {{ 'PAGES.VALIDATOR.delegableBalance' | translate }}
+        {{ 'PAGES.VALIDATOR.delegableBalance' | translate }}
       </div>
       <div class="body-01 text--gray-1">
         {{ !availableToken || +availableToken < 0.000001 ? '0' : (+availableToken | mask : 'separator.6') }}
         <span class="text--white"> {{ denom }}</span>
       </div>
     </div>
-    <div class="text--gray-5">Amount to Delegate {{ 'PAGES.VALIDATOR.amountToDelegate' | translate }}</div>
+    <div class="text--gray-5">{{ 'PAGES.VALIDATOR.amountToDelegate' | translate }}</div>
   </div>
 </ng-container>
 
@@ -50,7 +50,7 @@
   <div class="body-01 text--white">
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">
-        My delegation {{ 'PAGES.VALIDATOR.myDelegation' | translate }}
+        {{ 'PAGES.VALIDATOR.myDelegation' | translate }}
       </div>
       <div class="text--gray-1">
         {{
@@ -63,7 +63,7 @@
     </div>
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">
-        Pending Reward {{ 'PAGES.VALIDATOR.pendingReward' | translate }}
+        {{ 'PAGES.VALIDATOR.pendingReward' | translate }}
       </div>
       <div class="text--gray-1">
         {{
@@ -76,7 +76,7 @@
     </div>
     <div class="d-lg-flex">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 text--gray-5 body-02">
-        Delegable Balance {{ 'PAGES.VALIDATOR.delegableBalance' | translate }}
+        {{ 'PAGES.VALIDATOR.delegableBalance' | translate }}
       </div>
       <div class="text--gray-1">
         {{ !availableToken || +availableToken < 0.000001 ? '0' : (+availableToken | mask : 'separator.6') }}
@@ -98,10 +98,9 @@
     <div class="warning-icon mr-3"></div>
     <div>
       <div class="text--white h6 mb-2">
-        Trying to switch validators? {{ 'PAGES.VALIDATOR.switchValidators' | translate }}
+        {{ 'PAGES.VALIDATOR.switchValidators' | translate }}
       </div>
       <div class="text--gray-5">
-        Use the 'Redelegate' feature to instantly stake your assets to another validator.
         {{ 'PAGES.VALIDATOR.stakeAnotherValidator' | translate }}
       </div>
     </div>

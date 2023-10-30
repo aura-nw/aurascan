@@ -5,7 +5,7 @@
       <h3 class="mb-0 fw-700 text--gray-light-2 mb-4 mb-xl-0">NFTs ({{ listCollection[0]?.quantity || 0 }})</h3>
       <div class="d-flex flex-column flex-lg-row align-items-end justify-content-end gap-2">
         <div class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100">
-          <div class="body d-lg-flex d-none mr-2 text--gray-1">Collections</div>
+          <div class="body d-lg-flex d-none mr-2 text--gray-1">{{ 'PAGES.TOKEN.collections' | translate }}</div>
           <div class="dropdown aura-dropdown w-100">
             <button
               class="button button-pill button--sm button-outline button-outline__in-card px-3 justify-content-between"
@@ -86,11 +86,11 @@
                   nftId="{{ 'nft#' + i }}"
                   [nftType]="getTypeFile(item)"></app-nft-card>
                 <div class="nft-cards__label">
-                  <span class="text-gradient">CW-721</span>
+                  <span class="text-gradient">{{ 'LABEL.CW-721' | translate }}</span>
                 </div>
                 <div class="nft__body">
                   <div class="nft__info d-flex">
-                    <span class="mr-1 text--gray-1">Token:</span>
+                    <span class="mr-1 text--gray-1">{{ 'COMMON.TOKEN' | translate }}:</span>
                     <div
                       class="hover-link box-name"
                       (click)="handleRouterLink('/tokens/token-nft/' + item.contract_address)">

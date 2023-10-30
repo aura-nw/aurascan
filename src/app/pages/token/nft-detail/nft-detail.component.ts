@@ -48,7 +48,7 @@ export class NFTDetailComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'COMMON.TIME' },
     { matColumnDef: 'from_address', headerCellDef: 'COMMON.FROM' },
     { matColumnDef: 'to_address', headerCellDef: 'COMMON.TO' },
-    { matColumnDef: 'price', headerCellDef: 'Price' },
+    { matColumnDef: 'price', headerCellDef: 'LABEL.PRICE' },
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);

@@ -9,6 +9,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { ExportCsvRoutingModule } from './export-csv-routing.module';
 import { ExportCsvComponent } from './export-csv.component';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [ExportCsvComponent],
   imports: [
@@ -21,6 +22,7 @@ import { ExportCsvComponent } from './export-csv.component';
     TooltipCustomizeModule,
     NgxMaskPipe,
     MaterialModule,
+    TranslateModule,
   ],
   providers: [UserService, provideEnvironmentNgxMask(MASK_CONFIG)],
   exports: [ExportCsvComponent],

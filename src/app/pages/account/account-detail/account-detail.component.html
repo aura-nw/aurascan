@@ -8,7 +8,7 @@
         [routerLink]="['/contracts/', currentAddress]"
         *ngIf="isContractAddress && breakpoint.value.matches"
         class="contract-label text--primary ml-6 caption fw-normal"
-        >Contract</a
+        >{{ 'LABEL.CONTRACT' | translate }}</a
       >
       <div class="d-none d-lg-block">
         <span class="body-01 text--gray-5 caption-mob fw-normal">{{ currentAddress }}</span>

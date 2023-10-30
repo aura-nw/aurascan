@@ -31,7 +31,7 @@ export class ProposalComponent implements OnInit {
   isLoading = true;
   // data table
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'ID' },
+    { matColumnDef: 'id', headerCellDef: 'LABEL.ID' },
     { matColumnDef: 'title', headerCellDef: 'Title' },
     { matColumnDef: 'status', headerCellDef: 'COMMON.STATUS' },
     { matColumnDef: 'votingStart', headerCellDef: 'Voting Start' },

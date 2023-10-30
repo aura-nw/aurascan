@@ -32,7 +32,7 @@ export class SoulboundTokenContractComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'id', headerCellDef: 'LABEL.ID' },
     { matColumnDef: 'token_uri', headerCellDef: 'token_uri' },
     { matColumnDef: 'receiver_address', headerCellDef: 'receiver_address' },
     { matColumnDef: 'token_id', headerCellDef: 'token_id' },
