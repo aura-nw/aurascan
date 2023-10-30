@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig,
+  MatLegacyDialogConfig as MatDialogConfig
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
@@ -18,7 +19,6 @@ import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -51,6 +51,8 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   dataSourceMobile = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   quota = this.environmentService.chainConfig.quotaSetPrivateName;
+  isLoading = true;
+  errTxt: string;
 
   constructor(
     public commonService: CommonService,
@@ -58,7 +60,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private toastr: NgxToastrService,
     private global: Globals,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -105,35 +107,44 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
 
-    this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
-      this.countFav = res.meta.countFavorite || 0;
-      if (this.textSearch?.length > 0) {
-        this.countFav = 0;
-        //check record isFavorite
-        if (res.data?.length > 0 && res.data[0].isFavorite == 1) {
-          this.countFav = 1;
+    this.nameTagService.getListPrivateNameTag(payload).subscribe({
+      next: (res) => {
+        this.countFav = res.meta.countFavorite || 0;
+        if (this.textSearch?.length > 0) {
+          this.countFav = 0;
+          //check record isFavorite
+          if (res.data?.length > 0 && res.data[0].isFavorite == 1) {
+            this.countFav = 1;
+          }
         }
-      }
-      res.data?.forEach((element) => {
-        element['type'] = isContract(element.address) ? 'contract' : 'account';
-      });
-      this.dataSource.data = res.data;
-      this.pageData.length = res?.meta?.count || 0;
+        res.data?.forEach((element) => {
+          element['type'] = isContract(element.address) ? 'contract' : 'account';
+        });
+        this.dataSource.data = res.data;
+        this.pageData.length = res?.meta?.count || 0;
 
-      if (this.dataSource?.data) {
-        let dataMobTemp = this.dataSource.data?.slice(
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-        );
-        if (dataMobTemp.length !== 0) {
-          this.dataSourceMobile = dataMobTemp;
-        } else {
-          this.dataSourceMobile = this.dataSource.data?.slice(
-            (this.pageData.pageIndex - 1) * this.pageData.pageSize,
-            (this.pageData.pageIndex - 1) * this.pageData.pageSize + this.pageData.pageSize,
+        if (this.dataSource?.data) {
+          let dataMobTemp = this.dataSource.data?.slice(
+            this.pageData.pageIndex * this.pageData.pageSize,
+            this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
           );
+          if (dataMobTemp.length !== 0) {
+            this.dataSourceMobile = dataMobTemp;
+          } else {
+            this.dataSourceMobile = this.dataSource.data?.slice(
+              (this.pageData.pageIndex - 1) * this.pageData.pageSize,
+              (this.pageData.pageIndex - 1) * this.pageData.pageSize + this.pageData.pageSize,
+            );
+          }
         }
-      }
+      },
+      error: (e) => {
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 

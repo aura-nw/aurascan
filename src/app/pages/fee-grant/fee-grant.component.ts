@@ -11,6 +11,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 export class FeeGrantComponent implements OnInit {
   isGrantees = true;
   currentAddress = null;
+  isLoading = true;
   TAB = [
     {
       id: 0,
@@ -35,6 +36,7 @@ export class FeeGrantComponent implements OnInit {
         } else {
           this.currentAddress = null;
         }
+        this.isLoading = false;
       });
   }
 

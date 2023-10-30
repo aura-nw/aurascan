@@ -1,5 +1,6 @@
 <app-pagetitle title="Code ID Details" [displayInfo]="false"></app-pagetitle>
-<ng-container *ngIf="codeIdDetail">
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+<ng-container *ngIf="codeIdDetail && !isLoading">
   <section class="information mt-4 mt-lg-6">
     <div class="card">
       <div class="card-body">
@@ -87,7 +88,7 @@
     </div>
   </section>
 </ng-container>
-<ng-container *ngIf="!codeIdDetail"
+<ng-container *ngIf="!codeIdDetail && !isLoading"
   ><div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
   <div class="py-lg-20"></div>
 </ng-container>
