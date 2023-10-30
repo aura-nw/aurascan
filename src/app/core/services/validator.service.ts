@@ -12,7 +12,6 @@ import { LCD_COSMOS } from '../constants/url.constant';
   providedIn: 'root',
 })
 export class ValidatorService extends CommonService {
-  apiUrl = `${this.environmentService.backend}`;
   chainInfo = this.environmentService.chainInfo;
   stakingAPRSubject: BehaviorSubject<number>;
 
