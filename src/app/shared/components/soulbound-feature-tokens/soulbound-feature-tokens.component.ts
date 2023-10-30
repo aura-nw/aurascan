@@ -170,8 +170,4 @@ export class SoulboundFeatureTokensComponent implements OnInit {
       localStorage.setItem('tabUnEquip', 'true');
     }
   }
-
-  encodeData(data) {
-    return encodeURIComponent(data);
-  }
 }
