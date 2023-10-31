@@ -33,14 +33,14 @@ export class ExportCsvComponent implements OnInit {
   responseCaptcha;
   isValidCaptcha = false;
 
-  siteKey = this.environmentService.chainConfig.siteKeyCaptcha;
+  siteKey = this.environmentService.siteKeyCaptcha;
 
   constructor(
     private fb: FormBuilder,
     private commonService: CommonService,
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

@@ -102,7 +102,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
     this.timerGetUpTime = setInterval(() => {
       this.getTransaction(false);
-    }, 5000);
+    }, 30000);
   }
 
   changeTab(tabId): void {

@@ -84,7 +84,7 @@ export class ContractsTransactionsComponent implements OnInit {
         this.currentKey = null;
         this.getData(true);
       }
-    }, 5000);
+    }, 30000);
   }
 
   ngOnDestroy(): void {

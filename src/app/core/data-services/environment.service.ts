@@ -21,7 +21,6 @@ export interface IConfiguration {
     stakingTime: string;
     blockTime: number;
     quotaSetPrivateName: number;
-    siteKeyCaptcha: string;
     coins: {
       name: string;
       display: string;
@@ -44,6 +43,7 @@ export interface IConfiguration {
     google: {
       url: string;
       clientId: string;
+      siteKeyCaptcha: string;
     };
     horoscope: {
       url: string;
@@ -112,6 +112,9 @@ export class EnvironmentService {
     return `${_google.clientId}.${_google.url}`;
   }
 
+  get siteKeyCaptcha() {
+    return _.get(this.configValue, 'api.google.siteKeyCaptcha');
+  }
   constructor(private http: HttpClient) {}
 
   loadConfig() {

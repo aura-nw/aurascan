@@ -100,7 +100,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         this.currentKey = null;
         this.getListData(null, true);
       }
-    }, 5000);
+    }, 30000);
   }
 
   ngOnDestroy(): void {
