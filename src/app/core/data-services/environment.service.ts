@@ -105,6 +105,11 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.horoscope');
   }
 
+  get graphql() {
+    const { graphql, url } = _.get(this.configValue, 'api.horoscope');
+    return url + graphql;
+  }
+
   get socketUrl() {
     return _.get(this.configValue, 'api.socket');
   }
