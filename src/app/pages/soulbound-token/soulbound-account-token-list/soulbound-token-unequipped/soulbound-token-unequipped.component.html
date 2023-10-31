@@ -3,7 +3,9 @@
   <div class="card">
     <div class="card-body">
       <!-- Title -->
-      <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mb-4">
+      <div
+        class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mb-4"
+        *ngIf="!errTxt && !loading">
         <div class="body text--gray-4 mt-4 mt-lg-0">
           A total of {{ pageData.length }} record{{ pageData.length > 1 ? 's' : '' }} found
         </div>
@@ -43,7 +45,7 @@
         <div
           id="nft-cards"
           class="nft-cards nft__unclaimed token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
-          *ngIf="soulboundData.data.length > 0; else noValues">
+          *ngIf="soulboundData?.data?.length > 0; else noValues">
           <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
             <div class="nft-cards__item-border" [class.notify]="token.is_notify">
               <div class="nft-cards__item nft-cards__item--unclaimed">
@@ -89,7 +91,10 @@
           (pageEvent)="pageEvent($event)">
         </app-paginator>
         <ng-template #noValues>
-          <app-table-no-data textNull="This account doesn't have any un-claimed/un-equipped ABT to equip" *ngIf="!loading && !searchValue"></app-table-no-data>
+          <app-table-no-data
+            textNull="This account doesn't have any un-claimed/un-equipped ABT to equip"
+            *ngIf="!loading && !searchValue && !errTxt"></app-table-no-data>
+          <app-table-no-data [textNull]="errTxt" *ngIf="errTxt"></app-table-no-data>
           <app-table-no-data *ngIf="!loading && searchValue"></app-table-no-data>
         </ng-template>
       </div>

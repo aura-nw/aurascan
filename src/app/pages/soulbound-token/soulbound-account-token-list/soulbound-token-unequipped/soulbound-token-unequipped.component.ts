@@ -49,7 +49,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   sbType = SB_TYPE;
   isClick = false;
   MEDIA_TYPE = MEDIA_TYPE;
-  isError = false;
+  errTxt: string;
 
   constructor(
     public dialog: MatDialog,
@@ -96,14 +96,21 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
       keyword: this.textSearch,
     };
 
-    this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
-      this.soulboundData.data = res.data;
-      this.pageData.length = res.meta.count;
-      this.totalUnEquip.emit(this.pageData.length);
-      this.resetReload.emit(false);
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe({
+      next: (res) => {
+        this.soulboundData.data = res.data;
+        this.pageData.length = res.meta.count;
+        this.totalUnEquip.emit(this.pageData.length);
+        this.resetReload.emit(false);
+      },
+      error: (e) => {
+        this.loading = false;
+        this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
-
-    this.loading = false;
   }
 
   paginatorEmit(event): void {
@@ -152,10 +159,6 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;
-  }
-
-  error(): void {
-    this.isError = true;
   }
 
   updateNotify(contractAddress, tokenID) {

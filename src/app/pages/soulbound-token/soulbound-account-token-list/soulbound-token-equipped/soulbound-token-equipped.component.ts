@@ -37,7 +37,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   sbType = SB_TYPE;
   walletAddress = null;
   searchValue = '';
-  isError = false;
+  errTxt: string;
 
   constructor(
     private soulboundService: SoulboundService,
@@ -90,18 +90,21 @@ export class SoulboundTokenEquippedComponent implements OnInit {
       keyword: this.textSearch,
     };
 
-    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
-      (res) => {
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe({
+      next: (res) => {
         this.countSelected = res.data.filter((k) => k.picked)?.length || 0;
         this.soulboundData.data = res.data;
         this.pageData.length = res.meta.count;
         this.totalSBT.emit(this.pageData.length);
       },
-      () => {},
-      () => {
+      error: (e) => {
+        this.loading = false;
+        this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+      },
+      complete: () => {
         this.loading = false;
       },
-    );
+    });
   }
 
   paginatorEmit(event): void {
@@ -153,9 +156,5 @@ export class SoulboundTokenEquippedComponent implements OnInit {
 
   handleRouterLink(link): void {
     window.location.href = link;
-  }
-
-  error(): void {
-    this.isError = true;
   }
 }

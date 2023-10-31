@@ -265,7 +265,7 @@
             voting_Period_arr.length === 0 ? 'py-4 py-lg-6' : ''
           }}">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Votings</div>
-          <div *ngIf="voting_Period_arr.length > 0">
+          <div *ngIf="voting_Period_arr.length > 0 && !isLoadingVoting">
             <div class="mt-4 d-flex align-items-center">
               <div class="flex-shrink-0 flex-grow-1 d-flex w-25">
                 <div class="dropdown aura-dropdown w-100">
@@ -338,10 +338,15 @@
           </div>
           <div
             class="d-flex flex-column align-items-center justify-content-center h-100"
-            *ngIf="voting_Period_arr.length === 0">
+            *ngIf="voting_Period_arr.length === 0 && !errTxtVoting && !isLoadingVoting">
             <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt="" />
             <div class="text--gray-3">No proposal within the voting period</div>
           </div>
+          <app-table-no-data
+            *ngIf="!isLoadingVoting && errTxtVoting"
+            class=""
+            [textNull]="errTxtVoting"></app-table-no-data>
+          <app-loading-sprint *ngIf="isLoadingVoting"></app-loading-sprint>
         </div>
       </div>
     </div>
@@ -412,7 +417,7 @@
           </div>
           <ng-template #noValues>
             <ng-container *ngIf="!isLoadingBlock">
-              <app-table-no-data class="mt-18" [textNull]="errTextBlock"></app-table-no-data>
+              <app-table-no-data class="mt-18" [textNull]="errTxtBlock"></app-table-no-data>
             </ng-container>
           </ng-template>
         </div>
@@ -500,7 +505,7 @@
           </div>
           <ng-template #noValue>
             <ng-container *ngIf="!isLoadingTx">
-              <app-table-no-data class="mt-18" [textNull]="errTextTxs"></app-table-no-data>
+              <app-table-no-data class="mt-18" [textNull]="errTxtTxs"></app-table-no-data>
             </ng-container>
           </ng-template>
         </div>
