@@ -257,7 +257,7 @@ export const MENU_MOB: MenuItem[] = [
         id: 2,
         label: 'MENUITEMS.CODE-LIST',
         icon: 'code-simple',
-        link: '/code-ids/list',
+        link: '/code-ids',
         name: MenuName.CodeList,
       },
       {
