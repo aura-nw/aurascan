@@ -66,6 +66,18 @@ const routes: Routes = [
         path: 'profile',
         loadChildren: () => import('./pages/profile/profile.module').then((m) => m.ProfileModule),
       },
+      {
+        path: 'export-csv',
+        loadChildren: () => import('./pages/export-csv/export-csv.module').then((m) => m.ExportCsvModule),
+      },
+      {
+        path: 'terms',
+        loadChildren: () => import('./pages/terms-of-service/terms-of-service.module').then((m) => m.TermsModule),
+      },
+      {
+        path: 'privacyPolicy',
+        loadChildren: () => import('./pages/privacy-policy/privacy-policy.module').then((m) => m.PrivacyModule),
+      },
     ],
   },
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
@@ -78,7 +90,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy', scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

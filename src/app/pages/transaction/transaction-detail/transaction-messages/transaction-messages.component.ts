@@ -75,6 +75,7 @@ export class TransactionMessagesComponent implements OnInit {
   transactionTypeArr = [];
   codeTransaction = CodeTransaction;
   isDisplay = [];
+  keyIbc = 'client_message';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -89,6 +90,11 @@ export class TransactionMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // set key ibc update client when old type
+    if (this.transactionDetail?.messages[0]?.header) {
+      this.keyIbc = 'header';
+    }
+
     this.currentIndex = 0;
     // check if contract type not belongTo TypeTransaction enum
     if (Object.values(TRANSACTION_TYPE_ENUM).includes(this.transactionDetail?.type)) {
@@ -472,9 +478,9 @@ export class TransactionMessagesComponent implements OnInit {
         case this.eTransType.SubmitProposalTx:
           result.push({
             key: 'Amount',
-            value: data.initial_deposit[0].amount,
+            value: data.initial_deposit[0]?.amount,
             pipeType: pipeTypeData.BalanceOf,
-            denom: data.initial_deposit[0].amount > 0 ? { display: this.denom } : null,
+            denom: data.initial_deposit[0]?.amount > 0 ? { display: this.denom } : null,
           });
           result.push({
             key: 'Proposer',
@@ -482,14 +488,17 @@ export class TransactionMessagesComponent implements OnInit {
             link: { url: '/account', data: data.proposer, nameTag: true },
           });
           if (this.transactionDetail?.tx?.logs?.length > 0) {
+            const proposalData = this.transactionDetail?.tx?.logs[0]?.events?.find(
+              (k) => k.type === 'submit_proposal',
+            )?.attributes;
             result.push({
               key: 'Proposal Id',
-              value: this.getLongValue(this.transactionDetail?.tx?.logs[0].events[4].attributes[0].value),
+              value: this.getLongValue(proposalData?.find((k) => k.key === 'proposal_id')?.value),
               link: { url: '/votings' },
             });
             result.push({
               key: 'Proposal Type',
-              value: this.transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value,
+              value: proposalData?.find((k) => k.key === 'proposal_type')?.value,
             });
           }
           result.push({ key: 'Title', value: data.content.title });

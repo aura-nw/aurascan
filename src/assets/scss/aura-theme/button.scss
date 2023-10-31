@@ -416,6 +416,7 @@ button, .button {
 }
 
 .button-ghost {
+  min-width: 32px;
   border-radius: 8px;
   display: flex;
   align-items: center;

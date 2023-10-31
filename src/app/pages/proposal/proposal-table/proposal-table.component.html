@@ -205,8 +205,8 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: !commonService.checkDisplayTooltip(data.voter)
-                    ? commonService.checkPrivate(data.voter)
+                  class: !commonService.checkDisplayTooltip(data.depositors)
+                    ? commonService.checkPrivate(data.depositors)
                       ? 'name-tag private-name-tag mb-0 text--primary'
                       : 'name-tag text--primary mb-0'
                     : 'text--primary',

@@ -45,6 +45,15 @@
         </ng-container>
       </div>
     </ng-container>
+
+    <div class="text--gray-4 mb-4" *ngIf="mode === screenType.Login">
+      Login by email to manage your profile, personal note, watchlist and more.
+    </div>
+
+    <div class="text--gray-4 mb-4" *ngIf="mode === screenType.Register">
+      Register new account to manage your profile, personal note, watchlist and more.
+    </div>
+
     <form
       [formGroup]="loginForm"
       (ngSubmit)="onSubmit()"
@@ -52,7 +61,7 @@
       autocomplete="off">
       <ng-container *ngIf="mode === screenType.Forgot">
         <div class="text-center mb-6">
-          <img src="assets/images/pages/key_left.png" />
+          <img [src]="'assets/images/pages/key_left.png' | imageS3" />
           <div class="body-01 text--gray-2 mt-6">
             Kindly enter the email linked to your account, we'll send you a link to reset password
           </div>
@@ -196,7 +205,10 @@
           </div>
 
           <div class="mt-lg-6 mt-4 body-mob">
-            <!-- By continuing, you agree to our <a class="text--primary fw-semibold cursor-pointer">Terms of Use</a> -->
+            <span class="body-02">By continuing, you agree to our</span>
+            <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms"
+              >Terms and Conditions</a
+            >
           </div>
         </div>
       </ng-container>
@@ -212,6 +224,12 @@
             ">
             <span class="body-01">Register</span>
           </button>
+        </div>
+        <div class="mt-lg-6 mt-4 body-mob text-center text--gray-4">
+          <span class="body-02">By continuing, you agree to our</span>
+          <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms"
+            >Terms and Conditions</a
+          >
         </div>
       </ng-container>
 
@@ -231,7 +249,7 @@
 </div>
 
 <div *ngIf="mode === screenType.Welcome" class="card-welcome text-center">
-  <img class="img-welcome" src="assets/images/pages/planet.png" />
+  <img class="img-welcome" [src]="'assets/images/pages/planet.png' | imageS3" />
   <div class="title-welcome">Welcome to AuraScan</div>
   <span class="body-01 text--gray-2">
     Congratulation! You have successfully registered an account. Please Login in to your account and experience the
@@ -245,8 +263,8 @@
 </div>
 
 <div *ngIf="mode === screenType.Verify" class="card-verify text-center text--gray-4 mt-6">
-  <img class="mb-6" src="assets/images/pages/rocket.png" *ngIf="!isForgotScreen" />
-  <img class="mb-6" src="assets/images/pages/planet-2.png" *ngIf="isForgotScreen" />
+  <img class="mb-6" [src]="'assets/images/pages/rocket.png' | imageS3" *ngIf="!isForgotScreen" />
+  <img class="mb-6" [src]="'assets/images/pages/planet-2.png' | imageS3" *ngIf="isForgotScreen" />
   <div class="title-verify w-100">
     {{ !isForgotScreen ? 'Email verification' : 'Password recovery' }}
   </div>

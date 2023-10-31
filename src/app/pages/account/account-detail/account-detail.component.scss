@@ -43,13 +43,6 @@ section.account-detail {
 }
 
 @media (max-width: 991.98px) {
-  .g-ellipsis-address {
-    width: 310px;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
-  }
 
   .box-account {
     padding: var(--spacer-4) !important;
@@ -85,39 +78,6 @@ section.account-detail {
 
 .account__tab-item {
   min-width: 160px;
-}
-
-.aura-table.transaction-table th.mat-header-cell {
-  min-width: 150px;
-}
-
-.aura-table.transaction-table th.mat-header-cell:nth-child(1),
-.aura-table.transaction-table th.mat-header-cell:nth-child(2),
-.aura-table.transaction-table th.mat-header-cell:nth-child(7) {
-  min-width: 200px;
-}
-
-.button-switch-stage {
-  &__1 {
-    width: 100%;
-
-    @media (min-width: 568.98px) {
-      max-width: 168px;
-    }
-
-    button {
-      padding: 0 14px;
-    }
-  }
-
-  &__2 {
-    width: 100%;
-    max-width: unset;
-
-    @media (min-width: 991.98px) {
-      max-width: 239px;
-    }
-  }
 }
 
 .name-tag {
@@ -184,7 +144,7 @@ section.account-detail {
     height: 4px;
     background-color: var(--aura-gray-3);
     border-radius: 50%;
-    left: 0px;
+    left: 0;
 
     @media (min-width: 991.98px) {
       left: -6px;

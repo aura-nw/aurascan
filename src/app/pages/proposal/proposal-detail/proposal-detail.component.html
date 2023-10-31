@@ -10,7 +10,7 @@
     <app-validators-votes [proposalId]="proposalId"></app-validators-votes>
   </section>
   <section class="depositors">
-    <app-depositors [proposalId]="proposalId"></app-depositors>
+    <app-depositors [proposalDetail]="proposalDetail" *ngIf="proposalDetail"></app-depositors>
   </section>
 </ng-container>
 <ng-container *ngIf="this.errorPro === true"
