@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 
-import { EMPTY, expand, forkJoin, map, Observable, reduce, tap } from 'rxjs';
+import { EMPTY, expand, forkJoin, map, Observable, reduce, switchMap, tap } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { EnvironmentService } from './environment.service';
 import { VALIDATOR_ACCOUNT_TEMPLATE } from './template';
@@ -72,7 +72,10 @@ export class ApiAccountService {
       .pipe(
         map((res) => {
           const [accountAndValidator, DelegationsParam, UnbondingParam, RedelegationsParam, ParamAccount] = res;
-          console.log(UnbondingParam);
+
+          const delegations = this.parseDelegations(DelegationsParam, accountAndValidator.validator);
+
+          console.log(delegations);
 
           let data: Partial<IApiAccount> = {
             acc_address: address,
@@ -118,8 +121,34 @@ export class ApiAccountService {
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L165
-  parseDelegations(accountDelegations: any[]) {
-    if (accountDelegations.length > 0) {
+  parseDelegations(accountDelegations, validatorList: any[]) {
+    if (accountDelegations) {
+      const { rewards, delegations } = accountDelegations;
+
+      const rewardList = rewards.rewards || [];
+
+      return delegations.map((delegation, index) => {
+        const validatorInfo = validatorList.find(
+          (validator) => validator.operator_address === delegation.delegation.validator_address,
+        );
+
+        const reward =
+          rewardList[index] && rewardList[index].validator_address === delegation.delegation.validator_address
+            ? rewardList[index].reward[0]
+            : '0';
+
+        console.log(reward);
+
+        return {
+          reward: balanceOf(reward.amount, this.chainInfo.currencies[0].coinDecimals),
+          validator_name: validatorInfo.description.moniker,
+          validator_address: validatorInfo.operator_address,
+          validator_identity: validatorInfo.description.identity,
+          image_url: validatorInfo.image_url,
+          jailed: validatorInfo.jailed,
+          amount: balanceOf(delegation.balance.amount, this.chainInfo.currencies[0].coinDecimals),
+        };
+      });
     }
     return {};
   }
@@ -148,6 +177,8 @@ export class ApiAccountService {
       },
     });
 
+    const rewardsApi = this.http.get(`${this.lcd}/cosmos/distribution/v1beta1/delegators/${address}/rewards`);
+
     return api.pipe(
       expand((data) =>
         data.pagination.next_key ? this.getDelegations(address, `${data.pagination.next_key}`) : EMPTY,
@@ -155,6 +186,16 @@ export class ApiAccountService {
       reduce((acc, val) => {
         return [...acc, ...val.delegation_responses];
       }, []),
+      switchMap((delegations) => {
+        return rewardsApi.pipe(
+          map((items) => {
+            return {
+              rewards: items,
+              delegations,
+            };
+          }),
+        );
+      }),
     );
   }
 
