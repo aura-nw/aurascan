@@ -2,11 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DATE_TIME_WITH_MILLISECOND, TIME_OUT_CALL_API } from '../constants/common.constant';
-import {
-  MESSAGES_CODE_SDK,
-  MESSAGES_CODE_STAKING,
-  TYPE_CODE_SPACE
-} from '../constants/messages.constant';
+import { MESSAGES_CODE_SDK, MESSAGES_CODE_STAKING, TYPE_CODE_SPACE } from '../constants/messages.constant';
 import { CodeTransaction } from '../constants/transaction.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
