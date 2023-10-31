@@ -71,8 +71,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   isPrice = true;
   isLoadingBlock = true;
   isLoadingTx = true;
-  errTextBlock = null;
-  errTextTxs = null;
+  isLoadingVoting = true;
+  errTxtBlock = null;
+  errTxtTxs = null;
+  errTxtVoting = null;
 
   curr_voting_Period;
   voting_Period_arr = [];
@@ -285,7 +287,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (e) => {
         this.isLoadingBlock = false;
-        this.errTextBlock = e.status + ' ' + e.statusText;
+        this.errTxtBlock = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingBlock = false;
@@ -313,7 +315,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (e) => {
         this.isLoadingTx = false;
-        this.errTextTxs = e.status + ' ' + e.statusText;
+        this.errTxtTxs = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingTx = false;
@@ -445,25 +447,34 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     let payload = {
       limit: 20,
     };
-    this.proposalService.getProposalData(payload).subscribe((res) => {
-      if (res?.proposal) {
-        let tempDta = res.proposal;
-        this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
+    this.proposalService.getProposalData(payload).subscribe({
+      next: (res) => {
+        if (res?.proposal) {
+          let tempDta = res.proposal;
+          this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
 
-        this.voting_Period_arr.forEach((pro, index) => {
-          if (pro?.tally) {
-            const { yes, no, no_with_veto, abstain } = pro?.tally;
-            let totalVote = +yes + +no + +no_with_veto + +abstain;
-            if (this.voting_Period_arr[index].tally) {
-              this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;
-              this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
-              this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
-              this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
+          this.voting_Period_arr.forEach((pro, index) => {
+            if (pro?.tally) {
+              const { yes, no, no_with_veto, abstain } = pro?.tally;
+              let totalVote = +yes + +no + +no_with_veto + +abstain;
+              if (this.voting_Period_arr[index].tally) {
+                this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;
+                this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
+                this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
+                this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
+              }
             }
-          }
-        });
-        this.curr_voting_Period = this.voting_Period_arr[0];
-      }
+          });
+          this.curr_voting_Period = this.voting_Period_arr[0];
+        }
+      },
+      error: (e) => {
+        this.isLoadingVoting = false;
+        this.errTxtVoting = e.status + ' ' + e.statusText;
+      },
+      complete: () => {
+        this.isLoadingVoting = false;
+      },
     });
   }
 

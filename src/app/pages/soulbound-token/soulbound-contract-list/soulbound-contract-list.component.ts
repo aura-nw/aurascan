@@ -43,6 +43,7 @@ export class SoulboundContractListComponent implements OnInit {
   currentAddress = '';
   isNoData = true;
   isSearchData = false;
+  errTxt: string;
 
   constructor(
     private soulboundService: SoulboundService,
@@ -120,13 +121,21 @@ export class SoulboundContractListComponent implements OnInit {
       payload['keyword'] = addressNameTag;
     }
 
-    this.soulboundService.getListSoulbound(payload).subscribe((res) => {
-      this.dataSource.data = res.data;
-      this.pageData.length = res.meta.count;
-      if (res.data.length === 0 && this.isSearchData === false) {
-        this.isNoData = true;
-      }
-      this.loading = false;
+    this.soulboundService.getListSoulbound(payload).subscribe({
+      next: (res) => {
+        this.dataSource.data = res.data;
+        this.pageData.length = res.meta.count;
+        if (res.data.length === 0 && this.isSearchData === false) {
+          this.isNoData = true;
+        }
+      },
+      error: (e) => {
+        this.loading = false;
+        this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
   }
 

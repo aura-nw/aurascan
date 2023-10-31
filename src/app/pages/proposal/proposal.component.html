@@ -1,12 +1,12 @@
-<div *ngIf="isLoading" class="m-auto mt-10">
-  <app-loading-sprint></app-loading-sprint>
-</div>
 <div *ngIf="!isLoading && !(proposalData?.length > 0)" class="m-auto mt-10">
   <app-table-no-data [textNull]="errTxt"></app-table-no-data>
 </div>
 <ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <section class="lasted-list" *ngIf="proposalData && proposalData?.length > 0">
     <app-pagetitle title="Votings"></app-pagetitle>
+    <div *ngIf="isLoading" class="m-auto mt-10">
+      <app-loading-sprint></app-loading-sprint>
+    </div>
     <div class="row row-eq-height mt-4 mt-md-6">
       <ng-container *ngIf="!breakpoint.value.matches">
         <div class="col-6 proposal-lasted" *ngFor="let lastedItem of proposalData; index as idx">
