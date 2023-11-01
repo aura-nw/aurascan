@@ -154,8 +154,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       next: (res) => {
         if (res) {
           this.nextKey = null;
-          if (res.cw721_activity.length >= 100) {
-            this.nextKey = res?.cw721_activity[res.cw721_activity.length - 1]?.id;
+          if (res.cw721_activity?.length >= 100) {
+            this.nextKey = res?.cw721_activity[res.cw721_activity?.length - 1]?.id;
             this.hasMore.emit(true);
           } else {
             this.hasMore.emit(false);
@@ -170,7 +170,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['timestamp'] = element.tx.timestamp;
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.tx).action;
+            element['type'] = getTypeTx(element.tx)?.action;
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
