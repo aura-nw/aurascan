@@ -1,20 +1,22 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { LENGTH_CHARACTER } from '../constants/common.constant';
+import { TYPE_CW4973 } from '../constants/contract.constant';
+import { ApiAccountService } from '../data-services/api-account.service';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { map } from 'rxjs/operators';
-import { TYPE_CW4973 } from '../constants/contract.constant';
-import { LENGTH_CHARACTER } from '../constants/common.constant';
 
 @Injectable()
 export class AccountService extends CommonService {
+  apiService = inject(ApiAccountService);
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
 
   getAccountDetail(account_id: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/account/${account_id}`);
+    return this.apiService.getAccountByAddress(account_id as string);
   }
 
   getAssetCW20ByOwner(payload): Observable<any> {

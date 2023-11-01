@@ -11,7 +11,7 @@ export const VALIDATORS_TEMPLATE = _.template(
 export const VALIDATOR_ACCOUNT_TEMPLATE = _.template(`
   query VALIDATOR_ACCOUNT_TEMPLATE($account_address: String = "") {
     <%= chain %> {
-      validator(where: {delegators: {delegator_address: {_eq: $account_address}}}) {
+      validator {
         jailed
         image_url
         description

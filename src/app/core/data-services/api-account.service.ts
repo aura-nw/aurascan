@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Coin } from '@cosmjs/stargate';
 import * as _ from 'lodash';
 
-import { EMPTY, expand, forkJoin, map, Observable, reduce, switchMap, tap } from 'rxjs';
+import { EMPTY, expand, forkJoin, from, map, Observable, of, reduce, switchMap, tap } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { EnvironmentService } from './environment.service';
 import { VALIDATOR_ACCOUNT_TEMPLATE } from './template';
@@ -10,12 +11,12 @@ import { VALIDATOR_ACCOUNT_TEMPLATE } from './template';
 export interface IApiAccount {
   acc_address: string;
   available: string | number;
-  delegable_vesting: string;
-  delegated: string;
-  unbonding: string;
-  stake_reward: string;
-  commission: string;
-  total: string;
+  delegable_vesting: string | number;
+  delegated: string | number;
+  unbonding: string | number;
+  stake_reward: string | number;
+  commission: string | number;
+  total: string | number;
   balances: { name: string; denom: string; amount: string; price: number; total_price: number }[];
   delegations: {
     validator_name: string;
@@ -49,7 +50,7 @@ export interface IApiAccount {
     image_src_url: string;
     image_dst_url: string;
   }[];
-  vesting: { type: string; amount: string; vesting_schedule: string };
+  vesting: { type: string; amount: string | number; vesting_schedule: string };
 }
 
 @Injectable({ providedIn: 'root' })
@@ -58,49 +59,71 @@ export class ApiAccountService {
   lcd = this.env.chainConfig.chain_info.rest;
 
   chainInfo = this.env.chainInfo;
+  currencies = this.chainInfo.currencies[0];
 
   constructor(private http: HttpClient, private env: EnvironmentService) {}
 
   getAccountByAddress(address: string) {
-    forkJoin([
+    return forkJoin([
       this.queryAccountAndValidator(address),
       this.getDelegations(address),
       this.getUnbonding(address),
       this.getRedelegations(address),
       this.getAccount(address),
-    ])
-      .pipe(
-        map((res) => {
-          const [accountAndValidator, DelegationsParam, UnbondingParam, RedelegationsParam, ParamAccount] = res;
+    ]).pipe(
+      map((res) => {
+        const [accountAndValidator, delegationsData, unbondingData, redelegationsData, accountData] = res;
 
-          const delegations = this.parseDelegations(DelegationsParam, accountAndValidator.validator);
+        const delegations: any[] = this.parseDelegations(delegationsData, accountAndValidator.validator);
 
-          console.log(delegations);
+        const delegated = delegations.reduce((previousValue, currentValue) => currentValue?.amount + previousValue, 0);
 
-          let data: Partial<IApiAccount> = {
-            acc_address: address,
-            available: this.parseAvailableBalance(accountAndValidator.account),
-            balances: [this.parseBalance(accountAndValidator.account)],
-          };
+        const redelegations = this.parseRedelegations(redelegationsData, accountAndValidator.validator);
 
-          return data;
-        }),
-      )
-      .subscribe({
-        next: (res) => {
-          console.log(res);
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+        const vesting = this.parseVestingAccount(accountData?.account);
+
+        const { unbonding, unbonding_delegations } = this.parseUnbondingDelegations(
+          unbondingData,
+          accountAndValidator.validator,
+        );
+
+        const balance = this.parseBalance(accountAndValidator.account);
+
+        const available = this.parseAvailableBalance(accountAndValidator.account);
+
+        const commission = balanceOf(accountAndValidator?.commission?.amount, this.currencies.coinDecimals) || 0;
+
+        const stake_reward = balanceOf(delegationsData?.total, this.currencies.coinDecimals);
+
+        const delegable_vesting = balanceOf(balance?.amount, this.currencies.coinDecimals) - available;
+
+        // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L382
+        const total = available + delegated + unbonding + stake_reward + commission + delegable_vesting;
+
+        const data: Partial<IApiAccount> = {
+          acc_address: address,
+          available,
+          balances: [balance],
+          delegations,
+          stake_reward,
+          delegated,
+          commission,
+          delegable_vesting,
+          total,
+          vesting,
+          unbonding,
+          unbonding_delegations,
+          redelegations,
+        };
+
+        return { data };
+      }),
+    );
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L117
   parseBalance(account) {
-    return account
-      ? account[0]?.balances.find((item) => item.denom === this.chainInfo.currencies[0]?.coinMinimalDenom)
-      : [];
+    return account ? account[0]?.balances.find((item) => item.denom === this.currencies.coinMinimalDenom) : [];
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L132
@@ -108,16 +131,61 @@ export class ApiAccountService {
     if (account) {
       const spendable_balances = account[0]?.spendable_balances;
 
-      const value = spendable_balances?.find((f) => f.denom === this.chainInfo.currencies[0].coinMinimalDenom);
+      const value = spendable_balances?.find((f) => f.denom === this.currencies.coinMinimalDenom);
 
       if (value) {
         const amount = value.amount;
 
-        return balanceOf(amount, this.chainInfo.currencies[0].coinDecimals);
+        return balanceOf(amount, this.currencies.coinDecimals);
       }
     }
 
     return 0;
+  }
+
+  // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L283
+  parseRedelegations(redelegations, validatorList: any[]) {
+    return redelegations?.redelegation_responses
+      .map((data) => {
+        const validator_src_address = data.redelegation.validator_src_address;
+        const validator_dst_address = data.redelegation.validator_dst_address;
+
+        const validatorSrc = validatorList.find((e) => e.operator_address === validator_src_address);
+        let srcData = {};
+        if (validatorSrc) {
+          srcData = {
+            validator_src_name: validatorSrc.description?.moniker,
+            validator_src_address: validator_src_address,
+            validator_src_identity: validatorSrc.description?.identity,
+            validator_src_jailed: validatorSrc.jailed,
+            image_src_url: validatorSrc.image_url,
+          };
+        }
+
+        const validatorDst = validatorList.find((e) => e.operator_address === validator_dst_address);
+        let dstData = {};
+        if (validatorDst) {
+          dstData = {
+            validator_dst_name: validatorDst.description?.moniker,
+            validator_dst_address: validator_dst_address,
+            validator_dst_identity: validatorDst.description?.identity,
+            validator_dst_jailed: validatorDst.jailed,
+            image_dst_url: validatorDst.image_url,
+          };
+        }
+
+        const entries = data.entries.map((item) => {
+          return {
+            ...srcData,
+            ...dstData,
+            amount: balanceOf(item?.balance, this.currencies.coinDecimals),
+            completion_time: item?.redelegation_entry?.completion_time,
+          };
+        });
+
+        return entries;
+      })
+      .flat();
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L165
@@ -127,30 +195,109 @@ export class ApiAccountService {
 
       const rewardList = rewards.rewards || [];
 
-      return delegations.map((delegation, index) => {
-        const validatorInfo = validatorList.find(
-          (validator) => validator.operator_address === delegation.delegation.validator_address,
-        );
+      return delegations
+        .filter((delegation: any) => Number(delegation.balance?.amount) > 0)
+        .map((delegation: any) => {
+          const validatorInfo = validatorList.find(
+            (validator) => validator.operator_address === delegation.delegation.validator_address,
+          );
 
-        const reward =
-          rewardList[index] && rewardList[index].validator_address === delegation.delegation.validator_address
-            ? rewardList[index].reward[0]
-            : '0';
+          const rewardData = rewardList.find(
+            (item) => item.validator_address === delegation.delegation.validator_address,
+          );
 
-        console.log(reward);
+          const reward = _.get(rewardData, 'reward[0].amount') || 0;
+
+          return {
+            reward: balanceOf(reward, this.currencies.coinDecimals),
+            validator_name: validatorInfo.description.moniker,
+            validator_address: validatorInfo.operator_address,
+            validator_identity: validatorInfo.description.identity,
+            image_url: validatorInfo.image_url,
+            jailed: validatorInfo.jailed,
+            amount: balanceOf(delegation.balance.amount, this.currencies.coinDecimals),
+          };
+        });
+    }
+
+    return {};
+  }
+
+  // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L132
+  parseVestingAccount(account: any) {
+    if (account) {
+      const baseVesting = account.base_vesting_account;
+
+      if (baseVesting) {
+        const type = account['@type'];
+
+        const originalVesting = baseVesting.original_vesting || [];
+
+        let amount = 0;
+        if (originalVesting.length > 0) {
+          const originalAmount = originalVesting.reduce(
+            (accumulator, currentValue) => Number(currentValue?.amount) + accumulator,
+            0,
+          );
+
+          amount = balanceOf(originalAmount, this.currencies.coinDecimals);
+        }
+
+        return { type, amount, vesting_schedule: baseVesting.end_time };
+      }
+    }
+    return null;
+  }
+
+  // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L238
+  parseUnbondingDelegations(unbondingDelegations, validatorData) {
+    return unbondingDelegations
+      ?.map((data) => {
+        let unbonding = 0;
+        const validator_address = data.validator_address;
+        const validator = validatorData.filter((e) => e.operator_address === validator_address);
+
+        const unbonding_delegations = data.entries.map((entry) => {
+          let validator_name, validator_address, validator_identity, image_url, jailed, amount, completion_time;
+
+          if (validator.length > 0) {
+            validator_name = validator[0].description?.moniker;
+            validator_address = validator_address;
+            validator_identity = validator[0].description?.identity;
+            image_url = validator[0].image_url;
+            jailed = Number(validator[0].jailed);
+          }
+
+          amount = balanceOf(entry.balance, this.currencies.coinDecimals);
+          completion_time = entry.completion_time;
+          unbonding += +entry.balance;
+
+          return {
+            validator_name,
+            validator_address,
+            validator_identity,
+            image_url,
+            jailed,
+            amount,
+            completion_time,
+          };
+        });
 
         return {
-          reward: balanceOf(reward.amount, this.chainInfo.currencies[0].coinDecimals),
-          validator_name: validatorInfo.description.moniker,
-          validator_address: validatorInfo.operator_address,
-          validator_identity: validatorInfo.description.identity,
-          image_url: validatorInfo.image_url,
-          jailed: validatorInfo.jailed,
-          amount: balanceOf(delegation.balance.amount, this.chainInfo.currencies[0].coinDecimals),
+          unbonding: balanceOf(unbonding, this.currencies.coinDecimals),
+          unbonding_delegations,
         };
-      });
-    }
-    return {};
+      })
+      .reduce(
+        (accumulator, currentValue) => ({
+          unbonding: currentValue.unbonding + accumulator?.unbonding,
+          unbonding_delegations: [...currentValue.unbonding_delegations, ...accumulator?.unbonding_delegations],
+        }),
+        {
+          unbonding: 0,
+          unbonding_delegations: [],
+        },
+      );
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L98
@@ -163,9 +310,22 @@ export class ApiAccountService {
       operationName: 'VALIDATOR_ACCOUNT_TEMPLATE',
     };
 
-    return this.http
-      .post<any>(this.env.graphql, query)
-      .pipe(map((res) => (res?.data ? res?.data[this.horoscope.chain] : null)));
+    return this.http.post<any>(this.env.graphql, query).pipe(
+      map((res) => (res?.data ? res?.data[this.horoscope.chain] : null)),
+      switchMap((data) => {
+        const operatorAddress = data.validator?.find((dta) => dta.account_address === address)?.operator_address;
+
+        if (operatorAddress) {
+          return this.getCommission(operatorAddress).pipe(
+            map((commission) => ({
+              ...data,
+              commission,
+            })),
+          );
+        }
+        return of(data);
+      }),
+    );
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L149
@@ -188,10 +348,14 @@ export class ApiAccountService {
       }, []),
       switchMap((delegations) => {
         return rewardsApi.pipe(
-          map((items) => {
+          map((items: any) => {
+            const total = _.get(items, 'total[0]');
+            const totalAmount = total?.denom === this.currencies.coinMinimalDenom ? total?.amount : 0;
+
             return {
               rewards: items,
               delegations,
+              total: totalAmount,
             };
           }),
         );
@@ -199,15 +363,25 @@ export class ApiAccountService {
     );
   }
 
-  getUnbonding(address: string) {
-    return this.http.get(`${this.lcd}/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`);
+  getUnbonding(address: string): Observable<any> {
+    return this.http
+      .get(`${this.lcd}/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`)
+      .pipe(map((data: any) => data?.unbonding_responses));
   }
 
-  getRedelegations(address: string) {
+  getRedelegations(address: string): Observable<any> {
     return this.http.get(`${this.lcd}/cosmos/staking/v1beta1/delegators/${address}/redelegations`);
   }
 
-  getAccount(address: string) {
+  getAccount(address: string): Observable<any> {
     return this.http.get(`${this.lcd}/cosmos/auth/v1beta1/accounts/${address}`);
+  }
+
+  getCommission(operatorAddress: string): Observable<any> {
+    return this.http.get(`${this.lcd}/cosmos/distribution/v1beta1/validators/${operatorAddress}/commission`).pipe(
+      map((data: any) => {
+        return _.get(data, 'commission.commission[0]');
+      }),
+    );
   }
 }

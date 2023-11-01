@@ -126,16 +126,16 @@ export class AccountDetailComponent implements OnInit {
 
   getAccountDetail(): void {
     this.isNoData = false;
-    const halftime = 15000;
+    // const halftime = 15000;
     this.accountService.getAccountDetail(this.currentAddress).subscribe(
       (res) => {
-        if (res.data.code === 200 && !res.data?.data) {
-          this.isNoData = true;
-          setTimeout(() => {
-            this.getAccountDetail();
-          }, halftime);
-          return;
-        }
+        // if (res.data.code === 200 && !res.data?.data) {
+        //   this.isNoData = true;
+        //   setTimeout(() => {
+        //     this.getAccountDetail();
+        //   }, halftime);
+        //   return;
+        // }
 
         if (res?.data) {
           this.currentAccountDetail = res.data;
@@ -180,7 +180,9 @@ export class AccountDetailComponent implements OnInit {
           });
         }
       },
-      () => {},
+      (e) => {
+        console.log('Error', e);
+      },
       () => {},
     );
   }
