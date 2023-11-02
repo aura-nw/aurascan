@@ -30,3 +30,28 @@ export const VALIDATOR_ACCOUNT_TEMPLATE = _.template(`
     }
   }
 `);
+
+export const CW20_TOKENS_TEMPLATE = _.template(`
+  query CW20_TOKENS_TEMPLATE($address: String = "") {
+    <%= chain %>  {
+      cw20_holder(where: {address: {_eq: $address}}) {
+        address
+        amount
+        cw20_contract_id
+        cw20_contract {
+          marketing_info
+          decimal
+          id
+          last_updated_height
+          minter
+          name
+          symbol
+          total_supply
+          smart_contract {
+            address
+          }
+        }
+      }
+    }
+  }
+`);
