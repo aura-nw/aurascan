@@ -424,7 +424,8 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
                   <span *ngIf="data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | mask : 'separator.6' || '-' }} {{ data.denom || denom }}
+                    {{ data[template.matColumnDef] | mask : 'separator.6' || '-' }}
+                    <span [class.text--primary]="data.denom !== denom">{{ data.denom || denom }}</span>
                   </span>
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
