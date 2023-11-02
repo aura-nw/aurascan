@@ -127,9 +127,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   async getListTransactionTokenCW721(nextKey = null, isReload = false) {
     let payload = {
       address: this.keyWord,
-      heightLT: nextKey,
       contractAddr: this.contractAddress,
-      isTransferTab: true,
       idLte: nextKey,
     };
 
