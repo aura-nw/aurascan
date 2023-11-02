@@ -329,6 +329,7 @@ export class TokenService extends CommonService {
   getCW721Transfer(payload): Observable<any> {
     let queryName = payload.isCW4973 ? 'CW4973Transfer' : 'CW721Transfer';
     let queryCondition = payload.isCW4973 ? '_eq' : '_neq';
+    let queryActionNotIn = payload.isNFTDetail ? [''] : ['approve', 'instantiate', 'revoke', ''];
     const operationsDoc = `query ${queryName}(
       $contractAddress: String = null
       $actionNotIn: [String!] = null
@@ -387,7 +388,7 @@ export class TokenService extends CommonService {
         query: operationsDoc,
         variables: {
           contractAddress: payload.contractAddr,
-          actionNotIn: ['approve', 'instantiate', 'revoke', ''],
+          actionNotIn: queryActionNotIn,
           sender: payload.sender,
           receiver: payload.receiver,
           tokenId: payload.tokenId,
