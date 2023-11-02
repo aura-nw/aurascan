@@ -324,7 +324,10 @@
     </div>
     <div class="overflow-scroll-x aura-table-contain" style="max-height: 600px">
       <app-loading-sprint *ngIf="loadingTable" class="m-auto mt-10"></app-loading-sprint>
-      <app-table-no-data *ngIf="!loadingTable && errTxtActivity" class="mt-10" [textNull]="errTxtActivity"></app-table-no-data>
+      <app-table-no-data
+        *ngIf="!loadingTable && errTxtActivity"
+        class="mt-10"
+        [textNull]="errTxtActivity"></app-table-no-data>
       <table
         *ngIf="dataSource?.data?.length > 0; else noValues"
         mat-table
@@ -421,7 +424,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
                   <span *ngIf="data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | mask : 'separator.6' || '-' }} {{ denom }}
+                    {{ data[template.matColumnDef] | mask : 'separator.6' || '-' }} {{ data.denom }}
                   </span>
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>

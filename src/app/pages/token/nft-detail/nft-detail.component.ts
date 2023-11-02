@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig
+  MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -24,6 +24,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { getTypeTx, Globals } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
@@ -208,12 +209,23 @@ export class NFTDetailComponent implements OnInit {
           txs.forEach((element) => {
             element['tx_hash'] = element.tx.hash;
             element['from_address'] = element.from || NULL_ADDRESS;
-            element['to_address'] = element.to || NULL_ADDRESS;
+            element['to_address'] =
+              element.to || element.cw721_token.cw721_contract.smart_contract.address || NULL_ADDRESS;
             element['token_id'] = element.cw721_token.token_id;
             element['timestamp'] = element.tx.timestamp;
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
             element['type'] = getTypeTx(element.tx)?.action;
+            if (element.tx.transaction_messages[0].content?.funds.length > 0) {
+              let dataDenom = this.commonService.mappingNameIBC(
+                element.tx.transaction_messages[0].content?.funds[0]?.denom,
+              );
+              element['price'] = balanceOf(
+                element.tx.transaction_messages[0].content.funds[0]?.amount,
+                dataDenom['decimals'],
+              );
+              element['denom'] = dataDenom['display'];
+            }
           });
           this.dataSource.data = txs;
           this.pageData.length = txs?.length;
