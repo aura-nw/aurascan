@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -38,7 +39,7 @@ export class NftListComponent implements OnInit, OnChanges {
   ];
   errTxt: string;
 
-  constructor(private accountService: AccountService, public global: Globals) {}
+  constructor(private accountService: AccountService, public global: Globals, private router: Router) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {
@@ -171,7 +172,7 @@ export class NftListComponent implements OnInit, OnChanges {
   }
 
   handleRouterLink(link): void {
-    window.location.href = link;
+    this.router.navigate([link]);
   }
 
   getTypeFile(nft: any) {
