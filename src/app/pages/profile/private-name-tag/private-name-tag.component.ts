@@ -140,8 +140,12 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+        }
         this.isLoading = false;
-        this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
       },
       complete: () => {
         this.isLoading = false;

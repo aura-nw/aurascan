@@ -213,8 +213,12 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;

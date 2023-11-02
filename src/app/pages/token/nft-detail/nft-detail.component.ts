@@ -185,8 +185,12 @@ export class NFTDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;
@@ -232,8 +236,12 @@ export class NFTDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxtActivity = e.message;
+        } else {
+          this.errTxtActivity = e.status + ' ' + e.statusText;
+        }
         this.loadingTable = false;
-        this.errTxtActivity = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loadingTable = false;

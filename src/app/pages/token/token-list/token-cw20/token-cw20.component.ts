@@ -204,14 +204,22 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                 this.isLoading = false;
               },
               error: (e) => {
+                if (e.name === 'TimeoutError') {
+                  this.errTxt = e.message;
+                } else {
+                  this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+                }
                 this.isLoading = false;
-                this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
               },
             });
           },
           error: (e) => {
+            if (e.name === 'TimeoutError') {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+            }
             this.isLoading = false;
-            this.errTxt = e.status + ' ' + e.statusText;
           },
         });
     }

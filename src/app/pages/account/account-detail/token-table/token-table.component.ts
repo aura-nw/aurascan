@@ -24,7 +24,7 @@ export class TokenTableComponent implements OnChanges {
   tokenFilterItem = null;
   textSearch = '';
   searchValue = '';
-  errTxt:string;
+  errTxt: string;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'contractAddress', headerCellDef: 'contractAddress' },
@@ -159,8 +159,12 @@ export class TokenTableComponent implements OnChanges {
           this.setTokenFilter(this.listTokenType[0]);
         },
         error: (e) => {
+          if (e.name === 'TimeoutError') {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+          }
           this.assetsLoading = false;
-          this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
         },
         complete: () => {
           this.assetsLoading = false;

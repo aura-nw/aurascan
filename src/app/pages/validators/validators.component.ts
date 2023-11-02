@@ -222,8 +222,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loadingData = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loadingData = false;

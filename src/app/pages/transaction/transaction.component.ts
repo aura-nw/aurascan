@@ -28,7 +28,7 @@ export class TransactionComponent implements OnInit {
   pageSize = 20;
   typeTransaction = TYPE_TRANSACTION;
   loading = true;
-  errText = null;
+  errTxt = null;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
@@ -61,8 +61,12 @@ export class TransactionComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errText = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;

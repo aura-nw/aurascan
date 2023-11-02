@@ -286,8 +286,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxtBlock = e.message;
+        } else {
+          this.errTxtBlock = e.status + ' ' + e.statusText;
+        }
         this.isLoadingBlock = false;
-        this.errTxtBlock = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingBlock = false;
@@ -314,8 +318,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxtTxs = e.message;
+        } else {
+          this.errTxtTxs = e.status + ' ' + e.statusText;
+        }
         this.isLoadingTx = false;
-        this.errTxtTxs = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingTx = false;
@@ -469,8 +477,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxtVoting = e.message;
+        } else {
+          this.errTxtVoting = e.status + ' ' + e.statusText;
+        }
         this.isLoadingVoting = false;
-        this.errTxtVoting = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingVoting = false;

@@ -99,8 +99,12 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
         this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;

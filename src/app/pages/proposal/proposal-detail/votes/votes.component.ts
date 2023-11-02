@@ -83,9 +83,13 @@ export class VotesComponent implements OnChanges, OnDestroy {
         }
         this.voteDataListLoading = false;
       },
-      error: (error) => {
+      error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.voteDataListLoading = true;
-        this.errTxt = error.status + ' ' + error.statusText;
       },
     });
   }
@@ -114,8 +118,12 @@ export class VotesComponent implements OnChanges, OnDestroy {
         this.voteDataListLoading = false;
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.voteDataListLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
     });
   }

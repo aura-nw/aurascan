@@ -64,8 +64,12 @@ export class DepositorsComponent implements OnInit, OnDestroy {
           this.getDataDeposit(payload);
         },
         error: (e) => {
+          if (e.name === 'TimeoutError') {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loading = false;
-          this.errTxt = e.status + ' ' + e.statusText;
         },
       });
   }
@@ -97,7 +101,11 @@ export class DepositorsComponent implements OnInit, OnDestroy {
       },
       error: (e) => {
         this.loading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
       },
     });
   }

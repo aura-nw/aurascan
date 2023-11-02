@@ -181,8 +181,12 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;
@@ -236,8 +240,12 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;
