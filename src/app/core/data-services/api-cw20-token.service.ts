@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { forkJoin, map } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { ApiAccountService } from './api-account.service';
+import { CoingeckoService } from './coingecko.service';
 import { EnvironmentService } from './environment.service';
 import { CW20_TOKENS_TEMPLATE } from './template';
 
@@ -33,12 +34,16 @@ export class ApiCw20TokenService {
 
   apiAccount = inject(ApiAccountService);
 
-  constructor(private http: HttpClient, private env: EnvironmentService) {}
+  constructor(private http: HttpClient, private env: EnvironmentService, private coingecko: CoingeckoService) {}
 
   getByOwner(address: string) {
-    return forkJoin([this.queryCw20TokenByOwner(address), this.apiAccount.getAccountByAddress(address, true)]).pipe(
+    return forkJoin([
+      this.queryCw20TokenByOwner(address),
+      this.apiAccount.getAccountByAddress(address, true),
+      this.coingecko.getCoinMarkets(),
+    ]).pipe(
       map((data) => {
-        const [cw20Tokens, account] = data;
+        const [cw20Tokens, account, coinsMarkets] = data;
 
         const nativeToken = this.parseNativeToken(account);
 
@@ -46,9 +51,22 @@ export class ApiCw20TokenService {
 
         const ibcTokenBalances = this.parseIbcTokens(account);
 
-        const allTokens = [nativeToken, ...ibcTokenBalances, ...cw20TokenList].filter(
-          (token) => Number(token.balance) > 0,
-        );
+        const allTokens = [nativeToken, ...ibcTokenBalances, ...cw20TokenList]
+          .filter((token) => Number(token.balance) > 0)
+          .map((token) => {
+            const symbol = token.symbol.toLowerCase();
+
+            const coinMarket = coinsMarkets.find((coin) => coin.symbol.toLowerCase() === symbol);
+
+            return coinMarket
+              ? {
+                  ...token,
+                  price: coinMarket.current_price, // TO-DO
+                  price_change_percentage_24h: coinMarket.price_change_percentage_24h, // TO-DO
+                  value: token.balance * coinMarket.current_price, // TO-DO
+                }
+              : token;
+          });
 
         return { data: allTokens, meta: { count: allTokens.length } };
       }),
