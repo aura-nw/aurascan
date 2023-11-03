@@ -38,7 +38,7 @@
             <ul
               ngbNav
               #customNav="ngbNav"
-              [activeId]="this.currentTab === 'private' ? 1 : 0"
+              [activeId]="activeTabID"
               class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-lg-8 mb-4 mb-lg-0">
               <ng-container *ngFor="let tab of PROFILE_TAB; index as index">
                 <li [ngbNavItem]="index">

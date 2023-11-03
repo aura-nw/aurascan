@@ -26,25 +26,17 @@
         </button>
         <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
       </div>
-      <div class="aura-tooltip-contain" *ngIf="userEmail">
+      <div class="aura-tooltip-contain">
         <button
           class="button aura-tooltip-object pl-0"
           #tooltip
-          (click)="commonService.showToolTip(tooltip)"
+          (click)="handleWatchList()"
           [cdkCopyToClipboard]="currentAddress">
-          <i class="ph ph-star text--white body-01"></i>
+          <i class="ph ph-star body-01" [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
         </button>
-        <app-tooltip-customize [content]="'Add this address to my watch list'"> </app-tooltip-customize>
-      </div>
-      <div class="aura-tooltip-contain" *ngIf="userEmail">
-        <button
-          class="button aura-tooltip-object pl-0"
-          #tooltip
-          (click)="commonService.showToolTip(tooltip)"
-          [cdkCopyToClipboard]="currentAddress">
-          <i class="ph-star-fill text--yellow-2 body-01"></i>
-        </button>
-        <app-tooltip-customize [content]="'Remove this address from your watch list'"> </app-tooltip-customize>
+        <app-tooltip-customize
+          [content]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'">
+        </app-tooltip-customize>
       </div>
     </div>
     <div class="aura-tooltip-contain" *ngIf="!breakpoint.value.matches && isContractAddress">

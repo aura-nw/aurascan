@@ -1,0 +1,55 @@
+<div class="box-notification mr-4" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+  <div class="dropdown aura-dropdown">
+    <button
+      class="button button--xlg button--sm-mob button-circle button-notify"
+      id="userMenu"
+      data-bs-toggle="dropdown"
+      aria-expanded="false">
+      <!-- <i class="ph ph-bell "></i> -->
+      <img [src]="'assets/icons/icons-svg/black/bell.svg' | imageS3" alt="" />
+    </button>
+    <ul class="dropdown-menu aura-dropdown-menu notify-dropdown-menu" aria-labelledby="notifyMenu">
+      <div class="box-title">
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="h3 fw-semibold text--gray-4">Notifications</span>
+          <div class="text--primary caption align-items-center d-flex cursor-pointer">
+            <i class="ph ph-check h4 text--primary mr-1"></i>
+            Mask all as read
+          </div>
+        </div>
+        <div class="d-flex mt-6">
+          <button class="button-change-tab" (click)="isTabAll = true" [class.active]="isTabAll">
+            <span>All</span>
+          </button>
+          <button class="button-change-tab" (click)="isTabAll = false" [class.active]="!isTabAll">
+            <span>Un-read</span>
+          </button>
+        </div>
+      </div>
+      <div class="content-notify">
+        <div class="item">
+          <img [src]="'assets/icons/icons-svg/black/bell.svg' | imageS3" alt="" />
+          <div class="ml-2">
+            You have reached out your daily quota limit of 100 notifications per day. Kindly go to your watchlist to
+            turn on the notification mode and adjust your current configuration for your watchlist’s addresses and group
+            of tracking activities to avoid over quota again”
+          </div>
+        </div>
+        <div class="item">
+          <img [src]="'assets/icons/icons-svg/black/bell.svg' | imageS3" alt="" />
+          <div class="ml-2">
+            New Contract: settle_auction transaction initiated by aura1fgn...w70l20mc (A Permissioned Smart Contract
+            Layer / Real-life NFT use case and utility1
+          </div>
+        </div>
+        <div class="item">
+          <img [src]="'assets/icons/icons-svg/black/bell.svg' | imageS3" alt="" />
+          <div class="ml-2">
+            0.01 USDC, 5.6888 BUSD, 789.7859 USDT and more sent by aura1fgn...w70l20mc (A Permissioned Smart Contract
+            Layer / Real-life NFT use case and utility1)
+          </div>
+        </div>
+      </div>
+    </ul>
+  </div>
+</div>

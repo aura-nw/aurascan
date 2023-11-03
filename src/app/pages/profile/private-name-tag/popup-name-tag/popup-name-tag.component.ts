@@ -20,7 +20,6 @@ import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 export class PopupNameTagComponent implements OnInit {
   privateNameForm;
   isSubmit = false;
-  errorSpendLimit = '';
   formValid = true;
   isAccount = false;
   isContract = false;

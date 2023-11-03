@@ -1,0 +1,44 @@
+.box-notification {
+  .button-notify {
+    background: rgba(36, 38, 46, 1);
+    vertical-align: middle;
+    &:hover {
+      background: var(--aura-gray-7);
+    }
+  }
+  .notify-dropdown-menu {
+    width: 404px;
+    left: -360px !important;
+    padding: 0 0 32px 0;
+    background-color: var(--aura-gray-9);
+    // padding: 32px 20px;
+    .box-title {
+      padding: 32px 20px 0px;
+    }
+    .button-change-tab {
+      height: 34px;
+      padding: 0px 16px;
+      background: none;
+      color: var(--aura-white);
+      font-size: 14px;
+      font-weight: 600;
+      &.active {
+        border-bottom: 2px solid var(--aura-white);
+      }
+    }
+    .content-notify {
+      background: var(--aura-gray-8);
+      .item {
+        display: flex;
+        align-items: flex-start;
+        padding: 16px 20px;
+        color: var(--aura-gray-2);
+        line-height: 18px;
+        img {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+}

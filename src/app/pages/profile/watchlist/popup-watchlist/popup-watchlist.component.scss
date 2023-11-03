@@ -1,9 +1,10 @@
 .card.card-watchlist {
   @media (min-width: 992px) {
-    width: 800px;
+    width: 805px;
   }
   @media (max-width: 414px) {
-    max-height: 80vh;
+    max-height: 100vh;
+    height: 100vh;
   }
   .card-header {
     background-color: var(--aura-gray-9);
@@ -12,7 +13,7 @@
     max-height: 62vh;
     overflow-y: auto;
     .box-content {
-      min-height: 475px;
+      // min-height: 475px;
       overflow-y: auto;
       padding: var(--spacer-6);
       padding-right: 28px;
@@ -21,6 +22,9 @@
         border: 1px solid var(--aura-gray-9);
         border-radius: var(--spacer-2);
       }
+    }
+    @media (max-width: 414px) {
+      max-height: 80vh;
     }
   }
   .watchlist-form {

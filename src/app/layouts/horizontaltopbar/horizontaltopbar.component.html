@@ -54,7 +54,10 @@
         </div>
       </div>
     </div>
-    <app-authenticate-mail></app-authenticate-mail>
+    <div class="d-flex">
+      <app-notification></app-notification>
+      <app-authenticate-mail></app-authenticate-mail>
+    </div>
   </div>
   <!-- App Search mobile-->
   <div class="app-search d-lg-none px-4 mt-4 pb-3" *ngIf="router.url !== '/login'">

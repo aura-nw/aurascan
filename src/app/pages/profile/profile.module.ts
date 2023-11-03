@@ -7,6 +7,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-ma
 import { MASK_CONFIG } from 'src/app/app.config';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
@@ -52,6 +53,12 @@ import { WatchListComponent } from './watchlist/watchlist.component';
     PaginatorModule,
     TooltipCustomizeModule,
   ],
-  providers: [UntypedFormBuilder, UserService, NameTagService, provideEnvironmentNgxMask(MASK_CONFIG)],
+  providers: [
+    UntypedFormBuilder,
+    UserService,
+    NameTagService,
+    WatchListService,
+    provideEnvironmentNgxMask(MASK_CONFIG),
+  ],
 })
 export class ProfileModule {}

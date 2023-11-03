@@ -57,6 +57,7 @@ export class AccountDetailComponent implements OnInit {
   totalSBTPick = 0;
   totalSBT = 0;
   isContractAddress = false;
+  isWatchList = false;
 
   constructor(
     public commonService: CommonService,
@@ -83,6 +84,7 @@ export class AccountDetailComponent implements OnInit {
         this.isContractAddress = isContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
+        this.checkWatchList();
       }
     });
   }
@@ -246,7 +248,36 @@ export class AccountDetailComponent implements OnInit {
     }
   }
 
-  navigateWatchlist(address: string, tokenId: number): void {
+  navigateWatchlist(): void {
     this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+  }
+
+  checkWatchList() {
+    // get watch list form local storage
+    const lstWatchList = localStorage.getItem('lstWatchList');
+    try {
+      let data = JSON.parse(lstWatchList);
+      if (data.find((k) => k.address === this.currentAddress)) {
+        this.isWatchList = true;
+      }
+    } catch (e) {}
+  }
+
+  handleWatchList() {
+    if (this.isWatchList) {
+      this.navigateWatchlist();
+    } else {
+      this.editWatchList();
+    }
+  }
+
+  editWatchList() {
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      localStorage.setItem('setAddressWatchList', JSON.stringify(this.currentAddress));
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

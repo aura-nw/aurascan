@@ -17,6 +17,9 @@ body {
 
 .cdk-overlay-container {
   z-index: 1100 !important;
+  &.__grant {
+    z-index: 2100 !important;
+  }
 }
 
 // vote bar (similar process bar)
@@ -345,6 +348,16 @@ body {
 .mat-slide-toggle-thumb {
   width: 14px !important;
   height: 14px !important;
+}
+.color-gray.mat-slide-toggle {
+  &.mat-disabled {
+    opacity: 0.7;
+  }
+  &.mat-checked {
+    .mat-slide-toggle-bar {
+      background-color: var(--aura-gray-3) !important;
+    }
+  }
 }
 .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
   background-color: #2bbba3 !important;
