@@ -6,7 +6,7 @@ import { CodeIdListComponent } from './code-id-list/code-id-list.component';
 
 const routes: Routes = [
   {
-    path: 'list',
+    path: '',
     component: CodeIdListComponent,
   },
   {
