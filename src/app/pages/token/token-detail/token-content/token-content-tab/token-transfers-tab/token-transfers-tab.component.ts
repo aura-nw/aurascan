@@ -1,18 +1,23 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
-import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
+import {
+  CodeTransaction,
+  ModeExecuteTransaction,
+  StatusTransaction,
+} from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { Globals, convertDataAccountTransaction } from '../../../../../../global/global';
+import { convertDataAccountTransaction, getTypeTx, Globals } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -68,6 +73,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   currentKey = null;
   contractType = ContractRegisterType;
   timerGetUpTime: any;
+  errTxt: string;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -81,6 +87,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private userService: UserService,
+    private tokenService: TokenService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -119,11 +127,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   async getListTransactionTokenCW721(nextKey = null, isReload = false) {
     let payload = {
-      limit: 100,
       address: this.keyWord,
-      heightLT: nextKey,
       contractAddr: this.contractAddress,
-      isTransferTab: true,
+      idLte: nextKey,
     };
 
     if (this.typeContract === this.contractType.CW4973) {
@@ -143,31 +149,27 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.userService.getListNFTByAddress(payload).subscribe(
-      (res) => {
+    this.tokenService.getCW721Transfer(payload).subscribe({
+      next: (res) => {
         if (res) {
           this.nextKey = null;
-          if (res.transaction.length >= 100) {
-            this.nextKey = res?.transaction[res.transaction.length - 1]?.height;
+          if (res.cw721_activity?.length >= 100) {
+            this.nextKey = res?.cw721_activity[res.cw721_activity?.length - 1]?.id;
             this.hasMore.emit(true);
           } else {
             this.hasMore.emit(false);
           }
 
-          let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.NftTxs, false, null);
-
-          txs.forEach((element, index) => {
-            element['from_address'] = element.fromAddress;
-            element['to_address'] = element.toAddress;
-            element['token_id'] = element.arrEvent?.length > 1 ? 'More' : element.tokenId;
-            element['type'] = element.arrEvent[0]?.type?.replace('Contract: ', '');
-            if (this.typeContract === this.contractType.CW4973) {
-              if (element['type'] === 'mint') {
-                element['type'] = 'take';
-              } else if (element['type'] === 'burn') {
-                element['type'] = 'unequip';
-              }
-            }
+          let txs = res.cw721_activity;
+          txs.forEach((element) => {
+            element['tx_hash'] = element.tx.hash;
+            element['from_address'] = element.from || NULL_ADDRESS;
+            element['to_address'] = element.to || NULL_ADDRESS;
+            element['token_id'] = element.cw721_token.token_id;
+            element['timestamp'] = element.tx.timestamp;
+            element['status'] =
+              element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+            element['type'] = getTypeTx(element.tx)?.action;
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
@@ -179,11 +181,18 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           this.resultLength.emit(this.pageData.length);
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   async getListTransactionTokenCW20(nextKey = null, isReload = false) {
@@ -203,8 +212,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.userService.getListFTByAddress(payload).subscribe(
-      (res) => {
+    this.userService.getListFTByAddress(payload).subscribe({
+      next: (res) => {
         if (res) {
           this.nextKey = null;
           if (res.transaction.length >= 100) {
@@ -231,11 +240,18 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           this.resultLength.emit(this.pageData.length);
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -273,5 +289,10 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.cdr.markForCheck();
+  }
+
+  goTo(data) {
+    let url = '/tokens/' + this.linkToken + '/' + this.contractAddress + '/' + this.encodeData(data);
+    this.router.navigateByUrl(url);
   }
 }

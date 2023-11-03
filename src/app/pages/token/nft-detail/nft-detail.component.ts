@@ -9,23 +9,23 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { LENGTH_CHARACTER, MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, MEDIA_TYPE, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
-import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
+import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { UserService } from 'src/app/core/services/user.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
-import { convertDataAccountTransaction, Globals } from 'src/app/global/global';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { getTypeTx, Globals } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
 
@@ -54,6 +54,7 @@ export class NFTDetailComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   isSoulBound = false;
   loading = true;
+  loadingTable = true;
   nftId = '';
   contractAddress = '';
   nftDetail: any;
@@ -71,6 +72,8 @@ export class NFTDetailComponent implements OnInit {
   animationUrl: string;
   imageUrl: string;
   isCW4973 = false;
+  errTxt: string;
+  errTxtActivity: string;
 
   image_s3 = this.environmentService.imageUrl;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
@@ -96,7 +99,7 @@ export class NFTDetailComponent implements OnInit {
     private dialog: MatDialog,
     public translate: TranslateService,
     private layout: BreakpointObserver,
-    private userService: UserService,
+    private tokenService: TokenService,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -123,8 +126,8 @@ export class NFTDetailComponent implements OnInit {
   }
 
   getNFTDetail() {
-    this.contractService.getNFTDetail(this.contractAddress, this.nftId).subscribe(
-      (res) => {
+    this.contractService.getNFTDetail(this.contractAddress, this.decodeData(this.nftId)).subscribe({
+      next: (res) => {
         res = res.data[0];
 
         if (!res || res === null) {
@@ -181,68 +184,72 @@ export class NFTDetailComponent implements OnInit {
           this.nftDetail['nftName'] = this.nftDetail?.media_info?.onchain?.metadata?.name || '';
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
-  async getDataTable(nextKey = null) {
+  async getDataTable() {
     let payload = {
-      limit: 200,
-      heightLT: nextKey,
       contractAddr: this.contractAddress,
-      isTransferTab: false,
-      tokenId: this.nftId,
+      tokenId: this.decodeData(this.nftId),
       isCW4973: this.isCW4973 ? true : false,
       isNFTDetail: true,
     };
 
-    this.userService.getListNFTByAddress(payload).subscribe(
-      (res) => {
+    this.tokenService.getCW721Transfer(payload).subscribe({
+      next: (res) => {
         if (res) {
-          let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.NftTxs, false, null);
-          txs.forEach((element, index) => {
-            element['token_id'] = element.tokenId;
-            element['type'] = element.arrEvent[0]?.type?.replace('Contract: ', '');
-            element['from_address'] = element.fromAddress;
-            element['to_address'] = element.toAddress;
-            if (element['type'] === 'approve' || element['type'] === 'revoke') {
-              element['to_address'] =
-                element.eventAttr?.find((k) => k.composite_key === 'wasm.spender')?.value || element['to_address'];
+          let txs = res.cw721_activity;
+          txs.forEach((element) => {
+            element['tx_hash'] = element.tx.hash;
+            element['from_address'] = element.from || NULL_ADDRESS;
+            element['to_address'] =
+              element.to || element.cw721_token.cw721_contract.smart_contract.address || NULL_ADDRESS;
+            element['token_id'] = element.cw721_token.token_id;
+            element['timestamp'] = element.tx.timestamp;
+            element['status'] =
+              element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+            element['type'] = getTypeTx(element.tx)?.action;
+            if (element['type'] === 'burn') {
+              element['to_address'] = NULL_ADDRESS;
             }
-            if (this.isCW4973) {
-              if (element['type'] === 'mint') {
-                element['type'] = 'take';
-              } else if (element['type'] === 'burn') {
-                element['type'] = 'unequip';
-              }
+            if (element.tx.transaction_messages[0].content?.funds.length > 0) {
+              let dataDenom = this.commonService.mappingNameIBC(
+                element.tx.transaction_messages[0].content?.funds[0]?.denom,
+              );
+              element['price'] = balanceOf(
+                element.tx.transaction_messages[0].content.funds[0]?.amount,
+                dataDenom['decimals'],
+              );
+              element['denom'] = dataDenom['display'];
             }
           });
           this.dataSource.data = txs;
           this.pageData.length = txs?.length;
         }
       },
-      () => {},
-      () => {
-        this.loading = false;
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtActivity = e.message;
+        } else {
+          this.errTxtActivity = e.status + ' ' + e.statusText;
+        }
+        this.loadingTable = false;
       },
-    );
-  }
-
-  paginatorEmit(event): void {
-    this.dataSource.paginator = event;
-  }
-
-  handlePageEvent(e: any) {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.pageData = e;
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getDataTable(this.nextKey);
-      this.currentKey = this.nextKey;
-    }
+      complete: () => {
+        this.loadingTable = false;
+      },
+    });
   }
 
   async unEquipSBT() {
@@ -345,5 +352,9 @@ export class NFTDetailComponent implements OnInit {
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;
+  }
+
+  decodeData(data) {
+    return decodeURIComponent(data);
   }
 }

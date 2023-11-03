@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
@@ -24,6 +24,7 @@ export class TokenTableComponent implements OnChanges {
   tokenFilterItem = null;
   textSearch = '';
   searchValue = '';
+  errTxt: string;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'contractAddress', headerCellDef: 'contractAddress' },
@@ -119,8 +120,8 @@ export class TokenTableComponent implements OnChanges {
       }
       this.dataSource.data = [...searchList];
     } else {
-      this.accountService.getAssetCW20ByOwner(payload).subscribe(
-        (res: ResponseDto) => {
+      this.accountService.getAssetCW20ByOwner(payload).subscribe({
+        next: (res: ResponseDto) => {
           let data: any;
           if (res?.data?.length > 0) {
             let lstToken = _.get(res, 'data').map((element) => {
@@ -157,11 +158,18 @@ export class TokenTableComponent implements OnChanges {
           this.totalAssets.emit(this.pageData?.length || 0);
           this.setTokenFilter(this.listTokenType[0]);
         },
-        () => {},
-        () => {
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+          }
           this.assetsLoading = false;
         },
-      );
+        complete: () => {
+          this.assetsLoading = false;
+        },
+      });
     }
   }
 

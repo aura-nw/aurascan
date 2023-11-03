@@ -167,12 +167,12 @@
           </app-a-paginator>
         </div>
       </div>
-      <div class="mt-20" *ngIf="isLoading">
+      <div class="my-10" *ngIf="isLoading">
         <app-loading-sprint></app-loading-sprint>
       </div>
     </div>
   </section>
 </ng-container>
 <ng-template #noData>
-  <app-table-no-data *ngIf="!isLoading" [textNull]="errText"></app-table-no-data>
+  <app-table-no-data *ngIf="!isLoading" [textNull]="errTxt"></app-table-no-data>
 </ng-template>

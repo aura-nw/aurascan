@@ -62,6 +62,7 @@ export const LENGTH_CHARACTER = {
 };
 
 export const NULL_ADDRESS = 'Null address';
+export const TIMEOUT_ERROR = 'TimeoutError';
 
 export const TOKEN_ID_GET_PRICE = {
   AURA: 'aura-network',

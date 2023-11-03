@@ -51,7 +51,7 @@ initializeApp(environment.firebaseConfig);
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
-    { provide: DEFAULT_TIMEOUT, useValue: 60000 },
+    { provide: DEFAULT_TIMEOUT, useValue: 10000 },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     DatePipe,
     Globals,
