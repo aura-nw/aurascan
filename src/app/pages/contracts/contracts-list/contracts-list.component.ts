@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
-import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
 import { ContractService } from '../../../core/services/contract.service';
@@ -131,7 +131,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
-        if (e.name === 'TimeoutError') {
+        if (e.name === TIMEOUT_ERROR) {
           this.errTxt = e.message;
         } else {
           this.errTxt = e.status + ' ' + e.statusText;

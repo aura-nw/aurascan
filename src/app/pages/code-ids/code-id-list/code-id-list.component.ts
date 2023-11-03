@@ -3,7 +3,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -99,7 +99,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
         this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
       },
       error: (e) => {
-        if (e.name === 'TimeoutError') {
+        if (e.name === TIMEOUT_ERROR) {
           this.errTxt = e.message;
         } else {
           this.errTxt = e.status + ' ' + e.statusText;

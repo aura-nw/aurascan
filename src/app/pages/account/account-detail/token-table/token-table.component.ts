@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
@@ -159,7 +159,7 @@ export class TokenTableComponent implements OnChanges {
           this.setTokenFilter(this.listTokenType[0]);
         },
         error: (e) => {
-          if (e.name === 'TimeoutError') {
+          if (e.name === TIMEOUT_ERROR) {
             this.errTxt = e.message;
           } else {
             this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;

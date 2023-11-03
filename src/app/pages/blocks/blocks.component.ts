@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { getInfo } from 'src/app/core/utils/common/info-common';
 import { Globals, convertDataBlock } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -43,7 +44,7 @@ export class BlocksComponent implements OnInit {
         }
       },
       error: (e) => {
-        if (e.name === 'TimeoutError') {
+        if (e.name === TIMEOUT_ERROR) {
           this.errTxt = e.message;
         } else {
           this.errTxt = e.status + ' ' + e.statusText;
