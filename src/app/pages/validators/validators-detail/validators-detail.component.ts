@@ -237,8 +237,12 @@ export class ValidatorsDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxtProposedBlock = e.message;
+        } else {
+          this.errTxtProposedBlock = e.status + ' ' + e.statusText;
+        }
         this.isLoadingBlock = false;
-        this.errTxtProposedBlock = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingBlock = false;
@@ -349,8 +353,12 @@ export class ValidatorsDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxtPowerEvent = e.message;
+        } else {
+          this.errTxtPowerEvent = e.status + ' ' + e.statusText;
+        }
         this.isLoadingPower = false;
-        this.errTxtPowerEvent = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingPower = false;

@@ -538,7 +538,7 @@
                         <div class="justify-content-between tokenId">
                           <a
                             *ngIf="item.tokenId"
-                            [routerLink]="['/tokens/' + linkToken, data.contractAddress, item.tokenId]"
+                            [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
                             class="text--primary cursor-pointer"
                             >#{{ item.tokenId | stringEllipsis : (item.tokenId?.length > 8 ? 5 : 8) }}</a
                           >

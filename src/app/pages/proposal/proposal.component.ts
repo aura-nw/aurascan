@@ -113,8 +113,12 @@ export class ProposalComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;
@@ -143,7 +147,11 @@ export class ProposalComponent implements OnInit {
           this.length = res.proposal_aggregate.aggregate.count;
         },
         error: (e) => {
-          this.errTxt = e.status + ' ' + e.statusText;
+          if (e.name === 'TimeoutError') {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
         },
       });
   }

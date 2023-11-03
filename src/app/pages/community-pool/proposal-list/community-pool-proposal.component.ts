@@ -55,7 +55,7 @@ export class CommunityPoolProposalComponent implements OnInit {
   statusConstant = PROPOSAL_STATUS;
   distributionAcc = '';
   isLoading = true;
-  errText = null;
+  errTxt = null;
 
   constructor(
     public translate: TranslateService,
@@ -108,8 +108,12 @@ export class CommunityPoolProposalComponent implements OnInit {
         this.length = res.proposal_aggregate.aggregate.count;
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errText = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;

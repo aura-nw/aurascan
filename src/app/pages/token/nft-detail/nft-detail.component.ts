@@ -126,7 +126,7 @@ export class NFTDetailComponent implements OnInit {
   }
 
   getNFTDetail() {
-    this.contractService.getNFTDetail(this.contractAddress, this.nftId).subscribe({
+    this.contractService.getNFTDetail(this.contractAddress, this.decodeData(this.nftId)).subscribe({
       next: (res) => {
         res = res.data[0];
 
@@ -185,8 +185,12 @@ export class NFTDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;
@@ -197,7 +201,7 @@ export class NFTDetailComponent implements OnInit {
   async getDataTable() {
     let payload = {
       contractAddr: this.contractAddress,
-      tokenId: this.nftId,
+      tokenId: this.decodeData(this.nftId),
       isCW4973: this.isCW4973 ? true : false,
       isNFTDetail: true,
     };
@@ -216,6 +220,9 @@ export class NFTDetailComponent implements OnInit {
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
             element['type'] = getTypeTx(element.tx)?.action;
+            if (element['type'] === 'burn') {
+              element['to_address'] = NULL_ADDRESS;
+            }
             if (element.tx.transaction_messages[0].content?.funds.length > 0) {
               let dataDenom = this.commonService.mappingNameIBC(
                 element.tx.transaction_messages[0].content?.funds[0]?.denom,
@@ -232,8 +239,12 @@ export class NFTDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxtActivity = e.message;
+        } else {
+          this.errTxtActivity = e.status + ' ' + e.statusText;
+        }
         this.loadingTable = false;
-        this.errTxtActivity = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loadingTable = false;
@@ -341,5 +352,9 @@ export class NFTDetailComponent implements OnInit {
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;
+  }
+
+  decodeData(data) {
+    return decodeURIComponent(data);
   }
 }

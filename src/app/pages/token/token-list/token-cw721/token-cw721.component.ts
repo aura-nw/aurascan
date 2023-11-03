@@ -92,8 +92,12 @@ export class TokenCw721Component implements OnInit {
         this.pageData.length = res.total_token?.aggregate?.count;
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;

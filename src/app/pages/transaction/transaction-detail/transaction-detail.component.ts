@@ -20,7 +20,7 @@ export class TransactionDetailComponent implements OnInit {
   codeTransaction = CodeTransaction;
   isRawData = false;
   errorMessage = '';
-  errText = null;
+  errTxt = null;
   TAB = [
     {
       id: 0,
@@ -102,8 +102,12 @@ export class TransactionDetailComponent implements OnInit {
           }
         },
         error: (e) => {
+          if (e.name === 'TimeoutError') {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loading = false;
-          this.errText = e.status + ' ' + e.statusText;
         },
         complete: () => {
           this.loading = false;

@@ -577,4 +577,8 @@ export class AccountTransactionTableComponent {
     localStorage.setItem('setDataExport', JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }));
     this.router.navigate(['/export-csv']);
   }
+
+  encodeData(data) {
+    return encodeURIComponent(data);
+  }
 }

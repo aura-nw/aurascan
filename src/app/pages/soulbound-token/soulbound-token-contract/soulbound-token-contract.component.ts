@@ -132,8 +132,12 @@ export class SoulboundTokenContractComponent implements OnInit {
         this.pageData.length = res.meta.count;
       },
       error: (e) => {
+        if (e.name === 'TimeoutError') {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+        }
         this.loading = false;
-        this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
       },
       complete: () => {
         this.loading = false;
