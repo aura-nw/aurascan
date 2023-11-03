@@ -14,6 +14,7 @@ import { DATEFORMAT, PAGE_EVENT } from '../../../../core/constants/common.consta
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
+import { ApiCw20TokenService } from 'src/app/core/data-services/api-cw20-token.service';
 
 @Component({
   selector: 'app-token-cw20',

@@ -5,13 +5,14 @@ import { map } from 'rxjs/operators';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { TYPE_CW4973 } from '../constants/contract.constant';
 import { ApiAccountService } from '../data-services/api-account.service';
+import { ApiCw20TokenService } from '../data-services/api-cw20-token.service';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class AccountService extends CommonService {
   apiService = inject(ApiAccountService);
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  constructor(private http: HttpClient, private environmentService: EnvironmentService, private apiCw20TokenService: ApiCw20TokenService) {
     super(http, environmentService);
   }
 
@@ -20,7 +21,8 @@ export class AccountService extends CommonService {
   }
 
   getAssetCW20ByOwner(payload): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/${payload?.account_address}`);
+    return this.apiCw20TokenService.getByOwner(payload?.account_address)
+    // return this.http.get<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/${payload?.account_address}`);
   }
 
   getAssetCW721ByOwner(payload): Observable<any> {
