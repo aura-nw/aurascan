@@ -228,8 +228,20 @@ export class NFTDetailComponent implements OnInit {
             element['type'] = getTypeTx(element.tx)?.action;
             if (element['type'] === ModeExecuteTransaction.Burn || element['type'] === ModeExecuteTransaction.UnEquip) {
               element['to_address'] = NULL_ADDRESS;
+            } else if (
+              element['type'] === ModeExecuteTransaction.Approve ||
+              element['type'] === ModeExecuteTransaction.Revoke
+            ) {
+              let msg = element?.tx.transaction_messages[0]?.content?.msg;
+              if (typeof msg === 'string') {
+                try {
+                  msg = JSON.parse(msg);
+                } catch (e) {}
+              }
+              element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
             }
-            if (element.tx.transaction_messages[0].content?.funds.length > 0) {
+
+            if (element.tx.transaction_messages[0].content?.funds?.length > 0) {
               let dataDenom = this.commonService.mappingNameIBC(
                 element.tx.transaction_messages[0].content?.funds[0]?.denom,
               );
