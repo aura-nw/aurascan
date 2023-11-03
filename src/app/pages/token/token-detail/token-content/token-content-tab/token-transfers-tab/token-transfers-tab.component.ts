@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -88,6 +88,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private userService: UserService,
     private tokenService: TokenService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -288,5 +289,10 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.cdr.markForCheck();
+  }
+
+  goTo(data) {
+    let url = '/tokens/' + this.linkToken + '/' + this.contractAddress + '/' + this.encodeData(data);
+    this.router.navigateByUrl(url);
   }
 }
