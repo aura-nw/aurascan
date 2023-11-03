@@ -130,4 +130,8 @@ export class TokenTransferComponent implements OnInit {
     }
     return false;
   }
+
+  encodeData(data) {
+    return encodeURIComponent(data);
+  }
 }

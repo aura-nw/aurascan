@@ -1,6 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AURA_TOP_STATISTIC_RANGE } from 'src/app/core/constants/chart.constant';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { StatisticService } from 'src/app/core/services/statistic.service';
@@ -53,8 +54,12 @@ export class TopStatisticOverviewComponent implements OnInit {
         this.isLoading = false;
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
     });
   }

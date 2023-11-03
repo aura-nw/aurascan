@@ -238,7 +238,7 @@
                               [routerLink]="[
                                 '/tokens/token-nft/',
                                 data?.cw721_contract?.smart_contract?.address,
-                                data?.cw721_token?.token_id
+                                encodeData(data?.cw721_token?.token_id)
                               ]">
                               <span>NFT</span>
                             </button>

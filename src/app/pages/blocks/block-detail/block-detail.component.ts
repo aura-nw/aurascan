@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import { tap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
@@ -135,8 +135,12 @@ export class BlockDetailComponent implements OnInit {
                 }
               },
               error: (e) => {
+                if (e.name === TIMEOUT_ERROR) {
+                  this.errTxt = e.message;
+                } else {
+                  this.errTxt = e.status + ' ' + e.statusText;
+                }
                 this.loadingTxs = false;
-                this.errTxtTx = e.status + ' ' + e.statusText;
               },
               complete: () => {
                 this.loadingTxs = false;
@@ -167,8 +171,12 @@ export class BlockDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;

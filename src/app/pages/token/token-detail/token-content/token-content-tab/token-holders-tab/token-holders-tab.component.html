@@ -121,7 +121,7 @@
       </app-paginator>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data *ngIf="!loading"></app-table-no-data>
+      <app-table-no-data *ngIf="!loading" [textNull]="errTxt"></app-table-no-data>
     </ng-template>
   </div>
 </div>
