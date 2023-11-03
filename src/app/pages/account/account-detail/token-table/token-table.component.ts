@@ -155,7 +155,6 @@ export class TokenTableComponent implements OnChanges {
             this.dataSource.data = [];
           }
           this.totalAssets.emit(this.pageData?.length || 0);
-          console.log(data);
 
           this.totalValue.emit(res?.totalValue || 0);
           this.setTokenFilter(this.listTokenType[0]);
