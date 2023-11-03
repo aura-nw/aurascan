@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -61,7 +62,7 @@ export class TransactionComponent implements OnInit {
         }
       },
       error: (e) => {
-        if (e.name === 'TimeoutError') {
+        if (e.name === TIMEOUT_ERROR) {
           this.errTxt = e.message;
         } else {
           this.errTxt = e.status + ' ' + e.statusText;

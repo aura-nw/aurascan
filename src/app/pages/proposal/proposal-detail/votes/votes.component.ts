@@ -3,6 +3,7 @@ import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 import { ProposalService } from '../../../../core/services/proposal.service';
 export interface IVotes {
@@ -84,7 +85,7 @@ export class VotesComponent implements OnChanges, OnDestroy {
         this.voteDataListLoading = false;
       },
       error: (e) => {
-        if (e.name === 'TimeoutError') {
+        if (e.name === TIMEOUT_ERROR) {
           this.errTxt = e.message;
         } else {
           this.errTxt = e.status + ' ' + e.statusText;
@@ -118,7 +119,7 @@ export class VotesComponent implements OnChanges, OnDestroy {
         this.voteDataListLoading = false;
       },
       error: (e) => {
-        if (e.name === 'TimeoutError') {
+        if (e.name === TIMEOUT_ERROR) {
           this.errTxt = e.message;
         } else {
           this.errTxt = e.status + ' ' + e.statusText;

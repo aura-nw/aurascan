@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, map, mergeMap, repeat, takeLast, ta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { DATEFORMAT, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../../../core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
@@ -204,7 +204,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                 this.isLoading = false;
               },
               error: (e) => {
-                if (e.name === 'TimeoutError') {
+                if (e.name === TIMEOUT_ERROR) {
                   this.errTxt = e.message;
                 } else {
                   this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
@@ -214,7 +214,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
             });
           },
           error: (e) => {
-            if (e.name === 'TimeoutError') {
+            if (e.name === TIMEOUT_ERROR) {
               this.errTxt = e.message;
             } else {
               this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;

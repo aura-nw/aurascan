@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { NgxMaskPipe } from 'ngx-mask';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { CHART_RANGE } from 'src/app/core/constants/common.constant';
+import { CHART_RANGE, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportStatisticChart } from 'src/app/core/helpers/export';
 import { StatisticService } from 'src/app/core/services/statistic.service';
@@ -213,7 +213,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
-        if (e.name === 'TimeoutError') {
+        if (e.name === TIMEOUT_ERROR) {
           this.errTxt = e.message;
         } else {
           this.errTxt = e.status + ' ' + e.statusText;

@@ -18,6 +18,7 @@ import {
   NUMBER_2_DIGIT,
   NUMBER_CONVERT,
   NUM_BLOCK,
+  TIMEOUT_ERROR,
   TIME_OUT_CALL_API,
 } from '../../../app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR, VOTING_POWER_LEVEL } from '../../../app/core/constants/validator.enum';
@@ -222,7 +223,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
-        if (e.name === 'TimeoutError') {
+        if (e.name === TIMEOUT_ERROR) {
           this.errTxt = e.message;
         } else {
           this.errTxt = e.status + ' ' + e.statusText;

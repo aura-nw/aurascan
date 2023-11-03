@@ -1,3 +1,5 @@
+<app-loading-sprint class="mt-10" *ngIf="isLoading"></app-loading-sprint>
+<app-table-no-data class="mt-10" *ngIf="!isLoading && errTxt" [textNull]="errTxt"></app-table-no-data>
 <div class="box-contract text-white" *ngIf="tokenDetail">
   <!-- Unverified -->
   <ng-container *ngIf="!tokenDetail?.contract_verification || tokenDetail?.contract_verification === contractVerifyType.Unverified">
