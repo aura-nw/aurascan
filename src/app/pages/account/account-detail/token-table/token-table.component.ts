@@ -159,7 +159,9 @@ export class TokenTableComponent implements OnChanges {
           this.totalValue.emit(res?.totalValue || 0);
           this.setTokenFilter(this.listTokenType[0]);
         },
-        () => {},
+        (e) => {
+          console.log(e);
+        },
         () => {
           this.assetsLoading = false;
         },

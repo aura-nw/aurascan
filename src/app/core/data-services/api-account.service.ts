@@ -95,9 +95,13 @@ export class ApiAccountService {
 
         const commission = balanceOf(accountAndValidator?.commission?.amount, this.currencies.coinDecimals) || 0;
 
-        const stake_reward = balanceOf(delegationsData?.total, this.currencies.coinDecimals);
+        const stake_reward = delegationsData?.total
+          ? balanceOf(delegationsData?.total, this.currencies.coinDecimals)
+          : 0;
 
-        const delegable_vesting = balanceOf(balance?.amount, this.currencies.coinDecimals) - available;
+        const delegable_vesting = balance?.amount
+          ? balanceOf(balance?.amount, this.currencies.coinDecimals) - available
+          : 0;
 
         // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L382
         const total = available + delegated + unbonding + stake_reward + commission + delegable_vesting;

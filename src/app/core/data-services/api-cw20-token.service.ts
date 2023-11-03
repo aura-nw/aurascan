@@ -69,7 +69,7 @@ export class ApiCw20TokenService {
               : token;
           });
 
-        const totalValue = allTokens.reduce((prev, current) => current.value + prev, 0);
+        const totalValue = allTokens.reduce((prev, current) => current?.value + prev, 0);
 
         return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),
@@ -124,31 +124,33 @@ export class ApiCw20TokenService {
   }
 
   parseIbcTokens(account): IAsset[] {
-    const ibcBalances = account.data.balances.filter((balance) => balance.denom !== this.currencies.coinMinimalDenom);
+    const ibcBalances = account.data?.balances?.filter((balance) => balance.denom !== this.currencies.coinMinimalDenom);
 
     return ibcBalances
-      .map((item): Partial<IAsset> => {
-        const ibcToken = this.env.coins.find((coin) => coin.denom === item.denom);
-        return ibcToken
-          ? {
-              name: ibcToken?.name,
-              symbol: ibcToken?.display,
-              decimals: ibcToken?.decimal,
-              denom: ibcToken?.denom,
-              image: ibcToken?.logo,
-              max_total_supply: 0,
-              contract_address: '-',
-              balance: balanceOf(item.amount, this.currencies.coinDecimals),
-              price: 0,
-              price_change_percentage_24h: 0,
-              type: 'ibc',
-              value: 0,
-              verify_status: '',
-              verify_text: '',
-            }
-          : null;
-      })
-      .filter((data) => data !== null);
+      ? ibcBalances
+          .map((item): Partial<IAsset> => {
+            const ibcToken = this.env.coins.find((coin) => coin.denom === item.denom);
+            return ibcToken
+              ? {
+                  name: ibcToken?.name,
+                  symbol: ibcToken?.display,
+                  decimals: ibcToken?.decimal,
+                  denom: ibcToken?.denom,
+                  image: ibcToken?.logo,
+                  max_total_supply: 0,
+                  contract_address: '-',
+                  balance: balanceOf(item.amount, this.currencies.coinDecimals),
+                  price: 0,
+                  price_change_percentage_24h: 0,
+                  type: 'ibc',
+                  value: 0,
+                  verify_status: '',
+                  verify_text: '',
+                }
+              : null;
+          })
+          .filter((data) => data !== null)
+      : [];
   }
 
   queryCw20TokenByOwner(address: string) {
