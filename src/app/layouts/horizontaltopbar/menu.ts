@@ -162,7 +162,7 @@ export const MENU: MenuItem[] = [
         label: 'Export Data (.CSV)',
         link: '/export-csv',
         icon: 'export',
-      }
+      },
     ],
   },
 ];

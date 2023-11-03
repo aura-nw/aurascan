@@ -7,4 +7,5 @@ export interface MenuItem {
     parentId?: number;
     isUiElement?: boolean;
     name?: string;
+    disabled?: boolean
 }

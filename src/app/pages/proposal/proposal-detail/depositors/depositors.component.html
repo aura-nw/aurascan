@@ -13,9 +13,6 @@
         [errTxt]="errTxt"
         (pageEventChange)="pageEventChange($event)">
       </app-proposal-table>
-      <div *ngIf="dataLength === 0">
-        <app-table-no-data [textNull]="errTxt"></app-table-no-data>
-      </div>
     </div>
   </div>
 </div>

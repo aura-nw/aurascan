@@ -88,7 +88,7 @@ export class ProfileSettingsComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        this.errorMessage = error?.details?.message;
+        this.errorMessage = error?.error?.error?.details?.message;
       },
     });
   }

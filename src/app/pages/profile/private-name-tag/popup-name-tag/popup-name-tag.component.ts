@@ -149,7 +149,7 @@ export class PopupNameTagComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
+        this.toastr.error(error?.error?.error?.details?.details.message[0] || 'Error');
       },
     });
   }
@@ -168,7 +168,7 @@ export class PopupNameTagComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
+        this.toastr.error(error?.error?.error?.details?.details.message[0] || 'Error');
       },
     });
   }

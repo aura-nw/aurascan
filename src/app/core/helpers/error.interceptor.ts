@@ -12,8 +12,9 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((err) => {
+        const error = err?.error?.error?.details;
         // check status unauthorized, refresh token
-        if (err?.error?.statusCode === 401 && err?.error?.message == 'Unauthorized') {
+        if (error?.statusCode === 401 && error?.message == 'Unauthorized') {
           const payload = {
             refreshToken: localStorage.getItem('refreshToken').replace(/"/g, ''),
           };
@@ -24,6 +25,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
                 localStorage.removeItem('userEmail');
+                localStorage.removeItem('listNameTag');
                 this.router.navigate(['/login']);
 
                 setTimeout(() => {
@@ -38,6 +40,7 @@ export class ErrorInterceptor implements HttpInterceptor {
               localStorage.removeItem('accessToken');
               localStorage.removeItem('refreshToken');
               localStorage.removeItem('userEmail');
+              localStorage.removeItem('listNameTag');
               this.router.navigate(['/login']);
 
               setTimeout(() => {
