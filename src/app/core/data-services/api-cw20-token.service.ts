@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import BigNumber from 'bignumber.js';
 import { forkJoin, map } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { ApiAccountService } from './api-account.service';
@@ -43,43 +42,45 @@ export class ApiCw20TokenService {
 
         const nativeToken = this.parseNativeToken(account);
 
-        const cw20TokenList: any[] = this.parseCw20TokenList(cw20Tokens);
+        const cw20TokenList: any[] = this.parseCw20Tokens(cw20Tokens);
 
-        cw20TokenList.sort((item1, item2) => {
-          // 1st priority VERIFIED.
-          const compareStatus = item2.verify_status.localeCompare(item1.verify_status);
-          // 2nd priority token value DESC.
-          const compareValue = item2.value - item1.value;
-          return compareStatus || compareValue;
-        });
+        const ibcTokenBalances = this.parseIbcTokens(account);
 
-        const ibcTokenBalances = this.parseIbsTokens(account);
+        const allTokens = [nativeToken, ...ibcTokenBalances, ...cw20TokenList].filter(
+          (token) => Number(token.balance) > 0,
+        );
 
-        const allTokens = [nativeToken, ...ibcTokenBalances, ...cw20TokenList];
-
-        return { data: allTokens, meta: allTokens.length };
+        return { data: allTokens, meta: { count: allTokens.length } };
       }),
     );
   }
 
-  parseCw20TokenList(tokens) {
-    return tokens.map(
-      (item): Partial<IAsset> => ({
-        name: item?.cw20_contract?.name,
-        symbol: item?.cw20_contract?.symbol,
-        decimals: item?.cw20_contract?.decimal,
-        image: item?.cw20_contract?.marketing_info?.logo?.url,
-        max_total_supply: item?.cw20_contract?.total_supply,
-        contract_address: item?.cw20_contract?.smart_contract?.address || '-',
-        balance: item?.amount,
-        price: 0, // TO-DO
-        price_change_percentage_24h: 0, // TO-DO
-        type: 'cw20', // TO-DO
-        value: balanceOf(item?.amount) * 1, // TO-DO
-        verify_status: '', // TO-DO
-        verify_text: '', // TO-DO
-      }),
-    );
+  parseCw20Tokens(tokens) {
+    return tokens
+      .map(
+        (item): Partial<IAsset> => ({
+          name: item?.cw20_contract?.name,
+          symbol: item?.cw20_contract?.symbol,
+          decimals: item?.cw20_contract?.decimal,
+          image: item?.cw20_contract?.marketing_info?.logo?.url,
+          max_total_supply: item?.cw20_contract?.total_supply,
+          contract_address: item?.cw20_contract?.smart_contract?.address || '-',
+          balance: item?.amount,
+          price: 0, // TO-DO
+          price_change_percentage_24h: 0, // TO-DO
+          type: 'cw20', // TO-DO
+          value: balanceOf(item?.amount) * 1, // TO-DO
+          verify_status: '', // TO-DO
+          verify_text: '', // TO-DO
+        }),
+      )
+      .sort((item1, item2) => {
+        // 1st priority VERIFIED.
+        const compareStatus = item2.verify_status.localeCompare(item1.verify_status);
+        // 2nd priority token value DESC.
+        const compareValue = item2.value - item1.value;
+        return compareStatus || compareValue;
+      });
   }
 
   parseNativeToken(account) {
@@ -101,9 +102,8 @@ export class ApiCw20TokenService {
     };
   }
 
-  parseIbsTokens(account): IAsset[] {
+  parseIbcTokens(account): IAsset[] {
     const ibcBalances = account.data.balances.filter((balance) => balance.denom !== this.currencies.coinMinimalDenom);
-    console.log(ibcBalances);
 
     return ibcBalances
       .map((item): Partial<IAsset> => {
@@ -144,6 +144,4 @@ export class ApiCw20TokenService {
       map((data) => data?.cw20_holder),
     );
   }
-
-  queryIBCTokens(address: string) {}
 }
