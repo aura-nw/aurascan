@@ -1,11 +1,11 @@
 {
   "environment": {
-    "name": "develop",
+    "name": "serenity",
     "label": {
-      "desktop": "Nois Testnet",
-      "mobile": "Nois Testnet"
+      "desktop": "Serenity Testnet (v0.7.0)",
+      "mobile": "Serenity Testnet"
     },
-    "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/logo/aura-explorer-logo@mob.png",
+    "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png",
     "notice": {
       "content": null,
       "url": null
@@ -13,59 +13,89 @@
   },
   "chainConfig": {
     "stakingTime": "86400",
-    "blockTime": 4000,
-    "quotaSetPrivateName": 10,
-    "coins": [],
-    "features": [
-      "transaction",
-      "validators",
-      "votings",
-      "blocks",
-      "tokens",
-      "statistics",
-      "contracts",
-      "code-ids",
-      "fee-grant",
-      "accountbound",
-      "community-pool",
-      "login",
-      "user",
-      "profile",
-      "account"
-    ],
-    "chain_info": {
-      "chainId": "nois-testnet-005",
-      "chainName": "Nois Testnet",
-      "rpc": "https://nois-testnet-rpc.itrocket.net/",
-      "rest": "https://nois-testnet-api.itrocket.net/",
-      "bip44": { "coinType": 118 },
-      "bech32Config": {
-        "bech32PrefixAccAddr": "nois",
-        "bech32PrefixAccPub": "noispub",
-        "bech32PrefixValAddr": "noisvaloper",
-        "bech32PrefixValPub": "noisvaloperpub",
-        "bech32PrefixConsAddr": "noisvalcons",
-        "bech32PrefixConsPub": "noisvalconspub"
+    "blockTime": 2000,
+    "quotaSetPrivateName": 20,
+    "coins": [
+      {
+        "name": "Test Aura",
+        "display": "TAURA",
+        "denom": "ibc/6DF434CD72825125ACECEA86BF4A15DCF7CA0DE257C7683AF2A550D2BE34F79D",
+        "decimal": 6,
+        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
       },
-      "currencies": [{ "coinDenom": "NOIS", "coinMinimalDenom": "unois", "coinDecimals": 6 }],
-      "feeCurrencies": [{ "coinDenom": "NOIS", "coinMinimalDenom": "unois", "coinDecimals": 6 }],
-      "stakeCurrency": { "coinDenom": "NOIS", "coinMinimalDenom": "unois", "coinDecimals": 6 },
+      {
+        "name": "Test Aura 2",
+        "display": "TAURA",
+        "denom": "ibc/88157C3B5E7755BF1ED3756691F96DE13780973B7061BBCA837665D97666F75C",
+        "decimal": 6,
+        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
+      },
+      {
+        "name": "Test Aura 3",
+        "display": "TAURA",
+        "denom": "ibc/2C4AFBABEC27A288296EEBD37D156B2F70E109697F7C5C0DC5DE33788B6282A8",
+        "decimal": 6,
+        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
+      }
+    ],
+    "features": [],
+    "chain_info": {
+      "chainId": "serenity-testnet-001",
+      "chainName": "Aura serenity testnet",
+      "rpc": "https://rpc.serenity.aura.network",
+      "rest": "https://lcd.serenity.aura.network",
+      "bip44": {
+        "coinType": 118
+      },
+      "bech32Config": {
+        "bech32PrefixAccAddr": "aura",
+        "bech32PrefixAccPub": "aurapub",
+        "bech32PrefixValAddr": "auravaloper",
+        "bech32PrefixValPub": "auravaloperpub",
+        "bech32PrefixConsAddr": "auravalcons",
+        "bech32PrefixConsPub": "auravalconspub"
+      },
+      "currencies": [
+        {
+          "coinDenom": "AURA",
+          "coinMinimalDenom": "uaura",
+          "coinDecimals": 6
+        }
+      ],
+      "feeCurrencies": [
+        {
+          "coinDenom": "AURA",
+          "coinMinimalDenom": "uaura",
+          "coinDecimals": 6
+        }
+      ],
+      "stakeCurrency": {
+        "coinDenom": "AURA",
+        "coinMinimalDenom": "uaura",
+        "coinDecimals": 6
+      },
       "coinType": 118,
-      "gasPriceStep": { "low": 0.001, "average": 0.0025, "high": 0.004 },
-      "features": ["ibc-transfer"],
-      "walletUrlForStaking": "https://testnet.nois.explorers.guru/validators",
-      "logo": "",
-      "explorer": "https://testnet.nois.explorers.guru/",
+      "gasPriceStep": {
+        "low": 0.001,
+        "average": 0.0025,
+        "high": 0.004
+      },
+      "features": [
+        "ibc-transfer"
+      ],
+      "walletUrlForStaking": "https://serenity.aurascan.io/validators",
+      "logo": "https://i.imgur.com/zi0mTYb.png",
+      "explorer": "https://serenity.aurascan.io/",
       "beta": "false"
     }
   },
   "image": {
     "validator": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
-    "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/"
+    "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/"
   },
   "api": {
-    "backend": "http://10.89.246.108:3001/api/v1",
-    "socket": "https://explorer-api.dev.aura.network",
+    "backend": "https://serenity-api.aurascan.io/api/v1",
+    "socket": "https://serenity-api.aurascan.io",
     "ipfsDomain": "https://ipfs.io/",
     "google": {
       "url": "apps.googleusercontent.com",
@@ -76,7 +106,7 @@
       "url": "https://indexer-v2.dev.aurascan.io/api",
       "graphql": "/v2/graphql",
       "rest": "/v2",
-      "chain": "nois"
+      "chain": "serenity"
     }
   }
 }

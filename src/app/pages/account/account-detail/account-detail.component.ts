@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ApiAccountService } from 'src/app/core/data-services/api-account.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { isContract } from 'src/app/core/utils/common/validation';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
@@ -57,6 +58,8 @@ export class AccountDetailComponent implements OnInit {
   totalSBT = 0;
   isContractAddress = false;
 
+  api = inject(ApiAccountService);
+
   constructor(
     public commonService: CommonService,
     private route: ActivatedRoute,
@@ -81,6 +84,8 @@ export class AccountDetailComponent implements OnInit {
         this.isContractAddress = isContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
+
+        this.api.getAccountByAddress(params.address);
       }
     });
   }
@@ -121,16 +126,16 @@ export class AccountDetailComponent implements OnInit {
 
   getAccountDetail(): void {
     this.isNoData = false;
-    const halftime = 15000;
+    // const halftime = 15000;
     this.accountService.getAccountDetail(this.currentAddress).subscribe(
       (res) => {
-        if (res.data.code === 200 && !res.data?.data) {
-          this.isNoData = true;
-          setTimeout(() => {
-            this.getAccountDetail();
-          }, halftime);
-          return;
-        }
+        // if (res.data.code === 200 && !res.data?.data) {
+        //   this.isNoData = true;
+        //   setTimeout(() => {
+        //     this.getAccountDetail();
+        //   }, halftime);
+        //   return;
+        // }
 
         if (res?.data) {
           this.currentAccountDetail = res.data;
@@ -175,7 +180,9 @@ export class AccountDetailComponent implements OnInit {
           });
         }
       },
-      () => {},
+      (e) => {
+        console.log('Error', e);
+      },
       () => {},
     );
   }

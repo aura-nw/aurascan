@@ -12,7 +12,7 @@ const isEnabled = (
 
   const features = config.configValue['chainConfig']?.features;
 
-  if (features.findIndex((item) => item === functionNames) >= 0 || !features) {
+  if (features.findIndex((item) => item === functionNames) >= 0 || features.length === 0) {
     return true;
   }
 
