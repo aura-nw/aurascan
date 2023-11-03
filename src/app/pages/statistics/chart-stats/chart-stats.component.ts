@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { createChart } from 'lightweight-charts';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ChartOptions } from 'src/app/core/models/chart.model';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 import { STATISTIC_CHART_OPTIONS } from '../statistic-chart-options';
@@ -256,8 +257,12 @@ export class ChartStatsComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;

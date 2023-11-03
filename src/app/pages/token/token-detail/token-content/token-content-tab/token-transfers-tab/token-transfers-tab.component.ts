@@ -1,13 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import {
   CodeTransaction,
@@ -88,6 +88,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private userService: UserService,
     private tokenService: TokenService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -181,8 +182,12 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;
@@ -236,8 +241,12 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;
@@ -280,5 +289,10 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.cdr.markForCheck();
+  }
+
+  goTo(data) {
+    let url = '/tokens/' + this.linkToken + '/' + this.contractAddress + '/' + this.encodeData(data);
+    this.router.navigateByUrl(url);
   }
 }

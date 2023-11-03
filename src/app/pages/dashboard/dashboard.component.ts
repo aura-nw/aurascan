@@ -20,7 +20,7 @@ import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
+import { CHART_RANGE, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
 import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
@@ -286,8 +286,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtBlock = e.message;
+        } else {
+          this.errTxtBlock = e.status + ' ' + e.statusText;
+        }
         this.isLoadingBlock = false;
-        this.errTxtBlock = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingBlock = false;
@@ -314,8 +318,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtTxs = e.message;
+        } else {
+          this.errTxtTxs = e.status + ' ' + e.statusText;
+        }
         this.isLoadingTx = false;
-        this.errTxtTxs = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingTx = false;
@@ -469,8 +477,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtVoting = e.message;
+        } else {
+          this.errTxtVoting = e.status + ' ' + e.statusText;
+        }
         this.isLoadingVoting = false;
-        this.errTxtVoting = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingVoting = false;
