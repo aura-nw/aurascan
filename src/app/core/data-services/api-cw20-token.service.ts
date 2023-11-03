@@ -69,7 +69,9 @@ export class ApiCw20TokenService {
               : token;
           });
 
-        return { data: allTokens, meta: { count: allTokens.length } };
+        const totalValue = allTokens.reduce((prev, current) => current.value + prev, 0);
+
+        return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),
     );
   }

@@ -12,7 +12,11 @@ import { CommonService } from './common.service';
 @Injectable()
 export class AccountService extends CommonService {
   apiService = inject(ApiAccountService);
-  constructor(private http: HttpClient, private environmentService: EnvironmentService, private apiCw20TokenService: ApiCw20TokenService) {
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+    private apiCw20TokenService: ApiCw20TokenService,
+  ) {
     super(http, environmentService);
   }
 
@@ -21,8 +25,7 @@ export class AccountService extends CommonService {
   }
 
   getAssetCW20ByOwner(payload): Observable<any> {
-    return this.apiCw20TokenService.getByOwner(payload?.account_address)
-    // return this.http.get<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/${payload?.account_address}`);
+    return this.apiCw20TokenService.getByOwner(payload?.account_address);
   }
 
   getAssetCW721ByOwner(payload): Observable<any> {

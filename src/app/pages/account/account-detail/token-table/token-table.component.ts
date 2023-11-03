@@ -82,7 +82,7 @@ export class TokenTableComponent implements OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.getTotalAssets();
+    // this.getTotalAssets();
   }
 
   ngOnChanges(): void {
@@ -120,7 +120,7 @@ export class TokenTableComponent implements OnChanges {
       this.dataSource.data = [...searchList];
     } else {
       this.accountService.getAssetCW20ByOwner(payload).subscribe(
-        (res: ResponseDto) => {
+        (res: ResponseDto & { totalValue: number }) => {
           let data: any;
           if (res?.data?.length > 0) {
             let lstToken = _.get(res, 'data').map((element) => {
@@ -155,6 +155,9 @@ export class TokenTableComponent implements OnChanges {
             this.dataSource.data = [];
           }
           this.totalAssets.emit(this.pageData?.length || 0);
+          console.log(data);
+
+          this.totalValue.emit(res?.totalValue || 0);
           this.setTokenFilter(this.listTokenType[0]);
         },
         () => {},
@@ -185,10 +188,10 @@ export class TokenTableComponent implements OnChanges {
     this.searchToken();
   }
 
-  getTotalAssets(): void {
-    this.accountService.getTotalAssets(this.address).subscribe((res: ResponseDto) => {
-      this.total = res.data || 0;
-      this.totalValue.emit(this.total);
-    });
-  }
+  // getTotalAssets(): void {
+  //   this.accountService.getTotalAssets(this.address).subscribe((res: ResponseDto) => {
+  //     this.total = res.data || 0;
+  //     this.totalValue.emit(this.total);
+  //   });
+  // }
 }
