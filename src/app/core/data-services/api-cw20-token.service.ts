@@ -61,9 +61,10 @@ export class ApiCw20TokenService {
             return coinMarket
               ? {
                   ...token,
-                  price: coinMarket.current_price, // TO-DO
-                  price_change_percentage_24h: coinMarket.price_change_percentage_24h, // TO-DO
-                  value: token.balance * coinMarket.current_price, // TO-DO
+                  price: coinMarket.current_price,
+                  price_change_percentage_24h: coinMarket.price_change_percentage_24h,
+                  value: token.balance * coinMarket.current_price,
+                  max_total_supply: coinMarket.max_total_supply,
                 }
               : token;
           });
@@ -87,7 +88,7 @@ export class ApiCw20TokenService {
           price: 0, // TO-DO
           price_change_percentage_24h: 0, // TO-DO
           type: 'cw20', // TO-DO
-          value: balanceOf(item?.amount) * 1, // TO-DO
+          value: 0, // TO-DO
           verify_status: '', // TO-DO
           verify_text: '', // TO-DO
         }),
