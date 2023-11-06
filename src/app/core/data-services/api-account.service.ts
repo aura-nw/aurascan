@@ -63,7 +63,7 @@ export class ApiAccountService {
 
   constructor(private http: HttpClient, private env: EnvironmentService) {}
 
-  getAccountByAddress(address: string) {
+  getAccountByAddress(address: string, isGetAlBalances = false) {
     return forkJoin([
       this.queryAccountAndValidator(address),
       this.getDelegations(address),
@@ -89,13 +89,19 @@ export class ApiAccountService {
 
         const balance = this.parseBalance(accountAndValidator.account);
 
+        const balances = this.parseBalance(accountAndValidator.account, isGetAlBalances);
+
         const available = this.parseAvailableBalance(accountAndValidator.account);
 
         const commission = balanceOf(accountAndValidator?.commission?.amount, this.currencies.coinDecimals) || 0;
 
-        const stake_reward = balanceOf(delegationsData?.total, this.currencies.coinDecimals);
+        const stake_reward = delegationsData?.total
+          ? balanceOf(delegationsData?.total, this.currencies.coinDecimals)
+          : 0;
 
-        const delegable_vesting = balanceOf(balance?.amount, this.currencies.coinDecimals) - available;
+        const delegable_vesting = balance?.amount
+          ? balanceOf(balance?.amount, this.currencies.coinDecimals) - available
+          : 0;
 
         // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L382
         const total = available + delegated + unbonding + stake_reward + commission + delegable_vesting;
@@ -103,7 +109,7 @@ export class ApiAccountService {
         const data: Partial<IApiAccount> = {
           acc_address: address,
           available,
-          balances: [balance],
+          balances,
           delegations,
           stake_reward,
           delegated,
@@ -122,8 +128,12 @@ export class ApiAccountService {
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L117
-  parseBalance(account) {
-    return account ? account[0]?.balances.find((item) => item.denom === this.currencies.coinMinimalDenom) : [];
+  parseBalance(account, isGetAlBalances = false) {
+    const balances = account ? account[0]?.balances : [];
+
+    return isGetAlBalances
+      ? balances
+      : account[0]?.balances.find((item) => item.denom === this.currencies.coinMinimalDenom);
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L132
