@@ -186,7 +186,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
       this.toastr.successWithTitle('Address removed from watchlist!', 'Success');
       setTimeout(() => {
         this.pageData.length--;
-        this.pageEvent(this.pageData);
+        this.pageChange.selectPage(0);
       }, 2000);
     });
   }
