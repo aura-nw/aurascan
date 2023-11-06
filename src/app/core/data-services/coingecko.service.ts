@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { EnvironmentService } from './environment.service';
 
 @Injectable({ providedIn: 'root' })
@@ -35,6 +35,42 @@ export class CoingeckoService {
           console.log(error);
 
           return of([]);
+        }),
+      );
+  }
+  getCoinMarketChartById(
+    id: string,
+    {
+      from,
+      to,
+    }: {
+      from: number;
+      to: number;
+    },
+  ) {
+    return this.http
+      .get<any>(`${this.coingecko.url}/coins/${id}/market_chart/range`, {
+        params: {
+          vs_currency: 'usd',
+          from,
+          to,
+        },
+      })
+      .pipe(
+        map((res) => {
+          const { prices } = res;
+          console.log(prices);
+
+          if (prices) {
+            const data = prices.map((data) => {
+              return {
+                timestamp: new Date(data[0]).toISOString(),
+                current_price: data[1],
+              };
+            });
+            return { data };
+          }
+          return { data: [] };
         }),
       );
   }
