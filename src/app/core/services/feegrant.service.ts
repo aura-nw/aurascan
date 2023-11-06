@@ -6,7 +6,7 @@ import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FeeGrantService extends CommonService {
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);

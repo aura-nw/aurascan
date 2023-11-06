@@ -10,11 +10,9 @@
         [type]="proposalDeposit"
         [data]="tableData"
         [length]="dataLength"
+        [errTxt]="errTxt"
         (pageEventChange)="pageEventChange($event)">
       </app-proposal-table>
-      <div *ngIf="dataLength === 0">
-        <app-table-no-data></app-table-no-data>
-      </div>
     </div>
   </div>
 </div>

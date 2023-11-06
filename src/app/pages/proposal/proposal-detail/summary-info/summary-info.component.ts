@@ -1,13 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, formatNumber } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { from, interval } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { Globals } from '../../../../../app/global/global';
+import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
 import {
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
@@ -38,7 +37,7 @@ export class SummaryInfoComponent implements OnInit {
   currentStatusConstant = VOTING_FINAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: string } = null;
-  chainId = this.environmentService.configValue.chainId;
+  chainId = this.environmentService.chainId;
   proposalVotes: string;
   votingBarLoading = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -48,7 +47,7 @@ export class SummaryInfoComponent implements OnInit {
   isNotReached = true;
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
   timerGetUpTime: any;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   proposalStatus = null;
   typeSpecial = {
     SoftwareUpgrade: '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
@@ -57,17 +56,16 @@ export class SummaryInfoComponent implements OnInit {
   activeId = 0;
   reload$;
   dataDenomRequest: any;
+  numberOnlyDecimal = NUMBER_ONLY_DECIMAL;
+  number2Digit = NUMBER_2_DIGIT;
 
   constructor(
     private proposalService: ProposalService,
-    public global: Globals,
     private walletService: WalletService,
     public dialog: MatDialog,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     public commonService: CommonService,
-    private numberPipe: DecimalPipe,
-    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -181,9 +179,7 @@ export class SummaryInfoComponent implements OnInit {
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
-                    this.numberPipe
-                      .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
-                      .toString(),
+                    formatNumber(this.proposalDetail.veto_threshold, 'en-GB', this.number2Digit).toString(),
                   );
                 }
               } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
@@ -191,9 +187,7 @@ export class SummaryInfoComponent implements OnInit {
               } else {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                   '{{proposalDetail.noWithVetoPercent}}',
-                  this.numberPipe
-                    .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
-                    .toString(),
+                  formatNumber(this.proposalDetail.veto_threshold, 'en-GB', this.number2Digit).toString(),
                 );
               }
             } else {
@@ -263,22 +257,22 @@ export class SummaryInfoComponent implements OnInit {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
           this.currentSubTitle =
             'This proposal may pass when the voting period is over because current quorum is more than ' +
-            this.numberPipe.transform(proposalDetail.quorum, this.global.formatNumber2Decimal).toString() +
+            formatNumber(proposalDetail.quorum, 'en-GB', this.number2Digit)?.toString() +
             '% and there are more than ' +
-            this.numberPipe.transform(proposalDetail.threshold, this.global.formatNumber2Decimal).toString() +
+            formatNumber(proposalDetail.threshold, 'en-GB', this.number2Digit)?.toString() +
             '% of Yes votes.';
         } else {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
           this.currentSubTitle =
             'The proportion of NoWithVeto votes is superior to ' +
-            this.numberPipe.transform(proposalDetail.veto_threshold, this.global.formatNumber2Decimal).toString() +
+            formatNumber(proposalDetail.veto_threshold, 'en-GB', this.number2Digit)?.toString() +
             '%';
         }
       } else {
         this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
         this.currentSubTitle =
           'The proportion of Yes votes is inferior to ' +
-          this.numberPipe.transform(proposalDetail.threshold, this.global.formatNumber2Decimal).toString() +
+          formatNumber(this.proposalDetail.threshold, 'en-GB', this.number2Digit)?.toString() +
           '%';
       }
     } else {
@@ -287,7 +281,7 @@ export class SummaryInfoComponent implements OnInit {
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubTitle =
         'Current quorum is less than ' +
-        this.numberPipe.transform(proposalDetail.quorum, this.global.formatNumber2Decimal).toString() +
+        formatNumber(this.proposalDetail.quorum, 'en-GB', this.number2Digit)?.toString() +
         '% and this proposal requires more participation';
     }
     this.proposalDetail = {
@@ -350,7 +344,7 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   openDialog(data): void {
-    let dialogRef = this.dialog.open(ProposalVoteComponent, {
+    this.dialog.open(ProposalVoteComponent, {
       width: '431px',
       data: data,
     });
@@ -404,7 +398,7 @@ export class SummaryInfoComponent implements OnInit {
 
     if (key === '') {
       let numberVote: string;
-      numberVote = this.numberPipe.transform(abs, this.global.formatNumberOnlyDecimal);
+      numberVote = formatNumber(abs, 'en-GB', this.numberOnlyDecimal);
       return (isNegative ? '-' : '') + numberVote + key;
     }
     return (isNegative ? '-' : '') + abs + key;

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -16,7 +16,7 @@ declare var grecaptcha: any;
   styleUrls: ['./export-csv.component.scss'],
 })
 export class ExportCsvComponent implements OnInit {
-  csvForm;
+  csvForm: FormGroup;
   isError = false;
   isFilterDate = true;
   isValidAddress = true;
@@ -33,22 +33,21 @@ export class ExportCsvComponent implements OnInit {
   responseCaptcha;
   isValidCaptcha = false;
 
-  siteKey = this.environmentService.configValue.siteKeyCaptcha;
+  siteKey = this.environmentService.siteKeyCaptcha;
 
   constructor(
     private fb: FormBuilder,
     private commonService: CommonService,
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
-    this.formInit();
     this.renderCaptcha();
-
     // check exit email
     this.userEmail = localStorage.getItem('userEmail');
+    this.formInit();
 
     //get data config from account detail
     const dataConfig = localStorage.getItem('setDataExport');
@@ -70,13 +69,19 @@ export class ExportCsvComponent implements OnInit {
       endDate: null,
       fromBlock: null,
       toBlock: null,
-      displayPrivate: false,
+      displayPrivate: [
+        {
+          value: false,
+          disabled: !!!this.userEmail,
+        },
+      ],
     });
   }
 
   setDataConfig(dataConfig) {
     const data = JSON.parse(dataConfig);
-    this.csvForm.controls.address.value = data['address'];
+    // this.csvForm.controls.address.value = data['address'];
+    this.csvForm.controls.address.setValue(data['address']);
     this.dataType = data['exportType'];
   }
 
@@ -167,7 +172,7 @@ export class ExportCsvComponent implements OnInit {
   }
 
   checkFormValid(): boolean {
-    this.getAddress['value'] = this.getAddress?.value?.trim();
+    this.getAddress.setValue(this.getAddress?.value?.trim());
     const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
 
     this.isValidAddress = true;

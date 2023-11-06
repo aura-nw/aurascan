@@ -9,14 +9,13 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
-import { Globals } from '../../../global/global';
 
 interface CustomPageEvent {
   next?: number;
@@ -37,6 +36,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @Input() tabId: string;
   @Input() data: any[];
   @Input() length: number;
+  @Input() errTxt: string;
 
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
   @Output() isNextPage = new EventEmitter<boolean>();
@@ -79,14 +79,13 @@ export class ProposalTableComponent implements OnInit, OnChanges {
 
   displayedColumns: string[];
   template: Array<TableTemplate> = [];
-
   dataSource: MatTableDataSource<any>;
   pageSize = 5;
   pageIndex = 0;
   pageValidatorIndex = 0;
   proposalMode = PROPOSAL_TABLE_MODE;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   pageData: PageEvent = {
     length: 0,
@@ -95,7 +94,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   };
 
   constructor(
-    public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,

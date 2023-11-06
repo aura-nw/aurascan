@@ -9,7 +9,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 })
 export class SbImgComponent implements OnInit {
   @Input() token;
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   isError = false;
   previewImg = '';

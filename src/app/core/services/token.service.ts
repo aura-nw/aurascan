@@ -9,9 +9,9 @@ import { RangeType } from '../models/common.model';
 import { CommonService } from './common.service';
 import * as _ from 'lodash';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -324,5 +324,81 @@ export class TokenService extends CommonService {
 
   getListAssetCommunityPool() {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
+  }
+
+  getCW721Transfer(payload): Observable<any> {
+    let queryName = payload.isCW4973 ? 'CW4973Transfer' : 'CW721Transfer';
+    let queryCondition = payload.isCW4973 ? '_eq' : '_neq';
+    let queryActionNotIn = payload.isNFTDetail
+      ? ['']
+      : ['approve', 'instantiate', 'revoke', 'approve_all', 'revoke_all', ''];
+    const operationsDoc = `query ${queryName}(
+      $contractAddress: String = null
+      $actionNotIn: [String!] = null
+      $idLte: Int = null
+      $idGte: Int = null
+      $receiver: String = null
+      $sender: String = null
+      $tokenId: String = null
+      $txHash: String = null) {
+      ${this.envDB} {
+        cw721_activity(
+          where: {
+            _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }]
+            cw721_contract: {
+              smart_contract: {
+                address: { _eq: $contractAddress }
+                name: { ${queryCondition}: "crates.io:cw4973" }
+              }
+            }
+            cw721_token: { token_id: { _eq: $tokenId } }
+            id: { _lte: $idLte, _gte: $idGte }
+            action: { _nin: $actionNotIn }
+            tx_hash: {_eq: $txHash}
+          }
+          order_by: { id: desc }
+        ) {
+          id
+          action
+          from
+          to
+          sender
+          cw721_token {
+            token_id
+            cw721_contract {
+              smart_contract {
+                address
+              }
+            }
+          }
+          tx {
+            hash
+            height
+            timestamp
+            code
+            transaction_messages {
+              content
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          contractAddress: payload.contractAddr,
+          actionNotIn: queryActionNotIn,
+          sender: payload.sender,
+          receiver: payload.receiver,
+          tokenId: payload.tokenId,
+          idLte: payload.idLte,
+          txHash: payload.txHash,
+        },
+        operationName: queryName,
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 }

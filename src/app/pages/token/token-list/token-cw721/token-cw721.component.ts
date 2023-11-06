@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -40,11 +40,12 @@ export class TokenCw721Component implements OnInit {
   sort: MatSort;
   sortBy = 'transfer_24h';
   sortOrder = 'desc';
-  isSorting = true;
   searchSubject = new Subject();
-  destroy$ = new Subject();
-  image_s3 = this.environmentService.configValue.image_s3;
+  destroy$ = new Subject<void>();
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  isLoading = true;
+  errTxt: string;
 
   constructor(
     public translate: TranslateService,
@@ -85,9 +86,22 @@ export class TokenCw721Component implements OnInit {
       keySearch = addressNameTag;
     }
 
-    this.tokenService.getListCW721Token(payload, keySearch).subscribe((res) => {
-      this.dataSource = new MatTableDataSource<any>(res.list_token);
-      this.pageData.length = res.total_token?.aggregate?.count;
+    this.tokenService.getListCW721Token(payload, keySearch).subscribe({
+      next: (res) => {
+        this.dataSource = new MatTableDataSource<any>(res.list_token);
+        this.pageData.length = res.total_token?.aggregate?.count;
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 

@@ -7,12 +7,10 @@ import {
   Input,
   OnChanges,
   OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild,
-  ViewEncapsulation,
+  Output, ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import * as _ from 'lodash';
 
 @Component({
@@ -54,13 +52,13 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
   };
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     this.changePageMax(_.get(this.current, 'list[0].index'));
     this.changePage();
   }
   constructor() {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.length) {
       this.pageLength = Math.ceil(this.length / this.pageSize);
       this.pageList = Array.from({ length: this.pageLength }, (_, k) => ({

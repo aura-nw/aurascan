@@ -1,8 +1,8 @@
-import { formatDate } from '@angular/common';
+import { formatDate, formatNumber } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { MaskPipe } from 'ngx-mask';
+import { NgxMaskPipe } from 'ngx-mask';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -65,7 +65,7 @@ export class ImageURL implements PipeTransform {
     const replacePath = /\..\//gi;
     value = value.replace(replacePath, '');
     const replaceLink = /assets\//gi;
-    value = value.replace(replaceLink, this.environmentService.configValue.image_s3);
+    value = value.replace(replaceLink, this.environmentService.imageUrl);
     return value;
   }
 }
@@ -90,7 +90,7 @@ export class BalanceOf implements PipeTransform {
 export class ReplaceIpfs implements PipeTransform {
   constructor(private environmentService: EnvironmentService) {}
   transform(value: string): string {
-    return this.environmentService.configValue.ipfsDomain + value.replace('://', '/');
+    return this.environmentService.ipfsDomain + value.replace('://', '/');
   }
 }
 
@@ -103,7 +103,7 @@ export class ConvertUauraToAura implements PipeTransform {
 
 @Pipe({ name: 'convertLogAmount' })
 export class convertLogAmount implements PipeTransform {
-  constructor(private commonService: CommonService, private mask: MaskPipe) {}
+  constructor(private commonService: CommonService, private mask: NgxMaskPipe) {}
   transform(value: string, getDenomOnly = false): string {
     let amount = value.match(/\d+/g)[0];
     let data = this.commonService.mappingNameIBC(value);
@@ -187,4 +187,12 @@ function displayFullNumber(x) {
     }
   }
   return x;
+}
+
+@Pipe({ name: 'formatDigit' })
+export class formatDigit implements PipeTransform {
+  transform(amount: number, digit = 0) {
+    let digitConvert = '1.' + digit + '-' + digit;
+    return formatNumber(amount, 'en-GB', digitConvert);
+  }
 }

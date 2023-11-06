@@ -3,6 +3,7 @@ import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 import { ProposalService } from '../../../../core/services/proposal.service';
 export interface IVotes {
@@ -35,7 +36,7 @@ export class VotesComponent implements OnChanges, OnDestroy {
 
   voteDataList: IVotes[] = [];
   countVote: Map<string, number> = new Map<string, number>();
-
+  errTxt: string;
   voteDataListLoading = true;
   PROPOSAL_TABLE_MODE_VOTES = PROPOSAL_TABLE_MODE.VOTES;
 
@@ -43,7 +44,7 @@ export class VotesComponent implements OnChanges, OnDestroy {
   payloads: { pageIndex?: number; pageLimit?: number; proposalId?: number | string; offset?: number };
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
 
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
     this.proposalService.reloadList$.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
@@ -81,10 +82,14 @@ export class VotesComponent implements OnChanges, OnDestroy {
           this.countVote.set(VOTE_OPTION.NO, res[VOTE_OPTION.NO]?.aggregate.count || 0);
           this.countVote.set(VOTE_OPTION.NO_WITH_VETO, res[VOTE_OPTION.NO_WITH_VETO]?.aggregate.count || 0);
         }
-
         this.voteDataListLoading = false;
       },
-      error: (error) => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.voteDataListLoading = true;
       },
     });
@@ -108,8 +113,19 @@ export class VotesComponent implements OnChanges, OnDestroy {
       this.currentTabId = tabId || 'all';
     }
 
-    this.proposalService.getListVoteFromIndexer(this.payloads, voteOption).subscribe((res) => {
-      this.voteDataList = res.vote;
+    this.proposalService.getListVoteFromIndexer(this.payloads, voteOption).subscribe({
+      next: (res) => {
+        this.voteDataList = res.vote;
+        this.voteDataListLoading = false;
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.voteDataListLoading = false;
+      },
     });
   }
 }

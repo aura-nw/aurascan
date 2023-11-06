@@ -13,7 +13,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
  */
 export class HorizontalComponent implements OnInit {
   isCondensed = false;
-  notice = this.environmentService.configValue.notice;
+  notice = this.environmentService.environment.notice;
 
   constructor(public router: Router, private environmentService: EnvironmentService) {}
 

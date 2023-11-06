@@ -1,0 +1,32 @@
+.overlay-panel {
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--aura-black);
+  opacity: 0.95;
+}
+
+.menu-dropdown-popover {
+  z-index: 2;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--aura-gray-10);
+  margin-bottom: 8px !important;
+
+  .popover-body {
+    max-width: 200px;
+    overflow: hidden;
+
+    box-shadow: 2px 2px 30px rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 0;
+  }
+
+  .popover-arrow,
+  .arrow {
+    display: none;
+  }
+}

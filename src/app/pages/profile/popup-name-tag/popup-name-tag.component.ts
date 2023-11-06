@@ -1,6 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -34,12 +37,12 @@ export class PopupNameTagComponent implements OnInit {
     Account: 'account',
     Contract: 'contract',
   };
-  quota = this.environmentService.configValue.quotaSetPrivateName;
+  quota = this.environmentService.chainConfig.quotaSetPrivateName;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupNameTagComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public environmentService: EnvironmentService,
     public translate: TranslateService,
     private commonService: CommonService,
@@ -148,7 +151,7 @@ export class PopupNameTagComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
+        this.toastr.error(error?.error?.error?.details?.details.message[0] || 'Error');
       },
     });
   }
@@ -167,7 +170,7 @@ export class PopupNameTagComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
+        this.toastr.error(error?.error?.error?.details?.details.message[0] || 'Error');
       },
     });
   }

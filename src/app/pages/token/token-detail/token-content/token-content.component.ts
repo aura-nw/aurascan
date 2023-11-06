@@ -5,11 +5,10 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { Globals } from 'src/app/global/global';
-import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
-import { TokenTab } from '../../../../core/constants/token.enum';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
+import { TokenTab } from '../../../../core/constants/token.enum';
 
 @Component({
   selector: 'app-token-content',
@@ -42,15 +41,14 @@ export class TokenContentComponent implements OnInit {
   activeTabID = 0;
   textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     private route: ActivatedRoute,
     private environmentService: EnvironmentService,
-    public global: Globals,
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private tokenService: TokenService,

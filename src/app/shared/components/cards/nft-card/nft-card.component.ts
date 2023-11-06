@@ -18,7 +18,7 @@ export class NftCardComponent implements OnInit, AfterViewInit {
   @Input() disableLink: boolean;
   @ViewChild('timeline') timeline!: ElementRef;
   @ViewChild('video') video!: ElementRef;
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   isError = false;
   MEDIA_TYPE = MEDIA_TYPE;
