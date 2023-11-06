@@ -18,7 +18,6 @@ import {
   pipeTypeData,
 } from '../../../../core/constants/transaction.enum';
 import { formatWithSchema } from '../../../../core/helpers/date';
-import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -77,11 +76,10 @@ export class TransactionMessagesComponent implements OnInit {
   isDisplay = [];
   keyIbc = 'client_message';
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
 
   constructor(
-    public global: Globals,
     private datePipe: DatePipe,
     private environmentService: EnvironmentService,
     public commonService: CommonService,

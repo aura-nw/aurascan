@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -11,7 +11,6 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
-import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw4973',
@@ -21,7 +20,7 @@ import { Globals } from '../../../../global/global';
 export class TokenCw4973Component implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
@@ -37,10 +36,11 @@ export class TokenCw4973Component implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  errTxt: string;
+  isLoading = true;
 
   constructor(
     public translate: TranslateService,
-    public global: Globals,
     public tokenService: TokenService,
     public soulboundService: SoulboundService,
     public commonService: CommonService,
@@ -79,9 +79,16 @@ export class TokenCw4973Component implements OnInit {
       payload['keyword'] = addressNameTag;
     }
 
-    this.soulboundService.getListABT(payload).subscribe((res) => {
-      this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
-      this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;
+    this.soulboundService.getListABT(payload).subscribe({
+      next: (res) => {
+        this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
+        this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;
+        this.isLoading = false;
+      },
+      error: (e) =>{
+        this.isLoading = false;
+        this.errTxt = e.status + ' ' + e.statusText;
+      }
     });
   }
 

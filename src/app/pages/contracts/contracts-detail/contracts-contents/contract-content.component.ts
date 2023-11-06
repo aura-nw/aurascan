@@ -11,6 +11,7 @@ import { convertDataTransaction } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
 import { Location } from '@angular/common';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 @Component({
   selector: 'app-contract-content[contractsAddress]',
   templateUrl: './contract-content.component.html',
@@ -35,7 +36,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   limit = 25;
   contractTransaction = {};
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
-
+  errTxt: string;
   contractInfo = {
     contractsAddress: this.contractsAddress,
     count: 0,
@@ -45,10 +46,10 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   dataInstantiate = [];
   loadingContract = true;
 
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   timerGetUpTime: any;
 
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     private contractService: ContractService,
@@ -56,21 +57,19 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     private router: Router,
     private aRoute: ActivatedRoute,
     private environmentService: EnvironmentService,
-    private location: Location
+    private location: Location,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
     valueColumn &&
       ((v) => {
         v.suffix =
-          `<span class="text--primary">` +
-          this.environmentService.configValue.chain_info.currencies[0].coinDenom +
-          `</span>`;
+          `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
       })(valueColumn);
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next(true);
+    this.destroyed$.next();
     this.destroyed$.complete();
 
     if (this.timerGetUpTime) {
@@ -104,12 +103,12 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
     this.timerGetUpTime = setInterval(() => {
       this.getTransaction(false);
-    }, 5000);
+    }, 30000);
   }
 
   changeTab(tabId): void {
-    tabId = tabId || 'transactions'
-    this.location.replaceState("/contracts/" + this.contractInfo.contractsAddress + "?tabId=" + tabId);
+    tabId = tabId || 'transactions';
+    this.location.replaceState('/contracts/' + this.contractInfo.contractsAddress + '?tabId=' + tabId);
     this.countCurrent = tabId;
   }
 
@@ -120,8 +119,8 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         value: this.contractsAddress,
         key: '_contract_address',
       };
-      this.transactionService.getListTxCondition(payload).subscribe(
-        (res) => {
+      this.transactionService.getListTxCondition(payload).subscribe({
+        next: (res) => {
           const data = res;
           if (res) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
@@ -136,11 +135,18 @@ export class ContractContentComponent implements OnInit, OnDestroy {
             }
           }
         },
-        () => {},
-        () => {
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loadingContract = false;
         },
-      );
+        complete: () => {
+          this.loadingContract = false;
+        },
+      });
     } else {
       this.loadingContract = false;
     }

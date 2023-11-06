@@ -17,7 +17,7 @@ export class AuthenticateMailComponent implements OnDestroy {
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
-  chainId = this.envService.configValue.chainId;
+  chainId = this.envService.chainId;
   isMobileMatched = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
     tap((state) => {
@@ -27,7 +27,7 @@ export class AuthenticateMailComponent implements OnDestroy {
     }),
   );
 
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   constructor(
     private envService: EnvironmentService,
     private layout: BreakpointObserver,
@@ -55,6 +55,7 @@ export class AuthenticateMailComponent implements OnDestroy {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('listNameTag');
 
     // check is screen profile
     if (this.route.snapshot['_routerState']?.url === '/profile') {

@@ -1,32 +1,39 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+} from '@angular/material/legacy-dialog';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { LENGTH_CHARACTER, MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import * as _ from 'lodash';
+import {
+  LENGTH_CHARACTER,
+  MEDIA_TYPE,
+  NULL_ADDRESS,
+  PAGE_EVENT,
+  TIMEOUT_ERROR,
+} from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
-import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
+import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { getTypeTx, Globals } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
-import * as _ from 'lodash';
-import { UserService } from 'src/app/core/services/user.service';
-import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 
 @Component({
   selector: 'app-nft-detail',
@@ -41,7 +48,6 @@ export class NFTDetailComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   templates: Array<TableTemplate> = [
-    // { matColumnDef: 'popover', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
@@ -54,6 +60,7 @@ export class NFTDetailComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   isSoulBound = false;
   loading = true;
+  loadingTable = true;
   nftId = '';
   contractAddress = '';
   nftDetail: any;
@@ -71,17 +78,19 @@ export class NFTDetailComponent implements OnInit {
   animationUrl: string;
   imageUrl: string;
   isCW4973 = false;
+  errTxt: string;
+  errTxtActivity: string;
 
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   userAddress = '';
   ContractVerifyType = ContractVerifyType;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  network = this.environmentService.configValue.chain_info;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  network = this.environmentService.chainInfo;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     public commonService: CommonService,
@@ -96,7 +105,7 @@ export class NFTDetailComponent implements OnInit {
     private dialog: MatDialog,
     public translate: TranslateService,
     private layout: BreakpointObserver,
-    private userService: UserService,
+    private tokenService: TokenService,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -123,8 +132,8 @@ export class NFTDetailComponent implements OnInit {
   }
 
   getNFTDetail() {
-    this.contractService.getNFTDetail(this.contractAddress, this.nftId).subscribe(
-      (res) => {
+    this.contractService.getNFTDetail(this.contractAddress, this.decodeData(this.nftId)).subscribe({
+      next: (res) => {
         res = res.data[0];
 
         if (!res || res === null) {
@@ -181,87 +190,84 @@ export class NFTDetailComponent implements OnInit {
           this.nftDetail['nftName'] = this.nftDetail?.media_info?.onchain?.metadata?.name || '';
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
-  async getDataTable(nextKey = null) {
+  async getDataTable() {
     let payload = {
-      limit: 200,
-      heightLT: nextKey,
       contractAddr: this.contractAddress,
-      isTransferTab: false,
-      tokenId: this.nftId,
+      tokenId: this.decodeData(this.nftId),
       isCW4973: this.isCW4973 ? true : false,
       isNFTDetail: true,
     };
 
-    this.userService.getListNFTByAddress(payload).subscribe(
-      (res) => {
+    this.tokenService.getCW721Transfer(payload).subscribe({
+      next: (res) => {
         if (res) {
-          let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.NftTxs, false, null);
-          txs.forEach((element, index) => {
-            element['token_id'] = element.tokenId;
-            element['type'] = element.arrEvent[0]?.type?.replace('Contract: ', '');
-            element['from_address'] = element.fromAddress;
-            element['to_address'] = element.toAddress;
-            if (element['type'] === 'approve' || element['type'] === 'revoke') {
-              element['to_address'] =
-                element.eventAttr?.find((k) => k.composite_key === 'wasm.spender')?.value || element['to_address'];
-            }
-            if (this.isCW4973) {
-              if (element['type'] === 'mint') {
-                element['type'] = 'take';
-              } else if (element['type'] === 'burn') {
-                element['type'] = 'unequip';
+          let txs = res.cw721_activity;
+          txs.forEach((element) => {
+            element['tx_hash'] = element.tx.hash;
+            element['from_address'] = element.from || NULL_ADDRESS;
+            element['to_address'] =
+              element.to || element.cw721_token.cw721_contract.smart_contract.address || NULL_ADDRESS;
+            element['token_id'] = element.cw721_token.token_id;
+            element['timestamp'] = element.tx.timestamp;
+            element['status'] =
+              element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+            element['type'] = getTypeTx(element.tx)?.action;
+            if (element['type'] === ModeExecuteTransaction.Burn || element['type'] === ModeExecuteTransaction.UnEquip) {
+              element['to_address'] = NULL_ADDRESS;
+            } else if (
+              element['type'] === ModeExecuteTransaction.Approve ||
+              element['type'] === ModeExecuteTransaction.Revoke
+            ) {
+              let msg = element?.tx.transaction_messages[0]?.content?.msg;
+              if (typeof msg === 'string') {
+                try {
+                  msg = JSON.parse(msg);
+                } catch (e) {}
               }
+              element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
+            }
+
+            if (element.tx.transaction_messages[0].content?.funds?.length > 0) {
+              let dataDenom = this.commonService.mappingNameIBC(
+                element.tx.transaction_messages[0].content?.funds[0]?.denom,
+              );
+              element['price'] = balanceOf(
+                element.tx.transaction_messages[0].content.funds[0]?.amount,
+                dataDenom['decimals'],
+              );
+              element['denom'] = dataDenom['display'];
             }
           });
           this.dataSource.data = txs;
           this.pageData.length = txs?.length;
         }
       },
-      () => {},
-      () => {
-        this.loading = false;
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtActivity = e.message;
+        } else {
+          this.errTxtActivity = e.status + ' ' + e.statusText;
+        }
+        this.loadingTable = false;
       },
-    );
-  }
-
-  paginatorEmit(event): void {
-    this.dataSource.paginator = event;
-  }
-
-  handlePageEvent(e: any) {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.pageData = e;
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getDataTable(this.nextKey);
-      this.currentKey = this.nextKey;
-    }
-  }
-
-  getPopoverData(data): IContractPopoverData {
-    return {
-      amount: data?.value || 0,
-      code: Number(data?.tx_response?.code),
-      fee: data?.fee || 0,
-      from_address: data?.from_address || '',
-      to_address: data?.to_address || '',
-      price: 0,
-      status: data?.status,
-      symbol: this.denom,
-      tokenAddress: '',
-      tx_hash: data?.tx_hash || '',
-      gas_used: data?.tx_response?.gas_used,
-      gas_wanted: data?.tx_response?.gas_wanted,
-      nftDetail: this.nftDetail,
-      modeExecute: data?.modeExecute,
-    };
+      complete: () => {
+        this.loadingTable = false;
+      },
+    });
   }
 
   async unEquipSBT() {
@@ -364,5 +370,9 @@ export class NFTDetailComponent implements OnInit {
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;
+  }
+
+  decodeData(data) {
+    return decodeURIComponent(data);
   }
 }

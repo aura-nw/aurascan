@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { CodeTransaction } from '../../../../core/constants/transaction.enum';
-import { CommonService } from 'src/app/core/services/common.service';
-import { AccountTxType, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { Component, Input, OnInit } from '@angular/core';
+import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { CodeTransaction } from '../../../../core/constants/transaction.enum';
 
 export interface CardMobSimpleValidatorAddress {
   imgUrl: string;
@@ -62,7 +62,7 @@ export class CardMobAccountComponent implements OnInit {
   tabsData = TabsAccountLink;
   statusTransaction = CodeTransaction;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   constructor(public commonService: CommonService, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {

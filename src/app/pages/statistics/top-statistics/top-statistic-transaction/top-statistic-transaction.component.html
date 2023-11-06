@@ -10,13 +10,13 @@
     </button>
   </div>
 </div>
-<div class="row mt-6" *ngIf="loading">
+<div class="row mt-6" *ngIf="isLoading">
   <app-loading-sprint></app-loading-sprint>
 </div>
-<div class="row mt-6" *ngIf="!loading && !transactionsData">
-  <app-table-no-data></app-table-no-data>
+<div class="row mt-6" *ngIf="!isLoading && !transactionsData">
+  <app-table-no-data [textNull]="errTxt"></app-table-no-data>
 </div>
-<div class="row mt-6 box-statistic" *ngIf="!loading && transactionsData">
+<div class="row mt-6 box-statistic" *ngIf="!isLoading && transactionsData">
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-body">
@@ -52,8 +52,8 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | number : global.formatNumber2Decimal) > (0.01 | number)
-                          ? (element.percentage | number : global.formatNumber2Decimal)
+                        (element.percentage | formatDigit : 2) > (0.01 | number)
+                          ? (element.percentage | formatDigit : 2)
                           : '< 0.01' ?? 0
                       }}%
                     </td>
@@ -108,8 +108,8 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | number : global.formatNumber2Decimal) > (0.01 | number)
-                          ? (element.percentage | number : global.formatNumber2Decimal)
+                        (element.percentage | formatDigit : 2) > (0.01 | number)
+                          ? (element.percentage | formatDigit : 2)
                           : '< 0.01' ?? 0
                       }}%
                     </td>
@@ -163,8 +163,8 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | number : global.formatNumber2Decimal) > (0.01 | number)
-                          ? (element.percentage | number : global.formatNumber2Decimal)
+                        (element.percentage | formatDigit : 2) > (0.01 | number)
+                          ? (element.percentage | formatDigit : 2)
                           : '< 0.01' ?? 0
                       }}%
                     </td>
@@ -218,8 +218,8 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | number : global.formatNumber2Decimal) > (0.01 | number)
-                          ? (element.percentage | number : global.formatNumber2Decimal)
+                        (element.percentage | formatDigit : 2) > (0.01 | number)
+                          ? (element.percentage | formatDigit : 2)
                           : '< 0.01' ?? 0
                       }}%
                     </td>

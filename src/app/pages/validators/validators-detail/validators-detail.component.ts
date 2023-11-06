@@ -1,10 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
+import { NUMBER_2_DIGIT, NUM_BLOCK, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -67,27 +67,31 @@ export class ValidatorsDetailComponent implements OnInit {
   isLoadingBlock = true;
   isLoadingPower = true;
   lastBlockLoading = true;
+  isLoadingDelegators = true;
   numberLastBlock = 100;
   timerGetUpTime: any;
   timerGetBlock: any;
   nextKey = null;
   currentNextKey = null;
   nextKeyBlock = null;
-
+  errTxtProposedBlock: string;
+  errTxtDelegators: string;
+  errTxtPowerEvent: string;
   nextKeyDelegator = null;
   currentNextKeyDelegator = null;
 
   isOpenDialog = false;
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  timeInterval = this.environmentService.configValue.timeInterval;
   soulboundList = [];
   arrBlockUptime = [];
   arrLastBlock = [];
   isLeftPage = false;
   typeActive = 'BOND_STATUS_BONDED';
+  number2Digit = NUMBER_2_DIGIT;
   hexAddress = null;
+
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  timeInterval = this.environmentService.chainConfig.blockTime;
 
   constructor(
     private route: ActivatedRoute,
@@ -145,8 +149,8 @@ export class ValidatorsDetailComponent implements OnInit {
         payload = { limit: 1, operatorAddress: this.currentAddress };
       }
 
-      this.validatorService.getDataValidator(payload).subscribe(
-        (res) => {
+      this.validatorService.getDataValidator(payload).subscribe({
+        next: (res) => {
           if (res.status === 404 || res.validator?.length === 0) {
             this.router.navigate(['/']);
             return;
@@ -196,13 +200,12 @@ export class ValidatorsDetailComponent implements OnInit {
               }
             }, 2000);
           }
-
           this.getTotalSBT(this.currentValidatorDetail.acc_address);
         },
-        (error) => {
+        error: (e) => {
           this.router.navigate(['/']);
         },
-      );
+      });
     }
   }
 
@@ -215,8 +218,8 @@ export class ValidatorsDetailComponent implements OnInit {
     if (nextKeyBlock !== null) {
       payload.nextHeight = nextKeyBlock;
     }
-    this.blockService.getDataBlockWithOperator(payload).subscribe(
-      (res) => {
+    this.blockService.getDataBlockWithOperator(payload).subscribe({
+      next: (res) => {
         this.nextKeyBlock = res?.block[res?.block?.length - 1]?.height;
         if (res.block.length > 0) {
           const blocks = convertDataBlock(res);
@@ -230,15 +233,21 @@ export class ValidatorsDetailComponent implements OnInit {
             this.pageIndexBlock * this.pageSize,
             this.pageIndexBlock * this.pageSize + this.pageSize,
           );
-
           this.lengthBlock = this.dataSourceBlock.data.length;
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtProposedBlock = e.message;
+        } else {
+          this.errTxtProposedBlock = e.status + ' ' + e.statusText;
+        }
         this.isLoadingBlock = false;
       },
-    );
+      complete: () => {
+        this.isLoadingBlock = false;
+      },
+    });
   }
 
   getBlocksMiss(address = null, lastBlock = []) {
@@ -249,53 +258,60 @@ export class ValidatorsDetailComponent implements OnInit {
       limit = 1;
       height = lastBlock[0]?.height;
     }
-    this.validatorService.getUptimeIndexer(address, limit, height).subscribe((res) => {
-      this.arrBlockUptime = res?.block?.filter((h) => h.block_signatures.length === 0);
-      if (lastBlock?.length === 0) {
-        if (this.arrBlockUptime?.length > 0 && lastBlock?.length === 0) {
-          this.arrLastBlock?.forEach((element) => {
-            if (this.arrBlockUptime?.find((k) => k.height === element.height)) {
-              element['isSign'] = false;
-            }
-          });
+    this.validatorService.getUptimeIndexer(address, limit, height).subscribe({
+      next: (res) => {
+        this.arrBlockUptime = res?.block?.filter((h) => h.block_signatures.length === 0);
+        if (lastBlock?.length === 0) {
+          if (this.arrBlockUptime?.length > 0 && lastBlock?.length === 0) {
+            this.arrLastBlock?.forEach((element) => {
+              if (this.arrBlockUptime?.find((k) => k.height === element.height)) {
+                element['isSign'] = false;
+              }
+            });
+          }
+        } else {
+          lastBlock[0]['isSign'] = this.arrBlockUptime?.find((k) => k.height === lastBlock[0]?.height) ? false : true;
+          this.arrLastBlock?.unshift(lastBlock[0]);
+          this.arrLastBlock?.pop();
         }
-      } else {
-        lastBlock[0]['isSign'] = this.arrBlockUptime?.find((k) => k.height === lastBlock[0]?.height) ? false : true;
-        this.arrLastBlock?.unshift(lastBlock[0]);
-        this.arrLastBlock?.pop();
-      }
+      },
     });
   }
 
   async getListDelegator(nextKey = null, isInit = true) {
-    const res = await this.validatorService.delegator(100, this.currentAddress, nextKey);
+    try {
+      const res = await this.validatorService.delegator(100, this.currentAddress, nextKey);
+      if (res.data?.pagination?.next_key) {
+        this.nextKeyDelegator = encodeURIComponent(res.data?.pagination?.next_key);
+      }
 
-    if (res.data?.pagination?.next_key) {
-      this.nextKeyDelegator = encodeURIComponent(res.data?.pagination?.next_key);
+      let data = [];
+      res.data?.delegation_responses.forEach((k) => {
+        data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
+      });
+
+      if (this.dataSourceDelegator.data.length > 0 && isInit) {
+        this.dataSourceDelegator.data = [...this.dataSourceDelegator.data, ...data];
+      } else {
+        this.dataSourceDelegator.data = [...data];
+      }
+
+      this.dataSourceDelegatorMob = this.dataSourceDelegator?.data.slice(
+        this.pageIndexDelegator * this.pageSize,
+        this.pageIndexDelegator * this.pageSize + this.pageSize,
+      );
+
+      this.lengthDelegator = Number(this.dataSourceDelegator.data?.length);
+      this.isLoadingDelegators = false;
+    } catch (e) {
+      this.isLoadingDelegators = false;
+      this.errTxtDelegators = e['status'] + ' ' + e['statusText'];
     }
-
-    let data = [];
-    res.data?.delegation_responses.forEach((k) => {
-      data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
-    });
-
-    if (this.dataSourceDelegator.data.length > 0 && isInit) {
-      this.dataSourceDelegator.data = [...this.dataSourceDelegator.data, ...data];
-    } else {
-      this.dataSourceDelegator.data = [...data];
-    }
-
-    this.dataSourceDelegatorMob = this.dataSourceDelegator?.data.slice(
-      this.pageIndexDelegator * this.pageSize,
-      this.pageIndexDelegator * this.pageSize + this.pageSize,
-    );
-
-    this.lengthDelegator = Number(this.dataSourceDelegator.data?.length);
   }
 
   getListPower(nextKey = null, isInit = true): void {
-    this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe(
-      (res) => {
+    this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe({
+      next: (res) => {
         if (res?.power_event?.length > 0) {
           if (res?.power_event?.length >= 100) {
             this.nextKey = res?.power_event[res?.power_event?.length - 1].id;
@@ -333,15 +349,21 @@ export class ValidatorsDetailComponent implements OnInit {
             this.pageIndexPower * this.pageSize,
             this.pageIndexPower * this.pageSize + this.pageSize,
           );
-
           this.lengthPower = this.dataSourcePower.data.length;
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtPowerEvent = e.message;
+        } else {
+          this.errTxtPowerEvent = e.status + ' ' + e.statusText;
+        }
         this.isLoadingPower = false;
       },
-    );
+      complete: () => {
+        this.isLoadingPower = false;
+      },
+    });
   }
 
   paginatorEmit(event, type: 'block' | 'delegator' | 'power'): void {

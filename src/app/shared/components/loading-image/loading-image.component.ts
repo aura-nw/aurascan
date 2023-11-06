@@ -4,8 +4,7 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
-  SimpleChanges,
+  OnInit
 } from '@angular/core';
 import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
 
@@ -37,7 +36,7 @@ export class LoadingImageComponent implements OnInit, OnChanges {
 
   async ngOnInit() {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.isError = false;
     if (!this.identity) {
       this.srcImg = this.df;

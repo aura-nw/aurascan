@@ -111,7 +111,7 @@ export const MENU: MenuItem[] = [
         id: 2,
         label: 'MENUITEMS.CODE-LIST',
         icon: 'code-simple',
-        link: '/code-ids/list',
+        link: '/code-ids',
         name: MenuName.CodeList,
       },
     ],
@@ -162,7 +162,7 @@ export const MENU: MenuItem[] = [
         label: 'Export Data (.CSV)',
         link: '/export-csv',
         icon: 'export',
-      }
+      },
     ],
   },
 ];
@@ -257,7 +257,7 @@ export const MENU_MOB: MenuItem[] = [
         id: 2,
         label: 'MENUITEMS.CODE-LIST',
         icon: 'code-simple',
-        link: '/code-ids/list',
+        link: '/code-ids',
         name: MenuName.CodeList,
       },
       {

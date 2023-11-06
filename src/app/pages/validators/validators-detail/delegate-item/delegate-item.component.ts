@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NUMBER_CONVERT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
+import {
+  MAX_NUMBER_INPUT,
+  NUMBER_2_DIGIT,
+  NUMBER_CONVERT,
+  TIME_OUT_CALL_API,
+} from 'src/app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE } from 'src/app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -10,7 +15,6 @@ import { MappingErrorService } from 'src/app/core/services/mapping-error.service
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-delegate-item',
@@ -37,13 +41,14 @@ export class DelegateItemComponent implements OnInit {
   totalDelegator = 0;
   dialogOpen = false;
   isValidatorJail = false;
+  maxNumberInput = MAX_NUMBER_INPUT;
+  number2Digit = NUMBER_2_DIGIT;
 
-  chainInfo = this.environmentService.configValue.chain_info;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  chainInfo = this.environmentService.chainInfo;
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    public globals: Globals,
     public commonService: CommonService,
     private walletService: WalletService,
     private modalService: NgbModal,

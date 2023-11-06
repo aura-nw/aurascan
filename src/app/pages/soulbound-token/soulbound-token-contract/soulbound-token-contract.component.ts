@@ -1,19 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { ActivatedRoute } from '@angular/router';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { SB_TYPE, SOUL_BOUND_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-soulbound-token-contract',
@@ -45,14 +45,14 @@ export class SoulboundTokenContractComponent implements OnInit {
   selectedType = '';
   lstTypeSB = SOUL_BOUND_TYPE;
   sbType = SB_TYPE;
+  errTxt: string;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     public dialog: MatDialog,
     private soulboundService: SoulboundService,
     private walletService: WalletService,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -106,7 +106,7 @@ export class SoulboundTokenContractComponent implements OnInit {
     this.textSearch = this.searchValue = this.searchValue.trim();
     if (this.pageChange) {
       this.pageChange?.selectPage(0);
-    } 
+    }
     this.getListToken();
   }
 
@@ -126,11 +126,23 @@ export class SoulboundTokenContractComponent implements OnInit {
       payload['keyword'] = addressNameTag;
     }
 
-    this.soulboundService.getSBContractDetail(payload).subscribe((res) => {
-      this.dataSource.data = res.data;
-      this.pageData.length = res.meta.count;
+    this.soulboundService.getSBContractDetail(payload).subscribe({
+      next: (res) => {
+        this.dataSource.data = res.data;
+        this.pageData.length = res.meta.count;
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+        }
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
-    this.loading = false;
   }
 
   openDialog(): void {

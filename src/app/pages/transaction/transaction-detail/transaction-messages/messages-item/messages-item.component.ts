@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { NUMBER_2_DIGIT } from 'src/app/core/constants/common.constant';
 import { pipeTypeData } from 'src/app/core/constants/transaction.enum';
-import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-messages-item',
@@ -17,8 +17,9 @@ export class MessagesItemComponent implements OnInit {
   @Input() pipeType: string = '';
 
   pipeTypeData = pipeTypeData;
+  number2Digit = NUMBER_2_DIGIT;
 
-  constructor(public global: Globals, public router: Router) {}
+  constructor(public router: Router) {}
 
   ngOnInit(): void {}
 

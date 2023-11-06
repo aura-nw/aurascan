@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, Input, OnChanges } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ACCOUNT_WALLET_COLOR } from 'src/app/core/constants/account.constant';
@@ -11,7 +11,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { IAccountDetail } from 'src/app/core/models/account.model';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { Globals } from 'src/app/global/global';
-import { ChartOptions, chartCustomOptions } from '../chart-options';
+import { chartCustomOptions, ChartOptions } from '../chart-options';
 
 @Component({
   selector: 'app-account-stake',
@@ -104,10 +104,10 @@ export class AccountStakeComponent implements OnChanges {
     pageSize: PAGE_EVENT.PAGE_SIZE,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-  timeStaking = `${this.environmentService.configValue.timeStaking}`;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  timeStaking = `${this.environmentService.stakingTime}`;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
     public global: Globals,
@@ -146,7 +146,7 @@ export class AccountStakeComponent implements OnChanges {
     }, 2000);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.currentAccountDetail) {
       this.stakeLoading = false;
       if (this.currentAccountDetail?.delegations) {

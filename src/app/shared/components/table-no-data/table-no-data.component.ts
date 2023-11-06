@@ -6,11 +6,13 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./table-no-data.component.scss'],
 })
 export class TableNoDataComponent implements OnInit {
-  @Input() textNull: string = 'NO DATA';
+  @Input() textNull: string;
   @Input() img: string = 'assets/images/icons/noValues.svg';
   @Input() class: string;
   @Input() classText: string = 'body-01';
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.textNull = this.textNull || 'NO DATA';
+  }
 }

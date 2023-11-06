@@ -7,7 +7,7 @@
         <div class="d-flex flex-lg-row align-items-center justify-content-end gap-2">
           <div
             class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100"
-            *ngIf="!breakpoint.value.matches">
+            *ngIf="!breakpoint.value.matches && !errTxt">
             <div class="body d-lg-flex d-none align-items-center justify-content-center mr-2 text--gray-1">Type</div>
             <div class="dropdown aura-dropdown">
               <button
@@ -36,7 +36,7 @@
               </ul>
             </div>
           </div>
-          <div class="position-relative ml-lg-4 w-lg-auto w-100">
+          <div class="position-relative ml-lg-4 w-lg-auto w-100" *ngIf="!errTxt">
             <form (ngSubmit)="searchToken()" class="aura-form single-input-field token-filter-form w-100" #searchForm>
               <div class="input-group">
                 <input
@@ -66,7 +66,7 @@
               </div>
             </form>
           </div>
-          <div class="ml-2" *ngIf="breakpoint.value.matches">
+          <div class="ml-2" *ngIf="breakpoint.value.matches && !errTxt">
             <div class="dropdown aura-dropdown">
               <button
                 class="button button-pill button--sm button-outline button-outline__in-card token-filter-none px-3"
@@ -181,9 +181,7 @@
                     <div
                       class="d-flex {{ element.isValueUp ? 'text--green-3' : 'text--red-3' }}"
                       *ngIf="element.change !== '-'; else defaultValues">
-                      <span
-                        >{{ element.isValueUp ? '↑' : '↓' }}{{ element.change | number : global.formatNumber2Decimal }}%
-                      </span>
+                      <span>{{ element.isValueUp ? '↑' : '↓' }}{{ element.change | formatDigit : 2 }}% </span>
                     </div>
                   </div>
                 </div>
@@ -220,7 +218,7 @@
                   <span class="text--gray-4 caption fw-normal">Value</span>
                   <span *ngIf="element.price > 0; else defaultValues">
                     <ng-container *ngIf="element.contract_address === '-'">
-                      ${{ element.price * element.balance | number : global.formatNumber2Decimal }}
+                      ${{ element.price * element.balance | formatDigit : 2 }}
                     </ng-container>
                     <div
                       *ngIf="element.contract_address !== '-'"
@@ -241,8 +239,8 @@
       </ng-container>
     </div>
     <ng-template #noValues>
-      <div class="card" *ngIf="!assetsLoading">
-        <app-table-no-data [textNull]="'No coins & tokens'"></app-table-no-data>
+      <div class="card mt-14" *ngIf="!assetsLoading">
+        <app-table-no-data [textNull]="errTxt || 'No coins & tokens'"></app-table-no-data>
       </div>
     </ng-template>
     <div *ngIf="assetsLoading" class="mt-14">

@@ -1,15 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
-import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { shortenAddress } from '../../../../core/utils/common/shorten';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-code-id-contracts-tab',
@@ -34,8 +34,14 @@ export class CodeIdContractsTabComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
+  isLoading = true;
+  errTxt: string;
 
-  constructor(private contractService: ContractService, private datePipe: DatePipe, public commonService: CommonService) {}
+  constructor(
+    private contractService: ContractService,
+    private datePipe: DatePipe,
+    public commonService: CommonService,
+  ) {}
 
   ngOnInit(): void {
     this.getListContractByCode();
@@ -63,22 +69,35 @@ export class CodeIdContractsTabComponent implements OnInit {
       codeId: this.codeId.toString(),
     };
 
-    this.contractService.getListContractByCode(payload).subscribe((res) => {
-      this.pageData.length = res?.smart_contract_aggregate?.aggregate?.count || 0;
-      if (res?.smart_contract?.length > 0) {
-        res?.smart_contract.forEach((item) => {
-          item.updated_at = this.datePipe.transform(item?.created_at, DATEFORMAT.DATETIME_UTC);
-          item.contract_address = item?.address;
-          item.tx_hash = item?.instantiate_hash;
-          item.creator_address = item?.creator;
-          item.verified_at = _.get(item, 'code.code_id_verifications[0].verified_at');
-          item.type = item.code?.type || '-';
-          if (item.type === ContractRegisterType.CW721 && item.smart_contracts?.name === TYPE_CW4973) {
-            item.type = ContractRegisterType.CW4973;
-          }
-        });
-        this.dataSource.data = res.smart_contract;
-      }
+    this.contractService.getListContractByCode(payload).subscribe({
+      next: (res) => {
+        this.pageData.length = res?.smart_contract_aggregate?.aggregate?.count || 0;
+        if (res?.smart_contract?.length > 0) {
+          res?.smart_contract.forEach((item) => {
+            item.updated_at = this.datePipe.transform(item?.created_at, DATEFORMAT.DATETIME_UTC);
+            item.contract_address = item?.address;
+            item.tx_hash = item?.instantiate_hash;
+            item.creator_address = item?.creator;
+            item.verified_at = _.get(item, 'code.code_id_verifications[0].verified_at');
+            item.type = item.code?.type || '-';
+            if (item.type === ContractRegisterType.CW721 && item.smart_contracts?.name === TYPE_CW4973) {
+              item.type = ContractRegisterType.CW4973;
+            }
+          });
+          this.dataSource.data = res.smart_contract;
+        }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 }

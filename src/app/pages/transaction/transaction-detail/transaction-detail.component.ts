@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CodeTransaction } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
@@ -20,6 +20,7 @@ export class TransactionDetailComponent implements OnInit {
   codeTransaction = CodeTransaction;
   isRawData = false;
   errorMessage = '';
+  errTxt = null;
   TAB = [
     {
       id: 0,
@@ -31,9 +32,9 @@ export class TransactionDetailComponent implements OnInit {
     },
   ];
 
-  chainId = this.environmentService.configValue.chainId;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  chainId = this.environmentService.chainId;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
   loading = true;
   seeLess = false;
   isDisplayMore = false;
@@ -62,8 +63,8 @@ export class TransactionDetailComponent implements OnInit {
         limit: 1,
         hash: this.txHash,
       };
-      this.transactionService.getListTxDetail(payload).subscribe(
-        (res) => {
+      this.transactionService.getListTxDetail(payload).subscribe({
+        next: (res) => {
           if (res?.transaction?.length > 0) {
             const txs = convertDataTransaction(res, this.coinInfo);
             this.transaction = txs[0];
@@ -100,11 +101,18 @@ export class TransactionDetailComponent implements OnInit {
             }, 10000);
           }
         },
-        () => {},
-        () => {
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loading = false;
         },
-      );
+        complete: () => {
+          this.loading = false;
+        },
+      });
     } else {
       this.loading = false;
     }

@@ -13,6 +13,7 @@ import {
   decodeData,
   displayTypeToolTip,
   convertSmallNumber,
+  formatDigit,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
 
@@ -30,7 +31,8 @@ import { JsonPipe } from './json.pipe';
     convertLogAmount,
     decodeData,
     displayTypeToolTip,
-    convertSmallNumber
+    convertSmallNumber,
+    formatDigit
   ],
   imports: [CommonModule],
   exports: [
@@ -46,7 +48,8 @@ import { JsonPipe } from './json.pipe';
     convertLogAmount,
     decodeData,
     displayTypeToolTip,
-    convertSmallNumber
+    convertSmallNumber,
+    formatDigit
   ],
 })
 export class CommonPipeModule {}

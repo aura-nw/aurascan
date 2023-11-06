@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -30,7 +30,10 @@ export class PopupShareComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.shareLink = this.router['location']._platformLocation.location.href || '';
+    this.shareLink =
+      this.router['location']?._platformLocation?.location?.href ||
+      this.router['location']?._locationStrategy?._platformLocation?._location?.href ||
+      '';
   }
 
   closeDialog(isConfirm = false) {

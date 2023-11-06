@@ -6,7 +6,7 @@ import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
 import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UserService extends CommonService {
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -41,7 +41,7 @@ export class UserService extends CommonService {
   }
 
   refreshToken(payload): Observable<any> {
-    this.apiUrl = this.apiUrl || this.environmentService.configValue.beUri;
+    this.apiUrl = this.apiUrl || this.environmentService.backend;
     return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
   }
 

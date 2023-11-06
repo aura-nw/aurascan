@@ -5,7 +5,7 @@
       <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
         <h2 class="mb-0 text--white h3-mob">Community Pool Spent Proposals</h2>
       </div>
-      <div class="card-body pt-0" *ngIf="length > 0; else noData">
+      <div class="card-body pt-0" *ngIf="length > 0 && !isLoading; else noData">
         <ng-container *ngIf="!breakpoint.value.matches">
           <table mat-table [dataSource]="dataSource" matSort class="table-reponsive aura-table proposal-table">
             <!-- ID Column -->
@@ -149,7 +149,8 @@
                     data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
                       ? '<span>' +
                         (data.voting_end_time | customDate : 'yyyy-MM-dd') +
-                        '</span>' + ' ' + 
+                        '</span>' +
+                        ' ' +
                         '<span>' +
                         (data.voting_end_time | customDate : 'HH:mm:ss') +
                         '</span>'
@@ -166,9 +167,12 @@
           </app-a-paginator>
         </div>
       </div>
+      <div class="my-10" *ngIf="isLoading">
+        <app-loading-sprint></app-loading-sprint>
+      </div>
     </div>
   </section>
 </ng-container>
 <ng-template #noData>
-  <app-table-no-data></app-table-no-data>
+  <app-table-no-data *ngIf="!isLoading" [textNull]="errTxt"></app-table-no-data>
 </ng-template>

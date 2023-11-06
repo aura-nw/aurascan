@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { CONTRACT_RESULT, TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -14,6 +14,8 @@ import { ContractService } from 'src/app/core/services/contract.service';
 export class CodeIdDetailComponent implements OnInit {
   codeId;
   tabIndex = 0;
+  isLoading = true;
+  errTxt: string;
   TAB = [
     {
       id: 0,
@@ -25,7 +27,6 @@ export class CodeIdDetailComponent implements OnInit {
     },
   ];
   codeIdDetail;
-  contractResult = CONTRACT_RESULT;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
   constructor(
@@ -50,19 +51,31 @@ export class CodeIdDetailComponent implements OnInit {
   }
 
   getCodeIdDetail() {
-    this.contractService.getCodeIDDetail(this.codeId).subscribe((res) => {
-      if (res.code?.length > 0) {
-        let data = res.code[0];
-        data.instantiates = data.smart_contracts_aggregate?.aggregate?.count || 0;
-        data.tx_hash = data.store_hash;
-        data.verified_at = _.get(data, 'code_id_verifications[0].verified_at');
-        data.contract_verification = _.get(data, 'code_id_verifications[0].verification_status');
-        if (data.type === ContractRegisterType.CW721 && data.smart_contracts[0]?.name === TYPE_CW4973) {
-          data.type = ContractRegisterType.CW4973;
+    this.contractService.getCodeIDDetail(this.codeId).subscribe({
+      next: (res) => {
+        if (res.code?.length > 0) {
+          let data = res.code[0];
+          data.instantiates = data.smart_contracts_aggregate?.aggregate?.count || 0;
+          data.tx_hash = data.store_hash;
+          data.verified_at = _.get(data, 'code_id_verifications[0].verified_at');
+          data.contract_verification = _.get(data, 'code_id_verifications[0].verification_status');
+          if (data.type === ContractRegisterType.CW721 && data.smart_contracts[0]?.name === TYPE_CW4973) {
+            data.type = ContractRegisterType.CW4973;
+          }
+          this.codeIdDetail = data;
         }
-
-        this.codeIdDetail = data;
-      }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 }

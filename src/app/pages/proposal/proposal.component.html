@@ -1,6 +1,12 @@
+<div *ngIf="!isLoading && !(proposalData?.length > 0)" class="m-auto mt-10">
+  <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+</div>
 <ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <section class="lasted-list" *ngIf="proposalData && proposalData?.length > 0">
     <app-pagetitle title="Votings"></app-pagetitle>
+    <div *ngIf="isLoading" class="m-auto mt-10">
+      <app-loading-sprint></app-loading-sprint>
+    </div>
     <div class="row row-eq-height mt-4 mt-md-6">
       <ng-container *ngIf="!breakpoint.value.matches">
         <div class="col-6 proposal-lasted" *ngFor="let lastedItem of proposalData; index as idx">
@@ -69,8 +75,7 @@
                   <ul>
                     <li class="primary aura-tooltip-contain" [style.width]="lastedItem.tally?.yes + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize
-                        [content]="'Yes ' + (lastedItem.tally?.yes | number : global.formatNumber2Decimal) + '%'">
+                      <app-tooltip-customize [content]="'Yes ' + (lastedItem.tally?.yes | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                     <li
@@ -78,8 +83,7 @@
                       *ngIf="lastedItem.tally?.no"
                       [style.width]="lastedItem.tally?.no + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize
-                        [content]="'No ' + (lastedItem.tally?.no | number : global.formatNumber2Decimal) + '%'">
+                      <app-tooltip-customize [content]="'No ' + (lastedItem.tally?.no | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                     <li
@@ -88,11 +92,7 @@
                       [style.width]="lastedItem.tally?.no_with_veto + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
                       <app-tooltip-customize
-                        [content]="
-                          'No with veto ' +
-                          (lastedItem.tally?.no_with_veto | number : global.formatNumber2Decimal) +
-                          '%'
-                        ">
+                        [content]="'No with veto ' + (lastedItem.tally?.no_with_veto | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                     <li
@@ -101,9 +101,7 @@
                       [style.width]="lastedItem.tally?.abstain + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
                       <app-tooltip-customize
-                        [content]="
-                          'Abstain ' + (lastedItem.tally?.abstain | number : global.formatNumber2Decimal) + '%'
-                        ">
+                        [content]="'Abstain ' + (lastedItem.tally?.abstain | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                   </ul>
@@ -134,7 +132,7 @@
                           lastedItem.tally?.no,
                           lastedItem.tally?.no_with_veto,
                           lastedItem.tally?.abstain
-                        ).value | number : global.formatNumber2Decimal
+                        ).value | formatDigit : 2
                       }}% </span
                     >&nbsp;
                   </div>
@@ -253,8 +251,7 @@
                     <ul class="mt-4 ul-mobile">
                       <li class="primary aura-tooltip-contain" [style.width]="lastedItem.tally?.yes + '%'">
                         <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize
-                          [content]="'Yes ' + lastedItem.tally?.yes | number : global.formatNumber2Decimal + '%'">
+                        <app-tooltip-customize [content]="'Yes ' + (lastedItem.tally?.yes | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                       <li
@@ -262,8 +259,7 @@
                         *ngIf="lastedItem.tally?.no"
                         [style.width]="lastedItem.tally?.no + '%'">
                         <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize
-                          [content]="'No ' + lastedItem.tally?.no | number : global.formatNumber2Decimal + '%'">
+                        <app-tooltip-customize [content]="'No ' + (lastedItem.tally?.no | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                       <li
@@ -272,10 +268,7 @@
                         [style.width]="lastedItem.tally?.no_with_veto + '%'">
                         <div class="aura-tooltip-object w-100"></div>
                         <app-tooltip-customize
-                          [content]="
-                            'No with veto ' + lastedItem.tally?.no_with_veto
-                              | number : global.formatNumber2Decimal + '%'
-                          ">
+                          [content]="'No with veto ' + (lastedItem.tally?.no_with_veto | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                       <li
@@ -284,9 +277,7 @@
                         [style.width]="lastedItem.tally.abstain + '%'">
                         <div class="aura-tooltip-object w-100"></div>
                         <app-tooltip-customize
-                          [content]="
-                            'Abstain ' + lastedItem.tally.abstain | number : global.formatNumber2Decimal + '%'
-                          ">
+                          [content]="'Abstain ' + (lastedItem.tally.abstain | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                     </ul>
@@ -317,7 +308,7 @@
                             lastedItem.tally?.no,
                             lastedItem.tally?.no_with_veto,
                             lastedItem.tally.abstain
-                          ).value | number : global.formatNumber2Decimal
+                          ).value | formatDigit : 2
                         }}%
                       </span>
                     </div>
@@ -486,9 +477,6 @@
             (pageChange)="getListProposal({ index: $event })"></app-a-paginator>
         </div>
       </div>
-    </div>
-    <div *ngIf="!(dataSource?.data?.length > 0)">
-      <app-table-no-data></app-table-no-data>
     </div>
   </section>
 </ng-container>
