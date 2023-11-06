@@ -27,9 +27,18 @@
                             width="20"
                             height="20" />
                           <div class="ml-3 d-flex transfer-token-info">
-                            <span *ngIf="data.cw20_contract.symbol" class="caption text-sm mb-1">{{
-                              data.cw20_contract.symbol | stringEllipsis : 20
-                            }}</span>
+                            <div class="aura-tooltip-contain">
+                              <span
+                                *ngIf="data.cw20_contract.symbol"
+                                class="caption text-sm mb-1 aura-tooltip-object"
+                                >{{ data.cw20_contract.symbol | stringEllipsis : 15 }}</span
+                              >
+                              <app-tooltip-customize
+                                [content]="data.cw20_contract.symbol"
+                                [className]="'tooltip--right'">
+                              </app-tooltip-customize>
+                            </div>
+
                             <span
                               *ngIf="data.cw20_contract.name && !breakpoint.value.matches"
                               class="body-02 d-xl-none"

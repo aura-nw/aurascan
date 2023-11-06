@@ -95,7 +95,7 @@ export class TokenTransferComponent implements OnInit {
               dataAmount = this.commonService.mappingNameIBC(amountTemp);
               cw20_contract['name'] = dataAmount['name'];
               cw20_contract['symbol'] = dataAmount['display'];
-              decimal = dataAmount['decimal'];
+              decimal = dataAmount['decimal'] || 6;
             }
             let amount = +amountTemp.match(/\d+/g)[0];
             coinTransfer.push({ amount, cw20_contract, from, to, decimal });
