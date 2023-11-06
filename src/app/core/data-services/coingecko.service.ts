@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
+import * as moment from 'moment';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { EnvironmentService } from './environment.service';
 
@@ -59,7 +61,6 @@ export class CoingeckoService {
       .pipe(
         map((res) => {
           const { prices } = res;
-          console.log(prices);
 
           if (prices) {
             const data = prices.map((data) => {
@@ -73,5 +74,25 @@ export class CoingeckoService {
           return { data: [] };
         }),
       );
+  }
+
+  getCoinById(id: string) {
+    return this.http.get<any>(`${this.coingecko.url}/coins/${id}`).pipe(
+      map((res) => {
+        const data = {
+          coinId: _.get(res, 'id'),
+          current_price: _.get(res, "market_data.current_price['usd']"),
+          market_cap: _.get(res, "market_data.market_cap['usd']"),
+          max_supply: _.get(res, 'market_data.max_supply'),
+          price_change_percentage_24h: _.get(res, 'market_data.price_change_percentage_24h'),
+          timestamp: moment(_.get(res, 'market_data.last_updated')).unix().toString(),
+          total_volume: _.get(res, "market_data.total_volume['usd']"),
+        };
+
+        return {
+          data,
+        };
+      }),
+    );
   }
 }

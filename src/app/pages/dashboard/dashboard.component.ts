@@ -111,7 +111,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public datepipe: DatePipe,
     private proposalService: ProposalService,
     private maskService: NgxMaskService,
-    private token: TokenService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
@@ -256,7 +255,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getMarketInfo() {
-    this.token.getTokenMarket().subscribe((res) => {
+    this.coingecko.getCoinById(this.tokenIdGetPrice.AURA).subscribe((res) => {
       const { data } = res;
       if (data) {
         this.tokenInfo = data;

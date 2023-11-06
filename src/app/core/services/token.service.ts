@@ -300,27 +300,27 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
   }
 
-  getTokenMarket(coinId = 'aura-network') {
-    return this.http.get<any>(`${this.apiUrl}/metrics/token-market?coinId=${coinId}`);
-  }
+  // getTokenMarket(coinId = 'aura-network') {
+  //   return this.http.get<any>(`${this.apiUrl}/metrics/token-market?coinId=${coinId}`);
+  // }
 
-  getTokenMetrics({
-    rangeType,
-    coinId,
-    min,
-    max,
-    step,
-  }: {
-    rangeType: RangeType;
-    coinId: string;
-    min: number;
-    max: number;
-    step: number;
-  }) {
-    return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
-      params: { rangeType, coinId, min, max, step },
-    });
-  }
+  // getTokenMetrics({
+  //   rangeType,
+  //   coinId,
+  //   min,
+  //   max,
+  //   step,
+  // }: {
+  //   rangeType: RangeType;
+  //   coinId: string;
+  //   min: number;
+  //   max: number;
+  //   step: number;
+  // }) {
+  //   return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
+  //     params: { rangeType, coinId, min, max, step },
+  //   });
+  // }
 
   getListAssetCommunityPool() {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
