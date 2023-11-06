@@ -85,6 +85,9 @@ export class ProposalComponent implements OnInit {
           this.proposalData = res.proposal;
           if (this.proposalData?.length > 0) {
             this.proposalData.forEach((pro, index) => {
+              if (!pro.title) {
+                pro.title = pro.content.title;
+              }
               if (pro?.tally) {
                 const { yes, no, no_with_veto, abstain } = pro?.tally;
                 let totalVote = +yes + +no + +no_with_veto + +abstain;
@@ -137,6 +140,10 @@ export class ProposalComponent implements OnInit {
           if (res?.proposal) {
             let tempData = res.proposal;
             tempData?.forEach((pro) => {
+              if (!pro.title) {
+                pro.title = pro.content.title;
+              }
+
               if (pro.total_deposit?.length > 0) {
                 pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0]?.amount);
               }
@@ -202,7 +209,7 @@ export class ProposalComponent implements OnInit {
 
   openVoteDialog(item: IProposal, index: number) {
     const id = item.proposal_id;
-    const title = item.content.title;
+    const title = item['title'] ? item['title'] : item.content.title;
     const expiredTime = +moment(item.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {

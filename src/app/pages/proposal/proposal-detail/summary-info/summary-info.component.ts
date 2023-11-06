@@ -42,8 +42,8 @@ export class SummaryInfoComponent implements OnInit {
   votingBarLoading = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   currentStatus: VOTING_STATUS | string = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
-  finalSubTitle: VOTING_SUBTITLE | string = VOTING_SUBTITLE.PASS;
-  currentSubTitle = '';
+  finalSubMessage: VOTING_SUBTITLE | string = VOTING_SUBTITLE.PASS;
+  currentSubMessage = '';
   isNotReached = true;
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
   timerGetUpTime: any;
@@ -171,27 +171,27 @@ export class SummaryInfoComponent implements OnInit {
             this.parsingProposalStatus(this.proposalDetail);
 
             if (this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_FAILED) {
-              this.finalSubTitle = VOTING_SUBTITLE.FAILED;
+              this.finalSubMessage = VOTING_SUBTITLE.FAILED;
             } else if (this.proposalDetail.pro_turnout >= this.proposalDetail.quorum) {
               if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
                 if (pro_votes_no_with_veto < pro_total_vote / 3) {
-                  this.finalSubTitle = VOTING_SUBTITLE.PASS;
+                  this.finalSubMessage = VOTING_SUBTITLE.PASS;
                 } else {
-                  this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
+                  this.finalSubMessage = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
                     formatNumber(this.proposalDetail.veto_threshold, 'en-GB', this.number2Digit).toString(),
                   );
                 }
               } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
-                this.finalSubTitle = VOTING_SUBTITLE.REJECT_2;
+                this.finalSubMessage = VOTING_SUBTITLE.REJECT_2;
               } else {
-                this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
+                this.finalSubMessage = VOTING_SUBTITLE.REJECT_1.toString().replace(
                   '{{proposalDetail.noWithVetoPercent}}',
                   formatNumber(this.proposalDetail.veto_threshold, 'en-GB', this.number2Digit).toString(),
                 );
               }
             } else {
-              this.finalSubTitle = VOTING_SUBTITLE.REJECT_3;
+              this.finalSubMessage = VOTING_SUBTITLE.REJECT_3;
             }
           } else {
             this.proposalDtl.emit(this.proposalDetail);
@@ -224,12 +224,22 @@ export class SummaryInfoComponent implements OnInit {
     let pro_votes_abstain = balanceOf(+data.tally.abstain);
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
     const dataDetail = this.proposalDetail || data;
+    let pro_title: string;
+    let pro_type: string;
+    if (data['content'].length > 0) {
+      pro_type = data.content[0]['@type']?.split('.').pop();
+      pro_title = data.title;
+    } else {
+      pro_type = data.content['@type']?.split('.').pop();
+      pro_title = data.content.title;
+    }
+
     return {
       ...dataDetail,
       count_vote: data.count_vote || dataDetail.count_vote,
       initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
       pro_total_deposits: balanceOf(_.get(data, 'total_deposit[0].amount') || 0),
-      pro_type: data?.content['@type']?.split('.').pop(),
+      pro_type,
       pro_votes_yes,
       pro_votes_no,
       pro_votes_no_with_veto,
@@ -255,7 +265,7 @@ export class SummaryInfoComponent implements OnInit {
         if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
-          this.currentSubTitle =
+          this.currentSubMessage =
             'This proposal may pass when the voting period is over because current quorum is more than ' +
             formatNumber(proposalDetail.quorum, 'en-GB', this.number2Digit)?.toString() +
             '% and there are more than ' +
@@ -263,14 +273,14 @@ export class SummaryInfoComponent implements OnInit {
             '% of Yes votes.';
         } else {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
-          this.currentSubTitle =
+          this.currentSubMessage =
             'The proportion of NoWithVeto votes is superior to ' +
             formatNumber(proposalDetail.veto_threshold, 'en-GB', this.number2Digit)?.toString() +
             '%';
         }
       } else {
         this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
-        this.currentSubTitle =
+        this.currentSubMessage =
           'The proportion of Yes votes is inferior to ' +
           formatNumber(this.proposalDetail.threshold, 'en-GB', this.number2Digit)?.toString() +
           '%';
@@ -279,7 +289,7 @@ export class SummaryInfoComponent implements OnInit {
       this.isNotReached = true;
       this.quorumStatus = VOTING_QUORUM.NOT_REACHED;
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
-      this.currentSubTitle =
+      this.currentSubMessage =
         'Current quorum is less than ' +
         formatNumber(this.proposalDetail.quorum, 'en-GB', this.number2Digit)?.toString() +
         '% and this proposal requires more participation';
@@ -326,7 +336,7 @@ export class SummaryInfoComponent implements OnInit {
 
   openVoteDialog(proposalDetail) {
     const id = proposalDetail.proposal_id;
-    const title = proposalDetail.content.title;
+    const title = proposalDetail['title'] ? proposalDetail['title'] : proposalDetail.content.title;
     const expiredTime = +moment(proposalDetail.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {
