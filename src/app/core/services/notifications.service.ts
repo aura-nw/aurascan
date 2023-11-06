@@ -40,8 +40,6 @@ export class NotificationsService {
     this.listen();
 
     this.notificationsSubject$.asObservable().subscribe((payload) => {
-      console.log('payload ne', payload);
-      
       if (!payload) return;
 
       // let notification = payload.notification;
@@ -63,17 +61,12 @@ export class NotificationsService {
     let messaging;
     try {
       messaging = getMessaging();
-      console.log(messaging);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
 
     await getToken(messaging, {
-      vapidKey: 'BC42DYfTLtjkG08kw3fBs3Phqb71WnSgDKQf7vQpCJjCq6ZVrdNvez8uzAvbEyWGV8bpNOGy6bw0wszo-Pkk-OI',
+      vapidKey: environment.firebaseConfig.vapidKey, // 'BC42DYfTLtjkG08kw3fBs3Phqb71WnSgDKQf7vQpCJjCq6ZVrdNvez8uzAvbEyWGV8bpNOGy6bw0wszo-Pkk-OI',
     })
       .then((currentToken) => {
-        console.log(currentToken);
-
         if (currentToken) {
           this.currentFcmToken = currentToken;
         } else {
@@ -105,11 +98,8 @@ export class NotificationsService {
       })
       .subscribe((res: any) => {
         console.log('res', res);
-        
         if (res) {
           this.userId = res.data.user_id;
-          console.log(this.userId);
-          
         }
       });
   }

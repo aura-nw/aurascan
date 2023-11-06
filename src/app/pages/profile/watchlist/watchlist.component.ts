@@ -70,7 +70,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
     const dataWatchList = localStorage.getItem('setAddressWatchList');
     if (dataWatchList && dataWatchList !== 'undefined') {
       const address = JSON.parse(dataWatchList);
-      // localStorage.removeItem('setAddressWatchList');
+      localStorage.removeItem('setAddressWatchList');
       setTimeout(() => {
         this.openPopup({ address: address });
       }, 500);
@@ -140,14 +140,12 @@ export class WatchListComponent implements OnInit, OnDestroy {
     );
   }
 
-  openPopup(data = null, isEditMode = false) {
+  openPopup(data = null) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'full-overlay-panel';
     dialogConfig.disableClose = true;
-    console.log(data);
     if (data) {
       dialogConfig.data = data;
-      dialogConfig.data['isEditMode'] = isEditMode;
     }
     dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: this.pageData?.length } };
     let dialogRef = this.dialog.open(PopupWatchlistComponent, dialogConfig);

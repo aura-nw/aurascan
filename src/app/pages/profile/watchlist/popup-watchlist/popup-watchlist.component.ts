@@ -37,9 +37,10 @@ export class PopupWatchlistComponent implements OnInit {
     tokenReceived: 'tokenReceived',
     nftSent: 'nftSent',
     nftReceived: 'nftReceived',
-    nativeCoinSent: 'nativeCoinSentBoolean',
-    nativeCoinReceived: 'nativeCoinReceivedBoolean',
+    nativeCoinSent: 'nativeCoinSent',
+    nativeCoinReceived: 'nativeCoinReceived',
   };
+  isTracking = false;
 
   listTracking = [
     {
@@ -71,7 +72,16 @@ export class PopupWatchlistComponent implements OnInit {
       value: ' Native Coin Received (Aura coin, ibc)',
     },
   ];
-  countCheck = 0;
+
+  settingObj = {
+    transactionExecuted: false,
+    tokenSent: false,
+    tokenReceived: false,
+    nftSent: false,
+    nftReceived: false,
+    nativeCoinSent: false,
+    nativeCoinReceived: false,
+  };
 
   quota = this.environmentService.chainConfig.quotaSetPrivateName;
 
@@ -88,12 +98,17 @@ export class PopupWatchlistComponent implements OnInit {
 
   ngOnInit(): void {
     this.formInit();
-    console.log('data ne', this.data);
-
     if (this.data?.address) {
-      // if (this.data.isEditMode) {
-      this.setDataFrom(this.data);
-      // }
+      if (this.data.id) {
+        this.getDetailWatchList(this.data.id);
+      } else {
+        this.setDataFrom(this.data);
+      }
+    }
+
+    if (!this.isEditMode) {
+      this.isTracking = true;
+      this.formValid = false;
     }
 
     // override cdk-overlay-container z-index
@@ -103,45 +118,18 @@ export class PopupWatchlistComponent implements OnInit {
     }
   }
 
-  updateFunc(e) {
-    const someCondition = true;
-    if (someCondition) {
-    }
-  }
-
   get getAddress() {
     return this.watchlistForm.get('address');
   }
 
   get getFavorite() {
-    return this.watchlistForm.get('isFavorite');
-  }
-
-  get getNotiMode() {
-    return this.watchlistForm.get('isNotiMode');
+    return this.watchlistForm.get('favorite');
   }
 
   formInit() {
     this.watchlistForm = this.fb.group({
       favorite: false,
       tracking: true,
-      settings: new FormGroup({
-        transactionExecuted: new FormControl(false),
-        tokenSent: new FormControl(false),
-        tokenReceived: new FormControl(false),
-        nftSent: new FormControl(false),
-        nftReceived: new FormControl(false),
-        nativeCoinSentBoolean: new FormControl(false),
-        nativeCoinReceivedBoolean: new FormControl(false),
-        nativeCoinSent: new FormGroup({
-          turnOn: new FormControl(false),
-          inactiveAutoRestake: new FormControl(false),
-        }),
-        nativeCoinReceived: new FormGroup({
-          turnOn: new FormControl(false),
-          inactiveAutoRestake: new FormControl(false),
-        }),
-      }),
       isAccount: [false, [Validators.required]],
       address: ['', [Validators.required]],
       note: ['', [Validators.maxLength(200)]],
@@ -149,40 +137,36 @@ export class PopupWatchlistComponent implements OnInit {
     });
   }
 
-  setDataFrom(data) {
+  setDataFrom(data, isEditMode = false) {
     this.isValidAddress = true;
-    this.isEditMode = data.isEditMode;
+    this.isEditMode = isEditMode;
     const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
 
     this.watchlistForm.controls['isAccount'].setValue(isAccount);
     this.isAccount = isAccount;
-    this.isContract = !this.isAccount;
-    this.watchlistForm.controls['favorite'].setValue(data.favorite || false);
-    this.watchlistForm.controls['tracking'].setValue(data.tracking || false);
+    this.isContract = this.isAccount !== undefined ? !this.isAccount : undefined;
+    this.watchlistForm.controls['favorite'].setValue(data.favorite);
+    this.isTracking = data.tracking;
     this.watchlistForm.controls['address'].setValue(data.address);
     this.watchlistForm.controls['note'].setValue(data.note);
     this.watchlistForm.controls['id'].setValue(data.id || '');
 
     //set data group tracking
     if (data.settings) {
-      this.watchlistForm.controls['settings'].controls['nftReceived'].setValue(data.settings.nftReceived);
-      this.watchlistForm.controls['settings'].controls['nftSent'].setValue(data.settings.nftSent);
-      this.watchlistForm.controls['settings'].controls['tokenReceived'].setValue(data.settings.tokenReceived);
-      this.watchlistForm.controls['settings'].controls['tokenSent'].setValue(data.settings.tokenSent);
-      this.watchlistForm.controls['settings'].controls['transactionExecuted'].setValue(
-        data.settings.transactionExecuted,
-      );
-      this.watchlistForm.controls['settings'].controls['nativeCoinSentBoolean'].setValue(
-        data.settings.nativeCoinSent.turnOn,
-      );
       this.reStakeSent = data.settings.nativeCoinSent.inactiveAutoRestake;
-      this.watchlistForm.controls['settings'].controls['nativeCoinReceivedBoolean'].setValue(
-        data.settings.nativeCoinReceived.turnOn,
-      );
       this.reStakeReceiver = data.settings.nativeCoinReceived.inactiveAutoRestake;
+
+      this.settingObj = data.settings;
+      this.settingObj.nativeCoinSent = data.settings.nativeCoinSent.turnOn;
+      this.settingObj.nativeCoinReceived = data.settings.nativeCoinReceived.turnOn;
     }
 
     this.checkNameTag();
+  }
+
+  changeTracking() {
+    this.isTracking = !this.isTracking;
+    this.checkFormValid();
   }
 
   closeDialog(status = null) {
@@ -196,58 +180,50 @@ export class PopupWatchlistComponent implements OnInit {
     if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
       this.isValidAddress =
         (isAddress(this.getAddress.value) && this.isAccount) || (isContract(this.getAddress.value) && !this.isAccount);
-    } else {
-      this.isValidAddress = false;
+    }
+
+    if (!this.isValidAddress) {
       return false;
     }
 
-    console.log('this.watchlistForm.value', this.watchlistForm.value);
     //check setting noti
-    if (this.countCheck === 0) {
-      return false;
-    }
+    try {
+      if (!JSON.stringify(this.settingObj)?.includes('true') && this.isTracking) {
+        return false;
+      }
+    } catch {}
+
     this.formValid = true;
     return true;
   }
 
   onSubmit() {
     this.isSubmit = true;
-    let payload = this.watchlistForm.value;
+    const { favorite, isAccount, address, name, note, id } = this.watchlistForm.value;
 
-    // let payload = {
-    //   address: 'aura16pvug5gs8enxmga4v3avpyk5t5s702vu3nzszp',
-    //   type: 'account',
-    //   favorite: true,
-    //   tracking: true,
-    //   note: 'string',
-    //   settings: {
-    //     transactionExecuted: true,
-    //     tokenSent: true,
-    //     tokenReceived: true,
-    //     nftSent: true,
-    //     nftReceived: true,
-    //     // nativeCoinSent: {
-    //     //   turnOn: true,
-    //     //   inactiveAutoRestake: true,
-    //     // },
-    //     // nativeCoinReceived: {
-    //     //   turnOn: true,
-    //     //   inactiveAutoRestake: true,
-    //     // },
-    //   },
-    // };
-    if (payload.settings.nativeCoinSentBoolean) {
-      payload['settings']['nativeCoinSent']['turnOn'] = true;
-      payload['settings']['nativeCoinSent']['inactiveAutoRestake'] = this.reStakeSent;
-    }
-    if (payload.settings.nativeCoinReceivedBoolean) {
-      payload['settings']['nativeCoinReceived']['turnOn'] = true;
-      payload['settings']['nativeCoinReceived']['inactiveAutoRestake'] = this.reStakeReceiver;
-    }
-    delete payload.settings['nativeCoinSentBoolean'];
-    delete payload.settings['nativeCoinReceivedBoolean'];
-    payload['type'] = payload.isAccount ? 'account' : 'contract';
-    console.log(payload);
+    let payload = {
+      address: address,
+      type: isAccount ? 'account' : 'contract',
+      favorite: favorite,
+      tracking: this.isTracking,
+      note: note,
+      id: id,
+      settings: {
+        transactionExecuted: this.settingObj.transactionExecuted,
+        tokenSent: this.settingObj.tokenSent,
+        tokenReceived: this.settingObj.tokenReceived,
+        nftSent: this.settingObj.nftSent,
+        nftReceived: this.settingObj.nftReceived,
+        nativeCoinSent: {
+          turnOn: this.settingObj.nativeCoinSent,
+          inactiveAutoRestake: this.reStakeSent,
+        },
+        nativeCoinReceived: {
+          turnOn: this.settingObj.nativeCoinReceived,
+          inactiveAutoRestake: this.reStakeReceiver,
+        },
+      },
+    };
 
     if (this.isEditMode) {
       this.editAddressInWatchlist(payload);
@@ -301,10 +277,6 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm.value.isFavorite = !this.watchlistForm.value.isFavorite;
   }
 
-  changeNotiMode() {
-    this.watchlistForm.value.isNotiMode = !this.watchlistForm.value.isNotiMode;
-  }
-
   changeType(type) {
     this.isAccount = type;
     this.isContract = !this.isAccount;
@@ -332,21 +304,18 @@ export class PopupWatchlistComponent implements OnInit {
 
   getDetailWatchList(id = null) {
     this.watchListService.getDetailWatchList(id).subscribe((res) => {
-      this.setDataFrom(res?.data[0] || this.data);
+      this.setDataFrom(res, true);
     });
   }
 
   onChangeTnxFilterType(event, type: any) {
-    // if(event.target.checked){
-    //   this.countCheck++;
-    // } else
-    this.countCheck = event.target.checked ? this.countCheck + 1 : this.countCheck - 1;
-    console.log(this.countCheck);
-
-    if (type === 'nativeCoinSentBoolean' && !event.target.checked) {
+    if (type === 'nativeCoinSent' && !event.target.checked) {
       this.reStakeSent = false;
-    } else if (type === 'nativeCoinReceivedBoolean' && !event.target.checked) {
+    } else if (type === 'nativeCoinReceived' && !event.target.checked) {
       this.reStakeReceiver = false;
     }
+    this.settingObj[type] = event.target.checked;
+
+    this.checkFormValid();
   }
 }
