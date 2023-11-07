@@ -2,12 +2,16 @@ import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnIni
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { UserService } from 'src/app/core/services/user.service';
-import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from '../../../../../../core/constants/common.constant';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
+import {
+  LENGTH_CHARACTER,
+  NULL_ADDRESS,
+  PAGE_EVENT,
+  TIMEOUT_ERROR,
+} from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import {
   CodeTransaction,
@@ -17,7 +21,7 @@ import {
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { convertDataAccountTransaction, getTypeTx, Globals } from '../../../../../../global/global';
+import { getTypeTx, Globals } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -86,7 +90,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private userService: UserService,
     private tokenService: TokenService,
     private router: Router,
   ) {}
@@ -212,23 +215,37 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.userService.getListFTByAddress(payload).subscribe({
+    this.tokenService.getCW20Transfer(payload).subscribe({
       next: (res) => {
         if (res) {
           this.nextKey = null;
-          if (res.transaction.length >= 100) {
-            this.nextKey = res?.transaction[res.transaction.length - 1].height;
+          if (res.cw20_activity.length >= 100) {
+            this.nextKey = res?.cw20_activity[res.cw20_activity.length - 1].height;
             this.hasMore.emit(true);
           } else {
             this.hasMore.emit(false);
           }
-
-          let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.FtsTxs, false, null);
-          txs.forEach((element, index) => {
-            element['arrEvent'] = element.arrEvent?.filter((k) => k.contractAddress === this.contractAddress);
-            element['from_address'] = element.arrEvent[0]?.fromAddress;
-            element['to_address'] = element.arrEvent[0]?.toAddress;
-            element['type'] = element?.action;
+          let txs = res.cw20_activity;
+          txs.forEach((element) => {
+            element['tx_hash'] = element.tx.hash;
+            element['from_address'] = element.from || NULL_ADDRESS;
+            element['to_address'] = element.to || NULL_ADDRESS;
+            element['timestamp'] = element.tx.timestamp;
+            element['status'] =
+              element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+            element['type'] = getTypeTx(element.tx)?.action;
+            element['decimal'] = element.cw20_contract.decimal;
+            let msg = element?.tx.transaction_messages[0]?.content?.msg;
+            if (typeof msg === 'string') {
+              try {
+                msg = JSON.parse(msg);
+                if (msg[Object.keys(msg)[0]].amount) {
+                  element['amount'] = msg[Object.keys(msg)[0]].amount;
+                } else {
+                  element['amount'] = msg[Object.keys(msg)[0]].assets[0].amount;
+                }
+              } catch (e) {}
+            }
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
