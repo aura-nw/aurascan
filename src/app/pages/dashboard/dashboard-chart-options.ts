@@ -99,17 +99,17 @@ export const CHART_CONFIG: {
   };
 } = {
   ['24h']: {
-    initRange: 242,
+    initRange: 24, // 1 day
     type: RangeType.minute,
-    value: 1,
-    unit: 'd',
+    value: 24 * 2, // 2 day
+    unit: 'h',
     step: 9,
   },
   ['7d']: {
-    initRange: 168,
+    initRange: 168, // 1 weeks
     type: RangeType.hour,
-    value: 21,
-    unit: 'd',
+    value: 168 * 2, // 2 weeks
+    unit: 'h',
     step: 1,
   },
   ['30d']: {
