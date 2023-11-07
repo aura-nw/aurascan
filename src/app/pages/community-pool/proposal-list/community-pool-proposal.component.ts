@@ -5,7 +5,7 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { PROPOSAL_STATUS } from 'src/app/core/constants/proposal.constant';
+import { PROPOSAL_STATUS, PROPOSAL_TYPE_COMMUNITY_POOL } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -98,12 +98,23 @@ export class CommunityPoolProposalComponent implements OnInit {
     let payload = {
       limit: this.pageData.pageSize,
       offset: (index - 1) * this.pageData.pageSize,
-      type: '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal',
+      type: [PROPOSAL_TYPE_COMMUNITY_POOL.V1BETA1, PROPOSAL_TYPE_COMMUNITY_POOL.V1],
     };
     this.proposalService.getProposalData(payload).subscribe({
       next: (res) => {
         if (res?.proposal) {
-          this.dataSource = new MatTableDataSource(res.proposal);
+          let tempData = res.proposal;
+          tempData?.forEach((pro) => {
+            if (pro.content?.length > 0) {
+              pro.recipient = pro.content[0].recipient;
+              pro.amount = pro.content[0].amount;
+            } else {
+              pro.title = pro.content.title;
+              pro.recipient = pro.content.recipient;
+              pro.amount = pro.content.amount;
+            }
+          });
+          this.dataSource = new MatTableDataSource(tempData);
         }
         this.length = res.proposal_aggregate.aggregate.count;
       },
