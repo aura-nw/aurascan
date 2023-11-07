@@ -105,7 +105,7 @@ export class CommunityPoolProposalComponent implements OnInit {
         if (res?.proposal) {
           let tempData = res.proposal;
           tempData?.forEach((pro) => {
-            if (pro.content.length > 0) {
+            if (pro.content?.length > 0) {
               pro.recipient = pro.content[0].recipient;
               pro.amount = pro.content[0].amount;
             } else {

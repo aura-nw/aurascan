@@ -148,7 +148,6 @@ export class ProposalComponent implements OnInit {
                 pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0]?.amount);
               }
             });
-
             this.dataSource.data = tempData;
           }
           this.length = res.proposal_aggregate.aggregate.count;
