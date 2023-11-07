@@ -38,25 +38,27 @@
                     </a>
                   </ng-container>
                   <ng-container *ngSwitchCase="'hash-url'">
-                    <ng-container *ngIf="template.isNameTag">
-                      <app-name-tag
-                        [value]="data[template.matColumnDef]"
-                        [url]="template?.isUrl"
-                        [iconContract]="data[template.matColumnDef]?.length > lengthAddress"
-                        [isLink]="data[template.matColumnDef] !== contractInfo?.contractsAddress"></app-name-tag>
-                    </ng-container>
-                    <ng-container *ngIf="!template.isNameTag">
-                      <a
-                        *ngIf="data[template.matColumnDef]"
-                        class="text--primary cursor-pointer hash-link"
-                        [routerLink]="[
-                          template?.isUrl,
-                          template?.paramField ? data[template?.paramField] : data[template.matColumnDef]
-                        ]"
-                        >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</a
-                      >
-                    </ng-container>
                     <div *ngIf="!data[template.matColumnDef]">-</div>
+                    <ng-container *ngIf="data[template.matColumnDef]">
+                      <ng-container *ngIf="template.isNameTag">
+                        <app-name-tag
+                          [value]="data[template.matColumnDef]"
+                          [url]="template?.isUrl"
+                          [iconContract]="data[template.matColumnDef]?.length > lengthAddress"
+                          [isLink]="data[template.matColumnDef] !== contractInfo?.contractsAddress"></app-name-tag>
+                      </ng-container>
+                      <ng-container *ngIf="!template.isNameTag">
+                        <a
+                          *ngIf="data[template.matColumnDef]"
+                          class="text--primary cursor-pointer hash-link"
+                          [routerLink]="[
+                            template?.isUrl,
+                            template?.paramField ? data[template?.paramField] : data[template.matColumnDef]
+                          ]"
+                          >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</a
+                        >
+                      </ng-container>
+                    </ng-container>
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
                     <div
