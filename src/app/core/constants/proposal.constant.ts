@@ -109,3 +109,8 @@ export enum PROPOSAL_TABLE_MODE {
   DEPOSITORS = 'DEPOSITORS',
   VALIDATORS_VOTES = 'VALIDATORS_VOTES',
 }
+
+export enum PROPOSAL_TYPE_COMMUNITY_POOL {
+  V1BETA1 = '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal',
+  V1 = '/cosmos.distribution.v1beta1.MsgCommunityPoolSpend',
+}
