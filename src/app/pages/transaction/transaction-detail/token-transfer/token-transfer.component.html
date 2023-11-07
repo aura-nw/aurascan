@@ -163,98 +163,96 @@
                     *matCellDef="let data"
                     class="py-1"
                     [class.hide-td]="i === 2 && breakpoint.value.matches">
-                    <div>
-                      <ng-container [ngSwitch]="template.matColumnDef">
-                        <div *ngSwitchCase="'nft'">
-                          <div class="d-flex transfer-token-info">
-                            <div *ngIf="!breakpoint.value.matches" class="mb-1">
-                              <span class="caption fw-normal text--gray-4 mr-1">Token ID</span>
-                              <span>{{ data?.cw721_token?.token_id }}</span>
+                    <ng-container [ngSwitch]="template.matColumnDef">
+                      <ng-container *ngSwitchCase="'nft'">
+                        <div class="d-flex transfer-token-info">
+                          <div *ngIf="!breakpoint.value.matches" class="mb-1 d-flex align-items-end">
+                            <span class="caption fw-normal text--gray-4 mr-1 text-nowrap">Token ID</span>
+                            <span class="line-claim w-100">{{ data?.cw721_token?.token_id }}</span>
+                          </div>
+                          <div *ngIf="breakpoint.value.matches" class="d-flex mb-1">
+                            <span class="line-claim w-100">{{ data?.cw721_token?.token_id }}</span>
+                            <div
+                              *ngIf="breakpoint.value.matches"
+                              class="ml-1"
+                              (click)="
+                                navigateToNFTDetail(
+                                  data?.cw721_contract?.smart_contract?.address,
+                                  data?.cw721_token?.token_id
+                                )
+                              ">
+                              <i class="ph-arrow-square-out-fill text--gray-1 body-01 h5-mob mb-0"></i>
                             </div>
-                            <div *ngIf="breakpoint.value.matches" class="d-flex mb-1">
-                              <span>{{ data?.cw721_token?.token_id }}</span>
-                              <div
-                                *ngIf="breakpoint.value.matches"
-                                class="ml-1"
-                                (click)="
-                                  navigateToNFTDetail(
-                                    data?.cw721_contract?.smart_contract?.address,
-                                    data?.cw721_token?.token_id
-                                  )
-                                ">
-                                <i class="ph-arrow-square-out-fill text--gray-1 body-01 h5-mob mb-0"></i>
-                              </div>
-                            </div>
-                            <div *ngIf="!breakpoint.value.matches">
-                              <app-name-tag
-                                [maxCharacter]="30"
-                                [isLink]="true"
-                                [value]="data?.cw721_contract?.smart_contract?.address"
-                                [iconContract]="true"
-                                [url]="'contracts'"></app-name-tag>
-                            </div>
-                            <div *ngIf="breakpoint.value.matches">
-                              <app-name-tag
-                                [maxCharacter]="14"
-                                [isLink]="true"
-                                [value]="data?.cw721_contract?.smart_contract?.address"
-                                [iconContract]="true"
-                                [url]="'contracts'"></app-name-tag>
-                            </div>
+                          </div>
+                          <div *ngIf="!breakpoint.value.matches">
+                            <app-name-tag
+                              [maxCharacter]="30"
+                              [isLink]="true"
+                              [value]="data?.cw721_contract?.smart_contract?.address"
+                              [iconContract]="true"
+                              [url]="'contracts'"></app-name-tag>
+                          </div>
+                          <div *ngIf="breakpoint.value.matches">
+                            <app-name-tag
+                              [maxCharacter]="14"
+                              [isLink]="true"
+                              [value]="data?.cw721_contract?.smart_contract?.address"
+                              [iconContract]="true"
+                              [url]="'contracts'"></app-name-tag>
                           </div>
                         </div>
-
-                        <div *ngSwitchCase="'transfer'">
-                          <div class="mb-1 d-flex align-items-center">
-                            <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                              >From</span
-                            >
-                            <app-name-tag
-                              *ngIf="!breakpoint.value.matches"
-                              [isLink]="data.from ? true : false"
-                              [maxCharacter]="30"
-                              [value]="data.from || nullAddress"
-                              [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
-                            <app-name-tag
-                              *ngIf="breakpoint.value.matches"
-                              [isLink]="data.from ? true : false"
-                              [maxCharacter]="14"
-                              [value]="data.from || nullAddress"
-                              [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
-                          </div>
-                          <div class="d-flex align-items-center">
-                            <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                              >To</span
-                            >
-                            <app-name-tag
-                              *ngIf="!breakpoint.value.matches"
-                              [isLink]="data.to ? true : false"
-                              [maxCharacter]="30"
-                              [value]="data.to || nullAddress"
-                              [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
-                            <app-name-tag
-                              *ngIf="breakpoint.value.matches"
-                              [isLink]="data.to ? true : false"
-                              [maxCharacter]="14"
-                              [value]="data.to || nullAddress"
-                              [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
-                          </div>
-                        </div>
-                        <ng-container *ngIf="!breakpoint.value.matches">
-                          <div *ngSwitchCase="'action'" class="text-end">
-                            <button
-                              class="button button--sm button-outline button-outline__in-card button-pill"
-                              [routerLink]="[
-                                '/tokens/token-nft/',
-                                data?.cw721_contract?.smart_contract?.address,
-                                encodeData(data?.cw721_token?.token_id)
-                              ]">
-                              <span>NFT</span>
-                            </button>
-                          </div>
-                        </ng-container>
                       </ng-container>
-                    </div>
+
+                      <div *ngSwitchCase="'transfer'">
+                        <div class="mb-1 d-flex align-items-center line-claim">
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
+                            >From</span
+                          >
+                          <app-name-tag
+                            *ngIf="!breakpoint.value.matches"
+                            [isLink]="data.from ? true : false"
+                            [maxCharacter]="30"
+                            [value]="data.from || nullAddress"
+                            [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
+                          <app-name-tag
+                            *ngIf="breakpoint.value.matches"
+                            [isLink]="data.from ? true : false"
+                            [maxCharacter]="14"
+                            [value]="data.from || nullAddress"
+                            [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
+                        </div>
+                        <div class="d-flex align-items-center line-claim">
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
+                            >To</span
+                          >
+                          <app-name-tag
+                            *ngIf="!breakpoint.value.matches"
+                            [isLink]="data.to ? true : false"
+                            [maxCharacter]="20"
+                            [value]="data.to || nullAddress"
+                            [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
+                          <app-name-tag
+                            *ngIf="breakpoint.value.matches"
+                            [isLink]="data.to ? true : false"
+                            [maxCharacter]="14"
+                            [value]="data.to || nullAddress"
+                            [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="!breakpoint.value.matches">
+                        <div *ngSwitchCase="'action'" class="text-end">
+                          <button
+                            class="button button--sm button-outline button-outline__in-card button-pill"
+                            [routerLink]="[
+                              '/tokens/token-nft/',
+                              data?.cw721_contract?.smart_contract?.address,
+                              encodeData(data?.cw721_token?.token_id)
+                            ]">
+                            <span>NFT</span>
+                          </button>
+                        </div>
+                      </ng-container>
+                    </ng-container>
                   </td>
                 </ng-container>
               </ng-container>

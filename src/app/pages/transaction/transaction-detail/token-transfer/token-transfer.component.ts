@@ -121,7 +121,8 @@ export class TokenTransferComponent implements OnInit {
   }
 
   navigateToNFTDetail(address: string, tokenId: number): void {
-    this.router.navigate([`/tokens/token-nft/${address}/${tokenId}`]);
+    let enCode = this.encodeData(tokenId);
+    this.router.navigate([`/tokens/token-nft/${address}/${enCode}`]);
   }
 
   isContractAddress(address) {
