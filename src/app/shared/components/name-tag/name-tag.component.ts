@@ -53,7 +53,7 @@ export class NameTagComponent implements OnInit {
 
   displayContent(value) {
     let result = value;
-    if (!this.commonService.checkPublic(value)) {
+    if (this.commonService.checkPublic(value)) {
       result += '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag, false);
     }
     if (this.commonService.checkPrivate(value)) {
