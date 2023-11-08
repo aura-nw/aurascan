@@ -1,0 +1,67 @@
+.box-notification {
+  .button-notify {
+    background: rgba(36, 38, 46, 1);
+    vertical-align: middle;
+    &:hover {
+      background: var(--aura-gray-7);
+    }
+  }
+  .notify-dropdown-menu {
+    width: 404px;
+    left: -360px !important;
+    padding: 0 0 32px 0;
+    background-color: var(--aura-gray-9);
+    @media (max-width: 414px) {
+      width: 100vw;
+      height: 100vh;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      margin-top: 0 !important;
+      border-radius: 0;
+      .content-notify {
+        max-height: 80vh !important;
+      }
+    }
+    .box-title {
+      padding: 32px 20px 0px;
+    }
+    .button-change-tab {
+      height: 34px;
+      padding: 0px 16px;
+      background: none;
+      color: var(--aura-white);
+      font-size: 14px;
+      font-weight: 600;
+      &.active {
+        border-bottom: 2px solid var(--aura-white);
+      }
+    }
+    .content-notify {
+      background: var(--aura-gray-8);
+      max-height: 50vh;
+      overflow-x: auto;
+      .item {
+        display: flex;
+        align-items: flex-start;
+        padding: 16px 20px;
+        color: var(--aura-gray-2);
+        line-height: 18px;
+        font-size: 1.4rem;
+        img {
+          width: 30px;
+          height: 30px;
+        }
+        &:hover {
+          background-color: var(--aura-gray-9);
+        }
+      }
+      .box-no-noti {
+        padding: 32px;
+        text-align: center;
+        color: var(--aura-white);
+        font-size: 1.4rem;
+      }
+    }
+  }
+}

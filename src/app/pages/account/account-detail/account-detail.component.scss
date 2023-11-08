@@ -22,6 +22,11 @@ section.account-detail {
       width: fit-content;
     }
   }
+  .btn-watch-list {
+    ::ng-deep .custom-position {
+      transform: translate(-27%, 4px) !important;
+    }
+  }
 }
 
 .button {
@@ -43,7 +48,6 @@ section.account-detail {
 }
 
 @media (max-width: 991.98px) {
-
   .box-account {
     padding: var(--spacer-4) !important;
   }
