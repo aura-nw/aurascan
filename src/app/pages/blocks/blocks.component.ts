@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { getInfo } from 'src/app/core/utils/common/info-common';
-import { Globals, convertDataBlock } from 'src/app/global/global';
+import { convertDataBlock } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -26,7 +25,7 @@ export class BlocksComponent implements OnInit {
   loading = true;
   errTxt: string;
 
-  constructor(private blockService: BlockService, public commonService: CommonService, private globals: Globals) {}
+  constructor(private blockService: BlockService, public commonService: CommonService) {}
 
   ngOnInit(): void {
     this.getList();
@@ -54,12 +53,6 @@ export class BlocksComponent implements OnInit {
       complete: () => {
         this.loading = false;
       },
-    });
-  }
-
-  getInfoCommon(): void {
-    this.commonService.status().subscribe((res) => {
-      getInfo(this.globals, res);
     });
   }
 }

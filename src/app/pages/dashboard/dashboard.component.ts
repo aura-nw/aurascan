@@ -462,6 +462,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
 
           this.voting_Period_arr.forEach((pro, index) => {
+            if (!pro['title']) {
+              pro['title'] = pro.content.title;
+            }
+
             if (pro?.tally) {
               const { yes, no, no_with_veto, abstain } = pro?.tally;
               let totalVote = +yes + +no + +no_with_veto + +abstain;

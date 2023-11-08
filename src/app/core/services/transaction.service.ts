@@ -132,7 +132,7 @@ export class TransactionService extends CommonService {
           heightLT: payload.heightLT,
           indexGT: null,
           indexLT: null,
-          height: null,
+          height: payload.height,
         },
         operationName: 'queryListTopTransaction',
       })
