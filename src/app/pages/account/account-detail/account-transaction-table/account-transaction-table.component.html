@@ -612,9 +612,10 @@
 </ng-container>
 <ng-template #noValues>
   <div class="noData">
-    <app-table-no-data *ngIf="!transactionLoading && !isSearch"></app-table-no-data>
+    <app-table-no-data *ngIf="!transactionLoading && !isSearch && !errTxt"></app-table-no-data>
+    <app-table-no-data *ngIf="errTxt" [textNull]="errTxt"></app-table-no-data>
     <app-table-no-data
-      *ngIf="!transactionLoading && isSearch"
+      *ngIf="!transactionLoading && isSearch && !errTxt"
       textNull="No data with this type of message"></app-table-no-data>
   </div>
 </ng-template>
