@@ -1,19 +1,19 @@
 <div class="d-flex justify-content-between mt-4 mt-lg-0">
-  <div class="txt-title">Private name tag</div>
+  <div class="txt-title">My watchlist</div>
   <button
-    *ngIf="!errTxt"
     (click)="openPopup()"
     class="button button--xlg button--ssm-mob button-pill button-primary button-flat"
     type="button">
-    <span class="body-01 caption-mob fw-normal">Create</span>
+    <span class="body-01 caption-mob fw-normal">Add</span>
   </button>
 </div>
+
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
-<div class="mt-4" *ngIf="!isLoading">
-  <div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt">
-    <div class="text--gray-11">Total {{ pageData?.length }}/{{ quota }} addresses tagged</div>
+<div class="mt-4 box-watch-list" *ngIf="!isLoading">
+  <div class="d-lg-flex align-items-center justify-content-between">
+    <div class="text--gray-11">Total {{ pageData?.length }}/{{ quota }} addresses added.</div>
     <div class="filter-group d-flex align-items-center flex-nowrap mt-2 mt-lg-0">
-      <form class="aura-form single-input-field search-form private-search-form">
+      <form class="aura-form single-input-field search-form watchlist-search-form">
         <div class="input-group px-6">
           <input
             type="text"
@@ -41,7 +41,7 @@
   </div>
 
   <div class="overflow-scroll-x mt-4" *ngIf="pageData?.length > 0 && !isLoading; else noValues">
-    <table mat-table [dataSource]="dataSource" class="aura-table private-name-table d-none d-lg-block">
+    <table mat-table [dataSource]="dataSource" class="aura-table watchlist-table d-none d-lg-block">
       <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
           <th mat-header-cell *matHeaderCellDef>
@@ -60,7 +60,7 @@
                 <div *ngSwitchCase="'favorite'" class="d-flex ml-lg-3 ml-2">
                   <i
                     class="ph ph-push-pin body-01 cursor-pointer"
-                    *ngIf="!data.isFavorite"
+                    *ngIf="!data.favorite"
                     (click)="updateFavorite(data)"></i>
                   <img
                     [src]="'assets/icons/icons-svg/white/push-pin.svg' | imageS3"
@@ -69,7 +69,7 @@
                     height="16"
                     class="cursor-pointer"
                     (click)="updateFavorite(data)"
-                    *ngIf="data.isFavorite" />
+                    *ngIf="data.favorite" />
                 </div>
                 <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
                   <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
@@ -79,7 +79,7 @@
                     <div
                       class="text--gray-5 line-claim"
                       [class.aura-tooltip-object]="data.note"
-                      style="max-width: 200px; width: fit-content">
+                      style="max-width: 160px; width: fit-content">
                       {{ data.note || 'Note:-' }}
                     </div>
                     <app-tooltip-customize
@@ -92,13 +92,46 @@
                 <div *ngSwitchCase="'type'" class="text-capitalize">
                   {{ data[template.matColumnDef] }}
                 </div>
-                <div *ngSwitchCase="'name_tag'" class="profile-private-name-tag pe-auto">
-                  <div>{{ data.nameTag | cutStringPipe : 25 }}</div>
+                <div
+                  *ngSwitchCase="'public_name_tag'"
+                  class="pe-auto aura-tooltip-contain"
+                  [ngClass]="commonService.checkPublic(data.address) ? 'box-name-tag' : ''">
+                  <div class="aura-tooltip-object">
+                    {{
+                      commonService.checkPublic(data.address)
+                        ? (commonService.setNameTag(data.address, null, false) | cutStringPipe : 10)
+                        : '-'
+                    }}
+                  </div>
+
+                  <app-tooltip-customize
+                    *ngIf="!commonService.checkDisplayTooltip(data.address)"
+                    [content]="commonService.setNameTag(data.address, null, false)"></app-tooltip-customize>
                 </div>
-                <div *ngSwitchCase="'createdAt'">
-                  {{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}
+                <div
+                  *ngSwitchCase="'private_name_tag'"
+                  class="pe-auto aura-tooltip-contain"
+                  [ngClass]="commonService.checkPrivate(data.address) ? 'private-name-tag' : ''">
+                  <div class="aura-tooltip-object">
+                    {{
+                      commonService.checkPrivate(data.address)
+                        ? (commonService.setNameTag(data.address) | cutStringPipe : 12)
+                        : '-'
+                    }}
+                  </div>
+
+                  <app-tooltip-customize
+                    *ngIf="!commonService.checkDisplayTooltip(data.address)"
+                    [content]="commonService.setNameTag(data.address)"></app-tooltip-customize>
                 </div>
-                <div *ngSwitchCase="'updatedAt'">
+                <div *ngSwitchCase="'group'" class="">
+                  <div class="d-flex align-items-center">
+                    <i class="ph ph-bell-simple body-01" *ngIf="data.tracking"></i>
+                    <i class="ph ph-bell-simple-slash body-01" *ngIf="!data.tracking"></i>
+                    <span class="ml-1">{{ data.groupTracking }}/{{ totalGroupTracking }}</span>
+                  </div>
+                </div>
+                <div *ngSwitchCase="'updated_at'">
                   {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                 </div>
                 <div *ngSwitchCase="'action'" class="text-end">
@@ -108,8 +141,8 @@
                       (click)="openPopup(data)"></i>
                     <app-tooltip-customize [content]="'Edit'"> </app-tooltip-customize>
                   </div>
-                  <div class="aura-tooltip-contain ml-6">
-                    <i class="ph ph-x body-01 cursor-pointer aura-tooltip-object" (click)="openPopupDelete(data)"></i>
+                  <div class="aura-tooltip-contain ml-4">
+                    <i class="ph ph-x body-01 cursor-pointer aura-tooltip-object" (click)="openPopupRemove(data)"></i>
                     <app-tooltip-customize [content]="'Remove'"> </app-tooltip-customize>
                   </div>
                 </div>
@@ -121,7 +154,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <div class="d-lg-none">
+    <div class="d-lg-none mobile">
       <div *ngFor="let data of dataSourceMobile" class="card-name-tag">
         <div class="d-flex align-items-center justify-content-between">
           <div class="card__title">
@@ -133,10 +166,10 @@
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-end">
-            <div class="mr-3 d-flex align-items-center justify-content-center">
+            <div class="mr-6 d-flex align-items-center justify-content-center">
               <i
                 class="ph ph-push-pin body-01 cursor-pointer text--white"
-                *ngIf="!data.isFavorite"
+                *ngIf="!data.favorite"
                 (click)="updateFavorite(data)"></i>
               <img
                 [src]="'assets/icons/icons-svg/white/push-pin.svg' | imageS3"
@@ -145,7 +178,11 @@
                 height="16"
                 class="cursor-pointer"
                 (click)="updateFavorite(data)"
-                *ngIf="data.isFavorite" />
+                *ngIf="data.favorite" />
+            </div>
+            <div class="mr-3 d-flex align-items-center justify-content-center text--white">
+              <i class="ph ph-bell-simple body-01" *ngIf="data.tracking"></i>
+              <i class="ph ph-bell-simple-slash body-01" *ngIf="!data.tracking"></i>
             </div>
             <div class="dropdown aura-dropdown">
               <button class="button px-2" id="delegateAction2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -162,7 +199,7 @@
                 </li>
                 <li
                   class="dropdown-item cursor-pointer d-flex align-items-center px-2 action-mob"
-                  (click)="openPopupDelete(data)">
+                  (click)="openPopupRemove(data)">
                   <i class="ph ph-x h3 cursor-pointer aura-tooltip-object mr-2"></i>
                   <span class="body-02">Remove</span>
                 </li>
@@ -171,28 +208,47 @@
           </div>
         </div>
         <div class="divider divider-horizontal my-2"></div>
-        <div class="card__content">
+        <div class="card__content text--white">
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Type</div>
-            <div class="text--white text-capitalize">{{ data.type }}</div>
+            <div class="text-capitalize">{{ data.type }}</div>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <div class="caption fw-normal text--gray-4 label__content">Public name tag</div>
+            <div class="line-claim" [ngClass]="commonService.checkPublic(data.address) ? 'box-name-tag' : ''">
+              {{
+                commonService.checkPublic(data.address)
+                  ? (commonService.setNameTag(data.address, null, false) | cutStringPipe : 18)
+                  : '-'
+              }}
+            </div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Private name tag</div>
-            <div class="text--white line-claim">{{ data.nameTag }}</div>
+            <div class="line-claim" [ngClass]="commonService.checkPrivate(data.address) ? 'private-name-tag' : ''">
+              {{
+                commonService.checkPrivate(data.address)
+                  ? (commonService.setNameTag(data.address) | cutStringPipe : 22)
+                  : '-'
+              }}
+            </div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Added time</div>
-            <div class="text--white">{{ data.createdAt | customDate : 'yyyy-MM-dd' }}</div>
+            <div>{{ data.created_at | customDate : 'yyyy-MM-dd' }}</div>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <div class="caption fw-normal text--gray-4 label__content">Group tracking</div>
+            <div>{{ data.groupTracking }}/{{ totalGroupTracking }}</div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Updated time</div>
-            <div class="text--white">{{ commonService.getDateValue(data.updatedAt)[0] }}</div>
+            <div>{{ commonService.getDateValue(data.updated_at)[0] }}</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
   <div class="d-flex justify-content-center justify-content-md-end">
     <app-paginator
       [length]="pageData.length"
@@ -204,7 +260,5 @@
 </div>
 
 <ng-template #noValues>
-  <ng-container *ngIf="!isLoading">
-    <app-table-no-data [textNull]="errTxt"></app-table-no-data>
-  </ng-container>
+  <app-table-no-data></app-table-no-data>
 </ng-template>
