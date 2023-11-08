@@ -248,10 +248,6 @@ export class AccountDetailComponent implements OnInit {
     }
   }
 
-  navigateWatchlist(): void {
-    this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
-  }
-
   checkWatchList() {
     // get watch list form local storage
     const lstWatchList = localStorage.getItem('lstWatchList');
@@ -265,7 +261,7 @@ export class AccountDetailComponent implements OnInit {
 
   handleWatchList() {
     if (this.isWatchList) {
-      this.navigateWatchlist();
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.editWatchList();
     }

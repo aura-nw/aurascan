@@ -26,15 +26,12 @@
         </button>
         <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
       </div>
-      <div class="aura-tooltip-contain">
-        <button
-          class="button aura-tooltip-object pl-0"
-          #tooltip
-          (click)="handleWatchList()"
-          [cdkCopyToClipboard]="currentAddress">
+      <div class="aura-tooltip-contain btn-watch-list">
+        <button class="button aura-tooltip-object pl-0" #tooltip (click)="handleWatchList()">
           <i class="ph ph-star body-01" [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
         </button>
         <app-tooltip-customize
+          class="custom-position"
           [content]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'">
         </app-tooltip-customize>
       </div>

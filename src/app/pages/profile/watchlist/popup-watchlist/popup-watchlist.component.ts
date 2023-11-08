@@ -199,11 +199,11 @@ export class PopupWatchlistComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { favorite, isAccount, address, name, note, id } = this.watchlistForm.value;
+    const { favorite, address, note, id } = this.watchlistForm.value;
 
     let payload = {
       address: address,
-      type: isAccount ? 'account' : 'contract',
+      type: isAddress(address) ? 'account' : 'contract',
       favorite: favorite,
       tracking: this.isTracking,
       note: note,

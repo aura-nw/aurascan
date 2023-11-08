@@ -29,26 +29,22 @@
   }
   th.mat-header-cell:nth-child(4),
   th.mat-header-cell:nth-child(5) {
-    width: 170px;
+    width: 180px;
   }
   th.mat-header-cell:nth-child(6) {
     width: 140px;
   }
   th.mat-header-cell:nth-child(7) {
-    width: 150px;
+    width: 140px;
   }
   th.mat-header-cell:nth-child(8) {
-    min-width: 90px;
+    min-width: 80px;
   }
   .box-name-tag {
     &:after {
       border-right: 15px solid var(--aura-gray-10) !important;
     }
   }
-}
-
-.txt-total-address {
-  color: #e6e7e8;
 }
 
 .box-watch-list {

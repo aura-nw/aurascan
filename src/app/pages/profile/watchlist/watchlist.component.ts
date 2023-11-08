@@ -102,7 +102,6 @@ export class WatchListComponent implements OnInit, OnDestroy {
   }
 
   getWatchlist() {
-    this.isLoading = true;
     this.textSearch = this.textSearch?.trim();
     const payload = {
       limit: 10,

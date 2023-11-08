@@ -392,3 +392,8 @@ input:-webkit-autofill:active {
 .message-custom {
   transform: translate(0, 8px) !important;
 }
+
+.highlight-noti {
+  font-weight: 600;
+  color: var(--aura-white);
+}
