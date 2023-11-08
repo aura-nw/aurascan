@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
+import { CHART_RANGE } from '../constants/common.constant';
 import { EnvironmentService } from './environment.service';
 
 @Injectable({ providedIn: 'root' })
@@ -11,6 +12,13 @@ export class CoingeckoService {
   coinIds = this.coingecko.ids;
 
   coinsMarket$ = new BehaviorSubject([]);
+
+  cacheChartData = {
+    [CHART_RANGE.H_24]: [],
+    [CHART_RANGE.D_7]: [],
+    [CHART_RANGE.D_30]: [],
+    [CHART_RANGE.MONTH_12]: [],
+  };
 
   constructor(private http: HttpClient, private env: EnvironmentService) {}
 
@@ -40,6 +48,41 @@ export class CoingeckoService {
         }),
       );
   }
+
+  getChartData(
+    id: string,
+    {
+      from,
+      to,
+    }: {
+      from: number;
+      to: number;
+    },
+    {
+      type,
+      isLoadMore,
+    }: {
+      type: string;
+      isLoadMore?: boolean;
+    },
+  ) {
+    const resData = this.cacheChartData[type];
+
+    if (resData?.length > 0 && !isLoadMore) {
+      return of({ data: resData });
+    }
+
+    return this.getCoinMarketChartById(id, { from, to }).pipe(
+      tap((res) => {
+        if (isLoadMore) {
+          this.cacheChartData[type] = [...res.data];
+        } else {
+          this.cacheChartData[type] = [...this.cacheChartData[type], ...res.data];
+        }
+      }),
+    );
+  }
+
   getCoinMarketChartById(
     id: string,
     {
@@ -50,6 +93,10 @@ export class CoingeckoService {
       to: number;
     },
   ) {
+    if (!id) {
+      return of({ data: [] });
+    }
+
     return this.http
       .get<any>(`${this.coingecko.url}/coins/${id}/market_chart/range`, {
         params: {
@@ -77,6 +124,9 @@ export class CoingeckoService {
   }
 
   getCoinById(id: string) {
+    if (!id) {
+      return of({ data: null });
+    }
     return this.http.get<any>(`${this.coingecko.url}/coins/${id}`).pipe(
       map((res) => {
         const data = {
