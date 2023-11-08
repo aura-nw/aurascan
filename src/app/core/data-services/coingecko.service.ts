@@ -93,6 +93,10 @@ export class CoingeckoService {
       to: number;
     },
   ) {
+    if (!id) {
+      return of({ data: [] });
+    }
+
     return this.http
       .get<any>(`${this.coingecko.url}/coins/${id}/market_chart/range`, {
         params: {
@@ -120,6 +124,9 @@ export class CoingeckoService {
   }
 
   getCoinById(id: string) {
+    if (!id) {
+      return of({ data: null });
+    }
     return this.http.get<any>(`${this.coingecko.url}/coins/${id}`).pipe(
       map((res) => {
         const data = {

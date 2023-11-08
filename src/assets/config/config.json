@@ -69,7 +69,7 @@
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": ["aura-network"]
+      "ids": []
     },
     "google": {
       "url": "apps.googleusercontent.com",

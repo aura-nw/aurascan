@@ -259,7 +259,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getMarketInfo() {
-    this.coingecko.getCoinById(this.tokenIdGetPrice.AURA).subscribe((res) => {
+    this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
       const { data } = res;
       if (data) {
         this.tokenInfo = data;
@@ -337,7 +337,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.coingecko
       .getChartData(
-        this.tokenIdGetPrice.AURA,
+        this.environmentService.coingecko.ids[0],
         {
           from,
           to,
