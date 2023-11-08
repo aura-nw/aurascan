@@ -162,10 +162,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
               .subtract(value, unit as any)
               .unix();
 
-            return this.coingecko.getCoinMarketChartById(this.tokenIdGetPrice.AURA, {
-              from,
-              to,
-            });
+            return this.coingecko.getChartData(
+              this.tokenIdGetPrice.AURA,
+              {
+                from,
+                to,
+              },
+              { type: this.chartRange, isLoadMore: true },
+            );
           }
           return of(null);
         }),
@@ -332,13 +336,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       .unix();
 
     this.coingecko
-      .getCoinMarketChartById(this.tokenIdGetPrice.AURA, {
-        from,
-        to,
-      })
+      .getChartData(
+        this.tokenIdGetPrice.AURA,
+        {
+          from,
+          to,
+        },
+        { type: this.chartRange },
+      )
       .subscribe((res) => {
-        //update data common
-        this.getInfoCommon();
         if (res?.data?.length > 0) {
           const { dataX, dataY } = this.parseDataFromApi(res.data);
 
