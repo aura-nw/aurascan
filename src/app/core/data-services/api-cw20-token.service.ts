@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { forkJoin, map } from 'rxjs';
+import { forkJoin, map, take } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { ApiAccountService } from './api-account.service';
 import { CoingeckoService } from './coingecko.service';
@@ -40,7 +40,7 @@ export class ApiCw20TokenService {
     return forkJoin([
       this.queryCw20TokenByOwner(address),
       this.apiAccount.getAccountByAddress(address, true),
-      this.coingecko.getCoinMarkets(),
+      this.coingecko.coinsMarket$,
     ]).pipe(
       map((data) => {
         const [cw20Tokens, account, coinsMarkets] = data;

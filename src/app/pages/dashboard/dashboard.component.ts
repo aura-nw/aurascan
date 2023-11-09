@@ -88,6 +88,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     price_change_percentage_24h: number;
     timestamp: string;
     total_volume: number;
+    symbol: string;
   };
 
   originalData = [];
@@ -356,12 +357,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.chartEvent();
         }
       });
-  }
-
-  getInfoCommon(): void {
-    this.commonService.status().subscribe((res) => {
-      getInfo(this.global, res);
-    });
   }
 
   initTooltip() {
