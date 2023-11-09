@@ -23,6 +23,9 @@ import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
 import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
+import { initializeApp } from 'firebase/app';
+import { environment } from 'src/environments/environment';
+initializeApp(environment.firebaseConfig);
 
 @NgModule({
   declarations: [AppComponent],

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileTab } from 'src/app/core/constants/profile.enum';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -20,16 +20,13 @@ export class ProfileComponent implements OnInit {
       key: ProfileTab.PrivateNameTag,
       value: 'Private name tag',
     },
-    // {
-    //   key: ProfileTab.WatchList,
-    //   value: 'Watchlist'
-    // }
+    {
+      key: ProfileTab.WatchList,
+      value: 'Watchlist',
+    },
   ];
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {}
+  constructor(private route: ActivatedRoute, private router: Router, private location: Location) {}
 
   ngOnInit(): void {
     // check exit email
@@ -43,9 +40,16 @@ export class ProfileComponent implements OnInit {
         this.currentTab = params.tab;
       }
     });
+
+    if (this.currentTab === this.profileTab.PrivateNameTag) {
+      this.activeTabID = 1;
+    } else if (this.currentTab === this.profileTab.WatchList) {
+      this.activeTabID = 2;
+    }
   }
 
   changeTab(tabId): void {
     this.currentTab = tabId;
+    this.location.replaceState('/profile?tab=' + this.currentTab);
   }
 }

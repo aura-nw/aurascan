@@ -2,11 +2,16 @@
   padding-bottom: 48px !important;
 }
 
+.box-contract-info {
+  ::ng-deep .custom-position {
+    transform: translate(-25%, 3px) !important;
+  }
+}
 
-.button__icon{
+.button__icon {
   @media (max-width: 991.99px) {
     width: 20px;
-  height: 20px;
+    height: 20px;
   }
   width: 15px;
   height: 15px;
