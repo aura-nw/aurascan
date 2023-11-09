@@ -1,22 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class BlockService extends CommonService {
-  apiUrl = `${this.environmentService.backend}`;
-
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
-  }
-
-  getBlockAndTxs(type: string): Observable<any> {
-    const date = new Date();
-    return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`);
   }
 
   getDataBlock(payload) {

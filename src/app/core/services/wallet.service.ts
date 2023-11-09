@@ -25,7 +25,6 @@ export type WalletKey = Partial<Key> | AccountResponse;
   providedIn: 'root',
 })
 export class WalletService implements OnDestroy {
-  apiUrl = `${this.environmentService.backend}`;
   chainId = this.environmentService.chainId;
   chainInfo = this.environmentService.chainInfo;
 
