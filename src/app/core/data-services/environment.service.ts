@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 
 export interface IConfiguration {
   environment: {
@@ -40,6 +42,10 @@ export interface IConfiguration {
     socket: string;
     ipfsDomain: string;
     googleClientId: string;
+    coingecko: {
+      url: string;
+      ids: string[];
+    };
     google: {
       url: string;
       clientId: string;
@@ -103,6 +109,11 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.horoscope');
   }
 
+  get graphql() {
+    const { graphql, url } = _.get(this.configValue, 'api.horoscope');
+    return url + graphql;
+  }
+
   get socketUrl() {
     return _.get(this.configValue, 'api.socket');
   }
@@ -115,14 +126,14 @@ export class EnvironmentService {
   get siteKeyCaptcha() {
     return _.get(this.configValue, 'api.google.siteKeyCaptcha');
   }
+
+  get coingecko() {
+    return _.get(this.configValue, 'api.coingecko');
+  }
   constructor(private http: HttpClient) {}
 
   loadConfig() {
-    return this.http.get<IConfiguration>(this.configUri);
-  }
-
-  async load(): Promise<void> {
-    return lastValueFrom(this.loadConfig())
+    return lastValueFrom(this.http.get<IConfiguration>(this.configUri))
       .then((config: any) => {
         const configuration: IConfiguration = config as IConfiguration;
 
@@ -136,5 +147,9 @@ export class EnvironmentService {
       .catch((err: any) => {
         console.error(err);
       });
+  }
+
+  async load(): Promise<void> {
+    await this.loadConfig();
   }
 }

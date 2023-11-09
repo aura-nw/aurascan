@@ -1,8 +1,8 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { from } from "rxjs";
-import { delay, mergeMap } from "rxjs/operators";
+import { from } from 'rxjs';
+import { delay, mergeMap } from 'rxjs/operators';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
 import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
@@ -20,10 +20,7 @@ export class MenuBottomBarComponent implements OnInit {
   currentAddress;
   @ViewChild('popover') public popover: NgbPopover;
 
-  constructor(
-    public router: Router,
-    private walletService: WalletService,
-  ) {}
+  constructor(public router: Router, private walletService: WalletService) {}
 
   ngOnInit(): void {
     for (let menu of this.menu) {
