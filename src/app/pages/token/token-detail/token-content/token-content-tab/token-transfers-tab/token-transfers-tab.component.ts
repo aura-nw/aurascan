@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
 import {
   LENGTH_CHARACTER,
   NULL_ADDRESS,
@@ -235,17 +234,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
             element['type'] = getTypeTx(element.tx)?.action;
             element['decimal'] = element.cw20_contract.decimal;
-            let msg = element?.tx.transaction_messages[0]?.content?.msg;
-            if (typeof msg === 'string') {
-              try {
-                msg = JSON.parse(msg);
-                if (msg[Object.keys(msg)[0]].amount) {
-                  element['amount'] = msg[Object.keys(msg)[0]].amount;
-                } else {
-                  element['amount'] = msg[Object.keys(msg)[0]].assets[0].amount;
-                }
-              } catch (e) {}
-            }
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
