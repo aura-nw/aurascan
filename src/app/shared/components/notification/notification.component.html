@@ -2,12 +2,15 @@
   <div class="dropdown aura-dropdown">
     <button
       class="button button--xlg button--sm-mob button-circle button-notify"
-      id="userMenu"
+      id="notiMenu"
+      #notiMenu
       data-bs-toggle="dropdown"
       (click)="showData()"
       aria-expanded="false">
-      <!-- <i class="ph ph-bell "></i> -->
-      <img [src]="'assets/icons/icons-svg/black/bell.svg' | imageS3" alt="" />
+      <div class="position-relative">
+        <img [src]="'assets/icons/icons-svg/black/bell.svg' | imageS3" alt="" />
+        <span class="unread-noti caption" *ngIf="this.countUnread > 0"> </span>
+      </div>
     </button>
     <ul
       class="dropdown-menu aura-dropdown-menu notify-dropdown-menu"
@@ -21,33 +24,41 @@
             <i class="ph ph-check h4 text--primary mr-1"></i>
             Mask all as read
           </div>
-          <i class="ph ph-x h2 cursor-pointer text--white"></i>
+          <i class="ph ph-x h2 cursor-pointer text--white d-lg-none" (click)="closeNotiMob()"></i>
         </div>
         <div class="d-flex mt-6">
           <button class="button-change-tab" (click)="isTabAll = true; filterListNoti()" [class.active]="isTabAll">
             <span>All</span>
           </button>
-          <button class="button-change-tab" (click)="isTabAll = false; filterListNoti(0)" [class.active]="!isTabAll">
-            <span>Un-read</span>
+          <button class="button-change-tab" (click)="isTabAll = false; filterListNoti()" [class.active]="!isTabAll">
+            <span>Un-read {{ this.countUnread > 0 ? '(' + this.countUnread + ')' : '' }}</span>
           </button>
         </div>
       </div>
 
-      <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
-      <div class="content-notify" *ngIf="!isLoading">
+      <div class="content-notify" id="scrollBox" (scroll)="onScroll($event)">
         <ng-container *ngIf="lstData?.length > 0; else noNoti">
           <ng-container *ngFor="let item of lstData">
             <div class="item cursor-pointer" (click)="readNoti(item)">
-              <!-- <img [src]="item.image'' | imageS3" alt="" /> -->
-              <i class="ph-coins text--white h3"></i>
-              <div class="ml-3" [innerHtml]="item.display"></div>
+              <div class="box-img">
+                <img [src]="item.image | imageS3" *ngIf="item.image" />
+                <i class="text--white icon-noti" [ngClass]="item.icon" *ngIf="!item.image"></i>
+              </div>
+              <div class="ml-3">
+                <div class="break-word" [innerHtml]="item.display"></div>
+                <div class="mt-2 d-flex align-items-center caption fw-normal">
+                  <i class="ph ph-clock mr-1"></i>
+                  {{ commonService.getDateValue(item.created_at)[0] }}
+                </div>
+              </div>
             </div>
           </ng-container>
         </ng-container>
       </div>
 
       <ng-template #noNoti>
-        <div class="box-no-noti">No notifications yet</div>
+        <div class="box-no-noti" *ngIf="!isLoading">No notifications yet</div>
+        <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
       </ng-template>
     </ul>
   </div>

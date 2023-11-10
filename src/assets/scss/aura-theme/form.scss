@@ -248,6 +248,16 @@
         }
       }
     }
+    &.check-box--disable {
+      & ~ label {
+        &::before {
+          background: url(../../images/icons/check-box-disable.svg) center no-repeat;
+        }
+        &::after {
+          background: url(../../images/icons/check-box-checked-disable.svg) center no-repeat;
+        }
+      }
+    }
   }
   .radio-box {
     opacity: 0;

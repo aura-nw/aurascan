@@ -55,7 +55,7 @@
       </div>
     </div>
     <div class="d-flex">
-      <!-- <app-notification></app-notification> -->
+      <app-notification *ngIf="userEmail"></app-notification>
       <app-authenticate-mail></app-authenticate-mail>
     </div>
   </div>

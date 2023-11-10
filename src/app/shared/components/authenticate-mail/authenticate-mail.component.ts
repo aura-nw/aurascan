@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
 
 @Component({
   selector: 'app-authenticate-mail',
@@ -33,6 +34,7 @@ export class AuthenticateMailComponent implements OnDestroy {
     private layout: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
+    private notificationsService: NotificationsService
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +58,8 @@ export class AuthenticateMailComponent implements OnDestroy {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('listNameTag');
+    localStorage.removeItem('lstWatchList');
+    this.notificationsService.currentFcmToken = null;
 
     // check is screen profile
     if (this.route.snapshot['_routerState']?.url === '/profile') {

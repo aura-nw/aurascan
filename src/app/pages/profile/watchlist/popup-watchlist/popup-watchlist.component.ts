@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
@@ -29,8 +29,8 @@ export class PopupWatchlistComponent implements OnInit {
   isValidAddress = true;
   isError = false;
   isEditMode = false;
-  reStakeSent = false;
-  reStakeReceiver = false;
+  reStakeSent = true;
+  reStakeReceiver = true;
   lstTrackingName = {
     transactionExecuted: 'transactionExecuted',
     tokenSent: 'tokenSent',
@@ -83,7 +83,7 @@ export class PopupWatchlistComponent implements OnInit {
     nativeCoinReceived: false,
   };
 
-  quota = this.environmentService.chainConfig.quotaSetPrivateName;
+  quota = this.environmentService.chainConfig.quotaSetWatchList;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -126,6 +126,10 @@ export class PopupWatchlistComponent implements OnInit {
     return this.watchlistForm.get('favorite');
   }
 
+  get getTracking() {
+    return this.watchlistForm.get('tracking');
+  }
+
   formInit() {
     this.watchlistForm = this.fb.group({
       favorite: false,
@@ -147,6 +151,7 @@ export class PopupWatchlistComponent implements OnInit {
     this.isContract = this.isAccount !== undefined ? !this.isAccount : undefined;
     this.watchlistForm.controls['favorite'].setValue(data.favorite);
     this.isTracking = data.tracking;
+    this.watchlistForm.controls['tracking'].setValue(data.tracking);
     this.watchlistForm.controls['address'].setValue(data.address);
     this.watchlistForm.controls['note'].setValue(data.note);
     this.watchlistForm.controls['id'].setValue(data.id || '');
@@ -175,7 +180,11 @@ export class PopupWatchlistComponent implements OnInit {
 
   checkFormValid(): boolean {
     this.formValid = false;
-    this.getAddress['value'] = this.getAddress?.value.trim();
+    this.getAddress.value = this.getAddress?.value.trim();
+
+    if (!this.getAddress.value) {
+      return false;
+    }
 
     if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
       this.isValidAddress =
@@ -235,7 +244,7 @@ export class PopupWatchlistComponent implements OnInit {
   addAddressToWatchlist(payload) {
     if (this.data.currentLength >= this.quota) {
       this.isError = true;
-      this.toastr.error('You have reached out of ' + this.quota + ' max limitation of private name tag');
+      this.toastr.error('You have reached out of ' + this.quota + ' max limitation of address');
       return;
     }
     this.watchListService.createWatchList(payload).subscribe({
@@ -274,7 +283,8 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   changeFavorite() {
-    this.watchlistForm.value.isFavorite = !this.watchlistForm.value.isFavorite;
+    this.watchlistForm.value.favorite = !this.watchlistForm.value.favorite;
+    this.checkFormValid();
   }
 
   changeType(type) {
@@ -309,10 +319,10 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   onChangeTnxFilterType(event, type: any) {
-    if (type === 'nativeCoinSent' && !event.target.checked) {
-      this.reStakeSent = false;
-    } else if (type === 'nativeCoinReceived' && !event.target.checked) {
-      this.reStakeReceiver = false;
+    if (type === 'nativeCoinSent' && event.target.checked) {
+      this.reStakeSent = true;
+    } else if (type === 'nativeCoinReceived' && event.target.checked) {
+      this.reStakeReceiver = true;
     }
     this.settingObj[type] = event.target.checked;
 

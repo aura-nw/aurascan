@@ -23,6 +23,8 @@ export interface IConfiguration {
     stakingTime: string;
     blockTime: number;
     quotaSetPrivateName: number;
+    quotaSetWatchList: number;
+    quotaNotification: number;
     coins: {
       name: string;
       display: string;

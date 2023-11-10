@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
 import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
@@ -18,11 +19,19 @@ export class MenuBottomBarComponent implements OnInit {
   menuLink = [];
   overlayPanel = false;
   currentAddress;
+  hiddenFooter = false;
   @ViewChild('popover') public popover: NgbPopover;
 
-  constructor(public router: Router, private walletService: WalletService) {}
+  constructor(
+    public router: Router,
+    private walletService: WalletService,
+    private notificationsService: NotificationsService,
+  ) {}
 
   ngOnInit(): void {
+    this.notificationsService.hiddenFooterSubject.subscribe((res) => {
+      this.hiddenFooter = res;
+    });
     for (let menu of this.menu) {
       if (!menu.subItems) {
         this.menuLink.push(menu.link);

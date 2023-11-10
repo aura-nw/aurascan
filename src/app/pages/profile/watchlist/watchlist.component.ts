@@ -54,7 +54,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
   totalGroupTracking = TOTAL_GROUP_TRACKING;
   isLoading = true;
 
-  quota = this.environmentService.chainConfig.quotaSetPrivateName;
+  quota = this.environmentService.chainConfig.quotaSetWatchList;
 
   constructor(
     public commonService: CommonService,

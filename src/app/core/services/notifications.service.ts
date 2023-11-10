@@ -19,6 +19,7 @@ export class NotificationsService {
 
   notificationsSubject$ = new Subject<any>();
   notificationStore$ = new BehaviorSubject<any[]>([]);
+  hiddenFooterSubject = new BehaviorSubject<boolean>(false);
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
@@ -84,13 +85,9 @@ export class NotificationsService {
       .then((currentToken) => {
         if (currentToken) {
           this.currentFcmToken = currentToken;
-        } else {
-          console.log('No registration token available. Request permission to generate one.');
         }
       })
-      .catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
-      });
+      .catch((err) => {});
   }
 
   private listen() {

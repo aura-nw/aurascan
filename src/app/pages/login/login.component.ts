@@ -143,12 +143,12 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
               localStorage.setItem('userEmail', JSON.stringify(res.email));
               localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
+              this.notificationsService.registerFcmToken();
               this.route.navigate(['/profile']);
 
               setTimeout(() => {
                 location.reload();
-                this.notificationsService.registerFcmToken();
-              }, 500);
+              }, 1000);
             }
           },
           error: (err) => {
@@ -247,12 +247,12 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
             localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
             localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
+            this.notificationsService.registerFcmToken();
             window.location.href = '/profile';
 
             setTimeout(() => {
               location.reload();
-              this.notificationsService.registerFcmToken();
-            }, 500);
+            }, 1000);
           },
           error: (err) => {
             this.addError(err?.error?.error?.details?.message);
