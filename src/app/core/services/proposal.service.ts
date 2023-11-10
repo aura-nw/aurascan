@@ -63,12 +63,12 @@ export class ProposalService extends CommonService {
     limit: number;
     offset?: number;
     proposalId?: number;
-    type?: string;
+    type?: string[];
   }) {
     const operationsDoc = `
-    query queryProposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $type: String = null, $n_status : String = "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT") {
+    query queryProposal($limit: Int = 10, $offset: Int = 0, $order: order_by = desc, $proposalId: Int = null, $type: [String!] = null, $n_status : String = "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT") {
       ${this.envDB} {
-        proposal(limit: $limit, offset: $offset, where: {proposal_id: {_eq: $proposalId}, type: {_eq: $type}, status: {_neq: $n_status}}, order_by: {proposal_id: $order}) {
+        proposal(limit: $limit, offset: $offset, where: {proposal_id: {_eq: $proposalId}, type: {_in: $type}, status: {_neq: $n_status}}, order_by: {proposal_id: $order}) {
           content
           deposit_end_time
           description
@@ -92,7 +92,7 @@ export class ProposalService extends CommonService {
           voting_end_time
           voting_start_time
         }
-        proposal_aggregate(where: {proposal_id: {_eq: $proposalId}, type: {_eq: $type}, status: {_neq: "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT"}}) {
+        proposal_aggregate(where: {proposal_id: {_eq: $proposalId}, type: {_in: $type}, status: {_neq: "PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT"}}) {
           aggregate {
             count
           }

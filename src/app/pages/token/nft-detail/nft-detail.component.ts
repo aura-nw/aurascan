@@ -9,7 +9,13 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { LENGTH_CHARACTER, MEDIA_TYPE, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import {
+  LENGTH_CHARACTER,
+  MEDIA_TYPE,
+  NULL_ADDRESS,
+  PAGE_EVENT,
+  TIMEOUT_ERROR,
+} from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
@@ -220,10 +226,22 @@ export class NFTDetailComponent implements OnInit {
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
             element['type'] = getTypeTx(element.tx)?.action;
-            if (element['type'] === 'burn') {
+            if (element['type'] === ModeExecuteTransaction.Burn || element['type'] === ModeExecuteTransaction.UnEquip) {
               element['to_address'] = NULL_ADDRESS;
+            } else if (
+              element['type'] === ModeExecuteTransaction.Approve ||
+              element['type'] === ModeExecuteTransaction.Revoke
+            ) {
+              let msg = element?.tx.transaction_messages[0]?.content?.msg;
+              if (typeof msg === 'string') {
+                try {
+                  msg = JSON.parse(msg);
+                } catch (e) {}
+              }
+              element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
             }
-            if (element.tx.transaction_messages[0].content?.funds.length > 0) {
+
+            if (element.tx.transaction_messages[0].content?.funds?.length > 0) {
               let dataDenom = this.commonService.mappingNameIBC(
                 element.tx.transaction_messages[0].content?.funds[0]?.denom,
               );

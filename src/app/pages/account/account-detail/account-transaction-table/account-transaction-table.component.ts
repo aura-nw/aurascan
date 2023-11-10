@@ -5,7 +5,7 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER } from 'src/app/core/constants/transaction.enum';
@@ -32,6 +32,7 @@ export class AccountTransactionTableComponent {
   @Output() lstType = new EventEmitter<any>();
 
   transactionLoading = false;
+  errTxt: string;
   currentAddress: string;
   templates: Array<TableTemplate>;
   tabsData = TabsAccountLink;
@@ -327,10 +328,6 @@ export class AccountTransactionTableComponent {
       default:
         break;
     }
-
-    setTimeout(() => {
-      this.transactionLoading = false;
-    }, 5000);
   }
 
   getListTypeFilter() {
@@ -351,7 +348,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -365,7 +367,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -379,7 +386,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -393,7 +405,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {

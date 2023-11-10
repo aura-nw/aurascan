@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between">
         <h2>
           <div class="text--gray-3">#{{ proposalId }}</div>
-          <div class="text--white">{{ proposalDetail.content.title }}</div>
+          <div class="text--white">{{ proposalDetail.title }}</div>
         </h2>
         <div class="card__status d-flex align-items-center flex-shrink-0">
           <div class="text--gray-5 mr-6 d-flex flex-column align-items-center" *ngIf="proposalVotes">
@@ -36,7 +36,7 @@
         <div>
           <div class="h3 mb-0">
             <span class="text--gray-3 mr-2">#{{ proposalId }}</span>
-            <span class="text--white line-claim-v line-claim-v2">{{ proposalDetail.content.title }}</span>
+            <span class="text--white line-claim-v line-claim-v2">{{ proposalDetail.title }}</span>
           </div>
         </div>
         <div class="ml-3 flex-shrink-0 text-end">
@@ -231,8 +231,12 @@
             </div>
           </div>
         </div>
-        <div class="mt-2 mb-3 body-03 text--gray-7" *ngIf="proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-          {{ finalSubTitle }}
+        <div
+          class="mt-2 mb-3 body-03 text--gray-7"
+          *ngIf="
+            proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD' && proposalStatus.key != 'PROPOSAL_STATUS_FAILED'
+          ">
+          {{ finalSubMessage }}
         </div>
         <div class="row justify-content-between align-items-center mb-3 body-03 h6-mob text--gray-1">
           <div class="col-auto col-md-2">Total:</div>
@@ -245,28 +249,23 @@
           <ul class="vote-bar-ul">
             <li class="bg--primary aura-tooltip-contain" [style.width]="proposalDetail.yesPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize
-                [content]="'Yes ' + (proposalDetail.yesPercent | formatDigit : 2) + '%'">
+              <app-tooltip-customize [content]="'Yes ' + (proposalDetail.yesPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--danger aura-tooltip-contain" [style.width]="proposalDetail.noPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize
-                [content]="'No ' + (proposalDetail.noPercent | formatDigit : 2) + '%'">
+              <app-tooltip-customize [content]="'No ' + (proposalDetail.noPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--info aura-tooltip-contain" [style.width]="proposalDetail.noWithVetoPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
               <app-tooltip-customize
-                [content]="
-                  'No with veto ' + (proposalDetail.noWithVetoPercent | formatDigit : 2) + '%'
-                ">
+                [content]="'No with veto ' + (proposalDetail.noWithVetoPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--secondary aura-tooltip-contain" [style.width]="proposalDetail.abstainPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize
-                [content]="'Abstain ' + (proposalDetail.abstainPercent | formatDigit : 2) + '%'">
+              <app-tooltip-customize [content]="'Abstain ' + (proposalDetail.abstainPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
           </ul>
@@ -334,9 +333,7 @@
             <li data-style="primary">
               <div class="item-box">
                 <span class="item item-label text--gray-1">Yes</span>
-                <span class="item item-percent">
-                  {{ this.proposalDetail.yesPercent | formatDigit : 2 }}%
-                </span>
+                <span class="item item-percent"> {{ this.proposalDetail.yesPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_yes || 0 | mask : 'separator.6' }}</span>
@@ -346,9 +343,7 @@
             <li data-style="danger">
               <div class="item-box">
                 <span class="item item-label text--gray-1">No</span>
-                <span class="item item-percent">
-                  {{ this.proposalDetail.noPercent | formatDigit : 2 }}%
-                </span>
+                <span class="item item-percent"> {{ this.proposalDetail.noPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_no || 0 | mask : 'separator.6' }}</span>
@@ -358,9 +353,7 @@
             <li data-style="info">
               <div class="item-box">
                 <span class="item item-label text--gray-1">NoWithVeto</span>
-                <span class="item item-percent">
-                  {{ this.proposalDetail.noWithVetoPercent | formatDigit : 2 }}%
-                </span>
+                <span class="item item-percent"> {{ this.proposalDetail.noWithVetoPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | mask : 'separator.6' }}</span>
@@ -370,9 +363,7 @@
             <li data-style="secondary">
               <div class="item-box">
                 <span class="item item-label text--gray-1">Abstain</span>
-                <span class="item item-percent">
-                  {{ this.proposalDetail.abstainPercent | formatDigit : 2 }}%
-                </span>
+                <span class="item item-percent"> {{ this.proposalDetail.abstainPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_abstain || 0 | mask : 'separator.6' }}</span>
@@ -394,7 +385,7 @@
           <div class="col-12 col-lg-6 pl-lg-8 mt-3 mt-lg-0">
             <app-current-status
               [proposalDetail]="proposalDetail"
-              [currentSubTitle]="currentSubTitle"
+              [currentSubTitle]="currentSubMessage"
               [currentStatus]="getCurrentStatus(currentStatus)">
             </app-current-status>
           </div>

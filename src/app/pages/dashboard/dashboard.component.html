@@ -275,7 +275,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <span class="body text-start line-claim">{{
-                      curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
+                      curr_voting_Period ? curr_voting_Period.title : voting_Period_arr[0].title
                     }}</span>
                   </button>
                   <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light py-2 px-2">
@@ -285,7 +285,7 @@
                           type="button"
                           class="button p-0 body-03 line-claim text--gray-light"
                           (click)="curr_voting_Period = item">
-                          {{ item.content.title }}
+                          {{ item.title }}
                         </button>
                       </li>
                     </ng-container>
@@ -513,3 +513,4 @@
     </div>
   </div>
 </section>
+

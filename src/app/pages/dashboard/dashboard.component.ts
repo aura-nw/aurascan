@@ -9,6 +9,7 @@ import { NgxMaskService } from 'ngx-mask';
 import { of, Subject, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
+import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
@@ -112,11 +113,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public datepipe: DatePipe,
     private proposalService: ProposalService,
     private maskService: NgxMaskService,
-    private token: TokenService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
+    private coingecko: CoingeckoService,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -154,24 +155,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           if (from <= 0 && !this.endData) {
             const { value, unit } = CHART_CONFIG[this.chartRange];
 
-            const max = moment(this.originalData[0].timestamp)
+            const to = moment(this.originalData[0].timestamp)
               .subtract(1, unit as any)
-              .valueOf();
+              .unix();
 
-            const min = moment(this.originalData[0].timestamp)
+            const from = moment(this.originalData[0].timestamp)
               .subtract(1, unit as any)
               .subtract(value, unit as any)
-              .valueOf();
+              .unix();
 
-            const payload = {
-              coinId: this.tokenIdGetPrice.AURA,
-              rangeType: CHART_CONFIG[this.chartRange].type,
-              min,
-              max,
-              step: CHART_CONFIG[this.chartRange].step,
-            };
-
-            return this.token.getTokenMetrics(payload);
+            return this.coingecko.getChartData(
+              this.tokenIdGetPrice.AURA,
+              {
+                from,
+                to,
+              },
+              { type: this.chartRange, isLoadMore: true },
+            );
           }
           return of(null);
         }),
@@ -243,6 +243,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         to: chartLength,
       });
     }
+    this.chart.applyOptions({
+      handleScroll: this.chartRange === CHART_RANGE.H_24 ? false : true,
+    });
 
     this.chart.priceScale('left').applyOptions({
       scaleMargins: {
@@ -261,7 +264,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getMarketInfo() {
-    this.token.getTokenMarket().subscribe((res) => {
+    this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
       const { data } = res;
       if (data) {
         this.tokenInfo = data;
@@ -340,32 +343,34 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chartRange = type;
 
     const { value, unit } = CHART_CONFIG[this.chartRange];
-    const max = moment().valueOf();
-    const min = moment()
+    const to = moment().unix();
+    const from = moment()
       .subtract(value, unit as any)
-      .valueOf();
-    const payload = {
-      coinId: this.tokenIdGetPrice.AURA,
-      rangeType: CHART_CONFIG[this.chartRange].type,
-      min,
-      max,
-      step: CHART_CONFIG[this.chartRange].step,
-    };
+      .unix();
 
-    this.token.getTokenMetrics(payload).subscribe((res) => {
-      //update data common
-      this.getInfoCommon();
-      if (res?.data?.length > 0) {
-        const { dataX, dataY } = this.parseDataFromApi(res.data);
+    this.coingecko
+      .getChartData(
+        this.environmentService.coingecko.ids[0],
+        {
+          from,
+          to,
+        },
+        { type: this.chartRange },
+      )
+      .subscribe((res) => {
+        if (res?.data?.length > 0) {
+          const { dataX, dataY } = this.parseDataFromApi(res.data);
 
-        this.originalData = [...this.originalData, ...res?.data];
-        if (this.originalData.length > 0) {
-          this.cacheData = this.originalData;
+          this.originalData = [...this.originalData, ...res?.data];
+          if (this.originalData.length > 0) {
+            this.cacheData = this.originalData;
+          }
+          this.drawChartFirstTime(dataX, dataY);
+          if (this.chartRange !== CHART_RANGE.H_24) {
+            this.chartEvent();
+          }
         }
-        this.drawChartFirstTime(dataX, dataY);
-        this.chartEvent();
-      }
-    });
+      });
   }
 
   getInfoCommon(): void {
@@ -373,27 +378,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       getInfo(this.global, res);
     });
   }
-
-  // exportChart() {
-  //   const exportData = this.originalData.map((item) => {
-  //     const dateF = this.datepipe.transform(new Date(item.timestamp), 'dd-MM-yyyy:HH-mm-ss');
-  //     return {
-  //       date: dateF,
-  //       value: this.isPrice ? item.current_price : item.total_volume,
-  //     };
-  //   });
-
-  //   exportChart(
-  //     [
-  //       {
-  //         table1: exportData,
-  //       },
-  //     ],
-  //     this.chartRange,
-  //     this.isPrice,
-  //     this.currDate,
-  //   );
-  // }
 
   initTooltip() {
     const container = document.getElementById('chart');
@@ -462,6 +446,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
 
           this.voting_Period_arr.forEach((pro, index) => {
+            if (!pro['title']) {
+              pro['title'] = pro.content.title;
+            }
+
             if (pro?.tally) {
               const { yes, no, no_with_veto, abstain } = pro?.tally;
               let totalVote = +yes + +no + +no_with_veto + +abstain;

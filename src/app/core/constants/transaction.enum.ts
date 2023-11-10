@@ -117,6 +117,8 @@ export enum ModeExecuteTransaction {
   AcceptOffer = 'accept_nft_offer',
   Send = 'send',
   ProvideLiquidity = 'provide_liquidity',
+  Approve = 'approve',
+  Revoke = 'revoke'
 }
 
 export enum pipeTypeData {

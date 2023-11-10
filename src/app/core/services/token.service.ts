@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
-import { RangeType } from '../models/common.model';
 import { CommonService } from './common.service';
-import * as _ from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -300,28 +300,6 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
   }
 
-  getTokenMarket(coinId = 'aura-network') {
-    return this.http.get<any>(`${this.apiUrl}/metrics/token-market?coinId=${coinId}`);
-  }
-
-  getTokenMetrics({
-    rangeType,
-    coinId,
-    min,
-    max,
-    step,
-  }: {
-    rangeType: RangeType;
-    coinId: string;
-    min: number;
-    max: number;
-    step: number;
-  }) {
-    return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
-      params: { rangeType, coinId, min, max, step },
-    });
-  }
-
   getListAssetCommunityPool() {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
   }
@@ -398,6 +376,74 @@ export class TokenService extends CommonService {
           txHash: payload.txHash,
         },
         operationName: queryName,
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getCW20Transfer(payload): Observable<any> {
+    const operationsDoc = `query queryListTxsCW20(
+      $receiver: String = null
+      $sender: String = null
+      $contractAddr: String = null
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $limit: Int = 100
+      $txHash: String = null
+      $actionIn: [String!] = null
+      $actionNotIn: [String!] = null) {
+      ${this.envDB} {
+        cw20_activity(
+          where: {
+            _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }]
+            cw20_contract: { smart_contract: { address: { _eq: $contractAddr } } }
+            action: { _in: $actionIn, _nin: $actionNotIn }
+            height: { _gt: $heightGT, _lt: $heightLT }
+            tx_hash: { _eq: $txHash }
+          }
+          order_by: { height: desc }
+          limit: $limit
+        ) {
+          action
+          amount
+          from
+          to
+          sender
+          cw20_contract {
+            smart_contract {
+              address
+            }
+            decimal
+            symbol
+          }
+          tx {
+            hash
+            height
+            timestamp
+            code
+            transaction_messages {
+              type
+              content
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          sender: payload.sender,
+          receiver: payload.receiver,
+          listTxMsgType: payload.listTxMsgType,
+          contractAddr: payload.contractAddr,
+          heightLT: payload.heightLT,
+          txHash: payload.txHash,
+          actionIn: CW20_TRACKING,
+          actionNotIn: null,
+        },
+        operationName: 'queryListTxsCW20',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

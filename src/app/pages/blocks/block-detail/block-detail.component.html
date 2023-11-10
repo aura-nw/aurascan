@@ -139,7 +139,7 @@
     <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
       <h2 class="card-header mb-0 text--white pb-0">Transactions</h2>
       <div class="card-body body">
-        <ng-container *ngIf="!loadingTxs && dataSource?.data?.length > 0; else noValues">
+        <ng-container *ngIf="!loadingTxs && dataSource?.data?.length > 0; else noValue">
           <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
             <table mat-table [dataSource]="dataSource" class="aura-table keep-header">
               <ng-container *ngFor="let template of templates; index as i">
@@ -249,15 +249,9 @@
                 { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
               ]"></app-card-mob-simple>
           </div>
-          <app-paginator
-            [length]="pageData.length"
-            [pageSize]="pageData.pageSize"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="handlePageEvent($event)">
-          </app-paginator>
         </ng-container>
-        <ng-template #noValues>
-          <app-table-no-data *ngIf="!loadingTxs" [textNull]="errTxtTx"></app-table-no-data>
+        <ng-template #noValue>
+          <app-table-no-data *ngIf="!loadingTxs" [textNull]="errTxtTxs"></app-table-no-data>
         </ng-template>
       </div>
     </div>
@@ -300,5 +294,5 @@
 
 <ng-template #noValues>
   <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-  <app-table-no-data *ngIf="!loading" [textNull]="errTxt || errTxtTx"></app-table-no-data>
+  <app-table-no-data *ngIf="!loading" [textNull]="errTxt || errTxtTxs"></app-table-no-data>
 </ng-template>

@@ -11,6 +11,7 @@ import { convertDataTransaction } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
 import { Location } from '@angular/common';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 @Component({
   selector: 'app-contract-content[contractsAddress]',
   templateUrl: './contract-content.component.html',
@@ -35,7 +36,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   limit = 25;
   contractTransaction = {};
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
-
+  errTxt: string;
   contractInfo = {
     contractsAddress: this.contractsAddress,
     count: 0,
@@ -118,8 +119,8 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         value: this.contractsAddress,
         key: '_contract_address',
       };
-      this.transactionService.getListTxCondition(payload).subscribe(
-        (res) => {
+      this.transactionService.getListTxCondition(payload).subscribe({
+        next: (res) => {
           const data = res;
           if (res) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
@@ -134,11 +135,18 @@ export class ContractContentComponent implements OnInit, OnDestroy {
             }
           }
         },
-        () => {},
-        () => {
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loadingContract = false;
         },
-      );
+        complete: () => {
+          this.loadingContract = false;
+        },
+      });
     } else {
       this.loadingContract = false;
     }
