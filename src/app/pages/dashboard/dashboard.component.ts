@@ -244,7 +244,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
     this.chart.applyOptions({
-      handleScroll: this.chartRange === CHART_RANGE.H_24,
+      handleScroll: this.chartRange === CHART_RANGE.H_24 ? false : true,
     });
 
     this.chart.priceScale('left').applyOptions({
