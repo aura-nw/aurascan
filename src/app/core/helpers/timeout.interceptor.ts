@@ -4,9 +4,7 @@ import { timeout } from 'rxjs/operators';
 
 export const DEFAULT_TIMEOUT = new InjectionToken<number>('defaultTimeout');
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class RequestTimeoutHttpInterceptor implements HttpInterceptor {
   constructor(@Inject(DEFAULT_TIMEOUT) protected defaultTimeout: number) {}
 

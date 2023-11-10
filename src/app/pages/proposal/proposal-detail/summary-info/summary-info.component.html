@@ -231,7 +231,11 @@
             </div>
           </div>
         </div>
-        <div class="mt-2 mb-3 body-03 text--gray-7" *ngIf="proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+        <div
+          class="mt-2 mb-3 body-03 text--gray-7"
+          *ngIf="
+            proposalStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD' && proposalStatus.key != 'PROPOSAL_STATUS_FAILED'
+          ">
           {{ finalSubMessage }}
         </div>
         <div class="row justify-content-between align-items-center mb-3 body-03 h6-mob text--gray-1">
