@@ -3,7 +3,17 @@
     background: rgba(36, 38, 46, 1);
     vertical-align: middle;
     &:hover {
-      background: var(--aura-gray-7);
+      background: var(--aura-gray-9);
+    }
+    .unread-noti {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(-24%, 36%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--aura-red-3);
     }
   }
   .notify-dropdown-menu {
@@ -48,12 +58,21 @@
         color: var(--aura-gray-2);
         line-height: 18px;
         font-size: 1.4rem;
-        img {
-          width: 30px;
-          height: 30px;
+        .box-img {
+          min-width: 40px;
+          text-align: center;
+          img {
+            max-width: 40px;
+            max-height: 40px;
+          }
         }
+
         &:hover {
           background-color: var(--aura-gray-9);
+        }
+        .icon-noti {
+          font-size: 2rem;
+          margin-top: 2px;
         }
       }
       .box-no-noti {

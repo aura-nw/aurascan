@@ -113,10 +113,10 @@ export class PopupNameTagComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { isFavorite, isAccount, address, name, note } = this.privateNameForm.value;
+    const { isFavorite, address, name, note } = this.privateNameForm.value;
     let payload = {
       isFavorite: isFavorite == 1,
-      type: isAccount ? this.nameTagType.Account : this.nameTagType.Contract,
+      type: isAddress(address) ? 'account' : 'contract',
       address: address,
       nameTag: name,
       note: note,

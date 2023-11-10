@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 
@@ -9,8 +10,11 @@ import { NotificationsService } from 'src/app/core/services/notifications.servic
   styleUrls: ['./notification.component.scss'],
 })
 export class NotificationComponent {
+  @ViewChild('notiMenu') notiMenu: ElementRef;
+
   isTabAll = true;
   lstData = [];
+  lstDataUnread = [];
   typeNoti = {
     Executed: 'Executed',
     TokenSent: 'Token Sent',
@@ -25,11 +29,43 @@ export class NotificationComponent {
   isLoading = true;
   loadNewNoti = false;
 
+  currentOffset = 0;
+  lengthQuery = 100;
+  clickNoti = false;
+  countAll = 0;
+  countUnread = 0;
+
+  quotaNotification = this.environmentService.chainConfig.quotaNotification;
+  dataWarning = {
+    linkWatchList: true,
+    image: 'assets/icons/icons-svg/color/noti-quota.svg',
+    display:
+      'You have reached out your daily quota limit of ' +
+      this.quotaNotification +
+      ' notifications per day. Kindly go to your watchlist to turn on the' +
+      ' notification mode and adjust your current configuration for your watchlist’s addresses and group of tracking activities to avoid over quota again”',
+  };
+
   constructor(
     private notificationsService: NotificationsService,
     private router: Router,
-    private commonService: CommonService,
+    public commonService: CommonService,
+    private environmentService: EnvironmentService,
   ) {}
+
+  onScroll(event): void {
+    const scrollItem = document.getElementById('scrollBox');
+    if (scrollItem.scrollTop + 600 >= scrollItem.scrollHeight) {
+      if (!this.isLoading && this.currentOffset < this.countAll) {
+        this.currentOffset = this.currentOffset + this.lengthQuery;
+        this.getListNoti(false);
+      }
+
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 5000);
+    }
+  }
 
   ngOnInit(): void {
     // check exit email
@@ -38,15 +74,17 @@ export class NotificationComponent {
       return;
     }
 
-    // if (this.isInit) {
-    //   this.notificationsService.init();
-    //   this.isInit = false;
-    // }
+    if (this.isInit) {
+      this.getListNoti(this.isInit, true);
+      this.notificationsService.init();
+      this.isInit = false;
+    }
 
     this.notificationsService.notificationStore$.subscribe((res) => {
       if (res?.length > 0 && !this.loadNewNoti) {
         this.loadNewNoti = true;
-        if (this.lstData?.length >= 100) {
+        this.currentOffset = 0;
+        if (this.lstData?.length >= this.quotaNotification) {
           this.getQuotaNoti();
         } else {
           this.getListNoti();
@@ -60,6 +98,9 @@ export class NotificationComponent {
   }
 
   showData() {
+    if (document.getElementById('typeAction')?.classList.contains('show')) {
+      this.clickNoti = !this.clickNoti;
+    }
     if (this.isFirstLoad) {
       this.getListNoti();
       this.isFirstLoad = false;
@@ -68,18 +109,37 @@ export class NotificationComponent {
         this.getQuotaNoti(true);
       }, 1000);
     }
+
+    if (this.notificationsService.isMobileMatched) {
+      this.notificationsService.hiddenFooterSubject.next(true);
+    }
   }
 
-  getListNoti() {
+  getListNoti(isInit = true, unread = false) {
+    this.isLoading = true;
     const payload = {
-      unread: false,
+      limit: this.lengthQuery,
+      offset: this.currentOffset,
+      unread: unread,
     };
     this.notificationsService.getListNoti(payload).subscribe(
       (res) => {
-        this.notificationsService.lstNoti = this.lstData = res.data;
-        this.lstData.forEach((element) => {
+        if (unread) {
+          this.countUnread = res.meta.countUnread;
+          return;
+        }
+        res.data.forEach((element) => {
           this.handleDisplayNoti(element);
         });
+        this.countAll = res.meta.count;
+
+        if (isInit) {
+          this.notificationsService.lstNoti = this.lstData = res.data;
+        } else {
+          this.lstData.push(...res.data);
+        }
+        this.countUnread = this.lstData.filter((k) => k.is_read === 0)?.length;
+        this.filterListNoti();
       },
       () => {},
       () => {
@@ -90,13 +150,8 @@ export class NotificationComponent {
 
   getQuotaNoti(isInit = false) {
     this.notificationsService.getQuotaNoti().subscribe((res) => {
-      if (res >= 100) {
-        const dataWarning = {
-          display:
-            'You have reached out your daily quota limit of 100 notifications per day. Kindly go to your watchlist to turn on the' +
-            ' notification mode and adjust your current configuration for your watchlist’s addresses and group of tracking activities to avoid over quota again”',
-        };
-        this.lstData.unshift(dataWarning);
+      if (res >= this.quotaNotification) {
+        this.notificationsService.lstNoti.unshift(this.dataWarning);
       } else if (!isInit) {
         this.getListNoti();
       }
@@ -106,22 +161,26 @@ export class NotificationComponent {
   handleDisplayNoti(element) {
     try {
       const data = element.body.data;
+      if (element.image?.length > 0) {
+        element.image = this.handleImage(element.image);
+      }
       switch (element.title) {
         case this.typeNoti.Executed:
+          element.icon = 'ph-repeat-once';
           element.display = `New <span class="highlight-noti">${
             data.type
           }</span> transaction initiated by <span class="highlight-noti">${this.cutString(data.sender)}</span>`;
           break;
         case this.typeNoti.TokenSent:
         case this.typeNoti.TokenReceived:
-          element.display = `<span class="highlight-noti">${
-            data.tokens + (data.num >= 3 ? ' and more' : '')
-          }</span> ${
+          element.icon = 'ph-coin';
+          element.display = `<span class="highlight-noti">${data.tokens + (data.num >= 3 ? ' and more' : '')}</span> ${
             element.title === this.typeNoti.TokenSent ? 'sent' : 'received'
           } by <span class="highlight-noti">${this.cutString(data.from || data.to)}</span>`;
           break;
         case this.typeNoti.NFTSent:
         case this.typeNoti.NFTReceived:
+          element.icon = 'icon-nft';
           element.display = `NFT id <span class="highlight-noti">${
             data.tokens + (data.num >= 2 ? ' and more' : '')
           }</span> ${
@@ -130,6 +189,7 @@ export class NotificationComponent {
           break;
         case this.typeNoti.CoinSent:
         case this.typeNoti.CoinReceived:
+          element.icon = 'ph-coin-vertical';
           element.display = `<span class="highlight-noti">${
             data.transfer + (data.num >= 3 ? ' and more' : '')
           }</span> ${
@@ -137,14 +197,17 @@ export class NotificationComponent {
           } by <span class="highlight-noti">${this.cutString(data.address)}</span>`;
           break;
         default:
+          element.icon = 'ph-coin';
           element.display = data.content;
           break;
       }
-    } catch {}
+    } catch {
+      element.icon = 'ph-coin';
+    }
   }
 
-  filterListNoti(isRead = 1) {
-    if (isRead === 0) {
+  filterListNoti() {
+    if (!this.isTabAll) {
       this.lstData = this.lstData.filter((k) => k.is_read === 0);
     } else {
       this.lstData = this.notificationsService.lstNoti;
@@ -164,16 +227,49 @@ export class NotificationComponent {
   }
 
   readNoti(item = {}) {
+    if (item['linkWatchList']) {
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+    }
+
     this.notificationsService.readNoti(item['id']).subscribe(
-      (res) => {
-        this.getListNoti();
-      },
+      (res) => {},
       () => {},
       () => {
         if (item['id']) {
           this.router.navigate(['/transaction', item['tx_hash']]);
         }
+        this.updateReadStatus(item['id']);
       },
     );
+  }
+
+  updateReadStatus(id = null) {
+    if (!id) {
+      this.countUnread = 0;
+      this.lstData.forEach((element) => {
+        element.is_read = 1;
+      });
+      if (!this.isTabAll) {
+        this.lstData = [];
+      }
+    }
+  }
+
+  closeNotiMob() {
+    this.notiMenu.nativeElement.click();
+    this.notificationsService.hiddenFooterSubject.next(false);
+  }
+
+  handleImage(img) {
+    try {
+      let data = JSON.parse(img);
+      // skip if type = video || audio
+      if (!data?.type || data.type.indexOf('video') >= 0 || data.type.indexOf('audio') >= 0) {
+        return null;
+      }
+      return (img = data.image);
+    } catch (e) {
+      return img;
+    }
   }
 }

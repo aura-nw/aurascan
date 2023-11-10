@@ -11,7 +11,7 @@
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <div class="mt-4 box-watch-list" *ngIf="!isLoading">
   <div class="d-lg-flex align-items-center justify-content-between">
-    <div class="text--gray-11">Total {{ pageData?.length }}/{{ quota }} addresses added.</div>
+    <div class="text--gray-11">Total {{ pageData?.length }}/{{ quota }} addresses added</div>
     <div class="filter-group d-flex align-items-center flex-nowrap mt-2 mt-lg-0">
       <form class="aura-form single-input-field search-form watchlist-search-form">
         <div class="input-group px-6">
@@ -105,7 +105,7 @@
                   </div>
 
                   <app-tooltip-customize
-                    *ngIf="!commonService.checkDisplayTooltip(data.address)"
+                    *ngIf="commonService.checkPublic(data.address)"
                     [content]="commonService.setNameTag(data.address, null, false)"></app-tooltip-customize>
                 </div>
                 <div
@@ -121,7 +121,7 @@
                   </div>
 
                   <app-tooltip-customize
-                    *ngIf="!commonService.checkDisplayTooltip(data.address)"
+                    *ngIf="commonService.checkPrivate(data.address)"
                     [content]="commonService.setNameTag(data.address)"></app-tooltip-customize>
                 </div>
                 <div *ngSwitchCase="'group'" class="">
@@ -161,7 +161,7 @@
             <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
               <span class="fw-semibold">{{ data.address | cutStringPipe : 8 : 8 }}</span>
             </a>
-            <div class="text--gray-5 line-claim w-100" [class.aura-tooltip-object]="data.note">
+            <div class="text--gray-5 line-claim w-100" style="max-width: 170px" [class.aura-tooltip-object]="data.note">
               {{ data.note || 'Note:-' }}
             </div>
           </div>
