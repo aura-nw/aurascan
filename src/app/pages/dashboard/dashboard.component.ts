@@ -243,12 +243,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         to: chartLength,
       });
     }
-    if (this.chartRange === CHART_RANGE.MONTH_12) {
-      this.chart.applyOptions({
-        handleScroll: false,
-        handleScale: false,
-      });
-    }
+    this.chart.applyOptions({
+      handleScroll: this.chartRange === CHART_RANGE.H_24,
+    });
 
     this.chart.priceScale('left').applyOptions({
       scaleMargins: {
@@ -369,7 +366,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.cacheData = this.originalData;
           }
           this.drawChartFirstTime(dataX, dataY);
-          if (this.chartRange === CHART_RANGE.MONTH_12) {
+          if (this.chartRange !== CHART_RANGE.H_24) {
             this.chartEvent();
           }
         }
