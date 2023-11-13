@@ -223,6 +223,7 @@ export class SummaryInfoComponent implements OnInit {
     let pro_type: string;
     let pro_description: string;
     let pro_plan: any;
+    let pro_changes: any;
     let pro_type_data: any;
     if (data['content'].length > 0) {
       pro_type = data.content[0]['@type']?.split('.').pop();
@@ -232,7 +233,9 @@ export class SummaryInfoComponent implements OnInit {
       }
       pro_title = data.title;
       pro_description = data.description;
-      if (pro_type_data === this.typeSpecial.ParameterChange || pro_type_data === this.typeSpecial.SoftwareUpgrade) {
+      if (pro_type_data === this.typeSpecial.ParameterChange) {
+        pro_changes = data.content[0].content.changes;
+      } else if (pro_type_data === this.typeSpecial.SoftwareUpgrade) {
         pro_plan = data.content[0].content.plan;
       }
     } else {
@@ -240,15 +243,17 @@ export class SummaryInfoComponent implements OnInit {
       pro_type_data = data.content['@type'];
       pro_title = data.content.title;
       pro_description = data.content.description;
-      if (pro_type_data === this.typeSpecial.ParameterChange || pro_type_data === this.typeSpecial.SoftwareUpgrade) {
+      if (pro_type_data === this.typeSpecial.SoftwareUpgrade) {
         pro_plan = data.content.plan;
+      } else if (pro_type_data === this.typeSpecial.ParameterChange) {
+        pro_changes = data.content.changes;
       }
       pro_type_data = data.content['@type'];
     }
 
     //get more info proposal detail
-    if (pro_plan || this.proposalDetail?.content?.changes) {
-      this.getProposalMoreInfo(pro_plan || this.proposalDetail?.content?.changes);
+    if (pro_plan || pro_changes) {
+      this.getProposalMoreInfo(pro_plan || pro_changes);
     }
 
     return {
@@ -264,6 +269,7 @@ export class SummaryInfoComponent implements OnInit {
       pro_total_vote,
       pro_description,
       pro_plan,
+      pro_changes,
       pro_type_data,
       request_amount: balanceOf(data.request_amount),
       proposer_name: _.get(data, 'description.moniker'),
