@@ -57,7 +57,9 @@
       </div>
 
       <ng-template #noNoti>
-        <div class="box-no-noti" *ngIf="!isLoading">No notifications yet</div>
+        <div class="box-no-noti" *ngIf="!isLoading">
+          {{ isTabAll ? 'You don’t have any notification' : 'You don’t have any unread notification' }}
+        </div>
         <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
       </ng-template>
     </ul>

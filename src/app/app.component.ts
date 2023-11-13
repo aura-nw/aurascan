@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import { forkJoin } from 'rxjs';
 import { NameTagService } from './core/services/name-tag.service';
 import { ValidatorService } from './core/services/validator.service';
+import { NotificationsService } from './core/services/notifications.service';
 
 @Component({
   selector: 'app-root',
@@ -27,8 +28,15 @@ export class AppComponent implements OnInit {
     private tokenService: TokenService,
     private nameTagService: NameTagService,
     private validatorService: ValidatorService,
+    private notificationsService: NotificationsService,
   ) {}
   ngOnInit(): void {
+    const isRegisterFCM = localStorage.getItem('registerFCM');
+    if (isRegisterFCM) {
+      this.notificationsService.registerFcmToken();
+      localStorage.removeItem('registerFCM');
+    }
+
     this.getInfoCommon();
     this.getPriceToken();
 

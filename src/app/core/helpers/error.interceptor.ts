@@ -4,10 +4,15 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
+import { NotificationsService } from '../services/notifications.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private notificationsService: NotificationsService,
+  ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
@@ -28,6 +33,13 @@ export class ErrorInterceptor implements HttpInterceptor {
                 localStorage.removeItem('listNameTag');
                 this.router.navigate(['/login']);
 
+                // remove current fcm token
+                this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
+                  (res) => {},
+                  () => (this.notificationsService.currentFcmToken = null),
+                  () => (this.notificationsService.currentFcmToken = null),
+                );
+
                 setTimeout(() => {
                   location.reload();
                 }, 500);
@@ -43,13 +55,20 @@ export class ErrorInterceptor implements HttpInterceptor {
               localStorage.removeItem('listNameTag');
               this.router.navigate(['/login']);
 
+              // remove current fcm token
+              this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
+                (res) => {},
+                () => (this.notificationsService.currentFcmToken = null),
+                () => (this.notificationsService.currentFcmToken = null),
+              );
+
               setTimeout(() => {
                 location.reload();
               }, 500);
             },
           });
         }
-        return throwError((err));
+        return throwError(err);
       }),
     );
   }

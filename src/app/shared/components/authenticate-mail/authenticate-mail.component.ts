@@ -34,7 +34,7 @@ export class AuthenticateMailComponent implements OnDestroy {
     private layout: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +59,13 @@ export class AuthenticateMailComponent implements OnDestroy {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('listNameTag');
     localStorage.removeItem('lstWatchList');
-    this.notificationsService.currentFcmToken = null;
+
+    // remove current fcm token
+    this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
+      (res) => {},
+      () => (this.notificationsService.currentFcmToken = null),
+      () => (this.notificationsService.currentFcmToken = null),
+    );
 
     // check is screen profile
     if (this.route.snapshot['_routerState']?.url === '/profile') {
@@ -68,7 +74,7 @@ export class AuthenticateMailComponent implements OnDestroy {
 
     setTimeout(() => {
       location.reload();
-    }, 500);
+    }, 1000);
   }
 
   linkLogin() {
