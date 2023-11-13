@@ -358,6 +358,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.Vote:
+        case this.eTransType.VoteV2:
           result.push({ key: 'Proposal Id', value: this.getLongValue(data.proposal_id), link: { url: '/votings' } });
           result.push({
             key: 'Voter',
@@ -474,6 +475,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.SubmitProposalTx:
+        case this.eTransType.SubmitProposalTxV2:
           result.push({
             key: 'Amount',
             value: data.initial_deposit[0]?.amount,
@@ -494,12 +496,16 @@ export class TransactionMessagesComponent implements OnInit {
               value: this.getLongValue(proposalData?.find((k) => k.key === 'proposal_id')?.value),
               link: { url: '/votings' },
             });
+            let proposalType = proposalData
+              .find((k) => k.key === 'proposal_messages')
+              ?.value.split('.')
+              .pop();
             result.push({
               key: 'Proposal Type',
-              value: proposalData?.find((k) => k.key === 'proposal_type')?.value,
+              value: proposalType,
             });
           }
-          result.push({ key: 'Title', value: data.content.title });
+          result.push({ key: 'Title', value: data.content?.title || data?.title });
           break;
 
         case this.eTransType.MsgGrantAllowance:
@@ -570,21 +576,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.Deposit:
-          result.push({ key: 'Proposal Id', value: this.getLongValue(data.proposal_id), link: { url: '/votings' } });
-          result.push({
-            key: 'Depositor',
-            value: this.commonService.setNameTag(data.depositor),
-            link: { url: '/account', data: data.depositor, nameTag: true },
-          });
-          result.push({
-            key: 'Amount',
-            value: data?.amount[0]?.amount,
-            denom: dataDenom,
-            pipeType: pipeTypeData.BalanceOf,
-          });
-          break;
-
-        case this.eTransType.Deposit:
+        case this.eTransType.DepositV2:
           result.push({ key: 'Proposal Id', value: this.getLongValue(data.proposal_id), link: { url: '/votings' } });
           result.push({
             key: 'Depositor',
