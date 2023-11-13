@@ -103,11 +103,6 @@ export class SummaryInfoComponent implements OnInit {
             this.proposalDetail = this.makeProposalDataDetail(data.proposal[0]);
             this.proposalStatus = this.getStatus(data.proposal[0].status);
 
-            //get more info proposal detail
-            if (this.proposalDetail?.content?.plan || this.proposalDetail?.content?.changes) {
-              this.getProposalMoreInfo(this.proposalDetail?.content?.plan || this.proposalDetail?.content?.changes);
-            }
-
             if (this.proposalDetail?.content?.amount) {
               this.dataDenomRequest = this.commonService.mappingNameIBC(this.proposalDetail?.content?.amount[0]?.denom);
               this.proposalDetail['request_amount'] = balanceOf(
@@ -226,12 +221,34 @@ export class SummaryInfoComponent implements OnInit {
     const dataDetail = this.proposalDetail || data;
     let pro_title: string;
     let pro_type: string;
+    let pro_description: string;
+    let pro_plan: any;
+    let pro_type_data: any;
     if (data['content'].length > 0) {
       pro_type = data.content[0]['@type']?.split('.').pop();
+      if (data.content[0]['@type'] === '/cosmos.gov.v1.MsgExecLegacyContent') {
+        pro_type = data.content[0]['content']['@type']?.split('.').pop();
+        pro_type_data = data.content[0]['content']['@type'];
+      }
       pro_title = data.title;
+      pro_description = data.description;
+      if (pro_type_data === this.typeSpecial.ParameterChange || pro_type_data === this.typeSpecial.SoftwareUpgrade) {
+        pro_plan = data.content[0].content.plan;
+      }
     } else {
       pro_type = data.content['@type']?.split('.').pop();
+      pro_type_data = data.content['@type'];
       pro_title = data.content.title;
+      pro_description = data.content.description;
+      if (pro_type_data === this.typeSpecial.ParameterChange || pro_type_data === this.typeSpecial.SoftwareUpgrade) {
+        pro_plan = data.content.plan;
+      }
+      pro_type_data = data.content['@type'];
+    }
+
+    //get more info proposal detail
+    if (pro_plan || this.proposalDetail?.content?.changes) {
+      this.getProposalMoreInfo(pro_plan || this.proposalDetail?.content?.changes);
     }
 
     return {
@@ -245,6 +262,9 @@ export class SummaryInfoComponent implements OnInit {
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote,
+      pro_description,
+      pro_plan,
+      pro_type_data,
       request_amount: balanceOf(data.request_amount),
       proposer_name: _.get(data, 'description.moniker'),
     };
@@ -418,7 +438,7 @@ export class SummaryInfoComponent implements OnInit {
     setTimeout(() => {
       const editor = document.getElementById('marked');
       if (editor) {
-        editor.innerHTML = marked.parse(this.proposalDetail?.content?.description);
+        editor.innerHTML = marked.parse(this.proposalDetail?.description);
         return;
       }
     }, 2000);

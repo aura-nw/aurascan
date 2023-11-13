@@ -115,15 +115,13 @@
         <div
           class="row mb-3 mb-md-4 body-02 body-01-mob"
           *ngIf="
-            (proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade ||
-              proposalDetail?.content['@type'] === typeSpecial.ParameterChange) &&
+            (proposalDetail?.pro_type_data === typeSpecial.SoftwareUpgrade ||
+              proposalDetail?.pro_type_data === typeSpecial.ParameterChange) &&
             proposalDetailTitleArr.length > 0
           ">
           <div class="col-auto col-md-2 text--gray-4">
-            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade"> Plan </ng-container>
-            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
-              Changes
-            </ng-container>
+            <ng-container *ngIf="proposalDetail?.pro_type_data === typeSpecial.SoftwareUpgrade"> Plan </ng-container>
+            <ng-container *ngIf="proposalDetail?.pro_type_data === typeSpecial.ParameterChange"> Changes </ng-container>
           </div>
           <div class="col-12 col-md-10 mt-0">
             <ul
@@ -139,11 +137,10 @@
                 </li>
               </ng-container>
             </ul>
-            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.SoftwareUpgrade">
-              <ng-container
-                *ngIf="typeOf(proposalDetail?.content?.plan) !== 'object' && proposalDetail?.content?.plan.length > 0">
-                <div class="changes-contain" [class.overflow-scroll-y]="proposalDetail?.content?.plan.length > 2">
-                  <div *ngFor="let item of proposalDetail?.content?.plan" class="mt-4">
+            <ng-container *ngIf="proposalDetail?.pro_type_data === typeSpecial.SoftwareUpgrade">
+              <ng-container *ngIf="typeOf(proposalDetail?.pro_plan) !== 'object' && proposalDetail?.pro_plan.length > 0">
+                <div class="changes-contain" [class.overflow-scroll-y]="proposalDetail?.pro_plan.length > 2">
+                  <div *ngFor="let item of proposalDetail?.pro_plan" class="mt-4">
                     <div *ngFor="let key of getObjectKey(item)">
                       <div class="mb-2" *ngIf="key === proposalDetailTitleArr[activeId].value">
                         {{ item[key] }}
@@ -152,15 +149,15 @@
                   </div>
                 </div>
               </ng-container>
-              <ng-container *ngIf="typeOf(proposalDetail?.content?.plan) === 'object'">
-                <div *ngFor="let key of getObjectKey(proposalDetail?.content?.plan)" class="mt-4">
+              <ng-container *ngIf="typeOf(proposalDetail?.pro_plan) === 'object'">
+                <div *ngFor="let key of getObjectKey(proposalDetail?.pro_plan)" class="mt-4">
                   <div *ngIf="key === proposalDetailTitleArr[activeId].value">
-                    {{ proposalDetail?.content?.plan[key] }}
+                    {{ proposalDetail?.pro_plan[key] }}
                   </div>
                 </div>
               </ng-container>
             </ng-container>
-            <ng-container *ngIf="proposalDetail?.content['@type'] === typeSpecial.ParameterChange">
+            <ng-container *ngIf="proposalDetail?.pro_type_data == typeSpecial.ParameterChange">
               <div class="changes-contain" [class.overflow-scroll-y]="proposalDetail?.content?.changes.length > 2">
                 <div *ngFor="let item of proposalDetail?.content?.changes" class="mt-4">
                   <div *ngFor="let key of getObjectKey(item)">
@@ -195,7 +192,7 @@
         </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-12 col-md-2 text--gray-4">Details</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0" *ngIf="proposalDetail?.content.description">
+          <div class="col-12 col-md-10 mt-2 mt-lg-0" *ngIf="proposalDetail?.description">
             <div class="editorial-container p-4">
               <div id="marked" class="editorial"></div>
             </div>
