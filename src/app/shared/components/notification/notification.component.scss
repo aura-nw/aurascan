@@ -19,9 +19,9 @@
   .notify-dropdown-menu {
     width: 404px;
     left: -360px !important;
-    padding: 0 0 32px 0;
+    padding: 0;
     background-color: var(--aura-gray-9);
-    @media (max-width: 414px) {
+    @media (max-width: 430px) {
       width: 100vw;
       height: 100vh;
       position: fixed !important;
@@ -30,7 +30,7 @@
       margin-top: 0 !important;
       border-radius: 0;
       .content-notify {
-        max-height: 80vh !important;
+        max-height: 100vh !important;
       }
     }
     .box-title {
@@ -66,13 +66,15 @@
             max-height: 40px;
           }
         }
-
         &:hover {
-          background-color: var(--aura-gray-9);
+          background-color: var(--aura-gray-7);
         }
         .icon-noti {
           font-size: 2rem;
           margin-top: 2px;
+        }
+        &__read{
+          background: var(--aura-gray-9);
         }
       }
       .box-no-noti {

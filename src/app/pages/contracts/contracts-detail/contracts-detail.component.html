@@ -1,4 +1,5 @@
-<ng-container *ngIf="contractDetail; else noValues">
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+<ng-container *ngIf="contractDetail && !isLoading; else noValues">
   <div class="d-flex justify-content-between justify-content-lg-start mb-4 mb-lg-5 box-contract-info">
     <div class="d-lg-flex align-items-center">
       <h1 class="mb-0 text--white" id="ttiopa123">Contract</h1>
@@ -83,5 +84,5 @@
 </ng-container>
 
 <ng-template #noValues>
-  <app-table-no-data></app-table-no-data>
+  <app-table-no-data *ngIf="!isLoading" [textNull]="errTxt"></app-table-no-data>
 </ng-template>
