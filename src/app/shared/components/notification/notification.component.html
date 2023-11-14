@@ -39,14 +39,14 @@
       <div class="content-notify" id="scrollBox" (scroll)="onScroll($event)">
         <ng-container *ngIf="lstData?.length > 0; else noNoti">
           <ng-container *ngFor="let item of lstData">
-            <div class="item cursor-pointer" (click)="readNoti(item)" [ngClass]="{'item__read': item.is_read}">
-              <div class="box-img">
+            <div class="item cursor-pointer" (click)="readNoti(item)" [ngClass]="{ item__read: item.is_read }">
+              <div class="box-img" [ngClass]="{ 'box-img__bg-icon': !item.image }">
                 <img [src]="item.image | imageS3" *ngIf="item.image" />
                 <i class="text--white icon-noti" [ngClass]="item.icon" *ngIf="!item.image"></i>
               </div>
               <div class="ml-3">
                 <div class="break-word" [innerHtml]="item.display"></div>
-                <div class="mt-2 d-flex align-items-center caption fw-normal">
+                <div class="mt-2 d-flex align-items-center caption fw-normal text--gray-2">
                   <i class="ph ph-clock mr-1"></i>
                   {{ commonService.getDateValue(item.created_at)[0] }}
                 </div>
