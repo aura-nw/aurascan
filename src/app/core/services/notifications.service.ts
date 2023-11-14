@@ -40,7 +40,9 @@ export class NotificationsService {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
   ) {
-    this.apiUrl = `${this.environmentService.backend}`;
+    this.environmentService.config.asObservable().subscribe((res) => {
+      this.apiUrl = res.api.backend;
+    });
     this.breakpoint$.subscribe((state) => {
       if (state) {
         this.isMobileMatched = state.matches;
