@@ -10,7 +10,6 @@ import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 
 @Injectable()
 export class TransactionService extends CommonService {
-  apiUrl = `${this.environmentService.backend}`;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
@@ -56,7 +55,7 @@ export class TransactionService extends CommonService {
       }
     }
     `;
-    
+
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, mergeMap, Observable, of, shareReplay, Subject, take, tap } from 'rxjs';
 import { CHART_RANGE } from '../constants/common.constant';
 import { EnvironmentService } from './environment.service';
 
@@ -11,7 +11,17 @@ export class CoingeckoService {
   coingecko = this.env.coingecko;
   coinIds = this.coingecko.ids;
 
-  coinsMarket$ = new BehaviorSubject([]);
+  private _coinsMarket$ = new BehaviorSubject([]);
+
+  get coinsMarket$() {
+    return this._coinsMarket$.pipe(take(1));
+  }
+
+  set coinsMarket(coinsMarket) {
+    this._coinsMarket$.next(coinsMarket);
+  }
+
+  coinMarketShare$ = this.coinsMarket$.pipe(take(1), shareReplay(1));
 
   cacheChartData = {
     [CHART_RANGE.H_24]: [],
@@ -137,6 +147,7 @@ export class CoingeckoService {
           price_change_percentage_24h: _.get(res, 'market_data.price_change_percentage_24h'),
           timestamp: moment(_.get(res, 'market_data.last_updated')).unix().toString(),
           total_volume: _.get(res, "market_data.total_volume['usd']"),
+          symbol: _.get(res, 'symbol'),
         };
 
         return {

@@ -1,53 +1,63 @@
-import { Component, OnInit } from '@angular/core';
-import { TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
-import { CommonService } from './core/services/common.service';
-import { TokenService } from './core/services/token.service';
-import { getInfo } from './core/utils/common/info-common';
-import { Globals } from './global/global';
-// import eruda from 'eruda';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject, takeUntil, timer } from 'rxjs';
+import { CoingeckoService } from './core/data-services/coingecko.service';
+import { CommonService } from './core/services/common.service';
 import { NameTagService } from './core/services/name-tag.service';
 import { ValidatorService } from './core/services/validator.service';
+import { getInfo } from './core/utils/common/info-common';
+import { Globals } from './global/global';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
-  // TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
-  // isTestnet = this.TESTNET.includes(
-  //   this.chainInfo?.chainId || ''
-  // );
+export class AppComponent implements OnInit, OnDestroy {
   isFirstLoad = true;
+
+  destroyed$ = new Subject();
   constructor(
     private commonService: CommonService,
     private globals: Globals,
-    private tokenService: TokenService,
     private nameTagService: NameTagService,
     private validatorService: ValidatorService,
+    private coingeckoService: CoingeckoService,
   ) {}
-  ngOnInit(): void {
-    this.getInfoCommon();
-    this.getPriceToken();
 
-    // get list name validator form local storage
-    const listValidatorName = localStorage.getItem('listValidator');
-    if (!listValidatorName) {
-      this.getListValidator();
-    } else {
-      try {
-        let data = JSON.parse(listValidatorName);
-        this.commonService.listValidator = data;
-      } catch (e) {
-        this.getListValidator();
-      }
-    }
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
+  ngOnInit(): void {
+    // Get coins price 1 time
+    this.getCoinsMarket();
+
+    timer(0, 60000)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((count) => {
+        this.getStatistics();
+
+        if (count == 0) {
+          // get list name validator form local storage in the first time
+          const listValidatorName = localStorage.getItem('listValidator');
+
+          try {
+            let data = JSON.parse(listValidatorName);
+            this.commonService.listValidator = data;
+          } catch (e) {
+            this.getListValidator();
+          }
+        } else {
+          this.getListValidator();
+        }
+      });
 
     // get name tag form local storage
     const listNameTag = localStorage.getItem('listNameTag');
     const userEmail = localStorage.getItem('userEmail');
+
     if (listNameTag && !userEmail && this.isFirstLoad) {
       try {
         let data = JSON.parse(listNameTag);
@@ -59,46 +69,17 @@ export class AppComponent implements OnInit {
     } else {
       this.getListNameTag();
     }
-
-    setInterval(() => {
-      this.getInfoCommon();
-      this.getPriceToken();
-      this.getListNameTag();
-    }, 60000);
-
-    let intervalGetNameTag = userEmail ? 20000 : 60000;
-    setInterval(() => {
-      this.getListNameTag();
-    }, intervalGetNameTag);
-
-    setInterval(() => {
-      this.getListValidator();
-    }, 600000);
-
-    // if (this.isTestnet) {
-    //   let el = document.createElement('div');
-    //   document.body.appendChild(el);
-    //
-    //   eruda.init({
-    //     container: el,
-    //     tool: ['console', 'elements', 'resources', 'network'],
-    //   });
-    // }
   }
 
-  getInfoCommon(): void {
+  getStatistics(): void {
     this.commonService.status().subscribe((res) => {
       getInfo(this.globals, res);
     });
   }
 
-  getPriceToken(): void {
-    this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.AURA).subscribe((res) => {
-      this.globals.price.aura = res.data || 0;
-    });
-
-    this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.BTC).subscribe((res) => {
-      this.globals.price.btc = res.data || 0;
+  getCoinsMarket(): void {
+    this.coingeckoService.getCoinMarkets().subscribe((data) => {
+      this.coingeckoService.coinsMarket = data;
     });
   }
 
