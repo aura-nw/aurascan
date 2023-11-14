@@ -91,16 +91,7 @@
                 <div class="d-lg-flex flex-wrap mb-4">
                   <!-- Tabs -->
                   <div class="button-switch-stage button-switch-stage__3">
-                    <button
-                      type="button"
-                      disabled
-                      [class.active]="isPrice"
-                      (click)="isPrice = true; getCoinInfo(chartRange)">
-                      <span>Price chart</span>
-                    </button>
-                    <!-- <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
-                      <span>Volume</span>
-                    </button> -->
+                    <button type="button" disabled class="text--white">Price chart</button>
                   </div>
                   <div class="ms-auto mt-4 mt-md-0">
                     <div class="d-flex align-items-center chart__options">
@@ -513,4 +504,3 @@
     </div>
   </div>
 </section>
-

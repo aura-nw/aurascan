@@ -15,7 +15,7 @@ export class PopupNoticeComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<PopupNoticeComponent>,
     public walletService: WalletService,
-    public environmentService: EnvironmentService
+    public environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {}
