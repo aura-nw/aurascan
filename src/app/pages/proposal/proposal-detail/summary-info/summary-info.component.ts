@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DecimalPipe, formatNumber } from '@angular/common';
+import { formatNumber } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import * as _ from 'lodash';
@@ -10,6 +10,7 @@ import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/comm
 import {
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
+  SPECIFIC_TYPE_PROPOSAL,
   VOTING_FINAL_STATUS,
   VOTING_QUORUM,
   VOTING_STATUS,
@@ -31,8 +32,8 @@ const marked = require('marked');
 export class SummaryInfoComponent implements OnInit {
   @Input() proposalId: number;
   @Output() proposalDtl = new EventEmitter();
-  proposalDetail;
-  proposalDetailTitleArr = [];
+  proDetail;
+  specialDataArr = [];
   statusConstant = PROPOSAL_STATUS;
   currentStatusConstant = VOTING_FINAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
@@ -48,10 +49,10 @@ export class SummaryInfoComponent implements OnInit {
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
   timerGetUpTime: any;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  proposalStatus = null;
+  proStatus = null;
   typeSpecial = {
-    SoftwareUpgrade: '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
-    ParameterChange: '/cosmos.params.v1beta1.ParameterChangeProposal',
+    SoftwareUpgrade: SPECIFIC_TYPE_PROPOSAL.SOFTWARE_UPGRADE,
+    ParameterChange: SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE,
   };
   activeId = 0;
   reload$;
@@ -100,27 +101,26 @@ export class SummaryInfoComponent implements OnInit {
             if (data.proposal[0].status === VOTING_STATUS.PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT) {
               this.proposalDtl.emit(null);
             }
-            this.proposalDetail = this.makeProposalDataDetail(data.proposal[0]);
-            this.proposalStatus = this.getStatus(data.proposal[0].status);
+            this.proDetail = this.makeProposalDataDetail(data.proposal[0]);
+            this.proStatus = this.getStatus(data.proposal[0].status);
 
-            if (this.proposalDetail?.content?.amount) {
-              this.dataDenomRequest = this.commonService.mappingNameIBC(this.proposalDetail?.content?.amount[0]?.denom);
-              this.proposalDetail['request_amount'] = balanceOf(
-                this.proposalDetail?.content?.amount[0]?.amount,
+            if (this.proDetail?.content?.amount) {
+              this.dataDenomRequest = this.commonService.mappingNameIBC(this.proDetail?.content?.amount[0]?.denom);
+              this.proDetail['request_amount'] = balanceOf(
+                this.proDetail?.content?.amount[0]?.amount,
                 this.dataDenomRequest['decimals'],
               );
             }
             return this.commonService.status().pipe(
               mergeMap((res) => {
                 if (res) {
-                  this.proposalDetail.total_bonded_token = balanceOf(res.bonded_tokens);
+                  this.proDetail.total_bonded_token = balanceOf(res.bonded_tokens);
                   if (data.proposal[0].status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
-                    this.proposalDetail.voting_start_time = data.proposal[0].voting_start_time;
-                    this.proposalDetail.voting_end_time = data.proposal[0].voting_end_time;
-                    this.proposalDetail.pro_turnout =
-                      (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
+                    this.proDetail.voting_start_time = data.proposal[0].voting_start_time;
+                    this.proDetail.voting_end_time = data.proposal[0].voting_end_time;
+                    this.proDetail.turnout = (this.proDetail.total_vote * 100) / this.proDetail.total_bonded_token;
                   } else {
-                    this.proposalDetail.pro_turnout = this.proposalDetail.turnout;
+                    this.proDetail.turnout = this.proDetail.turnout;
                   }
                 }
                 return from(this.commonService.getParamTallyingFromLCD());
@@ -136,25 +136,22 @@ export class SummaryInfoComponent implements OnInit {
             return;
           }
           const { quorum, threshold, veto_threshold } = result;
-          if (this.proposalDetail) {
-            const { pro_votes_yes, pro_total_vote, pro_votes_abstain, pro_votes_no_with_veto } = this.proposalDetail;
-            this.proposalDetail['quorum'] = quorum * 100;
-            this.proposalDetail['threshold'] = threshold * 100;
-            this.proposalDetail['veto_threshold'] = veto_threshold * 100;
+          if (this.proDetail) {
+            const { votes_yes: votes_yes, total_vote, votes_abstain, votes_no_with_veto } = this.proDetail;
+            this.proDetail['quorum'] = quorum * 100;
+            this.proDetail['threshold'] = threshold * 100;
+            this.proDetail['veto_threshold'] = veto_threshold * 100;
 
-            const yesPercent = (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
-            const noPercent = (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
-            const noWithVetoPercent =
-              (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
-            const abstainPercent =
-              (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
-            const voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
-            const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
-            const voted_abstain_percent =
-              (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token;
+            const yesPercent = (this.proDetail.votes_yes * 100) / this.proDetail.total_vote || 0;
+            const noPercent = (this.proDetail.votes_no * 100) / this.proDetail.total_vote || 0;
+            const noWithVetoPercent = (this.proDetail.votes_no_with_veto * 100) / this.proDetail.total_vote || 0;
+            const abstainPercent = (this.proDetail.votes_abstain * 100) / this.proDetail.total_vote || 0;
+            const voted = this.proDetail.total_vote - this.proDetail.votes_abstain;
+            const voted_percent = (voted * 100) / this.proDetail.total_bonded_token;
+            const voted_abstain_percent = (this.proDetail.votes_abstain * 100) / this.proDetail.total_bonded_token;
 
-            this.proposalDetail = {
-              ...this.proposalDetail,
+            this.proDetail = {
+              ...this.proDetail,
               yesPercent,
               noPercent,
               noWithVetoPercent,
@@ -163,39 +160,39 @@ export class SummaryInfoComponent implements OnInit {
               voted,
               voted_abstain_percent,
             };
-            this.parsingProposalStatus(this.proposalDetail);
+            this.parsingProposalStatus(this.proDetail);
 
-            if (this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_FAILED) {
+            if (this.proDetail.status === VOTING_STATUS.PROPOSAL_STATUS_FAILED) {
               this.finalSubMessage = VOTING_SUBTITLE.FAILED;
-            } else if (this.proposalDetail.pro_turnout >= this.proposalDetail.quorum) {
-              if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
-                if (pro_votes_no_with_veto < pro_total_vote / 3) {
+            } else if (this.proDetail.turnout >= this.proDetail.quorum) {
+              if (votes_yes > (total_vote - votes_abstain) / 2) {
+                if (votes_no_with_veto < total_vote / 3) {
                   this.finalSubMessage = VOTING_SUBTITLE.PASS;
                 } else {
                   this.finalSubMessage = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
-                    formatNumber(this.proposalDetail.veto_threshold, 'en-GB', this.number2Digit).toString(),
+                    formatNumber(this.proDetail.veto_threshold, 'en-GB', this.number2Digit).toString(),
                   );
                 }
-              } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
+              } else if (votes_no_with_veto < total_vote / 3) {
                 this.finalSubMessage = VOTING_SUBTITLE.REJECT_2;
               } else {
                 this.finalSubMessage = VOTING_SUBTITLE.REJECT_1.toString().replace(
                   '{{proposalDetail.noWithVetoPercent}}',
-                  formatNumber(this.proposalDetail.veto_threshold, 'en-GB', this.number2Digit).toString(),
+                  formatNumber(this.proDetail.veto_threshold, 'en-GB', this.number2Digit).toString(),
                 );
               }
             } else {
               this.finalSubMessage = VOTING_SUBTITLE.REJECT_3;
             }
           } else {
-            this.proposalDtl.emit(this.proposalDetail);
+            this.proposalDtl.emit(this.proDetail);
           }
 
           // set interval reload when type = voting period or deposit period
           if (
-            this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD ||
-            this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD
+            this.proDetail.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD ||
+            this.proDetail.status === VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD
           ) {
             this.enabledReload();
           }
@@ -204,56 +201,50 @@ export class SummaryInfoComponent implements OnInit {
       .subscribe({
         complete: () => {
           this.votingBarLoading = false;
-          this.proposalDtl.emit(this.proposalDetail);
+          this.proposalDtl.emit(this.proDetail);
         },
         error: (e) => {
-          this.proposalDtl.emit(this.proposalDetail);
+          this.proposalDtl.emit(this.proDetail);
         },
       });
   }
 
   makeProposalDataDetail(data) {
-    let pro_votes_yes = balanceOf(+data.tally.yes);
-    let pro_votes_no = balanceOf(+data.tally.no);
-    let pro_votes_no_with_veto = balanceOf(+(data.tally.no_with_veto || data.tally.noWithVeto));
-    let pro_votes_abstain = balanceOf(+data.tally.abstain);
-    const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain || 0;
-    const dataDetail = this.proposalDetail || data;
-    let pro_title: string;
-    let pro_type: string;
-    let pro_description: string;
-    let pro_plan: any;
-    let pro_changes: any;
-    let pro_type_data: any;
+    let votes_yes = balanceOf(+data.tally.yes);
+    let votes_no = balanceOf(+data.tally.no);
+    let votes_no_with_veto = balanceOf(+(data.tally.no_with_veto || data.tally.noWithVeto));
+    let votes_abstain = balanceOf(+data.tally.abstain);
+    const total_vote = votes_yes + votes_no + votes_no_with_veto + votes_abstain || 0;
+    const dataDetail = this.proDetail || data;
+    let type: string;
+    let plan: any;
+    let changes: any;
+    let org_type: any;
     if (data['content'].length > 0) {
-      pro_type = data.content[0]['@type']?.split('.').pop();
-      if (data.content[0]['@type'] === '/cosmos.gov.v1.MsgExecLegacyContent') {
-        pro_type = data.content[0]['content']['@type']?.split('.').pop();
-        pro_type_data = data.content[0]['content']['@type'];
+      type = data.content[0]['@type']?.split('.').pop();
+      if (data.content[0]['@type'] === SPECIFIC_TYPE_PROPOSAL.LEGACY_CONTENT) {
+        type = data.content[0]['content']['@type']?.split('.').pop();
+        org_type = data.content[0]['content']['@type'];
       }
-      pro_title = data.title;
-      pro_description = data.description;
-      if (pro_type_data === this.typeSpecial.ParameterChange) {
-        pro_changes = data.content[0].content.changes;
-      } else if (pro_type_data === this.typeSpecial.SoftwareUpgrade) {
-        pro_plan = data.content[0].content.plan;
+      if (org_type === SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE) {
+        changes = data.content[0].content.changes;
+      } else if (org_type === SPECIFIC_TYPE_PROPOSAL.SOFTWARE_UPGRADE) {
+        plan = data.content[0].content.plan;
       }
     } else {
-      pro_type = data.content['@type']?.split('.').pop();
-      pro_type_data = data.content['@type'];
-      pro_title = data.content.title;
-      pro_description = data.content.description;
-      if (pro_type_data === this.typeSpecial.SoftwareUpgrade) {
-        pro_plan = data.content.plan;
-      } else if (pro_type_data === this.typeSpecial.ParameterChange) {
-        pro_changes = data.content.changes;
+      type = data.content['@type']?.split('.').pop();
+      org_type = data.content['@type'];
+      if (org_type === SPECIFIC_TYPE_PROPOSAL.SOFTWARE_UPGRADE) {
+        plan = data.content.plan;
+      } else if (org_type === SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE) {
+        changes = data.content.changes;
       }
-      pro_type_data = data.content['@type'];
+      org_type = data.content['@type'];
     }
 
     //get more info proposal detail
-    if (pro_plan || pro_changes) {
-      this.getProposalMoreInfo(pro_plan || pro_changes);
+    if (plan || changes) {
+      this.getProposalMoreInfo(plan || changes);
     }
 
     return {
@@ -261,54 +252,52 @@ export class SummaryInfoComponent implements OnInit {
       count_vote: data.count_vote || dataDetail.count_vote,
       initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
       pro_total_deposits: balanceOf(_.get(data, 'total_deposit[0].amount') || 0),
-      pro_type,
-      pro_votes_yes,
-      pro_votes_no,
-      pro_votes_no_with_veto,
-      pro_votes_abstain,
-      pro_total_vote,
-      pro_description,
-      pro_plan,
-      pro_changes,
-      pro_type_data,
+      type,
+      votes_yes,
+      votes_no,
+      votes_no_with_veto,
+      votes_abstain,
+      total_vote,
+      plan,
+      changes,
+      org_type,
       request_amount: balanceOf(data.request_amount),
       proposer_name: _.get(data, 'description.moniker'),
     };
   }
 
-  parsingProposalStatus(proposalDetail): void {
-    const currentTotal =
-      proposalDetail.pro_votes_yes + proposalDetail.pro_votes_no + proposalDetail.pro_votes_no_with_veto || 0;
-    const currentYesPercent = (proposalDetail.pro_votes_yes * 100) / currentTotal || 0;
-    const currentNoPercent = (proposalDetail.pro_votes_no * 100) / currentTotal || 0;
-    const currentNoWithVetoPercent = (proposalDetail.pro_votes_no_with_veto * 100) / currentTotal || 0;
+  parsingProposalStatus(proDetail): void {
+    const currentTotal = proDetail.votes_yes + proDetail.votes_no + proDetail.votes_no_with_veto || 0;
+    const currentYesPercent = (proDetail.votes_yes * 100) / currentTotal || 0;
+    const currentNoPercent = (proDetail.votes_no * 100) / currentTotal || 0;
+    const currentNoWithVetoPercent = (proDetail.votes_no_with_veto * 100) / currentTotal || 0;
 
-    if (proposalDetail.pro_turnout >= proposalDetail.quorum) {
+    if (proDetail.turnout >= proDetail.quorum) {
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
 
-      if ((currentYesPercent || proposalDetail.currentYesPercent) > proposalDetail.threshold) {
-        if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
+      if ((currentYesPercent || proDetail.currentYesPercent) > proDetail.threshold) {
+        if (proDetail.noWithVetoPercent < proDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
           this.currentSubMessage =
             'This proposal may pass when the voting period is over because current quorum is more than ' +
-            formatNumber(proposalDetail.quorum, 'en-GB', this.number2Digit)?.toString() +
+            formatNumber(proDetail.quorum, 'en-GB', this.number2Digit)?.toString() +
             '% and there are more than ' +
-            formatNumber(proposalDetail.threshold, 'en-GB', this.number2Digit)?.toString() +
+            formatNumber(proDetail.threshold, 'en-GB', this.number2Digit)?.toString() +
             '% of Yes votes.';
         } else {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
           this.currentSubMessage =
             'The proportion of NoWithVeto votes is superior to ' +
-            formatNumber(proposalDetail.veto_threshold, 'en-GB', this.number2Digit)?.toString() +
+            formatNumber(proDetail.veto_threshold, 'en-GB', this.number2Digit)?.toString() +
             '%';
         }
       } else {
         this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
         this.currentSubMessage =
           'The proportion of Yes votes is inferior to ' +
-          formatNumber(this.proposalDetail.threshold, 'en-GB', this.number2Digit)?.toString() +
+          formatNumber(this.proDetail.threshold, 'en-GB', this.number2Digit)?.toString() +
           '%';
       }
     } else {
@@ -317,11 +306,11 @@ export class SummaryInfoComponent implements OnInit {
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubMessage =
         'Current quorum is less than ' +
-        formatNumber(this.proposalDetail.quorum, 'en-GB', this.number2Digit)?.toString() +
+        formatNumber(this.proDetail.quorum, 'en-GB', this.number2Digit)?.toString() +
         '% and this proposal requires more participation';
     }
-    this.proposalDetail = {
-      ...this.proposalDetail,
+    this.proDetail = {
+      ...this.proDetail,
       currentTotal,
       currentYesPercent,
       currentNoPercent,
@@ -360,10 +349,10 @@ export class SummaryInfoComponent implements OnInit {
     });
   }
 
-  openVoteDialog(proposalDetail) {
-    const id = proposalDetail.proposal_id;
-    const title = proposalDetail['title'] ? proposalDetail['title'] : proposalDetail.content.title;
-    const expiredTime = +moment(proposalDetail.voting_end_time).format('x') - +moment().format('x');
+  openVoteDialog(proDetail) {
+    const id = proDetail.proposal_id;
+    const title = proDetail['title'] ? proDetail['title'] : proDetail.content.title;
+    const expiredTime = +moment(proDetail.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
@@ -444,18 +433,18 @@ export class SummaryInfoComponent implements OnInit {
     setTimeout(() => {
       const editor = document.getElementById('marked');
       if (editor) {
-        editor.innerHTML = marked.parse(this.proposalDetail?.description);
+        editor.innerHTML = marked.parse(this.proDetail?.description);
         return;
       }
     }, 2000);
   }
 
   getProposalMoreInfo(data: any) {
-    if (this.proposalDetailTitleArr?.length === 0) {
+    if (this.specialDataArr?.length === 0) {
       if (typeof data !== 'object') {
         let index = 0;
         for (let prop in data[0]) {
-          this.proposalDetailTitleArr.push({
+          this.specialDataArr.push({
             key: index,
             value: prop,
           });
@@ -467,7 +456,7 @@ export class SummaryInfoComponent implements OnInit {
         data = data[0] || data;
         for (let prop in data) {
           if (data.hasOwnProperty(prop)) {
-            this.proposalDetailTitleArr.push({
+            this.specialDataArr.push({
               key: index,
               value: prop,
             });

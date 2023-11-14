@@ -114,3 +114,9 @@ export enum PROPOSAL_TYPE_COMMUNITY_POOL {
   V1BETA1 = '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal',
   V1 = '/cosmos.distribution.v1beta1.MsgCommunityPoolSpend',
 }
+
+export enum SPECIFIC_TYPE_PROPOSAL {
+  SOFTWARE_UPGRADE = '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
+  PARAMETER_CHANGE = '/cosmos.params.v1beta1.ParameterChangeProposal',
+  LEGACY_CONTENT = '/cosmos.gov.v1.MsgExecLegacyContent'
+}
