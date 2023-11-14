@@ -26,19 +26,19 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.userService.refreshToken(payload).subscribe({
             next: (res) => {
               if (res.error?.statusCode === 400) {
-                // redirect to log out
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-                localStorage.removeItem('userEmail');
-                localStorage.removeItem('listNameTag');
-                this.router.navigate(['/login']);
-
                 // remove current fcm token
                 this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
                   (res) => {},
                   () => (this.notificationsService.currentFcmToken = null),
                   () => (this.notificationsService.currentFcmToken = null),
                 );
+
+                // redirect to log out
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('listNameTag');
+                this.router.navigate(['/login']);
 
                 setTimeout(() => {
                   location.reload();
@@ -49,18 +49,18 @@ export class ErrorInterceptor implements HttpInterceptor {
               localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
             },
             error: () => {
-              localStorage.removeItem('accessToken');
-              localStorage.removeItem('refreshToken');
-              localStorage.removeItem('userEmail');
-              localStorage.removeItem('listNameTag');
-              this.router.navigate(['/login']);
-
               // remove current fcm token
               this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
                 (res) => {},
                 () => (this.notificationsService.currentFcmToken = null),
                 () => (this.notificationsService.currentFcmToken = null),
               );
+
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+              localStorage.removeItem('userEmail');
+              localStorage.removeItem('listNameTag');
+              this.router.navigate(['/login']);
 
               setTimeout(() => {
                 location.reload();
