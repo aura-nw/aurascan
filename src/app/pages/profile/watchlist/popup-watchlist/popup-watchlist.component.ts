@@ -40,7 +40,7 @@ export class PopupWatchlistComponent implements OnInit {
     nativeCoinSent: 'nativeCoinSent',
     nativeCoinReceived: 'nativeCoinReceived',
   };
-  isTracking = false;
+  isTracking = true;
 
   listTracking = [
     {
@@ -150,8 +150,8 @@ export class PopupWatchlistComponent implements OnInit {
     this.isAccount = isAccount;
     this.isContract = this.isAccount !== undefined ? !this.isAccount : undefined;
     this.watchlistForm.controls['favorite'].setValue(data.favorite);
-    this.isTracking = data.tracking;
-    this.watchlistForm.controls['tracking'].setValue(data.tracking);
+    this.isTracking = isEditMode ? data.tracking : true;
+    this.watchlistForm.controls['tracking'].setValue(isEditMode ? data.tracking : true);
     this.watchlistForm.controls['address'].setValue(data.address);
     this.watchlistForm.controls['note'].setValue(data.note);
     this.watchlistForm.controls['id'].setValue(data.id || '');
