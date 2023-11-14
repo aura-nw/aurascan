@@ -4,10 +4,15 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
+import { NotificationsService } from '../services/notifications.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private notificationsService: NotificationsService,
+  ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
@@ -21,6 +26,13 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.userService.refreshToken(payload).subscribe({
             next: (res) => {
               if (res.error?.statusCode === 400) {
+                // remove current fcm token
+                this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
+                  (res) => {},
+                  () => (this.notificationsService.currentFcmToken = null),
+                  () => (this.notificationsService.currentFcmToken = null),
+                );
+
                 // redirect to log out
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
@@ -37,6 +49,13 @@ export class ErrorInterceptor implements HttpInterceptor {
               localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
             },
             error: () => {
+              // remove current fcm token
+              this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
+                (res) => {},
+                () => (this.notificationsService.currentFcmToken = null),
+                () => (this.notificationsService.currentFcmToken = null),
+              );
+
               localStorage.removeItem('accessToken');
               localStorage.removeItem('refreshToken');
               localStorage.removeItem('userEmail');
@@ -49,7 +68,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             },
           });
         }
-        return throwError((err));
+        return throwError(err);
       }),
     );
   }

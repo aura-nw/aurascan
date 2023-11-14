@@ -108,21 +108,21 @@ export const CHART_CONFIG: {
   ['7d']: {
     initRange: 168, // 1 weeks
     type: RangeType.hour,
-    value: 168 * 2, // 2 weeks
+    value: 168 * 4, // 4 weeks
     unit: 'h',
     step: 1,
   },
   ['30d']: {
     initRange: 30,
     type: RangeType.hour,
-    value: 91,
+    value: 100, // 100 days
     unit: 'd',
     step: 4,
   },
   ['12M']: {
     initRange: 365,
     type: RangeType.day,
-    value: 365,
+    value: 400, // 400 days
     unit: 'd',
     step: 1,
   },

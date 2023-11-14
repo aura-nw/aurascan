@@ -137,21 +137,15 @@
           <span class="caption fw-normal text--gray-4 mb-2">
             Kindly note that we only support to save notifications for 1 month.
           </span>
-          <div *ngIf="isEditMode && !getTracking.value">
-            <mat-slide-toggle [checked]="getTracking.value" (change)="changeTracking()">
-              <span>Notification Mode</span>
-            </mat-slide-toggle>
-            <div class="box-noti-toggle d-flex align-items-center mt-2">
-              <i class="ph ph-info mr-1 body-01"></i>
-              <span class="text--gray-1 caption fw-normal">
-                Turn on the Notification Mode to adjust the Tracking activity group.</span
-              >
-            </div>
-          </div>
-          <div class="d-flex align-items-center" *ngIf="!isEditMode || getTracking.value">
-            <mat-slide-toggle [checked]="true" [disabled]="true" class="mode-disable"> </mat-slide-toggle>
-            <span class="ml-2">Notification Mode</span>
-          </div>
+          <mat-slide-toggle [checked]="getTracking.value" (change)="changeTracking()">
+            <span>Notification Mode</span>
+          </mat-slide-toggle>
+        </div>
+        <div class="box-noti-toggle d-flex align-items-center mt-2" *ngIf="isEditMode && !getTracking.value">
+          <i class="ph ph-info mr-1 body-01"></i>
+          <span class="text--gray-2 caption fw-normal">
+            Turn on the Notification Mode to adjust the Tracking activity group.</span
+          >
         </div>
         <!-- Activities group -->
         <div class="row mt-lg-4 mt-0">

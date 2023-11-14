@@ -143,7 +143,7 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
               localStorage.setItem('userEmail', JSON.stringify(res.email));
               localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
-              this.notificationsService.registerFcmToken();
+              localStorage.setItem('registerFCM', JSON.stringify(true));
               this.route.navigate(['/profile']);
 
               setTimeout(() => {
@@ -247,7 +247,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
             localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
             localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
-            this.notificationsService.registerFcmToken();
+            localStorage.setItem('registerFCM', JSON.stringify(true));
             window.location.href = '/profile';
 
             setTimeout(() => {
