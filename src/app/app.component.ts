@@ -31,12 +31,6 @@ export class AppComponent implements OnInit {
     private notificationsService: NotificationsService,
   ) {}
   ngOnInit(): void {
-    const isRegisterFCM = localStorage.getItem('registerFCM');
-    if (isRegisterFCM) {
-      this.notificationsService.registerFcmToken();
-      localStorage.removeItem('registerFCM');
-    }
-
     this.getInfoCommon();
     this.getPriceToken();
 
@@ -75,6 +69,12 @@ export class AppComponent implements OnInit {
       this.getListValidator();
       this.getPriceToken();
     }, 600000);
+
+    const isRegisterFCM = localStorage.getItem('registerFCM');
+    if (isRegisterFCM) {
+      this.notificationsService.registerFcmToken();
+      localStorage.removeItem('registerFCM');
+    }
 
     // if (this.isTestnet) {
     //   let el = document.createElement('div');

@@ -496,13 +496,10 @@ export class TransactionMessagesComponent implements OnInit {
               value: this.getLongValue(proposalData?.find((k) => k.key === 'proposal_id')?.value),
               link: { url: '/votings' },
             });
-            let proposalType = proposalData
-              .find((k) => k.key === 'proposal_messages')
-              ?.value.split('.')
-              .pop();
+            let proposalType = data.content?.length > 0 ? data.content[0] : data.content || data.messages[0];
             result.push({
               key: 'Proposal Type',
-              value: proposalType,
+              value: proposalType['@type']?.split('.').pop(),
             });
           }
           result.push({ key: 'Title', value: data.content?.title || data?.title });
