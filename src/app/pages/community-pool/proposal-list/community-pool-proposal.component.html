@@ -163,8 +163,11 @@
         </ng-container>
 
         <div class="mt-6 d-flex justify-content-center justify-content-md-end">
-          <app-a-paginator [paginator]="pageData" [length]="length" (pageChange)="getListProposal({ index: $event })">
-          </app-a-paginator>
+          <app-custom-paginator
+            [paginator]="pageData"
+            [length]="length"
+            (pageChange)="getListProposal({ index: $event })">
+          </app-custom-paginator>
         </div>
       </div>
       <div class="my-10" *ngIf="isLoading">

@@ -17,8 +17,9 @@
   <div class="card mt-6">
     <div class="card-body">
       <app-loading-sprint *ngIf="isLoadingTX"></app-loading-sprint>
+      <app-table-no-data *ngIf="!isLoadingTX && errTxt" [textNull]="errTxt"></app-table-no-data>
       <app-contract-table
-        *ngIf="!isLoadingTX"
+        *ngIf="!isLoadingTX && !errTxt"
         [length]="contractTransaction['count']"
         [pageSize]="pageSize"
         [label]="label?.toString()"
