@@ -31,7 +31,7 @@
             <span>All</span>
           </button>
           <button class="button-change-tab" (click)="isTabAll = false; filterListNoti()" [class.active]="!isTabAll">
-            <span>Un-read {{ this.countUnread > 0 ? '(' + this.countUnread + ')' : '' }}</span>
+            <span>Unread {{ this.countUnread > 0 ? '(' + this.countUnread + ')' : '' }}</span>
           </button>
         </div>
       </div>
@@ -39,7 +39,7 @@
       <div class="content-notify" id="scrollBox" (scroll)="onScroll($event)">
         <ng-container *ngIf="lstData?.length > 0; else noNoti">
           <ng-container *ngFor="let item of lstData">
-            <div class="item cursor-pointer" (click)="readNoti(item)">
+            <div class="item cursor-pointer" (click)="readNoti(item)" [ngClass]="{'item__read': item.is_read}">
               <div class="box-img">
                 <img [src]="item.image | imageS3" *ngIf="item.image" />
                 <i class="text--white icon-noti" [ngClass]="item.icon" *ngIf="!item.image"></i>
@@ -57,7 +57,9 @@
       </div>
 
       <ng-template #noNoti>
-        <div class="box-no-noti" *ngIf="!isLoading">No notifications yet</div>
+        <div class="box-no-noti" *ngIf="!isLoading">
+          {{ isTabAll ? 'You don’t have any notification' : 'You don’t have any unread notification' }}
+        </div>
         <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
       </ng-template>
     </ul>

@@ -60,7 +60,9 @@ export class NotificationsService {
       if (!payload) return;
       let notification = payload.notification;
 
-      if ('serviceWorker' in navigator) {
+      // check exit email
+      const userEmail = localStorage.getItem('userEmail');
+      if ('serviceWorker' in navigator && userEmail) {
         navigator.serviceWorker.getRegistrations().then((registration) => {
           registration[0].showNotification(notification.title, {
             ...payload,
@@ -68,6 +70,7 @@ export class NotificationsService {
             body: notification.body,
           });
         });
+
         this.notificationStore$.next(['reload']);
       }
     });
@@ -134,5 +137,9 @@ export class NotificationsService {
 
   getQuotaNoti() {
     return this.http.get<any>(`${this.apiUrl}/quota-notifications`);
+  }
+
+  deleteToken(token) {
+    return this.http.delete<any>(`${this.apiUrl}/users/delete-notification-token/${token}`);
   }
 }
