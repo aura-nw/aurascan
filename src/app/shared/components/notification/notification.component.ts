@@ -150,8 +150,11 @@ export class NotificationComponent {
 
   getQuotaNoti(isInit = false) {
     this.notificationsService.getQuotaNoti().subscribe((res) => {
-      if (res >= this.quotaNotification) {
-        this.notificationsService.lstNoti.unshift(this.dataWarning);
+      if (res.total >= this.quotaNotification) {
+        if (!this.notificationsService.lstNoti[0]?.linkWatchList) {
+          this.dataWarning['created_at'] = res.updated_at || Date.now();
+          this.notificationsService.lstNoti.unshift(this.dataWarning);
+        }
       } else if (!isInit) {
         this.getListNoti();
       }
@@ -166,14 +169,14 @@ export class NotificationComponent {
       }
       switch (element.title) {
         case this.typeNoti.Executed:
-          element.icon = 'ph-repeat-once';
+          element.icon = 'icon icon-noti-executed';
           element.display = `New <span class="highlight-noti">${
             data.type
           }</span> transaction initiated by <span class="highlight-noti">${this.cutString(data.sender)}</span>`;
           break;
         case this.typeNoti.TokenSent:
         case this.typeNoti.TokenReceived:
-          element.icon = 'ph-coin';
+          element.icon = 'ph-coins';
           element.display = `<span class="highlight-noti">${data.tokens + (data.num >= 3 ? ' and more' : '')}</span> ${
             element.title === this.typeNoti.TokenSent ? 'sent' : 'received'
           } by <span class="highlight-noti">${this.cutString(data.from || data.to)}</span>`;
@@ -189,7 +192,7 @@ export class NotificationComponent {
           break;
         case this.typeNoti.CoinSent:
         case this.typeNoti.CoinReceived:
-          element.icon = 'ph-coin-vertical';
+          element.icon = 'ph-coin';
           element.display = `<span class="highlight-noti">${
             data.transfer + (data.num >= 3 ? ' and more' : '')
           }</span> ${
@@ -231,16 +234,26 @@ export class NotificationComponent {
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     }
 
-    this.notificationsService.readNoti(item['id']).subscribe(
-      (res) => {},
-      () => {},
-      () => {
-        if (item['id']) {
-          this.router.navigate(['/transaction', item['tx_hash']]);
-        }
-        this.updateReadStatus(item['id']);
-      },
-    );
+    if (!item['is_read']) {
+      this.notificationsService.readNoti(item['id']).subscribe(
+        (res) => {},
+        () => {
+          this.executeLinkTX(item);
+        },
+        () => {
+          this.executeLinkTX(item);
+        },
+      );
+    } else {
+      this.executeLinkTX(item);
+    }
+  }
+
+  executeLinkTX(item) {
+    if (item['id']) {
+      this.router.navigate(['/transaction', item['tx_hash']]);
+    }
+    this.updateReadStatus(item['id']);
   }
 
   updateReadStatus(id = null) {

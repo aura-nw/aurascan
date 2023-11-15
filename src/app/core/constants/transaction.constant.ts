@@ -48,3 +48,9 @@ export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.MsgMigrateContract, value: TypeTransaction.MsgMigrateContract },
   { label: TRANSACTION_TYPE_ENUM.Fail, value: TypeTransaction.Fail },
 ];
+
+export const TYPE_MULTI_VER = [
+  TRANSACTION_TYPE_ENUM.Vote,
+  TRANSACTION_TYPE_ENUM.Deposit,
+  TRANSACTION_TYPE_ENUM.SubmitProposalTx,
+];

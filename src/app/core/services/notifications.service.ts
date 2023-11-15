@@ -40,7 +40,9 @@ export class NotificationsService {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
   ) {
-    this.apiUrl = `${this.environmentService.backend}`;
+    this.environmentService.config.asObservable().subscribe((res) => {
+      this.apiUrl = res.api.backend;
+    });
     this.breakpoint$.subscribe((state) => {
       if (state) {
         this.isMobileMatched = state.matches;
@@ -60,7 +62,9 @@ export class NotificationsService {
       if (!payload) return;
       let notification = payload.notification;
 
-      if ('serviceWorker' in navigator) {
+      // check exit email
+      const userEmail = localStorage.getItem('userEmail');
+      if ('serviceWorker' in navigator && userEmail) {
         navigator.serviceWorker.getRegistrations().then((registration) => {
           registration[0].showNotification(notification.title, {
             ...payload,
@@ -68,6 +72,7 @@ export class NotificationsService {
             body: notification.body,
           });
         });
+
         this.notificationStore$.next(['reload']);
       }
     });
@@ -84,7 +89,7 @@ export class NotificationsService {
     })
       .then((currentToken) => {
         if (currentToken) {
-          this.currentFcmToken = currentToken;
+          this.currentFcmToken = currentToken || null;
         }
       })
       .catch((err) => {});
@@ -106,7 +111,7 @@ export class NotificationsService {
 
     this.http
       .post(`${this.apiUrl}/users/register-notification-token`, {
-        token: this.currentFcmToken,
+        token: this.currentFcmToken || '',
       })
       .subscribe((res: any) => {
         if (res) {
@@ -134,5 +139,9 @@ export class NotificationsService {
 
   getQuotaNoti() {
     return this.http.get<any>(`${this.apiUrl}/quota-notifications`);
+  }
+
+  deleteToken(token) {
+    return this.http.delete<any>(`${this.apiUrl}/users/delete-notification-token/${token}`);
   }
 }
