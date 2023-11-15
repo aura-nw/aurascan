@@ -27,7 +27,9 @@ export class CommonService {
   listValidator = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
-    this.apiUrl = `${this._environmentService.backend}`;
+    this._environmentService.config.asObservable().subscribe((res) => {
+      this.apiUrl = res.api.backend;
+    });
     const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
     this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);
     this.networkQueryOb = this.networkQuerySubject.asObservable();
