@@ -89,7 +89,7 @@ export class NotificationsService {
     })
       .then((currentToken) => {
         if (currentToken) {
-          this.currentFcmToken = currentToken;
+          this.currentFcmToken = currentToken || null;
         }
       })
       .catch((err) => {});
@@ -111,7 +111,7 @@ export class NotificationsService {
 
     this.http
       .post(`${this.apiUrl}/users/register-notification-token`, {
-        token: this.currentFcmToken,
+        token: this.currentFcmToken || '',
       })
       .subscribe((res: any) => {
         if (res) {

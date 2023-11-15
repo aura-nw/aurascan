@@ -234,16 +234,26 @@ export class NotificationComponent {
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     }
 
-    this.notificationsService.readNoti(item['id']).subscribe(
-      (res) => {},
-      () => {},
-      () => {
-        if (item['id']) {
-          this.router.navigate(['/transaction', item['tx_hash']]);
-        }
-        this.updateReadStatus(item['id']);
-      },
-    );
+    if (!item['is_read']) {
+      this.notificationsService.readNoti(item['id']).subscribe(
+        (res) => {},
+        () => {
+          this.executeLinkTX(item);
+        },
+        () => {
+          this.executeLinkTX(item);
+        },
+      );
+    } else {
+      this.executeLinkTX(item);
+    }
+  }
+
+  executeLinkTX(item) {
+    if (item['id']) {
+      this.router.navigate(['/transaction', item['tx_hash']]);
+    }
+    this.updateReadStatus(item['id']);
   }
 
   updateReadStatus(id = null) {
