@@ -19,7 +19,7 @@
   .notify-dropdown-menu {
     width: 404px;
     left: -360px !important;
-    padding: 0 0 32px 0;
+    padding: 0;
     background-color: var(--aura-gray-9);
     @media (max-width: 430px) {
       width: 100vw;
@@ -30,7 +30,7 @@
       margin-top: 0 !important;
       border-radius: 0;
       .content-notify {
-        max-height: calc(100vh - 150px) !important;
+        max-height: calc(100vh - 115px) !important;
       }
     }
     .box-title {
@@ -49,7 +49,7 @@
     }
     .content-notify {
       background: var(--aura-gray-8);
-      max-height: 50vh;
+      max-height: 65vh;
       overflow-x: auto;
       .item {
         display: flex;
@@ -62,8 +62,10 @@
           min-width: 40px;
           height: 40px;
           img {
-            max-width: 40px;
-            max-height: 40px;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
           }
           &__bg-icon {
             border-radius: 50%;
