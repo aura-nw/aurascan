@@ -6,7 +6,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-ma
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
@@ -32,7 +32,7 @@ import { MaterialModule } from 'src/app/material.module';
     NgxMaskPipe,
     NgxMaskDirective,
     CommonDirectiveModule,
-    APaginatorModule,
+    CustomPaginatorModule,
     NameTagModule,
     MaterialModule,
   ],

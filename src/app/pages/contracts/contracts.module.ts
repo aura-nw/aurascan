@@ -9,7 +9,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-ma
 import { MaterialModule } from 'src/app/material.module';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { ContractTableModule } from 'src/app/shared/components/contract-table/contract-table.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
@@ -69,7 +69,7 @@ import { MASK_CONFIG } from 'src/app/app.config';
     WriteContractModule,
     ReadContractModule,
     PopupAddZeroModule,
-    APaginatorModule,
+    CustomPaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
