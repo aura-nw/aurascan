@@ -10,7 +10,7 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
@@ -78,7 +78,7 @@ import { TokenRoutingModule } from './token-routing.module';
     AudioPlayerModule,
     ContractsModule,
     CommonDirectiveModule,
-    APaginatorModule,
+    CustomPaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
