@@ -10,7 +10,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { isAddress, isContract } from 'src/app/core/utils/common/validation';
+import { isAddress, isContract, isSafari } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -72,6 +72,7 @@ export class PopupWatchlistComponent implements OnInit {
       value: ' Native Coin Received (Aura coin, ibc)',
     },
   ];
+  isSafari = false;
 
   settingObj = {
     transactionExecuted: false,
@@ -97,6 +98,7 @@ export class PopupWatchlistComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isSafari = isSafari();
     this.formInit();
     if (this.data?.address) {
       if (this.data.id) {
