@@ -473,10 +473,10 @@
             ]"></app-card-mob-simple>
         </ng-template>
         <div class="mt-6 d-flex justify-content-center justify-content-md-end">
-          <app-a-paginator
+          <app-custom-paginator
             [paginator]="pageData"
             [length]="length"
-            (pageChange)="getListProposal({ index: $event })"></app-a-paginator>
+            (pageChange)="getListProposal({ index: $event })"></app-custom-paginator>
         </div>
       </div>
     </div>
