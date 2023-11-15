@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <div class="content-notify" id="scrollBox" (scroll)="onScroll($event)">
+      <div class="content-notify" id="scrollBox" (scroll)="onScroll($event)" [class.paddingSafari]="isSafari">
         <ng-container *ngIf="lstData?.length > 0; else noNoti">
           <ng-container *ngFor="let item of lstData">
             <div class="item cursor-pointer" (click)="readNoti(item)" [ngClass]="{ item__read: item.is_read }">

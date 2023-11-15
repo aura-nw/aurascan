@@ -45,6 +45,7 @@ export class NotificationsService {
     });
     this.breakpoint$.subscribe((state) => {
       if (state) {
+        this.environmentService.isMobile = state.matches;
         this.isMobileMatched = state.matches;
       }
     });

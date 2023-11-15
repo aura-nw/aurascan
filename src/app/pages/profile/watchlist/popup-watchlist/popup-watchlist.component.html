@@ -7,7 +7,7 @@
       <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
     </div>
   </div>
-  <div class="card-body p-0">
+  <div class="card-body p-lg-0">
     <form
       [formGroup]="watchlistForm"
       (ngSubmit)="onSubmit()"
@@ -205,22 +205,29 @@
         <div class="mt-4 text--gray-4 caption fw-normal">All fields are required except Personal Note</div>
       </div>
       <!-- button group -->
+      <div class="d-lg-none d-block" [class.paddingSafari]="isSafari">
+        <ng-container *ngTemplateOutlet="btnGroup"></ng-container>
+      </div>
     </form>
   </div>
-  <div class="card-footer card-footer--no-radius">
-    <div class="d-flex px-6 py-6 justify-content-end">
-      <button class="button button--md button-outline button-pill btn" type="button" (click)="closeDialog()">
-        <span>Cancel</span>
-      </button>
-      <button
-        class="button button--md button-outline button-pill button-flat ml-4 btn btn-create"
-        type="button"
-        (click)="onSubmit()"
-        [disabled]="!formValid || isError">
-        <span class="text--black">
-          {{ isEditMode ? 'Update' : 'Add' }}
-        </span>
-      </button>
-    </div>
+  <div class="card-footer card-footer--no-radius d-none d-lg-block">
+    <ng-container *ngTemplateOutlet="btnGroup"></ng-container>
   </div>
 </div>
+
+<ng-template #btnGroup>
+  <div class="d-flex px-6 pt-6 pb-6 justify-content-end">
+    <button class="button button--md button-outline button-pill btn" type="button" (click)="closeDialog()">
+      <span>Cancel</span>
+    </button>
+    <button
+      class="button button--md button-outline button-pill button-flat ml-4 btn btn-create"
+      type="button"
+      (click)="onSubmit()"
+      [disabled]="!formValid || isError">
+      <span class="text--black">
+        {{ isEditMode ? 'Update' : 'Add' }}
+      </span>
+    </button>
+  </div>
+</ng-template>
