@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
+import { isSafari } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-notification',
@@ -34,6 +35,7 @@ export class NotificationComponent {
   clickNoti = false;
   countAll = 0;
   countUnread = 0;
+  isSafari = false;
 
   quotaNotification = this.environmentService.chainConfig.quotaNotification;
   dataWarning = {
@@ -68,6 +70,7 @@ export class NotificationComponent {
   }
 
   ngOnInit(): void {
+    this.isSafari = isSafari();
     // check exit email
     const userEmail = localStorage.getItem('userEmail');
     if (!userEmail) {
@@ -185,7 +188,7 @@ export class NotificationComponent {
         case this.typeNoti.NFTReceived:
           element.icon = 'icon-nft';
           element.display = `NFT id <span class="highlight-noti">${
-            data.tokens + (data.num >= 2 ? ' and more' : '')
+            data.tokens + (data.num > 2 ? ' and more' : '')
           }</span> ${
             element.title === this.typeNoti.NFTSent ? 'sent' : 'received'
           } by <span class="highlight-noti">${this.cutString(data.from || data.to)}</span>`;

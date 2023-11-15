@@ -31,6 +31,9 @@
       border-radius: 0;
       .content-notify {
         max-height: calc(100vh - 115px) !important;
+        &.paddingSafari {
+          max-height: calc(80vh - 40px) !important;
+        }
       }
     }
     .box-title {
