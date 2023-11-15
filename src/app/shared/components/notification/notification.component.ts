@@ -232,6 +232,7 @@ export class NotificationComponent {
   readNoti(item = {}) {
     if (item['linkWatchList']) {
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+      return;
     }
 
     if (!item['is_read']) {
