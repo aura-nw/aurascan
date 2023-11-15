@@ -65,6 +65,7 @@ export interface IConfiguration {
 @Injectable()
 export class EnvironmentService {
   configUri = './assets/config/config.json';
+  isMobile = false;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
 
   get configValue(): IConfiguration {
