@@ -7,8 +7,9 @@ import {
   Input,
   OnChanges,
   OnInit,
-  Output, ViewChild,
-  ViewEncapsulation
+  Output,
+  ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import * as _ from 'lodash';
@@ -174,8 +175,8 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
     this.PAGE.avgIdx = 2;
   }
 
-  changeRecord(pageSize = 10){
+  changeRecord(pageSize = 10) {
     this.pageSize = pageSize;
-    this.pageChangeRecord.emit(this.pageSize)
+    this.pageChangeRecord.emit(this.pageSize);
   }
 }
