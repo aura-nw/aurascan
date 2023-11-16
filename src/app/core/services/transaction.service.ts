@@ -211,9 +211,9 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getProposalDeposit(payload) {
+  getProposalDepositor(payload) {
     const operationsDoc = `
-    query queryProposalDeposit(
+    query queryProposalDepositor(
       $limit: Int = 100
       $order: order_by = desc
       $value: String = null
@@ -241,9 +241,8 @@ export class TransactionService extends CommonService {
           height
           hash
           timestamp
-          event_attributes (where: {block_height: { _lte: $heightLT, _gte: $heightGT }}){
-            value
-            composite_key
+          transaction_messages {
+            content
           }
         }
       }
@@ -259,7 +258,7 @@ export class TransactionService extends CommonService {
           heightGT: payload.heightGT,
           heightLT: payload.heightLT,
         },
-        operationName: 'queryProposalDeposit',
+        operationName: 'queryProposalDepositor',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -398,7 +397,7 @@ export class TransactionService extends CommonService {
           listFilterCW20: CW20_TRACKING,
           listFilterCW721: CW721_TRACKING,
           heightLTE: height,
-          heightGTE: height
+          heightGTE: height,
         },
         operationName: 'TxTransferDetail',
       })
