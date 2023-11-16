@@ -46,7 +46,7 @@ export class TransactionDetailComponent implements OnInit {
     public global: Globals,
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
