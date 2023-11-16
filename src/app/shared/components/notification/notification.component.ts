@@ -36,6 +36,7 @@ export class NotificationComponent {
   countAll = 0;
   countUnread = 0;
   isSafari = false;
+  countRecallNoti = 0;
 
   quotaNotification = this.environmentService.chainConfig.quotaNotification;
   dataWarning = {
@@ -57,7 +58,7 @@ export class NotificationComponent {
 
   onScroll(event): void {
     const scrollItem = document.getElementById('scrollBox');
-    if (scrollItem.scrollTop + 600 >= scrollItem.scrollHeight) {
+    if (scrollItem.scrollTop + 800 >= scrollItem.scrollHeight) {
       if (!this.isLoading && this.currentOffset < this.countAll) {
         this.currentOffset = this.currentOffset + this.lengthQuery;
         this.getListNoti(false);
@@ -127,24 +128,30 @@ export class NotificationComponent {
     };
     this.notificationsService.getListNoti(payload).subscribe(
       (res) => {
+        this.countUnread = res.meta?.countUnread;
         if (unread) {
-          this.countUnread = res.meta.countUnread;
           return;
         }
         res.data.forEach((element) => {
           this.handleDisplayNoti(element);
         });
-        this.countAll = res.meta.count;
+        this.countAll = res.meta?.count;
 
         if (isInit) {
           this.notificationsService.lstNoti = this.lstData = res.data;
         } else {
           this.lstData.push(...res.data);
         }
-        this.countUnread = this.lstData.filter((k) => k.is_read === 0)?.length;
         this.filterListNoti();
       },
-      () => {},
+      () => {
+        if (this.countRecallNoti < 5) {
+          setTimeout(() => {
+            this.countRecallNoti++;
+            this.getListNoti(true);
+          }, 15000);
+        }
+      },
       () => {
         this.isLoading = false;
       },
