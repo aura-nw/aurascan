@@ -87,3 +87,7 @@ mat-date-range-input {
 .cdk-overlay-container--grant {
   z-index: 2500 !important;
 }
+
+.calendar-contain .mat-date-range-input .mat-date-range-input-container {
+  width: 100%;
+}
