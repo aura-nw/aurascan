@@ -36,6 +36,7 @@ export class NotificationComponent {
   countAll = 0;
   countUnread = 0;
   isSafari = false;
+  countRecallNoti = 0;
 
   quotaNotification = this.environmentService.chainConfig.quotaNotification;
   dataWarning = {
@@ -144,10 +145,12 @@ export class NotificationComponent {
         this.filterListNoti();
       },
       () => {
-        this.isLoading = false;
-        setTimeout(() => {
-          this.getListNoti(true);
-        }, 20000);
+        if (this.countRecallNoti < 5) {
+          setTimeout(() => {
+            this.countRecallNoti++;
+            this.getListNoti(true);
+          }, 15000);
+        }
       },
       () => {
         this.isLoading = false;
