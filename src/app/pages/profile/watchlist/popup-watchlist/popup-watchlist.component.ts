@@ -193,7 +193,7 @@ export class PopupWatchlistComponent implements OnInit {
       if (this.getAddress?.value?.startsWith('aura')) {
         this.isValidAddress =
           (isAddress(this.getAddress.value) && this.isAccount) ||
-          (isContract(this.getAddress.value) && !this.isAccount);
+          (isContract(this.getAddress.value) && this.isContract);
       }
     }
 
