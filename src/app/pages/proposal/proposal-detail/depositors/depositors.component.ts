@@ -75,20 +75,20 @@ export class DepositorsComponent implements OnInit, OnDestroy {
   }
 
   getDataDeposit(payload): void {
-    this.transactionService.getProposalDeposit(payload).subscribe({
+    this.transactionService.getProposalDepositor(payload).subscribe({
       next: (res) => {
         let dataList: any[] = [];
         if (res?.transaction?.length > 0) {
           res?.transaction.forEach((tx) => {
-            tx['event_attributes'].forEach((item) => {
-              if (item.composite_key === 'proposal_deposit.amount') {
-                if (item.value) {
-                  tx.amount = balanceOf(item?.value.replace(this.coinMinimalDenom, ''));
-                  dataList.push(tx);
-                }
-              }
-              if (item.composite_key === 'transfer.sender') {
-                tx.depositors = item?.value;
+            tx['transaction_messages'].forEach((item) => {
+              if (item.content?.initial_deposit?.length > 0) {
+                tx.amount = balanceOf(item.content.initial_deposit[0].amount);
+                tx.depositors = item?.content.proposer;
+                dataList.push(tx);
+              } else if (item.content?.amount?.length > 0) {
+                tx.amount = balanceOf(item.content?.amount[0]?.amount);
+                tx.depositors = item?.content.depositor;
+                dataList.push(tx);
               }
             });
           });
