@@ -225,7 +225,10 @@ export class SummaryInfoComponent implements OnInit {
       if (data.content[0]['@type'] === SPECIFIC_TYPE_PROPOSAL.LEGACY_CONTENT) {
         type = data.content[0]['content']['@type']?.split('.').pop();
         org_type = data.content[0]['content']['@type'];
+      } else {
+        changes = data.content[0].params;
       }
+
       if (org_type === SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE) {
         changes = data.content[0].content.changes;
       } else if (org_type === SPECIFIC_TYPE_PROPOSAL.SOFTWARE_UPGRADE) {
@@ -465,6 +468,8 @@ export class SummaryInfoComponent implements OnInit {
         }
       }
     }
+    console.log(this.specialDataArr);
+    
   }
   changeTab(key) {
     this.activeId = key;
