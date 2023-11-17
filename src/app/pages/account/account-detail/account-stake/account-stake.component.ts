@@ -117,7 +117,6 @@ export class AccountStakeComponent implements OnChanges {
 
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
-    this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
 
     this.dataSourceDelegation = new MatTableDataSource();
     this.dataSourceUnBonding = new MatTableDataSource();
