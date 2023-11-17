@@ -241,7 +241,7 @@ export class SummaryInfoComponent implements OnInit {
       if (org_type === SPECIFIC_TYPE_PROPOSAL.SOFTWARE_UPGRADE) {
         plan = data.content.plan;
       } else if (org_type === SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE) {
-        changes = data.content.changes;
+        changes = data.content.changes[0];
       }
       org_type = data.content['@type'];
     }
@@ -470,6 +470,7 @@ export class SummaryInfoComponent implements OnInit {
       }
     }
   }
+
   changeTab(key) {
     this.activeId = key;
   }
@@ -479,6 +480,10 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   getObjectKey(object) {
+    console.log(this.proDetail?.changes);
+
+    console.log(Object.keys(object));
+
     return Object.keys(object);
   }
 }

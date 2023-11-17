@@ -164,9 +164,6 @@
               </ng-container>
               <ng-container *ngIf="typeOf(proDetail?.changes) === 'object'">
                 <div *ngFor="let key of getObjectKey(proDetail?.changes)" class="mt-4">
-                  {{proDetail?.changes|appJson}}
-                  {{specialDataArr[activeId].value}}
-                  {{specialDataArr[0] | appJson}}
                   <div *ngIf="key === specialDataArr[activeId].value">
                     {{ proDetail?.changes[key] }}
                   </div>
