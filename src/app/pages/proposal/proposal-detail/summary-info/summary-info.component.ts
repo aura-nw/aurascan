@@ -480,10 +480,6 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   getObjectKey(object) {
-    console.log(this.proDetail?.changes);
-
-    console.log(Object.keys(object));
-
     return Object.keys(object);
   }
 }
