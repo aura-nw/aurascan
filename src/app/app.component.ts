@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
   //   this.chainInfo?.chainId || ''
   // );
   isFirstLoad = true;
+  userEmail = '';
   constructor(
     private commonService: CommonService,
     private globals: Globals,
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit {
     private watchListService: WatchListService,
   ) {}
   ngOnInit(): void {
+    this.userEmail = localStorage.getItem('userEmail');
     this.getInfoCommon();
     this.getPriceToken();
     this.getDataFromStorage();
@@ -82,8 +84,7 @@ export class AppComponent implements OnInit {
     };
 
     // get list name tag if not login email
-    const userEmail = localStorage.getItem('userEmail');
-    if (!userEmail) {
+    if (!this.userEmail) {
       await this.commonService.getListNameTag(payload).subscribe((res) => {
         this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
         localStorage.setItem('listNameTag', JSON.stringify(res.data?.nameTags));
@@ -166,22 +167,13 @@ export class AppComponent implements OnInit {
     }
 
     // get watch list form local storage
-    const lstWatchList = localStorage.getItem('lstWatchList');
-    if (lstWatchList) {
-      try {
-        let data = JSON.parse(lstWatchList);
-        this.getWatchlist();
-      } catch (e) {
-        this.getWatchlist();
-      }
-    } else {
+    if (this.userEmail) {
       this.getWatchlist();
-    }
-
-    // check register fcm token
-    const registerFCM = localStorage.getItem('registerFCM');
-    if (registerFCM == 'true') {
-      this.notificationsService.registerFcmToken();
+      // check register fcm token
+      const registerFCM = localStorage.getItem('registerFCM');
+      if (registerFCM == 'true') {
+        this.notificationsService.registerFcmToken();
+      }
     }
   }
 

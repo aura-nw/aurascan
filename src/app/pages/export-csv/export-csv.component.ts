@@ -130,7 +130,11 @@ export class ExportCsvComponent implements OnInit {
       },
       error: (err) => {
         this.isDownload = false;
-        this.displayError(err);
+        if (err.error instanceof Blob) {
+          this.displayError(err);
+        } else {
+          this.toastr.error('Error when download, try again later');
+        }
       },
     });
   }

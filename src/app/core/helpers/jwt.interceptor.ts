@@ -21,8 +21,14 @@ export class JwtInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
     const graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
+    // get list name tag if not login email
+    const userEmail = localStorage.getItem('userEmail');
     let accessToken = localStorage.getItem('accessToken');
-    const jwtToken = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64').toString());
+    if (!accessToken || !userEmail) {
+      return next.handle(request);
+    }
+
+    const jwtToken = JSON.parse(Buffer.from(accessToken?.split('.')[1], 'base64').toString());
     if (!this.isReloadToken && jwtToken.exp < Date.now() / 1000) {
       this.isReloadToken = true;
       const payload = {
@@ -56,7 +62,7 @@ export class JwtInterceptor implements HttpInterceptor {
           localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
           accessToken = res.accessToken;
         },
-        error: () => {
+        error: (err) => {
           this.isReloadToken = false;
           // remove current fcm token
           this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(

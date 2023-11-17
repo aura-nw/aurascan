@@ -498,7 +498,7 @@ export class TransactionMessagesComponent implements OnInit {
             const proposalType = data.content?.length > 0 ? data.content[0] : data.content || data.messages[0];
             result.push({
               key: 'Proposal Type',
-              value: proposalType ? proposalType['@type']?.split('.').pop() : "",
+              value: proposalType ? proposalType['@type']?.split('.').pop() : '',
             });
           }
           result.push({ key: 'Title', value: data.content?.title || data?.title });
@@ -665,6 +665,9 @@ export class TransactionMessagesComponent implements OnInit {
           if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward) {
             rawType = this.typeGetData.WithdrawRewards;
           }
+          const arrClaim = this.transactionDetail?.tx?.events?.filter(
+            (k) => k.type === this.typeGetData.WithdrawRewards,
+          );
           const temp = j?.events.filter((f) => f.type === rawType);
           const tempCommission = j?.events.filter((f) => f.type === this.typeGetData.WithdrawCommission);
           if (temp?.length > 0) {
@@ -672,11 +675,12 @@ export class TransactionMessagesComponent implements OnInit {
             if (data) {
               if (this.transactionDetail?.type !== TRANSACTION_TYPE_ENUM.GetReward) {
                 if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
-                  let arrayAmount = data.filter((k) => k.key === 'amount');
-                  this.amountClaim = 0;
-                  arrayAmount.forEach((element) => {
-                    this.amountClaim += balanceOf(Number(element.value?.replace(this.coinMinimalDenom, ''))) || 0;
-                  });
+                  if (arrClaim?.length > 0) {
+                    arrClaim.forEach((element) => {
+                      const amount = element.attributes?.find((k) => k.key === 'amount')?.value;
+                      this.amountClaim += balanceOf(Number(amount?.replace(this.coinMinimalDenom, ''))) || 0;
+                    });
+                  }
                 }
               }
 
@@ -689,11 +693,10 @@ export class TransactionMessagesComponent implements OnInit {
                   this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
                   this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate
                 ) {
-                  const temp = j?.events.filter((f) => f.type === this.typeGetData.WithdrawRewards);
-                  if (temp?.length > 0) {
+                  if (arrClaim?.length > 0) {
                     const amount =
                       balanceOf(
-                        temp[0]?.attributes
+                        arrClaim[0]?.attributes
                           .find((data) => data.key === 'amount')
                           ?.value?.replace(this.coinMinimalDenom, ''),
                       ) || 0;
