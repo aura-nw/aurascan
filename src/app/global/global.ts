@@ -309,6 +309,7 @@ export function convertDataTransaction(data, coinInfo) {
     const timestamp = _.get(element, 'timestamp');
     const gas_used = _.get(element, 'gas_used');
     const gas_wanted = _.get(element, 'gas_wanted');
+    const memo = _.get(element, 'memo');
     let tx = _.get(element, 'data.tx_response');
     if (tx) {
       tx['tx'] = _.get(element, 'data.tx');
@@ -330,6 +331,7 @@ export function convertDataTransaction(data, coinInfo) {
       tx,
       typeOrigin,
       lstType,
+      memo
     };
   });
   return txs;

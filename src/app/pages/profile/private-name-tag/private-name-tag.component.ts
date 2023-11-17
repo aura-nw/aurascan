@@ -18,7 +18,7 @@ import { isContract } from 'src/app/core/utils/common/validation';
 import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
-import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
+import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
 import * as _ from 'lodash';
 
 @Component({

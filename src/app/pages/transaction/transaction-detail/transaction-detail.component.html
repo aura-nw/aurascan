@@ -104,6 +104,18 @@
               {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
             </div>
           </div>
+          <div class="row body mt-2 justify-content-between justify-content-lg-start">
+            <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
+              <div>Memo</div>
+            </div>
+            <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
+              {{
+                !transaction?.memo
+                  ? '-'
+                  : (transaction?.memo | cutStringPipe : (environmentService.isMobile ? 25 : 100))
+              }}
+            </div>
+          </div>
         </div>
 
         <pre *ngIf="isRawData" id="json" class="raw-content text--gray-1" [innerHtml]="transaction.tx | appJson"></pre>

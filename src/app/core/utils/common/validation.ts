@@ -1,4 +1,4 @@
-import { LENGTH_CHARACTER } from "../../constants/common.constant";
+import { LENGTH_CHARACTER } from '../../constants/common.constant';
 
 const REGEX = {
   CONTRACT_ADDRESS: /aura([\w\d]+)/,
@@ -16,4 +16,11 @@ export function isAddress(adr: string): boolean {
     return true;
   }
   return false;
+}
+
+export function isSafari(): boolean {
+  const result =
+    ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform) ||
+    (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+  return result;
 }

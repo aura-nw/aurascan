@@ -16,7 +16,6 @@ import { ProposalService } from '../../../../../app/core/services/proposal.servi
 })
 export class DepositorsComponent implements OnInit, OnDestroy {
   @Input() proposalDetail: any;
-
   depositorsList: any[] = [];
   tableData = [];
   loading = true;
@@ -76,18 +75,20 @@ export class DepositorsComponent implements OnInit, OnDestroy {
   }
 
   getDataDeposit(payload): void {
-    this.transactionService.getProposalDeposit(payload).subscribe({
+    this.transactionService.getProposalDepositor(payload).subscribe({
       next: (res) => {
         let dataList: any[] = [];
         if (res?.transaction?.length > 0) {
-          dataList = res?.transaction;
-          dataList.forEach((tx) => {
-            tx['event_attributes'].forEach((item) => {
-              if (item.composite_key === 'proposal_deposit.amount') {
-                tx.amount = balanceOf(item?.value.replace(this.coinMinimalDenom, ''));
-              }
-              if (item.composite_key === 'transfer.sender') {
-                tx.depositors = item?.value;
+          res?.transaction.forEach((tx) => {
+            tx['transaction_messages'].forEach((item) => {
+              if (item.content?.initial_deposit?.length > 0) {
+                tx.amount = balanceOf(item.content.initial_deposit[0].amount);
+                tx.depositors = item?.content.proposer;
+                dataList.push(tx);
+              } else if (item.content?.amount?.length > 0) {
+                tx.amount = balanceOf(item.content?.amount[0]?.amount);
+                tx.depositors = item?.content.depositor;
+                dataList.push(tx);
               }
             });
           });

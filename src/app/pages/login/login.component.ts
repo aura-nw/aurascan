@@ -4,6 +4,7 @@ import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/lega
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
@@ -42,6 +43,7 @@ export class LoginComponent implements OnInit {
     private route: Router,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
+    private notificationsService: NotificationsService,
   ) {}
 
   ngOnInit(): void {
@@ -141,11 +143,12 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
               localStorage.setItem('userEmail', JSON.stringify(res.email));
               localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
+              localStorage.setItem('registerFCM', JSON.stringify(true));
               this.route.navigate(['/profile']);
 
               setTimeout(() => {
                 location.reload();
-              }, 500);
+              }, 1000);
             }
           },
           error: (err) => {
@@ -244,11 +247,12 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
             localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
             localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
+            localStorage.setItem('registerFCM', JSON.stringify(true));
             window.location.href = '/profile';
 
             setTimeout(() => {
               location.reload();
-            }, 500);
+            }, 1000);
           },
           error: (err) => {
             this.addError(err?.error?.error?.details?.message);

@@ -12,7 +12,7 @@ import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { MaterialModule } from 'src/app/material.module';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -46,7 +46,7 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     NgClickOutsideDirective,
     NgxMaskDirective,
     NgxMaskPipe,
-    APaginatorModule,
+    CustomPaginatorModule,
     NameTagModule,
     MaterialModule,
   ],

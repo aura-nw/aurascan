@@ -11,7 +11,7 @@
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <div class="mt-4" *ngIf="!isLoading">
   <div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt">
-    <div class="txt-total-name">Total {{ pageData?.length }}/{{ quota }} addresses tagged</div>
+    <div class="text--gray-11">Total {{ pageData?.length }}/{{ quota }} addresses tagged</div>
     <div class="filter-group d-flex align-items-center flex-nowrap mt-2 mt-lg-0">
       <form class="aura-form single-input-field search-form private-search-form">
         <div class="input-group px-6">

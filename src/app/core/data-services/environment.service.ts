@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 
 export interface IConfiguration {
   environment: {
@@ -21,6 +23,8 @@ export interface IConfiguration {
     stakingTime: string;
     blockTime: number;
     quotaSetPrivateName: number;
+    quotaSetWatchList: number;
+    quotaNotification: number;
     coins: {
       name: string;
       display: string;
@@ -57,7 +61,8 @@ export interface IConfiguration {
 @Injectable()
 export class EnvironmentService {
   configUri = './assets/config/config.json';
-  private config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
+  isMobile = false;
+  config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
 
   get configValue(): IConfiguration {
     return this.config?.value;
@@ -103,6 +108,11 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.horoscope');
   }
 
+  get graphql() {
+    const { graphql, url } = _.get(this.configValue, 'api.horoscope');
+    return url + graphql;
+  }
+
   get socketUrl() {
     return _.get(this.configValue, 'api.socket');
   }
@@ -115,14 +125,11 @@ export class EnvironmentService {
   get siteKeyCaptcha() {
     return _.get(this.configValue, 'api.google.siteKeyCaptcha');
   }
+
   constructor(private http: HttpClient) {}
 
   loadConfig() {
-    return this.http.get<IConfiguration>(this.configUri);
-  }
-
-  async load(): Promise<void> {
-    return lastValueFrom(this.loadConfig())
+    return lastValueFrom(this.http.get<IConfiguration>(this.configUri))
       .then((config: any) => {
         const configuration: IConfiguration = config as IConfiguration;
 
@@ -136,5 +143,9 @@ export class EnvironmentService {
       .catch((err: any) => {
         console.error(err);
       });
+  }
+
+  async load(): Promise<void> {
+    await this.loadConfig();
   }
 }

@@ -6,7 +6,6 @@
     </div>
     <div *ngIf="!loading">
       <app-proposal-table
-        *ngIf="dataLength > 0"
         [type]="proposalDeposit"
         [data]="tableData"
         [length]="dataLength"
