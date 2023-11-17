@@ -227,6 +227,7 @@ export class SummaryInfoComponent implements OnInit {
         org_type = data.content[0]['content']['@type'];
       } else {
         changes = data.content[0].params;
+        plan = data.content[0].plan;
       }
 
       if (org_type === SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE) {
@@ -468,8 +469,6 @@ export class SummaryInfoComponent implements OnInit {
         }
       }
     }
-    console.log(this.specialDataArr);
-    
   }
   changeTab(key) {
     this.activeId = key;
