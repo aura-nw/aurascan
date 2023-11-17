@@ -17,6 +17,7 @@ import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
 import { LayoutComponent } from './layout.component';
 import { MenuBottomBarComponent } from './menu-bottom-bar/menu-bottom-bar.component';
+import { NotificationModule } from '../shared/components/notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MenuBottomBarComponent } from './menu-bottom-bar/menu-bottom-bar.compon
     NgbPopoverModule,
     CommonPipeModule,
     AuthenticateMailModule,
+    NotificationModule,
   ],
   providers: [LanguageService, CommonService, TransactionService, ContractService],
   exports: [],

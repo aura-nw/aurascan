@@ -7,6 +7,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-ma
 import { MASK_CONFIG } from 'src/app/app.config';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
@@ -16,11 +17,13 @@ import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-custom
 import { CommonPipeModule } from '../../core/pipes/common-pipe.module';
 import { MaterialModule } from '../../material.module';
 import { SharedModule } from '../../shared/shared.module';
-import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
+import { PopupNameTagComponent } from './private-name-tag/popup-name-tag/popup-name-tag.component';
 import { PrivateNameTagComponent } from './private-name-tag/private-name-tag.component';
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { ProfileComponent } from './profile.component';
+import { PopupWatchlistComponent } from './watchlist/popup-watchlist/popup-watchlist.component';
+import { WatchListComponent } from './watchlist/watchlist.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,8 @@ import { ProfileComponent } from './profile.component';
     PrivateNameTagComponent,
     PopupNameTagComponent,
     PopupCommonComponent,
+    WatchListComponent,
+    PopupWatchlistComponent,
   ],
   imports: [
     CommonModule,
@@ -48,6 +53,12 @@ import { ProfileComponent } from './profile.component';
     PaginatorModule,
     TooltipCustomizeModule,
   ],
-  providers: [UntypedFormBuilder, UserService, NameTagService, provideEnvironmentNgxMask(MASK_CONFIG)],
+  providers: [
+    UntypedFormBuilder,
+    UserService,
+    NameTagService,
+    WatchListService,
+    provideEnvironmentNgxMask(MASK_CONFIG),
+  ],
 })
 export class ProfileModule {}

@@ -1,4 +1,4 @@
-<div class="audio-player audio-player--has-link" [class.isoClass]="browserEnv === 'ios' && !link">
+<div class="audio-player audio-player--has-link" [class.isoClass]="isSafari && !link">
   <img [src]="previewImg || defaultImgToken" *ngIf="link && !isError" (error)="error()" />
   <img [src]="defaultImgToken" *ngIf="link && isError"/>
   <a href="{{ link }}" *ngIf="link" [class.disable-link]="disableLink"></a>

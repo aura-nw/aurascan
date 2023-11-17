@@ -275,7 +275,8 @@
     </ng-container>
   </ng-container>
   <div class="mt-6 d-flex justify-content-center justify-content-md-end">
-    <app-a-paginator [paginator]="pageData" [length]="length" (pageChange)="pageEvent($event)"> </app-a-paginator>
+    <app-custom-paginator [paginator]="pageData" [length]="length" (pageChange)="pageEvent($event)">
+    </app-custom-paginator>
   </div>
   <ng-template #noValues>
     <app-table-no-data [textNull]="errTxt"></app-table-no-data>

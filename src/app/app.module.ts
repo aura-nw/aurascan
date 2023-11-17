@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -8,8 +8,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule, NgbNavModule, NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { initializeApp } from 'firebase/app';
 import { NgProgressModule } from 'ngx-progressbar';
 import { ToastrModule } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MAT_DATE_FORMATS_VALUE, NG_PROGRESS_MODULE_CONFIG, TRANSLATE_MODULE_CONFIG } from './app.config';
@@ -23,6 +25,7 @@ import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
 import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
+initializeApp(environment.firebaseConfig);
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,13 +48,6 @@ import { MediaExpandModule } from './shared/components/media-expand/media-expand
     SchemaViewerModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
-    { provide: DEFAULT_TIMEOUT, useValue: 10000 },
-    { provide: ErrorHandler, useClass: GlobalErrorHandler },
-    DatePipe,
-    Globals,
     EnvironmentService,
     {
       provide: APP_INITIALIZER,
@@ -59,6 +55,13 @@ import { MediaExpandModule } from './shared/components/media-expand/media-expand
       multi: true,
       deps: [EnvironmentService],
     },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
+    { provide: DEFAULT_TIMEOUT, useValue: 10000 },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    DatePipe,
+    Globals,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor,

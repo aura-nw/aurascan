@@ -162,7 +162,7 @@ export class TransactionMessagesComponent implements OnInit {
       let result = [];
 
       const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
-      this.transactionTypeArr.push(typeTrans?.value || data['@type'].split('.').pop());
+      this.transactionTypeArr.push((typeTrans?.value || data['@type'].split('.').pop())?.replace('Msg', ''));
       const denom = data?.amount?.length > 0 ? data?.amount[0]?.denom : this.denom;
       let dataDenom = this.commonService.mappingNameIBC(denom);
       switch (data['@type']) {
@@ -338,7 +338,6 @@ export class TransactionMessagesComponent implements OnInit {
             value: this.commonService.setNameTag(this.getDataJson('_contract_address')),
             link: { url: '/contracts', data: this.getDataJson('_contract_address'), nameTag: true },
           });
-          result.push({ key: 'Label', value: data?.label });
           result.push({
             key: 'Sender',
             value: this.commonService.setNameTag(data?.sender),
@@ -496,13 +495,10 @@ export class TransactionMessagesComponent implements OnInit {
               value: this.getLongValue(proposalData?.find((k) => k.key === 'proposal_id')?.value),
               link: { url: '/votings' },
             });
-            let proposalType = proposalData
-              .find((k) => k.key === 'proposal_messages')
-              ?.value.split('.')
-              .pop();
+            const proposalType = data.content?.length > 0 ? data.content[0] : data.content || data.messages[0];
             result.push({
               key: 'Proposal Type',
-              value: proposalType,
+              value: proposalType ? proposalType['@type']?.split('.').pop() : "",
             });
           }
           result.push({ key: 'Title', value: data.content?.title || data?.title });
