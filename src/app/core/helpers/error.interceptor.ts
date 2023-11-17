@@ -38,6 +38,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 localStorage.removeItem('refreshToken');
                 localStorage.removeItem('userEmail');
                 localStorage.removeItem('listNameTag');
+                localStorage.removeItem('registerFCM');
                 this.router.navigate(['/login']);
 
                 setTimeout(() => {
@@ -60,6 +61,7 @@ export class ErrorInterceptor implements HttpInterceptor {
               localStorage.removeItem('refreshToken');
               localStorage.removeItem('userEmail');
               localStorage.removeItem('listNameTag');
+              localStorage.removeItem('registerFCM');
               this.router.navigate(['/login']);
 
               setTimeout(() => {
