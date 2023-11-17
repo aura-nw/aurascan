@@ -99,30 +99,30 @@ export const CHART_CONFIG: {
   };
 } = {
   ['24h']: {
-    initRange: 24 * 60 * 12, // 1 day
+    initRange: 24 * 12, // 1 day and 5 point per minute
     type: RangeType.minute,
-    value: 24, // 1 day
-    unit: 'h',
+    value: 1, // 1 day
+    unit: 'd',
     step: 9,
   },
   ['7d']: {
-    initRange: 168, // 1 weeks
+    initRange: 168, // 1 weeks, 168 hour, 168 point
     type: RangeType.hour,
-    value: 168 * 4, // 4 weeks
-    unit: 'h',
+    value: 14, // 2 weeks
+    unit: 'd',
     step: 1,
   },
   ['30d']: {
-    initRange: 30,
+    initRange: 180,
     type: RangeType.hour,
-    value: 100, // 100 days
+    value: 60,
     unit: 'd',
     step: 4,
   },
   ['12M']: {
     initRange: 365,
     type: RangeType.day,
-    value: 400, // 400 days
+    value: 400,
     unit: 'd',
     step: 1,
   },

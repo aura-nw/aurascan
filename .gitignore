@@ -5,3 +5,4 @@ dist
 .idea/vcs.xml
 .idea/workspace.xml
 .vscode/settings.json
+*.orig
