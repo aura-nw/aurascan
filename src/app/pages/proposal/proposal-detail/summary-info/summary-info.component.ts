@@ -231,7 +231,7 @@ export class SummaryInfoComponent implements OnInit {
       }
 
       if (org_type === SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE) {
-        changes = data.content[0].content.changes;
+        changes = data.content[0].content.changes[0];
       } else if (org_type === SPECIFIC_TYPE_PROPOSAL.SOFTWARE_UPGRADE) {
         plan = data.content[0].content.plan;
       }
