@@ -142,7 +142,13 @@ export class ExportCsvComponent implements OnInit {
         try {
           const errMsg = JSON.parse((<any>e.target).result)?.error;
           if (errMsg?.statusCode === 401 && errMsg?.message == 'Unauthorized') {
-            this.reloadToken();
+            if (this.csvForm.value.displayPrivate) {
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+              localStorage.removeItem('userEmail');
+              localStorage.removeItem('listNameTag');
+              window.location.reload();
+            }
           } else {
             this.toastr.error(errMsg?.message);
           }
@@ -154,31 +160,6 @@ export class ExportCsvComponent implements OnInit {
         reject(err);
       };
       reader.readAsText(err.error);
-    });
-  }
-
-  reloadToken() {
-    const payload = {
-      refreshToken: localStorage.getItem('refreshToken').replace(/"/g, ''),
-    };
-    this.userService.refreshToken(payload).subscribe({
-      next: (res) => {
-        localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
-        localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
-        this.toastr.error('Token expired, please try again');
-        this.responseCaptcha = grecaptcha.reset();
-      },
-      error: (err) => {
-        if (this.csvForm.value.displayPrivate) {
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          localStorage.removeItem('userEmail');
-          localStorage.removeItem('listNameTag');
-          window.location.reload();
-        } else {
-          this.toastr.error('Error when download, try again later');
-        }
-      },
     });
   }
 
