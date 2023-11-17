@@ -58,10 +58,7 @@ export async function createSignBroadcast(
 
 export async function getNetworkFee(network, address, messageType, memo = ''): Promise<StdFee> {
   //set default for multi gas
-  let multiGas = 1.3;
-  if (messageType?.typeUrl === TRANSACTION_TYPE_ENUM.MsgRevokeAllowance) {
-    multiGas = 1.4;
-  }
+  let multiGas = 1.6;
 
   let gasEstimation = 0;
   try {
