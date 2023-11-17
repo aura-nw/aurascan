@@ -241,7 +241,7 @@ export class SummaryInfoComponent implements OnInit {
       if (org_type === SPECIFIC_TYPE_PROPOSAL.SOFTWARE_UPGRADE) {
         plan = data.content.plan;
       } else if (org_type === SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE) {
-        changes = data.content.changes;
+        changes = data.content.changes[0];
       }
       org_type = data.content['@type'];
     }
@@ -470,6 +470,7 @@ export class SummaryInfoComponent implements OnInit {
       }
     }
   }
+
   changeTab(key) {
     this.activeId = key;
   }
