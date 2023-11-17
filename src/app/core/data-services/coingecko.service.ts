@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { NgHttpCachingHeaders } from 'ng-http-caching';
 import { BehaviorSubject, catchError, map, mergeMap, Observable, of, shareReplay, Subject, take, tap } from 'rxjs';
 import { CHART_RANGE } from '../constants/common.constant';
 import { EnvironmentService } from './environment.service';
@@ -49,6 +50,9 @@ export class CoingeckoService {
           price_change_percentage: '24h',
           locale: 'en',
         },
+        headers: {
+          [NgHttpCachingHeaders.ALLOW_CACHE]: '1',
+        },
       })
       .pipe(
         catchError((error) => {
@@ -61,12 +65,10 @@ export class CoingeckoService {
 
   getChartData(
     id: string,
-    {
-      from,
-      to,
-    }: {
-      from: number;
-      to: number;
+    ranges: {
+      from?: number;
+      to?: number;
+      days?: number;
     },
     {
       type,
@@ -82,7 +84,7 @@ export class CoingeckoService {
       return of({ data: resData });
     }
 
-    return this.getCoinMarketChartById(id, { from, to }).pipe(
+    return this.getCoinMarketChartById(id, ranges).pipe(
       tap((res) => {
         if (isLoadMore) {
           this.cacheChartData[type] = [...res.data];
@@ -98,62 +100,85 @@ export class CoingeckoService {
     {
       from,
       to,
+      days,
     }: {
-      from: number;
-      to: number;
+      from?: number;
+      to?: number;
+      days?: number;
     },
   ) {
     if (!id) {
       return of({ data: [] });
     }
 
-    return this.http
-      .get<any>(`${this.coingecko.url}/coins/${id}/market_chart/range`, {
-        params: {
-          vs_currency: 'usd',
-          from,
-          to,
-        },
-      })
-      .pipe(
-        map((res) => {
-          const { prices } = res;
+    const request = days
+      ? this.http.get<any>(`${this.coingecko.url}/coins/${id}/market_chart`, {
+          params: {
+            vs_currency: 'usd',
+            days,
+          },
 
-          if (prices) {
-            const data = prices.map((data) => {
-              return {
-                timestamp: new Date(data[0]).toISOString(),
-                current_price: data[1],
-              };
-            });
-            return { data };
-          }
-          return { data: [] };
-        }),
-      );
+          headers: {
+            [NgHttpCachingHeaders.ALLOW_CACHE]: '1',
+          },
+        })
+      : this.http.get<any>(`${this.coingecko.url}/coins/${id}/market_chart/range`, {
+          params: {
+            vs_currency: 'usd',
+            from,
+            to,
+          },
+
+          headers: {
+            [NgHttpCachingHeaders.ALLOW_CACHE]: '1',
+          },
+        });
+
+    return request.pipe(
+      map((res) => {
+        const { prices } = res;
+
+        if (prices) {
+          const data = prices.map((data) => {
+            return {
+              timestamp: new Date(data[0]).toISOString(),
+              current_price: data[1],
+            };
+          });
+          return { data };
+        }
+        return { data: [] };
+      }),
+    );
   }
 
   getCoinById(id: string) {
     if (!id) {
       return of({ data: null });
     }
-    return this.http.get<any>(`${this.coingecko.url}/coins/${id}`).pipe(
-      map((res) => {
-        const data = {
-          coinId: _.get(res, 'id'),
-          current_price: _.get(res, "market_data.current_price['usd']"),
-          market_cap: _.get(res, "market_data.market_cap['usd']"),
-          max_supply: _.get(res, 'market_data.max_supply'),
-          price_change_percentage_24h: _.get(res, 'market_data.price_change_percentage_24h'),
-          timestamp: moment(_.get(res, 'market_data.last_updated')).unix().toString(),
-          total_volume: _.get(res, "market_data.total_volume['usd']"),
-          symbol: _.get(res, 'symbol'),
-        };
+    return this.http
+      .get<any>(`${this.coingecko.url}/coins/${id}`, {
+        headers: {
+          [NgHttpCachingHeaders.ALLOW_CACHE]: '1',
+        },
+      })
+      .pipe(
+        map((res) => {
+          const data = {
+            coinId: _.get(res, 'id'),
+            current_price: _.get(res, "market_data.current_price['usd']"),
+            market_cap: _.get(res, "market_data.market_cap['usd']"),
+            max_supply: _.get(res, 'market_data.max_supply'),
+            price_change_percentage_24h: _.get(res, 'market_data.price_change_percentage_24h'),
+            timestamp: moment(_.get(res, 'market_data.last_updated')).unix().toString(),
+            total_volume: _.get(res, "market_data.total_volume['usd']"),
+            symbol: _.get(res, 'symbol'),
+          };
 
-        return {
-          data,
-        };
-      }),
-    );
+          return {
+            data,
+          };
+        }),
+      );
   }
 }

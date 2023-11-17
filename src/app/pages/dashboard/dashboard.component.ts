@@ -144,6 +144,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
     this.initTooltip();
     this.subscribeVisibleLogicalRangeChange();
+    this.chartEvent();
   }
 
   subscribeVisibleLogicalRangeChange() {
@@ -198,7 +199,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   chartEvent() {
     this.chart.timeScale().subscribeVisibleLogicalRangeChange(({ from, to }) => {
-      this.logicalRangeChange$.next({ from, to });
+      if (this.chartRange !== CHART_RANGE.H_24) {
+        this.logicalRangeChange$.next({ from, to });
+      }
     });
   }
 
@@ -242,6 +245,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         to: chartLength,
       });
     }
+
+    this.chart.applyOptions({
+      handleScroll: this.chartRange === CHART_RANGE.H_24 ? false : true,
+    });
 
     this.chart.priceScale('left').applyOptions({
       scaleMargins: {
@@ -330,18 +337,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initTooltip();
     this.chartRange = type;
 
-    const { value, unit } = CHART_CONFIG[this.chartRange];
-    const to = moment().unix();
-    const from = moment()
-      .subtract(value, unit as any)
-      .unix();
+    const { value } = CHART_CONFIG[this.chartRange];
+    const days = value;
 
     this.coingecko
       .getChartData(
         this.environmentService.coingecko.ids[0],
         {
-          from,
-          to,
+          days,
         },
         { type: this.chartRange },
       )
@@ -354,7 +357,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.cacheData = this.originalData;
           }
           this.drawChartFirstTime(dataX, dataY);
-          this.chartEvent();
         }
       });
   }

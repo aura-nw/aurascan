@@ -23,6 +23,7 @@ import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
 import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
+import { NgHttpCachingLocalStorage, NgHttpCachingModule, NgHttpCachingStrategy } from 'ng-http-caching';
 
 @NgModule({
   declarations: [AppComponent],
@@ -43,6 +44,12 @@ import { MediaExpandModule } from './shared/components/media-expand/media-expand
     FormsModule,
     MediaExpandModule,
     SchemaViewerModule,
+    NgHttpCachingModule.forRoot({
+      cacheStrategy: NgHttpCachingStrategy.DISALLOW_ALL,
+      lifetime: 1000 * 60 * 5, // 5 minutes,
+      allowedMethod: ['GET'],
+      store: new NgHttpCachingLocalStorage(),
+    }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
