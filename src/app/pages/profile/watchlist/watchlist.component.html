@@ -1,6 +1,7 @@
 <div class="d-flex justify-content-between mt-4 mt-lg-0">
   <div class="txt-title">My watchlist</div>
   <button
+  *ngIf="!errTxt"
     (click)="openPopup()"
     class="button button--xlg button--ssm-mob button-pill button-primary button-flat"
     type="button">
@@ -10,7 +11,7 @@
 
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <div class="mt-4 box-watch-list" *ngIf="!isLoading">
-  <div class="d-lg-flex align-items-center justify-content-between">
+  <div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt">
     <div class="text--gray-11">Total {{ pageData?.length }}/{{ quota }} addresses added</div>
     <div class="filter-group d-flex align-items-center flex-nowrap mt-2 mt-lg-0">
       <form class="aura-form single-input-field search-form watchlist-search-form">
@@ -260,5 +261,5 @@
 </div>
 
 <ng-template #noValues>
-  <app-table-no-data></app-table-no-data>
+  <app-table-no-data [textNull]="errTxt"></app-table-no-data>
 </ng-template>
