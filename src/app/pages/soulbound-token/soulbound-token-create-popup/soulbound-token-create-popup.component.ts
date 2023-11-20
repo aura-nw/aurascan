@@ -8,7 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { isAddress } from 'src/app/core/utils/common/validation';
+import { isAddress, isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-soulbound-token-create-popup',
@@ -20,7 +20,9 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
   isAddressInvalid = false;
   isCurrentAddress = false;
   isReject = false;
+
   network = this.environmentService.chainInfo;
+  prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -58,7 +60,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     soulboundTokenURI = soulboundTokenURI.trim();
     receiverAddress = receiverAddress.trim();
 
-    if (!isAddress(receiverAddress)) {
+    if (!isValidBench32Address(receiverAddress, this.prefixNormalAdd)) {
       this.isAddressInvalid = true;
       return;
     }

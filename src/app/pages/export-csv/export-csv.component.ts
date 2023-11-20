@@ -1,15 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { saveAs } from 'file-saver';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT } from 'src/app/core/constants/common.constant';
-import { CommonService } from 'src/app/core/services/common.service';
-import { isAddress, isContract } from 'src/app/core/utils/common/validation';
-import { saveAs } from 'file-saver';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { UserService } from 'src/app/core/services/user.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 declare var grecaptcha: any;
 @Component({
@@ -43,7 +41,6 @@ export class ExportCsvComponent implements OnInit {
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
-    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -209,15 +206,12 @@ export class ExportCsvComponent implements OnInit {
     this.getAddress.setValue(this.getAddress?.value?.trim());
     const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
 
-    this.isValidAddress = true;
     this.isValidBlock = true;
 
-    if (address.length > 0) {
-      if (!(isAddress(address) || isContract(address))) {
-        this.isValidAddress = false;
-        return false;
-      }
+    if (isValidBench32Address(address)) {
+      this.isValidAddress = true;
     } else {
+      this.isValidAddress = false;
       return false;
     }
 
