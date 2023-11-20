@@ -72,7 +72,7 @@ export class TokenTableComponent implements OnChanges {
   coinMiniDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
   image_s3 = this.environmentService.imageUrl;
-  defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
+  defaultLogo = this.environmentService.environment?.logo;
 
   constructor(
     private accountService: AccountService,

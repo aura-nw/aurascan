@@ -84,8 +84,6 @@ export class AccountDetailComponent implements OnInit {
         this.isContractAddress = isContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
-
-        this.api.getAccountByAddress(params.address);
       }
     });
   }
@@ -127,16 +125,8 @@ export class AccountDetailComponent implements OnInit {
   getAccountDetail(): void {
     this.isNoData = false;
     // const halftime = 15000;
-    this.accountService.getAccountDetail(this.currentAddress).subscribe(
-      (res) => {
-        // if (res.data.code === 200 && !res.data?.data) {
-        //   this.isNoData = true;
-        //   setTimeout(() => {
-        //     this.getAccountDetail();
-        //   }, halftime);
-        //   return;
-        // }
-
+    this.accountService.getAccountDetail(this.currentAddress).subscribe({
+      next: (res) => {
         if (res?.data) {
           this.currentAccountDetail = res.data;
           this.chartOptions.series = [];
@@ -180,11 +170,10 @@ export class AccountDetailComponent implements OnInit {
           });
         }
       },
-      (e) => {
+      error: (e) => {
         console.log('Error', e);
       },
-      () => {},
-    );
+    });
   }
 
   viewQrAddress(staticDataModal: any): void {

@@ -31,9 +31,7 @@ export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
     secondsVisible: true,
     minBarSpacing: 0,
   },
-  handleScale: {
-    mouseWheel: false,
-  },
+  handleScale: false,
   handleScroll: false,
 };
 
