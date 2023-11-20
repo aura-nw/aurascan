@@ -8,6 +8,8 @@ import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 import { saveAs } from 'file-saver';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 declare var grecaptcha: any;
 @Component({
@@ -41,6 +43,7 @@ export class ExportCsvComponent implements OnInit {
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +83,6 @@ export class ExportCsvComponent implements OnInit {
 
   setDataConfig(dataConfig) {
     const data = JSON.parse(dataConfig);
-    // this.csvForm.controls.address.value = data['address'];
     this.csvForm.controls.address.setValue(data['address']);
     this.dataType = data['exportType'];
   }
@@ -126,10 +128,42 @@ export class ExportCsvComponent implements OnInit {
       next: (res) => {
         this.handleDownloadFile(res, payload);
       },
-      error: () => {
+      error: (err) => {
         this.isDownload = false;
-        this.toastr.error('Error when download, try again later');
+        if (err.error instanceof Blob) {
+          this.displayError(err);
+        } else {
+          this.toastr.error('Error when download, try again later');
+        }
       },
+    });
+  }
+
+  displayError(err) {
+    return new Promise<any>((resolve, reject) => {
+      let reader = new FileReader();
+      reader.onload = (e: Event) => {
+        try {
+          const errMsg = JSON.parse((<any>e.target).result)?.error;
+          if (errMsg?.statusCode === 401 && errMsg?.message == 'Unauthorized') {
+            if (this.csvForm.value.displayPrivate) {
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+              localStorage.removeItem('userEmail');
+              localStorage.removeItem('listNameTag');
+              window.location.reload();
+            }
+          } else {
+            this.toastr.error(errMsg?.message);
+          }
+        } catch (e) {
+          reject(err);
+        }
+      };
+      reader.onerror = (e) => {
+        reject(err);
+      };
+      reader.readAsText(err.error);
     });
   }
 

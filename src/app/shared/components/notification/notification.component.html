@@ -9,7 +9,7 @@
       aria-expanded="false">
       <div class="position-relative">
         <img [src]="'assets/icons/icons-svg/black/bell.svg' | imageS3" alt="" />
-        <span class="unread-noti caption" *ngIf="this.countUnread > 0"> </span>
+        <span class="unread-noti caption" *ngIf="notificationsService.countUnread > 0"> </span>
       </div>
     </button>
     <ul
@@ -31,7 +31,10 @@
             <span>All</span>
           </button>
           <button class="button-change-tab" (click)="isTabAll = false; filterListNoti()" [class.active]="!isTabAll">
-            <span>Unread {{ this.countUnread > 0 ? '(' + this.countUnread + ')' : '' }}</span>
+            <span
+              >Unread
+              {{ notificationsService.countUnread > 0 ? '(' + notificationsService.countUnread + ')' : '' }}
+            </span>
           </button>
         </div>
       </div>

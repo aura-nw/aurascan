@@ -7,7 +7,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT, TOTAL_GROUP_TRACKING } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR, TOTAL_GROUP_TRACKING } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -53,6 +53,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalGroupTracking = TOTAL_GROUP_TRACKING;
   isLoading = true;
+  errTxt: string;
 
   quota = this.environmentService.chainConfig.quotaSetWatchList;
 
@@ -130,7 +131,12 @@ export class WatchListComponent implements OnInit, OnDestroy {
           }
         }
       },
-      () => {
+      (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+        }
         this.isLoading = false;
       },
       () => {

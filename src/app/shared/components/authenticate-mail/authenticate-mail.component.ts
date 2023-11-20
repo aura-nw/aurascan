@@ -66,6 +66,7 @@ export class AuthenticateMailComponent implements OnDestroy {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('listNameTag');
     localStorage.removeItem('lstWatchList');
+    localStorage.removeItem('registerFCM');
 
     // check is screen profile
     if (this.route.snapshot['_routerState']?.url === '/profile') {

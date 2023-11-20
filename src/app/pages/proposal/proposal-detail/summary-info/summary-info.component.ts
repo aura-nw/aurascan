@@ -225,9 +225,13 @@ export class SummaryInfoComponent implements OnInit {
       if (data.content[0]['@type'] === SPECIFIC_TYPE_PROPOSAL.LEGACY_CONTENT) {
         type = data.content[0]['content']['@type']?.split('.').pop();
         org_type = data.content[0]['content']['@type'];
+      } else {
+        changes = data.content[0].params;
+        plan = data.content[0].plan;
       }
+
       if (org_type === SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE) {
-        changes = data.content[0].content.changes;
+        changes = data.content[0].content.changes[0];
       } else if (org_type === SPECIFIC_TYPE_PROPOSAL.SOFTWARE_UPGRADE) {
         plan = data.content[0].content.plan;
       }
@@ -237,7 +241,7 @@ export class SummaryInfoComponent implements OnInit {
       if (org_type === SPECIFIC_TYPE_PROPOSAL.SOFTWARE_UPGRADE) {
         plan = data.content.plan;
       } else if (org_type === SPECIFIC_TYPE_PROPOSAL.PARAMETER_CHANGE) {
-        changes = data.content.changes;
+        changes = data.content.changes[0];
       }
       org_type = data.content['@type'];
     }
@@ -466,6 +470,7 @@ export class SummaryInfoComponent implements OnInit {
       }
     }
   }
+
   changeTab(key) {
     this.activeId = key;
   }
