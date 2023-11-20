@@ -55,6 +55,7 @@
     "moment": "^2.29.4",
     "ng-apexcharts": "^1.7.7",
     "ng-click-outside2": "^12.0.0",
+    "ng-http-caching": "^16.0.6",
     "ngx-cookie-service": "^16.0.1",
     "ngx-date-fns": "^10.0.1",
     "ngx-json-viewer": "^3.0.2",
