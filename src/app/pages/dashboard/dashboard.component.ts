@@ -6,17 +6,15 @@ import { Router } from '@angular/router';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { NgxMaskService } from 'ngx-mask';
-import { of, Subject, Subscription, timer } from 'rxjs';
-import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
+import { Subject, Subscription, timer } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
-import { TokenService } from 'src/app/core/services/token.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { getInfo } from 'src/app/core/utils/common/info-common';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -143,59 +141,59 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
     this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
     this.initTooltip();
-    this.subscribeVisibleLogicalRangeChange();
-    this.chartEvent();
+    // this.subscribeVisibleLogicalRangeChange();
+    // this.chartEvent();
   }
 
-  subscribeVisibleLogicalRangeChange() {
-    this.logicalRangeChange$
-      .pipe(
-        debounceTime(500),
-        switchMap(({ from, to }) => {
-          if (from <= 0 && !this.endData) {
-            const { value, unit } = CHART_CONFIG[this.chartRange];
+  // subscribeVisibleLogicalRangeChange() {
+  //   this.logicalRangeChange$
+  //     .pipe(
+  //       debounceTime(500),
+  //       switchMap(({ from, to }) => {
+  //         if (from <= 0 && !this.endData) {
+  //           const { value, unit } = CHART_CONFIG[this.chartRange];
 
-            const to = moment(this.originalData[0].timestamp)
-              .subtract(1, unit as any)
-              .unix();
+  //           const to = moment(this.originalData[0].timestamp)
+  //             .subtract(1, unit as any)
+  //             .unix();
 
-            const from = moment(this.originalData[0].timestamp)
-              .subtract(1, unit as any)
-              .subtract(value, unit as any)
-              .unix();
+  //           const from = moment(this.originalData[0].timestamp)
+  //             .subtract(1, unit as any)
+  //             .subtract(value, unit as any)
+  //             .unix();
 
-            return this.coingecko.getChartData(
-              this.tokenIdGetPrice.AURA,
-              {
-                from,
-                to,
-              },
-              { type: this.chartRange, isLoadMore: true },
-            );
-          }
-          return of(null);
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((res) => {
-        if (res) {
-          //update data common
-          if (res?.data?.length > 0) {
-            const { dataX, dataY } = this.parseDataFromApi(res.data);
-            const chartData = this.makeChartData(dataX, dataY);
+  //           return this.coingecko.getChartData(
+  //             this.tokenIdGetPrice.AURA,
+  //             {
+  //               from,
+  //               to,
+  //             },
+  //             { type: this.chartRange, isLoadMore: true },
+  //           );
+  //         }
+  //         return of(null);
+  //       }),
+  //       takeUntil(this.destroy$),
+  //     )
+  //     .subscribe((res) => {
+  //       if (res) {
+  //         //update data common
+  //         if (res?.data?.length > 0) {
+  //           const { dataX, dataY } = this.parseDataFromApi(res.data);
+  //           const chartData = this.makeChartData(dataX, dataY);
 
-            this.originalData = [...res?.data, ...this.originalData];
-            this.originalDataArr = [...chartData, ...this.originalDataArr];
-            if (this.originalData.length > 0) {
-              this.cacheData = this.originalData;
-            }
-            this.areaSeries.setData(this.originalDataArr);
-          } else {
-            this.endData = true;
-          }
-        }
-      });
-  }
+  //           this.originalData = [...res?.data, ...this.originalData];
+  //           this.originalDataArr = [...chartData, ...this.originalDataArr];
+  //           if (this.originalData.length > 0) {
+  //             this.cacheData = this.originalData;
+  //           }
+  //           this.areaSeries.setData(this.originalDataArr);
+  //         } else {
+  //           this.endData = true;
+  //         }
+  //       }
+  //     });
+  // }
 
   chartEvent() {
     this.chart.timeScale().subscribeVisibleLogicalRangeChange(({ from, to }) => {
@@ -246,9 +244,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
 
-    this.chart.applyOptions({
-      handleScroll: this.chartRange === CHART_RANGE.H_24 ? false : true,
-    });
+    // this.chart.applyOptions({
+    //   handleScroll: this.chartRange === CHART_RANGE.H_24 ? false : true,
+    // });
 
     this.chart.priceScale('left').applyOptions({
       scaleMargins: {

@@ -34,6 +34,7 @@ export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
   handleScale: {
     mouseWheel: false,
   },
+  handleScroll: false,
 };
 
 export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'] = {
@@ -113,7 +114,7 @@ export const CHART_CONFIG: {
     step: 1,
   },
   ['30d']: {
-    initRange: 180,
+    initRange: 720, // 30 days, 720 hour, 720 point
     type: RangeType.hour,
     value: 60,
     unit: 'd',
