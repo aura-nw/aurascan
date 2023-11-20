@@ -31,10 +31,9 @@ export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
     secondsVisible: true,
     minBarSpacing: 0,
   },
-  handleScale: {
-    mouseWheel: false,
-  },
+  handleScale: false,
   handleScroll: false,
+  
 };
 
 export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'] = {
