@@ -16,6 +16,7 @@ export class NotificationsService {
   userId = '';
   lstNoti = [];
   isMobileMatched = false;
+  countUnread = 0;
 
   notificationsSubject$ = new Subject<any>();
   notificationStore$ = new BehaviorSubject<any[]>([]);
@@ -116,6 +117,7 @@ export class NotificationsService {
       })
       .subscribe((res: any) => {
         if (res) {
+          localStorage.setItem('registerFCM', 'false');
           this.userId = res.data.user_id;
         }
       });
