@@ -34,7 +34,6 @@ export class NotificationComponent {
   lengthQuery = 100;
   clickNoti = false;
   countAll = 0;
-  countUnread = 0;
   isSafari = false;
   countRecallNoti = 0;
 
@@ -50,7 +49,7 @@ export class NotificationComponent {
   };
 
   constructor(
-    private notificationsService: NotificationsService,
+    public notificationsService: NotificationsService,
     private router: Router,
     public commonService: CommonService,
     private environmentService: EnvironmentService,
@@ -79,8 +78,10 @@ export class NotificationComponent {
     }
 
     if (this.isInit) {
-      this.getListNoti(this.isInit, true);
       this.notificationsService.init();
+      if (!this.notificationsService.currentFcmToken) {
+        this.getListNoti(this.isInit, true);
+      }
       this.isInit = false;
     }
 
@@ -128,7 +129,7 @@ export class NotificationComponent {
     };
     this.notificationsService.getListNoti(payload).subscribe(
       (res) => {
-        this.countUnread = res.meta?.countUnread;
+        this.notificationsService.countUnread = res.meta?.countUnread;
         if (unread) {
           return;
         }
@@ -269,7 +270,7 @@ export class NotificationComponent {
 
   updateReadStatus(id = null) {
     if (!id) {
-      this.countUnread = 0;
+      this.notificationsService.countUnread = 0;
       this.lstData.forEach((element) => {
         element.is_read = 1;
       });

@@ -44,6 +44,10 @@ export interface IConfiguration {
     socket: string;
     ipfsDomain: string;
     googleClientId: string;
+    coingecko: {
+      url: string;
+      ids: string[];
+    };
     google: {
       url: string;
       clientId: string;
@@ -126,6 +130,9 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.google.siteKeyCaptcha');
   }
 
+  get coingecko() {
+    return _.get(this.configValue, 'api.coingecko');
+  }
   constructor(private http: HttpClient) {}
 
   loadConfig() {

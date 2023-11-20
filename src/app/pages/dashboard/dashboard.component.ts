@@ -6,16 +6,15 @@ import { Router } from '@angular/router';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { NgxMaskService } from 'ngx-mask';
-import { of, Subject, Subscription, timer } from 'rxjs';
-import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
+import { Subject, Subscription, timer } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
+import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
-import { TokenService } from 'src/app/core/services/token.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { getInfo } from 'src/app/core/utils/common/info-common';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -112,11 +111,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public datepipe: DatePipe,
     private proposalService: ProposalService,
     private maskService: NgxMaskService,
-    private token: TokenService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
+    private coingecko: CoingeckoService,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -143,64 +142,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
     this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
     this.initTooltip();
-    this.subscribeVisibleLogicalRangeChange();
-  }
-
-  subscribeVisibleLogicalRangeChange() {
-    this.logicalRangeChange$
-      .pipe(
-        debounceTime(500),
-        switchMap(({ from, to }) => {
-          if (from <= 0 && !this.endData) {
-            const { value, unit } = CHART_CONFIG[this.chartRange];
-
-            const max = moment(this.originalData[0].timestamp)
-              .subtract(1, unit as any)
-              .valueOf();
-
-            const min = moment(this.originalData[0].timestamp)
-              .subtract(1, unit as any)
-              .subtract(value, unit as any)
-              .valueOf();
-
-            const payload = {
-              coinId: this.tokenIdGetPrice.AURA,
-              rangeType: CHART_CONFIG[this.chartRange].type,
-              min,
-              max,
-              step: CHART_CONFIG[this.chartRange].step,
-            };
-
-            return this.token.getTokenMetrics(payload);
-          }
-          return of(null);
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((res) => {
-        if (res) {
-          //update data common
-          if (res?.data?.length > 0) {
-            const { dataX, dataY } = this.parseDataFromApi(res.data);
-            const chartData = this.makeChartData(dataX, dataY);
-
-            this.originalData = [...res?.data, ...this.originalData];
-            this.originalDataArr = [...chartData, ...this.originalDataArr];
-            if (this.originalData.length > 0) {
-              this.cacheData = this.originalData;
-            }
-            this.areaSeries.setData(this.originalDataArr);
-          } else {
-            this.endData = true;
-          }
-        }
-      });
-  }
-
-  chartEvent() {
-    this.chart.timeScale().subscribeVisibleLogicalRangeChange(({ from, to }) => {
-      this.logicalRangeChange$.next({ from, to });
-    });
   }
 
   makeChartData(data: number[], time: any[]) {
@@ -261,7 +202,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getMarketInfo() {
-    this.token.getTokenMarket().subscribe((res) => {
+    this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
       const { data } = res;
       if (data) {
         this.tokenInfo = data;
@@ -339,61 +280,29 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initTooltip();
     this.chartRange = type;
 
-    const { value, unit } = CHART_CONFIG[this.chartRange];
-    const max = moment().valueOf();
-    const min = moment()
-      .subtract(value, unit as any)
-      .valueOf();
-    const payload = {
-      coinId: this.tokenIdGetPrice.AURA,
-      rangeType: CHART_CONFIG[this.chartRange].type,
-      min,
-      max,
-      step: CHART_CONFIG[this.chartRange].step,
-    };
+    const { value } = CHART_CONFIG[this.chartRange];
+    const days = value;
 
-    this.token.getTokenMetrics(payload).subscribe((res) => {
-      //update data common
-      this.getInfoCommon();
-      if (res?.data?.length > 0) {
-        const { dataX, dataY } = this.parseDataFromApi(res.data);
+    this.coingecko
+      .getChartData(
+        this.environmentService.coingecko.ids[0],
+        {
+          days,
+        },
+        { type: this.chartRange },
+      )
+      .subscribe((res) => {
+        if (res?.data?.length > 0) {
+          const { dataX, dataY } = this.parseDataFromApi(res.data);
 
-        this.originalData = [...this.originalData, ...res?.data];
-        if (this.originalData.length > 0) {
-          this.cacheData = this.originalData;
+          this.originalData = [...this.originalData, ...res?.data];
+          if (this.originalData.length > 0) {
+            this.cacheData = this.originalData;
+          }
+          this.drawChartFirstTime(dataX, dataY);
         }
-        this.drawChartFirstTime(dataX, dataY);
-        this.chartEvent();
-      }
-    });
+      });
   }
-
-  getInfoCommon(): void {
-    this.commonService.status().subscribe((res) => {
-      getInfo(this.global, res);
-    });
-  }
-
-  // exportChart() {
-  //   const exportData = this.originalData.map((item) => {
-  //     const dateF = this.datepipe.transform(new Date(item.timestamp), 'dd-MM-yyyy:HH-mm-ss');
-  //     return {
-  //       date: dateF,
-  //       value: this.isPrice ? item.current_price : item.total_volume,
-  //     };
-  //   });
-
-  //   exportChart(
-  //     [
-  //       {
-  //         table1: exportData,
-  //       },
-  //     ],
-  //     this.chartRange,
-  //     this.isPrice,
-  //     this.currDate,
-  //   );
-  // }
 
   initTooltip() {
     const container = document.getElementById('chart');
