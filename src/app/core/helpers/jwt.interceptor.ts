@@ -28,7 +28,7 @@ export class JwtInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
-    const jwtToken = JSON.parse(Buffer.from(accessToken?.split('.')[1], 'base64').toString());
+    const jwtToken = this.parseJwt(accessToken);
     if (!this.isReloadToken && jwtToken.exp < Date.now() / 1000) {
       this.isReloadToken = true;
       const payload = {
@@ -93,5 +93,21 @@ export class JwtInterceptor implements HttpInterceptor {
       });
     }
     return next.handle(request);
+  }
+
+  parseJwt(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(
+      window
+        .atob(base64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join(''),
+    );
+
+    return JSON.parse(jsonPayload);
   }
 }
