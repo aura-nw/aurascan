@@ -14,8 +14,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (err.status === 401) {
           this.router.navigate(['/login']);
         }
-        const error = err.error.message || err.statusText;
-        return throwError(error);
+        return throwError(err);
       }),
     );
   }
