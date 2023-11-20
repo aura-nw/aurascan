@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { bech32 } from 'bech32';
 import { formatDistanceToNowStrict } from 'date-fns';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -9,7 +8,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
-import { Globals } from 'src/app/global/global';
 
 @Injectable({ providedIn: 'root' })
 export class CommonService {
