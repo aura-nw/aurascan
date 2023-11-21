@@ -133,7 +133,7 @@
             <ng-container *ngIf="proDetail?.plan">
               <div *ngFor="let key of getObjectKey(proDetail?.plan)">
                 <ng-container *ngIf="key === specialDataArr[activeId].value">
-                  {{ proDetail?.plan[key] }}
+                  {{ proDetail?.plan[key] | appJson : { checkType: true } }}
                 </ng-container>
               </div>
             </ng-container>
