@@ -59,13 +59,13 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getTokenMarketData(payload = {}): Observable<any> {
-    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
+  // getTokenMarketData(payload = {}): Observable<any> {
+  //   const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
 
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/token-market`, {
-      params,
-    });
-  }
+  //   return this.http.get<any>(`${this.apiUrl}/cw20-tokens/token-market`, {
+  //     params,
+  //   });
+  // }
 
   getListCW721Token(payload, textSearch = null): Observable<any> {
     if (textSearch?.length > 0) {

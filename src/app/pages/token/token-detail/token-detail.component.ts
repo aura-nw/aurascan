@@ -2,10 +2,11 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { map, of, switchMap } from 'rxjs';
 import { DATEFORMAT } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TokenService } from 'src/app/core/services/token.service';
 
@@ -18,17 +19,14 @@ export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
   tokenDetail: any;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
-  contractType = ContractRegisterType;
 
   constructor(
     private router: ActivatedRoute,
     private route: Router,
     private tokenService: TokenService,
-    private environmentService: EnvironmentService,
     private contractService: ContractService,
     private datePipe: DatePipe,
+    private coingecko: CoingeckoService,
   ) {}
 
   ngOnInit(): void {
@@ -47,40 +45,67 @@ export class TokenDetailComponent implements OnInit {
   getTokenDetail(): void {
     let now = new Date();
     now.setDate(now.getDate() - 1);
+
     this.tokenService
       .getTokenDetail(this.contractAddress, this.datePipe.transform(now, DATEFORMAT.DATE_ONLY))
-      .subscribe(
-        (res) => {
-          const data = _.get(res, `smart_contract`);
-          if (data.length > 0) {
-            const reqPayload = { contractAddress: data[0].address };
-            this.tokenService.getTokenMarketData(reqPayload).subscribe((item) => {
-              const token = data[0];
-              const tokenMarket = item.length > 0 ? item[0] : null;
-              token.contract_address = data[0].address;
-              token.name = data[0].cw20_contract.name;
-              token.symbol = data[0].cw20_contract.symbol;
-              token.decimals = data[0].cw20_contract.decimal;
-              token.type = this.contractType.CW20;
-              token.contract_address = data[0].address;
-              token.max_total_supply = tokenMarket?.max_supply || 0;
-              token.circulating_market_cap = tokenMarket?.circulating_market_cap || 0;
-              token.price = tokenMarket?.current_price || 0;
-              token.verify_status = tokenMarket?.verify_status || '';
-              token.verify_text = tokenMarket?.verify_text || '';
-              token.fully_diluted_market_cap =
-                tokenMarket?.fully_diluted_valuation || token.max_total_supply * token.price;
-              token.price_change_percentage_24h = tokenMarket?.price_change_percentage_24h || 0;
-              token.contract_verification = data[0].code?.code_id_verifications[0]?.verification_status;
-              this.tokenDetail = token;
-            });
+      .pipe(
+        switchMap((res) => {
+          const data = _.get(res, `smart_contract[0]`);
+
+          if (data) {
+            return this.coingecko.coinsMarket$.pipe(
+              map((coins) => {
+                const coin = coins?.find((item) => item.symbol === data.cw20_contract?.symbol);
+                const {
+                  price,
+                  circulating_market_cap,
+                  max_total_supply,
+                  fully_diluted_market_cap,
+                  price_change_percentage_24h,
+                } = coin || {
+                  price: 0,
+                  circulating_market_cap: 0,
+                  max_total_supply: 0,
+                  fully_diluted_market_cap: 0,
+                  price_change_percentage_24h: 0,
+                };
+
+                return {
+                  contract_address: data.address,
+                  name: data.cw20_contract?.name,
+                  symbol: data.cw20_contract?.symbol,
+                  decimals: data.cw20_contract?.decimal,
+                  type: ContractRegisterType.CW20,
+                  price,
+                  circulating_market_cap,
+                  max_total_supply,
+                  fully_diluted_market_cap,
+                  price_change_percentage_24h,
+                  contract_verification: '',
+                  verify_status: '',
+                  verify_text: '',
+                };
+              }),
+            );
           }
-        },
-        () => {},
-        () => {
+
+          return of(null);
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          if (!res) {
+            this.route.navigate(['/tokens']);
+            return;
+          }
+
+          this.tokenDetail = res;
           this.loading = false;
         },
-      );
+        error: () => {
+          this.loading = false;
+        },
+      });
   }
 
   getTokenDetailNFT(): void {
