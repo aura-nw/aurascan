@@ -10,7 +10,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { isAddress, isContract, isSafari } from 'src/app/core/utils/common/validation';
+import { isAddress, isContract, isSafari, isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -190,7 +190,7 @@ export class PopupWatchlistComponent implements OnInit {
 
     if (this.getAddress.value?.length > 0) {
       this.isValidAddress = false;
-      if (this.getAddress?.value?.startsWith('aura')) {
+      if (isValidBench32Address(this.getAddress?.value, this.commonService.addressPrefix)) {
         this.isValidAddress =
           (isAddress(this.getAddress.value) && this.isAccount) ||
           (isContract(this.getAddress.value) && this.isContract);
