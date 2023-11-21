@@ -10,7 +10,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { isAddress, isContract } from 'src/app/core/utils/common/validation';
+import { isAddress, isContract, isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -103,9 +103,9 @@ export class PopupNameTagComponent implements OnInit {
   checkFormValid() {
     this.getAddress['value'] = this.getAddress?.value.trim();
 
-    if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
+    if (isValidBench32Address(this.getAddress?.value, this.commonService.addressPrefix)) {
       this.isValidAddress =
-        (isAddress(this.getAddress.value) && this.isAccount) || (isContract(this.getAddress.value) && !this.isAccount);
+        (isAddress(this.getAddress.value) && this.isAccount) || (isContract(this.getAddress.value) && this.isContract);
     } else {
       this.isValidAddress = false;
     }

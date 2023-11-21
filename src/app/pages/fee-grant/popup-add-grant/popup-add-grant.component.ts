@@ -17,6 +17,7 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
+import { isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-add-grant',
@@ -220,10 +221,7 @@ export class PopupAddGrantComponent implements OnInit {
     this.formValid = false;
     this.isInvalidAddress = false;
     if (grantee_address?.length > 0) {
-      if (
-        this.isSubmit &&
-        !(grantee_address?.length >= LENGTH_CHARACTER.ADDRESS && grantee_address?.trim().startsWith(this.prefixAdd))
-      ) {
+      if (this.isSubmit && !isValidBench32Address(grantee_address, this.prefixAdd)) {
         this.isInvalidAddress = true;
         return false;
       }

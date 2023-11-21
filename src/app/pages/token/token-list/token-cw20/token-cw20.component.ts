@@ -133,6 +133,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     if (this.dataTable.length > 0) {
       let result = this.dataTable
         ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+        .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
         .slice(payload?.offset, payload?.offset + payload?.limit);
       // Search with text search
       if (this.textSearch) {
@@ -198,6 +199,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                 // Sort and slice 20 frist record.
                 const result = dataFlat
                   ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+                  .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
                   .slice(payload?.offset, payload?.offset + payload?.limit);
                 this.dataSource = new MatTableDataSource<any>(result);
                 this.pageData.length = res?.length;
