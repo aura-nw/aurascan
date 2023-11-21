@@ -1,7 +1,6 @@
 <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-<ng-container *ngIf="!loading">
+<ng-container *ngIf="!loading && !errTxt && tokenDetail">
   <div class="d-flex mb-4 mb-lg-5 align-items-center">
-    <!-- <img [src]="tokenDetail?.image || defaultLogoToken" alt="" width="32px" height="32px" /> -->
     <h1 class="mb-0 text--white ml-2">
       <div class="d-flex">
         Token <span class="text--gray-5 break-word ml-1">{{ tokenDetail?.name }}</span>
@@ -37,3 +36,4 @@
     (hasMore)="getMoreTx($event)">
   </app-token-content>
 </ng-container>
+<app-table-no-data *ngIf="!loading" [textNull]="errTxt"></app-table-no-data>

@@ -47,8 +47,8 @@ export enum WalletAcount {
 
 export enum TabsAccount {
   ExecutedTxs = 'Executed',
-  AuraTxs = 'Coin transfer',
-  FtsTxs = 'Token transfer',
+  AuraTxs = 'Native Transfer',
+  FtsTxs = 'CW20 Transfer',
   NftTxs = 'NFT transfer',
 }
 
