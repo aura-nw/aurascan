@@ -23,12 +23,14 @@ export class CommonService {
   envDB = this.horoscope?.chain;
 
   chainId = this._environmentService.chainId;
+  addressPrefix = 'aura';
   listNameTag = [];
   listValidator = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this._environmentService.config.asObservable().subscribe((res) => {
       this.apiUrl = res.api.backend;
+      this.addressPrefix = res.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
     });
     const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
     this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);

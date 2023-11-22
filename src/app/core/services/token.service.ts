@@ -1,14 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
-import { RangeType } from '../models/common.model';
 import { CommonService } from './common.service';
-import * as _ from 'lodash';
-import { CW20_TRACKING } from '../constants/common.constant';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -299,28 +298,6 @@ export class TokenService extends CommonService {
 
   getPriceToken(tokenId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
-  }
-
-  getTokenMarket(coinId = 'aura-network') {
-    return this.http.get<any>(`${this.apiUrl}/metrics/token-market?coinId=${coinId}`);
-  }
-
-  getTokenMetrics({
-    rangeType,
-    coinId,
-    min,
-    max,
-    step,
-  }: {
-    rangeType: RangeType;
-    coinId: string;
-    min: number;
-    max: number;
-    step: number;
-  }) {
-    return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
-      params: { rangeType, coinId, min, max, step },
-    });
   }
 
   getListAssetCommunityPool() {

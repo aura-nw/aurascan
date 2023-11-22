@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
+import { isContract } from 'src/app/core/utils/common/validation';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -43,7 +43,7 @@ export class NameTagComponent implements OnInit {
   }
 
   isContractAddress(address) {
-    return address?.startsWith('aura') && address?.length === LENGTH_CHARACTER.CONTRACT;
+    return isContract(address);
   }
 
   extendLink(url) {
