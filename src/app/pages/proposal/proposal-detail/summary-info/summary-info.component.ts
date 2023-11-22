@@ -445,27 +445,15 @@ export class SummaryInfoComponent implements OnInit {
 
   getProposalMoreInfo(data: any) {
     if (this.specialDataArr?.length === 0) {
-      if (typeof data !== 'object') {
-        let index = 0;
-        for (let prop in data[0]) {
+      let index = 0;
+      data = data[0] || data;
+      for (let prop in data) {
+        if (data.hasOwnProperty(prop)) {
           this.specialDataArr.push({
             key: index,
             value: prop,
           });
           index++;
-        }
-      }
-      if (typeof data === 'object') {
-        let index = 0;
-        data = data[0] || data;
-        for (let prop in data) {
-          if (data.hasOwnProperty(prop)) {
-            this.specialDataArr.push({
-              key: index,
-              value: prop,
-            });
-            index++;
-          }
         }
       }
     }
