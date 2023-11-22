@@ -153,7 +153,7 @@ export class LoginComponent implements OnInit {
           },
           error: (err) => {
             const error = err?.error?.error?.details;
-            this.addError(error?.message);
+            this.addError(error?.message || err.statusText);
             this.errorCode = error?.code;
             this.isError = true;
           },
@@ -170,7 +170,7 @@ export class LoginComponent implements OnInit {
           error: (err) => {
             const error = err?.error?.error?.details;
             this.errorCode = error?.code;
-            this.addError(error?.message[0]);
+            this.addError(error?.message[0] || err.statusText);
             this.isError = true;
           },
         });
