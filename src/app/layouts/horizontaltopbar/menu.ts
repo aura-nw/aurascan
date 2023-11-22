@@ -1,3 +1,4 @@
+import { EFeature } from 'src/app/core/models/common.model';
 import { MenuItem } from './menu.model';
 
 export enum MenuName {
@@ -77,6 +78,7 @@ export const MENU: MenuItem[] = [
         link: '/tokens',
         name: MenuName.TokenCW20,
         icon: 'coins',
+        featureName: EFeature.Cw20,
       },
       {
         id: 2,
@@ -84,6 +86,7 @@ export const MENU: MenuItem[] = [
         link: '/tokens/tokens-nft',
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
+        featureName: EFeature.Cw721,
       },
       {
         id: 3,
@@ -91,6 +94,7 @@ export const MENU: MenuItem[] = [
         link: '/tokens/token-abt',
         name: MenuName.TokenCW4973,
         icon: 'icon icon-bound-token',
+        featureName: EFeature.Cw4973,
       },
     ],
   },
@@ -129,13 +133,16 @@ export const MENU: MenuItem[] = [
         link: '/statistics/charts-stats',
         name: MenuName.ChartStats,
         icon: 'line-segments',
+        featureName: EFeature.Statistics,
       },
       {
         id: 2,
         label: 'MENUITEMS.TOP-STATISTICS',
         link: '/statistics/top-statistic',
         name: MenuName.TopStatistics,
+
         icon: 'chart-line-up',
+        featureName: EFeature.TopStatistics,
       },
     ],
   },
@@ -150,18 +157,21 @@ export const MENU: MenuItem[] = [
         label: 'Fee Grant',
         link: '/fee-grant',
         icon: 'gas-pump',
+        featureName: EFeature.FeeGrant,
       },
       {
         id: 2,
         label: 'ABT Creator',
         link: '/accountbound',
         icon: 'medal',
+        featureName: EFeature.AccountBound,
       },
       {
         id: 3,
         label: 'Export Data (.CSV)',
         link: '/export-csv',
         icon: 'export',
+        featureName: EFeature.ExportCsv,
       },
     ],
   },

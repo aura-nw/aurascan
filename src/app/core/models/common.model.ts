@@ -21,9 +21,7 @@ export interface IResponsesError {
   };
 }
 
-export interface IResponsesTemplates<T>
-  extends IResponsesSuccess<T>,
-    IResponsesError {}
+export interface IResponsesTemplates<T> extends IResponsesSuccess<T>, IResponsesError {}
 
 export class TableTemplate {
   matColumnDef: string;
@@ -38,7 +36,7 @@ export class TableTemplate {
   prefix?: string;
   headerWidth?: number;
   isNameTag?: boolean;
-  justify?: 'center' | 'flex-start' | 'flex-end'
+  justify?: 'center' | 'flex-start' | 'flex-end';
 }
 
 export class ATBalanceDto {
@@ -70,7 +68,7 @@ export class IWSItemIao {
   type: string;
 }
 
-export type TypeSecondary = "BUY_AT" | "SELL_AT" | "";
+export type TypeSecondary = 'BUY_AT' | 'SELL_AT' | '';
 
 export class SecondaryOrderBookDto {
   status: string;
@@ -152,7 +150,6 @@ export interface DataDelegateDto {
   identity?: string;
 }
 
-
 export class TableTemplate2 {
   matColumnDef: string;
   headerCellDef: string;
@@ -167,4 +164,17 @@ export enum RangeType {
   day = 'd',
   hour = 'h',
   minute = 'm',
+}
+
+export enum EFeature {
+  Cw20 = 'CW20',
+  Cw721 = 'CW721',
+  Cw4973 = 'CW4973',
+  Statistics = 'STATISTICS',
+  TopStatistics = 'TOP_STATISTICS',
+  FeeGrant = 'FEE_GRANT',
+  AccountBound = 'ACCOUNT_BOUND',
+  CommunityPool = 'COMMUNITY_POOL',
+  Profile = 'PROFILE',
+  ExportCsv = 'EXPORT_CSV',
 }

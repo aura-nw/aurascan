@@ -2,6 +2,37 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.2.
 
+## Features
+
+```
+  CW20
+  CW721
+  CW4973
+  STATISTICS
+  FEE_GRANT
+  ACCOUNT_BOUND
+  COMMUNITY_POOL
+  PROFILE
+  EXPORT_CSV
+  TOP_STATISTICS
+```
+
+To enable any feature above, please add the feature name to the [config](./src/assets/config/config.json) file.
+
+```
+{
+  ...
+  chainConfig: {
+    ...
+    features: ["CW20","CW721"]
+    ...
+  }
+  ...
+}
+```
+
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

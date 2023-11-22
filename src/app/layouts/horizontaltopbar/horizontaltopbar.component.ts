@@ -71,23 +71,21 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     if (features.length > 0) {
       this.menuItems.forEach((item) => {
         if (item.subItems) {
+          let isEnabledMenu = false;
           item.subItems.forEach((subItem) => {
-            const links = subItem.link.split('/');
+            const featureName = subItem.featureName;
 
-            // Check disabled for statistics menu,
-            if (['statistics', 'tokens'].includes(links[1])) {
-              const foundIndex = features.findIndex((item) => item === links[1]);
-              item.disabled = foundIndex < 0 ? true : false;
-              return;
-            }
+            const foundIndex = features.findIndex((item) => item === featureName);
 
-            // Check disabled submenu
-            const path = links.pop();
+            // If have featureName, check disable
+            subItem.disabled = featureName ? (foundIndex < 0 ? true : false) : false;
 
-            const foundIndex = features.findIndex((item) => item === path);
-
-            subItem.disabled = foundIndex < 0 ? true : false;
+            isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
           });
+        } else {
+          const featureName = item.featureName;
+          const foundIndex = features.findIndex((item) => item === featureName);
+          item.disabled = foundIndex < 0 ? true : false;
         }
       });
     }
