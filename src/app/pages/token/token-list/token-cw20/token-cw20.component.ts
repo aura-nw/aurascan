@@ -146,10 +146,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap);
 
         const data = result.slice(payload?.offset, payload?.offset + payload?.limit);
-        this.dataSource = new MatTableDataSource<any>(data);
+        this.dataSource.data = data;
         this.pageData.length = result?.length;
       } else {
-        this.dataSource = new MatTableDataSource<any>(result);
+        this.dataSource.data = result;
         this.pageData.length = this.dataTable?.length;
       }
     } else {
@@ -186,7 +186,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     volume: +tokenFind?.total_volume || 0,
                     price: +tokenFind?.current_price || 0,
                     isHolderUp: changePercent >= 0 ? true : false,
-                    isValueUp: tokenFind?.price_change_percentage_24h >= 0 ? true : false,
+                    isValueUp: tokenFind?.price_change_percentage_24h && tokenFind?.price_change_percentage_24h >= 0 ? true : false,
                     change: tokenFind?.price_change_percentage_24h || 0,
                     holderChange: Math.abs(changePercent),
                     holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
@@ -201,7 +201,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                   ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
                   .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
                   .slice(payload?.offset, payload?.offset + payload?.limit);
-                this.dataSource = new MatTableDataSource<any>(result);
+                this.dataSource.data = result;
                 this.pageData.length = res?.length;
                 this.isLoading = false;
               },
@@ -232,14 +232,14 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
+    this.pageChange.selectPage(0);
     this.dataSource.data.forEach((data) => {
       data.circulating_market_cap = +data.circulating_market_cap;
       data.volume = +data.volume;
       data.price = +data.price;
       data.holders = +data.holders;
     });
-
-    let data = this.dataSource.data.slice();
+    let data = this.dataTable;
     if (!sort.active || sort.direction === '') {
       this.sortedData = data;
       return;
@@ -270,14 +270,18 @@ export class TokenCw20Component implements OnInit, OnDestroy {
         .sort((a, b) => this.compare(a.change, b.change, !isAsc));
       this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
     }
+    const payload = {
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+    };
 
-    let dataFilter = this.sortedData;
+    let dataFilter = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
     this.pageData = {
       length: this.pageData.length,
       pageSize: this.pageData.pageSize,
       pageIndex: this.pageData.pageIndex,
     };
-    this.dataSource = new MatTableDataSource<any>(dataFilter);
+    this.dataSource.data = dataFilter;
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -291,7 +295,18 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    this.getListToken();
+    const payload = {
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+    };
+    if (this.sortedData) {
+      this.dataSource.data = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
+    } else {
+      this.dataSource.data = this.dataTable
+        ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+        .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
+        .slice(payload?.offset, payload?.offset + payload?.limit);
+    }
   }
 
   getPriceBTC() {
