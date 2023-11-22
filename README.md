@@ -1,9 +1,27 @@
-# aura
+# Aurascan
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.2.
+The next generation blockchain explorer for Aura Network.
 
-## Features
+## Getting Started
 
+To run Aurascan locally, you need to have Node.js and Angular CLI installed on your machine. You also need to clone this repository and install the dependencies.
+
+```bash
+git clone https://github.com/aura-nw/aurascan.git
+cd aurascan
+npm install
+```
+
+## Configuration
+
+You can configure Aurascan by editing the `src/assets/config/config.json` file. 
+
+You can specify the chain name, RPC endpoint, LCD endpoint, chain ID, and other options. 
+
+### Feature config
+
+
+List of features which you can configure:
 ```
   CW20
   CW721
@@ -17,42 +35,41 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
   TOP_STATISTICS
 ```
 
-To enable any feature above, please add the feature name to the [config](./src/assets/config/config.json) file.
+To enable any feature above, please add the feature name to the config file.
 
-```
+Example:
+```json
 {
   ...
-  chainConfig: {
+  "chainConfig": {
     ...
-    features: ["CW20","CW721"]
+    "features": ["CW20", "CW721"]
     ...
   }
   ...
 }
 ```
 
+## Development Server
 
+To start a development server, run the following command:
 
-## Development server
+```bash
+ng serve
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Then, navigate to http://localhost:4200/ to see the app in action. The app will automatically reload if you change any of the source files.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+To build the project for production, run the following command:
 
-## Running unit tests
+```bash
+ng build --prod
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+The build artifacts will be stored in the `dist/` directory.
 
-## Running end-to-end tests
+ ## Further Help
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page
+To get more help on the Angular CLI, use `ng help` or check out the [Angular CLI Overview and Command Reference](^1^) page.
