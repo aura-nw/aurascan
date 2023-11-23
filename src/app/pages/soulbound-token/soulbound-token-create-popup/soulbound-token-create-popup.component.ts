@@ -5,10 +5,10 @@ import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { isAddress, isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-soulbound-token-create-popup',
@@ -31,6 +31,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     private walletService: WalletService,
     private soulboundService: SoulboundService,
     private toastr: NgxToastrService,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit() {
@@ -60,7 +61,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     soulboundTokenURI = soulboundTokenURI.trim();
     receiverAddress = receiverAddress.trim();
 
-    if (!isValidBench32Address(receiverAddress, this.prefixNormalAdd)) {
+    if (!this.commonService.isBech32Address(receiverAddress)) {
       this.isAddressInvalid = true;
       return;
     }
