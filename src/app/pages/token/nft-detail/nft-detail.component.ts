@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig,
+  MatLegacyDialogConfig as MatDialogConfig
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -14,7 +14,7 @@ import {
   MEDIA_TYPE,
   NULL_ADDRESS,
   PAGE_EVENT,
-  TIMEOUT_ERROR,
+  TIMEOUT_ERROR
 } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -31,7 +31,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { getTypeTx, Globals } from 'src/app/global/global';
+import { getTypeTx } from 'src/app/global/global';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
 
@@ -94,8 +94,7 @@ export class NFTDetailComponent implements OnInit {
 
   constructor(
     public commonService: CommonService,
-    public global: Globals,
-    public route: Router,
+    private route: Router,
     private environmentService: EnvironmentService,
     private router: ActivatedRoute,
     private soulboundService: SoulboundService,

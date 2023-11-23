@@ -57,7 +57,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   constructor(
     public translate: TranslateService,
     public global: Globals,
-    public tokenService: TokenService,
+    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private datePipe: DatePipe,
   ) {}

@@ -40,7 +40,8 @@
                             "file-saver",
                             "js-sha256",
                             "apexcharts",
-                            "@cordobo/qrcode"
+                            "@cordobo/qrcode",
+                            "bech32"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",

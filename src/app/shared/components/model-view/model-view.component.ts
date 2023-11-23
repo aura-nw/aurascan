@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import '@google/model-viewer';
 
@@ -7,7 +7,7 @@ import '@google/model-viewer';
   templateUrl: './model-view.component.html',
   styleUrls: ['./model-view.component.scss'],
 })
-export class ModelViewComponent implements OnInit {
+export class ModelViewComponent {
   @Input() modelUrl: string;
   @Input() appWidth: number;
   @Input() appHeight: number;
@@ -16,8 +16,6 @@ export class ModelViewComponent implements OnInit {
   @Input() disablePan = false;
 
   constructor(private router: Router) {}
-
-  ngOnInit(): void {}
 
   goTo(link) {
     this.router.navigate([link]);

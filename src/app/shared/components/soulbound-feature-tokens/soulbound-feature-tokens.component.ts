@@ -45,7 +45,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     private router: ActivatedRoute,
     private contractService: ContractService,
     private wSService: WSService,
-    public route: Router,
+    private route: Router,
   ) {}
 
   ngOnInit(): void {

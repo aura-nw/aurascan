@@ -4,7 +4,6 @@ import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/lega
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
@@ -43,7 +42,6 @@ export class LoginComponent implements OnInit {
     private route: Router,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
-    private notificationsService: NotificationsService,
   ) {}
 
   ngOnInit(): void {

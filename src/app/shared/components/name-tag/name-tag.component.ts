@@ -30,7 +30,7 @@ export class NameTagComponent implements OnInit {
 
   extendUrlLink = '';
 
-  constructor(public commonService: CommonService, public global: Globals) {}
+  constructor(public commonService: CommonService, private global: Globals) {}
 
   ngOnInit(): void {
     if (this.extendUrl) {

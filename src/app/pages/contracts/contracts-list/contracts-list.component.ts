@@ -5,14 +5,13 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
 import { ContractService } from '../../../core/services/contract.service';
 import { shortenAddress } from '../../../core/utils/common/shorten';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-contracts-list',
@@ -56,7 +55,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     public translate: TranslateService,
     private contractService: ContractService,
     private datePipe: DatePipe,
-    public commonService: CommonService,
   ) {}
 
   ngOnDestroy(): void {
