@@ -43,7 +43,7 @@ export class NameTagComponent implements OnInit {
   }
 
   isContractAddress(address) {
-    return isContract(address);
+    return this.commonService.isValidContract(address);
   }
 
   extendLink(url) {

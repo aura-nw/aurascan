@@ -208,7 +208,7 @@ export class ExportCsvComponent implements OnInit {
 
     this.isValidBlock = true;
 
-    if (isValidBench32Address(address)) {
+    if (this.commonService.isBech32Address(address)) {
       this.isValidAddress = true;
     } else {
       this.isValidAddress = false;
