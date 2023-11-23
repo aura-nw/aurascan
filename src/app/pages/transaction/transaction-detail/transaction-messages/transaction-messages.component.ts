@@ -7,15 +7,14 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { isContract } from 'src/app/core/utils/common/validation';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
 import {
   CodeTransaction,
+  pipeTypeData,
   TRANSACTION_TYPE_ENUM,
   TypeTransaction,
-  pipeTypeData,
 } from '../../../../core/constants/transaction.enum';
 import { formatWithSchema } from '../../../../core/helpers/date';
 
@@ -1001,7 +1000,7 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   isContractAddress(address) {
-    if (isContract(address)) {
+    if (this.commonService.isValidContract(address)) {
       return true;
     }
     return false;

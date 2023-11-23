@@ -63,7 +63,7 @@ export interface IConfiguration {
 @Injectable()
 export class EnvironmentService {
   configUri = './assets/config/config.json';
-  private config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
+  config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
 
   get configValue(): IConfiguration {
     return this.config?.value;

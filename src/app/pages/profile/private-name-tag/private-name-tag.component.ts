@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig
+  MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -14,7 +14,6 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { isContract } from 'src/app/core/utils/common/validation';
 import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
@@ -118,7 +117,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
           }
         }
         res.data?.forEach((element) => {
-          element['type'] = isContract(element.address) ? 'contract' : 'account';
+          element['type'] = this.commonService.isValidContract(element.address) ? 'contract' : 'account';
         });
         this.dataSource.data = res.data;
         this.pageData.length = res?.meta?.count || 0;
@@ -223,6 +222,6 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   }
 
   urlType(address) {
-    return isContract(address) ? '/contracts' : '/account';
+    return this.commonService.isValidContract(address) ? '/contracts' : '/account';
   }
 }

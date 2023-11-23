@@ -9,7 +9,6 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApiAccountService } from 'src/app/core/data-services/api-account.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { isContract } from 'src/app/core/utils/common/validation';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -18,7 +17,7 @@ import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.const
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { Globals } from '../../../global/global';
-import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
   selector: 'app-account-detail',
@@ -81,7 +80,7 @@ export class AccountDetailComponent implements OnInit {
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
-        this.isContractAddress = isContract(this.currentAddress);
+        this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
       }

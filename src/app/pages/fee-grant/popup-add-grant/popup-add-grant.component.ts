@@ -1,16 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
   MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -36,7 +36,6 @@ export class PopupAddGrantComponent implements OnInit {
   isSubmit = false;
   isRevoking = false;
   dayConvert = 24 * 60 * 60;
-  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
@@ -48,6 +47,7 @@ export class PopupAddGrantComponent implements OnInit {
     private feeGrantService: FeeGrantService,
     private dialog: MatDialog,
     public translate: TranslateService,
+    public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
   ) {}
 
@@ -220,10 +220,7 @@ export class PopupAddGrantComponent implements OnInit {
     this.formValid = false;
     this.isInvalidAddress = false;
     if (grantee_address?.length > 0) {
-      if (
-        this.isSubmit &&
-        !(grantee_address?.length >= LENGTH_CHARACTER.ADDRESS && grantee_address?.trim().startsWith(this.prefixAdd))
-      ) {
+      if (this.isSubmit && !this.commonService.isBech32Address(grantee_address)) {
         this.isInvalidAddress = true;
         return false;
       }
