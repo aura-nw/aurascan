@@ -50,6 +50,7 @@ export class JwtInterceptor implements HttpInterceptor {
             localStorage.removeItem('refreshToken');
             localStorage.removeItem('userEmail');
             localStorage.removeItem('listNameTag');
+            localStorage.removeItem('lstWatchList');
             localStorage.removeItem('registerFCM');
             this.router.navigate(['/login']);
 
@@ -75,6 +76,7 @@ export class JwtInterceptor implements HttpInterceptor {
           localStorage.removeItem('refreshToken');
           localStorage.removeItem('userEmail');
           localStorage.removeItem('listNameTag');
+          localStorage.removeItem('lstWatchList');
           localStorage.removeItem('registerFCM');
           this.router.navigate(['/login']);
 
