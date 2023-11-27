@@ -86,8 +86,8 @@ export class ExportCsvComponent implements OnInit {
 
   mappingDataExport(dataType) {
     switch (dataType) {
-      case this.tabsData.AuraTxs:
-        return this.tabsAccount.AuraTxs;
+      case this.tabsData.NativeTxs:
+        return this.tabsAccount.NativeTxs;
       case this.tabsData.FtsTxs:
         return this.tabsAccount.FtsTxs;
       case this.tabsData.NftTxs:
