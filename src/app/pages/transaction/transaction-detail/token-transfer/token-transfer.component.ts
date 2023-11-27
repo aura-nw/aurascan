@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -18,7 +18,7 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 })
 export class TokenTransferComponent implements OnInit {
   @Input() transaction: Number;
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   nullAddress = NULL_ADDRESS;
   dataSourceFTs = new MatTableDataSource<any>([]);
@@ -41,8 +41,8 @@ export class TokenTransferComponent implements OnInit {
   ];
   displayedColumnsFTs: string[] = this.templatesFTs.map((dta) => dta.matColumnDef);
   displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinDecimals = this.environmentService.chainInfo.currencies[0].coinDecimals;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
@@ -59,69 +59,72 @@ export class TokenTransferComponent implements OnInit {
     }
 
     let coinTransfer = [];
-    this.transaction['tx'].events?.forEach((element, index) => {
-      //skip case index = 0, tx fee
-      if (index === 0) {
-        return;
-      }
-
-      if (element.type === 'coin_spent') {
-        const from = element.attributes?.find((k) => k.key === 'spender')?.value;
-        let to;
-        if (this.transaction['tx'].events[index + 1]?.type === 'coin_received') {
-          to = this.transaction['tx']?.events[index + 1]?.attributes?.find((k) => k.key === 'receiver')?.value;
-        }
-        let arrAmount;
-        if (this.transaction['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
-          this.transaction['messages'][0]?.outputs.forEach((element) => {
-            to = element.address;
-            let cw20_contract = {};
-            let data = this.commonService.mappingNameIBC(element?.coins[0]?.denom);
-            let decimal = cw20_contract['decimal'] || data['decimals'] || this.coinDecimals;
-            cw20_contract['symbol'] = cw20_contract['symbol'] || data['display'] || this.denom;
-            cw20_contract['name'] = cw20_contract['name'] || data['display'] || this.denom;
-            let amount = element?.coins[0]?.amount.match(/\d+/g)[0];
-            coinTransfer.push({ amount, cw20_contract, from, to, decimal });
-          });
-        } else {
-          arrAmount = element.attributes?.find((k) => k.key === 'amount')?.value?.split(',');
-          arrAmount?.forEach((amountTemp) => {
-            let cw20_contract = {};
-            let decimal = cw20_contract['decimal'] || this.coinDecimals;
-            let dataAmount = {};
-            cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
-            cw20_contract['name'] = cw20_contract['name'] || this.denom;
-            if (amountTemp.indexOf('ibc') >= 0) {
-              dataAmount = this.commonService.mappingNameIBC(amountTemp);
-              cw20_contract['name'] = dataAmount['name'];
-              cw20_contract['symbol'] = dataAmount['display'];
-              decimal = dataAmount['decimal'];
+    this.transactionService
+      .getListTransferFromTx(this.transaction['tx_hash'], this.transaction['height'])
+      .subscribe((res) => {
+        res.coin_transfer?.forEach((event) => {
+          event.event_attributes.forEach((element, index) => {
+            //get first data with UnDelegate && Delegate
+            if (
+              this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Undelegate ||
+              this.transaction['typeOrigin'] === TRANSACTION_TYPE_ENUM.Delegate
+            ) {
+              if (event.event_attributes?.length < 8 || index >= 3) {
+                return;
+              }
             }
-            let amount = +amountTemp.match(/\d+/g)[0];
-            coinTransfer.push({ amount, cw20_contract, from, to, decimal });
+
+            if (element.composite_key === 'coin_received.receiver') {
+              let indexData;
+              // check index of receiver
+              if (index % 2 !== 0) {
+                indexData = index - 1;
+              } else {
+                indexData = index + 1;
+              }
+              const arrAmount = event.event_attributes[indexData]?.value?.split(',');
+              arrAmount.forEach((amountTemp) => {
+                let cw20_contract = {};
+                let dataAmount = {};
+                cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
+                cw20_contract['name'] = cw20_contract['name'] || this.denom;
+                let decimal = cw20_contract['decimal'] || this.coinDecimals;
+                if (amountTemp.indexOf('ibc') >= 0) {
+                  dataAmount = this.commonService.mappingNameIBC(amountTemp);
+                  cw20_contract['name'] = dataAmount['name'];
+                  cw20_contract['symbol'] = dataAmount['display'];
+                  decimal = dataAmount['decimal'];
+                }
+                let amount = +amountTemp.match(/\d+/g)[0];
+                let from = event.event_attributes[index - 2]?.value;
+                if (event.event_attributes[index - 2].composite_key === 'coin_received.receiver') {
+                  from = event.event_attributes[0]?.value;
+                }
+                const to = event.event_attributes[index].value;
+                coinTransfer.push({ amount, cw20_contract, from, to, decimal });
+              });
+            }
+          });
+        });
+
+        if (res?.cw721_activity?.length > 0) {
+          // remove record approve && revoke
+          const arrCW721 = res.cw721_activity?.filter((k) => k.action !== 'approve' && k.action !== 'revoke');
+          this.dataSourceNFTs.data = arrCW721;
+        }
+        if (res.cw20_activity?.length > 0 || coinTransfer?.length > 0) {
+          this.dataSourceFTs.data = [...coinTransfer, ...(res.cw20_activity || [])];
+
+          res.cw20_activity.forEach((element) => {
+            element.decimal = element.decimal || element.cw20_contract?.decimal || 6;
           });
         }
-      }
-    });
-
-    this.transactionService.getListTransferFromTx(this.transaction['tx_hash']).subscribe((res) => {
-      if (res?.cw721_activity?.length > 0) {
-        // remove record approve && revoke
-        const arrCW721 = res.cw721_activity?.filter((k) => k.action !== 'approve' && k.action !== 'revoke');
-        this.dataSourceNFTs.data = arrCW721;
-      }
-      if (res.cw20_activity?.length > 0 || coinTransfer?.length > 0) {
-        this.dataSourceFTs.data = [...coinTransfer, ...(res.cw20_activity || [])];
-
-        res.cw20_activity.forEach((element) => {
-          element.decimal = element.decimal || element.cw20_contract?.decimal || 6;
-        });
-      }
-    });
+      });
   }
 
   navigateToNFTDetail(address: string, tokenId: number): void {
-    this.router.navigate([`/tokens/token-nft/${address}/${tokenId}`]);
+    let enCode = this.encodeData(tokenId);
+    this.router.navigate([`/tokens/token-nft/${address}/${enCode}`]);
   }
 
   isContractAddress(address) {
@@ -129,5 +132,9 @@ export class TokenTransferComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  encodeData(data) {
+    return encodeURIComponent(data);
   }
 }

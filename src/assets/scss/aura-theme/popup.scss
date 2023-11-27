@@ -44,6 +44,17 @@
   }
 }
 
+.full-overlay-panel {
+  @media (max-width: 567px) {
+    max-width: 100vw !important;
+  }
+  .mat-dialog-container {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+
 .cdk-overlay-dark-backdrop {
   background: rgba(0, 0, 0, 0.7);
 }
@@ -62,51 +73,4 @@
   min-width: 0 !important;
   overflow: hidden !important;
   border: none !important;
-}
-
-.custom-popover {
-  background: var(--aura-bg-form);
-  border: none;
-  min-width: 200px;
-  box-shadow: 2px 2px 30px #ffffff05;
-  border-radius: 8px;
-
-  @media (min-width: 576px) {
-    min-width: 360px;
-  }
-
-  .arrow {
-    position: relative;
-
-    &::before {
-      position: absolute;
-      content: '';
-      width: 16px;
-      height: 16px;
-      background-color: var(--aura-bg-form);
-      top: 179px;
-
-      @media (min-width: 576px) {
-        top: 163px;
-      }
-
-      left: -6px;
-      transform: rotate(45deg);
-    }
-  }
-
-  .popover-body {
-    padding: 16px;
-    min-width: 230px;
-  }
-
-  &.token-popover .arrow::before {
-    top: 227px;
-    @media (min-width: 576px) {
-      top: 217px;
-    }
-    @media (min-width: 992px) {
-      top: 223px;
-    }
-  }
 }

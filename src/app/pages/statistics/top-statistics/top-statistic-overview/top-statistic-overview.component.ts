@@ -1,10 +1,10 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AURA_TOP_STATISTIC_RANGE } from 'src/app/core/constants/chart.constant';
-import { StatisticService } from 'src/app/core/services/statistic.service';
-import { formatDate } from '@angular/common';
-import { Globals } from 'src/app/global/global';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { StatisticService } from 'src/app/core/services/statistic.service';
 
 @Component({
   selector: 'app-top-statistic-overview',
@@ -16,12 +16,14 @@ export class TopStatisticOverviewComponent implements OnInit {
   currentRange = AURA_TOP_STATISTIC_RANGE.Range1;
   currentDay;
   preDay;
-  loading = true;
+  isLoading = true;
+  errTxt: string;
   transactionsData;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
+
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinDecimals = this.environmentService.chainInfo.currencies[0].coinDecimals;
+
   constructor(
-    public global: Globals,
     private statisticService: StatisticService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
@@ -46,14 +48,19 @@ export class TopStatisticOverviewComponent implements OnInit {
       filterValue = 'thirty_days';
     }
 
-    this.statisticService.getListAccountStatistic().subscribe(
-      (res) => {
+    this.statisticService.getListAccountStatistic().subscribe({
+      next: (res) => {
         this.transactionsData = res[filterValue];
+        this.isLoading = false;
       },
-      () => {},
-      () => {
-        this.loading = false;
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoading = false;
       },
-    );
+    });
   }
 }

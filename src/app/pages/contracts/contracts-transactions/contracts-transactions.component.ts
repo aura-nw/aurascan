@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { Globals, convertDataTransaction } from 'src/app/global/global';
-import { TableData } from 'src/app/shared/components/contract-table/contract-table.component';
+import { convertDataTransaction, Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-contracts-transactions',
@@ -43,15 +43,15 @@ export class ContractsTransactionsComponent implements OnInit {
   lengthTxsExecute = 0;
   txsInstantiate = [];
   currentPage = 0;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   modeTxType = { Out: 0, In: 1, Instantiate: 2 };
   hashIns = '';
-  hasLoadIns = false;
+  hasLoadIns = true;
   payload = {
     limit: 100,
   };
-
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  errTxt: string;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     public translate: TranslateService,
@@ -60,16 +60,14 @@ export class ContractsTransactionsComponent implements OnInit {
     private route: ActivatedRoute,
     private transactionService: TransactionService,
     public commonService: CommonService,
-    private global: Globals
+    private global: Globals,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
     valueColumn &&
       ((v) => {
         v.suffix =
-          `<span class="text--primary">` +
-          this.environmentService.configValue.chain_info.currencies[0].coinDenom +
-          `</span>`;
+          `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
       })(valueColumn);
   }
 
@@ -79,18 +77,18 @@ export class ContractsTransactionsComponent implements OnInit {
     this.contractInfo.contractsAddress = this.contractAddress;
     this.payload['value'] = this.contractAddress;
     this.getData();
-    this.getDataInstantiate();
     this.timerGetUpTime = setInterval(() => {
+      this.errTxt = null;
       // reload when page = 0
       if (this.currentPage === 0) {
         this.currentKey = null;
         this.getData(true);
       }
-    }, 5000);
+    }, 30000);
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next(true);
+    this.destroyed$.next();
     this.destroyed$.complete();
 
     if (this.timerGetUpTime) {
@@ -121,68 +119,42 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   getDataTable(nextKey = null, isReload = false) {
-    if (+this.label == this.modeTxType.In && !this.hasLoadIns) {
+    if (+this.label === this.modeTxType.Out && this.label) {
+      this.isLoadingTX = false;
       return;
     }
-    if (!this.label || +this.label == this.modeTxType.In) {
-      this.payload['heightLT'] = nextKey;
-      this.transactionService.getListTxCondition(this.payload).subscribe(
-        (dataExecute) => {
-          if (dataExecute) {
-            const txsExecute = convertDataTransaction(dataExecute, this.coinInfo);
-            this.lengthTxsExecute = txsExecute.length;
-            if (dataExecute.transaction?.length > 0) {
-              this.nextKey = null;
-              if (txsExecute.length >= 100) {
-                this.nextKey = dataExecute?.transaction[txsExecute.length - 1].height;
-              }
-              if (this.contractTransaction['data']?.length > 0 && !isReload) {
-                this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
-              } else if (txsExecute.length > 0) {
-                this.contractTransaction['data'] = txsExecute;
-              }
+    this.payload['heightLT'] = nextKey;
+    this.transactionService.getListTxCondition(this.payload).subscribe({
+      next: (dataExecute) => {
+        if (dataExecute) {
+          const txsExecute = convertDataTransaction(dataExecute, this.coinInfo);
+          this.lengthTxsExecute = txsExecute.length;
+          if (dataExecute.transaction?.length > 0) {
+            this.nextKey = null;
+            if (txsExecute.length >= 100) {
+              this.nextKey = dataExecute?.transaction[txsExecute.length - 1].height;
             }
-
-            this.contractTransaction['count'] = this.contractTransaction['data']?.length;
-
-            if (!isReload) {
-              if (this.nextKey === null && +this.label == this.modeTxType.Instantiate) {
-                this.getDataInstantiate();
-              }
+            if (this.contractTransaction['data']?.length > 0 && !isReload) {
+              this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
+            } else if (txsExecute.length > 0) {
+              this.contractTransaction['data'] = txsExecute;
             }
           }
-        },
-        () => {},
-        () => {
-          this.isLoadingTX = false;
-        },
-      );
-    } else {
-      this.isLoadingTX = false;
-    }
-  }
-
-  getDataInstantiate(): void {
-    this.transactionService.getListTxCondition(this.payload).subscribe(
-      (dataInstantiate) => {
-        this.hasLoadIns = true;
-        if (dataInstantiate.transaction?.length > 0) {
-          this.hashIns = dataInstantiate.transaction[0]?.hash;
-          if (+this.label == this.modeTxType.Instantiate) {
-            this.txsInstantiate = convertDataTransaction(dataInstantiate, this.coinInfo);
-            this.contractTransaction['data'] = this.txsInstantiate;
-            this.contractTransaction['count'] = this.txsInstantiate.length || 0;
-          }
-          if (+this.label == this.modeTxType.In) {
-            this.getDataTable();
-          } else {
-            this.isLoadingTX = false;
-          }
+          this.contractTransaction['count'] = this.contractTransaction['data']?.length;
         }
       },
-      () => {},
-      () => {},
-    );
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoadingTX = false;
+      },
+      complete: () => {
+        this.isLoadingTX = false;
+      },
+    });
   }
 
   onChangePage(event) {

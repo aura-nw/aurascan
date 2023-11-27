@@ -12,6 +12,9 @@
       td.mat-cell:first-of-type {
         padding-left: 8px;
       }
+      td.mat-cell {
+        max-width: 150px;
+      }
     }
 
     .hide-td {

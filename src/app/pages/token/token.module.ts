@@ -2,21 +2,21 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { UserService } from 'src/app/core/services/user.service';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
-import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { MaterialModule } from '../../../app/app.module';
+import { MaterialModule } from '../../../app/material.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../../app/shared/shared.module';
@@ -39,7 +39,6 @@ import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component
 import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
-import { UserService } from 'src/app/core/services/user.service';
 
 @NgModule({
   declarations: [
@@ -66,13 +65,12 @@ import { UserService } from 'src/app/core/services/user.service';
     TranslateModule,
     PaginatorModule,
     TableNoDataModule,
-    MatTableModule,
     MaterialModule,
     FormsModule,
     NgbPopoverModule,
     CommonPipeModule,
-    ContractPopoverModule,
-    NgxMaskModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     WriteContractModule,
     ReadContractModule,
     ModelViewModule,
@@ -80,11 +78,11 @@ import { UserService } from 'src/app/core/services/user.service';
     AudioPlayerModule,
     ContractsModule,
     CommonDirectiveModule,
-    APaginatorModule,
+    CustomPaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
   ],
-  providers: [TokenService, AccountService, UserService],
+  providers: [TokenService, AccountService, UserService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class TokenModule {}

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute } from '@angular/router';
-import { MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -37,7 +37,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   sbType = SB_TYPE;
   walletAddress = null;
   searchValue = '';
-  isError = false;
+  errTxt: string;
 
   constructor(
     private soulboundService: SoulboundService,
@@ -90,18 +90,25 @@ export class SoulboundTokenEquippedComponent implements OnInit {
       keyword: this.textSearch,
     };
 
-    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
-      (res) => {
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe({
+      next: (res) => {
         this.countSelected = res.data.filter((k) => k.picked)?.length || 0;
         this.soulboundData.data = res.data;
         this.pageData.length = res.meta.count;
         this.totalSBT.emit(this.pageData.length);
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   paginatorEmit(event): void {
@@ -153,9 +160,5 @@ export class SoulboundTokenEquippedComponent implements OnInit {
 
   handleRouterLink(link): void {
     window.location.href = link;
-  }
-
-  error(): void {
-    this.isError = true;
   }
 }

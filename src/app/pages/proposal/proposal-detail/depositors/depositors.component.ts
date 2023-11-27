@@ -1,7 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { PROPOSAL_TABLE_MODE } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
@@ -15,17 +16,17 @@ import { ProposalService } from '../../../../../app/core/services/proposal.servi
 })
 export class DepositorsComponent implements OnInit, OnDestroy {
   @Input() proposalDetail: any;
-
   depositorsList: any[] = [];
   tableData = [];
   loading = true;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   dataLength = 0;
   proposalDeposit = PROPOSAL_TABLE_MODE.DEPOSITORS;
+  errTxt: string;
 
   pageData = { pageIndex: 0, pageSize: 5 };
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
 
   constructor(
     private proposalService: ProposalService,
@@ -60,25 +61,34 @@ export class DepositorsComponent implements OnInit, OnDestroy {
             heightGT: res.startBlock[0]?.height,
             heightLT: res.endBlock[0]?.height,
           };
-
           this.getDataDeposit(payload);
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loading = false;
         },
       });
   }
 
   getDataDeposit(payload): void {
-    this.transactionService.getProposalDeposit(payload).subscribe({
+    this.transactionService.getProposalDepositor(payload).subscribe({
       next: (res) => {
         let dataList: any[] = [];
         if (res?.transaction?.length > 0) {
-          dataList = res?.transaction;
-          dataList.forEach((tx) => {
-            tx['event_attributes'].forEach((item) => {
-              if (item.composite_key === 'proposal_deposit.amount') {
-                tx.amount = balanceOf(item?.value.replace(this.coinMinimalDenom, ''));
-              }
-              if (item.composite_key === 'transfer.sender') {
-                tx.depositors = item?.value;
+          res?.transaction.forEach((tx) => {
+            tx['transaction_messages'].forEach((item) => {
+              if (item.content?.initial_deposit?.length > 0) {
+                tx.amount = balanceOf(item.content.initial_deposit[0].amount);
+                tx.depositors = item?.content.proposer;
+                dataList.push(tx);
+              } else if (item.content?.amount?.length > 0) {
+                tx.amount = balanceOf(item.content?.amount[0]?.amount);
+                tx.depositors = item?.content.depositor;
+                dataList.push(tx);
               }
             });
           });
@@ -90,6 +100,14 @@ export class DepositorsComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.loading = false;
+      },
+      error: (e) => {
+        this.loading = false;
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
       },
     });
   }

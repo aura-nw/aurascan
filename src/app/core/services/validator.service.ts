@@ -12,8 +12,7 @@ import { LCD_COSMOS } from '../constants/url.constant';
   providedIn: 'root',
 })
 export class ValidatorService extends CommonService {
-  apiUrl = `${this.environmentService.configValue.beUri}`;
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainInfo = this.environmentService.chainInfo;
   stakingAPRSubject: BehaviorSubject<number>;
 
   constructor(
@@ -206,7 +205,6 @@ export class ValidatorService extends CommonService {
           height
           hash
           block_signatures(where: {validator_address: {_eq: $cons_address}}) {
-            signature
             block_id_flag
             timestamp
           }

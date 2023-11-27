@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Observable, Subject, of } from 'rxjs';
@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, map, mergeMap, repeat, takeLast, ta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { DATEFORMAT, PAGE_EVENT } from '../../../../core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
@@ -40,19 +40,18 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-
+  errTxt: string;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   sortedData: any;
   sort: MatSort;
-  filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  image_s3 = this.environmentService.configValue.image_s3;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   isLoading = true;
 
   searchSubject = new Subject();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   dataTable = [];
 
   constructor(
@@ -70,7 +69,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getPriceBTC();
     this.getListToken();
+
     this.searchSubject
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
@@ -96,7 +97,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       date: this.datePipe.transform(now, DATEFORMAT.DATE_ONLY),
     };
     let cw20Total = [];
-    const destroy_cw20$ = new Subject();
+    const destroy_cw20$ = new Subject<void>();
     return of(null).pipe(
       mergeMap(() => {
         return this.tokenService.getListToken(payload);
@@ -132,6 +133,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     if (this.dataTable.length > 0) {
       let result = this.dataTable
         ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+        .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
         .slice(payload?.offset, payload?.offset + payload?.limit);
       // Search with text search
       if (this.textSearch) {
@@ -144,68 +146,84 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap);
 
         const data = result.slice(payload?.offset, payload?.offset + payload?.limit);
-        this.dataSource = new MatTableDataSource<any>(data);
+        this.dataSource.data = data;
         this.pageData.length = result?.length;
       } else {
-        this.dataSource = new MatTableDataSource<any>(result);
+        this.dataSource.data = result;
         this.pageData.length = this.dataTable?.length;
       }
     } else {
       // Get the frist time data init screen
       this.getAllCW20Token()
         .pipe(takeLast(1))
-        .subscribe(
-          (res) => {
-            this.tokenService.getTokenMarketData().subscribe((tokenMarket) => {
-              // Flat data for mapping response api
-              const dataFlat = res?.map((item) => {
-                let changePercent = 0;
-                const tokenFind = tokenMarket?.find(
-                  (f) => String(f.contract_address) === item?.smart_contract?.address,
-                );
-                if (item.cw20_total_holder_stats?.length > 1) {
-                  changePercent =
-                    (item.cw20_total_holder_stats[1].total_holder * 100) /
-                      item.cw20_total_holder_stats[0].total_holder -
-                    100;
+        .subscribe({
+          next: (res) => {
+            this.tokenService.getTokenMarketData().subscribe({
+              next: (tokenMarket) => {
+                // Flat data for mapping response api
+                const dataFlat = res?.map((item) => {
+                  let changePercent = 0;
+                  const tokenFind = tokenMarket?.find(
+                    (f) => String(f.contract_address) === item?.smart_contract?.address,
+                  );
+                  if (item.cw20_total_holder_stats?.length > 1) {
+                    changePercent =
+                      (item.cw20_total_holder_stats[1].total_holder * 100) /
+                        item.cw20_total_holder_stats[0].total_holder -
+                      100;
+                  }
+                  return {
+                    coin_id: tokenFind?.coin_id || '',
+                    contract_address: item.smart_contract.address || '',
+                    name: item.name || '',
+                    symbol: item.symbol || '',
+                    image: item.marketing_info?.logo?.url ? item.marketing_info?.logo?.url : tokenFind?.image || '',
+                    description: tokenFind?.description || '',
+                    verify_status: tokenFind?.verify_status || '',
+                    verify_text: tokenFind?.verify_text || '',
+                    circulating_market_cap: +tokenFind?.circulating_market_cap || 0,
+                    onChainMarketCap: +tokenFind?.circulating_market_cap || 0,
+                    volume: +tokenFind?.total_volume || 0,
+                    price: +tokenFind?.current_price || 0,
+                    isHolderUp: changePercent >= 0 ? true : false,
+                    isValueUp: tokenFind?.price_change_percentage_24h && tokenFind?.price_change_percentage_24h >= 0 ? true : false,
+                    change: tokenFind?.price_change_percentage_24h || 0,
+                    holderChange: Math.abs(changePercent),
+                    holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
+                    max_total_supply: tokenFind?.max_supply || 0,
+                    fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,
+                  };
+                });
+                // store datatable
+                this.dataTable = dataFlat;
+                // Sort and slice 20 frist record.
+                const result = dataFlat
+                  ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+                  .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
+                  .slice(payload?.offset, payload?.offset + payload?.limit);
+                this.dataSource.data = result;
+                this.pageData.length = res?.length;
+                this.isLoading = false;
+              },
+              error: (e) => {
+                if (e.name === TIMEOUT_ERROR) {
+                  this.errTxt = e.message;
+                } else {
+                  this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
                 }
-                return {
-                  coin_id: tokenFind?.coin_id || '',
-                  contract_address: item.smart_contract.address || '',
-                  name: item.name || '',
-                  symbol: item.symbol || '',
-                  image: item.marketing_info?.logo?.url ? item.marketing_info?.logo?.url : tokenFind?.image || '',
-                  description: tokenFind?.description || '',
-                  verify_status: tokenFind?.verify_status || '',
-                  verify_text: tokenFind?.verify_text || '',
-                  circulating_market_cap: +tokenFind?.circulating_market_cap || 0,
-                  onChainMarketCap: +tokenFind?.circulating_market_cap || 0,
-                  volume: +tokenFind?.total_volume || 0,
-                  price: +tokenFind?.current_price || 0,
-                  isHolderUp: changePercent >= 0 ? true : false,
-                  isValueUp: tokenFind?.price_change_percentage_24h >= 0 ? true : false,
-                  change: tokenFind?.price_change_percentage_24h || 0,
-                  holderChange: Math.abs(changePercent),
-                  holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
-                  max_total_supply: tokenFind?.max_supply || 0,
-                  fully_diluted_market_cap: tokenFind?.fully_diluted_valuation || 0,
-                };
-              });
-              // store datatable
-              this.dataTable = dataFlat;
-              // Sort and slice 20 frist record.
-              const result = dataFlat
-                ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
-                .slice(payload?.offset, payload?.offset + payload?.limit);
-              this.dataSource = new MatTableDataSource<any>(result);
-              this.pageData.length = res?.length;
+                this.isLoading = false;
+              },
             });
           },
-          (e) => {},
-          () => {
+          error: (e) => {
+            if (e.name === TIMEOUT_ERROR) {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+            }
             this.isLoading = false;
           },
-        );
+        });
     }
   }
 
@@ -214,14 +232,14 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
+    this.pageChange.selectPage(0);
     this.dataSource.data.forEach((data) => {
       data.circulating_market_cap = +data.circulating_market_cap;
       data.volume = +data.volume;
       data.price = +data.price;
       data.holders = +data.holders;
     });
-
-    let data = this.dataSource.data.slice();
+    let data = this.dataTable;
     if (!sort.active || sort.direction === '') {
       this.sortedData = data;
       return;
@@ -252,14 +270,18 @@ export class TokenCw20Component implements OnInit, OnDestroy {
         .sort((a, b) => this.compare(a.change, b.change, !isAsc));
       this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
     }
+    const payload = {
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+    };
 
-    let dataFilter = this.sortedData;
+    let dataFilter = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
     this.pageData = {
       length: this.pageData.length,
       pageSize: this.pageData.pageSize,
       pageIndex: this.pageData.pageIndex,
     };
-    this.dataSource = new MatTableDataSource<any>(dataFilter);
+    this.dataSource.data = dataFilter;
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -273,6 +295,23 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    this.getListToken();
+    const payload = {
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+    };
+    if (this.sortedData) {
+      this.dataSource.data = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
+    } else {
+      this.dataSource.data = this.dataTable
+        ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+        .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
+        .slice(payload?.offset, payload?.offset + payload?.limit);
+    }
+  }
+
+  getPriceBTC() {
+    this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.BTC).subscribe((res) => {
+      this.global.price.btc = res.data || 0;
+    });
   }
 }

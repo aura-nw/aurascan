@@ -1,14 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
+import { MaterialModule } from 'src/app/material.module';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
 import { PopupDelegateComponent } from './popup-delegate.component';
@@ -17,18 +14,15 @@ import { PopupDelegateComponent } from './popup-delegate.component';
   declarations: [PopupDelegateComponent],
   imports: [
     CommonModule,
-    MatTableModule,
-    MatSortModule,
-    MatIconModule,
-    MatButtonModule,
-    MatPaginatorModule,
+    MaterialModule,
     TranslateModule,
     CommonPipeModule,
     RouterModule,
     TableNoDataModule,
     FormsModule,
-    NgxMaskModule
+    NgxMaskPipe,
   ],
-  exports: [PopupDelegateComponent]
+  exports: [PopupDelegateComponent],
+  providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
-export class PopupDelegateModule { }
+export class PopupDelegateModule {}

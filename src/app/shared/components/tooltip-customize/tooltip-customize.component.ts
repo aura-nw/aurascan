@@ -20,7 +20,7 @@ export class TooltipCustomizeComponent implements OnInit, AfterViewInit {
     if(!parent) return;
     let sibling = parent.querySelector('.aura-tooltip-object:not(.disabled-hover)');
     if(!sibling) return;
-    sibling.addEventListener("mouseenter", (e) => {
+    sibling.addEventListener("mouseenter", (_) => {
       let siblingObj = sibling.getBoundingClientRect();
       let tooltipObj = this.el.nativeElement.getBoundingClientRect();
       let tooltipY = siblingObj.top - (tooltipObj.height + 16);

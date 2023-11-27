@@ -1,16 +1,17 @@
 <div class="d-flex justify-content-between mt-4 mt-lg-0">
   <div class="txt-title">Private name tag</div>
   <button
+    *ngIf="!errTxt"
     (click)="openPopup()"
     class="button button--xlg button--ssm-mob button-pill button-primary button-flat"
     type="button">
     <span class="body-01 caption-mob fw-normal">Create</span>
   </button>
 </div>
-
-<div class="mt-4">
-  <div class="d-lg-flex align-items-center justify-content-between">
-    <div class="txt-total-name">Total {{ pageData?.length }}/{{ quota }} addresses tagged</div>
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+<div class="mt-4" *ngIf="!isLoading">
+  <div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt">
+    <div class="text--gray-11">Total {{ pageData?.length }}/{{ quota }} addresses tagged</div>
     <div class="filter-group d-flex align-items-center flex-nowrap mt-2 mt-lg-0">
       <form class="aura-form single-input-field search-form private-search-form">
         <div class="input-group px-6">
@@ -39,7 +40,7 @@
     </div>
   </div>
 
-  <div class="overflow-scroll-x mt-4" *ngIf="pageData?.length > 0; else noValues">
+  <div class="overflow-scroll-x mt-4" *ngIf="pageData?.length > 0 && !isLoading; else noValues">
     <table mat-table [dataSource]="dataSource" class="aura-table private-name-table d-none d-lg-block">
       <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
@@ -203,5 +204,7 @@
 </div>
 
 <ng-template #noValues>
-  <app-table-no-data></app-table-no-data>
+  <ng-container *ngIf="!isLoading">
+    <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+  </ng-container>
 </ng-template>

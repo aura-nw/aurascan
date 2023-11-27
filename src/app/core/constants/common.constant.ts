@@ -62,6 +62,7 @@ export const LENGTH_CHARACTER = {
 };
 
 export const NULL_ADDRESS = 'Null address';
+export const TIMEOUT_ERROR = 'TimeoutError';
 
 export const TOKEN_ID_GET_PRICE = {
   AURA: 'aura-network',
@@ -77,3 +78,8 @@ export enum MEDIA_TYPE {
 
 export const CW20_TRACKING = ['mint', 'burn', 'transfer', 'send', 'transfer_from', 'burn_from', 'send_from'];
 export const CW721_TRACKING = ['mint', 'burn', 'transfer_nft', 'send_nft'];
+
+export const MAX_NUMBER_INPUT = 100000000000000;
+export const NUMBER_ONLY_DECIMAL = '1.0-0';
+export const NUMBER_2_DIGIT = '1.2-2';
+export const TOTAL_GROUP_TRACKING = 7;

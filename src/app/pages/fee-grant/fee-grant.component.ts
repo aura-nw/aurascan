@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -12,6 +11,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 export class FeeGrantComponent implements OnInit {
   isGrantees = true;
   currentAddress = null;
+  isLoading = true;
   TAB = [
     {
       id: 0,
@@ -22,7 +22,7 @@ export class FeeGrantComponent implements OnInit {
       value: 'My Granters',
     },
   ];
-  constructor(public walletService: WalletService, private router: Router,) {}
+  constructor(public walletService: WalletService) {}
 
   ngOnInit(): void {
     from([1])
@@ -33,10 +33,10 @@ export class FeeGrantComponent implements OnInit {
       .subscribe((wallet) => {
         if (wallet) {
           this.currentAddress = wallet.bech32Address;
-        }
-        else{
+        } else {
           this.currentAddress = null;
         }
+        this.isLoading = false;
       });
   }
 

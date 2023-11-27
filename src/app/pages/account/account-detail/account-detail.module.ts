@@ -1,23 +1,24 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { UserService } from 'src/app/core/services/user.service';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { MaterialModule } from '../../../app.module';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { AccountService } from '../../../core/services/account.service';
 import { TransactionService } from '../../../core/services/transaction.service';
+import { MaterialModule } from '../../../material.module';
 import { PaginatorModule } from '../../../shared/components/paginator/paginator.module';
 import { QrModule } from '../../../shared/components/qr/qr.module';
 import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
@@ -56,15 +57,16 @@ import { TokenTableComponent } from './token-table/token-table.component';
     QrModule,
     NgbNavModule,
     NftCardModule,
-    NgxMaskModule,
+    NgxMaskPipe,
+    NgxMaskDirective,
     SoulboundFeatureTokensModule,
     CommonDirectiveModule,
-    APaginatorModule,
+    CustomPaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
-    RouterModule
+    RouterModule,
   ],
-  providers: [TransactionService, AccountService, DecimalPipe, UserService],
+  providers: [TransactionService, AccountService, UserService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class AccountDetailModule {}

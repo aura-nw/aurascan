@@ -1,19 +1,19 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { LIST_TRANSACTION_FILTER } from 'src/app/core/constants/transaction.enum';
+import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { Globals, convertDataAccountTransaction } from 'src/app/global/global';
+import { convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -32,6 +32,7 @@ export class AccountTransactionTableComponent {
   @Output() lstType = new EventEmitter<any>();
 
   transactionLoading = false;
+  errTxt: string;
   currentAddress: string;
   templates: Array<TableTemplate>;
   tabsData = TabsAccountLink;
@@ -90,11 +91,10 @@ export class AccountTransactionTableComponent {
   isSearchOther = false;
   countFilter = 0;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
-    public global: Globals,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
     private userService: UserService,
@@ -328,10 +328,6 @@ export class AccountTransactionTableComponent {
       default:
         break;
     }
-
-    setTimeout(() => {
-      this.transactionLoading = false;
-    }, 5000);
   }
 
   getListTypeFilter() {
@@ -352,7 +348,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -366,7 +367,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -380,7 +386,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -394,7 +405,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -415,7 +431,7 @@ export class AccountTransactionTableComponent {
         setReceive = true;
       }
 
-      const coinConfig = this.environmentService.configValue.coins;
+      const coinConfig = this.environmentService.coins;
       let txs = convertDataAccountTransaction(
         data,
         this.coinInfo,
@@ -577,5 +593,9 @@ export class AccountTransactionTableComponent {
   linkExportPage() {
     localStorage.setItem('setDataExport', JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }));
     this.router.navigate(['/export-csv']);
+  }
+
+  encodeData(data) {
+    return encodeURIComponent(data);
   }
 }

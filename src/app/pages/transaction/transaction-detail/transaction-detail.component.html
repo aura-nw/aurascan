@@ -104,18 +104,30 @@
               {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
             </div>
           </div>
+          <div class="row body mt-2 justify-content-between justify-content-lg-start">
+            <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
+              <div>Memo</div>
+            </div>
+            <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
+              {{
+                !transaction?.memo
+                  ? '-'
+                  : (transaction?.memo | cutStringPipe : (environmentService.isMobile ? 25 : 100))
+              }}
+            </div>
+          </div>
         </div>
 
         <pre *ngIf="isRawData" id="json" class="raw-content text--gray-1" [innerHtml]="transaction.tx | appJson"></pre>
       </div>
     </div>
 
-    <!-- <ng-container *ngIf="!isRawData">
+    <ng-container *ngIf="!isRawData">
       <h2 class="text--white">Asset Transfer</h2>
       <div class="mb-6">
         <app-token-transfer [transaction]="transaction"></app-token-transfer>
       </div>
-    </ng-container> -->
+    </ng-container>
 
     <ng-container *ngIf="!isRawData && transaction?.messages">
       <h2 class="text--white">Messages</h2>
@@ -141,6 +153,6 @@
     </div>
   </ng-container>
   <ng-template #noValues>
-    <app-table-no-data></app-table-no-data>
+    <app-table-no-data [textNull]="errTxt"></app-table-no-data>
   </ng-template>
 </ng-container>

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
 
 @Component({
   selector: 'app-authenticate-mail',
@@ -17,7 +18,7 @@ export class AuthenticateMailComponent implements OnDestroy {
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
-  chainId = this.envService.configValue.chainId;
+  chainId = this.envService.chainId;
   isMobileMatched = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
     tap((state) => {
@@ -27,12 +28,13 @@ export class AuthenticateMailComponent implements OnDestroy {
     }),
   );
 
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
   constructor(
     private envService: EnvironmentService,
     private layout: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
+    private notificationsService: NotificationsService,
   ) {}
 
   ngOnInit(): void {
@@ -46,15 +48,25 @@ export class AuthenticateMailComponent implements OnDestroy {
   }
 
   dismiss(): void {
-    this.buttonDismiss.nativeElement.click();
+    this.buttonDismiss.nativeElement.click();    
   }
 
   disconnect(): void {
+    // remove current fcm token
+    this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
+      (res) => {},
+      () => (this.notificationsService.currentFcmToken = null),
+      () => (this.notificationsService.currentFcmToken = null),
+    );
+
     // logout Google
     this.userEmail = null;
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('listNameTag');
+    localStorage.removeItem('lstWatchList');
+    localStorage.removeItem('registerFCM');
 
     // check is screen profile
     if (this.route.snapshot['_routerState']?.url === '/profile') {
@@ -63,7 +75,7 @@ export class AuthenticateMailComponent implements OnDestroy {
 
     setTimeout(() => {
       location.reload();
-    }, 500);
+    }, 1000);
   }
 
   linkLogin() {

@@ -1,17 +1,15 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import BigNumber from 'bignumber.js';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-table',
@@ -26,6 +24,7 @@ export class TokenTableComponent implements OnChanges {
   tokenFilterItem = null;
   textSearch = '';
   searchValue = '';
+  errTxt: string;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'contractAddress', headerCellDef: 'contractAddress' },
@@ -70,14 +69,13 @@ export class TokenTableComponent implements OnChanges {
   dataTable = [];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
-  image_s3 = this.environmentService.configValue.image_s3;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinMiniDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
 
   constructor(
-    public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
@@ -122,8 +120,8 @@ export class TokenTableComponent implements OnChanges {
       }
       this.dataSource.data = [...searchList];
     } else {
-      this.accountService.getAssetCW20ByOwner(payload).subscribe(
-        (res: ResponseDto) => {
+      this.accountService.getAssetCW20ByOwner(payload).subscribe({
+        next: (res: ResponseDto) => {
           let data: any;
           if (res?.data?.length > 0) {
             let lstToken = _.get(res, 'data').map((element) => {
@@ -160,11 +158,18 @@ export class TokenTableComponent implements OnChanges {
           this.totalAssets.emit(this.pageData?.length || 0);
           this.setTokenFilter(this.listTokenType[0]);
         },
-        () => {},
-        () => {
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+          }
           this.assetsLoading = false;
         },
-      );
+        complete: () => {
+          this.assetsLoading = false;
+        },
+      });
     }
   }
 

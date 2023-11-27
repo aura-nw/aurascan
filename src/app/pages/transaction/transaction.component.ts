@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -28,9 +29,10 @@ export class TransactionComponent implements OnInit {
   pageSize = 20;
   typeTransaction = TYPE_TRANSACTION;
   loading = true;
+  errTxt = null;
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     private transactionService: TransactionService,
@@ -46,9 +48,9 @@ export class TransactionComponent implements OnInit {
   getListTx(): void {
     const payload = {
       limit: this.pageSize,
-    }
-    this.transactionService.getListTx(payload).subscribe(
-      (res) => {
+    };
+    this.transactionService.getListTx(payload).subscribe({
+      next: (res) => {
         if (res?.transaction?.length > 0) {
           const txs = convertDataTransactionSimple(res, this.coinInfo);
           if (this.dataSource.data.length > 0) {
@@ -59,11 +61,18 @@ export class TransactionComponent implements OnInit {
           this.dataTx = txs;
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   checkAmountValue(amount: number, txHash: string) {
