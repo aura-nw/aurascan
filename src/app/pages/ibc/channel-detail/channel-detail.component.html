@@ -1,0 +1,229 @@
+<app-pagetitle [title]="chainInfo.chainName + ' - ' + channel_id" class="flex-grow-1"></app-pagetitle>
+<section class="box-channel-detail">
+  <div class="d-flex justify-content-center mt-lg-13 mt-6">
+    <div class="p-0 box-chain">
+      <div class="box-connect d-flex mb-6 justify-content-between align-items-center">
+        <div class="box-connect-chain">
+          <div class="d-lg-flex justify-content-center">
+            <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
+            <div class="ml-lg-5 body text--gray-11 caption-mob fw-normal">
+              <span class="h2 body-02-mob fw-semibold text--white mb-1">{{ chainInfo.chainName }}</span
+              ><br />
+              {{ chainInfo.chainId }}
+            </div>
+          </div>
+        </div>
+        <div class="box-connected flex-column d-flex justify-content-center align-items-center h2 body-mob">
+          <div class="fw-semibold">Openned</div>
+        </div>
+        <div class="box-connect-chain">
+          <div class="d-lg-flex justify-content-center">
+            <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
+            <div class="ml-lg-5 body text--gray-11 caption-mob fw-normal">
+              <span class="h2 body-02-mob fw-semibold text--white mb-1">{{ chainInfo.chainName }}</span
+              ><br />
+              {{ channelDetail.counterParty }}
+            </div>
+          </div>
+        </div>
+        <div class="divider divider-horizontal"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overview -->
+  <div class="box-overview mb-lg-9 mb-6">
+    <div class="h2 text--white mb-lg-4 mb-2">Overview</div>
+    <div class="row box-title">
+      <div class="col-lg-3 col-6 mb-lg-0 mb-4">
+        <div class="item">
+          Counter Party
+          <div class="body-01 body-mob text--white fw-semibold mt-1">{{ channelDetail.counterParty }}</div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <div class="item">
+          Operating Since
+          <div class="body-01 body-mob text--white fw-semibold mt-1">
+            {{
+              !channelDetail.operatingSince ? '-' : commonService.getDateValue(channelDetail.operatingSince, false)[0]
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <div class="item">
+          Total Transaction
+          <div class="body-01 body-mob text--white fw-semibold mt-1">{{ channelDetail.totalTx }}</div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <div class="item">
+          Client ID
+          <div class="body-01 body-mob text--white fw-semibold mt-1">{{ channelDetail.clientId }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transfer Assets -->
+  <app-transfer-assets></app-transfer-assets>
+
+  <!-- Transactions -->
+  <div class="h2 text--white mb-4">Transactions</div>
+  <div class="card">
+    <div class="card-body" *ngIf="dataSource.data?.length > 0 && !loadingTx; else noValuesTx">
+      <div class="table-responsive d-none d-lg-block">
+        <table mat-table [dataSource]="dataSource" class="aura-table tx">
+          <ng-container *ngFor="let template of templates; index as i">
+            <ng-container [matColumnDef]="template.matColumnDef">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                [class.col-per-13]="template.headerCellDef === 'Height' || template.headerCellDef === 'Result'">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+
+              <td mat-cell *matCellDef="let data">
+                <div>
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <div *ngSwitchCase="'timestamp'">
+                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                    </div>
+                    <a
+                      *ngSwitchCase="'tx_hash'"
+                      class="text--primary cursor-pointer hash-link"
+                      [routerLink]="['/transaction', data['tx_hash']]">
+                      {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                    </a>
+                    <a
+                      *ngSwitchCase="'height'"
+                      class="text--primary cursor-pointer block-link"
+                      [routerLink]="['/blocks', data['height']]">
+                      {{ data[template.matColumnDef] }}
+                    </a>
+                    <div *ngSwitchCase="'type'" class="aura-status">
+                      <div class="aura-status aura-tooltip-contain">
+                        <div class="status aura-tooltip-object">
+                          {{ data[template.matColumnDef] | stringEllipsis : 35 }}
+                          <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                            +{{ data.lstType?.length - 1 }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngSwitchCase="'status'">
+                      <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                        <div *ngSwitchCase="'Success'" class="text--green-3">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'Fail'" class="text--red-3">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngSwitchCase="'amount'" class="d-flex">
+                      <div class="aura-tooltip-contain">
+                        <div class="aura-tooltip-object" *ngIf="(data.amountTemp | balanceOf : data.decimals) < 0.001">
+                          <0,001
+                        </div>
+                        <app-tooltip-customize [content]="data.amountTemp | convertSmallNumber : data.decimals">
+                        </app-tooltip-customize>
+                        <div
+                          *ngIf="(data.amountTemp | balanceOf : data.decimals) >= 0.001"
+                          [appBigNumber]="data.amountTemp"
+                          [decimal]="data.decimals"></div>
+                      </div>
+                      <span class="ml-1">
+                        <div class="aura-tooltip-contain">
+                          <div [class.aura-tooltip-object]="data.denom">
+                            {{ data.denom || coinInfo.coinDenom | stringEllipsis : 25 }}
+                          </div>
+                          <app-tooltip-customize
+                            [className]="'tooltip--right'"
+                            [class]="'message-custom'"
+                            [content]="data.denom">
+                          </app-tooltip-customize>
+                        </div>
+                      </span>
+                    </div>
+                    <div *ngSwitchCase="'fee'">
+                      {{ +data[template.matColumnDef] | mask : 'separator.6' }}
+                      <span class="text--white">{{ coinInfo.coinDenom }}</span>
+                    </div>
+                    <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                  </ng-container>
+                </div>
+              </td>
+            </ng-container>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell g-no-data" colspan="9999">
+              {{ 'NO DATA' | translate }}
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="d-lg-none" *ngIf="dataSource?.data?.length > 0">
+        <app-card-mob-channel
+          *ngFor="let data of dataSource?.data; first as isFirst"
+          [link]="'/transaction/' + data.tx_hash"
+          [dataCard]="data"
+          [title]="{
+            size: 'md',
+            titleClass: 'body-02-mob',
+            label: data.tx_hash | cutStringPipe : 8 : 8,
+            subLabelContent: data.type,
+            subLabelClass: 'btn-mob',
+            status: data.code
+          }"
+          [content]="[
+            {
+              label: 'Amount',
+              class: 'h6 mb-0 text--gray-1',
+              info: data.amount
+                ? '<span class=mr-1>' +
+                  (data.amount | mask : 'separator.6') +
+                  '</span><span class=text--white>' +
+                  'AURA' +
+                  '</span>'
+                : '-'
+            },
+            {
+              label: 'Height',
+              class: 'text--gray-1 body-02-mob',
+              info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+            },
+            {
+              label: 'Fee',
+              class: 'text--gray-1 body-02-mob',
+              info: (data.fee | mask : 'separator.6') + '<span class=text--white> ' + 'AURA' + '</span>'
+            }
+          ]"></app-card-mob-channel>
+      </div>
+      <div class="d-flex justify-content-center justify-content-md-end">
+        <app-paginator
+          [length]="pageDataTx.length"
+          [pageSize]="pageDataTx.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noValuesTx>
+    <div class="mt-6" *ngIf="loadingTx">
+      <app-loading-sprint></app-loading-sprint>
+    </div>
+    <ng-container *ngIf="!loadingTx">
+      <app-table-no-data class="mt-6" [textNull]="errTxt"></app-table-no-data>
+    </ng-container>
+  </ng-template>
+</section>

@@ -1,0 +1,124 @@
+.card.card-ibc {
+  @media (min-width: 992px) {
+    width: 1090px;
+  }
+  @media (max-width: 430px) {
+    max-height: 100vh;
+    height: 100vh;
+    width: 100vw;
+  }
+  .card-header {
+    background-color: var(--aura-gray-9);
+  }
+  .card-body {
+    max-height: 62vh;
+    overflow-y: auto;
+    .box-connect {
+      position: relative;
+      .divider {
+        background-color: #49996f;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 49%;
+        @media (max-width: 375px) {
+          width: 40%;
+        }
+        @media (min-width: 376px) {
+          width: 45%;
+        }
+        @media (min-width: 992px) {
+          width: 50%;
+        }
+        &::before,
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: #49996f;
+        }
+        &::before {
+          left: 0;
+        }
+        &::after {
+          right: 0;
+        }
+      }
+    }
+    .box-connected {
+      color: var(--aura-white);
+      background-color: var(--aura-green-4);
+      border-radius: 8px;
+      padding: 8px 0;
+      display: flex;
+      justify-content: center;
+      width: 92px;
+      position: relative;
+      z-index: 1;
+      @media (min-width: 912px) {
+        width: 158px;
+      }
+    }
+    .box-connect-chain {
+      // width: 275px;
+      min-width: 110px;
+      height: 84px;
+      padding: 16px 8px;
+      background: linear-gradient(110.97deg, #262838 0%, #2e2e38 97.13%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @media (min-width: 912px) {
+        padding: 16px 24px;
+      }
+    }
+    @media (max-width: 430px) {
+      max-height: 100vh;
+      padding: 0 0 16px 0;
+      .paddingSafari {
+        padding-bottom: 75px;
+      }
+    }
+    .txt-state {
+      color: var(--aura-green-6);
+      .icon-connect {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 7px;
+        background-color: var(--aura-green-6);
+        display: inline-block;
+      }
+      &.close {
+        color: #98989b;
+        .icon-connect {
+          background-color: #98989b;
+        }
+      }
+    }
+    .relayer-detail-table {
+    }
+    .card-relayer {
+      margin: 16px;
+      border-radius: 8px;
+      background: var(--aura-gray-9);
+      padding: 12px;
+    }
+  }
+  .btn {
+    height: 40px;
+    padding: 0 24px;
+  }
+  .btn-create {
+    border: none;
+    &:disabled {
+      background: var(--aura-gray-8);
+    }
+  }
+}

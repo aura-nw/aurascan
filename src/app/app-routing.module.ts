@@ -122,6 +122,11 @@ const routes: Routes = [
         loadChildren: () => import('./pages/privacy-policy/privacy-policy.module').then((m) => m.PrivacyModule),
         canMatch: [() => isEnabled('privacyPolicy')],
       },
+      {
+        path: 'ibc-relayer',
+        loadChildren: () => import('./pages/ibc/ibc.module').then((m) => m.IBCModule),
+        canMatch: [() => isEnabled('ibc-relayer')],
+      },
     ],
   },
   {

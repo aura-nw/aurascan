@@ -1,0 +1,65 @@
+.box-ibc-relayer {
+  .box-title-relay {
+    div {
+      border-radius: 8px;
+      color: var(--aura-gray-2);
+      .item {
+        background: linear-gradient(110.97deg, #262838 0%, #2e2e38 97.13%);
+        padding: 12px 16px;
+        font-size: 1.4rem;
+        @media (min-width: 992px) {
+          padding: 16px 24px;
+        }
+      }
+    }
+  }
+  .txt-status {
+    color: var(--aura-green-6);
+    .icon-connect {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 7px;
+      background-color: var(--aura-green-6);
+      display: inline-block;
+    }
+    &.inactive {
+      color: #98989b;
+      .icon-connect {
+        background-color: #98989b;
+      }
+    }
+  }
+  .ibc-relayer-table {
+    .row-chain.cursor-pointer {
+      &:hover {
+        background: var(--aura-gray-9);
+      }
+    }
+  }
+  .txt-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 2.8rem;
+    color: var(--aura-gray-4);
+    @media (min-width: 992px) {
+      line-height: 4rem;
+      font-size: 3.2rem;
+    }
+  }
+  .search-form {
+    width: 100%;
+    @media (min-width: 992px) {
+      width: 420px;
+    }
+  }
+
+  .card-name-tag {
+    border-radius: 8px;
+    padding: 12px;
+    background-color: var(--aura-gray-9);
+    &:not(:last-child) {
+      margin-bottom: var(--spacer-4);
+    }
+  }
+}
