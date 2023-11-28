@@ -90,13 +90,8 @@
               <div class="align-items-center pt-6 px-4 pr-lg-6 pl-lg-1">
                 <div class="d-lg-flex flex-wrap mb-4">
                   <!-- Tabs -->
-                  <div class="button-switch-stage button-switch-stage__1">
-                    <button type="button" [class.active]="isPrice" (click)="isPrice = true; getCoinInfo(chartRange)">
-                      <span>Price</span>
-                    </button>
-                    <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
-                      <span>Volume</span>
-                    </button>
+                  <div class="button-switch-stage button-switch-stage__3">
+                    <button type="button" disabled class="text--white">Price chart</button>
                   </div>
                   <div class="ms-auto mt-4 mt-md-0">
                     <div class="d-flex align-items-center chart__options">
@@ -242,7 +237,7 @@
   <div class="row">
     <div class="col-12 col-lg-8 d-none d-lg-block">
       <div class="mb-4 mb-lg-6 carousel">
-        <ngb-carousel [showNavigationArrows]="false">
+        <ngb-carousel [showNavigationArrows]="false" [showNavigationIndicators]="false">
           <ng-template ngbSlide>
             <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
               <img
@@ -261,7 +256,7 @@
             voting_Period_arr.length === 0 ? 'py-4 py-lg-6' : ''
           }}">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Votings</div>
-          <div *ngIf="voting_Period_arr.length > 0">
+          <div *ngIf="voting_Period_arr.length > 0 && !isLoadingVoting">
             <div class="mt-4 d-flex align-items-center">
               <div class="flex-shrink-0 flex-grow-1 d-flex w-25">
                 <div class="dropdown aura-dropdown w-100">
@@ -271,7 +266,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <span class="body text-start line-claim">{{
-                      curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
+                      curr_voting_Period ? curr_voting_Period.title : voting_Period_arr[0].title
                     }}</span>
                   </button>
                   <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light py-2 px-2">
@@ -281,7 +276,7 @@
                           type="button"
                           class="button p-0 body-03 line-claim text--gray-light"
                           (click)="curr_voting_Period = item">
-                          {{ item.content.title }}
+                          {{ item.title }}
                         </button>
                       </li>
                     </ng-container>
@@ -308,39 +303,25 @@
                 <div>
                   <div class="text--gray-2">Yes</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{
-                      curr_voting_Period
-                        ? (curr_voting_Period.tally.yes | number : global.formatNumber2Decimal)
-                        : '0,0'
-                    }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.yes | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
                   <div class="text--gray-2">No</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{
-                      curr_voting_Period ? (curr_voting_Period.tally.no | number : global.formatNumber2Decimal) : '0,0'
-                    }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
                   <div class="text--gray-2">Veto</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{
-                      curr_voting_Period
-                        ? (curr_voting_Period.tally.no_with_veto | number : global.formatNumber2Decimal)
-                        : '0,0'
-                    }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no_with_veto | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
                   <div class="text--gray-2">Abstain</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{
-                      curr_voting_Period
-                        ? (curr_voting_Period.tally.abstain | number : global.formatNumber2Decimal)
-                        : '0,0'
-                    }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.abstain | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
               </div>
@@ -348,10 +329,15 @@
           </div>
           <div
             class="d-flex flex-column align-items-center justify-content-center h-100"
-            *ngIf="voting_Period_arr.length === 0">
+            *ngIf="voting_Period_arr.length === 0 && !errTxtVoting && !isLoadingVoting">
             <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt="" />
             <div class="text--gray-3">No proposal within the voting period</div>
           </div>
+          <app-table-no-data
+            *ngIf="!isLoadingVoting && errTxtVoting"
+            class=""
+            [textNull]="errTxtVoting"></app-table-no-data>
+          <app-loading-sprint *ngIf="isLoadingVoting"></app-loading-sprint>
         </div>
       </div>
     </div>
@@ -362,22 +348,19 @@
   <div class="row">
     <!-- Block -->
     <div class="col-xl-6">
-      <div class="card">
+      <div class="card box-dashboard">
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <h2 class="text--white mb-0">Blocks</h2>
           <button
             type="button"
             class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/blocks'"
-            *ngIf="dataSourceBlock">
+            *ngIf="dataSourceBlock?.data?.length > 0">
             <span>View more</span>
           </button>
         </div>
-        <div *ngIf="isLoadingBlock" class="mt-20">
-          <app-loading-sprint></app-loading-sprint>
-        </div>
-        <div class="card-body pt-4 pt-lg-2 box-dashboard" *ngIf="!isLoadingBlock">
-          <ng-container *ngIf="dataSourceBlock; else noValues">
+        <div class="card-body pt-4 pt-lg-2">
+          <ng-container *ngIf="dataSourceBlock?.data?.length > 0 && !isLoadingBlock; else noValues">
             <div class="table-responsive">
               <table mat-table [dataSource]="dataSourceBlock" class="aura-table body blocks">
                 <ng-container *ngFor="let template of templatesBlock; index as i">
@@ -414,14 +397,19 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell g-no-data" colspan="9999">
-                    <app-table-no-data></app-table-no-data>
+                    {{ 'NO DATA' | translate }}
                   </td>
                 </tr>
               </table>
             </div>
           </ng-container>
+          <div class="mt-20" *ngIf="isLoadingBlock">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
           <ng-template #noValues>
-            <app-table-no-data></app-table-no-data>
+            <ng-container *ngIf="!isLoadingBlock">
+              <app-table-no-data class="mt-18" [textNull]="errTxtBlock"></app-table-no-data>
+            </ng-container>
           </ng-template>
         </div>
       </div>
@@ -429,22 +417,19 @@
 
     <!-- Transaction -->
     <div class="col-xl-6">
-      <div class="card">
+      <div class="card box-dashboard">
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <h2 class="text--white mb-0">Transactions</h2>
           <button
             type="button"
             class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/transaction'"
-            *ngIf="dataSourceTx">
+            *ngIf="dataSourceTx?.data?.length > 0">
             <span>View more</span>
           </button>
         </div>
-        <div *ngIf="isLoadingTx" class="mt-20">
-          <app-loading-sprint></app-loading-sprint>
-        </div>
-        <div class="card-body pt-4 pt-lg-2 box-dashboard" *ngIf="!isLoadingTx">
-          <ng-container *ngIf="dataSourceTx; else noValues">
+        <div class="card-body pt-4 pt-lg-2">
+          <ng-container *ngIf="dataSourceTx?.data?.length > 0 && !isLoadingTx; else noValue">
             <div class="table-responsive">
               <table mat-table [dataSource]="dataSourceTx" class="aura-table transaction body">
                 <ng-container *ngFor="let template of templatesTx; index as i">
@@ -500,18 +485,22 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsTx"></tr>
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell g-no-data" colspan="9999">
-                    <app-table-no-data></app-table-no-data>
+                    {{ 'NO DATA' | translate }}
                   </td>
                 </tr>
               </table>
             </div>
           </ng-container>
-          <ng-template #noValues>
-            <app-table-no-data></app-table-no-data>
+          <div class="mt-20" *ngIf="isLoadingTx">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
+          <ng-template #noValue>
+            <ng-container *ngIf="!isLoadingTx">
+              <app-table-no-data class="mt-18" [textNull]="errTxtTxs"></app-table-no-data>
+            </ng-container>
           </ng-template>
         </div>
       </div>
     </div>
   </div>
 </section>
-

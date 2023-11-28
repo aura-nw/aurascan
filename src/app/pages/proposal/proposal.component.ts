@@ -1,14 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as moment from 'moment';
 import { tap } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
-import { Globals } from '../../../app/global/global';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
@@ -27,7 +26,9 @@ export class ProposalComponent implements OnInit {
   statusConstant = PROPOSAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: number } = null;
-  chainId = this.environmentService.configValue.chainId;
+  chainId = this.environmentService.chainId;
+  errTxt: string;
+  isLoading = true;
   // data table
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'ID' },
@@ -45,7 +46,6 @@ export class ProposalComponent implements OnInit {
         pageSize: state.matches ? 5 : 10,
         pageIndex: 1,
       };
-
       this.getListProposal({ index: 1 });
     }),
   );
@@ -54,7 +54,6 @@ export class ProposalComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   proposalData: any;
   length: number;
-  nextKey = null;
   scrolling = false;
 
   pageData: PageEvent = {
@@ -62,11 +61,11 @@ export class ProposalComponent implements OnInit {
     pageSize: this.layout.isMatched([Breakpoints.Small, Breakpoints.XSmall]) ? 5 : 10,
     pageIndex: 1,
   };
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
-    public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
@@ -75,20 +74,20 @@ export class ProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => this.getFourLastedProposal());
+    this.walletService.wallet$.subscribe(() => this.getFourLastedProposal());
   }
 
   getFourLastedProposal() {
-    this.proposalService
-      .getProposalData({
-        limit: 4,
-      })
-      .subscribe((res) => {
+    this.proposalService.getProposalData({ limit: 4 }).subscribe({
+      next: (res) => {
         if (res?.proposal) {
           const addr = this.walletService.wallet?.bech32Address || null;
           this.proposalData = res.proposal;
           if (this.proposalData?.length > 0) {
             this.proposalData.forEach((pro, index) => {
+              if (!pro.title) {
+                pro.title = pro.content.title;
+              }
               if (pro?.tally) {
                 const { yes, no, no_with_veto, abstain } = pro?.tally;
                 let totalVote = +yes + +no + +no_with_veto + +abstain;
@@ -115,7 +114,19 @@ export class ProposalComponent implements OnInit {
             });
           }
         }
-      });
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 
   getListProposal({ index }) {
@@ -124,18 +135,30 @@ export class ProposalComponent implements OnInit {
         limit: this.pageData.pageSize,
         offset: (index - 1) * this.pageData.pageSize,
       })
-      .subscribe((res) => {
-        if (res?.proposal) {
-          let tempData = res.proposal;
-          tempData?.forEach((pro) => {
-            if (pro.total_deposit?.length > 0) {
-              pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0]?.amount);
-            }
-          });
+      .subscribe({
+        next: (res) => {
+          if (res?.proposal) {
+            let tempData = res.proposal;
+            tempData?.forEach((pro) => {
+              if (!pro.title) {
+                pro.title = pro.content.title;
+              }
 
-          this.dataSource.data = tempData;
-        }
-        this.length = res.proposal_aggregate.aggregate.count;
+              if (pro.total_deposit?.length > 0) {
+                pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0]?.amount);
+              }
+            });
+            this.dataSource.data = tempData;
+          }
+          this.length = res.proposal_aggregate.aggregate.count;
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+        },
       });
   }
 
@@ -185,7 +208,7 @@ export class ProposalComponent implements OnInit {
 
   openVoteDialog(item: IProposal, index: number) {
     const id = item.proposal_id;
-    const title = item.content.title;
+    const title = item['title'] ? item['title'] : item.content.title;
     const expiredTime = +moment(item.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {
@@ -209,7 +232,7 @@ export class ProposalComponent implements OnInit {
       data: data,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.scrollToTop();
       setTimeout(() => {
         this.getFourLastedProposal();

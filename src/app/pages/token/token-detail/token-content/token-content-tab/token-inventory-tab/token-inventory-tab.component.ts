@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -25,15 +25,16 @@ export class TokenInventoryComponent implements OnInit {
   nftData = new MatTableDataSource<any>();
   contractAddress = '';
   keyWord = '';
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   linkToken = 'token-nft';
+  errTxt: string;
 
   constructor(
     private route: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private router: Router,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -70,8 +71,8 @@ export class TokenInventoryComponent implements OnInit {
       }
     }
 
-    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe(
-      (res) => {
+    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe({
+      next: (res) => {
         const asset = _.get(res, `cw721_token`);
         if (asset.length > 0) {
           asset.forEach((element) => {
@@ -81,11 +82,18 @@ export class TokenInventoryComponent implements OnInit {
         }
         this.pageData.length = res?.cw721_token_aggregate?.aggregate?.count;
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   pageEvent(pageIndex: number): void {

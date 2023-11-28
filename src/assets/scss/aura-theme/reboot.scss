@@ -1,20 +1,31 @@
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #5C606D;
+  background-color: #5c606d;
   width: 5px;
 }
 
 ::-webkit-scrollbar {
   width: 5px;
-  background-color: #F2F3F5;
+  background-color: #f2f3f5;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background-color: #FFF;
-  background: linear-gradient(108.46deg, #5EE6D0 12.51%, #BFC6FF 51.13%, #FFBA69 87.49%)
+  background-color: #fff;
+  background: linear-gradient(108.46deg, #5ee6d0 12.51%, #bfc6ff 51.13%, #ffba69 87.49%);
 }
-h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
   margin-bottom: 0;
 }
 ul {
@@ -25,7 +36,7 @@ ul {
 a {
   color: var(--aura-light-gray);
   text-decoration: none;
-  transition: color .35s ease-in-out;
+  transition: color 0.35s ease-in-out;
   &:hover {
     color: var(--aura-white);
   }
@@ -42,7 +53,14 @@ a {
     background: var(--aura-gradient-general) !important;
   }
 }
-.container, .container-fluid, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .navbar-header {
+.container,
+.container-fluid,
+.container-xxl,
+.container-xl,
+.container-lg,
+.container-md,
+.container-sm,
+.navbar-header {
   padding-right: var(--bs-gutter-x, 6px) !important;
   padding-left: var(--bs-gutter-x, 6px) !important;
   @media (min-width: 992px) {
@@ -67,19 +85,10 @@ app-paginator {
   overflow: hidden;
 }
 
-.mat-expansion-panel {
-  background: none;
-  box-shadow: none !important;
-}
-
-.mat-expansion-panel-header.mat-expanded {
-  height: 48px;
-}
-
 .mat-mdc-icon-button {
   --mat-mdc-button-persistent-ripple-color: transparent !important;
   --mat-mdc-button-ripple-color: transparent !important;
 }
 .mat-button-focus-overlay {
-  background-color: transparent!important;
+  background-color: transparent !important;
 }

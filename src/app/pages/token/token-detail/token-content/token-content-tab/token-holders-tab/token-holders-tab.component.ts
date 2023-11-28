@@ -1,15 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import * as _ from 'lodash';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
-import { Globals } from '../../../../../../global/global';
-import * as _ from 'lodash';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -26,7 +25,7 @@ export class TokenHoldersTabComponent implements OnInit {
   CW20Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
     { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
-    { matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12},
+    { matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12 },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 12 },
     { matColumnDef: 'value', headerCellDef: 'value', headerWidth: 12 },
   ];
@@ -47,17 +46,15 @@ export class TokenHoldersTabComponent implements OnInit {
   };
   loading = true;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  tokenType = ContractRegisterType.CW20;
   contractType = ContractRegisterType;
   numberTopHolder = 100;
   totalQuantity = 0;
   numberTop = 0;
   totalHolder = 0;
-
-  chainInfo = this.environmentService.configValue.chain_info;
+  errTxt: string;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
-    public global: Globals,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
@@ -74,8 +71,8 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getHolder() {
-    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.contractAddress).subscribe(
-      (res) => {
+    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.contractAddress).subscribe({
+      next: (res) => {
         const data = _.get(res, `cw20_holder`);
         const count = _.get(res, `cw20_holder_aggregate`);
         if (data?.length > 0) {
@@ -97,11 +94,18 @@ export class TokenHoldersTabComponent implements OnInit {
           this.dataSource = new MatTableDataSource<any>(dataFlat);
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   getHolderNFT() {
@@ -109,8 +113,8 @@ export class TokenHoldersTabComponent implements OnInit {
       limit: this.numberTopHolder,
       contractAddress: this.contractAddress,
     };
-    this.tokenService.getListTokenHolderNFT(payload).subscribe(
-      (res) => {
+    this.tokenService.getListTokenHolderNFT(payload).subscribe({
+      next: (res) => {
         if (res?.view_count_holder_cw721?.length > 0) {
           this.totalHolder = res.view_count_holder_cw721_aggregate?.aggregate?.count;
           if (this.totalHolder > this.numberTopHolder) {
@@ -138,11 +142,18 @@ export class TokenHoldersTabComponent implements OnInit {
           this.dataSource = new MatTableDataSource<any>(res.view_count_holder_cw721);
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {

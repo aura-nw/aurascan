@@ -1,5 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -41,7 +44,7 @@ export class PopupRevokeComponent implements OnInit {
           grantee: this.data.granteeAddress,
         },
         senderAddress: granter,
-        network: this.environmentService.configValue.chain_info,
+        network: this.environmentService.chainInfo,
         signingType: ESigningType.Keplr,
         chainId: this.walletService.chainId,
       });
@@ -54,7 +57,6 @@ export class PopupRevokeComponent implements OnInit {
         }
       }
     };
-
     executeRevoke();
   }
 }

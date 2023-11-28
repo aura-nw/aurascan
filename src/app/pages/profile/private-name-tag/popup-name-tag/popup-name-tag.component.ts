@@ -1,13 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -17,13 +19,11 @@ import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 export class PopupNameTagComponent implements OnInit {
   privateNameForm;
   isSubmit = false;
-  errorSpendLimit = '';
   formValid = true;
   isAccount = false;
   isContract = false;
   maxLengthNameTag = 35;
   maxLengthNote = 200;
-  currentCodeID;
   publicNameTag = '-';
   isValidAddress = true;
   isError = false;
@@ -34,12 +34,12 @@ export class PopupNameTagComponent implements OnInit {
     Account: 'account',
     Contract: 'contract',
   };
-  quota = this.environmentService.configValue.quotaSetPrivateName;
+  quota = this.environmentService.chainConfig.quotaSetPrivateName;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupNameTagComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public environmentService: EnvironmentService,
     public translate: TranslateService,
     private commonService: CommonService,
@@ -102,9 +102,10 @@ export class PopupNameTagComponent implements OnInit {
   checkFormValid() {
     this.getAddress['value'] = this.getAddress?.value.trim();
 
-    if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
+    if (this.commonService.isBech32Address(this.getAddress?.value)) {
       this.isValidAddress =
-        (isAddress(this.getAddress.value) && this.isAccount) || (isContract(this.getAddress.value) && !this.isAccount);
+        (this.commonService.isValidAddress(this.getAddress.value) && this.isAccount) ||
+        (this.commonService.isValidContract(this.getAddress.value) && this.isContract);
     } else {
       this.isValidAddress = false;
     }
@@ -112,10 +113,10 @@ export class PopupNameTagComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { isFavorite, isAccount, address, name, note } = this.privateNameForm.value;
+    const { isFavorite, address, name, note } = this.privateNameForm.value;
     let payload = {
       isFavorite: isFavorite == 1,
-      type: isAccount ? this.nameTagType.Account : this.nameTagType.Contract,
+      type: this.commonService.isValidAddress(address) ? 'account' : 'contract',
       address: address,
       nameTag: name,
       note: note,
@@ -148,7 +149,7 @@ export class PopupNameTagComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
+        this.toastr.error(error?.error?.error?.details?.details.message[0] || 'Error');
       },
     });
   }
@@ -167,7 +168,7 @@ export class PopupNameTagComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
+        this.toastr.error(error?.error?.error?.details?.details.message[0] || 'Error');
       },
     });
   }

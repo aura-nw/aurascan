@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { getInfo } from 'src/app/core/utils/common/info-common';
-import { Globals, convertDataBlock } from 'src/app/global/global';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { convertDataBlock } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -23,12 +23,9 @@ export class BlocksComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   pageSize = 20;
   loading = true;
+  errTxt: string;
 
-  constructor(
-    private blockService: BlockService,
-    public commonService: CommonService,
-    private globals: Globals,
-  ) {}
+  constructor(private blockService: BlockService, public commonService: CommonService) {}
 
   ngOnInit(): void {
     this.getList();
@@ -38,23 +35,24 @@ export class BlocksComponent implements OnInit {
     const payload = {
       limit: this.pageSize,
     };
-    this.blockService.getDataBlock(payload).subscribe(
-      (res) => {
+    this.blockService.getDataBlock(payload).subscribe({
+      next: (res) => {
         if (res?.block?.length > 0) {
           const blocks = convertDataBlock(res);
           this.dataSource = new MatTableDataSource(blocks);
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
-  }
-
-  getInfoCommon(): void {
-    this.commonService.status().subscribe((res) => {
-      getInfo(this.globals, res);
+      complete: () => {
+        this.loading = false;
+      },
     });
   }
 }

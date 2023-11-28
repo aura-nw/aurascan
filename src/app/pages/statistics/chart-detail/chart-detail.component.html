@@ -1,19 +1,23 @@
 <div class="container-fluid px-0">
   <div class="row">
     <app-pagetitle title="{{ theTitle }}"></app-pagetitle>
-    <p class="text--gray-1 mt-5" *ngIf="chartType === 'daily-transactions'">
-      The chart highlights the total number of transactions on the Aura Blockchain Network with daily individual
-      breakdown
-    </p>
-    <p class="text--gray-1 mt-5" *ngIf="chartType === 'unique-addresses'">
-      The chart shows the total distinct numbers of address on the Aura Blockchain Network and the increase in the
-      number of address daily.
-    </p>
-    <p class="text--gray-1 mt-5" *ngIf="chartType === 'daily_active_addresses'">
-      The Active Aura Addresses chart shows the daily number of unique addresses that were active on the network
-    </p>
+    <ng-container *ngIf="!isLoading && !errTxt">
+      <p class="text--gray-1 mt-5" *ngIf="chartType === 'daily-transactions'">
+        The chart highlights the total number of transactions on the Aura Blockchain Network with daily individual
+        breakdown
+      </p>
+      <p class="text--gray-1 mt-5" *ngIf="chartType === 'unique-addresses'">
+        The chart shows the total distinct numbers of address on the Aura Blockchain Network and the increase in the
+        number of address daily.
+      </p>
+      <p class="text--gray-1 mt-5" *ngIf="chartType === 'daily_active_addresses'">
+        The Active Aura Addresses chart shows the daily number of unique addresses that were active on the network
+      </p>
+    </ng-container>
   </div>
-  <div class="row">
+  <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+  <app-table-no-data *ngIf="errTxt" [textNull]="errTxt"></app-table-no-data>
+  <div class="row {{ !isLoading && !errTxt ? '' : 'd-none' }}">
     <div class="col-12 col-lg-6">
       <div class="card">
         <div class="card-body text--gray-1 py-4 d-flex justify-content-center align-items-center">
@@ -22,7 +26,7 @@
             <span>
               {{ chartType === 'unique-addresses' ? 'Highest increase of' : 'Highest number of' }}
             </span>
-            <span class="text--primary">{{ maxAmount | number : global.formatNumberOnlyDecimal }}</span>
+            <span class="text--primary">{{ maxAmount | formatDigit }}</span>
             <br class="d-lg-none" />
             <span class="mr-1" *ngIf="chartType === 'daily-transactions'"> transactions on</span>
             <span class="mr-1" *ngIf="chartType === 'unique-addresses'"> new addresses was recorded on</span>
@@ -40,7 +44,7 @@
             <span>
               {{ chartType === 'unique-addresses' ? 'Lowest increase of' : 'Lowest number of' }}
             </span>
-            <span class="mr-1 text--primary">{{ minAmount | number : global.formatNumberOnlyDecimal }}</span>
+            <span class="mr-1 text--primary">{{ minAmount | formatDigit }}</span>
             <br class="d-lg-none" />
             <span class="mr-1" *ngIf="chartType === 'daily-transactions'">transactions on</span>
             <span class="mr-1" *ngIf="chartType === 'unique-addresses'">new addresses was recorded on</span>
@@ -51,7 +55,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row {{ !isLoading && !errTxt ? '' : 'd-none' }}">
     <div class="col">
       <div class="card">
         <div class="card-header">

@@ -80,9 +80,12 @@ export enum TRANSACTION_TYPE_ENUM {
   SwapExactAmountIn = '/osmosis.gamm.v1beta1.MsgSwapExactAmountIn',
   BeginUnlocking = '/osmosis.lockup.MsgBeginUnlocking',
   Vote = '/cosmos.gov.v1beta1.MsgVote',
+  VoteV2 = '/cosmos.gov.v1.MsgVote',
   Vesting = '/cosmos.vesting.v1beta1.MsgCreateVestingAccount',
   Deposit = '/cosmos.gov.v1beta1.MsgDeposit',
+  DepositV2 = '/cosmos.gov.v1.MsgDeposit',
   SubmitProposalTx = '/cosmos.gov.v1beta1.MsgSubmitProposal',
+  SubmitProposalTxV2 = '/cosmos.gov.v1.MsgSubmitProposal',
   GetRewardCommission = '/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission',
   PeriodicVestingAccount = '/cosmos.vesting.v1beta1.MsgCreatePeriodicVestingAccount',
   BasicAllowance = '/cosmos.feegrant.v1beta1.BasicAllowance',
@@ -117,6 +120,8 @@ export enum ModeExecuteTransaction {
   AcceptOffer = 'accept_nft_offer',
   Send = 'send',
   ProvideLiquidity = 'provide_liquidity',
+  Approve = 'approve',
+  Revoke = 'revoke'
 }
 
 export enum pipeTypeData {
@@ -138,9 +143,6 @@ export const LIST_TRANSACTION_FILTER = [
   { type: '/cosmos.gov.v1beta1.MsgDeposit' },
   { type: '/cosmos.gov.v1beta1.MsgSubmitProposal' },
   { type: '/cosmos.gov.v1beta1.MsgVote' },
-  { type: '/cosmos.gov.v1.MsgDeposit' },
-  { type: '/cosmos.gov.v1.MsgSubmitProposal' },
-  { type: '/cosmos.gov.v1.MsgVote' },
   { type: '/cosmos.slashing.v1beta1.MsgUnjail' },
   { type: '/cosmos.staking.v1beta1.MsgBeginRedelegate' },
   { type: '/cosmos.staking.v1beta1.MsgCreateValidator' },

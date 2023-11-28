@@ -5,8 +5,10 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
 import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
+import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
+import { TYPE_MULTI_VER } from '../constants/transaction.constant';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UserService extends CommonService {
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -41,11 +43,55 @@ export class UserService extends CommonService {
   }
 
   refreshToken(payload): Observable<any> {
-    this.apiUrl = this.apiUrl || this.environmentService.configValue.beUri;
+    this.apiUrl = this.apiUrl || this.environmentService.backend;
     return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
   }
 
   getListTxByAddress(payload) {
+    payload.listTxMsgTypeFilter = null;
+    payload.listTxMsgTypeFilterNotIn = null;
+    // set type for filter in
+    if (payload.listTxMsgType?.length > 0) {
+      payload.listTxMsgTypeFilter = [...payload.listTxMsgType];
+      let arrMultiVer = payload.listTxMsgTypeFilter?.filter((k) => TYPE_MULTI_VER.includes(k));
+      if (arrMultiVer?.length > 0) {
+        arrMultiVer.forEach((element) => {
+          switch (element) {
+            case TRANSACTION_TYPE_ENUM.Vote:
+              payload.listTxMsgTypeFilter.push(TRANSACTION_TYPE_ENUM.VoteV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.Deposit:
+              payload.listTxMsgTypeFilter.push(TRANSACTION_TYPE_ENUM.DepositV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
+              payload.listTxMsgTypeFilter.push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
+              break;
+          }
+        });
+      }
+    }
+
+    // set type for filter not in
+    if (payload.listTxMsgTypeNotIn?.length > 0) {
+      payload.listTxMsgTypeFilterNotIn = [...payload.listTxMsgTypeNotIn];
+      let arrMultiVer = payload.listTxMsgTypeFilterNotIn?.filter((k) => TYPE_MULTI_VER.includes(k));
+      if (arrMultiVer?.length > 0) {
+        arrMultiVer.forEach((element) => {
+          switch (element) {
+            case TRANSACTION_TYPE_ENUM.Vote:
+              payload.listTxMsgTypeFilterNotIn.push(TRANSACTION_TYPE_ENUM.VoteV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.Deposit:
+              payload.listTxMsgTypeFilterNotIn.push(TRANSACTION_TYPE_ENUM.DepositV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
+              payload.listTxMsgTypeFilterNotIn.push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
+              break;
+          }
+        });
+      }
+    }
+
     const operationsDoc = `
     query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc, $address: String = null) {
       ${this.envDB} {
@@ -70,8 +116,8 @@ export class UserService extends CommonService {
           limit: payload.limit || 40,
           address: payload.address,
           heightLT: payload.heightLT,
-          listTxMsgType: payload.listTxMsgType,
-          listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
+          listTxMsgType: payload.listTxMsgTypeFilter,
+          listTxMsgTypeNotIn: payload.listTxMsgTypeFilterNotIn,
           startTime: payload.startTime,
           endTime: payload.endTime,
         },

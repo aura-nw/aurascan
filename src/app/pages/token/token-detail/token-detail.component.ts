@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { DATEFORMAT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -18,9 +18,10 @@ export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
   tokenDetail: any;
-  image_s3 = this.environmentService.configValue.image_s3;
+  image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   contractType = ContractRegisterType;
+  errTxt: string;
 
   constructor(
     private router: ActivatedRoute,
@@ -49,8 +50,8 @@ export class TokenDetailComponent implements OnInit {
     now.setDate(now.getDate() - 1);
     this.tokenService
       .getTokenDetail(this.contractAddress, this.datePipe.transform(now, DATEFORMAT.DATE_ONLY))
-      .subscribe(
-        (res) => {
+      .subscribe({
+        next: (res) => {
           const data = _.get(res, `smart_contract`);
           if (data.length > 0) {
             const reqPayload = { contractAddress: data[0].address };
@@ -76,16 +77,23 @@ export class TokenDetailComponent implements OnInit {
             });
           }
         },
-        () => {},
-        () => {
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loading = false;
         },
-      );
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 
   getTokenDetailNFT(): void {
-    this.contractService.loadContractDetail(this.contractAddress).subscribe(
-      (res) => {
+    this.contractService.loadContractDetail(this.contractAddress).subscribe({
+      next: (res) => {
         const name = _.get(res, 'smart_contract[0].cw721_contract.name');
         let type = ContractRegisterType.CW721;
         if (res.smart_contract[0]?.name === TYPE_CW4973) {
@@ -97,11 +105,18 @@ export class TokenDetailComponent implements OnInit {
         this.tokenDetail.contract_verification =
           res.smart_contract[0].code.code_id_verifications[0]?.verification_status;
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   getLength(result: string) {

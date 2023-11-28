@@ -1,14 +1,13 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatTableModule } from '@angular/material/table';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { ClickOutsideModule } from 'ng-click-outside';
-import { MaterialModule } from 'src/app/app.module';
+import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { MaterialModule } from 'src/app/material.module';
 import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
@@ -47,7 +46,6 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     SharedModule,
     FormsModule,
     CommonPipeModule,
-    MatTableModule,
     PaginatorModule,
     TranslateModule,
     TableNoDataModule,
@@ -59,11 +57,11 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     SoulboundFeatureTokensModule,
     ModelViewModule,
     AudioPlayerModule,
-    ClickOutsideModule,
+    NgClickOutsideDirective,
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
   ],
-  providers: [FormBuilder, SoulboundService],
+  providers: [UntypedFormBuilder, SoulboundService],
 })
 export class SoulboundTokenModule {}

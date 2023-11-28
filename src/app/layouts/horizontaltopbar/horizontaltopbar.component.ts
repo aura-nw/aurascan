@@ -28,10 +28,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   mode: string | undefined;
   layoutMode!: string;
   menuItems: MenuItem[] = MENU;
-  element: any;
-  flagvalue: any;
-  cookieValue: any;
-  countryName: any;
+
   valueset: any;
   searchValue = null;
   pageTitle = null;
@@ -39,20 +36,11 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
+  userEmail = '';
+  isNotiUnread = false;
 
-  prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
-  prefixNormalAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
-
-  /**
-   * Language Listing
-   */
-  listLang = [
-    { text: 'English', flag: 'assets/images/flags/us.jpg', lang: 'en' },
-    { text: 'Spanish', flag: 'assets/images/flags/spain.jpg', lang: 'es' },
-    { text: 'German', flag: 'assets/images/flags/germany.jpg', lang: 'de' },
-    { text: 'Italian', flag: 'assets/images/flags/italy.jpg', lang: 'it' },
-    { text: 'Russian', flag: 'assets/images/flags/russia.jpg', lang: 'ru' },
-  ];
+  prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
+  prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   @Output() settingsButtonClicked = new EventEmitter();
   @Output() mobileMenuButtonClicked = new EventEmitter();
@@ -80,52 +68,35 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.walletService.wallet$.subscribe((wallet) => {
-      if (wallet) {
-        this.menuItems.forEach((item) => {
-          if (item.name === this.menuName.Account) {
-            // check if item is account
-            item.link = `/account/${wallet.bech32Address}`;
-          }
-        });
-      } else {
-        this.menuItems.forEach((item) => {
-          if (item.name === this.menuName.Account) {
-            item.link = null;
-          }
-        });
-      }
-    });
-  }
+    // const features = this.environmentService.chainConfig.features;
 
-  /***
-   * Language Value Set
-   */
-  setLanguage(text: string, lang: string, flag: string) {
-    this.countryName = text;
-    this.flagvalue = flag;
-    this.cookieValue = lang;
-    this.languageService.setLanguage(lang);
+    // this.menuItems.forEach((item) => {
+    //   if (item.subItems) {
+    //     item.subItems.forEach((subItem) => {
+    //       const links = subItem.link.split('/');
+
+    //       // Check disabled for statistics menu,
+    //       if (['statistics', 'tokens'].includes(links[1])) {
+    //         const foundIndex = features.findIndex((item) => item === links[1]);
+    //         item.disabled = foundIndex < 0 ? true : false;
+    //         return;
+    //       }
+
+    //       // Check disabled submenu
+    //       const path = links.pop();
+
+    //       const foundIndex = features.findIndex((item) => item === path);
+
+    //       subItem.disabled = foundIndex < 0 ? true : false;
+    //     });
+    //   }
+    // });
   }
 
   ngOnInit(): void {
     this.getMenuLink();
-    this.element = document.documentElement;
     this.layoutMode = LAYOUT_MODE;
     this.checkEnv();
-    /***
-     * Language value cookies wise set
-     */
-    this.cookieValue = this._cookiesService.get('lang');
-    const val = this.listLang.filter((x) => x.lang === this.cookieValue);
-    this.countryName = val.map((element) => element.text);
-    if (val.length === 0) {
-      if (this.flagvalue === undefined) {
-        this.valueset = 'assets/images/flags/us.jpg';
-      }
-    } else {
-      this.flagvalue = val.map((element) => element.flag);
-    }
 
     // check account is in whitelist (Account Bound Token)
     from([1])
@@ -140,14 +111,17 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
           this.currentAddress = null;
         }
       });
+
+    // check exit email
+    this.userEmail = localStorage.getItem('userEmail');
   }
 
   checkEnv() {
     this.innerWidth = window.innerWidth;
     this.pageTitle =
       this.innerWidth > 992
-        ? this.environmentService.configValue.evnLabel.desktop
-        : this.environmentService.configValue.evnLabel.mobile;
+        ? this.environmentService.environment.label.desktop
+        : this.environmentService.environment.label.mobile;
   }
 
   /**
@@ -412,8 +386,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     }
 
     if (
-      menuLink === '/code-ids/list' &&
-      (this.router.url == '/code-ids/list' ||
+      menuLink === '/code-ids' &&
+      (this.router.url == '/code-ids' ||
         this.router.url.includes('/code-ids/detail/') ||
         this.router.url.includes('/code-ids/verify/'))
     ) {

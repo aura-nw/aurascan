@@ -24,6 +24,7 @@
         [type]="PROPOSAL_TABLE_MODE_VOTES"
         [length]="countVote.get(currentTabId == 'all' ? '' : currentTabId)"
         [data]="voteDataList"
+        [errTxt]="errTxt"
         (pageEventChange)="pageEventChange($event)">
       </app-proposal-table>
       <div *ngIf="voteDataListLoading">

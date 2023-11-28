@@ -17,10 +17,6 @@ Injectable();
 
 export class Globals {
   dataHeader = new CommonDataDto();
-  formatNumberToken = '1.6-6';
-  formatNumber2Decimal = '1.2-2';
-  formatNumberOnlyDecimal = '1.0-0';
-  maxNumberInput = 100000000000000;
   price = {
     aura: 0,
     btc: 0,
@@ -64,11 +60,11 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
       amount = itemMessage?.amount[0].amount;
     } else if (itemMessage?.funds && itemMessage?.funds.length > 0) {
       amount = itemMessage?.funds[0].amount;
-    } else if (type === eTransType.SubmitProposalTx) {
+    } else if (type === eTransType.SubmitProposalTx || type === eTransType.SubmitProposalTxV2) {
       amount =
         itemMessage?.initial_deposit[0]?.amount ||
-        itemMessage?.content?.amount[0].amount ||
-        itemMessage?.amount[0].amount ||
+        itemMessage?.content?.amount[0]?.amount ||
+        itemMessage?.amount[0]?.amount ||
         0;
     } else if (type === eTransType.CreateValidator) {
       amount = itemMessage?.value?.amount || 0;
@@ -313,6 +309,7 @@ export function convertDataTransaction(data, coinInfo) {
     const timestamp = _.get(element, 'timestamp');
     const gas_used = _.get(element, 'gas_used');
     const gas_wanted = _.get(element, 'gas_wanted');
+    const memo = _.get(element, 'memo');
     let tx = _.get(element, 'data.tx_response');
     if (tx) {
       tx['tx'] = _.get(element, 'data.tx');
@@ -334,6 +331,7 @@ export function convertDataTransaction(data, coinInfo) {
       tx,
       typeOrigin,
       lstType,
+      memo
     };
   });
   return txs;

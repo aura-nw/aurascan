@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MatSelect } from '@angular/material/select';
+import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,8 +16,7 @@ import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.const
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { Globals } from '../../../global/global';
-import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
-import { isContract } from 'src/app/core/utils/common/validation';
+import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
   selector: 'app-account-detail',
@@ -44,11 +43,12 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
+  userEmail = null;
 
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-  timeStaking = `${this.environmentService.configValue.timeStaking}`;
+  timeStaking = `${this.environmentService.stakingTime}`;
 
   totalValueToken = 0;
   totalValueNft = 0;
@@ -56,6 +56,7 @@ export class AccountDetailComponent implements OnInit {
   totalSBTPick = 0;
   totalSBT = 0;
   isContractAddress = false;
+  isWatchList = false;
 
   constructor(
     public commonService: CommonService,
@@ -73,14 +74,16 @@ export class AccountDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userEmail = localStorage.getItem('userEmail');
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
-        this.isContractAddress = isContract(this.currentAddress);
+        this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
+        this.checkWatchList();
       }
     });
   }
@@ -239,6 +242,35 @@ export class AccountDetailComponent implements OnInit {
         localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  checkWatchList() {
+    // get watch list form local storage
+    const lstWatchList = localStorage.getItem('lstWatchList');
+    try {
+      let data = JSON.parse(lstWatchList);
+      if (data.find((k) => k.address === this.currentAddress)) {
+        this.isWatchList = true;
+      }
+    } catch (e) {}
+  }
+
+  handleWatchList() {
+    if (this.isWatchList) {
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+    } else {
+      this.editWatchList();
+    }
+  }
+
+  editWatchList() {
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      localStorage.setItem('setAddressWatchList', JSON.stringify(this.currentAddress));
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);
     }

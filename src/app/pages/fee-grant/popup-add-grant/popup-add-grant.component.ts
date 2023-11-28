@@ -1,17 +1,23 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
+import { isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-add-grant',
@@ -20,7 +26,7 @@ import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
 })
 export class PopupAddGrantComponent implements OnInit {
   grantForm;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   periodShow = false;
   allContractAllowActive = false;
   currDate;
@@ -31,18 +37,18 @@ export class PopupAddGrantComponent implements OnInit {
   isSubmit = false;
   isRevoking = false;
   dayConvert = 24 * 60 * 60;
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public environmentService: EnvironmentService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private feeGrantService: FeeGrantService,
     private dialog: MatDialog,
     public translate: TranslateService,
+    public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
   ) {}
 
@@ -76,11 +82,11 @@ export class PopupAddGrantComponent implements OnInit {
     this.addContracts();
   }
 
-  get contracts(): FormArray {
-    return this.grantForm.get('execute_contract') as FormArray;
+  get contracts(): UntypedFormArray {
+    return this.grantForm.get('execute_contract') as UntypedFormArray;
   }
 
-  newContract(): FormGroup {
+  newContract(): UntypedFormGroup {
     return this.fb.group({
       address: ['', { validators: [Validators.required] }],
     });
@@ -176,7 +182,7 @@ export class PopupAddGrantComponent implements OnInit {
                 executeContract: execute_contract,
               },
               senderAddress: granter,
-              network: this.environmentService.configValue.chain_info,
+              network: this.environmentService.chainInfo,
               signingType: ESigningType.Keplr,
               chainId: this.walletService.chainId,
             });
@@ -215,10 +221,7 @@ export class PopupAddGrantComponent implements OnInit {
     this.formValid = false;
     this.isInvalidAddress = false;
     if (grantee_address?.length > 0) {
-      if (
-        this.isSubmit &&
-        !(grantee_address?.length >= LENGTH_CHARACTER.ADDRESS && grantee_address?.trim().startsWith(this.prefixAdd))
-      ) {
+      if (this.isSubmit && !this.commonService.isBech32Address(grantee_address)) {
         this.isInvalidAddress = true;
         return false;
       }

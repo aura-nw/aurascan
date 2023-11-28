@@ -15,7 +15,6 @@ export class ModelViewComponent implements OnInit {
   @Input() previewImg: string;
   @Input() disablePan = false;
 
-  camera_orbit = '45deg 55deg 2.5m';
   constructor(private router: Router) {}
 
   ngOnInit(): void {}

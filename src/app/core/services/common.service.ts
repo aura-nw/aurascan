@@ -8,27 +8,31 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CommonService {
   apiUrl = '';
-  coins = this._environmentService.configValue.coins;
+  coins = this._environmentService.coins;
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
-  chainInfo = this._environmentService.configValue.chain_info;
-  horoscopeApi = `${
-    this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathApi
-  }`;
-  graphUrl = `${
-    this._environmentService.configValue.horoscopeUrl + this._environmentService.configValue.horoscopePathGraphql
-  }`;
-  envDB = this._environmentService.configValue.horoscopeSelectedChain;
-  chainId = this._environmentService.configValue.chainId;
+  chainInfo = this._environmentService.chainInfo;
+
+  horoscope = this._environmentService.horoscope;
+  horoscopeApi = this.horoscope?.url + this.horoscope?.rest;
+  graphUrl = this.horoscope?.url + this.horoscope?.graphql;
+  envDB = this.horoscope?.chain;
+
+  chainId = this._environmentService.chainId;
+  addressPrefix = 'aura';
   listNameTag = [];
   listValidator = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
-    this.apiUrl = `${this._environmentService.configValue.beUri}`;
+    this._environmentService.config.asObservable().subscribe((res) => {
+      this.apiUrl = res.api.backend;
+      this.addressPrefix = res.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
+    });
     const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
     this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);
     this.networkQueryOb = this.networkQuerySubject.asObservable();
@@ -104,11 +108,11 @@ export class CommonService {
   }
 
   getCommunityTax() {
-    return axios.get(`${this._environmentService.configValue.chain_info.rest}/cosmos/distribution/v1beta1/params`);
+    return axios.get(`${this._environmentService.chainInfo.rest}/cosmos/distribution/v1beta1/params`);
   }
 
   getDefaultImg() {
-    return this._environmentService.configValue.image_s3 + 'images/aura__ntf-default-img.png';
+    return this._environmentService.imageUrl + 'images/aura__ntf-default-img.png';
   }
 
   getListNameTag(payload) {
@@ -176,7 +180,7 @@ export class CommonService {
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     let result = false;
     const nameTag = this.listNameTag?.find((k) => k.address === address && k.name_tag?.length > 0);
-    if (!nameTag || nameTag?.name_tag === address) {
+    if (nameTag && nameTag?.name_tag !== address) {
       result = true;
     }
     return result;
@@ -209,6 +213,18 @@ export class CommonService {
     if (value.match(/^https?:/)) {
       return value;
     }
-    return this._environmentService.configValue.ipfsDomain + value.replace('://', '/');
+    return this._environmentService.ipfsDomain + value.replace('://', '/');
+  }
+
+  isValidContract(address: string) {
+    return isContract(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
+  }
+
+  isValidAddress(address: string) {
+    return isAddress(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
+  }
+
+  isBech32Address(address: string) {
+    return isValidBench32Address(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
   }
 }

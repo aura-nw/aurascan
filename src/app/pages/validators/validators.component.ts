@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
@@ -13,7 +13,14 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
+import {
+  MAX_NUMBER_INPUT,
+  NUMBER_2_DIGIT,
+  NUMBER_CONVERT,
+  NUM_BLOCK,
+  TIMEOUT_ERROR,
+  TIME_OUT_CALL_API,
+} from '../../../app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR, VOTING_POWER_LEVEL } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
 import { DataDelegateDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -23,7 +30,6 @@ import { MappingErrorService } from '../../../app/core/services/mapping-error.se
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
-import { Globals } from '../../../app/global/global';
 
 @Component({
   selector: 'app-validators',
@@ -50,13 +56,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   rawData: any[];
   sortedData: any;
   clicked = false;
-  totalDelegator = 0;
   amountFormat = undefined;
   isExceedAmount = false;
   userAddress = '';
   selectedValidator: string;
-  searchNullData = false;
-  listStakingValidator = [];
   validatorDetail: any;
   statusValidator = STATUS_VALIDATOR;
   typeValidator = STATUS_VALIDATOR.Active;
@@ -69,8 +72,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstValidator = [];
   lstReValidator = [];
   lstUndelegate = [];
-  numberCode = 0;
-  arrBlocksMiss = [];
   lstValidatorOrigin = [];
   lstUptime = [];
   TABS = [
@@ -83,38 +84,38 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       label: 'INACTIVE',
     },
   ];
-
+  maxNumberInput = MAX_NUMBER_INPUT;
   timerUnSub: Subscription;
   errorExceedAmount = false;
   isHandleStake = false;
   isLoading = false;
   isClaimRewardLoading = false;
   _routerSubscription: Subscription;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
   pageYOffset = 0;
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
   staking_APR = 0;
-  validatorImgArr;
   maxPercentPower = 0;
   typeActive = 'BOND_STATUS_BONDED';
   countProposal = 0;
   dataUserDelegate;
   loadingData = true;
+  errTxt: string;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
+  number2Digit = NUMBER_2_DIGIT;
 
-  chainInfo = this.environmentService.configValue.chain_info;
+  chainInfo = this.environmentService.chainInfo;
   denom = this.chainInfo.currencies[0].coinDenom;
   coinMinimalDenom = this.chainInfo.currencies[0].coinMinimalDenom;
 
   constructor(
     private validatorService: ValidatorService,
-    public globals: Globals,
     private modalService: NgbModal,
     private accountService: AccountService,
     public commonService: CommonService,
@@ -129,7 +130,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    // this.getBlocksMiss();
     this.getCountProposal();
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -152,9 +152,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * ngOnDestroy
-   */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
@@ -165,8 +162,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getList(): void {
-    this.validatorService.getListValidator(null).subscribe(
-      (res) => {
+    this.validatorService.getListValidator(null).subscribe({
+      next: (res) => {
         this.lstUptime = res.validator;
         if (res.validator?.length > 0) {
           let dataFilter = res.validator.filter((event) =>
@@ -225,11 +222,18 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.searchValidator();
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loadingData = false;
       },
-    );
+      complete: () => {
+        this.loadingData = false;
+      },
+    });
   }
 
   getCountProposal() {
@@ -395,8 +399,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     const halftime = 10000;
     const currentUrl = this.router.url;
     if (this.userAddress && currentUrl.includes('/validators')) {
-      this.accountService.getAccountDetail(this.userAddress).subscribe(
-        (dataWallet) => {
+      this.accountService.getAccountDetail(this.userAddress).subscribe({
+        next: (dataWallet) => {
           if (dataWallet) {
             this.dataDelegate = {
               ...this.dataDelegate,
@@ -406,7 +410,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               stakingToken: dataWallet?.data?.stake_reward,
             };
           }
-
           this.getDataUser();
           this.getListUndelegate();
           setTimeout(() => {
@@ -414,13 +417,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.getList();
           }, halftime);
         },
-        (error) => {
+        error: (error) => {
           setTimeout(() => {
             this.getDataWallet();
             this.getList();
           }, halftime);
         },
-      );
+      });
     }
   }
 
@@ -485,10 +488,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.errorExceedAmount = false;
   }
 
-  handleStaking() {
+  handleDelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const executeStaking = async () => {
+      const executeDelegate = async () => {
         this.isLoading = true;
         const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
@@ -507,8 +510,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
         this.checkStatusExecuteBlock(hash, error);
       };
-
-      executeStaking();
+      executeDelegate();
     }
   }
 

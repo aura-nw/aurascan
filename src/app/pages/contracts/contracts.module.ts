@@ -2,15 +2,14 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { ClickOutsideModule } from 'ng-click-outside';
-import { NgxMaskModule } from 'ngx-mask';
-import { MaterialModule } from 'src/app/app.module';
+import { NgClickOutsideDirective } from 'ng-click-outside2';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MaterialModule } from 'src/app/material.module';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { ContractTableModule } from 'src/app/shared/components/contract-table/contract-table.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
@@ -34,6 +33,7 @@ import { ContractsRoutingModule } from './contracts-routing.module';
 import { ContractsTransactionsComponent } from './contracts-transactions/contracts-transactions.component';
 import { ContractVerifyStepsComponent } from './contracts-verify/contract-verify-steps/contract-verify-steps.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
+import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [
@@ -57,25 +57,25 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     FormsModule,
     MaterialModule,
     DropdownModule,
-    MatTableModule,
     NgbNavModule,
     CommonPipeModule,
-    NgxMaskModule,
+    NgxMaskPipe,
+    NgxMaskDirective,
     ContractTableModule,
     ReactiveFormsModule,
     QrModule,
     SharedModule,
-    ClickOutsideModule,
+    NgClickOutsideDirective,
     WriteContractModule,
     ReadContractModule,
     PopupAddZeroModule,
-    APaginatorModule,
+    CustomPaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
     CommonDirectiveModule,
   ],
-  providers: [ContractService],
+  providers: [ContractService, provideEnvironmentNgxMask(MASK_CONFIG)],
   exports: [ContractVerifyStepsComponent],
 })
 export class ContractsModule {}

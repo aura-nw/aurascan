@@ -1,19 +1,26 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
-import { TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { IContractPopoverData } from 'src/app/core/models/contract.model';
-import { UserService } from 'src/app/core/services/user.service';
-import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { TokenService } from 'src/app/core/services/token.service';
+import {
+  LENGTH_CHARACTER,
+  NULL_ADDRESS,
+  PAGE_EVENT,
+  TIMEOUT_ERROR,
+} from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
-import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
+import {
+  CodeTransaction,
+  ModeExecuteTransaction,
+  StatusTransaction,
+} from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { Globals, convertDataAccountTransaction } from '../../../../../../global/global';
+import { getTypeTx, Globals } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -30,7 +37,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
-    // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'status', headerCellDef: 'Result' },
@@ -41,7 +47,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ];
 
   NFTTemplates: Array<TableTemplate> = [
-    // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'status', headerCellDef: 'Result' },
@@ -71,11 +76,12 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   currentKey = null;
   contractType = ContractRegisterType;
   timerGetUpTime: any;
+  errTxt: string;
 
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
-  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     public global: Globals,
@@ -83,7 +89,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private userService: UserService,
+    private tokenService: TokenService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -103,7 +110,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         this.currentKey = null;
         this.getListData(null, true);
       }
-    }, 5000);
+    }, 30000);
   }
 
   ngOnDestroy(): void {
@@ -122,11 +129,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   async getListTransactionTokenCW721(nextKey = null, isReload = false) {
     let payload = {
-      limit: 100,
       address: this.keyWord,
-      heightLT: nextKey,
       contractAddr: this.contractAddress,
-      isTransferTab: true,
+      idLte: nextKey,
     };
 
     if (this.typeContract === this.contractType.CW4973) {
@@ -146,31 +151,27 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.userService.getListNFTByAddress(payload).subscribe(
-      (res) => {
+    this.tokenService.getCW721Transfer(payload).subscribe({
+      next: (res) => {
         if (res) {
           this.nextKey = null;
-          if (res.transaction.length >= 100) {
-            this.nextKey = res?.transaction[res.transaction.length - 1]?.height;
+          if (res.cw721_activity?.length >= 100) {
+            this.nextKey = res?.cw721_activity[res.cw721_activity?.length - 1]?.id;
             this.hasMore.emit(true);
           } else {
             this.hasMore.emit(false);
           }
 
-          let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.NftTxs, false, null);
-
-          txs.forEach((element, index) => {
-            element['from_address'] = element.fromAddress;
-            element['to_address'] = element.toAddress;
-            element['token_id'] = element.arrEvent?.length > 1 ? 'More' : element.tokenId;
-            element['type'] = element.arrEvent[0]?.type?.replace('Contract: ', '');
-            if (this.typeContract === this.contractType.CW4973) {
-              if (element['type'] === 'mint') {
-                element['type'] = 'take';
-              } else if (element['type'] === 'burn') {
-                element['type'] = 'unequip';
-              }
-            }
+          let txs = res.cw721_activity;
+          txs.forEach((element) => {
+            element['tx_hash'] = element.tx.hash;
+            element['from_address'] = element.from || NULL_ADDRESS;
+            element['to_address'] = element.to || NULL_ADDRESS;
+            element['token_id'] = element.cw721_token.token_id;
+            element['timestamp'] = element.tx.timestamp;
+            element['status'] =
+              element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+            element['type'] = getTypeTx(element.tx)?.action;
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
@@ -182,11 +183,18 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           this.resultLength.emit(this.pageData.length);
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   async getListTransactionTokenCW20(nextKey = null, isReload = false) {
@@ -206,23 +214,26 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.userService.getListFTByAddress(payload).subscribe(
-      (res) => {
+    this.tokenService.getCW20Transfer(payload).subscribe({
+      next: (res) => {
         if (res) {
           this.nextKey = null;
-          if (res.transaction.length >= 100) {
-            this.nextKey = res?.transaction[res.transaction.length - 1].height;
+          if (res.cw20_activity.length >= 100) {
+            this.nextKey = res?.cw20_activity[res.cw20_activity.length - 1].height;
             this.hasMore.emit(true);
           } else {
             this.hasMore.emit(false);
           }
-
-          let txs = convertDataAccountTransaction(res, this.coinInfo, TabsAccountLink.FtsTxs, false, null);
-          txs.forEach((element, index) => {
-            element['arrEvent'] = element.arrEvent?.filter((k) => k.contractAddress === this.contractAddress);
-            element['from_address'] = element.arrEvent[0]?.fromAddress;
-            element['to_address'] = element.arrEvent[0]?.toAddress;
-            element['type'] = element?.action;
+          let txs = res.cw20_activity;
+          txs.forEach((element) => {
+            element['tx_hash'] = element.tx.hash;
+            element['from_address'] = element.from || NULL_ADDRESS;
+            element['to_address'] = element.to || NULL_ADDRESS;
+            element['timestamp'] = element.tx.timestamp;
+            element['status'] =
+              element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+            element['type'] = getTypeTx(element.tx)?.action;
+            element['decimal'] = element.cw20_contract.decimal;
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
@@ -234,11 +245,18 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           this.resultLength.emit(this.pageData.length);
         }
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -270,30 +288,16 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = event;
   }
 
-  getPopoverData(data): IContractPopoverData {
-    return {
-      amount: data?.amountToken || 0,
-      code: Number(data?.tx_response?.code),
-      fee: data?.fee || 0,
-      from_address: data?.from_address || '',
-      to_address: data?.to_address || '',
-      price: 0,
-      status: data?.status,
-      symbol: this.denom,
-      tokenAddress: data?.contract_address,
-      tx_hash: data?.tx_hash || '',
-      gas_used: data?.tx_response?.gas_used,
-      gas_wanted: data?.tx_response?.gas_wanted,
-      nftDetail: this.nftDetail,
-      modeExecute: data?.modeExecute,
-    };
-  }
-
   encodeData(data) {
     return encodeURIComponent(data);
   }
 
   ngAfterViewInit(): void {
     this.cdr.markForCheck();
+  }
+
+  goTo(data) {
+    let url = '/tokens/' + this.linkToken + '/' + this.contractAddress + '/' + this.encodeData(data);
+    this.router.navigateByUrl(url);
   }
 }

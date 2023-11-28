@@ -22,6 +22,11 @@ section.account-detail {
       width: fit-content;
     }
   }
+  .btn-watch-list {
+    ::ng-deep .custom-position {
+      transform: translate(-25%, 4px) !important;
+    }
+  }
 }
 
 .button {
@@ -43,7 +48,6 @@ section.account-detail {
 }
 
 @media (max-width: 991.98px) {
-
   .box-account {
     padding: var(--spacer-4) !important;
   }
@@ -84,14 +88,16 @@ section.account-detail {
   max-width: 100%;
 }
 
-@media (max-width: 414px) {
-  .box-title {
-    .btn-copy {
+.box-title {
+  align-items: center;
+  @media (max-width: 430px) {
+    align-items: flex-start;
+    .btn-border {
       border: 1px solid #717582;
       border-radius: 8px;
-
-      button {
-        padding: 8px;
+      &.button {
+        padding: 4px;
+        height: auto;
       }
     }
   }

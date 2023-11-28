@@ -121,7 +121,7 @@
           <div class="row mt-3">
             <div class="col-6">Commission</div>
             <div class="col-6 text--gray-1 text-end text-lg-start">
-              {{ currentValidatorDetail?.commission | percent : global.formatNumber2Decimal }}
+              {{ currentValidatorDetail?.commission | percent : number2Digit }}
             </div>
           </div>
           <!-- Uptime -->
@@ -129,7 +129,7 @@
             <div class="col-6">Uptime</div>
             <div class="col-6 text--gray-1 text-end text-lg-start">
               <ng-container *ngIf="currentValidatorDetail['status'] === statusValidator.Active">
-                {{ currentValidatorDetail['up_time'] || 100 | number : global.formatNumber2Decimal }}%
+                {{ currentValidatorDetail['up_time'] || 100 | formatDigit : 2 }}%
               </ng-container>
               <ng-container *ngIf="currentValidatorDetail['status'] !== statusValidator.Active"> 0.00% </ng-container>
             </div>
@@ -188,7 +188,7 @@
           <!-- <div class="body-01 text--gray-5 mt-1 mt-lg-0">Total: {{ lengthBlock || 0 | number }} blocks</div> -->
         </div>
         <div class="card-body article-1 pt-4">
-          <ng-container *ngIf="lengthBlock > 0; else noValues">
+          <ng-container *ngIf="lengthBlock > 0 && !isLoadingBlock; else noValues">
             <div class="table-responsive aura-table-contain pb-1">
               <table mat-table [dataSource]="dataSourceBlock" class="aura-table" *ngIf="!breakpoint.value.matches">
                 <ng-container *ngFor="let template of templatesBlock; index as i">
@@ -266,8 +266,10 @@
             </div>
           </ng-container>
           <ng-template #noValues>
-            <app-loading-sprint *ngIf="isLoadingBlock"></app-loading-sprint>
-            <app-table-no-data *ngIf="!isLoadingBlock"></app-table-no-data>
+            <div class="mt-20">
+              <app-loading-sprint *ngIf="isLoadingBlock"></app-loading-sprint>
+              <app-table-no-data *ngIf="!isLoadingBlock" [textNull]="errTxtProposedBlock"></app-table-no-data>
+            </div>
           </ng-template>
         </div>
       </div>
@@ -328,7 +330,7 @@
           <h3 class="h2-mob mb-0 text--gray-1">Delegators</h3>
         </div>
         <div class="card-body article-1 pt-4">
-          <ng-container *ngIf="lengthDelegator > 0; else noValues">
+          <ng-container *ngIf="lengthDelegator > 0 && !isLoadingDelegators; else noValues">
             <div class="aura-table-contain overflow-scroll-x">
               <table mat-table [dataSource]="dataSourceDelegator" class="aura-table" *ngIf="!breakpoint.value.matches">
                 <ng-container *ngFor="let template of templatesDelegator; index as i">
@@ -398,7 +400,10 @@
             </div>
           </ng-container>
           <ng-template #noValues>
-            <app-table-no-data></app-table-no-data>
+            <div class="mt-20">
+              <app-loading-sprint *ngIf="isLoadingDelegators"></app-loading-sprint>
+              <app-table-no-data *ngIf="!isLoadingDelegators" [textNull]="errTxtDelegators"></app-table-no-data>
+            </div>
           </ng-template>
         </div>
       </div>
@@ -409,7 +414,7 @@
           <h3 class="h2-mob mb-0 text--gray-1">Power Events</h3>
         </div>
         <div class="card-body article-1 pt-4">
-          <div *ngIf="isLoadingPower" class="m-auto mt-10">
+          <div *ngIf="isLoadingPower" class="m-auto mt-20">
             <app-loading-sprint></app-loading-sprint>
           </div>
           <ng-container *ngIf="!isLoadingPower">
@@ -519,6 +524,12 @@
                 </app-paginator>
               </div>
             </ng-container>
+            <ng-template #noValues>
+              <div class="mt-20">
+                <app-loading-sprint *ngIf="isLoadingPower"></app-loading-sprint>
+                <app-table-no-data *ngIf="!isLoadingPower" [textNull]="errTxtPowerEvent"></app-table-no-data>
+              </div>
+            </ng-template>
           </ng-container>
         </div>
       </div>

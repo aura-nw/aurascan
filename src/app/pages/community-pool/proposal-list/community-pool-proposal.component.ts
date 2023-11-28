@@ -1,11 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { PROPOSAL_STATUS } from 'src/app/core/constants/proposal.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { PROPOSAL_STATUS, PROPOSAL_TYPE_COMMUNITY_POOL } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -50,10 +50,12 @@ export class CommunityPoolProposalComponent implements OnInit {
   );
   length: number;
   dataSource: MatTableDataSource<any>;
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  listCoin = this.environmentService.configValue.coins;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  listCoin = this.environmentService.coins;
   statusConstant = PROPOSAL_STATUS;
   distributionAcc = '';
+  isLoading = true;
+  errTxt = null;
 
   constructor(
     public translate: TranslateService,
@@ -96,13 +98,37 @@ export class CommunityPoolProposalComponent implements OnInit {
     let payload = {
       limit: this.pageData.pageSize,
       offset: (index - 1) * this.pageData.pageSize,
-      type: '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal',
+      type: [PROPOSAL_TYPE_COMMUNITY_POOL.V1BETA1, PROPOSAL_TYPE_COMMUNITY_POOL.V1],
     };
-    this.proposalService.getProposalData(payload).subscribe((res) => {
-      if (res?.proposal) {
-        this.dataSource = new MatTableDataSource(res.proposal);
-      }
-      this.length = res.proposal_aggregate.aggregate.count;
+    this.proposalService.getProposalData(payload).subscribe({
+      next: (res) => {
+        if (res?.proposal) {
+          let tempData = res.proposal;
+          tempData?.forEach((pro) => {
+            if (pro.content?.length > 0) {
+              pro.recipient = pro.content[0].recipient;
+              pro.amount = pro.content[0].amount;
+            } else {
+              pro.title = pro.content.title;
+              pro.recipient = pro.content.recipient;
+              pro.amount = pro.content.amount;
+            }
+          });
+          this.dataSource = new MatTableDataSource(tempData);
+        }
+        this.length = res.proposal_aggregate.aggregate.count;
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 }

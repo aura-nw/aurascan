@@ -17,13 +17,10 @@
     "noImplicitAny": false,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
+    "target": "ES2022",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths" : {
+    "lib": ["es2018", "dom"],
+    "paths": {
       "crypto": ["./node_modules/crypto-browserify"],
       "stream": ["./node_modules/stream-browserify"],
       "assert": ["./node_modules/assert"],
@@ -32,7 +29,10 @@
       "os": ["./node_modules/os-browserify"],
       "src/*": ["./src/*"]
     },
+    "useDefineForClassFields": false,
+    "types": ["google-one-tap", "google.accounts"]
   },
+
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

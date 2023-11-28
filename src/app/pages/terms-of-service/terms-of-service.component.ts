@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-terms-of-service',
@@ -7,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./terms-of-service.component.scss'],
 })
 export class TermsComponent implements OnInit {
-  constructor(private router: ActivatedRoute) {}
+  constructor() {}
 
   ngOnInit(): void {}
 }

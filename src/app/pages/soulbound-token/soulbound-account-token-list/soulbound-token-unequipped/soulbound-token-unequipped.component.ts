@@ -8,11 +8,11 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute } from '@angular/router';
-import { MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -49,7 +49,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   sbType = SB_TYPE;
   isClick = false;
   MEDIA_TYPE = MEDIA_TYPE;
-  isError = false;
+  errTxt: string;
 
   constructor(
     public dialog: MatDialog,
@@ -96,14 +96,25 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
       keyword: this.textSearch,
     };
 
-    this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
-      this.soulboundData.data = res.data;
-      this.pageData.length = res.meta.count;
-      this.totalUnEquip.emit(this.pageData.length);
-      this.resetReload.emit(false);
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe({
+      next: (res) => {
+        this.soulboundData.data = res.data;
+        this.pageData.length = res.meta.count;
+        this.totalUnEquip.emit(this.pageData.length);
+        this.resetReload.emit(false);
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+        }
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
-
-    this.loading = false;
   }
 
   paginatorEmit(event): void {
@@ -152,10 +163,6 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;
-  }
-
-  error(): void {
-    this.isError = true;
   }
 
   updateNotify(contractAddress, tokenID) {
