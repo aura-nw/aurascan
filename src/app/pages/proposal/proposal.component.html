@@ -202,7 +202,7 @@
                 <div class="w-100 body-01">
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Proposer</div>
-                    <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary">
+                    <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary line-claim">
                       <ng-container *ngIf="lastedItem?.proposer">
                         {{ lastedItem?.proposer?.description?.moniker }}
                       </ng-container>
