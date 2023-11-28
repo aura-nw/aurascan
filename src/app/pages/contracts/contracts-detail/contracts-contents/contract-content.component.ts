@@ -1,17 +1,17 @@
+import { Location } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { isContract } from 'src/app/core/utils/common/validation';
 import { convertDataTransaction } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
-import { Location } from '@angular/common';
-import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 @Component({
   selector: 'app-contract-content[contractsAddress]',
   templateUrl: './contract-content.component.html',
@@ -52,6 +52,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
+    private commonService: CommonService,
     private contractService: ContractService,
     private transactionService: TransactionService,
     private router: Router,
@@ -113,7 +114,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   }
 
   getTransaction(isInit = true): void {
-    if (isContract(this.contractsAddress)) {
+    if (this.commonService.isValidContract(this.contractsAddress)) {
       const payload = {
         limit: this.limit,
         value: this.contractsAddress,

@@ -48,7 +48,7 @@ export class AuthenticateMailComponent implements OnDestroy {
   }
 
   dismiss(): void {
-    this.buttonDismiss.nativeElement.click();
+    this.buttonDismiss.nativeElement.click();    
   }
 
   disconnect(): void {

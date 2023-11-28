@@ -36,4 +36,4 @@
     (hasMore)="getMoreTx($event)">
   </app-token-content>
 </ng-container>
-<app-table-no-data *ngIf="!loading" [textNull]="errTxt"></app-table-no-data>
+<app-table-no-data *ngIf="!loading && errTxt" [textNull]="errTxt"></app-table-no-data>
