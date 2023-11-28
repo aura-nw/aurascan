@@ -186,7 +186,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     volume: +tokenFind?.total_volume || 0,
                     price: +tokenFind?.current_price || 0,
                     isHolderUp: changePercent >= 0 ? true : false,
-                    isValueUp: tokenFind?.price_change_percentage_24h && tokenFind?.price_change_percentage_24h >= 0 ? true : false,
+                    isValueUp:
+                      tokenFind?.price_change_percentage_24h && tokenFind?.price_change_percentage_24h >= 0
+                        ? true
+                        : false,
                     change: tokenFind?.price_change_percentage_24h || 0,
                     holderChange: Math.abs(changePercent),
                     holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
@@ -299,13 +302,17 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
-    if (this.sortedData) {
-      this.dataSource.data = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
+    if (this.textSearch) {
+      this.getListToken();
     } else {
-      this.dataSource.data = this.dataTable
-        ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
-        .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
-        .slice(payload?.offset, payload?.offset + payload?.limit);
+      if (this.sortedData) {
+        this.dataSource.data = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
+      } else {
+        this.dataSource.data = this.dataTable
+          ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+          .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
+          .slice(payload?.offset, payload?.offset + payload?.limit);
+      }
     }
   }
 
