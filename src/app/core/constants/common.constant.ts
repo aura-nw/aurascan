@@ -81,3 +81,4 @@ export const CW721_TRACKING = ['mint', 'burn', 'transfer_nft', 'send_nft'];
 export const MAX_NUMBER_INPUT = 100000000000000;
 export const NUMBER_ONLY_DECIMAL = '1.0-0';
 export const NUMBER_2_DIGIT = '1.2-2';
+export const NUMBER_6_DIGIT = '1.2-6';

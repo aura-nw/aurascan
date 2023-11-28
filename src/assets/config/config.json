@@ -5,7 +5,7 @@
       "desktop": "Nois Testnet",
       "mobile": "Nois Testnet"
     },
-    "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/logo/aura-explorer-logo@mob.png",
+    "logo": "https://testnet.nois.explorers.guru/chains/nois_white.svg",
     "notice": {
       "content": null,
       "url": null
