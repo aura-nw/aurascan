@@ -2,13 +2,13 @@ export const environment = {
   production: true,
   defaultauth: 'fake-backend',
   firebaseConfig: {
-    vapidKey: 'BC42DYfTLtjkG08kw3fBs3Phqb71WnSgDKQf7vQpCJjCq6ZVrdNvez8uzAvbEyWGV8bpNOGy6bw0wszo-Pkk-OI',
-    apiKey: 'AIzaSyAQnkadQ0_7z3O4D53UNInv5H7LpJbgY9g',
-    authDomain: 'fir-notification-5e9fd.firebaseapp.com',
-    projectId: 'fir-notification-5e9fd',
-    storageBucket: 'fir-notification-5e9fd.appspot.com',
-    messagingSenderId: '96547384537',
-    appId: '1:96547384537:web:0a185392dc49fbb189a2c8',
-    measurementId: 'G-QFGE6B9LET',
+    vapidKey: 'BHL-BIKpNOc5us2i4M4hBRp1-a_sEL4Fvd0sxpSTtdzgcPxK0kzTshdRmca_biGZMOZKHxhzb9Yul6GhQ8LkLnc',
+    apiKey: "AIzaSyDijJa9Eh60RfG0m-E4HIOnNkotM0JKJn4",
+    authDomain: "aurascan-admin.firebaseapp.com",
+    projectId: "aurascan-admin",
+    storageBucket: "aurascan-admin.appspot.com",
+    messagingSenderId: "174826486049",
+    appId: "1:174826486049:web:945716c9af34236338a660",
+    measurementId: "G-M3RB4SYR92"
   },
 };
