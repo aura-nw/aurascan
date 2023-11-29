@@ -15,7 +15,6 @@
     </div>
   </div>
   <div class="card-body">
-    {{ errorMessage | json }}
     <ng-container *ngIf="errorMessage?.length > 0">
       <div class="box-error-message mb-lg-6 mb-4">
         <ng-container *ngFor="let error of errorMessage; let i = index">

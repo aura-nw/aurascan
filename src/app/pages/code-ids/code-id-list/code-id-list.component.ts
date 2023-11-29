@@ -96,7 +96,6 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
           }
         });
         this.dataSource.data = res?.code;
-        // this.dataSource = new MatTableDataSource<any>(res.list_token);
         this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
       },
       error: (e) => {
