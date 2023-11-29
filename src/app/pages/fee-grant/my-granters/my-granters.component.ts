@@ -11,7 +11,6 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-my-granters',
@@ -56,7 +55,6 @@ export class MyGrantersComponent implements OnInit {
 
   constructor(
     public commonService: CommonService,
-    public global: Globals,
     private environmentService: EnvironmentService,
     private feeGrantService: FeeGrantService,
     private walletService: WalletService,

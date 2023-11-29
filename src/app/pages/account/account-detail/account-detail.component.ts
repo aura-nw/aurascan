@@ -62,7 +62,7 @@ export class AccountDetailComponent implements OnInit {
     public commonService: CommonService,
     private route: ActivatedRoute,
     private accountService: AccountService,
-    public global: Globals,
+    private global: Globals,
     private walletService: WalletService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,

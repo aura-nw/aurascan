@@ -1,20 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { Component, Inject } from '@angular/core';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-popup-common',
   templateUrl: './popup-common.component.html',
   styleUrls: ['./popup-common.component.scss'],
 })
-export class PopupCommonComponent implements OnInit {
+export class PopupCommonComponent {
   isLoading;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupCommonComponent>,
   ) {}
-
-  ngOnInit(): void {
-  }
 
   submitAction(type) {
     this.dialogRef.close(type);

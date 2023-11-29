@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
     private route: Router,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
+    private cdr: ChangeDetectorRef,
     private notificationsService: NotificationsService,
   ) {}
 
@@ -227,9 +228,11 @@ export class LoginComponent implements OnInit {
   }
 
   addError(error) {
+    this.cdr.markForCheck();
     if (this.errorMessage?.length === 0 && error !== this.errorResendMsg) {
       this.errorMessage?.push(error);
     }
+    this.cdr.detectChanges();
   }
 
   initGoogleLogin() {

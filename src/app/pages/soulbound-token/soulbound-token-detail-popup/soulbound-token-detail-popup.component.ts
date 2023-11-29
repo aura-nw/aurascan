@@ -1,21 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
-  MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-  MatLegacyDialog as MatDialog,
+  MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
+import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { ABTActionType } from 'src/app/core/constants/token.enum';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
-import { ABTActionType } from 'src/app/core/constants/token.enum';
 import { AbtRejectPopupComponent } from 'src/app/pages/soulbound-token/abt-reject-popup/abt-reject-popup.component';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-soulbound-token-detail-popup',
@@ -39,10 +37,9 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
-    public translate: TranslateService,
+    private translate: TranslateService,
     private dialog: MatDialog,
     private soulboundService: SoulboundService,
-    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

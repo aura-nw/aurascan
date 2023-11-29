@@ -4,7 +4,7 @@ import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
   MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
@@ -17,7 +17,6 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
-import { isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-add-grant',
@@ -41,14 +40,14 @@ export class PopupAddGrantComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
-    private fb: UntypedFormBuilder,
-    public environmentService: EnvironmentService,
+    private formBuilder: UntypedFormBuilder,
+    private environmentService: EnvironmentService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private feeGrantService: FeeGrantService,
     private dialog: MatDialog,
     public translate: TranslateService,
-    public commonService: CommonService,
+    private commonService: CommonService,
     private mappingErrorService: MappingErrorService,
   ) {}
 
@@ -69,7 +68,7 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   formInit() {
-    this.grantForm = this.fb.group({
+    this.grantForm = this.formBuilder.group({
       grantee_address: ['', [Validators.required]],
       amount: ['', [Validators.maxLength(200)]],
       expiration_time: [''],
@@ -77,7 +76,7 @@ export class PopupAddGrantComponent implements OnInit {
       period_day: [''],
       isInstantiate: false,
       isExecute: false,
-      execute_contract: this.fb.array([]),
+      execute_contract: this.formBuilder.array([]),
     });
     this.addContracts();
   }
@@ -87,7 +86,7 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   newContract(): UntypedFormGroup {
-    return this.fb.group({
+    return this.formBuilder.group({
       address: ['', { validators: [Validators.required] }],
     });
   }
