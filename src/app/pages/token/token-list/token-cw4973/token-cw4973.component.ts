@@ -8,7 +8,6 @@ import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constan
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
 
@@ -41,9 +40,8 @@ export class TokenCw4973Component implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    public tokenService: TokenService,
-    public soulboundService: SoulboundService,
-    public commonService: CommonService,
+    private soulboundService: SoulboundService,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

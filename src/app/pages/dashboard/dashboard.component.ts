@@ -104,7 +104,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public global: Globals,
     private environmentService: EnvironmentService,
     private cdr: ChangeDetectorRef,
-    public datepipe: DatePipe,
     private proposalService: ProposalService,
     private walletService: WalletService,
     private validatorService: ValidatorService,

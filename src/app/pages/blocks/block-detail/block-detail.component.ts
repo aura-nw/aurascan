@@ -10,7 +10,7 @@ import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../../../app/global/global';
+import { convertDataBlock, convertDataTransactionSimple } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -62,7 +62,6 @@ export class BlockDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private blockService: BlockService,
-    public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,

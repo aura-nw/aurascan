@@ -19,7 +19,7 @@ export const ACCOUNT_WALLET_COLOR = [
 
 export const TABS_TITLE_ACCOUNT = [
   { label: TabsAccount.ExecutedTxs, value: TabsAccountLink.ExecutedTxs },
-  { label: TabsAccount.AuraTxs, value: TabsAccountLink.AuraTxs },
+  { label: TabsAccount.NativeTxs, value: TabsAccountLink.NativeTxs },
   { label: TabsAccount.FtsTxs, value: TabsAccountLink.FtsTxs },
   { label: TabsAccount.NftTxs, value: TabsAccountLink.NftTxs },
 ];

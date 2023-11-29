@@ -36,7 +36,7 @@ export class ExportCsvComponent implements OnInit {
   siteKey = this.environmentService.siteKeyCaptcha;
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private commonService: CommonService,
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
@@ -61,7 +61,7 @@ export class ExportCsvComponent implements OnInit {
   }
 
   formInit() {
-    this.csvForm = this.fb.group({
+    this.csvForm = this.formBuilder.group({
       dataType: null,
       address: ['', [Validators.required]],
       isFilterDate: true,
@@ -86,8 +86,8 @@ export class ExportCsvComponent implements OnInit {
 
   mappingDataExport(dataType) {
     switch (dataType) {
-      case this.tabsData.AuraTxs:
-        return this.tabsAccount.AuraTxs;
+      case this.tabsData.NativeTxs:
+        return this.tabsAccount.NativeTxs;
       case this.tabsData.FtsTxs:
         return this.tabsAccount.FtsTxs;
       case this.tabsData.NftTxs:

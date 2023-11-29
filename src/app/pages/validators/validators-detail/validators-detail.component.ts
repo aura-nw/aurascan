@@ -99,7 +99,7 @@ export class ValidatorsDetailComponent implements OnInit {
     private validatorService: ValidatorService,
     private blockService: BlockService,
     public commonService: CommonService,
-    public global: Globals,
+    private global: Globals,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,

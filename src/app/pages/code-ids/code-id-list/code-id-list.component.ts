@@ -45,7 +45,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractVerifyType = ContractVerifyType;
 
-  constructor(private contractService: ContractService, public commonService: CommonService) {}
+  constructor(private contractService: ContractService, private commonService: CommonService) {}
 
   ngOnInit(): void {
     this.getListCodeIds();
