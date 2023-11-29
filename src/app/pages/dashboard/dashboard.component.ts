@@ -1,11 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe } from '@angular/common';
+import { DatePipe, formatNumber } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
+import * as _ from 'lodash';
 import * as moment from 'moment';
-import { NgxMaskService } from 'ngx-mask';
 import { Subject, Subscription, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
@@ -19,7 +19,7 @@ import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
+import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR } from '../../core/constants/common.constant';
 import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
@@ -31,7 +31,6 @@ import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTI
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   chartRange = CHART_RANGE.H_24;
   chartRangeData = CHART_RANGE;
-  PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
 
   templatesBlock: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
@@ -39,6 +38,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
+
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
 
@@ -60,14 +60,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   areaSeries: ISeriesApi<'Area'> = null;
   chartDataExp = [];
 
-  toolTipWidth = 80;
-  toolTipHeight = 80;
-  toolTipMargin = 15;
+  toolTipConfig = {
+    width: 80,
+    height: 80,
+    margin: 15,
+  };
 
-  min = 0;
-  max = 1000;
-  currDate;
-  isPrice = true;
   isLoadingBlock = true;
   isLoadingTx = true;
   isLoadingVoting = true;
@@ -75,11 +73,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   errTxtTxs = null;
   errTxtVoting = null;
 
-  curr_voting_Period;
+  curr_voting_Period: any;
   voting_Period_arr = [];
 
   staking_APR = 0;
-  tokenIdGetPrice = TOKEN_ID_GET_PRICE;
   tokenInfo: {
     coinId: string;
     current_price: number;
@@ -93,13 +90,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   originalData = [];
   originalDataArr = [];
   cacheData = [];
-  logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
   destroy$ = new Subject<void>();
   isMobileMatched = false;
   currentAddress = null;
 
-  breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroy$));
+  breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     public commonService: CommonService,
@@ -109,14 +105,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private environmentService: EnvironmentService,
     private cdr: ChangeDetectorRef,
     private proposalService: ProposalService,
-    private maskService: NgxMaskService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private coingecko: CoingeckoService,
   ) {
-    this.breakpoint$.subscribe((state) => {
+    this.breakpoint$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state) {
         this.isMobileMatched = state.matches;
       }
@@ -124,18 +119,27 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getInfoData();
-    const period = 60000;
-    this.timerUnSub = timer(period, period)
+    this.timerUnSub = timer(0, 60000)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.getInfoData());
 
     this.initChart();
     this.getCoinInfo(this.chartRange);
-    this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
     this.getVotingPeriod();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  //get all data for dashboard
+  getInfoData() {
+    this.getMarketInfo();
+    this.getListBlock();
+    this.getListTransaction();
+    this.cdr.detectChanges();
+  }
   // config chart
   initChart() {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
@@ -152,34 +156,46 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   parseDataFromApi(dta: any[]) {
     const parseData = dta.map((el) => ({
-      dataX: this.isPrice ? Number(el.current_price?.toFixed(6)) : Number(el.total_volume?.toFixed(6)),
+      dataX: Number(el.current_price?.toFixed(6)),
       dataY: el.timestamp,
     }));
+
+    try {
+      // get last 2 items to check duplicated data
+      const last2Item = parseData.slice(-2);
+      const gapTime = moment(last2Item[1]?.dataY).diff(moment(last2Item[0]?.dataY));
+      const FIVE_MINUTE = 300000; // In milliseconds
+
+      if (gapTime <= FIVE_MINUTE) {
+        parseData.pop();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
     return {
       dataX: parseData.map((el) => el.dataX),
       dataY: parseData.map((el) => el.dataY),
     };
   }
 
-  drawChartFirstTime(data, dateTime) {
+  drawChart(data, dateTime) {
     this.chartDataExp = [];
     let arr = []; // drawing chart array
     arr = this.makeChartData(data, dateTime);
-    this.originalDataArr = arr;
-    this.areaSeries.applyOptions({
-      priceFormat: {
-        type: this.isPrice ? 'price' : 'volume',
-      },
-    });
 
+    this.originalDataArr = arr;
     this.areaSeries.setData(arr);
+
     const chartLength = arr.length - 1;
+
+    const from = chartLength - CHART_CONFIG[this.chartRange].initRange;
 
     if (chartLength <= CHART_CONFIG[this.chartRange].initRange) {
       this.chart.timeScale().fitContent();
     } else {
       this.chart.timeScale().setVisibleLogicalRange({
-        from: chartLength - CHART_CONFIG[this.chartRange].initRange,
+        from: from,
         to: chartLength,
       });
     }
@@ -192,31 +208,21 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  //get all data for dashboard
-  getInfoData() {
-    this.getMarketInfo();
-    this.getListBlock();
-    this.getListTransaction();
-    this.cdr.detectChanges();
-  }
-
   getMarketInfo() {
+    if (!this.environmentService.coingecko?.ids[0]) {
+      return;
+    }
+
     this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
-      const { data } = res;
-      if (data) {
-        this.tokenInfo = data;
+      if (res?.data) {
+        this.tokenInfo = res.data;
       }
     });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   getListBlock(): void {
     const payload = {
-      limit: this.PAGE_SIZE,
+      limit: PAGE_EVENT.PAGE_SIZE,
     };
     this.blockService.getDataBlock(payload).subscribe({
       next: (res) => {
@@ -241,7 +247,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getListTransaction(): void {
     const payload = {
-      limit: this.PAGE_SIZE,
+      limit: PAGE_EVENT.PAGE_SIZE,
     };
     this.transactionService.getListTx(payload).subscribe({
       next: (res) => {
@@ -276,17 +282,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.originalDataArr = [];
     this.endData = false;
 
-    this.initTooltip();
     this.chartRange = type;
 
     const { value } = CHART_CONFIG[this.chartRange];
-    const days = value;
 
     this.coingecko
       .getChartData(
         this.environmentService.coingecko.ids[0],
         {
-          days,
+          days: value,
         },
         { type: this.chartRange },
       )
@@ -298,7 +302,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           if (this.originalData.length > 0) {
             this.cacheData = this.originalData;
           }
-          this.drawChartFirstTime(dataX, dataY);
+
+          this.drawChart(dataX, dataY);
         }
       });
   }
@@ -306,56 +311,59 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   initTooltip() {
     const container = document.getElementById('chart');
     const toolTip = document.createElement('div');
-    const label = this.isPrice ? 'Price' : 'Volume';
+
     toolTip.className = 'floating-tooltip-2';
     container.appendChild(toolTip);
 
+    const toolTipTemplate = _.template(
+      '<div class="floating-tooltip__header">Price</div><div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0">${price}</div><div>${dateStr}</div></div>',
+    );
+
     // update tooltip
-    this.chart.subscribeCrosshairMove((param) => {
+    this.chart.subscribeCrosshairMove(({ point, time, seriesPrices }) => {
       if (
-        param.point === undefined ||
-        !param.time ||
-        param.point.x < 0 ||
-        param.point.x > container.clientWidth ||
-        param.point.y < 0 ||
-        param.point.y > container.clientHeight
+        point === undefined ||
+        !time ||
+        point?.x < 0 ||
+        point?.x > container.clientWidth ||
+        point?.y < 0 ||
+        point?.y > container.clientHeight
       ) {
         toolTip.style.display = 'none';
-      } else {
-        const timestamp = moment.unix((param.time as number) - 25200); // GMT+7
-        const dateStr = timestamp.format('DD/MM/YYYY HH:mm:ss');
-        toolTip.style.display = 'block';
-        const price = param.seriesPrices.get(this.areaSeries);
-        toolTip.innerHTML =
-          '' +
-          '<div class="floating-tooltip__header">' +
-          label +
-          '</div>' +
-          '<div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0;">' +
-          this.maskService.applyMask((price as number).toString(), 'separator') +
-          '</div><div>' +
-          dateStr +
-          '' +
-          '</div></div>';
-        const coordinate = this.areaSeries.priceToCoordinate(price as number);
-        let shiftedCoordinate = param.point.x - 50;
-        if (coordinate === null) {
-          return;
-        }
-        shiftedCoordinate = Math.max(0, Math.min(container.clientWidth - this.toolTipWidth, shiftedCoordinate));
-        const coordinateY =
-          coordinate - this.toolTipHeight - this.toolTipMargin > 0
-            ? coordinate - this.toolTipHeight - this.toolTipMargin
-            : Math.max(
-                0,
-                Math.min(
-                  container.clientHeight - this.toolTipHeight - this.toolTipMargin,
-                  coordinate + this.toolTipMargin,
-                ),
-              );
-        toolTip.style.left = shiftedCoordinate + 'px';
-        toolTip.style.top = coordinateY + 'px';
+        return;
       }
+
+      toolTip.style.display = 'block';
+
+      const timestamp = moment.unix((time as number) - 25200); // GMT+7
+      const dateStr = timestamp.format('DD/MM/YYYY HH:mm:ss');
+      const price = seriesPrices.get(this.areaSeries);
+
+      toolTip.innerHTML = toolTipTemplate({
+        dateStr,
+        price: formatNumber(price as number, 'en-GB', NUMBER_6_DIGIT),
+      });
+
+      const coordinate = this.areaSeries.priceToCoordinate(price as number);
+
+      if (coordinate === null) {
+        return;
+      }
+
+      const { width, height, margin } = this.toolTipConfig;
+      const { clientWidth, clientHeight } = container;
+
+      const shiftedCoordinate = Math.max(0, Math.min(clientWidth - width, point.x - 50));
+
+      const heightOffset = height - margin;
+
+      const coordinateY =
+        coordinate - heightOffset > 0
+          ? coordinate - heightOffset
+          : Math.max(0, Math.min(clientHeight - heightOffset, coordinate + margin));
+
+      toolTip.style.left = shiftedCoordinate + 'px';
+      toolTip.style.top = coordinateY + 'px';
     });
   }
 
@@ -403,12 +411,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngAfterViewInit() {
-    this.validatorService.stakingAPRSubject.subscribe((res) => {
-      this.staking_APR = res ?? 0;
-    });
+    this.validatorService.stakingAPRSubject
+      .asObservable()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.staking_APR = res ?? 0;
+      });
 
     // re-draw chart when connect coin98 app in mobile
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.wallet$.pipe(takeUntil(this.destroy$)).subscribe((wallet) => {
       if (wallet && this.isMobileMatched) {
         if (this.originalData.length === 0) {
           this.originalData = this.cacheData;

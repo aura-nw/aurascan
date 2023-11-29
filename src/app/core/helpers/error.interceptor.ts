@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { clearLocalData } from "src/app/global/global";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -12,6 +13,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((err) => {
         if (err.status === 401) {
+          clearLocalData();
           this.router.navigate(['/login']);
         }
         return throwError(err);
