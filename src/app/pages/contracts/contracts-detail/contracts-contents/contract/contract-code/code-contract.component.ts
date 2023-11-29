@@ -16,7 +16,7 @@ export class CodeContractComponent implements OnInit {
   isExpand = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(public router: Router, private layout: BreakpointObserver, public commonService: CommonService) {}
+  constructor(private router: Router, private layout: BreakpointObserver, public commonService: CommonService) {}
 
   ngOnInit(): void {}
 

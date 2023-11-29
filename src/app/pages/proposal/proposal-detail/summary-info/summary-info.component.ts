@@ -66,7 +66,7 @@ export class SummaryInfoComponent implements OnInit {
     public dialog: MatDialog,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
-    public commonService: CommonService,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

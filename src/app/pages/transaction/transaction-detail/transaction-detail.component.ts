@@ -7,7 +7,7 @@ import { CodeTransaction } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { Globals, convertDataTransaction } from '../../../global/global';
+import { convertDataTransaction } from '../../../global/global';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -43,7 +43,6 @@ export class TransactionDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private transactionService: TransactionService,
-    public global: Globals,
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
     public environmentService: EnvironmentService,

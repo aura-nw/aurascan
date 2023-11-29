@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges } from '@angular/core';
 import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
 
 @Component({
@@ -14,7 +7,7 @@ import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
   styleUrls: ['./loading-image.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadingImageComponent implements OnInit, OnChanges {
+export class LoadingImageComponent implements OnChanges {
   @Input() srcImg = '';
   @Input() identity = '';
   @Input() appClass = '';
@@ -33,8 +26,6 @@ export class LoadingImageComponent implements OnInit, OnChanges {
   error(): void {
     this.isLoading = false;
   }
-
-  async ngOnInit() {}
 
   ngOnChanges(): void {
     this.isError = false;

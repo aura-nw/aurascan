@@ -20,7 +20,7 @@ import {
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { getTypeTx, Globals } from '../../../../../../global/global';
+import { getTypeTx } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -84,7 +84,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
-    public global: Globals,
     public commonService: CommonService,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,

@@ -331,7 +331,7 @@ export function convertDataTransaction(data, coinInfo) {
       tx,
       typeOrigin,
       lstType,
-      memo
+      memo,
     };
   });
   return txs;
@@ -401,37 +401,25 @@ export function convertDataAccountTransaction(
       case TabsAccountLink.ExecutedTxs:
         type = getTypeTx(element)?.type;
         break;
-      case TabsAccountLink.AuraTxs:
+      case TabsAccountLink.NativeTxs:
         let arrTemp = [];
-        element?.events?.forEach((data, i) => {
-          toAddress = data.event_attributes.find((k) => k.composite_key === 'transfer.recipient')?.value;
-          fromAddress = data.event_attributes.find((k) => k.composite_key === 'transfer.sender')?.value;
-          if (toAddress === currentAddress || fromAddress === currentAddress) {
-            let { type, action } = getTypeTx(element, i);
-            toAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.recipient')?.value;
-            fromAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.sender')?.value;
-            const arrAmount = data.event_attributes
-              ?.find((k) => k.composite_key === 'transfer.amount')
-              ?.value?.split(',');
-            arrAmount?.forEach((rawAmount) => {
-              let amountTemp = rawAmount ? rawAmount?.match(/\d+/g)[0] : 0;
-              let amount;
-              let denom = coinInfo.coinDenom;
-              let denomOrigin;
-              let decimal = 6;
-              if (rawAmount?.indexOf('ibc') > -1) {
-                const dataIBC = getDataIBC(rawAmount, coinConfig);
-                amount = balanceOf(Number(amountTemp) || 0, dataIBC['decimal'] || 6);
-                denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
-                denomOrigin = dataIBC['denom'];
-              } else {
-                amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
-              }
-
-              const result = { type, toAddress, fromAddress, amount, denom, action, denomOrigin, amountTemp, decimal };
-              arrTemp.push(result);
-            });
+        element?.coin_transfers?.forEach((data, i) => {
+          toAddress = data.to;
+          fromAddress = data.from;
+          let { type, action } = getTypeTx(element, i);
+          let amountString = data.amount + denom;
+          let decimal = 6;
+          let amountTemp = data.amount;
+          if (amountString?.indexOf('ibc') > -1) {
+            const dataIBC = getDataIBC(amountString, coinConfig);
+            decimal = dataIBC['decimal'];
+            amount = balanceOf(Number(data.amount) || 0, dataIBC['decimal'] || 6);
+            denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
+          } else {
+            amount = balanceOf(Number(data.amount) || 0, coinInfo.coinDecimals);
           }
+          const result = { type, toAddress, fromAddress, amount, denom, amountTemp, action, decimal };
+          arrTemp.push(result);
         });
         arrEvent = arrTemp;
         break;
@@ -581,4 +569,13 @@ export function convertDataTransactionSimple(data, coinInfo) {
     };
   });
   return txs;
+}
+
+export function clearLocalData(){
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('listNameTag');
+  localStorage.removeItem('lstWatchList');
+  localStorage.removeItem('registerFCM');
 }

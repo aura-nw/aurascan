@@ -59,7 +59,7 @@ export class ContractsTransactionsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private transactionService: TransactionService,
-    public commonService: CommonService,
+    private commonService: CommonService,
     private global: Globals,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
