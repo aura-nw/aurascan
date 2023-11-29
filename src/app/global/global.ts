@@ -582,3 +582,12 @@ export function convertDataTransactionSimple(data, coinInfo) {
   });
   return txs;
 }
+
+export function clearLocalData(){
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('listNameTag');
+  localStorage.removeItem('lstWatchList');
+  localStorage.removeItem('registerFCM');
+}

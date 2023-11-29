@@ -153,7 +153,6 @@ export class LoginComponent implements OnInit {
             }
           },
           error: (err) => {
-            this.cdr.detectChanges();
             const error = err?.error?.error?.details;
             this.addError(error?.message || err.statusText);
             this.errorCode = error?.code;
@@ -229,9 +228,11 @@ export class LoginComponent implements OnInit {
   }
 
   addError(error) {
+    this.cdr.markForCheck();
     if (this.errorMessage?.length === 0 && error !== this.errorResendMsg) {
       this.errorMessage?.push(error);
     }
+    this.cdr.detectChanges();
   }
 
   initGoogleLogin() {
