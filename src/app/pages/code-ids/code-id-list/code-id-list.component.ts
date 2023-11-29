@@ -95,7 +95,8 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
             k.type = ContractRegisterType.CW4973;
           }
         });
-        this.dataSource.data = res.code;
+        this.dataSource.data = res?.code;
+        // this.dataSource = new MatTableDataSource<any>(res.list_token);
         this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
       },
       error: (e) => {
