@@ -2,19 +2,19 @@ import { DatePipe, formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { NgxMaskPipe } from 'ngx-mask';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { CHART_RANGE } from 'src/app/core/constants/common.constant';
+import { CHART_RANGE, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportStatisticChart } from 'src/app/core/helpers/export';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 import {
   CHART_CONFIG,
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
-  STATISTIC_CHART_DETAIL_OPTIONS,
+  STATISTIC_CHART_DETAIL_OPTIONS
 } from 'src/app/pages/dashboard/dashboard-chart-options';
 
 @Component({
@@ -51,7 +51,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     public translate: TranslateService,
     private statisticService: StatisticService,
-    public datepipe: DatePipe,
+    private datepipe: DatePipe,
     private maskService: NgxMaskPipe,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
@@ -213,8 +213,12 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CodeTransaction } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { Globals, convertDataTransaction } from '../../../global/global';
+import { convertDataTransaction } from '../../../global/global';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -20,7 +20,7 @@ export class TransactionDetailComponent implements OnInit {
   codeTransaction = CodeTransaction;
   isRawData = false;
   errorMessage = '';
-  errText = null;
+  errTxt = null;
   TAB = [
     {
       id: 0,
@@ -43,10 +43,9 @@ export class TransactionDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private transactionService: TransactionService,
-    public global: Globals,
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -102,8 +101,12 @@ export class TransactionDetailComponent implements OnInit {
           }
         },
         error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loading = false;
-          this.errText = e.status + ' ' + e.statusText;
         },
         complete: () => {
           this.loading = false;

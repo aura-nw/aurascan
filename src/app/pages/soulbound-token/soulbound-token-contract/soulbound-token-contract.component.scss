@@ -8,16 +8,24 @@
   align-items: center;
   justify-content: center;
 }
+
 .search-form-sblist {
   width: 100%;
+
   @media (min-width: 991.98px) {
     width: 500px;
   }
 }
+
+.status-box {
+  height: 40px;
+}
+
 .aura-table-slist {
   th {
     min-width: 15%;
   }
+
   th:first-child {
     min-width: 5%;
   }
@@ -26,17 +34,21 @@
     th {
       min-width: 150px;
     }
+
     th:first-child {
       min-width: 80px;
     }
+
     th:nth-child(2),
     th:nth-child(3) {
       min-width: 250px;
     }
   }
 }
+
 .token-status {
   position: relative;
+
   &:before {
     content: '\e916';
     font-family: 'ico-aura';
@@ -47,6 +59,7 @@
     font-size: 8px;
   }
 }
+
 ::ng-deep {
   .mat-form-field[soulbound] {
     background-color: var(--aura-bg-form);
@@ -54,7 +67,8 @@
     display: flex;
     align-items: center;
     width: 150px;
-    height: 48px;
+    height: 40px;
+
     @media (min-width: 991.98px) {
       width: 100%;
     }
@@ -93,7 +107,7 @@
       transform: translateY(-5%);
 
       .mat-select-arrow {
-        border: solid #E6E7E8;
+        border: solid var(--aura-gray-11);
         border-width: 0 2.3px 2.3px 0;
         display: inline-block;
         padding: 2.8px;
@@ -114,6 +128,7 @@
       padding: var(--spacer-4) 0 !important;
     }
   }
+
   .mat-option,
   .mat-option.mat-active {
     color: var(--aura-gray-1);

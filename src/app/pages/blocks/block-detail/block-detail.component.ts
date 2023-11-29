@@ -3,17 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Buffer } from 'buffer';
-import { sha256 } from 'js-sha256';
 import * as _ from 'lodash';
-import { tap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../../../app/global/global';
+import { convertDataBlock, convertDataTransactionSimple } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -54,21 +51,9 @@ export class BlockDetailComponent implements OnInit {
   loading = true;
   loadingTxs = true;
   isRawData = false;
-  isCurrentMobile;
   errTxt: string;
-  errTxtTx: string;
-
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
-    tap((data) => {
-      this.isCurrentMobile = data.matches;
-
-      if (this.isCurrentMobile) {
-        this.pageData.pageSize = 5;
-      } else {
-        this.pageData.pageSize = 20;
-      }
-    }),
-  );
+  errTxtTxs: string;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe();
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
@@ -77,7 +62,6 @@ export class BlockDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private blockService: BlockService,
-    public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
@@ -120,29 +104,25 @@ export class BlockDetailComponent implements OnInit {
 
           //get list tx detail
           let txs = [];
-          for (const key in res.block[0]?.data?.block?.data?.txs) {
-            const element = res.block[0]?.data?.block?.data?.txs[key];
-            const tx = sha256(Buffer.from(element, 'base64')).toUpperCase();
-
-            const payload = {
-              limit: 1,
-              hash: tx,
-            };
-            this.transactionService.getListTx(payload).subscribe({
-              next: (res) => {
-                if (res?.transaction[0]) {
-                  txs.push(res?.transaction[0]);
-                }
-              },
-              error: (e) => {
-                this.loadingTxs = false;
-                this.errTxtTx = e.status + ' ' + e.statusText;
-              },
-              complete: () => {
-                this.loadingTxs = false;
-              },
-            });
-          }
+          const payload = {
+            limit: 100,
+            height: this.blockHeight,
+          };
+          this.transactionService.getListTx(payload).subscribe({
+            next: (res) => {
+              if (res?.transaction) {
+                txs = res?.transaction;
+              }
+            },
+            error: (e) => {
+              if (e.name === TIMEOUT_ERROR) {
+                this.errTxtTxs = e.message;
+              } else {
+                this.errTxtTxs = e.status + ' ' + e.statusText;
+              }
+              this.loadingTxs = false;
+            },
+          });
 
           await Promise.all(txs);
           setTimeout(() => {
@@ -167,8 +147,12 @@ export class BlockDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;

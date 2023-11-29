@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import {
   MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
@@ -19,13 +19,11 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 export class PopupNameTagComponent implements OnInit {
   privateNameForm;
   isSubmit = false;
-  errorSpendLimit = '';
   formValid = true;
   isAccount = false;
   isContract = false;
   maxLengthNameTag = 35;
   maxLengthNote = 200;
-  currentCodeID;
   publicNameTag = '-';
   isValidAddress = true;
   isError = false;
@@ -42,8 +40,8 @@ export class PopupNameTagComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupNameTagComponent>,
     private fb: UntypedFormBuilder,
-    public environmentService: EnvironmentService,
     public translate: TranslateService,
+    private environmentService: EnvironmentService,
     private commonService: CommonService,
     private nameTagService: NameTagService,
     private toastr: NgxToastrService,
@@ -115,10 +113,10 @@ export class PopupNameTagComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { isFavorite, isAccount, address, name, note } = this.privateNameForm.value;
+    const { isFavorite, address, name, note } = this.privateNameForm.value;
     let payload = {
       isFavorite: isFavorite == 1,
-      type: isAccount ? this.nameTagType.Account : this.nameTagType.Contract,
+      type: this.commonService.isValidAddress(address) ? 'account' : 'contract',
       address: address,
       nameTag: name,
       note: note,
@@ -151,7 +149,7 @@ export class PopupNameTagComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
+        this.toastr.error(error?.error?.error?.details?.details.message[0] || 'Error');
       },
     });
   }
@@ -170,7 +168,7 @@ export class PopupNameTagComponent implements OnInit {
       },
       error: (error) => {
         this.isError = true;
-        this.toastr.error(error?.details.message[0] || 'Error');
+        this.toastr.error(error?.error?.error?.details?.details.message[0] || 'Error');
       },
     });
   }

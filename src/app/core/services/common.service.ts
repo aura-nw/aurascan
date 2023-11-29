@@ -180,7 +180,7 @@ export class CommonService {
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     let result = false;
     const nameTag = this.listNameTag?.find((k) => k.address === address && k.name_tag?.length > 0);
-    if (!nameTag || nameTag?.name_tag === address) {
+    if (nameTag && nameTag?.name_tag !== address) {
       result = true;
     }
     return result;

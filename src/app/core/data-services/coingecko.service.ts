@@ -57,7 +57,6 @@ export class CoingeckoService {
       .pipe(
         catchError((error) => {
           console.log(error);
-
           return of([]);
         }),
       );

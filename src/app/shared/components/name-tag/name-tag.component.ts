@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common.service';
+import { isContract } from 'src/app/core/utils/common/validation';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -29,7 +30,7 @@ export class NameTagComponent implements OnInit {
 
   extendUrlLink = '';
 
-  constructor(public commonService: CommonService, public global: Globals) {}
+  constructor(public commonService: CommonService, private global: Globals) {}
 
   ngOnInit(): void {
     if (this.extendUrl) {
@@ -52,7 +53,7 @@ export class NameTagComponent implements OnInit {
 
   displayContent(value) {
     let result = value;
-    if (!this.commonService.checkPublic(value)) {
+    if (this.commonService.checkPublic(value)) {
       result += '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag, false);
     }
     if (this.commonService.checkPrivate(value)) {

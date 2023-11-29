@@ -3,15 +3,15 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { CONTRACT_RESULT, TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { shortenAddress } from '../../../core/utils/common/shorten';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-code-id-list',
@@ -45,7 +45,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractVerifyType = ContractVerifyType;
 
-  constructor(private contractService: ContractService, public commonService: CommonService) {}
+  constructor(private contractService: ContractService, private commonService: CommonService) {}
 
   ngOnInit(): void {
     this.getListCodeIds();
@@ -95,12 +95,16 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
             k.type = ContractRegisterType.CW4973;
           }
         });
-        this.dataSource.data = res.code;
+        this.dataSource.data = res?.code;
         this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;

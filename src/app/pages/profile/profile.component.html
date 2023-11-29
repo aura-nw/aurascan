@@ -22,13 +22,13 @@
               class="button button-tab-menu body fw-semibold"
               >Private name tag</a
             >
-            <!-- <a
+            <a
               [routerLink]="['/profile']"
               [queryParams]="{ tab: profileTab.WatchList }"
               [class.active]="currentTab === profileTab.WatchList"
               class="button button-tab-menu body fw-semibold mt-2"
-              >WatchList</a
-            > -->
+              >My watchlist</a
+            >
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@
             <ul
               ngbNav
               #customNav="ngbNav"
-              [activeId]="this.currentTab === 'private' ? 1 : 0"
+              [activeId]="activeTabID"
               class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-lg-8 mb-4 mb-lg-0">
               <ng-container *ngFor="let tab of PROFILE_TAB; index as index">
                 <li [ngbNavItem]="index">
@@ -52,6 +52,7 @@
           <ng-container *ngIf="currentTab">
             <app-profile-settings *ngIf="currentTab === profileTab.Setting"></app-profile-settings>
             <app-private-name-tag *ngIf="currentTab === profileTab.PrivateNameTag"></app-private-name-tag>
+            <app-watchlist *ngIf="currentTab === profileTab.WatchList"></app-watchlist>
           </ng-container>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as moment from 'moment';
 import { tap } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
@@ -66,11 +66,11 @@ export class ProposalComponent implements OnInit {
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
-    public walletService: WalletService,
+    private walletService: WalletService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
-    public commonService: CommonService,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +85,9 @@ export class ProposalComponent implements OnInit {
           this.proposalData = res.proposal;
           if (this.proposalData?.length > 0) {
             this.proposalData.forEach((pro, index) => {
+              if (!pro.title) {
+                pro.title = pro.content.title;
+              }
               if (pro?.tally) {
                 const { yes, no, no_with_veto, abstain } = pro?.tally;
                 let totalVote = +yes + +no + +no_with_veto + +abstain;
@@ -113,8 +116,12 @@ export class ProposalComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;
@@ -133,17 +140,24 @@ export class ProposalComponent implements OnInit {
           if (res?.proposal) {
             let tempData = res.proposal;
             tempData?.forEach((pro) => {
+              if (!pro.title) {
+                pro.title = pro.content.title;
+              }
+
               if (pro.total_deposit?.length > 0) {
                 pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0]?.amount);
               }
             });
-
             this.dataSource.data = tempData;
           }
           this.length = res.proposal_aggregate.aggregate.count;
         },
         error: (e) => {
-          this.errTxt = e.status + ' ' + e.statusText;
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
         },
       });
   }
@@ -194,7 +208,7 @@ export class ProposalComponent implements OnInit {
 
   openVoteDialog(item: IProposal, index: number) {
     const id = item.proposal_id;
-    const title = item.content.title;
+    const title = item['title'] ? item['title'] : item.content.title;
     const expiredTime = +moment(item.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {

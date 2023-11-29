@@ -60,11 +60,11 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
       amount = itemMessage?.amount[0].amount;
     } else if (itemMessage?.funds && itemMessage?.funds.length > 0) {
       amount = itemMessage?.funds[0].amount;
-    } else if (type === eTransType.SubmitProposalTx) {
+    } else if (type === eTransType.SubmitProposalTx || type === eTransType.SubmitProposalTxV2) {
       amount =
         itemMessage?.initial_deposit[0]?.amount ||
-        itemMessage?.content?.amount[0].amount ||
-        itemMessage?.amount[0].amount ||
+        itemMessage?.content?.amount[0]?.amount ||
+        itemMessage?.amount[0]?.amount ||
         0;
     } else if (type === eTransType.CreateValidator) {
       amount = itemMessage?.value?.amount || 0;
@@ -309,6 +309,7 @@ export function convertDataTransaction(data, coinInfo) {
     const timestamp = _.get(element, 'timestamp');
     const gas_used = _.get(element, 'gas_used');
     const gas_wanted = _.get(element, 'gas_wanted');
+    const memo = _.get(element, 'memo');
     let tx = _.get(element, 'data.tx_response');
     if (tx) {
       tx['tx'] = _.get(element, 'data.tx');
@@ -330,6 +331,7 @@ export function convertDataTransaction(data, coinInfo) {
       tx,
       typeOrigin,
       lstType,
+      memo,
     };
   });
   return txs;
@@ -399,37 +401,25 @@ export function convertDataAccountTransaction(
       case TabsAccountLink.ExecutedTxs:
         type = getTypeTx(element)?.type;
         break;
-      case TabsAccountLink.AuraTxs:
+      case TabsAccountLink.NativeTxs:
         let arrTemp = [];
-        element?.events?.forEach((data, i) => {
-          toAddress = data.event_attributes.find((k) => k.composite_key === 'transfer.recipient')?.value;
-          fromAddress = data.event_attributes.find((k) => k.composite_key === 'transfer.sender')?.value;
-          if (toAddress === currentAddress || fromAddress === currentAddress) {
-            let { type, action } = getTypeTx(element, i);
-            toAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.recipient')?.value;
-            fromAddress = data.event_attributes?.find((k) => k.composite_key === 'transfer.sender')?.value;
-            const arrAmount = data.event_attributes
-              ?.find((k) => k.composite_key === 'transfer.amount')
-              ?.value?.split(',');
-            arrAmount?.forEach((rawAmount) => {
-              let amountTemp = rawAmount ? rawAmount?.match(/\d+/g)[0] : 0;
-              let amount;
-              let denom = coinInfo.coinDenom;
-              let denomOrigin;
-              let decimal = 6;
-              if (rawAmount?.indexOf('ibc') > -1) {
-                const dataIBC = getDataIBC(rawAmount, coinConfig);
-                amount = balanceOf(Number(amountTemp) || 0, dataIBC['decimal'] || 6);
-                denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
-                denomOrigin = dataIBC['denom'];
-              } else {
-                amount = balanceOf(Number(amountTemp) || 0, coinInfo.coinDecimals);
-              }
-
-              const result = { type, toAddress, fromAddress, amount, denom, action, denomOrigin, amountTemp, decimal };
-              arrTemp.push(result);
-            });
+        element?.coin_transfers?.forEach((data, i) => {
+          toAddress = data.to;
+          fromAddress = data.from;
+          let { type, action } = getTypeTx(element, i);
+          let amountString = data.amount + denom;
+          let decimal = 6;
+          let amountTemp = data.amount;
+          if (amountString?.indexOf('ibc') > -1) {
+            const dataIBC = getDataIBC(amountString, coinConfig);
+            decimal = dataIBC['decimal'];
+            amount = balanceOf(Number(data.amount) || 0, dataIBC['decimal'] || 6);
+            denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
+          } else {
+            amount = balanceOf(Number(data.amount) || 0, coinInfo.coinDecimals);
           }
+          const result = { type, toAddress, fromAddress, amount, denom, amountTemp, action, decimal };
+          arrTemp.push(result);
         });
         arrEvent = arrTemp;
         break;
@@ -579,4 +569,13 @@ export function convertDataTransactionSimple(data, coinInfo) {
     };
   });
   return txs;
+}
+
+export function clearLocalData(){
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('listNameTag');
+  localStorage.removeItem('lstWatchList');
+  localStorage.removeItem('registerFCM');
 }

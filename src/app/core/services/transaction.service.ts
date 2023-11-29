@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 
 @Injectable()
 export class TransactionService extends CommonService {
@@ -51,6 +51,7 @@ export class TransactionService extends CommonService {
           gas_used
           gas_wanted
           data
+          memo
         }
       }
     }
@@ -132,7 +133,7 @@ export class TransactionService extends CommonService {
           heightLT: payload.heightLT,
           indexGT: null,
           indexLT: null,
-          height: null,
+          height: payload.height,
         },
         operationName: 'queryListTopTransaction',
       })
@@ -210,9 +211,9 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getProposalDeposit(payload) {
+  getProposalDepositor(payload) {
     const operationsDoc = `
-    query queryProposalDeposit(
+    query queryProposalDepositor(
       $limit: Int = 100
       $order: order_by = desc
       $value: String = null
@@ -240,9 +241,8 @@ export class TransactionService extends CommonService {
           height
           hash
           timestamp
-          event_attributes (where: {block_height: { _lte: $heightLT, _gte: $heightGT }}){
-            value
-            composite_key
+          transaction_messages {
+            content
           }
         }
       }
@@ -258,7 +258,7 @@ export class TransactionService extends CommonService {
           heightGT: payload.heightGT,
           heightLT: payload.heightLT,
         },
-        operationName: 'queryProposalDeposit',
+        operationName: 'queryProposalDepositor',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -307,12 +307,16 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTransferFromTx(hash): Observable<any> {
+  getListTransferFromTx(hash, height = null): Observable<any> {
     const operationsDoc = `
     query TxTransferDetail(
       $listFilterCW20: [String!] = null
       $listFilterCW721: [String!] = null
       $txHash: String = null
+      $msgTypeNotIn: [String!] = null
+      $compositeKeyIn: [String!] = null
+      $heightGTE: Int = null
+      $heightLTE: Int = null
     ) {
       ${this.envDB} {
         cw20_activity(
@@ -364,6 +368,23 @@ export class TransactionService extends CommonService {
             }
           }
         }
+        coin_transfer: transaction(
+          where: {
+            hash: { _eq: $txHash }
+            transaction_messages: { type: { _nin: $msgTypeNotIn } }
+          }
+        ) {
+          event_attributes(
+            where: {
+              composite_key: { _in: $compositeKeyIn }
+              event: { tx_msg_index: { _is_null: false } }
+              block_height: { _lte: $heightLTE, _gte: $heightGTE }
+            }
+          ) {
+            composite_key
+            value
+          }
+        }
       }
     }
     `;
@@ -372,8 +393,11 @@ export class TransactionService extends CommonService {
         query: operationsDoc,
         variables: {
           txHash: hash,
+          compositeKeyIn: ['coin_spent.spender', 'coin_received.receiver', 'coin_spent.amount', 'coin_received.amount'],
           listFilterCW20: CW20_TRACKING,
           listFilterCW721: CW721_TRACKING,
+          heightLTE: height,
+          heightGTE: height,
         },
         operationName: 'TxTransferDetail',
       })

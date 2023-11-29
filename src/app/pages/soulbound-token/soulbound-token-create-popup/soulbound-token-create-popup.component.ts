@@ -22,6 +22,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
   isReject = false;
 
   network = this.environmentService.chainInfo;
+  prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

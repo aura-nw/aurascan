@@ -3,6 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -35,7 +36,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   limit = 25;
   contractTransaction = {};
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
-
+  errTxt: string;
   contractInfo = {
     contractsAddress: this.contractsAddress,
     count: 0,
@@ -103,7 +104,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
     this.timerGetUpTime = setInterval(() => {
       this.getTransaction(false);
-    }, 5000);
+    }, 30000);
   }
 
   changeTab(tabId): void {
@@ -119,8 +120,8 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         value: this.contractsAddress,
         key: '_contract_address',
       };
-      this.transactionService.getListTxCondition(payload).subscribe(
-        (res) => {
+      this.transactionService.getListTxCondition(payload).subscribe({
+        next: (res) => {
           const data = res;
           if (res) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
@@ -135,11 +136,18 @@ export class ContractContentComponent implements OnInit, OnDestroy {
             }
           }
         },
-        () => {},
-        () => {
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loadingContract = false;
         },
-      );
+        complete: () => {
+          this.loadingContract = false;
+        },
+      });
     } else {
       this.loadingContract = false;
     }

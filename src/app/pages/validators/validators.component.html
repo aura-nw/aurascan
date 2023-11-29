@@ -448,7 +448,7 @@
               (blur)="resetCheck()" />
             <div class="d-flex align-items-center mr-2 mr-lg-4">
               <button
-                class="button button-primary active button-flat button--sm button-max fw-semibold"
+                class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
                 type="button"
                 (click)="getMaxToken(dialogMode.Undelegate)">
                 MAX
@@ -460,9 +460,9 @@
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input [max]="maxNumberInput" mask="separator.6" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
-            <div class="d-flex align-items-center py-1 mr-4">
+            <div class="d-flex align-items-center mr-4">
               <button
-                class="button button-primary active button-flat button--sm button-max fw-semibold"
+                class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
                 type="button"
                 (click)="getMaxToken(dialogMode.Delegate)">
                 MAX
@@ -479,7 +479,6 @@
           <div class="h6 body-02-mob mb-3 text--white">Redelegate to:</div>
           <mat-form-field appearance="fill" dense>
             <mat-select
-              class="list-token"
               placeholder="Select validator"
               panelClass="commissionPanel"
               [(value)]="selectedValidator"
@@ -522,9 +521,9 @@
             </div>
             <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input [(ngModel)]="amountFormat" [max]="maxNumberInput" mask="separator.6" (blur)="resetCheck()" />
-              <div class="d-flex align-items-center py-1 mr-4">
+              <div class="d-flex align-items-center mr-4">
                 <button
-                  class="button button-primary active button-flat button--sm button-max fw-semibold"
+                  class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
                   type="button"
                   (click)="getMaxToken(dialogMode.Undelegate)">
                   MAX

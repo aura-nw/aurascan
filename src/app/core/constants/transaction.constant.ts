@@ -33,9 +33,12 @@ export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.SwapExactAmountIn, value: TypeTransaction.SwapExactAmountIn },
   { label: TRANSACTION_TYPE_ENUM.BeginUnlocking, value: TypeTransaction.BeginUnlocking },
   { label: TRANSACTION_TYPE_ENUM.Vote, value: TypeTransaction.Vote },
+  { label: TRANSACTION_TYPE_ENUM.VoteV2, value: TypeTransaction.Vote },
   { label: TRANSACTION_TYPE_ENUM.Vesting, value: TypeTransaction.Vesting },
   { label: TRANSACTION_TYPE_ENUM.Deposit, value: TypeTransaction.Deposit },
+  { label: TRANSACTION_TYPE_ENUM.DepositV2, value: TypeTransaction.Deposit },
   { label: TRANSACTION_TYPE_ENUM.SubmitProposalTx, value: TypeTransaction.SubmitProposalTx },
+  { label: TRANSACTION_TYPE_ENUM.SubmitProposalTxV2, value: TypeTransaction.SubmitProposalTx },
   { label: TRANSACTION_TYPE_ENUM.GetRewardCommission, value: TypeTransaction.GetRewardCommission },
   { label: TRANSACTION_TYPE_ENUM.PeriodicVestingAccount, value: TypeTransaction.PeriodicVestingAccount },
   { label: TRANSACTION_TYPE_ENUM.BasicAllowance, value: TypeTransaction.BasicAllowance },
@@ -47,4 +50,10 @@ export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.RevokeAuthz, value: TypeTransaction.RevokeAuthz },
   { label: TRANSACTION_TYPE_ENUM.MsgMigrateContract, value: TypeTransaction.MsgMigrateContract },
   { label: TRANSACTION_TYPE_ENUM.Fail, value: TypeTransaction.Fail },
+];
+
+export const TYPE_MULTI_VER = [
+  TRANSACTION_TYPE_ENUM.Vote,
+  TRANSACTION_TYPE_ENUM.Deposit,
+  TRANSACTION_TYPE_ENUM.SubmitProposalTx,
 ];

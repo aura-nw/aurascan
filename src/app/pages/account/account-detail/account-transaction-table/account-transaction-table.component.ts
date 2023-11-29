@@ -1,11 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER } from 'src/app/core/constants/transaction.enum';
@@ -32,6 +32,7 @@ export class AccountTransactionTableComponent {
   @Output() lstType = new EventEmitter<any>();
 
   transactionLoading = false;
+  errTxt: string;
   currentAddress: string;
   templates: Array<TableTemplate>;
   tabsData = TabsAccountLink;
@@ -258,6 +259,8 @@ export class AccountTransactionTableComponent {
       listTxMsgType: null,
       startTime: startDate || null,
       endTime: endDate || null,
+      from: address,
+      to: address,
     };
 
     if (this.isSearchOther) {
@@ -281,13 +284,12 @@ export class AccountTransactionTableComponent {
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
         this.getListTxByAddress(payload);
         break;
-      case TabsAccountLink.AuraTxs:
-        payload.compositeKey = ['transfer.sender', 'transfer.recipient'];
+      case TabsAccountLink.NativeTxs:
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
-            payload.compositeKey = ['transfer.sender'];
+            payload.to = '_';
           } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
-            payload.compositeKey = ['transfer.recipient'];
+            payload.from = '_';
           }
         }
         this.templates = [...this.templatesToken];
@@ -327,10 +329,6 @@ export class AccountTransactionTableComponent {
       default:
         break;
     }
-
-    setTimeout(() => {
-      this.transactionLoading = false;
-    }, 5000);
   }
 
   getListTypeFilter() {
@@ -351,7 +349,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -361,11 +364,16 @@ export class AccountTransactionTableComponent {
   }
 
   getListTxAuraByAddress(payload) {
-    this.userService.getListTxAuraByAddress(payload).subscribe({
+    this.userService.getListNativeTransfer(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -379,7 +387,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -393,7 +406,12 @@ export class AccountTransactionTableComponent {
       next: (data) => {
         this.handleGetData(data);
       },
-      error: () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.transactionLoading = false;
       },
       complete: () => {
@@ -576,5 +594,9 @@ export class AccountTransactionTableComponent {
   linkExportPage() {
     localStorage.setItem('setDataExport', JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }));
     this.router.navigate(['/export-csv']);
+  }
+
+  encodeData(data) {
+    return encodeURIComponent(data);
   }
 }

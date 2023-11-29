@@ -79,7 +79,9 @@
                 <img src="assets/icons/icons-svg/white/close.svg" alt="" />
               </button>
               <div class="mr-5 h6 mb-0 text--primary position-relative">
-                <i class="ph-calendar-blank-fill h2 text--white fw-normal d-block cursor-pointer" (click)="picker.open()"></i>
+                <i
+                  class="ph-calendar-blank-fill h2 text--white fw-normal d-block cursor-pointer"
+                  (click)="picker.open()"></i>
                 <mat-datepicker #picker></mat-datepicker>
               </div>
             </div>
@@ -199,8 +201,8 @@
                 id="execute-contract"
                 class="check-box check-box--dark"
                 formControlName="isExecute"
-                (ngModelChange)="checkFormValid()"/>
-              <label for="execute-contract" class=" ml-2 mb-0 text-justify"> Execute Contract </label>
+                (ngModelChange)="checkFormValid()" />
+              <label for="execute-contract" class="ml-2 mb-0 text-justify"> Execute Contract </label>
             </div>
           </div>
         </div>
@@ -218,7 +220,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="allContractAllowActive"
                   (change)="changeContractsActive(true)" />
-                <label for="all" class="ml-2 mb-0 text-justify">All smart contracts</label>
+                <label for="all" class=" ml-2 mb-0 text-justify">All smart contracts</label>
               </div>
               <div class="form-group d-flex align-items-center ml-lg-2 mt-4 mt-lg-0">
                 <input
@@ -228,7 +230,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="!allContractAllowActive"
                   (change)="changeContractsActive(false)" />
-                <label for="specified" class="ml-2 mb-0 text-justify">Specified smart contracts</label>
+                <label for="specified" class=" ml-2 mb-0 text-justify">Specified smart contracts</label>
               </div>
             </div> -->
             Specified smart contracts

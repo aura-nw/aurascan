@@ -19,7 +19,7 @@ import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
+import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR } from '../../core/constants/common.constant';
 import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
@@ -38,6 +38,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
+
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
 
@@ -68,8 +69,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isLoadingBlock = true;
   isLoadingTx = true;
-  errTextBlock = null;
-  errTextTxs = null;
+  isLoadingVoting = true;
+  errTxtBlock = null;
+  errTxtTxs = null;
+  errTxtVoting = null;
 
   curr_voting_Period: any;
   voting_Period_arr = [];
@@ -103,7 +106,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public global: Globals,
     private environmentService: EnvironmentService,
     private cdr: ChangeDetectorRef,
-    public datepipe: DatePipe,
     private proposalService: ProposalService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
@@ -132,6 +134,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
   //get all data for dashboard
   getInfoData() {
     this.getMarketInfo();
@@ -139,7 +142,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getListTransaction();
     this.cdr.detectChanges();
   }
-
   // config chart
   initChart() {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
@@ -232,8 +234,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtBlock = e.message;
+        } else {
+          this.errTxtBlock = e.status + ' ' + e.statusText;
+        }
         this.isLoadingBlock = false;
-        this.errTextBlock = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingBlock = false;
@@ -260,8 +266,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtTxs = e.message;
+        } else {
+          this.errTxtTxs = e.status + ' ' + e.statusText;
+        }
         this.isLoadingTx = false;
-        this.errTextTxs = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingTx = false;
@@ -363,25 +373,42 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     let payload = {
       limit: 20,
     };
-    this.proposalService.getProposalData(payload).subscribe((res) => {
-      if (res?.proposal) {
-        let tempDta = res.proposal;
-        this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
+    this.proposalService.getProposalData(payload).subscribe({
+      next: (res) => {
+        if (res?.proposal) {
+          let tempDta = res.proposal;
+          this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
 
-        this.voting_Period_arr.forEach((pro, index) => {
-          if (pro?.tally) {
-            const { yes, no, no_with_veto, abstain } = pro?.tally;
-            let totalVote = +yes + +no + +no_with_veto + +abstain;
-            if (this.voting_Period_arr[index].tally) {
-              this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;
-              this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
-              this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
-              this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
+          this.voting_Period_arr.forEach((pro, index) => {
+            if (!pro['title']) {
+              pro['title'] = pro.content.title;
             }
-          }
-        });
-        this.curr_voting_Period = this.voting_Period_arr[0];
-      }
+
+            if (pro?.tally) {
+              const { yes, no, no_with_veto, abstain } = pro?.tally;
+              let totalVote = +yes + +no + +no_with_veto + +abstain;
+              if (this.voting_Period_arr[index].tally) {
+                this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;
+                this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
+                this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
+                this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
+              }
+            }
+          });
+          this.curr_voting_Period = this.voting_Period_arr[0];
+        }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtVoting = e.message;
+        } else {
+          this.errTxtVoting = e.status + ' ' + e.statusText;
+        }
+        this.isLoadingVoting = false;
+      },
+      complete: () => {
+        this.isLoadingVoting = false;
+      },
     });
   }
 

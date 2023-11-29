@@ -1,0 +1,70 @@
+<div class="box-notification mr-4" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+  <div class="dropdown aura-dropdown">
+    <button
+      class="button button--xlg button--sm-mob button-circle button-notify"
+      id="notiMenu"
+      #notiMenu
+      data-bs-toggle="dropdown"
+      (click)="showData()"
+      aria-expanded="false">
+      <div class="position-relative">
+        <img [src]="'assets/icons/icons-svg/black/bell.svg' | imageS3" alt="" />
+        <span class="unread-noti caption" *ngIf="notificationsService.countUnread > 0"> </span>
+      </div>
+    </button>
+    <ul
+      class="dropdown-menu aura-dropdown-menu notify-dropdown-menu"
+      aria-labelledby="notifyMenu"
+      id="notifyMenu"
+      #notifyMenu>
+      <div class="box-title">
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="h3 fw-semibold text--gray-4">Notifications</span>
+          <div class="text--primary caption align-items-center d-flex cursor-pointer" (click)="readNoti()">
+            <i class="ph ph-check h4 text--primary mr-1"></i>
+            Mask all as read
+          </div>
+          <i class="ph ph-x h2 cursor-pointer text--white d-lg-none" (click)="closeNotiMob()"></i>
+        </div>
+        <div class="d-flex mt-6">
+          <button class="button-change-tab" (click)="isTabAll = true; filterListNoti()" [class.active]="isTabAll">
+            <span>All</span>
+          </button>
+          <button class="button-change-tab" (click)="isTabAll = false; filterListNoti()" [class.active]="!isTabAll">
+            <span
+              >Unread
+              {{ notificationsService.countUnread > 0 ? '(' + notificationsService.countUnread + ')' : '' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="content-notify" id="scrollBox" (scroll)="onScroll($event)" [class.paddingSafari]="isSafari">
+        <ng-container *ngIf="lstData?.length > 0; else noNoti">
+          <ng-container *ngFor="let item of lstData">
+            <div class="item cursor-pointer" (click)="readNoti(item)" [ngClass]="{ item__read: item.is_read }">
+              <div class="box-img" [ngClass]="{ 'box-img__bg-icon': !item.image }">
+                <img [src]="item.image | imageS3" *ngIf="item.image" />
+                <i class="text--white icon-noti" [ngClass]="item.icon" *ngIf="!item.image"></i>
+              </div>
+              <div class="ml-3">
+                <div class="break-word" [innerHtml]="item.display"></div>
+                <div class="mt-2 d-flex align-items-center caption fw-normal text--gray-2">
+                  <i class="ph ph-clock mr-1"></i>
+                  {{ commonService.getDateValue(item.created_at)[0] }}
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <ng-template #noNoti>
+        <div class="box-no-noti" *ngIf="!isLoading">
+          {{ isTabAll ? 'You don\'t have any notification' : 'You don\'t have any unread notification' }}
+        </div>
+        <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+      </ng-template>
+    </ul>
+  </div>
+</div>

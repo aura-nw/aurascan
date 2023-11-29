@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,6 +44,7 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
+  userEmail = null;
 
   destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
@@ -56,6 +57,7 @@ export class AccountDetailComponent implements OnInit {
   totalSBTPick = 0;
   totalSBT = 0;
   isContractAddress = false;
+  isWatchList = false;
 
   api = inject(ApiAccountService);
 
@@ -63,7 +65,7 @@ export class AccountDetailComponent implements OnInit {
     public commonService: CommonService,
     private route: ActivatedRoute,
     private accountService: AccountService,
-    public global: Globals,
+    private global: Globals,
     private walletService: WalletService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
@@ -75,6 +77,7 @@ export class AccountDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userEmail = localStorage.getItem('userEmail');
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
@@ -83,6 +86,7 @@ export class AccountDetailComponent implements OnInit {
         this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
+        this.checkWatchList();
       }
     });
   }
@@ -234,6 +238,35 @@ export class AccountDetailComponent implements OnInit {
         localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  checkWatchList() {
+    // get watch list form local storage
+    const lstWatchList = localStorage.getItem('lstWatchList');
+    try {
+      let data = JSON.parse(lstWatchList);
+      if (data.find((k) => k.address === this.currentAddress)) {
+        this.isWatchList = true;
+      }
+    } catch (e) {}
+  }
+
+  handleWatchList() {
+    if (this.isWatchList) {
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+    } else {
+      this.editWatchList();
+    }
+  }
+
+  editWatchList() {
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      localStorage.setItem('setAddressWatchList', JSON.stringify(this.currentAddress));
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);
     }

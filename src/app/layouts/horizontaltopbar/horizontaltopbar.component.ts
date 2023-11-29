@@ -36,6 +36,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
+  userEmail = '';
+  isNotiUnread = false;
 
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
@@ -109,6 +111,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
           this.currentAddress = null;
         }
       });
+
+    // check exit email
+    this.userEmail = localStorage.getItem('userEmail');
   }
 
   checkEnv() {

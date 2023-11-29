@@ -161,7 +161,7 @@ export class TransactionMessagesComponent implements OnInit {
       let result = [];
 
       const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
-      this.transactionTypeArr.push(typeTrans?.value || data['@type'].split('.').pop());
+      this.transactionTypeArr.push((typeTrans?.value || data['@type'].split('.').pop())?.replace('Msg', ''));
       const denom = data?.amount?.length > 0 ? data?.amount[0]?.denom : this.denom;
       let dataDenom = this.commonService.mappingNameIBC(denom);
       switch (data['@type']) {
@@ -337,7 +337,6 @@ export class TransactionMessagesComponent implements OnInit {
             value: this.commonService.setNameTag(this.getDataJson('_contract_address')),
             link: { url: '/contracts', data: this.getDataJson('_contract_address'), nameTag: true },
           });
-          result.push({ key: 'Label', value: data?.label });
           result.push({
             key: 'Sender',
             value: this.commonService.setNameTag(data?.sender),
@@ -357,6 +356,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.Vote:
+        case this.eTransType.VoteV2:
           result.push({ key: 'Proposal Id', value: this.getLongValue(data.proposal_id), link: { url: '/votings' } });
           result.push({
             key: 'Voter',
@@ -473,6 +473,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.SubmitProposalTx:
+        case this.eTransType.SubmitProposalTxV2:
           result.push({
             key: 'Amount',
             value: data.initial_deposit[0]?.amount,
@@ -493,12 +494,13 @@ export class TransactionMessagesComponent implements OnInit {
               value: this.getLongValue(proposalData?.find((k) => k.key === 'proposal_id')?.value),
               link: { url: '/votings' },
             });
+            const proposalType = data.content?.length > 0 ? data.content[0] : data.content || data.messages[0];
             result.push({
               key: 'Proposal Type',
-              value: proposalData?.find((k) => k.key === 'proposal_type')?.value,
+              value: proposalType ? proposalType['@type']?.split('.').pop() : '',
             });
           }
-          result.push({ key: 'Title', value: data.content.title });
+          result.push({ key: 'Title', value: data.content?.title || data?.title });
           break;
 
         case this.eTransType.MsgGrantAllowance:
@@ -569,21 +571,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.Deposit:
-          result.push({ key: 'Proposal Id', value: this.getLongValue(data.proposal_id), link: { url: '/votings' } });
-          result.push({
-            key: 'Depositor',
-            value: this.commonService.setNameTag(data.depositor),
-            link: { url: '/account', data: data.depositor, nameTag: true },
-          });
-          result.push({
-            key: 'Amount',
-            value: data?.amount[0]?.amount,
-            denom: dataDenom,
-            pipeType: pipeTypeData.BalanceOf,
-          });
-          break;
-
-        case this.eTransType.Deposit:
+        case this.eTransType.DepositV2:
           result.push({ key: 'Proposal Id', value: this.getLongValue(data.proposal_id), link: { url: '/votings' } });
           result.push({
             key: 'Depositor',
@@ -676,6 +664,9 @@ export class TransactionMessagesComponent implements OnInit {
           if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward) {
             rawType = this.typeGetData.WithdrawRewards;
           }
+          const arrClaim = this.transactionDetail?.tx?.events?.filter(
+            (k) => k.type === this.typeGetData.WithdrawRewards,
+          );
           const temp = j?.events.filter((f) => f.type === rawType);
           const tempCommission = j?.events.filter((f) => f.type === this.typeGetData.WithdrawCommission);
           if (temp?.length > 0) {
@@ -683,11 +674,12 @@ export class TransactionMessagesComponent implements OnInit {
             if (data) {
               if (this.transactionDetail?.type !== TRANSACTION_TYPE_ENUM.GetReward) {
                 if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
-                  let arrayAmount = data.filter((k) => k.key === 'amount');
-                  this.amountClaim = 0;
-                  arrayAmount.forEach((element) => {
-                    this.amountClaim += balanceOf(Number(element.value?.replace(this.coinMinimalDenom, ''))) || 0;
-                  });
+                  if (arrClaim?.length > 0) {
+                    arrClaim.forEach((element) => {
+                      const amount = element.attributes?.find((k) => k.key === 'amount')?.value;
+                      this.amountClaim += balanceOf(Number(amount?.replace(this.coinMinimalDenom, ''))) || 0;
+                    });
+                  }
                 }
               }
 
@@ -700,11 +692,10 @@ export class TransactionMessagesComponent implements OnInit {
                   this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
                   this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate
                 ) {
-                  const temp = j?.events.filter((f) => f.type === this.typeGetData.WithdrawRewards);
-                  if (temp?.length > 0) {
+                  if (arrClaim?.length > 0) {
                     const amount =
                       balanceOf(
-                        temp[0]?.attributes
+                        arrClaim[0]?.attributes
                           .find((data) => data.key === 'amount')
                           ?.value?.replace(this.coinMinimalDenom, ''),
                       ) || 0;

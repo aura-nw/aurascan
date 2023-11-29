@@ -15,6 +15,13 @@ export function isAddress(adr: string, addressPrefix = 'aura'): boolean {
   return false;
 }
 
+export function isSafari(): boolean {
+  const result =
+    ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform) ||
+    (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+  return result;
+}
+
 export function isValidBench32Address(address: string, addressPrefix = 'aura'): boolean {
   if (!address) {
     return false;

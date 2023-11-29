@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -45,12 +45,12 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     private router: ActivatedRoute,
     private contractService: ContractService,
     private wSService: WSService,
-    public route: Router,
+    private route: Router,
   ) {}
 
   ngOnInit(): void {
     if (this.route.url.includes('accountbound')) {
-      this.sbtClass = 'sbt-page'
+      this.sbtClass = 'sbt-page';
       this.sbtPage = true;
     }
 
@@ -169,9 +169,5 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     if (this.soulboundUnclaimedNum > 0 && this.wallet === this.userAddress) {
       localStorage.setItem('tabUnEquip', 'true');
     }
-  }
-
-  encodeData(data) {
-    return encodeURIComponent(data);
   }
 }

@@ -174,9 +174,9 @@
   }
 }
 
-.pro__type {
+.pro__type, .line-claim {
   @media (max-width: 991.99px) {
-    width: 200px;
+    max-width: 200px;
   }
 }
 .nav-tabs-proposal.aura-nav-tabs.nav-tabs {
