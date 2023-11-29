@@ -448,17 +448,17 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({ key: 'Identity', value: data.description?.identity });
           result.push({
             key: 'Commission Rate',
-            value: this.checkRateFloatNumber(data?.commission?.rate) || '-',
+            value: this.checkRateFloatNumber(+data?.commission?.rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
             key: 'Commission Max Rate',
-            value: this.checkRateFloatNumber(data?.commission?.max_rate) || '-',
+            value: this.checkRateFloatNumber(+data?.commission?.max_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
             key: 'Commission Max Change Rate',
-            value: this.checkRateFloatNumber(data?.commission?.max_change_rate) || '-',
+            value: this.checkRateFloatNumber(+data?.commission?.max_change_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({ key: 'Public Key', value: data?.pubkey?.value || data?.pubkey?.key });
@@ -965,10 +965,10 @@ export class TransactionMessagesComponent implements OnInit {
 
   checkRateFloatNumber(value) {
     if (!!value) {
-      const temp = value / Math.pow(10, 18);
+      const temp = +value / Math.pow(10, 18);
       let tempPercent = temp * 100;
       //check is int value
-      if (Number(tempPercent) === tempPercent && (tempPercent % 1 === 0 || tempPercent % 1 === tempPercent)) {
+      if (Number(tempPercent) === tempPercent) {
         value = temp;
       }
       return value;
