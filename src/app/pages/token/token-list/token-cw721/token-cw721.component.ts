@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatSort, Sort } from '@angular/material/sort';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatSort, Sort } from '@angular/material/sort';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -12,7 +12,6 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
-import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw721',
@@ -49,8 +48,7 @@ export class TokenCw721Component implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    public global: Globals,
-    public tokenService: TokenService,
+    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
   ) {}

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
@@ -23,8 +22,7 @@ export class PopupShareComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<PopupShareComponent>,
-    public walletService: WalletService,
-    public environmentService: EnvironmentService,
+    private walletService: WalletService,
     private router: Router,
     public commonService: CommonService,
   ) {}

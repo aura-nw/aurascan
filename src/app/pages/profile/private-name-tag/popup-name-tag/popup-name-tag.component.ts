@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import {
   MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
@@ -40,8 +40,8 @@ export class PopupNameTagComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupNameTagComponent>,
     private fb: UntypedFormBuilder,
-    public environmentService: EnvironmentService,
     public translate: TranslateService,
+    private environmentService: EnvironmentService,
     private commonService: CommonService,
     private nameTagService: NameTagService,
     private toastr: NgxToastrService,

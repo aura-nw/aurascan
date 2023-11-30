@@ -2,7 +2,6 @@ import { formatNumber } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-current-turnout',
@@ -15,7 +14,7 @@ export class CurrentTurnoutComponent implements OnInit {
   @Input() isNotReached;
   @Input() quorumStatus;
 
-  constructor(public dialog: MatDialog, public commonService: CommonService) {}
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {}
   formatNumber(number: number, args?: any): any {

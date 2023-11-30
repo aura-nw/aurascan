@@ -2,7 +2,7 @@ import { DatePipe, formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { NgxMaskPipe } from 'ngx-mask';
 import { Subject } from 'rxjs';
@@ -14,7 +14,7 @@ import { StatisticService } from 'src/app/core/services/statistic.service';
 import {
   CHART_CONFIG,
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
-  STATISTIC_CHART_DETAIL_OPTIONS,
+  STATISTIC_CHART_DETAIL_OPTIONS
 } from 'src/app/pages/dashboard/dashboard-chart-options';
 
 @Component({
@@ -51,7 +51,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     public translate: TranslateService,
     private statisticService: StatisticService,
-    public datepipe: DatePipe,
+    private datepipe: DatePipe,
     private maskService: NgxMaskPipe,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');

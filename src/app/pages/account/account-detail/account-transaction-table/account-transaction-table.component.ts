@@ -1,14 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { LIST_TRANSACTION_FILTER } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -152,6 +152,7 @@ export class AccountTransactionTableComponent {
       } else {
         this.listTypeSelectedTemp = [];
         this.checkAll = false;
+        this.isSearchOther = false;
       }
     } else {
       this.checkAll = false;
@@ -259,6 +260,8 @@ export class AccountTransactionTableComponent {
       listTxMsgType: null,
       startTime: startDate || null,
       endTime: endDate || null,
+      from: address,
+      to: address,
     };
 
     if (this.isSearchOther) {
@@ -282,19 +285,18 @@ export class AccountTransactionTableComponent {
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
         this.getListTxByAddress(payload);
         break;
-      case TabsAccountLink.AuraTxs:
-        payload.compositeKey = ['transfer.sender', 'transfer.recipient'];
+      case TabsAccountLink.NativeTxs:
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
-            payload.compositeKey = ['transfer.sender'];
+            payload.to = '_';
           } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
-            payload.compositeKey = ['transfer.recipient'];
+            payload.from = '_';
           }
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
-        this.getListTxAuraByAddress(payload);
+        this.getListTxNativeByAddress(payload);
         break;
       case TabsAccountLink.FtsTxs:
         payload['sender'] = payload['receiver'] = address;
@@ -362,8 +364,8 @@ export class AccountTransactionTableComponent {
     });
   }
 
-  getListTxAuraByAddress(payload) {
-    this.userService.getListTxAuraByAddress(payload).subscribe({
+  getListTxNativeByAddress(payload) {
+    this.userService.getListNativeTransfer(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
       },

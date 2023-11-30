@@ -1,19 +1,19 @@
-import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { TranslateService } from '@ngx-translate/core';
+import {DatePipe} from '@angular/common';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {TranslateService} from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { Observable, Subject, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, mergeMap, repeat, takeLast, takeUntil } from 'rxjs/operators';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TokenService } from 'src/app/core/services/token.service';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE } from '../../../../core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
-import { TableTemplate } from '../../../../core/models/common.model';
-import { Globals } from '../../../../global/global';
+import {Observable, of, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, mergeMap, repeat, takeLast, takeUntil} from 'rxjs/operators';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TokenService} from 'src/app/core/services/token.service';
+import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
+import {DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE} from '../../../../core/constants/common.constant';
+import {MAX_LENGTH_SEARCH_TOKEN} from '../../../../core/constants/token.constant';
+import {TableTemplate} from '../../../../core/models/common.model';
+import {Globals} from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw20',
@@ -57,7 +57,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   constructor(
     public translate: TranslateService,
     public global: Globals,
-    public tokenService: TokenService,
+    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private datePipe: DatePipe,
   ) {}
@@ -145,8 +145,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           )
           ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap);
 
-        const data = result.slice(payload?.offset, payload?.offset + payload?.limit);
-        this.dataSource.data = data;
+        this.dataSource.data = result.slice(payload?.offset, payload?.offset + payload?.limit);
         this.pageData.length = result?.length;
       } else {
         this.dataSource.data = result;
@@ -185,8 +184,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     onChainMarketCap: +tokenFind?.circulating_market_cap || 0,
                     volume: +tokenFind?.total_volume || 0,
                     price: +tokenFind?.current_price || 0,
-                    isHolderUp: changePercent >= 0 ? true : false,
-                    isValueUp: tokenFind?.price_change_percentage_24h && tokenFind?.price_change_percentage_24h >= 0 ? true : false,
+                    isHolderUp: changePercent >= 0,
+                    isValueUp:
+                      tokenFind?.price_change_percentage_24h && tokenFind?.price_change_percentage_24h >= 0,
                     change: tokenFind?.price_change_percentage_24h || 0,
                     holderChange: Math.abs(changePercent),
                     holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
@@ -197,11 +197,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                 // store datatable
                 this.dataTable = dataFlat;
                 // Sort and slice 20 frist record.
-                const result = dataFlat
+                this.dataSource.data = dataFlat
                   ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
                   .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
                   .slice(payload?.offset, payload?.offset + payload?.limit);
-                this.dataSource.data = result;
                 this.pageData.length = res?.length;
                 this.isLoading = false;
               },
@@ -299,13 +298,17 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
-    if (this.sortedData) {
-      this.dataSource.data = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
+    if (this.textSearch) {
+      this.getListToken();
     } else {
-      this.dataSource.data = this.dataTable
-        ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
-        .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
-        .slice(payload?.offset, payload?.offset + payload?.limit);
+      if (this.sortedData) {
+        this.dataSource.data = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
+      } else {
+        this.dataSource.data = this.dataTable
+          ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+          .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
+          .slice(payload?.offset, payload?.offset + payload?.limit);
+      }
     }
   }
 

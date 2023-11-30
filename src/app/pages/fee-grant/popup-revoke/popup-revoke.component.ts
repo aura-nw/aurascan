@@ -19,8 +19,8 @@ export class PopupRevokeComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { granterAddress: string; granteeAddress: string },
     public dialogRef: MatDialogRef<PopupRevokeComponent>,
-    public walletService: WalletService,
-    public environmentService: EnvironmentService,
+    private walletService: WalletService,
+    private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
   ) {}
 
