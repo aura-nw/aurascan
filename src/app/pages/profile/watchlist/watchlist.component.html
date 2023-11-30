@@ -96,33 +96,33 @@
                 <div
                   *ngSwitchCase="'public_name_tag'"
                   class="pe-auto aura-tooltip-contain"
-                  [ngClass]="commonService.checkPublic(data.address) ? 'box-name-tag' : ''">
+                  [ngClass]="(data.address | checkPublic) ? 'box-name-tag' : ''">
                   <div class="aura-tooltip-object">
                     {{
-                      commonService.checkPublic(data.address)
+                      (data.address | checkPublic)
                         ? ((data.address | nameTag : null : false) | cutStringPipe : 10)
                         : '-'
                     }}
                   </div>
 
                   <app-tooltip-customize
-                    *ngIf="commonService.checkPublic(data.address)"
+                    *ngIf="data.address | checkPublic"
                     [content]="data.address | nameTag : null : false"></app-tooltip-customize>
                 </div>
                 <div
                   *ngSwitchCase="'private_name_tag'"
                   class="pe-auto aura-tooltip-contain"
-                  [ngClass]="commonService.checkPrivate(data.address) ? 'private-name-tag' : ''">
+                  [ngClass]="(data.address | checkPrivate) ? 'private-name-tag' : ''">
                   <div class="aura-tooltip-object">
                     {{
-                      commonService.checkPrivate(data.address)
+                      (data.address | checkPrivate)
                         ? (data.address | nameTag | cutStringPipe : 12)
                         : '-'
                     }}
                   </div>
 
                   <app-tooltip-customize
-                    *ngIf="commonService.checkPrivate(data.address)"
+                    *ngIf="data.address | checkPrivate"
                     [content]="data.address | nameTag"></app-tooltip-customize>
                 </div>
                 <div *ngSwitchCase="'group'" class="">
@@ -133,7 +133,7 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="'updated_at'">
-                  {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
                 </div>
                 <div *ngSwitchCase="'action'" class="text-end">
                   <div class="aura-tooltip-contain">
@@ -216,9 +216,9 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Public name tag</div>
-            <div class="line-claim" [ngClass]="commonService.checkPublic(data.address) ? 'box-name-tag' : ''">
+            <div class="line-claim" [ngClass]="(data.address | checkPublic) ? 'box-name-tag' : ''">
               {{
-                commonService.checkPublic(data.address)
+                (data.address | checkPublic)
                   ? ((data.address | nameTag: null : false | cutStringPipe : 18))
                   : '-'
               }}
@@ -226,9 +226,9 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Private name tag</div>
-            <div class="line-claim" [ngClass]="commonService.checkPrivate(data.address) ? 'private-name-tag' : ''">
+            <div class="line-claim" [ngClass]="(data.address | checkPrivate) ? 'private-name-tag' : ''">
               {{
-                commonService.checkPrivate(data.address)
+                (data.address | checkPrivate)
                   ? (data.address | nameTag | cutStringPipe : 22)
                   : '-'
               }}
@@ -244,7 +244,7 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Updated time</div>
-            <div>{{ commonService.getDateValue(data.updated_at)[0] }}</div>
+            <div>{{ (data.updated_at | dateCustom)[0] }}</div>
           </div>
         </div>
       </div>

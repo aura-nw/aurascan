@@ -16,7 +16,12 @@ import {
   formatDigit,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
-import {nameTag} from "src/app/core/pipes/nameTag.pipe";
+import {nameTag} from "src/app/core/pipes/name-tag.pipe";
+import {CheckDisplayTooltip} from "src/app/core/pipes/tooltip-display.pipe";
+import {FindUrlNameTag} from "src/app/core/pipes/name-tag-find-url.pipe";
+import {CheckPublic} from "src/app/core/pipes/name-tag-public.pipe";
+import {CheckPrivate} from "src/app/core/pipes/name-tag-private.pipe";
+import {DateCustom} from "src/app/core/pipes/date-custom.pipe";
 
 @NgModule({
   declarations: [
@@ -34,7 +39,12 @@ import {nameTag} from "src/app/core/pipes/nameTag.pipe";
     displayTypeToolTip,
     convertSmallNumber,
     formatDigit,
-    nameTag
+    nameTag,
+    CheckDisplayTooltip,
+    FindUrlNameTag,
+    CheckPublic,
+    CheckPrivate,
+    DateCustom,
   ],
   imports: [CommonModule],
   exports: [
@@ -52,7 +62,12 @@ import {nameTag} from "src/app/core/pipes/nameTag.pipe";
     displayTypeToolTip,
     convertSmallNumber,
     formatDigit,
-    nameTag
+    nameTag,
+    CheckDisplayTooltip,
+    FindUrlNameTag,
+    CheckPublic,
+    CheckPrivate,
+    DateCustom,
   ],
 })
 export class CommonPipeModule {}

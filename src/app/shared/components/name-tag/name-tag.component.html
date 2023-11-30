@@ -5,11 +5,11 @@
       [routerLink]="['/' + url, paramUrl || value]"
       class="text--primary break-all d-flex"
       [ngClass]="[
-        isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
+        isBox && !((paramUrl || value) | checkDisplayTooltip) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
-        commonService.checkPrivate(paramUrl || value) ? 'private-name-tag' : ''
+        ((paramUrl || value) | checkPrivate) ? 'private-name-tag' : ''
       ]"
-      [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
+      [class.aura-tooltip-object]="!((paramUrl || value) | checkDisplayTooltip)">
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
     <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
@@ -21,11 +21,11 @@
       [href]="url + value"
       class="text--primary break-all d-flex"
       [ngClass]="[
-        isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
+        isBox && !((paramUrl || value) | checkDisplayTooltip) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
-        commonService.checkPrivate(paramUrl || value) ? 'private-name-tag' : ''
+        ((paramUrl || value) | checkPrivate) ? 'private-name-tag' : ''
       ]"
-      [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
+      [class.aura-tooltip-object]="!((paramUrl || value) | checkDisplayTooltip)">
       <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
     </a>
     <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
@@ -38,15 +38,15 @@
     <span
       class="break-all"
       [ngClass]="[
-        isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
+        isBox && !((paramUrl || value) | checkDisplayTooltip) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
-        commonService.checkPrivate(paramUrl || value) ? 'private-name-tag' : ''
+        ((paramUrl || value) | checkPrivate) ? 'private-name-tag' : ''
       ]"
-      [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
+      [class.aura-tooltip-object]="!((paramUrl || value) | checkDisplayTooltip)">
       <ng-container *ngIf="!fullText">
         <img
           [src]="'assets/images/icons/token-contract.svg' | imageS3"
-          [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+          [ngClass]="((paramUrl || value) | checkDisplayTooltip) ? 'mr-1' : 'icon-name-tag'"
           width="16px"
           height="16px"
           *ngIf="iconContract" />
@@ -74,18 +74,18 @@
     [src]="'assets/images/icons/token-contract.svg' | imageS3"
     *ngIf="isTokenDetail && isContractAddress(value)"
     alt=""
-    [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+    [ngClass]="((paramUrl || value) | checkDisplayTooltip) ? 'mr-1' : 'icon-name-tag'"
     width="16px"
     height="16px" />
   <img
     [src]="'assets/images/icons/token-contract.svg' | imageS3"
-    [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+    [ngClass]="((paramUrl || value) | checkDisplayTooltip) ? 'mr-1' : 'icon-name-tag'"
     width="16px"
     height="16px"
     *ngIf="iconContract" />
   <img
     [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-    [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+    [ngClass]="((paramUrl || value) | checkDisplayTooltip) ? 'mr-1' : 'icon-name-tag'"
     alt="contract_verification"
     width="16px"
     height="16px"
@@ -112,11 +112,11 @@
 </ng-template>
 
 <ng-template #displayNameTag>
-  <ng-container *ngIf="!commonService.checkDisplayTooltip(paramUrl || value)">
+  <ng-container *ngIf="!((paramUrl || value) | checkDisplayTooltip)">
     {{ (value | nameTag | cutStringPipe : maxCharacter) || '-' }}
   </ng-container>
 
-  <ng-container *ngIf="commonService.checkDisplayTooltip(paramUrl || value)">
+  <ng-container *ngIf="((paramUrl || value) | checkDisplayTooltip)">
     {{ (value | nameTag | cutStringPipe : 8 : 8) || '-' }}
   </ng-container>
 </ng-template>

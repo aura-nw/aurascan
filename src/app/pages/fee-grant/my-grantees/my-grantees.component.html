@@ -75,7 +75,7 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'timestamp'">
-                          {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                          {{ (data[template.matColumnDef] | dateCustom)[0] }}
                         </div>
                         <div *ngSwitchCase="'limit'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>

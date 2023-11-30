@@ -69,7 +69,7 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">
-                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
+                        <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
                           <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
@@ -80,7 +80,7 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'timestamp'">
                       <div *ngIf="data[template.matColumnDef]">
-                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
+                        <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
                           <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
@@ -114,14 +114,14 @@
               [content]="[
                 {
                   label: 'Voter',
-                  class: !commonService.checkDisplayTooltip(data.voter)
-                    ? commonService.checkPrivate(data.voter)
+                  class: !(data.voter | checkDisplayTooltip)
+                    ? (data.voter | checkPrivate)
                       ? 'name-tag private-name-tag mb-0 text--primary'
                       : 'name-tag text--primary mb-0'
                     : 'text--primary',
                   info: !data?.voter
                     ? '-'
-                    : !commonService.checkDisplayTooltip(data.voter)
+                    : !(data.voter | checkDisplayTooltip)
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.voter) +
                       '>' +
@@ -149,7 +149,7 @@
                   class: 'card__date text--gray-1 body-01',
                   info:
                     '<div class=text-end>' +
-                    commonService.getDateValue(data.timestamp, false)[0] +
+                    (data.timestamp | dateCustom : false)[0] +
                     '</div><div class=text--gray-5><span>' +
                     (data.timestamp | customDate : 'yyyy-MM-dd') +
                     '</span>' +
@@ -187,7 +187,7 @@
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
-                      commonService.getDateValue(data.timestamp, false)[0] +
+                      (data.timestamp | dateCustom: false)[0] +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
                       (data.timestamp | customDate : 'yyyy-MM-dd') +
@@ -205,14 +205,14 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: !commonService.checkDisplayTooltip(data.depositors)
-                    ? commonService.checkPrivate(data.depositors)
+                  class: !(data.depositors | checkDisplayTooltip)
+                    ? (data.depositors | checkPrivate)
                       ? 'name-tag private-name-tag mb-0 text--primary'
                       : 'name-tag text--primary mb-0'
                     : 'text--primary',
                   info: !data?.depositors
                     ? '-'
-                    : !commonService.checkDisplayTooltip(data.depositors)
+                    : !(data.depositors | checkDisplayTooltip)
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +
                       '>' +
@@ -251,7 +251,7 @@
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
-                      commonService.getDateValue(data.timestamp, false)[0] +
+                      (data.timestamp| dateCustom: false)[0] +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
                       (data.timestamp | customDate : 'yyyy-MM-dd') +

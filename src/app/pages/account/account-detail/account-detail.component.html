@@ -66,14 +66,14 @@
                 <span class="line-claim">{{ (currentAddress | nameTag : null : false) || '-' }}</span>
                 <a
                   target="_blank"
-                  [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
-                  *ngIf="commonService.findUrlNameTag(currentAddress)">
+                  [href]="extendLink(currentAddress | findUrlNameTag)"
+                  *ngIf="currentAddress | findUrlNameTag">
                   <i _ngcontent-wrg-c372="" class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
                 </a>
               </div>
 
               <app-tooltip-customize
-                *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
+                *ngIf="!(currentAddress | checkDisplayTooltip)"
                 [content]="
                   'Public name: ' + currentAddress | nameTag : null : false
                 "></app-tooltip-customize>
@@ -82,19 +82,19 @@
 
           <button
             class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private"
-            *ngIf="!commonService.checkPrivate(currentAddress)"
+            *ngIf="!(currentAddress | checkPrivate)"
             (click)="editPrivateName()">
             <span class="caption fw-normal"> Set Private Name Tag </span>
           </button>
           <div
-            *ngIf="commonService.checkPrivate(currentAddress)"
+            *ngIf="currentAddress | checkPrivate"
             class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
             <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
               <span class="line-claim">{{ (currentAddress | nameTag) || '-' }}</span>
             </div>
 
             <app-tooltip-customize
-              *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
+              *ngIf="!(currentAddress | checkDisplayTooltip)"
               [content]="'Private name: ' + currentAddress | nameTag"></app-tooltip-customize>
             <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
           </div>

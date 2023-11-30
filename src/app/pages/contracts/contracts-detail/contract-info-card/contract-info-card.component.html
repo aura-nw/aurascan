@@ -31,8 +31,8 @@
             <span class="line-claim">{{ (contractDetail?.address | nameTag: null : false) || '-' }}</span>
             <a
               target="_blank"
-              [href]="extendLink(commonService.findUrlNameTag(contractDetail?.address))"
-              *ngIf="commonService.findUrlNameTag(contractDetail?.address)">
+              [href]="extendLink((contractDetail?.address | findUrlNameTag))"
+              *ngIf="contractDetail?.address | findUrlNameTag">
               <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer mb-1"></i>
             </a>
           </div>
@@ -44,12 +44,12 @@
 
         <button
           class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-1 btn-private"
-          *ngIf="!commonService.checkPrivate(contractDetail?.address)"
+          *ngIf="!(contractDetail?.address | checkPrivate)"
           (click)="editPrivateName()">
           <span class="caption fw-normal"> Set Private Name Tag </span>
         </button>
         <div
-          *ngIf="commonService.checkPrivate(contractDetail?.address)"
+          *ngIf="contractDetail?.address | checkPrivate"
           class="mt-2 d-inline-flex box-private align-items-center text--white">
           <div class="d-inline-flex align-items-center private-name-tag">
             <span class="line-claim">{{ (contractDetail?.address | nameTag) || '-' }}</span>
