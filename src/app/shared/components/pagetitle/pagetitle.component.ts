@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Globals } from '../../../global/global';
 
 @Component({
@@ -10,7 +10,7 @@ import { Globals } from '../../../global/global';
 /**
  * Page Title Component
  */
-export class PagetitleComponent implements OnInit {
+export class PagetitleComponent {
   @Input()
   breadcrumbItems!: Array<{
     active?: boolean;
@@ -21,6 +21,4 @@ export class PagetitleComponent implements OnInit {
   @Input() displayInfo: boolean = false;
 
   constructor(public global: Globals) {}
-
-  ngOnInit(): void {}
 }

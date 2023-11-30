@@ -7,7 +7,6 @@ import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { shortenAddress } from '../../../../core/utils/common/shorten';
 
@@ -37,11 +36,7 @@ export class CodeIdContractsTabComponent implements OnInit {
   isLoading = true;
   errTxt: string;
 
-  constructor(
-    private contractService: ContractService,
-    private datePipe: DatePipe,
-    public commonService: CommonService,
-  ) {}
+  constructor(private contractService: ContractService, private datePipe: DatePipe) {}
 
   ngOnInit(): void {
     this.getListContractByCode();

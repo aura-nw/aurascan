@@ -19,7 +19,7 @@ export class MessagesItemComponent implements OnInit {
   pipeTypeData = pipeTypeData;
   number2Digit = NUMBER_2_DIGIT;
 
-  constructor(public router: Router) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 

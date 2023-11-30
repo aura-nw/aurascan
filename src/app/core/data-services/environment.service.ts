@@ -3,17 +3,13 @@ import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
-import { TYPE_TRANSACTION } from '../constants/transaction.constant';
-import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 
 export interface IConfiguration {
   environment: {
-    name: string;
     label: {
       desktop: string;
       mobile: string;
     };
-    logo: string;
     notice: {
       content: string;
       url: string;
