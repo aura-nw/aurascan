@@ -69,7 +69,7 @@ export class TokenCw4973Component implements OnInit {
     let payload = {
       limit: this.pageData.pageSize,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
-      keyword: this.textSearch,
+      keyword: this.textSearch?.length > 0 ? this.textSearch : null,
     };
 
     const addressNameTag = this.commonService.findNameTag(this.textSearch);
@@ -80,7 +80,7 @@ export class TokenCw4973Component implements OnInit {
     this.soulboundService.getListABT(payload).subscribe({
       next: (res) => {
         this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
-        this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;
+        this.pageData.length = res?.cw721_contract_aggregate?.aggregate?.count;
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
@@ -110,6 +110,11 @@ export class TokenCw4973Component implements OnInit {
 
   resetSearch() {
     this.textSearch = '';
+    this.pageData = {
+      length: PAGE_EVENT.LENGTH,
+      pageSize: 20,
+      pageIndex: 0,
+    };
     this.pageEvent(0);
   }
 }
