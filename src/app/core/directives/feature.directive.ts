@@ -13,7 +13,6 @@ export class FeatureDirective implements OnInit {
   constructor(private env: EnvironmentService, private elr: ElementRef<HTMLElement>) {}
 
   ngOnInit(): void {
-    console.log('OK', this.appFeature, this.features);
     if (this.appFeature && this.features?.length > 0) {
       const it = this.features.findIndex((feat) => feat === this.appFeature);
 

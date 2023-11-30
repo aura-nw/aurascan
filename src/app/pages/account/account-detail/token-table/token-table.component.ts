@@ -160,8 +160,9 @@ export class TokenTableComponent implements OnChanges {
           if (e.name === TIMEOUT_ERROR) {
             this.errTxt = e.message;
           } else {
-            this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+            this.errTxt = e?.status + ' ' + e?.error?.message; // Nois Only
           }
+
           this.assetsLoading = false;
         },
         complete: () => {
