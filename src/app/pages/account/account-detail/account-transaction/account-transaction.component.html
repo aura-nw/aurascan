@@ -35,7 +35,7 @@
     </ng-container>
 
     <!-- Aura Transfer -->
-    <ng-container *ngIf="currentTab === tabsData.AuraTxs">
+    <ng-container *ngIf="currentTab === tabsData.NativeTxs">
       <app-account-transaction-table
         [modeQuery]="currentTab"
         (lstType)="lstTypeFilter = $event"

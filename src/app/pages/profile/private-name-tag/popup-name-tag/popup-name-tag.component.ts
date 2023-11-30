@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
@@ -10,7 +10,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { isAddress, isContract } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -41,8 +40,8 @@ export class PopupNameTagComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupNameTagComponent>,
     private fb: UntypedFormBuilder,
-    public environmentService: EnvironmentService,
     public translate: TranslateService,
+    private environmentService: EnvironmentService,
     private commonService: CommonService,
     private nameTagService: NameTagService,
     private toastr: NgxToastrService,
@@ -103,9 +102,10 @@ export class PopupNameTagComponent implements OnInit {
   checkFormValid() {
     this.getAddress['value'] = this.getAddress?.value.trim();
 
-    if (this.getAddress.value?.length > 0 && this.getAddress?.value?.startsWith('aura')) {
+    if (this.commonService.isBech32Address(this.getAddress?.value)) {
       this.isValidAddress =
-        (isAddress(this.getAddress.value) && this.isAccount) || (isContract(this.getAddress.value) && !this.isAccount);
+        (this.commonService.isValidAddress(this.getAddress.value) && this.isAccount) ||
+        (this.commonService.isValidContract(this.getAddress.value) && this.isContract);
     } else {
       this.isValidAddress = false;
     }
@@ -116,7 +116,7 @@ export class PopupNameTagComponent implements OnInit {
     const { isFavorite, address, name, note } = this.privateNameForm.value;
     let payload = {
       isFavorite: isFavorite == 1,
-      type: isAddress(address) ? 'account' : 'contract',
+      type: this.commonService.isValidAddress(address) ? 'account' : 'contract',
       address: address,
       nameTag: name,
       note: note,

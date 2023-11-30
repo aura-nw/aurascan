@@ -45,7 +45,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractVerifyType = ContractVerifyType;
 
-  constructor(private contractService: ContractService, public commonService: CommonService) {}
+  constructor(private contractService: ContractService, private commonService: CommonService) {}
 
   ngOnInit(): void {
     this.getListCodeIds();
@@ -95,7 +95,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
             k.type = ContractRegisterType.CW4973;
           }
         });
-        this.dataSource.data = res.code;
+        this.dataSource.data = res?.code;
         this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;
       },
       error: (e) => {

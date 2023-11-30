@@ -55,7 +55,7 @@
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
             <ng-container *ngIf="proDetail?.proposer_address">
-              <a class="text--primary h6" [routerLink]="['/account', proDetail?.proposer_address]">
+              <a class="text--primary h6 line-claim" [routerLink]="['/account', proDetail?.proposer_address]">
                 <ng-container *ngIf="proDetail?.proposer">
                   {{ proDetail?.proposer?.description?.moniker }}
                 </ng-container>
@@ -121,7 +121,7 @@
               ngbNav
               #customNav="ngbNav"
               [activeId]="activeId"
-              class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md">
+              class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md mb-4">
               <ng-container *ngFor="let tab of specialDataArr; index as index">
                 <li [ngbNavItem]="index">
                   <a ngbNavLink (click)="changeTab(tab.key)">
@@ -131,44 +131,18 @@
               </ng-container>
             </ul>
             <ng-container *ngIf="proDetail?.plan">
-              <ng-container *ngIf="typeOf(proDetail?.plan) !== 'object' && proDetail?.plan?.length > 0">
-                <div class="changes-contain" [class.overflow-scroll-y]="proDetail?.plan.length > 2">
-                  <div *ngFor="let item of proDetail?.plan" class="mt-4">
-                    <div *ngFor="let key of getObjectKey(item)">
-                      <div class="mb-2" *ngIf="key === specialDataArr[activeId].value">
-                        {{ item[key] }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="typeOf(proDetail?.plan) === 'object'">
-                <div *ngFor="let key of getObjectKey(proDetail?.plan)" class="mt-4">
-                  <div *ngIf="key === specialDataArr[activeId].value">
-                    {{ proDetail?.plan[key] }}
-                  </div>
-                </div>
-              </ng-container>
+              <div *ngFor="let key of getObjectKey(proDetail?.plan)">
+                <ng-container *ngIf="key === specialDataArr[activeId].value">
+                  {{ proDetail?.plan[key] | appJson : { checkType: true } }}
+                </ng-container>
+              </div>
             </ng-container>
             <ng-container *ngIf="proDetail?.changes">
-              <ng-container *ngIf="typeOf(proDetail?.changes) !== 'object' && proDetail?.changes?.length > 0">
-                <div class="changes-contain" [class.overflow-scroll-y]="proDetail?.changes?.length > 2">
-                  <div *ngFor="let item of proDetail?.changes | keyvalue" class="mt-4">
-                    <div *ngFor="let key of getObjectKey(item)">
-                      <div class="mb-2" *ngIf="key === specialDataArr[activeId].value">
-                        {{ item[key] }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="typeOf(proDetail?.changes) === 'object'">
-                <div *ngFor="let key of getObjectKey(proDetail?.changes)" class="mt-4">
-                  <div *ngIf="key === specialDataArr[activeId].value">
-                    {{ proDetail?.changes[key] }}
-                  </div>
-                </div>
-              </ng-container>
+              <div *ngFor="let key of getObjectKey(proDetail?.changes)">
+                <ng-container *ngIf="key === specialDataArr[activeId].value">
+                  {{ proDetail?.changes[key] | appJson : { checkType: true } }}
+                </ng-container>
+              </div>
             </ng-container>
           </div>
         </div>

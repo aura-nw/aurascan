@@ -7,15 +7,14 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { isContract } from 'src/app/core/utils/common/validation';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
 import {
   CodeTransaction,
+  pipeTypeData,
   TRANSACTION_TYPE_ENUM,
   TypeTransaction,
-  pipeTypeData,
 } from '../../../../core/constants/transaction.enum';
 import { formatWithSchema } from '../../../../core/helpers/date';
 
@@ -452,17 +451,17 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({ key: 'Identity', value: data.description?.identity });
           result.push({
             key: 'Commission Rate',
-            value: this.checkRateFloatNumber(data?.commission?.rate) || '-',
+            value: this.checkRateFloatNumber(+data?.commission?.rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
             key: 'Commission Max Rate',
-            value: this.checkRateFloatNumber(data?.commission?.max_rate) || '-',
+            value: this.checkRateFloatNumber(+data?.commission?.max_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({
             key: 'Commission Max Change Rate',
-            value: this.checkRateFloatNumber(data?.commission?.max_change_rate) || '-',
+            value: this.checkRateFloatNumber(+data?.commission?.max_change_rate) || '-',
             pipeType: pipeTypeData.Percent,
           });
           result.push({ key: 'Public Key', value: data?.pubkey?.value || data?.pubkey?.key });
@@ -974,10 +973,10 @@ export class TransactionMessagesComponent implements OnInit {
 
   checkRateFloatNumber(value) {
     if (!!value) {
-      const temp = value / Math.pow(10, 18);
+      const temp = +value / Math.pow(10, 18);
       let tempPercent = temp * 100;
       //check is int value
-      if (Number(tempPercent) === tempPercent && (tempPercent % 1 === 0 || tempPercent % 1 === tempPercent)) {
+      if (Number(tempPercent) === tempPercent) {
         value = temp;
       }
       return value;
@@ -1000,7 +999,7 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   isContractAddress(address) {
-    if (isContract(address)) {
+    if (this.commonService.isValidContract(address)) {
       return true;
     }
     return false;

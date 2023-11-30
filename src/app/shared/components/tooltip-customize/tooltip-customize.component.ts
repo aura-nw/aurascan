@@ -1,18 +1,16 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-tooltip-customize',
   templateUrl: './tooltip-customize.component.html',
   styleUrls: ['./tooltip-customize.component.scss'],
 })
-export class TooltipCustomizeComponent implements OnInit, AfterViewInit {
+export class TooltipCustomizeComponent implements AfterViewInit {
   @Input() content: string;
   @Input() class: string;
   @Input() requestGetPosition: boolean = true;
   constructor(private renderer: Renderer2, private el: ElementRef) {
   }
-
-  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     if(!this.requestGetPosition) return;

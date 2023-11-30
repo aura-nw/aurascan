@@ -6,7 +6,7 @@ import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.consta
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { Globals, convertDataTransactionSimple } from '../../../app/global/global';
+import { convertDataTransactionSimple } from '../../../app/global/global';
 
 @Component({
   selector: 'app-transaction',
@@ -36,7 +36,6 @@ export class TransactionComponent implements OnInit {
 
   constructor(
     private transactionService: TransactionService,
-    public global: Globals,
     public commonService: CommonService,
     private environmentService: EnvironmentService,
   ) {}

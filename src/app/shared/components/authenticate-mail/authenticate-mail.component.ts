@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
+import {clearLocalData} from "src/app/global/global";
 
 @Component({
   selector: 'app-authenticate-mail',
@@ -48,7 +49,7 @@ export class AuthenticateMailComponent implements OnDestroy {
   }
 
   dismiss(): void {
-    this.buttonDismiss.nativeElement.click();
+    this.buttonDismiss.nativeElement.click();    
   }
 
   disconnect(): void {
@@ -61,12 +62,7 @@ export class AuthenticateMailComponent implements OnDestroy {
 
     // logout Google
     this.userEmail = null;
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('listNameTag');
-    localStorage.removeItem('lstWatchList');
-    localStorage.removeItem('registerFCM');
+    clearLocalData();
 
     // check is screen profile
     if (this.route.snapshot['_routerState']?.url === '/profile') {

@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
 
 @Injectable({ providedIn: 'root' })
 export class CommonService {
@@ -23,6 +24,7 @@ export class CommonService {
   envDB = this.horoscope?.chain;
 
   chainId = this._environmentService.chainId;
+  addressPrefix = 'aura';
   listNameTag = [];
   listValidator = [];
   listTokenIBC = [];
@@ -30,6 +32,7 @@ export class CommonService {
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this._environmentService.config.asObservable().subscribe((res) => {
       this.apiUrl = res.api.backend;
+      this.addressPrefix = res.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
     });
     const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
     this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);
@@ -214,5 +217,17 @@ export class CommonService {
       return value;
     }
     return this._environmentService.ipfsDomain + value.replace('://', '/');
+  }
+
+  isValidContract(address: string) {
+    return isContract(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
+  }
+
+  isValidAddress(address: string) {
+    return isAddress(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
+  }
+
+  isBech32Address(address: string) {
+    return isValidBench32Address(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
   }
 }

@@ -126,25 +126,46 @@ export class UserService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTxAuraByAddress(payload) {
+  getListNativeTransfer(payload) {
     const operationsDoc = `
-    query QueryTxMsgOfAccount($compositeKeyIn: [String!] = null, $address: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc) {
+    query CoinTransfer(
+      $from: String = null
+      $to: String = null
+      $start_time: timestamptz = null
+      $end_time: timestamptz = null
+      $msg_types: [String!] = null
+      $height_gt: Int = null
+      $height_lt: Int = null
+      $limit: Int = null) {
       ${this.envDB} {
-        transaction(where: {event_attribute_index: {composite_key: {_in: $compositeKeyIn}, value: {_eq: $address}, event: {tx_msg_index: {_is_null: false}}}, timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
-          hash
-          height
-          fee
-          timestamp
+        transaction(
+          where: {
+            coin_transfers: {
+              _or: [{ from: { _eq: $from } }, { to: { _eq: $to } }]
+              block_height: { _lt: $height_lt, _gt: $height_gt }
+              transaction: { timestamp: { _lte: $end_time, _gte: $start_time } }
+              message: { type: { _in: $msg_types } }
+            }
+          }
+          limit: $limit
+          order_by: { height: desc }
+        ) {
           code
+          hash
+          timestamp
+          height
           transaction_messages {
             type
             content
           }
-          events(where: {type: {_eq: "transfer"}, tx_msg_index: {_is_null: false}, event_attribute_index: {composite_key: {_in: $compositeKeyIn}, value: {_eq: $address}}}) {
-            event_attributes {
-              composite_key
-              value
-            }
+          coin_transfers(
+            where: { _or: [{ from: { _eq: $from } }, { to: { _eq: $to } }] }
+          ) {
+            from
+            to
+            amount
+            denom
+            block_height
           }
         }
       }
@@ -155,15 +176,14 @@ export class UserService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload.limit || 100,
-          compositeKeyIn: payload.compositeKey,
-          address: payload.address,
-          heightLT: payload.heightLT,
-          listTxMsgType: payload.listTxMsgType,
-          listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
-          startTime: payload.startTime,
-          endTime: payload.endTime,
+          from: payload.from,
+          to: payload.to,
+          height_lt: payload.heightLT,
+          msg_types: payload.listTxMsgType,
+          start_time: payload.startTime,
+          end_time: payload.endTime,
         },
-        operationName: 'QueryTxMsgOfAccount',
+        operationName: 'CoinTransfer',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

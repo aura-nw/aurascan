@@ -4,13 +4,13 @@ import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
   MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -36,18 +36,18 @@ export class PopupAddGrantComponent implements OnInit {
   isSubmit = false;
   isRevoking = false;
   dayConvert = 24 * 60 * 60;
-  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
-    private fb: UntypedFormBuilder,
-    public environmentService: EnvironmentService,
+    private formBuilder: UntypedFormBuilder,
+    private environmentService: EnvironmentService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private feeGrantService: FeeGrantService,
     private dialog: MatDialog,
     public translate: TranslateService,
+    private commonService: CommonService,
     private mappingErrorService: MappingErrorService,
   ) {}
 
@@ -68,7 +68,7 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   formInit() {
-    this.grantForm = this.fb.group({
+    this.grantForm = this.formBuilder.group({
       grantee_address: ['', [Validators.required]],
       amount: ['', [Validators.maxLength(200)]],
       expiration_time: [''],
@@ -76,7 +76,7 @@ export class PopupAddGrantComponent implements OnInit {
       period_day: [''],
       isInstantiate: false,
       isExecute: false,
-      execute_contract: this.fb.array([]),
+      execute_contract: this.formBuilder.array([]),
     });
     this.addContracts();
   }
@@ -86,7 +86,7 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   newContract(): UntypedFormGroup {
-    return this.fb.group({
+    return this.formBuilder.group({
       address: ['', { validators: [Validators.required] }],
     });
   }
@@ -220,10 +220,7 @@ export class PopupAddGrantComponent implements OnInit {
     this.formValid = false;
     this.isInvalidAddress = false;
     if (grantee_address?.length > 0) {
-      if (
-        this.isSubmit &&
-        !(grantee_address?.length >= LENGTH_CHARACTER.ADDRESS && grantee_address?.trim().startsWith(this.prefixAdd))
-      ) {
+      if (this.isSubmit && !this.commonService.isBech32Address(grantee_address)) {
         this.isInvalidAddress = true;
         return false;
       }
