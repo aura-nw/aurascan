@@ -80,6 +80,7 @@ export class NFTDetailComponent implements OnInit {
   isCW4973 = false;
   errTxt: string;
   errTxtActivity: string;
+  nftType: string;
 
   image_s3 = this.environmentService.imageUrl;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
@@ -167,6 +168,8 @@ export class NFTDetailComponent implements OnInit {
           media_info: _.get(res.cw721_contract, 'cw721_tokens[0].media_info'),
           verification_status: _.get(res.code, 'code_id_verifications[0].verification_status'),
         };
+        this.nftType = checkTypeFile(this.nftDetail);
+
         if (this.nftDetail?.media_info?.offchain?.image?.url) {
           this.imageUrl = this.nftDetail?.media_info?.offchain?.image?.url;
         }
@@ -177,7 +180,7 @@ export class NFTDetailComponent implements OnInit {
             } else {
               this.animationUrl = this.nftDetail?.media_info?.offchain?.animation?.url;
             }
-          } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
+          } else if (this.nftType !== MEDIA_TYPE.IMG) {
             this.animationUrl = this.nftDetail?.media_info?.offchain?.animation?.url;
           } else {
             this.imageUrl = this.nftDetail?.media_info?.offchain.image?.url;
@@ -350,7 +353,7 @@ export class NFTDetailComponent implements OnInit {
 
   expandMedia(): void {
     let content;
-    if (this.getTypeFile(this.nftDetail) === MEDIA_TYPE.IMG) {
+    if (this.nftType === MEDIA_TYPE.IMG) {
       content = this.imageUrl;
     } else {
       content = this.animationUrl;
@@ -361,17 +364,12 @@ export class NFTDetailComponent implements OnInit {
       dialogConfig.disableClose = false;
       dialogConfig.panelClass = 'transparent-dialog';
       dialogConfig.data = {
-        mediaType: this.getTypeFile(this.nftDetail),
+        mediaType: this.nftType,
         mediaSrc: content,
         mediaPoster: this.imageUrl,
       };
       this.dialog.open(MediaExpandComponent, dialogConfig);
     }
-  }
-
-  getTypeFile(nft: any) {
-    let nftType = checkTypeFile(nft);
-    return nftType;
   }
 
   decodeData(data) {
