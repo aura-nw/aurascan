@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 
@@ -11,7 +11,7 @@ import { EnvironmentService } from '../../core/data-services/environment.service
 /**
  * Footer Component
  */
-export class FooterComponent implements OnInit {
+export class FooterComponent {
   chainId = this.environmentService.chainId;
 
   dashboardURL = 'dashboard';
@@ -21,8 +21,6 @@ export class FooterComponent implements OnInit {
   governanceURL = 'proposal';
 
   constructor(private environmentService: EnvironmentService, public router: Router) {}
-
-  ngOnInit(): void {}
 
   getUrl(url: string): string {
     return this.router.serializeUrl(this.router.createUrlTree([url]));

@@ -19,7 +19,7 @@ export class ValidatorService extends CommonService {
     private http: HttpClient,
     private environmentService: EnvironmentService,
     private global: Globals,
-    public commonService: CommonService,
+    private commonService: CommonService,
   ) {
     super(http, environmentService);
     this.stakingAPRSubject = new BehaviorSubject<number>(0);
