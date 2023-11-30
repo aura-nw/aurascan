@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig
+  MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -14,7 +14,7 @@ import {
   MEDIA_TYPE,
   NULL_ADDRESS,
   PAGE_EVENT,
-  TIMEOUT_ERROR
+  TIMEOUT_ERROR,
 } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -182,6 +182,9 @@ export class NFTDetailComponent implements OnInit {
           } else {
             this.imageUrl = this.nftDetail?.media_info?.offchain.image?.url;
           }
+        }
+        if (!this.imageUrl) {
+          this.imageUrl = this.nftDetail?.media_info?.onchain?.metadata?.image;
         }
 
         if (res.type === ContractRegisterType.CW4973) {

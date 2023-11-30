@@ -59,6 +59,9 @@ export class NftCardComponent implements OnInit, AfterViewInit {
         this.imageUrl = this.nftItem?.media_info?.offchain?.image?.url;
       }
     }
+    if (!this.imageUrl) {
+      this.imageUrl = this.nftItem?.media_info?.onchain?.metadata?.image;
+    }
 
     // account bound token
     if (this.nftItem?.token_img) {
