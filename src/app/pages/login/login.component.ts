@@ -1,10 +1,9 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
@@ -44,7 +43,6 @@ export class LoginComponent implements OnInit {
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
     private cdr: ChangeDetectorRef,
-    private notificationsService: NotificationsService,
   ) {}
 
   ngOnInit(): void {

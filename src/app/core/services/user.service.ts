@@ -133,7 +133,8 @@ export class UserService extends CommonService {
       $to: String = null
       $start_time: timestamptz = null
       $end_time: timestamptz = null
-      $msg_types: [String!] = null
+      $msg_types_in: [String!] = null
+      $msg_types_nin: [String!] = null
       $height_gt: Int = null
       $height_lt: Int = null
       $limit: Int = null) {
@@ -144,7 +145,7 @@ export class UserService extends CommonService {
               _or: [{ from: { _eq: $from } }, { to: { _eq: $to } }]
               block_height: { _lt: $height_lt, _gt: $height_gt }
               transaction: { timestamp: { _lte: $end_time, _gte: $start_time } }
-              message: { type: { _in: $msg_types } }
+              message: { type: { _in: $msg_types_in, _nin: $msg_types_nin } }
             }
           }
           limit: $limit
@@ -179,7 +180,8 @@ export class UserService extends CommonService {
           from: payload.from,
           to: payload.to,
           height_lt: payload.heightLT,
-          msg_types: payload.listTxMsgType,
+          msg_types_in: payload.listTxMsgTypeNotIn?.length > 0 ? null : payload.listTxMsgType,
+          msg_types_nin: payload.listTxMsgTypeNotIn,
           start_time: payload.startTime,
           end_time: payload.endTime,
         },
