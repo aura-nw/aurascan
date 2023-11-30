@@ -2,7 +2,7 @@
   <!-- Image Default -->
   <img
     *ngIf="
-      (getTypeFile(nftItem) !== MEDIA_TYPE.IMG &&
+      (dataType !== MEDIA_TYPE.IMG &&
         !(nftItem.animation?.link_s3 || this.nftItem.animation_url || nftItem.media_info?.offchain?.animation?.url) &&
         !nftItem?.media_info?.onchain?.metadata?.image) ||
       isError
@@ -14,9 +14,7 @@
 
   <!-- Image -->
   <img
-    *ngIf="
-      (getTypeFile(nftItem) === MEDIA_TYPE.IMG || nftItem?.media_info?.onchain?.metadata?.image) && isError === false
-    "
+    *ngIf="(dataType === MEDIA_TYPE.IMG || nftItem?.media_info?.onchain?.metadata?.image) && isError === false"
     (error)="error()"
     [src]="imageUrl && animationUrl ? animationUrl : imageUrl"
     alt=""
@@ -31,12 +29,12 @@
     #video
     poster="{{ imageUrl }}"
     *ngIf="
-      getTypeFile(nftItem) === MEDIA_TYPE.VIDEO &&
+      dataType === MEDIA_TYPE.VIDEO &&
       (nftItem.media_info?.offchain?.animation?.url || nftItem.animation?.link_s3 || this.nftItem.animation_url)
     "></video>
   <div
     *ngIf="
-      getTypeFile(nftItem) === MEDIA_TYPE.VIDEO &&
+      dataType === MEDIA_TYPE.VIDEO &&
       (nftItem.media_info?.offchain?.animation?.url || nftItem.animation?.link_s3 || this.nftItem.animation_url)
     "
     class="control-container">
@@ -53,7 +51,7 @@
   <app-model-view
     (click)="nftLink && goTo(nftLink)"
     *ngIf="
-      getTypeFile(nftItem) === MEDIA_TYPE._3D &&
+      dataType === MEDIA_TYPE._3D &&
       (nftItem.media_info?.offchain?.animation?.url || nftItem.animation?.link_s3 || this.nftItem.animation_url)
     "
     [modelUrl]="animationUrl"
@@ -65,7 +63,7 @@
   <!-- Audio-view -->
   <app-audio-player
     *ngIf="
-      getTypeFile(nftItem) === MEDIA_TYPE.AUDIO &&
+      dataType === MEDIA_TYPE.AUDIO &&
       (nftItem.media_info?.offchain?.animation?.url || nftItem.animation?.link_s3 || this.nftItem.animation_url)
     "
     [link]="nftLink"
