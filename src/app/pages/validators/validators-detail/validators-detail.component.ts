@@ -8,7 +8,7 @@ import { NUMBER_2_DIGIT, NUM_BLOCK, TIMEOUT_ERROR } from 'src/app/core/constants
 import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -23,6 +23,7 @@ const marked = require('marked');
   styleUrls: ['./validators-detail.component.scss'],
 })
 export class ValidatorsDetailComponent implements OnInit {
+  EFeature = EFeature;
   currentAddress: string;
   currentValidatorDetail: any;
 

@@ -8,6 +8,7 @@ import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApiAccountService } from 'src/app/core/data-services/api-account.service';
+import { EFeature } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
@@ -35,6 +36,8 @@ export class AccountDetailComponent implements OnInit {
   public chartOptions: Partial<ChartOptions>;
   @ViewChild('walletChart') chart: ChartComponent;
   @ViewChild(MatSort) sort: MatSort;
+
+  EFeature = EFeature;
 
   currentAddress: string;
   currentAccountDetail: any;
