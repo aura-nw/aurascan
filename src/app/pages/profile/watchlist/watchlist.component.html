@@ -100,14 +100,14 @@
                   <div class="aura-tooltip-object">
                     {{
                       commonService.checkPublic(data.address)
-                        ? (commonService.setNameTag(data.address, null, false) | cutStringPipe : 10)
+                        ? ((data.address | getNameTag : null : false) | cutStringPipe : 10)
                         : '-'
                     }}
                   </div>
 
                   <app-tooltip-customize
                     *ngIf="commonService.checkPublic(data.address)"
-                    [content]="commonService.setNameTag(data.address, null, false)"></app-tooltip-customize>
+                    [content]="data.address | getNameTag : null : false"></app-tooltip-customize>
                 </div>
                 <div
                   *ngSwitchCase="'private_name_tag'"
@@ -116,14 +116,14 @@
                   <div class="aura-tooltip-object">
                     {{
                       commonService.checkPrivate(data.address)
-                        ? (commonService.setNameTag(data.address) | cutStringPipe : 12)
+                        ? (data.address | getNameTag | cutStringPipe : 12)
                         : '-'
                     }}
                   </div>
 
                   <app-tooltip-customize
                     *ngIf="commonService.checkPrivate(data.address)"
-                    [content]="commonService.setNameTag(data.address)"></app-tooltip-customize>
+                    [content]="data.address | getNameTag"></app-tooltip-customize>
                 </div>
                 <div *ngSwitchCase="'group'" class="">
                   <div class="d-flex align-items-center">
@@ -219,7 +219,7 @@
             <div class="line-claim" [ngClass]="commonService.checkPublic(data.address) ? 'box-name-tag' : ''">
               {{
                 commonService.checkPublic(data.address)
-                  ? (commonService.setNameTag(data.address, null, false) | cutStringPipe : 18)
+                  ? ((data.address | getNameTag: null : false | cutStringPipe : 18))
                   : '-'
               }}
             </div>
@@ -229,7 +229,7 @@
             <div class="line-claim" [ngClass]="commonService.checkPrivate(data.address) ? 'private-name-tag' : ''">
               {{
                 commonService.checkPrivate(data.address)
-                  ? (commonService.setNameTag(data.address) | cutStringPipe : 22)
+                  ? (data.address | getNameTag | cutStringPipe : 22)
                   : '-'
               }}
             </div>

@@ -379,8 +379,8 @@
                             : 'name-tag text--primary'
                           : 'text--primary',
                         info: !commonService.checkDisplayTooltip(data.delegator_address)
-                          ? (commonService.setNameTag(data.delegator_address) | cutStringPipe : 16)
-                          : (commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6)
+                          ? (data.delegator_address | getNameTag | cutStringPipe : 16)
+                          : (data.delegator_address | getNameTag | cutStringPipe : 6 : 6)
                       },
                       {
                         label: 'Amount',

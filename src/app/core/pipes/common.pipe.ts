@@ -196,3 +196,16 @@ export class formatDigit implements PipeTransform {
     return formatNumber(amount, 'en-GB', digitConvert);
   }
 }
+
+@Pipe({ name: 'getNameTag' })
+export class getNameTag implements PipeTransform {
+  transform(address, listNameTag = [], getPrivate = true) {
+    listNameTag = listNameTag?.length > 0 ? listNameTag : listNameTag;
+    const nameTag = listNameTag?.find((k) => k.address === address);
+    let result = nameTag?.name_tag || address;
+    if (getPrivate) {
+      result = nameTag?.name_tag_private || result;
+    }
+    return result;
+  }
+}

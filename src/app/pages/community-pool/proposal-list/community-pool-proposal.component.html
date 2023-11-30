@@ -112,12 +112,12 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
                       '>' +
-                      (commonService.setNameTag(distributionAcc) | cutStringPipe : 16) +
+                      (distributionAcc | getNameTag | cutStringPipe : 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
                       '>' +
-                      (commonService.setNameTag(distributionAcc) | cutStringPipe : 8 : 8) +
+                      (distributionAcc | getNameTag | cutStringPipe : 8 : 8) +
                       '</a>'
                 },
                 {
@@ -128,12 +128,12 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.recipient) +
                       '>' +
-                      (commonService.setNameTag(data.recipient) | cutStringPipe : 16) +
+                      (data.recipient | getNameTag | cutStringPipe : 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + data.recipient) +
                       '>' +
-                      (commonService.setNameTag(data.recipient) | cutStringPipe : 8 : 8) +
+                      (data.recipient | getNameTag | cutStringPipe : 8 : 8) +
                       '</a>'
                 },
                 {

@@ -24,11 +24,11 @@
         <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
         <ng-container
           *ngIf="
-            commonService.setNameTag(contractDetail?.address, null, false) !== contractDetail?.address;
+            (contractDetail?.address | getNameTag: null : false) !== contractDetail?.address;
             else NoNameTag
           ">
           <div class="box-name-tag">
-            <span class="line-claim">{{ commonService.setNameTag(contractDetail?.address, null, false) || '-' }}</span>
+            <span class="line-claim">{{ (contractDetail?.address | getNameTag: null : false) || '-' }}</span>
             <a
               target="_blank"
               [href]="extendLink(commonService.findUrlNameTag(contractDetail?.address))"
@@ -52,7 +52,7 @@
           *ngIf="commonService.checkPrivate(contractDetail?.address)"
           class="mt-2 d-inline-flex box-private align-items-center text--white">
           <div class="d-inline-flex align-items-center private-name-tag">
-            <span class="line-claim">{{ commonService.setNameTag(contractDetail?.address) || '-' }}</span>
+            <span class="line-claim">{{ (contractDetail?.address | getNameTag) || '-' }}</span>
           </div>
           <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
         </div>

@@ -125,12 +125,12 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.voter) +
                       '>' +
-                      (commonService.setNameTag(data.voter) | cutStringPipe : 16) +
+                      (data.voter | getNameTag | cutStringPipe : 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + data.voter) +
                       '>' +
-                      (commonService.setNameTag(data.voter) | cutStringPipe : 8 : 8) +
+                      (data.voter | getNameTag | cutStringPipe : 8 : 8) +
                       '</a>'
                 },
                 {
@@ -216,12 +216,12 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +
                       '>' +
-                      (commonService.setNameTag(data.depositors) | cutStringPipe : 16) +
+                      (data.depositors | getNameTag | cutStringPipe : 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + data.depositors) +
                       '>' +
-                      (commonService.setNameTag(data.depositors) | cutStringPipe : 8 : 8) +
+                      (data.depositors | getNameTag | cutStringPipe : 8 : 8) +
                       '</a>'
                 },
                 {
