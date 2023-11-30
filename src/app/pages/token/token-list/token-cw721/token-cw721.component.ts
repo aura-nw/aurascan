@@ -117,11 +117,6 @@ export class TokenCw721Component implements OnInit {
 
   resetSearch() {
     this.textSearch = '';
-    this.pageData = {
-      length: PAGE_EVENT.LENGTH,
-      pageSize: 20,
-      pageIndex: 0,
-    };
     this.pageEvent(0);
   }
 

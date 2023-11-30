@@ -69,7 +69,7 @@ export class TokenCw4973Component implements OnInit {
     let payload = {
       limit: this.pageData.pageSize,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
-      keyword: this.textSearch?.length > 0 ? this.textSearch : null,
+      keyword: this.textSearch,
     };
 
     const addressNameTag = this.commonService.findNameTag(this.textSearch);
@@ -110,11 +110,6 @@ export class TokenCw4973Component implements OnInit {
 
   resetSearch() {
     this.textSearch = '';
-    this.pageData = {
-      length: PAGE_EVENT.LENGTH,
-      pageSize: 20,
-      pageIndex: 0,
-    };
     this.pageEvent(0);
   }
 }
