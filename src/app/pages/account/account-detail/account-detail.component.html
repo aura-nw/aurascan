@@ -60,10 +60,10 @@
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
-              *ngIf="(currentAddress | getNameTag : null : false) !== currentAddress"
+              *ngIf="(currentAddress | nameTag : null : false) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
               <div class="d-inline-flex w-100 aura-tooltip-object align-items-center justify-content-between">
-                <span class="line-claim">{{ (currentAddress | getNameTag : null : false) || '-' }}</span>
+                <span class="line-claim">{{ (currentAddress | nameTag : null : false) || '-' }}</span>
                 <a
                   target="_blank"
                   [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
@@ -75,7 +75,7 @@
               <app-tooltip-customize
                 *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
                 [content]="
-                  'Public name: ' + currentAddress | getNameTag : null : false
+                  'Public name: ' + currentAddress | nameTag : null : false
                 "></app-tooltip-customize>
             </div>
           </div>
@@ -90,12 +90,12 @@
             *ngIf="commonService.checkPrivate(currentAddress)"
             class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
             <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
-              <span class="line-claim">{{ (currentAddress | getNameTag) || '-' }}</span>
+              <span class="line-claim">{{ (currentAddress | nameTag) || '-' }}</span>
             </div>
 
             <app-tooltip-customize
               *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
-              [content]="'Private name: ' + currentAddress | getNameTag"></app-tooltip-customize>
+              [content]="'Private name: ' + currentAddress | nameTag"></app-tooltip-customize>
             <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
           </div>
 

@@ -1,5 +1,5 @@
 import { formatDate, formatNumber } from '@angular/common';
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { NgxMaskPipe } from 'ngx-mask';
@@ -8,6 +8,7 @@ import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from '../services/common.service';
 import { balanceOf } from '../utils/common/parsing';
+
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -194,18 +195,5 @@ export class formatDigit implements PipeTransform {
   transform(amount: number, digit = 0) {
     let digitConvert = '1.' + digit + '-' + digit;
     return formatNumber(amount, 'en-GB', digitConvert);
-  }
-}
-
-@Pipe({ name: 'getNameTag' })
-export class getNameTag implements PipeTransform {
-  transform(address, listNameTag = [], getPrivate = true) {
-    listNameTag = listNameTag?.length > 0 ? listNameTag : listNameTag;
-    const nameTag = listNameTag?.find((k) => k.address === address);
-    let result = nameTag?.name_tag || address;
-    if (getPrivate) {
-      result = nameTag?.name_tag_private || result;
-    }
-    return result;
   }
 }

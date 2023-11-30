@@ -112,12 +112,12 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
                       '>' +
-                      (distributionAcc | getNameTag | cutStringPipe : 16) +
+                      (distributionAcc | nameTag | cutStringPipe : 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
                       '>' +
-                      (distributionAcc | getNameTag | cutStringPipe : 8 : 8) +
+                      (distributionAcc | nameTag | cutStringPipe : 8 : 8) +
                       '</a>'
                 },
                 {
@@ -128,12 +128,12 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.recipient) +
                       '>' +
-                      (data.recipient | getNameTag | cutStringPipe : 16) +
+                      (data.recipient | nameTag | cutStringPipe : 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + data.recipient) +
                       '>' +
-                      (data.recipient | getNameTag | cutStringPipe : 8 : 8) +
+                      (data.recipient | nameTag | cutStringPipe : 8 : 8) +
                       '</a>'
                 },
                 {

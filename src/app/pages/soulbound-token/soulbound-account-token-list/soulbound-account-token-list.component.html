@@ -30,16 +30,16 @@
             </div>
           </div>
           <div
-            *ngIf="(userAddress | getNameTag: null : false) !== userAddress"
+            *ngIf="(userAddress | nameTag: null : false) !== userAddress"
             class="name-tag cursor-pointer mt-1 aura-tooltip-contain d-inline-flex">
             <div class="d-inline-flex aura-tooltip-object align-items-center">
-              <span class="d-none d-lg-flex">{{ (userAddress | getNameTag: null : false) || '-' }}</span>
+              <span class="d-none d-lg-flex">{{ (userAddress | nameTag: null : false) || '-' }}</span>
               <span class="d-flex d-lg-none justify-content-center">
                 <ng-container *ngIf="!commonService.checkDisplayTooltip(userAddress)">
-                  {{ (userAddress | getNameTag: null : false) || '-' }}
+                  {{ (userAddress | nameTag: null : false) || '-' }}
                 </ng-container>
                 <ng-container *ngIf="commonService.checkDisplayTooltip(userAddress)">
-                  {{ ((userAddress | getNameTag: null : false) | cutStringPipe : 8 : 8) || '-' }}
+                  {{ ((userAddress | nameTag: null : false) | cutStringPipe : 8 : 8) || '-' }}
                 </ng-container>
               </span>
               <a
@@ -51,7 +51,7 @@
             </div>
             <app-tooltip-customize
               [className]="'tooltip--right'"
-              [content]="'Public name: ' + userAddress | getNameTag: null : false">
+              [content]="'Public name: ' + userAddress | nameTag: null : false">
             </app-tooltip-customize>
           </div>
         </div>
@@ -67,20 +67,20 @@
           *ngIf="commonService.checkPrivate(userAddress)"
           class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
           <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
-            <span class="d-none d-lg-flex">{{ (userAddress | getNameTag) || '-' }}</span>
+            <span class="d-none d-lg-flex">{{ (userAddress | nameTag) || '-' }}</span>
             <span class="d-flex d-lg-none justify-content-center">
               <ng-container *ngIf="!commonService.checkDisplayTooltip(userAddress)">
-                {{ (userAddress | getNameTag | cutStringPipe : 16) || '-' }}
+                {{ (userAddress | nameTag | cutStringPipe : 16) || '-' }}
               </ng-container>
               <ng-container *ngIf="commonService.checkDisplayTooltip(userAddress)">
-                {{ (userAddress | getNameTag | cutStringPipe : 8 : 8) || '-' }}
+                {{ (userAddress | nameTag | cutStringPipe : 8 : 8) || '-' }}
               </ng-container>
             </span>
           </div>
 
           <app-tooltip-customize
             *ngIf="!commonService.checkDisplayTooltip(userAddress)"
-            [content]="'Private name: ' + userAddress | getNameTag"></app-tooltip-customize>
+            [content]="'Private name: ' + userAddress | nameTag"></app-tooltip-customize>
           <i
             class="ph ph-note-pencil ml-2 body-01 cursor-pointer"
             (click)="editPrivateName()"></i>

@@ -14,9 +14,9 @@ import {
   displayTypeToolTip,
   convertSmallNumber,
   formatDigit,
-  getNameTag,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
+import {nameTag} from "src/app/core/pipes/nameTag.pipe";
 
 @NgModule({
   declarations: [
@@ -34,7 +34,7 @@ import { JsonPipe } from './json.pipe';
     displayTypeToolTip,
     convertSmallNumber,
     formatDigit,
-    getNameTag
+    nameTag
   ],
   imports: [CommonModule],
   exports: [
@@ -52,7 +52,7 @@ import { JsonPipe } from './json.pipe';
     displayTypeToolTip,
     convertSmallNumber,
     formatDigit,
-    getNameTag
+    nameTag
   ],
 })
 export class CommonPipeModule {}

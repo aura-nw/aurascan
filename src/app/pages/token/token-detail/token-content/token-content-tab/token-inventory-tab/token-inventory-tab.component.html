@@ -39,10 +39,10 @@
                   [ngClass]="commonService.checkPrivate(item.owner) ? 'private-name-tag' : ''"
                   href="/tokens/{{ linkToken }}/{{ item.contract_address }}?a={{ item.owner }}">
                   <ng-container *ngIf="!commonService.checkDisplayTooltip(item.owner)">
-                    {{ item.owner | getNameTag | cutStringPipe : 8 }}
+                    {{ item.owner | nameTag | cutStringPipe : 8 }}
                   </ng-container>
                   <ng-container *ngIf="commonService.checkDisplayTooltip(item.owner)">
-                    {{ item.owner | getNameTag | cutStringPipe : 5 : 5 }}
+                    {{ item.owner | nameTag | cutStringPipe : 5 : 5 }}
                   </ng-container>
                 </a>
                 <app-name-tag

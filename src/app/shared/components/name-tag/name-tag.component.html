@@ -53,7 +53,7 @@
         <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
       </ng-container>
       <ng-container *ngIf="fullText">
-        <span class="d-none d-lg-flex">{{ ((value || paramUrl) | getNameTag) || '-' }}</span>
+        <span class="d-none d-lg-flex">{{ ((value || paramUrl) | nameTag) || '-' }}</span>
         <span class="d-flex d-lg-none justify-content-center">
           <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
         </span>
@@ -95,13 +95,13 @@
   </ng-container>
   <ng-container *ngIf="fullText">
     <ng-container *ngIf="!fullTextMob">
-      <span class="d-none d-lg-flex">{{ ((value || paramUrl) | getNameTag) || '-' }}</span>
+      <span class="d-none d-lg-flex">{{ ((value || paramUrl) | nameTag) || '-' }}</span>
       <span class="d-flex d-lg-none justify-content-center">
         <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
       </span>
     </ng-container>
     <ng-container *ngIf="fullTextMob">
-      <span>{{ ((value || paramUrl) | getNameTag) || '-' }}</span>
+      <span>{{ ((value || paramUrl) | nameTag) || '-' }}</span>
     </ng-container>
   </ng-container>
   <ng-container *ngIf="extendUrl && extendUrlLink">
@@ -113,10 +113,10 @@
 
 <ng-template #displayNameTag>
   <ng-container *ngIf="!commonService.checkDisplayTooltip(paramUrl || value)">
-    {{ (value | getNameTag | cutStringPipe : maxCharacter) || '-' }}
+    {{ (value | nameTag | cutStringPipe : maxCharacter) || '-' }}
   </ng-container>
 
   <ng-container *ngIf="commonService.checkDisplayTooltip(paramUrl || value)">
-    {{ (value | getNameTag | cutStringPipe : 8 : 8) || '-' }}
+    {{ (value | nameTag | cutStringPipe : 8 : 8) || '-' }}
   </ng-container>
 </ng-template>
