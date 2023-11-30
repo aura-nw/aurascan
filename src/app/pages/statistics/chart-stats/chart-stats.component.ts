@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { createChart } from 'lightweight-charts';
+import * as _ from 'lodash';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ChartOptions } from 'src/app/core/models/chart.model';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 import { STATISTIC_CHART_OPTIONS } from '../statistic-chart-options';
@@ -32,7 +33,9 @@ export class ChartStatsComponent implements OnInit {
   isLoading = true;
   errTxt: string;
 
-  constructor(public translate: TranslateService, private statisticService: StatisticService) {}
+  chainName = _.startCase(_.camelCase(this.env.chainInfo?.bech32Config?.bech32PrefixAccAddr));
+
+  constructor(private statisticService: StatisticService, private env: EnvironmentService) {}
 
   ngOnInit() {
     this.dailyTransactionChartInit();
