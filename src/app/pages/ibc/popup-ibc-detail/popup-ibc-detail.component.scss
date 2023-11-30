@@ -11,25 +11,24 @@
     background-color: var(--aura-gray-9);
   }
   .card-body {
-    max-height: 62vh;
+    max-height: 66vh;
     overflow-y: auto;
     .box-connect {
       position: relative;
       .divider {
-        background-color: #49996f;
+        background-color: var(--aura-green-4);
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translateX(-50%);
-        width: 49%;
         @media (max-width: 375px) {
           width: 40%;
         }
         @media (min-width: 376px) {
-          width: 45%;
+          width: 46%;
         }
         @media (min-width: 992px) {
-          width: 50%;
+          width: 350px;
         }
         &::before,
         &::after {
@@ -40,7 +39,7 @@
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background-color: #49996f;
+          background-color: var(--aura-green-4);
         }
         &::before {
           left: 0;
@@ -75,7 +74,8 @@
       align-items: center;
       justify-content: center;
       @media (min-width: 912px) {
-        padding: 16px 24px;
+        padding: 16px 30px;
+        width: 275px;
       }
     }
     @media (max-width: 430px) {

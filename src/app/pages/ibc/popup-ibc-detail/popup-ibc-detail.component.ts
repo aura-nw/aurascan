@@ -56,6 +56,7 @@ export class PopupIBCDetailComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
   chainInfo = this.environmentService.chainInfo;
+  counterInfo: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupIBCDetailComponent>,
@@ -70,6 +71,7 @@ export class PopupIBCDetailComponent implements OnInit {
   ngOnInit(): void {
     if (this.data) {
       this.getRelayerDetail();
+      this.counterInfo = this.commonService.listTokenIBC?.find(k => k.chain_id === this.data?.chain);
     } else {
       this.isLoading = false;
     }
@@ -84,18 +86,17 @@ export class PopupIBCDetailComponent implements OnInit {
 
     this.ibcService.getListRelayerDetail(payload).subscribe({
       next: (res) => {
-        res.ibc_channel.forEach((element) => {
+        res.ibc_channel?.forEach((element) => {
           element['state'] =
             element['state'] === this.relayerType.OPEN || element['state'] === this.relayerType.STATE_OPEN
               ? 'Opened'
               : 'Close';
-
           element['operatingSince'] =
             _.get(element, 'ibc_connection.ibc_client.operating_since_1') ||
             _.get(element, 'ibc_connection.ibc_client.operating_since_2');
         });
 
-        this.dataSource = new MatTableDataSource<any>(res.ibc_channel);
+        this.dataSource = new MatTableDataSource<any>(res?.ibc_channel);
         this.pageData.length = res?.ibc_channel?.length;
 
         if (this.dataSource?.data) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,7 @@ import { IBCService } from 'src/app/core/services/ibc.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import { sha256, sha224 } from 'js-sha256';
 
 @Component({
   selector: 'app-channel-detail',
@@ -45,10 +46,10 @@ export class ChannelDetailComponent implements OnInit {
   loadingTx = true;
   channel_id = '';
   counterparty_channel_id = '';
+  counterInfo: any;
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   chainInfo = this.environmentService.chainInfo;
-  // denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
     public commonService: CommonService,
@@ -57,7 +58,11 @@ export class ChannelDetailComponent implements OnInit {
     private ibcService: IBCService,
     private environmentService: EnvironmentService,
   ) {}
-  
+
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    localStorage.setItem('showPopupIBC', 'true');
+  }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -83,6 +88,9 @@ export class ChannelDetailComponent implements OnInit {
           totalTx: _.get(data, 'total_tx.aggregate.count'),
           clientId: _.get(data, 'ibc_connection.ibc_client.client_id'),
         };
+        this.counterInfo = this.commonService.listTokenIBC?.find(
+          (k) => k.chain_id === res?.ibc_channel[0]?.ibc_connection?.ibc_client?.counterparty_chain_id,
+        );
       },
       error: (e) => {
         this.isLoading = false;
@@ -122,26 +130,31 @@ export class ChannelDetailComponent implements OnInit {
 
   convertTxIBC(data, coinInfo) {
     const txs = _.get(data, 'ibc_ics20').map((data) => {
-      let element = data.ibc_message.transaction_message;
-      const code = _.get(element, 'transaction.code');
-      const tx_hash = _.get(element, 'transaction.hash');
-      let typeOrigin = _.get(element, 'type');
+      let element = data.ibc_message?.transaction;
+      const code = _.get(element, 'code');
+      const tx_hash = _.get(element, 'hash');
+      let typeOrigin = _.get(element, 'transaction_messages[0].type');
+      const lstTypeTemp = _.get(element, 'transaction_messages');
 
-      let type = _.find(TYPE_TRANSACTION, { label: typeOrigin })?.value || typeOrigin.split('.').pop();
+      let type = _.find(TYPE_TRANSACTION, { label: typeOrigin })?.value || typeOrigin?.split('.').pop();
       if (type.startsWith('Msg')) {
         type = type?.replace('Msg', '');
       }
 
       const status = code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-      const fee = balanceOf(_.get(element, 'transaction.fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(
+      const fee = balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(
         coinInfo.coinDecimals,
       );
-      const height = _.get(element, 'transaction.height');
-      const timestamp = _.get(element, 'transaction.timestamp');
+      const height = _.get(element, 'height');
+      const timestamp = _.get(element, 'timestamp');
       let amountTemp = _.get(data, 'amount');
       let amount = balanceOf(amountTemp || 0, 6);
-      const denom = _.get(data, 'denom');
-      const decimals = 6;
+      let denom = _.get(data, 'denom');
+      let dataDenom;
+      if (denom) {
+        denom = 'ibc/' + sha256(denom)?.toUpperCase();
+        dataDenom = this.commonService.mappingNameIBC(denom);
+      }
 
       return {
         code,
@@ -153,8 +166,8 @@ export class ChannelDetailComponent implements OnInit {
         timestamp,
         amount,
         amountTemp,
-        denom,
-        decimals
+        dataDenom,
+        lstTypeTemp
       };
     });
     return txs;

@@ -25,11 +25,16 @@
           </div>
           <div class="box-connect-chain">
             <div class="d-lg-flex justify-content-center">
-              <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
-              <div class="ml-lg-5 body text--gray-11 caption-mob fw-normal">
-                <span class="h2 body-02-mob fw-semibold text--white">{{ chainInfo.chainName }}</span
+              <img
+                [src]="counterInfo?.image ? counterInfo?.image : 'assets/images/logo/auraTitleLogo.png'"
+                alt=""
+                class="mr-lg-5"
+                width="40px"
+                height="40px" />
+              <div class="body text--gray-11 caption-mob fw-normal">
+                <span class="h2 body-02-mob fw-semibold text--white">{{ counterInfo?.name }}</span
                 ><br />
-                {{ chainInfo.chainId }}
+                {{ counterInfo?.chain_id }}
               </div>
             </div>
           </div>
@@ -140,10 +145,6 @@
           (paginator)="paginatorEmit($event)"
           (pageEvent)="pageEvent($event)">
         </app-paginator>
-        <!-- <app-custom-paginator
-          [paginator]="pageData"
-          [length]="pageData.length"
-          (pageChange)="pageEvent($event)"></app-custom-paginator> -->
       </div>
     </div>
   </div>

@@ -243,28 +243,26 @@ export class IBCService extends CommonService {
           denom
           amount
           ibc_message {
-            transaction_message {
-              type
-              transaction {
-                code
-                timestamp
-                fee
-                height
-                hash
+            transaction {
+              code
+              timestamp
+              fee
+              height
+              hash
+              transaction_messages {
+                type
+                content
               }
             }
           }
         }
-        total_tx: ibc_ics20_aggregate(
-          where: { channel_id: { _eq: $channel_id } }
-        ) {
+        total_tx: ibc_ics20_aggregate(where: { channel_id: { _eq: $channel_id } }) {
           aggregate {
             count(columns: id)
           }
         }
       }
     }
-    
     `;
     return this.http
       .post<any>(this.graphUrl, {

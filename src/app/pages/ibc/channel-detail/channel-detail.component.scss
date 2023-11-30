@@ -22,7 +22,7 @@
 .box-connect {
   position: relative;
   .divider {
-    background-color: #49996f;
+    background-color: var(--aura-green-4);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -46,7 +46,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background-color: #49996f;
+      background-color: var(--aura-green-4);
     }
     &::before {
       left: 0;
@@ -73,8 +73,7 @@
   }
 }
 .box-connect-chain {
-  // width: 275px;
-  min-width: 120px;
+  // min-width: 120px;
   height: 84px;
   padding: 8px;
   background: linear-gradient(110.97deg, #262838 0%, #2e2e38 97.13%);
@@ -87,7 +86,8 @@
     height: 24px;
   }
   @media (min-width: 912px) {
-    padding: 16px 42px;
+    padding: 16px 30px;
+    width: 275px;
     .img-chain {
       width: 48px;
       height: 48px;

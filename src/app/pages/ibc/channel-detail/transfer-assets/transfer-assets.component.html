@@ -97,7 +97,7 @@
               </table>
             </div>
             <div class="d-lg-none mobile">
-              <div *ngFor="let data of dataIBCSending.data" class="card-ibc-assets">
+              <div *ngFor="let data of dataIBCSending?.data" class="card-ibc-assets">
                 <div class="d-flex align-items-center justify-content-between text--white">
                   <div class="d-flex align-items-center">
                     <img
@@ -107,7 +107,7 @@
                           : data['dataDenom']?.logo
                       "
                       alt=""
-                      class="mr-3"
+                      class="mr-2"
                       width="20px"
                       height="20px" />
                     <span>{{ data['dataDenom']?.display }}</span>
@@ -162,7 +162,7 @@
               <button
                 type="submit"
                 class="btn-search {{ textSearchReceive && textSearchReceive?.length > 0 ? 'd-none' : '' }}"
-                (click)="getTransferSend()">
+                (click)="getTransferReceive()">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
@@ -240,7 +240,7 @@
               </table>
             </div>
             <div class="d-lg-none mobile">
-              <div *ngFor="let data of dataIBCReceiving.data" class="card-ibc-assets">
+              <div *ngFor="let data of dataIBCReceiving?.data" class="card-ibc-assets">
                 <div class="d-flex align-items-center justify-content-between text--white">
                   <div class="d-flex align-items-center">
                     <img
@@ -250,7 +250,7 @@
                           : data['dataDenom']?.logo
                       "
                       alt=""
-                      class="mr-3"
+                      class="mr-2"
                       width="20px"
                       height="20px" />
                     <span>{{ data['dataDenom']?.display }}</span>

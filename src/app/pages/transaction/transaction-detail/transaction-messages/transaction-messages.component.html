@@ -1,7 +1,6 @@
 <div class="box-tx-detail">
   <div *ngIf="!isTransactionTypeDefault">
     <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1">
-      {{ checkTypeMessage() }}
       <ng-container *ngIf="!(transactionDetail?.messages[0]['@type'] === eTransType.MultiSend); else multiSend">
         <ng-container *ngFor="let element of currentData; let i = index">
           <div class="card text--white">
@@ -353,40 +352,36 @@
             *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
           </ng-container>
 
-          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length === 0">
+          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout)?.length === 0">
             <ng-container
               [ngTemplateOutlet]="ibcItem"
               [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: 'Receive' }"
               *ngIf="filterIBCType(eTransType.IBCReceived)?.length > 0">
             </ng-container>
-
             <ng-container
               [ngTemplateOutlet]="ibcItem"
               [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: 'Acknowledgement' }"
               *ngIf="filterIBCType(eTransType.IBCAcknowledgement)?.length > 0">
             </ng-container>
           </ng-container>
-          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length > 0">
-            <ng-container
-              [ngTemplateOutlet]="ibcItem"
-              [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }"
-              *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0">
-            </ng-container>
+
+          <ng-container
+            *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0"
+            [ngTemplateOutlet]="ibcItem"
+            [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }">
           </ng-container>
         </div>
       </div>
       <ng-template #ibcItem let-type="type" let-title="title">
-        <div class="ibc-item">
+        <div class="ibc-item" *ngIf="listIBCProgress">
           <div class="d-flex align-items-center">
             <div class="ibc-checker mr-2" [ngClass]="type === eTransType.IBCTimeout ? 'timeout' : ''"></div>
             <div class="text--green-4" [ngClass]="type === eTransType.IBCTimeout ? 'text--red-3' : ''">{{ title }}</div>
           </div>
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
-            <ng-container *ngFor="let item of filterIBCType(type)">
+            <ng-container *ngFor="let item of listIBCProgress">
               <div class="d-lg-flex justify-content-between">
-                <div>
-                  {{ (denomIBC ? (denomIBC | convertLogAmount : true) : item.denom) | cutStringPipe : 16 : 16 }}
-                </div>
+                {{ denomIBC }}
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">

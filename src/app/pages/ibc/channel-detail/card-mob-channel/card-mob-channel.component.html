@@ -34,7 +34,16 @@
   <div *ngIf="content && content.length > 0">
     <div class="mt-2 d-flex justify-content-between" *ngFor="let data of content; let i = index">
       <div class="text--gray-4 fw-normal">{{ data.label }}</div>
-      <div *ngIf="data.info" class="{{ data.class ? data.class : 'text--gray-1' }} mb-0" [innerHTML]="data.info"></div>
+      <div
+        *ngIf="data.info && data.label !== 'Amount'"
+        class="{{ data.class ? data.class : 'text--gray-1' }} mb-0"
+        [innerHTML]="data.info"></div>
+      <div *ngIf="data.label === 'Amount'">
+        <span class="mr-1"> {{ dataCard['amount'] | mask : 'separator.4' }}</span>
+        <span [class.text--primary]="dataCard.dataDenom?.decimals !== denom">{{
+          dataCard.dataDenom?.symbol | cutStringPipe : 16
+        }}</span>
+      </div>
     </div>
   </div>
 </div>

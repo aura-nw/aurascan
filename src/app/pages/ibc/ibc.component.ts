@@ -72,6 +72,17 @@ export class IBCComponent implements OnInit {
           this.pageChange.selectPage(0);
         }
       });
+
+    // check back event
+    const isShowPopup = localStorage.getItem('showPopupIBC');
+    if (isShowPopup == 'true') {
+      const data = localStorage.getItem('ibcDetail');
+      if (data) {
+        const ibcDetail = JSON.parse(data);
+        this.openPopup(ibcDetail);
+        localStorage.removeItem('showPopupIBC');
+      }
+    }
   }
 
   getReplayerInfo() {
@@ -158,6 +169,7 @@ export class IBCComponent implements OnInit {
     dialogConfig.panelClass = 'full-overlay-panel';
     dialogConfig.disableClose = true;
     if (data) {
+      localStorage.setItem('ibcDetail', JSON.stringify(data));
       dialogConfig.data = data;
     }
 

@@ -18,11 +18,14 @@
         </div>
         <div class="box-connect-chain">
           <div class="d-lg-flex justify-content-center">
-            <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
+            <img
+              [src]="counterInfo?.image ? counterInfo?.image : 'assets/images/logo/auraTitleLogo.png'"
+              alt=""
+              class="img-chain" />
             <div class="ml-lg-5 body text--gray-11 caption-mob fw-normal">
-              <span class="h2 body-02-mob fw-semibold text--white mb-1">{{ chainInfo.chainName }}</span
+              <span class="h2 body-02-mob fw-semibold text--white mb-1">{{ counterInfo?.name }}</span
               ><br />
-              {{ channelDetail.counterParty }}
+              {{ counterInfo?.chain_id }}
             </div>
           </div>
         </div>
@@ -38,7 +41,7 @@
       <div class="col-lg-3 col-6 mb-lg-0 mb-4">
         <div class="item">
           Counter Party
-          <div class="body-01 body-mob text--white fw-semibold mt-1">{{ channelDetail.counterParty }}</div>
+          <div class="body-01 body-mob text--white fw-semibold mt-1">{{ counterInfo?.chain_id }}</div>
         </div>
       </div>
       <div class="col-lg-3 col-6">
@@ -54,7 +57,7 @@
       <div class="col-lg-3 col-6">
         <div class="item">
           Total Transaction
-          <div class="body-01 body-mob text--white fw-semibold mt-1">{{ channelDetail.totalTx }}</div>
+          <div class="body-01 body-mob text--white fw-semibold mt-1">{{ channelDetail.totalTx | number }}</div>
         </div>
       </div>
       <div class="col-lg-3 col-6">
@@ -72,8 +75,8 @@
   <!-- Transactions -->
   <div class="h2 text--white mb-4">Transactions</div>
   <div class="card">
-    <div class="card-body" *ngIf="dataSource.data?.length > 0 && !loadingTx; else noValuesTx">
-      <div class="table-responsive d-none d-lg-block">
+    <div class="card-body">
+      <div class="table-responsive d-none d-lg-block" *ngIf="pageDataTx?.length > 0; else noValuesTx">
         <table mat-table [dataSource]="dataSource" class="aura-table tx">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
@@ -103,13 +106,18 @@
                       {{ data[template.matColumnDef] }}
                     </a>
                     <div *ngSwitchCase="'type'" class="aura-status">
-                      <div class="aura-status aura-tooltip-contain">
-                        <div class="status aura-tooltip-object">
-                          {{ data[template.matColumnDef] | stringEllipsis : 35 }}
-                          <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
-                            +{{ data.lstType?.length - 1 }}
+                      <div class="aura-status aura-tooltip-contain p-0">
+                        <div class="status cursor-pointer aura-tooltip-object">
+                          {{ data[template.matColumnDef] | stringEllipsis : 25 }}
+                          <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+                            +{{ data.lstTypeTemp?.length - 1 }}
                           </div>
                         </div>
+
+                        <app-tooltip-customize
+                          [class]="'message-custom'"
+                          [content]="data.lstTypeTemp | displayTypeToolTip">
+                        </app-tooltip-customize>
                       </div>
                     </div>
                     <div *ngSwitchCase="'status'">
@@ -127,25 +135,30 @@
                     </div>
                     <div *ngSwitchCase="'amount'" class="d-flex">
                       <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object" *ngIf="(data.amountTemp | balanceOf : data.decimals) < 0.001">
+                        <div
+                          class="aura-tooltip-object"
+                          *ngIf="(data.amountTemp | balanceOf : data.dataDenom?.decimals) < 0.001">
                           <0,001
                         </div>
-                        <app-tooltip-customize [content]="data.amountTemp | convertSmallNumber : data.decimals">
+                        <app-tooltip-customize
+                          [content]="data.amountTemp | convertSmallNumber : data.dataDenom?.symbol">
                         </app-tooltip-customize>
                         <div
-                          *ngIf="(data.amountTemp | balanceOf : data.decimals) >= 0.001"
+                          *ngIf="(data.amountTemp | balanceOf : data.dataDenom?.decimals) >= 0.001"
                           [appBigNumber]="data.amountTemp"
-                          [decimal]="data.decimals"></div>
+                          [decimal]="data.dataDenom?.decimals"></div>
                       </div>
                       <span class="ml-1">
-                        <div class="aura-tooltip-contain">
-                          <div [class.aura-tooltip-object]="data.denom">
-                            {{ data.denom || coinInfo.coinDenom | stringEllipsis : 25 }}
+                        <div
+                          class="aura-tooltip-contain"
+                          [class.text--primary]="data.dataDenom?.decimals !== coinInfo.coinDenom">
+                          <div [class.aura-tooltip-object]="data.dataDenom?.symbol">
+                            {{ data.dataDenom?.symbol | stringEllipsis : 25 }}
                           </div>
                           <app-tooltip-customize
                             [className]="'tooltip--right'"
                             [class]="'message-custom'"
-                            [content]="data.denom">
+                            [content]="data.dataDenom?.symbol">
                           </app-tooltip-customize>
                         </div>
                       </span>
@@ -163,14 +176,9 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns"></tr>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell g-no-data" colspan="9999">
-              {{ 'NO DATA' | translate }}
-            </td>
-          </tr>
         </table>
       </div>
-      <div class="d-lg-none" *ngIf="dataSource?.data?.length > 0">
+      <div class="d-lg-none" *ngIf="pageDataTx?.length > 0">
         <app-card-mob-channel
           *ngFor="let data of dataSource?.data; first as isFirst"
           [link]="'/transaction/' + data.tx_hash"
@@ -187,13 +195,7 @@
             {
               label: 'Amount',
               class: 'h6 mb-0 text--gray-1',
-              info: data.amount
-                ? '<span class=mr-1>' +
-                  (data.amount | mask : 'separator.6') +
-                  '</span><span class=text--white>' +
-                  'AURA' +
-                  '</span>'
-                : '-'
+              info: ''
             },
             {
               label: 'Height',
@@ -203,27 +205,21 @@
             {
               label: 'Fee',
               class: 'text--gray-1 body-02-mob',
-              info: (data.fee | mask : 'separator.6') + '<span class=text--white> ' + 'AURA' + '</span>'
+              info: (data.fee | mask : 'separator.6') + '<span class=text--white> ' + coinInfo.coinDenom + '</span>'
             }
           ]"></app-card-mob-channel>
       </div>
-      <div class="d-flex justify-content-center justify-content-md-end">
-        <app-paginator
-          [length]="pageDataTx.length"
-          [pageSize]="pageDataTx.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator>
-      </div>
+      <app-paginator
+        [length]="pageDataTx.length"
+        [pageSize]="pageDataTx.pageSize"
+        (paginator)="paginatorEmit($event)"
+        (pageEvent)="pageEvent($event)">
+      </app-paginator>
     </div>
   </div>
 
   <ng-template #noValuesTx>
-    <div class="mt-6" *ngIf="loadingTx">
-      <app-loading-sprint></app-loading-sprint>
-    </div>
-    <ng-container *ngIf="!loadingTx">
-      <app-table-no-data class="mt-6" [textNull]="errTxt"></app-table-no-data>
-    </ng-container>
+    <app-loading-sprint *ngIf="loadingTx"></app-loading-sprint>
+    <app-table-no-data *ngIf="!loadingTx" class="mt-6" [textNull]="errTxt"></app-table-no-data>
   </ng-template>
 </section>

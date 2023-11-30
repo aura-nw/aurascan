@@ -175,6 +175,19 @@ export class AppComponent implements OnInit {
         this.notificationsService.registerFcmToken();
       }
     }
+
+    // get list name validator form local storage
+    const listTokenIBC = localStorage.getItem('listTokenIBC');
+    if (!listTokenIBC) {
+      this.getListTokenIBC();
+    } else {
+      try {
+        let data = JSON.parse(listTokenIBC);
+        this.commonService.listTokenIBC = data;
+      } catch (e) {
+        this.getListTokenIBC();
+      }
+    }
   }
 
   getWatchlist() {
@@ -185,6 +198,15 @@ export class AppComponent implements OnInit {
 
     this.watchListService.getListWatchList(payload).subscribe((res) => {
       localStorage.setItem('lstWatchList', JSON.stringify(res?.data));
+    });
+  }
+
+  getListTokenIBC(): void {
+    const payload = {
+      onlyIbc: true,
+    };
+    this.tokenService.getTokenMarketData(payload).subscribe((res) => {
+      localStorage.setItem('listTokenIBC', JSON.stringify(res));
     });
   }
 }
