@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
@@ -43,16 +43,20 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   dataSourceMob: any[];
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
-  listCoin = this.environmentService.coins;
   listAssetLcd = [];
   searchSubject = new Subject();
   destroy$ = new Subject<void>();
   statusConstant = PROPOSAL_STATUS;
   isLoading = true;
   errText = null;
+
+  chainInfo = this.environmentService.chainInfo;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  image_s3 = this.environmentService.imageUrl;
+  listCoin = this.environmentService.coins;
+  coinLogo = this.environmentService.environment.logo;
+
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   constructor(
     public translate: TranslateService,
@@ -124,10 +128,11 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
             element.logo = findItem.logo;
             element.name = findItem.name;
           } else {
-            element.decimal = 6;
+            element.decimal = this.chainInfo.currencies[0].coinDecimals;
             element.symbol = '';
-            element.logo = '';
-            element.name = 'Aura';
+            element.logo = this.coinLogo;
+            element.name = this.chainInfo.currencies[0].coinDenom;
+
             element.amount = element.amount / NUMBER_CONVERT;
             auraAsset = element;
           }
