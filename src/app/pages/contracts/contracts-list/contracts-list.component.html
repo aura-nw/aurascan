@@ -11,19 +11,22 @@
     <button
       class="button button-pill button-flat"
       [class.active]="filterButtons.includes(ContractRegisterType.CW20)"
-      (click)="filterButton(ContractRegisterType.CW20)">
+      (click)="filterButton(ContractRegisterType.CW20)"
+      [appFeature]="EFeature.Cw20">
       CW-20
     </button>
     <button
       class="button button-pill button-flat"
       [class.active]="filterButtons.includes(ContractRegisterType.CW721)"
-      (click)="filterButton(ContractRegisterType.CW721)">
+      (click)="filterButton(ContractRegisterType.CW721)"
+      [appFeature]="EFeature.Cw721">
       CW-721
     </button>
     <button
       class="button button-pill button-flat"
       [class.active]="filterButtons.includes(ContractRegisterType.CW4973)"
-      (click)="filterButton(ContractRegisterType.CW4973)">
+      (click)="filterButton(ContractRegisterType.CW4973)"
+      [appFeature]="EFeature.Cw4973">
       CW-4973
     </button>
     <button

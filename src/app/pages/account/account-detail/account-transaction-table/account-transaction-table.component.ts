@@ -10,7 +10,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -30,6 +30,8 @@ export class AccountTransactionTableComponent {
   @Output() filterCondition = new EventEmitter<any>();
   @Output() tabName = new EventEmitter<string>();
   @Output() lstType = new EventEmitter<any>();
+
+  EFeature = EFeature;
 
   transactionLoading = false;
   errTxt: string;

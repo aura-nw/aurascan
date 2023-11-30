@@ -1,19 +1,11 @@
 import { NgModule } from '@angular/core';
-import { NumberDirective } from './number.directive';
 import { BigNumberDirective } from './big-number.directive';
-
-
+import { FeatureDirective } from './feature.directive';
+import { NumberDirective } from './number.directive';
 
 @NgModule({
-  declarations: [
-    NumberDirective,
-    BigNumberDirective
-  ],
-  imports: [
-  ],
-  exports: [
-    NumberDirective,
-    BigNumberDirective
-  ]
+  declarations: [NumberDirective, BigNumberDirective, FeatureDirective],
+  imports: [],
+  exports: [NumberDirective, BigNumberDirective, FeatureDirective],
 })
-export class CommonDirectiveModule { }
+export class CommonDirectiveModule {}
