@@ -154,6 +154,7 @@ export class AccountTransactionTableComponent {
       } else {
         this.listTypeSelectedTemp = [];
         this.checkAll = false;
+        this.isSearchOther = false;
       }
     } else {
       this.checkAll = false;
@@ -297,7 +298,7 @@ export class AccountTransactionTableComponent {
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
-        this.getListTxAuraByAddress(payload);
+        this.getListTxNativeByAddress(payload);
         break;
       case TabsAccountLink.FtsTxs:
         payload['sender'] = payload['receiver'] = address;
@@ -365,7 +366,7 @@ export class AccountTransactionTableComponent {
     });
   }
 
-  getListTxAuraByAddress(payload) {
+  getListTxNativeByAddress(payload) {
     this.userService.getListNativeTransfer(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);

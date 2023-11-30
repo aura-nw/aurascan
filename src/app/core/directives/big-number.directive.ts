@@ -15,7 +15,7 @@ export class BigNumberDirective implements AfterViewInit {
   @Input() votingPower: boolean = false;
 
   element: HTMLElement;
-  constructor(private mask: NgxMaskPipe, public elRef: ElementRef, public global: Globals) {
+  constructor(private mask: NgxMaskPipe, private elRef: ElementRef, private global: Globals) {
     this.element = elRef.nativeElement;
   }
 
