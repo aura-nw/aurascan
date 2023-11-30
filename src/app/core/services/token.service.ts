@@ -6,9 +6,7 @@ import { map } from 'rxjs/operators';
 import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
-import { RangeType } from '../models/common.model';
 import { CommonService } from './common.service';
-import * as _ from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -59,14 +57,6 @@ export class TokenService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
-
-  // getTokenMarketData(payload = {}): Observable<any> {
-  //   const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
-
-  //   return this.http.get<any>(`${this.apiUrl}/cw20-tokens/token-market`, {
-  //     params,
-  //   });
-  // }
 
   getListCW721Token(payload, textSearch = null): Observable<any> {
     if (textSearch?.length > 0) {

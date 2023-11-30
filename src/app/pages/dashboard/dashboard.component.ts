@@ -215,9 +215,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
     this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
-      const { data } = res;
-      if (data) {
-        this.tokenInfo = data;
+      if (res?.data) {
+        this.tokenInfo = res.data;
       }
     });
   }

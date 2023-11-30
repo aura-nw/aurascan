@@ -25,6 +25,9 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-noti-executed:before {
+  content: "\e91b";
+}
 .icon-download-simple:before {
   content: "\e918";
 }

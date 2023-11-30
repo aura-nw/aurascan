@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
@@ -11,11 +11,11 @@ import { CommonService } from './common.service';
 
 @Injectable()
 export class AccountService extends CommonService {
-  apiService = inject(ApiAccountService);
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
     private apiCw20TokenService: ApiCw20TokenService,
+    private apiService: ApiAccountService,
   ) {
     super(http, environmentService);
   }

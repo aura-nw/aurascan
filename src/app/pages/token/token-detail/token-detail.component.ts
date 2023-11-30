@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { map, of, switchMap } from 'rxjs';
-import { DATEFORMAT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
@@ -19,6 +19,7 @@ export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
   tokenDetail: any;
+  errTxt: string;
 
   constructor(
     private router: ActivatedRoute,
@@ -102,15 +103,20 @@ export class TokenDetailComponent implements OnInit {
           this.tokenDetail = res;
           this.loading = false;
         },
-        error: () => {
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loading = false;
         },
       });
   }
 
   getTokenDetailNFT(): void {
-    this.contractService.loadContractDetail(this.contractAddress).subscribe(
-      (res) => {
+    this.contractService.loadContractDetail(this.contractAddress).subscribe({
+      next: (res) => {
         const name = _.get(res, 'smart_contract[0].cw721_contract.name');
         let type = ContractRegisterType.CW721;
         if (res.smart_contract[0]?.name === TYPE_CW4973) {
@@ -122,11 +128,18 @@ export class TokenDetailComponent implements OnInit {
         this.tokenDetail.contract_verification =
           res.smart_contract[0].code.code_id_verifications[0]?.verification_status;
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   getLength(result: string) {

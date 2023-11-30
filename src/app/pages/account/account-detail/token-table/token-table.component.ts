@@ -82,9 +82,7 @@ export class TokenTableComponent implements OnChanges {
     private commonService: CommonService,
   ) {}
 
-  ngOnInit(): void {
-    // this.getTotalAssets();
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
     this.getListToken();
@@ -192,11 +190,4 @@ export class TokenTableComponent implements OnChanges {
     this.searchValue = '';
     this.searchToken();
   }
-
-  // getTotalAssets(): void {
-  //   this.accountService.getTotalAssets(this.address).subscribe((res: ResponseDto) => {
-  //     this.total = res.data || 0;
-  //     this.totalValue.emit(this.total);
-  //   });
-  // }
 }

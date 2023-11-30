@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
 import { EMPTY, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, expand, map, reduce, switchMap, takeUntil } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { DATEFORMAT, PAGE_EVENT } from '../../../../core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
@@ -56,7 +56,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   constructor(
     public global: Globals,
-    public tokenService: TokenService,
+    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private datePipe: DatePipe,
     private coingecko: CoingeckoService,
@@ -125,6 +125,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     if (this.dataTable.length > 0) {
       let result = this.dataTable
         ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+        .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
         .slice(payload?.offset, payload?.offset + payload?.limit);
       // Search with text search
       if (this.textSearch) {
@@ -137,10 +138,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap);
 
         const data = result.slice(payload?.offset, payload?.offset + payload?.limit);
-        this.dataSource = new MatTableDataSource<any>(data);
+        this.dataSource.data = data;
         this.pageData.length = result?.length;
       } else {
-        this.dataSource = new MatTableDataSource<any>(result);
+        this.dataSource.data = result;
         this.pageData.length = this.dataTable?.length;
       }
     } else {
@@ -161,16 +162,21 @@ export class TokenCw20Component implements OnInit, OnDestroy {
             // Sort and slice 20 frist record.
             const result = dataFlat
               ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+              .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
               .slice(payload?.offset, payload?.offset + payload?.limit);
 
-            this.dataSource = new MatTableDataSource<any>(result);
+            this.dataSource.data = result;
             this.pageData.length = dataFlat?.length;
 
             this.isLoading = false;
           },
           error: (e) => {
+            if (e.name === TIMEOUT_ERROR) {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+            }
             this.isLoading = false;
-            this.errTxt = `${e.status} ${e.statusText}`;
           },
         });
     }
@@ -200,7 +206,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
         volume: +tokenFound?.total_volume || 0,
         price: +tokenFound?.current_price || 0,
         isHolderUp: changePercent >= 0 ? true : false,
-        isValueUp: tokenFound?.price_change_percentage_24h >= 0 ? true : false,
+        isValueUp:
+          tokenFound?.price_change_percentage_24h && tokenFound?.price_change_percentage_24h >= 0 ? true : false,
         change: tokenFound?.price_change_percentage_24h || 0,
         holderChange: Math.abs(changePercent),
         holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
@@ -215,6 +222,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
+    this.pageChange.selectPage(0);
     this.dataSource.data.forEach((data) => {
       data.circulating_market_cap = +data.circulating_market_cap;
       data.volume = +data.volume;
@@ -222,7 +230,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       data.holders = +data.holders;
     });
 
-    let data = this.dataSource.data.slice();
+    let data = this.dataTable;
     if (!sort.active || sort.direction === '') {
       this.sortedData = data;
       return;
@@ -254,13 +262,18 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
     }
 
-    let dataFilter = this.sortedData;
+    const payload = {
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+    };
+
+    let dataFilter = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
     this.pageData = {
       length: this.pageData.length,
       pageSize: this.pageData.pageSize,
       pageIndex: this.pageData.pageIndex,
     };
-    this.dataSource = new MatTableDataSource<any>(dataFilter);
+    this.dataSource.data = dataFilter;
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -274,6 +287,21 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    this.getListToken();
+    const payload = {
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+    };
+    if (this.textSearch) {
+      this.getListToken();
+    } else {
+      if (this.sortedData) {
+        this.dataSource.data = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
+      } else {
+        this.dataSource.data = this.dataTable
+          ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+          .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
+          .slice(payload?.offset, payload?.offset + payload?.limit);
+      }
+    }
   }
 }

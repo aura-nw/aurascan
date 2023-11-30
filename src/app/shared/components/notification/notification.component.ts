@@ -45,7 +45,7 @@ export class NotificationComponent {
       'You have reached out your daily quota limit of ' +
       this.quotaNotification +
       ' notifications per day. Kindly go to your watchlist to turn on the' +
-      ' notification mode and adjust your current configuration for your watchlistâ€™s addresses and group of tracking activities to avoid over quota again',
+      ' notification mode and adjust your current configuration for your watchlist\'s addresses and group of tracking activities to avoid over quota again',
   };
 
   constructor(

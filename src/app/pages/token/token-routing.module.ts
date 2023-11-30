@@ -10,12 +10,12 @@ import { TokenCw721Component } from './token-list/token-cw721/token-cw721.compon
 
 const routes: Routes = [
   {
-    path: 'tokens',
+    path: '',
     component: TokenCw20Component,
     canMatch: [() => isEnabled(EFeature.Cw20)],
   },
   {
-    path: 'tokens',
+    path: 'token',
     component: TokenCw20Component,
     canMatch: [() => isEnabled(EFeature.Cw20)],
   },

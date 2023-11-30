@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { NgHttpCachingHeaders } from 'ng-http-caching';
-import { BehaviorSubject, catchError, map, mergeMap, Observable, of, shareReplay, Subject, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, shareReplay, take, tap } from 'rxjs';
 import { CHART_RANGE } from '../constants/common.constant';
 import { EnvironmentService } from './environment.service';
 
