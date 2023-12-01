@@ -41,24 +41,33 @@
               <table mat-table [dataSource]="dataIBCSending" class="aura-table body blocks">
                 <ng-container *ngFor="let template of templatesIBC; index as i">
                   <ng-container [matColumnDef]="template.matColumnDef">
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef class="text-capitalize">
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
-                    <td mat-cell *matCellDef="let data">
+                    <td mat-cell *matCellDef="let data; index as idx">
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
-                          <div *ngSwitchCase="'no'">#{{ pageIBCSend.pageIndex * pageIBCSend.pageSize + i + 1 }}</div>
-                          <div *ngSwitchCase="'asset'">
+                          <div *ngSwitchCase="'no'">#{{ pageIBCSend.pageIndex * pageIBCSend.pageSize + idx + 1 }}</div>
+                          <div *ngSwitchCase="'asset'" class="d-flex align-items-center">
                             <img
                               [src]="
-                                data['dataDenom']?.display === assetName
+                                !data['dataDenom']?.image
                                   ? 'assets/images/logo/auraTitleLogo.png'
-                                  : data['dataDenom']?.logo
+                                  : data['dataDenom']?.image
                               "
                               alt=""
+                              class="mr-1"
                               width="20px"
                               height="20px" />
-                            {{ data['dataDenom']?.display }}
+                            <div class="aura-tooltip-contain">
+                              <div class="aura-tooltip-object">
+                                {{ data['dataDenom']?.symbol | cutStringPipe : 20 }}
+                              </div>
+                              <app-tooltip-customize
+                                [className]="'tooltip--right'"
+                                [content]="data['dataDenom']?.symbol">
+                              </app-tooltip-customize>
+                            </div>
                           </div>
                           <div *ngSwitchCase="'type'">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</div>
                           <div *ngSwitchCase="'total_messages'">
@@ -102,15 +111,13 @@
                   <div class="d-flex align-items-center">
                     <img
                       [src]="
-                        data['dataDenom']?.display === assetName
-                          ? 'assets/images/logo/auraTitleLogo.png'
-                          : data['dataDenom']?.logo
+                        !data['dataDenom']?.image ? 'assets/images/logo/auraTitleLogo.png' : data['dataDenom']?.image
                       "
                       alt=""
                       class="mr-2"
                       width="20px"
                       height="20px" />
-                    <span>{{ data['dataDenom']?.display }}</span>
+                    <span>{{ data['dataDenom']?.symbol | cutStringPipe : 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
                 </div>
@@ -182,26 +189,38 @@
               <table mat-table [dataSource]="dataIBCReceiving" class="aura-table body blocks">
                 <ng-container *ngFor="let template of templatesIBC; index as i">
                   <ng-container [matColumnDef]="template.matColumnDef">
-                    <th mat-header-cell *matHeaderCellDef>
-                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    <th mat-header-cell *matHeaderCellDef class="text-capitalize">
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        *ngIf="template.matColumnDef !== 'amount'"></div>
+                      <div *ngIf="template.matColumnDef === 'amount'">Receiving amount</div>
                     </th>
-                    <td mat-cell *matCellDef="let data">
+                    <td mat-cell *matCellDef="let data; index as idx">
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'no'">
-                            #{{ pageIBCReceive.pageIndex * pageIBCReceive.pageSize + i + 1 }}
+                            #{{ pageIBCReceive.pageIndex * pageIBCReceive.pageSize + idx + 1 }}
                           </div>
                           <div *ngSwitchCase="'asset'">
                             <img
                               [src]="
-                                data['dataDenom']?.display === assetName
+                                !data['dataDenom']?.image
                                   ? 'assets/images/logo/auraTitleLogo.png'
-                                  : data['dataDenom']?.logo
+                                  : data['dataDenom']?.image
                               "
                               alt=""
+                              class="mr-1"
                               width="20px"
                               height="20px" />
-                            {{ data['dataDenom']?.display }}
+                            <div class="aura-tooltip-contain">
+                              <div class="aura-tooltip-object">
+                                {{ data['dataDenom']?.symbol | cutStringPipe : 20 }}
+                              </div>
+                              <app-tooltip-customize
+                                [className]="'tooltip--right'"
+                                [content]="data['dataDenom']?.symbol">
+                              </app-tooltip-customize>
+                            </div>
                           </div>
                           <div *ngSwitchCase="'type'">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</div>
                           <div *ngSwitchCase="'total_messages'">
@@ -245,15 +264,13 @@
                   <div class="d-flex align-items-center">
                     <img
                       [src]="
-                        data['dataDenom']?.display === assetName
-                          ? 'assets/images/logo/auraTitleLogo.png'
-                          : data['dataDenom']?.logo
+                        !data['dataDenom']?.image ? 'assets/images/logo/auraTitleLogo.png' : data['dataDenom']?.image
                       "
                       alt=""
                       class="mr-2"
                       width="20px"
                       height="20px" />
-                    <span>{{ data['dataDenom']?.display }}</span>
+                    <span>{{ data['dataDenom']?.symbol | cutStringPipe : 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
                 </div>

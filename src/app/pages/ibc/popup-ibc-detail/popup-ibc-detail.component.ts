@@ -18,12 +18,14 @@ import { RelayerType } from 'src/app/core/constants/ibc.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { PipeCutString } from 'src/app/core/pipes/common.pipe';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { MaterialModule } from 'src/app/material.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
@@ -71,7 +73,7 @@ export class PopupIBCDetailComponent implements OnInit {
   ngOnInit(): void {
     if (this.data) {
       this.getRelayerDetail();
-      this.counterInfo = this.commonService.listTokenIBC?.find(k => k.chain_id === this.data?.chain);
+      this.counterInfo = this.ibcService.listInfoChain?.find((k) => k.chainId === this.data?.chain);
     } else {
       this.isLoading = false;
     }
@@ -169,6 +171,8 @@ export class PopupIBCDetailComponent implements OnInit {
     NgbNavModule,
     NgxMaskDirective,
     NgxMaskPipe,
+    CommonPipeModule,
+    TooltipCustomizeModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })

@@ -1,6 +1,6 @@
 <div class="d-lg-flex justify-content-between align-items-center">
   <div class="text--white fw-700 h1">IBC Relayers</div>
-  <div class="text--gray-4 d-flex align-items-center mt-4 mt-lg-0 body-01 body-mob" *ngIf="timeUpdate">
+  <div class="text--gray-4 d-flex align-items-center mt-2 mt-lg-0 body" *ngIf="timeUpdate">
     Updated at
     <span class="ml-1">{{ timeUpdate | customDate : 'yyyy-MM-dd' }}</span>
     <div class="divider divider-vertical divider-lighter mx-2"></div>
@@ -9,8 +9,8 @@
 </div>
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <section class="box-ibc-relayer">
-  <div class="row box-title-relay py-4">
-    <div class="col-lg-3 col-6 mb-lg-0 mb-4">
+  <div class="row box-title-relay py-lg-6 py-4">
+    <div class="col-lg-3 col-6 mb-lg-0 mb-lg-0 mb-2">
       <div class="item">
         Connected Chains
         <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.connectedChain | number }}</div>
@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <div class="card mt-lg-2">
+  <div class="card">
     <div class="card-body">
       <!-- Title -->
       <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-center mb-4" *ngIf="!errTxt">
@@ -81,7 +81,15 @@
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
                     <div *ngSwitchCase="'no'">#{{ pageData.pageIndex * pageData.pageSize + i + 1 }}</div>
-                    <div *ngSwitchCase="'chain'">{{ data[template.matColumnDef] }}</div>
+                    <div *ngSwitchCase="'chain'" class="d-flex align-items-center">
+                      <img
+                        [src]="data.image ? data.image : 'assets/images/logo/auraTitleLogo.png'"
+                        alt=""
+                        class="mr-2"
+                        width="24px"
+                        height="24px" />
+                      {{ data[template.matColumnDef] }}
+                    </div>
                     <div
                       *ngSwitchCase="'status'"
                       class="txt-status d-flex align-items-center"
@@ -108,9 +116,17 @@
         </table>
 
         <div class="d-lg-none mobile">
-          <div *ngFor="let data of dataSourceMobile" class="card-name-tag" (click)="openPopup(data)">
+          <div *ngFor="let data of dataSource.data" class="card-chain" (click)="openPopup(data)">
             <div class="d-flex align-items-center justify-content-between">
-              <div class="mr-6 d-flex align-items-center justify-content-center text--white">{{ data.chain }}</div>
+              <div class="mr-6 d-flex align-items-center justify-content-center text--white">
+                <img
+                  [src]="data.image ? data.image : 'assets/images/logo/auraTitleLogo.png'"
+                  alt=""
+                  class="mr-2"
+                  width="24px"
+                  height="24px" />
+                {{ data.chain }}
+              </div>
               <div class="txt-status d-flex align-items-center" [ngClass]="data.open_channel === 0 ? 'inactive' : ''">
                 <span class="icon-connect"></span>
                 {{ data.open_channel === 0 ? 'Inactive' : 'Active' }}

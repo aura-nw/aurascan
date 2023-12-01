@@ -206,6 +206,9 @@ export class AppComponent implements OnInit {
       onlyIbc: true,
     };
     this.tokenService.getTokenMarketData(payload).subscribe((res) => {
+      res?.forEach((element) => {
+        element['display'] = element['display'] || element['symbol'];
+      });
       localStorage.setItem('listTokenIBC', JSON.stringify(res));
     });
   }

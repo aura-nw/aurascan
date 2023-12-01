@@ -1,35 +1,36 @@
 <app-pagetitle [title]="chainInfo.chainName + ' - ' + channel_id" class="flex-grow-1"></app-pagetitle>
 <section class="box-channel-detail">
-  <div class="d-flex justify-content-center mt-lg-13 mt-6">
+  <div class="d-flex justify-content-center mt-lg-13 mt-6 mb-9">
     <div class="p-0 box-chain">
-      <div class="box-connect d-flex mb-6 justify-content-between align-items-center">
-        <div class="box-connect-chain">
-          <div class="d-lg-flex justify-content-center">
+      <div class="box-connect d-lg-flex justify-content-between align-items-center">
+        <div class="box-connect-chain d-flex justify-content-lg-center align-items-center">
+          <div class="d-flex justify-content-lg-center align-items-center">
             <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
-            <div class="ml-lg-5 body text--gray-11 caption-mob fw-normal">
+            <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
               <span class="h2 body-02-mob fw-semibold text--white mb-1">{{ chainInfo.chainName }}</span
               ><br />
               {{ chainInfo.chainId }}
             </div>
           </div>
         </div>
-        <div class="box-connected flex-column d-flex justify-content-center align-items-center h2 body-mob">
+        <div class="box-connected justify-content-center align-items-center h2 d-none d-lg-flex">
           <div class="fw-semibold">Openned</div>
         </div>
-        <div class="box-connect-chain">
-          <div class="d-lg-flex justify-content-center">
+        <div class="box-connect-chain mt-6 mt-lg-0 d-flex justify-content-lg-center align-items-center">
+          <div class="d-flex justify-content-lg-center align-items-center">
             <img
-              [src]="counterInfo?.image ? counterInfo?.image : 'assets/images/logo/auraTitleLogo.png'"
+              [src]="counterInfo?.chainImage ? counterInfo?.chainImage : 'assets/images/logo/auraTitleLogo.png'"
               alt=""
               class="img-chain" />
-            <div class="ml-lg-5 body text--gray-11 caption-mob fw-normal">
-              <span class="h2 body-02-mob fw-semibold text--white mb-1">{{ counterInfo?.name }}</span
+            <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
+              <span class="h2 body-02-mob fw-semibold text--white mb-1">{{ counterInfo?.chainName }}</span
               ><br />
-              {{ counterInfo?.chain_id }}
+              {{ counterInfo?.chainId }}
             </div>
           </div>
         </div>
-        <div class="divider divider-horizontal"></div>
+        <div class="divider divider-horizontal d-none d-lg-block"></div>
+        <div class="divider divider-vertical d-lg-none"></div>
       </div>
     </div>
   </div>
@@ -37,14 +38,14 @@
   <!-- Overview -->
   <div class="box-overview mb-lg-9 mb-6">
     <div class="h2 text--white mb-lg-4 mb-2">Overview</div>
-    <div class="row box-title">
-      <div class="col-lg-3 col-6 mb-lg-0 mb-4">
+    <div class="row box-title mb-4">
+      <div class="col-lg-3 col-12 mb-lg-0">
         <div class="item">
           Counter Party
-          <div class="body-01 body-mob text--white fw-semibold mt-1">{{ counterInfo?.chain_id }}</div>
+          <div class="body-01 body-mob text--white fw-semibold mt-1">{{ counterInfo?.chainId }}</div>
         </div>
       </div>
-      <div class="col-lg-3 col-6">
+      <div class="col-lg-3 col-12">
         <div class="item">
           Operating Since
           <div class="body-01 body-mob text--white fw-semibold mt-1">
@@ -54,13 +55,13 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-6">
+      <div class="col-lg-3 col-12">
         <div class="item">
           Total Transaction
           <div class="body-01 body-mob text--white fw-semibold mt-1">{{ channelDetail.totalTx | number }}</div>
         </div>
       </div>
-      <div class="col-lg-3 col-6">
+      <div class="col-lg-3 col-12">
         <div class="item">
           Client ID
           <div class="body-01 body-mob text--white fw-semibold mt-1">{{ channelDetail.clientId }}</div>

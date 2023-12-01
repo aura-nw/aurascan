@@ -12,7 +12,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { Globals } from 'src/app/global/global';
+import { Globals, convertTxIBC } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { sha256, sha224 } from 'js-sha256';
 
@@ -69,6 +69,16 @@ export class ChannelDetailComponent implements OnInit {
       this.channel_id = params.channel_id;
       this.counterparty_channel_id = params.counterparty_channel_id;
     });
+
+    //get data list info chain from local
+    const listInfoChain = localStorage.getItem('listInfoChain');
+    if (listInfoChain) {
+      try {
+        let data = JSON.parse(listInfoChain);
+        this.ibcService.listInfoChain =
+          this.ibcService.listInfoChain?.length > 0 ? this.ibcService.listInfoChain : data;
+      } catch (e) {}
+    }
     this.getDataInit();
   }
 
@@ -88,9 +98,8 @@ export class ChannelDetailComponent implements OnInit {
           totalTx: _.get(data, 'total_tx.aggregate.count'),
           clientId: _.get(data, 'ibc_connection.ibc_client.client_id'),
         };
-        this.counterInfo = this.commonService.listTokenIBC?.find(
-          (k) => k.chain_id === res?.ibc_channel[0]?.ibc_connection?.ibc_client?.counterparty_chain_id,
-        );
+        const chainId = res?.ibc_channel[0]?.ibc_connection?.ibc_client?.counterparty_chain_id;
+        this.counterInfo = this.ibcService.listInfoChain?.find((k) => k.chainId === chainId);
       },
       error: (e) => {
         this.isLoading = false;
@@ -108,7 +117,19 @@ export class ChannelDetailComponent implements OnInit {
     this.ibcService.getListTxChannel(payload).subscribe({
       next: (res) => {
         if (res?.ibc_ics20?.length > 0) {
-          const txs = this.convertTxIBC(res, this.coinInfo);
+          const txs = convertTxIBC(res, this.coinInfo);
+          txs?.forEach((element) => {
+            if (element['denom']?.includes('/')) {
+              element['denom'] = 'ibc/' + sha256(element['denom'])?.toUpperCase();
+              element['dataDenom'] = this.commonService.mappingNameIBC(element['denom']);
+            } else {
+              element['dataDenom'] = {
+                decimals: 6,
+                symbol:
+                  element['denom'] === this.coinInfo.coinMinimalDenom ? this.coinInfo.coinDenom : element['denom'],
+              };
+            }
+          });
           this.dataSource = new MatTableDataSource<any>(txs);
           this.dataTx = txs;
         }
@@ -126,51 +147,6 @@ export class ChannelDetailComponent implements OnInit {
         this.loadingTx = false;
       },
     });
-  }
-
-  convertTxIBC(data, coinInfo) {
-    const txs = _.get(data, 'ibc_ics20').map((data) => {
-      let element = data.ibc_message?.transaction;
-      const code = _.get(element, 'code');
-      const tx_hash = _.get(element, 'hash');
-      let typeOrigin = _.get(element, 'transaction_messages[0].type');
-      const lstTypeTemp = _.get(element, 'transaction_messages');
-
-      let type = _.find(TYPE_TRANSACTION, { label: typeOrigin })?.value || typeOrigin?.split('.').pop();
-      if (type.startsWith('Msg')) {
-        type = type?.replace('Msg', '');
-      }
-
-      const status = code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-      const fee = balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(
-        coinInfo.coinDecimals,
-      );
-      const height = _.get(element, 'height');
-      const timestamp = _.get(element, 'timestamp');
-      let amountTemp = _.get(data, 'amount');
-      let amount = balanceOf(amountTemp || 0, 6);
-      let denom = _.get(data, 'denom');
-      let dataDenom;
-      if (denom) {
-        denom = 'ibc/' + sha256(denom)?.toUpperCase();
-        dataDenom = this.commonService.mappingNameIBC(denom);
-      }
-
-      return {
-        code,
-        tx_hash,
-        type,
-        status,
-        fee,
-        height,
-        timestamp,
-        amount,
-        amountTemp,
-        dataDenom,
-        lstTypeTemp
-      };
-    });
-    return txs;
   }
 
   paginatorEmit(event): void {

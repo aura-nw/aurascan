@@ -61,6 +61,18 @@ export class IBCComponent implements OnInit {
   ngOnInit(): void {
     this.getReplayerInfo();
     this.getListIBC();
+    const listInfoChain = localStorage.getItem('listInfoChain');
+    if (listInfoChain) {
+      try {
+        let data = JSON.parse(listInfoChain);
+        this.ibcService.listInfoChain = data;
+        this.getListInfoChain();
+      } catch (e) {
+        this.getListInfoChain();
+      }
+    } else {
+      this.getListInfoChain();
+    }
 
     this.searchSubject
       .asObservable()
@@ -89,13 +101,13 @@ export class IBCComponent implements OnInit {
     this.ibcService.getRelayerInfo().subscribe({
       next: (res) => {
         this.relayerInfo = {
-          connectedChain: _.get(res, 'total_conected_chain.aggregate.count') || 0,
+          connectedChain: _.get(res, 'total_connected_chain.aggregate.count') || 0,
           totalOpen:
-            (_.get(res, 'total_opening_channels.aggregate.count') || 0) +
+            (_.get(res, 'total_opening_channels.aggregate.sum.open_channel') || 0) +
               '/' +
-              _.get(res, 'total_channels.aggregate.count') || 0,
-          totalSend: _.get(res, 'total_send.aggregate.count') || 0,
-          totalReceive: _.get(res, 'total_receive.aggregate.count') || 0,
+              _.get(res, 'total_channels.aggregate.sum.total_channel') || 0,
+          totalSend: _.get(res, 'total_send.aggregate.sum.send_asset_transfer') || 0,
+          totalReceive: _.get(res, 'total_receive.aggregate.receive_asset_transfer') || 0,
         };
       },
     });
@@ -112,6 +124,9 @@ export class IBCComponent implements OnInit {
     this.ibcService.getListIbcRelayer(payload).subscribe({
       next: (res) => {
         this.timeUpdate = _.get(res, 'm_view_ibc_relayer_statistic[0].created_at');
+        res.m_view_ibc_relayer_statistic.forEach(element => {
+          element['image'] = this.ibcService.listInfoChain?.find((k) => k.chainId === element?.chain)?.chainImage;
+        });
         this.dataSource = new MatTableDataSource<any>(res.m_view_ibc_relayer_statistic);
         this.pageData.length = res.m_view_ibc_relayer_statistic?.length;
 
@@ -178,5 +193,14 @@ export class IBCComponent implements OnInit {
     }
 
     this.dialog.open(PopupIBCDetailComponent, dialogConfig);
+  }
+
+  getListInfoChain() {
+    this.ibcService.getListInfoChain().subscribe({
+      next: (res) => {
+        this.ibcService.listInfoChain = res.data;
+        localStorage.setItem('listInfoChain', JSON.stringify(res.data));
+      },
+    });
   }
 }

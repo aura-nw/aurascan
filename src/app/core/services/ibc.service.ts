@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class IBCService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
+  listInfoChain = [];
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -17,37 +18,37 @@ export class IBCService extends CommonService {
     const operationsDoc = `
     query IbcRelayersStat {
       ${this.envDB} {
-        total_conected_chain: ibc_client_aggregate(
-          distinct_on: counterparty_chain_id
-        ) {
+        total_connected_chain: m_view_ibc_relayer_statistic_aggregate {
           aggregate {
-            count(columns: counterparty_chain_id)
+            count
           }
         }
-        total_opening_channels: ibc_channel_aggregate(
-          where: { state: { _eq: "OPEN" } }
-        ) {
+        total_opening_channels: m_view_ibc_relayer_statistic_aggregate {
           aggregate {
-            count(columns: id)
+            sum {
+              open_channel
+            }
           }
         }
-        total_channels: ibc_channel_aggregate {
+        total_channels: m_view_ibc_relayer_statistic_aggregate {
           aggregate {
-            count(columns: id)
+            sum {
+              total_channel
+            }
           }
         }
-        total_send: ibc_ics20_aggregate(
-          where: { type: { _eq: "send_packet" }, status: { _eq: "ack_success" } }
-        ) {
+        total_send: m_view_ibc_relayer_statistic_aggregate {
           aggregate {
-            count(columns: id)
+            sum {
+              send_asset_transfer
+            }
           }
         }
-        total_receive: ibc_ics20_aggregate(
-          where: { type: { _eq: "recv_packet" }, status: { _eq: "ack_success" } }
-        ) {
+        total_receive: m_view_ibc_relayer_statistic_aggregate {
           aggregate {
-            count(columns: id)
+            sum {
+              receive_asset_transfer
+            }
           }
         }
       }
@@ -60,6 +61,10 @@ export class IBCService extends CommonService {
         operationName: 'IbcRelayersStat',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListInfoChain() {
+    return this.http.get<any>(`${this.apiUrl}/chain-info`);
   }
 
   getListIbcRelayer(payload) {
@@ -152,7 +157,7 @@ export class IBCService extends CommonService {
         variables: {
           chain_id: payload.chainId,
           limit: payload.limit,
-          offset: payload.offset
+          offset: payload.offset,
         },
         operationName: 'RelayerDetail',
       })
@@ -270,7 +275,7 @@ export class IBCService extends CommonService {
         variables: {
           limit: payload.limit,
           channel_id: payload.channel_id,
-          offset: payload.offset
+          offset: payload.offset,
         },
         operationName: 'TxOfChannel',
       })
@@ -309,12 +314,36 @@ export class IBCService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          channel_id: 'channel-11',
-          counterparty_channel_id: 'channel-45',
-          denom: 'utaura',
+          channel_id: payload.channel_id,
+          counterparty_channel_id: payload.counterparty_channel_id,
+          denom: null,
           type: payload.type || 'send_packet',
         },
         operationName: 'IbcChannelDetailStat',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getIBCTransfer(txHash) {
+    const operationsDoc = `
+    query IbcAssetTransfer ($txHash: String = null) {
+      ${this.envDB} {
+        coin_transfer(where: {transaction: {hash: {_eq: $txHash}}}) {
+          from
+          to
+          amount
+          denom
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          txHash: txHash,
+        },
+        operationName: 'IbcAssetTransfer',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

@@ -5,7 +5,7 @@
       color: var(--aura-gray-2);
       .item {
         background: linear-gradient(110.97deg, #262838 0%, #2e2e38 97.13%);
-        padding: 12px 16px;
+        padding: 12px 8px;
         font-size: 1.4rem;
         @media (min-width: 992px) {
           padding: 16px 24px;
@@ -54,7 +54,7 @@
     }
   }
 
-  .card-name-tag {
+  .card-chain {
     border-radius: 8px;
     padding: 12px;
     background-color: var(--aura-gray-9);

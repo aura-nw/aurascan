@@ -777,15 +777,13 @@ export class TransactionMessagesComponent implements OnInit {
     } catch (error) {}
   }
 
-  getDataIBC(type = '', index = 0): void {
+  getDataIBC(type = ''): void {
     try {
       const jsonData = JSON.parse(this.transactionDetail?.raw_log);
       if (type && jsonData.length > 0) {
         jsonData.forEach((k) => {
-          this.ibcOrigin = k.events.find((f) => f.type === type)?.attributes;
-          if (k.events.type === type) {
-            this.ibcData = k.events.type;
-          }
+          this.ibcOrigin = k.events?.find((f) => f.type === type)?.attributes;
+          this.ibcData = k.events?.find((k) => k.type === type);
         });
         if (this.ibcOrigin) {
           this.ibcData = {
@@ -919,6 +917,9 @@ export class TransactionMessagesComponent implements OnInit {
         if (denomTemp) {
           const dataDenom = this.commonService.mappingNameIBC(denomTemp);
           this.denomIBC = dataDenom['symbol'] || denomTemp;
+          if (this.denomIBC === this.coinMinimalDenom) {
+            this.denomIBC = this.denom;
+          }
         }
       }
     });

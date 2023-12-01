@@ -1,7 +1,9 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { sha256 } from 'js-sha256';
+import * as _ from 'lodash';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -61,8 +63,11 @@ export class TransferAssetsComponent {
   errTxtReceive: string;
   searchSubject = new Subject();
   destroy$ = new Subject<void>();
+  channel_id = '';
+  counterparty_channel_id = '';
 
   chainInfo = this.environmentService.chainInfo;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
   denom = this.chainInfo.currencies[0].coinMinimalDenom;
   assetName = this.environmentService.chainInfo.currencies[0].coinDenom;
 
@@ -71,9 +76,14 @@ export class TransferAssetsComponent {
     private environmentService: EnvironmentService,
     private ibcService: IBCService,
     private commonService: CommonService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.channel_id = params.channel_id;
+      this.counterparty_channel_id = params.counterparty_channel_id;
+    });
     this.getTransferSend();
     this.getTransferReceive();
 
@@ -88,15 +98,13 @@ export class TransferAssetsComponent {
   getTransferSend() {
     const payload = {
       limit: this.pageIBCSend.pageSize,
+      channel_id: this.channel_id,
+      counterparty_channel_id: this.counterparty_channel_id,
     };
     this.ibcService.getTransferAsset(payload).subscribe({
       next: (res) => {
         if (res.view_ibc_channel_detail_statistic?.length > 0) {
-          const txs = res.view_ibc_channel_detail_statistic;
-          txs.forEach((element) => {
-            element['dataDenom'] = this.commonService.mappingNameIBC(element.denom);
-          });
-
+          const txs = this.convertTxIBC(res.view_ibc_channel_detail_statistic);
           this.dataIBCSending.data = [...txs];
           this.pageIBCSend.length = txs?.length || 0;
         }
@@ -129,15 +137,14 @@ export class TransferAssetsComponent {
   getTransferReceive() {
     const payload = {
       limit: this.pageIBCReceive.pageSize,
+      channel_id: this.channel_id,
+      counterparty_channel_id: this.counterparty_channel_id,
       type: 'recv_packet',
     };
     this.ibcService.getTransferAsset(payload).subscribe({
       next: (res) => {
         if (res.view_ibc_channel_detail_statistic?.length > 0) {
-          const txs = res.view_ibc_channel_detail_statistic;
-          txs.forEach((element) => {
-            element['dataDenom'] = this.commonService.mappingNameIBC(element.denom);
-          });
+          const txs = this.convertTxIBC(res.view_ibc_channel_detail_statistic);
 
           this.dataIBCReceiving.data = [...txs];
           this.pageIBCReceive.length = txs?.length || 0;
@@ -175,5 +182,27 @@ export class TransferAssetsComponent {
       this.isSearchReceive = false;
       this.searchSubject.next(this.textSearchSend);
     }
+  }
+
+  convertTxIBC(data) {
+    const txs = data?.map((data) => {
+      let amount = _.get(data, 'amount');
+      let denom = _.get(data, 'denom');
+      const total_messages = _.get(data, 'total_messages');
+      let dataDenom;
+      if (denom?.includes('/')) {
+        denom = 'ibc/' + sha256(denom)?.toUpperCase();
+        dataDenom = this.commonService.mappingNameIBC(denom);
+      } else {
+        dataDenom = { decimals: 6, symbol: denom === this.denom ? this.assetName : denom };
+      }
+      return {
+        amount,
+        denom,
+        dataDenom,
+        total_messages,
+      };
+    });
+    return txs;
   }
 }

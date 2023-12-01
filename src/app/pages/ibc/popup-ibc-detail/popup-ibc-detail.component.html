@@ -6,39 +6,48 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="d-flex justify-content-center px-4 px-lg-0 mt-6 mt-lg-0">
-      <div class="col-12 col-lg-10">
-        <div class="box-connect d-flex mb-lg-3 mb-2 justify-content-between align-items-center">
-          <div class="box-connect-chain">
-            <div class="d-lg-flex justify-content-center">
-              <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
-              <div class="ml-lg-5 body text--gray-11 caption-mob fw-normal">
-                <span class="h2 body-02-mob fw-semibold text--white">{{ chainInfo.chainName }}</span
-                ><br />
-                {{ chainInfo.chainId }}
+    <div class="d-flex justify-content-center px-4 px-lg-0 mt-6 mt-lg-0 mb-4 mb-lg-0">
+      <div class="col-12 col-lg-11">
+        <div class="box-connect d-lg-flex mb-lg-3 justify-content-between align-items-center">
+          <div class="box-connect-chain d-flex justify-content-lg-center align-items-center">
+            <div class="d-flex justify-content-lg-center align-items-center">
+              <img src="assets/images/logo/auraTitleLogo.png" alt="" width="48px" height="48px" />
+              <div class="ml-4 body text--gray-11 caption-mob fw-normal">
+                <div class="aura-tooltip-contain">
+                  <span class="h2 body-02-mob fw-semibold text--white aura-tooltip-object"
+                    >{{ chainInfo.chainName | cutStringPipe : 18 }}
+                  </span>
+                  <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
+                </div>
+                <div class="mt-1">{{ chainInfo.chainId }}</div>
               </div>
             </div>
           </div>
-          <div class="box-connected flex-column d-flex justify-content-center align-items-center caption-mob fw-normal">
+          <div
+            class="box-connected flex-column align-items-center caption-mob body-01 justify-content-center d-none d-lg-flex">
             <div class="fw-semibold">Connected</div>
-            <div>{{ data.open_channel }}/{{ data.total_channel }} channel</div>
+            <div class="caption fw-normal mt-1">{{ data.open_channel }}/{{ data.total_channel }} channel</div>
           </div>
-          <div class="box-connect-chain">
-            <div class="d-lg-flex justify-content-center">
+          <div class="box-connect-chain mt-6 mt-lg-0 d-flex justify-content-lg-center align-items-center">
+            <div class="d-flex justify-content-lg-center align-items-center">
               <img
-                [src]="counterInfo?.image ? counterInfo?.image : 'assets/images/logo/auraTitleLogo.png'"
+                [src]="counterInfo?.chainImage ? counterInfo?.chainImage : 'assets/images/logo/auraTitleLogo.png'"
                 alt=""
-                class="mr-lg-5"
-                width="40px"
-                height="40px" />
-              <div class="body text--gray-11 caption-mob fw-normal">
-                <span class="h2 body-02-mob fw-semibold text--white">{{ counterInfo?.name }}</span
-                ><br />
-                {{ counterInfo?.chain_id }}
+                width="48px"
+                height="48px" />
+              <div class="ml-4 body text--gray-11 caption-mob fw-normal">
+                <div class="aura-tooltip-contain">
+                  <span class="h2 body-02-mob fw-semibold text--white aura-tooltip-object"
+                    >{{ counterInfo?.chainName | cutStringPipe : 18 }}
+                  </span>
+                  <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
+                </div>
+                <div class="mt-1">{{ counterInfo?.chainId }}</div>
               </div>
             </div>
           </div>
-          <div class="divider divider-horizontal"></div>
+          <div class="divider divider-horizontal d-none d-lg-block"></div>
+          <div class="divider divider-vertical d-lg-none"></div>
         </div>
       </div>
     </div>
@@ -75,7 +84,7 @@
                     {{
                       !data[template.matColumnDef]
                         ? '-'
-                        : commonService.getDateValue(data[template.matColumnDef], false)[1]
+                        : commonService.getDateValue(data[template.matColumnDef], false)[0]
                     }}
                   </div>
                   <div *ngSwitchCase="'total'">{{ data.state === 'Close' ? '-' : data?.total?.aggregate.count }}</div>
