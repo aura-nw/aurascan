@@ -272,7 +272,7 @@ export class AccountTransactionTableComponent {
       );
       payload['listTxMsgTypeNotIn'] = listTxMsgTypeNotIn || null;
     } else {
-      payload['listTxMsgType'] = this.transactionFilter.type ? new Array(...this.transactionFilter.type) : null;
+      payload['listTxMsgType'] = this.transactionFilter.type ? [...this.transactionFilter.type] : null;
     }
 
     // set type for filter in
