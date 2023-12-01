@@ -8,6 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { isValidBench32Address } from 'src/app/core/utils/common/validation';
+import {TypeExport} from "src/app/core/constants/export-csv.enum";
 
 declare var grecaptcha: any;
 @Component({
@@ -28,7 +29,7 @@ export class ExportCsvComponent implements OnInit {
   minDateEnd;
   maxDate;
   maxDateEnd;
-  tabsData = TabsAccountLink;
+  tabsData = TypeExport;
   isDownload = false;
   responseCaptcha;
   isValidCaptcha = false;
