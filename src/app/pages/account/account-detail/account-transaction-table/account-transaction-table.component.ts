@@ -294,9 +294,8 @@ export class AccountTransactionTableComponent {
         });
       }
     }
-
     // set type for filter not in
-    if (payload['listTxMsgTypeNotIn']?.length > 0) {
+    else if (payload['listTxMsgTypeNotIn']?.length > 0) {
       let arrMultiVer = payload['listTxMsgTypeNotIn']?.filter((k) => TYPE_MULTI_VER.includes(k));
       if (arrMultiVer?.length > 0) {
         arrMultiVer.forEach((element) => {
