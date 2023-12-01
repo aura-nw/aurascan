@@ -7,8 +7,8 @@ import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { LIST_TRANSACTION_FILTER } from 'src/app/core/constants/transaction.enum';
+import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -266,17 +266,53 @@ export class AccountTransactionTableComponent {
     };
 
     if (this.isSearchOther) {
-      const isSameType = (listIn, listNotIn) => listIn?.label === listNotIn;
-      const onlyInLeft = (left, right, compareFunction) =>
-        left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
-      const lstTemp = onlyInLeft(this.tnxTypeOrigin, this.transactionFilter.type, isSameType);
-      let result = [];
-      lstTemp.forEach((element) => {
-        result.push(element.label);
-      });
-      payload['listTxMsgTypeNotIn'] = result || null;
+      const listTxMsgTypeNotIn = _.pull(
+        [...this.tnxTypeOrigin.map((item) => item.label)],
+        ...this.transactionFilter.type,
+      );
+      payload['listTxMsgTypeNotIn'] = listTxMsgTypeNotIn || null;
     } else {
-      payload['listTxMsgType'] = this.transactionFilter.type || null;
+      payload['listTxMsgType'] = this.transactionFilter.type ? new Array(...this.transactionFilter.type) : null;
+    }
+
+    // set type for filter in
+    if (payload.listTxMsgType?.length > 0) {
+      let arrMultiVer = payload.listTxMsgType?.filter((k) => TYPE_MULTI_VER.includes(k));
+      if (arrMultiVer?.length > 0) {
+        arrMultiVer.forEach((element) => {
+          switch (element) {
+            case TRANSACTION_TYPE_ENUM.Vote:
+              payload.listTxMsgType.push(TRANSACTION_TYPE_ENUM.VoteV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.Deposit:
+              payload.listTxMsgType.push(TRANSACTION_TYPE_ENUM.DepositV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
+              payload.listTxMsgType.push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
+              break;
+          }
+        });
+      }
+    }
+
+    // set type for filter not in
+    if (payload['listTxMsgTypeNotIn']?.length > 0) {
+      let arrMultiVer = payload['listTxMsgTypeNotIn']?.filter((k) => TYPE_MULTI_VER.includes(k));
+      if (arrMultiVer?.length > 0) {
+        arrMultiVer.forEach((element) => {
+          switch (element) {
+            case TRANSACTION_TYPE_ENUM.Vote:
+              payload['listTxMsgTypeNotIn'].push(TRANSACTION_TYPE_ENUM.VoteV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.Deposit:
+              payload['listTxMsgTypeNotIn'].push(TRANSACTION_TYPE_ENUM.DepositV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
+              payload['listTxMsgTypeNotIn'].push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
+              break;
+          }
+        });
+      }
     }
 
     switch (this.modeQuery) {
