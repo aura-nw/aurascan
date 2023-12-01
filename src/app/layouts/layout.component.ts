@@ -21,82 +21,21 @@ import {
  * Layout Component
  */
 export class LayoutComponent implements OnInit {
-  // layout related config
-  layoutType!: string;
-  layoutMode!: string;
-  layoutwidth!: string;
-  layoutposition!: string;
-  topbar!: string;
-  sidebarcolor!: string;
-  sidebarsize!: string;
-
   pageYOffset = 0;
   scrolling = false;
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
 
-  constructor(private eventService: EventService, private scroll: ViewportScroller) {}
+  constructor(private scroll: ViewportScroller) {}
 
   ngOnInit() {
-    this.layoutMode = LAYOUT_MODE;
-    // default settings
-    this.layoutType = LAYOUT_HORIZONTAL;
-    this.layoutwidth = LAYOUT_WIDTH;
-    this.layoutposition = LAYOUT_POSITION;
-    this.sidebarcolor = SIDEBAR_COLOR;
-    this.sidebarsize = SIDEBAR_SIZE;
-    this.topbar = TOPBAR;
-
-    this.LayoutMode(this.layoutMode);
-    this.LayoutWidth(this.layoutwidth);
-    this.LayoutPosition(this.layoutposition);
-    this.Topbar(this.topbar);
-    this.SidebarColor(this.sidebarcolor);
-    this.SidebarSize(this.sidebarsize);
-
-    // listen to event and change the layout, theme, etc
-    this.eventService.subscribe('changeLayout', (layout) => {
-      this.layoutType = layout;
-    });
-
-    this.eventService.subscribe('changeMode', (mode) => {
-      this.layoutMode = mode;
-      this.LayoutMode(this.layoutMode);
-    });
-
-    this.eventService.subscribe('changeWidth', (width) => {
-      this.layoutwidth = width;
-      this.LayoutWidth(this.layoutwidth);
-    });
-
-    this.eventService.subscribe('changePosition', (position) => {
-      this.layoutposition = position;
-      this.LayoutPosition(this.layoutposition);
-    });
-
-    this.eventService.subscribe('changeTopbar', (topbar) => {
-      this.topbar = topbar;
-      this.Topbar(this.topbar);
-    });
-
-    this.eventService.subscribe('changeSidebarColor', (sidebarcolor) => {
-      this.sidebarcolor = sidebarcolor;
-      this.SidebarColor(this.sidebarcolor);
-    });
-
-    this.eventService.subscribe('changeSidebarSize', (sidebarsize) => {
-      this.sidebarsize = sidebarsize;
-      this.SidebarSize(this.sidebarsize);
-    });
-  }
-
-  ngAfterViewInit() {}
-  /**
-   * Check if the horizontal layout is requested
-   */
-  isHorizontalLayoutRequested() {
-    return this.layoutType === LAYOUT_HORIZONTAL;
+    this.LayoutMode(LAYOUT_MODE);
+    this.LayoutWidth(LAYOUT_WIDTH);
+    this.LayoutPosition(LAYOUT_POSITION);
+    this.Topbar(TOPBAR);
+    this.SidebarColor(SIDEBAR_COLOR);
+    this.SidebarSize(SIDEBAR_SIZE);
   }
 
   /**
