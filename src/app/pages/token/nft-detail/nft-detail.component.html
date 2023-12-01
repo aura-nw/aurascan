@@ -31,13 +31,17 @@
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
               <img
                 *ngIf="
-                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG && !nftDetail.media_info?.offchain?.animation?.url) ||
+                  (nftType !== MEDIA_TYPE.IMG &&
+                    !nftDetail.media_info?.offchain?.animation?.url &&
+                    !nftDetail?.media_info?.onchain?.metadata?.image) ||
                   isError
                 "
                 [src]="defaultImgToken" />
               <img
                 (click)="expandMedia()"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
+                *ngIf="
+                  (nftType === MEDIA_TYPE.IMG || nftDetail?.media_info?.onchain?.metadata?.image) && isError === false
+                "
                 (error)="error()"
                 [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
               <video
@@ -45,18 +49,18 @@
                 [src]="animationUrl"
                 controls
                 controlsList="nodownload"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO && nftDetail.media_info?.offchain?.animation?.url"
+                *ngIf="nftType === MEDIA_TYPE.VIDEO && nftDetail.media_info?.offchain?.animation?.url"
                 poster="{{ imageUrl }}"></video>
               <app-model-view
                 (click)="expandMedia()"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE._3D && nftDetail.media_info?.offchain?.animation?.url"
+                *ngIf="nftType === MEDIA_TYPE._3D && nftDetail.media_info?.offchain?.animation?.url"
                 [modelUrl]="animationUrl"
                 [disablePan]="false"
                 [previewImg]="imageUrl">
               </app-model-view>
               <app-audio-player
                 (click)="expandMedia()"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO && nftDetail.media_info?.offchain?.animation?.url"
+                *ngIf="nftType === MEDIA_TYPE.AUDIO && nftDetail.media_info?.offchain?.animation?.url"
                 [src]="animationUrl"
                 [previewImg]="imageUrl">
               </app-audio-player>

@@ -137,7 +137,7 @@ export class CommonService {
 
   findNameTag(keySearch, listNameTag = []) {
     if (!keySearch) {
-      return false;
+      return '';
     }
     const userEmail = localStorage.getItem('userEmail');
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
