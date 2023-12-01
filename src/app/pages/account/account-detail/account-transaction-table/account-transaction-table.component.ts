@@ -246,6 +246,7 @@ export class AccountTransactionTableComponent {
     const address = this.currentAddress;
     let startDate = null;
     let endDate = null;
+    this.errTxt = null;
 
     if (this.transactionFilter.startDate && this.transactionFilter.endDate) {
       startDate = this.getConvertDate(this.transactionFilter.startDate);
