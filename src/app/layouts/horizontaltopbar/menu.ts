@@ -18,6 +18,7 @@ export enum MenuName {
   BlockChain = 'Block chain',
   Resources = 'Resources',
   CodeList = 'Code IDs',
+  IBC = 'IBC Relayers',
   More = 'More',
 }
 
@@ -62,6 +63,13 @@ export const MENU: MenuItem[] = [
         icon: 'stack',
         link: '/blocks',
         name: MenuName.Block,
+      },
+      {
+        id: 5,
+        label: 'MENUITEMS.IBC-RELAYER',
+        icon: 'ph ph-intersect',
+        link: '/ibc-relayer',
+        name: MenuName.IBC,
       },
     ],
   },
@@ -208,6 +216,13 @@ export const MENU_MOB: MenuItem[] = [
         icon: 'stack',
         link: '/blocks',
         name: MenuName.Block,
+      },
+      {
+        id: 5,
+        label: 'MENUITEMS.IBC-RELAYER',
+        icon: 'ph ph-intersect',
+        link: '/ibc-relayer',
+        name: MenuName.IBC,
       },
     ],
   },
