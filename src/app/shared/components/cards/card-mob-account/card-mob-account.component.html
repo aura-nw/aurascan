@@ -28,7 +28,9 @@
         <span [class.line-claim]="modeQuery === tabsData.ExecutedTxs">{{
           title.subLabelContent | stringEllipsis : 30
         }}</span>
-        <div *ngIf="dataCard.arrEvent?.length > 1" class="ml-1 text--gray-4">+{{ dataCard.arrEvent?.length - 1 }}</div>
+        <div *ngIf="dataCard.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+          +{{ dataCard.lstTypeTemp?.length - 1 }}
+        </div>
       </div>
     </div>
     <div>

@@ -27,6 +27,7 @@ export class CommonService {
   addressPrefix = 'aura';
   listNameTag = [];
   listValidator = [];
+  listTokenIBC = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this._environmentService.config.asObservable().subscribe((res) => {
@@ -99,10 +100,13 @@ export class CommonService {
       } catch {}
       result = { display: value, decimals: 6 };
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.coins.find((k) => k.denom === temp) || {};
-      result['display'] = result['display'] || value;
+      result = this.listTokenIBC?.find((k) => k.denom === temp) || {
+        display:  value,
+        decimals:  this.chainInfo.currencies[0].coinDecimals,
+        symbol:  value,
+      };
     } else {
-      result = { display: this.chainInfo.currencies[0].coinDenom, decimals: 6 };
+      result = { display: this.chainInfo.currencies[0].coinDenom, decimals: this.chainInfo.currencies[0].coinDecimals };
     }
     return result;
   }

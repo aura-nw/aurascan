@@ -89,6 +89,9 @@ export class TransactionMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1) {
+      this.checkTypeMessage();
+    }
     // set key ibc update client when old type
     if (this.transactionDetail?.messages[0]?.header) {
       this.keyIbc = 'header';
@@ -142,7 +145,7 @@ export class TransactionMessagesComponent implements OnInit {
       this.getDataIBC();
       setTimeout(() => {
         this.getListIBCSequence(this.ibcData?.packet_sequence);
-      }, 2000);
+      }, 1000);
     }
 
     const typeTrans = this.typeTransaction.find(
@@ -776,15 +779,13 @@ export class TransactionMessagesComponent implements OnInit {
     } catch (error) {}
   }
 
-  getDataIBC(type = '', index = 0): void {
+  getDataIBC(type = ''): void {
     try {
       const jsonData = JSON.parse(this.transactionDetail?.raw_log);
       if (type && jsonData.length > 0) {
         jsonData.forEach((k) => {
-          this.ibcOrigin = k.events.find((f) => f.type === type)?.attributes;
-          if (k.events.type === type) {
-            this.ibcData = k.events.type;
-          }
+          this.ibcOrigin = k.events?.find((f) => f.type === type)?.attributes;
+          this.ibcData = k.events?.find((k) => k.type === type);
         });
         if (this.ibcOrigin) {
           this.ibcData = {
@@ -906,14 +907,22 @@ export class TransactionMessagesComponent implements OnInit {
           const denom = temp === this.coinMinimalDenom ? this.denom : temp;
           return { code, tx_hash, typeTx, denom, time, effected };
         });
+        let denomTemp;
         if (this.ibcData['typeProgress'] === this.eTransType.IBCReceived) {
           txs = txs.filter((k) => k.typeTx === this.eTransType.IBCReceived);
-          this.denomIBC = res.transaction[0]?.event_attributes[0]?.value;
+          denomTemp = res.transaction[0]?.event_attributes[0]?.value;
         } else {
           txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
-          this.denomIBC = this.transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom;
+          denomTemp = this.transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom;
         }
         this.listIBCProgress = txs;
+        if (denomTemp) {
+          const dataDenom = this.commonService.mappingNameIBC(denomTemp);
+          this.denomIBC = dataDenom['symbol'] || denomTemp;
+          if (this.denomIBC === this.coinMinimalDenom) {
+            this.denomIBC = this.denom;
+          }
+        }
       }
     });
   }
@@ -929,8 +938,8 @@ export class TransactionMessagesComponent implements OnInit {
 
   filterIBCType(type) {
     let arr = [];
-    arr = this.listIBCProgress.filter((f) => f.typeTx === type);
-    arr.forEach((k) => {
+    arr = this.listIBCProgress?.filter((f) => f.typeTx === type);
+    arr?.forEach((k) => {
       k.denom = k.denom === this.denom ? this.denom : k?.denom;
     });
     return arr;

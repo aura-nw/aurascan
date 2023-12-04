@@ -6,7 +6,7 @@ import { getInfo } from './core/utils/common/info-common';
 import { Globals } from './global/global';
 // import eruda from 'eruda';
 import * as _ from 'lodash';
-import { forkJoin } from 'rxjs';
+import { forkJoin, map } from 'rxjs';
 import { NameTagService } from './core/services/name-tag.service';
 import { ValidatorService } from './core/services/validator.service';
 import { NotificationsService } from './core/services/notifications.service';
@@ -175,6 +175,20 @@ export class AppComponent implements OnInit {
         this.notificationsService.registerFcmToken();
       }
     }
+
+    // get list name validator form local storage
+    const listTokenIBC = localStorage.getItem('listTokenIBC');
+    if (!listTokenIBC) {
+      this.getListTokenIBC();
+    } else {
+      try {
+        let data = JSON.parse(listTokenIBC);
+        this.commonService.listTokenIBC = data;
+        this.getListTokenIBC();
+      } catch (e) {
+        this.getListTokenIBC();
+      }
+    }
   }
 
   getWatchlist() {
@@ -186,5 +200,24 @@ export class AppComponent implements OnInit {
     this.watchListService.getListWatchList(payload).subscribe((res) => {
       localStorage.setItem('lstWatchList', JSON.stringify(res?.data));
     });
+  }
+
+  getListTokenIBC(): void {
+    const payload = {
+      onlyIbc: true,
+    };
+    this.tokenService
+      .getTokenMarketData(payload)
+      .pipe(
+        map((res) => {
+          return res.map((element) => ({
+            ...element,
+            display: element['display'] || element['symbol'],
+          }));
+        }),
+      )
+      .subscribe((listTokenIBC) => {
+        localStorage.setItem('listTokenIBC', JSON.stringify(listTokenIBC));
+      });
   }
 }

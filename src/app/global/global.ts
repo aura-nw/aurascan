@@ -13,6 +13,7 @@ import {
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
 import { getDataIBC } from '../core/utils/common/info-common';
+import { sha256 } from 'js-sha256';
 Injectable();
 
 export class Globals {
@@ -578,4 +579,37 @@ export function clearLocalData(){
   localStorage.removeItem('listNameTag');
   localStorage.removeItem('lstWatchList');
   localStorage.removeItem('registerFCM');
+}
+
+export function convertTxIBC(data, coinInfo) {
+  const txs = _.get(data, 'ibc_ics20').map((data) => {
+    let element = data.ibc_message?.transaction;
+    const code = _.get(element, 'code');
+    let typeOrigin = _.get(element, 'transaction_messages[0].type');
+    const lstTypeTemp = _.get(element, 'transaction_messages');
+
+    let type = _.find(TYPE_TRANSACTION, { label: typeOrigin })?.value || typeOrigin?.split('.').pop();
+    if (type.startsWith('Msg')) {
+      type = type?.replace('Msg', '');
+    }
+
+    const status = code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+    let amountTemp = _.get(data, 'amount');
+    let amount = balanceOf(amountTemp || 0, 6);
+
+    return {
+      code,
+      tx_hash: _.get(element, 'hash'),
+      type,
+      status,
+      fee: balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals),
+      height: _.get(element, 'height'),
+      timestamp: _.get(element, 'timestamp'),
+      amount,
+      amountTemp,
+      denom: _.get(data, 'denom'),
+      lstTypeTemp,
+    };
+  });
+  return txs;
 }
