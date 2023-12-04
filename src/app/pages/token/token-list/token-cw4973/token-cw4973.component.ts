@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
@@ -39,7 +38,6 @@ export class TokenCw4973Component implements OnInit {
   isLoading = true;
 
   constructor(
-    public translate: TranslateService,
     private soulboundService: SoulboundService,
     private commonService: CommonService,
   ) {}

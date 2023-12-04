@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
 import { DIALOG_STAKE_MODE } from '../../../core/constants/validator.enum';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
@@ -17,7 +16,7 @@ export class PopupDelegateComponent implements OnInit {
   timeStaking = `${this.environmentService.stakingTime}`;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  constructor(public translate: TranslateService, private environmentService: EnvironmentService) {}
+  constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();

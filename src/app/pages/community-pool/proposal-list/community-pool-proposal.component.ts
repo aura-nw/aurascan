@@ -2,7 +2,6 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { PROPOSAL_STATUS, PROPOSAL_TYPE_COMMUNITY_POOL } from 'src/app/core/constants/proposal.constant';
@@ -58,7 +57,6 @@ export class CommunityPoolProposalComponent implements OnInit {
   errTxt = null;
 
   constructor(
-    public translate: TranslateService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private proposalService: ProposalService,

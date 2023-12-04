@@ -17,7 +17,7 @@ export class MappingErrorService extends CommonService {
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
-    public translate: TranslateService,
+    private translate: TranslateService,
     private transactionService: TransactionService,
     private toastr: NgxToastrService,
   ) {

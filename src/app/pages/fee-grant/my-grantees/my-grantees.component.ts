@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig,
+  MatLegacyDialogConfig as MatDialogConfig
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -68,7 +67,6 @@ export class MyGranteesComponent implements OnInit {
 
   constructor(
     public commonService: CommonService,
-    public translate: TranslateService,
     private environmentService: EnvironmentService,
     private dialog: MatDialog,
     private feeGrantService: FeeGrantService,

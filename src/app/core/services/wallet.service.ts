@@ -1,11 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { StdSignDoc, makeSignDoc } from '@cosmjs/amino';
+import { makeSignDoc, StdSignDoc } from '@cosmjs/amino';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { Decimal } from '@cosmjs/math';
 import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
-import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -64,7 +63,6 @@ export class WalletService implements OnDestroy {
     private toastr: NgxToastrService,
     private breakpointObserver: BreakpointObserver,
     private http: HttpClient,
-    public translate: TranslateService,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {

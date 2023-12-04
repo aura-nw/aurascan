@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { MatSort, Sort } from '@angular/material/sort';
-import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
@@ -47,7 +46,6 @@ export class TokenCw721Component implements OnInit {
   errTxt: string;
 
   constructor(
-    public translate: TranslateService,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,

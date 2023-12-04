@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { createChart } from 'lightweight-charts';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ChartOptions } from 'src/app/core/models/chart.model';
@@ -32,7 +31,7 @@ export class ChartStatsComponent implements OnInit {
   isLoading = true;
   errTxt: string;
 
-  constructor(public translate: TranslateService, private statisticService: StatisticService) {}
+  constructor(private statisticService: StatisticService) {}
 
   ngOnInit() {
     this.dailyTransactionChartInit();

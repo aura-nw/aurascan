@@ -103,7 +103,7 @@ export class NFTDetailComponent implements OnInit {
     private toastr: NgxToastrService,
     private contractService: ContractService,
     private dialog: MatDialog,
-    public translate: TranslateService,
+    private translate: TranslateService,
     private layout: BreakpointObserver,
     private tokenService: TokenService,
   ) {

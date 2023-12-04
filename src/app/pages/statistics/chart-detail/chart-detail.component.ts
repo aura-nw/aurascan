@@ -1,7 +1,6 @@
 import { DatePipe, formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { NgxMaskPipe } from 'ngx-mask';
@@ -49,7 +48,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public translate: TranslateService,
     private statisticService: StatisticService,
     private datepipe: DatePipe,
     private maskService: NgxMaskPipe,

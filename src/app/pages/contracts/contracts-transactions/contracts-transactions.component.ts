@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
@@ -54,7 +53,6 @@ export class ContractsTransactionsComponent implements OnInit {
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
-    public translate: TranslateService,
     private router: Router,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,

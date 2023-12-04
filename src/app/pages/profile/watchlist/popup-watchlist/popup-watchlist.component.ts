@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import {
   MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
 } from '@angular/material/legacy-dialog';
-import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -89,7 +88,6 @@ export class PopupWatchlistComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupWatchlistComponent>,
     private fb: FormBuilder,
-    public translate: TranslateService,
     private environmentService: EnvironmentService,
     private commonService: CommonService,
     private toastr: NgxToastrService,

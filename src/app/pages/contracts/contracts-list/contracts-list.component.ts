@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
@@ -52,7 +51,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   MAX_LENGTH_SEARCH_TOKEN = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor(
-    public translate: TranslateService,
     private contractService: ContractService,
     private datePipe: DatePipe,
   ) {}

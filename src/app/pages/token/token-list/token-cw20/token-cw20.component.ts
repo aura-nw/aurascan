@@ -1,19 +1,18 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {TranslateService} from '@ngx-translate/core';
+import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatSort, Sort } from '@angular/material/sort';
 import * as _ from 'lodash';
-import {Observable, of, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, mergeMap, repeat, takeLast, takeUntil} from 'rxjs/operators';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TokenService} from 'src/app/core/services/token.service';
-import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
-import {DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE} from '../../../../core/constants/common.constant';
-import {MAX_LENGTH_SEARCH_TOKEN} from '../../../../core/constants/token.constant';
-import {TableTemplate} from '../../../../core/models/common.model';
-import {Globals} from '../../../../global/global';
+import { Observable, of, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, mergeMap, repeat, takeLast, takeUntil } from 'rxjs/operators';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TokenService } from 'src/app/core/services/token.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE } from '../../../../core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
+import { TableTemplate } from '../../../../core/models/common.model';
+import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw20',
@@ -55,7 +54,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   dataTable = [];
 
   constructor(
-    public translate: TranslateService,
     public global: Globals,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
