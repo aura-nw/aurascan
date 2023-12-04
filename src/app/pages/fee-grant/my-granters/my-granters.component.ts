@@ -8,8 +8,8 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
@@ -54,11 +54,11 @@ export class MyGrantersComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    public commonService: CommonService,
     private environmentService: EnvironmentService,
     private feeGrantService: FeeGrantService,
     private walletService: WalletService,
     private router: Router,
+    private nameTagService: NameTagService
   ) {}
 
   ngOnInit() {
@@ -100,7 +100,7 @@ export class MyGrantersComponent implements OnInit {
 
   getListGrant() {
     let keySearch = (this.textSearch = this.textSearch?.trim());
-    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
     }

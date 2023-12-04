@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -14,7 +13,7 @@ export class ContractInfoCardComponent implements OnInit {
   @Input() contractDetail: any;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
-  constructor(public commonService: CommonService, private global: Globals, private router: Router) {}
+  constructor(private global: Globals, private router: Router) {}
 
   ngOnInit(): void {}
 

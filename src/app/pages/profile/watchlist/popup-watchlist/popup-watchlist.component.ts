@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { isAddress, isContract, isSafari, isValidBench32Address } from 'src/app/core/utils/common/validation';
@@ -94,6 +95,7 @@ export class PopupWatchlistComponent implements OnInit {
     private commonService: CommonService,
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
+    private nameTagService: NameTagService
   ) {}
 
   ngOnInit(): void {
@@ -306,12 +308,12 @@ export class PopupWatchlistComponent implements OnInit {
     this.privateNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const tempPublic = this.commonService.setNameTag(this.getAddress.value, null, false);
-      const tempPrivate = this.commonService.setNameTag(this.getAddress.value);
+      const tempPublic = this.nameTagService.setNameTag(this.getAddress.value, null, false);
+      const tempPrivate = this.nameTagService.setNameTag(this.getAddress.value);
       if (tempPublic !== this.getAddress.value) {
         this.publicNameTag = tempPublic;
       }
-      if (this.commonService.checkPrivate(this.getAddress.value) && tempPrivate !== this.getAddress.value) {
+      if (this.nameTagService.checkPrivate(this.getAddress.value) && tempPrivate !== this.getAddress.value) {
         this.privateNameTag = tempPrivate;
       }
     }

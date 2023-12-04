@@ -2,17 +2,17 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { Router } from '@angular/router';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-soulbound-contract-list',
@@ -49,8 +49,8 @@ export class SoulboundContractListComponent implements OnInit {
     private soulboundService: SoulboundService,
     public dialog: MatDialog,
     private walletService: WalletService,
-    public commonService: CommonService,
     private router: Router,
+    private nameTagService: NameTagService
   ) {}
 
   ngOnInit(): void {
@@ -116,7 +116,7 @@ export class SoulboundContractListComponent implements OnInit {
       keyword: this.textSearch,
     };
 
-    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       payload['keyword'] = addressNameTag;
     }

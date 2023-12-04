@@ -3,11 +3,10 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import * as moment from 'moment';
 import { DATEFORMAT } from 'src/app/core/constants/common.constant';
 import { formatTimeInWords, formatWithSchema } from 'src/app/core/helpers/date';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Pipe({ name: 'dateCustom' })
 export class DateCustomPipe implements PipeTransform {
-  constructor(public commonService: CommonService) {}
+  constructor() {}
   transform(time, isCustom = true) {
     if (time) {
       try {

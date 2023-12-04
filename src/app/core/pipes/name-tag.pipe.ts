@@ -1,34 +1,34 @@
-import { CommonService } from 'src/app/core/services/common.service';
 import { Pipe, PipeTransform } from '@angular/core';
+import { NameTagService } from '../services/name-tag.service';
 
 @Pipe({ name: 'nameTag' })
 export class NameTagPipe implements PipeTransform {
-  constructor(public commonService: CommonService) {}
+  constructor(private nameTagService: NameTagService) {}
   transform(address, listNameTag = [], getPrivate = true) {
-    return this.commonService.setNameTag(address, listNameTag, getPrivate);
+    return this.nameTagService.setNameTag(address, listNameTag, getPrivate);
   }
 }
 
 @Pipe({ name: 'checkPublic' })
 export class CheckPublicPipe implements PipeTransform {
-  constructor(public commonService: CommonService) {}
+  constructor(private nameTagService: NameTagService) {}
   transform(address, listNameTag = []) {
-    return this.commonService.checkPublic(address, listNameTag);
+    return this.nameTagService.checkPublic(address, listNameTag);
   }
 }
 
 @Pipe({ name: 'checkPrivate' })
 export class CheckPrivatePipe implements PipeTransform {
-  constructor(public commonService: CommonService) {}
+  constructor(private nameTagService: NameTagService) {}
   transform(address) {
-    return this.commonService.checkPrivate(address);
+    return this.nameTagService.checkPrivate(address);
   }
 }
 
 @Pipe({ name: 'findUrlNameTag' })
 export class FindUrlNameTagPipe implements PipeTransform {
-  constructor(public commonService: CommonService) {}
+  constructor(private nameTagService: NameTagService) {}
   transform(address) {
-    return this.commonService.findUrlNameTag(address);
+    return this.nameTagService.findUrlNameTag(address);
   }
 }

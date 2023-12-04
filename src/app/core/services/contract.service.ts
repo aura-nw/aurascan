@@ -10,6 +10,7 @@ import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { Globals } from 'src/app/global/global';
+import { NameTagService } from './name-tag.service';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -22,7 +23,12 @@ export class ContractService extends CommonService {
     return this.contract$.value;
   }
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService, private global: Globals) {
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+    private global: Globals,
+    private nameTagService: NameTagService,
+  ) {
     super(http, environmentService);
     this.contractObservable = this.contract$.asObservable();
   }
@@ -59,7 +65,7 @@ export class ContractService extends CommonService {
         : 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}';
     }
 
-    const addressNameTag = this.findNameTag(keyword, this.global.listNameTag);
+    const addressNameTag = this.nameTagService.findNameTag(keyword, this.global.listNameTag);
     if (addressNameTag?.length > 0) {
       keyword = addressNameTag;
     }

@@ -85,7 +85,7 @@ export class AppComponent implements OnInit {
 
     // get list name tag if not login email
     if (!this.userEmail) {
-      await this.commonService.getListNameTag(payload).subscribe((res) => {
+      await this.nameTagService.getListNameTag(payload).subscribe((res) => {
         this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
         localStorage.setItem('listNameTag', JSON.stringify(res.data?.nameTags));
       });
@@ -94,7 +94,7 @@ export class AppComponent implements OnInit {
 
     // get list name tag if login email
     forkJoin({
-      publicName: this.commonService.getListNameTag(payload),
+      publicName: this.nameTagService.getListNameTag(payload),
       privateName: this.nameTagService.getListPrivateNameTag(payloadPrivate),
     }).subscribe(({ publicName, privateName }) => {
       let listTemp = publicName.data?.nameTags?.map((element) => {
