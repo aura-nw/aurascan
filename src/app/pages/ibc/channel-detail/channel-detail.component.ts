@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { sha256 } from 'js-sha256';
 import * as _ from 'lodash';
-import { Subject } from 'rxjs';
+import { Subject, map } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -33,7 +33,6 @@ export class ChannelDetailComponent implements OnInit {
   ];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataTx: any[];
   pageDataTx: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 5,
@@ -117,9 +116,10 @@ export class ChannelDetailComponent implements OnInit {
       channel_id: this.channel_id,
       offset: this.pageDataTx.pageIndex * this.pageDataTx.pageSize,
     };
-    this.ibcService.getListTxChannel(payload).subscribe({
-      next: (res) => {
-        if (res?.ibc_ics20?.length > 0) {
+    this.ibcService
+      .getListTxChannel(payload)
+      .pipe(
+        map((res) => {
           const txs = convertTxIBC(res, this.coinInfo);
           txs?.forEach((element) => {
             if (element['denom']?.includes('/')) {
@@ -133,23 +133,26 @@ export class ChannelDetailComponent implements OnInit {
               };
             }
           });
-          this.dataSource = new MatTableDataSource<any>(txs);
-          this.dataTx = txs;
-        }
-        this.pageDataTx.length = _.get(res, 'total_tx.aggregate.count') || 0;
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loadingTx = false;
-      },
-      complete: () => {
-        this.loadingTx = false;
-      },
-    });
+          return { listTx: txs || [], total: res.total_tx.aggregate.count || 0 };
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          this.dataSource = new MatTableDataSource<any>(res.listTx);
+          this.pageDataTx.length = _.get(res, 'total') || 0;
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loadingTx = false;
+        },
+        complete: () => {
+          this.loadingTx = false;
+        },
+      });
   }
 
   paginatorEmit(event): void {

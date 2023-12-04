@@ -137,8 +137,8 @@ export class PopupIBCDetailComponent implements OnInit {
   pageEvent(e): void {
     this.pageData.pageIndex = e.pageIndex;
     this.dataSourceMobile = this.dataSource.data?.slice(
-      this.pageData.pageIndex * this.pageData.pageSize,
-      this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      this.pageData?.pageIndex * this.pageData?.pageSize,
+      this.pageData?.pageIndex * this.pageData?.pageSize + this.pageData?.pageSize,
     );
   }
 

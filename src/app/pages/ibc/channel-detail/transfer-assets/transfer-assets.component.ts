@@ -192,9 +192,7 @@ export class TransferAssetsComponent {
 
   convertTxAssets(data) {
     const txs = data?.map((data) => {
-      let amount = _.get(data, 'amount');
       let denom = _.get(data, 'denom');
-      const total_messages = _.get(data, 'total_messages');
       let dataDenom;
       if (denom?.includes('/')) {
         denom = 'ibc/' + sha256(denom)?.toUpperCase();
@@ -203,10 +201,10 @@ export class TransferAssetsComponent {
         dataDenom = { decimals: this.coinInfo.coinDecimals, symbol: denom === this.denom ? this.assetName : denom };
       }
       return {
-        amount,
+        amount: _.get(data, 'amount'),
         denom,
         dataDenom,
-        total_messages,
+        total_messages: _.get(data, 'total_messages'),
       };
     });
     return txs;
