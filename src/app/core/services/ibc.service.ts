@@ -67,7 +67,7 @@ export class IBCService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/chain-info`);
   }
 
-  getListIbcRelayer(payload) {
+  getListIbcRelayer(keyword) {
     const operationsDoc = `
     query ChainConnected(
       $chain_name: String = null
@@ -94,13 +94,13 @@ export class IBCService extends CommonService {
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        variables: { chain_name: payload.keyword || null },
+        variables: { chain_name: keyword || null },
         operationName: 'ChainConnected',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListRelayerDetail(payload) {
+  getListRelayerDetail(payload: { limit: number; offset: number; chain_id: string }) {
     const operationsDoc = `
     query RelayerDetail(
       $chain_id: String = null
@@ -154,11 +154,7 @@ export class IBCService extends CommonService {
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        variables: {
-          chain_id: payload.chainId,
-          limit: payload.limit,
-          offset: payload.offset,
-        },
+        variables: { ...payload },
         operationName: 'RelayerDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
@@ -280,7 +276,7 @@ export class IBCService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getTransferAsset(payload) {
+  getTransferAsset(payload: { channel_id: string; counterparty_channel_id: string; type: string }) {
     const operationsDoc = `
     query IbcChannelDetailStat(
       $channel_id: String = null
@@ -311,12 +307,7 @@ export class IBCService extends CommonService {
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        variables: {
-          channel_id: payload.channel_id,
-          counterparty_channel_id: payload.counterparty_channel_id,
-          denom: null,
-          type: payload.type || 'send_packet',
-        },
+        variables: { ...payload },
         operationName: 'IbcChannelDetailStat',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));

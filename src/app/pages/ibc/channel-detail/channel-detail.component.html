@@ -8,7 +8,7 @@
             <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
             <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
-                <span class="h2 body-02-mob fw-semibold text--white mb-1">{{
+                <span class="h2 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
                   chainInfo.chainName | cutStringPipe : 16
                 }}</span>
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
@@ -28,7 +28,7 @@
               class="img-chain" />
             <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
-                <span class="h2 body-02-mob fw-semibold text--white mb-1">{{
+                <span class="h2 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
                   counterInfo?.chainName | cutStringPipe : 16
                 }}</span>
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>

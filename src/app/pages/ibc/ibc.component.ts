@@ -115,13 +115,8 @@ export class IBCComponent implements OnInit {
 
   getListIBC() {
     this.textSearch = this.textSearch?.trim();
-    let payload = {
-      limit: 100,
-      offset: 0,
-      keyword: this.textSearch ? `%${this.textSearch}%` : '',
-    };
-
-    this.ibcService.getListIbcRelayer(payload).subscribe({
+    this.textSearch = this.textSearch ? `%${this.textSearch}%` : ''
+    this.ibcService.getListIbcRelayer(this.textSearch).subscribe({
       next: (res) => {
         this.timeUpdate = _.get(res, 'm_view_ibc_relayer_statistic[0].created_at');
         res.m_view_ibc_relayer_statistic.forEach(element => {

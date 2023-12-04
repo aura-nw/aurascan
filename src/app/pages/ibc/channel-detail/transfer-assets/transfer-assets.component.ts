@@ -103,9 +103,9 @@ export class TransferAssetsComponent {
 
   getTransferSend() {
     const payload = {
-      limit: this.pageIBCSend.pageSize,
       channel_id: this.channel_id,
       counterparty_channel_id: this.counterparty_channel_id,
+      type: 'send_packet',
     };
     this.ibcService.getTransferAsset(payload).subscribe({
       next: (res) => {
@@ -142,7 +142,6 @@ export class TransferAssetsComponent {
 
   getTransferReceive() {
     const payload = {
-      limit: this.pageIBCReceive.pageSize,
       channel_id: this.channel_id,
       counterparty_channel_id: this.counterparty_channel_id,
       type: 'recv_packet',

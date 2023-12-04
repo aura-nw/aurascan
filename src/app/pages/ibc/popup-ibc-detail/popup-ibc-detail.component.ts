@@ -72,7 +72,7 @@ export class PopupIBCDetailComponent implements OnInit {
     let payload = {
       limit: 100,
       offset: 0,
-      chainId: this.data?.chain,
+      chain_id: this.data?.chain,
     };
 
     this.ibcService
