@@ -48,50 +48,6 @@ export class UserService extends CommonService {
   }
 
   getListTxByAddress(payload) {
-    payload.listTxMsgTypeFilter = null;
-    payload.listTxMsgTypeFilterNotIn = null;
-    // set type for filter in
-    if (payload.listTxMsgType?.length > 0) {
-      payload.listTxMsgTypeFilter = [...payload.listTxMsgType];
-      let arrMultiVer = payload.listTxMsgTypeFilter?.filter((k) => TYPE_MULTI_VER.includes(k));
-      if (arrMultiVer?.length > 0) {
-        arrMultiVer.forEach((element) => {
-          switch (element) {
-            case TRANSACTION_TYPE_ENUM.Vote:
-              payload.listTxMsgTypeFilter.push(TRANSACTION_TYPE_ENUM.VoteV2);
-              break;
-            case TRANSACTION_TYPE_ENUM.Deposit:
-              payload.listTxMsgTypeFilter.push(TRANSACTION_TYPE_ENUM.DepositV2);
-              break;
-            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
-              payload.listTxMsgTypeFilter.push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
-              break;
-          }
-        });
-      }
-    }
-
-    // set type for filter not in
-    if (payload.listTxMsgTypeNotIn?.length > 0) {
-      payload.listTxMsgTypeFilterNotIn = [...payload.listTxMsgTypeNotIn];
-      let arrMultiVer = payload.listTxMsgTypeFilterNotIn?.filter((k) => TYPE_MULTI_VER.includes(k));
-      if (arrMultiVer?.length > 0) {
-        arrMultiVer.forEach((element) => {
-          switch (element) {
-            case TRANSACTION_TYPE_ENUM.Vote:
-              payload.listTxMsgTypeFilterNotIn.push(TRANSACTION_TYPE_ENUM.VoteV2);
-              break;
-            case TRANSACTION_TYPE_ENUM.Deposit:
-              payload.listTxMsgTypeFilterNotIn.push(TRANSACTION_TYPE_ENUM.DepositV2);
-              break;
-            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
-              payload.listTxMsgTypeFilterNotIn.push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
-              break;
-          }
-        });
-      }
-    }
-
     const operationsDoc = `
     query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc, $address: String = null) {
       ${this.envDB} {
@@ -116,8 +72,8 @@ export class UserService extends CommonService {
           limit: payload.limit || 40,
           address: payload.address,
           heightLT: payload.heightLT,
-          listTxMsgType: payload.listTxMsgTypeFilter,
-          listTxMsgTypeNotIn: payload.listTxMsgTypeFilterNotIn,
+          listTxMsgType: payload.listTxMsgType,
+          listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
           startTime: payload.startTime,
           endTime: payload.endTime,
         },
@@ -133,7 +89,8 @@ export class UserService extends CommonService {
       $to: String = null
       $start_time: timestamptz = null
       $end_time: timestamptz = null
-      $msg_types: [String!] = null
+      $msg_types_in: [String!] = null
+      $msg_types_nin: [String!] = null
       $height_gt: Int = null
       $height_lt: Int = null
       $limit: Int = null) {
@@ -144,7 +101,7 @@ export class UserService extends CommonService {
               _or: [{ from: { _eq: $from } }, { to: { _eq: $to } }]
               block_height: { _lt: $height_lt, _gt: $height_gt }
               transaction: { timestamp: { _lte: $end_time, _gte: $start_time } }
-              message: { type: { _in: $msg_types } }
+              message: { type: { _in: $msg_types_in, _nin: $msg_types_nin } }
             }
           }
           limit: $limit
@@ -179,7 +136,8 @@ export class UserService extends CommonService {
           from: payload.from,
           to: payload.to,
           height_lt: payload.heightLT,
-          msg_types: payload.listTxMsgType,
+          msg_types_in: payload.listTxMsgTypeNotIn?.length > 0 ? null : payload.listTxMsgType,
+          msg_types_nin: payload.listTxMsgTypeNotIn,
           start_time: payload.startTime,
           end_time: payload.endTime,
         },

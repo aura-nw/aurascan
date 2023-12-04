@@ -80,7 +80,7 @@ export class TokenCw4973Component implements OnInit {
     this.soulboundService.getListABT(payload).subscribe({
       next: (res) => {
         this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
-        this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;
+        this.pageData.length = res?.cw721_contract_aggregate?.aggregate?.count;
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
