@@ -100,12 +100,13 @@ export class CommonService {
       } catch {}
       result = { display: value, decimals: 6 };
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.listTokenIBC?.find((k) => k.denom === temp) || {};
-      result['display'] = result['display'] || value;
-      result['decimals'] = result['decimals'] || 6;
-      result['symbol'] = result['symbol'] || value;
+      result = this.listTokenIBC?.find((k) => k.denom === temp) || {
+        display:  value,
+        decimals:  this.chainInfo.currencies[0].coinDecimals,
+        symbol:  value,
+      };
     } else {
-      result = { display: this.chainInfo.currencies[0].coinDenom, decimals: 6 };
+      result = { display: this.chainInfo.currencies[0].coinDenom, decimals: this.chainInfo.currencies[0].coinDecimals };
     }
     return result;
   }

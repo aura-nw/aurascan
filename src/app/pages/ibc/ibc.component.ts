@@ -170,9 +170,9 @@ export class IBCComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    this.dataSourceMobile = this.dataSource.data?.slice(
-      this.pageData.pageIndex * this.pageData.pageSize,
-      this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+    this.dataSourceMobile = this.dataSource?.data?.slice(
+      this.pageData?.pageIndex * this.pageData?.pageSize,
+      this.pageData?.pageIndex * this.pageData?.pageSize + this.pageData?.pageSize,
     );
   }
 

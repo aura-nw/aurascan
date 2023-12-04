@@ -7,9 +7,13 @@
           <div class="d-flex justify-content-lg-center align-items-center">
             <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
             <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
-              <span class="h2 body-02-mob fw-semibold text--white mb-1">{{ chainInfo.chainName }}</span
-              ><br />
-              {{ chainInfo.chainId }}
+              <div class="aura-tooltip-contain">
+                <span class="h2 body-02-mob fw-semibold text--white mb-1">{{
+                  chainInfo.chainName | cutStringPipe : 16
+                }}</span>
+                <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
+              </div>
+              <div>{{ chainInfo.chainId }}</div>
             </div>
           </div>
         </div>
@@ -23,9 +27,13 @@
               alt=""
               class="img-chain" />
             <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
-              <span class="h2 body-02-mob fw-semibold text--white mb-1">{{ counterInfo?.chainName }}</span
-              ><br />
-              {{ counterInfo?.chainId }}
+              <div class="aura-tooltip-contain">
+                <span class="h2 body-02-mob fw-semibold text--white mb-1">{{
+                  counterInfo?.chainName | cutStringPipe : 16
+                }}</span>
+                <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
+              </div>
+              <div>{{ counterInfo?.chainId }}</div>
             </div>
           </div>
         </div>

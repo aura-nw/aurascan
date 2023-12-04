@@ -585,7 +585,6 @@ export function convertTxIBC(data, coinInfo) {
   const txs = _.get(data, 'ibc_ics20').map((data) => {
     let element = data.ibc_message?.transaction;
     const code = _.get(element, 'code');
-    const tx_hash = _.get(element, 'hash');
     let typeOrigin = _.get(element, 'transaction_messages[0].type');
     const lstTypeTemp = _.get(element, 'transaction_messages');
 
@@ -595,24 +594,20 @@ export function convertTxIBC(data, coinInfo) {
     }
 
     const status = code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-    const fee = balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals);
-    const height = _.get(element, 'height');
-    const timestamp = _.get(element, 'timestamp');
     let amountTemp = _.get(data, 'amount');
     let amount = balanceOf(amountTemp || 0, 6);
-    let denom = _.get(data, 'denom');
 
     return {
       code,
-      tx_hash,
+      tx_hash: _.get(element, 'hash'),
       type,
       status,
-      fee,
-      height,
-      timestamp,
+      fee: balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals),
+      height: _.get(element, 'height'),
+      timestamp: _.get(element, 'timestamp'),
       amount,
       amountTemp,
-      denom,
+      denom: _.get(data, 'denom'),
       lstTypeTemp,
     };
   });

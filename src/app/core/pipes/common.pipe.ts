@@ -105,6 +105,7 @@ export class ConvertUauraToAura implements PipeTransform {
 export class convertLogAmount implements PipeTransform {
   constructor(private commonService: CommonService, private mask: NgxMaskPipe) {}
   transform(value: string, getDenomOnly = false): string {
+    if (!value) return '';
     let amount = value?.match(/\d+/g)[0];
     let data = this.commonService.mappingNameIBC(value);
     if (getDenomOnly) {

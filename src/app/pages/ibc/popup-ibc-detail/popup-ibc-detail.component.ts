@@ -1,6 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
@@ -8,25 +6,16 @@ import {
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
-import { MASK_CONFIG } from 'src/app/app.config';
+import { map } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { RelayerType } from 'src/app/core/constants/ibc.enum';
+import { Relayer } from 'src/app/core/constants/ibc.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
-import { PipeCutString } from 'src/app/core/pipes/common.pipe';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
-import { MaterialModule } from 'src/app/material.module';
-import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
-import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-popup-ibc-detail',
@@ -43,7 +32,7 @@ export class PopupIBCDetailComponent implements OnInit {
   errTxt: string;
   isLoading = true;
   dataSourceMobile: any[];
-  relayerType = RelayerType;
+  relayerType = Relayer;
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'channel_id', headerCellDef: 'channel', headerWidth: 20 },
@@ -86,48 +75,54 @@ export class PopupIBCDetailComponent implements OnInit {
       chainId: this.data?.chain,
     };
 
-    this.ibcService.getListRelayerDetail(payload).subscribe({
-      next: (res) => {
-        res.ibc_channel?.forEach((element) => {
-          element['state'] =
-            element['state'] === this.relayerType.OPEN || element['state'] === this.relayerType.STATE_OPEN
-              ? 'Opened'
-              : 'Close';
-          element['operatingSince'] =
-            _.get(element, 'ibc_connection.ibc_client.operating_since_1') ||
-            _.get(element, 'ibc_connection.ibc_client.operating_since_2');
-        });
+    this.ibcService
+      .getListRelayerDetail(payload)
+      .pipe(
+        map((res) => {
+          return res?.ibc_channel.map((element) => ({
+            ...element,
+            state:
+              element['state'] === this.relayerType.OPEN || element['state'] === this.relayerType.STATE_OPEN
+                ? 'Opened'
+                : 'Close',
+            operatingSince:
+              _.get(element, 'ibc_connection.ibc_client.operating_since_1') ||
+              _.get(element, 'ibc_connection.ibc_client.operating_since_2'),
+          }));
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          this.dataSource = new MatTableDataSource<any>(res);
+          this.pageData.length = res?.length;
 
-        this.dataSource = new MatTableDataSource<any>(res?.ibc_channel);
-        this.pageData.length = res?.ibc_channel?.length;
-
-        if (this.dataSource?.data) {
-          let dataMobTemp = this.dataSource.data?.slice(
-            this.pageData.pageIndex * this.pageData.pageSize,
-            this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-          );
-          if (dataMobTemp.length !== 0) {
-            this.dataSourceMobile = dataMobTemp;
-          } else {
-            this.dataSourceMobile = this.dataSource.data?.slice(
-              (this.pageData.pageIndex - 1) * this.pageData.pageSize,
-              (this.pageData.pageIndex - 1) * this.pageData.pageSize + this.pageData.pageSize,
+          if (this.dataSource?.data) {
+            let dataMobTemp = this.dataSource.data?.slice(
+              this.pageData.pageIndex * this.pageData.pageSize,
+              this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
             );
+            if (dataMobTemp.length !== 0) {
+              this.dataSourceMobile = dataMobTemp;
+            } else {
+              this.dataSourceMobile = this.dataSource.data?.slice(
+                (this.pageData.pageIndex - 1) * this.pageData.pageSize,
+                (this.pageData.pageIndex - 1) * this.pageData.pageSize + this.pageData.pageSize,
+              );
+            }
           }
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
-        }
-        this.isLoading = false;
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
-    });
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+          }
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
   closeDialog(status = null) {
@@ -156,24 +151,3 @@ export class PopupIBCDetailComponent implements OnInit {
     this.dialogRef.close();
   }
 }
-
-@NgModule({
-  declarations: [PopupIBCDetailComponent],
-  imports: [
-    SharedModule,
-    CommonPipeModule,
-    CommonModule,
-    FormsModule,
-    TableNoDataModule,
-    PaginatorModule,
-    TranslateModule,
-    MaterialModule,
-    NgbNavModule,
-    NgxMaskDirective,
-    NgxMaskPipe,
-    CommonPipeModule,
-    TooltipCustomizeModule,
-  ],
-  providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
-})
-class PopupIBCDetailModule {}

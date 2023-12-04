@@ -1,20 +1,16 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
+import { sha256 } from 'js-sha256';
 import * as _ from 'lodash';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals, convertTxIBC } from 'src/app/global/global';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { sha256, sha224 } from 'js-sha256';
 
 @Component({
   selector: 'app-channel-detail',
@@ -47,6 +43,7 @@ export class ChannelDetailComponent implements OnInit {
   channel_id = '';
   counterparty_channel_id = '';
   counterInfo: any;
+  destroy$ = new Subject<void>();
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   chainInfo = this.environmentService.chainInfo;
@@ -80,6 +77,12 @@ export class ChannelDetailComponent implements OnInit {
       } catch (e) {}
     }
     this.getDataInit();
+  }
+
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getDataInit() {
@@ -124,7 +127,7 @@ export class ChannelDetailComponent implements OnInit {
               element['dataDenom'] = this.commonService.mappingNameIBC(element['denom']);
             } else {
               element['dataDenom'] = {
-                decimals: 6,
+                decimals: this.coinInfo.coinDecimals,
                 symbol:
                   element['denom'] === this.coinInfo.coinMinimalDenom ? this.coinInfo.coinDenom : element['denom'],
               };

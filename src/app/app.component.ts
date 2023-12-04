@@ -6,7 +6,7 @@ import { getInfo } from './core/utils/common/info-common';
 import { Globals } from './global/global';
 // import eruda from 'eruda';
 import * as _ from 'lodash';
-import { forkJoin } from 'rxjs';
+import { forkJoin, map } from 'rxjs';
 import { NameTagService } from './core/services/name-tag.service';
 import { ValidatorService } from './core/services/validator.service';
 import { NotificationsService } from './core/services/notifications.service';
@@ -184,6 +184,7 @@ export class AppComponent implements OnInit {
       try {
         let data = JSON.parse(listTokenIBC);
         this.commonService.listTokenIBC = data;
+        this.getListTokenIBC();
       } catch (e) {
         this.getListTokenIBC();
       }
@@ -205,11 +206,18 @@ export class AppComponent implements OnInit {
     const payload = {
       onlyIbc: true,
     };
-    this.tokenService.getTokenMarketData(payload).subscribe((res) => {
-      res?.forEach((element) => {
-        element['display'] = element['display'] || element['symbol'];
+    this.tokenService
+      .getTokenMarketData(payload)
+      .pipe(
+        map((res) => {
+          return res.map((element) => ({
+            ...element,
+            display: element['display'] || element['symbol'],
+          }));
+        }),
+      )
+      .subscribe((listTokenIBC) => {
+        localStorage.setItem('listTokenIBC', JSON.stringify(listTokenIBC));
       });
-      localStorage.setItem('listTokenIBC', JSON.stringify(res));
-    });
   }
 }

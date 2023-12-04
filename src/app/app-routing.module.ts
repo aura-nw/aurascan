@@ -91,7 +91,6 @@ const routes: Routes = [
       {
         path: 'ibc-relayer',
         loadChildren: () => import('./pages/ibc/ibc.module').then((m) => m.IBCModule),
-        canMatch: [() => isEnabled('ibc-relayer')],
       },
     ],
   },

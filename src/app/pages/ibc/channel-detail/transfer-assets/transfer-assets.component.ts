@@ -95,6 +95,12 @@ export class TransferAssetsComponent {
       });
   }
 
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   getTransferSend() {
     const payload = {
       limit: this.pageIBCSend.pageSize,
@@ -104,7 +110,7 @@ export class TransferAssetsComponent {
     this.ibcService.getTransferAsset(payload).subscribe({
       next: (res) => {
         if (res.view_ibc_channel_detail_statistic?.length > 0) {
-          const txs = this.convertTxIBC(res.view_ibc_channel_detail_statistic);
+          const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
           this.dataIBCSending.data = [...txs];
           this.pageIBCSend.length = txs?.length || 0;
         }
@@ -144,7 +150,7 @@ export class TransferAssetsComponent {
     this.ibcService.getTransferAsset(payload).subscribe({
       next: (res) => {
         if (res.view_ibc_channel_detail_statistic?.length > 0) {
-          const txs = this.convertTxIBC(res.view_ibc_channel_detail_statistic);
+          const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
 
           this.dataIBCReceiving.data = [...txs];
           this.pageIBCReceive.length = txs?.length || 0;
@@ -184,7 +190,7 @@ export class TransferAssetsComponent {
     }
   }
 
-  convertTxIBC(data) {
+  convertTxAssets(data) {
     const txs = data?.map((data) => {
       let amount = _.get(data, 'amount');
       let denom = _.get(data, 'denom');
@@ -194,7 +200,7 @@ export class TransferAssetsComponent {
         denom = 'ibc/' + sha256(denom)?.toUpperCase();
         dataDenom = this.commonService.mappingNameIBC(denom);
       } else {
-        dataDenom = { decimals: 6, symbol: denom === this.denom ? this.assetName : denom };
+        dataDenom = { decimals: this.coinInfo.coinDecimals, symbol: denom === this.denom ? this.assetName : denom };
       }
       return {
         amount,

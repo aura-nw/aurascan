@@ -164,7 +164,7 @@ export class IBCService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getChannelDetail(channel_id, counterparty_channel_id) {
+  getChannelDetail(channel_id: string, counterparty_channel_id: string) {
     const operationsDoc = `
     query ChannelDetail(
       $counterparty_channel_id: String = null
@@ -226,7 +226,7 @@ export class IBCService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTxChannel(payload) {
+  getListTxChannel(payload: { limit: number; channel_id: string; offset: number }) {
     const operationsDoc = `
     query TxOfChannel(
       $id_gte: Int = null
@@ -273,9 +273,7 @@ export class IBCService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: payload.limit,
-          channel_id: payload.channel_id,
-          offset: payload.offset,
+          ...payload,
         },
         operationName: 'TxOfChannel',
       })
