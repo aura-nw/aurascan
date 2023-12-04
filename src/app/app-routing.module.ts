@@ -71,12 +71,6 @@ const routes: Routes = [
         canMatch: [() => isEnabled(EFeature.FeeGrant)],
       },
       {
-        path: 'accountbound',
-        loadChildren: () =>
-          import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule),
-        canMatch: [() => isEnabled(EFeature.AccountBound)],
-      },
-      {
         path: 'community-pool',
         loadChildren: () => import('./pages/community-pool/community-pool.module').then((m) => m.CommunityPoolModule),
         canMatch: [() => isEnabled(EFeature.CommunityPool)],

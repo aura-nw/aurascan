@@ -162,15 +162,7 @@
     [appFeature]="EFeature.Cw4973"
     class="card"
     *ngIf="totalSBTPick > 0 || (currentAddress === userAddress && totalSBT > 0)">
-    <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
-      <app-soulbound-feature-tokens
-        [extend]="true"
-        (totalSBTPick)="totalSBTPick = $event"
-        [displayManage]="true"
-        [accountAddress]="currentAddress"
-        [reloadAPI]="false"
-        [isAccountDetail]="true"></app-soulbound-feature-tokens>
-    </div>
+    <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0"></div>
   </div>
 
   <!-- NFT -->

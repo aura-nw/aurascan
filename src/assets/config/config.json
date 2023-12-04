@@ -23,6 +23,7 @@
       "COMMUNITY_POOL",
       "PROFILE",
       "TOP_STATISTICS",
+      "EXPORT_CSV",
       "STATISTICS"
     ],
     "chain_info": {

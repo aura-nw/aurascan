@@ -9,7 +9,6 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
-import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app/material.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
@@ -48,7 +47,6 @@ import { MASK_CONFIG } from 'src/app/app.config';
     LayoutModule,
     LoadingImageModule,
     NgbNavModule,
-    SoulboundFeatureTokensModule,
     CommonDirectiveModule,
     NameTagModule,
     TooltipCustomizeModule,
