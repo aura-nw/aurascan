@@ -1,9 +1,9 @@
-import {CommonService} from "src/app/core/services/common.service";
-import { Pipe, PipeTransform } from "@angular/core";
-import {formatTimeInWords, formatWithSchema} from "src/app/core/helpers/date";
-import {DATEFORMAT} from "src/app/core/constants/common.constant";
-import * as moment from "moment";
-import {formatDistanceToNowStrict} from "date-fns";
+import { Pipe, PipeTransform } from '@angular/core';
+import { formatDistanceToNowStrict } from 'date-fns';
+import * as moment from 'moment';
+import { DATEFORMAT } from 'src/app/core/constants/common.constant';
+import { formatTimeInWords, formatWithSchema } from 'src/app/core/helpers/date';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Pipe({ name: 'dateCustom' })
 export class DateCustom implements PipeTransform {
