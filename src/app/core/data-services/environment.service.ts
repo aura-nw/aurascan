@@ -6,12 +6,10 @@ import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 export interface IConfiguration {
   environment: {
-    name: string;
     label: {
       desktop: string;
       mobile: string;
     };
-    logo: string;
     notice: {
       content: string;
       url: string;
@@ -21,6 +19,8 @@ export interface IConfiguration {
     stakingTime: string;
     blockTime: number;
     quotaSetPrivateName: number;
+    quotaSetWatchList: number;
+    quotaNotification: number;
     coins: {
       name: string;
       display: string;
@@ -40,6 +40,10 @@ export interface IConfiguration {
     socket: string;
     ipfsDomain: string;
     googleClientId: string;
+    coingecko: {
+      url: string;
+      ids: string[];
+    };
     google: {
       url: string;
       clientId: string;
@@ -57,7 +61,8 @@ export interface IConfiguration {
 @Injectable()
 export class EnvironmentService {
   configUri = './assets/config/config.json';
-  private config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
+  isMobile = false;
+  config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
 
   get configValue(): IConfiguration {
     return this.config?.value;
@@ -103,6 +108,11 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.horoscope');
   }
 
+  get graphql() {
+    const { graphql, url } = _.get(this.configValue, 'api.horoscope');
+    return url + graphql;
+  }
+
   get socketUrl() {
     return _.get(this.configValue, 'api.socket');
   }
@@ -115,14 +125,14 @@ export class EnvironmentService {
   get siteKeyCaptcha() {
     return _.get(this.configValue, 'api.google.siteKeyCaptcha');
   }
+
+  get coingecko() {
+    return _.get(this.configValue, 'api.coingecko');
+  }
   constructor(private http: HttpClient) {}
 
   loadConfig() {
-    return this.http.get<IConfiguration>(this.configUri);
-  }
-
-  async load(): Promise<void> {
-    return lastValueFrom(this.loadConfig())
+    return lastValueFrom(this.http.get<IConfiguration>(this.configUri))
       .then((config: any) => {
         const configuration: IConfiguration = config as IConfiguration;
 
@@ -136,5 +146,9 @@ export class EnvironmentService {
       .catch((err: any) => {
         console.error(err);
       });
+  }
+
+  async load(): Promise<void> {
+    await this.loadConfig();
   }
 }

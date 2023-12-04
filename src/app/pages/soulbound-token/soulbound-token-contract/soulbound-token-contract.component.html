@@ -21,16 +21,16 @@
       </div>
       <!-- Filter -->
       <div
+        *ngIf="!errTxt"
         class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mt-6 mb-2 mb-lg-4">
         <div class="body text--gray-4 mt-4 mt-lg-0">
           A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
         </div>
         <div class="col-12 col-md-8">
           <div class="row justify-content-lg-end">
-            <div class="box-input col-12 col-md-4 col-lg-3 mb-4 mb-lg-0">
+            <div class="col-12 col-md-4 col-lg-3 mb-4 mb-lg-0">
               <mat-form-field appearance="fill" soulbound>
                 <mat-select
-                  class="list-token"
                   placeholder="Select a type contract"
                   panelClass="contractPanel"
                   (selectionChange)="searchToken()"
@@ -160,5 +160,5 @@
 
 <ng-template #noValues>
   <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-  <app-table-no-data *ngIf="!loading"></app-table-no-data>
+  <app-table-no-data *ngIf="!loading" [textNull]="errTxt"></app-table-no-data>
 </ng-template>

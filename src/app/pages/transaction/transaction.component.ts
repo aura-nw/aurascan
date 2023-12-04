@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { Globals, convertDataTransactionSimple } from '../../../app/global/global';
+import { convertDataTransactionSimple } from '../../../app/global/global';
 
 @Component({
   selector: 'app-transaction',
@@ -28,14 +29,13 @@ export class TransactionComponent implements OnInit {
   pageSize = 20;
   typeTransaction = TYPE_TRANSACTION;
   loading = true;
-  errText = null;
+  errTxt = null;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     private transactionService: TransactionService,
-    public global: Globals,
     public commonService: CommonService,
     private environmentService: EnvironmentService,
   ) {}
@@ -61,8 +61,12 @@ export class TransactionComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
-        this.errText = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.loading = false;

@@ -5,7 +5,7 @@ import { NgbNavModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
@@ -57,7 +57,7 @@ import { MASK_CONFIG } from 'src/app/app.config';
     TableNoDataModule,
     PaginatorModule,
     LoadingImageModule,
-    APaginatorModule,
+    CustomPaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
   ],

@@ -8,7 +8,6 @@ import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { isContract } from 'src/app/core/utils/common/validation';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -17,7 +16,7 @@ import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.const
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { Globals } from '../../../global/global';
-import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
   selector: 'app-account-detail',
@@ -44,6 +43,7 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
+  userEmail = null;
 
   destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
@@ -56,12 +56,13 @@ export class AccountDetailComponent implements OnInit {
   totalSBTPick = 0;
   totalSBT = 0;
   isContractAddress = false;
+  isWatchList = false;
 
   constructor(
     public commonService: CommonService,
     private route: ActivatedRoute,
     private accountService: AccountService,
-    public global: Globals,
+    private global: Globals,
     private walletService: WalletService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
@@ -73,14 +74,16 @@ export class AccountDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userEmail = localStorage.getItem('userEmail');
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
-        this.isContractAddress = isContract(this.currentAddress);
+        this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
+        this.checkWatchList();
       }
     });
   }
@@ -239,6 +242,35 @@ export class AccountDetailComponent implements OnInit {
         localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  checkWatchList() {
+    // get watch list form local storage
+    const lstWatchList = localStorage.getItem('lstWatchList');
+    try {
+      let data = JSON.parse(lstWatchList);
+      if (data.find((k) => k.address === this.currentAddress)) {
+        this.isWatchList = true;
+      }
+    } catch (e) {}
+  }
+
+  handleWatchList() {
+    if (this.isWatchList) {
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+    } else {
+      this.editWatchList();
+    }
+  }
+
+  editWatchList() {
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      localStorage.setItem('setAddressWatchList', JSON.stringify(this.currentAddress));
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);
     }

@@ -1,24 +1,24 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig
+  MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { Subject } from 'rxjs';
+import { Subject, forkJoin } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { isContract } from 'src/app/core/utils/common/validation';
 import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
-import { PopupNameTagComponent } from '../popup-name-tag/popup-name-tag.component';
+import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -118,7 +118,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
           }
         }
         res.data?.forEach((element) => {
-          element['type'] = isContract(element.address) ? 'contract' : 'account';
+          element['type'] = this.commonService.isValidContract(element.address) ? 'contract' : 'account';
         });
         this.dataSource.data = res.data;
         this.pageData.length = res?.meta?.count || 0;
@@ -139,8 +139,12 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;
@@ -163,6 +167,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       if (result) {
         setTimeout(() => {
           this.getListPrivateName();
+          this.storeListNameTag();
         }, 3000);
       }
     });
@@ -196,6 +201,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.pageData.length--;
         this.pageChange.selectPage(0);
+        this.storeListNameTag();
       }, 2000);
     });
   }
@@ -223,6 +229,50 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   }
 
   urlType(address) {
-    return isContract(address) ? '/contracts' : '/account';
+    return this.commonService.isValidContract(address) ? '/contracts' : '/account';
+  }
+
+  async storeListNameTag() {
+    const payloadPrivate = {
+      limit: 100,
+      offset: 0,
+      keyword: null,
+    };
+
+    const listNameTag = localStorage.getItem('listNameTag');
+    this.nameTagService.getListPrivateNameTag(payloadPrivate).subscribe((privateName) => {
+      try {
+        let data = JSON.parse(listNameTag);
+        this.global.listNameTag = this.commonService.listNameTag = data;
+      } catch (e) {}
+      let listTemp = this.global.listNameTag?.map((element) => {
+        const address = _.get(element, 'address');
+        let name_tag = _.get(element, 'name_tag');
+        let isPrivate = false;
+        let name_tag_private = null;
+        let id;
+        const enterpriseUrl = _.get(element, 'enterpriseUrl');
+        let privateData = privateName?.data?.find((k) => k.address === address);
+        if (privateData) {
+          name_tag_private = privateData.nameTag;
+          isPrivate = true;
+          id = privateData.id;
+        }
+        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
+      });
+
+      // get other data of private list
+      const isSameUser = (listTemp, privateName) => listTemp?.address === privateName.address;
+      const onlyInLeft = (left, right, compareFunction) =>
+        left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
+      const lstPrivate = onlyInLeft(privateName?.data, listTemp, isSameUser);
+      lstPrivate.forEach((element) => {
+        element['name_tag_private'] = element.nameTag;
+        element['nameTag'] = null;
+        element['isPrivate'] = true;
+      });
+      const result = [...listTemp, ...lstPrivate];
+      this.global.listNameTag = this.commonService.listNameTag = result;
+    });
   }
 }

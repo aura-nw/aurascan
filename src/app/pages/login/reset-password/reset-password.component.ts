@@ -69,7 +69,7 @@ export class ResetPasswordComponent implements OnInit {
         this.mode = 'resetSuccess';
       },
       error: (error) => {
-        this.errorMessage = error?.details?.message;
+        this.errorMessage = error?.error?.error?.details?.details?.message;
       },
     });
   }

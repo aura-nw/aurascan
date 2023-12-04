@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { APaginatorComponent } from './a-paginator.component';
+import { NgModule } from '@angular/core';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { CustomPaginatorComponent } from './custom-paginator.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
-  declarations: [APaginatorComponent],
+  declarations: [CustomPaginatorComponent],
   imports: [CommonModule, NgbPaginationModule, TranslateModule],
-  exports: [APaginatorComponent],
+  exports: [CustomPaginatorComponent],
 })
-export class APaginatorModule {}
+export class CustomPaginatorModule {}

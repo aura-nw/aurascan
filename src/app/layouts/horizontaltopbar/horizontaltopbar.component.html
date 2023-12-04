@@ -54,7 +54,10 @@
         </div>
       </div>
     </div>
-    <app-authenticate-mail></app-authenticate-mail>
+    <div class="d-flex">
+      <app-notification *ngIf="userEmail"></app-notification>
+      <app-authenticate-mail></app-authenticate-mail>
+    </div>
   </div>
   <!-- App Search mobile-->
   <div class="app-search d-lg-none px-4 mt-4 pb-3" *ngIf="router.url !== '/login'">
@@ -105,9 +108,7 @@
             </li>
             <li class="nav-item dropdown mx-5 mx-lg-4 mx-xl-8" *ngIf="i > 0 && !item.disabled">
               <ng-container>
-                <button
-                  (click)="onMenuClick($event)"
-                  class="button nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0">
+                <button class="button nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0">
                   <div class="nav-link__item d-flex align-items-center mb-0 py-0">
                     <i class="ph-{{ item.icon }}"></i>
                     <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>

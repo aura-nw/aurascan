@@ -91,16 +91,8 @@
                 <div class="d-lg-flex flex-wrap mb-4">
                   <!-- Tabs -->
                   <div class="button-switch-stage button-switch-stage__3">
-                    <button
-                      type="button"
-                      disabled
-                      [class.active]="isPrice"
-                      (click)="isPrice = true; getCoinInfo(chartRange)">
+                    <button type="button" disabled class="text--white">Price chart</button>
                       <span>{{ 'PAGES.DASHBOARDS.priceChart' | translate }}</span>
-                    </button>
-                    <!-- <button type="button" [class.active]="!isPrice" (click)="isPrice = false; getCoinInfo(chartRange)">
-                      <span>Volume</span>
-                    </button> -->
                   </div>
                   <div class="ms-auto mt-4 mt-md-0">
                     <div class="d-flex align-items-center chart__options">
@@ -265,7 +257,7 @@
             voting_Period_arr.length === 0 ? 'py-4 py-lg-6' : ''
           }}">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">{{ 'PAGES.DASHBOARDS.votings' | translate }}</div>
-          <div *ngIf="voting_Period_arr.length > 0">
+          <div *ngIf="voting_Period_arr.length > 0 && !isLoadingVoting">
             <div class="mt-4 d-flex align-items-center">
               <div class="flex-shrink-0 flex-grow-1 d-flex w-25">
                 <div class="dropdown aura-dropdown w-100">
@@ -275,7 +267,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <span class="body text-start line-claim">{{
-                      curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
+                      curr_voting_Period ? curr_voting_Period.title : voting_Period_arr[0].title
                     }}</span>
                   </button>
                   <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light py-2 px-2">
@@ -285,7 +277,7 @@
                           type="button"
                           class="button p-0 body-03 line-claim text--gray-light"
                           (click)="curr_voting_Period = item">
-                          {{ item.content.title }}
+                          {{ item.title }}
                         </button>
                       </li>
                     </ng-container>
@@ -338,10 +330,15 @@
           </div>
           <div
             class="d-flex flex-column align-items-center justify-content-center h-100"
-            *ngIf="voting_Period_arr.length === 0">
+            *ngIf="voting_Period_arr.length === 0 && !errTxtVoting && !isLoadingVoting">
             <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt="" />
             <div class="text--gray-3">{{ 'MESSAGES.NO_PROPOSAL_PERIOD' | translate }}</div>
           </div>
+          <app-table-no-data
+            *ngIf="!isLoadingVoting && errTxtVoting"
+            class=""
+            [textNull]="errTxtVoting"></app-table-no-data>
+          <app-loading-sprint *ngIf="isLoadingVoting"></app-loading-sprint>
         </div>
       </div>
     </div>
@@ -412,7 +409,7 @@
           </div>
           <ng-template #noValues>
             <ng-container *ngIf="!isLoadingBlock">
-              <app-table-no-data class="mt-18" [textNull]="errTextBlock"></app-table-no-data>
+              <app-table-no-data class="mt-18" [textNull]="errTxtBlock"></app-table-no-data>
             </ng-container>
           </ng-template>
         </div>
@@ -500,7 +497,7 @@
           </div>
           <ng-template #noValue>
             <ng-container *ngIf="!isLoadingTx">
-              <app-table-no-data class="mt-18" [textNull]="errTextTxs"></app-table-no-data>
+              <app-table-no-data class="mt-18" [textNull]="errTxtTxs"></app-table-no-data>
             </ng-container>
           </ng-template>
         </div>

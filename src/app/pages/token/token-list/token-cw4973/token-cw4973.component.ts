@@ -4,11 +4,10 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
 
@@ -41,9 +40,8 @@ export class TokenCw4973Component implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    public tokenService: TokenService,
-    public soulboundService: SoulboundService,
-    public commonService: CommonService,
+    private soulboundService: SoulboundService,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -82,13 +80,19 @@ export class TokenCw4973Component implements OnInit {
     this.soulboundService.getListABT(payload).subscribe({
       next: (res) => {
         this.dataSource = new MatTableDataSource<any>(res?.cw721_contract);
-        this.pageData.length = res?.cw721_contract_aggregate.aggregate.count;
+        this.pageData.length = res?.cw721_contract_aggregate?.aggregate?.count;
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
       },
-      error: (e) =>{
+      complete: () => {
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
-      }
+      },
     });
   }
 

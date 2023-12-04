@@ -15,6 +15,8 @@
     "stakingTime": "86400",
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
+    "quotaSetWatchList": 10,
+    "quotaNotification": 100,
     "coins": [
       {
         "name": "Serenity Aura",
@@ -97,6 +99,10 @@
     "backend": "https://explorer-api.dev.aura.network/api/v1",
     "socket": "https://explorer-api.dev.aura.network",
     "ipfsDomain": "https://ipfs.io/",
+    "coingecko": {
+      "url": "https://api.coingecko.com/api/v3",
+      "ids": ["aura-network"]
+    },
     "google": {
       "url": "apps.googleusercontent.com",
       "clientId": "3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08",

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
     private route: Router,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -141,16 +142,18 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
               localStorage.setItem('userEmail', JSON.stringify(res.email));
               localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
+              localStorage.setItem('registerFCM', 'true');
               this.route.navigate(['/profile']);
 
               setTimeout(() => {
                 location.reload();
-              }, 500);
+              }, 1000);
             }
           },
-          error: (error) => {
-            this.addError(error?.details?.message);
-            this.errorCode = error?.details?.code;
+          error: (err) => {
+            const error = err?.error?.error?.details;
+            this.addError(error?.message || err.statusText);
+            this.errorCode = error?.code;
             this.isError = true;
           },
         });
@@ -163,9 +166,10 @@ export class LoginComponent implements OnInit {
             this.mode = this.screenType?.Verify;
             this.isForgotScreen = false;
           },
-          error: (error) => {
-            this.errorCode = error?.details?.code;
-            this.addError(error?.details?.message[0]);
+          error: (err) => {
+            const error = err?.error?.error?.details;
+            this.errorCode = error?.code;
+            this.addError(error?.message[0] || err.statusText);
             this.isError = true;
           },
         });
@@ -189,13 +193,14 @@ export class LoginComponent implements OnInit {
         this.errorMessage = [];
         this.mode = this.screenType.Verify;
       },
-      error: (error) => {
+      error: (err) => {
+        const error = err?.error?.error?.details;
         this.errorMessage = [];
-        this.errorCode = error?.details?.code;
-        if (error?.details?.message.indexOf('registered') >= 0 || error?.details?.message.indexOf('verified') >= 0) {
-          this.addError(error?.details?.message);
+        this.errorCode = error?.code;
+        if (error?.message.indexOf('registered') >= 0 || error?.message.indexOf('verified') >= 0) {
+          this.addError(error?.message);
         } else {
-          this.toastr.error(error.details?.message);
+          this.toastr.error(error?.message);
         }
         this.isError = true;
       },
@@ -206,24 +211,26 @@ export class LoginComponent implements OnInit {
     if (this.isForgotScreen) {
       this.userService.sendResetPasswordEmail(this.loginForm.value?.email).subscribe({
         next: (res) => {},
-        error: (error) => {
-          this.toastr.error(error.details?.message);
+        error: (err) => {
+          this.toastr.error(err?.error?.error?.details?.message);
         },
       });
     } else {
       this.userService.resendVerifyEmail(this.loginForm.value?.email).subscribe({
         next: (res) => {},
-        error: (error) => {
-          this.toastr.error(error.details?.message);
+        error: (err) => {
+          this.toastr.error(err?.error?.error?.details?.message);
         },
       });
     }
   }
 
   addError(error) {
+    this.cdr.markForCheck();
     if (this.errorMessage?.length === 0 && error !== this.errorResendMsg) {
       this.errorMessage?.push(error);
     }
+    this.cdr.detectChanges();
   }
 
   initGoogleLogin() {
@@ -241,14 +248,15 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
             localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
             localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
+            localStorage.setItem('registerFCM', 'true');
             window.location.href = '/profile';
 
             setTimeout(() => {
               location.reload();
-            }, 500);
+            }, 1000);
           },
-          error: (error) => {
-            this.addError(error?.details?.message);
+          error: (err) => {
+            this.addError(err?.error?.error?.details?.message);
           },
         });
       }

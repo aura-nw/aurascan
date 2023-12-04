@@ -92,7 +92,9 @@ export class MyGranteesComponent implements OnInit {
         this.isNoData = false;
         this.getGranteesData();
         this.timerGetFeeGrant = setInterval(() => {
-          this.getListGrant();
+          if (this.pageData.pageIndex === 1) {
+            this.getListGrant();
+          }
         }, 30000);
       } else {
         this.loading = false;

@@ -10,7 +10,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-ma
 import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { UserService } from 'src/app/core/services/user.service';
-import { APaginatorModule } from 'src/app/shared/components/a-paginator/a-paginator.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
@@ -61,7 +61,7 @@ import { TokenTableComponent } from './token-table/token-table.component';
     NgxMaskDirective,
     SoulboundFeatureTokensModule,
     CommonDirectiveModule,
-    APaginatorModule,
+    CustomPaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,

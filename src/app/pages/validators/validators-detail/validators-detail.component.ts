@@ -4,7 +4,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { NUMBER_2_DIGIT, NUM_BLOCK } from 'src/app/core/constants/common.constant';
+import { NUMBER_2_DIGIT, NUM_BLOCK, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -99,7 +99,7 @@ export class ValidatorsDetailComponent implements OnInit {
     private validatorService: ValidatorService,
     private blockService: BlockService,
     public commonService: CommonService,
-    public global: Globals,
+    private global: Globals,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
@@ -237,8 +237,12 @@ export class ValidatorsDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtProposedBlock = e.message;
+        } else {
+          this.errTxtProposedBlock = e.status + ' ' + e.statusText;
+        }
         this.isLoadingBlock = false;
-        this.errTxtProposedBlock = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingBlock = false;
@@ -349,8 +353,12 @@ export class ValidatorsDetailComponent implements OnInit {
         }
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtPowerEvent = e.message;
+        } else {
+          this.errTxtPowerEvent = e.status + ' ' + e.statusText;
+        }
         this.isLoadingPower = false;
-        this.errTxtPowerEvent = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoadingPower = false;

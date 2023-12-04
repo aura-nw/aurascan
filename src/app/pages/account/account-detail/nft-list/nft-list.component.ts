@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { Router } from '@angular/router';
 import * as _ from 'lodash';
-import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
-import { Globals } from 'src/app/global/global';
 @Component({
   selector: 'app-nft-list',
   templateUrl: './nft-list.component.html',
@@ -36,8 +36,9 @@ export class NftListComponent implements OnInit, OnChanges {
       address: '',
     },
   ];
+  errTxt: string;
 
-  constructor(private accountService: AccountService, public global: Globals) {}
+  constructor(private accountService: AccountService, private router: Router) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {
@@ -73,8 +74,8 @@ export class NftListComponent implements OnInit, OnChanges {
       }
     }
 
-    this.accountService.getAssetCW721ByOwner(payload).subscribe(
-      (res) => {
+    this.accountService.getAssetCW721ByOwner(payload).subscribe({
+      next: (res) => {
         if (res?.cw721_token?.length === 0) {
           if (this.textSearch?.length > 0) {
             this.searchNotFound = true;
@@ -94,11 +95,18 @@ export class NftListComponent implements OnInit, OnChanges {
         this.totalValueNft.emit(this.totalValue);
         this.pageData.length = res.cw721_token_aggregate?.aggregate?.count || 0;
       },
-      () => {},
-      () => {
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.loading = false;
       },
-    );
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   getListCollection() {
@@ -106,8 +114,8 @@ export class NftListComponent implements OnInit, OnChanges {
       owner: this.address,
     };
 
-    this.accountService.getListCollectionByOwner(payload).subscribe(
-      (res) => {
+    this.accountService.getListCollectionByOwner(payload).subscribe({
+      next: (res) => {
         if (res?.cw721_contract?.length > 0) {
           this.listCollection = [
             {
@@ -127,9 +135,14 @@ export class NftListComponent implements OnInit, OnChanges {
           this.setNFTFilter(this.listCollection[0]);
         }
       },
-      () => {},
-      () => {},
-    );
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+      },
+    });
   }
 
   setNFTFilter(nft) {
@@ -158,7 +171,7 @@ export class NftListComponent implements OnInit, OnChanges {
   }
 
   handleRouterLink(link): void {
-    window.location.href = link;
+    this.router.navigate([link]);
   }
 
   getTypeFile(nft: any) {

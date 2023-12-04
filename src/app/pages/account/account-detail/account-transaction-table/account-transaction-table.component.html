@@ -538,7 +538,7 @@
                         <div class="justify-content-between tokenId">
                           <a
                             *ngIf="item.tokenId"
-                            [routerLink]="['/tokens/' + linkToken, data.contractAddress, item.tokenId]"
+                            [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
                             class="text--primary cursor-pointer"
                             >#{{ item.tokenId | stringEllipsis : (item.tokenId?.length > 8 ? 5 : 8) }}</a
                           >
@@ -612,9 +612,10 @@
 </ng-container>
 <ng-template #noValues>
   <div class="noData">
-    <app-table-no-data *ngIf="!transactionLoading && !isSearch"></app-table-no-data>
+    <app-table-no-data *ngIf="!transactionLoading && !isSearch && !errTxt"></app-table-no-data>
+    <app-table-no-data *ngIf="errTxt" [textNull]="errTxt"></app-table-no-data>
     <app-table-no-data
-      *ngIf="!transactionLoading && isSearch"
+      *ngIf="!transactionLoading && isSearch && !errTxt"
       textNull="No data with this type of message"></app-table-no-data>
   </div>
 </ng-template>

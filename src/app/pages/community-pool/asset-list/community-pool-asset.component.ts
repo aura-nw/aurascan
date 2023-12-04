@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
@@ -56,7 +56,7 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
 
   constructor(
     public translate: TranslateService,
-    public tokenService: TokenService,
+    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
   ) {}

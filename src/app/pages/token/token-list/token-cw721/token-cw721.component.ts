@@ -1,18 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatSort, Sort } from '@angular/material/sort';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatSort, Sort } from '@angular/material/sort';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
-import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw721',
@@ -49,8 +48,7 @@ export class TokenCw721Component implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    public global: Globals,
-    public tokenService: TokenService,
+    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
   ) {}
@@ -92,8 +90,12 @@ export class TokenCw721Component implements OnInit {
         this.pageData.length = res.total_token?.aggregate?.count;
       },
       error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
         this.isLoading = false;
-        this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
         this.isLoading = false;

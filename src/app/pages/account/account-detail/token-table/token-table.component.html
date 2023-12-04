@@ -7,7 +7,7 @@
         <div class="d-flex flex-lg-row align-items-center justify-content-end gap-2">
           <div
             class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100"
-            *ngIf="!breakpoint.value.matches">
+            *ngIf="!breakpoint.value.matches && !errTxt">
             <div class="body d-lg-flex d-none align-items-center justify-content-center mr-2 text--gray-1">
               {{ 'LABEL.TYPE' | translate }}
             </div>
@@ -38,7 +38,7 @@
               </ul>
             </div>
           </div>
-          <div class="position-relative ml-lg-4 w-lg-auto w-100">
+          <div class="position-relative ml-lg-4 w-lg-auto w-100" *ngIf="!errTxt">
             <form (ngSubmit)="searchToken()" class="aura-form single-input-field token-filter-form w-100" #searchForm>
               <div class="input-group">
                 <input
@@ -50,13 +50,13 @@
                   (keyup.enter)="searchToken()"
                   name="search"
                   autocomplete="off" />
-                <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
+                <button type="submit" class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}">
                   <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                 </button>
                 <button
                   type="reset"
                   class="btn-reset cursor-pointer {{
-                    !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                    !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
                   }}"
                   (click)="resetSearch()">
                   <img
@@ -68,7 +68,7 @@
               </div>
             </form>
           </div>
-          <div class="ml-2" *ngIf="breakpoint.value.matches">
+          <div class="ml-2" *ngIf="breakpoint.value.matches && !errTxt">
             <div class="dropdown aura-dropdown">
               <button
                 class="button button-pill button--sm button-outline button-outline__in-card token-filter-none px-3"
@@ -241,8 +241,8 @@
       </ng-container>
     </div>
     <ng-template #noValues>
-      <div class="card" *ngIf="!assetsLoading">
-        <app-table-no-data [textNull]="'No coins & tokens'"></app-table-no-data>
+      <div class="card mt-14" *ngIf="!assetsLoading">
+        <app-table-no-data [textNull]="errTxt || 'No coins & tokens'"></app-table-no-data>
       </div>
     </ng-template>
     <div *ngIf="assetsLoading" class="mt-14">

@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
 
 @Injectable({ providedIn: 'root' })
 export class CommonService {
@@ -23,11 +24,15 @@ export class CommonService {
   envDB = this.horoscope?.chain;
 
   chainId = this._environmentService.chainId;
+  addressPrefix = 'aura';
   listNameTag = [];
   listValidator = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
-    this.apiUrl = `${this._environmentService.backend}`;
+    this._environmentService.config.asObservable().subscribe((res) => {
+      this.apiUrl = res.api.backend;
+      this.addressPrefix = res.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
+    });
     const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
     this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);
     this.networkQueryOb = this.networkQuerySubject.asObservable();
@@ -128,6 +133,9 @@ export class CommonService {
   }
 
   findNameTag(keySearch, listNameTag = []) {
+    if(!keySearch){
+      return '';
+    }
     const userEmail = localStorage.getItem('userEmail');
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     if (this.listNameTag?.length > 0) {
@@ -175,7 +183,7 @@ export class CommonService {
     this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
     let result = false;
     const nameTag = this.listNameTag?.find((k) => k.address === address && k.name_tag?.length > 0);
-    if (!nameTag || nameTag?.name_tag === address) {
+    if (nameTag && nameTag?.name_tag !== address) {
       result = true;
     }
     return result;
@@ -209,5 +217,17 @@ export class CommonService {
       return value;
     }
     return this._environmentService.ipfsDomain + value.replace('://', '/');
+  }
+
+  isValidContract(address: string) {
+    return isContract(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
+  }
+
+  isValidAddress(address: string) {
+    return isAddress(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
+  }
+
+  isBech32Address(address: string) {
+    return isValidBench32Address(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
   }
 }

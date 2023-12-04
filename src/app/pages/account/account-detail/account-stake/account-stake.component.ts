@@ -4,13 +4,11 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ACCOUNT_WALLET_COLOR } from 'src/app/core/constants/account.constant';
 import { PageEventType, StakeModeAccount } from 'src/app/core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IAccountDetail } from 'src/app/core/models/account.model';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { Globals } from 'src/app/global/global';
 import { chartCustomOptions, ChartOptions } from '../chart-options';
 
 @Component({
@@ -110,14 +108,12 @@ export class AccountStakeComponent implements OnChanges {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    public global: Globals,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
-    this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
 
     this.dataSourceDelegation = new MatTableDataSource();
     this.dataSourceUnBonding = new MatTableDataSource();

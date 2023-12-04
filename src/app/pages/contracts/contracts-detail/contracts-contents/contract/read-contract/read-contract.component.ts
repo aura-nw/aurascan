@@ -17,7 +17,7 @@ export class ReadContractComponent implements OnInit {
   jsValidator = new Validator();
   root: any[];
 
-  constructor(public walletService: WalletService, private environmentService: EnvironmentService) {}
+  constructor(private walletService: WalletService, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     try {

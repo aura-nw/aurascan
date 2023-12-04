@@ -31,32 +31,36 @@
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
               <img
                 *ngIf="
-                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG && !nftDetail.media_info?.offchain?.animation?.url) ||
+                  (nftType !== MEDIA_TYPE.IMG &&
+                    !nftDetail.media_info?.offchain?.animation?.url &&
+                    !nftDetail?.media_info?.onchain?.metadata?.image) ||
                   isError
                 "
                 [src]="defaultImgToken" />
               <img
                 (click)="expandMedia()"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
+                *ngIf="
+                  (nftType === MEDIA_TYPE.IMG || nftDetail?.media_info?.onchain?.metadata?.image) && isError === false
+                "
                 (error)="error()"
-                [src]="animationUrl || imageUrl" />
+                [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
               <video
                 (click)="expandMedia()"
                 [src]="animationUrl"
                 controls
                 controlsList="nodownload"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO && nftDetail.media_info?.offchain?.animation?.url"
+                *ngIf="nftType === MEDIA_TYPE.VIDEO && nftDetail.media_info?.offchain?.animation?.url"
                 poster="{{ imageUrl }}"></video>
               <app-model-view
                 (click)="expandMedia()"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE._3D && nftDetail.media_info?.offchain?.animation?.url"
+                *ngIf="nftType === MEDIA_TYPE._3D && nftDetail.media_info?.offchain?.animation?.url"
                 [modelUrl]="animationUrl"
                 [disablePan]="false"
                 [previewImg]="imageUrl">
               </app-model-view>
               <app-audio-player
                 (click)="expandMedia()"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO && nftDetail.media_info?.offchain?.animation?.url"
+                *ngIf="nftType === MEDIA_TYPE.AUDIO && nftDetail.media_info?.offchain?.animation?.url"
                 [src]="animationUrl"
                 [previewImg]="imageUrl">
               </app-audio-player>
@@ -319,11 +323,17 @@
   </div>
   <div class="card card-body mt-4 mt-lg-6">
     <h2 class="text--white mb-0">{{ 'PAGES.TOKEN.itemActivity' | translate }}</h2>
+
     <div class="divider divider-horizontal d-none d-lg-block mt-2"></div>
     <div class="text--gray-5 body-02 caption-mob fw-normal-mob mt-3 mb-2 mb-lg-3">
       A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
     <div class="overflow-scroll-x aura-table-contain" style="max-height: 600px">
+      <app-loading-sprint *ngIf="loadingTable" class="m-auto mt-10"></app-loading-sprint>
+      <app-table-no-data
+        *ngIf="!loadingTable && errTxtActivity"
+        class="mt-10"
+        [textNull]="errTxtActivity"></app-table-no-data>
       <table
         *ngIf="dataSource?.data?.length > 0; else noValues"
         mat-table
@@ -420,7 +430,8 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
                   <span *ngIf="data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | mask : 'separator.6' || '-' }} {{ denom }}
+                    {{ data[template.matColumnDef] | mask : 'separator.6' || '-' }}
+                    <span [class.text--primary]="data.denom !== denom">{{ data.denom || denom }}</span>
                   </span>
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -442,6 +453,4 @@
   </div>
 </ng-container>
 
-<ng-template #noValues>
-  <app-table-no-data></app-table-no-data>
-</ng-template>
+<app-table-no-data *ngIf="!loading && errTxt" class="mt-20" [textNull]="errTxt"></app-table-no-data>
