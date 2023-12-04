@@ -3,7 +3,7 @@
   <div class="d-flex mb-4 mb-lg-5 align-items-center">
     <h1 class="mb-0 text--white ml-2">
       <div class="d-flex">
-        Token <span class="text--gray-5 break-word ml-1">{{ tokenDetail?.name }}</span>
+        {{ 'COMMON.TOKEN' | translate }} <span class="text--gray-5 break-word ml-1">{{ tokenDetail?.name }}</span>
         <div class="status cursor-pointer d-flex align-items-top aura-tooltip-contain">
           <img
             [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
@@ -12,7 +12,7 @@
             height="18"
             class="ml-1 aura-tooltip-object"
             *ngIf="tokenDetail?.verify_status === 'VERIFIED'" />
-          <app-tooltip-customize [content]="tokenDetail?.verify_text || 'Verified by Aura Network'">
+          <app-tooltip-customize [content]="tokenDetail?.verify_text || 'LABEL.VERIFIED_BY_AURA' | translate">
           </app-tooltip-customize>
         </div>
       </div>

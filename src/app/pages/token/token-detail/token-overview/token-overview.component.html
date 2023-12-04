@@ -3,7 +3,7 @@
     <table class="aura-basic-table w-100">
       <tr class="body">
         <td class="h6 h3-mob mb-0">
-          <span class="text--white">Overview </span>
+          <span class="text--white">{{ 'PAGES.TOKEN.overview' | translate }}</span>
           <span class="text--gray-light">
             <ng-container *ngIf="tokenDetail.type === contractType.CW20"
               >[{{ 'LABEL.CW-20' | translate }}]</ng-container
@@ -23,7 +23,7 @@
           <div class="d-flex">
             <div class="flex-item">
               <div class="text--gray-5 body-02 fixed-col">
-                <span>Price:</span>
+                <span>{{ 'PAGES.TOKEN.priceLabel' | translate }}</span>
               </div>
               <div class="body-02">
                 <div class="text--gray-1">
@@ -43,7 +43,7 @@
               </div>
             </div>
             <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
-              <div class="text--gray-5 body-02">CIRCULATING SUPPLY MARKET CAP</div>
+              <div class="text--gray-5 body-02">{{ 'PAGES.TOKEN.circulatingSupply' | translate }}</div>
               <div class="body-02 text--gray-1">${{ tokenDetail.circulating_market_cap | formatDigit : 2 }}</div>
             </div>
           </div>
@@ -57,7 +57,9 @@
               [class.flex-item]="!tokenDetail.isNFTContract"
               [ngClass]="{ 'd-flex': tokenDetail.isNFTContract, 'align-items-center': tokenDetail.isNFTContract }">
               <span class="text--gray-5 body-02 fixed-col"
-                ><ng-container *ngIf="tokenDetail.type === contractType.CW20">Max </ng-container>Total Supply:</span
+                ><ng-container *ngIf="tokenDetail.type === contractType.CW20"
+                  >{{ 'PAGES.TOKEN.max' | translate }} </ng-container
+                >{{ 'PAGES.TOKEN.totalSupply' | translate }}</span
               >
               <div class="body-02 text--gray-1">
                 <ng-container *ngIf="!tokenDetail.isNFTContract">
@@ -74,7 +76,7 @@
             </div>
 
             <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
-              <div class="text--gray-5 body-02">FULLY DILUTED MARKET CAP</div>
+              <div class="text--gray-5 body-02">{{ 'PAGES.TOKEN.fullyDiluted' | translate }}</div>
               <div class="body-02 text--gray-1">
                 ${{
                   +tokenDetail.max_total_supply === 0
@@ -108,9 +110,10 @@
       <tr>
         <td colspan="2" *ngIf="!params">
           <div class="d-flex">
-            <div class="body-02 text--gray-5 fixed-col">Transfers:</div>
+            <div class="body-02 text--gray-5 fixed-col">{{ 'PAGES.TOKEN.transferLabel' | translate }}</div>
             <div class="body-02 text--gray-1">
-              <span *ngIf="tokenDetail.hasMoreTx">More than </span>{{ tokenDetail.totalTransfer || 0 }}
+              <span *ngIf="tokenDetail.hasMoreTx">{{ 'COMMON.MORE_THAN' | translate }} </span
+              >{{ tokenDetail.totalTransfer || 0 }}
             </div>
           </div>
         </td>

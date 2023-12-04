@@ -4,7 +4,8 @@
 
 <ng-container *ngIf="!loading">
   <ng-container *ngIf="blockDetail; else noValues">
-    <app-pagetitle title="Details for Block #{{ blockHeight || blockDetail?.height }}"></app-pagetitle>
+    <app-pagetitle
+      title="{{ 'PAGES.BLOCKS.blockDetailTitle' | translate }}{{ blockHeight || blockDetail?.height }}"></app-pagetitle>
     <!-- Tabs -->
     <ul
       ngbNav
@@ -67,15 +68,15 @@
         <ng-container *ngIf="!isRawData">
           <div *ngIf="!loading" [ngClass]="{ 'card-info': breakpoint.value.matches }">
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
+              <div class="col-auto col-lg-3 text--gray-4">{{ 'PAGES.BLOCKS.chainId' | translate }}</div>
               <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ blockDetail?.chainid }}</div>
             </div>
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Height</div>
+              <div class="col-auto col-lg-3 text--gray-4">{{ 'COMMON.HEIGHT' | translate }}</div>
               <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ blockDetail?.height }}</div>
             </div>
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Block Time</div>
+              <div class="col-auto col-lg-3 text--gray-4">{{ 'PAGES.BLOCKS.blockTime' | translate }}</div>
               <div class="col-auto col-lg-9 text-end text-lg-start text--gray-1 d-lg-flex align-items-center">
                 <div>{{ commonService.getDateValue(blockDetail?.timestamp)[0] }}</div>
                 <div class="d-flex align-items-center ml-1">
@@ -88,28 +89,28 @@
               </div>
             </div>
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Block Hash</div>
+              <div class="col-auto col-lg-3 text--gray-4">{{ 'LABEL.BLOCK_HASH' | translate }}</div>
               <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.block_hash }}</div>
             </div>
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Number of Tx</div>
+              <div class="col-auto col-lg-3 text--gray-4">{{ 'PAGES.BLOCKS.numberOfTx' | translate }}</div>
               <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.num_txs }}</div>
             </div>
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
-                <div>Gas</div>
-                <div class="ml-md-1">(used / wanted)</div>
+                <div>{{ 'PAGES.BLOCKS.gas' | translate }}</div>
+                <div class="ml-md-1">{{ 'PAGES.BLOCKS.gasUnit' | translate }}</div>
               </div>
               <div class="col-auto col-lg-9 mb-0 text--gray-1">
                 {{ blockDetail?.gas_used | number }} / {{ blockDetail?.gas_wanted | number }}
               </div>
             </div>
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Block Round</div>
+              <div class="col-auto col-lg-3 text--gray-4">{{ 'PAGES.BLOCKS.blockRound' | translate }}</div>
               <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.round | number }}</div>
             </div>
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Proposer</div>
+              <div class="col-auto col-lg-3 text--gray-4">{{ 'LABEL.PROPOSER' | translate }}</div>
               <div class="col-auto col-lg-9 text--primary mb-0">
                 <a class="text--primary" routerLink="/validators/{{ blockDetail?.operator_address }}">
                   {{ blockDetail?.proposer }}
@@ -137,7 +138,7 @@
       <app-loading-sprint></app-loading-sprint>
     </div>
     <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
-      <h2 class="card-header mb-0 text--white pb-0">Transactions</h2>
+      <h2 class="card-header mb-0 text--white pb-0">{{ 'COMMON.TRANSACTIONS' | translate }}</h2>
       <div class="card-body body">
         <ng-container *ngIf="!loadingTxs && dataSource?.data?.length > 0; else noValue">
           <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
@@ -258,7 +259,7 @@
 
     <!-- Event Log -->
     <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
-      <h2 class="card-header mb-0 text--white pb-0">Events</h2>
+      <h2 class="card-header mb-0 text--white pb-0">{{ 'PAGES.BLOCKS.events' | translate }}</h2>
       <div class="card-body body">
         <div class="col-12 text--gray-1 box-event-log border-radius--sm">
           <div class="item-event-log">

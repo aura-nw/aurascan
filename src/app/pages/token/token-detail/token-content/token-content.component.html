@@ -3,7 +3,7 @@
     <div *ngIf="isSearchTx" class="px-4 py-4 py-lg-3 card border-none">
       <p class="caption d-flex align-item-center mb-1 mb-lg-0">
         <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px" />
-        FILTER BY TOKEN TXN HASH
+        {{ 'PAGES.TOKEN.filterByTx' | translate }}
       </p>
       <a class="text--primary body-02" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
     </div>
@@ -17,7 +17,7 @@
               alt=""
               width="18px"
               height="18px" />
-            FILTER BY ADDRESS
+            {{ 'PAGES.TOKEN.filterByAddress' | translate }}
           </div>
           <div class="mt-2">
             <app-name-tag
@@ -33,7 +33,7 @@
           class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
             tokenDetail?.isNFTContract ? 'no-border-bottom pb-0' : 'pb-3'
           }}">
-          <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
+          <div class="caption text--gray-5 mb-1 mb-lg-0">{{ 'PAGES.TOKEN.balance' | translate }}</div>
           <ng-container *ngIf="!tokenDetail?.isNFTContract">
             <div class="aura-tooltip-contain">
               <span
@@ -57,7 +57,7 @@
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
         </div>
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
-          <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
+          <div class="caption text--gray-5 mb-1 mb-lg-0">{{ 'LABEL.VALUE' | translate | uppercase}}</div>
           <ng-container *ngIf="tokenDetail.price > 0">
             <div
               class="d-inline"

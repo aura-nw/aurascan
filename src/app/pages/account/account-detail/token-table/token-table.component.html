@@ -125,7 +125,7 @@
                               class="ml-1"
                               *ngIf="element.verify_status === 'VERIFIED'" />
                           </div>
-                          <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
+                          <app-tooltip-customize [content]="element.verify_text || 'LABEL.VERIFIED_BY_AURA' | translate">
                           </app-tooltip-customize>
                         </div>
                       </div>
@@ -145,7 +145,7 @@
                             class="ml-1"
                             *ngIf="element.verify_status === 'VERIFIED'" />
                         </div>
-                        <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
+                        <app-tooltip-customize [content]="element.verify_text || 'LABEL.VERIFIED_BY_AURA' | translate">
                         </app-tooltip-customize>
                       </div>
                     </div>

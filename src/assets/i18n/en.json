@@ -139,7 +139,23 @@
       "tokenDetail": "Token detail",
       "createNew": "Create New",
       "abtURI": "Account Bound Token URI",
-      "creatorAddress": "Creator’s Address"
+      "creatorAddress": "Creator’s Address",
+      "btc": "BTC",
+      "profileSummary": "Profile Summary",
+      "contractLabel": "Contract:",
+      "decimalsLabel": "Decimals:",
+      "officialSiteLabel": "Official Site:",
+      "socialProfilesLabel": "Social Profiles:",
+      "overview": "Overview",
+      "priceLabel": "Price:",
+      "circulatingSupply":"CIRCULATING SUPPLY MARKET CAP",
+      "max": "Max",
+      "totalSupply": "Total Supply:",
+      "fullyDiluted": "FULLY DILUTED MARKET CAP",
+      "transferLabel": "Transfer:",
+      "filterByTx":"FILTER BY TOKEN TXN HASH",
+      "filterByAddress": "FILTER BY ADDRESS",
+      "balance": "BALANCE"
     },
     "CONTRACT": {
       "contractVer": "Contract Ver",
@@ -181,6 +197,17 @@
       "checkMail": "In case you cannot find the email, please check the spam folder and ensure your spam filters allow email from verify@aura.network",
       "sentVerifyLink": "A verification link has been sent to {{ emailFormat }}.<br />Please click on the link to verify your email account.",
       "sentPasswordReset": "A password reset link has been sent to {{ emailFormat }}.<br />Please click on the link to change your password."
+    },
+    "BLOCKS":
+    {
+      "blockDetailTitle": "Details for Block #",
+      "chainId": "Chain Id",
+      "blockTime": "Block Time",
+      "numberOfTx": "Number of Tx",
+      "gas": "Gas",
+      "gasUnit": "(used / wanted)",
+      "blockRound": "Block Round",
+      "events": "Events"
     }
   },
   "WALLET": {
@@ -242,6 +269,7 @@
   "COMMON": {
     "HEIGHT": "Height",
     "TRANSACTIONS": "Transactions",
+    "TRANSACTION": "transaction",
     "BLOCKS": "Blocks",
     "SEE_MORE": "See more",
     "SEE_LESS": "See less",
@@ -258,7 +286,13 @@
     "ADDRESS": "Address",
     "DETAILS": "Details",
     "TIME": "Time",
-    "TOKEN": "Token"
+    "TOKEN": "Token",
+    "TOTAL_OF": "A total of {{ value }} {{ unit }} found",
+    "MORE_THAN": "More than {{ value }} {{ unit }} found",
+    "A_TOTAL_OF": "A total of",
+    "MORE_THAN_LABEL": "'More than",
+    "FOUND": "found",
+    "VIEW_ALL": "View all"
   },
   "LABEL": {
     "NAME": "Name",
@@ -304,7 +338,8 @@
     "YES": "Yes",
     "NO": "No",
     "NOTE": "Note",
-    "WARNING": "Warning"
+    "WARNING": "Warning",
+    "VERIFIED_BY_AURA": "Verified by Aura Network"
   },
   "PAGINATOR": {
     "FIRST": "First",

@@ -1,7 +1,10 @@
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <ng-container *ngIf="!isLoading">
   <div class="text--gray-6 body mb-4 mb-lg-6" *ngIf="dataSource.data.length > 0">
-    A total of {{ pageData.length }} record{{ pageData.length > 1 ? 's' : '' }} found
+    {{
+      'COMMON.TOTAL_OF'
+        | translate : { value: pageData?.length | number, unit: pageData?.length > 1 ? 'records' : 'record' }
+    }}
   </div>
 
   <div class="overflow-scroll-x aura-table-contain mt-4 mt-lg-0">
