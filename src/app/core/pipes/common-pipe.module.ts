@@ -1,25 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { DateCustom } from 'src/app/core/pipes/date-custom.pipe';
-import { FindUrlNameTag } from 'src/app/core/pipes/name-tag-find-url.pipe';
-import { CheckPrivate } from 'src/app/core/pipes/name-tag-private.pipe';
-import { CheckPublic } from 'src/app/core/pipes/name-tag-public.pipe';
-import { nameTag } from 'src/app/core/pipes/name-tag.pipe';
+import { DateCustomPipe } from 'src/app/core/pipes/date-custom.pipe';
+import { CheckPrivatePipe, CheckPublicPipe, FindUrlNameTagPipe, NameTagPipe } from 'src/app/core/pipes/name-tag.pipe';
 import { CheckDisplayTooltip } from 'src/app/core/pipes/tooltip-display.pipe';
 import {
   BalanceOf,
-  convertLogAmount,
-  convertSmallNumber,
   ConvertUauraToAura,
   CustomDate,
-  decodeData,
-  displayTypeToolTip,
-  formatDigit,
   ImageURL,
-  pipeCalDate,
   PipeCutString,
   ReplaceIpfs,
   StringEllipsis,
+  convertLogAmount,
+  convertSmallNumber,
+  decodeData,
+  displayTypeToolTip,
+  formatDigit,
+  pipeCalDate,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
 
@@ -39,12 +36,12 @@ import { JsonPipe } from './json.pipe';
     displayTypeToolTip,
     convertSmallNumber,
     formatDigit,
-    nameTag,
+    NameTagPipe,
     CheckDisplayTooltip,
-    FindUrlNameTag,
-    CheckPublic,
-    CheckPrivate,
-    DateCustom,
+    FindUrlNameTagPipe,
+    CheckPublicPipe,
+    CheckPrivatePipe,
+    DateCustomPipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -62,12 +59,12 @@ import { JsonPipe } from './json.pipe';
     displayTypeToolTip,
     convertSmallNumber,
     formatDigit,
-    nameTag,
+    NameTagPipe,
     CheckDisplayTooltip,
-    FindUrlNameTag,
-    CheckPublic,
-    CheckPrivate,
-    DateCustom,
+    FindUrlNameTagPipe,
+    CheckPublicPipe,
+    CheckPrivatePipe,
+    DateCustomPipe,
   ],
 })
 export class CommonPipeModule {}

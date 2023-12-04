@@ -6,7 +6,7 @@ import { formatTimeInWords, formatWithSchema } from 'src/app/core/helpers/date';
 import { CommonService } from 'src/app/core/services/common.service';
 
 @Pipe({ name: 'dateCustom' })
-export class DateCustom implements PipeTransform {
+export class DateCustomPipe implements PipeTransform {
   constructor(public commonService: CommonService) {}
   transform(time, isCustom = true) {
     if (time) {
