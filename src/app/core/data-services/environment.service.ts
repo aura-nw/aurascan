@@ -6,12 +6,10 @@ import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 export interface IConfiguration {
   environment: {
-    name: string;
     label: {
       desktop: string;
       mobile: string;
     };
-    logo: string;
     notice: {
       content: string;
       url: string;

@@ -5,6 +5,7 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { UserService } from '../services/user.service';
 import { NotificationsService } from '../services/notifications.service';
 import { Router } from '@angular/router';
+import {clearLocalData} from "src/app/global/global";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -36,8 +37,8 @@ export class JwtInterceptor implements HttpInterceptor {
       };
       this.userService.refreshToken(payload).subscribe({
         next: (res) => {
+          this.isReloadToken = false;
           if (res.error?.statusCode === 400) {
-            this.isReloadToken = false;
             // remove current fcm token
             this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
               (res) => {},
@@ -45,13 +46,8 @@ export class JwtInterceptor implements HttpInterceptor {
               () => (this.notificationsService.currentFcmToken = null),
             );
 
+            clearLocalData();
             // redirect to log out
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('listNameTag');
-            localStorage.removeItem('lstWatchList');
-            localStorage.removeItem('registerFCM');
             this.router.navigate(['/login']);
 
             setTimeout(() => {
@@ -72,12 +68,7 @@ export class JwtInterceptor implements HttpInterceptor {
             () => (this.notificationsService.currentFcmToken = null),
           );
 
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          localStorage.removeItem('userEmail');
-          localStorage.removeItem('listNameTag');
-          localStorage.removeItem('lstWatchList');
-          localStorage.removeItem('registerFCM');
+          clearLocalData();
           this.router.navigate(['/login']);
 
           setTimeout(() => {

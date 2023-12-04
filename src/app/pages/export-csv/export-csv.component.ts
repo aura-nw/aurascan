@@ -8,6 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { isValidBench32Address } from 'src/app/core/utils/common/validation';
+import {TypeExport} from "src/app/core/constants/export-csv.enum";
 
 declare var grecaptcha: any;
 @Component({
@@ -28,7 +29,7 @@ export class ExportCsvComponent implements OnInit {
   minDateEnd;
   maxDate;
   maxDateEnd;
-  tabsData = TabsAccountLink;
+  tabsData = TypeExport;
   isDownload = false;
   responseCaptcha;
   isValidCaptcha = false;
@@ -36,7 +37,7 @@ export class ExportCsvComponent implements OnInit {
   siteKey = this.environmentService.siteKeyCaptcha;
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private commonService: CommonService,
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
@@ -61,7 +62,7 @@ export class ExportCsvComponent implements OnInit {
   }
 
   formInit() {
-    this.csvForm = this.fb.group({
+    this.csvForm = this.formBuilder.group({
       dataType: null,
       address: ['', [Validators.required]],
       isFilterDate: true,
@@ -86,8 +87,8 @@ export class ExportCsvComponent implements OnInit {
 
   mappingDataExport(dataType) {
     switch (dataType) {
-      case this.tabsData.AuraTxs:
-        return this.tabsAccount.AuraTxs;
+      case this.tabsData.NativeTxs:
+        return this.tabsAccount.NativeTxs;
       case this.tabsData.FtsTxs:
         return this.tabsAccount.FtsTxs;
       case this.tabsData.NftTxs:

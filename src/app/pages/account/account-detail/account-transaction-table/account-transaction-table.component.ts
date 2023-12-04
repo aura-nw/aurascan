@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -152,6 +152,7 @@ export class AccountTransactionTableComponent {
       } else {
         this.listTypeSelectedTemp = [];
         this.checkAll = false;
+        this.isSearchOther = false;
       }
     } else {
       this.checkAll = false;
@@ -245,6 +246,7 @@ export class AccountTransactionTableComponent {
     const address = this.currentAddress;
     let startDate = null;
     let endDate = null;
+    this.errTxt = null;
 
     if (this.transactionFilter.startDate && this.transactionFilter.endDate) {
       startDate = this.getConvertDate(this.transactionFilter.startDate);
@@ -259,20 +261,57 @@ export class AccountTransactionTableComponent {
       listTxMsgType: null,
       startTime: startDate || null,
       endTime: endDate || null,
+      from: address,
+      to: address,
     };
 
     if (this.isSearchOther) {
-      const isSameType = (listIn, listNotIn) => listIn?.label === listNotIn;
-      const onlyInLeft = (left, right, compareFunction) =>
-        left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
-      const lstTemp = onlyInLeft(this.tnxTypeOrigin, this.transactionFilter.type, isSameType);
-      let result = [];
-      lstTemp.forEach((element) => {
-        result.push(element.label);
-      });
-      payload['listTxMsgTypeNotIn'] = result || null;
+      const listTxMsgTypeNotIn = _.pull(
+        [...this.tnxTypeOrigin.map((item) => item.label)],
+        ...this.transactionFilter.type,
+      );
+      payload['listTxMsgTypeNotIn'] = listTxMsgTypeNotIn || null;
     } else {
-      payload['listTxMsgType'] = this.transactionFilter.type || null;
+      payload['listTxMsgType'] = this.transactionFilter.type ? [...this.transactionFilter.type] : null;
+    }
+
+    // set type for filter in
+    if (payload.listTxMsgType?.length > 0) {
+      let arrMultiVer = payload.listTxMsgType?.filter((k) => TYPE_MULTI_VER.includes(k));
+      if (arrMultiVer?.length > 0) {
+        arrMultiVer.forEach((element) => {
+          switch (element) {
+            case TRANSACTION_TYPE_ENUM.Vote:
+              payload.listTxMsgType.push(TRANSACTION_TYPE_ENUM.VoteV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.Deposit:
+              payload.listTxMsgType.push(TRANSACTION_TYPE_ENUM.DepositV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
+              payload.listTxMsgType.push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
+              break;
+          }
+        });
+      }
+    }
+    // set type for filter not in
+    else if (payload['listTxMsgTypeNotIn']?.length > 0) {
+      let arrMultiVer = payload['listTxMsgTypeNotIn']?.filter((k) => TYPE_MULTI_VER.includes(k));
+      if (arrMultiVer?.length > 0) {
+        arrMultiVer.forEach((element) => {
+          switch (element) {
+            case TRANSACTION_TYPE_ENUM.Vote:
+              payload['listTxMsgTypeNotIn'].push(TRANSACTION_TYPE_ENUM.VoteV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.Deposit:
+              payload['listTxMsgTypeNotIn'].push(TRANSACTION_TYPE_ENUM.DepositV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
+              payload['listTxMsgTypeNotIn'].push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
+              break;
+          }
+        });
+      }
     }
 
     switch (this.modeQuery) {
@@ -282,19 +321,18 @@ export class AccountTransactionTableComponent {
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
         this.getListTxByAddress(payload);
         break;
-      case TabsAccountLink.AuraTxs:
-        payload.compositeKey = ['transfer.sender', 'transfer.recipient'];
+      case TabsAccountLink.NativeTxs:
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
-            payload.compositeKey = ['transfer.sender'];
+            payload.to = '_';
           } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
-            payload.compositeKey = ['transfer.recipient'];
+            payload.from = '_';
           }
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
-        this.getListTxAuraByAddress(payload);
+        this.getListTxNativeByAddress(payload);
         break;
       case TabsAccountLink.FtsTxs:
         payload['sender'] = payload['receiver'] = address;
@@ -362,8 +400,8 @@ export class AccountTransactionTableComponent {
     });
   }
 
-  getListTxAuraByAddress(payload) {
-    this.userService.getListTxAuraByAddress(payload).subscribe({
+  getListTxNativeByAddress(payload) {
+    this.userService.getListNativeTransfer(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
       },

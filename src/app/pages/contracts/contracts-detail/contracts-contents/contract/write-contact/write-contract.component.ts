@@ -25,9 +25,9 @@ export class WriteContractComponent implements OnInit {
   root: any[];
 
   constructor(
-    public walletService: WalletService,
+    private walletService: WalletService,
     private toastr: NgxToastrService,
-    public translate: TranslateService,
+    private translate: TranslateService,
     private dialog: MatDialog,
   ) {}
 

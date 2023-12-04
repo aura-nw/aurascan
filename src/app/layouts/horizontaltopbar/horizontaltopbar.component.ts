@@ -1,14 +1,12 @@
 import { AfterViewInit, Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CookieService } from 'ngx-cookie-service';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { LENGTH_CHARACTER } from '../../../app/core/constants/common.constant';
 import { EventService } from '../../core/services/event.service';
-import { LanguageService } from '../../core/services/language.service';
 import { TransactionService } from '../../core/services/transaction.service';
 import { WalletService } from '../../core/services/wallet.service';
 import { LAYOUT_MODE } from '../layouts.model';
@@ -54,8 +52,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   constructor(
     public router: Router,
     public translate: TranslateService,
-    public languageService: LanguageService,
-    public _cookiesService: CookieService,
     private eventService: EventService,
     private walletService: WalletService,
     private transactionService: TransactionService,
