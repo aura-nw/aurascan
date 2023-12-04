@@ -1,6 +1,6 @@
 <div class="card mt-3" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card-body">
-    <h3 class="mb-0 fw-700 text--gray-light-2 mb-4">Stake</h3>
+    <h3 class="mb-0 fw-700 text--gray-light-2 mb-4">{{ 'PAGES.ACCOUNT_DETAIL.STAKE' | translate }}</h3>
     <div class="row flex-column-reverse flex-lg-row">
       <div class="col-12 col-lg-8 right-border pr-lg-6">
         <div class="card card-h-100">
@@ -119,7 +119,10 @@
                       <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
                       <span class="text--gray-5 body fw-semibold body-01-mob fw-normal-mob">{{ item.name }}</span>
                     </div>
-                    <span class="text--gray-1 fw-semibold body body-01-mob fw-normal-mob" [appBigNumber]="item.amount" [decimal]="0"></span>
+                    <span
+                      class="text--gray-1 fw-semibold body body-01-mob fw-normal-mob"
+                      [appBigNumber]="item.amount"
+                      [decimal]="0"></span>
                   </div>
                 </ng-container>
               </div>
@@ -129,7 +132,9 @@
             </div>
           </div>
         </div>
-        <div *ngIf="breakpoint.value.matches" class="divider divider-horizontal divider-lighter mb-3 text--gray-9"></div>
+        <div
+          *ngIf="breakpoint.value.matches"
+          class="divider divider-horizontal divider-lighter mb-3 text--gray-9"></div>
       </div>
     </div>
   </div>

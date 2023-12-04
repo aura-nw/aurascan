@@ -3,7 +3,9 @@
     <div class="card-body p-0">
       <!-- Title -->
       <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!assetsLoading">
-        <h3 class="mb-3 fw-700 text--gray-light-2 mb-xl-0">Coins & Tokens ({{ pageData?.length || 0 }})</h3>
+        <h3 class="mb-3 fw-700 text--gray-light-2 mb-xl-0">
+          {{ 'PAGES.ACCOUNT_DETAIL.COIN_N_TOKEN' | translate }} ({{ pageData?.length || 0 }})
+        </h3>
         <div class="d-flex flex-lg-row align-items-center justify-content-end gap-2">
           <div
             class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100"
@@ -125,7 +127,8 @@
                               class="ml-1"
                               *ngIf="element.verify_status === 'VERIFIED'" />
                           </div>
-                          <app-tooltip-customize [content]="element.verify_text || 'LABEL.VERIFIED_BY_AURA' | translate">
+                          <app-tooltip-customize
+                            [content]="element.verify_text || 'LABEL.VERIFIED_BY_AURA' | translate">
                           </app-tooltip-customize>
                         </div>
                       </div>
@@ -242,7 +245,7 @@
     </div>
     <ng-template #noValues>
       <div class="card mt-14" *ngIf="!assetsLoading">
-        <app-table-no-data [textNull]="errTxt || 'No coins & tokens'"></app-table-no-data>
+        <app-table-no-data [textNull]="errTxt || 'MESSAGES.NO_COIN_N_TOKEN' | translate"></app-table-no-data>
       </div>
     </ng-template>
     <div *ngIf="assetsLoading" class="mt-14">

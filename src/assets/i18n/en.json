@@ -4,6 +4,28 @@
     "MEGA_MENU": "Mega Menu",
     "HEIGHT": "height"
   },
+  "FOOTER": {
+    "FEATURES": "Features",
+    "DASHBOARD": "Dashboard",
+    "BLOCKS": "Blocks",
+    "TRANSACTIONs": "Transactions",
+    "VALIDATORS": "Validators",
+    "GOVERNANCE": "Governance",
+    "RESOURCES": "Resources",
+    "LANDING_PAGE": "Landing page",
+    "INSIGHTS": "Insights",
+    "DOCS": "Docs",
+    "WHITEPAPER": "Whitepaper",
+    "RESEARCH": "Research",
+    "ABOUT_US": "About us",
+    "CAREERS": "Careers",
+    "CONTACT_US": "Contact us",
+    "TERMS_OF_SERVICE": "Terms of Service",
+    "PRIVACY_POLICY": "Privacy Policy",
+    "TEXT": "We’d love to hear from you, we’re here <br /> to answer all your questions.",
+    "SUPPORT_MAIL": "support@aura.network",
+    "COPYRIGHT": "Copyright © 2023 Aura Network. All rights reserved"
+  },
   "MENUITEMS": {
     "CODE-LIST": "Code IDs",
     "CHART-STATS": "Chart & Stats",
@@ -174,12 +196,12 @@
       "socialProfilesLabel": "Social Profiles:",
       "overview": "Overview",
       "priceLabel": "Price:",
-      "circulatingSupply":"CIRCULATING SUPPLY MARKET CAP",
+      "circulatingSupply": "CIRCULATING SUPPLY MARKET CAP",
       "max": "Max",
       "totalSupply": "Total Supply:",
       "fullyDiluted": "FULLY DILUTED MARKET CAP",
       "transferLabel": "Transfer:",
-      "filterByTx":"FILTER BY TOKEN TXN HASH",
+      "filterByTx": "FILTER BY TOKEN TXN HASH",
       "filterByAddress": "FILTER BY ADDRESS",
       "balance": "BALANCE"
     },
@@ -224,8 +246,7 @@
       "sentVerifyLink": "A verification link has been sent to {{ emailFormat }}.<br />Please click on the link to verify your email account.",
       "sentPasswordReset": "A password reset link has been sent to {{ emailFormat }}.<br />Please click on the link to change your password."
     },
-    "BLOCKS":
-    {
+    "BLOCKS": {
       "blockDetailTitle": "Details for Block #",
       "chainId": "Chain Id",
       "blockTime": "Block Time",
@@ -234,6 +255,16 @@
       "gasUnit": "(used / wanted)",
       "blockRound": "Block Round",
       "events": "Events"
+    },
+    "ACCOUNT_DETAIL": {
+      "REWARD": "Reward",
+      "COMPLETION_TIME": "Completion Time",
+      "VESTING_SCHEDULE": "Vesting Schedule",
+      "STAKE": "Stake",
+      "EXPORT_CSV": "Export CSV",
+      "COIN_N_TOKEN": "Coins & Tokens",
+      "ACCOUNT_INFO": "Account Info",
+      "TOTAL_VALUE": "Total Value"
     }
   },
   "WALLET": {
@@ -278,7 +309,9 @@
     "CLICK_VERIFY_LINK": "Please click on the verification link sent to your mail to complete the registration process.<br />In case you've not yet received any email.",
     "INVALID_EMAIL_FORMAT": "Invalid email format",
     "RULE_PASSWORD": "The password need to be more than 8 characters in length with at least one upper case, 1 lower case, 1 number and 1 special character",
-    "PASSWORD_NOT_MATCH": "The password confirmation does not match"
+    "PASSWORD_NOT_MATCH": "The password confirmation does not match",
+    "NO_COIN_N_TOKEN": "No coins & tokens",
+    "FETCHING_DATA": "Fetching data, might take longer than usual. <br />Please come back later or "
   },
   "VERIFY_CODE_ID": {
     "E001": "Code ID not found",
@@ -320,7 +353,8 @@
     "A_TOTAL_OF": "A total of",
     "MORE_THAN_LABEL": "'More than",
     "FOUND": "found",
-    "VIEW_ALL": "View all"
+    "VIEW_ALL": "View all",
+    "COLLAPSE_ALL": "Collapse all"
   },
   "LABEL": {
     "NAME": "Name",
@@ -372,7 +406,10 @@
     "NOTE": "Note",
     "WARNING": "Warning",
     "NO_DATA": "No Data",
-    "VERIFIED_BY_AURA": "Verified by Aura Network"
+    "VERIFIED_BY_AURA": "Verified by Aura Network",
+    "NOTICE": "NOTICE",
+    "ALL": "All",
+    "REFRESH_PAGE": "refresh the page"
   },
   "PAGINATOR": {
     "FIRST": "First",
@@ -390,6 +427,18 @@
     "REGISTER": "Register",
     "CONTINUE": "Continue",
     "LOGIN": "Log in",
-    "CONFIRM": "Confirm"
+    "CONFIRM": "Confirm",
+    "CLEAR_ALL": "Clear all",
+    "FILTER": "Filter",
+    "ASSET_TRANSFER_TYPE": "Asset Transfer Type",
+    "ALL_TYPE": "All type",
+    "SENT": "Sent",
+    "RECEIVE": "Receive",
+    "MESSAGE_TYPE": "Message type",
+    "MSG_TYPE_SELECTED": "Msg Types selected",
+    "SELECTED_ITEMS": "Selected Items ...",
+    "RESET": "Reset",
+    "SELECT": "Select",
+    "SET_PRIVATE_NAME": "Set Private Name Tag"
   }
 }

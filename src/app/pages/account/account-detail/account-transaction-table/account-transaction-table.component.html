@@ -9,14 +9,14 @@
       "
       class="button button-link body-01 px-0 mr-4 d-lg-none"
       (click)="clearFilter(modeFilter.all)">
-      <span class="text-nowrap">Clear all</span>
+      <span class="text-nowrap">{{ 'BUTTON.CLEAR_ALL' | translate }}</span>
     </button>
     <button
       (click)="displayFilter = !displayFilter"
       class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4"
       type="button">
       <i class="ph ph-funnel-simple text--white mr-2 body-01"></i>
-      <span>Filter</span>
+      <span>{{ 'BUTTON.FILTER' | translate }}</span>
       <span *ngIf="countFilter > 0" class="nft__unclaimed-noti caption aura-tooltip-object" [class.noti--pill]="true">
         {{ countFilter }}
       </span>
@@ -26,7 +26,7 @@
       type="button"
       (click)="linkExportPage()">
       <i class="ph ph-export text--white mr-2 body-01"></i>
-      <span>Export CSV</span>
+      <span>{{ 'PAGES.ACCOUNT_DETAIL.EXPORT_CSV' | translate }}</span>
     </button>
   </div>
   <div
@@ -142,7 +142,9 @@
             aria-expanded="false"
             #trigger>
             <span class="body">
-              <ng-container *ngIf="!transactionFilter.typeTransfer"> Asset Transfer Type </ng-container>
+              <ng-container *ngIf="!transactionFilter.typeTransfer">
+                {{ 'BUTTON.ASSET_TRANSFER_TYPE' | translate }}
+              </ng-container>
               <span *ngIf="transactionFilter.typeTransfer?.length > 0">{{ transactionFilter.typeTransfer }} </span>
             </span>
             <div class="ml-1 d-flex align-items-center">
@@ -158,13 +160,13 @@
           </button>
           <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
             <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
-              <button type="button" class="button p-0">All type</button>
+              <button type="button" class="button p-0">{{ 'BUTTON.ALL_TYPE' | translate }}</button>
             </li>
             <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Sent)">
-              <button type="button" class="button p-0">Sent</button>
+              <button type="button" class="button p-0">{{ 'BUTTON.SENT' | translate }}</button>
             </li>
             <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Received)">
-              <button type="button" class="button p-0">Receive</button>
+              <button type="button" class="button p-0">{{ 'BUTTON.RECEIVE' | translate }}</button>
             </li>
           </ul>
         </div>
@@ -178,7 +180,7 @@
             class="input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-mess"
             [class.menu-hidden]="transactionFilter.type"
             type="button">
-            <span class="body line-claim"> Message type </span>
+            <span class="body line-claim"> {{ 'BUTTON.MESSAGE_TYPE' | translate }} </span>
             <div class="ml-3 mt-1">
               <i *ngIf="!transactionFilter.startDate" class="ph ph-caret-down text--white body icon-expand"></i>
               <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
@@ -189,7 +191,7 @@
             id="filter-result-mess"
             (click)="tnxTypeMenuBtn.click(); initTnxFilterPanel()"
             *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
-            {{ checkAll ? 'All' : transactionFilter.type?.length || 1 }} Msg Types selected
+            {{ checkAll ? 'All' : transactionFilter.type?.length || 1 }} {{ 'BUTTON.MSG_TYPE_SELECTED' | translate }}
             <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.msgType)"></i>
           </div>
           <mat-menu
@@ -238,7 +240,7 @@
                 [class.has-result]="listTypeSelectedTemp?.length > 0"
                 (click)="$event.stopPropagation()"
                 (keydown)="$event.stopPropagation()">
-                <span *ngIf="listTypeSelectedTemp?.length === 0">Selected Items ...</span>
+                <span *ngIf="listTypeSelectedTemp?.length === 0">{{ 'BUTTON.SELECTED_ITEMS' | translate }}</span>
                 <div class="filter-result" *ngFor="let type of listTypeSelectedTemp">
                   <span class="caption">{{ type.value }}</span>
                   <i class="ph-thin ph-x cursor-pointer ml-1 body-02" (click)="removeFilterType(type)"></i>
@@ -255,7 +257,7 @@
                     [checked]="checkAll"
                     (change)="onChangeTnxFilterType($event, 'all')"
                     class="check-box check-box--dark" />
-                  <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
+                  <label for="all" class="ml-2 mb-0 text-justify pl-1"> {{ 'LABEL.ALL' | translate }} </label>
                 </div>
                 <div class="divider divider-horizontal my-2"></div>
                 <div class="tnx-filter-box" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
@@ -283,14 +285,14 @@
                     tnxTypeMenuBtn.click()
                   "
                   type="button">
-                  <span>Reset</span>
+                  <span>{{ 'BUTTON.RESET' | translate }}</span>
                 </button>
                 <button
                   class="button button--xlg button-outline button-outline__in-card button-pill ml-4"
                   type="button"
                   [disabled]="listTypeSelectedTemp?.length === 0"
                   (click)="executeFilterType(); tnxTypeMenuBtn.click()">
-                  <span>Select</span>
+                  <span>{{ 'BUTTON.SELECT' | translate }}</span>
                 </button>
               </div>
             </div>
@@ -306,7 +308,7 @@
         class="d-none d-lg-flex align-items-center">
         <div class="divider divider-vertical mx-6"></div>
         <button class="button button-link body-01 px-0" (click)="clearFilter(modeFilter.all)">
-          <span>Clear all</span>
+          <span>{{ 'BUTTON.CLEAR_ALL' | translate }}</span>
         </button>
       </div>
     </div>
@@ -317,7 +319,7 @@
       class="button button-pill button--sm button-outline button-outline__in-card button-filter"
       type="button">
       <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
-      <span>Filter</span>
+      <span>{{ 'BUTTON.FILTER' | translate }}</span>
       <span
         *ngIf="countFilter > 0"
         class="nft__unclaimed-noti caption aura-tooltip-object text--white"
@@ -330,7 +332,7 @@
       type="button"
       (click)="linkExportPage()">
       <i class="ph ph-export text--white mr-2 body-01"></i>
-      <span>Export CSV</span>
+      <span>{{ 'PAGES.ACCOUNT_DETAIL.EXPORT_CSV' | translate }}</span>
     </button>
   </div>
 </div>
@@ -503,18 +505,22 @@
                       (click)="seeMoreData(data)"
                       *ngIf="data.limit < data.arrEvent?.length"
                       class="cursor-pointer mr-8"
-                      >See more</span
+                      >{{ 'COMMON.SEE_MORE' | translate }}</span
                     >
-                    <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
+                    <span (click)="expandData(data)" class="cursor-pointer">{{
+                      'COMMON.COLLAPSE_ALL' | translate
+                    }}</span>
                   </div>
                   <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="data.arrEvent?.length > 1 && data.expand">
                     <span
                       (click)="seeMoreData(data)"
                       *ngIf="data.limit < data.arrEvent?.length"
                       class="cursor-pointer mr-8"
-                      >See more</span
+                      >{{ 'COMMON.SEE_MORE' | translate }}</span
                     >
-                    <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
+                    <span (click)="expandData(data)" class="cursor-pointer">{{
+                      'COMMON.COLLAPSE_ALL' | translate
+                    }}</span>
                   </div>
                 </div>
                 <div *ngSwitchCase="'toAddress'">
