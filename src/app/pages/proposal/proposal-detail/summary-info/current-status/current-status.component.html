@@ -1,7 +1,7 @@
 <div class="h-100 d-flex flex-column justify-content-between">
   <div>
     <div class="d-flex justify-content-between align-items-center">
-      <h4 class="mb-0 text--gray-1 fw-semibold-mob">Current Status</h4>
+      <h4 class="mb-0 text--gray-1 fw-semibold-mob">{{ 'PAGES.PROPOSAL.currentStatus' | translate }}</h4>
       <div class="proposal-status proposal-status__{{ currentStatus?.key }}">
         <span>{{ currentStatus?.value }}</span>
       </div>
@@ -17,7 +17,7 @@
       </ul>
       <div class="vote-bar__info" [style.left]="proposalDetail.threshold + '%'">
         <span class="caption">
-          <span class="text--gray-5">Threshold:</span>
+          <span class="text--gray-5">{{ 'PAGES.PROPOSAL.threshold' | translate }}:</span>
           <span class="text--gray-1 ml-1">{{ proposalDetail.threshold | formatDigit : 2 }}%</span>
         </span>
       </div>
@@ -26,7 +26,7 @@
       <div class="vote status--primary"></div>
       <div class="row align-items-center flex-grow-1">
         <div class="col-4 col-lg-5 fw-semibold">
-          <span class="body-03"> Yes </span>
+          <span class="body-03"> {{ 'LABEL.YES' | translate }} </span>
         </div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
           {{ proposalDetail.currentYesPercent | formatDigit : 2 }}%
@@ -40,7 +40,7 @@
       <div class="vote status--danger flex-grow-0"></div>
       <div class="row align-items-center flex-grow-1">
         <div class="col-4 col-lg-5 fw-semibold">
-          <span class="body-03"> No </span>
+          <span class="body-03"> {{ 'LABEL.NO' | translate }} </span>
         </div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
           {{ proposalDetail.currentNoPercent | formatDigit : 2 }}%
@@ -54,7 +54,7 @@
       <div class="vote status--info"></div>
       <div class="row align-items-center flex-grow-1">
         <div class="col-4 col-lg-5 fw-semibold">
-          <span class="body-03"> NoWithVeto</span>
+          <span class="body-03"> {{ 'LABEL.NOWITHVETO' | translate }}</span>
         </div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
           {{ proposalDetail.currentNoWithVetoPercent | formatDigit : 2 }}%

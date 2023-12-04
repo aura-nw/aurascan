@@ -100,7 +100,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell g-no-data" colspan="9999">
-            {{ 'NO DATA' | translate }}
+            {{ 'LABEL.NO_DATA' | translate }}
           </td>
         </tr>
       </table>
@@ -113,7 +113,7 @@
             <app-card-mob-simple
               [content]="[
                 {
-                  label: 'Voter',
+                  label: 'PAGES.PROPOSAL.voter' | translate,
                   class: !commonService.checkDisplayTooltip(data.voter)
                     ? commonService.checkPrivate(data.voter)
                       ? 'name-tag private-name-tag mb-0 text--primary'
@@ -134,7 +134,7 @@
                       '</a>'
                 },
                 {
-                  label: 'TxHash',
+                  label: 'LABEL.TXHASH' | translate,
                   class: 'body-01',
                   info:
                     '<a class=text--primary href=' +
@@ -145,7 +145,7 @@
                 },
                 { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.vote_option) },
                 {
-                  label: 'COMMON.TIME',
+                  label: 'COMMON.TIME' | translate,
                   class: 'card__date text--gray-1 body-01',
                   info:
                     '<div class=text-end>' +
@@ -171,7 +171,7 @@
               }"
               [content]="[
                 {
-                  label: 'TxHash',
+                  label: 'LABEL.TXHASH' | translate,
                   class: 'body-01',
                   info: data.txhash
                     ? '<a class=text--primary href=' +
@@ -183,7 +183,7 @@
                 },
                 { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.vote_option) },
                 {
-                  label: 'COMMON.TIME',
+                  label: 'COMMON.TIME' | translate,
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
@@ -204,7 +204,7 @@
             <app-card-mob-simple
               [content]="[
                 {
-                  label: 'Depositor',
+                  label: 'PAGES.PROPOSAL.depositor' | translate,
                   class: !commonService.checkDisplayTooltip(data.depositors)
                     ? commonService.checkPrivate(data.depositors)
                       ? 'name-tag private-name-tag mb-0 text--primary'
@@ -225,7 +225,7 @@
                       '</a>'
                 },
                 {
-                  label: 'TxHash',
+                  label: 'LABEL.TXHASH' | translate,
                   class: 'body-01',
                   info: data.hash
                     ? '<a class=text--primary href=' +
@@ -236,7 +236,7 @@
                     : '<span class=text--gray-1>-</span>'
                 },
                 {
-                  label: 'COMMON.AMOUNT',
+                  label: 'COMMON.AMOUNT' | translate,
                   class: 'h6 mb-0 text--gray-1',
                   info: data.amount
                     ? '<span class=mr-1>' +
@@ -247,7 +247,7 @@
                     : '-'
                 },
                 {
-                  label: 'COMMON.TIME',
+                  label: 'COMMON.TIME' | translate,
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
@@ -267,7 +267,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell g-no-data" colspan="9999">
-              {{ 'NO DATA' | translate }}
+              {{ 'LABEL.NO_DATA' | translate }}
             </td>
           </tr>
         </ng-container>

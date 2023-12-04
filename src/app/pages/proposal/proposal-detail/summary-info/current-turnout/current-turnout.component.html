@@ -1,7 +1,7 @@
 <div class="h-100 d-flex justify-content-between flex-column">
   <div>
     <div class="d-flex justify-content-between align-items-center" style="min-height: 32px">
-      <h6 class="mb-0 text--gray-1 fw-semibold-mob">Current Turnout</h6>
+      <h6 class="mb-0 text--gray-1 fw-semibold-mob">{{ 'PAGES.PROPOSAL.currentTurnout' | translate }}</h6>
       <div class="caption text--gray-5">
         <h5 class="text--gray-1 mr-lg-2 mb-0 d-inline">{{ proposalDetail.turnout | formatDigit : 2 }}%</h5>
         <span class="body-03 caption-mob">
@@ -11,8 +11,7 @@
       </div>
     </div>
     <div class="mt-1 caption text--gray-5 content--fixed-height body-03-mob">
-      The result of governance will only be applied when quorum is more than
-      {{ proposalDetail.quorum | formatDigit : 2 }}% of the total votes.
+      {{ 'PAGES.PROPOSAL.voteQuorumInfo' | translate : {value: (proposalDetail.quorum | formatDigit : 2)} }}
     </div>
   </div>
   <div class="mt-6">
@@ -23,7 +22,7 @@
       </ul>
       <div class="vote-bar__info" [style.left]="proposalDetail.quorum + '%'">
         <span class="caption">
-          <span class="text--gray-5">Quorum:</span>
+          <span class="text--gray-5">{{ 'PAGES.PROPOSAL.quorum' | translate }}:</span>
           <span class="text--gray-1 ml-1">{{ proposalDetail.quorum | formatDigit : 2 }}%</span>
           <span class="text--green-3 ml-1">{{ quorumStatus }}</span>
         </span>
@@ -32,7 +31,7 @@
     <div class="d-flex align-items-center">
       <div class="vote --w-0"></div>
       <div class="row flex-grow-1 align-items-center">
-        <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">Voted</div>
+        <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">{{ 'PAGES.PROPOSAL.voted' | translate }}</div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
           {{ proposalDetail.voted_percent | formatDigit : 2 }}%
         </div>
@@ -44,7 +43,7 @@
     <div class="d-flex align-items-center mt-2">
       <div class="vote --w-0"></div>
       <div class="row flex-grow-1 align-items-center">
-        <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">Voted Abstain</div>
+        <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">{{ 'PAGES.PROPOSAL.votedAbstain' | translate }}</div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
           {{ proposalDetail.voted_abstain_percent | formatDigit : 2 }}%
         </div>
@@ -56,7 +55,7 @@
     <div class="d-flex align-items-center mt-2">
       <div class="vote --w-0"></div>
       <div class="row flex-grow-1 align-items-center">
-        <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">Did not vote</div>
+        <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">{{ 'PAGES.PROPOSAL.didNotVote' | translate }}</div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
           {{ 100 - proposalDetail.turnout | formatDigit : 2 }}%
         </div>
