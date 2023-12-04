@@ -118,7 +118,8 @@ $textColors: (
   'aqua-2',
   'aura-blue-3link',
   'gray-light-2',
-  'gray-11'
+  'gray-11',
+  'green-6'
 );
 @each $color in $textColors {
   .text--#{$color} {
