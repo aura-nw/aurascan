@@ -8,8 +8,7 @@
         </h2>
         <div class="card__status d-flex align-items-center flex-shrink-0">
           <div class="text--gray-5 mr-6 d-flex flex-column align-items-center" *ngIf="proposalVotes">
-            <span> You voted "{{ proposalVotes }}" </span>
-            <span>for this proposal</span>
+            <span>{{ 'PAGES.PROPOSAL.voteInfo' | translate : {value : proposalVotes} }}</span>
           </div>
           <div class="proposal-status proposal-status__{{ proStatus.key }}">
             <span>{{ proStatus.value }}</span>
@@ -46,13 +45,15 @@
           </div>
         </div>
       </div>
-      <div class="text--gray-5 mt-1" *ngIf="proposalVotes">You voted "{{ proposalVotes }}" for this proposal</div>
+      <div class="text--gray-5 mt-1" *ngIf="proposalVotes">
+        {{ 'PAGES.PROPOSAL.voteInfo' | translate : {value : proposalVotes} }}
+      </div>
       <div class="divider divider-horizontal mt-3"></div>
     </div>
     <div class="card-body pt-3 pt-lg-0 px-3 px-lg-6">
       <div class="text--gray-1">
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob align-items-center">
-          <div class="col-auto col-md-2 text--gray-4">Proposer</div>
+          <div class="col-auto col-md-2 text--gray-4">{{ 'LABEL.PROPOSER' | translate }}</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
             <ng-container *ngIf="proDetail?.proposer_address">
               <a class="text--primary h6 line-claim" [routerLink]="['/account', proDetail?.proposer_address]">
@@ -68,21 +69,21 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-4">Initial Deposit</div>
+          <div class="col-auto col-md-2 text--gray-4">{{ 'PAGES.PROPOSAL.initialDeposit' | translate }}</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
             {{ proDetail.initial_deposit | mask : 'separator.6' }}
             <span class="text--white">{{ denom }}</span>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-4">Total Deposit</div>
+          <div class="col-auto col-md-2 text--gray-4">{{ 'PAGES.PROPOSAL.totalDeposit' | translate }}</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
             {{ proDetail.pro_total_deposits | mask : 'separator.6' }}
             <span class="text--white"> {{ denom }}</span>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-4">Voting Start</div>
+          <div class="col-auto col-md-2 text--gray-4">{{ 'PAGES.VALIDATOR_DETAIL.votingStart' | translate }}</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center" *ngIf="proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
               <span>{{ proDetail?.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
@@ -95,7 +96,7 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-4">Voting End</div>
+          <div class="col-auto col-md-2 text--gray-4">{{ 'PAGES.VALIDATOR_DETAIL.votingEnd' | translate }}</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center" *ngIf="proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
               <span>{{ proDetail?.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
@@ -108,13 +109,13 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob" *ngIf="proDetail.type">
-          <div class="col-auto col-md-2 text--gray-4">Type</div>
+          <div class="col-auto col-md-2 text--gray-4">{{ 'LABEL.TYPE' | translate }}</div>
           <div class="col-auto col-md-10 mt-0 line-claim text--gray-1 pro__type">{{ proDetail.type }}</div>
         </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob" *ngIf="specialDataArr.length > 0">
           <div class="col-auto col-md-2 text--gray-4">
-            <ng-container *ngIf="proDetail?.plan"> Plan </ng-container>
-            <ng-container *ngIf="proDetail?.changes"> Changes </ng-container>
+            <ng-container *ngIf="proDetail?.plan"> {{ 'PAGES.PROPOSAL.plan' | translate }} </ng-container>
+            <ng-container *ngIf="proDetail?.changes"> {{ 'PAGES.PROPOSAL.changes' | translate }} </ng-container>
           </div>
           <div class="col-12 col-md-10 mt-0">
             <ul
@@ -147,7 +148,7 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-4">Submit Time</div>
+          <div class="col-auto col-md-2 text--gray-4">{{ 'PAGES.PROPOSAL.submitTime' | translate }}</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
               <span>{{ proDetail.submit_time | customDate : 'yyyy-MM-dd' }}</span>
@@ -157,7 +158,7 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-4">Deposit End Time</div>
+          <div class="col-auto col-md-2 text--gray-4">{{ 'PAGES.PROPOSAL.depositEndTime' | translate }}</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
               <span>{{ proDetail.deposit_end_time | customDate : 'yyyy-MM-dd' }}</span>
@@ -167,7 +168,7 @@
           </div>
         </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-12 col-md-2 text--gray-4">Details</div>
+          <div class="col-12 col-md-2 text--gray-4">{{ 'COMMON.DETAILS' | translate }}</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0" *ngIf="proDetail?.description">
             <div class="editorial-container p-4">
               <div id="marked" class="editorial"></div>
@@ -175,7 +176,7 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob" *ngIf="proDetail?.content?.amount">
-          <div class="col-auto col-md-2 text--gray-5">Request Amount</div>
+          <div class="col-auto col-md-2 text--gray-5">{{ 'PAGES.PROPOSAL.requestAmount' | translate }}</div>
           <div class="col-auto col-md-10 mt-0">
             {{ proDetail.request_amount | mask : 'separator.6' }}
             <span [class.text--primary]="dataDenomRequest.display !== denom">{{
@@ -193,7 +194,7 @@
         <div
           class="row justify-content-between align-items-center mb-3"
           *ngIf="proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-          <div class="col-6 col-md-2 body-03 h6-mob text--gray-1">Final Status:</div>
+          <div class="col-6 col-md-2 body-03 h6-mob text--gray-1">{{ 'PAGES.PROPOSAL.finalStatus' | translate }}:</div>
           <div class="col-6 col-md-10 body-02 text-end text-md-start">
             <div
               class="aura-status-inline
@@ -208,7 +209,7 @@
           {{ finalSubMessage }}
         </div>
         <div class="row justify-content-between align-items-center mb-3 body-03 h6-mob text--gray-1">
-          <div class="col-auto col-md-2">Total:</div>
+          <div class="col-auto col-md-2">{{ 'LABEL.TOTAL' | translate }}:</div>
           <div class="col-auto col-md-10 mt-2 mt-lg-0">
             {{ proDetail.total_vote | mask : 'separator.6' }}
             <span class="text--white">{{ denom }}</span>
@@ -218,23 +219,23 @@
           <ul class="vote-bar-ul">
             <li class="bg--primary aura-tooltip-contain" [style.width]="proDetail.yesPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'Yes ' + (proDetail.yesPercent | formatDigit : 2) + '%'">
+              <app-tooltip-customize [content]="('LABEL.YES' | translate) + ' ' + (proDetail.yesPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--danger aura-tooltip-contain" [style.width]="proDetail.noPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'No ' + (proDetail.noPercent | formatDigit : 2) + '%'">
+              <app-tooltip-customize [content]="('LABEL.NO' | translate) + ' ' + (proDetail.noPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--info aura-tooltip-contain" [style.width]="proDetail.noWithVetoPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
               <app-tooltip-customize
-                [content]="'No with veto ' + (proDetail.noWithVetoPercent | formatDigit : 2) + '%'">
+                [content]="('LABEL.NO_WITH_VETO' | translate) + ' ' + (proDetail.noWithVetoPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--secondary aura-tooltip-contain" [style.width]="proDetail.abstainPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'Abstain ' + (proDetail.abstainPercent | formatDigit : 2) + '%'">
+              <app-tooltip-customize [content]="('LABEL.ABSTAIN' | translate) + ' ' + (proDetail.abstainPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
           </ul>
@@ -244,7 +245,7 @@
             <div class="vote status--primary"></div>
             <div class="row align-items-center flex-grow-1">
               <div class="col-4 col-lg-5">
-                <span class="body-03"> Yes </span>
+                <span class="body-03"> {{'LABEL.YES' | translate}} </span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proDetail.yesPercent | formatDigit : 2 }}%
@@ -258,7 +259,7 @@
             <div class="vote status--danger flex-grow-0"></div>
             <div class="row align-items-center flex-grow-1">
               <div class="col-4 col-lg-5">
-                <span class="body-03"> No </span>
+                <span class="body-03"> {{'LABEL.NO' | translate}} </span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proDetail.noPercent | formatDigit : 2 }}%
@@ -272,7 +273,7 @@
             <div class="vote status--info"></div>
             <div class="row align-items-center flex-grow-1">
               <div class="col-4 col-lg-5">
-                <span class="body-03"> NoWithVeto</span>
+                <span class="body-03"> {{'LABEL.NOWITHVETO' | translate}}</span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proDetail.noWithVetoPercent | formatDigit : 2 }}%
@@ -286,7 +287,7 @@
             <div class="vote status--secondary"></div>
             <div class="row align-items-center flex-grow-1">
               <div class="col-4 col-lg-5">
-                <span class="body-03"> Abstain</span>
+                <span class="body-03"> {{'LABEL.ABSTAIN' | translate}} </span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proDetail.abstainPercent | formatDigit : 2 }}%
@@ -301,7 +302,7 @@
           <ul>
             <li data-style="primary">
               <div class="item-box">
-                <span class="item item-label text--gray-1">Yes</span>
+                <span class="item item-label text--gray-1">{{'LABEL.YES' | translate}}</span>
                 <span class="item item-percent"> {{ this.proDetail.yesPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
@@ -311,7 +312,7 @@
             </li>
             <li data-style="danger">
               <div class="item-box">
-                <span class="item item-label text--gray-1">No</span>
+                <span class="item item-label text--gray-1">{{'LABEL.NO' | translate}}</span>
                 <span class="item item-percent"> {{ this.proDetail.noPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
@@ -321,7 +322,7 @@
             </li>
             <li data-style="info">
               <div class="item-box">
-                <span class="item item-label text--gray-1">NoWithVeto</span>
+                <span class="item item-label text--gray-1">{{'LABEL.NOWITHVETO' | translate}}</span>
                 <span class="item item-percent"> {{ this.proDetail.noWithVetoPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
@@ -331,7 +332,7 @@
             </li>
             <li data-style="secondary">
               <div class="item-box">
-                <span class="item item-label text--gray-1">Abstain</span>
+                <span class="item item-label text--gray-1">{{'LABEL.ABSTAIN' | translate}}</span>
                 <span class="item item-percent"> {{ this.proDetail.abstainPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">

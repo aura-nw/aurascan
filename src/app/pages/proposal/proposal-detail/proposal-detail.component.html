@@ -1,4 +1,4 @@
-<app-pagetitle title="Voting Details"></app-pagetitle>
+<app-pagetitle title="{{ 'PAGES.PROPOSAL.votingDetails' | translate }}"></app-pagetitle>
 <ng-container *ngIf="this.errorPro === false">
   <section class="summary mt-4 mt-lg-6">
     <app-summary-info [proposalId]="proposalId" (proposalDtl)="getProposalDetail($event)"></app-summary-info>
@@ -14,6 +14,6 @@
   </section>
 </ng-container>
 <ng-container *ngIf="this.errorPro === true"
-  ><div class="text--white text-center my-lg-20 mb-5 h6">Proposal was not found!</div>
+  ><div class="text--white text-center my-lg-20 mb-5 h6">{{ 'NOTICE.PROPOSAL_NOT_FOUND' | translate }}</div>
   <div class="py-lg-20"></div>
 </ng-container>

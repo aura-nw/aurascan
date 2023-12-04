@@ -3,7 +3,7 @@
 </div>
 <ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <section class="lasted-list" *ngIf="proposalData && proposalData?.length > 0">
-    <app-pagetitle title="Votings"></app-pagetitle>
+    <app-pagetitle title="{{ 'MENUITEMS.PROPOSAL' | translate }}"></app-pagetitle>
     <div *ngIf="isLoading" class="m-auto mt-10">
       <app-loading-sprint></app-loading-sprint>
     </div>
@@ -28,7 +28,7 @@
               <div class="d-flex justify-content-between mt-6 proposal-lasted__content small-body">
                 <div>
                   <div class="d-flex mb-2">
-                    <div class="content-body">Proposer</div>
+                    <div class="content-body">{{ 'LABEL.PROPOSER' | translate }}</div>
                     <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary h6 mb-0">
                       <ng-container *ngIf="lastedItem?.proposer">
                         {{ lastedItem?.proposer?.description?.moniker }}
@@ -39,7 +39,7 @@
                     </a>
                   </div>
                   <div class="d-flex mb-2">
-                    <div class="content-body">Voting Start</div>
+                    <div class="content-body">{{ 'PAGES.VALIDATOR_DETAIL.votingStart' | translate }}</div>
                     <div
                       class="text--gray-1 body-02 d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
@@ -54,7 +54,7 @@
                     </div>
                   </div>
                   <div class="d-flex mb-2">
-                    <div class="content-body">Voting End</div>
+                    <div class="content-body">{{ 'PAGES.VALIDATOR_DETAIL.votingEnd' | translate }}</div>
                     <div
                       class="text--gray-1 body-02 d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
@@ -75,7 +75,7 @@
                   <ul>
                     <li class="primary aura-tooltip-contain" [style.width]="lastedItem.tally?.yes + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize [content]="'Yes ' + (lastedItem.tally?.yes | formatDigit : 2) + '%'">
+                      <app-tooltip-customize [content]="('LABEL.YES' | translate) + ' ' + (lastedItem.tally?.yes | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                     <li
@@ -83,7 +83,7 @@
                       *ngIf="lastedItem.tally?.no"
                       [style.width]="lastedItem.tally?.no + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize [content]="'No ' + (lastedItem.tally?.no | formatDigit : 2) + '%'">
+                      <app-tooltip-customize [content]="('LABEL.NO' | translate) + ' ' + (lastedItem.tally?.no | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                     <li
@@ -92,7 +92,7 @@
                       [style.width]="lastedItem.tally?.no_with_veto + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
                       <app-tooltip-customize
-                        [content]="'No with veto ' + (lastedItem.tally?.no_with_veto | formatDigit : 2) + '%'">
+                        [content]="('LABEL.NO_WITH_VETO' | translate) + ' ' + (lastedItem.tally?.no_with_veto | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                     <li
@@ -101,13 +101,13 @@
                       [style.width]="lastedItem.tally?.abstain + '%'">
                       <div class="aura-tooltip-object w-100 h-100"></div>
                       <app-tooltip-customize
-                        [content]="'Abstain ' + (lastedItem.tally?.abstain | formatDigit : 2) + '%'">
+                        [content]="('LABEL.ABSTAIN' | translate) + ' ' + (lastedItem.tally?.abstain | formatDigit : 2) + '%'">
                       </app-tooltip-customize>
                     </li>
                   </ul>
                 </div>
                 <div class="most-vote flex-shrink-0 text--gray-1">
-                  <div class="body-02 mb-1 text--gray-5">Most voted on</div>
+                  <div class="body-02 mb-1 text--gray-5">{{ 'PAGES.PROPOSAL.mostVotedOn' | translate }}</div>
                   <div
                     class="body-02 value {{
                       getHighestVote(
@@ -145,14 +145,14 @@
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="body-03 text--gray-3">
                     <span *ngIf="lastedItem.vote_option"
-                      >You voted "{{ lastedItem.vote_option }}" for this proposal</span
+                      >{{ 'PAGES.PROPOSAL.voteInfo' | translate : {value : lastedItem.vote_option} }}</span
                     >
                   </div>
                   <div class="d-flex">
                     <button
                       class="button button--sm button-pill button-outline body mr-3"
                       [routerLink]="[lastedItem.proposal_id]">
-                      <span>Details</span>
+                      <span>{{ 'COMMON.DETAILS' | translate }}</span>
                     </button>
                     <button
                       [disabled]="lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
@@ -162,8 +162,8 @@
                         {{
                           lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
                           lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                            ? 'Voting Ended'
-                            : 'Vote'
+                            ? ('PAGES.PROPOSAL.votingEnded' | translate)
+                            : ('PAGES.PROPOSAL.vote' | translate)
                         }}
                       </span>
                     </button>
@@ -195,13 +195,13 @@
                   </div>
                 </div>
                 <div class="text-start text--gray-5" *ngIf="lastedItem.vote_option">
-                  You voted "{{ lastedItem.vote_option }}" for this proposal
+                  {{ 'PAGES.PROPOSAL.voteInfo' | translate : {value : lastedItem.vote_option} }}
                 </div>
               </div>
               <div class="mt-3 proposal-lasted__content">
                 <div class="w-100 body-01">
                   <div class="d-flex justify-content-between mb-3 small-body">
-                    <div class="text--gray-4">Proposer</div>
+                    <div class="text--gray-4">{{ 'LABEL.PROPOSER' | translate }}</div>
                     <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary line-claim">
                       <ng-container *ngIf="lastedItem?.proposer">
                         {{ lastedItem?.proposer?.description?.moniker }}
@@ -212,7 +212,7 @@
                     </a>
                   </div>
                   <div class="d-flex justify-content-between mb-3 small-body">
-                    <div class="text--gray-4">Voting Start</div>
+                    <div class="text--gray-4">{{ 'PAGES.VALIDATOR_DETAIL.votingStart' | translate }}</div>
                     <div
                       class="text--white d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
@@ -231,7 +231,7 @@
                     </div>
                   </div>
                   <div class="d-flex justify-content-between small-body">
-                    <div class="text--gray-4">Voting End</div>
+                    <div class="text--gray-4">{{ 'PAGES.VALIDATOR_DETAIL.votingEnd' | translate }}</div>
                     <div
                       class="text--white d-flex align-items-center"
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
@@ -251,7 +251,7 @@
                     <ul class="mt-4 ul-mobile">
                       <li class="primary aura-tooltip-contain" [style.width]="lastedItem.tally?.yes + '%'">
                         <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize [content]="'Yes ' + (lastedItem.tally?.yes | formatDigit : 2) + '%'">
+                        <app-tooltip-customize [content]="('LABEL.YES' | translate) + ' ' + (lastedItem.tally?.yes | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                       <li
@@ -259,7 +259,7 @@
                         *ngIf="lastedItem.tally?.no"
                         [style.width]="lastedItem.tally?.no + '%'">
                         <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize [content]="'No ' + (lastedItem.tally?.no | formatDigit : 2) + '%'">
+                        <app-tooltip-customize [content]="('LABEL.NO' | translate) + ' ' + (lastedItem.tally?.no | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                       <li
@@ -268,7 +268,7 @@
                         [style.width]="lastedItem.tally?.no_with_veto + '%'">
                         <div class="aura-tooltip-object w-100"></div>
                         <app-tooltip-customize
-                          [content]="'No with veto ' + (lastedItem.tally?.no_with_veto | formatDigit : 2) + '%'">
+                          [content]="('LABEL.NO_WITH_VETO' | translate) + ' ' + (lastedItem.tally?.no_with_veto | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                       <li
@@ -277,13 +277,13 @@
                         [style.width]="lastedItem.tally.abstain + '%'">
                         <div class="aura-tooltip-object w-100"></div>
                         <app-tooltip-customize
-                          [content]="'Abstain ' + (lastedItem.tally.abstain | formatDigit : 2) + '%'">
+                          [content]="('LABEL.ABSTAIN' | translate) + ' ' + (lastedItem.tally.abstain | formatDigit : 2) + '%'">
                         </app-tooltip-customize>
                       </li>
                     </ul>
                   </div>
                   <div class="most-vote flex-shrink-0 ml-4">
-                    <div class="caption-mob fw-normal text--gray-5">Most voted on</div>
+                    <div class="caption-mob fw-normal text--gray-5">{{ 'PAGES.PROPOSAL.mostVotedOn' }}</div>
                     <div
                       class="body-02 value {{
                         getHighestVote(
@@ -320,7 +320,7 @@
               <button
                 class="button button-pill button--md button-outline button-fixed"
                 [routerLink]="[lastedItem.proposal_id]">
-                <span>Details</span>
+                <span>{{ 'LABEL.DETAILS' | translate }}</span>
               </button>
               <button
                 class="button button-pill button--md button-outline button-outline--gradient button-outline__in-card button-fixed ml-4"
@@ -330,8 +330,8 @@
                   {{
                     lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
                     lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                      ? 'Voting Ended'
-                      : 'Vote'
+                      ? ('PAGES.PROPOSAL.votingEnded' | translate)
+                      : ('PAGES.PROPOSAL.vote' | translate)
                   }}
                 </span>
               </button>
@@ -345,7 +345,7 @@
   <section class="all-list table-responsive">
     <div class="card" *ngIf="dataSource?.data?.length > 0">
       <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
-        <h2 class="mb-0 text--white">Proposals</h2>
+        <h2 class="mb-0 text--white">{{ 'PAGES.PROPOSAL.proposals' | translate }}</h2>
         <!-- <button type="button" class="button button-outline" [routerLink]="'/transaction'">View more</button> -->
       </div>
       <div class="card-body pt-0">
@@ -361,7 +361,7 @@
 
             <!-- Title Column -->
             <ng-container matColumnDef="title">
-              <th mat-header-cell *matHeaderCellDef>Title</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'COMMON.TITLE' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="title-cell">
                 <a [routerLink]="[element.proposal_id]" class="line-claim-v">{{ element.title }}</a>
               </td>
@@ -369,7 +369,7 @@
 
             <!-- Status Column -->
             <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'COMMON.STATUS' | translate }}</th>
               <td mat-cell *matCellDef="let element">
                 <div
                   class="aura-status-inline {{ getStatus(element.status).class }} text-capitalize"
@@ -381,7 +381,7 @@
 
             <!-- Voting Start Column -->
             <ng-container matColumnDef="votingStart">
-              <th mat-header-cell *matHeaderCellDef>Voting Start</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'PAGES.VALIDATOR_DETAIL.votingStart' | translate }}</th>
               <td mat-cell *matCellDef="let element">
                 <div
                   class="body-02 d-flex align-items-center"
@@ -400,7 +400,7 @@
 
             <!-- Submit Time Column -->
             <ng-container matColumnDef="submitTime">
-              <th mat-header-cell *matHeaderCellDef>Submit Time</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'PAGES.PROPOSAL.submitTime' | translate }}</th>
               <td mat-cell *matCellDef="let element">
                 <div class="body-02 d-flex align-items-center">
                   <span>{{ element.submit_time | customDate : 'yyyy-MM-dd' }}</span>
@@ -412,7 +412,7 @@
 
             <!-- Total Deposit Column -->
             <ng-container matColumnDef="totalDeposit">
-              <th mat-header-cell *matHeaderCellDef>Total Deposit</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'PAGES.PROPOSAL.totalDeposit' | translate }}</th>
               <td mat-cell *matCellDef="let element">
                 {{ element.total_deposit[0]?.amount || 0 | mask : 'separator.6' }}
                 <span class="text--white">{{ denom }}</span>
@@ -423,7 +423,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
-                {{ 'NO DATA' | translate }}
+                {{ 'LABEL.NO_DATA' | translate }}
               </td>
             </tr>
           </table>
@@ -442,12 +442,12 @@
             }"
             [content]="[
               {
-                label: 'Status',
+                label: 'COMMON.STATUS' | translate,
                 class: 'aura-status-inline text-capitalize body-02-mob ' + getStatus(data.status).class,
                 info: '<span class=status>' + getStatus(data.status).value + '</span>'
               },
               {
-                label: 'Voting Start',
+                label: 'PAGES.VALIDATOR_DETAIL.votingStart' | translate,
                 class: 'card__date text--gray-1 body-01',
                 info:
                   data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
@@ -460,7 +460,7 @@
                     : '-'
               },
               {
-                label: 'Submit Time',
+                label: 'PAGES.PROPOSAL.submitTime' | translate,
                 class: 'card__date text--gray-1 body-01',
                 info:
                   '<span>' +

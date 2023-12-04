@@ -36,7 +36,7 @@
                           class="ml-2 p-0 button button--ssm button-ghost aura-tooltip-object">
                           <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
                         </a>
-                        <app-tooltip-customize [content]="'Open CoinGecko'"> </app-tooltip-customize>
+                        <app-tooltip-customize [content]="'PAGES.DASHBOARDS.openCoinGecko' | translate"> </app-tooltip-customize>
                       </div>
                     </div>
                     <div class="divider divider-horizontal"></div>
@@ -49,7 +49,7 @@
                           <span
                             *ngIf="tokenInfo"
                             class="ml-1 body
-                      {{ tokenInfo.price_change_percentage_24h > 0 ? 'text--green-3' : 'text--red-3' }}">
+                            {{ tokenInfo.price_change_percentage_24h > 0 ? 'text--green-3' : 'text--red-3' }}">
                             {{
                               tokenInfo.price_change_percentage_24h
                                 ? '(' +
@@ -91,8 +91,9 @@
                 <div class="d-lg-flex flex-wrap mb-4">
                   <!-- Tabs -->
                   <div class="button-switch-stage button-switch-stage__3">
-                    <button type="button" disabled class="text--white">Price chart</button>
+                    <button type="button" disabled class="text--white">
                       <span>{{ 'PAGES.DASHBOARDS.priceChart' | translate }}</span>
+                    </button>
                   </div>
                   <div class="ms-auto mt-4 mt-md-0">
                     <div class="d-flex align-items-center chart__options">
@@ -302,25 +303,25 @@
             <div class="mt-3 card-child border-radius--sm py-3 px-4">
               <div class="d-flex align-items-center justify-content-between body-03">
                 <div>
-                  <div class="text--gray-2">Yes</div>
+                  <div class="text--gray-2">{{ 'LABEL.YES' | translate }}</div>
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.yes | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
-                  <div class="text--gray-2">No</div>
+                  <div class="text--gray-2">{{ 'LABEL.NO' | translate }}</div>
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.no | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
-                  <div class="text--gray-2">Veto</div>
+                  <div class="text--gray-2">{{ 'LABEL.VETO' | translate }}</div>
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.no_with_veto | formatDigit : 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
-                  <div class="text--gray-2">Abstain</div>
+                  <div class="text--gray-2">{{ 'LABEL.ABSTAIN' | translate }}</div>
                   <div class="text--gray-1 fw-semibold mt-1">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.abstain | formatDigit : 2) : '0,0' }}%
                   </div>
@@ -398,7 +399,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell g-no-data" colspan="9999">
-                    {{ 'NO DATA' | translate }}
+                    {{ 'LABEL.NO_DATA' | translate }}
                   </td>
                 </tr>
               </table>
@@ -486,7 +487,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsTx"></tr>
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell g-no-data" colspan="9999">
-                    {{ 'NO DATA' | translate }}
+                    {{ 'LABEL.NO_DATA' | translate }}
                   </td>
                 </tr>
               </table>
