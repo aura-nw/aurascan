@@ -135,9 +135,7 @@ export class EnvironmentService {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   constructor(private http: HttpClient, private layout: BreakpointObserver) {
     this.breakpoint$.subscribe((state) => {
-      if (state) {
-        this.isMobile = state.matches;
-      }
+      this.isMobile = state?.matches ? true : false;
     });
   }
 

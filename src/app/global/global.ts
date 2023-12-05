@@ -355,7 +355,7 @@ export function convertDataAccountTransaction(
   coinInfo,
   modeQuery,
   setReceive = false,
-  currentAddress,
+  currentAddress = null,
   coinConfig = null,
 ) {
   const txs = _.get(data, 'transaction').map((element) => {

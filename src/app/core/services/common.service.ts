@@ -24,7 +24,7 @@ export class CommonService {
   envDB = this.horoscope?.chain;
 
   chainId = this._environmentService.chainId;
-  addressPrefix = 'aura';
+  addressPrefix = '';
   listNameTag = [];
   listValidator = [];
   listTokenIBC = [];
@@ -90,7 +90,10 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
-    let result = {};
+    let result = {
+      display: this.chainInfo.currencies[0].coinDenom,
+      decimals: this.chainInfo.currencies[0].coinDecimals,
+    };
     if (value.indexOf('ibc') >= 0) {
       try {
         if (!value.startsWith('ibc')) {
@@ -104,9 +107,8 @@ export class CommonService {
         symbol: value,
       };
       result['decimals'] = result['decimal'] || result['decimals'] || this.chainInfo.currencies[0].coinDecimals;
-    } else {
-      result = { display: this.chainInfo.currencies[0].coinDenom, decimals: this.chainInfo.currencies[0].coinDecimals };
     }
+
     return result;
   }
 
