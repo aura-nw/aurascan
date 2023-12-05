@@ -115,15 +115,19 @@ export class IBCComponent implements OnInit {
 
   getListIBC() {
     this.textSearch = this.textSearch?.trim();
-    this.textSearch = this.textSearch ? `%${this.textSearch}%` : ''
-    this.ibcService.getListIbcRelayer(this.textSearch).subscribe({
+    const keySearch = this.textSearch ? `%${this.textSearch}%` : '';
+    this.ibcService.getListIbcRelayer(keySearch).subscribe({
       next: (res) => {
-        this.timeUpdate = _.get(res, 'm_view_ibc_relayer_statistic[0].created_at');
-        res.m_view_ibc_relayer_statistic.forEach(element => {
+        const m_view_ibc_relayer_statistic = _.get(res, 'm_view_ibc_relayer_statistic') || [];
+
+        this.timeUpdate = this.timeUpdate || m_view_ibc_relayer_statistic[0]?.created_at;
+
+        m_view_ibc_relayer_statistic?.forEach((element) => {
           element['image'] = this.ibcService.listInfoChain?.find((k) => k.chainId === element?.chain)?.chainImage;
         });
-        this.dataSource = new MatTableDataSource<any>(res.m_view_ibc_relayer_statistic);
-        this.pageData.length = res.m_view_ibc_relayer_statistic?.length;
+
+        this.dataSource = new MatTableDataSource<any>(m_view_ibc_relayer_statistic);
+        this.pageData.length = m_view_ibc_relayer_statistic?.length;
 
         if (this.dataSource?.data) {
           let dataMobTemp = this.dataSource.data?.slice(

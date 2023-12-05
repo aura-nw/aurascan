@@ -425,14 +425,14 @@
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
                           <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
-                            <div [class.aura-tooltip-object]="item.denomOrigin">
-                              {{ item.denom || denom | stringEllipsis : 19 }}
+                            <div [class.aura-tooltip-object]="(item.denomOrigin || item.denom) !== denom">
+                              {{ item.denomOrigin || item.denom | stringEllipsis : 19 }}
                             </div>
 
                             <app-tooltip-customize
                               [className]="'tooltip--left'"
                               [class]="'message-custom'"
-                              [content]="item.denomOrigin">
+                              [content]="item.denomOrigin || item.denom">
                             </app-tooltip-customize>
                           </div>
                           <a

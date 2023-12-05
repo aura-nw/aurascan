@@ -9,7 +9,7 @@
             <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
                 <span class="h2 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
-                  chainInfo.chainName | cutStringPipe : 16
+                  chainInfo.chainName | cutStringPipe : maxDisplayChar
                 }}</span>
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
               </div>
@@ -29,7 +29,7 @@
             <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
                 <span class="h2 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
-                  counterInfo?.chainName | cutStringPipe : 16
+                  counterInfo?.chainName | cutStringPipe : maxDisplayChar
                 }}</span>
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
               </div>
@@ -150,7 +150,7 @@
                           <0,001
                         </div>
                         <app-tooltip-customize
-                          [content]="data.amountTemp | convertSmallNumber : data.dataDenom?.symbol">
+                          [content]="data.amountTemp | convertSmallNumber : data.dataDenom?.decimals">
                         </app-tooltip-customize>
                         <div
                           *ngIf="(data.amountTemp | balanceOf : data.dataDenom?.decimals) >= 0.001"
@@ -158,9 +158,7 @@
                           [decimal]="data.dataDenom?.decimals"></div>
                       </div>
                       <span class="ml-1">
-                        <div
-                          class="aura-tooltip-contain"
-                          [class.text--primary]="data.dataDenom?.decimals !== coinInfo.coinDenom">
+                        <div class="aura-tooltip-contain">
                           <div [class.aura-tooltip-object]="data.dataDenom?.symbol">
                             {{ data.dataDenom?.symbol | stringEllipsis : 25 }}
                           </div>

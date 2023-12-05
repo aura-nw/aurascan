@@ -132,10 +132,16 @@ export class TransferAssetsComponent {
   searchData() {
     let result;
     if (this.isSearchReceive) {
-      result = this.dataIBCReceiving.data.find((k) => k['dataDenom']?.display === this.textSearchReceive) || [];
+      result =
+        this.dataIBCReceiving.data?.filter((k) =>
+          k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchReceive?.toLowerCase()),
+        ) || [];
       this.dataIBCReceiving.data = [...result];
     } else {
-      result = this.dataIBCSending.data.find((k) => k['dataDenom']?.display === this.textSearchSend) || [];
+      result =
+        this.dataIBCSending.data?.filter((k) =>
+          k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchSend?.toLowerCase()),
+        ) || [];
       this.dataIBCSending.data = [...result];
     }
   }

@@ -43,6 +43,7 @@ export class ChannelDetailComponent implements OnInit {
   counterparty_channel_id = '';
   counterInfo: any;
   destroy$ = new Subject<void>();
+  maxDisplayChar = 16;
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   chainInfo = this.environmentService.chainInfo;
@@ -61,6 +62,10 @@ export class ChannelDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.environmentService.isMobile) {
+      this.maxDisplayChar = 28;
+    }
+
     this.route.params.subscribe((params) => {
       this.channel_id = params.channel_id;
       this.counterparty_channel_id = params.counterparty_channel_id;
