@@ -1,7 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { StdSignDoc, makeSignDoc } from '@cosmjs/amino';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { makeSignDoc, StdSignDoc } from '@cosmjs/amino';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { Decimal } from '@cosmjs/math';
 import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
@@ -10,18 +11,17 @@ import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
+import { getLeap } from 'src/app/core/utils/leap';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
+import { getSigner } from 'src/app/core/utils/signing/signer';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
+import { WalletListComponent } from 'src/app/shared/components/wallet-connect/wallet-list/wallet-list.component';
 import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
-import {WalletListComponent} from "src/app/shared/components/wallet-connect/wallet-list/wallet-list.component";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
-import {getLeap} from "src/app/core/utils/leap";
-import {getSigner} from "src/app/core/utils/signing/signer";
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -65,7 +65,7 @@ export class WalletService implements OnDestroy {
         this.isMobileMatched = state.matches;
       }
     });
-    
+
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
 
@@ -119,7 +119,7 @@ export class WalletService implements OnDestroy {
       case WALLET_PROVIDER.KEPLR:
         this.connectKeplr(this.chainInfo);
         return Promise.resolve(true);
-        
+
       case WALLET_PROVIDER.LEAP:
         this.connectLeap(this.chainInfo);
         return Promise.resolve(true);
@@ -413,19 +413,19 @@ export class WalletService implements OnDestroy {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
       const user: any = local.getItem(LAST_USED_PROVIDER);
-      if(!user?.provider) return ;
+      if (!user?.provider) return;
       let provider;
-      switch(user.provider) {
-        case 'KEPLR' :
-         provider =  'Keplr';
-         break;
-        case 'COIN98' :
-         provider =  'Coin98';
-         break;
-        case 'LEAP' :
-         provider =  'Leap';
-         break;
-      }      
+      switch (user.provider) {
+        case 'KEPLR':
+          provider = 'Keplr';
+          break;
+        case 'COIN98':
+          provider = 'Coin98';
+          break;
+        case 'LEAP':
+          provider = 'Leap';
+          break;
+      }
       signer = await getSigner(provider, this.chainId);
     }
 
@@ -454,7 +454,7 @@ export class WalletService implements OnDestroy {
   openWalletPopup(): void {
     this.dialog.open(WalletListComponent, {
       panelClass: 'wallet-popup',
-      width: '716px'
+      width: '716px',
     });
   }
 }

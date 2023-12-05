@@ -1,46 +1,34 @@
-::ng-deep {
-  .wallet-popup {
-    max-width: 92vw !important;
-    .mat-dialog-container {
-      padding: 0;
-      background-color: var(--aura-gray-10);
-      border-radius: 8px;
-      box-shadow: 0 10px 30px 20px rgba(0, 0, 0, 0.24);
-    }
-  }
-}
-
-
 .wallet-list-container {
   .popup-header {
     height: 72px;
     @media (min-width: 991.98px) {
-      height: 76px      
+      height: 76px;
     }
     background-color: var(--aura-gray-9);
     color: var(--aura-white);
   }
   .wallet-item {
-      cursor: pointer;
-      padding: 12px 8px;
-      border-radius: 8px;
+    cursor: pointer;
+    padding: 12px 8px;
+    border-radius: 8px;
 
-      &:hover {
-        background-color: var(--aura-gray-9);
+    &:hover {
+      background-color: var(--aura-gray-9);
+    }
+    &.disabled-connect {
+      cursor: not-allowed;
+      background-color: var(--aura-gray-8);
+      img,
+      span {
+        opacity: 0.3;
       }
-      &.disabled-connect {
-        cursor: not-allowed;
-        background-color: var(--aura-gray-8);
-        img, span {
-          opacity: 0.3;          
-        }
-      }
+    }
 
-      .wallet-icon {
-        width: 32px;
-        height: 32px;
-      }
-}
+    .wallet-icon {
+      width: 32px;
+      height: 32px;
+    }
+  }
   .wallet-info {
     background-color: var(--aura-gray-9);
     border-radius: 12px;
@@ -48,9 +36,10 @@
   }
 
   @media (min-width: 991.98px) {
-    .wallet-list, .wallet-info {
+    .wallet-list,
+    .wallet-info {
       flex: 0 1 50%;
-      width: 50%;      
+      width: 50%;
       min-height: unset;
     }
   }

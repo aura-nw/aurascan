@@ -1,11 +1,11 @@
-import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { WALLET_PROVIDER } from '../../../../core/constants/wallet.constant';
 import { IWalletInfo } from '../../../../core/models/wallet';
-import {WalletService} from "src/app/core/services/wallet.service";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {tap} from "rxjs/operators";
-import {DialogService} from "src/app/core/services/dialog.service";
-import {MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { tap } from 'rxjs/operators';
+import { DialogService } from 'src/app/core/services/dialog.service';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 @Component({
   selector: 'app-wallet-list',
   templateUrl: './wallet-list.component.html',
@@ -27,15 +27,15 @@ export class WalletListComponent implements OnInit {
       name: WALLET_PROVIDER.LEAP,
       icon: '../../../../../../assets/images/icon-leap.svg',
     },
-  ];  
+  ];
   isMobileMatched = false;
-  
+
   constructor(
     public dialogRef: MatDialogRef<WalletListComponent>,
     private layout: BreakpointObserver,
     private dlgService: DialogService,
-    private walletService: WalletService) {
-  }
+    private walletService: WalletService,
+  ) {}
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -43,11 +43,11 @@ export class WalletListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe(wallet => {
-       if(wallet) {
-         this.dialogRef.close();
-       }
-    })
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.dialogRef.close();
+      }
+    });
     this.isMobileMatched = window.innerWidth <= 992;
   }
 
