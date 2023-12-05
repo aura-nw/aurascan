@@ -7,7 +7,6 @@
           <span class="text--gray-light">
             <ng-container *ngIf="tokenDetail.type === contractType.CW20">[CW-20]</ng-container>
             <ng-container *ngIf="tokenDetail.type === contractType.CW721">[CW-721]</ng-container>
-            <ng-container *ngIf="tokenDetail.type === contractType.CW4973">[CW-4973]</ng-container>
           </span>
         </td>
       </tr>
@@ -31,19 +30,14 @@
                   </span>
 
                   <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
-                    (<span
-                      >{{ tokenDetail.isValueUp ? '+' : '-'
-                      }}{{ tokenDetail.change | formatDigit : 2 }}%</span
-                    >)
+                    (<span>{{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change | formatDigit : 2 }}%</span>)
                   </span>
                 </div>
               </div>
             </div>
             <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
               <div class="text--gray-5 body-02">CIRCULATING SUPPLY MARKET CAP</div>
-              <div class="body-02 text--gray-1">
-                ${{ tokenDetail.circulating_market_cap | formatDigit : 2 }}
-              </div>
+              <div class="body-02 text--gray-1">${{ tokenDetail.circulating_market_cap | formatDigit : 2 }}</div>
             </div>
           </div>
         </td>
@@ -96,8 +90,7 @@
                 class="ml-1 {{ tokenDetail.isHolderUp ? 'text--green-3' : 'text--red-3' }}"
                 *ngIf="!tokenDetail.isNFTContract">
                 (<span
-                  >{{ tokenDetail.isHolderUp ? '↑' : '↓'
-                  }}{{ tokenDetail.holderChange || 0 | formatDigit : 2 }}%</span
+                  >{{ tokenDetail.isHolderUp ? '↑' : '↓' }}{{ tokenDetail.holderChange || 0 | formatDigit : 2 }}%</span
                 >)
               </span>
             </div>

@@ -133,10 +133,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       idLte: nextKey,
     };
 
-    if (this.typeContract === this.contractType.CW4973) {
-      payload['isCW4973'] = true;
-    }
-
     if (this.keyWord) {
       if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
         payload['txHash'] = this.keyWord;

@@ -9,7 +9,6 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApiAccountService } from 'src/app/core/data-services/api-account.service';
 import { EFeature } from 'src/app/core/models/common.model';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -73,7 +72,6 @@ export class AccountDetailComponent implements OnInit {
     private layout: BreakpointObserver,
     private modalService: NgbModal,
     private environmentService: EnvironmentService,
-    private soulboundService: SoulboundService,
     private router: Router,
   ) {
     this.chartOptions = CHART_OPTION();
@@ -112,8 +110,6 @@ export class AccountDetailComponent implements OnInit {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
       }
-      this.getSBTPick();
-      this.getTotalSBT();
     });
 
     let retrievedObject = localStorage.getItem('accountDetail');
@@ -197,33 +193,6 @@ export class AccountDetailComponent implements OnInit {
 
   reloadData() {
     location.reload();
-  }
-
-  getSBTPick() {
-    const payload = {
-      limit: 100,
-      offset: 0,
-      receiverAddress: this.currentAddress,
-      isEquipToken: true,
-    };
-
-    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
-      (res) => {
-        this.totalSBTPick = res.data.length;
-      },
-      () => {},
-      () => {},
-    );
-  }
-
-  getTotalSBT() {
-    this.soulboundService.countTotalABT(this.currentAddress).subscribe(
-      (res) => {
-        this.totalSBT = res.data;
-      },
-      () => {},
-      () => {},
-    );
   }
 
   extendLink(url) {

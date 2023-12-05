@@ -4,7 +4,6 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -91,9 +90,6 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
           k.tx_hash = k.store_hash;
           k.verified_at = k.code_id_verifications[0]?.verified_at;
           k.contract_verification = k.code_id_verifications[0]?.verification_status;
-          if (k.type === ContractRegisterType.CW721 && k.smart_contracts[0]?.name === TYPE_CW4973) {
-            k.type = ContractRegisterType.CW4973;
-          }
         });
         this.dataSource.data = res?.code;
         this.pageData.length = res?.code_aggregate?.aggregate?.count || 0;

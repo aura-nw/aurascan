@@ -28,7 +28,6 @@ List of features which you can configure:
   CW4973
   STATISTICS
   FEE_GRANT
-  ACCOUNT_BOUND
   COMMUNITY_POOL
   PROFILE
   EXPORT_CSV

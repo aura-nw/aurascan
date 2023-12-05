@@ -38,7 +38,14 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   { matColumnDef: 'status', headerCellDef: 'Result', type: 'result', headerWidth: 9 },
   { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
   { matColumnDef: 'blockHeight', headerCellDef: 'Block', type: 'hash-url', headerWidth: 6, isUrl: '/blocks' },
-  { matColumnDef: 'from', headerCellDef: 'Message Sender', type: 'hash-url', headerWidth: 12, isUrl: '/account', isNameTag: true },
+  {
+    matColumnDef: 'from',
+    headerCellDef: 'Message Sender',
+    type: 'hash-url',
+    headerWidth: 12,
+    isUrl: '/account',
+    isNameTag: true,
+  },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },
 ];
 
@@ -104,10 +111,6 @@ export const REGISTER_CONTRACT = [
     key: ContractRegisterType.CW721,
     value: ContractRegisterType.CW721,
   },
-  {
-    key: ContractRegisterType.CW4973,
-    value: ContractRegisterType.CW4973,
-  },
 ];
 
 export const LIST_ZEROES = [
@@ -124,5 +127,3 @@ export const LIST_ZEROES = [
     value: 'custom',
   },
 ];
-
-export const TYPE_CW4973 = 'crates.io:cw4973';

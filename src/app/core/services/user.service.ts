@@ -302,8 +302,8 @@ export class UserService extends CommonService {
           tokenId: payload.tokenId,
           actionIn: payload.isNFTDetail ? null : !payload.isTransferTab ? CW721_TRACKING : null,
           actionNotIn: payload.isNFTDetail ? null : payload.isTransferTab ? ['approve', 'instantiate', 'revoke'] : null,
-          neqCw4973: payload.isCW4973 ? null : 'crates.io:cw4973',
-          eqCw4973: payload.isCW4973 ? 'crates.io:cw4973' : null,
+          neqCw4973: 'crates.io:cw4973',
+          eqCw4973: null,
         },
         operationName: 'Cw721TXMultilCondition',
       })

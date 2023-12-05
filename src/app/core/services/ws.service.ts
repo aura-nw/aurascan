@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import io, { Socket } from 'socket.io-client';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { SoulboundService } from './soulbound.service';
 import { WalletService } from './wallet.service';
 
 interface RedisResponse {
@@ -30,11 +29,7 @@ export class WSService {
 
   codeId: number;
 
-  constructor(
-    private environmentService: EnvironmentService,
-    private soulboundService: SoulboundService,
-    private walletService: WalletService,
-  ) {
+  constructor(private environmentService: EnvironmentService, private walletService: WalletService) {
     this.wsData = new BehaviorSubject<any>(null);
     this.data$ = this.wsData.asObservable();
   }
@@ -123,32 +118,6 @@ export class WSService {
       if (redisResponse.CodeId === this.codeId && this.codeId) {
         callBack && callBack();
         this.codeStatus.next(redisResponse.Code);
-      }
-    });
-  }
-
-  subscribeABTNotify(callBack?: () => void, tabCallBack?: () => void) {
-    this.connect();
-
-    const wsData = { event: 'eventABTNotify' };
-
-    const register = this.on('register', wsData);
-
-    if (register === undefined) {
-      return;
-    }
-
-    register.subscribe((data: any) => {
-      const redisResponse: RedisResponse = (data && JSON.parse(data)) || {
-        ReceiverAddress: '',
-      };
-
-      const currentWallet = this.walletService.wallet?.bech32Address;
-      if (currentWallet && redisResponse.ReceiverAddress === currentWallet) {
-        callBack && callBack();
-        this.soulboundService.getNotify(currentWallet).subscribe((res) => {
-          this.notifyValue.next(res.data.notify);
-        });
       }
     });
   }

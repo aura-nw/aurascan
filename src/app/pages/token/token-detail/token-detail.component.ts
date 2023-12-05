@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { map, of, switchMap } from 'rxjs';
 import { DATEFORMAT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -119,9 +118,7 @@ export class TokenDetailComponent implements OnInit {
       next: (res) => {
         const name = _.get(res, 'smart_contract[0].cw721_contract.name');
         let type = ContractRegisterType.CW721;
-        if (res.smart_contract[0]?.name === TYPE_CW4973) {
-          type = ContractRegisterType.CW4973;
-        }
+
         const isNFTContract = true;
         const contract_address = _.get(res, 'smart_contract[0].address');
         this.tokenDetail = { name, type, contract_address, isNFTContract };
