@@ -11,9 +11,8 @@ import {
   TypeTransaction,
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
+import { convertTx } from '../core/utils/common/info-common';
 import { balanceOf } from '../core/utils/common/parsing';
-import { getDataIBC } from '../core/utils/common/info-common';
-import { sha256 } from 'js-sha256';
 Injectable();
 
 export class Globals {
@@ -408,16 +407,16 @@ export function convertDataAccountTransaction(
           toAddress = data.to;
           fromAddress = data.from;
           let { type, action } = getTypeTx(element, i);
-          let amountString = data.amount + denom;
-          let decimal = 6;
+          let amountString = data.amount + data.denom || denom;
+          let decimal = coinInfo.coinDecimals;
           let amountTemp = data.amount;
           if (amountString?.indexOf('ibc') > -1) {
-            const dataIBC = getDataIBC(amountString, coinConfig);
+            const dataIBC = convertTx(amountString, coinConfig, coinInfo.coinDecimals);
             decimal = dataIBC['decimal'];
-            amount = balanceOf(Number(data.amount) || 0, dataIBC['decimal'] || 6);
+            amount = balanceOf(Number(data.amount) || 0, dataIBC['decimal'] || decimal);
             denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
           } else {
-            amount = balanceOf(Number(data.amount) || 0, coinInfo.coinDecimals);
+            amount = balanceOf(Number(data.amount) || 0, decimal);
           }
           const result = { type, toAddress, fromAddress, amount, denom, amountTemp, action, decimal };
           arrTemp.push(result);
@@ -572,7 +571,7 @@ export function convertDataTransactionSimple(data, coinInfo) {
   return txs;
 }
 
-export function clearLocalData(){
+export function clearLocalData() {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
   localStorage.removeItem('userEmail');
@@ -595,7 +594,7 @@ export function convertTxIBC(data, coinInfo) {
 
     const status = code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
     let amountTemp = _.get(data, 'amount');
-    let amount = balanceOf(amountTemp || 0, 6);
+    let amount = balanceOf(amountTemp || 0, coinInfo.coinDecimals);
 
     return {
       code,

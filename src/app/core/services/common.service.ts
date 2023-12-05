@@ -98,13 +98,12 @@ export class CommonService {
           value = value?.replace(temp, '');
         }
       } catch {}
-      result = { display: value, decimals: 6 };
       let temp = value.slice(value.indexOf('ibc'));
       result = this.listTokenIBC?.find((k) => k.denom === temp) || {
-        display:  value,
-        decimals:  this.chainInfo.currencies[0].coinDecimals,
-        symbol:  value,
+        display: value,
+        symbol: value,
       };
+      result['decimals'] = result['decimal'] || result['decimals'] || this.chainInfo.currencies[0].coinDecimals;
     } else {
       result = { display: this.chainInfo.currencies[0].coinDenom, decimals: this.chainInfo.currencies[0].coinDecimals };
     }
