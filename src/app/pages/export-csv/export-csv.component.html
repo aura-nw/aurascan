@@ -43,27 +43,27 @@
                 <h5 class="dropdown-menu__title">Account transaction</h5>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
-                  [class.active]="dataType === tabsData.ExecutedTxs"
-                  (click)="changeTypeFilter(tabsData.ExecutedTxs)">
-                  <button type="button" class="button px-2">{{ tabsAccount.ExecutedTxs }}</button>
+                  [class.active]="dataType === TabsAccountLink.ExecutedTxs"
+                  (click)="changeTypeFilter(TabsAccountLink.ExecutedTxs)">
+                  <button type="button" class="button px-2">{{ TabsAccount.ExecutedTxs }}</button>
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
-                  [class.active]="dataType === tabsData.NativeTxs"
-                  (click)="changeTypeFilter(tabsData.NativeTxs)">
-                  <button type="button" class="button px-2">{{ tabsAccount.NativeTxs }}</button>
+                  [class.active]="dataType === TabsAccountLink.NativeTxs"
+                  (click)="changeTypeFilter(TabsAccountLink.NativeTxs)">
+                  <button type="button" class="button px-2">{{ TabsAccount.NativeTxs }}</button>
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
-                  [class.active]="dataType === tabsData.FtsTxs"
-                  (click)="changeTypeFilter(tabsData.FtsTxs)">
-                  <button type="button" class="button px-2">{{ tabsAccount.FtsTxs }}</button>
+                  [class.active]="dataType === TabsAccountLink.FtsTxs"
+                  (click)="changeTypeFilter(TabsAccountLink.FtsTxs)">
+                  <button type="button" class="button px-2">{{ TabsAccount.FtsTxs }}</button>
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
-                  [class.active]="dataType === tabsData.NftTxs"
-                  (click)="changeTypeFilter(tabsData.NftTxs)">
-                  <button type="button" class="button px-2">{{ tabsAccount.NftTxs }}</button>
+                  [class.active]="dataType === TabsAccountLink.NftTxs"
+                  (click)="changeTypeFilter(TabsAccountLink.NftTxs)">
+                  <button type="button" class="button px-2">{{ TabsAccount.NftTxs }}</button>
                 </li>
               </div>
             </ul>
@@ -117,7 +117,7 @@
               type="radio"
               value="filterRange"
               id="block"
-              [disabled]="!(!dataType || dataType === this.tabsData.ExecutedTxs)"
+              [disabled]="!(!dataType || dataType === this.TabsAccountLink.ExecutedTxs)"
               class="radio-box radio-box--dark"
               [checked]="!isFilterDate"
               (change)="changeType()" />
