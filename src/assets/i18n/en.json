@@ -265,6 +265,20 @@
       "COIN_N_TOKEN": "Coins & Tokens",
       "ACCOUNT_INFO": "Account Info",
       "TOTAL_VALUE": "Total Value"
+    },
+    "CODE_ID": {
+      "OWNER_MSG": "Are you the Code ID's owner?",
+      "VERIFY_N_PUBLISH": "Verify and Publish",
+      "YOUR_CODE_ID": "your Code ID source code today!",
+      "PENDING_MSG": "This code ID source code is currently pending in Verify and Publish process.",
+      "KINDLY_CLICK": "Kindly click",
+      "HERE": "here",
+      "FOR_MORE_DETAIL": "for more detail",
+      "CHECK_STATUS": "Let check the status of the last time this Code ID source code was unable to Verify and Publish",
+      "VERIFIED": "Code ID Verified",
+      "COMPILER_VER": "Compiler Version:",
+      "VERIFY_TIME": "Verified Time:",
+      "LINK_SOURCE_CODE": "Link Code ID source code"
     }
   },
   "WALLET": {
@@ -311,9 +325,10 @@
     "RULE_PASSWORD": "The password need to be more than 8 characters in length with at least one upper case, 1 lower case, 1 number and 1 special character",
     "PASSWORD_NOT_MATCH": "The password confirmation does not match",
     "NO_COIN_N_TOKEN": "No coins & tokens",
-    "FETCHING_DATA": "Fetching data, might take longer than usual. <br />Please come back later or "
+    "FETCHING_DATA": "Fetching data, might take longer than usual. <br />Please come back later or ",
+    "CODE_ID_NOT_FOUND": "Code ID was not found!"
   },
-  "VERIFY_CODE_ID": {
+  "VERIFY_CODE_ID_ERR": {
     "E001": "Code ID not found",
     "E002": "Wrong compiler image",
     "E003": "Code ID is currently being verified",
@@ -409,7 +424,9 @@
     "VERIFIED_BY_AURA": "Verified by Aura Network",
     "NOTICE": "NOTICE",
     "ALL": "All",
-    "REFRESH_PAGE": "refresh the page"
+    "REFRESH_PAGE": "refresh the page",
+    "INSTANTIATE_TIME": "Instantiate times",
+    "CREATE_AT": "Created At"
   },
   "PAGINATOR": {
     "FIRST": "First",
@@ -439,6 +456,8 @@
     "SELECTED_ITEMS": "Selected Items ...",
     "RESET": "Reset",
     "SELECT": "Select",
-    "SET_PRIVATE_NAME": "Set Private Name Tag"
+    "SET_PRIVATE_NAME": "Set Private Name Tag",
+    "COPY": "Copy",
+    "COPIED": "Copied!"
   }
 }

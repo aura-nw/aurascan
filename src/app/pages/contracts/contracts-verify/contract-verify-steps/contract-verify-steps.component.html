@@ -20,7 +20,7 @@
                 <li [class]="step.className">
                   <div>{{ step.check_name }}</div>
                   <div class="step__error" *ngIf="step.result === 'Fail'">
-                    {{ 'VERIFY_CODE_ID.' + step.msg_code | translate }}
+                    {{ 'VERIFY_CODE_ID_ERR.' + step.msg_code | translate }}
                   </div>
                 </li>
               </ng-container>
@@ -46,7 +46,7 @@
                 <li [class]="step.className">
                   <div>{{ step.check_name }}</div>
                   <div class="step__error" *ngIf="step.result === 'Fail'">
-                    {{ 'VERIFY_CODE_ID.' + step.msg_code | translate }}
+                    {{ 'VERIFY_CODE_ID_ERR.' + step.msg_code | translate }}
                   </div>
                 </li>
               </ng-container>

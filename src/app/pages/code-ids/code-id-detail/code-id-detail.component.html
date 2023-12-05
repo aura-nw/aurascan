@@ -4,10 +4,10 @@
   <section class="information mt-4 mt-lg-6">
     <div class="card">
       <div class="card-body">
-        <h2 class="h3-mob text--white mb-4">Information</h2>
+        <h2 class="h3-mob text--white mb-4">{{ 'LABEL.INFORMATION' | translate }}</h2>
         <div class="row">
           <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Code ID</div>
+            <div class="text--gray-4 body">{{ 'LABEL.CODE_ID' | translate }}</div>
           </div>
           <div class="col-6 col-lg-auto">
             <div class="text--gray-light body">{{ codeIdDetail.code_id }}</div>
@@ -39,7 +39,7 @@
         </div>
         <div class="row mt-2">
           <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Type</div>
+            <div class="text--gray-4 body">{{ 'LABEL.TYPE' | translate }}</div>
           </div>
           <div class="col-6 col-lg-auto">
             <div class="text--gray-light body">
@@ -49,7 +49,7 @@
         </div>
         <div class="row mt-2">
           <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Instantiate times</div>
+            <div class="text--gray-4 body">{{ 'LABEL.INSTANTIATE_TIME' | translate }}</div>
           </div>
           <div class="col-6 col-lg-auto">
             <div class="text--gray-light body">{{ codeIdDetail.instantiates }}</div>
@@ -57,7 +57,7 @@
         </div>
         <div class="row mt-2">
           <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Created At</div>
+            <div class="text--gray-4 body">{{ 'LABEL.CREATE_AT' | translate }}</div>
           </div>
           <div class="col-6 col-lg-auto">
             <div class="text--gray-1 body">{{ codeIdDetail.created_at | customDate : 'yyyy-MM-dd HH:mm:ss' }}</div>
@@ -89,6 +89,6 @@
   </section>
 </ng-container>
 <ng-container *ngIf="!codeIdDetail && !isLoading"
-  ><div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
+  ><div class="text--white text-center my-lg-20 mb-5 h6">{{ 'MESSAGES.CODE_ID_NOT_FOUND' | translate }}</div>
   <div class="py-lg-20"></div>
 </ng-container>
