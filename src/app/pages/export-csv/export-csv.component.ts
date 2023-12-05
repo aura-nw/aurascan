@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
-import { TabsAccount } from 'src/app/core/constants/account.enum';
+import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT } from 'src/app/core/constants/common.constant';
 import { TypeExport } from 'src/app/core/constants/export-csv.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -167,7 +167,7 @@ export class ExportCsvComponent implements OnInit {
     const data: Blob = new Blob([buffer], {
       type: 'text/csv;charset=utf-8',
     });
-    const typeName = payload.dataType == TypeExport.NativeTxs ? TypeExport.NativeTxs : TypeExport.FtsTxs;
+    let typeName = payload.dataType == TypeExport.NativeTxs ? TabsAccountLink.NativeTxs :TabsAccountLink.FtsTxs;
     const fileName = 'export-account-' + typeName + '-' + payload.address + '.csv';
     saveAs(data, fileName);
     this.isDownload = false;
