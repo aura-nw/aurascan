@@ -1,14 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { from } from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { LENGTH_CHARACTER } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
-import { WalletService } from '../../core/services/wallet.service';
-import { LAYOUT_MODE } from '../layouts.model';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
 

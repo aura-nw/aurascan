@@ -1,6 +1,7 @@
 export enum WALLET_PROVIDER {
   KEPLR = 'KEPLR',
   COIN98 = 'COIN98',
+  LEAP = 'LEAP',
 }
 
 export const LAST_USED_PROVIDER = 'LAST_USED_PROVIDER';

@@ -18,6 +18,8 @@ import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
+import {WalletListComponent} from "src/app/shared/components/wallet-connect/wallet-list/wallet-list.component";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -43,17 +45,6 @@ export class WalletService implements OnDestroy {
     this._wallet$.next(nextState);
   }
 
-  dialogState$: Observable<'open' | 'close'>;
-  private _dialogState$: BehaviorSubject<'open' | 'close'>;
-
-  get dialogState(): 'open' | 'close' {
-    return this._dialogState$.getValue();
-  }
-
-  setDialogState(nextState: 'open' | 'close'): void {
-    this._dialogState$.next(nextState);
-  }
-
   isMobileMatched = false;
   breakpoint$ = this.breakpointObserver
     .observe([Breakpoints.Small, Breakpoints.XSmall])
@@ -65,15 +56,14 @@ export class WalletService implements OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private http: HttpClient,
     public translate: TranslateService,
+    private dialog: MatDialog,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
         this.isMobileMatched = state.matches;
       }
     });
-
-    this._dialogState$ = new BehaviorSubject(null);
-    this.dialogState$ = this._dialogState$.asObservable();
+    
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
 
@@ -128,6 +118,10 @@ export class WalletService implements OnDestroy {
         this.connectKeplr(this.chainInfo);
 
         return Promise.resolve(true);
+        
+      case WALLET_PROVIDER.LEAP:
+
+        return null;
 
       case WALLET_PROVIDER.COIN98:
         const _coin98 = this.checkExistedCoin98();
@@ -230,7 +224,7 @@ export class WalletService implements OnDestroy {
       return account;
     }
 
-    this.setDialogState('open');
+    this.openWalletPopup();
 
     return null;
   }
@@ -410,5 +404,12 @@ export class WalletService implements OnDestroy {
       dataWallet = await keplr.signArbitrary(this.chainInfo.chainId, minter, message);
     }
     return dataWallet;
+  }
+
+  openWalletPopup(): void {
+    this.dialog.open(WalletListComponent, {
+      panelClass: 'wallet-popup',
+      width: '716px'
+    });
   }
 }
