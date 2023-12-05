@@ -15,7 +15,6 @@
         <li
           *ngFor="let wallet of walletList"
           class="wallet-item mt-1"
-          [class.disabled-connect]="wallet.name === walletProvider.LEAP"
           [class.d-none]="isMobileMatched && wallet.disableMobile"
           (click)="connectWallet(wallet.name)">
           <div class="d-flex align-items-center">

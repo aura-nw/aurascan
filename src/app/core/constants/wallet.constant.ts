@@ -35,4 +35,5 @@ export const SIGNING_MESSAGE_TYPES = {
 export enum ESigningType {
   Keplr = 'Keplr',
   Coin98 = 'Coin98',
+  Leap = 'Leap',
 }

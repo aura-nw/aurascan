@@ -20,6 +20,8 @@ import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
 import {WalletListComponent} from "src/app/shared/components/wallet-connect/wallet-list/wallet-list.component";
 import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {getLeap} from "src/app/core/utils/leap";
+import {getSigner} from "src/app/core/utils/signing/signer";
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -116,12 +118,11 @@ export class WalletService implements OnDestroy {
     switch (provider) {
       case WALLET_PROVIDER.KEPLR:
         this.connectKeplr(this.chainInfo);
-
         return Promise.resolve(true);
         
       case WALLET_PROVIDER.LEAP:
-
-        return null;
+        this.connectLeap(this.chainInfo);
+        return Promise.resolve(true);
 
       case WALLET_PROVIDER.COIN98:
         const _coin98 = this.checkExistedCoin98();
@@ -167,6 +168,36 @@ export class WalletService implements OnDestroy {
         } else {
           this.disconnect();
           window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
+        }
+      } catch (e: any) {
+        this.catchErrors(e);
+      }
+    };
+    checkWallet();
+  }
+
+  private async connectLeap(chainInfo: ChainInfo): Promise<void> {
+    const checkWallet = async () => {
+      try {
+        const leap = await getLeap();
+
+        if (leap) {
+          await this.suggestChain(leap);
+          await leap.enable(chainInfo.chainId);
+          const account = await leap.getKey(chainInfo.chainId);
+
+          if (account) {
+            this.setWallet(account);
+            const timestamp = new Date().getTime();
+            local.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+              provider: WALLET_PROVIDER.LEAP,
+              chainId: chainInfo.chainId,
+              timestamp,
+            });
+          }
+        } else {
+          this.disconnect();
+          window.open('https://chromewebstore.google.com/detail/leap-cosmos-wallet/fcfcfllfndlomdhbehjjcoimbgofdncg');
         }
       } catch (e: any) {
         this.catchErrors(e);
@@ -381,7 +412,21 @@ export class WalletService implements OnDestroy {
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
-      signer = await window.getOfflineSignerAuto(this.chainId);
+      const user: any = local.getItem(LAST_USED_PROVIDER);
+      if(!user?.provider) return ;
+      let provider;
+      switch(user.provider) {
+        case 'KEPLR' :
+         provider =  'Keplr';
+         break;
+        case 'COIN98' :
+         provider =  'Coin98';
+         break;
+        case 'LEAP' :
+         provider =  'Leap';
+         break;
+      }      
+      signer = await getSigner(provider, this.chainId);
     }
 
     return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
