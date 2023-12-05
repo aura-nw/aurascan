@@ -3,12 +3,12 @@
   <div class="d-flex justify-content-center mt-lg-13 mt-6 mb-9">
     <div class="p-0 box-chain">
       <div class="box-connect d-lg-flex justify-content-between align-items-center">
-        <div class="box-connect-chain d-flex justify-content-lg-center align-items-center">
+        <div class="box-connect-chain d-flex align-items-center">
           <div class="d-flex justify-content-lg-center align-items-center">
             <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
-            <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
+            <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
-                <span class="h2 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
+                <span class="body-01 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
                   chainInfo.chainName | cutStringPipe : maxDisplayChar
                 }}</span>
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
@@ -20,15 +20,15 @@
         <div class="box-connected justify-content-center align-items-center h2 d-none d-lg-flex">
           <div class="fw-semibold">Openned</div>
         </div>
-        <div class="box-connect-chain mt-6 mt-lg-0 d-flex justify-content-lg-center align-items-center">
+        <div class="box-connect-chain mt-6 mt-lg-0 d-flex align-items-center pl-lg-9">
           <div class="d-flex justify-content-lg-center align-items-center">
             <img
               [src]="counterInfo?.chainImage ? counterInfo?.chainImage : 'assets/images/logo/auraTitleLogo.png'"
               alt=""
               class="img-chain" />
-            <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
+            <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
-                <span class="h2 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
+                <span class="body-01 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
                   counterInfo?.chainName | cutStringPipe : maxDisplayChar
                 }}</span>
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
@@ -159,7 +159,7 @@
                       </div>
                       <span class="ml-1">
                         <div class="aura-tooltip-contain">
-                          <div [class.aura-tooltip-object]="data.dataDenom?.symbol">
+                          <div class="text--white" [class.aura-tooltip-object]="data.dataDenom?.symbol">
                             {{ data.dataDenom?.symbol | stringEllipsis : 25 }}
                           </div>
                           <app-tooltip-customize

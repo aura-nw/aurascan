@@ -6,7 +6,7 @@
     <div class="col-lg-6">
       <div class="card box-dashboard">
         <div class="align-items-center d-lg-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
-          <h2 class="text--white mb-0">IBC Sending Assets</h2>
+          <div class="text--white mb-0 body-01 fw-semibold">IBC Sending Assets</div>
           <form class="aura-form single-input-field search-form mt-4 mt-lg-0" #searchForm>
             <div class="input-group">
               <input
@@ -15,13 +15,13 @@
                 placeholder="Search by IBC Assets"
                 [maxLength]="maxLengthSearch"
                 [(ngModel)]="textSearchSend"
-                (keypress)="onKeyUp()"
+                (blur)="searchSend()"
                 name="search"
                 autocomplete="off" />
               <button
                 type="submit"
                 class="btn-search {{ textSearchSend && textSearchSend?.length > 0 ? 'd-none' : '' }}"
-                (click)="getTransferSend()">
+                (click)="searchSend()">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
@@ -154,7 +154,7 @@
     <div class="col-lg-6">
       <div class="card box-dashboard">
         <div class="align-items-center d-lg-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
-          <h2 class="text--white mb-0">IBC Receiving Assets</h2>
+          <div class="text--white mb-0 body-01 fw-semibold">IBC Receiving Assets</div>
           <form class="aura-form single-input-field search-form mt-4 mt-lg-0" #searchForm>
             <div class="input-group">
               <input
@@ -163,13 +163,13 @@
                 placeholder="Search by IBC Assets"
                 [maxLength]="maxLengthSearch"
                 [(ngModel)]="textSearchReceive"
-                (keypress)="onKeyUp(true)"
+                (blur)="searchReceive()"
                 name="search"
                 autocomplete="off" />
               <button
                 type="submit"
                 class="btn-search {{ textSearchReceive && textSearchReceive?.length > 0 ? 'd-none' : '' }}"
-                (click)="getTransferReceive()">
+                (click)="searchReceive()">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button

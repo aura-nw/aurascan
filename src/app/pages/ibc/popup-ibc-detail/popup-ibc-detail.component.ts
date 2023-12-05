@@ -33,7 +33,7 @@ export class PopupIBCDetailComponent implements OnInit {
   isLoading = true;
   dataSourceMobile: any[];
   relayerType = Relayer;
-  maxDisplayChar = 16;
+  maxDisplayChar = 22;
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'channel_id', headerCellDef: 'channel', headerWidth: 20 },
