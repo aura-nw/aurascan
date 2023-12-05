@@ -162,8 +162,7 @@
       "delegators": "Delegators",
       "powerEvents": "Power Events",
       "lastBlocks": "Last {{ numberLastBlock }} Blocks",
-      "votingStart": "Voting Start",
-      "votingEnd": "Voting End"
+      "votingStart": "Voting Start"
     },
     "TOKEN": {
       "cw20Title": "CW-20 Tokens",
@@ -207,7 +206,22 @@
     },
     "CONTRACT": {
       "contractVer": "Contract Ver",
-      "tokenTracker": "Token Tracker"
+      "tokenTracker": "Token Tracker",
+      "moreInfo": "More Info",
+      "contractType": "Contract Type",
+      "contractCreator": "Contract Creator",
+      "atTx": "at txn",
+      "linkContractSourceCode":"Link Contract Source Code",
+      "fileContractSourceCode": "File Contract Source Code",
+      "contractSchema": "Contract Schema",
+      "fileJson1":"File 1 of 3: execute msg.json",
+      "fileJson2":"File 2 of 3: instantiate msg.json",
+      "fileJson3":"File 3 of 3: query msg.json",
+      "exportSchema":"Export Schema",
+      "contractCreationCode":"Contract Creation Code",
+      "readContractInfo":"Read Contract Information",
+      "expandAll":"Expand all",
+      "readContract": "Read Contract"
     },
     "FEE_GRANT": {
       "granteeAddress": "Grantee's address",
@@ -257,28 +271,30 @@
       "events": "Events"
     },
     "ACCOUNT_DETAIL": {
-      "REWARD": "Reward",
-      "COMPLETION_TIME": "Completion Time",
-      "VESTING_SCHEDULE": "Vesting Schedule",
-      "STAKE": "Stake",
-      "EXPORT_CSV": "Export CSV",
-      "COIN_N_TOKEN": "Coins & Tokens",
-      "ACCOUNT_INFO": "Account Info",
-      "TOTAL_VALUE": "Total Value"
+      "reward": "Reward",
+      "completionTime": "Completion Time",
+      "vestingSchedule": "Vesting Schedule",
+      "stake": "Stake",
+      "exportCsv": "Export CSV",
+      "coinAndToken": "Coins & Tokens",
+      "accountInfo": "Account Info",
+      "totalValue": "Total Value"
     },
     "CODE_ID": {
-      "OWNER_MSG": "Are you the Code ID's owner?",
-      "VERIFY_N_PUBLISH": "Verify and Publish",
-      "YOUR_CODE_ID": "your Code ID source code today!",
-      "PENDING_MSG": "This code ID source code is currently pending in Verify and Publish process.",
-      "KINDLY_CLICK": "Kindly click",
-      "HERE": "here",
-      "FOR_MORE_DETAIL": "for more detail",
-      "CHECK_STATUS": "Let check the status of the last time this Code ID source code was unable to Verify and Publish",
-      "VERIFIED": "Code ID Verified",
-      "COMPILER_VER": "Compiler Version:",
-      "VERIFY_TIME": "Verified Time:",
-      "LINK_SOURCE_CODE": "Link Code ID source code"
+      "ownerMsg": "Are you the Code ID's owner?",
+      "verifyAndPublish": "Verify and Publish",
+      "yourCodeID": "your Code ID source code today!",
+      "pendingMsg": "This code ID source code is currently pending in Verify and Publish process.",
+      "pendingVerifyMsg": "The code ID source code that this smart contract was instantiated from is currently pending in Verify and Publish process.",
+      "kindlyClick": "Kindly click",
+      "here": "here",
+      "forMoreDetail": "for more detail",
+      "checkStatus": "Let check the status of the last time this Code ID source code was unable to Verify and Publish",
+      "verified": "Code ID Verified",
+      "complierVer": "Compiler Version:",
+      "verifiedTime": "Verified Time:",
+      "linkSourceCode": "Link Code ID source code",
+      "codeIdVerified":"Code ID source code verified"
     }
   },
   "WALLET": {
@@ -426,7 +442,20 @@
     "ALL": "All",
     "REFRESH_PAGE": "refresh the page",
     "INSTANTIATE_TIME": "Instantiate times",
-    "CREATE_AT": "Created At"
+    "CREATE_AT": "Created At",
+    "ASSET": "Asset",
+    "SYMBOL": "Symbol",
+    "COMMUNITY_POOL_PROPOSAL": "Community Pool Spent Proposals",
+    "RECIPIENT": "Recipient",
+    "VOTING_END": "Voting End",
+    "COMMUNITY_POOL_DETAIL": "Community Pool Details",
+    "PUBLIC_NAME": "Public Name",
+    "PRIVATE_NAME_TAG": "Private Name Tag",
+    "TRUE": "true",
+    "FALSE": "false",
+    "WRITE": "Write",
+    "CODE": "Code",
+    "READ": "Read"
   },
   "PAGINATOR": {
     "FIRST": "First",
@@ -458,6 +487,10 @@
     "SELECT": "Select",
     "SET_PRIVATE_NAME": "Set Private Name Tag",
     "COPY": "Copy",
-    "COPIED": "Copied!"
+    "COPIED": "Copied!",
+    "JSON_FORMAT":"JSON Format",
+    "JRAW":"JRAW/Text Format",
+    "CONNECT_TO_WEB3": "Connect to Web3",
+    "CONNECTED_TO_WEB3": "Connected to Web3"
   }
 }

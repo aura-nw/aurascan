@@ -26,7 +26,7 @@
               [cdkCopyToClipboard]="currentAddress">
               <i class="ph ph-copy text--white body-01"></i>
             </button>
-            <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+            <app-tooltip-customize [content]="'BUTTON.COPIED' | translate"> </app-tooltip-customize>
           </div>
         </div>
         <div class="aura-tooltip-contain btn-watch-list ml-2 ml-lg-0">
@@ -61,7 +61,7 @@
         <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">
-              {{ 'PAGES.ACCOUNT_DETAIL.ACCOUNT_INFO' | translate }}
+              {{ 'PAGES.ACCOUNT_DETAIL.accountInfo' | translate }}
             </h3>
             <div
               *ngIf="commonService.setNameTag(currentAddress, null, false) !== currentAddress"
@@ -105,7 +105,7 @@
 
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
             <div>
-              <div class="h5 mb-1 text--white">{{ 'PAGES.ACCOUNT_DETAIL.TOTAL_VALUE' | translate }}</div>
+              <div class="h5 mb-1 text--white">{{ 'PAGES.ACCOUNT_DETAIL.totalValue' | translate }}</div>
               <span class="h1 mb-0 fw-700 mb-0 text-gradient d-inline" *ngIf="!isNoData">
                 $ {{ totalValueToken + totalValueNft || 0 | formatDigit : 2 }}
               </span>

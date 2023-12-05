@@ -6,29 +6,28 @@
         class="button button-pill button--xs button-outline button-outline__in-card"
         *ngIf="!userAddress">
         <span class="icon-connect"></span>
-        <span class="fw-semibold fw-normal-mob">Connect to Web3</span>
+        <span class="fw-semibold fw-normal-mob">{{ 'BUTTON.CONNECT_TO_WEB3' | translate }}</span>
       </button>
       <button
         [routerLink]="['/account/', userAddress]"
         class="button button-pill button--xs button-outline button-outline__in-card"
         *ngIf="userAddress">
         <span class="icon-connect connected"></span>
-        <span class="fw-semibold fw-normal-mob text--gray-1">Connected to Web3</span>
+        <span class="fw-semibold fw-normal-mob text--gray-1">{{ 'BUTTON.CONNECTED_TO_WEB3' | translate }}</span>
       </button>
     </div>
     <div class="caption fw-normal-mob d-flex align-items-center">
       <span class="cursor-pointer text--primary" (click)="expandMenu()">
-        <ng-container *ngIf="!isExpand">Expand all</ng-container>
-        <ng-container *ngIf="isExpand">Collapse all</ng-container>
+        <ng-container *ngIf="!isExpand">{{ 'PAGES.CONTRACT.expandAll' | translate }}</ng-container>
+        <ng-container *ngIf="isExpand">{{ 'COMMON.COLLAPSE_ALL' | translate }}</ng-container>
       </span>
       <div class="divider divider-vertical"></div>
-      <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
+      <span class="cursor-pointer text--primary" (click)="reloadData()">{{ 'BUTTON.RESET' | translate }}</span>
     </div>
   </div>
 
   <div class="box-content text--white mt-3">
     <ng-container *ngFor="let msg of root; index as index">
-      <!-- <p>{{ index + 1 }}.{{ getRequired(msg) }} <br />{{ msg | json }}</p> -->
       <mat-expansion-panel hideToggle *ngIf="msg.fieldName" class="custom-expansion-panel outline">
         <mat-expansion-panel-header class="content-contract txt-header">
           <mat-panel-title class="item-content body-02 text--gray-1">
@@ -38,7 +37,6 @@
         </mat-expansion-panel-header>
 
         <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
-          <!-- {{ msg.fieldList | json}} -->
           <ng-container *ngFor="let item of msg.fieldList">
             <div [class.d-none]="item.fieldName === 'fund'" class="d-lg-block">
               <div class="d-flex align-items-center mb-2">
@@ -79,14 +77,14 @@
                   <mat-option [value]="true">
                     <div class="d-flex option-contain">
                       <div class="option-lable">
-                        <span>true</span>
+                        <span>{{ 'LABEL.TRUE' | translate }}</span>
                       </div>
                     </div>
                   </mat-option>
                   <mat-option [value]="false">
                     <div class="d-flex option-contain">
                       <div class="option-lable">
-                        <span>false</span>
+                        <span>{{ 'LABEL.FALSE' | translate }}</span>
                       </div>
                     </div>
                   </mat-option>
@@ -108,7 +106,7 @@
                 width="20"
                 height="20"
                 *ngIf="msg.isLoading" />
-              <span>Write</span>
+              <span>{{ 'LABEL.WRITE' | translate }}</span>
             </button>
           </div>
         </div>

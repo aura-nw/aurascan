@@ -8,7 +8,7 @@
         </h2>
         <div class="card__status d-flex align-items-center flex-shrink-0">
           <div class="text--gray-5 mr-6 d-flex flex-column align-items-center" *ngIf="proposalVotes">
-            <span>{{ 'PAGES.PROPOSAL.voteInfo' | translate : {value : proposalVotes} }}</span>
+            <span>{{ 'PAGES.PROPOSAL.voteInfo' | translate : { value: proposalVotes } }}</span>
           </div>
           <div class="proposal-status proposal-status__{{ proStatus.key }}">
             <span>{{ proStatus.value }}</span>
@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class="text--gray-5 mt-1" *ngIf="proposalVotes">
-        {{ 'PAGES.PROPOSAL.voteInfo' | translate : {value : proposalVotes} }}
+        {{ 'PAGES.PROPOSAL.voteInfo' | translate : { value: proposalVotes } }}
       </div>
       <div class="divider divider-horizontal mt-3"></div>
     </div>
@@ -96,7 +96,7 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-4">{{ 'PAGES.VALIDATOR_DETAIL.votingEnd' | translate }}</div>
+          <div class="col-auto col-md-2 text--gray-4">{{ 'LABEL.VOTING_END' | translate }}</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center" *ngIf="proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
               <span>{{ proDetail?.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
@@ -219,23 +219,28 @@
           <ul class="vote-bar-ul">
             <li class="bg--primary aura-tooltip-contain" [style.width]="proDetail.yesPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="('LABEL.YES' | translate) + ' ' + (proDetail.yesPercent | formatDigit : 2) + '%'">
+              <app-tooltip-customize
+                [content]="('LABEL.YES' | translate) + ' ' + (proDetail.yesPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--danger aura-tooltip-contain" [style.width]="proDetail.noPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="('LABEL.NO' | translate) + ' ' + (proDetail.noPercent | formatDigit : 2) + '%'">
+              <app-tooltip-customize
+                [content]="('LABEL.NO' | translate) + ' ' + (proDetail.noPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
             <li class="bg--info aura-tooltip-contain" [style.width]="proDetail.noWithVetoPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
               <app-tooltip-customize
-                [content]="('LABEL.NO_WITH_VETO' | translate) + ' ' + (proDetail.noWithVetoPercent | formatDigit : 2) + '%'">
+                [content]="
+                  ('LABEL.NO_WITH_VETO' | translate) + ' ' + (proDetail.noWithVetoPercent | formatDigit : 2) + '%'
+                ">
               </app-tooltip-customize>
             </li>
             <li class="bg--secondary aura-tooltip-contain" [style.width]="proDetail.abstainPercent + '%'">
               <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="('LABEL.ABSTAIN' | translate) + ' ' + (proDetail.abstainPercent | formatDigit : 2) + '%'">
+              <app-tooltip-customize
+                [content]="('LABEL.ABSTAIN' | translate) + ' ' + (proDetail.abstainPercent | formatDigit : 2) + '%'">
               </app-tooltip-customize>
             </li>
           </ul>
@@ -245,7 +250,7 @@
             <div class="vote status--primary"></div>
             <div class="row align-items-center flex-grow-1">
               <div class="col-4 col-lg-5">
-                <span class="body-03"> {{'LABEL.YES' | translate}} </span>
+                <span class="body-03"> {{ 'LABEL.YES' | translate }} </span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proDetail.yesPercent | formatDigit : 2 }}%
@@ -259,7 +264,7 @@
             <div class="vote status--danger flex-grow-0"></div>
             <div class="row align-items-center flex-grow-1">
               <div class="col-4 col-lg-5">
-                <span class="body-03"> {{'LABEL.NO' | translate}} </span>
+                <span class="body-03"> {{ 'LABEL.NO' | translate }} </span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proDetail.noPercent | formatDigit : 2 }}%
@@ -273,7 +278,7 @@
             <div class="vote status--info"></div>
             <div class="row align-items-center flex-grow-1">
               <div class="col-4 col-lg-5">
-                <span class="body-03"> {{'LABEL.NOWITHVETO' | translate}}</span>
+                <span class="body-03"> {{ 'LABEL.NOWITHVETO' | translate }}</span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proDetail.noWithVetoPercent | formatDigit : 2 }}%
@@ -287,7 +292,7 @@
             <div class="vote status--secondary"></div>
             <div class="row align-items-center flex-grow-1">
               <div class="col-4 col-lg-5">
-                <span class="body-03"> {{'LABEL.ABSTAIN' | translate}} </span>
+                <span class="body-03"> {{ 'LABEL.ABSTAIN' | translate }} </span>
               </div>
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proDetail.abstainPercent | formatDigit : 2 }}%
@@ -302,7 +307,7 @@
           <ul>
             <li data-style="primary">
               <div class="item-box">
-                <span class="item item-label text--gray-1">{{'LABEL.YES' | translate}}</span>
+                <span class="item item-label text--gray-1">{{ 'LABEL.YES' | translate }}</span>
                 <span class="item item-percent"> {{ this.proDetail.yesPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
@@ -312,7 +317,7 @@
             </li>
             <li data-style="danger">
               <div class="item-box">
-                <span class="item item-label text--gray-1">{{'LABEL.NO' | translate}}</span>
+                <span class="item item-label text--gray-1">{{ 'LABEL.NO' | translate }}</span>
                 <span class="item item-percent"> {{ this.proDetail.noPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
@@ -322,7 +327,7 @@
             </li>
             <li data-style="info">
               <div class="item-box">
-                <span class="item item-label text--gray-1">{{'LABEL.NOWITHVETO' | translate}}</span>
+                <span class="item item-label text--gray-1">{{ 'LABEL.NOWITHVETO' | translate }}</span>
                 <span class="item item-percent"> {{ this.proDetail.noWithVetoPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">
@@ -332,7 +337,7 @@
             </li>
             <li data-style="secondary">
               <div class="item-box">
-                <span class="item item-label text--gray-1">{{'LABEL.ABSTAIN' | translate}}</span>
+                <span class="item item-label text--gray-1">{{ 'LABEL.ABSTAIN' | translate }}</span>
                 <span class="item item-percent"> {{ this.proDetail.abstainPercent | formatDigit : 2 }}% </span>
               </div>
               <p class="item item-amount">

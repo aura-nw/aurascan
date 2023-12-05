@@ -2,12 +2,12 @@
   <div class="d-flex justify-content-between contract__title">
     <div class="d-flex align-items-center">
       <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px" />
-      <span class="body-02 text--gray-1 ml-2">Read Contract Information</span>
+      <span class="body-02 text--gray-1 ml-2">{{ 'PAGES.CONTRACT.readContractInfo' | translate }}</span>
     </div>
     <div class="caption fw-normal-mob d-flex align-items-center">
       <span class="cursor-pointer text--primary" (click)="expandMenu()">
-        <ng-container *ngIf="!isExpand">Expand all</ng-container>
-        <ng-container *ngIf="isExpand">Collapse all</ng-container>
+        <ng-container *ngIf="!isExpand">{{ 'PAGES.CONTRACT.expandAll' | translate }}</ng-container>
+        <ng-container *ngIf="isExpand">{{ 'COMMON.COLLAPSE_ALL' | translate }}</ng-container>
       </span>
       <div class="divider divider-vertical mx-2 mx-lg-4"></div>
       <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
