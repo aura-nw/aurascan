@@ -24,9 +24,10 @@ export class CommonService {
   envDB = this.horoscope?.chain;
 
   chainId = this._environmentService.chainId;
-  addressPrefix = 'aura';
+  addressPrefix = '';
   listNameTag = [];
   listValidator = [];
+  listTokenIBC = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this._environmentService.config.asObservable().subscribe((res) => {
@@ -89,7 +90,10 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
-    let result = {};
+    let result = {
+      display: this.chainInfo.currencies[0].coinDenom,
+      decimals: this.chainInfo.currencies[0].coinDecimals,
+    };
     if (value.indexOf('ibc') >= 0) {
       try {
         if (!value.startsWith('ibc')) {
@@ -97,13 +101,14 @@ export class CommonService {
           value = value?.replace(temp, '');
         }
       } catch {}
-      result = { display: value, decimals: 6 };
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.coins.find((k) => k.denom === temp) || {};
-      result['display'] = result['display'] || value;
-    } else {
-      result = { display: this.chainInfo.currencies[0].coinDenom, decimals: 6 };
+      result = this.listTokenIBC?.find((k) => k.denom === temp) || {
+        display: value,
+        symbol: value,
+      };
+      result['decimals'] = result['decimal'] || result['decimals'] || this.chainInfo.currencies[0].coinDecimals;
     }
+
     return result;
   }
 
@@ -133,7 +138,7 @@ export class CommonService {
   }
 
   findNameTag(keySearch, listNameTag = []) {
-    if(!keySearch){
+    if (!keySearch) {
       return '';
     }
     const userEmail = localStorage.getItem('userEmail');

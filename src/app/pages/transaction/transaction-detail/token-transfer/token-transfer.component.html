@@ -33,7 +33,7 @@
                               <span
                                 *ngIf="data.cw20_contract.symbol"
                                 class="caption text-sm mb-1 aura-tooltip-object"
-                                >{{ data.cw20_contract.symbol | stringEllipsis : 15 }}</span
+                                >{{ data.cw20_contract.symbol | stringEllipsis : 20 }}</span
                               >
                               <app-tooltip-customize
                                 [content]="data.cw20_contract.symbol"
@@ -41,16 +41,7 @@
                               </app-tooltip-customize>
                             </div>
 
-                            <span
-                              *ngIf="data.cw20_contract.name && !breakpoint.value.matches"
-                              class="body-02 d-xl-none"
-                              >{{ data.cw20_contract.name | stringEllipsis : 25 }}</span
-                            >
-                            <span
-                              *ngIf="data.cw20_contract.name && !breakpoint.value.matches"
-                              class="body-02 d-none d-xl-inline"
-                              >{{ data.cw20_contract.name }}</span
-                            >
+                            <span class="body-02">{{ data.cw20_contract.name | stringEllipsis : 20 }}</span>
                             <ng-container *ngIf="breakpoint.value.matches">
                               <span
                                 class="aura-tooltip-object"

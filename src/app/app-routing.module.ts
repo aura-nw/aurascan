@@ -88,6 +88,10 @@ const routes: Routes = [
         path: 'privacyPolicy',
         loadChildren: () => import('./pages/privacy-policy/privacy-policy.module').then((m) => m.PrivacyModule),
       },
+      {
+        path: 'ibc-relayer',
+        loadChildren: () => import('./pages/ibc/ibc.module').then((m) => m.IBCModule),
+      },
     ],
   },
   {
