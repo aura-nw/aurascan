@@ -221,7 +221,9 @@
       "contractCreationCode":"Contract Creation Code",
       "readContractInfo":"Read Contract Information",
       "expandAll":"Expand all",
-      "readContract": "Read Contract"
+      "readContract": "Read Contract",
+      "contractInstantiated": "This contract was instantiated from Code ID",
+      "writeContract": "Write Contract"
     },
     "FEE_GRANT": {
       "granteeAddress": "Grantee's address",

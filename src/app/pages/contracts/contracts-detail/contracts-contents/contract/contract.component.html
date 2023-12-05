@@ -1,6 +1,6 @@
 <div class="box-contract text--white">
   <div class="mb-4" *ngIf="contractDetail?.code?.code_id">
-    This contract was instantiated from Code ID
+    {{ 'PAGES.CONTRACT.contractInstantiated' | translate }}
     <a [routerLink]="['/code-ids/detail', contractDetail?.code?.code_id]" class="text--primary">{{
       contractDetail?.code?.code_id
     }}</a>
@@ -65,8 +65,8 @@
         class="button-tab"
         [class.active]="countCurrent === contractType.WriteContract"
         (click)="changeTab(contractType.WriteContract)">
-        <span class="d-none d-lg-block">Write Contract</span>
-        <span class="d-lg-none">Write</span>
+        <span class="d-none d-lg-block">{{ 'PAGES.CONTRACT.writeContract' | translate }}</span>
+        <span class="d-lg-none">{{ 'LABEL.WRITE' | translate }}</span>
       </button>
     </div>
   </ng-container>
@@ -80,15 +80,15 @@
         height="16"
         class="mr-2" />
       <div>
-        Are you the Code ID's owner?
+        {{ 'PAGES.CODE_ID.ownerMsg' | translate }}
         <span class="text--primary ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail?.code?.code_id)">
-          Verify and Publish
+          {{ 'PAGES.CODE_ID.verifyAndPublish' | translate }}
         </span>
-        your Code ID source code today!
+        {{ 'PAGES.CODE_ID.yourCodeID' | translate }}
       </div>
     </div>
     <div class="mt-4 mt-lg-6">
-      Let check the status of the last time this Code ID source code was unable to Verify and Publish
+      {{ 'PAGES.CODE_ID.checkStatus' | translate }}
     </div>
     <app-contract-verify-steps [codeID]="contractDetail?.code?.code_id"></app-contract-verify-steps>
   </ng-container>
