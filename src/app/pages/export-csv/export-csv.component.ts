@@ -166,8 +166,7 @@ export class ExportCsvComponent implements OnInit {
     const data: Blob = new Blob([buffer], {
       type: 'text/csv;charset=utf-8',
     });
-    let typeName = payload.dataType;
-    const fileName = 'export-account-' + typeName + '-' + payload.address + '.csv';
+    const fileName = 'export-account-' + payload.dataType + '-' + payload.address + '.csv';
     saveAs(data, fileName);
     this.isDownload = false;
     this.isValidCaptcha = false;
