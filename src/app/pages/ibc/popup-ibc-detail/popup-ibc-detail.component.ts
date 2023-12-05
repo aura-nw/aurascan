@@ -33,6 +33,7 @@ export class PopupIBCDetailComponent implements OnInit {
   isLoading = true;
   dataSourceMobile: any[];
   relayerType = Relayer;
+  maxDisplayChar = 16;
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'channel_id', headerCellDef: 'channel', headerWidth: 20 },
@@ -65,6 +66,10 @@ export class PopupIBCDetailComponent implements OnInit {
       this.counterInfo = this.ibcService.listInfoChain?.find((k) => k.chainId === this.data?.chain);
     } else {
       this.isLoading = false;
+    }
+
+    if (this.environmentService.isMobile) {
+      this.maxDisplayChar = 28;
     }
   }
 

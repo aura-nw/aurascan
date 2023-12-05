@@ -236,6 +236,7 @@ export class IBCService extends CommonService {
           where: {
             channel_id: { _eq: $channel_id }
             id: { _gt: $id_gte, _lte: $id_lte }
+            status: { _eq: "ack_success" }
           }
           order_by: { id: desc }
           limit: $limit
@@ -256,8 +257,14 @@ export class IBCService extends CommonService {
               }
             }
           }
+          status
         }
-        total_tx: ibc_ics20_aggregate(where: { channel_id: { _eq: $channel_id } }) {
+        total_tx: ibc_ics20_aggregate(
+          where: {
+            channel_id: { _eq: $channel_id }
+            status: { _eq: "ack_success" }
+          }
+        ) {
           aggregate {
             count(columns: id)
           }
