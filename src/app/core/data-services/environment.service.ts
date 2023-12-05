@@ -141,6 +141,11 @@ export class EnvironmentService {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
   loadConfig() {
     return lastValueFrom(this.http.get<IConfiguration>(this.configUri))
       .then((config: any) => {
