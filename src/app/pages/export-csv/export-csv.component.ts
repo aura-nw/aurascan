@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT } from 'src/app/core/constants/common.constant';
-import { TypeExport } from 'src/app/core/constants/export-csv.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -22,13 +21,13 @@ export class ExportCsvComponent implements OnInit {
   isValidAddress = true;
   isValidBlock = true;
   userEmail;
-  tabsAccount = TabsAccount;
+  TabsAccount = TabsAccount;
   dataType = '';
   minDate;
   minDateEnd;
   maxDate;
   maxDateEnd;
-  tabsData = TypeExport;
+  TabsAccountLink = TabsAccountLink;
   isDownload = false;
   responseCaptcha;
   isValidCaptcha = false;
@@ -85,14 +84,14 @@ export class ExportCsvComponent implements OnInit {
 
   mappingDataExport(dataType) {
     switch (dataType) {
-      case this.tabsData.NativeTxs:
-        return this.tabsAccount.NativeTxs;
-      case this.tabsData.FtsTxs:
-        return this.tabsAccount.FtsTxs;
-      case this.tabsData.NftTxs:
-        return this.tabsAccount.NftTxs;
+      case TabsAccountLink.NativeTxs:
+        return this.TabsAccount.NativeTxs;
+      case TabsAccountLink.FtsTxs:
+        return this.TabsAccount.FtsTxs;
+      case TabsAccountLink.NftTxs:
+        return this.TabsAccount.NftTxs;
       default:
-        return this.tabsAccount.ExecutedTxs;
+        return this.TabsAccount.ExecutedTxs;
     }
   }
 
@@ -167,7 +166,7 @@ export class ExportCsvComponent implements OnInit {
     const data: Blob = new Blob([buffer], {
       type: 'text/csv;charset=utf-8',
     });
-    let typeName = payload.dataType == TypeExport.NativeTxs ? TabsAccountLink.NativeTxs :TabsAccountLink.FtsTxs;
+    let typeName = payload.dataType;
     const fileName = 'export-account-' + typeName + '-' + payload.address + '.csv';
     saveAs(data, fileName);
     this.isDownload = false;
@@ -195,7 +194,7 @@ export class ExportCsvComponent implements OnInit {
   changeTypeFilter(type) {
     this.dataType = type;
     this.csvForm.value.dataType = this.dataType;
-    if (type !== this.tabsData.ExecutedTxs) {
+    if (type !== this.TabsAccountLink.ExecutedTxs) {
       this.isFilterDate = true;
       this.csvForm.value.isFilterDate = this.isFilterDate;
     }
