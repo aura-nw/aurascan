@@ -1,10 +1,10 @@
-import { CommonService } from 'src/app/core/services/common.service';
 import { Pipe, PipeTransform } from '@angular/core';
+import { NameTagService } from '../services/name-tag.service';
 
 @Pipe({ name: 'checkDisplayTooltip' })
 export class CheckDisplayTooltip implements PipeTransform {
-  constructor(public commonService: CommonService) {}
+  constructor(public nameTagService: NameTagService) {}
   transform(address) {
-    return this.commonService.checkDisplayTooltip(address);
+    return this.nameTagService.checkDisplayTooltip(address);
   }
 }

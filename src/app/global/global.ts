@@ -11,9 +11,8 @@ import {
   TypeTransaction,
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
-import { balanceOf } from '../core/utils/common/parsing';
 import { getDataIBC } from '../core/utils/common/info-common';
-import { sha256 } from 'js-sha256';
+import { balanceOf } from '../core/utils/common/parsing';
 Injectable();
 
 export class Globals {
@@ -22,7 +21,6 @@ export class Globals {
     aura: 0,
     btc: 0,
   };
-  listNameTag = [];
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {

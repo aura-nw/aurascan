@@ -200,7 +200,7 @@ export class PopupNameTagComponent implements OnInit {
     this.publicNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const temp = this.nameTagService.setNameTag(this.getAddress.value, null, false);
+      const temp = this.nameTagService.getNameTag(this.getAddress.value, false);
       if (temp !== this.getAddress.value) {
         this.publicNameTag = temp;
       }

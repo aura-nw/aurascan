@@ -308,8 +308,8 @@ export class PopupWatchlistComponent implements OnInit {
     this.privateNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const tempPublic = this.nameTagService.setNameTag(this.getAddress.value, null, false);
-      const tempPrivate = this.nameTagService.setNameTag(this.getAddress.value);
+      const tempPublic = this.nameTagService.getNameTag(this.getAddress.value, false);
+      const tempPrivate = this.nameTagService.getNameTag(this.getAddress.value);
       if (tempPublic !== this.getAddress.value) {
         this.publicNameTag = tempPublic;
       }

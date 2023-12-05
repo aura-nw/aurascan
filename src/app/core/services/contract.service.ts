@@ -9,7 +9,6 @@ import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { Globals } from 'src/app/global/global';
 import { NameTagService } from './name-tag.service';
 
 @Injectable()
@@ -26,7 +25,6 @@ export class ContractService extends CommonService {
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
-    private global: Globals,
     private nameTagService: NameTagService,
   ) {
     super(http, environmentService);
@@ -65,7 +63,7 @@ export class ContractService extends CommonService {
         : 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}';
     }
 
-    const addressNameTag = this.nameTagService.findNameTag(keyword, this.global.listNameTag);
+    const addressNameTag = this.nameTagService.findNameTag(keyword);
     if (addressNameTag?.length > 0) {
       keyword = addressNameTag;
     }

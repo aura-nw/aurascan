@@ -68,7 +68,7 @@ export class TokenContentComponent implements OnInit {
       this.paramQuery = params?.a || '';
       this.searchTemp = this.paramQuery;
       this.handleSearch();
-      this.searchTemp = this.nameTagService.setNameTag(this.searchTemp);
+      this.searchTemp = this.nameTagService.getNameTag(this.searchTemp);
     });
 
     if (localStorage.getItem('isVerifyTab') == 'true') {

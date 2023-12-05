@@ -374,7 +374,7 @@
                       {
                         label: '',
                         class: !(data.delegator_address | checkDisplayTooltip)
-                          ? (data.delegator_address | checkPrivate)
+                          ? (data.delegator_address | isPrivateNameTag)
                             ? 'name-tag private-name-tag text--primary'
                             : 'name-tag text--primary'
                           : 'text--primary',

@@ -25,7 +25,6 @@ export class CommonService {
 
   chainId = this._environmentService.chainId;
   addressPrefix = 'aura';
-  listNameTag = [];
   listValidator = [];
   listTokenIBC = [];
 
@@ -117,15 +116,6 @@ export class CommonService {
 
   getDefaultImg() {
     return this._environmentService.imageUrl + 'images/aura__ntf-default-img.png';
-  }
-
-  checkDisplayTooltip(address): boolean {
-    let result = false;
-    const nameTag = this.listNameTag?.find((k) => k.address === address);
-    if (!nameTag || nameTag?.name_tag === address) {
-      result = true;
-    }
-    return result;
   }
 
   showToolTip(element) {

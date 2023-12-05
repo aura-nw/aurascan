@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { DateCustomPipe } from 'src/app/core/pipes/date-custom.pipe';
-import { CheckPrivatePipe, CheckPublicPipe, FindUrlNameTagPipe, NameTagPipe } from 'src/app/core/pipes/name-tag.pipe';
+import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from 'src/app/core/pipes/name-tag.pipe';
 import { CheckDisplayTooltip } from 'src/app/core/pipes/tooltip-display.pipe';
 import {
   BalanceOf,
@@ -38,9 +38,8 @@ import { JsonPipe } from './json.pipe';
     formatDigit,
     NameTagPipe,
     CheckDisplayTooltip,
-    FindUrlNameTagPipe,
-    CheckPublicPipe,
-    CheckPrivatePipe,
+    IsPublicNameTagPipe,
+    IsPrivateNameTagPipe,
     DateCustomPipe,
   ],
   imports: [CommonModule],
@@ -61,9 +60,8 @@ import { JsonPipe } from './json.pipe';
     formatDigit,
     NameTagPipe,
     CheckDisplayTooltip,
-    FindUrlNameTagPipe,
-    CheckPublicPipe,
-    CheckPrivatePipe,
+    IsPublicNameTagPipe,
+    IsPrivateNameTagPipe,
     DateCustomPipe,
   ],
 })

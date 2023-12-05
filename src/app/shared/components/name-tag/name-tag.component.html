@@ -7,7 +7,7 @@
       [ngClass]="[
         isBox && !((paramUrl || value) | checkDisplayTooltip) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
-        ((paramUrl || value) | checkPrivate) ? 'private-name-tag' : ''
+        ((paramUrl || value) | isPrivateNameTag) ? 'private-name-tag' : ''
       ]"
       [class.aura-tooltip-object]="!((paramUrl || value) | checkDisplayTooltip)">
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
@@ -23,7 +23,7 @@
       [ngClass]="[
         isBox && !((paramUrl || value) | checkDisplayTooltip) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
-        ((paramUrl || value) | checkPrivate) ? 'private-name-tag' : ''
+        ((paramUrl || value) | isPrivateNameTag) ? 'private-name-tag' : ''
       ]"
       [class.aura-tooltip-object]="!((paramUrl || value) | checkDisplayTooltip)">
       <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
@@ -40,7 +40,7 @@
       [ngClass]="[
         isBox && !((paramUrl || value) | checkDisplayTooltip) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
-        ((paramUrl || value) | checkPrivate) ? 'private-name-tag' : ''
+        ((paramUrl || value) | isPrivateNameTag) ? 'private-name-tag' : ''
       ]"
       [class.aura-tooltip-object]="!((paramUrl || value) | checkDisplayTooltip)">
       <ng-container *ngIf="!fullText">

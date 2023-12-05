@@ -4,31 +4,27 @@ import { NameTagService } from '../services/name-tag.service';
 @Pipe({ name: 'nameTag' })
 export class NameTagPipe implements PipeTransform {
   constructor(private nameTagService: NameTagService) {}
-  transform(address, listNameTag = [], getPrivate = true) {
-    return this.nameTagService.setNameTag(address, listNameTag, getPrivate);
+  transform(address, getPrivate = true, type = 'name') {
+    if (type === 'name') {
+      return this.nameTagService.getNameTag(address, getPrivate);
+    } else {
+      return this.nameTagService.findUrlNameTag(address);
+    }
   }
 }
 
-@Pipe({ name: 'checkPublic' })
-export class CheckPublicPipe implements PipeTransform {
+@Pipe({ name: 'isPublicNameTag' })
+export class IsPublicNameTagPipe implements PipeTransform {
   constructor(private nameTagService: NameTagService) {}
-  transform(address, listNameTag = []) {
-    return this.nameTagService.checkPublic(address, listNameTag);
+  transform(address) {
+    return this.nameTagService.checkPublic(address);
   }
 }
 
-@Pipe({ name: 'checkPrivate' })
-export class CheckPrivatePipe implements PipeTransform {
+@Pipe({ name: 'isPrivateNameTag' })
+export class IsPrivateNameTagPipe implements PipeTransform {
   constructor(private nameTagService: NameTagService) {}
   transform(address) {
     return this.nameTagService.checkPrivate(address);
-  }
-}
-
-@Pipe({ name: 'findUrlNameTag' })
-export class FindUrlNameTagPipe implements PipeTransform {
-  constructor(private nameTagService: NameTagService) {}
-  transform(address) {
-    return this.nameTagService.findUrlNameTag(address);
   }
 }

@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
     // get list name tag if not login email
     if (!this.userEmail) {
       await this.nameTagService.getListNameTag(payload).subscribe((res) => {
-        this.globals.listNameTag = this.commonService.listNameTag = res.data?.nameTags;
+        this.nameTagService.listNameTag = res.data?.nameTags;
         localStorage.setItem('listNameTag', JSON.stringify(res.data?.nameTags));
       });
       return;
@@ -124,7 +124,7 @@ export class AppComponent implements OnInit {
         element['isPrivate'] = true;
       });
       const result = [...listTemp, ...lstPrivate];
-      this.globals.listNameTag = this.commonService.listNameTag = result;
+      this.nameTagService.listNameTag = result;
       localStorage.setItem('listNameTag', JSON.stringify(result));
     });
   }
@@ -157,7 +157,7 @@ export class AppComponent implements OnInit {
     if (listNameTag) {
       try {
         let data = JSON.parse(listNameTag);
-        this.globals.listNameTag = this.commonService.listNameTag = data;
+        this.nameTagService.listNameTag = data;
         this.getListNameTag();
       } catch (e) {
         this.getListNameTag();

@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between mt-4 mt-lg-0">
   <div class="txt-title">My watchlist</div>
   <button
-  *ngIf="!errTxt"
+    *ngIf="!errTxt"
     (click)="openPopup()"
     class="button button--xlg button--ssm-mob button-pill button-primary button-flat"
     type="button">
@@ -96,33 +96,25 @@
                 <div
                   *ngSwitchCase="'public_name_tag'"
                   class="pe-auto aura-tooltip-contain"
-                  [ngClass]="(data.address | checkPublic) ? 'box-name-tag' : ''">
+                  [ngClass]="(data.address | isPublicNameTag) ? 'box-name-tag' : ''">
                   <div class="aura-tooltip-object">
-                    {{
-                      (data.address | checkPublic)
-                        ? ((data.address | nameTag : null : false) | cutStringPipe : 10)
-                        : '-'
-                    }}
+                    {{ (data.address | isPublicNameTag) ? (data.address | nameTag : false | cutStringPipe : 10) : '-' }}
                   </div>
 
                   <app-tooltip-customize
-                    *ngIf="data.address | checkPublic"
-                    [content]="data.address | nameTag : null : false"></app-tooltip-customize>
+                    *ngIf="data.address | isPublicNameTag"
+                    [content]="data.address | nameTag : false"></app-tooltip-customize>
                 </div>
                 <div
                   *ngSwitchCase="'private_name_tag'"
                   class="pe-auto aura-tooltip-contain"
-                  [ngClass]="(data.address | checkPrivate) ? 'private-name-tag' : ''">
+                  [ngClass]="(data.address | isPrivateNameTag) ? 'private-name-tag' : ''">
                   <div class="aura-tooltip-object">
-                    {{
-                      (data.address | checkPrivate)
-                        ? (data.address | nameTag | cutStringPipe : 12)
-                        : '-'
-                    }}
+                    {{ (data.address | isPrivateNameTag) ? (data.address | nameTag | cutStringPipe : 12) : '-' }}
                   </div>
 
                   <app-tooltip-customize
-                    *ngIf="data.address | checkPrivate"
+                    *ngIf="data.address | isPrivateNameTag"
                     [content]="data.address | nameTag"></app-tooltip-customize>
                 </div>
                 <div *ngSwitchCase="'group'" class="">
@@ -216,22 +208,14 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Public name tag</div>
-            <div class="line-claim" [ngClass]="(data.address | checkPublic) ? 'box-name-tag' : ''">
-              {{
-                (data.address | checkPublic)
-                  ? ((data.address | nameTag: null : false | cutStringPipe : 18))
-                  : '-'
-              }}
+            <div class="line-claim" [ngClass]="(data.address | isPublicNameTag) ? 'box-name-tag' : ''">
+              {{ (data.address | isPublicNameTag) ? (data.address | nameTag : false | cutStringPipe : 18) : '-' }}
             </div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Private name tag</div>
-            <div class="line-claim" [ngClass]="(data.address | checkPrivate) ? 'private-name-tag' : ''">
-              {{
-                (data.address | checkPrivate)
-                  ? (data.address | nameTag | cutStringPipe : 22)
-                  : '-'
-              }}
+            <div class="line-claim" [ngClass]="(data.address | isPrivateNameTag) ? 'private-name-tag' : ''">
+              {{ (data.address | isPrivateNameTag) ? (data.address | nameTag | cutStringPipe : 22) : '-' }}
             </div>
           </div>
           <div class="d-flex align-items-center mb-2">

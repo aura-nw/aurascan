@@ -24,15 +24,15 @@
         <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
         <ng-container
           *ngIf="
-            (contractDetail?.address | nameTag: null : false) !== contractDetail?.address;
+            (contractDetail?.address | nameTag : false) !== contractDetail?.address;
             else NoNameTag
           ">
           <div class="box-name-tag">
-            <span class="line-claim">{{ (contractDetail?.address | nameTag: null : false) || '-' }}</span>
+            <span class="line-claim">{{ (contractDetail?.address | nameTag : false) || '-' }}</span>
             <a
               target="_blank"
-              [href]="extendLink((contractDetail?.address | findUrlNameTag))"
-              *ngIf="contractDetail?.address | findUrlNameTag">
+              [href]="extendLink((contractDetail?.address | nameTag : null : 'url'))"
+              *ngIf="contractDetail?.address | nameTag : null : 'url'">
               <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer mb-1"></i>
             </a>
           </div>
@@ -44,12 +44,12 @@
 
         <button
           class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-1 btn-private"
-          *ngIf="!(contractDetail?.address | checkPrivate)"
+          *ngIf="!(contractDetail?.address | isPrivateNameTag)"
           (click)="editPrivateName()">
           <span class="caption fw-normal"> Set Private Name Tag </span>
         </button>
         <div
-          *ngIf="contractDetail?.address | checkPrivate"
+          *ngIf="contractDetail?.address | isPrivateNameTag"
           class="mt-2 d-inline-flex box-private align-items-center text--white">
           <div class="d-inline-flex align-items-center private-name-tag">
             <span class="line-claim">{{ (contractDetail?.address | nameTag) || '-' }}</span>

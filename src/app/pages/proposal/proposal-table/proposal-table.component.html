@@ -115,7 +115,7 @@
                 {
                   label: 'Voter',
                   class: !(data.voter | checkDisplayTooltip)
-                    ? (data.voter | checkPrivate)
+                    ? (data.voter | isPrivateNameTag)
                       ? 'name-tag private-name-tag mb-0 text--primary'
                       : 'name-tag text--primary mb-0'
                     : 'text--primary',
@@ -206,7 +206,7 @@
                 {
                   label: 'Depositor',
                   class: !(data.depositors | checkDisplayTooltip)
-                    ? (data.depositors | checkPrivate)
+                    ? (data.depositors | isPrivateNameTag)
                       ? 'name-tag private-name-tag mb-0 text--primary'
                       : 'name-tag text--primary mb-0'
                     : 'text--primary',
