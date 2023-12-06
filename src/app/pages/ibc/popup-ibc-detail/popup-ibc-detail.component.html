@@ -14,7 +14,10 @@
               <img src="assets/images/logo/auraTitleLogo.png" class="img-chain" alt="" />
               <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
                 <div class="aura-tooltip-contain">
-                  <span class="body-01 body-02-mob fw-semibold text--white aura-tooltip-object"
+                  <span
+                    class="body-01 body-02-mob fw-semibold text--white {{
+                      chainInfo.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
+                    }}"
                     >{{ chainInfo.chainName | cutStringPipe : maxDisplayChar }}
                   </span>
                   <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
@@ -36,7 +39,10 @@
                 class="img-chain" />
               <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
                 <div class="aura-tooltip-contain">
-                  <span class="body-01 body-02-mob fw-semibold text--white aura-tooltip-object"
+                  <span
+                    class="body-01 body-02-mob fw-semibold text--white {{
+                      counterInfo?.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
+                    }}"
                     >{{ counterInfo?.chainName | cutStringPipe : maxDisplayChar }}
                   </span>
                   <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
@@ -60,8 +66,18 @@
               <div
                 [innerHTML]="template.headerCellDef | translate"
                 *ngIf="template.headerCellDef !== 'channel' && template.headerCellDef !== 'counter'"></div>
-              <div *ngIf="template.headerCellDef === 'channel'">{{ chainInfo.chainName | cutStringPipe : 15 }}</div>
-              <div *ngIf="template.headerCellDef === 'counter'">{{ counterInfo?.chainName | cutStringPipe : 15 }}</div>
+              <div *ngIf="template.headerCellDef === 'channel'" class="aura-tooltip-contain">
+                <span class="{{ chainInfo.chainName?.length > 15 ? 'aura-tooltip-object' : '' }}">{{
+                  chainInfo.chainName | cutStringPipe : 15
+                }}</span>
+                <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
+              </div>
+              <div *ngIf="template.headerCellDef === 'counter'" class="aura-tooltip-contain">
+                <span class="{{ counterInfo?.chainName?.length > 15 ? 'aura-tooltip-object' : '' }}">
+                  {{ counterInfo?.chainName | cutStringPipe : 15 }}
+                </span>
+                <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
+              </div>
             </th>
             <td mat-cell *matCellDef="let data; let i = index">
               <div>
@@ -110,7 +126,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
-      <div class="d-lg-none mobile">
+      <div class="d-lg-none mobile" [class.paddingSafari]="isSafari">
         <div *ngFor="let data of dataSourceMobile" class="card-relayer" (click)="showDetail(data)">
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">

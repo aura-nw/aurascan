@@ -132,8 +132,10 @@ export class TransferAssetsComponent {
     }
 
     const result =
-      this.lstSendingRaw?.filter((k) =>
-        k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchSend?.toLowerCase()),
+      this.lstSendingRaw?.filter(
+        (k) =>
+          k['dataDenom']?.name?.toLowerCase().includes(this.textSearchSend?.toLowerCase()) ||
+          k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchSend?.toLowerCase()),
       ) || [];
     this.dataIBCSending.data = [...result];
   }
@@ -145,8 +147,10 @@ export class TransferAssetsComponent {
     }
 
     const result =
-      this.lstSendingReceive?.filter((k) =>
-        k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchReceive?.toLowerCase()),
+      this.lstSendingReceive?.filter(
+        (k) =>
+          k['dataDenom']?.name?.toLowerCase().includes(this.textSearchReceive?.toLowerCase()) ||
+          k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchReceive?.toLowerCase()),
       ) || [];
     this.dataIBCReceiving.data = [...result];
   }

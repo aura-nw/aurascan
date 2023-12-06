@@ -15,13 +15,12 @@
                 placeholder="Search by IBC Assets"
                 [maxLength]="maxLengthSearch"
                 [(ngModel)]="textSearchSend"
-                (blur)="searchSend()"
+                (keyup)="searchSend()"
                 name="search"
                 autocomplete="off" />
               <button
                 type="submit"
-                class="btn-search {{ textSearchSend && textSearchSend?.length > 0 ? 'd-none' : '' }}"
-                (click)="searchSend()">
+                class="btn-search {{ textSearchSend && textSearchSend?.length > 0 ? 'd-none' : '' }}">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
@@ -61,11 +60,15 @@
                               height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
-                                {{ data['dataDenom']?.symbol | cutStringPipe : 20 }}
+                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe : 20 }}
                               </div>
                               <app-tooltip-customize
                                 [className]="'tooltip--right'"
-                                [content]="data['dataDenom']?.symbol">
+                                [content]="
+                                  data['dataDenom']?.name
+                                    ? data['dataDenom']?.name + '<br>' + data['dataDenom']?.denom
+                                    : data['dataDenom']?.symbol
+                                ">
                               </app-tooltip-customize>
                             </div>
                           </div>
@@ -163,13 +166,12 @@
                 placeholder="Search by IBC Assets"
                 [maxLength]="maxLengthSearch"
                 [(ngModel)]="textSearchReceive"
-                (blur)="searchReceive()"
+                (keyup)="searchReceive()"
                 name="search"
                 autocomplete="off" />
               <button
                 type="submit"
-                class="btn-search {{ textSearchReceive && textSearchReceive?.length > 0 ? 'd-none' : '' }}"
-                (click)="searchReceive()">
+                class="btn-search {{ textSearchReceive && textSearchReceive?.length > 0 ? 'd-none' : '' }}">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
@@ -214,11 +216,15 @@
                               height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
-                                {{ data['dataDenom']?.symbol | cutStringPipe : 20 }}
+                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe : 20 }}
                               </div>
                               <app-tooltip-customize
                                 [className]="'tooltip--right'"
-                                [content]="data['dataDenom']?.symbol">
+                                [content]="
+                                  data['dataDenom']?.name
+                                    ? data['dataDenom']?.name + '<br>' + data['dataDenom']?.denom
+                                    : data['dataDenom']?.symbol
+                                ">
                               </app-tooltip-customize>
                             </div>
                           </div>
