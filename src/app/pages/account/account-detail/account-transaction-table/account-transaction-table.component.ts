@@ -50,7 +50,7 @@ export class AccountTransactionTableComponent {
 
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 14 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 17 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 22 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 17 },
     { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 24 },
     { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 20 },
