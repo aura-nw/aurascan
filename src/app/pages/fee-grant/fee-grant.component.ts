@@ -22,7 +22,7 @@ export class FeeGrantComponent implements OnInit {
       value: 'My Granters',
     },
   ];
-  constructor(public walletService: WalletService) {}
+  constructor(private walletService: WalletService) {}
 
   ngOnInit(): void {
     from([1])

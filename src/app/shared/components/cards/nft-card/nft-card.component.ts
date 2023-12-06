@@ -25,6 +25,7 @@ export class NftCardComponent implements OnInit, AfterViewInit {
   paused = true;
   animationUrl: string;
   imageUrl: string;
+  dataType: string;
 
   constructor(
     private environmentService: EnvironmentService,
@@ -42,6 +43,7 @@ export class NftCardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.dataType = checkTypeFile(this.nftItem);
     // CW721
     if (this.nftItem?.media_info?.offchain?.image?.url) {
       this.imageUrl = this.nftItem?.media_info?.offchain?.image?.url;
@@ -53,11 +55,14 @@ export class NftCardComponent implements OnInit, AfterViewInit {
         } else {
           this.animationUrl = this.nftItem?.media_info?.offchain?.animation?.url;
         }
-      } else if (this.getTypeFile(this.nftItem) !== MEDIA_TYPE.IMG) {
+      } else if (this.dataType !== MEDIA_TYPE.IMG) {
         this.animationUrl = this.nftItem?.media_info?.offchain?.animation?.url;
       } else {
         this.imageUrl = this.nftItem?.media_info?.offchain?.image?.url;
       }
+    }
+    if (!this.imageUrl) {
+      this.imageUrl = this.nftItem?.media_info?.onchain?.metadata?.image;
     }
 
     // account bound token
@@ -71,7 +76,7 @@ export class NftCardComponent implements OnInit, AfterViewInit {
         } else {
           this.animationUrl = this.commonService.replaceImgIpfs(this.nftItem?.animation_url);
         }
-      } else if (this.getTypeFile(this.nftItem) !== MEDIA_TYPE.IMG) {
+      } else if (this.dataType !== MEDIA_TYPE.IMG) {
         this.animationUrl = this.commonService.replaceImgIpfs(this.nftItem?.animation_url);
       } else {
         this.imageUrl = this.commonService.replaceImgIpfs(this.nftItem?.token_img);
@@ -102,11 +107,6 @@ export class NftCardComponent implements OnInit, AfterViewInit {
 
   error(): void {
     this.isError = true;
-  }
-
-  getTypeFile(nft: any) {
-    let nftType = checkTypeFile(nft);
-    return nftType;
   }
 
   goTo(link) {

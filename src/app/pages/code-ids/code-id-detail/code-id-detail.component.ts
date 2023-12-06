@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 @Component({
   selector: 'app-code-id-detail',
@@ -31,9 +30,8 @@ export class CodeIdDetailComponent implements OnInit {
 
   constructor(
     private router: ActivatedRoute,
-    public route: Router,
+    private route: Router,
     private contractService: ContractService,
-    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

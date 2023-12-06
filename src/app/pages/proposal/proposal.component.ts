@@ -66,11 +66,11 @@ export class ProposalComponent implements OnInit {
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
-    public walletService: WalletService,
+    private walletService: WalletService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
-    public commonService: CommonService,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

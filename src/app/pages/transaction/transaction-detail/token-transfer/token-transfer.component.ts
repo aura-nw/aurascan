@@ -47,7 +47,7 @@ export class TokenTransferComponent implements OnInit {
 
   constructor(
     private environmentService: EnvironmentService,
-    public router: Router,
+    private router: Router,
     private transactionService: TransactionService,
     private layout: BreakpointObserver,
     private commonService: CommonService,

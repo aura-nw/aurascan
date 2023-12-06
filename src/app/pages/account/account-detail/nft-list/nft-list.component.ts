@@ -6,7 +6,6 @@ import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/consta
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
-import { Globals } from 'src/app/global/global';
 @Component({
   selector: 'app-nft-list',
   templateUrl: './nft-list.component.html',
@@ -39,7 +38,7 @@ export class NftListComponent implements OnInit, OnChanges {
   ];
   errTxt: string;
 
-  constructor(private accountService: AccountService, public global: Globals, private router: Router) {}
+  constructor(private accountService: AccountService, private router: Router) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {
