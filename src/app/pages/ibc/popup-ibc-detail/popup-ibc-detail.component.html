@@ -126,7 +126,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
-      <div class="d-lg-none mobile" [class.padding-safari]="isSafari">
+      <div class="d-lg-none mobile" [class.safari-device]="isSafari">
         <div *ngFor="let data of dataSourceMobile" class="card-relayer" (click)="showDetail(data)">
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
