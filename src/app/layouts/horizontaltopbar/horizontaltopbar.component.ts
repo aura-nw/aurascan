@@ -1,14 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { from } from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { LENGTH_CHARACTER } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
-import { WalletService } from '../../core/services/wallet.service';
-import { LAYOUT_MODE } from '../layouts.model';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
 
@@ -46,7 +42,7 @@ export class HorizontaltopbarComponent implements OnInit {
     public translate: TranslateService,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
-    private commonService: CommonService,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +67,7 @@ export class HorizontaltopbarComponent implements OnInit {
     const regexRule = VALIDATORS.HASHRULE;
     if (this.searchValue) {
       this.searchValue = this.searchValue.trim();
-      const addressNameTag = this.commonService.findNameTag(this.searchValue);
+      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
       if (addressNameTag?.length > 0) {
         let urlLink = addressNameTag.length === LENGTH_CHARACTER.CONTRACT ? 'contracts' : 'account';
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

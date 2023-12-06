@@ -84,7 +84,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
-    public commonService: CommonService,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
