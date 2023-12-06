@@ -51,7 +51,7 @@ export class TokenContentComponent implements OnInit {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private tokenService: TokenService,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +68,7 @@ export class TokenContentComponent implements OnInit {
       this.paramQuery = params?.a || '';
       this.searchTemp = this.paramQuery;
       this.handleSearch();
-      this.searchTemp = this.nameTagService.getNameTag(this.searchTemp);
+      this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
     });
 
     if (localStorage.getItem('isVerifyTab') == 'true') {
@@ -87,7 +87,7 @@ export class TokenContentComponent implements OnInit {
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
     if (this.searchTemp?.length > 0) {
-      const addressNameTag = this.nameTagService.findNameTag(this.searchTemp);
+      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchTemp);
       this.textSearch = this.searchTemp;
       let tempTabs;
       this.paramQuery = addressNameTag || this.searchTemp;

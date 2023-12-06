@@ -50,7 +50,7 @@ export class TokenCw721Component implements OnInit {
     public translate: TranslateService,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +79,7 @@ export class TokenCw721Component implements OnInit {
     };
 
     let keySearch = this.textSearch;
-    const addressNameTag = this.nameTagService.findNameTag(keySearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(keySearch);
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
     }

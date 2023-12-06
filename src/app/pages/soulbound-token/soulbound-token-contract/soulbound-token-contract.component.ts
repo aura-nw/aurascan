@@ -54,7 +54,7 @@ export class SoulboundTokenContractComponent implements OnInit {
     private soulboundService: SoulboundService,
     private walletService: WalletService,
     public commonService: CommonService,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -123,7 +123,7 @@ export class SoulboundTokenContractComponent implements OnInit {
       status: this.selectedType,
     };
 
-    const addressNameTag = this.nameTagService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       payload['keyword'] = addressNameTag;
     }

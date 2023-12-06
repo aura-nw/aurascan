@@ -58,7 +58,7 @@ export class MyGrantersComponent implements OnInit {
     private feeGrantService: FeeGrantService,
     private walletService: WalletService,
     private router: Router,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit() {
@@ -100,7 +100,7 @@ export class MyGrantersComponent implements OnInit {
 
   getListGrant() {
     let keySearch = (this.textSearch = this.textSearch?.trim());
-    const addressNameTag = this.nameTagService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
     }

@@ -75,7 +75,7 @@ export class MyGranteesComponent implements OnInit {
     private walletService: WalletService,
     private mappingErrorService: MappingErrorService,
     private router: Router,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit() {
@@ -131,7 +131,7 @@ export class MyGranteesComponent implements OnInit {
 
   getListGrant() {
     let keySearch = (this.textSearch = this.textSearch?.trim());
-    const addressNameTag = this.nameTagService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
     }

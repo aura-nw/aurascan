@@ -63,7 +63,7 @@ export class ContractService extends CommonService {
         : 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}';
     }
 
-    const addressNameTag = this.nameTagService.findNameTag(keyword);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
     if (addressNameTag?.length > 0) {
       keyword = addressNameTag;
     }

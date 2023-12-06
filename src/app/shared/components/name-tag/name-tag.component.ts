@@ -33,7 +33,7 @@ export class NameTagComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.extendUrl) {
-      this.extendUrlLink = this.nameTagService.findUrlNameTag(this.value || this.paramUrl);
+      this.extendUrlLink = this.nameTagService.findUrlByAddress(this.value || this.paramUrl);
     }
   }
 
@@ -48,11 +48,11 @@ export class NameTagComponent implements OnInit {
 
   displayContent(value) {
     let result = value;
-    if (this.nameTagService.checkPublic(value)) {
-      result += '<br>' + 'Public name: ' + this.nameTagService.getNameTag(value, false);
+    if (this.nameTagService.isPublic(value)) {
+      result += '<br>' + 'Public name: ' + this.nameTagService.findNameTagByAddress(value, false);
     }
-    if (this.nameTagService.checkPrivate(value)) {
-      result += '<br>' + 'Private name: ' + this.nameTagService.getNameTag(value);
+    if (this.nameTagService.isPrivate(value)) {
+      result += '<br>' + 'Private name: ' + this.nameTagService.findNameTagByAddress(value);
     }
     return result;
   }

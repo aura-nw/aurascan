@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
-  MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
@@ -95,7 +96,7 @@ export class PopupWatchlistComponent implements OnInit {
     private commonService: CommonService,
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -308,12 +309,12 @@ export class PopupWatchlistComponent implements OnInit {
     this.privateNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const tempPublic = this.nameTagService.getNameTag(this.getAddress.value, false);
-      const tempPrivate = this.nameTagService.getNameTag(this.getAddress.value);
+      const tempPublic = this.nameTagService.findNameTagByAddress(this.getAddress.value, false);
+      const tempPrivate = this.nameTagService.findNameTagByAddress(this.getAddress.value);
       if (tempPublic !== this.getAddress.value) {
         this.publicNameTag = tempPublic;
       }
-      if (this.nameTagService.checkPrivate(this.getAddress.value) && tempPrivate !== this.getAddress.value) {
+      if (this.nameTagService.isPrivate(this.getAddress.value) && tempPrivate !== this.getAddress.value) {
         this.privateNameTag = tempPrivate;
       }
     }

@@ -79,7 +79,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
       keyword: this.textSearch,
     };
 
-    const addressNameTag = this.nameTagService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       payload['keyword'] = addressNameTag;
     }

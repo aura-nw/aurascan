@@ -41,7 +41,7 @@ export class TokenCw4973Component implements OnInit {
   constructor(
     public translate: TranslateService,
     private soulboundService: SoulboundService,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +72,7 @@ export class TokenCw4973Component implements OnInit {
       keyword: this.textSearch,
     };
 
-    const addressNameTag = this.nameTagService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       payload['keyword'] = addressNameTag;
     }

@@ -230,8 +230,8 @@ export class NotificationComponent {
 
   cutString(value: string): string {
     let nameTag = '';
-    if (this.nameTagService.getNameTag(value) !== value) {
-      nameTag = ' (' + this.nameTagService.getNameTag(value) + ')';
+    if (this.nameTagService.findNameTagByAddress(value) !== value) {
+      nameTag = ' (' + this.nameTagService.findNameTagByAddress(value) + ')';
     }
     const firstChar = value.substring(0, 8);
     const lastChar = value.substring(value.length - 8);

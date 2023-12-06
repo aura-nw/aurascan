@@ -42,7 +42,7 @@ export class HorizontaltopbarComponent implements OnInit {
     public translate: TranslateService,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +67,7 @@ export class HorizontaltopbarComponent implements OnInit {
     const regexRule = VALIDATORS.HASHRULE;
     if (this.searchValue) {
       this.searchValue = this.searchValue.trim();
-      const addressNameTag = this.nameTagService.findNameTag(this.searchValue);
+      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
       if (addressNameTag?.length > 0) {
         let urlLink = addressNameTag.length === LENGTH_CHARACTER.CONTRACT ? 'contracts' : 'account';
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

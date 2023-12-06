@@ -6,9 +6,9 @@ export class NameTagPipe implements PipeTransform {
   constructor(private nameTagService: NameTagService) {}
   transform(address, getPrivate = true, type = 'name') {
     if (type === 'name') {
-      return this.nameTagService.getNameTag(address, getPrivate);
+      return this.nameTagService.findNameTagByAddress(address, getPrivate);
     } else {
-      return this.nameTagService.findUrlNameTag(address);
+      return this.nameTagService.findUrlByAddress(address);
     }
   }
 }
@@ -17,7 +17,7 @@ export class NameTagPipe implements PipeTransform {
 export class IsPublicNameTagPipe implements PipeTransform {
   constructor(private nameTagService: NameTagService) {}
   transform(address) {
-    return this.nameTagService.checkPublic(address);
+    return this.nameTagService.isPublic(address);
   }
 }
 
@@ -25,6 +25,6 @@ export class IsPublicNameTagPipe implements PipeTransform {
 export class IsPrivateNameTagPipe implements PipeTransform {
   constructor(private nameTagService: NameTagService) {}
   transform(address) {
-    return this.nameTagService.checkPrivate(address);
+    return this.nameTagService.isPrivate(address);
   }
 }

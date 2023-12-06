@@ -50,7 +50,7 @@ export class SoulboundContractListComponent implements OnInit {
     public dialog: MatDialog,
     private walletService: WalletService,
     private router: Router,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -116,7 +116,7 @@ export class SoulboundContractListComponent implements OnInit {
       keyword: this.textSearch,
     };
 
-    const addressNameTag = this.nameTagService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       payload['keyword'] = addressNameTag;
     }

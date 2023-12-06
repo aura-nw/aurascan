@@ -41,33 +41,34 @@ export class NameTagService extends CommonService {
     });
   }
 
-  getNameTag(address, getPrivate = true) {
+  findNameTagByAddress(address: string, isPrivate = true) {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
-    let result = nameTag?.name_tag || address;
-    if (getPrivate) {
-      result = nameTag?.name_tag_private || result;
-    }
-    return result;
+
+    let result = isPrivate ? nameTag?.name_tag_private : nameTag?.name_tag;
+
+    return result ? result : address;
   }
 
-  findNameTag(keySearch) {
-    if (!keySearch) {
+  findAddressByNameTag(nameTag: string) {
+    if (!nameTag) {
       return '';
     }
+
     const userEmail = localStorage.getItem('userEmail');
+    let address = '';
     if (this.listNameTag?.length > 0) {
-      let result;
       if (userEmail) {
-        result = this.listNameTag?.find((k) => k.name_tag_private?.trim() === keySearch?.trim())?.address || '';
+        address = this.listNameTag?.find((k) => k.name_tag_private?.trim() === nameTag?.trim())?.address || '';
       }
-      if (!result) {
-        result = this.listNameTag?.find((k) => k.name_tag?.trim() === keySearch?.trim())?.address || '';
+
+      if (!address) {
+        address = this.listNameTag?.find((k) => k.name_tag?.trim() === nameTag?.trim())?.address || '';
       }
-      return result;
     }
+    return address;
   }
 
-  findUrlNameTag(address) {
+  findUrlByAddress(address: string) {
     let result = '';
     const nameTag = this.listNameTag?.find((k) => k.address === address);
     if (nameTag?.enterpriseUrl?.length > 0) {
@@ -76,30 +77,32 @@ export class NameTagService extends CommonService {
     return result;
   }
 
-  checkPublic(address): boolean {
-    let result = false;
-    const nameTag = this.listNameTag?.find((k) => k.address === address && k.name_tag?.length > 0);
-    if (nameTag && nameTag?.name_tag !== address) {
-      result = true;
-    }
-    return result;
-  }
-
-  checkPrivate(address): boolean {
-    let result = false;
-    const nameTag = this.listNameTag?.find((k) => k.address === address && k.isPrivate);
-    if (nameTag?.name_tag_private) {
-      result = true;
-    }
-    return result;
-  }
-
-  checkDisplayTooltip(address): boolean {
-    let result = false;
+  isPublic(address: string): boolean {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
-    if (!nameTag || nameTag?.name_tag === address) {
-      result = true;
+
+    if (nameTag?.name_tag) {
+      return true;
     }
-    return result;
+
+    return false;
+  }
+
+  isPrivate(address: string): boolean {
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+
+    if (nameTag?.isPrivate && nameTag?.name_tag_private) {
+      return true;
+    }
+
+    return false;
+  }
+
+  checkDisplayTooltip(address: string): boolean {
+    const nameTag = this.listNameTag?.find((k) => k.address === address);
+
+    if (!nameTag || nameTag?.name_tag === address) {
+      return true;
+    }
+    return false;
   }
 }

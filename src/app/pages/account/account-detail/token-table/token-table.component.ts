@@ -79,7 +79,7 @@ export class TokenTableComponent implements OnChanges {
     private accountService: AccountService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -104,7 +104,7 @@ export class TokenTableComponent implements OnChanges {
 
       // Search with text search
       let txtSearch = this.textSearch.trim();
-      const addressNameTag = this.nameTagService.findNameTag(this.textSearch);
+      const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
       if (addressNameTag?.length > 0) {
         txtSearch = addressNameTag;
       }
