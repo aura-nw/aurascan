@@ -5,7 +5,6 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
@@ -20,7 +19,6 @@ import { shortenAddress } from '../../../core/utils/common/shorten';
 })
 export class ContractsListComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
-  typeCW4973 = TYPE_CW4973;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },
     { matColumnDef: 'name', headerCellDef: 'Contract Name' },
@@ -94,19 +92,8 @@ export class ContractsListComponent implements OnInit, OnDestroy {
             if (item?.code?.type === this.contractRegisterType.CW20 && item['cw20_contract']?.name) {
               item.url = '/tokens/token/' + item.address;
               item.token_tracker = item['cw20_contract']?.name;
-            } else if (
-              item?.code?.type === this.contractRegisterType.CW721 &&
-              item?.name !== this.typeCW4973 &&
-              item['cw721_contract']?.name
-            ) {
+            } else if (item?.code?.type === this.contractRegisterType.CW721 && item['cw721_contract']?.name) {
               item.url = '/tokens/token-nft/' + item.address;
-              item.token_tracker = item['cw721_contract']?.name;
-            } else if (
-              item['code'].type === this.contractRegisterType.CW721 &&
-              item['name'] === this.typeCW4973 &&
-              item['cw721_contract']?.name
-            ) {
-              item.url = '/tokens/token-abt/' + item.address;
               item.token_tracker = item['cw721_contract']?.name;
             }
 
@@ -115,9 +102,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
               DATEFORMAT.DATETIME_UTC,
             );
             item.type = item.code.type;
-            if (item.type === ContractRegisterType.CW721 && item?.name === TYPE_CW4973) {
-              item.type = ContractRegisterType.CW4973;
-            }
             item.compiler_version = item.code?.code_id_verifications[0]?.compiler_version;
             item.contract_verification = item.code.code_id_verifications[0]?.verification_status;
           });
@@ -173,7 +157,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
         break;
       case ContractRegisterType.CW20:
       case ContractRegisterType.CW721:
-      case ContractRegisterType.CW4973:
       case '': //Others
       default:
         if (i >= 0) {

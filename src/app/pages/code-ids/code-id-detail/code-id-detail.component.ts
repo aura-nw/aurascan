@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { ContractService } from 'src/app/core/services/contract.service';
 @Component({
@@ -28,11 +27,7 @@ export class CodeIdDetailComponent implements OnInit {
   codeIdDetail;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
-  constructor(
-    private router: ActivatedRoute,
-    private route: Router,
-    private contractService: ContractService,
-  ) {}
+  constructor(private router: ActivatedRoute, private route: Router, private contractService: ContractService) {}
 
   ngOnInit(): void {
     this.codeId = this.router.snapshot.paramMap.get('codeId');
@@ -57,9 +52,6 @@ export class CodeIdDetailComponent implements OnInit {
           data.tx_hash = data.store_hash;
           data.verified_at = _.get(data, 'code_id_verifications[0].verified_at');
           data.contract_verification = _.get(data, 'code_id_verifications[0].verification_status');
-          if (data.type === ContractRegisterType.CW721 && data.smart_contracts[0]?.name === TYPE_CW4973) {
-            data.type = ContractRegisterType.CW4973;
-          }
           this.codeIdDetail = data;
         }
       },

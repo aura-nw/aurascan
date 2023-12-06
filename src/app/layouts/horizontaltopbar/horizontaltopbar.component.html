@@ -125,11 +125,8 @@
                         [class.active]="checkMenuActive(subMenu.link)">
                         <!-- Menu token has special icon -->
                         <i class="icon icon-nft text--white" *ngIf="subMenu.name === menuName.TokenCW721"></i>
-                        <i class="icon icon-bound-token text--white" *ngIf="subMenu.name === menuName.TokenCW4973"></i>
                         <!-- . -->
-                        <i
-                          class="ph-{{ subMenu.icon }} text--white"
-                          *ngIf="subMenu.name !== menuName.TokenCW721 && subMenu.name !== menuName.TokenCW4973"></i>
+                        <i class="ph-{{ subMenu.icon }} text--white" *ngIf="subMenu.name !== menuName.TokenCW721"></i>
                         <span class="ml-2 text--white">{{ subMenu.label | translate }}</span>
                       </a>
                     </ng-container>

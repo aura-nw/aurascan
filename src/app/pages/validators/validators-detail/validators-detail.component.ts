@@ -5,13 +5,11 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { NUMBER_2_DIGIT, NUM_BLOCK, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { Globals, convertDataBlock } from 'src/app/global/global';
@@ -82,7 +80,6 @@ export class ValidatorsDetailComponent implements OnInit {
   currentNextKeyDelegator = null;
 
   isOpenDialog = false;
-  soulboundList = [];
   arrBlockUptime = [];
   arrLastBlock = [];
   isLeftPage = false;
@@ -103,7 +100,6 @@ export class ValidatorsDetailComponent implements OnInit {
     private global: Globals,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
-    private soulboundService: SoulboundService,
     private walletService: WalletService,
   ) {}
 
@@ -201,7 +197,6 @@ export class ValidatorsDetailComponent implements OnInit {
               }
             }, 2000);
           }
-          this.getTotalSBT(this.currentValidatorDetail.acc_address);
         },
         error: (e) => {
           this.router.navigate(['/']);
@@ -438,17 +433,6 @@ export class ValidatorsDetailComponent implements OnInit {
 
   updateStatus(event) {
     this.isOpenDialog = event;
-  }
-
-  getTotalSBT(address) {
-    const payload = {
-      receiverAddress: address,
-      limit: LIMIT_NUM_SBT,
-    };
-
-    this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      this.soulboundList = res.data.filter((k) => k.picked);
-    });
   }
 
   getUptime() {

@@ -58,11 +58,6 @@
       left: 0;
       object-fit: contain;
     }
-    &.nft-soulbound__img {
-      &:before {
-        padding-top: 73.426573%;
-      }
-    }
   }
   @media (max-width: 991.98px) {
     * {
@@ -130,7 +125,6 @@
     @media (min-width: 992px) {
       margin: 0 -8px;
     }
-
   }
   &__col {
     padding: 0 4px;

@@ -164,12 +164,9 @@
 <ng-template #menuItem let-data="data">
   <li class="menu-item" (click)="popover.close()">
     <a class="menu-link" [class.active]="checkMenuActive(data.link)" [routerLink]="data.link">
-      <i
-        class="ph-{{ data.icon }} h3 mr-2 mb-0"
-        *ngIf="data.name !== menuName.TokenCW721 && data.name !== menuName.TokenCW4973"></i>
+      <i class="ph-{{ data.icon }} h3 mr-2 mb-0" *ngIf="data.name !== menuName.TokenCW721"></i>
       <!-- Menu token has special icon -->
       <i class="icon icon-nft mr-2 mb-0" *ngIf="data.name === menuName.TokenCW721"></i>
-      <i class="icon icon-bound-token mr-2 mb-0" *ngIf="data.name === menuName.TokenCW4973"></i>
       <div class="body fw-semibold">{{ data.label | translate }}</div>
     </a>
   </li>

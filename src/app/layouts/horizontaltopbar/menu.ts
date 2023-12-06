@@ -10,7 +10,6 @@ export enum MenuName {
   Token = 'Token',
   TokenCW20 = 'TokenCW20',
   TokenCW721 = 'TokenCW721',
-  TokenCW4973 = 'TokenCW4973',
   Statistic = 'Statistic',
   ChartStats = 'Chart & Stats',
   TopStatistics = 'Top Statistics',
@@ -88,14 +87,6 @@ export const MENU: MenuItem[] = [
         icon: 'icon icon-nft',
         featureName: EFeature.Cw721,
       },
-      {
-        id: 3,
-        label: 'CW-4973 Top Tokens',
-        link: '/tokens/token-abt',
-        name: MenuName.TokenCW4973,
-        icon: 'icon icon-bound-token',
-        featureName: EFeature.Cw4973,
-      },
     ],
   },
   {
@@ -158,13 +149,6 @@ export const MENU: MenuItem[] = [
         link: '/fee-grant',
         icon: 'gas-pump',
         featureName: EFeature.FeeGrant,
-      },
-      {
-        id: 2,
-        label: 'ABT Creator',
-        link: '/accountbound',
-        icon: 'medal',
-        featureName: EFeature.AccountBound,
       },
       {
         id: 3,
@@ -241,13 +225,6 @@ export const MENU_MOB: MenuItem[] = [
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
       },
-      {
-        id: 3,
-        label: 'CW-4973 Top Tokens',
-        link: '/tokens/token-abt',
-        name: MenuName.TokenCW4973,
-        icon: 'icon icon-bound-token',
-      },
     ],
   },
   {
@@ -297,12 +274,6 @@ export const MENU_MOB: MenuItem[] = [
         label: 'Fee Grant',
         link: '/fee-grant',
         icon: 'gas-pump',
-      },
-      {
-        id: 2,
-        label: 'ABT Creator',
-        link: '/accountbound',
-        icon: 'medal',
       },
       {
         id: 3,

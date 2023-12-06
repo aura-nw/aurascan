@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig
+  MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -14,19 +14,16 @@ import {
   MEDIA_TYPE,
   NULL_ADDRESS,
   PAGE_EVENT,
-  TIMEOUT_ERROR
+  TIMEOUT_ERROR,
 } from 'src/app/core/constants/common.constant';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
-import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
@@ -58,7 +55,6 @@ export class NFTDetailComponent implements OnInit {
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  isSoulBound = false;
   loading = true;
   loadingTable = true;
   nftId = '';
@@ -72,12 +68,10 @@ export class NFTDetailComponent implements OnInit {
   nextKey = null;
   currentKey: string;
   isError = false;
-  sbType = SB_TYPE;
   contractType = ContractRegisterType;
   linkToken = 'token-nft';
   animationUrl: string;
   imageUrl: string;
-  isCW4973 = false;
   errTxt: string;
   errTxtActivity: string;
 
@@ -97,7 +91,6 @@ export class NFTDetailComponent implements OnInit {
     private route: Router,
     private environmentService: EnvironmentService,
     private router: ActivatedRoute,
-    private soulboundService: SoulboundService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private contractService: ContractService,
@@ -142,18 +135,6 @@ export class NFTDetailComponent implements OnInit {
         }
 
         res['type'] = res['type'] || ContractRegisterType.CW721;
-        if (this.router.snapshot.url[0]?.path === 'token-abt') {
-          if (res.name === TYPE_CW4973 && res.cw721_contract?.cw721_tokens[0]?.burned === false) {
-            res['type'] = ContractRegisterType.CW4973;
-            this.isSoulBound = true;
-            this.linkToken = 'token-abt';
-            this.isCW4973 = true;
-          } else {
-            this.toastr.error('Token invalid');
-            this.loading = false;
-            return;
-          }
-        }
 
         this.getDataTable();
 
@@ -183,11 +164,6 @@ export class NFTDetailComponent implements OnInit {
             this.imageUrl = this.nftDetail?.media_info?.offchain.image?.url;
           }
         }
-
-        if (res.type === ContractRegisterType.CW4973) {
-          this.nftDetail['isDisplayName'] = true;
-          this.nftDetail['nftName'] = this.nftDetail?.media_info?.onchain?.metadata?.name || '';
-        }
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
@@ -207,7 +183,6 @@ export class NFTDetailComponent implements OnInit {
     let payload = {
       contractAddr: this.contractAddress,
       tokenId: this.decodeData(this.nftId),
-      isCW4973: this.isCW4973 ? true : false,
       isNFTDetail: true,
     };
 
@@ -266,72 +241,6 @@ export class NFTDetailComponent implements OnInit {
       complete: () => {
         this.loadingTable = false;
       },
-    });
-  }
-
-  async unEquipSBT() {
-    const executeUnEquipMsg = {
-      unequip: {
-        token_id: this.nftDetail.token_id,
-      },
-    };
-    this.execute(executeUnEquipMsg);
-  }
-
-  async execute(data) {
-    const user = this.walletService.wallet?.bech32Address;
-    let msgError = MESSAGES_CODE_CONTRACT[5].Message;
-    msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
-    let dataWallet = await this.walletService.getWalletSign(user, this.nftDetail.token_id);
-
-    const payload = {
-      signature: dataWallet['signature'],
-      msg: true,
-      pubKey: dataWallet['pub_key'].value,
-      id: this.nftDetail?.token_id,
-      status: this.sbType.PENDING,
-      contractAddress: this.nftDetail?.contract_address,
-    };
-
-    let feeGas = {
-      amount: [
-        {
-          amount: (this.network.gasPriceStep?.average || 0.0025).toString(),
-          denom: this.network.currencies[0].coinMinimalDenom,
-        },
-      ],
-      gas: '200000',
-    };
-
-    try {
-      this.walletService
-        .execute(user, this.nftDetail.contract_address, data, feeGas)
-        .then((e) => {
-          if ((e as any).result?.error) {
-            this.toastr.error(msgError);
-          } else {
-            if ((e as any)?.transactionHash) {
-              this.toastr.loading((e as any)?.transactionHash);
-              setTimeout(() => {
-                this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-                this.updateStatusSBT(payload, user);
-              }, 4000);
-            }
-          }
-        })
-        .catch((error) => {
-          if (!error.toString().includes('Request rejected')) {
-            this.toastr.error(msgError);
-          }
-        });
-    } catch (error) {
-      this.toastr.error(`Error: ${msgError}`);
-    }
-  }
-
-  async updateStatusSBT(payload: any, address) {
-    this.soulboundService.updatePickSBToken(payload).subscribe((res) => {
-      this.route.navigate(['/account/', address]);
     });
   }
 

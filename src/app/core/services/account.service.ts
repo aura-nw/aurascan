@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
-import { TYPE_CW4973 } from '../constants/contract.constant';
 import { ApiAccountService } from '../data-services/api-account.service';
 import { ApiCw20TokenService } from '../data-services/api-cw20-token.service';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -48,7 +47,7 @@ export class AccountService extends CommonService {
           offset: $offset
           where: {
             cw721_contract: {
-              smart_contract: { address: { _eq: $contract_address }, name: {_neq: "${TYPE_CW4973}"} }
+              smart_contract: { address: { _eq: $contract_address }, name: {_neq: "crates.io:cw4973"} }
             }
             token_id: { _eq: $tokenId }
             owner: { _eq: $owner }
@@ -72,7 +71,7 @@ export class AccountService extends CommonService {
             }
           }
         }
-        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "crates.io:cw4973"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
           aggregate {
             count
           }

@@ -2,7 +2,7 @@
   <app-loading-sprint></app-loading-sprint>
 </div>
 
-<ng-container *ngIf="nftDetail && (nftDetail.type === contractType.CW721 || nftDetail.type === contractType.CW4973)">
+<ng-container *ngIf="nftDetail && nftDetail.type === contractType.CW721">
   <div class="text--white">
     <div class="d-lg-none">
       <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap">
@@ -27,41 +27,7 @@
       <!-- nft-media -->
       <div class="col-12 col-lg-4 my-4 my-md-0 pl-lg-0">
         <div class="nft-img__contain w-100 h-100">
-          <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
-            <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
-              <img
-                *ngIf="
-                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG && !nftDetail.media_info?.offchain?.animation?.url) ||
-                  isError
-                "
-                [src]="defaultImgToken" />
-              <img
-                (click)="expandMedia()"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
-                (error)="error()"
-                [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
-              <video
-                (click)="expandMedia()"
-                [src]="animationUrl"
-                controls
-                controlsList="nodownload"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO && nftDetail.media_info?.offchain?.animation?.url"
-                poster="{{ imageUrl }}"></video>
-              <app-model-view
-                (click)="expandMedia()"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE._3D && nftDetail.media_info?.offchain?.animation?.url"
-                [modelUrl]="animationUrl"
-                [disablePan]="false"
-                [previewImg]="imageUrl">
-              </app-model-view>
-              <app-audio-player
-                (click)="expandMedia()"
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO && nftDetail.media_info?.offchain?.animation?.url"
-                [src]="animationUrl"
-                [previewImg]="imageUrl">
-              </app-audio-player>
-            </div>
-          </div>
+          <div class="card m-0 w-100 h-100 align-items-center justify-content-center"></div>
         </div>
       </div>
       <div class="col-12 col-lg-8 pl-lg-3">
@@ -79,14 +45,6 @@
               </button>
               <span class="burnt-tag" *ngIf="nftDetail?.burned">Burnt</span>
             </div>
-            <ng-container *ngIf="isSoulBound">
-              <button
-                *ngIf="nftDetail.burned === false && userAddress === nftDetail?.owner"
-                class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
-                (click)="unEquipSBT()">
-                <span>Un-equip</span>
-              </button>
-            </ng-container>
           </div>
           <div class="mt-1 mt-lg-2 mb-4 d-lg-flex d-none">
             <a
@@ -96,7 +54,6 @@
             >
           </div>
           <!-- Desktop card info -->
-          <!--          <div class="d-none d-lg-block card py-3 px-6" *ngIf="!isSoulBound">-->
           <div class="d-none d-lg-block card py-3 px-6" *ngIf="false">
             <div class="d-flex">
               <div class="flex-shrink-0 flex-grow-1 w-auto">
@@ -129,30 +86,6 @@
             </div>
           </div>
           <!-- Mobile card info -->
-          <!--          <div class="d-lg-none" *ngIf="!isSoulBound">-->
-          <div class="d-lg-none" *ngIf="false">
-            <div class="card px-6 py-3 mb-4">
-              <div class="body-02 text--gray-5 mb-1">Min. Price</div>
-              <div class="h3 mb-0 text--white">
-                <span>- {{ denom }}</span>
-                <span class="text--gray-5 ml-2">(-)</span>
-              </div>
-            </div>
-            <div class="card px-6 py-3 mb-4">
-              <div class="body-02 text--gray-5 mb-1">Last Sale (Item)</div>
-              <div class="h3 mb-0 text--white">
-                <span>N/A</span>
-                <!--              <span class="text--gray-5 ml-2">($32.42)</span>-->
-              </div>
-            </div>
-            <div class="card px-6 py-3 mb-4">
-              <div class="body-02 text--gray-5 mb-1">Last Sale (Contract)</div>
-              <div class="h3 mb-0 text--white">
-                <span>- {{ denom }}</span>
-                <span class="text--gray-5 ml-2">(-)</span>
-              </div>
-            </div>
-          </div>
           <!-- End card info -->
           <div class="card card__ntf-detail mb-0">
             <h2 class="mb-0 h5-mob text--white card__ntf-detail-item" id="popupCopy">Details</h2>
@@ -258,58 +191,9 @@
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Token Standard:</div>
               <div class="text--gray-1 fw-normal-mob">
-                {{ isSoulBound ? 'CW-4973' : 'CW-721' }}
+                {{ 'CW-721' }}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row mt-4 flex-column-reverse flex-lg-row" *ngIf="isSoulBound">
-      <div class="col-12 col-lg-4 mt-4 mt-lg-0">
-        <div class="card card--sb-information mb-0">
-          <div class="card-header card-header--has-border h2 text--white box-prop">Properties</div>
-          <ng-container *ngIf="nftDetail?.media_info?.onchain?.metadata?.attributes">
-            <ng-container *ngIf="isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)">
-              <div class="box-prop-item">
-                <div class="row text--gray-1 box-prop-item__row">
-                  <ng-container *ngFor="let prop of nftDetail?.media_info?.onchain?.metadata?.attributes; index as i">
-                    <div class="col-lg-4 col-6 mb-lg-6 mb-2 box-prop-item__col">
-                      <div class="card-info py-4 text-center">
-                        <div class="caption fw-normal text--white">
-                          <span class="d-none d-lg-block">
-                            {{ prop.trait_type | stringEllipsis : 15 }}
-                          </span>
-                          <span class="d-block d-lg-none">
-                            {{ prop.trait_type | stringEllipsis : 18 }}
-                          </span>
-                        </div>
-                        <div class="mt-2 caption text--white">
-                          <span class="d-none d-lg-block">
-                            {{ prop.value | stringEllipsis : 14 }}
-                          </span>
-                          <span class="d-block d-lg-none">
-                            {{ prop.value | stringEllipsis : 17 }}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </ng-container>
-            <span *ngIf="!isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)" class="pl-4 pl-lg-6 pt-2"
-              >-</span
-            >
-          </ng-container>
-          <span *ngIf="!nftDetail?.media_info?.onchain?.metadata?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
-        </div>
-      </div>
-      <div class="col-12 col-lg-8 pl-lg-3">
-        <div class="card card--sb-information mb-0">
-          <div class="card-header card-header--has-border h2 text--white pt-4 pb-5 pt-lg-6 pb-lg-4">Description</div>
-          <div class="card-body text--gray-1 body-03 sb-props">
-            {{ nftDetail?.media_info?.onchain?.metadata?.description || '-' }}
           </div>
         </div>
       </div>

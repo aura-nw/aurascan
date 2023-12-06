@@ -13,7 +13,6 @@ import { UserService } from 'src/app/core/services/user.service';
 import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
-import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { AccountService } from '../../../core/services/account.service';
@@ -59,7 +58,6 @@ import { TokenTableComponent } from './token-table/token-table.component';
     NftCardModule,
     NgxMaskPipe,
     NgxMaskDirective,
-    SoulboundFeatureTokensModule,
     CommonDirectiveModule,
     CustomPaginatorModule,
     NameTagModule,

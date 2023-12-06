@@ -169,11 +169,9 @@ export enum RangeType {
 export enum EFeature {
   Cw20 = 'CW20',
   Cw721 = 'CW721',
-  Cw4973 = 'CW4973',
   Statistics = 'STATISTICS',
   TopStatistics = 'TOP_STATISTICS',
   FeeGrant = 'FEE_GRANT',
-  AccountBound = 'ACCOUNT_BOUND',
   CommunityPool = 'COMMUNITY_POOL',
   Profile = 'PROFILE',
   ExportCsv = 'EXPORT_CSV',

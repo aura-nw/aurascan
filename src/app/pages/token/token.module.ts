@@ -36,7 +36,6 @@ import { TokenDetailComponent } from './token-detail/token-detail.component';
 import { TokenOverviewComponent } from './token-detail/token-overview/token-overview.component';
 import { TokenSummaryComponent } from './token-detail/token-summary/token-summary.component';
 import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component';
-import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
 
@@ -55,7 +54,6 @@ import { TokenRoutingModule } from './token-routing.module';
     TokenInventoryComponent,
     NFTDetailComponent,
     PopupShareComponent,
-    TokenCw4973Component,
   ],
   imports: [
     CommonModule,

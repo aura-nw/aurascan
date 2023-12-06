@@ -4,7 +4,6 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
 import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -75,9 +74,6 @@ export class CodeIdContractsTabComponent implements OnInit {
             item.creator_address = item?.creator;
             item.verified_at = _.get(item, 'code.code_id_verifications[0].verified_at');
             item.type = item.code?.type || '-';
-            if (item.type === ContractRegisterType.CW721 && item.smart_contracts?.name === TYPE_CW4973) {
-              item.type = ContractRegisterType.CW4973;
-            }
           });
           this.dataSource.data = res.smart_contract;
         }
