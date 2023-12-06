@@ -250,9 +250,9 @@
                         class: 'body-01 text--gray-1',
                         info: commonService.getDateValue(data.timestamp)[0]
                       },
-                      { label: 'LABEL.TXS', class: 'body-01 text--gray-1', info: data.num_txs.toString() },
+                      { label: 'LABEL.TXS' | translate, class: 'body-01 text--gray-1', info: data.num_txs.toString() },
                       {
-                        label: 'PAGES.VALIDATOR_DETAIL.votingStart',
+                        label: 'PAGES.VALIDATOR_DETAIL.votingStart' | translate,
                         class: 'card__date text--gray-1 body-01-mob',
                         info:
                           '<span>' +
@@ -393,7 +393,7 @@
                           : (commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6)
                       },
                       {
-                        label: 'COMMON.AMOUNT',
+                        label: 'COMMON.AMOUNT' | translate,
                         class: 'body-01 text--gray-1',
                         info: (data.amount | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
                       }
@@ -504,7 +504,7 @@
                             '</a>'
                         },
                         {
-                          label: 'COMMON.AMOUNT',
+                          label: 'COMMON.AMOUNT' | translate,
                           info:
                             !data.amount || data.amount === 0 || data.amount === 'More'
                               ? data.amount.toString()
@@ -513,7 +513,7 @@
                               : '<span class=text--danger>' + '- ' + (data.amount | mask : 'separator.6') + '</span>'
                         },
                         {
-                          label: 'COMMON.TIME',
+                          label: 'COMMON.TIME' | translate,
                           class: 'card__date text--gray-1 body-01-mob',
                           info:
                             '<span>' +

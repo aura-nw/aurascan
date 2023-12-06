@@ -85,12 +85,12 @@
                           </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [value]="data.from || nullAddress"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [value]="data.from || nullAddress"
                             [maxCharacter]="13"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
@@ -101,12 +101,12 @@
                           </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [value]="data.to || nullAddress"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [value]="data.to || nullAddress"
                             [maxCharacter]="13"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
@@ -205,13 +205,13 @@
                             </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [maxCharacter]="30"
                             [value]="data.from || nullAddress"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [maxCharacter]="14"
                             [value]="data.from || nullAddress"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
@@ -222,13 +222,13 @@
                             </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [maxCharacter]="20"
                             [value]="data.to || nullAddress"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [maxCharacter]="14"
                             [value]="data.to || nullAddress"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>

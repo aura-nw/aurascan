@@ -23,13 +23,13 @@
               <span class="modal__title break-all">{{ currentValidatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ currentValidatorDetail?.commission | percent : number2Digit }}
+              {{ 'PAGES.VALIDATOR.commission' | translate }} - {{ currentValidatorDetail?.commission | percent : number2Digit }}
             </div>
           </div>
         </div>
         <div class="body-01 text--gray-5">
           <div class="mb-1">
-            <span>Voting power - {{ currentValidatorDetail?.percent_power }}%</span>&nbsp;
+            <span>{{ 'PAGES.VALIDATOR.votingPower' | translate }} - {{ currentValidatorDetail?.percent_power }}%</span>&nbsp;
             <span>({{ currentValidatorDetail?.power | mask : 'separator.6' }}</span>
             <span class="text--white ml-1">{{ denom }}</span
             >)
@@ -46,16 +46,16 @@
               class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
               type="button"
               (click)="getMaxToken()">
-              MAX
+              {{ 'BUTTON.MAX' | translate }}
             </button>
           </div>
           <div class="input-group-append text--white">{{ denom }}</div>
         </div>
         <div *ngIf="errorExceedAmount" class="text--danger mt-3">
-          Insufficient available balance for transaction fee
+          {{ 'PAGES.VALIDATOR_DETAIL.errorExceedAmount' | translate }}
         </div>
         <div *ngIf="isValidatorJail" class="text--danger mt-3">
-          This validator is currently jailed so you can not delegate to this validator.
+          {{ 'PAGES.VALIDATOR_DETAIL.isValidatorJail' | translate }}
         </div>
 
         <div class="mt-6 d-flex align-items-center justify-content-center justify-content-lg-end">
@@ -71,7 +71,7 @@
               width="20"
               height="20"
               *ngIf="isLoading" />
-            <span>Delegate</span>
+            <span>{{ 'PAGES.VALIDATOR.delegate' | translate }}</span>
           </button>
         </div>
       </div>
@@ -79,4 +79,4 @@
   </ng-template>
 </div>
 
-<button id="buttonOpenDialog" class="d-none" (click)="viewPopupDetail(modalManage)">Close</button>
+<button id="buttonOpenDialog" class="d-none" (click)="viewPopupDetail(modalManage)">{{ 'BUTTON.CLOSE' | translate }}</button>

@@ -97,12 +97,12 @@
             }"
             [content]="[
               {
-                label: 'LABEL.FEE',
+                label: 'LABEL.FEE' | translate,
                 class: 'body-01-mob text--gray-1',
                 info: (+data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
               },
               {
-                label: 'COMMON.TIME',
+                label: 'COMMON.TIME' | translate,
                 class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +
