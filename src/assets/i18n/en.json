@@ -329,6 +329,15 @@
       "verifiedTime": "Verified Time:",
       "linkSourceCode": "Link Code ID source code",
       "codeIdVerified":"Code ID source code verified"
+    },
+    "EXPORT_CSV" : {
+      "exportData": "Export Data",
+      "downloadCSVFile": "Download CSV file",
+      "exportDataType": "Export data type",
+      "selectExportDataType": "Select export data type",
+      "accountTransaction": "Account transaction",
+      "dataRange": "Data range",
+      "descContent": "The earliest 1,000 records within the selected range will be exported"
     }
   },
   "WALLET": {
@@ -358,6 +367,7 @@
     "GIT_SOURCE_MAX_LENGTH_ERR": "Link GitHub Source Code is not allowed more 200 characters!",
     "GIT_INVALID": "Invalid link Github Source Code",
     "CODE_ID_VERIFIED_SUCCESS": "Code ID source code verified successfully",
+    "AURA_ADDRESS_INVALID": "Invalid aura address format",
     "REQUIRED": "Required"
   },
   "MESSAGES": {
@@ -416,6 +426,7 @@
     "TO": "To",
     "BACK": "Back",
     "COMPLETE": "Complete",
+    "DATE": "Date",
     "JAILED": "Jailed",
     "ACTIVE": "Active",
     "INACTIVE": "inActive",

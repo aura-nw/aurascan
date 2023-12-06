@@ -1,10 +1,10 @@
 <h1 class="text--white fw-700">
-  Export Data <br class="d-lg-none" />
-  (Download CSV file)
+  {{ 'PAGES.EXPORT_CSV.exportData' | translate }} <br class="d-lg-none" />
+  ({{ 'PAGES.EXPORT_CSV.downloadCSVFile' | translate }})
 </h1>
 <div class="text--gray-2 mb-6 d-flex">
   <i class="ph ph-info body-01 mr-1" style="margin-top: 2px"></i>
-  The earliest 1,000 records within the selected range will be exported
+  {{ 'PAGES.EXPORT_CSV.descContent' | translate }}
 </div>
 
 <div class="col-12 col-lg-6">
@@ -16,7 +16,7 @@
     <!-- Export data type -->
     <div class="row mb-6 align-items-center">
       <div class="col-12 col-lg-3 mb-4 mb-lg-0">
-        <span class="form-label body-02 text--gray-4 input-require">Export data type</span>
+        <span class="form-label body-02 text--gray-4 input-require">{{ 'PAGES.EXPORT_CSV.exportDataType' | translate }}</span>
       </div>
       <div class="col-12 col-lg-9">
         <div class="form-group">
@@ -29,7 +29,7 @@
               aria-expanded="false"
               #trigger>
               <span class="body text--gray-4">
-                <ng-container *ngIf="!dataType"> Select export data type </ng-container>
+                <ng-container *ngIf="!dataType">{{ 'PAGES.EXPORT_CSV.selectExportDataType' | translate }}</ng-container>
                 <span *ngIf="dataType?.length > 0" class="text--white"> {{ mappingDataExport(dataType) }} </span>
               </span>
               <div class="ml-3 d-flex align-items-center">
@@ -40,7 +40,7 @@
             <ul class="dropdown-menu aura-dropdown-menu p-0" id="typeAction" #typeAction>
               <!-- Group 1-->
               <div>
-                <h5 class="dropdown-menu__title">Account transaction</h5>
+                <h5 class="dropdown-menu__title">{{ 'PAGES.EXPORT_CSV.accountTransaction' | translate }}</h5>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
                   [class.active]="dataType === TabsAccountLink.ExecutedTxs"
@@ -89,7 +89,7 @@
               autocomplete="off" />
           </div>
           <div *ngIf="getAddress?.value?.length > 0 && !isValidAddress" class="text--danger mt-2 caption fw-normal">
-            Invalid aura address format
+            {{ "NOTICE.AURA_ADDRESS_INVALID" | translate }}
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@
     <!-- Data range -->
     <div class="row mb-6 align-items-center">
       <div class="col-12 col-lg-3 mb-4 mb-lg-0">
-        <span class="form-label body-02 text--gray-4 input-require">Data range</span>
+        <span class="form-label body-02 text--gray-4 input-require">{{ 'PAGES.EXPORT_CSV.dataRange' | translate }}</span>
       </div>
       <div class="col-12 col-lg-9">
         <div class="d-flex align-items-center">
@@ -110,7 +110,7 @@
               class="radio-box radio-box--dark"
               [checked]="isFilterDate"
               (change)="changeType(true)" />
-            <label for="date" class="ml-2 pl-1 mb-0 text-justify">Date</label>
+            <label for="date" class="ml-2 pl-1 mb-0 text-justify">{{ 'COMMON.DATE' | translate }}</label>
           </div>
           <div class="form-group d-flex align-items-center ml-8">
             <input
