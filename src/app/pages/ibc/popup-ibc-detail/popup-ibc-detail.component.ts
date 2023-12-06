@@ -16,6 +16,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
+import { isSafari } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-ibc-detail',
@@ -33,6 +34,8 @@ export class PopupIBCDetailComponent implements OnInit {
   isLoading = true;
   dataSourceMobile: any[];
   relayerType = Relayer;
+  maxDisplayChar = 22;
+  isSafari = isSafari();
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'channel_id', headerCellDef: 'channel', headerWidth: 20 },
@@ -65,6 +68,10 @@ export class PopupIBCDetailComponent implements OnInit {
       this.counterInfo = this.ibcService.listInfoChain?.find((k) => k.chainId === this.data?.chain);
     } else {
       this.isLoading = false;
+    }
+
+    if (this.environmentService.isMobile) {
+      this.maxDisplayChar = 28;
     }
   }
 

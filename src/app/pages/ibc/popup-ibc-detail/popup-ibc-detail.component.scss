@@ -30,15 +30,7 @@
         top: 50%;
         left: 50%;
         transform: translateX(-50%);
-        @media (max-width: 375px) {
-          width: 40%;
-        }
-        @media (min-width: 376px) {
-          width: 46%;
-        }
-        @media (min-width: 992px) {
-          width: 330px;
-        }
+        width: 340px;
         &::before,
         &::after {
           content: '';
@@ -111,7 +103,7 @@
       @media (min-width: 912px) {
         width: 332px;
         height: 84px;
-        padding: 16px 16px 16px 36px;
+        padding: 16px;
         .img-chain {
           width: 48px;
           height: 48px;
@@ -121,9 +113,6 @@
     @media (max-width: 430px) {
       max-height: 100vh;
       padding: 0 0 16px 0;
-      .paddingSafari {
-        padding-bottom: 75px;
-      }
     }
     .txt-state {
       color: var(--aura-green-6);
@@ -158,5 +147,8 @@
     &:disabled {
       background: var(--aura-gray-8);
     }
+  }
+  .safari-device {
+    padding-bottom: 75px;
   }
 }
