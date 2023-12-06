@@ -1,4 +1,4 @@
-<h1 class="mb-4 mb-lg-6 text--white">Contracts</h1>
+<h1 class="mb-4 mb-lg-6 text--white">{{ 'MENUITEMS.CONTRACT' | translate }}</h1>
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt && !isLoading">
   <div class="filter-group d-flex align-items-center flex-nowrap">
@@ -6,7 +6,7 @@
       class="button button-pill button-flat"
       [class.active]="filterButtons.length === 0"
       (click)="filterButton('All')">
-      All types
+      {{ 'BUTTON.ALL_TYPES' | translate }}
     </button>
     <button
       class="button button-pill button-flat"
@@ -30,7 +30,7 @@
       class="button button-pill button-flat"
       [class.active]="filterButtons.includes('')"
       (click)="filterButton('')">
-      Others
+      {{ 'BUTTON.OTHERS' | translate }}
     </button>
   </div>
   <form class="aura-form single-input-field search-form contract-search-form d-none d-lg-block">
@@ -38,7 +38,7 @@
       <input
         type="text"
         class="form-control pl-0"
-        placeholder="Search for Contract name, contract address/name tag, creator address/name tag, Code ID"
+        placeholder="{{ 'NOTICE.CONTRACT_SEARCH_PLACEHOLDER' | translate }}"
         [(ngModel)]="textSearch"
         [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
         (keyup)="onKeyUp()"
@@ -67,7 +67,7 @@
               <input
                 type="text"
                 class="form-control pl-0"
-                placeholder="Search for Contract name, contract address/name tag, creator address/name tag, Code ID"
+                placeholder="{{ 'NOTICE.CONTRACT_SEARCH_PLACEHOLDER' | translate }}"
                 [(ngModel)]="textSearch"
                 [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
                 (keyup)="onKeyUp()"

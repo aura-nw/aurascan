@@ -225,10 +225,12 @@
       "moreInfo": "More Info",
       "contractType": "Contract Type",
       "contractCreator": "Contract Creator",
+      "contractOverview": "Contract Overview",
+      "contractSchema": "Contract Schema",
+      "auraBalance": "AURA Balance",
       "atTx": "at txn",
       "linkContractSourceCode":"Link Contract Source Code",
       "fileContractSourceCode": "File Contract Source Code",
-      "contractSchema": "Contract Schema",
       "fileJson1":"File 1 of 3: execute msg.json",
       "fileJson2":"File 2 of 3: instantiate msg.json",
       "fileJson3":"File 3 of 3: query msg.json",
@@ -238,7 +240,22 @@
       "expandAll":"Expand all",
       "readContract": "Read Contract",
       "contractInstantiated": "This contract was instantiated from Code ID",
+      "removeAddressFormWatchlist": "Remove this address from your watch list",
+      "addAddressFormWatchlist": "Add this address to my watch list",
       "writeContract": "Write Contract"
+    },
+    "CONTRACT_VERIFY": {
+      "contractVerifyTitle" : "Verify & Publish Code ID Source Code",
+      "exitCodeNote" : "Source code verification provides transparency for users interacting with smart contracts <b>which is instantiated from Code ID source code</b>. By uploading link GitHub source code, Aurascan will match the compiled code with that on the blockchain. Just like contracts, a smart contract should provide end users with more information on what they are \"digitally signing\" for and give users an opportunity to audit the code to independently verify that it actually does what it is supposed to do.",
+      "codeIDSourceCode" : "Code ID Source Code",
+      "codeIDToVerify" : "Code ID to verify",
+      "codeIDIsRequired" : "Code ID is required!",
+      "CompiledWasmFileName" : "Compiled wasm file name",
+      "complierVer": "Compiler Version",
+      "complierOutput": "Compiler Output",
+      "linkGitHubSourceCode" : "Link GitHub Source Code",
+      "preCheckStep" : "Pre check ({{ currentStep }}/4)",
+      "verifyProcess" : "Verify process ({{ currentStep }}/4)"
     },
     "FEE_GRANT": {
       "granteeAddress": "Grantee's address",
@@ -333,7 +350,15 @@
     "SUCCESS_TRANSACTION": "Successful transaction!",
     "SUBMIT_FORM_SUCCESS": "Submit form successfully!",
     "PROPOSAL_NOT_FOUND": "Proposal was not found!",
-    "CHART_WAIT_DATA": "Please wait for chart info"
+    "CONTRACT_SEARCH_PLACEHOLDER": "Search for Contract name, contract address/name tag, creator address/name tag, Code ID",
+    "COMPILER_VER_PLACEHOLDER": "Please select compiler version",
+    "CHART_WAIT_DATA": "Please wait for chart info",
+    "GIT_NOTE": "Enter the Github URL at the right commit version of source code you would like to verify<br />E.g: http://github.com/***/commit/***",
+    "WASM_FILE_MAX_LENGTH_ERR": "Compiled wasm file name is not allowed more 200 characters!",
+    "GIT_SOURCE_MAX_LENGTH_ERR": "Link GitHub Source Code is not allowed more 200 characters!",
+    "GIT_INVALID": "Invalid link Github Source Code",
+    "CODE_ID_VERIFIED_SUCCESS": "Code ID source code verified successfully",
+    "REQUIRED": "Required"
   },
   "MESSAGES": {
     "NO_PROPOSAL_PERIOD": "No proposal within the voting period",
@@ -390,6 +415,7 @@
     "FROM": "From",
     "TO": "To",
     "BACK": "Back",
+    "COMPLETE": "Complete",
     "JAILED": "Jailed",
     "ACTIVE": "Active",
     "INACTIVE": "inActive",
@@ -404,6 +430,7 @@
     "FOUND": "found",
     "DATA": "Data",
     "VIEW_ALL": "View all",
+    "FOR": "for",
     "COLLAPSE_ALL": "Collapse all"
   },
   "LABEL": {
@@ -504,9 +531,11 @@
     "LOGIN": "Log in",
     "CONFIRM": "Confirm",
     "CLEAR_ALL": "Clear all",
+    "OTHERS": "COthers",
     "FILTER": "Filter",
     "ASSET_TRANSFER_TYPE": "Asset Transfer Type",
     "ALL_TYPE": "All type",
+    "ALL_TYPES": "All types",
     "SENT": "Sent",
     "RECEIVE": "Receive",
     "MESSAGE_TYPE": "Message type",
@@ -520,6 +549,8 @@
     "COPIED": "Copied!",
     "JSON_FORMAT":"JSON Format",
     "JRAW":"JRAW/Text Format",
+    "START_OVER":"Start over",
+    "VERIFY_PUBLISH":"Verify & Publish",
     "CONNECT_TO_WEB3": "Connect to Web3",
     "CONNECTED_TO_WEB3": "Connected to Web3"
   }

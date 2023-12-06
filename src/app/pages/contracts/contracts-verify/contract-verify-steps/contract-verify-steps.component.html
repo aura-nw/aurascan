@@ -2,7 +2,7 @@
   <div class="notice-warning mb-8" *ngIf="errorMessage">
     <div class="notice-icon">
       <img [src]="'assets/icons/icons-svg/color/warning-red.svg' | imageS3" alt="icon" />
-      <span class="body-03 text--red-3 fw-semibold"> ERROR: </span>
+      <span class="body-03 text--red-3 fw-semibold text-uppercase"> {{ 'LABEL.ERROR' | translate }}: </span>
     </div>
     <span class="body-03 text--white notice-content">{{errorMessage}}</span>
   </div>
@@ -11,7 +11,7 @@
       <div class="step" id="step1" [class.complete]="currentStep >= 4" [class.active]="currentStep <= 3">
         <div class="step__label text-lg-center d-flex align-items-center d-lg-block">
           <div class="step__num mx-lg-auto">1</div>
-          <div class="step__title">Pre check ({{ currentStep > 4 ? 4 : currentStep }}/4)</div>
+          <div class="step__title"> {{ 'PAGES.CONTRACT_VERIFY.preCheckStep' | translate : {currentStep : currentStep > 4 ? 4 : currentStep} }}</div>
         </div>
         <div class="step__content my-2 my-lg-4">
           <ul>
@@ -37,7 +37,9 @@
         [class.active]="currentStep > 3 && currentStep < 8">
         <div class="step__label text-lg-center d-flex align-items-center d-lg-block">
           <div class="step__num mx-lg-auto">2</div>
-          <div class="step__title">Verify process ({{ currentStep < 4 ? 0 : currentStep - 4 }}/4)</div>
+          <div class="step__title">
+            {{ 'PAGES.CONTRACT_VERIFY.verifyProcess' | translate : {currentStep : currentStep < 4 ? 0 : currentStep - 4} }}
+          </div>
         </div>
         <div class="step__content my-2 my-lg-4">
           <ul>
@@ -59,12 +61,12 @@
       <div class="step" id="step3" [class.complete]="currentStep >= 8">
         <div class="step__label text-lg-center d-flex align-items-center d-lg-block">
           <div class="step__num mx-lg-auto">3</div>
-          <div class="step__title">Complete</div>
+          <div class="step__title">{{ 'COMMON.COMPLETE' | translate }}</div>
         </div>
         <div class="step__content my-2 my-lg-4" *ngIf="currentStep >= 8">
           <ul>
             <li class="isComplete">
-              <div>Code ID source code verified successfully</div>
+              <div>{{ 'NOTICE.CODE_ID_VERIFIED_SUCCESS' | translate }}</div>
             </li>
           </ul>
         </div>

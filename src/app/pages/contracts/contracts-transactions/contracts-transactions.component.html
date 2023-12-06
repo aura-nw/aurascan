@@ -1,7 +1,7 @@
 <div *ngIf="contractInfo">
-  <h1 class="mb-2 text--white">Transactions</h1>
+  <h1 class="mb-2 text--white">{{ 'COMMON.TRANSACTIONS' | translate }}</h1>
   <div class="body-02 text--gray-5 d-flex">
-    for
+    {{ 'COMMON.FOR' | translate }}
     <span class="ml-1 break-all contract-title">
       <app-name-tag
         [tooltipPosition]="'tooltip--right'"

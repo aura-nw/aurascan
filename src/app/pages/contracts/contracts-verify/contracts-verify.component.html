@@ -1,14 +1,8 @@
 <section class="contract-verify">
-  <h1 class="text--white mb-2 mb-lg-0">Verify & Publish Code ID Source Code</h1>
+  <h1 class="text--white mb-2 mb-lg-0">{{ "PAGES.CONTRACT_VERIFY.contractVerifyTitle" | translate }}</h1>
   <ng-container *ngIf="isExitCode">
     <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
-    <div class="body-02 caption-mob fw-normal-mob text--gray-6">
-      Source code verification provides transparency for users interacting with smart contracts
-      <b>which is instantiated from Code ID source code</b>. By uploading link GitHub source code, Aurascan will match
-      the compiled code with that on the blockchain. Just like contracts, a smart contract should provide end users with
-      more information on what they are "digitally signing" for and give users an opportunity to audit the code to
-      independently verify that it actually does what it is supposed to do.
-    </div>
+    <div class="body-02 caption-mob fw-normal-mob text--gray-6" [innerHTML]="'PAGES.CONTRACT_VERIFY.exitCodeNote' | translate"></div>
     <div class="card mt-4">
       <div class="card-body">
         <div *ngIf="loading">
@@ -17,20 +11,20 @@
         <div *ngIf="!loading">
           <!-- Contract Source Code -->
           <div *ngIf="currentStep === 'verify'">
-            <h2 class="h3-mob fw-semibold text--white mb-0">Code ID Source Code</h2>
+            <h2 class="h3-mob fw-semibold text--white mb-0">{{ "PAGES.CONTRACT_VERIFY.codeIDSourceCode" | translate }}</h2>
             <div class="divider divider-horizontal divider-lighter my-4 mb-lg-6"></div>
             <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form" autocomplete="off">
               <div class="row">
                 <div class="col-12 col-lg-6">
                   <div class="form-group mb-4 mb-lg-6">
-                    <label for="codeId" class="form-label text--gray-1 body-02">Code ID to verify </label>
+                    <label for="codeId" class="form-label text--gray-1 body-02">{{ "PAGES.CONTRACT_VERIFY.codeIDToVerify" | translate }}</label>
                     <input formControlName="codeId" type="text" class="form-control form-check-input" id="codeId" />
-                    <div class="error" *ngIf="formControls['codeId'].invalid">Code ID is required!</div>
+                    <div class="error" *ngIf="formControls['codeId'].invalid">{{ "PAGES.CONTRACT_VERIFY.codeIDIsRequired" | translate }}</div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="form-group mb-4 mb-lg-6">
-                    <label for="wasm_file" class="form-label text--gray-1 body-02"> Compiled wasm file name </label>
+                    <label for="wasm_file" class="form-label text--gray-1 body-02">{{ "PAGES.CONTRACT_VERIFY.CompiledWasmFileName" | translate }}</label>
                     <input
                       formControlName="wasm_file"
                       type="text"
@@ -40,9 +34,9 @@
                       (change)="checkFormValid()"
                       placeholder="xxx.wasm" />
                     <ng-container *ngIf="formControls['wasm_file'].touched">
-                      <div class="error" *ngIf="formControls['wasm_file'].errors?.required">Required</div>
+                      <div class="error" *ngIf="formControls['wasm_file'].errors?.required">{{ "NOTICE.REQUIRED" | translate }}</div>
                       <div class="error" *ngIf="formControls['wasm_file'].errors?.maxlength">
-                        Compiled wasm file name is not allowed more 200 characters!
+                        {{ "NOTICE.WASM_FILE_MAX_LENGTH_ERR" | translate }}
                       </div>
                     </ng-container>
                   </div>
@@ -51,7 +45,7 @@
               <div class="row">
                 <div class="col-12 col-lg-6">
                   <div class="form-group mb-4 mb-lg-6">
-                    <label for="link" class="form-label text--gray-1 body-02"> Link GitHub Source Code </label>
+                    <label for="link" class="form-label text--gray-1 body-02">{{ "PAGES.CONTRACT_VERIFY.linkGitHubSourceCode" | translate }}</label>
                     <input
                       formControlName="link"
                       type="text"
@@ -60,26 +54,23 @@
                       maxlength="200"
                       (change)="checkFormValid()"
                       placeholder="https://github.com/{repo-name}/commit/{commit-hash}" />
-                    <div class="text--white mt-2 caption">
-                      Enter the Github URL at the right commit version of source code you would like to verify<br />
-                      E.g: http://github.com/***/commit/***
-                    </div>
+                    <div class="text--white mt-2 caption" [innerHTML]="'NOTICE.GIT_NOTE' | translate"></div>
                     <ng-container *ngIf="formControls['link'].touched">
-                      <div class="error" *ngIf="formControls['link'].errors?.required">Required</div>
+                      <div class="error" *ngIf="formControls['link'].errors?.required">{{ "NOTICE.REQUIRED" | translate }}</div>
                       <div class="error" *ngIf="formControls['link'].errors?.maxlength">
-                        Link GitHub Source Code is not allowed more 200 characters!
+                        {{ "NOTICE.GIT_SOURCE_MAX_LENGTH_ERR" | translate }}
                       </div>
                       <div
                         class="error"
                         *ngIf="formControls['link'].errors?.pattern && !formControls['link'].errors?.required">
-                        Invalid link Github Source Code
+                        {{ "NOTICE.GIT_INVALID" | translate }}
                       </div>
                     </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="form-group mb-4 mb-lg-6">
-                    <label for="version" class="form-label text--gray-1 body-02">Compiler Version</label>
+                    <label for="version" class="form-label text--gray-1 body-02">{{ "PAGES.CONTRACT_VERIFY.complierVer" | translate }}</label>
                     <mat-select
                       #version
                       id="version"
@@ -88,14 +79,14 @@
                       panelClass="aura-optional-panel aura-optional-panel--flat"
                       [disableOptionCentering]="true"
                       (change)="checkFormValid()"
-                      placeholder="Please select compiler version">
+                      placeholder="{{ 'NOTICE.COMPILER_VER_PLACEHOLDER' | translate }}">
                       <mat-option *ngFor="let item of versionList" [value]="item.value">
                         {{ item.label }}
                       </mat-option>
                     </mat-select>
 
                     <ng-container *ngIf="formControls['compiler_version'].touched">
-                      <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required</div>
+                      <div class="error" *ngIf="formControls['compiler_version'].errors?.required">{{ 'NOTICE.REQUIRED' | translate }}</div>
                     </ng-container>
                   </div>
                 </div>
@@ -106,20 +97,20 @@
                   class="button button--md button-pill button-outline button-fixed"
                   type="button"
                   (click)="handleReset()">
-                  <span>Reset</span>
+                  <span>{{ 'BUTTON.RESET' | translate }}</span>
                 </button>
                 <button
                   class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4 px-1 px-sm-6"
                   type="submit"
                   [disabled]="contractForm.status === 'INVALID'">
-                  <span>Verify & Publish</span>
+                  <span>{{ 'BUTTON.VERIFY_PUBLISH' | translate }}</span>
                 </button>
               </div>
             </form>
           </div>
           <!-- Contract Verify step -->
           <div *ngIf="currentStep === 'compiler'">
-            <h2 class="h3-mob fw-semibold text--white mb-0">Compiler Output</h2>
+            <h2 class="h3-mob fw-semibold text--white mb-0">{{ "PAGES.CONTRACT_VERIFY.complierOutput" | translate }}</h2>
             <div class="divider divider-horizontal divider-lighter my-4 mb-lg-6"></div>
             <app-contract-verify-steps
               [codeID]="code_id"
@@ -132,14 +123,14 @@
                   class="button button--md button-pill button-outline"
                   (click)="redirectToPreviousPage()"
                   type="button">
-                  <span>Back</span>
+                  <span>{{ 'COMMON.BACK' | translate }}</span>
                 </button>
                 <button
                   [disabled]="!isCompilerComplete || !isVerifyFail"
                   class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card ml-4"
                   (click)="startOver()"
                   type="button">
-                  <span>Start over</span>
+                  <span>{{ 'BUTTON.START_OVER' | translate }}</span>
                 </button>
               </ng-container>
               <button
@@ -147,7 +138,7 @@
                 class="button button--md button-pill button-flat ml-4"
                 type="button"
                 (click)="redirectToPreviousPage()">
-                <span>Confirm</span>
+                <span>{{ 'BUTTON.CONFIRM' | translate }}</span>
               </button>
             </div>
           </div>
@@ -157,7 +148,7 @@
   </ng-container>
 
   <ng-container *ngIf="!isExitCode"
-    ><div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
+    ><div class="text--white text-center my-lg-20 mb-5 h6">{{ 'MESSAGES.CODE_ID_NOT_FOUND' | translate }}</div>
     <div class="py-lg-20"></div>
   </ng-container>
 </section>
