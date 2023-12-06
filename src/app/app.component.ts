@@ -189,6 +189,9 @@ export class AppComponent implements OnInit {
         this.getListTokenIBC();
       }
     }
+
+    //get list token market
+    this.tokenService.getCoinData();
   }
 
   getWatchlist() {

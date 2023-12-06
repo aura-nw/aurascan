@@ -2,18 +2,24 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { CoingeckoService } from '../data-services/coingecko.service';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
+  listTokenMarket$ = new BehaviorSubject<any[]>([]);
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+    private coingeckoService: CoingeckoService,
+  ) {
     super(http, environmentService);
   }
 
@@ -446,5 +452,32 @@ export class TokenService extends CommonService {
         operationName: 'queryListTxsCW20',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getCoinData() {
+    this.http.get<any>(`${this.apiUrl}/cw20-tokens/token-market`).subscribe((res) => {
+      if (res?.length === 0) {
+        return;
+      }
+
+      this.listTokenMarket$ = res;
+      const listCoinID = res
+        ?.filter((k) => k.coin_id?.length > 0)
+        ?.map((j) => {
+          return j.coin_id;
+        });
+
+      if (listCoinID?.length > 0) {
+        this.coingeckoService.getCoinMarkets(listCoinID).subscribe((res) => {
+          this.listTokenMarket$?.forEach((element) => {
+            res.forEach((item) => {
+              if (item.id === element['coin_id']) {
+                element['price'] = item.current_price;
+              }
+            });
+          });
+        });
+      }
+    });
   }
 }
