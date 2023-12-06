@@ -29,11 +29,6 @@ export class TransferAssetsComponent {
     { matColumnDef: 'total_messages', headerCellDef: 'Messages' },
     { matColumnDef: 'amount', headerCellDef: 'Sending amount' },
   ];
-  pageIBCSend: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
   dataSourceMobSend: any[];
   displayedColumnsIBC: string[] = this.templatesIBC.map((dta) => dta.matColumnDef);
   isLoadingIBCSend = true;
@@ -48,11 +43,6 @@ export class TransferAssetsComponent {
     { matColumnDef: 'total_messages', headerCellDef: 'Messages' },
     { matColumnDef: 'amount', headerCellDef: 'Receiving amount' },
   ];
-  pageIBCReceive: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
   dataSourceMobReceive: any[];
   isLoadingIBCReceive = true;
   textSearchReceive;
@@ -106,7 +96,6 @@ export class TransferAssetsComponent {
           const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
           this.lstSendingRaw = txs;
           this.dataIBCSending.data = [...txs];
-          this.pageIBCSend.length = txs?.length || 0;
         }
       },
       error: (e) => {
@@ -165,7 +154,6 @@ export class TransferAssetsComponent {
           const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
           this.lstSendingReceive = txs;
           this.dataIBCReceiving.data = [...txs];
-          this.pageIBCReceive.length = txs?.length || 0;
         }
       },
       error: (e) => {
