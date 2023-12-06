@@ -33,10 +33,7 @@
     top: 50%;
     left: 50%;
     transform: translateX(-50%);
-    width: 49%;
-    @media (min-width: 992px) {
-      width: 38%;
-    }
+    width: 390px;
     &::before,
     &::after {
       content: '';

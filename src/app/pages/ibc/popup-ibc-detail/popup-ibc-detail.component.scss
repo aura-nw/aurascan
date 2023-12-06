@@ -30,15 +30,7 @@
         top: 50%;
         left: 50%;
         transform: translateX(-50%);
-        @media (max-width: 375px) {
-          width: 40%;
-        }
-        @media (min-width: 376px) {
-          width: 46%;
-        }
-        @media (min-width: 992px) {
-          width: 340px;
-        }
+        width: 340px;
         &::before,
         &::after {
           content: '';
@@ -156,7 +148,7 @@
       background: var(--aura-gray-8);
     }
   }
-  .paddingSafari {
+  .padding-safari {
     padding-bottom: 75px;
   }
 }

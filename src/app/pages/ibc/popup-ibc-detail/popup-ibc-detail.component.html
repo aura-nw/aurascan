@@ -67,9 +67,9 @@
                 [innerHTML]="template.headerCellDef | translate"
                 *ngIf="template.headerCellDef !== 'channel' && template.headerCellDef !== 'counter'"></div>
               <div *ngIf="template.headerCellDef === 'channel'" class="aura-tooltip-contain">
-                <span class="{{ chainInfo.chainName?.length > 15 ? 'aura-tooltip-object' : '' }}">{{
-                  chainInfo.chainName | cutStringPipe : 15
-                }}</span>
+                <span class="{{ chainInfo.chainName?.length > 15 ? 'aura-tooltip-object' : '' }}">
+                  {{ chainInfo.chainName | cutStringPipe : 15 }}
+                </span>
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
               </div>
               <div *ngIf="template.headerCellDef === 'counter'" class="aura-tooltip-contain">
@@ -126,7 +126,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
-      <div class="d-lg-none mobile" [class.paddingSafari]="isSafari">
+      <div class="d-lg-none mobile" [class.padding-safari]="isSafari">
         <div *ngFor="let data of dataSourceMobile" class="card-relayer" (click)="showDetail(data)">
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
