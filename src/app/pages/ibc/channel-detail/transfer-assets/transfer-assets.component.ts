@@ -11,7 +11,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
-import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -30,11 +29,6 @@ export class TransferAssetsComponent {
     { matColumnDef: 'total_messages', headerCellDef: 'Messages' },
     { matColumnDef: 'amount', headerCellDef: 'Sending amount' },
   ];
-  pageIBCSend: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
   dataSourceMobSend: any[];
   displayedColumnsIBC: string[] = this.templatesIBC.map((dta) => dta.matColumnDef);
   isLoadingIBCSend = true;
@@ -49,11 +43,6 @@ export class TransferAssetsComponent {
     { matColumnDef: 'total_messages', headerCellDef: 'Messages' },
     { matColumnDef: 'amount', headerCellDef: 'Receiving amount' },
   ];
-  pageIBCReceive: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
   dataSourceMobReceive: any[];
   isLoadingIBCReceive = true;
   textSearchReceive;
@@ -74,7 +63,6 @@ export class TransferAssetsComponent {
   assetName = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    public global: Globals,
     private environmentService: EnvironmentService,
     private ibcService: IBCService,
     private commonService: CommonService,
@@ -108,7 +96,6 @@ export class TransferAssetsComponent {
           const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
           this.lstSendingRaw = txs;
           this.dataIBCSending.data = [...txs];
-          this.pageIBCSend.length = txs?.length || 0;
         }
       },
       error: (e) => {
@@ -167,7 +154,6 @@ export class TransferAssetsComponent {
           const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
           this.lstSendingReceive = txs;
           this.dataIBCReceiving.data = [...txs];
-          this.pageIBCReceive.length = txs?.length || 0;
         }
       },
       error: (e) => {

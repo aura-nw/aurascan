@@ -1,5 +1,11 @@
 .table-transfer-assets {
-  min-height: 150px;
+  height: 315px;
+  overflow-x: auto;
+}
+.card-body {
+  @media (min-height: 912px) {
+    height: 347px;
+  }
 }
 .card-ibc-assets {
   padding: 12px;

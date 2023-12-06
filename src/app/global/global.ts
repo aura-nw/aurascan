@@ -8,7 +8,7 @@ import {
   ModeExecuteTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
-  TypeTransaction,
+  TypeTransaction
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { convertTx } from '../core/utils/common/info-common';
@@ -21,7 +21,6 @@ export class Globals {
     aura: 0,
     btc: 0,
   };
-  listNameTag = [];
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {

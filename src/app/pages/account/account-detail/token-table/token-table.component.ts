@@ -8,7 +8,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
-import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
@@ -79,7 +79,7 @@ export class TokenTableComponent implements OnChanges {
     private accountService: AccountService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
-    private commonService: CommonService,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -104,7 +104,7 @@ export class TokenTableComponent implements OnChanges {
 
       // Search with text search
       let txtSearch = this.textSearch.trim();
-      const addressNameTag = this.commonService.findNameTag(this.textSearch);
+      const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
       if (addressNameTag?.length > 0) {
         txtSearch = addressNameTag;
       }

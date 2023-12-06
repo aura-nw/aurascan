@@ -1,9 +1,10 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { calculateFee, DeliverTxResponse, SigningStargateClient, StdFee } from '@cosmjs/stargate';
 import { ChainInfo } from '@keplr-wallet/types';
-import { KEPLR_ERRORS } from '../../constants/wallet.constant';
+import {KEPLR_ERRORS, LAST_USED_PROVIDER} from '../../constants/wallet.constant';
 import { messageCreators } from './messages';
 import { getSigner } from './signer';
+import local from "src/app/core/utils/storage/local";
 
 export async function createSignBroadcast(
   {
@@ -61,7 +62,21 @@ export async function getNetworkFee(network, address, messageType, memo = ''): P
 
   let gasEstimation = 0;
   try {
-    const signer = await window.getOfflineSignerAuto(network.chainId);
+    const user: any = local.getItem(LAST_USED_PROVIDER);
+    if(!user?.provider) return null;
+    let provider;
+    switch(user.provider) {
+      case 'KEPLR' :
+        provider =  'Keplr';
+        break;
+      case 'COIN98' :
+        provider =  'Coin98';
+        break;
+      case 'LEAP' :
+        provider =  'Leap';
+        break;
+    }
+    const signer = await getSigner(provider, network.chainId);
     const onlineClient = await SigningCosmWasmClient.connectWithSigner(network.rpc, signer);
     gasEstimation = await onlineClient.simulate(address, Array.isArray(messageType) ? messageType : [messageType], '');
   } catch (e) {

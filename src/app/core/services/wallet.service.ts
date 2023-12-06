@@ -1,7 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { StdSignDoc, makeSignDoc } from '@cosmjs/amino';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { makeSignDoc, StdSignDoc } from '@cosmjs/amino';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { Decimal } from '@cosmjs/math';
 import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
@@ -10,8 +11,11 @@ import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
+import { getLeap } from 'src/app/core/utils/leap';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
+import { getSigner } from 'src/app/core/utils/signing/signer';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
+import { WalletListComponent } from 'src/app/shared/components/wallet-connect/wallet-list/wallet-list.component';
 import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
@@ -43,17 +47,6 @@ export class WalletService implements OnDestroy {
     this._wallet$.next(nextState);
   }
 
-  dialogState$: Observable<'open' | 'close'>;
-  private _dialogState$: BehaviorSubject<'open' | 'close'>;
-
-  get dialogState(): 'open' | 'close' {
-    return this._dialogState$.getValue();
-  }
-
-  setDialogState(nextState: 'open' | 'close'): void {
-    this._dialogState$.next(nextState);
-  }
-
   isMobileMatched = false;
   breakpoint$ = this.breakpointObserver
     .observe([Breakpoints.Small, Breakpoints.XSmall])
@@ -65,6 +58,7 @@ export class WalletService implements OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private http: HttpClient,
     public translate: TranslateService,
+    private dialog: MatDialog,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -72,8 +66,6 @@ export class WalletService implements OnDestroy {
       }
     });
 
-    this._dialogState$ = new BehaviorSubject(null);
-    this.dialogState$ = this._dialogState$.asObservable();
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
 
@@ -126,7 +118,10 @@ export class WalletService implements OnDestroy {
     switch (provider) {
       case WALLET_PROVIDER.KEPLR:
         this.connectKeplr(this.chainInfo);
+        return Promise.resolve(true);
 
+      case WALLET_PROVIDER.LEAP:
+        this.connectLeap(this.chainInfo);
         return Promise.resolve(true);
 
       case WALLET_PROVIDER.COIN98:
@@ -173,6 +168,36 @@ export class WalletService implements OnDestroy {
         } else {
           this.disconnect();
           window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
+        }
+      } catch (e: any) {
+        this.catchErrors(e);
+      }
+    };
+    checkWallet();
+  }
+
+  private async connectLeap(chainInfo: ChainInfo): Promise<void> {
+    const checkWallet = async () => {
+      try {
+        const leap = await getLeap();
+
+        if (leap) {
+          await this.suggestChain(leap);
+          await leap.enable(chainInfo.chainId);
+          const account = await leap.getKey(chainInfo.chainId);
+
+          if (account) {
+            this.setWallet(account);
+            const timestamp = new Date().getTime();
+            local.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+              provider: WALLET_PROVIDER.LEAP,
+              chainId: chainInfo.chainId,
+              timestamp,
+            });
+          }
+        } else {
+          this.disconnect();
+          window.open('https://chromewebstore.google.com/detail/leap-cosmos-wallet/fcfcfllfndlomdhbehjjcoimbgofdncg');
         }
       } catch (e: any) {
         this.catchErrors(e);
@@ -230,7 +255,7 @@ export class WalletService implements OnDestroy {
       return account;
     }
 
-    this.setDialogState('open');
+    this.openWalletPopup();
 
     return null;
   }
@@ -387,7 +412,21 @@ export class WalletService implements OnDestroy {
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
-      signer = await window.getOfflineSignerAuto(this.chainId);
+      const user: any = local.getItem(LAST_USED_PROVIDER);
+      if (!user?.provider) return;
+      let provider;
+      switch (user.provider) {
+        case 'KEPLR':
+          provider = 'Keplr';
+          break;
+        case 'COIN98':
+          provider = 'Coin98';
+          break;
+        case 'LEAP':
+          provider = 'Leap';
+          break;
+      }
+      signer = await getSigner(provider, this.chainId);
     }
 
     return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
@@ -410,5 +449,12 @@ export class WalletService implements OnDestroy {
       dataWallet = await keplr.signArbitrary(this.chainInfo.chainId, minter, message);
     }
     return dataWallet;
+  }
+
+  openWalletPopup(): void {
+    this.dialog.open(WalletListComponent, {
+      panelClass: 'wallet-popup',
+      width: '716px',
+    });
   }
 }

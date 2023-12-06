@@ -107,33 +107,33 @@
                 {
                   address: distributionAcc,
                   label: 'Sender',
-                  class: !commonService.checkDisplayTooltip(distributionAcc) ? 'name-tag' : '',
-                  info: !commonService.checkDisplayTooltip(distributionAcc)
+                  class: !(distributionAcc | checkDisplayTooltip) ? 'name-tag' : '',
+                  info: !(distributionAcc | checkDisplayTooltip)
                     ? '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
                       '>' +
-                      (commonService.setNameTag(distributionAcc) | cutStringPipe : 16) +
+                      (distributionAcc | nameTag | cutStringPipe : 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
                       '>' +
-                      (commonService.setNameTag(distributionAcc) | cutStringPipe : 8 : 8) +
+                      (distributionAcc | nameTag | cutStringPipe : 8 : 8) +
                       '</a>'
                 },
                 {
                   address: data.recipient,
                   label: 'Recipient',
-                  class: !commonService.checkDisplayTooltip(data.recipient) ? 'name-tag' : '',
-                  info: !commonService.checkDisplayTooltip(data.recipient)
+                  class: !(data.recipient | checkDisplayTooltip) ? 'name-tag' : '',
+                  info: !(data.recipient | checkDisplayTooltip)
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.recipient) +
                       '>' +
-                      (commonService.setNameTag(data.recipient) | cutStringPipe : 16) +
+                      (data.recipient | nameTag | cutStringPipe : 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + data.recipient) +
                       '>' +
-                      (commonService.setNameTag(data.recipient) | cutStringPipe : 8 : 8) +
+                      (data.recipient | nameTag | cutStringPipe : 8 : 8) +
                       '</a>'
                 },
                 {
