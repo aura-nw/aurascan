@@ -43,7 +43,7 @@ export class ChannelDetailComponent implements OnInit {
   counterparty_channel_id = '';
   counterInfo: any;
   destroy$ = new Subject<void>();
-  maxDisplayChar = 16;
+  maxDisplayChar = 22;
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   chainInfo = this.environmentService.chainInfo;
