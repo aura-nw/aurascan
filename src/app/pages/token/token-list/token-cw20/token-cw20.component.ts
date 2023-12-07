@@ -170,7 +170,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           next: (res) => {
             this.tokenService.tokensMarket$
               .pipe(
-                tap(console.log),
                 filter((data) => _.isArray(data)),
                 take(1),
               )

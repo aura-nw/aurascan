@@ -4,13 +4,9 @@ import { TokenService } from 'src/app/core/services/token.service';
 
 @Pipe({ name: 'marketInfo' })
 export class MarketInfoPipe implements PipeTransform {
-  tokenMarket = this.token.tokensMarket;
-
   constructor(private env: EnvironmentService, private token: TokenService) {}
 
   transform(value: any, key?: 'logo' | 'name' | 'symbol'): any {
-    console.log(value);
-
     if (!value) {
       return {
         logo: '',
@@ -18,6 +14,7 @@ export class MarketInfoPipe implements PipeTransform {
         name: '',
       };
     }
+    const tokenMarket = this.token.tokensMarket;
 
     const image_s3 = this.env.imageUrl;
     const defaultLogoToken = `${image_s3}images/icons/token-logo.png`;
@@ -31,7 +28,7 @@ export class MarketInfoPipe implements PipeTransform {
     if (cw20_contract?.smart_contract?.address) {
       // cw20 type
       const address = cw20_contract.smart_contract.address;
-      const tokenCw20 = this.tokenMarket.find((t) => t.contract_address === address);
+      const tokenCw20 = tokenMarket.find((t) => t.contract_address === address);
       if (tokenCw20) {
         logo = tokenCw20.image || logo;
         name = tokenCw20.name || name;
@@ -39,7 +36,7 @@ export class MarketInfoPipe implements PipeTransform {
       }
     } else if (ibc_denom) {
       // ibc type
-      const tokenIbc = this.tokenMarket.find((t) => t.denom === ibc_denom);
+      const tokenIbc = tokenMarket.find((t) => t.denom === ibc_denom);
       if (tokenIbc) {
         logo = tokenIbc.image || logo;
         name = tokenIbc.name || name;
