@@ -13,10 +13,10 @@ import { CommonService } from './common.service';
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
-  listTokenMarket$ = new BehaviorSubject<any[]>([]);
+  tokensMarket$ = new BehaviorSubject<any[]>([]);
 
-  get listTokenMarket() {
-    return this.listTokenMarket$.getValue();
+  get tokensMarket() {
+    return this.tokensMarket$.getValue();
   }
 
   constructor(
@@ -77,7 +77,7 @@ export class TokenService extends CommonService {
     });
   }
 
-  getListCW721Token(payload, textSearch = null): Observable<any> {
+  getListCW721Token(payload, textSearch: string = null): Observable<any> {
     if (textSearch?.length > 0) {
       textSearch = '%' + textSearch + '%';
     }
@@ -118,7 +118,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getTokenDetail(address, date): Observable<any> {
+  getTokenDetail(address: string, date): Observable<any> {
     const operationsDoc = `query queryCW20Detail($address: String, $date: date) { 
       ${this.envDB} { smart_contract(where: {address: {_eq: $address}}) {
           address
@@ -157,7 +157,13 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTokenNFTFromIndexer(payload): Observable<any> {
+  getListTokenNFTFromIndexer(payload: {
+    limit: number;
+    offset: number;
+    contractAddress: string;
+    token_id: string;
+    owner: string;
+  }): Observable<any> {
     const operationsDoc = `
     query queryListInventory(
       $contract_address: String
@@ -222,7 +228,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  countTotalTokenCW721(contract_address): Observable<any> {
+  countTotalTokenCW721(contract_address: string): Observable<any> {
     const operationsDoc = `
     query queryCountTotalToken721($contract_address: String) {
       ${this.envDB} {
@@ -278,7 +284,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTokenHolderNFT(payload) {
+  getListTokenHolderNFT(payload: { limit: number; contractAddress: string }) {
     const operationsDoc = `
     query queryListHolderNFT($contract_address: String, $limit: Int = 10) {
       ${this.envDB} {
@@ -314,7 +320,16 @@ export class TokenService extends CommonService {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
   }
 
-  getCW721Transfer(payload): Observable<any> {
+  getCW721Transfer(payload: {
+    isCW4973?: boolean;
+    isNFTDetail?: boolean;
+    contractAddr?: string;
+    sender?: string;
+    receiver?: string;
+    tokenId?: string;
+    idLte?: string;
+    txHash?: string;
+  }): Observable<any> {
     let queryName = payload.isCW4973 ? 'CW4973Transfer' : 'CW721Transfer';
     let queryCondition = payload.isCW4973 ? '_eq' : '_neq';
     let queryActionNotIn = payload.isNFTDetail
@@ -472,13 +487,13 @@ export class TokenService extends CommonService {
           const coinsId = tokensFiltered.map((coin: { coin_id: string }) => coin.coin_id);
           if (coinsId?.length > 0) {
             return forkJoin({
-              tokensMarket: of(res),
+              tokensMarket: of(tokensFiltered),
               coinMarkets: this.getCoinMarkets(coinsId),
             });
           }
 
           return forkJoin({
-            tokensMarket: of(res),
+            tokensMarket: of(tokensFiltered),
             coinMarkets: of(null),
           });
         }),
@@ -496,15 +511,6 @@ export class TokenService extends CommonService {
               if (!coin) {
                 return token;
               }
-              console.log({
-                max_supply: coin.max_supply,
-                current_price: coin.current_price,
-                price_change_percentage_24h: coin.price_change_percentage_24h,
-                total_volume: coin.total_volume,
-                circulating_supply: coin.circulating_supply,
-                circulating_market_cap: coin.circulating_market_cap,
-                fully_diluted_valuation: coin.fully_diluted_valuation,
-              });
 
               return {
                 ...token,
@@ -513,18 +519,15 @@ export class TokenService extends CommonService {
                 price_change_percentage_24h: coin.price_change_percentage_24h,
                 total_volume: coin.total_volume,
                 circulating_supply: coin.circulating_supply,
-                circulating_market_cap: coin.circulating_market_cap,
                 fully_diluted_valuation: coin.fully_diluted_valuation,
               };
             });
           }
-          return null;
+          return [];
         }),
       )
       .subscribe((res) => {
-        console.log(res);
-
-        this.listTokenMarket$.next(res);
+        this.tokensMarket$.next(res);
       });
   }
 
