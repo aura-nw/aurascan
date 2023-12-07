@@ -1,7 +1,6 @@
 @import '@angular/material/theming';
 
 @import './expansion.scss';
-@import './dialog.scss';
 
 $custom-typography: mat-typography-config(
   $font-family: 'Roboto, "Helvetica Neue", sans-serif',
@@ -14,4 +13,9 @@ $custom-typography: mat-typography-config(
 
 .mat-table {
   width: 100%;
+}
+
+.transparent-dialog .mat-dialog-container {
+  background: transparent !important;
+  box-shadow: none;
 }
