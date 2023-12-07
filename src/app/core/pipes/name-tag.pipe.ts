@@ -4,7 +4,7 @@ import { NameTagService } from '../services/name-tag.service';
 @Pipe({ name: 'nameTag' })
 export class NameTagPipe implements PipeTransform {
   constructor(private nameTagService: NameTagService) {}
-  transform(address, getPrivate = true, type = 'name') {
+  transform(address, getPrivate = true, type: 'name' | 'url' = 'name') {
     if (type === 'name') {
       return this.nameTagService.findNameTagByAddress(address, getPrivate);
     } else {
