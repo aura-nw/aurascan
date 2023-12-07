@@ -18,13 +18,13 @@
   <div class="caption-mob fw-normal text--gray-light">
     <div class="d-flex">
       <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
-      <span>{{ commonService.getDateValue(dataCard.timestamp, false)[0] }}</span>
+      <span>{{ (dataCard.timestamp | dateCustom)[0] }}</span>
     </div>
     <div class="d-flex mt-1">
       <i class="ph ph-chat-circle-text mr-1 text--gray-4 body-mob"></i>
-      <span [class.line-claim]="modeQuery === tabsData.ExecutedTxs">{{
-        title.subLabelContent | stringEllipsis : 30
-      }}</span>
+      <span [class.line-claim]="modeQuery === tabsData.ExecutedTxs">
+        {{ title.subLabelContent | stringEllipsis : 30 }}
+      </span>
       <div *ngIf="dataCard.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
         +{{ dataCard.lstTypeTemp?.length - 1 }}
       </div>
