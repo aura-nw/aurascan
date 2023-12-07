@@ -73,9 +73,9 @@
               </div>
 
               <app-tooltip-customize
-                *ngIf="!(currentAddress | checkDisplayTooltip)"
+                *ngIf="currentAddress | isPublicNameTag"
                 [content]="
-                  'Public name: ' + currentAddress | nameTag : false
+                  'Public name: ' + (currentAddress | nameTag : false)
                 "></app-tooltip-customize>
             </div>
           </div>
@@ -94,8 +94,8 @@
             </div>
 
             <app-tooltip-customize
-              *ngIf="!(currentAddress | checkDisplayTooltip)"
-              [content]="'Private name: ' + currentAddress | nameTag"></app-tooltip-customize>
+              *ngIf="currentAddress | isPrivateNameTag"
+              [content]="'Private name: ' + (currentAddress | nameTag)"></app-tooltip-customize>
             <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
           </div>
 
