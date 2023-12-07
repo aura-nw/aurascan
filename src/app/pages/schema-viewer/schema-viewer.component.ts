@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-schema-viewer',
@@ -11,8 +12,8 @@ export class SchemaViewerComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.data = JSON.parse(localStorage.getItem('contractRawData'));
-    if (this.data.type === 'json') {
+    this.data = local.getItem('contractRawData');
+    if (this.data?.type === 'json') {
       this.content = JSON.stringify(this.data.content).split(' ').join('').split('\\n').join('');
     } else {
       this.content = this.data.content;

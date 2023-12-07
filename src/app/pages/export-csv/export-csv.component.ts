@@ -3,10 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, LOCAL_DATA } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { UserStorage } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
 @Component({
@@ -44,11 +46,11 @@ export class ExportCsvComponent implements OnInit {
   ngOnInit(): void {
     this.renderCaptcha();
     // check exit email
-    this.userEmail = localStorage.getItem('userEmail');
+    this.userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
     this.formInit();
 
     //get data config from account detail
-    const dataConfig = localStorage.getItem('setDataExport');
+    const dataConfig = local.getItem<[]>('setDataExport');
 
     if (dataConfig?.length > 0) {
       this.setDataConfig(dataConfig);
@@ -142,10 +144,8 @@ export class ExportCsvComponent implements OnInit {
           const errMsg = JSON.parse((<any>e.target).result)?.error;
           if (errMsg?.statusCode === 401 && errMsg?.message == 'Unauthorized') {
             if (this.csvForm.value.displayPrivate) {
-              localStorage.removeItem('accessToken');
-              localStorage.removeItem('refreshToken');
-              localStorage.removeItem('userEmail');
-              localStorage.removeItem('listNameTag');
+              local.removeItem(LOCAL_DATA.USER_DATA);
+              local.removeItem(LOCAL_DATA.LIST_NAME_TAG);
               window.location.reload();
             }
           } else {

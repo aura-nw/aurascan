@@ -7,7 +7,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT, TIMEOUT_ERROR, TOTAL_GROUP_TRACKING } from 'src/app/core/constants/common.constant';
+import { LOCAL_DATA, PAGE_EVENT, TIMEOUT_ERROR, TOTAL_GROUP_TRACKING } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -19,6 +19,7 @@ import { isContract } from 'src/app/core/utils/common/validation';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupWatchlistComponent } from './popup-watchlist/popup-watchlist.component';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-watchlist',
@@ -66,12 +67,11 @@ export class WatchListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const dataWatchList = localStorage.getItem('setAddressWatchList');
+    const dataWatchList = local.getItem('setAddressWatchList');
     if (dataWatchList && dataWatchList !== 'undefined') {
-      const address = JSON.parse(dataWatchList);
-      localStorage.removeItem('setAddressWatchList');
+      local.removeItem('setAddressWatchList');
       setTimeout(() => {
-        this.openPopup({ address: address });
+        this.openPopup({ address: dataWatchList });
       }, 500);
     }
 
@@ -109,7 +109,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
 
     this.watchListService.getListWatchList(payload).subscribe(
       (res) => {
-        localStorage.setItem('lstWatchList', JSON.stringify(res?.data));
+        local.setItem(LOCAL_DATA.LIST_WATCH_LIST, res?.data);
         this.dataSource.data = res.data;
         this.pageData.length = res?.meta?.count || 0;
 
@@ -156,7 +156,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
       if (result) {
         setTimeout(() => {
           this.getWatchlist();
-        }, 3000);
+        }, 2000);
       }
     });
   }

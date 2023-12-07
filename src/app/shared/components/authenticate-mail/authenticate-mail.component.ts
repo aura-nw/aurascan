@@ -6,6 +6,9 @@ import { tap } from 'rxjs/operators';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import {clearLocalData} from "src/app/global/global";
+import local from 'src/app/core/utils/storage/local';
+import { LOCAL_DATA } from 'src/app/core/constants/common.constant';
+import { UserStorage } from 'src/app/core/models/common.model';
 
 @Component({
   selector: 'app-authenticate-mail',
@@ -39,7 +42,7 @@ export class AuthenticateMailComponent implements OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userEmail = localStorage.getItem('userEmail');
+    this.userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
   }
 
   ngOnDestroy(): void {

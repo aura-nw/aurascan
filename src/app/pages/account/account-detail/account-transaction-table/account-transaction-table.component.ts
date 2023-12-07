@@ -12,6 +12,7 @@ import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/con
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { UserService } from 'src/app/core/services/user.service';
+import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
@@ -627,7 +628,7 @@ export class AccountTransactionTableComponent {
   }
 
   linkExportPage() {
-    localStorage.setItem('setDataExport', JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }));
+    local.setItem('setDataExport', JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }));
     this.router.navigate(['/export-csv']);
   }
 

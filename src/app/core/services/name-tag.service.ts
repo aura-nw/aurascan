@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import local from '../utils/storage/local';
+import { LOCAL_DATA } from '../constants/common.constant';
+import { UserStorage } from '../models/common.model';
 
 @Injectable({ providedIn: 'root' })
 export class NameTagService extends CommonService {
@@ -54,7 +57,7 @@ export class NameTagService extends CommonService {
       return '';
     }
 
-    const userEmail = localStorage.getItem('userEmail');
+    const userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
     let address = '';
     if (this.listNameTag?.length > 0) {
       if (userEmail) {

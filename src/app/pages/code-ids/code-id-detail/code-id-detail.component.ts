@@ -5,6 +5,7 @@ import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.c
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { ContractService } from 'src/app/core/services/contract.service';
+import local from 'src/app/core/utils/storage/local';
 @Component({
   selector: 'app-code-id-detail',
   templateUrl: './code-id-detail.component.html',
@@ -36,9 +37,9 @@ export class CodeIdDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.codeId = this.router.snapshot.paramMap.get('codeId');
-    if (localStorage.getItem('isVerifyTab') == 'true') {
+    if (local.getItem('isVerifyTab') == 'true') {
       this.tabIndex = 1;
-      localStorage.setItem('isVerifyTab', null);
+      local.removeItem('isVerifyTab');
     }
 
     if (this.codeId === 'null') {

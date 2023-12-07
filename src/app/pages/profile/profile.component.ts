@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileTab } from 'src/app/core/constants/profile.enum';
 import { Location } from '@angular/common';
+import local from 'src/app/core/utils/storage/local';
+import { LOCAL_DATA } from 'src/app/core/constants/common.constant';
+import { UserStorage } from 'src/app/core/models/common.model';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -30,7 +33,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     // check exit email
-    const userEmail = localStorage.getItem('userEmail');
+    const userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
     if (!userEmail) {
       this.router.navigate(['/']);
     }

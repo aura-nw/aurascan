@@ -1,11 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LOCAL_DATA } from 'src/app/core/constants/common.constant';
 import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { UserStorage } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-soulbound-account-token-list',
@@ -60,9 +63,9 @@ export class SoulboundAccountTokenListComponent implements OnInit {
       }
     });
 
-    if (localStorage.getItem('tabUnEquip') == 'true') {
+    if (local.getItem('tabUnEquip') == 'true') {
       this.activeId = 1;
-      localStorage.setItem('tabUnEquip', null);
+      local.removeItem('tabUnEquip');
     }
     this.getSBTPick();
   }
@@ -114,13 +117,13 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   }
 
   editPrivateName() {
-    const userEmail = localStorage.getItem('userEmail');
+    const userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
     const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.userAddress);
     if (userEmail) {
       if (dataNameTag) {
-        localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
+        local.setItem('setAddressNameTag', dataNameTag);
       } else {
-        localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.userAddress }));
+        local.setItem('setAddressNameTag', JSON.stringify({ address: this.userAddress }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {

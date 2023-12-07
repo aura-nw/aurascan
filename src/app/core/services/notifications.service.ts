@@ -6,6 +6,9 @@ import * as _ from 'lodash';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { EnvironmentService } from '../data-services/environment.service';
+import local from '../utils/storage/local';
+import { LOCAL_DATA } from '../constants/common.constant';
+import { UserStorage } from '../models/common.model';
 
 @Injectable({
   providedIn: 'root',
@@ -65,7 +68,7 @@ export class NotificationsService {
       let notification = payload.notification;
 
       // check exit email
-      const userEmail = localStorage.getItem('userEmail');
+      const userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
       if ('serviceWorker' in navigator && userEmail) {
         navigator.serviceWorker.getRegistrations().then((registration) => {
           registration[0].showNotification(notification.title, {
@@ -117,7 +120,7 @@ export class NotificationsService {
       })
       .subscribe((res: any) => {
         if (res) {
-          localStorage.setItem('registerFCM', 'false');
+          local.removeItem(LOCAL_DATA.REGISTER_FCM);
           this.userId = res.data.user_id;
         }
       });

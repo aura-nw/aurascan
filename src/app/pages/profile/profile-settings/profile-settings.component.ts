@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { LOCAL_DATA } from 'src/app/core/constants/common.constant';
+import { UserStorage } from 'src/app/core/models/common.model';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-profile-settings',
@@ -9,7 +12,7 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./profile-settings.component.scss'],
 })
 export class ProfileSettingsComponent implements OnInit {
-  userEmail = null;
+  userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
   changePassForm;
   hideOldPassword = true;
   hideNewPassword = true;
@@ -23,8 +26,7 @@ export class ProfileSettingsComponent implements OnInit {
   constructor(private fb: UntypedFormBuilder, private userService: UserService, private toastr: NgxToastrService) {}
 
   ngOnInit(): void {
-    this.userEmail = localStorage.getItem('userEmail')?.replace(/"/g, '');
-    this.currentProvider = localStorage.getItem('provider')?.replace(/"/g, '');
+    this.currentProvider = local.getItem(LOCAL_DATA.LOGIN_PROVIDER);
     this.formInit();
 
     if (this.currentProvider === 'google') {
@@ -80,7 +82,7 @@ export class ProfileSettingsComponent implements OnInit {
         this.toastr.successWithTitle('Please use the new password next time you log in.', passwordText);
 
         if (this.currentProvider === 'google') {
-          localStorage.setItem('provider', JSON.stringify('password'));
+          local.setItem(LOCAL_DATA.LOGIN_PROVIDER, 'password');
           setTimeout(() => {
             window.location.reload();
           }, 4000);

@@ -6,6 +6,7 @@ import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { WSService } from 'src/app/core/services/ws.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-contracts-verify',
@@ -140,7 +141,7 @@ export class ContractsVerifyComponent implements OnInit {
 
   redirectToPreviousPage() {
     const preUrl = sessionStorage.getItem('codeIdPrePage');
-    localStorage.setItem('isVerifyTab', 'true');
+    local.setItem('isVerifyTab', 'true');
     if (preUrl) {
       window.location.href = preUrl;
     } else {

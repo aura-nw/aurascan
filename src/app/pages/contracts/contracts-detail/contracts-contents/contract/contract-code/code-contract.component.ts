@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { CommonService } from 'src/app/core/services/common.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-code-contract',
@@ -32,7 +33,7 @@ export class CodeContractComponent implements OnInit {
   }
 
   sendRouteObject(type: 'json' | 'text', content: string) {
-    localStorage.setItem('contractRawData', JSON.stringify({ content, type }));
+    local.setItem('contractRawData', JSON.stringify({ content, type }));
     let url = this.router.serializeUrl(this.router.createUrlTree(['raw-data']));
     window.open(url, '_blank');
   }

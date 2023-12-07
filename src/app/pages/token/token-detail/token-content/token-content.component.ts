@@ -9,6 +9,7 @@ import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-token-content',
@@ -71,10 +72,10 @@ export class TokenContentComponent implements OnInit {
       this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
     });
 
-    if (localStorage.getItem('isVerifyTab') == 'true') {
+    if (local.getItem('isVerifyTab') == 'true') {
       this.currentTab = this.tokenTab.Contract;
       this.activeTabID = this.TABS.findIndex((k) => k.key === this.tokenTab.Contract);
-      localStorage.setItem('isVerifyTab', null);
+      local.removeItem('isVerifyTab');
     }
   }
 

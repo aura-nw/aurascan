@@ -6,6 +6,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { WSService } from 'src/app/core/services/ws.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import local from 'src/app/core/utils/storage/local';
 import { SoulboundTokenDetailPopupComponent } from 'src/app/pages/soulbound-token/soulbound-token-detail-popup/soulbound-token-detail-popup.component';
 
 @Component({
@@ -163,9 +164,8 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   }
 
   setLinkTab() {
-    localStorage.setItem('tabUnEquip', null);
     if (this.soulboundUnclaimedNum > 0 && this.wallet === this.userAddress) {
-      localStorage.setItem('tabUnEquip', 'true');
+      local.setItem('tabUnEquip', 'true');
     }
   }
 }

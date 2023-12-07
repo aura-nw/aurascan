@@ -3,10 +3,12 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { LENGTH_CHARACTER } from '../../../app/core/constants/common.constant';
+import { LENGTH_CHARACTER, LOCAL_DATA } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
+import local from 'src/app/core/utils/storage/local';
+import { UserStorage } from 'src/app/core/models/common.model';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -26,7 +28,7 @@ export class HorizontaltopbarComponent implements OnInit {
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
-  userEmail = '';
+  userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
 
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
@@ -48,9 +50,6 @@ export class HorizontaltopbarComponent implements OnInit {
   ngOnInit(): void {
     this.getMenuLink();
     this.checkEnv();
-
-    // check exit email
-    this.userEmail = localStorage.getItem('userEmail');
   }
 
   checkEnv() {
@@ -189,7 +188,7 @@ export class HorizontaltopbarComponent implements OnInit {
 
   removeConfigCSV(data) {
     if (data.link === '/export-csv') {
-      localStorage.removeItem('setDataExport');
+      local.removeItem('setDataExport');
     }
   }
 }

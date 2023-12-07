@@ -12,11 +12,13 @@ import { EnvironmentService } from '../../../../app/core/data-services/environme
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants/account.enum';
-import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
+import { DATE_TIME_WITH_MILLISECOND, LOCAL_DATA } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import local from 'src/app/core/utils/storage/local';
+import { UserStorage } from 'src/app/core/models/common.model';
 
 @Component({
   selector: 'app-account-detail',
@@ -43,7 +45,7 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
-  userEmail = null;
+  userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
 
   destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
@@ -74,7 +76,6 @@ export class AccountDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userEmail = localStorage.getItem('userEmail');
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
@@ -109,17 +110,6 @@ export class AccountDetailComponent implements OnInit {
       this.getSBTPick();
       this.getTotalSBT();
     });
-
-    let retrievedObject = localStorage.getItem('accountDetail');
-    if (retrievedObject) {
-      let data = JSON.parse(retrievedObject);
-      let dataAccount = JSON.parse(data?.dataAccount);
-      if (dataAccount && dataAccount.acc_address === this.currentAddress) {
-        this.currentAccountDetail = dataAccount;
-
-        this.chartOptions = JSON.parse(data?.dataChart);
-      }
-    }
   }
 
   getAccountDetail(): void {
@@ -233,13 +223,12 @@ export class AccountDetailComponent implements OnInit {
   }
 
   editPrivateName() {
-    const userEmail = localStorage.getItem('userEmail');
     const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.currentAddress);
-    if (userEmail) {
+    if (this.userEmail) {
       if (dataNameTag) {
-        localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
+        local.setItem('setAddressNameTag', dataNameTag);
       } else {
-        localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
+        local.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {
@@ -249,13 +238,10 @@ export class AccountDetailComponent implements OnInit {
 
   checkWatchList() {
     // get watch list form local storage
-    const lstWatchList = localStorage.getItem('lstWatchList');
-    try {
-      let data = JSON.parse(lstWatchList);
-      if (data.find((k) => k.address === this.currentAddress)) {
-        this.isWatchList = true;
-      }
-    } catch (e) {}
+    const lstWatchList = local.getItem<any>(LOCAL_DATA.LIST_WATCH_LIST);
+    if (lstWatchList?.find((k) => k.address === this.currentAddress)) {
+      this.isWatchList = true;
+    }
   }
 
   handleWatchList() {
@@ -267,9 +253,8 @@ export class AccountDetailComponent implements OnInit {
   }
 
   editWatchList() {
-    const userEmail = localStorage.getItem('userEmail');
-    if (userEmail) {
-      localStorage.setItem('setAddressWatchList', JSON.stringify(this.currentAddress));
+    if (this.userEmail) {
+      local.setItem('setAddressWatchList', this.currentAddress);
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

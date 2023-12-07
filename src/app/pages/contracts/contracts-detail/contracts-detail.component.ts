@@ -3,9 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TIMEOUT_ERROR, LOCAL_DATA } from 'src/app/core/constants/common.constant';
+import { UserStorage } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-contracts-detail',
@@ -26,7 +28,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     private contractService: ContractService,
     private modalService: NgbModal,
     public commonService: CommonService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnDestroy(): void {
@@ -89,13 +91,10 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
 
   checkWatchList() {
     // get watch list form local storage
-    const lstWatchList = localStorage.getItem('lstWatchList');
-    try {
-      let data = JSON.parse(lstWatchList);
-      if (data.find((k) => k.address === this.contractAddress)) {
-        this.isWatchList = true;
-      }
-    } catch (e) {}
+    const lstWatchList = local.getItem<any>(LOCAL_DATA.LIST_WATCH_LIST);
+    if (lstWatchList?.find((k) => k.address === this.contractAddress)) {
+      this.isWatchList = true;
+    }
   }
 
   handleWatchList() {
@@ -107,9 +106,9 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
   }
 
   editWatchList() {
-    const userEmail = localStorage.getItem('userEmail');
+    const userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
     if (userEmail) {
-      localStorage.setItem('setAddressWatchList', JSON.stringify(this.contractAddress));
+      local.setItem('setAddressWatchList', this.contractAddress);
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

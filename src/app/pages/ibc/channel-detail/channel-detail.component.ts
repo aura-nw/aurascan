@@ -5,11 +5,12 @@ import { ActivatedRoute } from '@angular/router';
 import { sha256 } from 'js-sha256';
 import * as _ from 'lodash';
 import { Subject, map } from 'rxjs';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { LOCAL_DATA, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
+import local from 'src/app/core/utils/storage/local';
 import { Globals, convertTxIBC } from 'src/app/global/global';
 
 @Component({
@@ -58,7 +59,7 @@ export class ChannelDetailComponent implements OnInit {
 
   @HostListener('window:popstate', ['$event'])
   onPopState(event) {
-    localStorage.setItem('showPopupIBC', 'true');
+    local.setItem('showPopupIBC', 'true');
   }
 
   ngOnInit() {
@@ -71,16 +72,12 @@ export class ChannelDetailComponent implements OnInit {
       this.counterparty_channel_id = params.counterparty_channel_id;
     });
 
-    //get data list info chain from local
-    const listInfoChain = localStorage.getItem('listInfoChain');
-    if (listInfoChain) {
-      try {
-        let data = JSON.parse(listInfoChain);
-        this.ibcService.listInfoChain =
-          this.ibcService.listInfoChain?.length > 0 ? this.ibcService.listInfoChain : data;
-      } catch (e) {}
-    }
     this.getDataInit();
+
+    //get data list info chain from local
+    const listInfoChain = local.getItem<[]>(LOCAL_DATA.LIST_INFO_CHAIN);
+    this.ibcService.listInfoChain =
+      this.ibcService.listInfoChain?.length > 0 ? this.ibcService.listInfoChain : listInfoChain;
   }
 
   ngOnDestroy(): void {
