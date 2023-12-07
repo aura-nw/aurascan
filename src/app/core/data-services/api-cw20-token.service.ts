@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { forkJoin, map, take } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { ApiAccountService } from './api-account.service';
-import { CoingeckoService } from './coingecko.service';
 import { EnvironmentService } from './environment.service';
 import { CW20_TOKENS_TEMPLATE } from './template';
 import { TokenService } from '../services/token.service';
@@ -36,17 +35,13 @@ export class ApiCw20TokenService {
 
   apiAccount = inject(ApiAccountService);
 
-  constructor(
-    private http: HttpClient,
-    private env: EnvironmentService,
-    private tokenService: TokenService
-    ) {}
+  constructor(private http: HttpClient, private env: EnvironmentService, private tokenService: TokenService) {}
 
   getByOwner(address: string) {
     return forkJoin([
       this.queryCw20TokenByOwner(address),
       this.apiAccount.getAccountByAddress(address, true),
-      this.tokenService.getTokenMarketData()
+      this.tokenService.getTokenMarketData(),
     ]).pipe(
       map((data) => {
         const [cw20Tokens, account, coinsMarkets] = data;
@@ -57,12 +52,13 @@ export class ApiCw20TokenService {
 
         const ibcTokenBalances = this.parseIbcTokens(account, coinsMarkets);
 
+        const allTokens = [nativeToken, ...ibcTokenBalances, ...cw20TokenList].filter(
+          (token) => Number(token.balance) > 0,
+        );
 
-
-        const allTokens = [nativeToken, ...ibcTokenBalances, ...cw20TokenList]
-          .filter((token) => Number(token.balance) > 0);          
-
-        const totalValue = allTokens.filter((item) => item.verify_status === 'VERIFIED').reduce((prev, current) => current?.value + prev, 0);
+        const totalValue = allTokens
+          .filter((item) => item.verify_status === 'VERIFIED')
+          .reduce((prev, current) => current?.value + prev, 0);
 
         return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),
@@ -71,26 +67,28 @@ export class ApiCw20TokenService {
 
   parseCw20Tokens(tokens, coinsMarkets) {
     return tokens
-      .map(
-        (item): Partial<IAsset> => {
-        const coinMarket = coinsMarkets.find((coin) => coin.contract_address === item.cw20_contract.smart_contract.address);        
-        return  {
-            name: coinMarket?.name || item?.cw20_contract?.name,
-            symbol: coinMarket?.symbol || item?.cw20_contract?.symbol,
-            decimals: item?.cw20_contract?.decimal,
-            image: coinMarket?.image || item?.cw20_contract?.marketing_info?.logo?.url,
-            max_total_supply: item?.cw20_contract?.total_supply,
-            contract_address: item?.cw20_contract?.smart_contract?.address || '-',
-            balance: item?.amount,
-            price: coinMarket?.current_price || 0,
-            price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0, 
-            type: 'cw20',
-            value: item?.amount * coinMarket?.current_price || 0,
-            verify_status: coinMarket?.verify_status || '',
-            verify_text: coinMarket?.verify_text || '',
+      .map((item): Partial<IAsset> => {
+        const coinMarket = coinsMarkets.find(
+          (coin) => coin.contract_address === item.cw20_contract.smart_contract.address,
+        );
+        return {
+          name: coinMarket?.name || item?.cw20_contract?.name,
+          symbol: coinMarket?.symbol || item?.cw20_contract?.symbol,
+          decimals: item?.cw20_contract?.decimal,
+          image: coinMarket?.image || item?.cw20_contract?.marketing_info?.logo?.url,
+          max_total_supply: item?.cw20_contract?.total_supply,
+          contract_address: item?.cw20_contract?.smart_contract?.address || '-',
+          balance: item?.amount,
+          price: coinMarket?.current_price || 0,
+          price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
+          type: 'cw20',
+          value:
+            balanceOf(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals) *
+              coinMarket?.current_price || 0,
+          verify_status: coinMarket?.verify_status || '',
+          verify_text: coinMarket?.verify_text || '',
         };
-    },
-      )
+      })
       .sort((item1, item2) => {
         // 1st priority VERIFIED.
         const compareStatus = item2.verify_status.localeCompare(item1.verify_status);
@@ -113,7 +111,7 @@ export class ApiCw20TokenService {
       price: coinMarket?.current_price || 0,
       price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
       value: account.data.total * coinMarket?.current_price || 0,
-      max_total_supply: coinMarket?.max_total_supply || 0,  
+      max_total_supply: coinMarket?.max_total_supply || 0,
       type: 'native',
       verify_status: 'VERIFIED',
       verify_text: 'Verified by Aura Network',
@@ -133,7 +131,7 @@ export class ApiCw20TokenService {
                   symbol: coinMarket?.symbol,
                   decimals: coinMarket?.decimal,
                   denom: coinMarket?.denom,
-                  image:  coinMarket?.image,
+                  image: coinMarket?.image,
                   max_total_supply: 0,
                   contract_address: '-',
                   balance: balanceOf(item.amount, this.currencies.coinDecimals),
@@ -147,6 +145,13 @@ export class ApiCw20TokenService {
               : null;
           })
           .filter((data) => data !== null)
+          .sort((item1, item2) => {
+            // 1st priority VERIFIED.
+            const compareStatus = item2.verify_status.localeCompare(item1.verify_status);
+            // 2nd priority token value DESC.
+            const compareValue = item2.value - item1.value;
+            return compareStatus || compareValue;
+          })
       : [];
   }
 
