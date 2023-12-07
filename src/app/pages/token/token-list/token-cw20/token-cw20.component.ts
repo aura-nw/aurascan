@@ -1,19 +1,19 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {TranslateService} from '@ngx-translate/core';
+import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import {Observable, of, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, mergeMap, repeat, takeLast, takeUntil} from 'rxjs/operators';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TokenService} from 'src/app/core/services/token.service';
-import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
-import {DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE} from '../../../../core/constants/common.constant';
-import {MAX_LENGTH_SEARCH_TOKEN} from '../../../../core/constants/token.constant';
-import {TableTemplate} from '../../../../core/models/common.model';
-import {Globals} from '../../../../global/global';
+import { Observable, of, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, mergeMap, repeat, take, takeLast, takeUntil } from 'rxjs/operators';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TokenService } from 'src/app/core/services/token.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE } from '../../../../core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
+import { TableTemplate } from '../../../../core/models/common.model';
+import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw20',
@@ -157,8 +157,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
         .pipe(takeLast(1))
         .subscribe({
           next: (res) => {
-            this.tokenService.getTokenMarketData().subscribe({
+            of(this.tokenService.listTokenMarket).subscribe({
               next: (tokenMarket) => {
+                console.log(tokenMarket);
+
                 // Flat data for mapping response api
                 const dataFlat = res?.map((item) => {
                   let changePercent = 0;
@@ -185,8 +187,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     volume: +tokenFind?.total_volume || 0,
                     price: +tokenFind?.current_price || 0,
                     isHolderUp: changePercent >= 0,
-                    isValueUp:
-                      tokenFind?.price_change_percentage_24h && tokenFind?.price_change_percentage_24h >= 0,
+                    isValueUp: tokenFind?.price_change_percentage_24h && tokenFind?.price_change_percentage_24h >= 0,
                     change: tokenFind?.price_change_percentage_24h || 0,
                     holderChange: Math.abs(changePercent),
                     holders: item.cw20_holders_aggregate?.aggregate?.count || 0,

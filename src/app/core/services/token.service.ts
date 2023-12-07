@@ -2,18 +2,22 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
+import { CoingeckoService } from '../data-services/coingecko.service';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { CoingeckoService } from '../data-services/coingecko.service';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
   listTokenMarket$ = new BehaviorSubject<any[]>([]);
+
+  get listTokenMarket() {
+    return this.listTokenMarket$.getValue();
+  }
 
   constructor(
     private http: HttpClient,
@@ -455,29 +459,76 @@ export class TokenService extends CommonService {
   }
 
   getCoinData() {
-    this.http.get<any>(`${this.apiUrl}/cw20-tokens/token-market`).subscribe((res) => {
-      if (res?.length === 0) {
-        return;
-      }
+    this.http
+      .get<any>(`${this.apiUrl}/cw20-tokens/token-market`)
+      .pipe(
+        switchMap((res: any[]) => {
+          if (res?.length === 0) {
+            return of(null);
+          }
 
-      this.listTokenMarket$ = res;
-      const listCoinID = res
-        ?.filter((k) => k.coin_id?.length > 0)
-        ?.map((j) => {
-          return j.coin_id;
-        });
+          const tokensFiltered = res.filter((token) => token.coin_id);
 
-      if (listCoinID?.length > 0) {
-        this.coingeckoService.getCoinMarkets(listCoinID).subscribe((res) => {
-          this.listTokenMarket$?.forEach((element) => {
-            res.forEach((item) => {
-              if (item.id === element['coin_id']) {
-                element['price'] = item.current_price;
-              }
+          const coinsId = tokensFiltered.map((coin: { coin_id: string }) => coin.coin_id);
+          if (coinsId?.length > 0) {
+            return forkJoin({
+              tokensMarket: of(res),
+              coinMarkets: this.getCoinMarkets(coinsId),
             });
+          }
+
+          return forkJoin({
+            tokensMarket: of(res),
+            coinMarkets: of(null),
           });
-        });
-      }
-    });
+        }),
+        map((data) => {
+          if (data) {
+            const { coinMarkets, tokensMarket } = data;
+
+            return tokensMarket.map((token) => {
+              if (!token.coin_id) {
+                return token;
+              }
+
+              const coin = coinMarkets.find((item) => item.id === token.coin_id);
+
+              if (!coin) {
+                return token;
+              }
+              console.log({
+                max_supply: coin.max_supply,
+                current_price: coin.current_price,
+                price_change_percentage_24h: coin.price_change_percentage_24h,
+                total_volume: coin.total_volume,
+                circulating_supply: coin.circulating_supply,
+                circulating_market_cap: coin.circulating_market_cap,
+                fully_diluted_valuation: coin.fully_diluted_valuation,
+              });
+
+              return {
+                ...token,
+                max_supply: coin.max_supply,
+                current_price: coin.current_price,
+                price_change_percentage_24h: coin.price_change_percentage_24h,
+                total_volume: coin.total_volume,
+                circulating_supply: coin.circulating_supply,
+                circulating_market_cap: coin.circulating_market_cap,
+                fully_diluted_valuation: coin.fully_diluted_valuation,
+              };
+            });
+          }
+          return null;
+        }),
+      )
+      .subscribe((res) => {
+        console.log(res);
+
+        this.listTokenMarket$.next(res);
+      });
+  }
+
+  getCoinMarkets(coinsId: string[]): Observable<any[]> {
+    return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
   }
 }
