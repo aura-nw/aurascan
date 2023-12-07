@@ -13,7 +13,7 @@ import { CommonService } from './common.service';
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
-  tokensMarket$ = new BehaviorSubject<any[]>([]);
+  tokensMarket$ = new BehaviorSubject<any[]>(null);
 
   get tokensMarket() {
     return this.tokensMarket$.getValue();
