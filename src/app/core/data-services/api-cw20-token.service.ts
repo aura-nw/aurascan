@@ -6,7 +6,7 @@ import { ApiAccountService } from './api-account.service';
 import { EnvironmentService } from './environment.service';
 import { CW20_TOKENS_TEMPLATE } from './template';
 import { TokenService } from '../services/token.service';
-import { TOKEN_ID_GET_PRICE } from '../constants/common.constant';
+import { COIN_TOKEN_TYPE, TOKEN_ID_GET_PRICE } from '../constants/common.constant';
 
 export interface IAsset {
   name: string;
@@ -81,7 +81,7 @@ export class ApiCw20TokenService {
           balance: item?.amount,
           price: coinMarket?.current_price || 0,
           price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
-          type: 'cw20',
+          type: COIN_TOKEN_TYPE.CW20,
           value:
             balanceOf(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals) *
               coinMarket?.current_price || 0,
@@ -112,9 +112,9 @@ export class ApiCw20TokenService {
       price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
       value: account.data.total * coinMarket?.current_price || 0,
       max_total_supply: coinMarket?.max_total_supply || 0,
-      type: 'native',
-      verify_status: 'VERIFIED',
-      verify_text: 'Verified by Aura Network',
+      type: COIN_TOKEN_TYPE.NATIVE,
+      verify_status: coinMarket?.verify_status || 'VERIFIED',
+      verify_text: coinMarket?.verify_text || 'Verified by Aura Network',
     };
   }
 
@@ -138,7 +138,7 @@ export class ApiCw20TokenService {
                   price: coinMarket?.current_price || 0,
                   price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
                   value: balanceOf(item.amount, this.currencies.coinDecimals) * coinMarket?.current_price || 0,
-                  type: 'ibc',
+                  type: COIN_TOKEN_TYPE.IBC,
                   verify_status: coinMarket?.verify_status || '',
                   verify_text: coinMarket?.verify_text || '',
                 }

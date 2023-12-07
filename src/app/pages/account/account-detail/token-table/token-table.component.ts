@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { COIN_TOKEN_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
@@ -41,17 +41,17 @@ export class TokenTableComponent implements OnChanges {
     },
     {
       label: 'Native Coin',
-      value: 'native',
+      value: COIN_TOKEN_TYPE.NATIVE,
       quantity: 0,
     },
     {
       label: 'IBC Token',
-      value: 'ibc',
+      value: COIN_TOKEN_TYPE.IBC,
       quantity: 0,
     },
     {
       label: 'CW-20 Token',
-      value: 'cw20',
+      value: COIN_TOKEN_TYPE.CW20,
       quantity: 0,
     },
   ];
