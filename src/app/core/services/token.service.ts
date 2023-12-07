@@ -496,15 +496,6 @@ export class TokenService extends CommonService {
               if (!coin) {
                 return token;
               }
-              console.log({
-                max_supply: coin.max_supply,
-                current_price: coin.current_price,
-                price_change_percentage_24h: coin.price_change_percentage_24h,
-                total_volume: coin.total_volume,
-                circulating_supply: coin.circulating_supply,
-                circulating_market_cap: coin.circulating_market_cap,
-                fully_diluted_valuation: coin.fully_diluted_valuation,
-              });
 
               return {
                 ...token,
@@ -522,8 +513,6 @@ export class TokenService extends CommonService {
         }),
       )
       .subscribe((res) => {
-        console.log(res);
-
         this.listTokenMarket$.next(res);
       });
   }
