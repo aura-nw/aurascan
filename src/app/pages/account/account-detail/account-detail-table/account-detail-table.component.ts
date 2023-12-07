@@ -6,7 +6,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { PageEventType } from '../../../../../app/core/constants/account.enum';
 import { TableTemplate } from '../../../../core/models/common.model';
-import { CommonService } from '../../../../core/services/common.service';
 
 @Component({
   selector: 'app-account-detail-table',
@@ -29,7 +28,6 @@ export class AccountDetailTableComponent implements OnInit, OnChanges {
 
   constructor(
     public translate: TranslateService,
-    public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
   ) {}

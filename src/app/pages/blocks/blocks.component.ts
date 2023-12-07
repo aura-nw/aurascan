@@ -4,7 +4,6 @@ import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { convertDataBlock } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
-import { CommonService } from '../../../app/core/services/common.service';
 
 @Component({
   selector: 'app-blocks',
@@ -25,7 +24,7 @@ export class BlocksComponent implements OnInit {
   loading = true;
   errTxt: string;
 
-  constructor(private blockService: BlockService, public commonService: CommonService) {}
+  constructor(private blockService: BlockService) {}
 
   ngOnInit(): void {
     this.getList();

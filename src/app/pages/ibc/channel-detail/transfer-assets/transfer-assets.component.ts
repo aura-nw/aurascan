@@ -11,7 +11,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
-import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -64,7 +63,6 @@ export class TransferAssetsComponent {
   assetName = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    public global: Globals,
     private environmentService: EnvironmentService,
     private ibcService: IBCService,
     private commonService: CommonService,

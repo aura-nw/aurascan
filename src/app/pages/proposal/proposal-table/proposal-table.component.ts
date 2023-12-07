@@ -13,7 +13,6 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
-import { CommonService } from '../../../../app/core/services/common.service';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
 
@@ -94,7 +93,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   };
 
   constructor(
-    public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
   ) {}

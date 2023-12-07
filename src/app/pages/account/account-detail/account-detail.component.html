@@ -60,42 +60,42 @@
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
-              *ngIf="commonService.setNameTag(currentAddress, null, false) !== currentAddress"
+              *ngIf="(currentAddress | nameTag : false) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
               <div class="d-inline-flex w-100 aura-tooltip-object align-items-center justify-content-between">
-                <span class="line-claim">{{ commonService.setNameTag(currentAddress, null, false) || '-' }}</span>
+                <span class="line-claim">{{ (currentAddress | nameTag : false) || '-' }}</span>
                 <a
                   target="_blank"
-                  [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
-                  *ngIf="commonService.findUrlNameTag(currentAddress)">
+                  [href]="extendLink(currentAddress | nameTag : null : 'url')"
+                  *ngIf="currentAddress | nameTag : null : 'url'">
                   <i _ngcontent-wrg-c372="" class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
                 </a>
               </div>
 
               <app-tooltip-customize
-                *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
+                *ngIf="!(currentAddress | checkDisplayTooltip)"
                 [content]="
-                  'Public name: ' + commonService.setNameTag(currentAddress, null, false)
+                  'Public name: ' + currentAddress | nameTag : false
                 "></app-tooltip-customize>
             </div>
           </div>
 
           <button
             class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private"
-            *ngIf="!commonService.checkPrivate(currentAddress)"
+            *ngIf="!(currentAddress | isPrivateNameTag)"
             (click)="editPrivateName()">
             <span class="caption fw-normal"> Set Private Name Tag </span>
           </button>
           <div
-            *ngIf="commonService.checkPrivate(currentAddress)"
+            *ngIf="currentAddress | isPrivateNameTag"
             class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
             <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
-              <span class="line-claim">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+              <span class="line-claim">{{ (currentAddress | nameTag) || '-' }}</span>
             </div>
 
             <app-tooltip-customize
-              *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
-              [content]="'Private name: ' + commonService.setNameTag(currentAddress)"></app-tooltip-customize>
+              *ngIf="!(currentAddress | checkDisplayTooltip)"
+              [content]="'Private name: ' + currentAddress | nameTag"></app-tooltip-customize>
             <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
           </div>
 

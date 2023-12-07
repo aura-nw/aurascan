@@ -1,19 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { DateCustomPipe } from 'src/app/core/pipes/date-custom.pipe';
+import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from 'src/app/core/pipes/name-tag.pipe';
+import { CheckDisplayTooltip } from 'src/app/core/pipes/tooltip-display.pipe';
 import {
   BalanceOf,
+  ConvertUauraToAura,
   CustomDate,
   ImageURL,
-  pipeCalDate,
   PipeCutString,
-  StringEllipsis,
   ReplaceIpfs,
-  ConvertUauraToAura,
+  StringEllipsis,
   convertLogAmount,
+  convertSmallNumber,
   decodeData,
   displayTypeToolTip,
-  convertSmallNumber,
   formatDigit,
+  pipeCalDate,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
 
@@ -32,7 +35,12 @@ import { JsonPipe } from './json.pipe';
     decodeData,
     displayTypeToolTip,
     convertSmallNumber,
-    formatDigit
+    formatDigit,
+    NameTagPipe,
+    CheckDisplayTooltip,
+    IsPublicNameTagPipe,
+    IsPrivateNameTagPipe,
+    DateCustomPipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -49,7 +57,12 @@ import { JsonPipe } from './json.pipe';
     decodeData,
     displayTypeToolTip,
     convertSmallNumber,
-    formatDigit
+    formatDigit,
+    NameTagPipe,
+    CheckDisplayTooltip,
+    IsPublicNameTagPipe,
+    IsPrivateNameTagPipe,
+    DateCustomPipe,
   ],
 })
 export class CommonPipeModule {}

@@ -8,7 +8,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
@@ -50,7 +50,7 @@ export class TokenCw721Component implements OnInit {
     public translate: TranslateService,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
-    public commonService: CommonService,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +79,7 @@ export class TokenCw721Component implements OnInit {
     };
 
     let keySearch = this.textSearch;
-    const addressNameTag = this.commonService.findNameTag(keySearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(keySearch);
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
     }
