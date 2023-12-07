@@ -165,7 +165,7 @@
                       </div>
                       <span class="ml-1">
                         <div class="aura-tooltip-contain">
-                          <div class="text--white" [class.aura-tooltip-object]="data.dataDenom?.symbol">
+                          <div [class.aura-tooltip-object]="data.dataDenom?.symbol">
                             {{ data.dataDenom?.symbol | stringEllipsis : 25 }}
                           </div>
                           <app-tooltip-customize
@@ -178,7 +178,7 @@
                     </div>
                     <div *ngSwitchCase="'fee'">
                       {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                      <span class="text--white">{{ coinInfo.coinDenom }}</span>
+                      <span>{{ coinInfo.coinDenom }}</span>
                     </div>
                     <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                   </ng-container>
@@ -218,7 +218,7 @@
             {
               label: 'Fee',
               class: 'text--gray-1 body-02-mob',
-              info: (data.fee | mask : 'separator.6') + '<span class=text--white> ' + coinInfo.coinDenom + '</span>'
+              info: (data.fee | mask : 'separator.6') + '<span> ' + coinInfo.coinDenom + '</span>'
             }
           ]"></app-card-mob-channel>
       </div>
