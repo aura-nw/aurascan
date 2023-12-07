@@ -119,4 +119,9 @@
   .txt-event-key {
     color: var(--aura-gray-4);
   }
+  .txt-header {
+    @media (max-width: 430px) {
+      width: max-content;
+    }
+  }
 }
