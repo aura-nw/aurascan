@@ -39,19 +39,19 @@
                   {{ (userAddress | nameTag : false) || '-' }}
                 </ng-container>
                 <ng-container *ngIf="userAddress | checkDisplayTooltip">
-                  {{ ((userAddress | nameTag : false) | cutStringPipe : 8 : 8) || '-' }}
+                  {{ (userAddress | nameTag : false | cutStringPipe : 8 : 8) || '-' }}
                 </ng-container>
               </span>
               <a
                 target="_blank"
-                [href]="extendLink((userAddress | nameTag: null : 'url'))"
-                *ngIf="userAddress | nameTag: null : 'url'">
+                [href]="extendLink(userAddress | nameTag : null : 'url')"
+                *ngIf="userAddress | nameTag : null : 'url'">
                 <i _ngcontent-wrg-c372="" class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
               </a>
             </div>
             <app-tooltip-customize
               [className]="'tooltip--right'"
-              [content]="'Public name: ' + userAddress | nameTag : false">
+              [content]="'Public name: ' + (userAddress | nameTag : false)">
             </app-tooltip-customize>
           </div>
         </div>
@@ -64,7 +64,7 @@
           <span class="caption fw-normal"> Set Private Name Tag </span>
         </button>
         <div
-          *ngIf="(userAddress | isPrivateNameTag)"
+          *ngIf="userAddress | isPrivateNameTag"
           class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
           <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
             <span class="d-none d-lg-flex">{{ (userAddress | nameTag) || '-' }}</span>
@@ -79,11 +79,9 @@
           </div>
 
           <app-tooltip-customize
-            *ngIf="!(userAddress | checkDisplayTooltip)"
-            [content]="'Private name: ' + userAddress | nameTag"></app-tooltip-customize>
-          <i
-            class="ph ph-note-pencil ml-2 body-01 cursor-pointer"
-            (click)="editPrivateName()"></i>
+            *ngIf="userAddress | isPrivateNameTag"
+            [content]="'Private name: ' + (userAddress | nameTag)"></app-tooltip-customize>
+          <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
         </div>
 
         <div class="mt-6 mt-lg-4">
