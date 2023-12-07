@@ -18,7 +18,7 @@
                   <div>
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'timestamp'">
-                        {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                        {{ (data[template.matColumnDef] | dateCustom)[0] }}
                       </div>
                       <a
                         *ngSwitchCase="'tx_hash'"

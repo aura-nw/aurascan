@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { isSafari } from 'src/app/core/utils/common/validation';
 
@@ -51,8 +51,8 @@ export class NotificationComponent {
   constructor(
     public notificationsService: NotificationsService,
     private router: Router,
-    public commonService: CommonService,
     private environmentService: EnvironmentService,
+    private nameTagService: NameTagService,
   ) {}
 
   onScroll(event): void {
@@ -230,8 +230,8 @@ export class NotificationComponent {
 
   cutString(value: string): string {
     let nameTag = '';
-    if (this.commonService.setNameTag(value) !== value) {
-      nameTag = ' (' + this.commonService.setNameTag(value) + ')';
+    if (this.nameTagService.findNameTagByAddress(value) !== value) {
+      nameTag = ' (' + this.nameTagService.findNameTagByAddress(value) + ')';
     }
     const firstChar = value.substring(0, 8);
     const lastChar = value.substring(value.length - 8);

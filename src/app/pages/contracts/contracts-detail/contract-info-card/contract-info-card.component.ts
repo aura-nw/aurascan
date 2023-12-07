@@ -1,8 +1,7 @@
-import { Component, Input, OnInit, } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { CommonService } from 'src/app/core/services/common.service';
-import { Globals } from 'src/app/global/global';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 
 @Component({
   selector: 'app-contract-info-card',
@@ -14,7 +13,7 @@ export class ContractInfoCardComponent implements OnInit {
   @Input() contractDetail: any;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
-  constructor(public commonService: CommonService, private global: Globals, private router: Router) {}
+  constructor(private router: Router, private nameTagService: NameTagService) {}
 
   ngOnInit(): void {}
 
@@ -25,7 +24,7 @@ export class ContractInfoCardComponent implements OnInit {
 
   editPrivateName() {
     const userEmail = localStorage.getItem('userEmail');
-    const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.contractDetail?.address);
+    const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.contractDetail?.address);
     if (userEmail) {
       if (dataNameTag) {
         localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
