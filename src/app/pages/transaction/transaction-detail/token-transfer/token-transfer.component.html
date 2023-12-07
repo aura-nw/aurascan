@@ -23,23 +23,23 @@
                         <div class="d-flex align-items-center">
                           <img
                             class="rounded-circle"
-                            [src]="data.cw20_contract?.marketing_info?.logo?.url || defaultLogoToken"
+                            [src]="(data | marketInfo : 'logo')"
                             width="20"
                             height="20" />
                           <div class="ml-3 d-flex transfer-token-info">
                             <div class="aura-tooltip-contain">
                               <span
-                                *ngIf="data.cw20_contract.symbol"
+                                *ngIf="(data | marketInfo : 'symbol')"
                                 class="caption text-sm mb-1 aura-tooltip-object"
-                                >{{ data.cw20_contract.symbol | stringEllipsis : 20 }}</span
+                                >{{ ((data | marketInfo : 'symbol')) | stringEllipsis : 20 }}</span
                               >
                               <app-tooltip-customize
-                                [content]="data.cw20_contract.symbol"
+                                [content]="(data | marketInfo :'symbol')"
                                 [className]="'tooltip--right'">
                               </app-tooltip-customize>
                             </div>
 
-                            <span class="body-02">{{ data.cw20_contract.name | stringEllipsis : 20 }}</span>
+                            <span class="body-02">{{ (data | marketInfo : 'name') | stringEllipsis : 20 }}</span>
                             <ng-container *ngIf="breakpoint.value.matches">
                               <span
                                 class="aura-tooltip-object"
@@ -83,12 +83,12 @@
                           >
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [value]="data.from || nullAddress"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [value]="data.from || nullAddress"
                             [maxCharacter]="13"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
@@ -99,12 +99,12 @@
                           >
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [value]="data.to || nullAddress"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [value]="data.to || nullAddress"
                             [maxCharacter]="13"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>

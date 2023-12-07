@@ -106,6 +106,8 @@ export class TokenTransferComponent implements OnInit {
                   dataAmount = this.commonService.mappingNameIBC(amountTemp);
                   cw20_contract['name'] = dataAmount['name'];
                   cw20_contract['symbol'] = dataAmount['display'];
+                  console.log(dataAmount)
+                  cw20_contract['ibc_denom'] = dataAmount['denom'];
                   decimal = dataAmount['decimals'];
                   from = event.event_attributes?.find((k) => k.composite_key === 'coin_spent.spender')?.value;
                   for (let idx = 0; idx < event.event_attributes; idx++) {
@@ -115,7 +117,7 @@ export class TokenTransferComponent implements OnInit {
                   }
                 }
                 let amount = +amountTemp.match(/\d+/g)[0];
-                coinTransfer.push({ amount, cw20_contract, from, to, decimal });
+                coinTransfer.push({ amount, cw20_contract, from, to, decimal});
               });
             }
           });

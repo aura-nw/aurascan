@@ -16,6 +16,7 @@ import {
   formatDigit,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
+import {MarketInfo} from "src/app/core/pipes/market-info.pipe";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { JsonPipe } from './json.pipe';
     decodeData,
     displayTypeToolTip,
     convertSmallNumber,
-    formatDigit
+    formatDigit,
+    MarketInfo
   ],
   imports: [CommonModule],
   exports: [
@@ -49,7 +51,8 @@ import { JsonPipe } from './json.pipe';
     decodeData,
     displayTypeToolTip,
     convertSmallNumber,
-    formatDigit
+    formatDigit,
+    MarketInfo
   ],
 })
 export class CommonPipeModule {}
