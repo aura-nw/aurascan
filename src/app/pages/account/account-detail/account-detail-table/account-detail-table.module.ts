@@ -11,6 +11,7 @@ import { CommonPipeModule } from '../../../../core/pipes/common-pipe.module';
 import { PaginatorModule } from '../../../../shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../../shared/components/table-no-data/table-no-data.module';
 import { AccountDetailTableComponent } from './account-detail-table.component';
+import {TooltipCustomizeModule} from "src/app/shared/components/tooltip-customize/tooltip-customize.module";
 
 @NgModule({
   declarations: [AccountDetailTableComponent],
@@ -26,6 +27,7 @@ import { AccountDetailTableComponent } from './account-detail-table.component';
     NgxMaskDirective,
     CommonDirectiveModule,
     MaterialModule,
+    TooltipCustomizeModule,
   ],
   exports: [AccountDetailTableComponent],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
