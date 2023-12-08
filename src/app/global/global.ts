@@ -423,25 +423,25 @@ export function convertDataAccountTransaction(
         arrEvent = arrTemp;
         break;
       case TabsAccountLink.FtsTxs:
-        arrEvent = _.get(element, 'events')?.map((item, index) => {
+        arrEvent = _.get(element, 'cw20_activities')?.map((item, index) => {
           let { type, action } = getTypeTx(element, index);
-          let fromAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].from') || NULL_ADDRESS;
-          let toAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].to') || NULL_ADDRESS;
-          let denom = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.symbol');
-          let amountTemp = _.get(item, 'smart_contract_events[0].cw20_activities[0].amount');
-          let decimal = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.decimal');
+          let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
+          let toAddress = _.get(item, 'to') || NULL_ADDRESS;
+          let denom = _.get(item, 'cw20_contract.symbol');
+          let amountTemp = _.get(item, 'amount');
+          let decimal = _.get(item, 'cw20_contract.decimal');
           let amount = balanceOf(amountTemp || 0, +decimal);
-          let contractAddress = _.get(item, 'smart_contract_events[0].smart_contract.address');
+          let contractAddress = _.get(item, 'cw20_contract.smart_contract.address');
           return { type, fromAddress, toAddress, amount, denom, contractAddress, action, amountTemp, decimal };
         });
         break;
       case TabsAccountLink.NftTxs:
-        arrEvent = _.get(element, 'events')?.map((item, index) => {
+        arrEvent = _.get(element, 'cw721_activities')?.map((item, index) => {
           let { type, action } = getTypeTx(element, index);
-          let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
+          let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
           let toAddress =
-            _.get(item, 'smart_contract_events[0].cw721_activity.to') ||
-            _.get(item, 'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address') ||
+            _.get(item, 'to') ||
+            _.get(item, 'cw721_contract.smart_contract.address') ||
             NULL_ADDRESS;
           if (action === 'burn') {
             toAddress = NULL_ADDRESS;
@@ -449,9 +449,9 @@ export function convertDataAccountTransaction(
 
           let contractAddress = _.get(
             item,
-            'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address',
+            'cw721_contract.smart_contract.address',
           );
-          let tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
+          let tokenId = _.get(item, 'cw721_token.token_id');
           let eventAttr = element.event_attribute_index;
           return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
         });
