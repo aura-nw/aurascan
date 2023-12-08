@@ -16,7 +16,7 @@ import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { getSigner } from 'src/app/core/utils/signing/signer';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
 import { WalletListComponent } from 'src/app/shared/components/wallet-connect/wallet-list/wallet-list.component';
-import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
+import { ESigningType, LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors } from '../utils/keplr';
@@ -279,8 +279,7 @@ export class WalletService implements OnDestroy {
     }: { messageType: any; message: any; senderAddress: any; network: ChainInfo; signingType: any; chainId: any },
     validatorsCount?: number,
   ) {
-    let signingClient;
-    if (this.isMobileMatched && !this.checkExistedCoin98()) {
+    if (this.isMobileMatched && !this.checkExistedCoin98() && signingType != ESigningType.Leap) {
       const msgs = messageCreators[messageType](senderAddress, message, network);
       let fee;
       if (this.coin98Client) {
@@ -330,7 +329,6 @@ export class WalletService implements OnDestroy {
         chainId,
       },
       validatorsCount || undefined,
-      signingClient,
     );
   }
 
@@ -409,24 +407,27 @@ export class WalletService implements OnDestroy {
       delete msg[key]?.fund;
     }
 
-    if (this.isMobileMatched && !this.checkExistedCoin98()) {
+    const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+    if (!lastProvider?.provider) {
+      throw new Error('Provider not found');
+    }
+
+    if (this.isMobileMatched && !this.checkExistedCoin98() && lastProvider.provider != WALLET_PROVIDER.LEAP) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
-      const user: any = local.getItem(LAST_USED_PROVIDER);
-      if (!user?.provider) return;
-      let provider;
-      switch (user.provider) {
-        case 'KEPLR':
-          provider = 'Keplr';
+      let signingType: ESigningType;
+      switch (lastProvider.provider) {
+        case WALLET_PROVIDER.COIN98:
+          signingType = ESigningType.Coin98;
           break;
-        case 'COIN98':
-          provider = 'Coin98';
+        case WALLET_PROVIDER.LEAP:
+          signingType = ESigningType.Leap;
           break;
-        case 'LEAP':
-          provider = 'Leap';
+        default:
+          signingType = ESigningType.Keplr;
           break;
       }
-      signer = await getSigner(provider, this.chainId);
+      signer = await getSigner(signingType, this.chainId);
     }
 
     return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
@@ -439,16 +440,28 @@ export class WalletService implements OnDestroy {
   }
 
   async getWalletSign(minter, message) {
-    let dataWallet;
-    if (this.isMobileMatched && !this.checkExistedCoin98()) {
-      let coin98Client = new Coin98Client(this.chainInfo);
-      let temp = await coin98Client.signArbitrary(minter, message);
-      dataWallet = temp['result'];
-    } else {
-      const keplr = await getKeplr();
-      dataWallet = await keplr.signArbitrary(this.chainInfo.chainId, minter, message);
+    const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+    if (!lastProvider?.provider) {
+      throw new Error('Provider not found');
     }
-    return dataWallet;
+
+    let provider: Keplr;
+
+    switch (lastProvider.provider) {
+      case WALLET_PROVIDER.LEAP:
+        provider = await getLeap();
+        break;
+      case WALLET_PROVIDER.COIN98:
+        provider = this.checkExistedCoin98();
+        if (this.isMobileMatched && !provider) {
+          return this.coin98Client.signArbitrary(minter, message);
+        }
+        break;
+      default:
+        provider = await getKeplr();
+    }
+
+    return provider.signArbitrary(this.chainInfo.chainId, minter, message);
   }
 
   openWalletPopup(): void {
