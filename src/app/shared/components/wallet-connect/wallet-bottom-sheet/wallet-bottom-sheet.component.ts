@@ -39,7 +39,7 @@ export class WalletBottomSheetComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private dlgService: DialogService,
     private walletService: WalletService,
-    public _bottomSheetRef: MatBottomSheetRef<WalletBottomSheetComponent>,
+    public bottomSheetRef: MatBottomSheetRef<WalletBottomSheetComponent>,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -48,16 +48,11 @@ export class WalletBottomSheetComponent implements OnInit {
     });
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.isMobileMatched = window.innerWidth <= 992;
-  }
-
   ngOnInit(): void {
     this.isMobileMatched = window.innerWidth <= 992;
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
-        this._bottomSheetRef.dismiss();
+        this.bottomSheetRef.dismiss();
       }
     });
   }
@@ -71,7 +66,7 @@ export class WalletBottomSheetComponent implements OnInit {
             title: '',
             content: 'Please set up override Keplr in settings of Coin98 wallet',
           });
-          this._bottomSheetRef.dismiss();
+          this.bottomSheetRef.dismiss();
         }
       };
 

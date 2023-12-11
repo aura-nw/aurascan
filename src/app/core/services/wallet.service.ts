@@ -64,7 +64,7 @@ export class WalletService implements OnDestroy {
     public translate: TranslateService,
     private dialog: MatDialog,
     private notificationsService: NotificationsService,
-    private _bottomSheet: MatBottomSheet,
+    private bottomSheet: MatBottomSheet,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -463,10 +463,10 @@ export class WalletService implements OnDestroy {
       });
     } else {
       this.notificationsService.hiddenFooterSubject.next(true);
-      this._bottomSheet.open(WalletBottomSheetComponent, {
+      this.bottomSheet.open(WalletBottomSheetComponent, {
         panelClass: 'wallet-popup--mob',
       });
-      this._bottomSheet._openedBottomSheetRef.afterDismissed().subscribe((res) => {
+      this.bottomSheet._openedBottomSheetRef.afterDismissed().subscribe((res) => {
         this.notificationsService.hiddenFooterSubject.next(false);
       });
     }
