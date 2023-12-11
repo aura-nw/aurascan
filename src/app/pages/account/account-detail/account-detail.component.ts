@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
@@ -16,7 +17,6 @@ import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.const
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
 
 @Component({
   selector: 'app-account-detail',
