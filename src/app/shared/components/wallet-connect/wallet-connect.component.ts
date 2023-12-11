@@ -1,7 +1,7 @@
-import { Component  } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { CommonService } from 'src/app/core/services/common.service';
 import { WalletService } from '../../../core/services/wallet.service';
-import {Observable} from "rxjs";
-import {CommonService} from "src/app/core/services/common.service";
 
 @Component({
   selector: 'app-wallet-connect',
@@ -10,10 +10,8 @@ import {CommonService} from "src/app/core/services/common.service";
 })
 export class WalletConnectComponent {
   wallet$: Observable<any> = this.walletService.wallet$;
-  constructor(
-    private walletService: WalletService,
-    public commonService: CommonService,
-  ) {}
+
+  constructor(private walletService: WalletService, public commonService: CommonService) {}
 
   openWalletPopup(): void {
     this.walletService.openWalletPopup();
