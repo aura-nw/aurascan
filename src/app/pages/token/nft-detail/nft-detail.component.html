@@ -40,7 +40,8 @@
               <img
                 (click)="expandMedia()"
                 *ngIf="
-                  (nftType === MEDIA_TYPE.IMG || nftDetail?.media_info?.onchain?.metadata?.image) && isError === false
+                  (nftType === MEDIA_TYPE.IMG || (nftDetail?.media_info?.onchain?.metadata?.image && !animationUrl)) &&
+                  isError === false
                 "
                 (error)="error()"
                 [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
