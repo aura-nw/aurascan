@@ -128,14 +128,14 @@
                 <div class="card__content text--white body-01">
                   <div class="d-flex align-items-center mb-2 justify-content-between">
                     <div class="body text--gray-4 label__content">Messages</div>
-                    <div class="text--gray-1">{{ data.total_messages }}</div>
+                    <div class="text--gray-1 body-mob">{{ data.total_messages }}</div>
                   </div>
                   <div class="d-flex align-items-center mb-2 justify-content-between">
                     <div class="body text--gray-4 label__content">Sending amount</div>
                     <div
                       [appBigNumber]="data.amount"
                       [decimal]="data['dataDenom']?.decimals"
-                      class="text--gray-1"></div>
+                      class="text--gray-1 body-mob"></div>
                   </div>
                 </div>
               </div>
@@ -282,14 +282,14 @@
                 <div class="card__content text--white body-01">
                   <div class="d-flex align-items-center mb-2 justify-content-between">
                     <div class="body text--gray-4 label__content">Messages</div>
-                    <div class="text--gray-1">{{ data.total_messages }}</div>
+                    <div class="text--gray-1 body-mob">{{ data.total_messages }}</div>
                   </div>
                   <div class="d-flex align-items-center mb-2 justify-content-between">
-                    <div class="body text--gray-4 label__content">Receiving amount</div>
+                    <div class="body text--gray-4">Receiving amount</div>
                     <div
                       [appBigNumber]="data.amount"
                       [decimal]="data['dataDenom']?.decimals"
-                      class="text--gray-1"></div>
+                      class="text--gray-1 body-mob"></div>
                   </div>
                 </div>
               </div>
