@@ -21,30 +21,28 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'assets'">
                         <div class="d-flex align-items-center">
-                          <img
-                            class="rounded-circle"
-                            [src]="(data | marketInfo : 'logo')"
-                            width="20"
-                            height="20" />
+                          <img class="rounded-circle" [src]="data | marketInfo : 'logo'" width="20" height="20" />
                           <div class="ml-3 d-flex transfer-token-info">
                             <div class="aura-tooltip-contain">
                               <span
-                                *ngIf="(data | marketInfo : 'symbol')"
-                                class="caption text-sm mb-1 aura-tooltip-object"
-                                >{{ ((data | marketInfo : 'symbol')) | stringEllipsis : 20 }}</span
+                                *ngIf="data | marketInfo : 'symbol'"
+                                class="caption text-sm mb-1 aura-tooltip-object">
+                                {{ data | marketInfo : 'symbol' | stringEllipsis : 20 }}</span
                               >
                               <app-tooltip-customize
-                                [content]="(data | marketInfo :'symbol')"
+                                [content]="data | marketInfo : 'symbol'"
                                 [className]="'tooltip--right'">
                               </app-tooltip-customize>
                             </div>
 
-                            <span class="body-02">{{ (data | marketInfo : 'name') | stringEllipsis : 20 }}</span>
+                            <span *ngIf="!breakpoint.value.matches" class="body-02">
+                              {{ data | marketInfo : 'name' | stringEllipsis : 20 }}
+                            </span>
                             <ng-container *ngIf="breakpoint.value.matches">
                               <span
                                 class="aura-tooltip-object"
                                 *ngIf="(data.amount | balanceOf : data.decimal) < 0.001">
-                                <0,001
+                                {{ '<0,001' }}
                               </span>
                               <span
                                 *ngIf="(data.amount | balanceOf : data.decimal) >= 0.001"
@@ -63,7 +61,7 @@
                           <div
                             class="aura-tooltip-object"
                             *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) < 0.001">
-                            <0,001
+                            {{ '<0,001' }}
                           </div>
                           <app-tooltip-customize
                             [content]="data[template.matColumnDef] | convertSmallNumber : data.decimal">
