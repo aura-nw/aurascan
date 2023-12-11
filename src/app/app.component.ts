@@ -38,6 +38,8 @@ export class AppComponent implements OnInit {
     this.getInfoCommon();
     this.getPriceToken();
     this.getDataFromStorage();
+    //get list token market
+    this.tokenService.getCoinData();
 
     setInterval(() => {
       this.getInfoCommon();
@@ -46,6 +48,8 @@ export class AppComponent implements OnInit {
     setInterval(() => {
       this.getListValidator();
       this.getPriceToken();
+      //get list token market
+      this.tokenService.getCoinData();
     }, 600000);
 
     // if (this.isTestnet) {

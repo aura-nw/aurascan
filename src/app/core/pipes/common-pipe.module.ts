@@ -19,6 +19,7 @@ import {
   pipeCalDate,
 } from './common.pipe';
 import { JsonPipe } from './json.pipe';
+import { MarketInfoPipe } from 'src/app/core/pipes/market-info.pipe';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { JsonPipe } from './json.pipe';
     convertSmallNumber,
     formatDigit,
     NameTagPipe,
+    MarketInfoPipe,
     CheckDisplayTooltip,
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
@@ -59,6 +61,7 @@ import { JsonPipe } from './json.pipe';
     convertSmallNumber,
     formatDigit,
     NameTagPipe,
+    MarketInfoPipe,
     CheckDisplayTooltip,
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,

@@ -156,8 +156,6 @@ export class UserService extends CommonService {
       $limit: Int = 100, 
       $actionIn: [String!] = null,
       $actionNotIn: [String!] = null,
-      $listTxMsgType: [String!] = null, 
-      $listTxMsgTypeNotIn: [String!] = null, 
       $startTime: timestamptz = null, 
       $endTime: timestamptz = null
       ) {
@@ -167,9 +165,6 @@ export class UserService extends CommonService {
             cw20_activities: {
               _or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], 
               action: {_in: $actionIn, _nin: $actionNotIn}
-            }, 
-            transaction_messages: {
-              type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}
             },
             height: {_gt: $heightGT, _lt: $heightLT}, 
             timestamp: {_lte: $endTime, _gte: $startTime}
@@ -211,12 +206,9 @@ export class UserService extends CommonService {
         variables: {
           sender: payload.sender,
           receiver: payload.receiver,
-          listTxMsgType: payload.listTxMsgType,
           startTime: payload.startTime,
           endTime: payload.endTime,
-          contractAddr: payload.contractAddr,
           heightLT: payload.heightLT,
-          txHash: payload.txHash,
           actionIn: CW20_TRACKING,
           actionNotIn: null,
         },
