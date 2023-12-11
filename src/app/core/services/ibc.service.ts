@@ -300,7 +300,7 @@ export class IBCService extends CommonService {
             type: {_eq: $type}
             denom: {_eq: $denom}
           }
-          order_by: {amount: desc}
+          order_by: {total_messages: desc}
         ) {
           denom
           total_messages

@@ -14,7 +14,10 @@
 
   <!-- Image -->
   <img
-    *ngIf="(dataType === MEDIA_TYPE.IMG || nftItem?.media_info?.onchain?.metadata?.image) && isError === false"
+    *ngIf="
+      (dataType === MEDIA_TYPE.IMG || (nftItem?.media_info?.onchain?.metadata?.image && !animationUrl)) &&
+      isError === false
+    "
     (error)="error()"
     [src]="imageUrl && animationUrl ? animationUrl : imageUrl"
     alt=""
