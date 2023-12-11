@@ -1,15 +1,16 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {WALLET_PROVIDER} from "src/app/core/constants/wallet.constant";
-import {IWalletInfo} from "src/app/core/models/wallet";
-import {BreakpointObserver} from "@angular/cdk/layout";
-import {DialogService} from "src/app/core/services/dialog.service";
-import {WalletService} from "src/app/core/services/wallet.service";
-import {MatBottomSheetRef} from "@angular/material/bottom-sheet";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { Subject, takeUntil } from 'rxjs';
+import { WALLET_PROVIDER } from 'src/app/core/constants/wallet.constant';
+import { IWalletInfo } from 'src/app/core/models/wallet';
+import { DialogService } from 'src/app/core/services/dialog.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-wallet-bottom-sheet',
   templateUrl: './wallet-bottom-sheet.component.html',
-  styleUrls: ['./wallet-bottom-sheet.component.scss']
+  styleUrls: ['./wallet-bottom-sheet.component.scss'],
 })
 export class WalletBottomSheetComponent implements OnInit {
   walletProvider = WALLET_PROVIDER;
@@ -29,12 +30,22 @@ export class WalletBottomSheetComponent implements OnInit {
     },
   ];
   isMobileMatched = false;
+  destroyed$ = new Subject<void>();
+  breakpoint$ = this.breakpointObserver
+    .observe([Breakpoints.Small, Breakpoints.XSmall])
+    .pipe(takeUntil(this.destroyed$));
 
   constructor(
-    private layout: BreakpointObserver,
+    private breakpointObserver: BreakpointObserver,
     private dlgService: DialogService,
     private walletService: WalletService,
-    public _bottomSheetRef: MatBottomSheetRef<WalletBottomSheetComponent>) {
+    public _bottomSheetRef: MatBottomSheetRef<WalletBottomSheetComponent>,
+  ) {
+    this.breakpoint$.subscribe((state) => {
+      if (state) {
+        this.isMobileMatched = state.matches;
+      }
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -69,5 +80,4 @@ export class WalletBottomSheetComponent implements OnInit {
       console.error(error);
     }
   }
-
 }

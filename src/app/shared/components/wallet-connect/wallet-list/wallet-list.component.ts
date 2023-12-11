@@ -1,5 +1,7 @@
+import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { Subject, takeUntil } from 'rxjs';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { WALLET_PROVIDER } from '../../../../core/constants/wallet.constant';
@@ -28,25 +30,36 @@ export class WalletListComponent implements OnInit {
     },
   ];
   isMobileMatched = false;
+  destroyed$ = new Subject<void>();
+  breakpoint$ = this.breakpointObserver
+    .observe([Breakpoints.Small, Breakpoints.XSmall])
+    .pipe(takeUntil(this.destroyed$));
 
   constructor(
     public dialogRef: MatDialogRef<WalletListComponent>,
     private dlgService: DialogService,
     private walletService: WalletService,
-  ) {}
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.isMobileMatched = window.innerWidth <= 992;
+    private breakpointObserver: BreakpointObserver,
+  ) {
+    this.breakpoint$.subscribe((state) => {
+      if (state) {
+        this.isMobileMatched = state.matches;
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
         this.dialogRef.close();
       }
     });
     this.isMobileMatched = window.innerWidth <= 992;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   connectWallet(provider: WALLET_PROVIDER): void {
