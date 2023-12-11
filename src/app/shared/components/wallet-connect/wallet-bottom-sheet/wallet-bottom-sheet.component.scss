@@ -1,9 +1,6 @@
 .wallet-list-container {
   .popup-header {
     height: 72px;
-    @media (min-width: 991.98px) {
-      height: 76px;
-    }
     background-color: var(--aura-gray-9);
     color: var(--aura-white);
   }
@@ -37,14 +34,5 @@
     background-color: var(--aura-gray-9);
     border-radius: 12px;
     min-height: 234px;
-  }
-
-  @media (min-width: 991.98px) {
-    .wallet-list,
-    .wallet-info {
-      flex: 0 1 50%;
-      width: 50%;
-      min-height: unset;
-    }
   }
 }
