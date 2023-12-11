@@ -19,6 +19,7 @@ import { WalletListComponent } from 'src/app/shared/components/wallet-connect/wa
 import { ESigningType, LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
+import { getLastProvider, getSigningType } from '../utils/common/info-common';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
@@ -274,12 +275,14 @@ export class WalletService implements OnDestroy {
       message,
       senderAddress,
       network,
-      signingType,
       chainId,
-    }: { messageType: any; message: any; senderAddress: any; network: ChainInfo; signingType: any; chainId: any },
+    }: { messageType: any; message: any; senderAddress: any; network: ChainInfo; chainId: any },
     validatorsCount?: number,
   ) {
-    if (this.isMobileMatched && !this.checkExistedCoin98() && signingType != ESigningType.Leap) {
+    const lastProvider = getLastProvider();
+    const signingType = getSigningType(lastProvider);
+
+    if (this.isMobileMatched && !this.checkExistedCoin98() && lastProvider != WALLET_PROVIDER.LEAP) {
       const msgs = messageCreators[messageType](senderAddress, message, network);
       let fee;
       if (this.coin98Client) {
@@ -407,26 +410,13 @@ export class WalletService implements OnDestroy {
       delete msg[key]?.fund;
     }
 
-    const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
-    if (!lastProvider?.provider) {
-      throw new Error('Provider not found');
-    }
+    const lastProvider = getLastProvider();
 
-    if (this.isMobileMatched && !this.checkExistedCoin98() && lastProvider.provider != WALLET_PROVIDER.LEAP) {
+    if (this.isMobileMatched && !this.checkExistedCoin98() && lastProvider != WALLET_PROVIDER.LEAP) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
-      let signingType: ESigningType;
-      switch (lastProvider.provider) {
-        case WALLET_PROVIDER.COIN98:
-          signingType = ESigningType.Coin98;
-          break;
-        case WALLET_PROVIDER.LEAP:
-          signingType = ESigningType.Leap;
-          break;
-        default:
-          signingType = ESigningType.Keplr;
-          break;
-      }
+      let signingType: ESigningType = getSigningType(lastProvider);
+
       signer = await getSigner(signingType, this.chainId);
     }
 
@@ -440,14 +430,10 @@ export class WalletService implements OnDestroy {
   }
 
   async getWalletSign(minter, message) {
-    const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
-    if (!lastProvider?.provider) {
-      throw new Error('Provider not found');
-    }
-
+    const lastProvider = getLastProvider();
     let provider: Keplr;
 
-    switch (lastProvider.provider) {
+    switch (lastProvider) {
       case WALLET_PROVIDER.LEAP:
         provider = await getLeap();
         break;

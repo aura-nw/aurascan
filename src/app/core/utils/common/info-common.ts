@@ -3,6 +3,9 @@ import { getAmount, getDataInfo } from 'src/app/global/global';
 import { MEDIA_TYPE, NUMBER_CONVERT } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../constants/transaction.enum';
+import { ESigningType, LAST_USED_PROVIDER, WALLET_PROVIDER } from '../../constants/wallet.constant';
+import { WalletStorage } from '../../models/wallet';
+import local from '../storage/local';
 import { balanceOf } from './parsing';
 
 export function getInfo(globals: any, data: any): void {
@@ -136,4 +139,21 @@ export function getDataIBC(value, coinConfig) {
   }
   result['denom'] = result['denom'] || temp;
   return result;
+}
+
+export function getLastProvider() {
+  const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+
+  return lastProvider.provider ? lastProvider.provider : WALLET_PROVIDER.KEPLR;
+}
+
+export function getSigningType(provider: WALLET_PROVIDER) {
+  switch (provider) {
+    case WALLET_PROVIDER.COIN98:
+      return ESigningType.Coin98;
+    case WALLET_PROVIDER.LEAP:
+      return ESigningType.Leap;
+    default:
+      return ESigningType.Keplr;
+  }
 }
