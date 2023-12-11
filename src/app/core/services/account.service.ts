@@ -3,22 +3,29 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
+import { ApiAccountService } from '../data-services/api-account.service';
+import { ApiCw20TokenService } from '../data-services/api-cw20-token.service';
 import { TYPE_CW4973 } from '../constants/contract.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class AccountService extends CommonService {
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+    private apiCw20TokenService: ApiCw20TokenService,
+    private apiService: ApiAccountService,
+  ) {
     super(http, environmentService);
   }
 
   getAccountDetail(account_id: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/account/${account_id}`);
+    return this.apiService.getAccountByAddress(account_id as string);
   }
 
   getAssetCW20ByOwner(payload): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/${payload?.account_address}`);
+    return this.apiCw20TokenService.getByOwner(payload?.account_address);
   }
 
   getAssetCW721ByOwner(payload): Observable<any> {
@@ -88,10 +95,6 @@ export class AccountService extends CommonService {
         operationName: 'queryAssetCW721',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getTotalAssets(account_id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/total-asset/${account_id}`);
   }
 
   getListCollectionByOwner(payload): Observable<any> {

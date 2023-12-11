@@ -22,7 +22,7 @@ import {
   TIME_OUT_CALL_API,
 } from '../../../app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR, VOTING_POWER_LEVEL } from '../../../app/core/constants/validator.enum';
-import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
+import { SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
 import { DataDelegateDto, TableTemplate } from '../../../app/core/models/common.model';
 import { AccountService } from '../../../app/core/services/account.service';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
@@ -502,7 +502,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           },
           senderAddress: this.userAddress,
           network: this.chainInfo,
-          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
@@ -525,7 +524,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             },
             senderAddress: this.userAddress,
             network: this.chainInfo,
-            signingType: ESigningType.Keplr,
             chainId: this.walletService.chainId,
           },
           this.lstValidatorData?.length,
@@ -553,7 +551,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           },
           senderAddress: this.userAddress,
           network: this.chainInfo,
-          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
@@ -580,7 +577,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           },
           senderAddress: this.userAddress,
           network: this.chainInfo,
-          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
