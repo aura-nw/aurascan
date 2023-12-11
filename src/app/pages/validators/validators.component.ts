@@ -25,7 +25,6 @@ import { DIALOG_STAKE_MODE, STATUS_VALIDATOR, VOTING_POWER_LEVEL } from '../../.
 import { SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
 import { DataDelegateDto, TableTemplate } from '../../../app/core/models/common.model';
 import { AccountService } from '../../../app/core/services/account.service';
-import { CommonService } from '../../../app/core/services/common.service';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
@@ -118,7 +117,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private validatorService: ValidatorService,
     private modalService: NgbModal,
     private accountService: AccountService,
-    public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private mappingErrorService: MappingErrorService,

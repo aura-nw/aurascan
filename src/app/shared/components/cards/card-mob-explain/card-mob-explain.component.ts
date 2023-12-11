@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
 
 export interface CardMobExplainTitle {
   label: string;
@@ -26,7 +25,7 @@ export class CardMobExplainComponent implements OnInit {
   @Input() content: CardMobContent[];
   @Input() tokenAmount: any;
   @Input() data: any;
-  constructor(private environmentService: EnvironmentService, public commonService: CommonService) {}
+  constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {}
 

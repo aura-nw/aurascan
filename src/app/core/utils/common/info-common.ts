@@ -120,9 +120,10 @@ export function checkTypeFile(nft: any) {
   return content_type;
 }
 
-export function getDataIBC(value, coinConfig) {
+export function convertTx(value: string, coinConfig: any, decimal = 6) {
   let result = {};
-  let temp;
+  if (!value) return result;
+  let display;
   if (value.indexOf('ibc') >= 0) {
     try {
       if (!value.startsWith('ibc')) {
@@ -130,14 +131,12 @@ export function getDataIBC(value, coinConfig) {
         value = value?.replace(temp, '');
       }
     } catch {}
-    result = { display: value, decimals: 6 };
-    temp = value.slice(value.indexOf('ibc'));
-    result = coinConfig.find((k) => k.denom === temp) || {};
-    result['display'] = result['display'] || value;
+    display = value.slice(value.indexOf('ibc'));
+    result = coinConfig?.find((k) => k.denom === display) || { display: value, decimal: decimal };
   } else {
-    result = { display: temp, decimals: 6 };
+    result = { display: display, decimal: decimal };
   }
-  result['denom'] = result['denom'] || temp;
+  result['denom'] = result['denom'] || display;
   return result;
 }
 

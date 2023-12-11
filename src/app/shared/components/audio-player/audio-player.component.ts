@@ -22,7 +22,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   constructor(private environmentService: EnvironmentService) {}
 
   ngAfterViewInit(): void {
-    this.isSafari = isSafari();
+    this.isSafari =  /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
     if (this.audio) {
       this.audio.nativeElement.onpause = () => {
         this.paused = this.audio.nativeElement.paused;

@@ -348,7 +348,7 @@
             <div>
               <ng-container [ngSwitch]="template.matColumnDef">
                 <div *ngSwitchCase="'timestamp'">
-                  {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
                 </div>
                 <a
                   *ngSwitchCase="'tx_hash'"
@@ -376,7 +376,7 @@
                 <div *ngSwitchCase="'type'">
                   <div class="aura-status aura-tooltip-contain p-0">
                     <div class="status cursor-pointer aura-tooltip-object">
-                      {{ data[template.matColumnDef] | stringEllipsis : 25 }}
+                      {{ data[template.matColumnDef] | stringEllipsis : 22 }}
                       <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                         +{{ data.lstTypeTemp?.length - 1 }}
                       </div>
@@ -413,26 +413,33 @@
                         <div class="aura-tooltip-contain">
                           <div
                             class="aura-tooltip-object"
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) < 0.001 && item.amountTemp != 0">
+                            *ngIf="+(item.amountTemp | balanceOf : item.decimal) < 0.001">
                             <0,001
                           </div>
-                          <app-tooltip-customize [content]="item.amountTemp | convertSmallNumber : item.decimal">
-                          </app-tooltip-customize>
                           <div
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001 || item.amountTemp == 0"
+                            [class.aura-tooltip-object]="item.amountTemp !== 0"
+                            [class.cursor-text]="+(item.amountTemp | balanceOf : item.decimals) < 1000000"
+                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001"
                             [appBigNumber]="item.amountTemp"
                             [decimal]="item.decimal"></div>
+                          <app-tooltip-customize
+                            *ngIf="
+                              (item.amountTemp | balanceOf : item.decimals) < 0.001 ||
+                              (item.amountTemp | convertSmallNumber : item.decimals) >= 1000000
+                            "
+                            [content]="item.amountTemp | convertSmallNumber : item.decimal">
+                          </app-tooltip-customize>
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
                           <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
-                            <div [class.aura-tooltip-object]="item.denomOrigin">
-                              {{ item.denom || denom | stringEllipsis : 19 }}
+                            <div [class.aura-tooltip-object]="(item.denomOrigin || item.denom) !== denom">
+                              {{ item.denomOrigin || item.denom | stringEllipsis : 19 }}
                             </div>
 
                             <app-tooltip-customize
                               [className]="'tooltip--left'"
                               [class]="'message-custom'"
-                              [content]="item.denomOrigin">
+                              [content]="item.denomOrigin || item.denom">
                             </app-tooltip-customize>
                           </div>
                           <a
