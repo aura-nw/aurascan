@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -67,6 +68,7 @@ Form Field, Input, Select, Autocomplete
     MatCardModule,
     MatChipsModule,
     MatSliderModule,
+    MatBottomSheetModule,
   ],
   declarations: [],
 })
