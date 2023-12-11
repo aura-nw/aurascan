@@ -11,9 +11,10 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.module';
 import { WalletListComponent } from './wallet-list/wallet-list.component';
 import { MaterialModule } from 'src/app/material.module';
+import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-sheet.component';
 
 @NgModule({
-  declarations: [WalletConnectComponent, WalletListComponent],
+  declarations: [WalletConnectComponent, WalletListComponent, WalletBottomSheetComponent],
   imports: [
     CommonModule,
     NgApexchartsModule,
