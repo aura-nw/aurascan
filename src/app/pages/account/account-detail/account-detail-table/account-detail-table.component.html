@@ -30,11 +30,13 @@
                     </a>
                     <div *ngSwitchCase="'amount'" class="d-flex align-items-center">
                       <div class="aura-tooltip-contain d-flex">
-                        <div class="aura-tooltip-object"
-                             [class.cursor-text]="data[template.matColumnDef] < 1000000"
-                             [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></div>
+                        <div
+                          class="aura-tooltip-object"
+                          [class.cursor-text]="data[template.matColumnDef] < 1000000"
+                          [appBigNumber]="data[template.matColumnDef]"
+                          [decimal]="0"></div>
                         <app-tooltip-customize
-                          *ngIf="data[template.matColumnDef]  >= 1000000"
+                          *ngIf="data[template.matColumnDef] >= 1000000"
                           [content]="data[template.matColumnDef] | formatDigit : 2">
                         </app-tooltip-customize>
                       </div>
@@ -42,11 +44,13 @@
                     </div>
                     <div *ngSwitchCase="'reward'" class="d-flex align-items-center">
                       <div class="aura-tooltip-contain d-flex">
-                        <div class="aura-tooltip-object"
-                             [class.cursor-text]="data[template.matColumnDef] < 1000000"
-                             [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></div>
+                        <div
+                          class="aura-tooltip-object"
+                          [class.cursor-text]="data[template.matColumnDef] < 1000000"
+                          [appBigNumber]="data[template.matColumnDef]"
+                          [decimal]="0"></div>
                         <app-tooltip-customize
-                          *ngIf="data[template.matColumnDef]  >= 1000000"
+                          *ngIf="data[template.matColumnDef] >= 1000000"
                           [content]="data[template.matColumnDef] | formatDigit : 2">
                         </app-tooltip-customize>
                       </div>
@@ -58,13 +62,11 @@
                         <div class="divider divider-vertical divider-lighter mx-2"></div>
                         <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
                       </div>
-                      <div class="small-body">
-                        ({{ (data[template.matColumnDef] | dateCustom : false)[1] }})
-                      </div>
+                      <div class="small-body">({{ (data[template.matColumnDef] | dateCustom : false)[1] }})</div>
                     </div>
                     <div *ngSwitchCase="'vesting_schedule'">
-                      {{ (data['date_format'] | dateCustom: false)[1] }} <br />({{
-                        (data['date_format'] | dateCustom: false)[0]
+                      {{ (data['date_format'] | dateCustom : false)[1] }} <br />({{
+                        (data['date_format'] | dateCustom : false)[0]
                       }})
                     </div>
                     <a

@@ -200,12 +200,16 @@
                   <div class="aura-tooltip-object" *ngIf="(element.balance | balanceOf : element.decimals) < 0.001">
                     <0,001
                   </div>
-                  <div class="aura-tooltip-object"
+                  <div
+                    class="aura-tooltip-object"
                     *ngIf="(element.balance | balanceOf : element.decimals) >= 0.001"
                     [appBigNumber]="element.balance"
                     [decimal]="element.decimals"></div>
                   <app-tooltip-customize
-                    *ngIf="(element.balance | balanceOf : element.decimals) < 0.001 || (element.balance | convertSmallNumber : element.decimals)  >= 1000000"
+                    *ngIf="
+                      (element.balance | balanceOf : element.decimals) < 0.001 ||
+                      (element.balance | convertSmallNumber : element.decimals) >= 1000000
+                    "
                     [content]="element.balance | convertSmallNumber : element.decimals | formatDigit : 2">
                   </app-tooltip-customize>
                 </div>
@@ -222,16 +226,18 @@
                     <ng-container *ngIf="element.contract_address === '-'">
                       ${{ element.price * element.balance | formatDigit : 2 }}
                     </ng-container>
-                    <div class="aura-tooltip-contain"
-                      *ngIf="element.contract_address !== '-'">
-                      <div class="aura-tooltip-object"
-                           [class.cursor-text]="+(element.price * element['balance'] | balanceOf: element.decimals) < 1000000"
-                           [appBigNumber]="element['balance']"
-                           [decimal]="element.decimals"
-                           [tokenPrice]="element.price"></div>
+                    <div class="aura-tooltip-contain" *ngIf="element.contract_address !== '-'">
+                      <div
+                        class="aura-tooltip-object"
+                        [class.cursor-text]="
+                          +(element.price * element['balance'] | balanceOf : element.decimals) < 1000000
+                        "
+                        [appBigNumber]="element['balance']"
+                        [decimal]="element.decimals"
+                        [tokenPrice]="element.price"></div>
                       <app-tooltip-customize
-                        *ngIf="+(element.price * element['balance'] | balanceOf: element.decimals) >= 1000000"
-                        [content]="element.price * element['balance'] | balanceOf: element.decimals | formatDigit : 2">                        
+                        *ngIf="+(element.price * element['balance'] | balanceOf : element.decimals) >= 1000000"
+                        [content]="element.price * element['balance'] | balanceOf : element.decimals | formatDigit : 2">
                       </app-tooltip-customize>
                     </div>
                   </span>
