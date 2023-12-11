@@ -1,10 +1,9 @@
-import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
-import {WALLET_PROVIDER} from '../../../../core/constants/wallet.constant';
-import {IWalletInfo} from '../../../../core/models/wallet';
-import {WalletService} from 'src/app/core/services/wallet.service';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {DialogService} from 'src/app/core/services/dialog.service';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { DialogService } from 'src/app/core/services/dialog.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { WALLET_PROVIDER } from '../../../../core/constants/wallet.constant';
+import { IWalletInfo } from '../../../../core/models/wallet';
 
 @Component({
   selector: 'app-wallet-list',
@@ -32,11 +31,9 @@ export class WalletListComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<WalletListComponent>,
-    private layout: BreakpointObserver,
     private dlgService: DialogService,
     private walletService: WalletService,
-  ) {
-  }
+  ) {}
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
