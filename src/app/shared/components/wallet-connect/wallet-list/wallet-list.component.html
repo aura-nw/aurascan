@@ -1,31 +1,32 @@
 <div class="wallet-list-container">
   <div
-    class="d-flex flex-row-reverse flex-lg-row justify-content-center justify-content-lg-between align-items-center mb-4">
-    <div class="sub-text wallet-title text--white w-100 text-center text-lg-start h3 h1-mob">Connect a wallet</div>
+    class="d-flex justify-content-between align-items-center popup-header px-6">
+    <h2 class="text--white h3-mob fw-semibold mb-0">Connect a wallet</h2>
     <img
+      (click)="dialogRef.close()"
       class="icon-close close-dialog"
-      [src]="
-        disabled
-          ? ('assets/icons/icons-svg/white/arrow-left.svg' | imageS3)
-          : ('assets/icons/icons-svg/basic/close.svg' | imageS3)
-      "
-      alt=""
-      (click)="dismiss()" />
+      [src]="'assets/icons/icons-svg/white/close.svg'"
+      alt=""/>
   </div>
-  <div class="border-bottom-mobile"></div>
-  <p class="caption-mob fw-normal">If you don't have a wallet, you can select a provider and create one now</p>
-  <div class="wallet-list">
-    <ul class="list-group">
-      <li
-        *ngFor="let wallet of walletList"
-        class="wallet-item"
-        (click)="!(disabled && wallet.disableMobile) && connect(wallet)"
-        [class.disabled-connect]="disabled && wallet.disableMobile">
-        <div class="d-flex align-items-center gap-3">
-          <img class="wallet-icon" [src]="wallet.icon | imageS3" />
-          <span class="h3 text--gray-1">{{ wallet.name | titlecase }}</span>
-        </div>
-      </li>
-    </ul>
+  <div class="pt-9 pb-12 px-4 px-lg-6 d-lg-flex">
+    <div class="wallet-list">
+      <div class="body mb-3 text--gray-2 ml-2">Select a provider to connect or create a wallet</div>
+      <ul class="list-group">
+        <li
+          *ngFor="let wallet of walletList"
+          class="wallet-item mt-1"
+          [class.d-none]="isMobileMatched && wallet.disableMobile"
+          (click)="connectWallet(wallet.name)">
+          <div class="d-flex align-items-center">
+            <img class="wallet-icon" [src]="wallet.icon | imageS3" />
+            <span class="h5 text--white ml-3">{{ wallet.name | titlecase }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>    
+    <div class="ml-lg-6 mt-6 mt-lg-0 wallet-info px-4 py-5 d-flex flex-column align-items-center justify-content-center">
+      <img [src]="'assets/images/digital-wallet.png' | imageS3" alt="">
+      <div class="body mt-4 text--gray-1 text-center">Wallets are used to send, receive, store digital assets like Aura and NFTs.</div>
+    </div>
   </div>
 </div>

@@ -1,10 +1,10 @@
 <!-- Transfer Assets -->
-<div class="box-transfer mb-4">
+<div class="box-transfer mb-lg-4">
   <div class="h2 text--white mb-4">Transfer Assets</div>
   <div class="row">
     <!-- IBC Sending -->
     <div class="col-lg-6">
-      <div class="card box-dashboard">
+      <div class="card box-transfer">
         <div class="align-items-center d-lg-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <div class="text--white mb-0 body-01 fw-semibold">IBC Sending Assets</div>
           <form class="aura-form single-input-field search-form mt-4 mt-lg-0" #searchForm>
@@ -37,7 +37,7 @@
         <div class="card-body pt-4 pt-lg-2">
           <ng-container *ngIf="dataIBCSending?.data?.length > 0; else noValues">
             <div class="table-responsive table-transfer-assets d-none d-lg-block">
-              <table mat-table [dataSource]="dataIBCSending" class="aura-table body blocks">
+              <table mat-table [dataSource]="dataIBCSending" class="aura-table body">
                 <ng-container *ngFor="let template of templatesIBC; index as i">
                   <ng-container [matColumnDef]="template.matColumnDef">
                     <th mat-header-cell *matHeaderCellDef class="text-capitalize">
@@ -46,7 +46,7 @@
                     <td mat-cell *matCellDef="let data; index as idx">
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
-                          <div *ngSwitchCase="'no'">#{{ pageIBCSend.pageIndex * pageIBCSend.pageSize + idx + 1 }}</div>
+                          <div *ngSwitchCase="'no'">#{{ idx + 1 }}</div>
                           <div *ngSwitchCase="'asset'" class="d-flex align-items-center">
                             <img
                               [src]="
@@ -128,14 +128,14 @@
                 <div class="card__content text--white body-01">
                   <div class="d-flex align-items-center mb-2 justify-content-between">
                     <div class="body text--gray-4 label__content">Messages</div>
-                    <div class="text--gray-1">{{ data.total_messages }}</div>
+                    <div class="text--gray-1 body-mob">{{ data.total_messages }}</div>
                   </div>
                   <div class="d-flex align-items-center mb-2 justify-content-between">
                     <div class="body text--gray-4 label__content">Sending amount</div>
                     <div
                       [appBigNumber]="data.amount"
                       [decimal]="data['dataDenom']?.decimals"
-                      class="text--gray-1"></div>
+                      class="text--gray-1 body-mob"></div>
                   </div>
                 </div>
               </div>
@@ -155,7 +155,7 @@
 
     <!-- IBC Receiving -->
     <div class="col-lg-6">
-      <div class="card box-dashboard">
+      <div class="card box-transfer">
         <div class="align-items-center d-lg-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <div class="text--white mb-0 body-01 fw-semibold">IBC Receiving Assets</div>
           <form class="aura-form single-input-field search-form mt-4 mt-lg-0" #searchForm>
@@ -188,7 +188,7 @@
         <div class="card-body pt-4 pt-lg-2">
           <ng-container *ngIf="dataIBCReceiving?.data?.length > 0; else noValues">
             <div class="table-responsive table-transfer-assets d-none d-lg-block">
-              <table mat-table [dataSource]="dataIBCReceiving" class="aura-table body blocks">
+              <table mat-table [dataSource]="dataIBCReceiving" class="aura-table body keep-header">
                 <ng-container *ngFor="let template of templatesIBC; index as i">
                   <ng-container [matColumnDef]="template.matColumnDef">
                     <th mat-header-cell *matHeaderCellDef class="text-capitalize">
@@ -200,9 +200,7 @@
                     <td mat-cell *matCellDef="let data; index as idx">
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
-                          <div *ngSwitchCase="'no'">
-                            #{{ pageIBCReceive.pageIndex * pageIBCReceive.pageSize + idx + 1 }}
-                          </div>
+                          <div *ngSwitchCase="'no'">#{{ idx + 1 }}</div>
                           <div *ngSwitchCase="'asset'">
                             <img
                               [src]="
@@ -284,14 +282,14 @@
                 <div class="card__content text--white body-01">
                   <div class="d-flex align-items-center mb-2 justify-content-between">
                     <div class="body text--gray-4 label__content">Messages</div>
-                    <div class="text--gray-1">{{ data.total_messages }}</div>
+                    <div class="text--gray-1 body-mob">{{ data.total_messages }}</div>
                   </div>
                   <div class="d-flex align-items-center mb-2 justify-content-between">
-                    <div class="body text--gray-4 label__content">Receiving amount</div>
+                    <div class="body text--gray-4">Receiving amount</div>
                     <div
                       [appBigNumber]="data.amount"
                       [decimal]="data['dataDenom']?.decimals"
-                      class="text--gray-1"></div>
+                      class="text--gray-1 body-mob"></div>
                   </div>
                 </div>
               </div>

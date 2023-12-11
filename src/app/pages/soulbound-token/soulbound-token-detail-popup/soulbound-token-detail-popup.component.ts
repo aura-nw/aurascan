@@ -26,6 +26,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   isLoading = false;
   MEDIA_TYPE = MEDIA_TYPE;
   imageUrl = '';
+  dfImg = '';
   animationUrl = '';
   ABT_ACTION = ABTActionType;
   currentABTAction = ABTActionType.Reject;
@@ -59,6 +60,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
         this.imageUrl = this.commonService.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
       }
     }
+    this.dfImg = this.commonService.getDefaultImg();
   }
 
   handleRejectABT(rejectAll = false) {

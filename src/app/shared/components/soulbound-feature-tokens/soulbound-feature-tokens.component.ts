@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -39,7 +38,6 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
   constructor(
     private soulboundService: SoulboundService,
-    public commonService: CommonService,
     private dialog: MatDialog,
     private walletService: WalletService,
     private router: ActivatedRoute,

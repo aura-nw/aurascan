@@ -78,9 +78,9 @@
 
                       <div *ngSwitchCase="'transfer'" class="d-inline-block transfer-address">
                         <div class="mb-1 text-start d-flex align-items-center">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >From</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            From
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
                             [isLink]="!!data.from"
@@ -94,9 +94,9 @@
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                         </div>
                         <div class="text-start d-flex align-items-center">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >To</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            To
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
                             [isLink]="!!data.to"
@@ -196,9 +196,9 @@
 
                       <div *ngSwitchCase="'transfer'">
                         <div class="mb-1 d-flex align-items-center line-claim">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >From</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            From
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
                             [isLink]="data.from ? true : false"
@@ -213,9 +213,9 @@
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                         </div>
                         <div class="d-flex align-items-center line-claim">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >To</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            To
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
                             [isLink]="data.to ? true : false"
