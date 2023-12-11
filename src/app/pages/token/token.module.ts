@@ -83,6 +83,6 @@ import { TokenRoutingModule } from './token-routing.module';
     TooltipCustomizeModule,
     ClipboardModule,
   ],
-  providers: [TokenService, AccountService, UserService, provideEnvironmentNgxMask(MASK_CONFIG)],
+  providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class TokenModule {}
