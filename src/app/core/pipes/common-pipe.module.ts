@@ -6,7 +6,6 @@ import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from 'src/app/
 import { CheckDisplayTooltip } from 'src/app/core/pipes/tooltip-display.pipe';
 import {
   BalanceOfPipe,
-  CalDatePipe,
   ConvertLogAmountPipe,
   ConvertSmallNumberPipe,
   CustomDatePipe,
@@ -23,7 +22,6 @@ import { JsonPipe } from './json.pipe';
 
 @NgModule({
   declarations: [
-    CalDatePipe,
     JsonPipe,
     CutStringPipe,
     ImageURLPipe,
@@ -46,7 +44,6 @@ import { JsonPipe } from './json.pipe';
   ],
   imports: [CommonModule],
   exports: [
-    CalDatePipe,
     JsonPipe,
     CutStringPipe,
     ImageURLPipe,
