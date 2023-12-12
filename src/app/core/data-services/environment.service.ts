@@ -34,6 +34,7 @@ export interface IConfiguration {
     }[];
     features: string[];
     chain_info: ChainInfo & { gasPriceStep: any };
+    cosmos_sdk_version?: string;
   };
   image: {
     validator: string;
@@ -155,6 +156,8 @@ export class EnvironmentService {
   async load(): Promise<void> {
     await this.loadConfig();
     await this.extendsTxType();
+
+    this.getNodeInfo();
   }
 
   extendsTxType(): Promise<void> {
@@ -164,6 +167,18 @@ export class EnvironmentService {
         TypeTransaction[data.value] = data.value;
         TYPE_TRANSACTION.push({ label: TRANSACTION_TYPE_ENUM[data.label], value: TypeTransaction[data.value] });
       });
+    });
+  }
+
+  getNodeInfo(): void {
+    this.http.get(`${this.chainInfo.rest}/cosmos/base/tendermint/v1beta1/node_info`).subscribe((data: any) => {
+      const cosmos_sdk_version = data?.application_version?.cosmos_sdk_version;
+      if (cosmos_sdk_version) {
+        const configuration: IConfiguration = this.configValue;
+        configuration.chainConfig.cosmos_sdk_version = cosmos_sdk_version;
+
+        this.config.next(configuration);
+      }
     });
   }
 }
