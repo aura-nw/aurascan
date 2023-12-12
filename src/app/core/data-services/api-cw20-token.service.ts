@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { forkJoin, map, take } from 'rxjs';
+import { filter, forkJoin, map, take } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { ApiAccountService } from './api-account.service';
 import { EnvironmentService } from './environment.service';
 import { CW20_TOKENS_TEMPLATE } from './template';
 import { TokenService } from '../services/token.service';
 import { COIN_TOKEN_TYPE, TOKEN_ID_GET_PRICE } from '../constants/common.constant';
+import * as _ from 'lodash';
 
 export interface IAsset {
   name: string;
@@ -41,7 +42,10 @@ export class ApiCw20TokenService {
     return forkJoin([
       this.queryCw20TokenByOwner(address),
       this.apiAccount.getAccountByAddress(address, true),
-      this.tokenService.getTokenMarketData(),
+      this.tokenService.tokensMarket$.pipe(
+        filter((data) => _.isArray(data)),
+        take(1),
+      ),
     ]).pipe(
       map((data) => {
         const [cw20Tokens, account, coinsMarkets] = data;
