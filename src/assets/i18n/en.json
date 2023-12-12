@@ -106,7 +106,11 @@
       "votings": "Votings",
       "openCoinGecko": "Open CoinGecko 123",
       "viewDetail": "View detail",
-      "viewMore": "View more"
+      "viewMore": "View more",
+      "24H": "24H",
+      "7D": "7D",
+      "30D": "30D",
+      "12M": "12M"
     },
     "TRANSACTION_DETAILS": {
       "transactionDetails": "Transaction Details",
@@ -229,15 +233,15 @@
       "contractSchema": "Contract Schema",
       "auraBalance": "AURA Balance",
       "atTx": "at txn",
-      "linkContractSourceCode":"Link Contract Source Code",
+      "linkContractSourceCode": "Link Contract Source Code",
       "fileContractSourceCode": "File Contract Source Code",
-      "fileJson1":"File 1 of 3: execute msg.json",
-      "fileJson2":"File 2 of 3: instantiate msg.json",
-      "fileJson3":"File 3 of 3: query msg.json",
-      "exportSchema":"Export Schema",
-      "contractCreationCode":"Contract Creation Code",
-      "readContractInfo":"Read Contract Information",
-      "expandAll":"Expand all",
+      "fileJson1": "File 1 of 3: execute msg.json",
+      "fileJson2": "File 2 of 3: instantiate msg.json",
+      "fileJson3": "File 3 of 3: query msg.json",
+      "exportSchema": "Export Schema",
+      "contractCreationCode": "Contract Creation Code",
+      "readContractInfo": "Read Contract Information",
+      "expandAll": "Expand all",
       "readContract": "Read Contract",
       "contractInstantiated": "This contract was instantiated from Code ID",
       "removeAddressFormWatchlist": "Remove this address from your watch list",
@@ -245,17 +249,17 @@
       "writeContract": "Write Contract"
     },
     "CONTRACT_VERIFY": {
-      "contractVerifyTitle" : "Verify & Publish Code ID Source Code",
-      "exitCodeNote" : "Source code verification provides transparency for users interacting with smart contracts <b>which is instantiated from Code ID source code</b>. By uploading link GitHub source code, Aurascan will match the compiled code with that on the blockchain. Just like contracts, a smart contract should provide end users with more information on what they are \"digitally signing\" for and give users an opportunity to audit the code to independently verify that it actually does what it is supposed to do.",
-      "codeIDSourceCode" : "Code ID Source Code",
-      "codeIDToVerify" : "Code ID to verify",
-      "codeIDIsRequired" : "Code ID is required!",
-      "CompiledWasmFileName" : "Compiled wasm file name",
+      "contractVerifyTitle": "Verify & Publish Code ID Source Code",
+      "exitCodeNote": "Source code verification provides transparency for users interacting with smart contracts <b>which is instantiated from Code ID source code</b>. By uploading link GitHub source code, Aurascan will match the compiled code with that on the blockchain. Just like contracts, a smart contract should provide end users with more information on what they are \"digitally signing\" for and give users an opportunity to audit the code to independently verify that it actually does what it is supposed to do.",
+      "codeIDSourceCode": "Code ID Source Code",
+      "codeIDToVerify": "Code ID to verify",
+      "codeIDIsRequired": "Code ID is required!",
+      "CompiledWasmFileName": "Compiled wasm file name",
       "complierVer": "Compiler Version",
       "complierOutput": "Compiler Output",
-      "linkGitHubSourceCode" : "Link GitHub Source Code",
-      "preCheckStep" : "Pre check ({{ currentStep }}/4)",
-      "verifyProcess" : "Verify process ({{ currentStep }}/4)"
+      "linkGitHubSourceCode": "Link GitHub Source Code",
+      "preCheckStep": "Pre check ({{ currentStep }}/4)",
+      "verifyProcess": "Verify process ({{ currentStep }}/4)"
     },
     "FEE_GRANT": {
       "granteeAddress": "Grantee's address",
@@ -328,16 +332,19 @@
       "complierVer": "Compiler Version:",
       "verifiedTime": "Verified Time:",
       "linkSourceCode": "Link Code ID source code",
-      "codeIdVerified":"Code ID source code verified"
+      "codeIdVerified": "Code ID source code verified"
     },
-    "EXPORT_CSV" : {
+    "EXPORT_CSV": {
       "exportData": "Export Data",
       "downloadCSVFile": "Download CSV file",
       "exportDataType": "Export data type",
       "selectExportDataType": "Select export data type",
       "accountTransaction": "Account transaction",
       "dataRange": "Data range",
-      "descContent": "The earliest 1,000 records within the selected range will be exported"
+      "descContent": "The earliest 1,000 records within the selected range will be exported",
+      "validBlock": "“To Block” height need to be greater than “From Block” height",
+      "includedPrivateNameTag": "Include Private name tags in data downloaded",
+      "needLoginText": "Need to login by email to enable this option"
     }
   },
   "WALLET": {
@@ -445,6 +452,7 @@
     "COLLAPSE_ALL": "Collapse all"
   },
   "LABEL": {
+    "AURA": "AURA",
     "NAME": "Name",
     "AMOUNT_STAKED": "Amount Staked",
     "BONDED": "Bonded",
@@ -522,7 +530,8 @@
     "FALSE": "false",
     "WRITE": "Write",
     "CODE": "Code",
-    "READ": "Read"
+    "READ": "Read",
+    "BLOCK_HEIGHT": "Block height"
   },
   "PAGINATOR": {
     "FIRST": "First",
@@ -558,11 +567,12 @@
     "CLOSE": "Close",
     "COPY": "Copy",
     "COPIED": "Copied!",
-    "JSON_FORMAT":"JSON Format",
-    "JRAW":"JRAW/Text Format",
-    "START_OVER":"Start over",
-    "VERIFY_PUBLISH":"Verify & Publish",
+    "JSON_FORMAT": "JSON Format",
+    "JRAW": "JRAW/Text Format",
+    "START_OVER": "Start over",
+    "VERIFY_PUBLISH": "Verify & Publish",
     "CONNECT_TO_WEB3": "Connect to Web3",
-    "CONNECTED_TO_WEB3": "Connected to Web3"
+    "CONNECTED_TO_WEB3": "Connected to Web3",
+    "DOWNLOAD": "Download"
   }
 }

@@ -28,7 +28,9 @@
                   <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                       <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px" />
-                      <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">AURA</div>
+                      <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">
+                        {{ 'LABEL.AURA' | translate }}
+                      </div>
                       <div class="aura-tooltip-contain">
                         <a
                           href="https://www.coingecko.com/en/coins/aura-network"
@@ -36,7 +38,8 @@
                           class="ml-2 p-0 button button--ssm button-ghost aura-tooltip-object">
                           <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
                         </a>
-                        <app-tooltip-customize [content]="'PAGES.DASHBOARDS.openCoinGecko' | translate"> </app-tooltip-customize>
+                        <app-tooltip-customize [content]="'PAGES.DASHBOARDS.openCoinGecko' | translate">
+                        </app-tooltip-customize>
                       </div>
                     </div>
                     <div class="divider divider-horizontal"></div>
@@ -102,25 +105,25 @@
                           type="button"
                           [class.active]="chartRange === chartRangeData.H_24"
                           (click)="getCoinInfo(chartRangeData.H_24)">
-                          <span>24H</span>
+                          <span>{{ 'PAGES.DASHBOARDS.24H' | translate }}</span>
                         </button>
                         <button
                           type="button"
                           [class.active]="chartRange === chartRangeData.D_7"
                           (click)="getCoinInfo(chartRangeData.D_7)">
-                          <span>7D</span>
+                          <span>{{ 'PAGES.DASHBOARDS.7D' | translate }}</span>
                         </button>
                         <button
                           type="button"
                           [class.active]="chartRange === chartRangeData.D_30"
                           (click)="getCoinInfo(chartRangeData.D_30)">
-                          <span>30D</span>
+                          <span>{{ 'PAGES.DASHBOARDS.30D' | translate }}</span>
                         </button>
                         <button
                           type="button"
                           [class.active]="chartRange === chartRangeData.MONTH_12"
                           (click)="getCoinInfo(chartRangeData.MONTH_12)">
-                          <span>12M</span>
+                          <span>{{ 'PAGES.DASHBOARDS.12M' | translate }}</span>
                         </button>
                       </div>
                     </div>

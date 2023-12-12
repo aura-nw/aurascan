@@ -12,19 +12,19 @@
       class="button button-pill button-flat"
       [class.active]="filterButtons.includes(ContractRegisterType.CW20)"
       (click)="filterButton(ContractRegisterType.CW20)">
-      CW-20
+      {{ 'LABEL.CW-20' | translate }}
     </button>
     <button
       class="button button-pill button-flat"
       [class.active]="filterButtons.includes(ContractRegisterType.CW721)"
       (click)="filterButton(ContractRegisterType.CW721)">
-      CW-721
+      {{ 'LABEL.CW-721' | translate }}
     </button>
     <button
       class="button button-pill button-flat"
       [class.active]="filterButtons.includes(ContractRegisterType.CW4973)"
       (click)="filterButton(ContractRegisterType.CW4973)">
-      CW-4973
+      {{ 'LABEL.CW-4973' | translate }}
     </button>
     <button
       class="button button-pill button-flat"

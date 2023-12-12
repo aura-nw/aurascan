@@ -16,7 +16,9 @@
     <!-- Export data type -->
     <div class="row mb-6 align-items-center">
       <div class="col-12 col-lg-3 mb-4 mb-lg-0">
-        <span class="form-label body-02 text--gray-4 input-require">{{ 'PAGES.EXPORT_CSV.exportDataType' | translate }}</span>
+        <span class="form-label body-02 text--gray-4 input-require">{{
+          'PAGES.EXPORT_CSV.exportDataType' | translate
+        }}</span>
       </div>
       <div class="col-12 col-lg-9">
         <div class="form-group">
@@ -89,7 +91,7 @@
               autocomplete="off" />
           </div>
           <div *ngIf="getAddress?.value?.length > 0 && !isValidAddress" class="text--danger mt-2 caption fw-normal">
-            {{ "NOTICE.AURA_ADDRESS_INVALID" | translate }}
+            {{ 'NOTICE.AURA_ADDRESS_INVALID' | translate }}
           </div>
         </div>
       </div>
@@ -98,7 +100,9 @@
     <!-- Data range -->
     <div class="row mb-6 align-items-center">
       <div class="col-12 col-lg-3 mb-4 mb-lg-0">
-        <span class="form-label body-02 text--gray-4 input-require">{{ 'PAGES.EXPORT_CSV.dataRange' | translate }}</span>
+        <span class="form-label body-02 text--gray-4 input-require">{{
+          'PAGES.EXPORT_CSV.dataRange' | translate
+        }}</span>
       </div>
       <div class="col-12 col-lg-9">
         <div class="d-flex align-items-center">
@@ -121,7 +125,7 @@
               class="radio-box radio-box--dark"
               [checked]="!isFilterDate"
               (change)="changeType()" />
-            <label for="block" class="ml-2 pl-1 mb-0 text-justify">Block Height</label>
+            <label for="block" class="ml-2 pl-1 mb-0 text-justify">{{ 'LABEL.BLOCK_HEIGHT' | translate }}</label>
           </div>
         </div>
       </div>
@@ -193,25 +197,25 @@
         </div>
       </ng-container>
       <div *ngIf="!isValidBlock" class="text--danger mt-2 caption fw-normal">
-        "To Block" height need to be greater than "From Block" height
+        {{ 'PAGES.EXPORT_CSV.validBlock' | translate }}
       </div>
     </div>
 
     <div [class.aura-tooltip-contain]="!userEmail">
       <div class="aura-tooltip-object d-flex">
         <mat-slide-toggle formControlName="displayPrivate" [disabled]="!userEmail" class="csv-hint"> </mat-slide-toggle>
-        <span class="txt-toggle ml-2" [class.text--white]="userEmail"
-          >Include Private name tags in data downloaded</span
-        >
+        <span class="txt-toggle ml-2" [class.text--white]="userEmail">{{
+          'PAGES.EXPORT_CSV.includedPrivateNameTag' | translate
+        }}</span>
       </div>
-      <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
+      <app-tooltip-customize [content]="'PAGES.EXPORT_CSV.needLoginText' | translate"> </app-tooltip-customize>
     </div>
 
     <div id="box_recaptcha" class="mt-6"></div>
     <br />
     <div class="d-flex mb-6 justify-content-center justify-content-lg-end mt-3 mt-lg-0 button-group">
       <button class="button button--md button-pill button-outline" type="button" (click)="resetData()">
-        <span>Reset</span>
+        <span>{{ 'BUTTON.RESET' | translate }}</span>
       </button>
       <button
         class="button button--md button-outline--gradient button-pill button-flat btn-create ml-4"
@@ -224,7 +228,7 @@
           width="20"
           height="20"
           *ngIf="isDownload" />
-        <span class="text--white"> Download </span>
+        <span class="text--white">{{ 'BUTTON.DOWNLOAD' | translate }}</span>
       </button>
     </div>
   </form>

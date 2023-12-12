@@ -1,13 +1,17 @@
 <div class="d-flex justify-content-between align-items-center">
   <div class="button-switch-stage">
-    <button class="button" [class.active]="isActive" (click)="changeType(true)">Active</button>
-    <button class="button" [class.active]="!isActive" (click)="changeType(false)">Inactive</button>
+    <button class="button" [class.active]="isActive" (click)="changeType(true)">
+      {{ 'COMMON.ACTIVE' | translate }}
+    </button>
+    <button class="button" [class.active]="!isActive" (click)="changeType(false)">
+      {{ 'COMMON.INACTIVE' | translate }}
+    </button>
   </div>
   <button
     *ngIf="currentAddress"
     class="button button-outline button-outline--gradient button--md button-pill"
     (click)="openCreatePopup()">
-    <span>Add New Grant</span>
+    <span>{{ 'PAGES.FEE_GRANT.addNewGrant' | translate }}</span>
   </button>
   <button
     #connectButton
@@ -17,7 +21,7 @@
     data-bs-toggle="offcanvas"
     data-bs-target="#offcanvasWallet"
     aria-controls="offcanvasWallet">
-    <span>Add New Grant</span>
+    <span>{{ 'PAGES.FEE_GRANT.addNewGrant' | translate }}</span>
   </button>
 </div>
 
