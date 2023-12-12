@@ -141,7 +141,7 @@ export class ContractService extends CommonService {
           instantiate_hash
           name
           version
-          label     
+          label  
           cw721_contract {
             name
             symbol
@@ -149,6 +149,9 @@ export class ContractService extends CommonService {
           cw20_contract {
             name
             symbol
+            smart_contract {
+              address
+            }  
           }
           code {
             type

@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Observable, of, Subject } from 'rxjs';
@@ -15,8 +15,7 @@ import {
   repeat,
   take,
   takeLast,
-  takeUntil,
-  tap,
+  takeUntil
 } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -163,7 +162,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
         this.pageData.length = this.dataTable?.length;
       }
     } else {
-      // Get the frist time data init screen
+      // Get the first time data init screen
       this.getAllCW20Token()
         .pipe(takeLast(1))
         .subscribe({
@@ -190,9 +189,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     return {
                       coin_id: foundToken?.coin_id || '',
                       contract_address: item.smart_contract.address || '',
-                      name: item.name || '',
-                      symbol: item.symbol || '',
-                      image: item.marketing_info?.logo?.url ? item.marketing_info?.logo?.url : foundToken?.image || '',
+                      name: foundToken?.name || '',
+                      symbol: foundToken?.symbol || '',
+                      image: foundToken?.image ? foundToken?.image : item.marketing_info?.logo?.url || '',
                       holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
                       isHolderUp: changePercent >= 0,
                       holderChange: Math.abs(changePercent),
