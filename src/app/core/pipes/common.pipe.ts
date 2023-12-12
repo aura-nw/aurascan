@@ -175,7 +175,7 @@ export class convertSmallNumber implements PipeTransform {
 }
 
 @Pipe({ name: 'formatStringNumber' })
-export class formatStringNumber implements PipeTransform {
+export class FormatStringNumber implements PipeTransform {
   transform(valueString: string): any {
     if (valueString.toString().includes('.')) {
       valueString = valueString.toString().split('.')[0];

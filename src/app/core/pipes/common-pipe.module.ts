@@ -13,7 +13,7 @@ import {
   decodeData,
   displayTypeToolTip,
   formatDigit,
-  formatStringNumber,
+  FormatStringNumber,
   ImageURL,
   pipeCalDate,
   PipeCutString,
@@ -44,7 +44,7 @@ import { JsonPipe } from './json.pipe';
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    formatStringNumber,
+    FormatStringNumber,
   ],
   imports: [CommonModule],
   exports: [
@@ -68,7 +68,7 @@ import { JsonPipe } from './json.pipe';
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    formatStringNumber,
+    FormatStringNumber,
   ],
 })
 export class CommonPipeModule {}
