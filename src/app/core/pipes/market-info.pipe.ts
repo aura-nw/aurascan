@@ -1,14 +1,13 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TokenService} from 'src/app/core/services/token.service';
+import { Pipe, PipeTransform } from '@angular/core';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TokenService } from 'src/app/core/services/token.service';
 
-@Pipe({name: 'marketInfo'})
+@Pipe({ name: 'marketInfo' })
 export class MarketInfoPipe implements PipeTransform {
   image_s3 = this.env.imageUrl;
   defaultLogoToken = `${this.image_s3}images/icons/token-logo.png`;
 
-  constructor(private env: EnvironmentService, private token: TokenService) {
-  }
+  constructor(private env: EnvironmentService, private token: TokenService) {}
 
   transform(value: any, key?: 'logo' | 'name' | 'symbol'): any {
     let marketInfo = {
@@ -23,7 +22,7 @@ export class MarketInfoPipe implements PipeTransform {
 
     const tokenMarket = this.token.tokensMarket || [];
 
-    const {cw20_contract, ibc_denom} = value;
+    const { cw20_contract, ibc_denom } = value;
     if (cw20_contract) {
       marketInfo = {
         logo: cw20_contract?.marketing_info?.logo?.url || this.defaultLogoToken,
