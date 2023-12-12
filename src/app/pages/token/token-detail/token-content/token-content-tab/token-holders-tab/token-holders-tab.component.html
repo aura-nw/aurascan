@@ -69,7 +69,11 @@
                             (data[template.matColumnDef] | balanceOf : decimalValue) < 0.001 ||
                             (data[template.matColumnDef] | convertSmallNumber : decimalValue) >= 1000000
                           "
-                          [content]="data[template.matColumnDef] | convertSmallNumber : decimalValue | formatDigit : 2">
+                          [content]="
+                            (data[template.matColumnDef] | balanceOf : decimalValue) < 0.001
+                              ? (data[template.matColumnDef] | balanceOf : decimalValue)
+                              : (data[template.matColumnDef] | convertSmallNumber : decimalValue | formatStringNumber)
+                          ">
                         </app-tooltip-customize>
                       </div>
                     </ng-container>
@@ -103,8 +107,17 @@
                           [decimal]="decimalValue"
                           [tokenPrice]="tokenDetail?.price"></div>
                         <app-tooltip-customize
-                          *ngIf="+(tokenDetail.price * data['balance'] | balanceOf : decimalValue) >= 1000000"
-                          [content]="tokenDetail.price * data['balance'] | balanceOf : decimalValue | formatDigit : 2">
+                          *ngIf="
+                            (tokenDetail.price * data['balance'] | balanceOf : decimalValue) < 0.001 ||
+                            (tokenDetail.price * data['balance'] | convertSmallNumber : decimalValue) >= 1000000
+                          "
+                          [content]="
+                            (tokenDetail.price * data['balance'] | balanceOf : decimalValue) < 0.001
+                              ? (tokenDetail.price * data['balance'] | balanceOf : decimalValue)
+                              : (tokenDetail.price * data['balance']
+                                | convertSmallNumber : decimalValue
+                                | formatStringNumber)
+                          ">
                         </app-tooltip-customize>
                       </div>
 
