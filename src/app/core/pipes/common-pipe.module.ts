@@ -1,74 +1,68 @@
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {DateCustomPipe} from 'src/app/core/pipes/date-custom.pipe';
-import {IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe} from 'src/app/core/pipes/name-tag.pipe';
-import {CheckDisplayTooltip} from 'src/app/core/pipes/tooltip-display.pipe';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { DateCustomPipe } from 'src/app/core/pipes/date-custom.pipe';
+import { MarketInfoPipe } from 'src/app/core/pipes/market-info.pipe';
+import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from 'src/app/core/pipes/name-tag.pipe';
+import { CheckDisplayTooltip } from 'src/app/core/pipes/tooltip-display.pipe';
 import {
-  BalanceOf,
-  ConvertUauraToAura,
-  CustomDate,
-  ImageURL,
-  PipeCutString,
-  ReplaceIpfs,
-  StringEllipsis,
-  convertLogAmount,
-  convertSmallNumber,
-  decodeData,
-  displayTypeToolTip,
-  formatDigit,
-  pipeCalDate, convertStringNumber,
+  BalanceOfPipe,
+  ConvertLogAmountPipe,
+  ConvertSmallNumberPipe,
+  CustomDatePipe,
+  CutStringPipe,
+  DecodeDataPipe,
+  DisplayTypeToolTipPipe,
+  FormatDigitPipe,
+  FormatStringNumberPipe,
+  ImageURLPipe,
+  ReplaceIpfsPipe,
+  StringEllipsisPipe,
 } from './common.pipe';
-import {JsonPipe} from './json.pipe';
-import {MarketInfoPipe} from 'src/app/core/pipes/market-info.pipe';
+import { JsonPipe } from './json.pipe';
 
 @NgModule({
   declarations: [
-    pipeCalDate,
     JsonPipe,
-    PipeCutString,
-    ImageURL,
-    CustomDate,
-    StringEllipsis,
-    BalanceOf,
-    ReplaceIpfs,
-    ConvertUauraToAura,
-    convertLogAmount,
-    decodeData,
-    displayTypeToolTip,
-    convertSmallNumber,
-    formatDigit,
+    CutStringPipe,
+    ImageURLPipe,
+    CustomDatePipe,
+    StringEllipsisPipe,
+    BalanceOfPipe,
+    ReplaceIpfsPipe,
+    ConvertLogAmountPipe,
+    DecodeDataPipe,
+    DisplayTypeToolTipPipe,
+    ConvertSmallNumberPipe,
+    FormatDigitPipe,
     NameTagPipe,
     MarketInfoPipe,
     CheckDisplayTooltip,
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    convertStringNumber
+    FormatStringNumberPipe,
   ],
   imports: [CommonModule],
   exports: [
-    pipeCalDate,
     JsonPipe,
-    PipeCutString,
-    ImageURL,
-    CustomDate,
-    StringEllipsis,
-    BalanceOf,
-    ReplaceIpfs,
-    ConvertUauraToAura,
-    convertLogAmount,
-    decodeData,
-    displayTypeToolTip,
-    convertSmallNumber,
-    formatDigit,
+    CutStringPipe,
+    ImageURLPipe,
+    CustomDatePipe,
+    StringEllipsisPipe,
+    BalanceOfPipe,
+    ReplaceIpfsPipe,
+    ConvertLogAmountPipe,
+    DecodeDataPipe,
+    DisplayTypeToolTipPipe,
+    ConvertSmallNumberPipe,
+    FormatDigitPipe,
     NameTagPipe,
     MarketInfoPipe,
     CheckDisplayTooltip,
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    convertStringNumber
+    FormatStringNumberPipe,
   ],
 })
-export class CommonPipeModule {
-}
+export class CommonPipeModule {}
