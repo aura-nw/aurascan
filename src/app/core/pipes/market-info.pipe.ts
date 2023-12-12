@@ -38,8 +38,8 @@ export class MarketInfoPipe implements PipeTransform {
       if (tokenCw20) {
         marketInfo = {
           logo: tokenCw20.image || marketInfo.logo,
-          symbol: tokenCw20.name || marketInfo.name,
-          name: tokenCw20.symbol || marketInfo.symbol,
+          symbol: tokenCw20.symbol || marketInfo.symbol,
+          name: tokenCw20.name || marketInfo.name,
         };
       }
     } else if (ibc_denom) {
@@ -48,8 +48,8 @@ export class MarketInfoPipe implements PipeTransform {
       if (tokenIbc) {
         marketInfo = {
           logo: tokenIbc.image || marketInfo.logo,
-          symbol: tokenIbc.name || marketInfo.name,
-          name: tokenIbc.symbol || marketInfo.symbol,
+          symbol: tokenIbc.symbol || marketInfo.symbol,
+          name: tokenIbc.name || marketInfo.name,
         };
       }
     }
