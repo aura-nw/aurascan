@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-staking-info',
@@ -32,7 +31,7 @@ export class StakingInfoComponent implements OnChanges {
   clicked = false;
   isDisableClaim = true;
 
-  constructor(public commonService: CommonService) {}
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSourceWallet = new MatTableDataSource(this.dataUserDelegate?.delegations);

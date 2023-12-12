@@ -79,6 +79,7 @@ export class IBCService extends CommonService {
           where: { counterparty_chain_id: { _ilike: $chain_name } }
           limit: $limit
           offset: $offset
+          order_by: { total_asset_transfer: desc }
         ) {
           chain: counterparty_chain_id
           total_asset_transfer
@@ -299,7 +300,7 @@ export class IBCService extends CommonService {
             type: {_eq: $type}
             denom: {_eq: $denom}
           }
-          order_by: {amount: desc}
+          order_by: {total_messages: desc}
         ) {
           denom
           total_messages

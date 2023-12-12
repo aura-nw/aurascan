@@ -11,6 +11,11 @@ body {
   cursor: pointer !important;
 }
 
+
+.cursor-text {
+  cursor: text !important;
+}
+
 .disabled-pointer {
   pointer-events: none;
 }

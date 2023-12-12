@@ -4,8 +4,9 @@ import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
   MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -45,6 +46,7 @@ export class PopupAddGrantComponent implements OnInit {
     private toastr: NgxToastrService,
     private feeGrantService: FeeGrantService,
     private dialog: MatDialog,
+    public translate: TranslateService,
     private commonService: CommonService,
     private mappingErrorService: MappingErrorService,
   ) {}
@@ -180,7 +182,6 @@ export class PopupAddGrantComponent implements OnInit {
               },
               senderAddress: granter,
               network: this.environmentService.chainInfo,
-              signingType: ESigningType.Keplr,
               chainId: this.walletService.chainId,
             });
 

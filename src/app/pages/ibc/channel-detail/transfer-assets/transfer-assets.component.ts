@@ -11,7 +11,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
-import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -30,11 +29,6 @@ export class TransferAssetsComponent {
     { matColumnDef: 'total_messages', headerCellDef: 'Messages' },
     { matColumnDef: 'amount', headerCellDef: 'Sending amount' },
   ];
-  pageIBCSend: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
   dataSourceMobSend: any[];
   displayedColumnsIBC: string[] = this.templatesIBC.map((dta) => dta.matColumnDef);
   isLoadingIBCSend = true;
@@ -49,15 +43,12 @@ export class TransferAssetsComponent {
     { matColumnDef: 'total_messages', headerCellDef: 'Messages' },
     { matColumnDef: 'amount', headerCellDef: 'Receiving amount' },
   ];
-  pageIBCReceive: PageEvent = {
-    length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
-    pageIndex: PAGE_EVENT.PAGE_INDEX,
-  };
   dataSourceMobReceive: any[];
   isLoadingIBCReceive = true;
   textSearchReceive;
   isSearchReceive = false;
+  lstSendingRaw = [];
+  lstSendingReceive = [];
 
   errTxtSend: string;
   errTxtReceive: string;
@@ -72,7 +63,6 @@ export class TransferAssetsComponent {
   assetName = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    public global: Globals,
     private environmentService: EnvironmentService,
     private ibcService: IBCService,
     private commonService: CommonService,
@@ -86,13 +76,6 @@ export class TransferAssetsComponent {
     });
     this.getTransferSend();
     this.getTransferReceive();
-
-    this.searchSubject
-      .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.searchData();
-      });
   }
 
   ngOnDestroy(): void {
@@ -111,8 +94,8 @@ export class TransferAssetsComponent {
       next: (res) => {
         if (res.view_ibc_channel_detail_statistic?.length > 0) {
           const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
+          this.lstSendingRaw = txs;
           this.dataIBCSending.data = [...txs];
-          this.pageIBCSend.length = txs?.length || 0;
         }
       },
       error: (e) => {
@@ -129,21 +112,34 @@ export class TransferAssetsComponent {
     });
   }
 
-  searchData() {
-    let result;
-    if (this.isSearchReceive) {
-      result =
-        this.dataIBCReceiving.data?.filter((k) =>
-          k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchReceive?.toLowerCase()),
-        ) || [];
-      this.dataIBCReceiving.data = [...result];
-    } else {
-      result =
-        this.dataIBCSending.data?.filter((k) =>
-          k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchSend?.toLowerCase()),
-        ) || [];
-      this.dataIBCSending.data = [...result];
+  searchSend() {
+    if (!this.textSearchSend) {
+      this.dataIBCSending.data = this.lstSendingRaw;
+      return;
     }
+
+    const result =
+      this.lstSendingRaw?.filter(
+        (k) =>
+          k['dataDenom']?.name?.toLowerCase().includes(this.textSearchSend?.toLowerCase()) ||
+          k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchSend?.toLowerCase()),
+      ) || [];
+    this.dataIBCSending.data = [...result];
+  }
+
+  searchReceive() {
+    if (!this.textSearchReceive) {
+      this.dataIBCReceiving.data = this.lstSendingReceive;
+      return;
+    }
+
+    const result =
+      this.lstSendingReceive?.filter(
+        (k) =>
+          k['dataDenom']?.name?.toLowerCase().includes(this.textSearchReceive?.toLowerCase()) ||
+          k['dataDenom']?.symbol?.toLowerCase().includes(this.textSearchReceive?.toLowerCase()),
+      ) || [];
+    this.dataIBCReceiving.data = [...result];
   }
 
   getTransferReceive() {
@@ -156,9 +152,8 @@ export class TransferAssetsComponent {
       next: (res) => {
         if (res.view_ibc_channel_detail_statistic?.length > 0) {
           const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
-
+          this.lstSendingReceive = txs;
           this.dataIBCReceiving.data = [...txs];
-          this.pageIBCReceive.length = txs?.length || 0;
         }
       },
       error: (e) => {
@@ -182,16 +177,6 @@ export class TransferAssetsComponent {
     } else {
       this.textSearchSend = '';
       this.getTransferSend();
-    }
-  }
-
-  onKeyUp(isSeachReceive = false) {
-    if (isSeachReceive) {
-      this.isSearchReceive = true;
-      this.searchSubject.next(this.textSearchReceive);
-    } else {
-      this.isSearchReceive = false;
-      this.searchSubject.next(this.textSearchSend);
     }
   }
 

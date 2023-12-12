@@ -407,7 +407,7 @@
                         height="16px"
                         *ngIf="item.effected"
                         class="mr-1" />
-                      {{ commonService.getDateValue(item.time)[0] }}
+                      {{ (item.time | dateCustom)[0] }}
                     </div>
                     <div class="d-flex justify-content-end align-items-center ml-2">
                       <span>({{ item.time | customDate : 'yyyy-MM-dd' }}</span>

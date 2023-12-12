@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
@@ -34,7 +33,6 @@ export class TokenInventoryComponent implements OnInit {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private router: Router,
-    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

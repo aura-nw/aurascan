@@ -1,5 +1,5 @@
 <div class="d-lg-flex justify-content-between align-items-center">
-  <div class="text--white fw-700 h1">IBC Relayers</div>
+  <div class="text--white fw-semibold h1">IBC Relayers</div>
   <div class="text--gray-4 d-flex align-items-center mt-2 mt-lg-0 body" *ngIf="timeUpdate">
     Updated at
     <span class="ml-1">{{ timeUpdate | customDate : 'yyyy-MM-dd' }}</span>
@@ -136,19 +136,19 @@
             <div class="card__content text--white">
               <div class="d-flex align-items-center mb-2 justify-content-between">
                 <div class="body text--gray-4 label__content">Total</div>
-                <div>{{ data.total_asset_transfer }}</div>
+                <div class="text--gray-1">{{ data.total_asset_transfer }}</div>
               </div>
               <div class="d-flex align-items-center mb-2 justify-content-between">
                 <div class="body text--gray-4 label__content">Receive</div>
-                <div>{{ data.receive_asset_transfer }}</div>
+                <div class="text--gray-1">{{ data.receive_asset_transfer }}</div>
               </div>
               <div class="d-flex align-items-center mb-2 justify-content-between">
                 <div class="body text--gray-4 label__content">Send</div>
-                <div>{{ data.send_asset_transfer }}</div>
+                <div class="text--gray-1">{{ data.send_asset_transfer }}</div>
               </div>
               <div class="d-flex align-items-center justify-content-between">
                 <div class="body text--gray-4 label__content">Channels</div>
-                <div>{{ data.open_channel || 0 }}/{{ data.total_channel || 0 }}</div>
+                <div class="text--gray-1">{{ data.open_channel || 0 }}/{{ data.total_channel || 0 }}</div>
               </div>
             </div>
           </div>

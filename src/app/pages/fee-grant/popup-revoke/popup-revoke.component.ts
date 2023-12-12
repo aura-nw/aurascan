@@ -3,7 +3,7 @@ import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
-import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -45,7 +45,6 @@ export class PopupRevokeComponent implements OnInit {
         },
         senderAddress: granter,
         network: this.environmentService.chainInfo,
-        signingType: ESigningType.Keplr,
         chainId: this.walletService.chainId,
       });
 

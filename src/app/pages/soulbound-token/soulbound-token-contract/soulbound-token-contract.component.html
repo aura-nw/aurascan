@@ -8,9 +8,9 @@
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Contract</div>
           <div class="ml-2 contract-address h4 mb-0">
             <span class="d-lg-none body-mob fw-semibold">{{
-              commonService.setNameTag(contractAddress) | stringEllipsis : 8
+              contractAddress | nameTag | stringEllipsis : 8
             }}</span>
-            <span class="d-none d-lg-block fw-semibold">{{ commonService.setNameTag(contractAddress) }}</span>
+            <span class="d-none d-lg-block fw-semibold">{{ contractAddress | nameTag }}</span>
           </div>
         </div>
         <button

@@ -55,9 +55,6 @@ import { WatchListComponent } from './watchlist/watchlist.component';
   ],
   providers: [
     UntypedFormBuilder,
-    UserService,
-    NameTagService,
-    WatchListService,
     provideEnvironmentNgxMask(MASK_CONFIG),
   ],
 })

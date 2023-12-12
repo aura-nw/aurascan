@@ -6,9 +6,8 @@ import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.consta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
-import { CommonService } from 'src/app/core/services/common.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { convertDataTransaction, Globals } from 'src/app/global/global';
+import { convertDataTransaction } from 'src/app/global/global';
 
 @Component({
   selector: 'app-contracts-transactions',
@@ -57,8 +56,6 @@ export class ContractsTransactionsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private transactionService: TransactionService,
-    private commonService: CommonService,
-    private global: Globals,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
@@ -70,7 +67,6 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.commonService['listNameTag'] = this.commonService['listNameTag'] || this.global?.listNameTag;
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractInfo.contractsAddress = this.contractAddress;
     this.payload['value'] = this.contractAddress;

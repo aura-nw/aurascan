@@ -3,34 +3,40 @@
   <div class="d-flex justify-content-center mt-lg-13 mt-6 mb-9">
     <div class="p-0 box-chain">
       <div class="box-connect d-lg-flex justify-content-between align-items-center">
-        <div class="box-connect-chain d-flex justify-content-lg-center align-items-center">
+        <div class="box-connect-chain d-flex align-items-center">
           <div class="d-flex justify-content-lg-center align-items-center">
             <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
-            <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
+            <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
-                <span class="h2 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
-                  chainInfo.chainName | cutStringPipe : maxDisplayChar
-                }}</span>
+                <span
+                  class="body-01 body-02-mob fw-semibold text--white mb-1 {{
+                    chainInfo.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
+                  }}"
+                  >{{ chainInfo.chainName | cutStringPipe : maxDisplayChar }}</span
+                >
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
               </div>
               <div>{{ chainInfo.chainId }}</div>
             </div>
           </div>
         </div>
-        <div class="box-connected justify-content-center align-items-center h2 d-none d-lg-flex">
+        <div class="box-connected justify-content-center align-items-center h5 d-none d-lg-flex">
           <div class="fw-semibold">Openned</div>
         </div>
-        <div class="box-connect-chain mt-6 mt-lg-0 d-flex justify-content-lg-center align-items-center">
+        <div class="box-connect-chain mt-6 mt-lg-0 d-flex align-items-center pl-lg-9">
           <div class="d-flex justify-content-lg-center align-items-center">
             <img
               [src]="counterInfo?.chainImage ? counterInfo?.chainImage : 'assets/images/logo/auraTitleLogo.png'"
               alt=""
               class="img-chain" />
-            <div class="ml-2 ml-lg-5 body text--gray-11 caption-mob fw-normal">
+            <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
-                <span class="h2 body-02-mob fw-semibold text--white mb-1 aura-tooltip-object">{{
-                  counterInfo?.chainName | cutStringPipe : maxDisplayChar
-                }}</span>
+                <span
+                  class="body-01 body-02-mob fw-semibold text--white mb-1 {{
+                    counterInfo?.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
+                  }}"
+                  >{{ counterInfo?.chainName | cutStringPipe : maxDisplayChar }}</span
+                >
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
               </div>
               <div>{{ counterInfo?.chainId }}</div>
@@ -57,9 +63,7 @@
         <div class="item">
           Operating Since
           <div class="body-01 body-mob text--white fw-semibold mt-1">
-            {{
-              !channelDetail.operatingSince ? '-' : commonService.getDateValue(channelDetail.operatingSince, false)[0]
-            }}
+            {{ !channelDetail.operatingSince ? '-' : (channelDetail.operatingSince | dateCustom)[0] }}
           </div>
         </div>
       </div>
@@ -100,7 +104,7 @@
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <div *ngSwitchCase="'timestamp'">
-                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                      {{ (data[template.matColumnDef] | dateCustom)[0] }}
                     </div>
                     <a
                       *ngSwitchCase="'tx_hash'"
@@ -172,7 +176,7 @@
                     </div>
                     <div *ngSwitchCase="'fee'">
                       {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                      <span class="text--white">{{ coinInfo.coinDenom }}</span>
+                      <span>{{ coinInfo.coinDenom }}</span>
                     </div>
                     <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                   </ng-container>
@@ -212,7 +216,7 @@
             {
               label: 'Fee',
               class: 'text--gray-1 body-02-mob',
-              info: (data.fee | mask : 'separator.6') + '<span class=text--white> ' + coinInfo.coinDenom + '</span>'
+              info: (data.fee | mask : 'separator.6') + '<span> ' + coinInfo.coinDenom + '</span>'
             }
           ]"></app-card-mob-channel>
       </div>

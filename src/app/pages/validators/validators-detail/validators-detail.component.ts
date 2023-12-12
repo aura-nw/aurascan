@@ -14,7 +14,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { Globals, convertDataBlock } from 'src/app/global/global';
+import { convertDataBlock } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 const marked = require('marked');
 @Component({
@@ -99,7 +99,6 @@ export class ValidatorsDetailComponent implements OnInit {
     private validatorService: ValidatorService,
     private blockService: BlockService,
     public commonService: CommonService,
-    private global: Globals,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
@@ -107,7 +106,6 @@ export class ValidatorsDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.commonService['listNameTag'] = this.global?.listNameTag;
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.getDetail(true);
     this.timerGetBlock = setInterval(() => {

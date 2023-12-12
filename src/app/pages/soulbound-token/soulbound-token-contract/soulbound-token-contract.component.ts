@@ -14,6 +14,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 
 @Component({
   selector: 'app-soulbound-token-contract',
@@ -53,6 +54,7 @@ export class SoulboundTokenContractComponent implements OnInit {
     private soulboundService: SoulboundService,
     private walletService: WalletService,
     public commonService: CommonService,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -121,7 +123,7 @@ export class SoulboundTokenContractComponent implements OnInit {
       status: this.selectedType,
     };
 
-    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       payload['keyword'] = addressNameTag;
     }

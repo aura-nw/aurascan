@@ -210,7 +210,7 @@
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'timestamp'">
-                            {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                            {{ (data[template.matColumnDef] | dateCustom)[0] }}
                           </div>
                           <a
                             *ngSwitchCase="'block_hash'"
@@ -248,7 +248,7 @@
                       {
                         label: data.height,
                         class: 'body-01 text--gray-1',
-                        info: commonService.getDateValue(data.timestamp)[0]
+                        info: (data.timestamp | dateCustom)[0]
                       },
                       { label: 'LABEL.TXS' | translate, class: 'body-01 text--gray-1', info: data.num_txs.toString() },
                       {
@@ -383,14 +383,14 @@
                     [content]="[
                       {
                         label: '',
-                        class: !commonService.checkDisplayTooltip(data.delegator_address)
-                          ? commonService.checkPrivate(data.delegator_address)
+                        class: !(data.delegator_address | checkDisplayTooltip)
+                          ? (data.delegator_address | isPrivateNameTag)
                             ? 'name-tag private-name-tag text--primary'
                             : 'name-tag text--primary'
                           : 'text--primary',
-                        info: !commonService.checkDisplayTooltip(data.delegator_address)
-                          ? (commonService.setNameTag(data.delegator_address) | cutStringPipe : 16)
-                          : (commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6)
+                        info: !(data.delegator_address | checkDisplayTooltip)
+                          ? (data.delegator_address | nameTag | cutStringPipe : 16)
+                          : (data.delegator_address | nameTag | cutStringPipe : 6 : 6)
                       },
                       {
                         label: 'COMMON.AMOUNT' | translate,
@@ -442,7 +442,7 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <div *ngSwitchCase="'timestamp'">
-                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                              {{ (data[template.matColumnDef] | dateCustom)[0] }}
                             </div>
                             <a
                               *ngSwitchCase="'tx_hash'"

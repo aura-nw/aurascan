@@ -4,7 +4,6 @@ import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';
-import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { convertDataTransactionSimple } from '../../../app/global/global';
 
@@ -36,7 +35,6 @@ export class TransactionComponent implements OnInit {
 
   constructor(
     private transactionService: TransactionService,
-    public commonService: CommonService,
     private environmentService: EnvironmentService,
   ) {}
 

@@ -209,7 +209,7 @@
               <span class="text--white ml-1">{{ denom }}</span>
             </div>
             <div class="text--gray-5">
-              {{ commonService.getDateValue(validator.completion_time, false)[1] }}
+              {{ (validator.completion_time | dateCustom :  false)[1] }}
             </div>
           </div>
         </div>
@@ -242,7 +242,7 @@
               </div>
             </div>
             <div class="body-02 text--gray-5 text-end">
-              {{ commonService.getDateValue(validator.completion_time, false)[1] }}
+              {{ (validator.completion_time | dateCustom : false)[1] }}
             </div>
           </div>
         </ng-container>

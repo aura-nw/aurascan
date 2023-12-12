@@ -40,7 +40,8 @@
               <img
                 (click)="expandMedia()"
                 *ngIf="
-                  (nftType === MEDIA_TYPE.IMG || nftDetail?.media_info?.onchain?.metadata?.image) && isError === false
+                  (nftType === MEDIA_TYPE.IMG || (nftDetail?.media_info?.onchain?.metadata?.image && !animationUrl)) &&
+                  isError === false
                 "
                 (error)="error()"
                 [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
@@ -314,7 +315,7 @@
                   </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'timestamp'">
-                  {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
                 </ng-container>
                 <ng-container *ngSwitchCase="'type'">
                   <div class="aura-status text-capitalize">

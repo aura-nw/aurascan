@@ -1,11 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TranslateService } from '@ngx-translate/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { PageEventType } from '../../../../../app/core/constants/account.enum';
 import { TableTemplate } from '../../../../core/models/common.model';
-import { CommonService } from '../../../../core/services/common.service';
 
 @Component({
   selector: 'app-account-detail-table',
@@ -27,7 +27,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges {
   dataSourceMobile: any[];
 
   constructor(
-    public commonService: CommonService,
+    public translate: TranslateService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
   ) {}

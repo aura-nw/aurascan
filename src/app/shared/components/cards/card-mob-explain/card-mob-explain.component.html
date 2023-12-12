@@ -27,8 +27,7 @@
         *ngIf="!data.isAmount"
         class="{{ data.class }}"
         [class.private-name-tag]="
-          (data.label === ('LABEL.SENDER' | translate) || data.label === 'Recipient') &&
-          commonService.checkPrivate(data['address'])
+          (data.label === ('LABEL.SENDER' | translate) || data.label === 'Recipient') && (data['address'] | isPrivateNameTag)
         "
         [innerHTML]="data.info"></div>
       <div *ngIf="data.isAmount" class="{{ data.class }}">

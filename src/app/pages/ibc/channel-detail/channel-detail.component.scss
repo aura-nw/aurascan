@@ -9,11 +9,10 @@
       .item {
         background: linear-gradient(110.97deg, #262838 0%, #2e2e38 97.13%);
         padding: 12px 16px;
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         margin-bottom: 8px;
         @media (min-width: 992px) {
           padding: 16px 24px;
-          font-size: 1.4rem;
         }
       }
     }
@@ -33,10 +32,7 @@
     top: 50%;
     left: 50%;
     transform: translateX(-50%);
-    width: 49%;
-    @media (min-width: 992px) {
-      width: 38%;
-    }
+    width: 390px;
     &::before,
     &::after {
       content: '';
@@ -104,7 +100,7 @@
   }
   @media (min-width: 912px) {
     height: 84px;
-    padding: 16px 16px 16px 36px;
+    padding: 16px;
     width: 332px;
     .img-chain {
       width: 48px;

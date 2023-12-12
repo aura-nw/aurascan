@@ -6,6 +6,7 @@ import {
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -13,9 +14,9 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PopupAddGrantComponent } from 'src/app/pages/fee-grant/popup-add-grant/popup-add-grant.component';
@@ -66,7 +67,7 @@ export class MyGranteesComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    public commonService: CommonService,
+    public translate: TranslateService,
     private environmentService: EnvironmentService,
     private dialog: MatDialog,
     private feeGrantService: FeeGrantService,
@@ -74,6 +75,7 @@ export class MyGranteesComponent implements OnInit {
     private walletService: WalletService,
     private mappingErrorService: MappingErrorService,
     private router: Router,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit() {
@@ -129,7 +131,7 @@ export class MyGranteesComponent implements OnInit {
 
   getListGrant() {
     let keySearch = (this.textSearch = this.textSearch?.trim());
-    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
     }
