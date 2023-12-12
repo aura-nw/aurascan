@@ -1,15 +1,15 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import axios from 'axios';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
-import { IResponsesTemplates } from 'src/app/core/models/common.model';
-import { SmartContractListReq } from 'src/app/core/models/contract.model';
-import { LENGTH_CHARACTER } from '../constants/common.constant';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
-import { NameTagService } from './name-tag.service';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {LCD_COSMOS} from 'src/app/core/constants/url.constant';
+import {IResponsesTemplates} from 'src/app/core/models/common.model';
+import {SmartContractListReq} from 'src/app/core/models/contract.model';
+import {LENGTH_CHARACTER} from '../constants/common.constant';
+import {EnvironmentService} from '../data-services/environment.service';
+import {CommonService} from './common.service';
+import {NameTagService} from './name-tag.service';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -32,15 +32,15 @@ export class ContractService extends CommonService {
   }
 
   getListContract({
-    codeId,
-    creator,
-    address,
-    name,
-    keyword,
-    limit,
-    offset,
-    contractType,
-  }: {
+                    codeId,
+                    creator,
+                    address,
+                    name,
+                    keyword,
+                    limit,
+                    offset,
+                    contractType,
+                  }: {
     codeId?: number;
     creator?: string;
     address?: string;
@@ -141,7 +141,7 @@ export class ContractService extends CommonService {
           instantiate_hash
           name
           version
-          label     
+          label  
           cw721_contract {
             name
             symbol
@@ -149,6 +149,9 @@ export class ContractService extends CommonService {
           cw20_contract {
             name
             symbol
+            smart_contract {
+              address
+            }  
           }
           code {
             type

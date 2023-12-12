@@ -1,11 +1,11 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import * as _ from 'lodash';
-import { filter, take } from 'rxjs/operators';
-import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ContractService } from 'src/app/core/services/contract.service';
-import { TokenService } from 'src/app/core/services/token.service';
-import { Globals } from '../../../../global/global';
+import {filter, take} from 'rxjs/operators';
+import {ContractRegisterType} from 'src/app/core/constants/contract.enum';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {ContractService} from 'src/app/core/services/contract.service';
+import {TokenService} from 'src/app/core/services/token.service';
+import {Globals} from '../../../../global/global';
 
 @Component({
   selector: 'app-contracts-overview-card',
@@ -26,7 +26,8 @@ export class ContractsOverviewCardComponent implements OnChanges {
     private environmentService: EnvironmentService,
     private contractService: ContractService,
     private tokenService: TokenService,
-  ) {}
+  ) {
+  }
 
   async ngOnChanges() {
     const balanceReq = await this.contractService.getContractBalance(this.contractDetail.address);
@@ -39,7 +40,6 @@ export class ContractsOverviewCardComponent implements OnChanges {
       .subscribe((res) => {
         if (res?.length > 0) {
           const value = res.find((token) => token.contract_address === this.contractDetail?.address);
-
           this.verifiedStatus = value?.verify_status;
           this.verifiedText = value?.verifiedText;
         }

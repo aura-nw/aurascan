@@ -1,11 +1,11 @@
-import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
-import { TranslateService } from '@ngx-translate/core';
+import {DatePipe} from '@angular/common';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort, Sort} from '@angular/material/sort';
+import {TranslateService} from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { Observable, of, Subject } from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -18,13 +18,13 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TokenService } from 'src/app/core/services/token.service';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE } from '../../../../core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
-import { TableTemplate } from '../../../../core/models/common.model';
-import { Globals } from '../../../../global/global';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TokenService} from 'src/app/core/services/token.service';
+import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
+import {DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE} from '../../../../core/constants/common.constant';
+import {MAX_LENGTH_SEARCH_TOKEN} from '../../../../core/constants/token.constant';
+import {TableTemplate} from '../../../../core/models/common.model';
+import {Globals} from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw20',
@@ -35,14 +35,14 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
-    { matColumnDef: 'token', headerCellDef: 'name' },
-    { matColumnDef: 'price', headerCellDef: 'price' },
-    { matColumnDef: 'change', headerCellDef: 'change' },
-    { matColumnDef: 'volume', headerCellDef: 'volume' },
-    { matColumnDef: 'circulating_market_cap', headerCellDef: 'circulatingMarketCap' },
-    { matColumnDef: 'onChainMarketCap', headerCellDef: 'onChainMarketCap' },
-    { matColumnDef: 'holders', headerCellDef: 'holders' },
+    {matColumnDef: 'id', headerCellDef: 'id'},
+    {matColumnDef: 'token', headerCellDef: 'name'},
+    {matColumnDef: 'price', headerCellDef: 'price'},
+    {matColumnDef: 'change', headerCellDef: 'change'},
+    {matColumnDef: 'volume', headerCellDef: 'volume'},
+    {matColumnDef: 'circulating_market_cap', headerCellDef: 'circulatingMarketCap'},
+    {matColumnDef: 'onChainMarketCap', headerCellDef: 'onChainMarketCap'},
+    {matColumnDef: 'holders', headerCellDef: 'holders'},
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
@@ -71,7 +71,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private datePipe: DatePipe,
-  ) {}
+  ) {
+  }
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
@@ -163,7 +164,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
         this.pageData.length = this.dataTable?.length;
       }
     } else {
-      // Get the frist time data init screen
+      // Get the first time data init screen
       this.getAllCW20Token()
         .pipe(takeLast(1))
         .subscribe({
@@ -190,9 +191,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     return {
                       coin_id: foundToken?.coin_id || '',
                       contract_address: item.smart_contract.address || '',
-                      name: item.name || '',
-                      symbol: item.symbol || '',
-                      image: item.marketing_info?.logo?.url ? item.marketing_info?.logo?.url : foundToken?.image || '',
+                      name: foundToken?.name || '',
+                      symbol: foundToken?.symbol || '',
+                      image: foundToken?.image ? foundToken?.image : item.marketing_info?.logo?.url || '',
                       holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
                       isHolderUp: changePercent >= 0,
                       holderChange: Math.abs(changePercent),
