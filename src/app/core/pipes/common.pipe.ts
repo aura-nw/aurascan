@@ -96,13 +96,6 @@ export class ReplaceIpfsPipe implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'convertUauraToAura' })
-export class ConvertUauraToAuraPipe implements PipeTransform {
-  transform(value: number, powNum?: number): number {
-    return value / Math.pow(10, powNum);
-  }
-}
-
 @Pipe({ name: 'convertLogAmount' })
 export class ConvertLogAmountPipe implements PipeTransform {
   constructor(private commonService: CommonService, private mask: NgxMaskPipe) {}
