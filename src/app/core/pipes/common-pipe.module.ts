@@ -1,25 +1,26 @@
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {DateCustomPipe} from 'src/app/core/pipes/date-custom.pipe';
-import {IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe} from 'src/app/core/pipes/name-tag.pipe';
-import {CheckDisplayTooltip} from 'src/app/core/pipes/tooltip-display.pipe';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { DateCustomPipe } from 'src/app/core/pipes/date-custom.pipe';
+import { MarketInfoPipe } from 'src/app/core/pipes/market-info.pipe';
+import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from 'src/app/core/pipes/name-tag.pipe';
+import { CheckDisplayTooltip } from 'src/app/core/pipes/tooltip-display.pipe';
 import {
   BalanceOf,
-  ConvertUauraToAura,
-  CustomDate,
-  ImageURL,
-  PipeCutString,
-  ReplaceIpfs,
-  StringEllipsis,
   convertLogAmount,
   convertSmallNumber,
+  ConvertUauraToAura,
+  CustomDate,
   decodeData,
   displayTypeToolTip,
   formatDigit,
-  pipeCalDate, convertStringNumber,
+  formatStringNumber,
+  ImageURL,
+  pipeCalDate,
+  PipeCutString,
+  ReplaceIpfs,
+  StringEllipsis,
 } from './common.pipe';
-import {JsonPipe} from './json.pipe';
-import {MarketInfoPipe} from 'src/app/core/pipes/market-info.pipe';
+import { JsonPipe } from './json.pipe';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,7 @@ import {MarketInfoPipe} from 'src/app/core/pipes/market-info.pipe';
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    convertStringNumber
+    formatStringNumber,
   ],
   imports: [CommonModule],
   exports: [
@@ -67,8 +68,7 @@ import {MarketInfoPipe} from 'src/app/core/pipes/market-info.pipe';
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    convertStringNumber
+    formatStringNumber,
   ],
 })
-export class CommonPipeModule {
-}
+export class CommonPipeModule {}
