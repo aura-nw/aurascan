@@ -21,7 +21,7 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'assets'">
                         <div class="d-flex align-items-center">
-                          <img class="rounded-circle" [src]="data | marketInfo : 'logo'" width="20" height="20" />
+                          <img class="rounded-circle" [src]="data | marketInfo : 'logo'" width="20" height="20"/>
                           <div class="ml-3 d-flex transfer-token-info">
                             <div class="aura-tooltip-contain">
                               <span
@@ -63,14 +63,23 @@
                             *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) < 0.001">
                             {{ '<0,001' }}
                           </div>
-                          <app-tooltip-customize
-                            [content]="data[template.matColumnDef] | convertSmallNumber : data.decimal">
-                          </app-tooltip-customize>
-                          <span
-                            *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) >= 0.001"
-                            class="body-02"
+
+                          <div
+                            class="aura-tooltip-object body-02"
+                            [class.cursor-text]="
+                              +(data[template.matColumnDef] | balanceOf : data.decimal) < 1000000
+                            "
                             [appBigNumber]="data[template.matColumnDef]"
-                            [decimal]="data.decimal"></span>
+                            [decimal]="data.decimal"></div>
+                          <app-tooltip-customize
+                            *ngIf="
+                              (data[template.matColumnDef] | balanceOf : data.decimal) < 0.001 ||
+                              (data[template.matColumnDef] | convertSmallNumber : data.decimal) >= 1000000
+                              "
+                            [content]="((data[template.matColumnDef] | balanceOf : data.decimal) < 0.001) ? 
+                                  (data[template.matColumnDef] | balanceOf : data.decimal) :
+                                  (data[template.matColumnDef] | convertSmallNumber : data.decimal | convertStringNumber)">
+                          </app-tooltip-customize>
                         </div>
                       </ng-container>
 

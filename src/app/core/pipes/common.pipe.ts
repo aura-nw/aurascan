@@ -1,15 +1,15 @@
-import { formatDate, formatNumber } from '@angular/common';
-import { Pipe, PipeTransform } from '@angular/core';
+import {formatDate, formatNumber} from '@angular/common';
+import {Pipe, PipeTransform} from '@angular/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { NgxMaskPipe } from 'ngx-mask';
-import { TYPE_TRANSACTION } from '../constants/transaction.constant';
-import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from '../services/common.service';
-import { balanceOf } from '../utils/common/parsing';
+import {NgxMaskPipe} from 'ngx-mask';
+import {TYPE_TRANSACTION} from '../constants/transaction.constant';
+import {TRANSACTION_TYPE_ENUM} from '../constants/transaction.enum';
+import {EnvironmentService} from '../data-services/environment.service';
+import {CommonService} from '../services/common.service';
+import {balanceOf} from '../utils/common/parsing';
 
-@Pipe({ name: 'calDate' })
+@Pipe({name: 'calDate'})
 export class pipeCalDate implements PipeTransform {
   transform(value: string): string {
     const date = new Date(value);
@@ -29,7 +29,7 @@ export class pipeCalDate implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'cutStringPipe' })
+@Pipe({name: 'cutStringPipe'})
 export class PipeCutString implements PipeTransform {
   transform(value: string, start: number, end?: number): string {
     let endChar = end || 0;
@@ -47,7 +47,7 @@ export class PipeCutString implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'stringEllipsis' })
+@Pipe({name: 'stringEllipsis'})
 export class StringEllipsis implements PipeTransform {
   transform(value: string, limit: number): string {
     if (value && value.length > limit) {
@@ -58,9 +58,11 @@ export class StringEllipsis implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'imageS3' })
+@Pipe({name: 'imageS3'})
 export class ImageURL implements PipeTransform {
-  constructor(private environmentService: EnvironmentService) {}
+  constructor(private environmentService: EnvironmentService) {
+  }
+
   transform(value: string): string {
     const replacePath = /\..\//gi;
     value = value.replace(replacePath, '');
@@ -70,7 +72,7 @@ export class ImageURL implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'customDate' })
+@Pipe({name: 'customDate'})
 export class CustomDate implements PipeTransform {
   transform(value: string, format: string) {
     const date = new Date(value);
@@ -79,31 +81,35 @@ export class CustomDate implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'balanceOf' })
+@Pipe({name: 'balanceOf'})
 export class BalanceOf implements PipeTransform {
   transform(amount: string | number, decimal = 6) {
     return +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
   }
 }
 
-@Pipe({ name: 'replaceIpfs' })
+@Pipe({name: 'replaceIpfs'})
 export class ReplaceIpfs implements PipeTransform {
-  constructor(private environmentService: EnvironmentService) {}
+  constructor(private environmentService: EnvironmentService) {
+  }
+
   transform(value: string): string {
     return this.environmentService.ipfsDomain + value.replace('://', '/');
   }
 }
 
-@Pipe({ name: 'convertUauraToAura' })
+@Pipe({name: 'convertUauraToAura'})
 export class ConvertUauraToAura implements PipeTransform {
   transform(value: number, powNum?: number): number {
     return value / Math.pow(10, powNum);
   }
 }
 
-@Pipe({ name: 'convertLogAmount' })
+@Pipe({name: 'convertLogAmount'})
 export class convertLogAmount implements PipeTransform {
-  constructor(private commonService: CommonService, private mask: NgxMaskPipe) {}
+  constructor(private commonService: CommonService, private mask: NgxMaskPipe) {
+  }
+
   transform(value: string, getDenomOnly = false): string {
     if (!value) return '';
     let amount = value?.match(/\d+/g)[0];
@@ -119,14 +125,14 @@ export class convertLogAmount implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'decodeData' })
+@Pipe({name: 'decodeData'})
 export class decodeData implements PipeTransform {
   transform(value: string): string {
     return atob(value);
   }
 }
 
-@Pipe({ name: 'displayTypeToolTip' })
+@Pipe({name: 'displayTypeToolTip'})
 export class displayTypeToolTip implements PipeTransform {
   transform(value: any): string {
     let result = '';
@@ -139,13 +145,15 @@ export class displayTypeToolTip implements PipeTransform {
           if (typeof dataTemp === 'string') {
             try {
               dataTemp = JSON.parse(dataTemp);
-            } catch (e) {}
+            } catch (e) {
+            }
           }
           let action = Object.keys(dataTemp)[0];
           type = 'Contract: ' + action;
-        } catch (e) {}
+        } catch (e) {
+        }
       } else {
-        type = _.find(TYPE_TRANSACTION, { label: typeMsg })?.value || typeMsg.split('.').pop().replace('Msg', '');
+        type = _.find(TYPE_TRANSACTION, {label: typeMsg})?.value || typeMsg.split('.').pop().replace('Msg', '');
       }
 
       if (index <= 4) {
@@ -163,24 +171,33 @@ export class displayTypeToolTip implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'convertSmallNumber' })
+@Pipe({name: 'convertSmallNumber'})
 export class convertSmallNumber implements PipeTransform {
-  constructor() {}
   transform(amount: number, decimal: number = 6): any {
-    let valueString = (new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toString();
-    return displayFullNumber(valueString) !== '0.001' ? displayFullNumber(valueString) : '';
+    let value = +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
+    return displayFullNumber(value) !== '0.001' ? displayFullNumber(value) : '';
+  }
+}
+
+@Pipe({name: 'convertStringNumber'})
+export class convertStringNumber implements PipeTransform {
+  transform(valueString: string): any {
+    if (valueString.toString().includes('.')) {
+      valueString = valueString.toString().split('.')[0];
+    }
+    return valueString.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 }
 
 function displayFullNumber(x) {
   if (Math.abs(x) < 1.0) {
-    var e = parseInt(x.toString().split('e-')[1]);
+    const e = parseInt(x.toString().split('e-')[1]);
     if (e) {
       x *= Math.pow(10, e - 1);
       x = '0.' + new Array(e).join('0') + x.toString().substring(2);
     }
   } else {
-    var e = parseInt(x.toString().split('+')[1]);
+    let e = parseInt(x.toString().split('+')[1]);
     if (e > 20) {
       e -= 20;
       x /= Math.pow(10, e);
@@ -190,7 +207,7 @@ function displayFullNumber(x) {
   return x;
 }
 
-@Pipe({ name: 'formatDigit' })
+@Pipe({name: 'formatDigit'})
 export class formatDigit implements PipeTransform {
   transform(amount: number, digit = 0) {
     let digitConvert = '1.' + digit + '-' + digit;
