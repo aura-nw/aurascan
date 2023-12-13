@@ -6,7 +6,7 @@
         [routerLink]="['/contracts/', currentAddress]"
         *ngIf="isContractAddress && breakpoint.value.matches"
         class="contract-label text--primary ml-6 caption fw-normal"
-        >Contract</a
+      >Contract</a
       >
     </div>
     <div class="d-flex box-title mb-2 mb-lg-0" [class.justify-content-between]="breakpoint.value.matches">
@@ -101,10 +101,13 @@
             <div>
               <div class="h5 mb-1 text--white">Total Value</div>
               <div class="aura-tooltip-contain">
-                <span class="h1 mb-0 fw-700 mb-0 text-gradient d-inline aura-tooltip-object" *ngIf="!isNoData">
+                <span class="h1 mb-0 fw-700 mb-0 text-gradient d-inline aura-tooltip-object"
+                      *ngIf="!isNoData"
+                >
                   $ <span [appBigNumber]="totalValueToken + totalValueNft || 0" [decimal]="0"></span>
                 </span>
                 <app-tooltip-customize
+                  *ngIf="totalValueToken + totalValueNft < 0.001 || totalValueToken + totalValueNft >= 1000000"
                   [content]="
                     (totalValueToken + totalValueNft | convertSmallNumber : 0 | formatStringNumber) || 0
                   "></app-tooltip-customize>
@@ -115,7 +118,7 @@
                 class="ml-10"
                 width="20"
                 height="20"
-                *ngIf="isNoData" />
+                *ngIf="isNoData"/>
             </div>
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
@@ -123,7 +126,7 @@
                 alt=""
                 width="30px"
                 height="30px"
-                (click)="viewQrAddress(modalManage)" />
+                (click)="viewQrAddress(modalManage)"/>
             </div>
           </div>
         </div>
@@ -152,7 +155,7 @@
             alt=""
             width="14"
             height="14"
-            (click)="closePopup()" />
+            (click)="closePopup()"/>
         </div>
         <app-qr [address]="currentAddress || ''"></app-qr>
       </div>
@@ -191,9 +194,9 @@
 <ng-template #reloadTemplate>
   <div class="card p-5 d-flex justify-content-between align-items-center" *ngIf="isNoData">
     <div class="text-center">
-      <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="mr-2" width="40" height="40" />
+      <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="mr-2" width="40" height="40"/>
       <div class="small-text text--light-gray mt-4">
-        Fetching data, might take longer than usual. <br />
+        Fetching data, might take longer than usual. <br/>
         Please come back later or
         <span class="link-reset-data" (click)="reloadData()">refresh the page</span>
       </div>

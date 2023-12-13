@@ -2,7 +2,7 @@
   <section class="text--white">
     <div *ngIf="isSearchTx" class="px-4 py-4 py-lg-3 card border-none">
       <p class="caption d-flex align-item-center mb-1 mb-lg-0">
-        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px" />
+        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px"/>
         FILTER BY TOKEN TXN HASH
       </p>
       <a class="text--primary body-02" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
@@ -16,7 +16,7 @@
               class="mr-2"
               alt=""
               width="18px"
-              height="18px" />
+              height="18px"/>
             FILTER BY ADDRESS
           </div>
           <div class="mt-2">
@@ -73,19 +73,19 @@
             <div class="aura-tooltip-contain" *ngIf="infoSearch['balance']">
               <div
                 class="aura-tooltip-object"
-                [class.cursor-text]="+(infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 1000000"
+                [class.cursor-text]="+(infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals) < 1000000"
                 [appBigNumber]="infoSearch['balance']"
                 [decimal]="tokenDetail.decimals"
                 [tokenPrice]="tokenDetail.price"></div>
               <app-tooltip-customize
                 *ngIf="
-                  (infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001 ||
-                  (infoSearch['balance'] | convertSmallNumber : tokenDetail.decimals) >= 1000000
+                  (infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals) < 0.001 ||
+                  (infoSearch['balance'] * tokenDetail.price | convertSmallNumber : tokenDetail.decimals) >= 1000000
                 "
                 [content]="
-                  (infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001
-                    ? (infoSearch['balance'] | balanceOf : tokenDetail.decimals)
-                    : (infoSearch['balance'] | convertSmallNumber : tokenDetail.decimals | formatStringNumber)
+                  (infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals) < 0.001
+                    ? (infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals)
+                    : (infoSearch['balance'] * tokenDetail.price| convertSmallNumber : tokenDetail.decimals | formatStringNumber)
                 ">
               </app-tooltip-customize>
             </div>
@@ -93,20 +93,20 @@
             <div class="aura-tooltip-contain" *ngIf="infoSearch['balance']">
               <div
                 class="aura-tooltip-object"
-                [class.cursor-text]="+(infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 1000000"
+                [class.cursor-text]="+(infoSearch['balance'] * tokenDetail.price  | balanceOf : tokenDetail.decimals) < 1000000"
                 [appBigNumber]="infoSearch['balance']"
                 [decimal]="tokenDetail.decimals"
                 [auraValue]="true"
                 [tokenPrice]="tokenDetail.price"></div>
               <app-tooltip-customize
                 *ngIf="
-                  (infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001 ||
-                  (infoSearch['balance'] | convertSmallNumber : tokenDetail.decimals) >= 1000000
+                  (infoSearch['balance'] * tokenDetail.price  | balanceOf : tokenDetail.decimals) < 0.001 ||
+                  (infoSearch['balance'] * tokenDetail.price  | convertSmallNumber : tokenDetail.decimals) >= 1000000
                 "
                 [content]="
-                  (infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001
-                    ? (infoSearch['balance'] | balanceOf : tokenDetail.decimals)
-                    : (infoSearch['balance'] | convertSmallNumber : tokenDetail.decimals | formatStringNumber)
+                  (infoSearch['balance'] * tokenDetail.price  | balanceOf : tokenDetail.decimals) < 0.001
+                    ? (infoSearch['balance'] * tokenDetail.price  | balanceOf : tokenDetail.decimals)
+                    : (infoSearch['balance'] * tokenDetail.price  | convertSmallNumber : tokenDetail.decimals | formatStringNumber)
                 ">
               </app-tooltip-customize>
             </div>
@@ -135,7 +135,7 @@
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"
               width="16px"
-              height="16px" />
+              height="16px"/>
           </a>
         </li>
       </ng-container>
@@ -158,9 +158,9 @@
             name="search"
             (keyup.enter)="handleSearch()"
             [disabled]="paramQuery?.length > 0"
-            autocomplete="off" />
+            autocomplete="off"/>
           <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
           </button>
           <button
             type="reset"
@@ -168,7 +168,7 @@
               !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : ''
             }}"
             (click)="resetSearch()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
           </button>
         </div>
       </form>
