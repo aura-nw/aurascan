@@ -17,11 +17,11 @@
                 [(ngModel)]="textSearchSend"
                 (keyup)="searchSend()"
                 name="search"
-                autocomplete="off" />
+                autocomplete="off"/>
               <button
                 type="submit"
                 class="btn-search {{ textSearchSend && textSearchSend?.length > 0 ? 'd-none' : '' }}">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
               <button
                 type="reset"
@@ -29,7 +29,7 @@
                   !textSearchSend || (textSearchSend && textSearchSend?.length === 0) ? 'd-none' : ''
                 }}"
                 (click)="resetSearch()">
-                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
             </div>
           </form>
@@ -57,7 +57,7 @@
                               alt=""
                               class="mr-1"
                               width="20px"
-                              height="20px" />
+                              height="20px"/>
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
                                 {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe : 20 }}
@@ -81,7 +81,7 @@
                               <div
                                 class="aura-tooltip-object"
                                 *ngIf="(data.amount | balanceOf : data['dataDenom']?.decimals) < 0.001">
-                                <0,001
+                                <0.001
                               </div>
                               <app-tooltip-customize
                                 [content]="data.amount | convertSmallNumber : data['dataDenom']?.decimals">
@@ -119,7 +119,7 @@
                       alt=""
                       class="mr-2"
                       width="20px"
-                      height="20px" />
+                      height="20px"/>
                     <span>{{ data['dataDenom']?.symbol | cutStringPipe : 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
@@ -168,11 +168,11 @@
                 [(ngModel)]="textSearchReceive"
                 (keyup)="searchReceive()"
                 name="search"
-                autocomplete="off" />
+                autocomplete="off"/>
               <button
                 type="submit"
                 class="btn-search {{ textSearchReceive && textSearchReceive?.length > 0 ? 'd-none' : '' }}">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
               <button
                 type="reset"
@@ -180,7 +180,7 @@
                   !textSearchReceive || (textSearchReceive && textSearchReceive?.length === 0) ? 'd-none' : ''
                 }}"
                 (click)="resetSearch(true)">
-                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
             </div>
           </form>
@@ -211,7 +211,7 @@
                               alt=""
                               class="mr-1"
                               width="20px"
-                              height="20px" />
+                              height="20px"/>
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
                                 {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe : 20 }}
@@ -235,7 +235,7 @@
                               <div
                                 class="aura-tooltip-object"
                                 *ngIf="(data.amount | balanceOf : data['dataDenom']?.decimals) < 0.001">
-                                <0,001
+                                <0.001
                               </div>
                               <app-tooltip-customize
                                 [content]="data.amount | convertSmallNumber : data['dataDenom']?.decimals">
@@ -273,7 +273,7 @@
                       alt=""
                       class="mr-2"
                       width="20px"
-                      height="20px" />
+                      height="20px"/>
                     <span>{{ data['dataDenom']?.symbol | cutStringPipe : 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>

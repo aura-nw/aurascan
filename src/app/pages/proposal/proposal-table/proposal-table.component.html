@@ -27,8 +27,8 @@
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
-                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                        '-'
+                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                    '-'
                     }}
                   </a>
                 </ng-container>
@@ -50,11 +50,30 @@
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
-                      {{
-                        (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])
-                          | mask : 'separator.6' || '-'
-                      }}
-                      <span class="text--white ml-1">{{ denom }}</span>
+
+                      <div class="aura-tooltip-contain d-flex">
+                        <div
+                          class="aura-tooltip-object"
+                          *ngIf="data[template.matColumnDef] < 0.001">
+                          <0.001
+                        </div>
+                        <div
+                          [class.aura-tooltip-object]="data[template.matColumnDef] !== 0"
+                          [class.cursor-text]="data[template.matColumnDef] < 1000000"
+                          *ngIf="data[template.matColumnDef] >= 0.001"
+                          [appBigNumber]="data[template.matColumnDef]"
+                          [decimal]="0"></div>
+                        <span class="text--white ml-1">{{ denom }}</span>
+                        <app-tooltip-customize
+                          *ngIf="
+                              data[template.matColumnDef] < 0.001 ||
+                              data[template.matColumnDef] >= 1000000
+                            "
+                          [content]="data[template.matColumnDef]">
+                        </app-tooltip-customize>
+                      </div>
+
+
                     </ng-container>
                     <ng-container *ngSwitchCase="'vote_option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}
@@ -65,7 +84,7 @@
                     <ng-container *ngSwitchCase="'rank'">
                       <span [class.label-circle]="data[template.matColumnDef] <= 3">{{
                         data[template.matColumnDef]
-                      }}</span>
+                        }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">
@@ -240,7 +259,7 @@
                   class: 'h6 mb-0 text--gray-1',
                   info: data.amount
                     ? '<span class=mr-1>' +
-                      (data.amount | mask : 'separator.6') +
+                      (data.amount < 0.001 ? '<0.001' : (data.amount | mask : 'separator.6')) +
                       '</span><span class=text--white>' +
                       denom +
                       '</span>'

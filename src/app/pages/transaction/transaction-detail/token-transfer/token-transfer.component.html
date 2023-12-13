@@ -42,7 +42,7 @@
                               <span
                                 class="aura-tooltip-object"
                                 *ngIf="(data.amount | balanceOf : data.decimal) < 0.001">
-                                {{ '<0,001' }}
+                                {{ '<0.001' }}
                               </span>
                               <span
                                 *ngIf="(data.amount | balanceOf : data.decimal) >= 0.001"
@@ -61,7 +61,7 @@
                           <div
                             class="aura-tooltip-object"
                             *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) < 0.001">
-                            {{ '<0,001' }}
+                            {{ '<0.001' }}
                           </div>
 
                           <div
