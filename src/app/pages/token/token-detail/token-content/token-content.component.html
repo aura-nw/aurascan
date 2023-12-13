@@ -56,11 +56,7 @@
                   (infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001 ||
                   (infoSearch['balance'] | convertSmallNumber : tokenDetail.decimals) >= 1000000
                 "
-                [content]="
-                  (infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001
-                    ? (infoSearch['balance'] | balanceOf : tokenDetail.decimals)
-                    : (infoSearch['balance'] | convertSmallNumber : tokenDetail.decimals | formatStringNumber)
-                ">
+                [content]="infoSearch['balance'] | balanceOf : tokenDetail.decimals">
               </app-tooltip-customize>
             </div>
             {{ tokenDetail.symbol || tokenDetail.name }}
@@ -82,11 +78,7 @@
                   (infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals) < 0.001 ||
                   (infoSearch['balance'] * tokenDetail.price | convertSmallNumber : tokenDetail.decimals) >= 1000000
                 "
-                [content]="
-                  (infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals) < 0.001
-                    ? (infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals)
-                    : (infoSearch['balance'] * tokenDetail.price| convertSmallNumber : tokenDetail.decimals | formatStringNumber)
-                ">
+                [content]="infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals">
               </app-tooltip-customize>
             </div>
             (
@@ -104,9 +96,9 @@
                   (infoSearch['balance'] * tokenDetail.price  | convertSmallNumber : tokenDetail.decimals) >= 1000000
                 "
                 [content]="
-                  (infoSearch['balance'] * tokenDetail.price  | balanceOf : tokenDetail.decimals) < 0.001
-                    ? (infoSearch['balance'] * tokenDetail.price  | balanceOf : tokenDetail.decimals)
-                    : (infoSearch['balance'] * tokenDetail.price  | convertSmallNumber : tokenDetail.decimals | formatStringNumber)
+                  (infoSearch['balance'] * tokenDetail.price / auraPrice  | balanceOf : tokenDetail.decimals) < 0.001
+                    ? (infoSearch['balance'] * tokenDetail.price / auraPrice | balanceOf : tokenDetail.decimals)
+                    : (infoSearch['balance'] * tokenDetail.price / auraPrice  | convertSmallNumber : tokenDetail.decimals)
                 ">
               </app-tooltip-customize>
             </div>

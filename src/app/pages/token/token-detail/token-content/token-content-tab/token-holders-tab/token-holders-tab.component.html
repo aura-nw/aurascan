@@ -70,11 +70,7 @@
                             (data[template.matColumnDef] | balanceOf : decimalValue) < 0.001 ||
                             (data[template.matColumnDef] | convertSmallNumber : decimalValue) >= 1000000
                           "
-                          [content]="
-                            (data[template.matColumnDef] | balanceOf : decimalValue) < 0.001
-                              ? (data[template.matColumnDef] | balanceOf : decimalValue)
-                              : (data[template.matColumnDef] | convertSmallNumber : decimalValue | formatStringNumber)
-                          ">
+                          [content]="data[template.matColumnDef] | balanceOf : decimalValue">
                         </app-tooltip-customize>
                       </div>
                     </ng-container>
@@ -112,13 +108,7 @@
                             (tokenDetail.price * data['balance'] | balanceOf : decimalValue) < 0.001 ||
                             (tokenDetail.price * data['balance'] | convertSmallNumber : decimalValue) >= 1000000
                           "
-                          [content]="
-                            (tokenDetail.price * data['balance'] | balanceOf : decimalValue) < 0.001
-                              ? (tokenDetail.price * data['balance'] | balanceOf : decimalValue)
-                              : (tokenDetail.price * data['balance']
-                                | convertSmallNumber : decimalValue
-                                | formatStringNumber)
-                          ">
+                          [content]="tokenDetail.price * data['balance'] | balanceOf : decimalValue">
                         </app-tooltip-customize>
                       </div>
 

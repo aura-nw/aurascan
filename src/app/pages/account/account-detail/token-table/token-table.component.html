@@ -47,9 +47,9 @@
                   [maxLength]="maxLengthSearch"
                   (keyup.enter)="searchToken()"
                   name="search"
-                  autocomplete="off" />
+                  autocomplete="off"/>
                 <button type="submit" class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
                 </button>
                 <button
                   type="reset"
@@ -61,7 +61,7 @@
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
                     alt=""
                     width="24"
-                    height="24" />
+                    height="24"/>
                 </button>
               </div>
             </form>
@@ -101,8 +101,8 @@
               <td mat-cell *matCellDef="let element">
                 <div class="d-flex align-items-center">
                   <div>
-                    <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
-                    <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
+                    <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt=""/>
+                    <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt=""/>
                   </div>
                   <div>
                     <a
@@ -121,7 +121,7 @@
                               width="18"
                               height="18"
                               class="ml-1"
-                              *ngIf="element.verify_status === 'VERIFIED'" />
+                              *ngIf="element.verify_status === 'VERIFIED'"/>
                           </div>
                           <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
                           </app-tooltip-customize>
@@ -141,7 +141,7 @@
                             width="18"
                             height="18"
                             class="ml-1"
-                            *ngIf="element.verify_status === 'VERIFIED'" />
+                            *ngIf="element.verify_status === 'VERIFIED'"/>
                         </div>
                         <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
                         </app-tooltip-customize>
@@ -214,7 +214,7 @@
                     [content]="
                       (element.balance | balanceOf : element.decimals) < 0.001
                         ? (element.balance | balanceOf : element.decimals)
-                        : (element.balance | convertSmallNumber : element.decimals | formatStringNumber)
+                        : (element.balance | convertSmallNumber : element.decimals)
                     ">
                   </app-tooltip-customize>
                 </div>
@@ -249,8 +249,7 @@
                           (element.price * element['balance'] | balanceOf : element.decimals) < 0.001
                             ? (element.price * element['balance'] | balanceOf : element.decimals)
                             : (element.price * element['balance']
-                              | convertSmallNumber : element.decimals
-                              | formatStringNumber)
+                              | convertSmallNumber : element.decimals)
                         ">
                       </app-tooltip-customize>
                     </div>

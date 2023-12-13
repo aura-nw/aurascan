@@ -102,6 +102,7 @@
               <div class="h5 mb-1 text--white">Total Value</div>
               <div class="aura-tooltip-contain">
                 <span class="h1 mb-0 fw-700 mb-0 text-gradient d-inline aura-tooltip-object"
+                      [class.cursor-text]="totalValueToken + totalValueNft >= 0.001 && totalValueToken + totalValueNft < 1000000"
                       *ngIf="!isNoData"
                 >
                   $ <span [appBigNumber]="totalValueToken + totalValueNft || 0" [decimal]="0"></span>
@@ -109,7 +110,7 @@
                 <app-tooltip-customize
                   *ngIf="totalValueToken + totalValueNft < 0.001 || totalValueToken + totalValueNft >= 1000000"
                   [content]="
-                    (totalValueToken + totalValueNft | convertSmallNumber : 0 | formatStringNumber) || 0
+                    (totalValueToken + totalValueNft | convertSmallNumber : 0) || 0
                   "></app-tooltip-customize>
               </div>
               <img

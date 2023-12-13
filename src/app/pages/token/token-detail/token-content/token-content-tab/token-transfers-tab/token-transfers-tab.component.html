@@ -80,16 +80,21 @@
                           class="aura-tooltip-object"
                           *ngIf="(data.amount | balanceOf : data.decimal) >= 0.001"
                           [class.cursor-text]="
-                            (data.amount | balanceOf : data.decimals) >= 0.01 &&
-                            (data.amount | balanceOf : data.decimals) < 1000000"
+                            (data.amount | balanceOf : data.decimal) >= 0.001 &&
+                            (data.amount | balanceOf : data.decimal) < 1000000"
                           [appBigNumber]="data.amount"
                           [decimal]="data.decimal"></div>
                         <app-tooltip-customize
                           *ngIf="
-                            (data.amount | balanceOf : data.decimals) < 1 ||
-                            (data.amount | balanceOf : data.decimals) >= 1000000
+                            (data.amount | balanceOf : data.decimal) < 0.001 ||
+                            (data.amount | balanceOf : data.decimal) >= 1000000
                           "
-                          [content]="data.amount | balanceOf : data.decimal | formatStringNumber">
+                          [content]="
+                            (data.amount | balanceOf : data.decimal) < 0.001
+                              ? (data.amount | balanceOf : data.decimal)
+                              : (data.amount | balanceOf : data.decimal | formatStringNumber)
+                          "
+                        >
                         </app-tooltip-customize>
                       </div>
                     </ng-container>
