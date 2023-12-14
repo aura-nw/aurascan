@@ -98,7 +98,7 @@
                 [content]="
                   (infoSearch['balance'] * tokenDetail.price / auraPrice  | balanceOf : tokenDetail.decimals) < 0.001
                     ? (infoSearch['balance'] * tokenDetail.price / auraPrice | balanceOf : tokenDetail.decimals)
-                    : (infoSearch['balance'] * tokenDetail.price / auraPrice  | convertSmallNumber : tokenDetail.decimals)
+                    : (infoSearch['balance'] * tokenDetail.price / auraPrice  | convertSmallNumber : tokenDetail.decimals | formatStringNumber)
                 ">
               </app-tooltip-customize>
             </div>

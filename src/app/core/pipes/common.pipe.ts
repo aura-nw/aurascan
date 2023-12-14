@@ -157,10 +157,13 @@ export class ConvertSmallNumberPipe implements PipeTransform {
 @Pipe({name: 'formatStringNumber'})
 export class FormatStringNumberPipe implements PipeTransform {
   transform(valueString: string): any {
+    let decimalStr;
     if (valueString.toString().includes('.')) {
+      decimalStr = valueString.toString().split('.')[1];
       valueString = valueString.toString().split('.')[0];
     }
-    return valueString.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return valueString.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+      (decimalStr ? ('.' + decimalStr) : '');
   }
 }
 

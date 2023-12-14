@@ -427,7 +427,7 @@
                               (item.amountTemp | balanceOf : item.decimal) < 0.001 ||
                               (item.amountTemp | convertSmallNumber : item.decimal) >= 1000000
                             "
-                            [content]="item.amountTemp | convertSmallNumber : item.decimal">
+                            [content]="item.amountTemp | convertSmallNumber : item.decimal | formatStringNumber">
                           </app-tooltip-customize>
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">

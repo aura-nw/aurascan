@@ -50,7 +50,6 @@
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
-
                       <div class="aura-tooltip-contain d-flex">
                         <div
                           class="aura-tooltip-object"
@@ -72,8 +71,6 @@
                           [content]="data[template.matColumnDef]">
                         </app-tooltip-customize>
                       </div>
-
-
                     </ng-container>
                     <ng-container *ngSwitchCase="'vote_option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}

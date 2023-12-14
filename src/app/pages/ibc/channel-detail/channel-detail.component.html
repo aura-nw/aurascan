@@ -154,7 +154,7 @@
                           <0.001
                         </div>
                         <app-tooltip-customize
-                          [content]="data.amountTemp | convertSmallNumber : data.dataDenom?.decimals">
+                          [content]="data.amountTemp | convertSmallNumber : data.dataDenom?.decimals | formatStringNumber">
                         </app-tooltip-customize>
                         <div
                           *ngIf="(data.amountTemp | balanceOf : data.dataDenom?.decimals) >= 0.001"

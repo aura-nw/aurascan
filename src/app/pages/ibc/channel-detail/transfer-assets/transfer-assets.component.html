@@ -84,7 +84,7 @@
                                 <0.001
                               </div>
                               <app-tooltip-customize
-                                [content]="data.amount | convertSmallNumber : data['dataDenom']?.decimals">
+                                [content]="data.amount | convertSmallNumber : data['dataDenom']?.decimals | formatStringNumber">
                               </app-tooltip-customize>
                               <div
                                 *ngIf="(data.amount | balanceOf : data['dataDenom']?.decimals) >= 0.001"
@@ -238,7 +238,7 @@
                                 <0.001
                               </div>
                               <app-tooltip-customize
-                                [content]="data.amount | convertSmallNumber : data['dataDenom']?.decimals">
+                                [content]="data.amount | convertSmallNumber : data['dataDenom']?.decimals | formatStringNumber">
                               </app-tooltip-customize>
                               <div
                                 *ngIf="(data.amount | balanceOf : data['dataDenom']?.decimals) >= 0.001"

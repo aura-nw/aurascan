@@ -214,7 +214,7 @@
                     [content]="
                       (element.balance | balanceOf : element.decimals) < 0.001
                         ? (element.balance | balanceOf : element.decimals)
-                        : (element.balance | convertSmallNumber : element.decimals)
+                        : (element.balance | convertSmallNumber : element.decimals | formatStringNumber)
                     ">
                   </app-tooltip-customize>
                 </div>
@@ -249,7 +249,7 @@
                           (element.price * element['balance'] | balanceOf : element.decimals) < 0.001
                             ? (element.price * element['balance'] | balanceOf : element.decimals)
                             : (element.price * element['balance']
-                              | convertSmallNumber : element.decimals)
+                              | convertSmallNumber : element.decimals | formatStringNumber)
                         ">
                       </app-tooltip-customize>
                     </div>

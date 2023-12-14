@@ -75,7 +75,7 @@
                               (data[template.matColumnDef] | balanceOf : data.decimal) < 0.001 ||
                               (data[template.matColumnDef] | convertSmallNumber : data.decimal) >= 1000000
                             "
-                            [content]="data[template.matColumnDef] | convertSmallNumber : data.decimal ">
+                            [content]="data[template.matColumnDef] | convertSmallNumber : data.decimal  | formatStringNumber">
                           </app-tooltip-customize>
                         </div>
                       </ng-container>
