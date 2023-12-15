@@ -5,14 +5,14 @@
       <div class="box-connect d-lg-flex justify-content-between align-items-center">
         <div class="box-connect-chain d-flex align-items-center">
           <div class="d-flex justify-content-lg-center align-items-center">
-            <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain"/>
+            <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
             <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
                 <span
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     chainInfo.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                >{{ chainInfo.chainName | cutStringPipe: maxDisplayChar }}</span
+                  >{{ chainInfo.chainName | cutStringPipe : maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
               </div>
@@ -28,14 +28,14 @@
             <img
               [src]="counterInfo?.chainImage ? counterInfo?.chainImage : 'assets/images/logo/auraTitleLogo.png'"
               alt=""
-              class="img-chain"/>
+              class="img-chain" />
             <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
                 <span
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     counterInfo?.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                >{{ counterInfo?.chainName | cutStringPipe: maxDisplayChar }}</span
+                  >{{ counterInfo?.chainName | cutStringPipe : maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
               </div>
@@ -110,7 +110,7 @@
                       *ngSwitchCase="'tx_hash'"
                       class="text--primary cursor-pointer hash-link"
                       [routerLink]="['/transaction', data['tx_hash']]">
-                      {{ data[template.matColumnDef] | cutStringPipe: 8 : 8 }}
+                      {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                     </a>
                     <a
                       *ngSwitchCase="'height'"
@@ -121,7 +121,7 @@
                     <div *ngSwitchCase="'type'" class="aura-status">
                       <div class="aura-status aura-tooltip-contain p-0">
                         <div class="status cursor-pointer aura-tooltip-object">
-                          {{ data[template.matColumnDef] | stringEllipsis: 25 }}
+                          {{ data[template.matColumnDef] | stringEllipsis : 25 }}
                           <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                             +{{ data.lstTypeTemp?.length - 1 }}
                           </div>
@@ -148,39 +148,39 @@
                     </div>
                     <div *ngSwitchCase="'amount'" class="d-flex">
                       <div class="aura-tooltip-contain">
-                        <div
-                          *ngIf="data.amountTemp === 0">0
-                        </div>
+                        <div *ngIf="data.amountTemp === 0">0</div>
                         <div
                           class="aura-tooltip-object"
-                          *ngIf="data.amountTemp !== 0 && (data.amountTemp | balanceOf: data.dataDenom?.decimals) < 0.001">
+                          *ngIf="
+                            data.amountTemp !== 0 && (data.amountTemp | balanceOf : data.dataDenom?.decimals) < 0.001
+                          ">
                           <0.001
                         </div>
                         <div
                           class="aura-tooltip-object"
-                          *ngIf="(data.amountTemp | balanceOf: data.dataDenom?.decimals) >= 0.001"
+                          *ngIf="(data.amountTemp | balanceOf : data.dataDenom?.decimals) >= 0.001"
                           [class.cursor-text]="
-                            (data.amountTemp === 0) || 
-                            ((data.amountTemp | balanceOf: data.dataDenom?.decimals) >= 0.001 &&
-                            (data.amountTemp | balanceOf: data.dataDenom?.decimals) < 1000000)
+                            data.amountTemp === 0 ||
+                            ((data.amountTemp | balanceOf : data.dataDenom?.decimals) >= 0.001 &&
+                              (data.amountTemp | balanceOf : data.dataDenom?.decimals) < 1000000)
                           "
                           [appBigNumber]="data.amountTemp"
                           [decimal]="data.dataDenom?.decimals"></div>
                         <app-tooltip-customize
                           *ngIf="
-                            (data.amountTemp !== 0) && 
-                            ((data.amountTemp | balanceOf: data.dataDenom?.decimals) < 0.001 ||
-                            (data.amountTemp | balanceOf: data.dataDenom?.decimals) >= 1000000)
+                            data.amountTemp !== 0 &&
+                            ((data.amountTemp | balanceOf : data.dataDenom?.decimals) < 0.001 ||
+                              (data.amountTemp | balanceOf : data.dataDenom?.decimals) >= 1000000)
                           "
                           [content]="
-                            data.amountTemp | convertSmallNumber: data.dataDenom?.decimals | formatStringNumber
+                            data.amountTemp | convertSmallNumber : data.dataDenom?.decimals | formatStringNumber
                           ">
                         </app-tooltip-customize>
                       </div>
                       <span class="ml-1">
                         <div class="aura-tooltip-contain">
                           <div [class.aura-tooltip-object]="data.dataDenom?.symbol">
-                            {{ data.dataDenom?.symbol | stringEllipsis: 25 }}
+                            {{ data.dataDenom?.symbol | stringEllipsis : 25 }}
                           </div>
                           <app-tooltip-customize
                             [className]="'tooltip--right'"
@@ -191,7 +191,7 @@
                       </span>
                     </div>
                     <div *ngSwitchCase="'fee'">
-                      {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                      {{ +data[template.matColumnDef] | mask : 'separator.6' }}
                       <span>{{ coinInfo.coinDenom }}</span>
                     </div>
                     <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -213,7 +213,7 @@
           [title]="{
             size: 'md',
             titleClass: 'body-02-mob',
-            label: data.tx_hash | cutStringPipe: 8 : 8,
+            label: data.tx_hash | cutStringPipe : 8 : 8,
             subLabelContent: data.type,
             subLabelClass: 'btn-mob',
             status: data.code
@@ -232,7 +232,7 @@
             {
               label: 'Fee',
               class: 'text--gray-1 body-02-mob',
-              info: (data.fee | mask: 'separator.6') + '<span> ' + coinInfo.coinDenom + '</span>'
+              info: (data.fee | mask : 'separator.6') + '<span> ' + coinInfo.coinDenom + '</span>'
             }
           ]"></app-card-mob-channel>
       </div>
