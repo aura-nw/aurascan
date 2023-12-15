@@ -5,10 +5,11 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-content',
@@ -45,13 +46,15 @@ export class TokenContentComponent implements OnInit {
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.chainInfo;
+  auraPrice = this.global.price.aura;
 
   constructor(
     private route: ActivatedRoute,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
-    public commonService: CommonService,
     private tokenService: TokenService,
+    private nameTagService: NameTagService,
+    private global: Globals,
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +71,7 @@ export class TokenContentComponent implements OnInit {
       this.paramQuery = params?.a || '';
       this.searchTemp = this.paramQuery;
       this.handleSearch();
-      this.searchTemp = this.commonService.setNameTag(this.searchTemp);
+      this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
     });
 
     if (localStorage.getItem('isVerifyTab') == 'true') {
@@ -87,7 +90,7 @@ export class TokenContentComponent implements OnInit {
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
     if (this.searchTemp?.length > 0) {
-      const addressNameTag = this.commonService.findNameTag(this.searchTemp);
+      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchTemp);
       this.textSearch = this.searchTemp;
       let tempTabs;
       this.paramQuery = addressNameTag || this.searchTemp;

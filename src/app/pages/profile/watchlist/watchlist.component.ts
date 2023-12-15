@@ -16,7 +16,6 @@ import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { isContract } from 'src/app/core/utils/common/validation';
-import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupWatchlistComponent } from './popup-watchlist/popup-watchlist.component';
@@ -62,7 +61,6 @@ export class WatchListComponent implements OnInit, OnDestroy {
     public nameTagService: NameTagService,
     private dialog: MatDialog,
     private toastr: NgxToastrService,
-    private global: Globals,
     private environmentService: EnvironmentService,
     private watchListService: WatchListService,
   ) {}
@@ -77,7 +75,6 @@ export class WatchListComponent implements OnInit, OnDestroy {
       }, 500);
     }
 
-    this.commonService.listNameTag = this.global.listNameTag;
     this.getWatchlist();
     this.searchSubject
       .asObservable()

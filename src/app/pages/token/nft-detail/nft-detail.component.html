@@ -12,14 +12,14 @@
         </ng-container>
         <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
         <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
-          <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
+          <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40"/>
         </button>
         <span class="burnt-tag caption" *ngIf="nftDetail?.burned">Burnt</span>
       </h1>
       <div class="mt-2">
         <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]">{{
           nftDetail?.name || nftDetail?.token_name
-        }}</a>
+          }}</a>
       </div>
     </div>
 
@@ -36,14 +36,15 @@
                     !nftDetail?.media_info?.onchain?.metadata?.image) ||
                   isError
                 "
-                [src]="defaultImgToken" />
+                [src]="defaultImgToken"/>
               <img
                 (click)="expandMedia()"
                 *ngIf="
-                  (nftType === MEDIA_TYPE.IMG || nftDetail?.media_info?.onchain?.metadata?.image) && isError === false
+                  (nftType === MEDIA_TYPE.IMG || (nftDetail?.media_info?.onchain?.metadata?.image && !animationUrl)) &&
+                  isError === false
                 "
                 (error)="error()"
-                [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
+                [src]="imageUrl && animationUrl ? animationUrl : imageUrl"/>
               <video
                 (click)="expandMedia()"
                 [src]="animationUrl"
@@ -79,7 +80,7 @@
                 <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
               </h1>
               <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
-                <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
+                <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40"/>
               </button>
               <span class="burnt-tag" *ngIf="nftDetail?.burned">Burnt</span>
             </div>
@@ -96,7 +97,7 @@
             <a
               class="body-01 text--primary break-word"
               [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]"
-              >{{ nftDetail?.name || nftDetail?.token_name }}</a
+            >{{ nftDetail?.name || nftDetail?.token_name }}</a
             >
           </div>
           <!-- Desktop card info -->
@@ -178,9 +179,9 @@
                     <img
                       [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                       class="cursor-pointer btn-copy"
-                      alt="" />
+                      alt=""/>
                   </button>
-                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
                 </div>
               </div>
             </div>
@@ -203,9 +204,9 @@
                     <img
                       [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                       class="cursor-pointer btn-copy"
-                      alt="" />
+                      alt=""/>
                   </button>
-                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
                 </div>
               </div>
             </div>
@@ -227,9 +228,9 @@
                     <img
                       [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                       class="cursor-pointer btn-copy"
-                      alt="" />
+                      alt=""/>
                   </button>
-                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
                 </div>
               </div>
             </div>
@@ -253,9 +254,9 @@
                     <img
                       [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                       class="ml-2 cursor-pointer btn-copy"
-                      alt="" />
+                      alt=""/>
                   </button>
-                  <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
                 </div>
               </div>
             </div>
@@ -303,7 +304,7 @@
               </div>
             </ng-container>
             <span *ngIf="!isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)" class="pl-4 pl-lg-6 pt-2"
-              >-</span
+            >-</span
             >
           </ng-container>
           <span *ngIf="!nftDetail?.media_info?.onchain?.metadata?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
@@ -364,7 +365,7 @@
                   </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'timestamp'">
-                  {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
                 </ng-container>
                 <ng-container *ngSwitchCase="'type'">
                   <div class="aura-status text-capitalize">
@@ -403,7 +404,7 @@
                     [src]="'assets/images/icons/arrow-right.png' | imageS3"
                     width="14"
                     height="9"
-                    class="ml-10 ml-lg-15" />
+                    class="ml-10 ml-lg-15"/>
                 </ng-container>
                 <ng-container *ngSwitchCase="'to_address'">
                   <ng-container
@@ -427,10 +428,31 @@
                   </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
-                  <span *ngIf="data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | mask : 'separator.6' || '-' }}
-                    <span [class.text--primary]="data.denom !== denom">{{ data.denom || denom }}</span>
-                  </span>
+                  <div class="aura-tooltip-contain d-flex"
+                       *ngIf="data[template.matColumnDef]">
+                    <div
+                      class="aura-tooltip-object"
+                      *ngIf="data[template.matColumnDef] < 0.001">
+                      <0.001
+                    </div>
+                    <div
+                      [class.aura-tooltip-object]="data[template.matColumnDef] !== 0"
+                      [class.cursor-text]="data[template.matColumnDef] < 1000000"
+                      *ngIf="data[template.matColumnDef] >= 0.001"
+                      [appBigNumber]="data[template.matColumnDef]"
+                      [decimal]="0"></div>
+                    <span [class.text--primary]="data.denom !== denom" class="ml-1">{{ data.denom || denom }}</span>
+                    <app-tooltip-customize
+                      *ngIf="
+                              data[template.matColumnDef] < 0.001 ||
+                              data[template.matColumnDef] >= 1000000
+                            "
+                      [content]="data[template.matColumnDef] | mask : 'separator.6'">
+                    </app-tooltip-customize>
+                  </div>
+                  <div *ngIf="!data[template.matColumnDef]">
+                    -
+                  </div>
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
               </ng-container>

@@ -69,6 +69,12 @@ export const TOKEN_ID_GET_PRICE = {
   BTC: 'bitcoin',
 };
 
+export const COIN_TOKEN_TYPE = {
+  NATIVE: 'native',
+  IBC: 'ibc',
+  CW20: 'cw20',
+}
+
 export enum MEDIA_TYPE {
   IMG = 'img',
   VIDEO = 'video',

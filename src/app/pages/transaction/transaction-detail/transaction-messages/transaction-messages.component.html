@@ -1,7 +1,6 @@
 <div class="box-tx-detail">
   <div *ngIf="!isTransactionTypeDefault">
     <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1">
-      {{ checkTypeMessage() }}
       <ng-container *ngIf="!(transactionDetail?.messages[0]['@type'] === eTransType.MultiSend); else multiSend">
         <ng-container *ngFor="let element of currentData; let i = index">
           <div class="card text--white">
@@ -160,8 +159,10 @@
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask : 'separator.6' }}
-        <span class="text--white">{{
-          transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom | convertLogAmount : true
+        <span class="text--primary">{{
+          transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom === coinMinimalDenom
+            ? denom
+            : transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom
         }}</span>
       </div>
     </div>
@@ -184,7 +185,9 @@
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.amount | balanceOf | mask : 'separator.6' }}
-        <span class="text--primary">{{ ibcData?.receive?.denom }}</span>
+        <span class="text--primary">{{
+          ibcData?.receive?.denom === coinMinimalDenom ? denom : ibcData?.receive?.denom
+        }}</span>
       </div>
     </div>
     <app-messages-item
@@ -243,7 +246,7 @@
   </ng-template>
 
   <ng-template #ibcTimeout let-data="data" let-index="index">
-    {{ getDataIBC(ibcListMapping.TimeOut, index) }}
+    {{ getDataIBC(ibcListMapping.TimeOut) }}
     <app-messages-item
       [label]="'Sequence'"
       [value]="getLongValue(ibcData?.time_out[index - 1]?.next_sequence_recv)"
@@ -353,39 +356,37 @@
             *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
           </ng-container>
 
-          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length === 0">
+          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout)?.length === 0">
             <ng-container
               [ngTemplateOutlet]="ibcItem"
               [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: 'Receive' }"
               *ngIf="filterIBCType(eTransType.IBCReceived)?.length > 0">
             </ng-container>
-
             <ng-container
               [ngTemplateOutlet]="ibcItem"
               [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: 'Acknowledgement' }"
               *ngIf="filterIBCType(eTransType.IBCAcknowledgement)?.length > 0">
             </ng-container>
           </ng-container>
-          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length > 0">
-            <ng-container
-              [ngTemplateOutlet]="ibcItem"
-              [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }"
-              *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0">
-            </ng-container>
+
+          <ng-container
+            *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0"
+            [ngTemplateOutlet]="ibcItem"
+            [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }">
           </ng-container>
         </div>
       </div>
       <ng-template #ibcItem let-type="type" let-title="title">
-        <div class="ibc-item">
+        <div class="ibc-item" *ngIf="listIBCProgress">
           <div class="d-flex align-items-center">
             <div class="ibc-checker mr-2" [ngClass]="type === eTransType.IBCTimeout ? 'timeout' : ''"></div>
             <div class="text--green-4" [ngClass]="type === eTransType.IBCTimeout ? 'text--red-3' : ''">{{ title }}</div>
           </div>
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
-            <ng-container *ngFor="let item of filterIBCType(type)">
+            <ng-container *ngFor="let item of listIBCProgress">
               <div class="d-lg-flex justify-content-between">
                 <div>
-                  {{ (denomIBC ? (denomIBC | convertLogAmount : true) : item.denom) | cutStringPipe : 16 : 16 }}
+                  <!-- {{ denomIBC || ibcData?.receive?.denomOrigin | cutStringPipe : 25 }} -->
                 </div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
@@ -406,7 +407,7 @@
                         height="16px"
                         *ngIf="item.effected"
                         class="mr-1" />
-                      {{ commonService.getDateValue(item.time)[0] }}
+                      {{ (item.time | dateCustom)[0] }}
                     </div>
                     <div class="d-flex justify-content-end align-items-center ml-2">
                       <span>({{ item.time | customDate : 'yyyy-MM-dd' }}</span>

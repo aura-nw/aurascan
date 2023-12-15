@@ -26,7 +26,7 @@
               [cdkCopyToClipboard]="currentAddress">
               <i class="ph ph-copy text--white body-01"></i>
             </button>
-            <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+            <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
           </div>
         </div>
         <div class="aura-tooltip-contain btn-watch-list ml-2 ml-lg-0">
@@ -44,7 +44,7 @@
               <a class="text--primary" [routerLink]="['/contracts/', currentAddress]">Contract</a>
             </div>
           </div>
-          <app-tooltip-customize [content]="'Go to Contract Details'"> </app-tooltip-customize>
+          <app-tooltip-customize [content]="'Go to Contract Details'"></app-tooltip-customize>
         </div>
       </div>
     </div>
@@ -54,57 +54,67 @@
     <div class="col-12 col-lg-3">
       <div class="card card-h-100">
         <div class="px-4 px-xl-0 py-4 py-lg-6 qr-code d-none d-lg-block">
-          <app-qr [address]="currentAddress || ''"> </app-qr>
+          <app-qr [address]="currentAddress || ''"></app-qr>
         </div>
         <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
-              *ngIf="commonService.setNameTag(currentAddress, null, false) !== currentAddress"
+              *ngIf="(currentAddress | nameTag: false) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
               <div class="d-inline-flex w-100 aura-tooltip-object align-items-center justify-content-between">
-                <span class="line-claim">{{ commonService.setNameTag(currentAddress, null, false) || '-' }}</span>
+                <span class="line-claim">{{ (currentAddress | nameTag: false) || '-' }}</span>
                 <a
                   target="_blank"
-                  [href]="extendLink(commonService.findUrlNameTag(currentAddress))"
-                  *ngIf="commonService.findUrlNameTag(currentAddress)">
-                  <i _ngcontent-wrg-c372="" class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
+                  [href]="extendLink(currentAddress | nameTag: null : 'url')"
+                  *ngIf="currentAddress | nameTag: null : 'url'">
+                  <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
                 </a>
               </div>
 
               <app-tooltip-customize
-                *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
-                [content]="
-                  'Public name: ' + commonService.setNameTag(currentAddress, null, false)
-                "></app-tooltip-customize>
+                *ngIf="currentAddress | isPublicNameTag"
+                [content]="'Public name: ' + (currentAddress | nameTag: false)"></app-tooltip-customize>
             </div>
           </div>
 
           <button
             class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private"
-            *ngIf="!commonService.checkPrivate(currentAddress)"
+            *ngIf="!(currentAddress | isPrivateNameTag)"
             (click)="editPrivateName()">
             <span class="caption fw-normal"> Set Private Name Tag </span>
           </button>
           <div
-            *ngIf="commonService.checkPrivate(currentAddress)"
+            *ngIf="currentAddress | isPrivateNameTag"
             class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
             <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
-              <span class="line-claim">{{ commonService.setNameTag(currentAddress) || '-' }}</span>
+              <span class="line-claim">{{ (currentAddress | nameTag) || '-' }}</span>
             </div>
 
             <app-tooltip-customize
-              *ngIf="!commonService.checkDisplayTooltip(currentAddress)"
-              [content]="'Private name: ' + commonService.setNameTag(currentAddress)"></app-tooltip-customize>
+              *ngIf="currentAddress | isPrivateNameTag"
+              [content]="'Private name: ' + (currentAddress | nameTag)"></app-tooltip-customize>
             <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
           </div>
 
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
             <div>
               <div class="h5 mb-1 text--white">Total Value</div>
-              <span class="h1 mb-0 fw-700 mb-0 text-gradient d-inline" *ngIf="!isNoData">
-                $ {{ totalValueToken + totalValueNft || 0 | formatDigit : 2 }}
-              </span>
+              <div class="aura-tooltip-contain">
+                <span
+                  class="h1 mb-0 fw-700 mb-0 text-gradient d-inline aura-tooltip-object"
+                  [class.cursor-text]="
+                    totalValueToken + totalValueNft >= 0.001 && totalValueToken + totalValueNft < 1000000
+                  "
+                  *ngIf="!isNoData">
+                  $ <span [appBigNumber]="totalValueToken + totalValueNft || 0" [decimal]="0"></span>
+                </span>
+                <app-tooltip-customize
+                  *ngIf="totalValueToken + totalValueNft < 0.001 || totalValueToken + totalValueNft >= 1000000"
+                  [content]="
+                    (totalValueToken + totalValueNft | convertSmallNumber: 0 | formatStringNumber) || 0
+                  "></app-tooltip-customize>
+              </div>
               <img
                 [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                 alt=""
@@ -150,7 +160,7 @@
             height="14"
             (click)="closePopup()" />
         </div>
-        <app-qr [address]="currentAddress || ''"> </app-qr>
+        <app-qr [address]="currentAddress || ''"></app-qr>
       </div>
     </ng-template>
   </div>
