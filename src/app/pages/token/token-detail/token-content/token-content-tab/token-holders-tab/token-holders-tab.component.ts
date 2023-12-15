@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
@@ -82,13 +83,12 @@ export class TokenHoldersTabComponent implements OnInit {
           } else {
             this.pageData.length = this.totalHolder;
           }
-
-          const dataFlat = data?.map((item) => {
+          let dataFlat = data?.map((item) => {
             return {
               owner: item.address,
               balance: item.amount,
               percent_hold: (item.amount / item.cw20_contract.total_supply) * 100,
-              value: 0,
+              value: (new BigNumber(item.amount).multipliedBy(this.tokenDetail.price)).toFixed() || 0,
             };
           });
           this.dataSource = new MatTableDataSource<any>(dataFlat);
