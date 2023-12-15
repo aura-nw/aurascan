@@ -56,10 +56,24 @@
             <ng-container matColumnDef="amount">
               <th mat-header-cell *matHeaderCellDef>Amount</th>
               <td mat-cell *matCellDef="let element">
-                <span
-                  class="mb-0 text--gray-1 fw-normal"
-                  [appBigNumber]="element?.amount[0].amount"
-                  [decimal]="6"></span>
+                <div class="aura-tooltip-contain mb-0 text--gray-1 fw-normal">
+                  <div class="aura-tooltip-object" *ngIf="+(element?.amount[0].amount | balanceOf: 6) < 0.001">
+                    <0.001
+                  </div>
+                  <div
+                    [class.aura-tooltip-object]="element?.amount[0].amount !== 0"
+                    [class.cursor-text]="+(element?.amount[0].amount | balanceOf: 6) < 1000000"
+                    *ngIf="(element?.amount[0].amount | balanceOf: 6) >= 0.001"
+                    [appBigNumber]="element?.amount[0].amount"
+                    [decimal]="6"></div>
+                  <app-tooltip-customize
+                    *ngIf="
+                              (element?.amount[0].amount | balanceOf: 6) < 0.001 ||
+                              (element?.amount[0].amount | convertSmallNumber: 6) >= 1000000
+                            "
+                    [content]="element?.amount[0].amount | convertSmallNumber: 6 | formatStringNumber">
+                  </app-tooltip-customize>
+                </div>
                 <span class="text--white fw-normal"> {{ denom }}</span>
               </td>
             </ng-container>

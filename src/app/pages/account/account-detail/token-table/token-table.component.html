@@ -47,9 +47,9 @@
                   [maxLength]="maxLengthSearch"
                   (keyup.enter)="searchToken()"
                   name="search"
-                  autocomplete="off" />
+                  autocomplete="off"/>
                 <button type="submit" class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
                 </button>
                 <button
                   type="reset"
@@ -61,7 +61,7 @@
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
                     alt=""
                     width="24"
-                    height="24" />
+                    height="24"/>
                 </button>
               </div>
             </form>
@@ -101,8 +101,8 @@
               <td mat-cell *matCellDef="let element">
                 <div class="d-flex align-items-center">
                   <div>
-                    <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
-                    <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
+                    <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt=""/>
+                    <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt=""/>
                   </div>
                   <div>
                     <a
@@ -121,7 +121,7 @@
                               width="18"
                               height="18"
                               class="ml-1"
-                              *ngIf="element.verify_status === 'VERIFIED'" />
+                              *ngIf="element.verify_status === 'VERIFIED'"/>
                           </div>
                           <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
                           </app-tooltip-customize>
@@ -141,7 +141,7 @@
                             width="18"
                             height="18"
                             class="ml-1"
-                            *ngIf="element.verify_status === 'VERIFIED'" />
+                            *ngIf="element.verify_status === 'VERIFIED'"/>
                         </div>
                         <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
                         </app-tooltip-customize>
@@ -193,28 +193,30 @@
               <th *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element">
                 <span class="text--gray-4 caption fw-normal">Amount</span>
-                <ng-container *ngIf="element.contract_address === '-'">
-                  <div [appBigNumber]="element.balance" [decimal]="0"></div>
-                </ng-container>
-                <div *ngIf="element.contract_address !== '-'" class="aura-tooltip-contain d-flex">
-                  <div class="aura-tooltip-object" *ngIf="(element.balance | balanceOf: element.decimals) < 0.001">
+                <div class="aura-tooltip-contain d-flex">
+                  <div class="aura-tooltip-object"
+                       *ngIf="element.balance === 0">0
+                  </div>
+                  <div class="aura-tooltip-object"
+                       *ngIf="(element.balance !== 0) && (element.balance | balanceOf: (element.contract_address !== '-' ? element.decimals : 0)) < 0.001">
                     <0.001
                   </div>
                   <div
                     class="aura-tooltip-object"
-                    *ngIf="(element.balance | balanceOf: element.decimals) >= 0.001"
-                    [class.cursor-text]="+(element.balance | balanceOf: element.decimals) < 1000000"
+                    *ngIf="(element.balance | balanceOf: (element.contract_address !== '-' ? element.decimals : 0)) >= 0.001"
+                    [class.cursor-text]="+(element.balance | balanceOf: (element.contract_address !== '-' ? element.decimals : 0)) < 1000000"
                     [appBigNumber]="element.balance"
-                    [decimal]="element.decimals"></div>
+                    [decimal]="(element.contract_address !== '-' ? element.decimals : 0)"></div>
                   <app-tooltip-customize
                     *ngIf="
-                      (element.balance | balanceOf: element.decimals) < 0.001 ||
-                      (element.balance | convertSmallNumber: element.decimals) >= 1000000
+                      (element.balance !== 0) &&
+                      ((element.balance | balanceOf: (element.contract_address !== '-' ? element.decimals : 0)) < 0.001 ||
+                      (element.balance | convertSmallNumber: (element.contract_address !== '-' ? element.decimals : 0)) >= 1000000)
                     "
                     [content]="
-                      (element.balance | balanceOf: element.decimals) < 0.001
-                        ? (element.balance | balanceOf: element.decimals)
-                        : (element.balance | convertSmallNumber: element.decimals | formatStringNumber)
+                      (element.balance | balanceOf: (element.contract_address !== '-' ? element.decimals : 0)) < 0.001
+                        ? (element.balance | balanceOf: (element.contract_address !== '-' ? element.decimals : 0))
+                        : (element.balance | convertSmallNumber: (element.contract_address !== '-' ? element.decimals : 0) | formatStringNumber)
                     ">
                   </app-tooltip-customize>
                 </div>

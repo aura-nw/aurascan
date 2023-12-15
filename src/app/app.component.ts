@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
-import { CommonService } from './core/services/common.service';
-import { TokenService } from './core/services/token.service';
-import { getInfo } from './core/utils/common/info-common';
-import { Globals } from './global/global';
-// import eruda from 'eruda';
 import * as _ from 'lodash';
 import { forkJoin, map } from 'rxjs';
+import { TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
+import { CommonService } from './core/services/common.service';
 import { NameTagService } from './core/services/name-tag.service';
-import { ValidatorService } from './core/services/validator.service';
 import { NotificationsService } from './core/services/notifications.service';
+import { TokenService } from './core/services/token.service';
+import { ValidatorService } from './core/services/validator.service';
 import { WatchListService } from './core/services/watch-list.service';
+import { getInfo } from './core/utils/common/info-common';
+import { Globals } from './global/global';
 
 @Component({
   selector: 'app-root',
@@ -81,59 +80,59 @@ export class AppComponent implements OnInit {
       nextKey: 0,
     };
 
-    const payloadPrivate = {
-      limit: 100,
-      offset: 0,
-      keyword: null,
-    };
-
     // get list name tag if not login email
     if (!this.userEmail) {
       this.nameTagService.getListNameTag(payload).subscribe((res) => {
         this.nameTagService.listNameTag = res.data?.nameTags;
         localStorage.setItem('listNameTag', JSON.stringify(res.data?.nameTags));
       });
+    } else {
+      const payloadPrivate = {
+        limit: 100,
+        offset: 0,
+        keyword: null,
+      };
+
+      // get list name tag if login email
+      forkJoin({
+        publicName: this.nameTagService.getListNameTag(payload),
+        privateName: this.nameTagService.getListPrivateNameTag(payloadPrivate),
+      }).subscribe(({ publicName, privateName }) => {
+        const listNameTag = publicName.data?.nameTags?.map((element) => {
+          const address = _.get(element, 'address');
+          const name_tag = _.get(element, 'name_tag');
+          const enterpriseUrl = _.get(element, 'enterpriseUrl');
+
+          let isPrivate = false;
+          let name_tag_private = null;
+          let id = null;
+
+          let privateData = privateName?.data?.find((k) => k.address === address);
+
+          if (privateData) {
+            name_tag_private = privateData.nameTag;
+            isPrivate = true;
+            id = privateData.id;
+          }
+          return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
+        });
+
+        // get other data of private list
+        const isSameUser = (listTemp, privateName) => listTemp?.address === privateName.address;
+        const onlyInLeft = (left, right, compareFunction) =>
+          left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
+        const lstPrivate = onlyInLeft(privateName?.data, listNameTag, isSameUser);
+
+        lstPrivate.forEach((element) => {
+          element['name_tag_private'] = element.nameTag;
+          element['nameTag'] = null;
+          element['isPrivate'] = true;
+        });
+        const result = [...listNameTag, ...lstPrivate];
+        this.nameTagService.listNameTag = result;
+        localStorage.setItem('listNameTag', JSON.stringify(result));
+      });
     }
-
-    // get list name tag if login email
-    forkJoin({
-      publicName: this.nameTagService.getListNameTag(payload),
-      privateName: this.nameTagService.getListPrivateNameTag(payloadPrivate),
-    }).subscribe(({ publicName, privateName }) => {
-      const listNameTag = publicName.data?.nameTags?.map((element) => {
-        const address = _.get(element, 'address');
-        const name_tag = _.get(element, 'name_tag');
-        const enterpriseUrl = _.get(element, 'enterpriseUrl');
-
-        let isPrivate = false;
-        let name_tag_private = null;
-        let id = null;
-
-        let privateData = privateName?.data?.find((k) => k.address === address);
-
-        if (privateData) {
-          name_tag_private = privateData.nameTag;
-          isPrivate = true;
-          id = privateData.id;
-        }
-        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
-      });
-
-      // get other data of private list
-      const isSameUser = (listTemp, privateName) => listTemp?.address === privateName.address;
-      const onlyInLeft = (left, right, compareFunction) =>
-        left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
-      const lstPrivate = onlyInLeft(privateName?.data, listNameTag, isSameUser);
-
-      lstPrivate.forEach((element) => {
-        element['name_tag_private'] = element.nameTag;
-        element['nameTag'] = null;
-        element['isPrivate'] = true;
-      });
-      const result = [...listNameTag, ...lstPrivate];
-      this.nameTagService.listNameTag = result;
-      localStorage.setItem('listNameTag', JSON.stringify(result));
-    });
   }
 
   getListValidator(): void {
