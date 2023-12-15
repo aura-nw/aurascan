@@ -76,14 +76,14 @@
                 matStartDate
                 placeholder="Start date"
                 [(ngModel)]="transactionFilter.startDate"
-                readonly/>
+                readonly />
               <input
                 matEndDate
                 placeholder="End date"
                 [(ngModel)]="transactionFilter.endDate"
                 class="pl-3 cursor-pointer"
                 readonly
-                (ngModelChange)="searchType()"/>
+                (ngModelChange)="searchType()" />
             </mat-date-range-input>
             <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true" id="datepicker-toggle">
               <mat-icon matDatepickerToggleIcon class="d-flex align-items-center">
@@ -101,7 +101,7 @@
                   alt=""
                   width="24"
                   height="24"
-                  (click)="clearFilter(modeFilter.date)"/>
+                  (click)="clearFilter(modeFilter.date)" />
               </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
@@ -112,9 +112,9 @@
           class="filter-result cursor-pointer"
           (click)="datePickerClickTrigger()"
           id="filter-result-date">
-          <span>{{ transactionFilter.startDate | date : 'MM/dd/yyyy' }}</span>
+          <span>{{ transactionFilter.startDate | date: 'MM/dd/yyyy' }}</span>
           <span class="mx-1">-</span>
-          <span>{{ transactionFilter.endDate | date : 'MM/dd/yyyy' }}</span>
+          <span>{{ transactionFilter.endDate | date: 'MM/dd/yyyy' }}</span>
           <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.date)"></i>
         </div>
         <div class="dropdown aura-dropdown btn-item ml-6 flex-shrink-0" *ngIf="modeQuery !== tabsData.ExecutedTxs">
@@ -198,11 +198,11 @@
                   [ngModelOptions]="{ standalone: true }"
                   (ngModelChange)="searchTransactionType()"
                   name="search"
-                  autocomplete="off"/>
+                  autocomplete="off" />
                 <button
                   type="submit"
                   class="btn-search {{ transactionTypeKeyWord && transactionTypeKeyWord?.length > 0 ? 'd-none' : '' }}">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                 </button>
                 <button
                   type="reset"
@@ -216,7 +216,7 @@
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
                     alt=""
                     width="24"
-                    height="24"/>
+                    height="24" />
                 </button>
               </div>
               <div
@@ -240,7 +240,7 @@
                     id="all"
                     [checked]="checkAll"
                     (change)="onChangeTnxFilterType($event, 'all')"
-                    class="check-box check-box--dark"/>
+                    class="check-box check-box--dark" />
                   <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
                 </div>
                 <div class="divider divider-horizontal my-2"></div>
@@ -253,7 +253,7 @@
                       [checked]="checkedTnx(type)"
                       id="type-{{ i }}"
                       (change)="onChangeTnxFilterType($event, type)"
-                      class="check-box check-box--dark"/>
+                      class="check-box check-box--dark" />
                     <label for="type-{{ i }}" class="ml-2 mb-0 text-justify pl-1"> {{ type.value }} </label>
                   </div>
                 </div>
@@ -354,7 +354,7 @@
                   *ngSwitchCase="'tx_hash'"
                   class="text--primary cursor-pointer hash-link"
                   [routerLink]="['/transaction', data['tx_hash']]">
-                  {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                  {{ data[template.matColumnDef] | cutStringPipe: 8 : 8 }}
                 </a>
                 <a
                   *ngSwitchCase="'height'"
@@ -376,7 +376,7 @@
                 <div *ngSwitchCase="'type'">
                   <div class="aura-status aura-tooltip-contain p-0">
                     <div class="status cursor-pointer aura-tooltip-object">
-                      {{ data[template.matColumnDef] | stringEllipsis : 22 }}
+                      {{ data[template.matColumnDef] | stringEllipsis: 22 }}
                       <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                         +{{ data.lstTypeTemp?.length - 1 }}
                       </div>
@@ -400,7 +400,7 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="'fee'">
-                  {{ +data[template.matColumnDef] | mask : 'separator.6' }}
+                  {{ +data[template.matColumnDef] | mask: 'separator.6' }}
                   <span class="text--white">{{ denom }}</span>
                 </div>
                 <div *ngSwitchCase="'amount'">
@@ -411,29 +411,27 @@
                       *ngIf="index < data.limit">
                       <div class="item-show d-flex align-items-center">
                         <div class="aura-tooltip-contain">
-                          <div
-                            class="aura-tooltip-object"
-                            *ngIf="+(item.amountTemp | balanceOf : item.decimal) < 0.001">
+                          <div class="aura-tooltip-object" *ngIf="+(item.amountTemp | balanceOf: item.decimal) < 0.001">
                             <0,001
                           </div>
                           <div
                             [class.aura-tooltip-object]="item.amountTemp !== 0"
-                            [class.cursor-text]="+(item.amountTemp | balanceOf : item.decimal) < 1000000"
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001"
+                            [class.cursor-text]="+(item.amountTemp | balanceOf: item.decimal) < 1000000"
+                            *ngIf="(item.amountTemp | balanceOf: item.decimal) >= 0.001"
                             [appBigNumber]="item.amountTemp"
                             [decimal]="item.decimal"></div>
                           <app-tooltip-customize
                             *ngIf="
-                              (item.amountTemp | balanceOf : item.decimal) < 0.001 ||
-                              (item.amountTemp | convertSmallNumber : item.decimal) >= 1000000
+                              (item.amountTemp | balanceOf: item.decimal) < 0.001 ||
+                              (item.amountTemp | convertSmallNumber: item.decimal) >= 1000000
                             "
-                            [content]="item.amountTemp | convertSmallNumber : item.decimal | formatStringNumber">
+                            [content]="item.amountTemp | convertSmallNumber: item.decimal | formatStringNumber">
                           </app-tooltip-customize>
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
                           <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
                             <div [class.aura-tooltip-object]="(item.denomOrigin || item.denom) !== denom">
-                              {{ item.denomOrigin || item.denom | stringEllipsis : 19 }}
+                              {{ item.denomOrigin || item.denom | stringEllipsis: 19 }}
                             </div>
 
                             <app-tooltip-customize
@@ -446,7 +444,7 @@
                             class=""
                             [routerLink]="['/tokens/token', item.contractAddress]"
                             *ngIf="modeQuery === tabsData.FtsTxs">
-                            {{ item.denom | stringEllipsis : 19 }}
+                            {{ item.denom | stringEllipsis: 19 }}
                           </a>
                         </span>
                       </div>
@@ -484,7 +482,7 @@
                       (click)="seeMoreData(data)"
                       *ngIf="data.limit < data.arrEvent?.length"
                       class="cursor-pointer mr-8"
-                    >See more</span
+                      >See more</span
                     >
                     <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                   </div>
@@ -493,7 +491,7 @@
                       (click)="seeMoreData(data)"
                       *ngIf="data.limit < data.arrEvent?.length"
                       class="cursor-pointer mr-8"
-                    >See more</span
+                      >See more</span
                     >
                     <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                   </div>
@@ -547,7 +545,7 @@
                             *ngIf="item.tokenId"
                             [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
                             class="text--primary cursor-pointer"
-                          >#{{ item.tokenId | stringEllipsis : (item.tokenId?.length > 8 ? 5 : 8) }}</a
+                            >#{{ item.tokenId | stringEllipsis: (item.tokenId?.length > 8 ? 5 : 8) }}</a
                           >
                           <ng-container *ngIf="!item.tokenId">-</ng-container>
                         </div>
@@ -590,7 +588,7 @@
       [title]="{
         size: 'md',
         titleClass: 'body-02-mob',
-        label: data.tx_hash | cutStringPipe : 8 : 8,
+        label: data.tx_hash | cutStringPipe: 8 : 8,
         subLabelContent: data.type,
         subLabelClass: 'btn-mob',
         status: data.code
@@ -604,7 +602,7 @@
         {
           label: 'Fee',
           class: 'text--gray-1 body-02-mob',
-          info: (+data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
+          info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
         }
       ]"></app-card-mob-account>
   </div>

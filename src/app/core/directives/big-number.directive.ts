@@ -1,8 +1,8 @@
-import {AfterViewInit, Directive, ElementRef, Input, SimpleChanges} from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, SimpleChanges } from '@angular/core';
 import BigNumber from 'bignumber.js';
-import {NgxMaskPipe} from 'ngx-mask';
-import {Globals} from 'src/app/global/global';
-import {IntlFormat} from '../utils/common/parsing';
+import { NgxMaskPipe } from 'ngx-mask';
+import { Globals } from 'src/app/global/global';
+import { IntlFormat } from '../utils/common/parsing';
 
 @Directive({
   selector: 'span[appBigNumber],div[appBigNumber]',
@@ -17,7 +17,11 @@ export class BigNumberDirective implements AfterViewInit {
 
   element: HTMLElement;
 
-  constructor(private mask: NgxMaskPipe, private elRef: ElementRef, private global: Globals) {
+  constructor(
+    private mask: NgxMaskPipe,
+    private elRef: ElementRef,
+    private global: Globals,
+  ) {
     this.element = elRef.nativeElement;
   }
 
@@ -27,8 +31,7 @@ export class BigNumberDirective implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   convertNumber() {
     const newAmount = new BigNumber(this.appBigNumber);
@@ -66,9 +69,9 @@ export class BigNumberDirective implements AfterViewInit {
       let abs;
       let key = '';
       const powers = [
-        {key: 'T', value: new BigNumber(10).pow(12)},
-        {key: 'B', value: new BigNumber(10).pow(9)},
-        {key: 'M', value: new BigNumber(10).pow(6)},
+        { key: 'T', value: new BigNumber(10).pow(12) },
+        { key: 'B', value: new BigNumber(10).pow(9) },
+        { key: 'M', value: new BigNumber(10).pow(6) },
       ];
 
       for (let i = 0; i < powers.length; i++) {

@@ -1,15 +1,15 @@
-import {formatDate, formatNumber} from '@angular/common';
-import {Pipe, PipeTransform} from '@angular/core';
+import { formatDate, formatNumber } from '@angular/common';
+import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import {NgxMaskPipe} from 'ngx-mask';
-import {TYPE_TRANSACTION} from '../constants/transaction.constant';
-import {TRANSACTION_TYPE_ENUM} from '../constants/transaction.enum';
-import {EnvironmentService} from '../data-services/environment.service';
-import {CommonService} from '../services/common.service';
-import {balanceOf, parseFullNumber} from '../utils/common/parsing';
+import { NgxMaskPipe } from 'ngx-mask';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
+import { EnvironmentService } from '../data-services/environment.service';
+import { CommonService } from '../services/common.service';
+import { balanceOf, parseFullNumber } from '../utils/common/parsing';
 
-@Pipe({name: 'cutStringPipe'})
+@Pipe({ name: 'cutStringPipe' })
 export class CutStringPipe implements PipeTransform {
   transform(value: string, start: number, end?: number): string {
     let endChar = end || 0;
@@ -27,7 +27,7 @@ export class CutStringPipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'stringEllipsis'})
+@Pipe({ name: 'stringEllipsis' })
 export class StringEllipsisPipe implements PipeTransform {
   transform(value: string, limit: number): string {
     if (value && value.length > limit) {
@@ -38,10 +38,9 @@ export class StringEllipsisPipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'imageS3'})
+@Pipe({ name: 'imageS3' })
 export class ImageURLPipe implements PipeTransform {
-  constructor(private environmentService: EnvironmentService) {
-  }
+  constructor(private environmentService: EnvironmentService) {}
 
   transform(value: string): string {
     const replacePath = /\..\//gi;
@@ -52,7 +51,7 @@ export class ImageURLPipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'customDate'})
+@Pipe({ name: 'customDate' })
 export class CustomDatePipe implements PipeTransform {
   transform(value: string, format: string) {
     const date = new Date(value);
@@ -61,7 +60,7 @@ export class CustomDatePipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'balanceOf'})
+@Pipe({ name: 'balanceOf' })
 export class BalanceOfPipe implements PipeTransform {
   transform(amount: string | number, decimal = 6) {
     let value = +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
@@ -69,20 +68,21 @@ export class BalanceOfPipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'replaceIpfs'})
+@Pipe({ name: 'replaceIpfs' })
 export class ReplaceIpfsPipe implements PipeTransform {
-  constructor(private environmentService: EnvironmentService) {
-  }
+  constructor(private environmentService: EnvironmentService) {}
 
   transform(value: string): string {
     return this.environmentService.ipfsDomain + value.replace('://', '/');
   }
 }
 
-@Pipe({name: 'convertLogAmount'})
+@Pipe({ name: 'convertLogAmount' })
 export class ConvertLogAmountPipe implements PipeTransform {
-  constructor(private commonService: CommonService, private mask: NgxMaskPipe) {
-  }
+  constructor(
+    private commonService: CommonService,
+    private mask: NgxMaskPipe,
+  ) {}
 
   transform(value: string, getDenomOnly = false): string {
     if (!value) return '';
@@ -99,14 +99,14 @@ export class ConvertLogAmountPipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'decodeData'})
+@Pipe({ name: 'decodeData' })
 export class DecodeDataPipe implements PipeTransform {
   transform(value: string): string {
     return atob(value);
   }
 }
 
-@Pipe({name: 'displayTypeToolTip'})
+@Pipe({ name: 'displayTypeToolTip' })
 export class DisplayTypeToolTipPipe implements PipeTransform {
   transform(value: any): string {
     let result = '';
@@ -119,15 +119,13 @@ export class DisplayTypeToolTipPipe implements PipeTransform {
           if (typeof dataTemp === 'string') {
             try {
               dataTemp = JSON.parse(dataTemp);
-            } catch (e) {
-            }
+            } catch (e) {}
           }
           let action = Object.keys(dataTemp)[0];
           type = 'Contract: ' + action;
-        } catch (e) {
-        }
+        } catch (e) {}
       } else {
-        type = _.find(TYPE_TRANSACTION, {label: typeMsg})?.value || typeMsg.split('.').pop().replace('Msg', '');
+        type = _.find(TYPE_TRANSACTION, { label: typeMsg })?.value || typeMsg.split('.').pop().replace('Msg', '');
       }
 
       if (index <= 4) {
@@ -145,7 +143,7 @@ export class DisplayTypeToolTipPipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'convertSmallNumber'})
+@Pipe({ name: 'convertSmallNumber' })
 export class ConvertSmallNumberPipe implements PipeTransform {
   transform(amount: number, decimal: number = 6): any {
     // let value = +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
@@ -154,7 +152,7 @@ export class ConvertSmallNumberPipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'formatStringNumber'})
+@Pipe({ name: 'formatStringNumber' })
 export class FormatStringNumberPipe implements PipeTransform {
   transform(valueString: string): any {
     let decimalStr;
@@ -162,12 +160,11 @@ export class FormatStringNumberPipe implements PipeTransform {
       decimalStr = valueString.toString().split('.')[1];
       valueString = valueString.toString().split('.')[0];
     }
-    return valueString.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
-      (decimalStr ? ('.' + decimalStr) : '');
+    return valueString.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (decimalStr ? '.' + decimalStr : '');
   }
 }
 
-@Pipe({name: 'formatDigit'})
+@Pipe({ name: 'formatDigit' })
 export class FormatDigitPipe implements PipeTransform {
   transform(amount: number, digit = 0) {
     let digitConvert = '1.' + digit + '-' + digit;

@@ -27,8 +27,8 @@
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
-                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                    '-'
+                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                        '-'
                     }}
                   </a>
                 </ng-container>
@@ -51,11 +51,7 @@
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
                       <div class="aura-tooltip-contain d-flex">
-                        <div
-                          class="aura-tooltip-object"
-                          *ngIf="data[template.matColumnDef] < 0.001">
-                          <0.001
-                        </div>
+                        <div class="aura-tooltip-object" *ngIf="data[template.matColumnDef] < 0.001"><0.001</div>
                         <div
                           [class.aura-tooltip-object]="data[template.matColumnDef] !== 0"
                           [class.cursor-text]="data[template.matColumnDef] < 1000000"
@@ -64,10 +60,7 @@
                           [decimal]="0"></div>
                         <span class="text--white ml-1">{{ denom }}</span>
                         <app-tooltip-customize
-                          *ngIf="
-                              data[template.matColumnDef] < 0.001 ||
-                              data[template.matColumnDef] >= 1000000
-                            "
+                          *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
                           [content]="data[template.matColumnDef]">
                         </app-tooltip-customize>
                       </div>
@@ -81,15 +74,15 @@
                     <ng-container *ngSwitchCase="'rank'">
                       <span [class.label-circle]="data[template.matColumnDef] <= 3">{{
                         data[template.matColumnDef]
-                        }}</span>
+                      }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">
                         <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -98,9 +91,9 @@
                       <div *ngIf="data[template.matColumnDef]">
                         <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -138,16 +131,16 @@
                   info: !data?.voter
                     ? '-'
                     : !(data.voter | checkDisplayTooltip)
-                    ? '<a class=text--primary href=' +
-                      ('/account/' + data.voter) +
-                      '>' +
-                      (data.voter | nameTag | cutStringPipe : 16) +
-                      '</a>'
-                    : '<a class=text--primary href=' +
-                      ('/account/' + data.voter) +
-                      '>' +
-                      (data.voter | nameTag | cutStringPipe : 8 : 8) +
-                      '</a>'
+                      ? '<a class=text--primary href=' +
+                        ('/account/' + data.voter) +
+                        '>' +
+                        (data.voter | nameTag | cutStringPipe: 16) +
+                        '</a>'
+                      : '<a class=text--primary href=' +
+                        ('/account/' + data.voter) +
+                        '>' +
+                        (data.voter | nameTag | cutStringPipe: 8 : 8) +
+                        '</a>'
                 },
                 {
                   label: 'TxHash',
@@ -165,12 +158,12 @@
                   class: 'card__date text--gray-1 body-01',
                   info:
                     '<div class=text-end>' +
-                    (data.timestamp | dateCustom : false)[0] +
+                    (data.timestamp | dateCustom: false)[0] +
                     '</div><div class=text--gray-5><span>' +
-                    (data.timestamp | customDate : 'yyyy-MM-dd') +
+                    (data.timestamp | customDate: 'yyyy-MM-dd') +
                     '</span>' +
                     '<span>' +
-                    (data.timestamp | customDate : 'HH:mm:ss') +
+                    (data.timestamp | customDate: 'HH:mm:ss') +
                     '</span></div>'
                 }
               ]"></app-card-mob-simple>
@@ -206,10 +199,10 @@
                       (data.timestamp | dateCustom: false)[0] +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDate : 'yyyy-MM-dd') +
+                      (data.timestamp | customDate: 'yyyy-MM-dd') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate : 'HH:mm:ss') +
+                      (data.timestamp | customDate: 'HH:mm:ss') +
                       '</span></div>'
                     : '-'
                 }
@@ -229,16 +222,16 @@
                   info: !data?.depositors
                     ? '-'
                     : !(data.depositors | checkDisplayTooltip)
-                    ? '<a class=text--primary href=' +
-                      ('/account/' + data.depositors) +
-                      '>' +
-                      (data.depositors | nameTag | cutStringPipe : 16) +
-                      '</a>'
-                    : '<a class=text--primary href=' +
-                      ('/account/' + data.depositors) +
-                      '>' +
-                      (data.depositors | nameTag | cutStringPipe : 8 : 8) +
-                      '</a>'
+                      ? '<a class=text--primary href=' +
+                        ('/account/' + data.depositors) +
+                        '>' +
+                        (data.depositors | nameTag | cutStringPipe: 16) +
+                        '</a>'
+                      : '<a class=text--primary href=' +
+                        ('/account/' + data.depositors) +
+                        '>' +
+                        (data.depositors | nameTag | cutStringPipe: 8 : 8) +
+                        '</a>'
                 },
                 {
                   label: 'TxHash',
@@ -256,7 +249,7 @@
                   class: 'h6 mb-0 text--gray-1',
                   info: data.amount
                     ? '<span class=mr-1>' +
-                      (data.amount < 0.001 ? '<0.001' : (data.amount | mask : 'separator.6')) +
+                      (data.amount < 0.001 ? '<0.001' : (data.amount | mask: 'separator.6')) +
                       '</span><span class=text--white>' +
                       denom +
                       '</span>'
@@ -267,13 +260,13 @@
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
-                      (data.timestamp| dateCustom: false)[0] +
+                      (data.timestamp | dateCustom: false)[0] +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDate : 'yyyy-MM-dd') +
+                      (data.timestamp | customDate: 'yyyy-MM-dd') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate : 'HH:mm:ss') +
+                      (data.timestamp | customDate: 'HH:mm:ss') +
                       '</span></div>'
                     : '-'
                 }
