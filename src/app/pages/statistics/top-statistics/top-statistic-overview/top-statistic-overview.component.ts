@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { AURA_TOP_STATISTIC_RANGE } from 'src/app/core/constants/chart.constant';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 
 @Component({
@@ -26,7 +25,6 @@ export class TopStatisticOverviewComponent implements OnInit {
   constructor(
     private statisticService: StatisticService,
     private environmentService: EnvironmentService,
-    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

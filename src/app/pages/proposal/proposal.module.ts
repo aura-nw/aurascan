@@ -28,6 +28,7 @@ import { ProposalTableComponent } from './proposal-table/proposal-table.componen
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
 import { MASK_CONFIG } from 'src/app/app.config';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -60,12 +61,8 @@ import { MASK_CONFIG } from 'src/app/app.config';
     CustomPaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
+    CommonDirectiveModule,
   ],
-  providers: [
-    ProposalService,
-    MappingErrorService,
-    ValidatorService,
-    provideEnvironmentNgxMask(MASK_CONFIG),
-  ],
+  providers: [ProposalService, MappingErrorService, ValidatorService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class ProposalModule {}

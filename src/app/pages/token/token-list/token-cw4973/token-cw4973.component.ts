@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../../core/models/common.model';
@@ -41,7 +41,7 @@ export class TokenCw4973Component implements OnInit {
   constructor(
     public translate: TranslateService,
     private soulboundService: SoulboundService,
-    private commonService: CommonService,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +72,7 @@ export class TokenCw4973Component implements OnInit {
       keyword: this.textSearch,
     };
 
-    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       payload['keyword'] = addressNameTag;
     }

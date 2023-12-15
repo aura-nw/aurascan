@@ -6,7 +6,6 @@ import { MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/co
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -43,7 +42,6 @@ export class SoulboundTokenEquippedComponent implements OnInit {
     private soulboundService: SoulboundService,
     private route: ActivatedRoute,
     private walletService: WalletService,
-    public commonService: CommonService,
     private contractService: ContractService,
     private toastr: NgxToastrService,
   ) {}

@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-soulbound-account-token-list',
@@ -46,7 +46,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private soulboundService: SoulboundService,
     public commonService: CommonService,
-    private global: Globals
+    private nameTagService: NameTagService
   ) {}
 
   ngOnInit(): void {
@@ -115,7 +115,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
 
   editPrivateName() {
     const userEmail = localStorage.getItem('userEmail');
-    const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.userAddress);
+    const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.userAddress);
     if (userEmail) {
       if (dataNameTag) {
         localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));

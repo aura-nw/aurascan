@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
@@ -15,7 +16,6 @@ import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants
 import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
-import { Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
@@ -62,13 +62,13 @@ export class AccountDetailComponent implements OnInit {
     public commonService: CommonService,
     private route: ActivatedRoute,
     private accountService: AccountService,
-    private global: Globals,
     private walletService: WalletService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
     private router: Router,
+    private nameTagService: NameTagService,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -234,7 +234,7 @@ export class AccountDetailComponent implements OnInit {
 
   editPrivateName() {
     const userEmail = localStorage.getItem('userEmail');
-    const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.currentAddress);
+    const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.currentAddress);
     if (userEmail) {
       if (dataNameTag) {
         localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));

@@ -3,6 +3,9 @@ import { getAmount, getDataInfo } from 'src/app/global/global';
 import { MEDIA_TYPE, NUMBER_CONVERT } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../constants/transaction.enum';
+import { ESigningType, LAST_USED_PROVIDER, WALLET_PROVIDER } from '../../constants/wallet.constant';
+import { WalletStorage } from '../../models/wallet';
+import local from '../storage/local';
 import { balanceOf } from './parsing';
 
 export function getInfo(globals: any, data: any): void {
@@ -117,9 +120,10 @@ export function checkTypeFile(nft: any) {
   return content_type;
 }
 
-export function getDataIBC(value, coinConfig) {
+export function convertTx(value: string, coinConfig: any, decimal = 6) {
   let result = {};
-  let temp;
+  if (!value) return result;
+  let display;
   if (value.indexOf('ibc') >= 0) {
     try {
       if (!value.startsWith('ibc')) {
@@ -127,13 +131,28 @@ export function getDataIBC(value, coinConfig) {
         value = value?.replace(temp, '');
       }
     } catch {}
-    result = { display: value, decimals: 6 };
-    temp = value.slice(value.indexOf('ibc'));
-    result = coinConfig.find((k) => k.denom === temp) || {};
-    result['display'] = result['display'] || value;
+    display = value.slice(value.indexOf('ibc'));
+    result = coinConfig?.find((k) => k.denom === display) || { display: value, decimal: decimal };
   } else {
-    result = { display: temp, decimals: 6 };
+    result = { display: display, decimal: decimal };
   }
-  result['denom'] = result['denom'] || temp;
+  result['denom'] = result['denom'] || display;
   return result;
+}
+
+export function getLastProvider() {
+  const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+
+  return lastProvider.provider ? lastProvider.provider : WALLET_PROVIDER.KEPLR;
+}
+
+export function getSigningType(provider: WALLET_PROVIDER) {
+  switch (provider) {
+    case WALLET_PROVIDER.COIN98:
+      return ESigningType.Coin98;
+    case WALLET_PROVIDER.LEAP:
+      return ESigningType.Leap;
+    default:
+      return ESigningType.Keplr;
+  }
 }
