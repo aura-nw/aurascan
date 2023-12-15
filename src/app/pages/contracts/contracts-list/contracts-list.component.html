@@ -173,8 +173,8 @@
                       <span
                         *ngIf="
                           !data['code']?.type ||
-                          (data['code']?.type === contractRegisterType.CW20 && !data['cw20_contract']?.name) ||
-                          (data['code']?.type === contractRegisterType.CW721 && !data['cw721_contract']?.name)
+                          (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
+                          (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
                         ">
                         -
                       </span>

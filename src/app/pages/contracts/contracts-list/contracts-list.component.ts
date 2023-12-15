@@ -30,7 +30,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
     { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', isShort: true, isNameTag: true },
   ];
-  contractRegisterType = ContractRegisterType;
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -90,18 +89,18 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res?.smart_contract?.length) {
           res?.smart_contract.forEach((item) => {
-            if (item?.code?.type === this.contractRegisterType.CW20 && item['cw20_contract']?.name) {
+            if (item?.code?.type === ContractRegisterType.CW20 && item['cw20_contract']?.name) {
               item.url = '/tokens/token/' + item.address;
               item.token_tracker = item['cw20_contract']?.name;
             } else if (
-              item?.code?.type === this.contractRegisterType.CW721 &&
+              item?.code?.type === ContractRegisterType.CW721 &&
               item?.name !== this.typeCW4973 &&
               item['cw721_contract']?.name
             ) {
               item.url = '/tokens/token-nft/' + item.address;
               item.token_tracker = item['cw721_contract']?.name;
             } else if (
-              item['code'].type === this.contractRegisterType.CW721 &&
+              item['code'].type === ContractRegisterType.CW721 &&
               item['name'] === this.typeCW4973 &&
               item['cw721_contract']?.name
             ) {

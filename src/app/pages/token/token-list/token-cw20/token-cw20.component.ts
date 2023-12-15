@@ -24,6 +24,7 @@ import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE } from '../..
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 
 @Component({
   selector: 'app-token-cw20',
@@ -36,12 +37,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
     { matColumnDef: 'token', headerCellDef: 'name' },
+    { matColumnDef: 'type', headerCellDef: 'type' },
     { matColumnDef: 'price', headerCellDef: 'price' },
-    { matColumnDef: 'change', headerCellDef: 'change' },
-    { matColumnDef: 'volume', headerCellDef: 'volume' },
     { matColumnDef: 'circulating_market_cap', headerCellDef: 'circulatingMarketCap' },
+    { matColumnDef: 'ibc_out', headerCellDef: 'ibcOut' },
     { matColumnDef: 'onChainMarketCap', headerCellDef: 'onChainMarketCap' },
-    { matColumnDef: 'holders', headerCellDef: 'holders' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
@@ -59,6 +59,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   isLoading = true;
+  filterButtons = [];
+  ContractRegisterType = ContractRegisterType;
 
   searchSubject = new Subject();
   destroy$ = new Subject<void>();
@@ -331,5 +333,26 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.BTC).subscribe((res) => {
       this.global.price.btc = res.data || 0;
     });
+  }
+
+  filterButton(val: string) {
+    const i = this.filterButtons.findIndex((i) => i === val);
+
+    switch (val) {
+      case 'All':
+        this.filterButtons = [];
+        break;
+      case ContractRegisterType.CW20:
+      case ContractRegisterType.CW721:
+      case ContractRegisterType.CW4973:
+      case '': //Others
+      default:
+        if (i >= 0) {
+          this.filterButtons = this.filterButtons.filter((item) => item !== val);
+        } else {
+          this.filterButtons.push(val);
+        }
+    }
+    // this.pageEvent(0);
   }
 }
