@@ -38,9 +38,7 @@
               <ng-container *ngIf="errorCode === 'EU001' && (mode === screenType.Login || mode === screenType.Forgot)">
                 <ng-container *ngIf="i === 0">
                   <div [innerHTML]="'MESSAGES.CLICK_VERIFY_LINK' | translate"></div>
-                  Please click on the verification link sent to your mail to complete the registration process.<br />
-                  In case you've not yet received any email.
-                  <a (click)="resendMail()" class="text--primary cursor-pointer">Resend {{ 'PAGES.LOGIN.resend' }}</a>
+                  <a (click)="resendMail()" class="text--primary cursor-pointer">{{ 'PAGES.LOGIN.resend' }}</a>
                 </ng-container>
                 <ng-container *ngIf="i !== 0">{{ error }}</ng-container>
               </ng-container>
@@ -70,7 +68,6 @@
         <div class="text-center mb-6">
           <img [src]="'assets/images/pages/key_left.png' | imageS3" />
           <div class="body-01 text--gray-2 mt-6">
-            Kindly enter the email linked to your account, we'll send you a link to reset password
             {{ 'PAGES.LOGIN.sendLinkReset' | translate }}
           </div>
         </div>
@@ -162,7 +159,6 @@
                   loginForm.value.confirmPassword?.length > 0
                 "
                 class="text--danger mt-2 caption fw-normal">
-                The password confirmation does not match
                 {{ 'MESSAGES.PASSWORD_NOT_MATCH' | translate }}
               </div>
             </div>
@@ -182,7 +178,7 @@
             type="submit"
             (click)="showVerifyMail()"
             [disabled]="loginForm.status === 'INVALID' || isError">
-            <span class="body-01">Log in {{ 'BUTTON.LOGIN' | translate }}</span>
+            <span class="body-01">{{ 'BUTTON.LOGIN' | translate }}</span>
           </button>
         </div>
         <div class="text-center text--gray-4">
@@ -192,7 +188,7 @@
               'BUTTON.REGISTER' | translate
             }}</a>
           </div>
-          <div class="py-6 text--white body-01">or</div>
+          <div class="py-6 text--white body-01">{{ 'PAGES.LOGIN.or' | translate }}</div>
 
           <div class="box-sign-google">
             <div
@@ -280,25 +276,15 @@
   <div class="body-01 text--gray-2">
     <ng-container *ngIf="!isForgotScreen">
       <div [innerHTML]="'LOGIN.sentVerifyLink' | translate : { emailFormat: emailFormat }"></div>
-      A verification link has been sent to {{ emailFormat }}.<br />
-      Please click on the link to verify your email account.
     </ng-container>
     <ng-container *ngIf="isForgotScreen">
       <div [innerHTML]="'LOGIN.sentPasswordReset' | translate : { emailFormat: emailFormat }"></div>
-      A password reset link has been sent to {{ emailFormat }}.<br />
-      Please click on the link to change your password.
     </ng-container>
   </div>
-  <div class="body mt-6" *ngIf="!isForgotScreen">
-    {{ 'PAGES.LOGIN.checkMail' | translate }}
-    In case you cannot find the email, please check the spam folder and ensure your spam filters allow email from
-    verify@aura.network
-  </div>
+  <div class="body mt-6" *ngIf="!isForgotScreen">{{ 'PAGES.LOGIN.checkMail' | translate }}</div>
   <div class="mt-6 mb-6 mb-lg-0">
-    <span>Have not received any email? {{ 'PAGES.LOGIN.notHaveEmail' | translate }}</span>
-    <a class="text--primary fw-semibold ml-1 cursor-pointer" (click)="resendMail()"
-      >Resend {{ 'PAGES.LOGIN.resend' }}</a
-    >
+    <span>{{ 'PAGES.LOGIN.notHaveEmail' | translate }}</span>
+    <a class="text--primary fw-semibold ml-1 cursor-pointer" (click)="resendMail()">{{ 'PAGES.LOGIN.resend' }}</a>
     <div *ngIf="errorMessage?.length > 0" class="text--danger mt-2 caption fw-normal">
       <div>{{ errorMessage[errorMessage?.length - 1] }}</div>
     </div>

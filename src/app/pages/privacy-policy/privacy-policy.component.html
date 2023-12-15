@@ -12,8 +12,8 @@
           </picture>
         </div>
         <div class="order-1">
-          <div class="h1 text-white fw-700 mb-2">Privacy Policy</div>
-          <p class="text-white body-01">Effective Date: 28 September 2023</p>
+          <div class="h1 text-white fw-700 mb-2">{{ 'FOOTER.PRIVACY_POLICY' | translate }}</div>
+          <p class="text-white body-01">{{ 'PAGES.PRIVACY_POLICY.effectiveDate' | translate }}</p>
         </div>
       </div>
     </div>
@@ -21,55 +21,39 @@
   </div>
   <div class="rounded-bottom--3 rounded-bottom--3 col-xl-12 box-content">
     <div class="col-lg-12">
-      <p class="body fw-normal col-lg-12 m-0 pt-2">
-        We respect your privacy and are committed to protecting your privacy rights. Please take the time to read our
-        Privacy Policy carefully. We want to be clear about how we use information, and about how you can protect your
-        privacy. To ensure transparency, this Privacy Policy describes our information-handling practices when you
-        access the Software and our Services, as defined below.<br />
-        References in this Privacy Policy to “Service Provider”, “we”, “our” or “us”, are to Aura Network Limited, a
-        company having an address at Unit 8, 3/F., Qwomar Trading Complex, Blackburne Road, Port Purcell, Road Town,
-        Tortola, British Virgin Islands VG1110 and references to “you”, “your”, “customer”, “Data Subject” or “user” are
-        to the person who is a visitor or a user of the Software and/or our Services. “Services” refer individually and
-        collectively to our website(s), our application programming interfaces (APIs), mobile applications
-        (“Application”) (collectively, the “Software”), and any live support, software, tools, features, or
-        functionalities provided on or in connection with our Services.<br />
-        By using our Software and/or our Services, including but not limited to downloading one of our mobile
-        Applications, or visiting our website, you express your acceptance of all the terms of this Privacy Policy.
-        Where we require your consent to process your personal information, we will ask for your consent to the
-        collection, use, and disclosure of your personal information as described further below.
-      </p>
+      <p class="body fw-normal col-lg-12 m-0 pt-2" [innerHTML]="'PAGES.PRIVACY_POLICY.intro' | translate"></p>
       <p class="text-white body fw-semibold col-lg-12 m-0 py-3">
-        BY ACCESSING AND/OR USING OUR SERVICES, YOU AGREE TO BE BOUND BY PRIVACY POLICY. IF YOU DO NOT AGREE WITH THIS
-        PRIVACY POLICY PLEASE LEAVE THE WEB AND/OR UNINSTALL MOBILE APPLICATIONS OR CEASE USING OUR SERVICES
-        IMMEDIATELY.
+        {{ 'PAGES.PRIVACY_POLICY.notice' | translate }}
       </p>
       <p class="body col-lg-12 m-0">
-        All the definitions used in this Privacy Policy shall have the same meaning as in our prevailing
-        <a routerLink="/terms" class="text--primary fw-semibold">Terms of Services</a> unless this Privacy Policy sets a
-        different meaning.
+        {{ 'PAGES.PRIVACY_POLICY.notice_sub1' | translate }}
+        <a routerLink="/terms" class="text--primary fw-semibold">{{
+          'PAGES.PRIVACY_POLICY.termsOfService' | translate
+        }}</a>
+        {{ 'PAGES.PRIVACY_POLICY.notice_sub2' | translate }}
       </p>
     </div>
     <div class="col-xl-12 item-privacy mt-3">
       <div class="col-lg-12">
-        <p class="text-white col-lg-12 m-0 px-lg-3 px-0 py-2 h4">1. Our Status</p>
+        <p class="text-white col-lg-12 m-0 px-lg-3 px-0 py-2 h4">
+          {{ 'PAGES.PRIVACY_POLICY.1_ourStatus' | translate }}
+        </p>
       </div>
       <div class="col-lg-12">
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 m-0 pr-2 py-2 mr-2">1.1</p>
+          <p class="text-white body fw-semibold col-lg-0 m-0 pr-2 py-2 mr-2">
+            {{ 'PAGES.PRIVACY_POLICY.1_1' | translate }}
+          </p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              We will act as a data controller in relation to personal information about you that may be either provided
-              by you or collected by us.
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.1_1Text' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 m-0 pr-2 py-2 mr-1">1.2</p>
+          <p class="text-white body fw-semibold col-lg-0 m-0 pr-2 py-2 mr-1">
+            {{ 'PAGES.PRIVACY_POLICY.1_2' | translate }}
+          </p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              As a data controller, we will solely determine which of your personal information we will process in
-              corresponding with the purposes and means of the processing of it.
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.1_2Text' | translate }}</p>
           </div>
         </div>
       </div>
@@ -77,147 +61,107 @@
 
     <div class="col-xl-12 item-privacy">
       <div class="col-lg-12 d-flex">
-        <p class="text-white col-lg-12 m-0 px-lg-3 px-0 py-2 h4">2. The Data That We Will Collect</p>
+        <p class="text-white col-lg-12 m-0 px-lg-3 px-0 py-2 h4">
+          {{ 'PAGES.PRIVACY_POLICY.2_theDataCollect' | translate }}
+        </p>
       </div>
       <div class="col-lg-12">
-        <p>
-          Please note that not all the information you provide to us is personally identifiable information according to
-          the applicable law.
-        </p>
+        <p>{{ 'PAGES.PRIVACY_POLICY.2_notice' | translate }}</p>
         <div class="col-lg-12">
           <div class="col-lg-12 d-flex">
-            <p class="text-white body fw-semibold col-lg-12 m-0 py-2">2.1&nbsp; Usage Data</p>
+            <p
+              class="text-white body fw-semibold col-lg-12 m-0 py-2"
+              [innerHTML]="'PAGES.PRIVACY_POLICY.2_1' | translate"></p>
           </div>
           <div class="col-lg-12">
-            <p class="ml-2">
-              We may process information about your use of our Services (“Usage Data”). The source of the usage data is
-              our analytics tracking system and your usage of our Services. The Usage Data may include:
-            </p>
+            <p class="ml-2">{{ 'PAGES.PRIVACY_POLICY.2_1Text' | translate }}</p>
             <div class="d-flex">
-              <p class="text-white body fw-semibold col-lg-0 m-0 pl-lg-3 pr-lg-5 pr-4 ml-2 py-2">2.1.1</p>
+              <p class="text-white body fw-semibold col-lg-0 m-0 pl-lg-3 pr-lg-5 pr-4 ml-2 py-2">
+                {{ 'PAGES.PRIVACY_POLICY.2_1_1' | translate }}
+              </p>
               <div class="col-lg-11 align-items-center">
-                <p class="body fw-normal m-0 py-2">
-                  Your IP address, geographical location, browser type and version, operating system, referral source,
-                  length of visit, page views and navigation paths, as well as information about the timing, frequency
-                  and pattern of your service use;
-                </p>
+                <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.2_1_1Text' | translate }}</p>
               </div>
             </div>
             <div class="d-flex">
-              <p class="text-white body fw-semibold col-lg-0 m-0 pl-lg-3 pr-lg-4 pr-3 ml-2 py-2">2.1.2</p>
+              <p class="text-white body fw-semibold col-lg-0 m-0 pl-lg-3 pr-lg-4 pr-3 ml-2 py-2">
+                {{ 'PAGES.PRIVACY_POLICY.2_1_2' | translate }}
+              </p>
               <div class="col-lg-11 align-items-center">
-                <p class="body fw-normal m-0 py-2">
-                  Your device number, device ID or unique identifier, device type, and unique device token, operating
-                  system and applications used, application crash-data, application version, device identifiers such as
-                  IDFA (Identifier For Advertisers), Android ID (Android device), referrer URL (Playstore), Google
-                  Advertiser ID, device model; and
-                </p>
+                <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.2_1_2Text' | translate }}</p>
               </div>
             </div>
             <div class="d-flex">
-              <p class="text-white body fw-semibold col-lg-0 m-0 pl-lg-3 pr-lg-4 pr-3 ml-2 py-2">2.1.3</p>
+              <p class="text-white body fw-semibold col-lg-0 m-0 pl-lg-3 pr-lg-4 pr-3 ml-2 py-2">
+                {{ 'PAGES.PRIVACY_POLICY.2_1_3' | translate }}
+              </p>
               <div class="col-lg-11 align-items-center">
-                <p class="body fw-normal m-0 py-2">
-                  Cookie, which is a small file on your device with a string of letters and numbers which serves as a
-                  unique identifier. Sometimes cookies can also be used to store your personal preferences on websites.
-                  When you open the Software for the first time, cookies are created on your device. When you open it
-                  next time, cookies are sent back to us, thus letting us know you’ve already been there. We don’t
-                  create cookies ourselves, but we use third-party providers who do it for us. Cookies make it easier
-                  for you to use the Software during future visits. They also allow us to monitor traffic and
-                  personalise the content of the Software for you. Session-based cookies only last while your browser is
-                  open, and are automatically deleted when you close the browser. Persistent cookies last until you or
-                  your browser deletes them or until they expire. Some of our cookies may be necessary for certain uses
-                  of the Software. These cookies allow us to make the Software usable by enabling basic functions like
-                  page navigation. The Software may not function properly without these cookies. You can generally
-                  activate or later deactivate the use of cookies through a functionality built into your web browser or
-                  mobile device.
-                </p>
+                <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.2_1_3Text' | translate }}</p>
               </div>
             </div>
             <div class="d-flex">
-              <p class="text-white body fw-semibold col-lg-0 m-0 pl-lg-3 pr-lg-4 pr-3 ml-2 py-2">2.1.4</p>
+              <p class="text-white body fw-semibold col-lg-0 m-0 pl-lg-3 pr-lg-4 pr-3 ml-2 py-2">
+                {{ 'PAGES.PRIVACY_POLICY.2_1_4' | translate }}
+              </p>
               <div class="col-lg-11 align-items-center">
-                <p class="body fw-normal m-0 py-2">
-                  Local storage files, including Javascript-enabled local storage, is a typical way for a website to
-                  store a small file of letters and numbers in your browser. We use local storage files to keep you
-                  signed in at our customer support platform. Local storage files are deleted when the website that
-                  stores them deletes them. You can also delete local storage files from your browser at any time you
-                  like by visiting your web browser settings.
+                <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.2_1_4Text' | translate }}</p>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="col-lg-12 d-flex">
+                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">
+                  {{ 'PAGES.PRIVACY_POLICY.2_2' | translate }}
                 </p>
               </div>
+              <p class="ml-2">{{ 'PAGES.PRIVACY_POLICY.2_2Text' | translate }}</p>
             </div>
             <div class="col-lg-12">
               <div class="col-lg-12 d-flex">
-                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">2.2 Account Data</p>
+                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">
+                  {{ 'PAGES.PRIVACY_POLICY.2_3' | translate }}
+                </p>
               </div>
-              <p class="ml-2">
-                We may process your account data (“Account Data”). The account data may include your nickname, email
-                address, your user ID. The source of the Account Data is you and our Software that you used to create
-                your Account.
-              </p>
+              <p class="ml-2">{{ 'PAGES.PRIVACY_POLICY.2_3Text' | translate }}</p>
             </div>
             <div class="col-lg-12">
               <div class="col-lg-12 d-flex">
-                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">2.3 Enquiry Data</p>
+                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">
+                  {{ 'PAGES.PRIVACY_POLICY.2_4' | translate }}
+                </p>
               </div>
-              <p class="ml-2">
-                We may process information contained in any enquiry you submit to us regarding the Software and/or our
-                Services (“Enquiry Data”). The Enquiry Data may be processed for the purposes of responding to your
-                enquiry, offering, marketing, correcting any deficiencies in the Software and/or Services and selling
-                relevant services to you.
-              </p>
+              <p class="ml-2">{{ 'PAGES.PRIVACY_POLICY.2_4Text' | translate }}</p>
             </div>
             <div class="col-lg-12">
               <div class="col-lg-12 d-flex">
-                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">2.4 Correspondence Data</p>
+                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">
+                  {{ 'PAGES.PRIVACY_POLICY.2_5' | translate }}
+                </p>
               </div>
-              <p class="ml-2">
-                We may process information contained in or relating to any communication that you send to us
-                (“Correspondence Data”). The correspondence data may include the communication content and your contact
-                information (phone number, social media handle, email address or other social networks or messenger
-                identifiers you use to communicate with us).
-              </p>
+              <p class="ml-2">{{ 'PAGES.PRIVACY_POLICY.2_5Text' | translate }}</p>
             </div>
             <div class="col-lg-12">
               <div class="col-lg-12 d-flex">
-                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">2.5 Customer Relationship Data</p>
+                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">
+                  {{ 'PAGES.PRIVACY_POLICY.2_6' | translate }}
+                </p>
               </div>
-              <p class="ml-2">
-                We may process information relating to our customer relationships, including customer contact
-                information (“Customer Relationship Data”). The customer relationship data may include your name, your
-                nickname, your contact details (phone number, social media handle, email address or other social
-                networks or messenger identifiers you use to communicate with us) and information contained in
-                communications between us and you. The source of the customer relationship data is you.
-              </p>
+              <p class="ml-2">{{ 'PAGES.PRIVACY_POLICY.2_6Text' | translate }}</p>
             </div>
             <div class="col-lg-12">
               <div class="col-lg-12 d-flex">
-                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">2.6 Interaction Data</p>
+                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">
+                  {{ 'PAGES.PRIVACY_POLICY.2_7' | translate }}
+                </p>
               </div>
-              <p class="ml-2">
-                We may process your transaction information when you interact with technically supported decentralized
-                protocols and the information you generate through the Software (“Interaction Data”). The source of this
-                data is your activities at or through our Software.
-              </p>
+              <p class="ml-2">{{ 'PAGES.PRIVACY_POLICY.2_7Text' | translate }}</p>
             </div>
             <div class="col-lg-12">
               <div class="col-lg-12 d-flex">
-                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">2.7 Verification Data</p>
+                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">
+                  {{ 'PAGES.PRIVACY_POLICY.2_8' | translate }}
+                </p>
               </div>
-              <p class="ml-2">
-                We may process information when we verify your identity (“Verification Data”). This verification data
-                may include your name, address, telephone number, e-mail address, date of birth, national identification
-                number, government identification documents, and, if applicable, information regarding your bank account
-                (such as the name of the bank, the account type and account number). The source of this data is you.
-              </p>
-            </div>
-            <div class="col-lg-12">
-              <div class="col-lg-12 d-flex">
-                <p class="text-white body fw-semibold col-lg-12 m-0 py-2">2.8 Other Data</p>
-              </div>
-              <p class="ml-2">
-                We may process any of your personal information for the purposes as set out in Section 3 below.
-              </p>
+              <p class="ml-2">{{ 'PAGES.PRIVACY_POLICY.2_8Text' | translate }}</p>
             </div>
           </div>
         </div>
@@ -226,94 +170,79 @@
 
     <div class="col-xl-12 item-privacy">
       <div class="col-lg-12 d-flex">
-        <p class="text-white col-lg-12 m-0 px-lg-3 px-0 py-2 h4">3. Purposes of Processing Collected Data</p>
+        <p class="text-white col-lg-12 m-0 px-lg-3 px-0 py-2 h4">
+          {{ 'PAGES.PRIVACY_POLICY.3_purposeOfProcessingCollectedData' | translate }}
+        </p>
       </div>
       <div class="col-lg-12">
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 m-0 pr-4 py-2">3.1</p>
+          <p class="text-white body fw-semibold col-lg-0 m-0 pr-4 py-2">{{ 'PAGES.PRIVACY_POLICY.3_1' | translate }}</p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              The Usage Data may be processed for the purposes of analysing the use of our Services. For cookies, we
-              generally use them for the following purposes:
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_1Text' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">(i)</p>
+          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">
+            {{ 'PAGES.PRIVACY_POLICY.3_1_i' | translate }}
+          </p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              authentication – we use cookies to identify you when you visit the Software and as you navigate through
-              the Software;
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_1_iText' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">(ii)</p>
+          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">
+            {{ 'PAGES.PRIVACY_POLICY.3_1_ii' | translate }}
+          </p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              status – we use cookies to help us to determine if you are logged into the Software;
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_1_iiText' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">(iii)</p>
+          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">
+            {{ 'PAGES.PRIVACY_POLICY.3_1_iii' | translate }}
+          </p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              security – we use cookies as an element of the security measures used to protect user accounts, including
-              preventing fraudulent use of login credentials, and to protect the Software and our Services;
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_1_iiiText' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">(iv)</p>
+          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">
+            {{ 'PAGES.PRIVACY_POLICY.3_1_iv' | translate }}
+          </p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              analysis – we use cookies to help us to analyse the use and performance of the Software and Services; and
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_1_ivText' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">(v)</p>
+          <p class="text-white body fw-semibold col-lg-0 py-2 w-order-list mb-0">
+            {{ 'PAGES.PRIVACY_POLICY.3_1_v' | translate }}
+          </p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              cookie consent – we use cookies to store your preferences in relation to the use of cookies more
-              generally.
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_1_vText' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 m-0 pr-3 py-2">3.2</p>
+          <p class="text-white body fw-semibold col-lg-0 m-0 pr-3 py-2">{{ 'PAGES.PRIVACY_POLICY.3_2' | translate }}</p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              The Account Data may be processed for the purposes of providing you access to our Services, ensuring the
-              security of our Services, maintaining back-ups of our databases and communicating with you.
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_2Text' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 m-0 pr-3 py-2">3.3</p>
+          <p class="text-white body fw-semibold col-lg-0 m-0 pr-3 py-2">{{ 'PAGES.PRIVACY_POLICY.3_3' | translate }}</p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              The Correspondence Data may be processed for the purposes of communicating with you and record-keeping.
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_3Text' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 m-0 pr-3 py-2">3.4</p>
+          <p class="text-white body fw-semibold col-lg-0 m-0 pr-3 py-2">{{ 'PAGES.PRIVACY_POLICY.3_4' | translate }}</p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              The Customer Relationship Data may be processed for the purposes of managing our relationships with
-              customers, communicating with customers, keeping records of those communications, and promoting our
-              products and services to customers.
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_4Text' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
-          <p class="text-white body fw-semibold col-lg-0 m-0 pr-3 py-2">3.5</p>
+          <p class="text-white body fw-semibold col-lg-0 m-0 pr-3 py-2">{{ 'PAGES.PRIVACY_POLICY.3_5' | translate }}</p>
           <div class="col-lg-11 align-items-center">
-            <p class="body fw-normal m-0 py-2">
-              The Interaction Data may be processed for the purposes of providing relevant Services to you.
-            </p>
+            <p class="body fw-normal m-0 py-2">{{ 'PAGES.PRIVACY_POLICY.3_5Text' | translate }}</p>
           </div>
         </div>
         <div class="d-flex">
