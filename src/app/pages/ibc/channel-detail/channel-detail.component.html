@@ -5,14 +5,14 @@
       <div class="box-connect d-lg-flex justify-content-between align-items-center">
         <div class="box-connect-chain d-flex align-items-center">
           <div class="d-flex justify-content-lg-center align-items-center">
-            <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
+            <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain"/>
             <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
                 <span
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     chainInfo.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                  >{{ chainInfo.chainName | cutStringPipe: maxDisplayChar }}</span
+                >{{ chainInfo.chainName | cutStringPipe: maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
               </div>
@@ -28,14 +28,14 @@
             <img
               [src]="counterInfo?.chainImage ? counterInfo?.chainImage : 'assets/images/logo/auraTitleLogo.png'"
               alt=""
-              class="img-chain" />
+              class="img-chain"/>
             <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
                 <span
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     counterInfo?.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                  >{{ counterInfo?.chainName | cutStringPipe: maxDisplayChar }}</span
+                >{{ counterInfo?.chainName | cutStringPipe: maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
               </div>
@@ -149,19 +149,33 @@
                     <div *ngSwitchCase="'amount'" class="d-flex">
                       <div class="aura-tooltip-contain">
                         <div
+                          *ngIf="data.amountTemp === 0">0
+                        </div>
+                        <div
                           class="aura-tooltip-object"
-                          *ngIf="(data.amountTemp | balanceOf: data.dataDenom?.decimals) < 0.001">
+                          *ngIf="data.amountTemp !== 0 && (data.amountTemp | balanceOf: data.dataDenom?.decimals) < 0.001">
                           <0.001
                         </div>
+                        <div
+                          class="aura-tooltip-object"
+                          *ngIf="(data.amountTemp | balanceOf: data.dataDenom?.decimals) >= 0.001"
+                          [class.cursor-text]="
+                            (data.amountTemp === 0) || 
+                            ((data.amountTemp | balanceOf: data.dataDenom?.decimals) >= 0.001 &&
+                            (data.amountTemp | balanceOf: data.dataDenom?.decimals) < 1000000)
+                          "
+                          [appBigNumber]="data.amountTemp"
+                          [decimal]="data.dataDenom?.decimals"></div>
                         <app-tooltip-customize
+                          *ngIf="
+                            (data.amountTemp !== 0) && 
+                            ((data.amountTemp | balanceOf: data.dataDenom?.decimals) < 0.001 ||
+                            (data.amountTemp | balanceOf: data.dataDenom?.decimals) >= 1000000)
+                          "
                           [content]="
                             data.amountTemp | convertSmallNumber: data.dataDenom?.decimals | formatStringNumber
                           ">
                         </app-tooltip-customize>
-                        <div
-                          *ngIf="(data.amountTemp | balanceOf: data.dataDenom?.decimals) >= 0.001"
-                          [appBigNumber]="data.amountTemp"
-                          [decimal]="data.dataDenom?.decimals"></div>
                       </div>
                       <span class="ml-1">
                         <div class="aura-tooltip-contain">
