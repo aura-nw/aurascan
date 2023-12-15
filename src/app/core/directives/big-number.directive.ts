@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { NgxMaskPipe } from 'ngx-mask';
 import { Globals } from 'src/app/global/global';
 import { IntlFormat } from '../utils/common/parsing';
+
 @Directive({
   selector: 'span[appBigNumber],div[appBigNumber]',
   providers: [NgxMaskPipe],
@@ -15,7 +16,12 @@ export class BigNumberDirective implements AfterViewInit {
   @Input() votingPower: boolean = false;
 
   element: HTMLElement;
-  constructor(private mask: NgxMaskPipe, private elRef: ElementRef, private global: Globals) {
+
+  constructor(
+    private mask: NgxMaskPipe,
+    private elRef: ElementRef,
+    private global: Globals,
+  ) {
     this.element = elRef.nativeElement;
   }
 
