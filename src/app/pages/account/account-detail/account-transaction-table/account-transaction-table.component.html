@@ -76,14 +76,14 @@
                 matStartDate
                 placeholder="Start date"
                 [(ngModel)]="transactionFilter.startDate"
-                readonly />
+                readonly/>
               <input
                 matEndDate
                 placeholder="End date"
                 [(ngModel)]="transactionFilter.endDate"
                 class="pl-3 cursor-pointer"
                 readonly
-                (ngModelChange)="searchType()" />
+                (ngModelChange)="searchType()"/>
             </mat-date-range-input>
             <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true" id="datepicker-toggle">
               <mat-icon matDatepickerToggleIcon class="d-flex align-items-center">
@@ -101,7 +101,7 @@
                   alt=""
                   width="24"
                   height="24"
-                  (click)="clearFilter(modeFilter.date)" />
+                  (click)="clearFilter(modeFilter.date)"/>
               </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
@@ -198,11 +198,11 @@
                   [ngModelOptions]="{ standalone: true }"
                   (ngModelChange)="searchTransactionType()"
                   name="search"
-                  autocomplete="off" />
+                  autocomplete="off"/>
                 <button
                   type="submit"
                   class="btn-search {{ transactionTypeKeyWord && transactionTypeKeyWord?.length > 0 ? 'd-none' : '' }}">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
                 </button>
                 <button
                   type="reset"
@@ -216,7 +216,7 @@
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
                     alt=""
                     width="24"
-                    height="24" />
+                    height="24"/>
                 </button>
               </div>
               <div
@@ -240,7 +240,7 @@
                     id="all"
                     [checked]="checkAll"
                     (change)="onChangeTnxFilterType($event, 'all')"
-                    class="check-box check-box--dark" />
+                    class="check-box check-box--dark"/>
                   <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
                 </div>
                 <div class="divider divider-horizontal my-2"></div>
@@ -253,7 +253,7 @@
                       [checked]="checkedTnx(type)"
                       id="type-{{ i }}"
                       (change)="onChangeTnxFilterType($event, type)"
-                      class="check-box check-box--dark" />
+                      class="check-box check-box--dark"/>
                     <label for="type-{{ i }}" class="ml-2 mb-0 text-justify pl-1"> {{ type.value }} </label>
                   </div>
                 </div>
@@ -411,8 +411,11 @@
                       *ngIf="index < data.limit">
                       <div class="item-show d-flex align-items-center">
                         <div class="aura-tooltip-contain">
-                          <div class="aura-tooltip-object" *ngIf="+(item.amountTemp | balanceOf: item.decimal) < 0.001">
-                            <0,001
+                          <div *ngIf="+item.amountTemp === 0">
+                            0
+                          </div>
+                          <div class="aura-tooltip-object" *ngIf="+item.amountTemp !== 0 && +(item.amountTemp | balanceOf: item.decimal) < 0.001">
+                            <0.001
                           </div>
                           <div
                             [class.aura-tooltip-object]="item.amountTemp !== 0"
@@ -422,8 +425,9 @@
                             [decimal]="item.decimal"></div>
                           <app-tooltip-customize
                             *ngIf="
-                              (item.amountTemp | balanceOf: item.decimal) < 0.001 ||
-                              (item.amountTemp | convertSmallNumber: item.decimal) >= 1000000
+                            (+item.amountTemp !== 0) && 
+                            ((item.amountTemp | balanceOf: item.decimal) < 0.001 ||
+                             (item.amountTemp | convertSmallNumber: item.decimal) >= 1000000)
                             "
                             [content]="item.amountTemp | convertSmallNumber: item.decimal | formatStringNumber">
                           </app-tooltip-customize>
@@ -482,7 +486,7 @@
                       (click)="seeMoreData(data)"
                       *ngIf="data.limit < data.arrEvent?.length"
                       class="cursor-pointer mr-8"
-                      >See more</span
+                    >See more</span
                     >
                     <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                   </div>
@@ -491,7 +495,7 @@
                       (click)="seeMoreData(data)"
                       *ngIf="data.limit < data.arrEvent?.length"
                       class="cursor-pointer mr-8"
-                      >See more</span
+                    >See more</span
                     >
                     <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                   </div>
@@ -545,7 +549,7 @@
                             *ngIf="item.tokenId"
                             [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
                             class="text--primary cursor-pointer"
-                            >#{{ item.tokenId | stringEllipsis: (item.tokenId?.length > 8 ? 5 : 8) }}</a
+                          >#{{ item.tokenId | stringEllipsis: (item.tokenId?.length > 8 ? 5 : 8) }}</a
                           >
                           <ng-container *ngIf="!item.tokenId">-</ng-container>
                         </div>
