@@ -1,14 +1,14 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import {filter, take} from 'rxjs';
-import {DATEFORMAT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {TYPE_CW4973} from 'src/app/core/constants/contract.constant';
-import {ContractRegisterType} from 'src/app/core/constants/contract.enum';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {ContractService} from 'src/app/core/services/contract.service';
-import {TokenService} from 'src/app/core/services/token.service';
+import { filter, take } from 'rxjs';
+import { DATEFORMAT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-token-detail',
@@ -31,8 +31,7 @@ export class TokenDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
     private contractService: ContractService,
     private datePipe: DatePipe,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
@@ -109,7 +108,7 @@ export class TokenDetailComponent implements OnInit {
         }
         const isNFTContract = true;
         const contract_address = _.get(res, 'smart_contract[0].address');
-        this.tokenDetail = {name, type, contract_address, isNFTContract};
+        this.tokenDetail = { name, type, contract_address, isNFTContract };
         this.tokenDetail.contract_verification =
           res.smart_contract[0].code.code_id_verifications[0]?.verification_status;
       },
