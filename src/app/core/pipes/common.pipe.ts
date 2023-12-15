@@ -63,7 +63,8 @@ export class CustomDatePipe implements PipeTransform {
 @Pipe({ name: 'balanceOf' })
 export class BalanceOfPipe implements PipeTransform {
   transform(amount: string | number, decimal = 6) {
-    return +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
+    let value = +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
+    return parseFullNumber(value) !== '0.001' ? parseFullNumber(value) : '';
   }
 }
 
@@ -78,7 +79,10 @@ export class ReplaceIpfsPipe implements PipeTransform {
 
 @Pipe({ name: 'convertLogAmount' })
 export class ConvertLogAmountPipe implements PipeTransform {
-  constructor(private commonService: CommonService, private mask: NgxMaskPipe) {}
+  constructor(
+    private commonService: CommonService,
+    private mask: NgxMaskPipe,
+  ) {}
 
   transform(value: string, getDenomOnly = false): string {
     if (!value) return '';
@@ -142,18 +146,21 @@ export class DisplayTypeToolTipPipe implements PipeTransform {
 @Pipe({ name: 'convertSmallNumber' })
 export class ConvertSmallNumberPipe implements PipeTransform {
   transform(amount: number, decimal: number = 6): any {
-    let value = +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
-    return parseFullNumber(value) !== '0.001' ? parseFullNumber(value) : '';
+    // let value = +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
+    let value = new BigNumber(amount).dividedBy(Math.pow(10, decimal));
+    return parseFullNumber(value.toFixed()) !== '0.001' ? parseFullNumber(value.toFixed()) : '';
   }
 }
 
 @Pipe({ name: 'formatStringNumber' })
 export class FormatStringNumberPipe implements PipeTransform {
   transform(valueString: string): any {
+    let decimalStr;
     if (valueString.toString().includes('.')) {
+      decimalStr = valueString.toString().split('.')[1];
       valueString = valueString.toString().split('.')[0];
     }
-    return valueString.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return valueString.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (decimalStr ? '.' + decimalStr : '');
   }
 }
 

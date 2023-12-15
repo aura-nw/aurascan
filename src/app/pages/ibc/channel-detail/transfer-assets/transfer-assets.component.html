@@ -60,7 +60,7 @@
                               height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
-                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe : 20 }}
+                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe: 20 }}
                               </div>
                               <app-tooltip-customize
                                 [className]="'tooltip--right'"
@@ -74,20 +74,22 @@
                           </div>
                           <div *ngSwitchCase="'type'">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</div>
                           <div *ngSwitchCase="'total_messages'">
-                            {{ data[template.matColumnDef] | mask : 'separator.0' }}
+                            {{ data[template.matColumnDef] | mask: 'separator.0' }}
                           </div>
                           <div *ngSwitchCase="'amount'">
                             <div class="aura-tooltip-contain">
                               <div
                                 class="aura-tooltip-object"
-                                *ngIf="(data.amount | balanceOf : data['dataDenom']?.decimals) < 0.001">
-                                <0,001
+                                *ngIf="(data.amount | balanceOf: data['dataDenom']?.decimals) < 0.001">
+                                <0.001
                               </div>
                               <app-tooltip-customize
-                                [content]="data.amount | convertSmallNumber : data['dataDenom']?.decimals">
+                                [content]="
+                                  data.amount | convertSmallNumber: data['dataDenom']?.decimals | formatStringNumber
+                                ">
                               </app-tooltip-customize>
                               <div
-                                *ngIf="(data.amount | balanceOf : data['dataDenom']?.decimals) >= 0.001"
+                                *ngIf="(data.amount | balanceOf: data['dataDenom']?.decimals) >= 0.001"
                                 [appBigNumber]="data.amount"
                                 [decimal]="data['dataDenom']?.decimals"></div>
                             </div>
@@ -120,7 +122,7 @@
                       class="mr-2"
                       width="20px"
                       height="20px" />
-                    <span>{{ data['dataDenom']?.symbol | cutStringPipe : 20 }}</span>
+                    <span>{{ data['dataDenom']?.symbol | cutStringPipe: 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
                 </div>
@@ -214,7 +216,7 @@
                               height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
-                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe : 20 }}
+                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe: 20 }}
                               </div>
                               <app-tooltip-customize
                                 [className]="'tooltip--right'"
@@ -228,20 +230,22 @@
                           </div>
                           <div *ngSwitchCase="'type'">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</div>
                           <div *ngSwitchCase="'total_messages'">
-                            {{ data[template.matColumnDef] | mask : 'separator.0' }}
+                            {{ data[template.matColumnDef] | mask: 'separator.0' }}
                           </div>
                           <div *ngSwitchCase="'amount'">
                             <div class="aura-tooltip-contain">
                               <div
                                 class="aura-tooltip-object"
-                                *ngIf="(data.amount | balanceOf : data['dataDenom']?.decimals) < 0.001">
-                                <0,001
+                                *ngIf="(data.amount | balanceOf: data['dataDenom']?.decimals) < 0.001">
+                                <0.001
                               </div>
                               <app-tooltip-customize
-                                [content]="data.amount | convertSmallNumber : data['dataDenom']?.decimals">
+                                [content]="
+                                  data.amount | convertSmallNumber: data['dataDenom']?.decimals | formatStringNumber
+                                ">
                               </app-tooltip-customize>
                               <div
-                                *ngIf="(data.amount | balanceOf : data['dataDenom']?.decimals) >= 0.001"
+                                *ngIf="(data.amount | balanceOf: data['dataDenom']?.decimals) >= 0.001"
                                 [appBigNumber]="data.amount"
                                 [decimal]="data['dataDenom']?.decimals"></div>
                             </div>
@@ -274,7 +278,7 @@
                       class="mr-2"
                       width="20px"
                       height="20px" />
-                    <span>{{ data['dataDenom']?.symbol | cutStringPipe : 20 }}</span>
+                    <span>{{ data['dataDenom']?.symbol | cutStringPipe: 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
                 </div>
