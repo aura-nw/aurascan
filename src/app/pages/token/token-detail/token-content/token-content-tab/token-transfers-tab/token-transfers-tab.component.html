@@ -73,24 +73,27 @@
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amountToken'">
                       <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object" *ngIf="(data.amount | balanceOf : data.decimal) < 0.001">
-                          <0,001
+                        <div class="aura-tooltip-object" *ngIf="(data.amount | balanceOf: data.decimal) < 0.001">
+                          <0.001
                         </div>
                         <div
                           class="aura-tooltip-object"
-                          [class.cursor-text]="+(data.amount | balanceOf : data.decimals) < 1000000"
-                          *ngIf="(data.amount | balanceOf : data.decimal) >= 0.001"
+                          *ngIf="(data.amount | balanceOf: data.decimal) >= 0.001"
+                          [class.cursor-text]="
+                            (data.amount | balanceOf: data.decimal) >= 0.001 &&
+                            (data.amount | balanceOf: data.decimal) < 1000000
+                          "
                           [appBigNumber]="data.amount"
                           [decimal]="data.decimal"></div>
                         <app-tooltip-customize
                           *ngIf="
-                            (data.amount | balanceOf : data.decimals) < 0.001 ||
-                            (data.amount | convertSmallNumber : data.decimals) >= 1000000
+                            (data.amount | balanceOf: data.decimal) < 0.001 ||
+                            (data.amount | balanceOf: data.decimal) >= 1000000
                           "
                           [content]="
-                            (data.amount | balanceOf : data.decimals) < 0.001
-                              ? (data.amount | balanceOf : data.decimals)
-                              : (data.amount | convertSmallNumber : data.decimals | formatStringNumber)
+                            (data.amount | balanceOf: data.decimal) < 0.001
+                              ? (data.amount | balanceOf: data.decimal)
+                              : (data.amount | balanceOf: data.decimal | formatStringNumber)
                           ">
                         </app-tooltip-customize>
                       </div>
@@ -118,7 +121,7 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'">
                       <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
-                        {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                        {{ data[template.matColumnDef] | cutStringPipe: 8 : 8 }}
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'from_address'">
@@ -129,7 +132,7 @@
                               data.modeExecute === modeExecuteTransaction.Take ||
                               data[template.matColumnDef]?.startsWith('Null')
                             ">
-                            <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
+                            <span>{{ data[template.matColumnDef] | cutStringPipe: 8 : 8 }}</span>
                           </ng-container>
                           <ng-container
                             *ngIf="
@@ -203,13 +206,13 @@
                       <span *ngIf="data['token_id']?.length === 0"> - </span>
                       <span *ngIf="data['token_id'] === 'More'"> More </span>
                       <span class="text--primary" *ngIf="data['status'] === 'Fail'">
-                        {{ data[template.matColumnDef] | stringEllipsis : 16 }}
+                        {{ data[template.matColumnDef] | stringEllipsis: 16 }}
                       </span>
                       <a
                         class="text--primary"
                         href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
                         *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
-                        {{ data[template.matColumnDef] | stringEllipsis : 16 }}
+                        {{ data[template.matColumnDef] | stringEllipsis: 16 }}
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
