@@ -103,24 +103,30 @@ export class DelegateItemComponent implements OnInit {
   //Get data for wallet info and list staking
   getDataWallet() {
     if (this.userAddress) {
-      this.accountService.getAccountDetail(this.userAddress).subscribe((res) => {
-        if (res) {
-          this.dataDelegate = {
-            ...this.dataDelegate,
-            delegableVesting: res?.data?.delegable_vesting,
-            delegatedToken: res?.data?.delegated,
-            availableToken: res?.data?.available,
-            stakingToken: res?.data?.stake_reward,
-            dialogMode: DIALOG_STAKE_MODE.Delegate,
-            validatorDetail:
-              res?.data?.delegations?.find(
-                (k) => k.validator_address === this.currentValidatorDetail?.operator_address,
-              ) || {},
-          };
-          this.dataDelegate.validatorDetail['amount_staked'] = this.dataDelegate?.validatorDetail?.amount || 0;
+      this.dataDelegate = { dialogMode: DIALOG_STAKE_MODE.Delegate };
+      this.accountService.getAccountDetail(this.userAddress).subscribe(
+        (res) => {
+          if (res) {
+            this.dataDelegate = {
+              ...this.dataDelegate,
+              delegableVesting: res?.data?.delegable_vesting,
+              delegatedToken: res?.data?.delegated,
+              availableToken: res?.data?.available,
+              stakingToken: res?.data?.stake_reward,
+              validatorDetail:
+                res?.data?.delegations?.find(
+                  (k) => k.validator_address === this.currentValidatorDetail?.operator_address,
+                ) || {},
+            };
+            this.dataDelegate.validatorDetail['amount_staked'] = this.dataDelegate?.validatorDetail?.amount || 0;
+            document.getElementById('buttonOpenDialog').click();
+          }
+        },
+        (err) => {
           document.getElementById('buttonOpenDialog').click();
-        }
-      });
+        },
+        () => {},
+      );
     }
   }
 
