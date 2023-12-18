@@ -10,6 +10,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
 import { Globals } from 'src/app/global/global';
+import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'app-token-content',
@@ -158,6 +159,15 @@ export class TokenContentComponent implements OnInit {
       } else {
         const data = await client.queryContractSmart(this.contractAddress, queryData);
         this.infoSearch['balance'] = data?.balance;
+        this.infoSearch['value'] = new BigNumber(data?.balance)
+          .multipliedBy(this.tokenDetail.price)
+          .dividedBy(Math.pow(10, this.tokenDetail.decimals))
+          .toFixed();
+        this.infoSearch['valueAura'] = new BigNumber(data?.balance)
+          .multipliedBy(this.tokenDetail.price)
+          .dividedBy(Math.pow(10, this.tokenDetail.decimals))
+          .dividedBy(this.auraPrice)
+          .toFixed();
       }
     } catch (error) {}
   }
