@@ -60,21 +60,21 @@
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
-              *ngIf="(currentAddress | nameTag: false) !== currentAddress"
+              *ngIf="(currentAddress | nameTag : false) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
               <div class="d-inline-flex w-100 aura-tooltip-object align-items-center justify-content-between">
-                <span class="line-claim">{{ (currentAddress | nameTag: false) || '-' }}</span>
+                <span class="line-claim">{{ (currentAddress | nameTag : false) || '-' }}</span>
                 <a
                   target="_blank"
-                  [href]="extendLink(currentAddress | nameTag: null : 'url')"
-                  *ngIf="currentAddress | nameTag: null : 'url'">
+                  [href]="extendLink(currentAddress | nameTag : null : 'url')"
+                  *ngIf="currentAddress | nameTag : null : 'url'">
                   <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
                 </a>
               </div>
 
               <app-tooltip-customize
                 *ngIf="currentAddress | isPublicNameTag"
-                [content]="'Public name: ' + (currentAddress | nameTag: false)"></app-tooltip-customize>
+                [content]="'Public name: ' + (currentAddress | nameTag : false)"></app-tooltip-customize>
             </div>
           </div>
 
@@ -104,15 +104,19 @@
                 <span
                   class="h1 mb-0 fw-700 mb-0 text-gradient d-inline aura-tooltip-object"
                   [class.cursor-text]="
-                    totalValueToken + totalValueNft >= 0.001 && totalValueToken + totalValueNft < 1000000
+                    (totalValueToken + totalValueNft >= 0.001 && totalValueToken + totalValueNft < 1000000) ||
+                    totalValueToken + totalValueNft === 0
                   "
                   *ngIf="!isNoData">
                   $ <span [appBigNumber]="totalValueToken + totalValueNft || 0" [decimal]="0"></span>
                 </span>
                 <app-tooltip-customize
-                  *ngIf="totalValueToken + totalValueNft < 0.001 || totalValueToken + totalValueNft >= 1000000"
+                  *ngIf="
+                    totalValueToken + totalValueNft !== 0 &&
+                    (totalValueToken + totalValueNft < 0.001 || totalValueToken + totalValueNft >= 1000000)
+                  "
                   [content]="
-                    (totalValueToken + totalValueNft | convertSmallNumber: 0 | formatStringNumber) || 0
+                    (totalValueToken + totalValueNft | convertSmallNumber : 0 | formatStringNumber) || 0
                   "></app-tooltip-customize>
               </div>
               <img

@@ -57,8 +57,8 @@
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
-                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                        '-'
+                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                    '-'
                     }}
                   </a>
                 </ng-container>
@@ -73,27 +73,32 @@
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amountToken'">
                       <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object" *ngIf="(data.amount | balanceOf: data.decimal) < 0.001">
+                        <div *ngIf="data.amount === 0">
+                          0
+                        </div>
+                        <div class="aura-tooltip-object" *ngIf="data.amount !== 0 && (data.amount | balanceOf: data.decimal) < 0.001">
                           <0.001
                         </div>
                         <div
                           class="aura-tooltip-object"
                           *ngIf="(data.amount | balanceOf: data.decimal) >= 0.001"
                           [class.cursor-text]="
-                            (data.amount | balanceOf: data.decimal) >= 0.001 &&
-                            (data.amount | balanceOf: data.decimal) < 1000000
+                            (data.amount === 0) || 
+                            ((data.amount | balanceOf: data.decimal) >= 0.001 &&
+                            (data.amount | balanceOf: data.decimal) < 1000000)
                           "
                           [appBigNumber]="data.amount"
                           [decimal]="data.decimal"></div>
                         <app-tooltip-customize
                           *ngIf="
-                            (data.amount | balanceOf: data.decimal) < 0.001 ||
-                            (data.amount | balanceOf: data.decimal) >= 1000000
+                            (data.amount !== 0) && 
+                            ((data.amount | balanceOf: data.decimal) < 0.001 ||
+                            (data.amount | balanceOf: data.decimal) >= 1000000)
                           "
                           [content]="
                             (data.amount | balanceOf: data.decimal) < 0.001
                               ? (data.amount | balanceOf: data.decimal)
-                              : (data.amount | balanceOf: data.decimal | formatStringNumber)
+                              : (data.amount | convertSmallNumber: data.decimal | formatStringNumber)
                           ">
                         </app-tooltip-customize>
                       </div>
@@ -154,7 +159,7 @@
                             [src]="'assets/images/icons/arrow-right.png' | imageS3"
                             width="14"
                             height="9"
-                            class="mr-lg-3 mr-0 ml-3 ml-lg-0" />
+                            class="mr-lg-3 mr-0 ml-3 ml-lg-0"/>
                         </ng-container>
                         <ng-container *ngIf="isSearchAddress">
                           <div class="box-token-transfer">

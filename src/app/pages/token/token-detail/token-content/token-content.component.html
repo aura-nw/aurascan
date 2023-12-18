@@ -36,23 +36,30 @@
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <ng-container *ngIf="!tokenDetail?.isNFTContract">
             <div class="aura-tooltip-contain">
+              <span *ngIf="infoSearch['balance'] === 0">0</span>
               <span
                 class="aura-tooltip-object"
-                *ngIf="(infoSearch['balance'] | balanceOf: tokenDetail.decimals) < 0.001 && infoSearch['balance'] != 0">
+                *ngIf="
+                  (infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001 && infoSearch['balance'] != 0
+                ">
                 <0.001
               </span>
               <span
                 class="aura-tooltip-object"
-                *ngIf="(infoSearch['balance'] | balanceOf: tokenDetail.decimals) >= 0.001 || infoSearch['balance'] == 0"
-                [class.cursor-text]="+(infoSearch['balance'] | balanceOf: tokenDetail.decimals) < 1000000"
+                *ngIf="(infoSearch['balance'] | balanceOf : tokenDetail.decimals) >= 0.001"
+                [class.cursor-text]="+(infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 1000000"
                 [appBigNumber]="infoSearch['balance']"
                 [decimal]="tokenDetail.decimals"></span>
               <app-tooltip-customize
                 *ngIf="
-                  (infoSearch['balance'] | balanceOf: tokenDetail.decimals) < 0.001 ||
-                  (infoSearch['balance'] | convertSmallNumber: tokenDetail.decimals) >= 1000000
+                  (infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001 ||
+                  (infoSearch['balance'] | convertSmallNumber : tokenDetail.decimals) >= 1000000
                 "
-                [content]="infoSearch['balance'] | balanceOf: tokenDetail.decimals">
+                [content]="
+                  (infoSearch['balance'] | balanceOf : tokenDetail.decimals) < 0.001
+                    ? (infoSearch['balance'] | balanceOf : tokenDetail.decimals)
+                    : (infoSearch['balance'] | convertSmallNumber : tokenDetail.decimals | formatStringNumber)
+                ">
               </app-tooltip-customize>
             </div>
             {{ tokenDetail.symbol || tokenDetail.name }}
@@ -66,17 +73,17 @@
               <div
                 class="aura-tooltip-object"
                 [class.cursor-text]="
-                  +(infoSearch['balance'] * tokenDetail.price | balanceOf: tokenDetail.decimals) < 1000000
+                  +(infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals) < 1000000
                 "
                 [appBigNumber]="infoSearch['balance']"
                 [decimal]="tokenDetail.decimals"
                 [tokenPrice]="tokenDetail.price"></div>
               <app-tooltip-customize
                 *ngIf="
-                  (infoSearch['balance'] * tokenDetail.price | balanceOf: tokenDetail.decimals) < 0.001 ||
-                  (infoSearch['balance'] * tokenDetail.price | convertSmallNumber: tokenDetail.decimals) >= 1000000
+                  (infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals) < 0.001 ||
+                  (infoSearch['balance'] * tokenDetail.price | convertSmallNumber : tokenDetail.decimals) >= 1000000
                 "
-                [content]="infoSearch['balance'] * tokenDetail.price | balanceOf: tokenDetail.decimals">
+                [content]="infoSearch['value'] | formatStringNumber">
               </app-tooltip-customize>
             </div>
             (
@@ -84,7 +91,7 @@
               <div
                 class="aura-tooltip-object"
                 [class.cursor-text]="
-                  +(infoSearch['balance'] * tokenDetail.price | balanceOf: tokenDetail.decimals) < 1000000
+                  +(infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals) < 1000000
                 "
                 [appBigNumber]="infoSearch['balance']"
                 [decimal]="tokenDetail.decimals"
@@ -92,15 +99,13 @@
                 [tokenPrice]="tokenDetail.price"></div>
               <app-tooltip-customize
                 *ngIf="
-                  (infoSearch['balance'] * tokenDetail.price | balanceOf: tokenDetail.decimals) < 0.001 ||
-                  (infoSearch['balance'] * tokenDetail.price | convertSmallNumber: tokenDetail.decimals) >= 1000000
+                  (infoSearch['balance'] * tokenDetail.price | balanceOf : tokenDetail.decimals) < 0.001 ||
+                  (infoSearch['balance'] * tokenDetail.price | convertSmallNumber : tokenDetail.decimals) >= 1000000
                 "
                 [content]="
-                  ((infoSearch['balance'] * tokenDetail.price) / auraPrice | balanceOf: tokenDetail.decimals) < 0.001
-                    ? ((infoSearch['balance'] * tokenDetail.price) / auraPrice | balanceOf: tokenDetail.decimals)
-                    : ((infoSearch['balance'] * tokenDetail.price) / auraPrice
-                      | convertSmallNumber: tokenDetail.decimals
-                      | formatStringNumber)
+                  ((infoSearch['balance'] * tokenDetail.price) / auraPrice | balanceOf : tokenDetail.decimals) < 0.001
+                    ? ((infoSearch['balance'] * tokenDetail.price) / auraPrice | balanceOf : tokenDetail.decimals)
+                    : (infoSearch['valueAura'] | formatStringNumber)
                 ">
               </app-tooltip-customize>
             </div>

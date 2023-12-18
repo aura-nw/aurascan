@@ -58,3 +58,11 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+.token-item {
+  min-width: 270px;
+}
+.table-token {
+  tr.mat-header-row {
+    text-transform: capitalize;
+  }
+}

@@ -101,7 +101,8 @@ export class ChannelDetailComponent implements OnInit {
         this.channelDetail = {
           counterParty: _.get(data, 'counterparty_channel_id'),
           operatingSince:
-            _.get(data, 'ibc_connection.ibc_client.operating_since_1') || _.get(data, 'ibc_client.operating_since_2'),
+            _.get(data, 'ibc_connection.ibc_client.operating_since_1') ||
+            _.get(data, 'ibc_connection.ibc_client.operating_since_2'),
           totalTx: _.get(data, 'total_tx.aggregate.count'),
           clientId: _.get(data, 'ibc_connection.ibc_client.client_id'),
         };
