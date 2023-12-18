@@ -195,7 +195,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                       holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
                       isHolderUp: changePercent >= 0,
                       holderChange: Math.abs(changePercent),
-                      description: foundToken?.description || item.marketing_info.description || '',
+                      description: foundToken?.description || item.marketing_info?.description || '',
                       verify_status: foundToken?.verify_status || '',
                       verify_text: foundToken?.verify_text || '',
                       circulating_market_cap: +foundToken?.circulating_market_cap || 0,
