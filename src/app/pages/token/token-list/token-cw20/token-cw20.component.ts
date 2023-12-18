@@ -15,7 +15,7 @@ import {
   repeat,
   take,
   takeLast,
-  takeUntil
+  takeUntil,
 } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -189,13 +189,13 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     return {
                       coin_id: foundToken?.coin_id || '',
                       contract_address: item.smart_contract.address || '',
-                      name: foundToken?.name || '',
-                      symbol: foundToken?.symbol || '',
-                      image: foundToken?.image ? foundToken?.image : item.marketing_info?.logo?.url || '',
+                      name: foundToken?.name || item.name || '',
+                      symbol: foundToken?.symbol || item.symbol || '',
+                      image: foundToken?.image || item.marketing_info?.logo?.url || '',
                       holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
                       isHolderUp: changePercent >= 0,
                       holderChange: Math.abs(changePercent),
-                      description: foundToken?.description || '',
+                      description: foundToken?.description || item.marketing_info.description || '',
                       verify_status: foundToken?.verify_status || '',
                       verify_text: foundToken?.verify_text || '',
                       circulating_market_cap: +foundToken?.circulating_market_cap || 0,

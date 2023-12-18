@@ -43,7 +43,7 @@ export class IBCComponent implements OnInit {
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'no', headerCellDef: 'No', headerWidth: 8 },
-    { matColumnDef: 'chain', headerCellDef: 'Chain', headerWidth: 24 },
+    { matColumnDef: 'chain', headerCellDef: 'Chain', headerWidth: 28 },
     { matColumnDef: 'total_asset_transfer', headerCellDef: 'Total', headerWidth: 16 },
     { matColumnDef: 'receive_asset_transfer', headerCellDef: 'Receive', headerWidth: 16 },
     { matColumnDef: 'send_asset_transfer', headerCellDef: 'Send', headerWidth: 16 },
@@ -116,7 +116,9 @@ export class IBCComponent implements OnInit {
         this.timeUpdate = this.timeUpdate || m_view_ibc_relayer_statistic[0]?.created_at;
 
         m_view_ibc_relayer_statistic?.forEach((element) => {
-          element['image'] = this.ibcService.listInfoChain?.find((k) => k.chainId === element?.chain)?.chainImage;
+          const dataChain = this.ibcService.listInfoChain?.find((k) => k.chainId === element?.chain);
+          element['chainName'] = dataChain?.chainName || element.chain;
+          element['image'] = dataChain?.chainImage;
         });
 
         this.dataSource = new MatTableDataSource<any>(m_view_ibc_relayer_statistic);
