@@ -88,7 +88,11 @@ export class TokenHoldersTabComponent implements OnInit {
               owner: item.address,
               balance: item.amount,
               percent_hold: (item.amount / item.cw20_contract.total_supply) * 100,
-              value: (new BigNumber(item.amount).multipliedBy(this.tokenDetail.price)).toFixed() || 0,
+              value:
+                new BigNumber(item.amount)
+                  .multipliedBy(this.tokenDetail.price)
+                  .dividedBy(Math.pow(10, this.decimalValue))
+                  .toFixed() || 0,
             };
           });
           this.dataSource = new MatTableDataSource<any>(dataFlat);
