@@ -41,7 +41,7 @@ export class TokenTransferComponent implements OnInit {
   ];
   displayedColumnsFTs: string[] = this.templatesFTs.map((dta) => dta.matColumnDef);
   displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
-  maxDisplayChar = 20;
+  maxLengthSymbol = 20;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinDecimals = this.environmentService.chainInfo.currencies[0].coinDecimals;
@@ -58,7 +58,7 @@ export class TokenTransferComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.environmentService.isMobile) {
-      this.maxDisplayChar = 12;
+      this.maxLengthSymbol = 10;
     }
 
     if (this.transaction['status'] == 'Fail') {

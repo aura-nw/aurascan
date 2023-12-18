@@ -27,7 +27,7 @@
                               <span
                                 *ngIf="data | marketInfo: 'symbol'"
                                 class="caption text-sm mb-1 aura-tooltip-object">
-                                {{ data | marketInfo: 'symbol' | stringEllipsis: 20 }}</span
+                                {{ data | marketInfo: 'symbol' | stringEllipsis: maxLengthSymbol }}</span
                               >
                               <app-tooltip-customize
                                 [content]="data | marketInfo: 'symbol'"
