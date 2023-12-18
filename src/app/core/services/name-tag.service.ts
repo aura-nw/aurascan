@@ -47,7 +47,7 @@ export class NameTagService extends CommonService {
   findNameTagByAddress(address: string, isPrivate = true) {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
 
-    let result = isPrivate ? nameTag?.name_tag_private : nameTag?.name_tag;
+    let result = isPrivate && nameTag?.name_tag_private ? nameTag?.name_tag_private : nameTag?.name_tag;
 
     return result ? result : address;
   }

@@ -17,6 +17,7 @@ import { CommunityPoolComponent } from './community-pool.component';
 import { CommunityPoolProposalComponent } from './proposal-list/community-pool-proposal.component';
 import { MASK_CONFIG } from 'src/app/app.config';
 import { MaterialModule } from 'src/app/material.module';
+import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 
 @NgModule({
   declarations: [CommunityPoolAssetComponent, CommunityPoolProposalComponent, CommunityPoolComponent],
@@ -35,6 +36,7 @@ import { MaterialModule } from 'src/app/material.module';
     CustomPaginatorModule,
     NameTagModule,
     MaterialModule,
+    TooltipCustomizeModule,
   ],
   providers: [ProposalService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })

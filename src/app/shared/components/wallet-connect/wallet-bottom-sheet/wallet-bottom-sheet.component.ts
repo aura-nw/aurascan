@@ -1,18 +1,18 @@
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { Subject, takeUntil } from 'rxjs';
+import { WALLET_PROVIDER } from 'src/app/core/constants/wallet.constant';
+import { IWalletInfo } from 'src/app/core/models/wallet';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { WALLET_PROVIDER } from '../../../../core/constants/wallet.constant';
-import { IWalletInfo } from '../../../../core/models/wallet';
 
 @Component({
-  selector: 'app-wallet-list',
-  templateUrl: './wallet-list.component.html',
-  styleUrls: ['./wallet-list.component.scss'],
+  selector: 'app-wallet-bottom-sheet',
+  templateUrl: './wallet-bottom-sheet.component.html',
+  styleUrls: ['./wallet-bottom-sheet.component.scss'],
 })
-export class WalletListComponent implements OnInit {
+export class WalletBottomSheetComponent implements OnInit {
   walletProvider = WALLET_PROVIDER;
   walletList: IWalletInfo[] = [
     {
@@ -36,10 +36,10 @@ export class WalletListComponent implements OnInit {
     .pipe(takeUntil(this.destroyed$));
 
   constructor(
-    public dialogRef: MatDialogRef<WalletListComponent>,
+    private breakpointObserver: BreakpointObserver,
     private dlgService: DialogService,
     private walletService: WalletService,
-    private breakpointObserver: BreakpointObserver,
+    public bottomSheetRef: MatBottomSheetRef<WalletBottomSheetComponent>,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -49,17 +49,12 @@ export class WalletListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
+    this.isMobileMatched = window.innerWidth <= 992;
+    this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
-        this.dialogRef.close();
+        this.bottomSheetRef.dismiss();
       }
     });
-    this.isMobileMatched = window.innerWidth <= 992;
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   connectWallet(provider: WALLET_PROVIDER): void {
@@ -71,7 +66,7 @@ export class WalletListComponent implements OnInit {
             title: '',
             content: 'Please set up override Keplr in settings of Coin98 wallet',
           });
-          this.dialogRef.close();
+          this.bottomSheetRef.dismiss();
         }
       };
 

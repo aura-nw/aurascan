@@ -411,17 +411,26 @@
                       *ngIf="index < data.limit">
                       <div class="item-show d-flex align-items-center">
                         <div class="aura-tooltip-contain">
+                          <div *ngIf="+item.amountTemp === 0">0</div>
                           <div
                             class="aura-tooltip-object"
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) < 0.001 && item.amountTemp != 0">
-                            <0,001
+                            *ngIf="+item.amountTemp !== 0 && +(item.amountTemp | balanceOf : item.decimal) < 0.001">
+                            <0.001
                           </div>
-                          <app-tooltip-customize [content]="item.amountTemp | convertSmallNumber : item.decimal">
-                          </app-tooltip-customize>
                           <div
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001 || item.amountTemp == 0"
+                            [class.aura-tooltip-object]="item.amountTemp !== 0"
+                            [class.cursor-text]="+(item.amountTemp | balanceOf : item.decimal) < 1000000"
+                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001"
                             [appBigNumber]="item.amountTemp"
                             [decimal]="item.decimal"></div>
+                          <app-tooltip-customize
+                            *ngIf="
+                              +item.amountTemp !== 0 &&
+                              ((item.amountTemp | balanceOf : item.decimal) < 0.001 ||
+                                (item.amountTemp | convertSmallNumber : item.decimal) >= 1000000)
+                            "
+                            [content]="item.amountTemp | convertSmallNumber : item.decimal | formatStringNumber">
+                          </app-tooltip-customize>
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
                           <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
@@ -513,7 +522,7 @@
                             class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8"
                             (click)="expandData(data)"
                             *ngIf="data.arrEvent?.length > 1">
-                            <ng-container *ngIf="data.arrEvent?.length > 100"> >99 </ng-container>
+                            <ng-container *ngIf="data.arrEvent?.length > 100"> >99</ng-container>
                             <ng-container *ngIf="data.arrEvent?.length <= 100">
                               +{{ data.arrEvent?.length - 1 }}
                             </ng-container>
@@ -597,7 +606,7 @@
         {
           label: 'Fee',
           class: 'text--gray-1 body-02-mob',
-          info: (data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
+          info: (+data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
         }
       ]"></app-card-mob-account>
   </div>

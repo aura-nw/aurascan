@@ -3,7 +3,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
-import * as _ from 'lodash';
 import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -42,6 +41,7 @@ export class TokenTransferComponent implements OnInit {
   ];
   displayedColumnsFTs: string[] = this.templatesFTs.map((dta) => dta.matColumnDef);
   displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
+  maxDisplayChar = 20;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinDecimals = this.environmentService.chainInfo.currencies[0].coinDecimals;
@@ -57,12 +57,15 @@ export class TokenTransferComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.environmentService.isMobile) {
+      this.maxDisplayChar = 12;
+    }
+
     if (this.transaction['status'] == 'Fail') {
       return;
     }
 
     this.getTokenTransfer();
-    // this.getIBCTransfer();
   }
 
   getTokenTransfer() {
@@ -106,6 +109,7 @@ export class TokenTransferComponent implements OnInit {
                   dataAmount = this.commonService.mappingNameIBC(amountTemp);
                   cw20_contract['name'] = dataAmount['name'];
                   cw20_contract['symbol'] = dataAmount['display'];
+                  cw20_contract['ibc_denom'] = dataAmount['denom'];
                   decimal = dataAmount['decimals'];
                   from = event.event_attributes?.find((k) => k.composite_key === 'coin_spent.spender')?.value;
                   for (let idx = 0; idx < event.event_attributes; idx++) {

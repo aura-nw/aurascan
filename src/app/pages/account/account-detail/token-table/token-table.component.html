@@ -193,19 +193,43 @@
               <th *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element">
                 <span class="text--gray-4 caption fw-normal">Amount</span>
-                <ng-container *ngIf="element.contract_address === '-'">
-                  <div [appBigNumber]="element.balance" [decimal]="0"></div>
-                </ng-container>
-                <div *ngIf="element.contract_address !== '-'" class="aura-tooltip-contain d-flex">
-                  <div class="aura-tooltip-object" *ngIf="(element.balance | balanceOf : element.decimals) < 0.001">
-                    <0,001
-                  </div>
-                  <app-tooltip-customize [content]="element.balance | convertSmallNumber : element.decimals">
-                  </app-tooltip-customize>
+                <div class="aura-tooltip-contain d-flex">
+                  <div class="aura-tooltip-object" *ngIf="element.balance === 0">0</div>
                   <div
-                    *ngIf="(element.balance | balanceOf : element.decimals) >= 0.001"
+                    class="aura-tooltip-object"
+                    *ngIf="
+                      element.balance !== 0 &&
+                      (element.balance | balanceOf : (element.contract_address !== '-' ? element.decimals : 0)) < 0.001
+                    ">
+                    <0.001
+                  </div>
+                  <div
+                    class="aura-tooltip-object"
+                    *ngIf="
+                      (element.balance | balanceOf : (element.contract_address !== '-' ? element.decimals : 0)) >= 0.001
+                    "
+                    [class.cursor-text]="
+                      +(element.balance | balanceOf : (element.contract_address !== '-' ? element.decimals : 0)) <
+                      1000000
+                    "
                     [appBigNumber]="element.balance"
-                    [decimal]="element.decimals"></div>
+                    [decimal]="element.contract_address !== '-' ? element.decimals : 0"></div>
+                  <app-tooltip-customize
+                    *ngIf="
+                      element.balance !== 0 &&
+                      ((element.balance | balanceOf : (element.contract_address !== '-' ? element.decimals : 0)) <
+                        0.001 ||
+                        (element.balance
+                          | convertSmallNumber : (element.contract_address !== '-' ? element.decimals : 0)) >= 1000000)
+                    "
+                    [content]="
+                      (element.balance | balanceOf : (element.contract_address !== '-' ? element.decimals : 0)) < 0.001
+                        ? (element.balance | balanceOf : (element.contract_address !== '-' ? element.decimals : 0))
+                        : (element.balance
+                          | convertSmallNumber : (element.contract_address !== '-' ? element.decimals : 0)
+                          | formatStringNumber)
+                    ">
+                  </app-tooltip-customize>
                 </div>
               </td>
             </ng-container>
@@ -220,11 +244,29 @@
                     <ng-container *ngIf="element.contract_address === '-'">
                       ${{ element.price * element.balance | formatDigit : 2 }}
                     </ng-container>
-                    <div
-                      *ngIf="element.contract_address !== '-'"
-                      [appBigNumber]="element['balance']"
-                      [decimal]="element.decimals"
-                      [tokenPrice]="element.price"></div>
+                    <div class="aura-tooltip-contain" *ngIf="element.contract_address !== '-'">
+                      <div
+                        class="aura-tooltip-object"
+                        [class.cursor-text]="
+                          +(element.price * element['balance'] | balanceOf : element.decimals) < 1000000
+                        "
+                        [appBigNumber]="element['balance']"
+                        [decimal]="element.decimals"
+                        [tokenPrice]="element.price"></div>
+                      <app-tooltip-customize
+                        *ngIf="
+                          (element.price * element['balance'] | balanceOf : element.decimals) < 0.001 ||
+                          (element.price * element['balance'] | convertSmallNumber : element.decimals) >= 1000000
+                        "
+                        [content]="
+                          (element.price * element['balance'] | balanceOf : element.decimals) < 0.001
+                            ? (element.price * element['balance'] | balanceOf : element.decimals)
+                            : (element.price * element['balance']
+                              | convertSmallNumber : element.decimals
+                              | formatStringNumber)
+                        ">
+                      </app-tooltip-customize>
+                    </div>
                   </span>
                 </div>
               </td>

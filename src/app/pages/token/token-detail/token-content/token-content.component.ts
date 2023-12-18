@@ -10,6 +10,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
 import local from 'src/app/core/utils/storage/local';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-content',
@@ -46,6 +47,7 @@ export class TokenContentComponent implements OnInit {
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.chainInfo;
+  auraPrice = this.global.price.aura;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,6 +55,7 @@ export class TokenContentComponent implements OnInit {
     private layout: BreakpointObserver,
     private tokenService: TokenService,
     private nameTagService: NameTagService,
+    private global: Globals,
   ) {}
 
   ngOnInit(): void {

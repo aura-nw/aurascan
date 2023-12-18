@@ -27,7 +27,7 @@
             </div>
           </div>
           <div
-            class="box-connected flex-column align-items-center caption-mob body-01 justify-content-center d-none d-lg-flex">
+            class="box-connected flex-column align-items-center caption-mob body-02 justify-content-center d-none d-lg-flex">
             <div class="fw-semibold">Connected</div>
             <div class="caption fw-normal mt-1">{{ data.open_channel }}/{{ data.total_channel }} channel</div>
           </div>
@@ -96,11 +96,7 @@
                     {{ data[template.matColumnDef] }}
                   </div>
                   <div *ngSwitchCase="'operatingSince'">
-                    {{
-                      !data[template.matColumnDef]
-                        ? '-'
-                        : commonService.getDateValue(data[template.matColumnDef], false)[0]
-                    }}
+                    {{ !data[template.matColumnDef] ? '-' : (data[template.matColumnDef] | dateCustom)[0] }}
                   </div>
                   <div *ngSwitchCase="'total'">{{ data.state === 'Close' ? '-' : data?.total?.aggregate.count }}</div>
                   <div *ngSwitchCase="'receive'">
@@ -145,7 +141,7 @@
           <div class="card__content text--white body-01">
             <div class="d-flex align-items-center mb-2 justify-content-between">
               <div class="body text--gray-4 label__content">Operating Since</div>
-              <div>{{ !data.operatingSince ? '-' : commonService.getDateValue(data.operatingSince, false)[0] }}</div>
+              <div>{{ !data.operatingSince ? '-' : (data.operatingSince | dateCustom)[0] }}</div>
             </div>
             <div class="d-flex align-items-center mb-2 justify-content-between">
               <div class="body text--gray-4 label__content">Total</div>

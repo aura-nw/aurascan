@@ -149,6 +149,9 @@ export class IBCComponent implements OnInit {
 
   resetSearch(): void {
     this.textSearch = '';
+    this.dataSource.data = [];
+    this.pageData.length = 0;
+    this.dataSourceMobile = [];
     this.getListIBC();
   }
 

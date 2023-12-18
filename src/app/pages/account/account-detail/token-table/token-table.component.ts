@@ -3,10 +3,10 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { COIN_TOKEN_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
+import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
@@ -41,17 +41,17 @@ export class TokenTableComponent implements OnChanges {
     },
     {
       label: 'Native Coin',
-      value: 'native',
+      value: COIN_TOKEN_TYPE.NATIVE,
       quantity: 0,
     },
     {
       label: 'IBC Token',
-      value: 'ibc',
+      value: COIN_TOKEN_TYPE.IBC,
       quantity: 0,
     },
     {
       label: 'CW-20 Token',
-      value: 'cw20',
+      value: COIN_TOKEN_TYPE.CW20,
       quantity: 0,
     },
   ];
@@ -82,9 +82,7 @@ export class TokenTableComponent implements OnChanges {
     private nameTagService: NameTagService,
   ) {}
 
-  ngOnInit(): void {
-    this.getTotalAssets();
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
     this.getListToken();
@@ -121,7 +119,7 @@ export class TokenTableComponent implements OnChanges {
       this.dataSource.data = [...searchList];
     } else {
       this.accountService.getAssetCW20ByOwner(payload).subscribe({
-        next: (res: ResponseDto) => {
+        next: (res) => {
           let data: any;
           if (res?.data?.length > 0) {
             let lstToken = _.get(res, 'data').map((element) => {
@@ -156,13 +154,18 @@ export class TokenTableComponent implements OnChanges {
             this.dataSource.data = [];
           }
           this.totalAssets.emit(this.pageData?.length || 0);
+          this.totalValue.emit(res?.totalValue);
           this.setTokenFilter(this.listTokenType[0]);
         },
         error: (e) => {
           if (e.name === TIMEOUT_ERROR) {
             this.errTxt = e.message;
           } else {
-            this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+            if (e.error?.error?.statusCode) {
+              this.errTxt = e.error?.error?.statusCode + ' ' + e.error?.error?.message;
+            } else {
+              this.errTxt = e.error?.message;
+            }
           }
           this.assetsLoading = false;
         },
@@ -191,12 +194,5 @@ export class TokenTableComponent implements OnChanges {
     this.textSearch = '';
     this.searchValue = '';
     this.searchToken();
-  }
-
-  getTotalAssets(): void {
-    this.accountService.getTotalAssets(this.address).subscribe((res: ResponseDto) => {
-      this.total = res.data || 0;
-      this.totalValue.emit(this.total);
-    });
   }
 }

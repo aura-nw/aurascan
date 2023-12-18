@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { makeSignDoc, StdSignDoc } from '@cosmjs/amino';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
@@ -10,15 +11,18 @@ import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
 import { getLeap } from 'src/app/core/utils/leap';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { getSigner } from 'src/app/core/utils/signing/signer';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
+import { WalletBottomSheetComponent } from 'src/app/shared/components/wallet-connect/wallet-bottom-sheet/wallet-bottom-sheet.component';
 import { WalletListComponent } from 'src/app/shared/components/wallet-connect/wallet-list/wallet-list.component';
-import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
+import { ESigningType, LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
+import { getLastProvider, getSigningType } from '../utils/common/info-common';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
@@ -59,6 +63,8 @@ export class WalletService implements OnDestroy {
     private http: HttpClient,
     public translate: TranslateService,
     private dialog: MatDialog,
+    private notificationsService: NotificationsService,
+    private bottomSheet: MatBottomSheet,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -274,13 +280,14 @@ export class WalletService implements OnDestroy {
       message,
       senderAddress,
       network,
-      signingType,
       chainId,
-    }: { messageType: any; message: any; senderAddress: any; network: ChainInfo; signingType: any; chainId: any },
+    }: { messageType: any; message: any; senderAddress: any; network: ChainInfo; chainId: any },
     validatorsCount?: number,
   ) {
-    let signingClient;
-    if (this.isMobileMatched && !this.checkExistedCoin98()) {
+    const lastProvider = getLastProvider();
+    const signingType = getSigningType(lastProvider);
+
+    if (this.isMobileMatched && !this.checkExistedCoin98() && lastProvider != WALLET_PROVIDER.LEAP) {
       const msgs = messageCreators[messageType](senderAddress, message, network);
       let fee;
       if (this.coin98Client) {
@@ -330,7 +337,6 @@ export class WalletService implements OnDestroy {
         chainId,
       },
       validatorsCount || undefined,
-      signingClient,
     );
   }
 
@@ -409,24 +415,14 @@ export class WalletService implements OnDestroy {
       delete msg[key]?.fund;
     }
 
-    if (this.isMobileMatched && !this.checkExistedCoin98()) {
+    const lastProvider = getLastProvider();
+
+    if (this.isMobileMatched && !this.checkExistedCoin98() && lastProvider != WALLET_PROVIDER.LEAP) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
-      const user: any = local.getItem(LAST_USED_PROVIDER);
-      if (!user?.provider) return;
-      let provider;
-      switch (user.provider) {
-        case 'KEPLR':
-          provider = 'Keplr';
-          break;
-        case 'COIN98':
-          provider = 'Coin98';
-          break;
-        case 'LEAP':
-          provider = 'Leap';
-          break;
-      }
-      signer = await getSigner(provider, this.chainId);
+      let signingType: ESigningType = getSigningType(lastProvider);
+
+      signer = await getSigner(signingType, this.chainId);
     }
 
     return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
@@ -439,22 +435,40 @@ export class WalletService implements OnDestroy {
   }
 
   async getWalletSign(minter, message) {
-    let dataWallet;
-    if (this.isMobileMatched && !this.checkExistedCoin98()) {
-      let coin98Client = new Coin98Client(this.chainInfo);
-      let temp = await coin98Client.signArbitrary(minter, message);
-      dataWallet = temp['result'];
-    } else {
-      const keplr = await getKeplr();
-      dataWallet = await keplr.signArbitrary(this.chainInfo.chainId, minter, message);
+    const lastProvider = getLastProvider();
+    let provider: Keplr;
+
+    switch (lastProvider) {
+      case WALLET_PROVIDER.LEAP:
+        provider = await getLeap();
+        break;
+      case WALLET_PROVIDER.COIN98:
+        provider = this.checkExistedCoin98();
+        if (this.isMobileMatched && !provider) {
+          return this.coin98Client.signArbitrary(minter, message);
+        }
+        break;
+      default:
+        provider = await getKeplr();
     }
-    return dataWallet;
+
+    return provider.signArbitrary(this.chainInfo.chainId, minter, message);
   }
 
   openWalletPopup(): void {
-    this.dialog.open(WalletListComponent, {
-      panelClass: 'wallet-popup',
-      width: '716px',
-    });
+    if (!this.isMobileMatched) {
+      this.dialog.open(WalletListComponent, {
+        panelClass: 'wallet-popup',
+        width: '716px',
+      });
+    } else {
+      this.notificationsService.hiddenFooterSubject.next(true);
+      this.bottomSheet.open(WalletBottomSheetComponent, {
+        panelClass: 'wallet-popup--mob',
+      });
+      this.bottomSheet._openedBottomSheetRef.afterDismissed().subscribe((res) => {
+        this.notificationsService.hiddenFooterSubject.next(false);
+      });
+    }
   }
 }
