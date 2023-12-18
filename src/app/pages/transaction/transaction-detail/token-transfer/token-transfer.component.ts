@@ -109,7 +109,7 @@ export class TokenTransferComponent implements OnInit {
                   dataAmount = this.commonService.mappingNameIBC(amountTemp);
                   cw20_contract['name'] = dataAmount['name'];
                   cw20_contract['symbol'] = dataAmount['display'];
-                  cw20_contract['ibc_denom'] = dataAmount['denom'];
+                  cw20_contract['ibc_denom'] = dataAmount['denom'] || dataAmount['symbol'];
                   decimal = dataAmount['decimals'];
                   from = event.event_attributes?.find((k) => k.composite_key === 'coin_spent.spender')?.value;
                   for (let idx = 0; idx < event.event_attributes; idx++) {
