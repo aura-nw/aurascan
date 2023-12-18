@@ -70,7 +70,6 @@ export class TokenDetailComponent implements OnInit {
                 token.symbol = tokenMarket?.symbol || token.cw20_contract.symbol;
                 token.decimals = token.cw20_contract.decimal;
                 token.type = this.contractType.CW20;
-                token.contract_address = token.address;
                 token.max_total_supply = tokenMarket?.max_supply || 0;
                 token.circulating_market_cap = tokenMarket?.circulating_market_cap || 0;
                 token.price = tokenMarket?.current_price || 0;
