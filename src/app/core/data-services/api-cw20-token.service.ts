@@ -37,7 +37,11 @@ export class ApiCw20TokenService {
 
   apiAccount = inject(ApiAccountService);
 
-  constructor(private http: HttpClient, private env: EnvironmentService, private tokenService: TokenService) {}
+  constructor(
+    private http: HttpClient,
+    private env: EnvironmentService,
+    private tokenService: TokenService,
+  ) {}
 
   getByOwner(address: string) {
     return forkJoin([
@@ -57,8 +61,9 @@ export class ApiCw20TokenService {
 
         const ibcTokenBalances = this.parseIbcTokens(account, coinsMarkets);
 
+        // get coin native && token balance > 0
         const allTokens = [nativeToken, ...ibcTokenBalances, ...cw20TokenList].filter(
-          (token) => Number(token.balance) > 0,
+          (token) => Number(token.balance) > 0 || token.denom === this.currencies.coinMinimalDenom,
         );
 
         const totalValue = allTokens
