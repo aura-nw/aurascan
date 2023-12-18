@@ -181,7 +181,7 @@ export class IBCComponent implements OnInit {
     dialogConfig.panelClass = 'full-overlay-panel';
     dialogConfig.disableClose = true;
     if (data) {
-      local.setItem('ibcDetail', data);
+      local.setItem(STORAGE_KEYS.IBC_DETAIL, data);
       dialogConfig.data = data;
     }
 

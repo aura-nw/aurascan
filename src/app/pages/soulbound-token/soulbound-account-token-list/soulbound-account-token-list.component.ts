@@ -63,9 +63,9 @@ export class SoulboundAccountTokenListComponent implements OnInit {
       }
     });
 
-    if (local.getItem('tabUnEquip') == 'true') {
+    if (local.getItem(STORAGE_KEYS.TAB_UNEQUIP) == 'true') {
       this.activeId = 1;
-      local.removeItem('tabUnEquip');
+      local.removeItem(STORAGE_KEYS.TAB_UNEQUIP);
     }
     this.getSBTPick();
   }

@@ -106,5 +106,7 @@ export const STORAGE_KEYS = {
   IBC_DETAIL: 'ibcDetail',
   SET_DATA_EXPORT: 'setDataExport',
   CONTRACT_RAW_DATA: 'contractRawData',
-  IS_VERIFY_TAB: 'isVerifyTab'
+  IS_VERIFY_TAB: 'isVerifyTab',
+  TAB_UNEQUIP: 'tabUnEquip',
+  LAST_USED_PROVIDER: 'LAST_USED_PROVIDER'
 };

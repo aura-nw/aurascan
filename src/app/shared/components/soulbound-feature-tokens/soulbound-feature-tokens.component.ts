@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -165,7 +166,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
   setLinkTab() {
     if (this.soulboundUnclaimedNum > 0 && this.wallet === this.userAddress) {
-      local.setItem('tabUnEquip', 'true');
+      local.setItem(STORAGE_KEYS.TAB_UNEQUIP, 'true');
     }
   }
 }
