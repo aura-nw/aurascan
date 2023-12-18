@@ -389,7 +389,7 @@ export class ApiAccountService {
   getAccount(address: string): Observable<any> {
     return this.http.get(`${this.lcd}/cosmos/auth/v1beta1/accounts/${address}`).pipe(
       catchError((error) => {
-        return of([]);
+        return of(null);
       }),
     );
   }
