@@ -110,7 +110,7 @@
                             (tokenDetail.price * data['balance'] | balanceOf: decimalValue) < 0.001 ||
                             (tokenDetail.price * data['balance'] | convertSmallNumber: decimalValue) >= 1000000
                           "
-                          [content]="data['value']">
+                          [content]="data['value'] | formatStringNumber">
                         </app-tooltip-customize>
                       </div>
                       <span *ngIf="tokenDetail.price <= 0">$0.00</span>
