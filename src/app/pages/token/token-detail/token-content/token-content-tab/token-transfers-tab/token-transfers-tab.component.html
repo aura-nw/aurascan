@@ -98,7 +98,7 @@
                           [content]="
                             (data.amount | balanceOf: data.decimal) < 0.001
                               ? (data.amount | balanceOf: data.decimal)
-                              : (data.amount | balanceOf: data.decimal | formatStringNumber)
+                              : (data.amount | convertSmallNumber: data.decimal | formatStringNumber)
                           ">
                         </app-tooltip-customize>
                       </div>
