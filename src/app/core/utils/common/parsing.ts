@@ -4,6 +4,10 @@ export function balanceOf(amount: string | number, decimal = 6): number {
   return +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
 }
 
+export function getBalance(amount: string | number, decimal = 6): string {
+  return new BigNumber(amount).dividedBy(new BigNumber(10).pow(decimal)).toFixed();
+}
+
 export function parseLabel(label: number) {
   return (
     {

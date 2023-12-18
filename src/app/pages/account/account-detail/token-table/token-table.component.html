@@ -245,7 +245,20 @@
                       ${{ element.price * element.balance | formatDigit : 2 }}
                     </ng-container>
                     <div class="aura-tooltip-contain" *ngIf="element.contract_address !== '-'">
+                      <div *ngIf="element.price * element['balance'] === 0">0</div>
                       <div
+                        class="aura-tooltip-object"
+                        *ngIf="
+                          element.price * element['balance'] !== 0 &&
+                          +(element.price * element['balance'] | balanceOf : element.decimals) < 0.001
+                        ">
+                        <0.001
+                      </div>
+                      <div
+                        *ngIf="
+                          element.price * element['balance'] !== 0 &&
+                          +(element.price * element['balance'] | convertSmallNumber : element.decimals) >= 0.01
+                        "
                         class="aura-tooltip-object"
                         [class.cursor-text]="
                           +(element.price * element['balance'] | balanceOf : element.decimals) < 1000000
@@ -255,16 +268,11 @@
                         [tokenPrice]="element.price"></div>
                       <app-tooltip-customize
                         *ngIf="
-                          (element.price * element['balance'] | balanceOf : element.decimals) < 0.001 ||
-                          (element.price * element['balance'] | convertSmallNumber : element.decimals) >= 1000000
+                          element.price * element['balance'] !== 0 &&
+                          ((element.price * element['balance'] | balanceOf : element.decimals) < 0.001 ||
+                            (element.price * element['balance'] | convertSmallNumber : element.decimals) >= 1000000)
                         "
-                        [content]="
-                          (element.price * element['balance'] | balanceOf : element.decimals) < 0.001
-                            ? (element.price * element['balance'] | balanceOf : element.decimals)
-                            : (element.price * element['balance']
-                              | convertSmallNumber : element.decimals
-                              | formatStringNumber)
-                        ">
+                        [content]="element.value | formatStringNumber">
                       </app-tooltip-customize>
                     </div>
                   </span>
