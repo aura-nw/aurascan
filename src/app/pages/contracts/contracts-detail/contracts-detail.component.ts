@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { TIMEOUT_ERROR, LOCAL_DATA } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/common.model';
+import { TIMEOUT_ERROR, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import local from 'src/app/core/utils/storage/local';
@@ -91,7 +91,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
 
   checkWatchList() {
     // get watch list form local storage
-    const lstWatchList = local.getItem<any>(LOCAL_DATA.LIST_WATCH_LIST);
+    const lstWatchList = local.getItem<any>(STORAGE_KEYS.LIST_WATCH_LIST);
     if (lstWatchList?.find((k) => k.address === this.contractAddress)) {
       this.isWatchList = true;
     }
@@ -106,9 +106,9 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
   }
 
   editWatchList() {
-    const userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
+    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     if (userEmail) {
-      local.setItem('setAddressWatchList', this.contractAddress);
+      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.contractAddress);
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

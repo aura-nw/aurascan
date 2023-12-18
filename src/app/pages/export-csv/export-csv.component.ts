@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, LOCAL_DATA } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { UserStorage } from 'src/app/core/models/common.model';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import local from 'src/app/core/utils/storage/local';
@@ -46,11 +46,11 @@ export class ExportCsvComponent implements OnInit {
   ngOnInit(): void {
     this.renderCaptcha();
     // check exit email
-    this.userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
+    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     this.formInit();
 
     //get data config from account detail
-    const dataConfig = local.getItem<[]>('setDataExport');
+    const dataConfig = local.getItem<[]>(STORAGE_KEYS.SET_DATA_EXPORT);
 
     if (dataConfig?.length > 0) {
       this.setDataConfig(dataConfig);
@@ -144,8 +144,8 @@ export class ExportCsvComponent implements OnInit {
           const errMsg = JSON.parse((<any>e.target).result)?.error;
           if (errMsg?.statusCode === 401 && errMsg?.message == 'Unauthorized') {
             if (this.csvForm.value.displayPrivate) {
-              local.removeItem(LOCAL_DATA.USER_DATA);
-              local.removeItem(LOCAL_DATA.LIST_NAME_TAG);
+              local.removeItem(STORAGE_KEYS.USER_DATA);
+              local.removeItem(STORAGE_KEYS.LIST_NAME_TAG);
               window.location.reload();
             }
           } else {

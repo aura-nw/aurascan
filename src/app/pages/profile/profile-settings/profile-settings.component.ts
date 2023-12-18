@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
-import { LOCAL_DATA } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/common.model';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
@@ -12,7 +12,7 @@ import local from 'src/app/core/utils/storage/local';
   styleUrls: ['./profile-settings.component.scss'],
 })
 export class ProfileSettingsComponent implements OnInit {
-  userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
+  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
   changePassForm;
   hideOldPassword = true;
   hideNewPassword = true;
@@ -23,10 +23,14 @@ export class ProfileSettingsComponent implements OnInit {
   isError = false;
   textTitle = 'Change password';
 
-  constructor(private fb: UntypedFormBuilder, private userService: UserService, private toastr: NgxToastrService) {}
+  constructor(
+    private fb: UntypedFormBuilder,
+    private userService: UserService,
+    private toastr: NgxToastrService,
+  ) {}
 
   ngOnInit(): void {
-    this.currentProvider = local.getItem(LOCAL_DATA.LOGIN_PROVIDER);
+    this.currentProvider = local.getItem(STORAGE_KEYS.LOGIN_PROVIDER);
     this.formInit();
 
     if (this.currentProvider === 'google') {
@@ -82,7 +86,7 @@ export class ProfileSettingsComponent implements OnInit {
         this.toastr.successWithTitle('Please use the new password next time you log in.', passwordText);
 
         if (this.currentProvider === 'google') {
-          local.setItem(LOCAL_DATA.LOGIN_PROVIDER, 'password');
+          local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, 'password');
           setTimeout(() => {
             window.location.reload();
           }, 4000);

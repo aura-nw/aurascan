@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileTab } from 'src/app/core/constants/profile.enum';
 import { Location } from '@angular/common';
 import local from 'src/app/core/utils/storage/local';
-import { LOCAL_DATA } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/common.model';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { UserStorage } from 'src/app/core/models/auth.models';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -29,11 +29,15 @@ export class ProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private route: ActivatedRoute, private router: Router, private location: Location) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location,
+  ) {}
 
   ngOnInit(): void {
     // check exit email
-    const userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
+    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     if (!userEmail) {
       this.router.navigate(['/']);
     }

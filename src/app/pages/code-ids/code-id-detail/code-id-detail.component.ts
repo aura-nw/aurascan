@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -37,9 +37,9 @@ export class CodeIdDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.codeId = this.router.snapshot.paramMap.get('codeId');
-    if (local.getItem('isVerifyTab') == 'true') {
+    if (local.getItem(STORAGE_KEYS.IS_VERIFY_TAB) == 'true') {
       this.tabIndex = 1;
-      local.removeItem('isVerifyTab');
+      local.removeItem(STORAGE_KEYS.IS_VERIFY_TAB);
     }
 
     if (this.codeId === 'null') {

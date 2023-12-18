@@ -7,7 +7,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { LOCAL_DATA, PAGE_EVENT, TIMEOUT_ERROR, TOTAL_GROUP_TRACKING } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR, TOTAL_GROUP_TRACKING } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -67,9 +67,9 @@ export class WatchListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const dataWatchList = local.getItem('setAddressWatchList');
+    const dataWatchList = local.getItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST);
     if (dataWatchList && dataWatchList !== 'undefined') {
-      local.removeItem('setAddressWatchList');
+      local.removeItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST);
       setTimeout(() => {
         this.openPopup({ address: dataWatchList });
       }, 500);
@@ -109,7 +109,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
 
     this.watchListService.getListWatchList(payload).subscribe(
       (res) => {
-        local.setItem(LOCAL_DATA.LIST_WATCH_LIST, res?.data);
+        local.setItem(STORAGE_KEYS.LIST_WATCH_LIST, res?.data);
         this.dataSource.data = res.data;
         this.pageData.length = res?.meta?.count || 0;
 

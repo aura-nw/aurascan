@@ -21,9 +21,7 @@ export interface IResponsesError {
   };
 }
 
-export interface IResponsesTemplates<T>
-  extends IResponsesSuccess<T>,
-    IResponsesError {}
+export interface IResponsesTemplates<T> extends IResponsesSuccess<T>, IResponsesError {}
 
 export class TableTemplate {
   matColumnDef: string;
@@ -38,7 +36,7 @@ export class TableTemplate {
   prefix?: string;
   headerWidth?: number;
   isNameTag?: boolean;
-  justify?: 'center' | 'flex-start' | 'flex-end'
+  justify?: 'center' | 'flex-start' | 'flex-end';
 }
 
 export class ResponseDto {
@@ -79,9 +77,3 @@ export enum RangeType {
   hour = 'h',
   minute = 'm',
 }
-
-export type UserStorage = {
-  email: string;
-  refreshToken: string;
-  accessToken: string;
-};

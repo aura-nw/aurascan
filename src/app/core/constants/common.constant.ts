@@ -90,7 +90,7 @@ export const NUMBER_ONLY_DECIMAL = '1.0-0';
 export const NUMBER_2_DIGIT = '1.2-2';
 export const NUMBER_6_DIGIT = '1.2-6';
 export const TOTAL_GROUP_TRACKING = 7;
-export const LOCAL_DATA = {
+export const STORAGE_KEYS = {
   USER_EMAIL: 'userEmail',
   LIST_VALIDATOR: 'listValidator',
   LIST_NAME_TAG: 'listNameTag',
@@ -99,5 +99,12 @@ export const LOCAL_DATA = {
   REGISTER_FCM: 'registerFCM',
   LIST_TOKEN_IBC: 'listTokenIBC',
   LIST_INFO_CHAIN: 'listInfoChain',
-  LOGIN_PROVIDER: 'provider'
+  LOGIN_PROVIDER: 'provider',
+  SET_ADDRESS_NAME_TAG: 'setAddressNameTag',
+  SET_ADDRESS_WATCH_LIST: 'setAddressWatchList',
+  SHOW_POPUP_IBC: 'showPopupIBC',
+  IBC_DETAIL: 'ibcDetail',
+  SET_DATA_EXPORT: 'setDataExport',
+  CONTRACT_RAW_DATA: 'contractRawData',
+  IS_VERIFY_TAB: 'isVerifyTab'
 };

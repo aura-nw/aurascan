@@ -5,7 +5,13 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import {
+  DATEFORMAT,
+  LENGTH_CHARACTER,
+  PAGE_EVENT,
+  STORAGE_KEYS,
+  TIMEOUT_ERROR,
+} from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
@@ -606,8 +612,8 @@ export class AccountTransactionTableComponent {
 
   initTnxFilterPanel() {
     if (this.transactionFilter.type) {
-      this.listTypeSelectedTemp = this.tnxTypeOrigin?.filter((type) =>
-        this.transactionFilter?.type?.includes(type.label),
+      this.listTypeSelectedTemp = this.tnxTypeOrigin?.filter(
+        (type) => this.transactionFilter?.type?.includes(type.label),
       );
       if (this.listTypeSelectedTemp?.length === this.tnxTypeOrigin?.length) {
         this.checkAll = true;
@@ -628,7 +634,10 @@ export class AccountTransactionTableComponent {
   }
 
   linkExportPage() {
-    local.setItem('setDataExport', JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }));
+    local.setItem(
+      STORAGE_KEYS.SET_DATA_EXPORT,
+      JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }),
+    );
     this.router.navigate(['/export-csv']);
   }
 

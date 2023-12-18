@@ -7,8 +7,8 @@ import { EnvironmentService } from '../../../core/data-services/environment.serv
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import {clearLocalData} from "src/app/global/global";
 import local from 'src/app/core/utils/storage/local';
-import { LOCAL_DATA } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/common.model';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { UserStorage } from 'src/app/core/models/auth.models';
 
 @Component({
   selector: 'app-authenticate-mail',
@@ -42,7 +42,7 @@ export class AuthenticateMailComponent implements OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
+    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
   }
 
   ngOnDestroy(): void {

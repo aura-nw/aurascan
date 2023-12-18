@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TabsAccountLink } from '../core/constants/account.enum';
-import { LENGTH_CHARACTER, LOCAL_DATA, NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
+import { LENGTH_CHARACTER, STORAGE_KEYS, NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
 import {
   CodeTransaction,
@@ -572,10 +572,10 @@ export function convertDataTransactionSimple(data, coinInfo) {
 }
 
 export function clearLocalData() {
-  local.removeItem(LOCAL_DATA.USER_DATA);
-  local.removeItem(LOCAL_DATA.LIST_NAME_TAG);
-  local.removeItem(LOCAL_DATA.LIST_WATCH_LIST);
-  local.removeItem(LOCAL_DATA.REGISTER_FCM);
+  local.removeItem(STORAGE_KEYS.USER_DATA);
+  local.removeItem(STORAGE_KEYS.LIST_NAME_TAG);
+  local.removeItem(STORAGE_KEYS.LIST_WATCH_LIST);
+  local.removeItem(STORAGE_KEYS.REGISTER_FCM);
 }
 
 export function convertTxIBC(data, coinInfo) {

@@ -6,7 +6,7 @@ import {
 } from '@angular/material/legacy-dialog';
 import { PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
-import { LOCAL_DATA, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { IBCService } from 'src/app/core/services/ibc.service';
@@ -63,7 +63,7 @@ export class IBCComponent implements OnInit {
     this.getReplayerInfo();
     this.getListIBC();
 
-    const listInfoChain = local.getItem<[]>(LOCAL_DATA.LIST_INFO_CHAIN);
+    const listInfoChain = local.getItem<[]>(STORAGE_KEYS.LIST_INFO_CHAIN);
     this.ibcService.listInfoChain = listInfoChain;
     this.getListInfoChain();
 
@@ -79,13 +79,13 @@ export class IBCComponent implements OnInit {
       });
 
     // check back event
-    const isShowPopup = local.getItem('showPopupIBC');
+    const isShowPopup = local.getItem(STORAGE_KEYS.SHOW_POPUP_IBC);
     if (isShowPopup == 'true') {
-      const ibcDetail = local.getItem('ibcDetail');
+      const ibcDetail = local.getItem(STORAGE_KEYS.IBC_DETAIL);
       if (ibcDetail) {
         this.openPopup(ibcDetail);
-        local.removeItem('showPopupIBC');
-        local.removeItem('ibcDetail')
+        local.removeItem(STORAGE_KEYS.SHOW_POPUP_IBC);
+        local.removeItem(STORAGE_KEYS.IBC_DETAIL)
       }
     }
   }
@@ -196,7 +196,7 @@ export class IBCComponent implements OnInit {
     this.ibcService.getListInfoChain().subscribe({
       next: (res) => {
         this.ibcService.listInfoChain = res.data;
-        local.setItem(LOCAL_DATA.LIST_INFO_CHAIN, res.data);
+        local.setItem(STORAGE_KEYS.LIST_INFO_CHAIN, res.data);
       },
     });
   }

@@ -8,7 +8,7 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { LOCAL_DATA, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -63,9 +63,9 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const dataNameTag = local.getItem('setAddressNameTag');
+    const dataNameTag = local.getItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
     if (dataNameTag && dataNameTag !== 'undefined') {
-      local.removeItem('setAddressNameTag');
+      local.removeItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
 
       setTimeout(() => {
         this.openPopup(dataNameTag, true);
@@ -236,7 +236,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       keyword: null,
     };
 
-    const listNameTag = local.getItem<[]>(LOCAL_DATA.LIST_NAME_TAG);
+    const listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
     this.nameTagService.getListPrivateNameTag(payloadPrivate).subscribe((privateName) => {
       this.nameTagService.listNameTag = listNameTag;
       let listTemp = this.nameTagService.listNameTag?.map((element) => {
@@ -267,7 +267,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       });
       const result = [...listTemp, ...lstPrivate];
       this.nameTagService.listNameTag = [...result];
-      local.setItem(LOCAL_DATA.LIST_NAME_TAG, result);
+      local.setItem(STORAGE_KEYS.LIST_NAME_TAG, result);
     });
   }
 }

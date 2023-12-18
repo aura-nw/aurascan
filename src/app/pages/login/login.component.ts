@@ -2,9 +2,9 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LOCAL_DATA } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { UserStorage } from 'src/app/core/models/common.model';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     // check exit email
-    const userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
+    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     if (userEmail) {
       this.route.navigate(['/']);
     }
@@ -141,9 +141,9 @@ export class LoginComponent implements OnInit {
         this.userService.loginWithPassword(payload).subscribe({
           next: (res) => {
             if (!res.error) {
-              local.setItem(LOCAL_DATA.USER_DATA, res);
-              local.setItem(LOCAL_DATA.LOGIN_PROVIDER, res.provider || 'password');
-              local.setItem(LOCAL_DATA.REGISTER_FCM, 'true');
+              local.setItem(STORAGE_KEYS.USER_DATA, res);
+              local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, res.provider || 'password');
+              local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
               this.route.navigate(['/profile']);
 
               setTimeout(() => {
@@ -245,9 +245,9 @@ export class LoginComponent implements OnInit {
 
         this.userService.loginWithGoogle(payload).subscribe({
           next: (res) => {
-            local.setItem(LOCAL_DATA.USER_DATA, res);
-            local.setItem(LOCAL_DATA.LOGIN_PROVIDER, res.provider || 'password');
-            local.setItem(LOCAL_DATA.REGISTER_FCM, 'true');
+            local.setItem(STORAGE_KEYS.USER_DATA, res);
+            local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, res.provider || 'password');
+            local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
             window.location.href = '/profile';
 
             setTimeout(() => {

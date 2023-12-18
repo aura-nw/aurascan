@@ -7,8 +7,8 @@ import { NotificationsService } from '../services/notifications.service';
 import { Router } from '@angular/router';
 import { clearLocalData } from 'src/app/global/global';
 import local from '../utils/storage/local';
-import { LOCAL_DATA } from '../constants/common.constant';
-import { UserStorage } from '../models/common.model';
+import { STORAGE_KEYS } from '../constants/common.constant';
+import { UserStorage } from '../models/auth.models';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -26,7 +26,7 @@ export class JwtInterceptor implements HttpInterceptor {
     }
     const graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
     // get list name tag if not login email
-    const userStorage = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA);
+    const userStorage = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA);
     if (!userStorage) {
       return next.handle(request);
     }
@@ -69,7 +69,7 @@ export class JwtInterceptor implements HttpInterceptor {
             refreshToken: res.refreshToken,
           };
 
-          local.setItem(LOCAL_DATA.USER_DATA, userData);
+          local.setItem(STORAGE_KEYS.USER_DATA, userData);
         },
         error: (err) => {
           this.isReloadToken = false;

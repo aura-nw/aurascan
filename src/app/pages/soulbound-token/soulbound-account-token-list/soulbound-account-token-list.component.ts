@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { LOCAL_DATA } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
-import { UserStorage } from 'src/app/core/models/common.model';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -49,7 +49,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private soulboundService: SoulboundService,
     public commonService: CommonService,
-    private nameTagService: NameTagService
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +59,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
       if (wallet) {
         if (wallet?.bech32Address === this.userAddress) {
           this.TABS = this.TAB_ALL;
-        } 
+        }
       }
     });
 
@@ -117,13 +117,13 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   }
 
   editPrivateName() {
-    const userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
+    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.userAddress);
     if (userEmail) {
       if (dataNameTag) {
-        local.setItem('setAddressNameTag', dataNameTag);
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem('setAddressNameTag', JSON.stringify({ address: this.userAddress }));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, JSON.stringify({ address: this.userAddress }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {

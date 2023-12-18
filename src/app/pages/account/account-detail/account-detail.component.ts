@@ -13,12 +13,12 @@ import { EnvironmentService } from '../../../../app/core/data-services/environme
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants/account.enum';
-import { DATE_TIME_WITH_MILLISECOND, LOCAL_DATA } from '../../../core/constants/common.constant';
+import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 import local from 'src/app/core/utils/storage/local';
-import { UserStorage } from 'src/app/core/models/common.model';
+import { UserStorage } from 'src/app/core/models/auth.models';
 
 @Component({
   selector: 'app-account-detail',
@@ -45,7 +45,7 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
-  userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
+  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
 
   destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
@@ -226,9 +226,9 @@ export class AccountDetailComponent implements OnInit {
     const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.currentAddress);
     if (this.userEmail) {
       if (dataNameTag) {
-        local.setItem('setAddressNameTag', dataNameTag);
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, JSON.stringify({ address: this.currentAddress }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {
@@ -238,7 +238,7 @@ export class AccountDetailComponent implements OnInit {
 
   checkWatchList() {
     // get watch list form local storage
-    const lstWatchList = local.getItem<any>(LOCAL_DATA.LIST_WATCH_LIST);
+    const lstWatchList = local.getItem<any>(STORAGE_KEYS.LIST_WATCH_LIST);
     if (lstWatchList?.find((k) => k.address === this.currentAddress)) {
       this.isWatchList = true;
     }
@@ -254,7 +254,7 @@ export class AccountDetailComponent implements OnInit {
 
   editWatchList() {
     if (this.userEmail) {
-      local.setItem('setAddressWatchList', this.currentAddress);
+      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.currentAddress);
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

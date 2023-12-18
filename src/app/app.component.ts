@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LOCAL_DATA, TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
+import { STORAGE_KEYS, TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
 import { CommonService } from './core/services/common.service';
 import { TokenService } from './core/services/token.service';
 import { getInfo } from './core/utils/common/info-common';
@@ -7,12 +7,12 @@ import { Globals } from './global/global';
 // import eruda from 'eruda';
 import * as _ from 'lodash';
 import { forkJoin, map } from 'rxjs';
-import { UserStorage } from './core/models/common.model';
 import { NameTagService } from './core/services/name-tag.service';
 import { NotificationsService } from './core/services/notifications.service';
 import { ValidatorService } from './core/services/validator.service';
 import { WatchListService } from './core/services/watch-list.service';
 import local from './core/utils/storage/local';
+import { UserStorage } from './core/models/auth.models';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
     private watchListService: WatchListService,
   ) {}
   ngOnInit(): void {
-    this.userEmail = local.getItem<UserStorage>(LOCAL_DATA.USER_DATA)?.email;
+    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     this.getInfoCommon();
     this.getPriceToken();
     this.getDataFromStorage();
@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
     if (!this.userEmail) {
       this.nameTagService.getListNameTag(payload).subscribe((res) => {
         this.nameTagService.listNameTag = res.data?.nameTags;
-        local.setItem(LOCAL_DATA.LIST_NAME_TAG, res.data?.nameTags);
+        local.setItem(STORAGE_KEYS.LIST_NAME_TAG, res.data?.nameTags);
       });
     } else {
       const payloadPrivate = {
@@ -133,7 +133,7 @@ export class AppComponent implements OnInit {
         });
         const result = [...listNameTag, ...lstPrivate];
         this.nameTagService.listNameTag = result;
-        local.setItem(LOCAL_DATA.LIST_NAME_TAG, result);
+        local.setItem(STORAGE_KEYS.LIST_NAME_TAG, result);
       });
     }
   }
@@ -142,19 +142,19 @@ export class AppComponent implements OnInit {
     this.validatorService.getListNameValidator(null).subscribe((res) => {
       if (res.validator?.length > 0) {
         this.commonService.listValidator = res.validator;
-        local.setItem(LOCAL_DATA.LIST_VALIDATOR, this.commonService.listValidator);
+        local.setItem(STORAGE_KEYS.LIST_VALIDATOR, this.commonService.listValidator);
       }
     });
   }
 
   getDataFromStorage() {
     // get list name validator form local storage
-    const listValidatorName = local.getItem<[]>(LOCAL_DATA.LIST_VALIDATOR);
+    const listValidatorName = local.getItem<[]>(STORAGE_KEYS.LIST_VALIDATOR);
     this.commonService.listValidator = listValidatorName;
     this.getListValidator();
 
     // get name tag form local storage
-    const listNameTag = local.getItem<[]>(LOCAL_DATA.LIST_NAME_TAG);
+    const listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
     this.nameTagService.listNameTag = listNameTag;
     this.getListNameTag();
 
@@ -162,14 +162,14 @@ export class AppComponent implements OnInit {
     if (this.userEmail) {
       this.getWatchlist();
       // check register fcm token
-      const registerFCM = local.getItem(LOCAL_DATA.REGISTER_FCM);
+      const registerFCM = local.getItem(STORAGE_KEYS.REGISTER_FCM);
       if (registerFCM == 'true') {
         this.notificationsService.registerFcmToken();
       }
     }
 
     // get list name validator form local storage
-    const listTokenIBC = local.getItem<[]>(LOCAL_DATA.LIST_TOKEN_IBC);
+    const listTokenIBC = local.getItem<[]>(STORAGE_KEYS.LIST_TOKEN_IBC);
     if (!listTokenIBC) {
       this.commonService.listTokenIBC = listTokenIBC;
     }
@@ -183,7 +183,7 @@ export class AppComponent implements OnInit {
     };
 
     this.watchListService.getListWatchList(payload).subscribe((res) => {
-      local.setItem(LOCAL_DATA.LIST_WATCH_LIST, res?.data);
+      local.setItem(STORAGE_KEYS.LIST_WATCH_LIST, res?.data);
     });
   }
 
@@ -202,7 +202,7 @@ export class AppComponent implements OnInit {
         }),
       )
       .subscribe((listTokenIBC) => {
-        local.setItem(LOCAL_DATA.LIST_TOKEN_IBC, listTokenIBC);
+        local.setItem(STORAGE_KEYS.LIST_TOKEN_IBC, listTokenIBC);
       });
   }
 }
