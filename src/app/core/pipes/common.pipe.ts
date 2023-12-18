@@ -146,7 +146,6 @@ export class DisplayTypeToolTipPipe implements PipeTransform {
 @Pipe({ name: 'convertSmallNumber' })
 export class ConvertSmallNumberPipe implements PipeTransform {
   transform(amount: number, decimal: number = 6): any {
-    // let value = +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
     let value = new BigNumber(amount).dividedBy(Math.pow(10, decimal));
     return parseFullNumber(value.toFixed()) !== '0.001' ? parseFullNumber(value.toFixed()) : '';
   }
