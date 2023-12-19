@@ -10,15 +10,7 @@ import { ReadContractComponent } from './read-contract.component';
 
 @NgModule({
   declarations: [ReadContractComponent],
-  imports: [
-    CommonModule,
-    CommonPipeModule,
-    TableNoDataModule,
-    RouterModule,
-    FormsModule,
-    MaterialModule,
-    TranslateModule,
-  ],
+  imports: [CommonModule, CustomPipeModule, TableNoDataModule, RouterModule, FormsModule, MaterialModule],
   exports: [ReadContractComponent],
 })
 export class ReadContractModule {}

@@ -39,7 +39,7 @@
         class="{{ data.class ? data.class : 'text--gray-1' }} mb-0"
         [innerHTML]="data.info"></div>
       <div *ngIf="data.label === 'Amount'" class="text--gray-1">
-        <span class="mr-1"> {{ dataCard['amount'] | mask : 'separator.4' }}</span>
+        <span class="mr-1" [appBigNumber]="dataCard['amount']" [decimal]="0"></span>
         <span>{{ dataCard.dataDenom?.symbol | cutStringPipe : 16 }}</span>
       </div>
     </div>

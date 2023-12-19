@@ -60,20 +60,23 @@
                       <div class="aura-tooltip-contain">
                         <span
                           class="aura-tooltip-object"
-                          *ngIf="(data[template.matColumnDef] | balanceOf : decimalValue) < 0.001">
-                          <0,001
+                          *ngIf="(data[template.matColumnDef] | balanceOf: decimalValue) < 0.001">
+                          <0.001
                         </span>
                         <span
                           class="aura-tooltip-object"
-                          *ngIf="(data[template.matColumnDef] | balanceOf : decimalValue) >= 0.001"
+                          [class.cursor-text]="+(data[template.matColumnDef] | balanceOf: decimalValue) < 1000000"
+                          *ngIf="(data[template.matColumnDef] | balanceOf: decimalValue) >= 0.001"
                           [appBigNumber]="data[template.matColumnDef]"
                           [decimal]="decimalValue || 0"></span>
                         <app-tooltip-customize
                           *ngIf="
-                            (data[template.matColumnDef] | balanceOf : decimalValue) < 0.001 ||
-                            (data[template.matColumnDef] | convertSmallNumber : decimalValue) >= 1000000
+                            (data[template.matColumnDef] | balanceOf: decimalValue) < 0.001 ||
+                            (data[template.matColumnDef] | convertSmallNumber: decimalValue) >= 1000000
                           "
-                          [content]="data[template.matColumnDef] | convertSmallNumber : decimalValue | formatDigit : 2">
+                          [content]="
+                            data[template.matColumnDef] | convertSmallNumber: decimalValue | formatStringNumber
+                          ">
                         </app-tooltip-customize>
                       </div>
                     </ng-container>
@@ -87,10 +90,10 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'percent_hold'">
                       <span *ngIf="this.typeContract === contractType.CW20"
-                        >{{ data[template.matColumnDef] | formatDigit : 2 }}%</span
+                        >{{ data[template.matColumnDef] | formatDigit: 2 }}%</span
                       >
                       <ng-container *ngIf="this.typeContract !== contractType.CW20">
-                        <span>{{ data.percent_hold || 0 | formatDigit : 2 }} %</span>
+                        <span>{{ data.percent_hold || 0 | formatDigit: 2 }} %</span>
                         <div class="percentage-bar mt-2">
                           <div class="percentage-bar__process" [style.width]="(data.width_chart || 0) + '%'"></div>
                         </div>
@@ -101,17 +104,19 @@
                         <div
                           class="aura-tooltip-object"
                           [class.cursor-text]="
-                            +(tokenDetail.price * data['balance'] | balanceOf : decimalValue) < 1000000
+                            +(tokenDetail.price * data['balance'] | balanceOf: decimalValue) < 1000000
                           "
                           [appBigNumber]="data['balance']"
                           [decimal]="decimalValue"
                           [tokenPrice]="tokenDetail?.price"></div>
                         <app-tooltip-customize
-                          *ngIf="+(tokenDetail.price * data['balance'] | balanceOf : decimalValue) >= 1000000"
-                          [content]="tokenDetail.price * data['balance'] | balanceOf : decimalValue | formatDigit : 2">
+                          *ngIf="
+                            (tokenDetail.price * data['balance'] | balanceOf: decimalValue) < 0.001 ||
+                            (tokenDetail.price * data['balance'] | convertSmallNumber: decimalValue) >= 1000000
+                          "
+                          [content]="data['value'] | formatStringNumber">
                         </app-tooltip-customize>
                       </div>
-
                       <span *ngIf="tokenDetail.price <= 0">$0.00</span>
                     </ng-container>
                     <ng-container *ngSwitchDefault>

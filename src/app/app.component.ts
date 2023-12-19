@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
+import { STORAGE_KEYS, TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
 import { CommonService } from './core/services/common.service';
 import { TokenService } from './core/services/token.service';
 import { getInfo } from './core/utils/common/info-common';
@@ -8,9 +8,11 @@ import { Globals } from './global/global';
 import * as _ from 'lodash';
 import { forkJoin, map } from 'rxjs';
 import { NameTagService } from './core/services/name-tag.service';
-import { ValidatorService } from './core/services/validator.service';
 import { NotificationsService } from './core/services/notifications.service';
+import { ValidatorService } from './core/services/validator.service';
 import { WatchListService } from './core/services/watch-list.service';
+import local from './core/utils/storage/local';
+import { UserStorage } from './core/models/auth.models';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +36,7 @@ export class AppComponent implements OnInit {
     private watchListService: WatchListService,
   ) {}
   ngOnInit(): void {
-    this.userEmail = localStorage.getItem('userEmail');
+    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     this.getInfoCommon();
     this.getPriceToken();
     this.getDataFromStorage();
@@ -81,121 +83,97 @@ export class AppComponent implements OnInit {
       nextKey: 0,
     };
 
-    const payloadPrivate = {
-      limit: 100,
-      offset: 0,
-      keyword: null,
-    };
-
     // get list name tag if not login email
     if (!this.userEmail) {
       this.nameTagService.getListNameTag(payload).subscribe((res) => {
         this.nameTagService.listNameTag = res.data?.nameTags;
-        localStorage.setItem('listNameTag', JSON.stringify(res.data?.nameTags));
+        local.setItem(STORAGE_KEYS.LIST_NAME_TAG, res.data?.nameTags);
+      });
+    } else {
+      const payloadPrivate = {
+        limit: 100,
+        offset: 0,
+        keyword: null,
+      };
+
+      // get list name tag if login email
+      forkJoin({
+        publicName: this.nameTagService.getListNameTag(payload),
+        privateName: this.nameTagService.getListPrivateNameTag(payloadPrivate),
+      }).subscribe(({ publicName, privateName }) => {
+        const listNameTag = publicName.data?.nameTags?.map((element) => {
+          const address = _.get(element, 'address');
+          const name_tag = _.get(element, 'name_tag');
+          const enterpriseUrl = _.get(element, 'enterpriseUrl');
+
+          let isPrivate = false;
+          let name_tag_private = null;
+          let id = null;
+
+          let privateData = privateName?.data?.find((k) => k.address === address);
+
+          if (privateData) {
+            name_tag_private = privateData.nameTag;
+            isPrivate = true;
+            id = privateData.id;
+          }
+          return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
+        });
+
+        // get other data of private list
+        const isSameUser = (listTemp, privateName) => listTemp?.address === privateName.address;
+        const onlyInLeft = (left, right, compareFunction) =>
+          left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
+        const lstPrivate = onlyInLeft(privateName?.data, listNameTag, isSameUser);
+
+        lstPrivate.forEach((element) => {
+          element['name_tag_private'] = element.nameTag;
+          element['nameTag'] = null;
+          element['isPrivate'] = true;
+        });
+        const result = [...listNameTag, ...lstPrivate];
+        this.nameTagService.listNameTag = result;
+        local.setItem(STORAGE_KEYS.LIST_NAME_TAG, result);
       });
     }
-
-    // get list name tag if login email
-    forkJoin({
-      publicName: this.nameTagService.getListNameTag(payload),
-      privateName: this.nameTagService.getListPrivateNameTag(payloadPrivate),
-    }).subscribe(({ publicName, privateName }) => {
-      const listNameTag = publicName.data?.nameTags?.map((element) => {
-        const address = _.get(element, 'address');
-        const name_tag = _.get(element, 'name_tag');
-        const enterpriseUrl = _.get(element, 'enterpriseUrl');
-
-        let isPrivate = false;
-        let name_tag_private = null;
-        let id = null;
-
-        let privateData = privateName?.data?.find((k) => k.address === address);
-
-        if (privateData) {
-          name_tag_private = privateData.nameTag;
-          isPrivate = true;
-          id = privateData.id;
-        }
-        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
-      });
-
-      // get other data of private list
-      const isSameUser = (listTemp, privateName) => listTemp?.address === privateName.address;
-      const onlyInLeft = (left, right, compareFunction) =>
-        left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
-      const lstPrivate = onlyInLeft(privateName?.data, listNameTag, isSameUser);
-
-      lstPrivate.forEach((element) => {
-        element['name_tag_private'] = element.nameTag;
-        element['nameTag'] = null;
-        element['isPrivate'] = true;
-      });
-      const result = [...listNameTag, ...lstPrivate];
-      this.nameTagService.listNameTag = result;
-      localStorage.setItem('listNameTag', JSON.stringify(result));
-    });
   }
 
   getListValidator(): void {
     this.validatorService.getListNameValidator(null).subscribe((res) => {
       if (res.validator?.length > 0) {
         this.commonService.listValidator = res.validator;
-        localStorage.setItem('listValidator', JSON.stringify(this.commonService.listValidator));
+        local.setItem(STORAGE_KEYS.LIST_VALIDATOR, this.commonService.listValidator);
       }
     });
   }
 
   getDataFromStorage() {
     // get list name validator form local storage
-    const listValidatorName = localStorage.getItem('listValidator');
-    if (!listValidatorName) {
-      this.getListValidator();
-    } else {
-      try {
-        let data = JSON.parse(listValidatorName);
-        this.commonService.listValidator = data;
-      } catch (e) {
-        this.getListValidator();
-      }
-    }
+    const listValidatorName = local.getItem<[]>(STORAGE_KEYS.LIST_VALIDATOR);
+    this.commonService.listValidator = listValidatorName;
+    this.getListValidator();
 
     // get name tag form local storage
-    const listNameTag = localStorage.getItem('listNameTag');
-    if (listNameTag) {
-      try {
-        let data = JSON.parse(listNameTag);
-        this.nameTagService.listNameTag = data;
-        this.getListNameTag();
-      } catch (e) {
-        this.getListNameTag();
-      }
-    } else {
-      this.getListNameTag();
-    }
+    const listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
+    this.nameTagService.listNameTag = listNameTag;
+    this.getListNameTag();
 
     // get watch list form local storage
     if (this.userEmail) {
       this.getWatchlist();
       // check register fcm token
-      const registerFCM = localStorage.getItem('registerFCM');
+      const registerFCM = local.getItem(STORAGE_KEYS.REGISTER_FCM);
       if (registerFCM == 'true') {
         this.notificationsService.registerFcmToken();
       }
     }
 
     // get list name validator form local storage
-    const listTokenIBC = localStorage.getItem('listTokenIBC');
+    const listTokenIBC = local.getItem<[]>(STORAGE_KEYS.LIST_TOKEN_IBC);
     if (!listTokenIBC) {
-      this.getListTokenIBC();
-    } else {
-      try {
-        let data = JSON.parse(listTokenIBC);
-        this.commonService.listTokenIBC = data;
-        this.getListTokenIBC();
-      } catch (e) {
-        this.getListTokenIBC();
-      }
+      this.commonService.listTokenIBC = listTokenIBC;
     }
+    this.getListTokenIBC();
   }
 
   getWatchlist() {
@@ -205,7 +183,7 @@ export class AppComponent implements OnInit {
     };
 
     this.watchListService.getListWatchList(payload).subscribe((res) => {
-      localStorage.setItem('lstWatchList', JSON.stringify(res?.data));
+      local.setItem(STORAGE_KEYS.LIST_WATCH_LIST, res?.data);
     });
   }
 
@@ -224,7 +202,7 @@ export class AppComponent implements OnInit {
         }),
       )
       .subscribe((listTokenIBC) => {
-        localStorage.setItem('listTokenIBC', JSON.stringify(listTokenIBC));
+        local.setItem(STORAGE_KEYS.LIST_TOKEN_IBC, listTokenIBC);
       });
   }
 }

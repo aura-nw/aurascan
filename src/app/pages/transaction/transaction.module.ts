@@ -11,7 +11,7 @@ import { ProposalService } from 'src/app/core/services/proposal.service';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app/material.module';
-import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { SharedModule } from '../../../app/shared/shared.module';
@@ -38,13 +38,13 @@ import { MASK_CONFIG } from 'src/app/app.config';
     MaterialModule,
     NgxMaskDirective,
     NgxMaskPipe,
-    CommonPipeModule,
+    CustomPipeModule,
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
     SharedModule,
     TableNoDataModule,
-    CommonPipeModule,
+    CustomPipeModule,
     NgbNavModule,
     NgxJsonViewerModule,
     CommonDirectiveModule,

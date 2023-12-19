@@ -34,11 +34,7 @@
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>
             <div class="body text--gray-1">
-              {{
-                (transactionsData.top_amount_sent[0]?.amount
-                  | convertUauraToAura : coinDecimals
-                  | mask : 'separator.6') ?? 0
-              }}
+              {{ (transactionsData.top_amount_sent[0]?.amount | balanceOf : coinDecimals | mask : 'separator.6') ?? 0 }}
             </div>
           </div>
         </div>
@@ -58,9 +54,7 @@
             </div>
             <div class="body text--gray-1">
               {{
-                (transactionsData.top_amount_received[0]?.amount
-                  | convertUauraToAura : coinDecimals
-                  | mask : 'separator.6') ?? 0
+                (transactionsData.top_amount_received[0]?.amount | balanceOf : coinDecimals | mask : 'separator.6') ?? 0
               }}
             </div>
           </div>

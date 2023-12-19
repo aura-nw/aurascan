@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { MaterialModule } from 'src/app/material.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
@@ -23,7 +23,7 @@ import { ContractTableComponent } from './contract-table.component';
     PaginatorModule,
     TableNoDataModule,
     MaterialModule,
-    CommonPipeModule,
+    CustomPipeModule,
     DateFnsModule,
     NgxMaskDirective,
     NgxMaskPipe,

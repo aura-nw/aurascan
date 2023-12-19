@@ -127,6 +127,9 @@ export class TokenService extends CommonService {
             symbol
             marketing_info
             decimal
+            smart_contract {
+              address
+            }
             cw20_holders {
               address
               amount

@@ -2,13 +2,16 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
+import local from 'src/app/core/utils/storage/local';
+import { Globals } from 'src/app/global/global';
+import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'app-token-content',
@@ -45,6 +48,7 @@ export class TokenContentComponent implements OnInit {
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.chainInfo;
+  auraPrice = this.global.price.aura;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,6 +56,7 @@ export class TokenContentComponent implements OnInit {
     private layout: BreakpointObserver,
     private tokenService: TokenService,
     private nameTagService: NameTagService,
+    private global: Globals,
   ) {}
 
   ngOnInit(): void {
@@ -71,10 +76,10 @@ export class TokenContentComponent implements OnInit {
       this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
     });
 
-    if (localStorage.getItem('isVerifyTab') == 'true') {
+    if (local.getItem(STORAGE_KEYS.IS_VERIFY_TAB) == 'true') {
       this.currentTab = this.tokenTab.Contract;
       this.activeTabID = this.TABS.findIndex((k) => k.key === this.tokenTab.Contract);
-      localStorage.setItem('isVerifyTab', null);
+      local.removeItem(STORAGE_KEYS.IS_VERIFY_TAB);
     }
   }
 
@@ -155,6 +160,15 @@ export class TokenContentComponent implements OnInit {
       } else {
         const data = await client.queryContractSmart(this.contractAddress, queryData);
         this.infoSearch['balance'] = data?.balance;
+        this.infoSearch['value'] = new BigNumber(data?.balance)
+          .multipliedBy(this.tokenDetail.price)
+          .dividedBy(Math.pow(10, this.tokenDetail.decimals))
+          .toFixed();
+        this.infoSearch['valueAura'] = new BigNumber(data?.balance)
+          .multipliedBy(this.tokenDetail.price)
+          .dividedBy(Math.pow(10, this.tokenDetail.decimals))
+          .dividedBy(this.auraPrice)
+          .toFixed();
       }
     } catch (error) {}
   }

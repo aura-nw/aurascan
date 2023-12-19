@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { IBCService } from 'src/app/core/services/ibc.service';
@@ -15,6 +15,7 @@ import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-ibc',
@@ -42,7 +43,7 @@ export class IBCComponent implements OnInit {
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'no', headerCellDef: 'No', headerWidth: 8 },
-    { matColumnDef: 'chain', headerCellDef: 'Chain', headerWidth: 24 },
+    { matColumnDef: 'chain', headerCellDef: 'Chain', headerWidth: 28 },
     { matColumnDef: 'total_asset_transfer', headerCellDef: 'Total', headerWidth: 16 },
     { matColumnDef: 'receive_asset_transfer', headerCellDef: 'Receive', headerWidth: 16 },
     { matColumnDef: 'send_asset_transfer', headerCellDef: 'Send', headerWidth: 16 },
@@ -61,18 +62,10 @@ export class IBCComponent implements OnInit {
   ngOnInit(): void {
     this.getReplayerInfo();
     this.getListIBC();
-    const listInfoChain = localStorage.getItem('listInfoChain');
-    if (listInfoChain) {
-      try {
-        let data = JSON.parse(listInfoChain);
-        this.ibcService.listInfoChain = data;
-        this.getListInfoChain();
-      } catch (e) {
-        this.getListInfoChain();
-      }
-    } else {
-      this.getListInfoChain();
-    }
+
+    const listInfoChain = local.getItem<[]>(STORAGE_KEYS.LIST_INFO_CHAIN);
+    this.ibcService.listInfoChain = listInfoChain;
+    this.getListInfoChain();
 
     this.searchSubject
       .asObservable()
@@ -86,13 +79,13 @@ export class IBCComponent implements OnInit {
       });
 
     // check back event
-    const isShowPopup = localStorage.getItem('showPopupIBC');
+    const isShowPopup = local.getItem(STORAGE_KEYS.SHOW_POPUP_IBC);
     if (isShowPopup == 'true') {
-      const data = localStorage.getItem('ibcDetail');
-      if (data) {
-        const ibcDetail = JSON.parse(data);
+      const ibcDetail = local.getItem(STORAGE_KEYS.IBC_DETAIL);
+      if (ibcDetail) {
         this.openPopup(ibcDetail);
-        localStorage.removeItem('showPopupIBC');
+        local.removeItem(STORAGE_KEYS.SHOW_POPUP_IBC);
+        local.removeItem(STORAGE_KEYS.IBC_DETAIL)
       }
     }
   }
@@ -114,6 +107,7 @@ export class IBCComponent implements OnInit {
   }
 
   getListIBC() {
+    this.dataSource.data = [];
     this.textSearch = this.textSearch?.trim();
     const keySearch = this.textSearch ? `%${this.textSearch}%` : '';
     this.ibcService.getListIbcRelayer(keySearch).subscribe({
@@ -123,10 +117,12 @@ export class IBCComponent implements OnInit {
         this.timeUpdate = this.timeUpdate || m_view_ibc_relayer_statistic[0]?.created_at;
 
         m_view_ibc_relayer_statistic?.forEach((element) => {
-          element['image'] = this.ibcService.listInfoChain?.find((k) => k.chainId === element?.chain)?.chainImage;
+          const dataChain = this.ibcService.listInfoChain?.find((k) => k.chainId === element?.chain);
+          element['chainName'] = dataChain?.chainName || element.chain;
+          element['image'] = dataChain?.chainImage;
         });
 
-        this.dataSource = new MatTableDataSource<any>(m_view_ibc_relayer_statistic);
+        this.dataSource.data = m_view_ibc_relayer_statistic;
         this.pageData.length = m_view_ibc_relayer_statistic?.length;
 
         if (this.dataSource?.data) {
@@ -156,6 +152,10 @@ export class IBCComponent implements OnInit {
 
   resetSearch(): void {
     this.textSearch = '';
+    this.dataSource.data = [];
+    this.pageData.length = 0;
+    this.pageChange.selectPage(0);
+    this.dataSourceMobile = [];
     this.getListIBC();
   }
 
@@ -183,7 +183,7 @@ export class IBCComponent implements OnInit {
     dialogConfig.panelClass = 'full-overlay-panel';
     dialogConfig.disableClose = true;
     if (data) {
-      localStorage.setItem('ibcDetail', JSON.stringify(data));
+      local.setItem(STORAGE_KEYS.IBC_DETAIL, data);
       dialogConfig.data = data;
     }
 
@@ -198,7 +198,7 @@ export class IBCComponent implements OnInit {
     this.ibcService.getListInfoChain().subscribe({
       next: (res) => {
         this.ibcService.listInfoChain = res.data;
-        localStorage.setItem('listInfoChain', JSON.stringify(res.data));
+        local.setItem(STORAGE_KEYS.LIST_INFO_CHAIN, res.data);
       },
     });
   }

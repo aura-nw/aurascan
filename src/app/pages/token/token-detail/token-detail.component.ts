@@ -65,12 +65,11 @@ export class TokenDetailComponent implements OnInit {
 
                 const token = data[0];
                 // const tokenMarket = item.length > 0 ? item[0] : null;
-                token.contract_address = data[0].address;
-                token.name = data[0].cw20_contract.name;
-                token.symbol = data[0].cw20_contract.symbol;
-                token.decimals = data[0].cw20_contract.decimal;
+                token.contract_address = token.address;
+                token.name = tokenMarket?.name || token.cw20_contract.name;
+                token.symbol = tokenMarket?.symbol || token.cw20_contract.symbol;
+                token.decimals = token.cw20_contract.decimal;
                 token.type = this.contractType.CW20;
-                token.contract_address = data[0].address;
                 token.max_total_supply = tokenMarket?.max_supply || 0;
                 token.circulating_market_cap = tokenMarket?.circulating_market_cap || 0;
                 token.price = tokenMarket?.current_price || 0;
@@ -79,7 +78,7 @@ export class TokenDetailComponent implements OnInit {
                 token.fully_diluted_market_cap =
                   tokenMarket?.fully_diluted_valuation || token.max_total_supply * token.price;
                 token.price_change_percentage_24h = tokenMarket?.price_change_percentage_24h || 0;
-                token.contract_verification = data[0].code?.code_id_verifications[0]?.verification_status;
+                token.contract_verification = token.code?.code_id_verifications[0]?.verification_status;
                 this.tokenDetail = token;
               });
           }

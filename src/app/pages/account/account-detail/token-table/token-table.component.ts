@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import { COIN_TOKEN_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
+import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
@@ -82,8 +82,7 @@ export class TokenTableComponent implements OnChanges {
     private nameTagService: NameTagService,
   ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
     this.getListToken();
@@ -162,7 +161,11 @@ export class TokenTableComponent implements OnChanges {
           if (e.name === TIMEOUT_ERROR) {
             this.errTxt = e.message;
           } else {
-            this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+            if (e.error?.error?.statusCode) {
+              this.errTxt = e.error?.error?.statusCode + ' ' + e.error?.error?.message;
+            } else {
+              this.errTxt = e.error?.message;
+            }
           }
           this.assetsLoading = false;
         },

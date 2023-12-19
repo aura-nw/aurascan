@@ -19,13 +19,14 @@ import { getSigner } from 'src/app/core/utils/signing/signer';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
 import { WalletBottomSheetComponent } from 'src/app/shared/components/wallet-connect/wallet-bottom-sheet/wallet-bottom-sheet.component';
 import { WalletListComponent } from 'src/app/shared/components/wallet-connect/wallet-list/wallet-list.component';
-import { ESigningType, LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
+import { ESigningType, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
 import { getLastProvider, getSigningType } from '../utils/common/info-common';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
+import { STORAGE_KEYS } from '../constants/common.constant';
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -75,18 +76,18 @@ export class WalletService implements OnDestroy {
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
 
-    const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+    const lastProvider = local.getItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER);
     const currentTimestamp = moment().subtract(1, 'd').toDate().getTime();
 
     if (lastProvider && currentTimestamp < lastProvider?.timestamp) {
       const { provider } = lastProvider;
       this.connect(provider);
     } else if (currentTimestamp > lastProvider?.timestamp) {
-      local.removeItem(LAST_USED_PROVIDER);
+      local.removeItem(STORAGE_KEYS.LAST_USED_PROVIDER);
     }
 
     window.addEventListener('keplr_keystorechange', () => {
-      const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+      const lastProvider = local.getItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER);
 
       if (lastProvider) {
         this.connect(lastProvider.provider);
@@ -148,7 +149,7 @@ export class WalletService implements OnDestroy {
 
   disconnect(): void {
     this.setWallet(null);
-    local.removeItem(LAST_USED_PROVIDER);
+    local.removeItem(STORAGE_KEYS.LAST_USED_PROVIDER);
   }
 
   private async connectKeplr(chainInfo: ChainInfo): Promise<void> {
@@ -165,7 +166,7 @@ export class WalletService implements OnDestroy {
           if (account) {
             this.setWallet(account);
             const timestamp = new Date().getTime();
-            local.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+            local.setItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER, {
               provider: WALLET_PROVIDER.KEPLR,
               chainId: chainInfo.chainId,
               timestamp,
@@ -195,7 +196,7 @@ export class WalletService implements OnDestroy {
           if (account) {
             this.setWallet(account);
             const timestamp = new Date().getTime();
-            local.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+            local.setItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER, {
               provider: WALLET_PROVIDER.LEAP,
               chainId: chainInfo.chainId,
               timestamp,
@@ -226,7 +227,7 @@ export class WalletService implements OnDestroy {
         if (account) {
           this.setWallet(account);
           const timestamp = new Date().getTime();
-          local.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+          local.setItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER, {
             provider: WALLET_PROVIDER.KEPLR,
             chainId: chainInfo.chainId,
             timestamp,

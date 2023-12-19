@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/f
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { MaterialModule } from 'src/app/material.module';
 import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
@@ -45,7 +45,7 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     SoulboundTokenRoutingModule,
     SharedModule,
     FormsModule,
-    CommonPipeModule,
+    CustomPipeModule,
     PaginatorModule,
     TranslateModule,
     TableNoDataModule,

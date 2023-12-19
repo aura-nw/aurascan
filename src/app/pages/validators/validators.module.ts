@@ -12,7 +12,7 @@ import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.modul
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app/material.module';
-import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { AccountService } from '../../../app/core/services/account.service';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -37,7 +37,7 @@ import { MASK_CONFIG } from 'src/app/app.config';
     MaterialModule,
     NgxMaskDirective,
     NgxMaskPipe,
-    CommonPipeModule,
+    CustomPipeModule,
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,

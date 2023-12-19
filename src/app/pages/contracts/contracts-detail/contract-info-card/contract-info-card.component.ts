@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-contract-info-card',
@@ -13,7 +15,10 @@ export class ContractInfoCardComponent implements OnInit {
   @Input() contractDetail: any;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
-  constructor(private router: Router, private nameTagService: NameTagService) {}
+  constructor(
+    private router: Router,
+    private nameTagService: NameTagService,
+  ) {}
 
   ngOnInit(): void {}
 
@@ -23,13 +28,13 @@ export class ContractInfoCardComponent implements OnInit {
   }
 
   editPrivateName() {
-    const userEmail = localStorage.getItem('userEmail');
+    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.contractDetail?.address);
     if (userEmail) {
       if (dataNameTag) {
-        localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.contractDetail?.address }));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, JSON.stringify({ address: this.contractDetail?.address }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {

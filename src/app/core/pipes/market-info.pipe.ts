@@ -21,8 +21,7 @@ export class MarketInfoPipe implements PipeTransform {
     }
 
     const tokenMarket = this.token.tokensMarket || [];
-
-    const { cw20_contract, ibc_denom } = value;
+    const { cw20_contract } = value;
     if (cw20_contract) {
       marketInfo = {
         logo: cw20_contract?.marketing_info?.logo?.url || this.defaultLogoToken,
@@ -38,18 +37,18 @@ export class MarketInfoPipe implements PipeTransform {
       if (tokenCw20) {
         marketInfo = {
           logo: tokenCw20.image || marketInfo.logo,
-          symbol: tokenCw20.name || marketInfo.name,
-          name: tokenCw20.symbol || marketInfo.symbol,
+          symbol: tokenCw20.symbol || marketInfo.symbol,
+          name: tokenCw20.name || marketInfo.name,
         };
       }
-    } else if (ibc_denom) {
+    } else if (cw20_contract.ibc_denom) {
       // ibc type
-      const tokenIbc = tokenMarket.find((t) => t.denom === ibc_denom);
+      const tokenIbc = tokenMarket?.find((t) => t.denom === cw20_contract.ibc_denom);
       if (tokenIbc) {
         marketInfo = {
           logo: tokenIbc.image || marketInfo.logo,
-          symbol: tokenIbc.name || marketInfo.name,
-          name: tokenIbc.symbol || marketInfo.symbol,
+          symbol: tokenIbc.symbol || marketInfo.symbol,
+          name: tokenIbc.name || marketInfo.name,
         };
       }
     }
