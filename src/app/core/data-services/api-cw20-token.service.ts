@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { filter, forkJoin, map, take } from 'rxjs';
+import { catchError, filter, forkJoin, map, of, take } from 'rxjs';
 import { COIN_TOKEN_TYPE, TOKEN_ID_GET_PRICE } from '../constants/common.constant';
 import { TokenService } from '../services/token.service';
 import { balanceOf, getBalance } from '../utils/common/parsing';
@@ -53,19 +53,18 @@ export class ApiCw20TokenService {
 
         const nativeToken = this.parseNativeToken(account, coinsMarkets);
 
-        const cw20TokenList: any[] = this.parseCw20Tokens(cw20Tokens, coinsMarkets);
+        const cw20TokenList: any[] = this.parseCw20Tokens(cw20Tokens, coinsMarkets) || [];
 
-        const ibcTokenBalances = this.parseIbcTokens(account, coinsMarkets);
+        const ibcTokenBalances = this.parseIbcTokens(account, coinsMarkets) || [];
 
-        const allTokens = [nativeToken, ...ibcTokenBalances, ...cw20TokenList].filter(
-          (token) => Number(token.balance) > 0,
-        );
+        // get coin native && token balance > 0
+        const tokens = [...ibcTokenBalances, ...cw20TokenList].filter((token) => BigNumber(token.balance).gt(0));
 
-        const totalValue = allTokens
+        const totalValue = [nativeToken, ...tokens]
           .filter((item) => item.verify_status === 'VERIFIED')
-          .reduce((prev, current) => new BigNumber(current?.value).plus(prev).toFixed(), 0);
+          .reduce((prev, current) => BigNumber(current?.value).plus(prev).toFixed(), 0);
 
-        return { data: allTokens, meta: { count: allTokens.length }, totalValue };
+        return { data: [nativeToken, ...tokens], meta: { count: tokens.length }, totalValue };
       }),
     );
   }
