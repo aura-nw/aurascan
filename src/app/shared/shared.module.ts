@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { CommonDirectiveModule } from '../core/directives/common-directive.module';
 import { CardMobAccountComponent } from './components/cards/card-mob-account/card-mob-account.component';

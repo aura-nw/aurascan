@@ -10,6 +10,7 @@ import { CommonService } from '../core/services/common.service';
 import { LanguageService } from '../core/services/language.service';
 import { TransactionService } from '../core/services/transaction.service';
 import { AuthenticateMailModule } from '../shared/components/authenticate-mail/authenticate-mail.module';
+import { NotificationModule } from '../shared/components/notification/notification.module';
 import { WalletConnectModule } from '../shared/components/wallet-connect/wallet-connect.module';
 import { DialogComponent } from './dialog/dialog.component';
 import { FooterComponent } from './footer/footer.component';
@@ -17,7 +18,6 @@ import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
 import { LayoutComponent } from './layout.component';
 import { MenuBottomBarComponent } from './menu-bottom-bar/menu-bottom-bar.component';
-import { NotificationModule } from '../shared/components/notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -39,6 +39,7 @@ import { NotificationModule } from '../shared/components/notification/notificati
     CustomPipeModule,
     AuthenticateMailModule,
     NotificationModule,
+    TranslateModule,
   ],
   providers: [LanguageService, CommonService, TransactionService, ContractService],
   exports: [],
