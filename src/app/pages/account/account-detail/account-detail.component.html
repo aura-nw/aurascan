@@ -116,7 +116,7 @@
                     (totalValueToken + totalValueNft < 0.001 || totalValueToken + totalValueNft >= 1000000)
                   "
                   [content]="
-                    (totalValueToken + totalValueNft | convertSmallNumber : 0 | formatStringNumber) || 0
+                    (totalValueToken + totalValueNft | balance : 0 | formatStringNumber) || 0
                   "></app-tooltip-customize>
               </div>
               <img

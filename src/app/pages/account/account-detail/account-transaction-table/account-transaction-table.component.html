@@ -414,22 +414,22 @@
                           <div *ngIf="+item.amountTemp === 0">0</div>
                           <div
                             class="aura-tooltip-object"
-                            *ngIf="+item.amountTemp !== 0 && +(item.amountTemp | balanceOf : item.decimal) < 0.001">
-                            <0.001
+                            *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance : item.decimal | lt : 0.001)">
+                            {{ '<0.001' }}
                           </div>
                           <div
                             [class.aura-tooltip-object]="item.amountTemp !== 0"
-                            [class.cursor-text]="+(item.amountTemp | balanceOf : item.decimal) < 1000000"
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001"
+                            [class.cursor-text]="item.amountTemp | balance : item.decimal | lt : 1000000"
+                            *ngIf="item.amountTemp | balance : item.decimal | gte : 0.001"
                             [appBigNumber]="item.amountTemp"
                             [decimal]="item.decimal"></div>
                           <app-tooltip-customize
                             *ngIf="
                               +item.amountTemp !== 0 &&
-                              ((item.amountTemp | balanceOf : item.decimal) < 0.001 ||
-                                (item.amountTemp | convertSmallNumber : item.decimal) >= 1000000)
+                              ((item.amountTemp | balance : item.decimal | lt : 0.001) ||
+                                (item.amountTemp | balance : item.decimal | gte : 1000000))
                             "
-                            [content]="item.amountTemp | convertSmallNumber : item.decimal | formatStringNumber">
+                            [content]="item.amountTemp | balance : item.decimal | formatStringNumber">
                           </app-tooltip-customize>
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">

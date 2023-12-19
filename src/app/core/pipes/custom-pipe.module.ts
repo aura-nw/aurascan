@@ -6,11 +6,14 @@ import { JsonPipe } from './json.pipe';
 import { MarketInfoPipe } from './market-info.pipe';
 import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-tag.pipe';
 import {
-  BalanceOfPipe,
+  BalancePipe,
   ConvertLogAmountPipe,
-  ConvertSmallNumberPipe,
   FormatDigitPipe,
   FormatStringNumberPipe,
+  GtePipe,
+  GtPipe,
+  LtePipe,
+  LtPipe,
 } from './number.pipe';
 import { CutStringPipe, StringEllipsisPipe } from './string.pipe';
 import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
@@ -23,11 +26,9 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     StringEllipsisPipe,
     ImageURLPipe,
     CustomDatePipe,
-    BalanceOfPipe,
     ReplaceIpfsPipe,
     ConvertLogAmountPipe,
     DisplayTypeToolTipPipe,
-    ConvertSmallNumberPipe,
     FormatDigitPipe,
     NameTagPipe,
     MarketInfoPipe,
@@ -36,6 +37,11 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     IsPrivateNameTagPipe,
     DateCustomPipe,
     FormatStringNumberPipe,
+    BalancePipe,
+    GtePipe,
+    LtePipe,
+    GtPipe,
+    LtPipe,
   ],
   exports: [
     JsonPipe,
@@ -43,11 +49,9 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     ImageURLPipe,
     CustomDatePipe,
     StringEllipsisPipe,
-    BalanceOfPipe,
     ReplaceIpfsPipe,
     ConvertLogAmountPipe,
     DisplayTypeToolTipPipe,
-    ConvertSmallNumberPipe,
     FormatDigitPipe,
     NameTagPipe,
     MarketInfoPipe,
@@ -56,6 +60,11 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     IsPrivateNameTagPipe,
     DateCustomPipe,
     FormatStringNumberPipe,
+    BalancePipe,
+    GtePipe,
+    LtePipe,
+    GtPipe,
+    LtPipe,
   ],
 })
 export class CustomPipeModule {}
