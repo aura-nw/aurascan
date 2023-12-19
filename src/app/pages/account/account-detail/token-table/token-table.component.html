@@ -199,9 +199,9 @@
                     class="aura-tooltip-object"
                     *ngIf="
                       element.balance !== 0 &&
-                      (
-                        element.balance | balance : (element.contract_address !== '-' ? element.decimals : 0) : true
-                      ).lte(0.001)
+                      (element.balance | balance : (element.contract_address !== '-' ? element.decimals : 0) : true).lt(
+                        0.001
+                      )
                     ">
                     {{ '<0.001' }}
                   </div>
@@ -221,10 +221,10 @@
                       element.balance !== 0 &&
                       ((
                         element.balance | balance : (element.contract_address !== '-' ? element.decimals : 0) : true
-                      ).lte(0.001) ||
+                      ).lt(0.001) ||
                         (
                           element.balance | balance : (element.contract_address !== '-' ? element.decimals : 0) : true
-                        ).gt(1000000))
+                        ).gte(1000000))
                     "
                     [content]="element.balance | balance">
                   </app-tooltip-customize>
