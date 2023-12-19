@@ -1,36 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { DateCustomPipe } from 'src/app/core/pipes/date-custom.pipe';
-import { MarketInfoPipe } from 'src/app/core/pipes/market-info.pipe';
-import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from 'src/app/core/pipes/name-tag.pipe';
-import { CheckDisplayTooltip } from 'src/app/core/pipes/tooltip-display.pipe';
+import { CustomDatePipe, DateCustomPipe } from './date.pipe';
+import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
+import { JsonPipe } from './json.pipe';
+import { MarketInfoPipe } from './market-info.pipe';
+import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-tag.pipe';
 import {
   BalanceOfPipe,
   ConvertLogAmountPipe,
   ConvertSmallNumberPipe,
-  CustomDatePipe,
-  CutStringPipe,
-  DecodeDataPipe,
-  DisplayTypeToolTipPipe,
   FormatDigitPipe,
   FormatStringNumberPipe,
-  ImageURLPipe,
-  ReplaceIpfsPipe,
-  StringEllipsisPipe,
-} from './common.pipe';
-import { JsonPipe } from './json.pipe';
+} from './number.pipe';
+import { CutStringPipe, StringEllipsisPipe } from './string.pipe';
+import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
 
 @NgModule({
+  imports: [CommonModule],
   declarations: [
     JsonPipe,
     CutStringPipe,
+    StringEllipsisPipe,
     ImageURLPipe,
     CustomDatePipe,
-    StringEllipsisPipe,
     BalanceOfPipe,
     ReplaceIpfsPipe,
     ConvertLogAmountPipe,
-    DecodeDataPipe,
     DisplayTypeToolTipPipe,
     ConvertSmallNumberPipe,
     FormatDigitPipe,
@@ -42,7 +37,6 @@ import { JsonPipe } from './json.pipe';
     DateCustomPipe,
     FormatStringNumberPipe,
   ],
-  imports: [CommonModule],
   exports: [
     JsonPipe,
     CutStringPipe,
@@ -52,7 +46,6 @@ import { JsonPipe } from './json.pipe';
     BalanceOfPipe,
     ReplaceIpfsPipe,
     ConvertLogAmountPipe,
-    DecodeDataPipe,
     DisplayTypeToolTipPipe,
     ConvertSmallNumberPipe,
     FormatDigitPipe,
@@ -65,4 +58,4 @@ import { JsonPipe } from './json.pipe';
     FormatStringNumberPipe,
   ],
 })
-export class CommonPipeModule {}
+export class CustomPipeModule {}
