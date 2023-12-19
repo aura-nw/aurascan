@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
@@ -114,6 +114,7 @@ export class IBCComponent implements OnInit {
   }
 
   getListIBC() {
+    this.dataSource.data = [];
     this.textSearch = this.textSearch?.trim();
     const keySearch = this.textSearch ? `%${this.textSearch}%` : '';
     this.ibcService.getListIbcRelayer(keySearch).subscribe({
@@ -128,7 +129,7 @@ export class IBCComponent implements OnInit {
           element['image'] = dataChain?.chainImage;
         });
 
-        this.dataSource = new MatTableDataSource<any>(m_view_ibc_relayer_statistic);
+        this.dataSource.data = m_view_ibc_relayer_statistic;
         this.pageData.length = m_view_ibc_relayer_statistic?.length;
 
         if (this.dataSource?.data) {
@@ -160,6 +161,7 @@ export class IBCComponent implements OnInit {
     this.textSearch = '';
     this.dataSource.data = [];
     this.pageData.length = 0;
+    this.pageChange.selectPage(0);
     this.dataSourceMobile = [];
     this.getListIBC();
   }
