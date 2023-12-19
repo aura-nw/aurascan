@@ -4,11 +4,14 @@ import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import BigNumber from 'bignumber.js';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -17,8 +20,6 @@ import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constant
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
-import local from 'src/app/core/utils/storage/local';
-import { UserStorage } from 'src/app/core/models/auth.models';
 
 @Component({
   selector: 'app-account-detail',
@@ -73,6 +74,10 @@ export class AccountDetailComponent implements OnInit {
     private nameTagService: NameTagService,
   ) {
     this.chartOptions = CHART_OPTION();
+  }
+
+  get totalValue() {
+    return BigNumber(this.totalValueToken).minus(this.totalValueNft);
   }
 
   ngOnInit(): void {

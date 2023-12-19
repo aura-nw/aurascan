@@ -226,7 +226,7 @@
                           element.balance | balance : (element.contract_address !== '-' ? element.decimals : 0) : true
                         ).gte(1000000))
                     "
-                    [content]="element.balance | balance">
+                    [content]="element.balance | balance : (element.contract_address !== '-' ? element.decimals : 0)">
                   </app-tooltip-customize>
                 </div>
               </td>
