@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
@@ -68,7 +68,7 @@ import { TokenRoutingModule } from './token-routing.module';
     MaterialModule,
     FormsModule,
     NgbPopoverModule,
-    CommonPipeModule,
+    CustomPipeModule,
     NgxMaskDirective,
     NgxMaskPipe,
     WriteContractModule,

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { DecodeDataPipe } from './common.pipe';
-import { CustomDatePipe, DateCustomPipe } from './date-custom.pipe';
+import { CustomDatePipe, DateCustomPipe } from './date.pipe';
 import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
 import { JsonPipe } from './json.pipe';
 import { MarketInfoPipe } from './market-info.pipe';
@@ -14,7 +13,7 @@ import {
   FormatStringNumberPipe,
 } from './number.pipe';
 import { CutStringPipe, StringEllipsisPipe } from './string.pipe';
-import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip-display.pipe';
+import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -27,7 +26,6 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip-display.p
     BalanceOfPipe,
     ReplaceIpfsPipe,
     ConvertLogAmountPipe,
-    DecodeDataPipe,
     DisplayTypeToolTipPipe,
     ConvertSmallNumberPipe,
     FormatDigitPipe,
@@ -48,7 +46,6 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip-display.p
     BalanceOfPipe,
     ReplaceIpfsPipe,
     ConvertLogAmountPipe,
-    DecodeDataPipe,
     DisplayTypeToolTipPipe,
     ConvertSmallNumberPipe,
     FormatDigitPipe,
@@ -61,4 +58,4 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip-display.p
     FormatStringNumberPipe,
   ],
 })
-export class CommonPipeModule {}
+export class CustomPipeModule {}
