@@ -102,13 +102,7 @@
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | lt : 0.001) ||
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | gte : 1000000)
                 "
-                [content]="
-                  ((infoSearch['balance'] * tokenDetail.price) / auraPrice
-                  | balance : tokenDetail.decimals
-                  | lt : 0.001)
-                    ? ((infoSearch['balance'] * tokenDetail.price) / auraPrice | balance : tokenDetail.decimals)
-                    : (infoSearch['valueAura'] | formatStringNumber)
-                ">
+                [content]="infoSearch['valueAura'] | formatStringNumber">
               </app-tooltip-customize>
             </div>
             {{ denom }})
