@@ -454,7 +454,8 @@
               <div class="ml-2">
                 <span
                   *ngIf="item?.coins?.length > 0"
-                  [innerHTML]="item?.coins[0]?.amount + item?.coins[0]?.denom | convertLogAmount"></span>
+                  [innerHTML]="item?.coins[0]?.denom | ibcDenom : item?.coins[0]?.amount">
+                </span>
               </div>
             </div>
           </div>

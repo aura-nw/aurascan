@@ -201,7 +201,7 @@
                         <div *ngSwitchCase="'amount'">
                           <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                             <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                            <span class="text--white ml-1">{{ data?.denom | convertLogAmount : true }}</span>
+                            <span class="text--white ml-1">{{ data?.denom | ibcDenom }}</span>
                           </ng-container>
                           <ng-template #displayNonNumber>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
