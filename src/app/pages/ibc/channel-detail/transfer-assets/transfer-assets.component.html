@@ -103,7 +103,7 @@
                                   ((data.amount | balance : data.decimal | lt : 0.001) ||
                                     (data.amount | balance : data.decimal | gte : 1000000))
                                 "
-                                [content]="data.amount | balance : data['dataDenom']?.decimals | formatStringNumber">
+                                [content]="data.amount | balance : data['dataDenom']?.decimals | mask : 'separator'">
                               </app-tooltip-customize>
                             </div>
                           </div>
@@ -272,7 +272,7 @@
                                   ((data.amount | balance : data['dataDenom']?.decimals | lt : 0.001) ||
                                     (data.amount | balance : data['dataDenom']?.decimals | gte : 1000000))
                                 "
-                                [content]="data.amount | balance : data['dataDenom']?.decimals | formatStringNumber">
+                                [content]="data.amount | balance : data['dataDenom']?.decimals | mask : 'separator'">
                               </app-tooltip-customize>
                             </div>
                           </div>

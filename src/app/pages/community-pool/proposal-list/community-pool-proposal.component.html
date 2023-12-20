@@ -71,7 +71,7 @@
                       (element?.amount[0].amount | balance : 6 | lt : 0.001) ||
                       (element?.amount[0].amount | balance : 6 | gte : 1000000)
                     "
-                    [content]="element?.amount[0].amount | balance : 6 | formatStringNumber">
+                    [content]="element?.amount[0].amount | balance : 6 | mask : 'separator'">
                   </app-tooltip-customize>
                 </div>
                 <span class="text--white fw-normal"> {{ denom }}</span>
