@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { NgxMaskPipe } from 'ngx-mask';
 import { CustomDatePipe, DateCustomPipe } from './date.pipe';
 import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
 import { JsonPipe } from './json.pipe';
@@ -56,6 +55,6 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     GtPipe,
     LtPipe,
   ],
-  providers: [NgxMaskPipe],
+  providers: [],
 })
 export class CustomPipeModule {}
