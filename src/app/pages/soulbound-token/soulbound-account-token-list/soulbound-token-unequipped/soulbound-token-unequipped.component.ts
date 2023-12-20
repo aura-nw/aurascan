@@ -18,9 +18,9 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { WSService } from 'src/app/core/services/ws.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail-popup/soulbound-token-detail-popup.component';
-import { WSService } from 'src/app/core/services/ws.service';
 
 @Component({
   selector: 'app-soulbound-token-unequipped',
@@ -100,7 +100,9 @@ export class SoulboundTokenUnequippedComponent implements OnInit, OnChanges {
       next: (res) => {
         this.soulboundData.data = res.data;
         this.pageData.length = res.meta.count;
-        this.totalUnEquip.emit(this.pageData.length);
+        if (!this.searchValue) {
+          this.totalUnEquip.emit(this.pageData.length);
+        }
         this.resetReload.emit(false);
       },
       error: (e) => {

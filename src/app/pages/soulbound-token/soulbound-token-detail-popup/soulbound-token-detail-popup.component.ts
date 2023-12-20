@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
-  MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
@@ -58,6 +59,28 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
         this.animationUrl = this.commonService.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
       } else {
         this.imageUrl = this.commonService.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
+      }
+    }
+
+    if (this.imageUrl.startsWith('https://ipfs.io/ipfs') || this.animationUrl.startsWith('https://ipfs.io/ipfs')) {
+      if (this.soulboundDetail?.token_img && !this.soulboundDetail?.token_img.startsWith('https://ipfs.io/ipfs')) {
+        this.imageUrl = this.soulboundDetail?.token_img;
+      }
+      if (
+        this.soulboundDetail?.animation_url &&
+        !this.soulboundDetail?.animation_url.startsWith('https://ipfs.io/ipfs')
+      ) {
+        if (!this.soulboundDetail?.token_img) {
+          if (this.soulboundDetail.img_type === 'image/gif') {
+            this.imageUrl = this.soulboundDetail?.animation_url;
+          } else {
+            this.animationUrl = this.soulboundDetail?.animation_url;
+          }
+        } else if (this.soulboundDetail.img_type !== MEDIA_TYPE.IMG) {
+          this.animationUrl = this.soulboundDetail?.animation_url;
+        } else {
+          this.imageUrl = this.soulboundDetail?.token_img;
+        }
       }
     }
     this.dfImg = this.commonService.getDefaultImg();
