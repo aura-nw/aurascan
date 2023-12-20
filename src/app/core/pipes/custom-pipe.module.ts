@@ -1,10 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { CustomDatePipe, DateCustomPipe } from './date.pipe';
-import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
-import { JsonPipe } from './json.pipe';
-import { MarketInfoPipe } from './market-info.pipe';
-import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-tag.pipe';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CustomDatePipe, DateCustomPipe} from './date.pipe';
+import {ImageURLPipe, ReplaceIpfsPipe} from './image.pipe';
+import {JsonPipe} from './json.pipe';
+import {MarketInfoPipe} from './market-info.pipe';
+import {IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe} from './name-tag.pipe';
+import {NgxMaskPipe} from 'ngx-mask';
 import {
   BalancePipe,
   ConvertLogAmountPipe,
@@ -15,8 +16,8 @@ import {
   LtePipe,
   LtPipe,
 } from './number.pipe';
-import { CutStringPipe, StringEllipsisPipe } from './string.pipe';
-import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
+import {CutStringPipe, StringEllipsisPipe} from './string.pipe';
+import {CheckDisplayTooltip, DisplayTypeToolTipPipe} from './tooltip.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -66,5 +67,7 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     GtPipe,
     LtPipe,
   ],
+  providers: [NgxMaskPipe]
 })
-export class CustomPipeModule {}
+export class CustomPipeModule {
+}
