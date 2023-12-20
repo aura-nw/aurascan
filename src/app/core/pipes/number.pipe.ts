@@ -2,21 +2,8 @@ import { formatNumber } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import { NgxMaskPipe } from 'ngx-mask';
-import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from '../services/common.service';
-import { balanceOf, parseFullNumber } from '../utils/common/parsing';
-
-@Pipe({ name: 'formatStringNumber' })
-export class FormatStringNumberPipe implements PipeTransform {
-  transform(valueString: string): any {
-    let decimalStr;
-    if (valueString.toString().includes('.')) {
-      decimalStr = valueString.toString().split('.')[1];
-      valueString = valueString.toString().split('.')[0];
-    }
-    return valueString.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (decimalStr ? '.' + decimalStr : '');
-  }
-}
+import { balanceOf } from '../utils/common/parsing';
 
 @Pipe({ name: 'formatDigit' })
 export class FormatDigitPipe implements PipeTransform {

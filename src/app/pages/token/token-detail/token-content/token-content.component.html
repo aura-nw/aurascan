@@ -58,7 +58,7 @@
                 [content]="
                   (infoSearch['balance'] | balance : tokenDetail.decimals | lt : 0.001)
                     ? (infoSearch['balance'] | balance : tokenDetail.decimals)
-                    : (infoSearch['balance'] | balance : tokenDetail.decimals | formatStringNumber)
+                    : (infoSearch['balance'] | balance : tokenDetail.decimals | mask : 'separator')
                 ">
               </app-tooltip-customize>
             </div>
@@ -83,7 +83,7 @@
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | lt : 0.001) ||
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | gte : 1000000)
                 "
-                [content]="infoSearch['value'] | formatStringNumber">
+                [content]="infoSearch['value'] | mask : 'separator'">
               </app-tooltip-customize>
             </div>
             (
@@ -102,7 +102,7 @@
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | lt : 0.001) ||
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | gte : 1000000)
                 "
-                [content]="infoSearch['valueAura'] | formatStringNumber">
+                [content]="infoSearch['valueAura'] | mask : 'separator'">
               </app-tooltip-customize>
             </div>
             {{ denom }})

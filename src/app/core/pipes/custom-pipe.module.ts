@@ -5,16 +5,7 @@ import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
 import { JsonPipe } from './json.pipe';
 import { MarketInfoPipe } from './market-info.pipe';
 import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-tag.pipe';
-import {
-  BalancePipe,
-  ConvertLogAmountPipe,
-  FormatDigitPipe,
-  FormatStringNumberPipe,
-  GtePipe,
-  GtPipe,
-  LtePipe,
-  LtPipe,
-} from './number.pipe';
+import { BalancePipe, ConvertLogAmountPipe, FormatDigitPipe, GtePipe, GtPipe, LtePipe, LtPipe } from './number.pipe';
 import { CutStringPipe, StringEllipsisPipe } from './string.pipe';
 import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
 
@@ -36,7 +27,6 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    FormatStringNumberPipe,
     BalancePipe,
     GtePipe,
     LtePipe,
@@ -59,7 +49,6 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    FormatStringNumberPipe,
     BalancePipe,
     GtePipe,
     LtePipe,
