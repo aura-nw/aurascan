@@ -5,7 +5,7 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { MaterialModule } from 'src/app/material.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
@@ -17,7 +17,7 @@ import { PopupIBCDetailComponent } from './popup-ibc-detail.component';
   declarations: [PopupIBCDetailComponent],
   imports: [
     SharedModule,
-    CommonPipeModule,
+    CustomPipeModule,
     CommonModule,
     FormsModule,
     TableNoDataModule,
@@ -27,7 +27,7 @@ import { PopupIBCDetailComponent } from './popup-ibc-detail.component';
     NgbNavModule,
     NgxMaskDirective,
     NgxMaskPipe,
-    CommonPipeModule,
+    CustomPipeModule,
     TooltipCustomizeModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],

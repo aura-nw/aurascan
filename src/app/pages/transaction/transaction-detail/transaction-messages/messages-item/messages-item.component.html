@@ -33,7 +33,7 @@
         {{ (value | mask : 'separator.6') || '-' }}
       </ng-container>
       <ng-container *ngSwitchCase="pipeTypeData.BalanceOf">
-        {{ value > 0 ? (value | balanceOf : denom.decimals | mask : 'separator.6') : '-' }}
+        {{ value > 0 ? (value | balance : denom.decimals | mask : 'separator.6') : '-' }}
       </ng-container>
       <ng-container *ngSwitchCase="pipeTypeData.Json">
         <pre id="json" class="raw-content text--white px-4" [innerHtml]="value | appJson"></pre>

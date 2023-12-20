@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Coin } from '@cosmjs/stargate';
 import * as _ from 'lodash';
 
-import { EMPTY, expand, forkJoin, from, map, Observable, of, reduce, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, expand, forkJoin, from, map, Observable, of, reduce, switchMap, tap } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { EnvironmentService } from './environment.service';
 import { VALIDATOR_ACCOUNT_TEMPLATE } from './template';
@@ -61,7 +61,10 @@ export class ApiAccountService {
   chainInfo = this.env.chainInfo;
   currencies = this.chainInfo.currencies[0];
 
-  constructor(private http: HttpClient, private env: EnvironmentService) {}
+  constructor(
+    private http: HttpClient,
+    private env: EnvironmentService,
+  ) {}
 
   getAccountByAddress(address: string, isGetAlBalances = false) {
     return forkJoin([
@@ -384,7 +387,11 @@ export class ApiAccountService {
   }
 
   getAccount(address: string): Observable<any> {
-    return this.http.get(`${this.lcd}/cosmos/auth/v1beta1/accounts/${address}`);
+    return this.http.get(`${this.lcd}/cosmos/auth/v1beta1/accounts/${address}`).pipe(
+      catchError((error) => {
+        return of(null);
+      }),
+    );
   }
 
   getCommission(operatorAddress: string): Observable<any> {

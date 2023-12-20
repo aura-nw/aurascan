@@ -76,29 +76,29 @@
                         <div *ngIf="data.amount === 0">0</div>
                         <div
                           class="aura-tooltip-object"
-                          *ngIf="data.amount !== 0 && (data.amount | balanceOf: data.decimal) < 0.001">
-                          <0.001
+                          *ngIf="data.amount !== 0 && (data.amount | balance: data.decimal) | lt: 0.001">
+                          {{ '<0.001' }}
                         </div>
                         <div
                           class="aura-tooltip-object"
-                          *ngIf="(data.amount | balanceOf: data.decimal) >= 0.001"
+                          *ngIf="data.amount | balance: data.decimal | gte: 0.001"
                           [class.cursor-text]="
                             data.amount === 0 ||
-                            ((data.amount | balanceOf: data.decimal) >= 0.001 &&
-                              (data.amount | balanceOf: data.decimal) < 1000000)
+                            ((data.amount | balance: data.decimal | gte: 0.001) &&
+                              (data.amount | balance: data.decimal | lt: 1000000))
                           "
                           [appBigNumber]="data.amount"
                           [decimal]="data.decimal"></div>
                         <app-tooltip-customize
                           *ngIf="
                             data.amount !== 0 &&
-                            ((data.amount | balanceOf: data.decimal) < 0.001 ||
-                              (data.amount | balanceOf: data.decimal) >= 1000000)
+                            ((data.amount | balance: data.decimal | lt: 0.001) || (data.amount | balance: data.decimal)
+                              | gte: 1000000)
                           "
                           [content]="
-                            (data.amount | balanceOf: data.decimal) < 0.001
-                              ? (data.amount | balanceOf: data.decimal)
-                              : (data.amount | convertSmallNumber: data.decimal | formatStringNumber)
+                            (data.amount | balance: data.decimal | lt: 0.001)
+                              ? (data.amount | balance: data.decimal)
+                              : (data.amount | balance: data.decimal | formatStringNumber)
                           ">
                         </app-tooltip-customize>
                       </div>

@@ -9,7 +9,7 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app/material.module';
-import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { BlockService } from '../../../app/core/services/block.service';
 import { SharedModule } from '../../../app/shared/shared.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
@@ -26,7 +26,7 @@ import { MASK_CONFIG } from 'src/app/app.config';
     MaterialModule,
     NgxMaskPipe,
     NgxMaskDirective,
-    CommonPipeModule,
+    CustomPipeModule,
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
