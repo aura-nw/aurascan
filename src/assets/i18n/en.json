@@ -500,7 +500,8 @@
       "characterLimit": "Character limit: {{ value }}/{{ length }} <br /> Set private name tag to easily identify this address in Aurascan only from your view",
       "personalNote": "Personal Note (Optional)",
       "enterNote": "Enter note",
-      "noteLimit": " Character limit:  {{ value }}/{{ length }} <br /> A personal note of this address. Kindly note that DO NOT input any passwords or private key here"
+      "noteLimit": " Character limit:  {{ value }}/{{ length }} <br /> A personal note of this address. Kindly note that DO NOT input any passwords or private key here",
+      "requiedNote:": "All fields are required except Personal Note"
     }
   },
   "NOTICE": {
