@@ -10,10 +10,10 @@ import local from 'src/app/core/utils/storage/local';
 export class SchemaViewerComponent implements OnInit {
   data;
   content;
-  constructor() {}
 
   ngOnInit(): void {
-    this.data = local.getItem(STORAGE_KEYS.CONTRACT_RAW_DATA);
+    this.data = local.getItem<any>(STORAGE_KEYS.CONTRACT_RAW_DATA);
+
     if (this.data?.type === 'json') {
       this.content = JSON.stringify(this.data.content).split(' ').join('').split('\\n').join('');
     } else {

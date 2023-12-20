@@ -1,9 +1,9 @@
 import { formatNumber } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
-import { NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskService } from 'ngx-mask';
 import { CommonService } from '../services/common.service';
-import { balanceOf } from '../utils/common/parsing';
+import { getBalance } from '../utils/common/parsing';
 
 @Pipe({ name: 'formatDigit' })
 export class FormatDigitPipe implements PipeTransform {
@@ -15,7 +15,7 @@ export class FormatDigitPipe implements PipeTransform {
 
 @Pipe({ name: 'convertLogAmount' })
 export class ConvertLogAmountPipe implements PipeTransform {
-  constructor(private commonService: CommonService, private mask: NgxMaskPipe) {}
+  constructor(private commonService: CommonService, private mask: NgxMaskService) {}
 
   transform(value: string, getDenomOnly = false): string {
     if (!value) return '';
@@ -24,10 +24,13 @@ export class ConvertLogAmountPipe implements PipeTransform {
     if (getDenomOnly) {
       return data['display'];
     }
-    amount = this.mask.transform(balanceOf(amount, data['decimals']), 'separator.6');
+
+    amount = this.mask.applyMask(getBalance(amount, data['decimals']), 'separator.6');
+
     if (+amount <= 0) {
       return '-';
     }
+
     return amount + `<span class="text--primary ml-1">` + data['display'] + `</span>`;
   }
 }

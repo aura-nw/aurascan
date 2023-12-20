@@ -55,5 +55,6 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     GtPipe,
     LtPipe,
   ],
+  providers: [],
 })
 export class CustomPipeModule {}
