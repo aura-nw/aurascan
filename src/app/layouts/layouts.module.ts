@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { CommonPipeModule } from '../core/pipes/common-pipe.module';
+import { CustomPipeModule } from '../core/pipes/custom-pipe.module';
 import { CommonService } from '../core/services/common.service';
 import { LanguageService } from '../core/services/language.service';
 import { TransactionService } from '../core/services/transaction.service';
@@ -36,7 +36,7 @@ import { NotificationModule } from '../shared/components/notification/notificati
     FormsModule,
     WalletConnectModule,
     NgbPopoverModule,
-    CommonPipeModule,
+    CustomPipeModule,
     AuthenticateMailModule,
     NotificationModule,
   ],

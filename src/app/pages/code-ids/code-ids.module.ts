@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from 'src/app/material.module';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
@@ -26,7 +26,7 @@ import { CodeIdsRoutingModule } from './code-ids-routing.module';
     CommonModule,
     CodeIdsRoutingModule,
     FormsModule,
-    CommonPipeModule,
+    CustomPipeModule,
     TableNoDataModule,
     PaginatorModule,
     MaterialModule,

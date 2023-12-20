@@ -85,6 +85,10 @@ export class EnvironmentService {
     return _.get(this.configValue, 'chainConfig.chain_info.chainId');
   }
 
+  get coinDecimals() {
+    return _.get(this.configValue, 'chainConfig.chain_info.currencies[0].coinDecimals');
+  }
+
   get stakingTime() {
     return _.get(this.configValue, 'chainConfig.stakingTime');
   }

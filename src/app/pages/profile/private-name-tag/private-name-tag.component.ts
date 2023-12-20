@@ -8,7 +8,7 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -18,6 +18,7 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -62,13 +63,12 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const dataNameTag = localStorage.getItem('setAddressNameTag');
+    const dataNameTag = local.getItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
     if (dataNameTag && dataNameTag !== 'undefined') {
-      const data = JSON.parse(dataNameTag);
-      localStorage.removeItem('setAddressNameTag');
+      local.removeItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
 
       setTimeout(() => {
-        this.openPopup(data, true);
+        this.openPopup(dataNameTag, true);
       }, 500);
     }
 
@@ -236,12 +236,9 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       keyword: null,
     };
 
-    const listNameTag = localStorage.getItem('listNameTag');
+    const listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
     this.nameTagService.getListPrivateNameTag(payloadPrivate).subscribe((privateName) => {
-      try {
-        let data = JSON.parse(listNameTag);
-        this.nameTagService.listNameTag = data;
-      } catch (e) {}
+      this.nameTagService.listNameTag = listNameTag;
       let listTemp = this.nameTagService.listNameTag?.map((element) => {
         const address = _.get(element, 'address');
         let name_tag = _.get(element, 'name_tag');
@@ -270,7 +267,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       });
       const result = [...listTemp, ...lstPrivate];
       this.nameTagService.listNameTag = [...result];
-      localStorage.setItem('listNameTag', JSON.stringify(result));
+      local.setItem(STORAGE_KEYS.LIST_NAME_TAG, result);
     });
   }
 }

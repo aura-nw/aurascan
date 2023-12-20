@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import { formatDistanceToNowStrict } from 'date-fns';
 import * as moment from 'moment';
@@ -35,5 +36,14 @@ export class DateCustomPipe implements PipeTransform {
     } else {
       return ['-', ''];
     }
+  }
+}
+
+@Pipe({ name: 'customDate' })
+export class CustomDatePipe implements PipeTransform {
+  transform(value: string, format: string) {
+    const date = new Date(value);
+    value = formatDate(date, format, 'en-US');
+    return value;
   }
 }

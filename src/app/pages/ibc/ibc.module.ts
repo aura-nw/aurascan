@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { MaterialModule } from 'src/app/material.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
@@ -24,7 +24,7 @@ import { PopupIBCDetailModule } from './popup-ibc-detail/popup-ibc-detail.module
   imports: [
     IBCRoutingModule,
     SharedModule,
-    CommonPipeModule,
+    CustomPipeModule,
     CommonModule,
     FormsModule,
     TableNoDataModule,
