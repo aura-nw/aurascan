@@ -8,7 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
-import { TokenTab } from '../../../../core/constants/token.enum';
+import { EModeToken, TokenTab } from '../../../../core/constants/token.enum';
 import { Globals } from 'src/app/global/global';
 import BigNumber from 'bignumber.js';
 
@@ -23,6 +23,8 @@ export class TokenContentComponent implements OnInit {
   @Output() resultLength = new EventEmitter<any>();
   @Output() hasMore = new EventEmitter<any>();
 
+  tabStaking = [TokenTab.Holders];
+  tabIBC = [TokenTab.Transfers, TokenTab.Holders];
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Contract];
   TABS = [];
@@ -59,9 +61,27 @@ export class TokenContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.TABS = TOKEN_TAB.filter((tab) =>
-      (this.tokenDetail?.isNFTContract ? this.tabNFT : this.tabToken).includes(tab.key),
-    ).map((tab) => ({
+    let tabFilter;
+    switch (this.tokenDetail.modeToken) {
+      case EModeToken.StakingCoin:
+        tabFilter = this.tabStaking;
+        this.currentTab = this.tokenTab.Holders;
+        this.textPlaceHolder = 'Filter Address/Name Tag';
+        break;
+      case EModeToken.IBCCoin:
+        tabFilter = this.tabIBC;
+        this.textPlaceHolder = 'Filter Address/Name Tag, Txn hash';
+        break;
+      default:
+        tabFilter = this.tabToken;
+        if (this.tokenDetail?.isNFTContract) {
+          tabFilter = this.tabNFT;
+          this.textPlaceHolder = 'Filter Address/Name Tag/Txn Hash/Token ID';
+        }
+        break;
+    }
+
+    this.TABS = TOKEN_TAB.filter((tab) => tabFilter.includes(tab.key)).map((tab) => ({
       ...tab,
       value: tab.value,
       key: tab.key,

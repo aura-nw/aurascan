@@ -600,6 +600,8 @@ export function convertTxIBC(data, coinInfo) {
       tx_hash: _.get(element, 'hash'),
       type,
       status,
+      from_address: _.get(data, 'sender'),
+      to_address: _.get(data, 'receiver'),
       fee: balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals),
       height: _.get(element, 'height'),
       timestamp: _.get(element, 'timestamp'),

@@ -3,6 +3,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import {
@@ -18,9 +19,8 @@ import {
   StatusTransaction,
 } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
-import { CommonService } from '../../../../../../core/services/common.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { getTypeTx } from '../../../../../../global/global';
+import { convertTxIBC, getTypeTx } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -28,8 +28,7 @@ import { getTypeTx } from '../../../../../../global/global';
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
 export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
-  @Input() typeContract: string;
-  @Input() contractAddress: string;
+  @Input() tokenDetail: any;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
   @Input() decimalValue: number;
@@ -77,6 +76,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   contractType = ContractRegisterType;
   timerGetUpTime: any;
   errTxt: string;
+  typeContract: string;
+  contractAddress: string;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -92,6 +93,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.contractAddress = this.tokenDetail?.contract_address;
+    this.typeContract = this.tokenDetail?.type;
     this.route.queryParams.subscribe((params) => {
       this.keyWord = params?.a || '';
     });
@@ -118,10 +121,14 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getListData(nextKey = null, isReload = false) {
-    if (this.typeContract !== this.contractType.CW20) {
-      this.getListTransactionTokenCW721(nextKey, isReload);
+    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+      if (this.typeContract !== this.contractType.CW20) {
+        this.getListTransactionTokenCW721(nextKey, isReload);
+      } else {
+        this.getListTransactionTokenCW20(nextKey, isReload);
+      }
     } else {
-      this.getListTransactionTokenCW20(nextKey, isReload);
+      this.getListTransactionTokenIBC(nextKey, isReload);
     }
   }
 
@@ -257,12 +264,74 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     });
   }
 
+  async getListTransactionTokenIBC(nextKey = null, isReload = false) {
+    let payload = {
+      limit: 100,
+      address: this.keyWord,
+      heightLT: nextKey,
+      contractAddr: this.contractAddress,
+    };
+
+    // if (this.keyWord) {
+    //   if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
+    //     payload['txHash'] = this.keyWord;
+    //   } else {
+    //     payload['sender'] = this.keyWord;
+    //     payload['receiver'] = this.keyWord;
+    //   }
+    // }
+
+    this.tokenService.getListTransactionTokenIBC('').subscribe({
+      next: (res) => {
+        if (res) {
+          this.nextKey = null;
+          if (res.ibc_ics20.length >= 100) {
+            this.nextKey = res?.ibc_ics20[res.ibc_ics20.length - 1].height;
+            this.hasMore.emit(true);
+          } else {
+            this.hasMore.emit(false);
+          }
+
+          const txs = convertTxIBC(res, this.coinInfo);
+          txs.forEach((element) => {
+            element['amount'] = element.amountTemp || 0;
+            element['decimal'] = this.tokenDetail?.decimal;
+          });
+
+          if (this.dataSource.data.length > 0 && !isReload) {
+            this.dataSource.data = [...this.dataSource.data, ...txs];
+          } else {
+            this.dataSource.data = [...txs];
+          }
+
+          this.pageData.length = this.dataSource.data.length;
+          this.resultLength.emit(this.pageData.length);
+        }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
+  }
+
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   getTemplate(): Array<TableTemplate> {
-    return this.typeContract !== this.contractType.CW20 ? this.NFTTemplates : this.noneNFTTemplates;
+    let result = this.noneNFTTemplates;
+    if (this.typeContract && this.typeContract !== this.contractType.CW20) {
+      result = this.NFTTemplates;
+    }
+    return result;
   }
 
   shortenAddress(address: string): string {

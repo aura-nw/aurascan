@@ -10,6 +10,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
+import { EModeToken } from 'src/app/core/constants/token.enum';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -53,6 +54,8 @@ export class TokenHoldersTabComponent implements OnInit {
   numberTop = 0;
   totalHolder = 0;
   errTxt: string;
+  EModeToken = EModeToken;
+
   chainInfo = this.environmentService.chainInfo;
 
   constructor(

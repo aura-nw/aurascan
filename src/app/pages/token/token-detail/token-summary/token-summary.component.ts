@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { EModeToken } from 'src/app/core/constants/token.enum';
 import { ProjectDetail } from 'src/app/core/models/project';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-token-summary',
@@ -9,8 +11,10 @@ import { ProjectDetail } from 'src/app/core/models/project';
 export class TokenSummaryComponent implements OnInit {
   @Input() tokenDetail: any;
   projectDetail: ProjectDetail;
+  EModeToken = EModeToken;
 
-  constructor() {}
+  constructor(public commonService: CommonService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

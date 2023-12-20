@@ -537,4 +537,46 @@ export class TokenService extends CommonService {
   getCoinMarkets(coinsId: string[]): Observable<any[]> {
     return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
   }
+
+  getListTransactionTokenIBC(denom_hash: string): Observable<any> {
+    const operationsDoc = `
+    query DenomTransfer(
+      $denom_hash: String = null
+      $limit: Int = null
+      $offset: Int = null
+      $address: String = null
+    ) {
+      ${this.envDB} {
+        ibc_ics20(
+          where: { denom: { _eq: $denom_hash } _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}
+          order_by: { id: desc }
+          limit: $limit
+          offset: $offset
+        ) {
+          denom
+          sender
+          receiver
+          amount
+          ibc_message {
+            transaction {
+              hash
+              transaction_messages {
+                type
+              }
+              timestamp
+              code
+            }
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {},
+        operationName: 'DenomTransfer',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 }

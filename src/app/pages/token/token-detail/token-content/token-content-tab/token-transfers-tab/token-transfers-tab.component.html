@@ -57,8 +57,8 @@
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
-                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                    '-'
+                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                        '-'
                     }}
                   </a>
                 </ng-container>
@@ -73,27 +73,27 @@
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amountToken'">
                       <div class="aura-tooltip-contain">
-                        <div *ngIf="data.amount === 0">
-                          0
-                        </div>
-                        <div class="aura-tooltip-object" *ngIf="data.amount !== 0 && (data.amount | balanceOf: data.decimal) < 0.001">
+                        <div *ngIf="data.amount === 0">0</div>
+                        <div
+                          class="aura-tooltip-object"
+                          *ngIf="data.amount !== 0 && (data.amount | balanceOf: data.decimal) < 0.001">
                           <0.001
                         </div>
                         <div
                           class="aura-tooltip-object"
                           *ngIf="(data.amount | balanceOf: data.decimal) >= 0.001"
                           [class.cursor-text]="
-                            (data.amount === 0) || 
+                            data.amount === 0 ||
                             ((data.amount | balanceOf: data.decimal) >= 0.001 &&
-                            (data.amount | balanceOf: data.decimal) < 1000000)
+                              (data.amount | balanceOf: data.decimal) < 1000000)
                           "
                           [appBigNumber]="data.amount"
                           [decimal]="data.decimal"></div>
                         <app-tooltip-customize
                           *ngIf="
-                            (data.amount !== 0) && 
+                            data.amount !== 0 &&
                             ((data.amount | balanceOf: data.decimal) < 0.001 ||
-                            (data.amount | balanceOf: data.decimal) >= 1000000)
+                              (data.amount | balanceOf: data.decimal) >= 1000000)
                           "
                           [content]="
                             (data.amount | balanceOf: data.decimal) < 0.001
@@ -120,8 +120,18 @@
                       {{ (data[template.matColumnDef] | dateCustom)[0] }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
-                      <div class="aura-status text-capitalize">
-                        <span class="status">{{ data[template.matColumnDef] }}</span>
+                      <div class="aura-status text-capitalize aura-tooltip-contain">
+                        <div class="aura-tooltip-object status">
+                          <span>{{ data[template.matColumnDef] }}</span>
+                          <span *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+                            +{{ data.lstTypeTemp?.length - 1 }}
+                          </span>
+                        </div>
+
+                        <app-tooltip-customize
+                          [class]="'message-custom'"
+                          [content]="data.lstTypeTemp | displayTypeToolTip">
+                        </app-tooltip-customize>
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'">
@@ -159,7 +169,7 @@
                             [src]="'assets/images/icons/arrow-right.png' | imageS3"
                             width="14"
                             height="9"
-                            class="mr-lg-3 mr-0 ml-3 ml-lg-0"/>
+                            class="mr-lg-3 mr-0 ml-3 ml-lg-0" />
                         </ng-container>
                         <ng-container *ngIf="isSearchAddress">
                           <div class="box-token-transfer">
