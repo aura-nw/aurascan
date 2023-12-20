@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { TermsRoutingModule } from './privacy-policy-routing.module';
 import { PrivacyComponent } from './privacy-policy.component';
 @NgModule({
   declarations: [PrivacyComponent],
-  imports: [
-    TermsRoutingModule,
-    CommonPipeModule,
-  ],
+  imports: [TermsRoutingModule, CustomPipeModule],
   providers: [],
   exports: [PrivacyComponent],
 })

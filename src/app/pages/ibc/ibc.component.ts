@@ -6,7 +6,7 @@ import {
 } from '@angular/material/legacy-dialog';
 import { PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { IBCService } from 'src/app/core/services/ibc.service';
@@ -15,6 +15,7 @@ import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-ibc',
@@ -61,18 +62,10 @@ export class IBCComponent implements OnInit {
   ngOnInit(): void {
     this.getReplayerInfo();
     this.getListIBC();
-    const listInfoChain = localStorage.getItem('listInfoChain');
-    if (listInfoChain) {
-      try {
-        let data = JSON.parse(listInfoChain);
-        this.ibcService.listInfoChain = data;
-        this.getListInfoChain();
-      } catch (e) {
-        this.getListInfoChain();
-      }
-    } else {
-      this.getListInfoChain();
-    }
+
+    const listInfoChain = local.getItem<[]>(STORAGE_KEYS.LIST_INFO_CHAIN);
+    this.ibcService.listInfoChain = listInfoChain;
+    this.getListInfoChain();
 
     this.searchSubject
       .asObservable()
@@ -86,13 +79,13 @@ export class IBCComponent implements OnInit {
       });
 
     // check back event
-    const isShowPopup = localStorage.getItem('showPopupIBC');
+    const isShowPopup = local.getItem(STORAGE_KEYS.SHOW_POPUP_IBC);
     if (isShowPopup == 'true') {
-      const data = localStorage.getItem('ibcDetail');
-      if (data) {
-        const ibcDetail = JSON.parse(data);
+      const ibcDetail = local.getItem(STORAGE_KEYS.IBC_DETAIL);
+      if (ibcDetail) {
         this.openPopup(ibcDetail);
-        localStorage.removeItem('showPopupIBC');
+        local.removeItem(STORAGE_KEYS.SHOW_POPUP_IBC);
+        local.removeItem(STORAGE_KEYS.IBC_DETAIL)
       }
     }
   }
@@ -190,7 +183,7 @@ export class IBCComponent implements OnInit {
     dialogConfig.panelClass = 'full-overlay-panel';
     dialogConfig.disableClose = true;
     if (data) {
-      localStorage.setItem('ibcDetail', JSON.stringify(data));
+      local.setItem(STORAGE_KEYS.IBC_DETAIL, data);
       dialogConfig.data = data;
     }
 
@@ -205,7 +198,7 @@ export class IBCComponent implements OnInit {
     this.ibcService.getListInfoChain().subscribe({
       next: (res) => {
         this.ibcService.listInfoChain = res.data;
-        localStorage.setItem('listInfoChain', JSON.stringify(res.data));
+        local.setItem(STORAGE_KEYS.LIST_INFO_CHAIN, res.data);
       },
     });
   }

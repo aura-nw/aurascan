@@ -5,7 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 import { MaterialModule } from 'src/app/material.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
@@ -30,7 +30,7 @@ import { TopStatisticsComponent } from './top-statistics/top-statistics.componen
     CommonModule,
     StatisticsRoutingModule,
     SharedModule,
-    CommonPipeModule,
+    CustomPipeModule,
     NgApexchartsModule,
     NgbNavModule,
     TranslateModule,

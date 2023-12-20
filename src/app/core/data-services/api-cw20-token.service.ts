@@ -60,11 +60,13 @@ export class ApiCw20TokenService {
         // get coin native && token balance > 0
         const tokens = [...ibcTokenBalances, ...cw20TokenList].filter((token) => BigNumber(token.balance).gt(0));
 
-        const totalValue = [nativeToken, ...tokens]
+        const allTokens = [nativeToken, ...tokens];
+
+        const totalValue = allTokens
           .filter((item) => item.verify_status === 'VERIFIED')
           .reduce((prev, current) => BigNumber(current?.value).plus(prev).toFixed(), 0);
 
-        return { data: [nativeToken, ...tokens], meta: { count: tokens.length }, totalValue };
+        return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),
     );
   }

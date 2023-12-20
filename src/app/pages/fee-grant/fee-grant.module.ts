@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
@@ -38,7 +38,7 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     FeeGrantRoutingModule,
     NgbNavModule,
     FormsModule,
-    CommonPipeModule,
+    CustomPipeModule,
     TableNoDataModule,
     TranslateModule,
     SharedModule,

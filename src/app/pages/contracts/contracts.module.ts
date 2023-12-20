@@ -8,7 +8,7 @@ import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MaterialModule } from 'src/app/material.module';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { ContractTableModule } from 'src/app/shared/components/contract-table/contract-table.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
@@ -58,7 +58,7 @@ import { MASK_CONFIG } from 'src/app/app.config';
     MaterialModule,
     DropdownModule,
     NgbNavModule,
-    CommonPipeModule,
+    CustomPipeModule,
     NgxMaskPipe,
     NgxMaskDirective,
     ContractTableModule,
