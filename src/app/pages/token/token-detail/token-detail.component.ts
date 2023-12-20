@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { filter, take } from 'rxjs';
-import { DATEFORMAT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
@@ -144,7 +144,7 @@ export class TokenDetailComponent implements OnInit {
   getDataCoin(denom) {
     this.loading = false;
     this.getTokenDetailByDenom();
-    const listTokenIBC = local.getItem<any>('listTokenIBC');
+    const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
     let findData = listTokenIBC?.find((k) => k['denom']?.indexOf(denom) > 0);
 
     this.tokenDetail = {

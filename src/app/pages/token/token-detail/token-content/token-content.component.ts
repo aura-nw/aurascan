@@ -71,7 +71,7 @@ export class TokenContentComponent implements OnInit {
         break;
       case EModeToken.IBCCoin:
         tabFilter = this.tabIBC;
-        this.textPlaceHolder = 'Filter Address/Name Tag, Txn hash';
+        this.textPlaceHolder = 'Filter Address/Name Tag/Txn hash';
         break;
       default:
         tabFilter = this.tabToken;

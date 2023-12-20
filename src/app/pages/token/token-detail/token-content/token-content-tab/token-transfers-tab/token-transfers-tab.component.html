@@ -12,7 +12,7 @@
         <ng-container *ngFor="let template of template; index as i">
           <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
             <ng-container *ngSwitchCase="'type'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-13">
+              <th mat-header-cell *matHeaderCellDef class="col-per-15">
                 <div [innerHTML]="template.headerCellDef | translate" class="ml-5"></div>
               </th>
             </ng-container>
@@ -21,8 +21,8 @@
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
-            <ng-container *ngSwitchCase="'action'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-5">
+            <ng-container *ngSwitchCase="'status'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-13">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
@@ -47,7 +47,7 @@
               </th>
             </ng-container>
             <ng-container *ngSwitchDefault>
-              <th mat-header-cell *matHeaderCellDef class="col-per-13">
+              <th mat-header-cell *matHeaderCellDef class="col-per-15">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
