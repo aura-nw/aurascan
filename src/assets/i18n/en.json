@@ -491,17 +491,17 @@
       "13_CD": "13. Contact details",
       "13_text": "If you have any requests concerning your personal information or any queries with regard to this Privacy Policy please feel free to contact us at",
       "13_link": "support@aura.network"
+    },
+    "NAME_TAG": {
+      "setFav": "Set favorite in tag list",
+      "account": "Account",
+      "publicNameTag": "Public Name Tag",
+      "enterPrivateNameTag": "Enter private name tag",
+      "characterLimit": "Character limit: {{ value }}/{{ length }} <br /> Set private name tag to easily identify this address in Aurascan only from your view",
+      "personalNote": "Personal Note (Optional)",
+      "enterNote": "Enter note",
+      "noteLimit": " Character limit:  {{ value }}/{{ length }} <br /> A personal note of this address. Kindly note that DO NOT input any passwords or private key here"
     }
-  },
-  "WALLET": {
-    "SCAN_QR": "Scan QR code",
-    "MSG_CONNECT": "Connect with one wallet provider or create a new one",
-    "MSG_CONNECT_DISABLED": "The wallet connection feature on mobile web is temporarily pending. Please visit the Aurascan website on desktop to use this feature.",
-    "MSG_PENDING_STAKE_REWARD": "Pending Staking Reward",
-    "MSG_EARN": "Earn up to 20% per year",
-    "STAKE": "Stake",
-    "CLAIM": "Claim",
-    "DEPOSIT": "Deposit"
   },
   "NOTICE": {
     "REDELEGATE_WAITING": "You must wait {{ timeStaking }} day(s) in order to be able to redelegate from the selected validator.",
@@ -688,6 +688,7 @@
   "BUTTON": {
     "CANCEL": "Cancel",
     "CREATE": "Create",
+    "EDIT": "Edit",
     "GRANT": "Grant",
     "MAX": "MAX",
     "ADD_MORE": "Add More",
