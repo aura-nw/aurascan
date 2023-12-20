@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource as MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
@@ -93,7 +93,9 @@ export class SoulboundTokenEquippedComponent implements OnInit {
         this.countSelected = res.data.filter((k) => k.picked)?.length || 0;
         this.soulboundData.data = res.data;
         this.pageData.length = res.meta.count;
-        this.totalSBT.emit(this.pageData.length);
+        if (!this.textSearch) {
+          this.totalSBT.emit(this.pageData.length);
+        }
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
