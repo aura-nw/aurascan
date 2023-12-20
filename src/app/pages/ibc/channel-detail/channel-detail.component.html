@@ -172,7 +172,7 @@
                             ((data.amountTemp | balance : data.dataDenom?.decimals | lt : 0.001) ||
                               (data.amountTemp | balance : data.dataDenom?.decimals | gte : 1000000))
                           "
-                          [content]="data.amountTemp | balance : data.dataDenom?.decimals | formatStringNumber">
+                          [content]="data.amountTemp | balance : data.dataDenom?.decimals | mask : 'separator'">
                         </app-tooltip-customize>
                       </div>
                       <span class="ml-1">
