@@ -103,21 +103,15 @@
               <div class="aura-tooltip-contain">
                 <span
                   class="h1 mb-0 fw-700 mb-0 text-gradient d-inline aura-tooltip-object"
-                  [class.cursor-text]="
-                    (totalValueToken + totalValueNft >= 0.001 && totalValueToken + totalValueNft < 1000000) ||
-                    totalValueToken + totalValueNft === 0
-                  "
+                  [class.cursor-text]="(totalValue.gte(0.001) && totalValue.lt(1000000)) || totalValue.eq(0)"
                   *ngIf="!isNoData">
-                  $ <span [appBigNumber]="totalValueToken + totalValueNft || 0" [decimal]="0"></span>
+                  $<span [decimal]="0" [appBigNumber]="totalValue.toFixed() || 0"></span>
                 </span>
+
                 <app-tooltip-customize
-                  *ngIf="
-                    totalValueToken + totalValueNft !== 0 &&
-                    (totalValueToken + totalValueNft < 0.001 || totalValueToken + totalValueNft >= 1000000)
-                  "
-                  [content]="
-                    (totalValueToken + totalValueNft | balance : 0 | formatStringNumber) || 0
-                  "></app-tooltip-customize>
+                  *ngIf="!totalValue.eq(0) && (totalValue.lt(0.001) || totalValue.gte(1000000))"
+                  [content]="totalValue.toFixed() | mask : 'separator'">
+                </app-tooltip-customize>
               </div>
               <img
                 [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"

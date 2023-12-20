@@ -34,7 +34,7 @@ export class CodeContractComponent implements OnInit {
   }
 
   sendRouteObject(type: 'json' | 'text', content: string) {
-    local.setItem(STORAGE_KEYS.CONTRACT_RAW_DATA, JSON.stringify({ content, type }));
+    local.setItem(STORAGE_KEYS.CONTRACT_RAW_DATA, { content, type });
     let url = this.router.serializeUrl(this.router.createUrlTree(['raw-data']));
     window.open(url, '_blank');
   }
