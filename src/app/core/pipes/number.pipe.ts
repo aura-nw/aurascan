@@ -1,37 +1,12 @@
 import { formatNumber } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import BigNumber from 'bignumber.js';
-import { NgxMaskService } from 'ngx-mask';
-import { CommonService } from '../services/common.service';
-import { getBalance } from '../utils/common/parsing';
 
 @Pipe({ name: 'formatDigit' })
 export class FormatDigitPipe implements PipeTransform {
   transform(amount: number, digit = 0) {
     let digitConvert = '1.' + digit + '-' + digit;
     return formatNumber(amount, 'en-GB', digitConvert);
-  }
-}
-
-@Pipe({ name: 'convertLogAmount' })
-export class ConvertLogAmountPipe implements PipeTransform {
-  constructor(private commonService: CommonService, private mask: NgxMaskService) {}
-
-  transform(value: string, getDenomOnly = false): string {
-    if (!value) return '';
-    let amount = value?.match(/\d+/g)[0];
-    let data = this.commonService.mappingNameIBC(value);
-    if (getDenomOnly) {
-      return data['display'];
-    }
-
-    amount = this.mask.applyMask(getBalance(amount, data['decimals']), 'separator.6');
-
-    if (+amount <= 0) {
-      return '-';
-    }
-
-    return amount + `<span class="text--primary ml-1">` + data['display'] + `</span>`;
   }
 }
 
