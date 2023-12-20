@@ -75,7 +75,7 @@
                               (data[template.matColumnDef] | balance : data.decimal | lt : 0.001) ||
                               (data[template.matColumnDef] | balance : data.decimal | gte : 1000000)
                             "
-                            [content]="data[template.matColumnDef] | balance : data.decimal | formatStringNumber">
+                            [content]="data[template.matColumnDef] | balance : data.decimal | mask : 'separator'">
                           </app-tooltip-customize>
                         </div>
                       </ng-container>

@@ -429,7 +429,7 @@
                               ((item.amountTemp | balance : item.decimal | lt : 0.001) ||
                                 (item.amountTemp | balance : item.decimal | gte : 1000000))
                             "
-                            [content]="item.amountTemp | balance : item.decimal | formatStringNumber">
+                            [content]="item.amountTemp | balance : item.decimal | mask : 'separator'">
                           </app-tooltip-customize>
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
