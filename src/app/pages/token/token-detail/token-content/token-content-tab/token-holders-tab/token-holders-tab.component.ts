@@ -201,11 +201,7 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getDenomHolder() {
-    const payload = {
-      denom: this.tokenDetail?.denomHash,
-      contractAddress: this.contractAddress,
-    };
-    this.tokenService.getDenomHolder(payload).subscribe({
+    this.tokenService.getDenomHolder(this.tokenDetail?.denomHash).subscribe({
       next: (res) => {
         if (res?.account?.length > 0) {
           this.totalHolder = res?.account?.length;

@@ -17,6 +17,7 @@ export class TokenSummaryComponent implements OnInit {
   projectDetail: ProjectDetail;
   EModeToken = EModeToken;
   channelId: string;
+  channelCounterId: string;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -34,7 +35,14 @@ export class TokenSummaryComponent implements OnInit {
     const denomHash = this.router.snapshot.paramMap.get('contractAddress');
     if (!denomHash?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
       const tempChannel = await this.ibcService.getChannelInfoByDenom(encodeURIComponent(denomHash));
-      this.channelId = 'channel-11' || _.get(tempChannel, 'data.denom_trace.path')?.replace('transfer/', '');
+      this.channelId = _.get(tempChannel, 'data.denom_trace.path')?.replace('transfer/', '');
+      this.getChannelCounter();
     }
+  }
+
+  getChannelCounter(){
+    this.ibcService.getChannelCounter(this.channelId).subscribe((res) => {
+      this.channelCounterId = _.get(res, 'ibc_channel[0].counterparty_channel_id');
+    });
   }
 }

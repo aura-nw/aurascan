@@ -79,6 +79,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   typeContract: string;
   contractAddress: string;
   EModeToken = EModeToken;
+  linkAddress: string;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -94,6 +95,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.contractAddress = this.tokenDetail?.contract_address;
     this.typeContract = this.tokenDetail?.type;
     this.route.queryParams.subscribe((params) => {
@@ -103,7 +105,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    if (this.typeContract !== this.contractType.CW20) {
+    if (this.typeContract && this.typeContract !== this.contractType.CW20) {
       this.linkToken = this.typeContract === this.contractType.CW721 ? 'token-nft' : 'token-abt';
     }
     this.getListData();

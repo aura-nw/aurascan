@@ -359,4 +359,49 @@ export class IBCService extends CommonService {
   getChannelInfoByDenom(denomHash: string) {
     return axios.get(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`);
   }
+
+  getDenomHolder(denomHash) {
+    const operationsDoc = `
+    query DenomHolder ($denom: String = null) {
+      ${this.envDB} {
+        account_aggregate(where: {balances: {_contains: [{denom: $denom}]}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          denom: denomHash,
+        },
+        operationName: 'DenomHolder',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getChannelCounter(channel_id: string) {
+    const operationsDoc = `
+    query CounterPartyChannel($channel_id: String = null) {
+      ${this.envDB} {
+        ibc_channel(where: {channel_id: {_eq: $channel_id}}) {
+          channel_id
+          counterparty_channel_id
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          channel_id: channel_id,
+        },
+        operationName: 'CounterPartyChannel',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 }

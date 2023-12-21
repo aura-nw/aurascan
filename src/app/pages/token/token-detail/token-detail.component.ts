@@ -144,30 +144,34 @@ export class TokenDetailComponent implements OnInit {
   }
 
   async getDataCoin(denom) {
-    this.getTokenDetailByDenom();
     const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
     let findData = listTokenIBC?.find((k) => k['denom']?.indexOf(denom) > 0);
-    const decimals = findData?.decimal || this.chainInfo?.currencies[0].coinDecimals;
+    this.getDenomHolder(findData);
+  }
+
+  async getDenomHolder(data) {
     let totalSupply = 0;
-    if (findData?.denom) {
-      const tempDenom = await this.ibcService.getTotalSupplyLCD(encodeURIComponent(findData?.denom));
-      totalSupply = _.get(tempDenom, 'data.amount.amount' || 0); 
+    if (data?.denom) {
+      const tempDenom = await this.ibcService.getTotalSupplyLCD(encodeURIComponent(data?.denom));
+      totalSupply = _.get(tempDenom, 'data.amount.amount' || 0);
     }
+    const decimals = data?.decimal || this.chainInfo?.currencies[0].coinDecimals;
 
     this.tokenDetail = {
-      modeToken: findData?.denom ? EModeToken.IBCCoin : EModeToken.StakingCoin,
-      denomHash: findData?.denom,
-      name: findData?.name,
-      price: findData?.current_price,
-      symbol: findData?.symbol || findData?.display,
-      isValueUp: findData?.price_change_percentage_24h && findData?.price_change_percentage_24h >= 0,
-      change: findData?.price_change_percentage_24h || 0,
+      modeToken: data?.denom ? EModeToken.IBCCoin : EModeToken.StakingCoin,
+      denomHash: data?.denom,
+      name: data?.name,
+      price: data?.current_price,
+      symbol: data?.symbol || data?.display,
+      isValueUp: data?.price_change_percentage_24h && data?.price_change_percentage_24h >= 0,
+      change: data?.price_change_percentage_24h || 0,
       decimals,
       totalSupply,
     };
-    this.loading = false;
-  }
 
-  getTokenDetailByDenom(): void {
+    this.ibcService.getDenomHolder(data?.denom).subscribe((res) => {
+      this.tokenDetail['holder'] = _.get(res, 'account_aggregate.aggregate.count');
+    });
+    this.loading = false;
   }
 }

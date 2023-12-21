@@ -538,7 +538,7 @@ export class TokenService extends CommonService {
     return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
   }
 
-  getListTransactionTokenIBC(denom_hash: string): Observable<any> {
+  getListTransactionTokenIBC(denomHash: string): Observable<any> {
     const operationsDoc = `
     query DenomTransfer(
       $denom_hash: String = null
@@ -580,7 +580,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getDenomHolder(payload): Observable<any> {
+  getDenomHolder(denomHash: string): Observable<any> {
     const operationsDoc = `
     query DenomHolder(
       $denom: String = null
@@ -608,7 +608,7 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          denom: 'ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20'
+          denom: denomHash
         },
         operationName: 'DenomHolder',
       })

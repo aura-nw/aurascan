@@ -33,11 +33,14 @@ export class TokenOverviewComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
-    if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
-      this.getTotalSupply();
-      this.getHolderNFT();
-    } else {
-      this.getTotalHolder();
+
+    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+      if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
+        this.getTotalSupply();
+        this.getHolderNFT();
+      } else {
+        this.getTotalHolder();
+      }
     }
 
     //set price change
