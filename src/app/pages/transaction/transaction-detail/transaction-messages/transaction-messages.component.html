@@ -381,16 +381,16 @@
             <ng-container *ngFor="let item of listIBCProgress">
               <div class="d-lg-flex justify-content-between">
                 <div>
-                  <!-- {{ denomIBC || ibcData?.receive?.denomOrigin | cutStringPipe : 25 }} -->
+                  <!-- {{ denomIBC || ibcData?.receive?.denomOrigin | ellipsis : 25 }} -->
                 </div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
-                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe : 8 : 8 }}</span>
+                      <span class="d-lg-none">{{ item.tx_hash | ellipsis : 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </a>
                     <span *ngIf="item.denom !== denom">
-                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe : 8 : 8 }}</span>
+                      <span class="d-lg-none">{{ item.tx_hash | ellipsis : 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </span>
                   </div>

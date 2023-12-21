@@ -126,7 +126,7 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'">
                       <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
-                        {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                        {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'from_address'">
@@ -137,7 +137,7 @@
                               data.modeExecute === modeExecuteTransaction.Take ||
                               data[template.matColumnDef]?.startsWith('Null')
                             ">
-                            <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
+                            <span>{{ data[template.matColumnDef] | ellipsis : 8 : 8 }}</span>
                           </ng-container>
                           <ng-container
                             *ngIf="

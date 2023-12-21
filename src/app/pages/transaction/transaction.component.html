@@ -24,7 +24,7 @@
                         *ngSwitchCase="'tx_hash'"
                         class="text--primary cursor-pointer hash-link"
                         [routerLink]="['/transaction', data['tx_hash']]">
-                        {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                        {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                       </a>
                       <a
                         *ngSwitchCase="'height'"
@@ -87,7 +87,7 @@
             [title]="{
               size: 'md',
               titleClass: 'h6-mob',
-              label: data.tx_hash | cutStringPipe : 6 : 6,
+              label: data.tx_hash | ellipsis : 6 : 6,
               subLabelContent: data.type,
               subLabelClass: 'label__status',
               status: data.code

@@ -12,7 +12,7 @@
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     chainInfo.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                  >{{ chainInfo.chainName | cutStringPipe : maxDisplayChar }}</span
+                  >{{ chainInfo.chainName | ellipsis : maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
               </div>
@@ -35,7 +35,7 @@
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     counterInfo?.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                  >{{ counterInfo?.chainName | cutStringPipe : maxDisplayChar }}</span
+                  >{{ counterInfo?.chainName | ellipsis : maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
               </div>
@@ -110,7 +110,7 @@
                       *ngSwitchCase="'tx_hash'"
                       class="text--primary cursor-pointer hash-link"
                       [routerLink]="['/transaction', data['tx_hash']]">
-                      {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                      {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                     </a>
                     <a
                       *ngSwitchCase="'height'"
@@ -211,7 +211,7 @@
           [title]="{
             size: 'md',
             titleClass: 'body-02-mob',
-            label: data.tx_hash | cutStringPipe : 8 : 8,
+            label: data.tx_hash | ellipsis : 8 : 8,
             subLabelContent: data.type,
             subLabelClass: 'btn-mob',
             status: data.code
