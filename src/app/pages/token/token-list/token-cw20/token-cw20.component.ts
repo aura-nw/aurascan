@@ -1,11 +1,11 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {TranslateService} from '@ngx-translate/core';
+import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import {Observable, of, Subject} from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -17,15 +17,21 @@ import {
   takeLast,
   takeUntil,
 } from 'rxjs/operators';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TokenService} from 'src/app/core/services/token.service';
-import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
-import {DATEFORMAT, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR, TOKEN_ID_GET_PRICE} from '../../../../core/constants/common.constant';
-import {MAX_LENGTH_SEARCH_TOKEN} from '../../../../core/constants/token.constant';
-import {TableTemplate} from '../../../../core/models/common.model';
-import {Globals} from '../../../../global/global';
-import {ContractRegisterType} from 'src/app/core/constants/contract.enum';
-import local from "src/app/core/utils/storage/local";
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TokenService } from 'src/app/core/services/token.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import {
+  DATEFORMAT,
+  PAGE_EVENT,
+  STORAGE_KEYS,
+  TIMEOUT_ERROR,
+  TOKEN_ID_GET_PRICE,
+} from '../../../../core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
+import { TableTemplate } from '../../../../core/models/common.model';
+import { Globals } from '../../../../global/global';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-token-cw20',
@@ -36,12 +42,12 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'id', headerCellDef: 'id'},
-    {matColumnDef: 'token', headerCellDef: 'name'},
-    {matColumnDef: 'type', headerCellDef: 'type'},
-    {matColumnDef: 'price', headerCellDef: 'price'},
-    {matColumnDef: 'circulating_market_cap', headerCellDef: 'circulatingMarketCap'},
-    {matColumnDef: 'onChainMarketCap', headerCellDef: 'onChainMarketCap'},
+    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'token', headerCellDef: 'name' },
+    { matColumnDef: 'type', headerCellDef: 'type' },
+    { matColumnDef: 'price', headerCellDef: 'price' },
+    { matColumnDef: 'circulating_market_cap', headerCellDef: 'circulatingMarketCap' },
+    { matColumnDef: 'onChainMarketCap', headerCellDef: 'onChainMarketCap' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
@@ -74,8 +80,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private datePipe: DatePipe,
-  ) {
-  }
+  ) {}
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
@@ -84,10 +89,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.listTokenIBC = local.getItem(STORAGE_KEYS.LIST_TOKEN_IBC);
+
     this.getPriceBTC();
     this.getListToken();
-    this.listTokenIBC = local.getItem(STORAGE_KEYS.LIST_TOKEN_IBC);
-    console.log(this.listTokenIBC)
     this.searchSubject
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
@@ -216,10 +221,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     };
                   });
                   // store datatable
-                  console.log(mappedData)
                   mappedData.push(...this.listTokenIBC);
                   this.dataTable = mappedData;
-                  console.log(mappedData)
                   // Sort and slice 20 frist record.
                   this.dataSource.data = mappedData
                     ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)

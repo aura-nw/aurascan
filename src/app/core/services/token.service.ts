@@ -538,21 +538,16 @@ export class TokenService extends CommonService {
     return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
   }
 
-  getListTransactionTokenIBC(denomHash: string): Observable<any> {
+  getListTransactionTokenIBC(payload: {
+    denom: string;
+    limit: number;
+    offset: number;
+    address: string;
+  }): Observable<any> {
     const operationsDoc = `
-    query DenomTransfer(
-      $denom_hash: String = null
-      $limit: Int = null
-      $offset: Int = null
-      $address: String = null
-    ) {
-      ${this.envDB} {
-        ibc_ics20(
-          where: { denom: { _eq: $denom_hash } _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}
-          order_by: { id: desc }
-          limit: $limit
-          offset: $offset
-        ) {
+    query DenomTransfer($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
+      auratestnet {
+        ibc_ics20(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}, order_by: {id: desc}, limit: $limit, offset: $offset) {
           denom
           sender
           receiver
@@ -568,13 +563,23 @@ export class TokenService extends CommonService {
             }
           }
         }
+        ibc_ics20_aggregate(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}) {
+          aggregate {
+            count
+          }
+        }
       }
     }
     `;
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        variables: {},
+        variables: {
+          denom: payload.denom,
+          limit: payload.limit,
+          offset: payload.offset,
+          address: payload.address,
+        },
         operationName: 'DenomTransfer',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
@@ -608,7 +613,7 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          denom: denomHash
+          denom: denomHash,
         },
         operationName: 'DenomHolder',
       })

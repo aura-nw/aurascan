@@ -150,13 +150,12 @@ export class TokenDetailComponent implements OnInit {
   }
 
   async getDenomHolder(data) {
-    let totalSupply = 0;
-    if (data?.denom) {
-      const tempDenom = await this.ibcService.getTotalSupplyLCD(encodeURIComponent(data?.denom));
-      totalSupply = _.get(tempDenom, 'data.amount.amount' || 0);
-    }
-    const decimals = data?.decimal || this.chainInfo?.currencies[0].coinDecimals;
+    const [denom, channel] = await Promise.all([
+      this.ibcService.getTotalSupplyLCD(encodeURIComponent(data?.denom)),
+      this.ibcService.getChannelInfoByDenom(encodeURIComponent(data?.denom)),
+    ]);
 
+    const decimals = data?.decimal || this.chainInfo?.currencies[0].coinDecimals;
     this.tokenDetail = {
       modeToken: data?.denom ? EModeToken.IBCCoin : EModeToken.StakingCoin,
       denomHash: data?.denom,
@@ -166,7 +165,8 @@ export class TokenDetailComponent implements OnInit {
       isValueUp: data?.price_change_percentage_24h && data?.price_change_percentage_24h >= 0,
       change: data?.price_change_percentage_24h || 0,
       decimals,
-      totalSupply,
+      totalSupply: _.get(denom, 'data.amount.amount' || 0),
+      channelPath: _.get(channel, 'data.denom_trace'),
     };
 
     this.ibcService.getDenomHolder(data?.denom).subscribe((res) => {

@@ -31,18 +31,13 @@ export class TokenSummaryComponent implements OnInit {
     this.getChannelInfoByDenom();
   }
 
-  async getChannelInfoByDenom() {
+  getChannelInfoByDenom() {
     const denomHash = this.router.snapshot.paramMap.get('contractAddress');
     if (!denomHash?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
-      const tempChannel = await this.ibcService.getChannelInfoByDenom(encodeURIComponent(denomHash));
-      this.channelId = _.get(tempChannel, 'data.denom_trace.path')?.replace('transfer/', '');
-      this.getChannelCounter();
+      this.channelId = this.tokenDetail.channelPath?.path?.replace('transfer/', '');
+      this.ibcService.getChannelCounter(this.channelId).subscribe((res) => {
+        this.channelCounterId = _.get(res, 'ibc_channel[0].counterparty_channel_id');
+      });
     }
-  }
-
-  getChannelCounter(){
-    this.ibcService.getChannelCounter(this.channelId).subscribe((res) => {
-      this.channelCounterId = _.get(res, 'ibc_channel[0].counterparty_channel_id');
-    });
   }
 }
