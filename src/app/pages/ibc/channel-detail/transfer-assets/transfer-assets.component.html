@@ -60,7 +60,7 @@
                               height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
-                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis : 20 }}
+                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis: 20 }}
                               </div>
                               <app-tooltip-customize
                                 [className]="'tooltip--right'"
@@ -74,7 +74,7 @@
                           </div>
                           <div *ngSwitchCase="'type'">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</div>
                           <div *ngSwitchCase="'total_messages'">
-                            {{ data[template.matColumnDef] | mask : 'separator.0' }}
+                            {{ data[template.matColumnDef] | mask: 'separator.0' }}
                           </div>
                           <div *ngSwitchCase="'amount'">
                             <div class="aura-tooltip-contain">
@@ -82,28 +82,27 @@
                               <div
                                 class="aura-tooltip-object"
                                 *ngIf="
-                                  data.amount !== 0 &&
-                                  (data.amount | balance : data['dataDenom']?.decimals | lt : 0.001)
+                                  data.amount !== 0 && (data.amount | balance: data['dataDenom']?.decimals | lt: 0.001)
                                 ">
                                 {{ '<0.001' }}
                               </div>
                               <div
                                 class="aura-tooltip-object"
-                                *ngIf="data.amount | balance : data['dataDenom']?.decimals | gte : 0.001"
+                                *ngIf="data.amount | balance: data['dataDenom']?.decimals | gte: 0.001"
                                 [class.cursor-text]="
                                   data.amount === 0 ||
-                                  ((data.amount | balance : data['dataDenom']?.decimals | gte : 0.001) &&
-                                    (data.amount | balance : data['dataDenom']?.decimals | lt : 1000000))
+                                  ((data.amount | balance: data['dataDenom']?.decimals | gte: 0.001) &&
+                                    (data.amount | balance: data['dataDenom']?.decimals | lt: 1000000))
                                 "
                                 [appBigNumber]="data.amount"
                                 [decimal]="data['dataDenom']?.decimals"></div>
                               <app-tooltip-customize
                                 *ngIf="
                                   data.amount !== 0 &&
-                                  ((data.amount | balance : data.decimal | lt : 0.001) ||
-                                    (data.amount | balance : data.decimal | gte : 1000000))
+                                  ((data.amount | balance: data.decimal | lt: 0.001) ||
+                                    (data.amount | balance: data.decimal | gte: 1000000))
                                 "
-                                [content]="data.amount | balance : data['dataDenom']?.decimals | mask : 'separator'">
+                                [content]="data.amount | balance: data['dataDenom']?.decimals | mask: 'separator'">
                               </app-tooltip-customize>
                             </div>
                           </div>
@@ -135,7 +134,7 @@
                       class="mr-2"
                       width="20px"
                       height="20px" />
-                    <span>{{ data['dataDenom']?.symbol | ellipsis : 20 }}</span>
+                    <span>{{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis: 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
                 </div>
@@ -229,7 +228,7 @@
                               height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
-                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis : 20 }}
+                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis: 20 }}
                               </div>
                               <app-tooltip-customize
                                 [className]="'tooltip--right'"
@@ -243,7 +242,7 @@
                           </div>
                           <div *ngSwitchCase="'type'">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</div>
                           <div *ngSwitchCase="'total_messages'">
-                            {{ data[template.matColumnDef] | mask : 'separator.0' }}
+                            {{ data[template.matColumnDef] | mask: 'separator.0' }}
                           </div>
                           <div *ngSwitchCase="'amount'">
                             <div class="aura-tooltip-contain">
@@ -251,28 +250,27 @@
                               <div
                                 class="aura-tooltip-object"
                                 *ngIf="
-                                  data.amount !== 0 &&
-                                  (data.amount | balance : data['dataDenom']?.decimals | lt : 0.001)
+                                  data.amount !== 0 && (data.amount | balance: data['dataDenom']?.decimals | lt: 0.001)
                                 ">
                                 {{ '<0.001' }}
                               </div>
                               <div
                                 class="aura-tooltip-object"
-                                *ngIf="data.amount | balance : data['dataDenom']?.decimals | gte : 0.001"
+                                *ngIf="data.amount | balance: data['dataDenom']?.decimals | gte: 0.001"
                                 [class.cursor-text]="
                                   data.amount === 0 ||
-                                  ((data.amount | balance : data['dataDenom']?.decimals | gte : 0.001) &&
-                                    (data.amount | balance : data['dataDenom']?.decimals | lt : 1000000))
+                                  ((data.amount | balance: data['dataDenom']?.decimals | gte: 0.001) &&
+                                    (data.amount | balance: data['dataDenom']?.decimals | lt: 1000000))
                                 "
                                 [appBigNumber]="data.amount"
                                 [decimal]="data['dataDenom']?.decimals"></div>
                               <app-tooltip-customize
                                 *ngIf="
                                   data.amount !== 0 &&
-                                  ((data.amount | balance : data['dataDenom']?.decimals | lt : 0.001) ||
-                                    (data.amount | balance : data['dataDenom']?.decimals | gte : 1000000))
+                                  ((data.amount | balance: data['dataDenom']?.decimals | lt: 0.001) ||
+                                    (data.amount | balance: data['dataDenom']?.decimals | gte: 1000000))
                                 "
-                                [content]="data.amount | balance : data['dataDenom']?.decimals | mask : 'separator'">
+                                [content]="data.amount | balance: data['dataDenom']?.decimals | mask: 'separator'">
                               </app-tooltip-customize>
                             </div>
                           </div>
@@ -304,7 +302,7 @@
                       class="mr-2"
                       width="20px"
                       height="20px" />
-                    <span>{{ data['dataDenom']?.symbol | ellipsis : 20 }}</span>
+                    <span>{{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis: 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
                 </div>
