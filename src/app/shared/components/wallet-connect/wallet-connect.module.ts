@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { MaterialModule } from 'src/app/material.module';
 import { QrModule } from '../qr/qr.module';
 import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.module';
@@ -22,7 +22,7 @@ import { WalletListComponent } from './wallet-list/wallet-list.component';
     NgClickOutsideDirective,
     QrModule,
     TranslateModule,
-    CommonPipeModule,
+    CustomPipeModule,
     ClipboardModule,
     TooltipCustomizeModule,
     MaterialModule,

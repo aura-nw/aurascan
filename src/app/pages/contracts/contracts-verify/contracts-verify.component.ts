@@ -1,11 +1,13 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { WSService } from 'src/app/core/services/ws.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-contracts-verify',
@@ -140,7 +142,7 @@ export class ContractsVerifyComponent implements OnInit {
 
   redirectToPreviousPage() {
     const preUrl = sessionStorage.getItem('codeIdPrePage');
-    localStorage.setItem('isVerifyTab', 'true');
+    local.setItem(STORAGE_KEYS.IS_VERIFY_TAB, 'true');
     if (preUrl) {
       window.location.href = preUrl;
     } else {

@@ -21,9 +21,7 @@ export interface IResponsesError {
   };
 }
 
-export interface IResponsesTemplates<T>
-  extends IResponsesSuccess<T>,
-    IResponsesError {}
+export interface IResponsesTemplates<T> extends IResponsesSuccess<T>, IResponsesError {}
 
 export class TableTemplate {
   matColumnDef: string;
@@ -38,86 +36,7 @@ export class TableTemplate {
   prefix?: string;
   headerWidth?: number;
   isNameTag?: boolean;
-  justify?: 'center' | 'flex-start' | 'flex-end'
-}
-
-export class ATBalanceDto {
-  initialAssetTokenPrice: string;
-  assetTokenTicker: string;
-  assetId: string;
-  actualAmountMatched: string;
-  avgStableToken: string;
-  totalStableToken: string;
-  tokenId: string;
-  remain: string;
-  currentSell: string;
-  percent: string;
-}
-
-export class InvestmentBookDto {
-  status: string;
-  createdAt: string;
-  assetTokenTicker: string;
-  StableTokenBalance: string;
-  initialAssetTokenPrice: string;
-  amountMatched: string;
-  spendingStableToken: string;
-}
-
-export class IWSItemIao {
-  mainWallet: string;
-  remainingAT: string;
-  type: string;
-}
-
-export type TypeSecondary = "BUY_AT" | "SELL_AT" | "";
-
-export class SecondaryOrderBookDto {
-  status: string;
-  type: string;
-  createdAt: string;
-  updatedAt: string;
-  startDate: string;
-  expireDate: string;
-  saoPrice: string;
-  quantity: string;
-  remain: string;
-  matchQuantity: string;
-  totalSAO: string;
-  tokenTicker: string;
-}
-
-export class SecondaryOrderBookQuery {
-  type?: string;
-  status?: string;
-  startDate?: string;
-  expireDate?: string;
-  assetTokenTicker?: string;
-  pageIndex: number;
-  pageSize: number;
-}
-
-export class SecondaryHistoryDto {
-  status?: string;
-  type?: TypeSecondary;
-  createdAt?: string;
-  updatedAt?: string;
-  startDate?: string;
-  expireDate?: string;
-  saoPrice?: number;
-  quantity?: number;
-  tokenTicker?: string;
-  price?: number;
-}
-
-export class SecondaryHistoryQueryDto {
-  type?: TypeSecondary;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
-  assetTokenTicker?: string;
-  pageIndex: number;
-  pageSize: number;
+  justify?: 'center' | 'flex-start' | 'flex-end';
 }
 
 export class ResponseDto {
@@ -150,16 +69,6 @@ export interface DataDelegateDto {
   dialogMode?: string;
   validatorDetail?: any;
   identity?: string;
-}
-
-
-export class TableTemplate2 {
-  matColumnDef: string;
-  headerCellDef: string;
-  type: 'date' | 'numb' | 'status' | 'url' | 'prefix' | 'url-address' | 'moment-detail' | 'level' | '';
-  value?: string;
-  idColumnDef?: string;
-  headerWidth?: number;
 }
 
 export enum RangeType {

@@ -2,20 +2,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
-import * as _ from 'lodash';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { DATEFORMAT } from '../constants/common.constant';
+import { Observable } from 'rxjs';
+import { DATEFORMAT, STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
+import local from '../utils/storage/local';
 
 @Injectable({ providedIn: 'root' })
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.coins;
-  private networkQuerySubject: BehaviorSubject<any>;
-  public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.chainInfo;
 
   horoscope = this._environmentService.horoscope;
@@ -33,17 +31,6 @@ export class CommonService {
       this.apiUrl = res.api.backend;
       this.addressPrefix = res.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
     });
-    const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
-    this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);
-    this.networkQueryOb = this.networkQuerySubject.asObservable();
-  }
-
-  public get getNetwork(): any {
-    return this.networkQuerySubject.value;
-  }
-
-  public set setNetwork(data: any) {
-    this.networkQuerySubject.next(data);
   }
 
   status(): Observable<any> {
@@ -89,6 +76,7 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
+    const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
     let result = {
       display: this.chainInfo.currencies[0].coinDenom,
       decimals: this.chainInfo.currencies[0].coinDecimals,
@@ -101,7 +89,7 @@ export class CommonService {
         }
       } catch {}
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.listTokenIBC?.find((k) => k.denom === temp) || {
+      result = listTokenIBC?.find((k) => k.denom === temp) || {
         display: value,
         symbol: value,
       };

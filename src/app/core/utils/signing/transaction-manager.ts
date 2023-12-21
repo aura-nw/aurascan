@@ -1,10 +1,11 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { calculateFee, DeliverTxResponse, SigningStargateClient, StdFee } from '@cosmjs/stargate';
 import { ChainInfo } from '@keplr-wallet/types';
-import {KEPLR_ERRORS, LAST_USED_PROVIDER} from '../../constants/wallet.constant';
+import {KEPLR_ERRORS} from '../../constants/wallet.constant';
 import { messageCreators } from './messages';
 import { getSigner } from './signer';
 import local from "src/app/core/utils/storage/local";
+import { STORAGE_KEYS } from '../../constants/common.constant';
 
 export async function createSignBroadcast(
   {
@@ -62,7 +63,7 @@ export async function getNetworkFee(network, address, messageType, memo = ''): P
 
   let gasEstimation = 0;
   try {
-    const user: any = local.getItem(LAST_USED_PROVIDER);
+    const user: any = local.getItem(STORAGE_KEYS.LAST_USED_PROVIDER);
     if(!user?.provider) return null;
     let provider;
     switch(user.provider) {
