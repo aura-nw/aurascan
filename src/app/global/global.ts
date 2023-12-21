@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TabsAccountLink } from '../core/constants/account.enum';
-import { LENGTH_CHARACTER, STORAGE_KEYS, NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
+import { LENGTH_CHARACTER, NULL_ADDRESS, NUMBER_CONVERT, STORAGE_KEYS } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
 import {
   CodeTransaction,
@@ -11,7 +11,7 @@ import {
   TypeTransaction,
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
-import { convertTx } from '../core/utils/common/info-common';
+import { convertTxNative } from '../core/utils/common/info-common';
 import { balanceOf } from '../core/utils/common/parsing';
 import local from '../core/utils/storage/local';
 Injectable();
@@ -410,15 +410,17 @@ export function convertDataAccountTransaction(
           let amountString = data.amount + data.denom || denom;
           let decimal = coinInfo.coinDecimals;
           let amountTemp = data.amount;
+          let denomOrigin;
           if (amountString?.indexOf('ibc') > -1) {
-            const dataIBC = convertTx(amountString, coinConfig, coinInfo.coinDecimals);
+            const dataIBC = convertTxNative(amountString, coinInfo.coinDecimals);
             decimal = dataIBC['decimal'];
             amount = balanceOf(Number(data.amount) || 0, dataIBC['decimal'] || decimal);
-            denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
+            denomOrigin = dataIBC['denom'];
+            denom = dataIBC['display']?.indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
           } else {
             amount = balanceOf(Number(data.amount) || 0, decimal);
           }
-          const result = { type, toAddress, fromAddress, amount, denom, amountTemp, action, decimal };
+          const result = { type, toAddress, fromAddress, amount, denom, amountTemp, action, decimal, denomOrigin };
           arrTemp.push(result);
         });
         arrEvent = arrTemp;
@@ -440,18 +442,12 @@ export function convertDataAccountTransaction(
         arrEvent = _.get(element, 'cw721_activities')?.map((item, index) => {
           let { type, action } = getTypeTx(element, index);
           let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
-          let toAddress =
-            _.get(item, 'to') ||
-            _.get(item, 'cw721_contract.smart_contract.address') ||
-            NULL_ADDRESS;
+          let toAddress = _.get(item, 'to') || _.get(item, 'cw721_contract.smart_contract.address') || NULL_ADDRESS;
           if (action === 'burn') {
             toAddress = NULL_ADDRESS;
           }
 
-          let contractAddress = _.get(
-            item,
-            'cw721_contract.smart_contract.address',
-          );
+          let contractAddress = _.get(item, 'cw721_contract.smart_contract.address');
           let tokenId = _.get(item, 'cw721_token.token_id');
           let eventAttr = element.event_attribute_index;
           return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
