@@ -1,16 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
-import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
-import { CW20_TRACKING } from '../constants/common.constant';
-import { LCD_COSMOS } from '../constants/url.constant';
-import { CoingeckoService } from '../data-services/coingecko.service';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
+import {BehaviorSubject, forkJoin, Observable, of} from 'rxjs';
+import {catchError, map, switchMap} from 'rxjs/operators';
+import {CW20_TRACKING} from '../constants/common.constant';
+import {LCD_COSMOS} from '../constants/url.constant';
+import {CoingeckoService} from '../data-services/coingecko.service';
+import {EnvironmentService} from '../data-services/environment.service';
+import {CommonService} from './common.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
   tokensMarket$ = new BehaviorSubject<any[]>(null);
@@ -34,6 +34,8 @@ export class TokenService extends CommonService {
           marketing_info
           name
           symbol
+          total_supply
+          decimal
           smart_contract {
             address
           }
@@ -502,7 +504,7 @@ export class TokenService extends CommonService {
         }),
         map((data) => {
           if (data) {
-            const { coinMarkets, tokensMarket } = data;
+            const {coinMarkets, tokensMarket} = data;
 
             return tokensMarket.map((token) => {
               if (!token.coin_id) {
@@ -613,5 +615,9 @@ export class TokenService extends CommonService {
         operationName: 'DenomHolder',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getTokenSupply() {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}`);
   }
 }

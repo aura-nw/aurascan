@@ -26,6 +26,7 @@ import {TableTemplate} from '../../../../core/models/common.model';
 import {Globals} from '../../../../global/global';
 import {ContractRegisterType} from 'src/app/core/constants/contract.enum';
 import local from "src/app/core/utils/storage/local";
+import {balanceOf} from "src/app/core/utils/common/parsing";
 
 @Component({
   selector: 'app-token-cw20',
@@ -84,10 +85,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getListTokenIBC().then(r => {
+      this.getListToken();
+    });
     this.getPriceBTC();
-    this.getListToken();
-    this.listTokenIBC = local.getItem(STORAGE_KEYS.LIST_TOKEN_IBC);
-    console.log(this.listTokenIBC)
     this.searchSubject
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
@@ -102,6 +103,19 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   onKeyUp() {
     this.searchSubject.next(this.textSearch);
+  }
+
+  async getListTokenIBC() {
+    this.listTokenIBC = local.getItem(STORAGE_KEYS.LIST_TOKEN_IBC);
+    const res = await this.tokenService.getTokenSupply();
+    const supply = _.get(res, 'data.supply');
+    this.listTokenIBC.forEach(token => {
+      supply.forEach(s => {
+        if (token.denom === s.denom) {
+          token.total_supply = balanceOf(Number(s?.amount) || 0, +token.decimal) || 0
+        }
+      })
+    })
   }
 
   getAllCW20Token(): Observable<any> {
@@ -183,9 +197,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                   // Flat data for mapping response api
                   const mappedData = res?.map((item) => {
                     const foundToken = tokenMarket?.find((f) => f.contract_address === item?.smart_contract?.address);
-
                     const cw20_total_holder_stats = item.cw20_total_holder_stats;
-
                     let changePercent = 0;
                     if (cw20_total_holder_stats?.length > 1) {
                       changePercent =
@@ -213,16 +225,16 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                       change: foundToken?.price_change_percentage_24h || 0,
                       max_total_supply: foundToken?.max_supply || 0,
                       fully_diluted_market_cap: foundToken?.fully_diluted_valuation || 0,
+                      total_supply: balanceOf(Number(item.total_supply) || 0, +item.decimal),
                     };
                   });
                   // store datatable
-                  console.log(mappedData)
                   mappedData.push(...this.listTokenIBC);
                   this.dataTable = mappedData;
                   console.log(mappedData)
                   // Sort and slice 20 frist record.
                   this.dataSource.data = mappedData
-                    ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
+                    ?.sort((a, b) => (a.total_supply === b.total_supply ? 0 : a.total_supply ? -1 : 1))
                     .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
                     .slice(payload?.offset, payload?.offset + payload?.limit);
                   this.pageData.length = res?.length;
