@@ -378,7 +378,7 @@
                             *ngSwitchCase="'proposer'"
                             class="text--primary cursor-pointer break-all"
                             [routerLink]="['/validators', data.operator_address]">
-                            {{ data[template.matColumnDef] | stringEllipsis : 10 }}
+                            {{ data[template.matColumnDef] | ellipsis : 10 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"

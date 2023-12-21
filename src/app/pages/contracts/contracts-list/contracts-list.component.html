@@ -168,7 +168,7 @@
                   <ng-container *ngIf="template.matColumnDef === 'token_tracker'">
                     <div class="aura-tooltip-contain">
                       <a class="aura-tooltip-object" *ngIf="data['token_tracker']" [routerLink]="data.url">
-                        {{ data['token_tracker'] | stringEllipsis : 18 }}
+                        {{ data['token_tracker'] | ellipsis : 18 }}
                       </a>
                       <span
                         *ngIf="

@@ -121,7 +121,7 @@
                     <div *ngSwitchCase="'type'" class="aura-status">
                       <div class="aura-status aura-tooltip-contain p-0">
                         <div class="status cursor-pointer aura-tooltip-object">
-                          {{ data[template.matColumnDef] | stringEllipsis : 25 }}
+                          {{ data[template.matColumnDef] | ellipsis : 25 }}
                           <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                             +{{ data.lstTypeTemp?.length - 1 }}
                           </div>
@@ -178,7 +178,7 @@
                       <span class="ml-1">
                         <div class="aura-tooltip-contain">
                           <div [class.aura-tooltip-object]="data.dataDenom?.symbol">
-                            {{ data.dataDenom?.symbol | stringEllipsis : 25 }}
+                            {{ data.dataDenom?.symbol | ellipsis : 25 }}
                           </div>
                           <app-tooltip-customize
                             [className]="'tooltip--right'"

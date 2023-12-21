@@ -376,7 +376,7 @@
                 <div *ngSwitchCase="'type'">
                   <div class="aura-status aura-tooltip-contain p-0">
                     <div class="status cursor-pointer aura-tooltip-object">
-                      {{ data[template.matColumnDef] | stringEllipsis : 22 }}
+                      {{ data[template.matColumnDef] | ellipsis : 22 }}
                       <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                         +{{ data.lstTypeTemp?.length - 1 }}
                       </div>
@@ -435,7 +435,7 @@
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
                           <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
                             <div [class.aura-tooltip-object]="(item.denomOrigin || item.denom) !== denom">
-                              {{ item.denomOrigin || item.denom | stringEllipsis : 19 }}
+                              {{ item.denomOrigin || item.denom | ellipsis : 19 }}
                             </div>
 
                             <app-tooltip-customize
@@ -448,7 +448,7 @@
                             class=""
                             [routerLink]="['/tokens/token', item.contractAddress]"
                             *ngIf="modeQuery === tabsData.FtsTxs">
-                            {{ item.denom | stringEllipsis : 19 }}
+                            {{ item.denom | ellipsis : 19 }}
                           </a>
                         </span>
                       </div>
@@ -549,7 +549,7 @@
                             *ngIf="item.tokenId"
                             [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
                             class="text--primary cursor-pointer"
-                            >#{{ item.tokenId | stringEllipsis : (item.tokenId?.length > 8 ? 5 : 8) }}</a
+                            >#{{ item.tokenId | ellipsis : (item.tokenId?.length > 8 ? 5 : 8) }}</a
                           >
                           <ng-container *ngIf="!item.tokenId">-</ng-container>
                         </div>

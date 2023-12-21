@@ -23,7 +23,7 @@
     <div class="d-flex mt-1">
       <i class="ph ph-chat-circle-text mr-1 text--gray-4 body-mob"></i>
       <span [class.line-claim]="modeQuery === tabsData.ExecutedTxs">
-        {{ title.subLabelContent | stringEllipsis : 30 }}
+        {{ title.subLabelContent | ellipsis : 30 }}
       </span>
       <div *ngIf="dataCard.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
         +{{ dataCard.lstTypeTemp?.length - 1 }}
