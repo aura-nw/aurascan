@@ -6,7 +6,7 @@ import { JsonPipe } from './json.pipe';
 import { IbcDenomPipe, MarketInfoPipe } from './market-info.pipe';
 import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-tag.pipe';
 import { BalancePipe, FormatDigitPipe, GtePipe, GtPipe, LtePipe, LtPipe } from './number.pipe';
-import { CutStringPipe, StringEllipsisPipe } from './string.pipe';
+import { CutStringPipe, EllipsisPipe, StringEllipsisPipe } from './string.pipe';
 import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
 
 @NgModule({
@@ -32,6 +32,7 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     GtPipe,
     LtPipe,
     IbcDenomPipe,
+    EllipsisPipe,
   ],
   exports: [
     JsonPipe,
@@ -54,6 +55,7 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     GtPipe,
     LtPipe,
     IbcDenomPipe,
+    EllipsisPipe,
   ],
   providers: [],
 })

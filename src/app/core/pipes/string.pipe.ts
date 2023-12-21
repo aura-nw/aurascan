@@ -28,3 +28,23 @@ export class StringEllipsisPipe implements PipeTransform {
     return value;
   }
 }
+
+@Pipe({ name: 'ellipsis' })
+export class EllipsisPipe implements PipeTransform {
+  transform(value: string, start: number, end?: number): string {
+    let endChar = end || 0;
+
+    if (value && value.length > start + endChar) {
+      if (end) {
+        const firstChar = value.substring(0, start);
+        const lastChar = value.substring(value.length - end);
+        value = firstChar + '...' + lastChar;
+      } else {
+        const middleText = value.substring(0, start);
+        value = middleText + '...';
+      }
+    }
+
+    return value;
+  }
+}
