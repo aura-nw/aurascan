@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
 import { MaterialModule } from 'src/app/material.module';
-import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
+import { CustomPipeModule } from '../../../core/pipes/custom-pipe.module';
 import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
 import { PopupDelegateComponent } from './popup-delegate.component';
 
@@ -16,7 +16,7 @@ import { PopupDelegateComponent } from './popup-delegate.component';
     CommonModule,
     MaterialModule,
     TranslateModule,
-    CommonPipeModule,
+    CustomPipeModule,
     RouterModule,
     TableNoDataModule,
     FormsModule,

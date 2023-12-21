@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
@@ -29,7 +29,7 @@ import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-custom
     PaginatorModule,
     TableNoDataModule,
     FormsModule,
-    CommonPipeModule,
+    CustomPipeModule,
     NgxMaskPipe,
     NgxMaskDirective,
     CommonDirectiveModule,

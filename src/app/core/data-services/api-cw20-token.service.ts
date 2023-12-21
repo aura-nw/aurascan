@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { filter, forkJoin, map, take } from 'rxjs';
-import { balanceOf } from '../utils/common/parsing';
+import BigNumber from 'bignumber.js';
+import * as _ from 'lodash';
+import { catchError, filter, forkJoin, map, of, take } from 'rxjs';
+import { COIN_TOKEN_TYPE, TOKEN_ID_GET_PRICE } from '../constants/common.constant';
+import { TokenService } from '../services/token.service';
+import { balanceOf, getBalance } from '../utils/common/parsing';
 import { ApiAccountService } from './api-account.service';
 import { EnvironmentService } from './environment.service';
 import { CW20_TOKENS_TEMPLATE } from './template';
-import { TokenService } from '../services/token.service';
-import { COIN_TOKEN_TYPE, TOKEN_ID_GET_PRICE } from '../constants/common.constant';
-import * as _ from 'lodash';
 
 export interface IAsset {
   name: string;
@@ -18,7 +19,7 @@ export interface IAsset {
   max_total_supply: number;
   price: number;
   price_change_percentage_24h: number;
-  value: number;
+  value: number | string;
   denom: string;
   decimals: number;
   verify_status: string;
@@ -52,17 +53,18 @@ export class ApiCw20TokenService {
 
         const nativeToken = this.parseNativeToken(account, coinsMarkets);
 
-        const cw20TokenList: any[] = this.parseCw20Tokens(cw20Tokens, coinsMarkets);
+        const cw20TokenList: any[] = this.parseCw20Tokens(cw20Tokens, coinsMarkets) || [];
 
-        const ibcTokenBalances = this.parseIbcTokens(account, coinsMarkets);
+        const ibcTokenBalances = this.parseIbcTokens(account, coinsMarkets) || [];
 
-        const allTokens = [nativeToken, ...ibcTokenBalances, ...cw20TokenList].filter(
-          (token) => Number(token.balance) > 0,
-        );
+        // get coin native && token balance > 0
+        const tokens = [...ibcTokenBalances, ...cw20TokenList].filter((token) => BigNumber(token.balance).gt(0));
+
+        const allTokens = [nativeToken, ...tokens];
 
         const totalValue = allTokens
           .filter((item) => item.verify_status === 'VERIFIED')
-          .reduce((prev, current) => current?.value + prev, 0);
+          .reduce((prev, current) => BigNumber(current?.value).plus(prev).toFixed(), 0);
 
         return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),
@@ -75,6 +77,10 @@ export class ApiCw20TokenService {
         const coinMarket = coinsMarkets.find(
           (coin) => coin.contract_address === item.cw20_contract.smart_contract.address,
         );
+
+        const amount = getBalance(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals);
+        const value = new BigNumber(amount).multipliedBy(coinMarket?.current_price || 0);
+
         return {
           name: coinMarket?.name || item?.cw20_contract?.name,
           symbol: coinMarket?.symbol || item?.cw20_contract?.symbol,
@@ -86,9 +92,7 @@ export class ApiCw20TokenService {
           price: coinMarket?.current_price || 0,
           price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
           type: COIN_TOKEN_TYPE.CW20,
-          value:
-            balanceOf(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals) *
-              coinMarket?.current_price || 0,
+          value: value.toFixed(),
           verify_status: coinMarket?.verify_status || '',
           verify_text: coinMarket?.verify_text || '',
         };
@@ -97,7 +101,7 @@ export class ApiCw20TokenService {
         // 1st priority VERIFIED.
         const compareStatus = item2.verify_status.localeCompare(item1.verify_status);
         // 2nd priority token value DESC.
-        const compareValue = item2.value - item1.value;
+        const compareValue = new BigNumber(item2.value).comparedTo(item1.value);
         return compareStatus || compareValue;
       });
   }
@@ -129,6 +133,10 @@ export class ApiCw20TokenService {
       ? ibcBalances
           .map((item): Partial<IAsset> => {
             const coinMarket = coinsMarkets.find((coin) => item.denom === coin.denom);
+
+            const amount = getBalance(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals);
+            const value = new BigNumber(amount).multipliedBy(coinMarket?.current_price || 0);
+
             return coinMarket
               ? {
                   name: coinMarket?.name,
@@ -141,7 +149,7 @@ export class ApiCw20TokenService {
                   balance: balanceOf(item.amount, this.currencies.coinDecimals),
                   price: coinMarket?.current_price || 0,
                   price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
-                  value: balanceOf(item.amount, this.currencies.coinDecimals) * coinMarket?.current_price || 0,
+                  value: value.toFixed(),
                   type: COIN_TOKEN_TYPE.IBC,
                   verify_status: coinMarket?.verify_status || '',
                   verify_text: coinMarket?.verify_text || '',
@@ -153,7 +161,7 @@ export class ApiCw20TokenService {
             // 1st priority VERIFIED.
             const compareStatus = item2.verify_status.localeCompare(item1.verify_status);
             // 2nd priority token value DESC.
-            const compareValue = item2.value - item1.value;
+            const compareValue = new BigNumber(item2.value).comparedTo(item1.value);
             return compareStatus || compareValue;
           })
       : [];

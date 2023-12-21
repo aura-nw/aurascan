@@ -4,8 +4,6 @@ export enum WALLET_PROVIDER {
   LEAP = 'LEAP',
 }
 
-export const LAST_USED_PROVIDER = 'LAST_USED_PROVIDER';
-
 export enum KEPLR_ERRORS {
   Success = 'OK',
   Failed = 'FAILED',

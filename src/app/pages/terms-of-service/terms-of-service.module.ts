@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { TermsRoutingModule } from './terms-of-service-routing.module';
 import { TermsComponent } from './terms-of-service.component';
 @NgModule({
   declarations: [TermsComponent],
-  imports: [
-    TermsRoutingModule,
-    CommonPipeModule,
-  ],
+  imports: [TermsRoutingModule, CustomPipeModule],
   providers: [],
   exports: [TermsComponent],
 })

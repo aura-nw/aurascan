@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
 import { getAmount, getDataInfo } from 'src/app/global/global';
-import { MEDIA_TYPE, NUMBER_CONVERT } from '../../constants/common.constant';
+import { MEDIA_TYPE, NUMBER_CONVERT, STORAGE_KEYS } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../constants/transaction.enum';
-import { ESigningType, LAST_USED_PROVIDER, WALLET_PROVIDER } from '../../constants/wallet.constant';
+import { ESigningType, WALLET_PROVIDER } from '../../constants/wallet.constant';
 import { WalletStorage } from '../../models/wallet';
 import local from '../storage/local';
 import { balanceOf } from './parsing';
@@ -141,7 +141,7 @@ export function convertTx(value: string, coinConfig: any, decimal = 6) {
 }
 
 export function getLastProvider() {
-  const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+  const lastProvider = local.getItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER);
 
   return lastProvider.provider ? lastProvider.provider : WALLET_PROVIDER.KEPLR;
 }
