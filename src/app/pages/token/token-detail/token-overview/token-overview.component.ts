@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -39,7 +41,7 @@ export class TokenOverviewComponent implements OnInit {
     }
 
     //set price change
-    this.tokenDetail['change'] = this.tokenDetail.price_change_percentage_24h;
+    this.tokenDetail['change'] = this.tokenDetail['change'] || this.tokenDetail.price_change_percentage_24h;
     this.tokenDetail['isValueUp'] = true;
     if (this.tokenDetail['change'] < 0) {
       this.tokenDetail['isValueUp'] = false;
@@ -58,6 +60,11 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail['isHolderUp'] = false;
       this.tokenDetail.holderChange = Math.abs(this.tokenDetail.holderChange);
     }
+
+    this.tokenDetail['supplyAmount'] = balanceOf(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
+    this.tokenDetail['supplyValue'] = new BigNumber(this.tokenDetail['supplyAmount'])
+      .multipliedBy(this.tokenDetail?.price)
+      .toFixed();
   }
 
   getTotalHolder() {

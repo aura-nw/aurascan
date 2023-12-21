@@ -579,4 +579,39 @@ export class TokenService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
+
+  getDenomHolder(payload): Observable<any> {
+    const operationsDoc = `
+    query DenomHolder(
+      $denom: String = null
+      $limit: Int = null
+      $offset: Int = null
+      $address: String = null
+    ) {
+      ${this.envDB} {
+        account(
+          where: {
+            balances: { _contains: [{ denom: $denom }] }
+            address: { _eq: $address }
+          }
+          order_by: {}
+          limit: $limit
+          offset: $offset
+        ) {
+          address
+          balances
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          denom: 'ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20'
+        },
+        operationName: 'DenomHolder',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 }

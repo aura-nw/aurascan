@@ -78,6 +78,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   errTxt: string;
   typeContract: string;
   contractAddress: string;
+  EModeToken = EModeToken;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -295,7 +296,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           const txs = convertTxIBC(res, this.coinInfo);
           txs.forEach((element) => {
             element['amount'] = element.amountTemp || 0;
-            element['decimal'] = this.tokenDetail?.decimal;
+            element['decimal'] = this.tokenDetail?.decimals || this.tokenDetail?.decimal;
           });
 
           if (this.dataSource.data.length > 0 && !isReload) {

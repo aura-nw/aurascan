@@ -65,11 +65,16 @@ export class TokenHoldersTabComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.typeContract !== ContractRegisterType.CW20) {
-      this.getQuantity();
+    if (this.typeContract) {
+      if (this.typeContract !== ContractRegisterType.CW20) {
+        this.getQuantity();
+      } else {
+        this.getHolder();
+      }
     } else {
-      this.getHolder();
+      this.getDenomHolder();
     }
+
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
@@ -168,7 +173,11 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getTemplate(): Array<TableTemplate> {
-    return this.typeContract !== ContractRegisterType.CW20 ? this.CW721Templates : this.CW20Templates;
+    let result = this.CW20Templates;
+    if (this.typeContract && this.typeContract !== ContractRegisterType.CW20) {
+      result = this.CW721Templates;
+    }
+    return result;
   }
 
   paginatorEmit(event): void {
@@ -189,5 +198,52 @@ export class TokenHoldersTabComponent implements OnInit {
       this.totalQuantity = config?.count || 0;
       this.getHolderNFT();
     } catch (error) {}
+  }
+
+  getDenomHolder() {
+    const payload = {
+      denom: this.tokenDetail?.denomHash,
+      contractAddress: this.contractAddress,
+    };
+    this.tokenService.getDenomHolder(payload).subscribe({
+      next: (res) => {
+        if (res?.account?.length > 0) {
+          this.totalHolder = res?.account?.length;
+          if (this.totalHolder > this.numberTopHolder) {
+            this.pageData.length = this.numberTopHolder;
+          } else {
+            this.pageData.length = this.totalHolder;
+          }
+
+          let dataFlat = res.account?.map((item) => {
+            let amount = item.balances?.find((k) => k.denom === this.tokenDetail?.denomHash)?.amount;
+            
+            return {
+              owner: item.address,
+              amount,
+              balance: amount,
+              percent_hold: (amount / this.tokenDetail?.totalSupply) * 100,
+              value:
+                new BigNumber(amount)
+                  .multipliedBy(this.tokenDetail?.price)
+                  .dividedBy(Math.pow(10, this.decimalValue))
+                  .toFixed() || 0,
+            };
+          });
+          this.dataSource = new MatTableDataSource<any>(dataFlat);
+        }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 }
