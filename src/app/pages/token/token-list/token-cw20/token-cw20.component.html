@@ -5,26 +5,26 @@
     <div class="filter-group d-flex align-items-center flex-nowrap">
       <button
         class="button button-pill button-flat"
-        [class.active]="filterButtons.length === 0"
-        (click)="filterButton('All')">
+        [class.active]="filterType.length === 0"
+        (click)="getTokenData()">
         All types
       </button>
       <button
         class="button button-pill button-flat"
-        [class.active]="filterButtons.includes(ContractRegisterType.CW20)"
-        (click)="filterButton(ContractRegisterType.CW20)">
+        [class.active]="filterType.includes(tokenType.NATIVE)"
+        (click)="getTokenData(tokenType.NATIVE)">
         Staking Coin
       </button>
       <button
         class="button button-pill button-flat"
-        [class.active]="filterButtons.includes(ContractRegisterType.CW721)"
-        (click)="filterButton(ContractRegisterType.CW721)">
+        [class.active]="filterType.includes(tokenType.IBC)"
+        (click)="getTokenData(tokenType.IBC)">
         IBC Coin
       </button>
       <button
         class="button button-pill button-flat"
-        [class.active]="filterButtons.includes(ContractRegisterType.CW4973)"
-        (click)="filterButton(ContractRegisterType.CW4973)">
+        [class.active]="filterType.includes(tokenType.CW20)"
+        (click)="getTokenData(tokenType.CW20)">
         CW-20 Token
       </button>
     </div>
@@ -125,7 +125,7 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Supply</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.total_supply >= 0; else noData">
-                  ${{ element.total_supply | formatDigit: 2 }}
+                  {{ element.total_supply | mask : 'separator.2' }}
                 </ng-container>
               </td>
             </ng-container>
