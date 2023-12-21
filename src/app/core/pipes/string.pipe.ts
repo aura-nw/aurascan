@@ -5,9 +5,9 @@ export class EllipsisPipe implements PipeTransform {
   transform(value: string, start: number, end: number = 0): string {
     const length = value?.length;
 
-    if (length > start + end) {
+    if (length > start) {
       const firstPart = start ? value.slice(0, start) : '';
-      const lastPart = end ? value.slice(length - end, length) : '';
+      const lastPart = end && length > start + end ? value.slice(length - end, length) : '';
 
       const middleText = start != 0 ? '...' : '';
 
