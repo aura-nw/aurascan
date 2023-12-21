@@ -7,7 +7,6 @@
     <span>{{ timeUpdate | customDate : 'HH:mm:ss' }}</span>
   </div>
 </div>
-<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <section class="box-ibc-relayer">
   <div class="row box-title-relay py-lg-6 py-4">
     <div class="col-lg-3 col-6 mb-lg-0 mb-lg-0 mb-2">
@@ -19,7 +18,7 @@
     <div class="col-lg-3 col-6">
       <div class="item">
         Total Channels
-        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.totalOpen }}</div>
+        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.totalOpen || '0/0'}}</div>
       </div>
     </div>
     <div class="col-lg-3 col-6">
@@ -51,12 +50,12 @@
               [(ngModel)]="textSearch"
               (keyup)="onKeyUp()"
               name="search"
-              autocomplete="off" />
+              autocomplete="off"/>
             <button
               type="submit"
               class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
               (click)="getListIBC()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
             <button
               type="reset"
@@ -64,13 +63,14 @@
                 !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
           </div>
         </form>
       </div>
       <!-- Table -->
-      <div class="overflow-scroll-x" *ngIf="pageData?.length > 0; else noValues">
+      <app-loading-sprint *ngIf="isLoadingTable"></app-loading-sprint>
+      <div class="overflow-scroll-x" *ngIf="pageData?.length > 0 && !isLoadingTable; else noValues">
         <table mat-table [dataSource]="dataSource" class="aura-table ibc-relayer-table d-none d-lg-block">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
@@ -87,7 +87,7 @@
                         alt=""
                         class="mr-2"
                         width="24px"
-                        height="24px" />
+                        height="24px"/>
                       {{ data['chainName'] | ellipsis : 30 }}
                     </div>
                     <div
@@ -114,7 +114,7 @@
             [ngClass]="row.open_channel > 0 ? 'cursor-pointer' : ''"
             (click)="openPopup(row)"></tr>
         </table>
-
+        \
         <div class="d-lg-none mobile">
           <div *ngFor="let data of dataSourceMobile" class="card-chain" (click)="openPopup(data)">
             <div class="d-flex align-items-center justify-content-between">
@@ -124,7 +124,7 @@
                   alt=""
                   class="mr-2"
                   width="24px"
-                  height="24px" />
+                  height="24px"/>
                 {{ data['chainName'] | ellipsis : 20 }}
               </div>
               <div class="txt-status d-flex align-items-center" [ngClass]="data.open_channel === 0 ? 'inactive' : ''">
@@ -165,7 +165,7 @@
 
       <!-- No data -->
       <ng-template #noValues>
-        <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+        <app-table-no-data *ngIf="!isLoadingTable" [textNull]="errTxt"></app-table-no-data>
       </ng-template>
     </div>
   </div>
