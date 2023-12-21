@@ -12,7 +12,7 @@
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     chainInfo.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                  >{{ chainInfo.chainName | cutStringPipe : maxDisplayChar }}</span
+                  >{{ chainInfo.chainName | ellipsis : maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
               </div>
@@ -35,7 +35,7 @@
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     counterInfo?.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                  >{{ counterInfo?.chainName | cutStringPipe : maxDisplayChar }}</span
+                  >{{ counterInfo?.chainName | ellipsis : maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
               </div>
@@ -110,7 +110,7 @@
                       *ngSwitchCase="'tx_hash'"
                       class="text--primary cursor-pointer hash-link"
                       [routerLink]="['/transaction', data['tx_hash']]">
-                      {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                      {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                     </a>
                     <a
                       *ngSwitchCase="'height'"
@@ -121,7 +121,7 @@
                     <div *ngSwitchCase="'type'" class="aura-status">
                       <div class="aura-status aura-tooltip-contain p-0">
                         <div class="status cursor-pointer aura-tooltip-object">
-                          {{ data[template.matColumnDef] | stringEllipsis : 25 }}
+                          {{ data[template.matColumnDef] | ellipsis : 25 }}
                           <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                             +{{ data.lstTypeTemp?.length - 1 }}
                           </div>
@@ -178,7 +178,7 @@
                       <span class="ml-1">
                         <div class="aura-tooltip-contain">
                           <div [class.aura-tooltip-object]="data.dataDenom?.symbol">
-                            {{ data.dataDenom?.symbol | stringEllipsis : 25 }}
+                            {{ data.dataDenom?.symbol | ellipsis : 25 }}
                           </div>
                           <app-tooltip-customize
                             [className]="'tooltip--left'"
@@ -211,7 +211,7 @@
           [title]="{
             size: 'md',
             titleClass: 'body-02-mob',
-            label: data.tx_hash | cutStringPipe : 8 : 8,
+            label: data.tx_hash | ellipsis : 8 : 8,
             subLabelContent: data.type,
             subLabelClass: 'btn-mob',
             status: data.code

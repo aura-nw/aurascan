@@ -17,7 +17,7 @@
                 id="tokenFilter"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <span>{{ tokenFilterItem?.label | stringEllipsis : 16 }} ({{ tokenFilterItem?.quantity }})</span>
+                <span>{{ tokenFilterItem?.label | ellipsis : 16 }} ({{ tokenFilterItem?.quantity }})</span>
                 <i class="ph ph-caret-down text--white h3"></i>
                 <i class="ph ph-caret-up text--white h3"></i>
               </button>
@@ -111,7 +111,7 @@
                       *ngIf="element.contract_address !== '-'">
                       <div class="d-flex align-items-center">
                         <div class="ml-2 body-03 fw-semibold">
-                          {{ element.name | stringEllipsis : 30 }}
+                          {{ element.name | ellipsis : 30 }}
                         </div>
                         <div class="aura-tooltip-contain">
                           <div class="status cursor-pointer aura-tooltip-object">
@@ -130,7 +130,7 @@
                     </a>
                     <div class="d-flex align-items-center" *ngIf="element.contract_address === '-'">
                       <div class="ml-2 body-03 fw-semibold">
-                        {{ element.name | stringEllipsis : 19 }}
+                        {{ element.name | ellipsis : 19 }}
                       </div>
 
                       <div class="aura-tooltip-contain">

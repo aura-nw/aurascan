@@ -378,7 +378,7 @@
                             *ngSwitchCase="'proposer'"
                             class="text--primary cursor-pointer break-all"
                             [routerLink]="['/validators', data.operator_address]">
-                            {{ data[template.matColumnDef] | stringEllipsis : 10 }}
+                            {{ data[template.matColumnDef] | ellipsis : 10 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
@@ -451,7 +451,7 @@
                             *ngSwitchCase="'tx_hash'"
                             class="text--primary cursor-pointer hash-link"
                             [routerLink]="['/transaction', data['tx_hash']]">
-                            {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                            {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
@@ -462,7 +462,7 @@
                           <div *ngSwitchCase="'type'">
                             <div class="aura-status aura-tooltip-contain">
                               <div class="label__status aura-tooltip-object">
-                                {{ data[template.matColumnDef] | cutStringPipe : 20 }}
+                                {{ data[template.matColumnDef] | ellipsis : 20 }}
                                 <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
                                   +{{ data.lstType?.length - 1 }}
                                 </div>
