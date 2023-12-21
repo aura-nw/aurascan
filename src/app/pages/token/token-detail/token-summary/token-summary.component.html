@@ -77,10 +77,10 @@
           <div class="d-flex align-items-center py-2">
             <div class="first-col text--gray-5">Channel</div>
             <div class="text--white d-flex align-items-center">
-              channel-11
-              <i class="ph ph-link-simple-horizontal px-1"></i>
-              channel-45
-              <i class="ph-arrow-square-out-fill body-01 h4-mob ml-4 cursor-pointer"></i>
+              {{ channelId }}
+              <i
+                class="ph-arrow-square-out-fill body-01 h4-mob ml-4 cursor-pointer"
+                [routerLink]="['/ibc-relayer/', channelId, 'channel-45']"></i>
             </div>
           </div>
         </td>

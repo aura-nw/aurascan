@@ -126,7 +126,10 @@
               <div class="divider divider-item"></div>
               <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
                 <div class="text--gray-5 caption fw-normal">In-chain Supply Amount</div>
-                <div class="body-02 text--gray-11">{{ tokenDetail.circulating_market_cap | formatDigit: 0 }} KAVA</div>
+                <div class="body-02 text--gray-11">
+                  {{ tokenDetail.supplyAmount | formatDigit: 0 }}
+                  {{ tokenDetail?.name }}
+                </div>
               </div>
             </div>
           </td>
@@ -136,7 +139,7 @@
           <td colspan="2">
             <div class="d-flex">
               <span class="text--gray-5 body-02 fixed-col">In-chain Supply Value</span>
-              <div class="body-02 text--gray-11">1,000,000,000$</div>
+              <div class="body-02 text--gray-11">{{ tokenDetail['supplyValue'] || 0 | formatDigit: 2 }}$</div>
             </div>
           </td>
         </tr>

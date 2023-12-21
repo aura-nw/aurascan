@@ -4,13 +4,20 @@ import * as _ from 'lodash';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
+import axios from 'axios';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({ providedIn: 'root' })
 export class IBCService extends CommonService {
-  chainInfo = this.environmentService.chainInfo;
   listInfoChain = [];
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  chainInfo = this.environmentService.chainInfo;
+  lcd = this.environmentService.chainConfig.chain_info.rest;
+
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+  ) {
     super(http, environmentService);
   }
 
@@ -343,5 +350,13 @@ export class IBCService extends CommonService {
         operationName: 'IbcAssetTransfer',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getTotalSupplyLCD(denomHash: string) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}/by_denom?denom=${denomHash}`);
+  }
+
+  getChannelInfoByDenom(denomHash: string) {
+    return axios.get(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`);
   }
 }

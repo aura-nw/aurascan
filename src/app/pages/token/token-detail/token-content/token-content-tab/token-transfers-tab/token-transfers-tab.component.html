@@ -21,8 +21,8 @@
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
-            <ng-container *ngSwitchCase="'status'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-13">
+            <ng-container *ngSwitchCase="'action'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-5">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
@@ -47,7 +47,7 @@
               </th>
             </ng-container>
             <ng-container *ngSwitchDefault>
-              <th mat-header-cell *matHeaderCellDef class="col-per-15">
+              <th mat-header-cell *matHeaderCellDef class="col-per-13">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
@@ -92,8 +92,8 @@
                         <app-tooltip-customize
                           *ngIf="
                             data.amount !== 0 &&
-                            ((data.amount | balance: data.decimal | lt: 0.001) || (data.amount | balance: data.decimal)
-                              | gte: 1000000)
+                            ((data.amount | balance: data.decimal | lt: 0.001) ||
+                              (data.amount | balance: data.decimal | gte: 1000000))
                           "
                           [content]="
                             (data.amount | balance: data.decimal | lt: 0.001)
@@ -120,8 +120,8 @@
                       {{ (data[template.matColumnDef] | dateCustom)[0] }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
-                      <div class="aura-status text-capitalize aura-tooltip-contain">
-                        <div class="aura-tooltip-object status">
+                      <div class="aura-status text-capitalize aura-tooltip-contain status">
+                        <div class="aura-tooltip-object">
                           <span>{{ data[template.matColumnDef] }}</span>
                           <span *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                             +{{ data.lstTypeTemp?.length - 1 }}
@@ -129,6 +129,7 @@
                         </div>
 
                         <app-tooltip-customize
+                          *ngIf="tokenDetail.modeToken !== EModeToken.CWToken"
                           [class]="'message-custom'"
                           [content]="data.lstTypeTemp | displayTypeToolTip">
                         </app-tooltip-customize>
