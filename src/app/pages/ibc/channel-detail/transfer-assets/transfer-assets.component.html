@@ -60,7 +60,7 @@
                               height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
-                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe : 20 }}
+                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis : 20 }}
                               </div>
                               <app-tooltip-customize
                                 [className]="'tooltip--right'"
@@ -135,7 +135,7 @@
                       class="mr-2"
                       width="20px"
                       height="20px" />
-                    <span>{{ data['dataDenom']?.symbol | cutStringPipe : 20 }}</span>
+                    <span>{{ data['dataDenom']?.symbol | ellipsis : 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
                 </div>
@@ -229,7 +229,7 @@
                               height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
-                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | cutStringPipe : 20 }}
+                                {{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis : 20 }}
                               </div>
                               <app-tooltip-customize
                                 [className]="'tooltip--right'"
@@ -304,7 +304,7 @@
                       class="mr-2"
                       width="20px"
                       height="20px" />
-                    <span>{{ data['dataDenom']?.symbol | cutStringPipe : 20 }}</span>
+                    <span>{{ data['dataDenom']?.symbol | ellipsis : 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
                 </div>

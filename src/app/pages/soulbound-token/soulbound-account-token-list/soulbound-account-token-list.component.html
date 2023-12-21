@@ -16,7 +16,7 @@
           <div class="d-flex align-items-center">
             <div class="body text--gray-1" id="userAddress">
               <span class="d-md-flex d-none">{{ userAddress }}</span>
-              <span class="d-md-none d-flex">{{ userAddress | cutStringPipe : 8 : 8 }}</span>
+              <span class="d-md-none d-flex">{{ userAddress | ellipsis : 8 : 8 }}</span>
             </div>
             <div class="aura-tooltip-contain ml-2">
               <button
@@ -39,7 +39,7 @@
                   {{ (userAddress | nameTag : false) || '-' }}
                 </ng-container>
                 <ng-container *ngIf="userAddress | checkDisplayTooltip">
-                  {{ (userAddress | nameTag : false | cutStringPipe : 8 : 8) || '-' }}
+                  {{ (userAddress | nameTag : false | ellipsis : 8 : 8) || '-' }}
                 </ng-container>
               </span>
               <a
@@ -70,10 +70,10 @@
             <span class="d-none d-lg-flex">{{ (userAddress | nameTag) || '-' }}</span>
             <span class="d-flex d-lg-none justify-content-center">
               <ng-container *ngIf="!(userAddress | checkDisplayTooltip)">
-                {{ (userAddress | nameTag | cutStringPipe : 16) || '-' }}
+                {{ (userAddress | nameTag | ellipsis : 16) || '-' }}
               </ng-container>
               <ng-container *ngIf="userAddress | checkDisplayTooltip">
-                {{ (userAddress | nameTag | cutStringPipe : 8 : 8) || '-' }}
+                {{ (userAddress | nameTag | ellipsis : 8 : 8) || '-' }}
               </ng-container>
             </span>
           </div>

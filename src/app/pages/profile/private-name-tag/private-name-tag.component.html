@@ -73,7 +73,7 @@
                 </div>
                 <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
                   <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
-                    <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
+                    <span>{{ data[template.matColumnDef] | ellipsis : 8 : 8 }}</span>
                   </a>
                   <div class="aura-tooltip-contain">
                     <div
@@ -93,7 +93,7 @@
                   {{ data[template.matColumnDef] }}
                 </div>
                 <div *ngSwitchCase="'name_tag'" class="profile-private-name-tag pe-auto">
-                  <div>{{ data.nameTag | cutStringPipe : 25 }}</div>
+                  <div>{{ data.nameTag | ellipsis : 25 }}</div>
                 </div>
                 <div *ngSwitchCase="'createdAt'">
                   {{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}
@@ -126,7 +126,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <div class="card__title">
             <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
-              <span class="fw-semibold">{{ data.address | cutStringPipe : 8 : 8 }}</span>
+              <span class="fw-semibold">{{ data.address | ellipsis : 8 : 8 }}</span>
             </a>
             <div class="text--gray-5 line-claim w-100" [class.aura-tooltip-object]="data.note">
               {{ data.note || 'Note:-' }}
