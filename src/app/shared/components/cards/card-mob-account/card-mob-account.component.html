@@ -7,7 +7,7 @@
       <span
         class="{{ title.titleClass ? title.titleClass : '' }}"
         [routerLink]="['/transaction', dataCard['tx_hash']]"
-        >{{ title.label }}</span
+      >{{ title.label }}</span
       >
     </div>
     <ng-container *ngIf="modeQuery === tabsData.ExecutedTxs">
@@ -65,7 +65,7 @@
     <div class="content-expand">
       <ng-container *ngFor="let item of dataCard.arrEvent">
         <div class="d-flex align-items-center justify-content-between item-expand">
-          <div class="fw-normal">
+          <div class="fw-normal flex-shrink-0">
             <div class="d-flex align-items-center txt-top-expand">
               <span class="caption fw-normal text--gray-4 txt-from-to">
                 {{ item['address'] === item['toAddress'] ? 'To:' : 'From:' }}
@@ -91,11 +91,11 @@
             <div class="d-flex align-items-center">
               <div>
                 <ng-container *ngIf="item['address'] === item['toAddress']">
-                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
+                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14"/>
                   <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
                 </ng-container>
                 <ng-container *ngIf="item['address'] !== item['toAddress']">
-                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
+                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14"/>
                   <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
                 </ng-container>
               </div>
@@ -120,7 +120,7 @@
               <div [class.text--primary]="item.denom !== denom" [class.text--white]="item.denom === denom" class="ml-1">
                 <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">{{
                   item.denom || denom | ellipsis : 19
-                }}</ng-container>
+                  }}</ng-container>
                 <a [routerLink]="['/tokens/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
                   {{ item.denom | ellipsis : 19 }}
                 </a>
