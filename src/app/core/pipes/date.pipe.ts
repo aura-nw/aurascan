@@ -47,3 +47,27 @@ export class CustomDatePipe implements PipeTransform {
     return value;
   }
 }
+
+@Pipe({ name: 'customDateTime' })
+export class CustomTimeDatePipe implements PipeTransform {
+  transform(value: string, format: 'Distance' | 'DateOnly' | 'TimeOnly' | 'DateTime') {
+    if (value) {
+      const dateValue = moment(value).toDate();
+
+      switch (format) {
+        case 'Distance':
+          if (moment().isBefore(dateValue)) {
+            return formatDistanceToNowStrict(dateValue) + ' remaining';
+          }
+          return formatTimeInWords(dateValue);
+        case 'DateOnly':
+          return formatWithSchema(dateValue, DATEFORMAT.DATE_ONLY);
+        case 'TimeOnly':
+          return formatWithSchema(dateValue, DATEFORMAT.TIME_ONLY);
+        default:
+          return formatWithSchema(dateValue, DATEFORMAT.DATETIME_UTC);
+      }
+    }
+    return value;
+  }
+}
