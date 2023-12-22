@@ -60,7 +60,7 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'timestamp'">
-                          {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                          {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                         </div>
                         <div *ngSwitchCase="'limit'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>

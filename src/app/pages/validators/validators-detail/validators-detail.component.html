@@ -202,7 +202,7 @@
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'timestamp'">
-                            {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                            {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                           </div>
                           <a
                             *ngSwitchCase="'block_hash'"
@@ -240,7 +240,7 @@
                       {
                         label: data.height,
                         class: 'body-01 text--gray-1',
-                        info: (data.timestamp | dateCustom)[0]
+                        info: (data.timestamp | customDateTime: 'Distance')
                       },
                       { label: 'Txs', class: 'body-01 text--gray-1', info: data.num_txs.toString() },
                       {
@@ -432,7 +432,7 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <div *ngSwitchCase="'timestamp'">
-                              {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                              {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                             </div>
                             <a
                               *ngSwitchCase="'tx_hash'"

@@ -79,7 +79,7 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Time</div>
             <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
-              <div>{{ (transaction?.timestamp | dateCustom)[0] }}</div>
+              <div>{{ transaction?.timestamp | customDateTime: 'Distance' }}</div>
               <div class="d-flex align-items-center ml-1 text--gray-4">
                 <span>(</span>
                 <span>{{ transaction?.timestamp | customDateTime: 'DateOnly' }}</span>

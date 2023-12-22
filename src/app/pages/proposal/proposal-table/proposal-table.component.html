@@ -78,7 +78,7 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">
-                        <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
+                        <div>{{ data[template.matColumnDef] | customDateTime: 'Distance' }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
                           <span>{{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
@@ -89,7 +89,7 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'timestamp'">
                       <div *ngIf="data[template.matColumnDef]">
-                        <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
+                        <div>{{ data[template.matColumnDef] | customDateTime: 'Distance' }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
                           <span>{{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}</span>
                           <div class="divider divider-vertical mx-2"></div>

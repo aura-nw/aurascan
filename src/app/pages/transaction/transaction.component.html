@@ -18,7 +18,7 @@
                   <div>
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'timestamp'">
-                        {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                        {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                       </div>
                       <a
                         *ngSwitchCase="'tx_hash'"

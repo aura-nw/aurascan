@@ -32,7 +32,7 @@
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'timestamp'">
-                        {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                        {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                       </div>
                       <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                     </ng-container>
@@ -58,7 +58,7 @@
               size: 'md',
               titleClass: 'h6-mob',
               label: data.height,
-              subLabelContent: (data.timestamp | dateCustom)[0],
+              subLabelContent: (data.timestamp | customDateTime: 'Distance'),
               subLabelClass: 'text--gray-1 h6-mob w-time justify-content-end'
             }"
             [content]="[
