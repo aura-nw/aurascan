@@ -48,7 +48,7 @@
               placeholder="Search by Chain name"
               [maxLength]="maxLengthSearch"
               [(ngModel)]="textSearch"
-              (keyup)="onKeyUp()"
+              (keyup)="searchListIBC()"
               name="search"
               autocomplete="off"/>
             <button
