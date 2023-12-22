@@ -1,15 +1,17 @@
 .content-transfer {
-  min-width: 170px;
+  min-width: 180px;
   display: inline-block;
   @media (max-width: 991.99px) {
     min-width: 160px;
   }
 }
+
 .box-token-transfer {
   min-width: 80px;
   margin-left: 20px;
   display: flex;
   justify-content: flex-start;
+
   .token-transfer-status {
     display: inline-flex;
     align-items: center;
@@ -20,6 +22,7 @@
     font-size: 12px;
     width: auto;
     margin: auto;
+
     &.status-out {
       color: var(--aura-red-3);
     }
@@ -29,6 +32,7 @@
 .aura-status {
   display: flex;
   align-items: center;
+
   .status {
     padding: 8px 16px;
     border-radius: 4px;
