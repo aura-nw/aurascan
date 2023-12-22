@@ -80,9 +80,9 @@
                       <div *ngIf="data[template.matColumnDef]">
                         <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -91,9 +91,9 @@
                       <div *ngIf="data[template.matColumnDef]">
                         <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -131,16 +131,16 @@
                   info: !data?.voter
                     ? '-'
                     : !(data.voter | checkDisplayTooltip)
-                      ? '<a class=text--primary href=' +
-                        ('/account/' + data.voter) +
-                        '>' +
-                        (data.voter | nameTag | cutStringPipe: 16) +
-                        '</a>'
-                      : '<a class=text--primary href=' +
-                        ('/account/' + data.voter) +
-                        '>' +
-                        (data.voter | nameTag | cutStringPipe: 8 : 8) +
-                        '</a>'
+                    ? '<a class=text--primary href=' +
+                      ('/account/' + data.voter) +
+                      '>' +
+                      (data.voter | nameTag | ellipsis : 16) +
+                      '</a>'
+                    : '<a class=text--primary href=' +
+                      ('/account/' + data.voter) +
+                      '>' +
+                      (data.voter | nameTag | ellipsis : 8 : 8) +
+                      '</a>'
                 },
                 {
                   label: 'TxHash',
@@ -158,12 +158,12 @@
                   class: 'card__date text--gray-1 body-01',
                   info:
                     '<div class=text-end>' +
-                    (data.timestamp | dateCustom: false)[0] +
+                    (data.timestamp | dateCustom : false)[0] +
                     '</div><div class=text--gray-5><span>' +
-                    (data.timestamp | customDate: 'yyyy-MM-dd') +
+                    (data.timestamp | customDate : 'yyyy-MM-dd') +
                     '</span>' +
                     '<span>' +
-                    (data.timestamp | customDate: 'HH:mm:ss') +
+                    (data.timestamp | customDate : 'HH:mm:ss') +
                     '</span></div>'
                 }
               ]"></app-card-mob-simple>
@@ -196,13 +196,13 @@
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
-                      (data.timestamp | dateCustom: false)[0] +
+                      (data.timestamp | dateCustom : false)[0] +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDate: 'yyyy-MM-dd') +
+                      (data.timestamp | customDate : 'yyyy-MM-dd') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      (data.timestamp | customDate : 'HH:mm:ss') +
                       '</span></div>'
                     : '-'
                 }
@@ -222,16 +222,16 @@
                   info: !data?.depositors
                     ? '-'
                     : !(data.depositors | checkDisplayTooltip)
-                      ? '<a class=text--primary href=' +
-                        ('/account/' + data.depositors) +
-                        '>' +
-                        (data.depositors | nameTag | cutStringPipe: 16) +
-                        '</a>'
-                      : '<a class=text--primary href=' +
-                        ('/account/' + data.depositors) +
-                        '>' +
-                        (data.depositors | nameTag | cutStringPipe: 8 : 8) +
-                        '</a>'
+                    ? '<a class=text--primary href=' +
+                      ('/account/' + data.depositors) +
+                      '>' +
+                      (data.depositors | nameTag | ellipsis : 16) +
+                      '</a>'
+                    : '<a class=text--primary href=' +
+                      ('/account/' + data.depositors) +
+                      '>' +
+                      (data.depositors | nameTag | ellipsis : 8 : 8) +
+                      '</a>'
                 },
                 {
                   label: 'TxHash',
@@ -249,7 +249,7 @@
                   class: 'h6 mb-0 text--gray-1',
                   info: data.amount
                     ? '<span class=mr-1>' +
-                      (data.amount < 0.001 ? '<0.001' : (data.amount | mask: 'separator.6')) +
+                      (data.amount < 0.001 ? '<0.001' : (data.amount | mask : 'separator.6')) +
                       '</span><span class=text--white>' +
                       denom +
                       '</span>'
@@ -260,13 +260,13 @@
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
-                      (data.timestamp | dateCustom: false)[0] +
+                      (data.timestamp | dateCustom : false)[0] +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDate: 'yyyy-MM-dd') +
+                      (data.timestamp | customDate : 'yyyy-MM-dd') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      (data.timestamp | customDate : 'HH:mm:ss') +
                       '</span></div>'
                     : '-'
                 }

@@ -57,7 +57,7 @@
           <div class="d-flex align-items-center py-2">
             <div class="first-col text--gray-5">Hash</div>
             <div class="break-word text--primary d-flex align-items-center">
-              {{ tokenDetail.denomHash | cutStringPipe: 10 : 6 }}
+              {{ tokenDetail.denomHash | ellipsis: 10 : 6 }}
               <div class="aura-tooltip-contain">
                 <button
                   class="button btn-border aura-tooltip-object disabled-hover p-0 ml-2"

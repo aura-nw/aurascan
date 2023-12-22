@@ -322,7 +322,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.dataSource.data = [];
     this.dataSource.data = [...auraToken];
     this.dataSource.data = this.dataSource.data.concat(verifiedToken);
-    this.dataSource.data = this.dataSource.data.concat(otherToken);
+    this.dataSource.data = this.dataSource.data.concat(otherToken)
   }
 
   paginatorEmit(event): void {

@@ -57,8 +57,8 @@
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
-                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                    '-'
+                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                        '-'
                     }}
                   </a>
                 </ng-container>
@@ -98,7 +98,7 @@
                           [content]="
                             (data.amount | balance: data.decimal | lt: 0.001)
                               ? (data.amount | balance: data.decimal)
-                              : (data.amount | balance: data.decimal | mask : 'separator')
+                              : (data.amount | balance: data.decimal | mask: 'separator')
                           ">
                         </app-tooltip-customize>
                       </div>
@@ -137,7 +137,7 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'">
                       <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
-                        {{ data[template.matColumnDef] | cutStringPipe: 8 : 8 }}
+                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'from_address'">
@@ -148,7 +148,7 @@
                               data.modeExecute === modeExecuteTransaction.Take ||
                               data[template.matColumnDef]?.startsWith('Null')
                             ">
-                            <span>{{ data[template.matColumnDef] | cutStringPipe: 8 : 8 }}</span>
+                            <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                           </ng-container>
                           <ng-container
                             *ngIf="
@@ -170,7 +170,7 @@
                             [src]="'assets/images/icons/arrow-right.png' | imageS3"
                             width="14"
                             height="9"
-                            class="mr-lg-3 mr-0 ml-3 ml-lg-0"/>
+                            class="mr-lg-3 mr-0 ml-3 ml-lg-0" />
                         </ng-container>
                         <ng-container *ngIf="isSearchAddress">
                           <div class="box-token-transfer">
@@ -222,13 +222,13 @@
                       <span *ngIf="data['token_id']?.length === 0"> - </span>
                       <span *ngIf="data['token_id'] === 'More'"> More </span>
                       <span class="text--primary" *ngIf="data['status'] === 'Fail'">
-                        {{ data[template.matColumnDef] | stringEllipsis: 16 }}
+                        {{ data[template.matColumnDef] | ellipsis: 16 }}
                       </span>
                       <a
                         class="text--primary"
                         href="/tokens/{{ linkToken }}/{{ linkAddress }}?a={{ encodeData(data['token_id']) }}"
                         *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
-                        {{ data[template.matColumnDef] | stringEllipsis: 16 }}
+                        {{ data[template.matColumnDef] | ellipsis: 16 }}
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchDefault>

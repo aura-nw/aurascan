@@ -68,7 +68,7 @@
                           *ngSwitchCase="'tx_hash'"
                           class="text--primary cursor-pointer"
                           [routerLink]="['/transaction', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
+                          <span>{{ data[template.matColumnDef] | ellipsis : 8 : 8 }}</span>
                         </a>
                         <app-name-tag [value]="data[template.matColumnDef]" *ngSwitchCase="'grantee'"></app-name-tag>
                         <div *ngSwitchCase="'type'">

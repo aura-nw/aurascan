@@ -2,16 +2,16 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import BigNumber from 'bignumber.js';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
-import { EModeToken, TokenTab } from '../../../../core/constants/token.enum';
 import local from 'src/app/core/utils/storage/local';
 import { Globals } from 'src/app/global/global';
-import BigNumber from 'bignumber.js';
+import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
+import { EModeToken, TokenTab } from '../../../../core/constants/token.enum';
 
 @Component({
   selector: 'app-token-content',
