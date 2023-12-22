@@ -110,8 +110,8 @@ export class IBCComponent implements OnInit {
           element['image'] = dataChain?.chainImage;
         });
 
-        this.rawData = this.rawData?.length === 0 ? m_view_ibc_relayer_statistic : this.rawData;
-        this.setDataList(this.rawData);
+        this.rawData = m_view_ibc_relayer_statistic;
+        this.setDataList(m_view_ibc_relayer_statistic);
       },
       error: (e) => {
         this.isLoadingTable = false;
