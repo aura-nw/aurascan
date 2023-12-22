@@ -1,11 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { sha256 } from 'js-sha256';
 import * as _ from 'lodash';
-import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { Subject } from 'rxjs';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';

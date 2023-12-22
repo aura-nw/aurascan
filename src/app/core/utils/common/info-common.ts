@@ -120,7 +120,8 @@ export function checkTypeFile(nft: any) {
   return content_type;
 }
 
-export function convertTx(value: string, coinConfig: any, decimal = 6) {
+export function convertTxNative(value: string, decimal = 6) {
+  const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
   let result = {};
   if (!value) return result;
   let display;
@@ -132,7 +133,7 @@ export function convertTx(value: string, coinConfig: any, decimal = 6) {
       }
     } catch {}
     display = value.slice(value.indexOf('ibc'));
-    result = coinConfig?.find((k) => k.denom === display) || { display: value, decimal: decimal };
+    result = listTokenIBC?.find((k) => k.denom === display) || { display: value, decimal: decimal };
   } else {
     result = { display: display, decimal: decimal };
   }
