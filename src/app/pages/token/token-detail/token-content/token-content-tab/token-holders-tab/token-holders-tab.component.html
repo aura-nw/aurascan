@@ -51,9 +51,9 @@
                         [tooltipPosition]="'tooltip--right'"
                         [url]="
                           '/tokens/' +
-                          (this.typeContract === contractType.CW20 ? 'token' : 'token-nft') +
+                          (this.typeContract && this.typeContract !== contractType.CW20 ? 'token-nft' : 'token') +
                           '/' +
-                          contractAddress +
+                          linkAddress +
                           '?a='
                         "></app-name-tag>
                     </ng-container>

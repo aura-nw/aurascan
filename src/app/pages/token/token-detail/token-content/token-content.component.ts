@@ -45,6 +45,7 @@ export class TokenContentComponent implements OnInit {
   linkToken = 'token-nft';
   activeTabID = 0;
   textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
+  linkAddress: string;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
@@ -62,6 +63,7 @@ export class TokenContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     let tabFilter;
     switch (this.tokenDetail.modeToken) {
       case EModeToken.StakingCoin:
@@ -116,26 +118,32 @@ export class TokenContentComponent implements OnInit {
       this.textSearch = this.searchTemp;
       let tempTabs;
       this.paramQuery = addressNameTag || this.searchTemp;
-      if (this.textSearch.length === LENGTH_CHARACTER.TRANSACTION && this.textSearch == this.textSearch.toUpperCase()) {
-        this.isSearchTx = true;
-        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-      } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
-        this.isSearchAddress = true;
-        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
-        this.getInfoAddress(this.paramQuery);
-      } else {
-        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
+      // check if mode not equal native coin
+      if (this.tokenDetail.modeToken !== EModeToken?.StakingCoin) {
+        if (
+          this.textSearch.length === LENGTH_CHARACTER.TRANSACTION &&
+          this.textSearch == this.textSearch.toUpperCase()
+        ) {
+          this.isSearchTx = true;
+          tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
+        } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
+          this.isSearchAddress = true;
+          tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
+          this.getInfoAddress(this.paramQuery);
+        } else {
+          tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
+        }
       }
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
           if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
             this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
-            window.location.href = `/tokens/${this.linkToken}/${this.contractAddress}?a=${encodeURIComponent(
+            window.location.href = `/tokens/${this.linkToken}/${this.linkAddress}?a=${encodeURIComponent(
               this.paramQuery,
             )}`;
           } else {
-            window.location.href = `/tokens/token/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
+            window.location.href = `/tokens/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }
         }
       });

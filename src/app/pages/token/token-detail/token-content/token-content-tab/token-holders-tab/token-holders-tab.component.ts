@@ -11,6 +11,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { EModeToken } from 'src/app/core/constants/token.enum';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -55,6 +56,7 @@ export class TokenHoldersTabComponent implements OnInit {
   totalHolder = 0;
   errTxt: string;
   EModeToken = EModeToken;
+  linkAddress: string;
 
   chainInfo = this.environmentService.chainInfo;
 
@@ -62,9 +64,11 @@ export class TokenHoldersTabComponent implements OnInit {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     if (this.typeContract) {
       if (this.typeContract !== ContractRegisterType.CW20) {
         this.getQuantity();
@@ -201,33 +205,31 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getDenomHolder() {
-    this.tokenService.getDenomHolder(this.tokenDetail?.denomHash).subscribe({
+    this.tokenService.getDenomHolder(this.tokenDetail?.denomHash, this.keyWord || null).subscribe({
       next: (res) => {
-        if (res?.account?.length > 0) {
-          this.totalHolder = res?.account?.length;
-          if (this.totalHolder > this.numberTopHolder) {
-            this.pageData.length = this.numberTopHolder;
-          } else {
-            this.pageData.length = this.totalHolder;
-          }
-
-          let dataFlat = res.account?.map((item) => {
-            let amount = item.balances?.find((k) => k.denom === this.tokenDetail?.denomHash)?.amount;
-            
-            return {
-              owner: item.address,
-              amount,
-              balance: amount,
-              percent_hold: (amount / this.tokenDetail?.totalSupply) * 100,
-              value:
-                new BigNumber(amount)
-                  .multipliedBy(this.tokenDetail?.price)
-                  .dividedBy(Math.pow(10, this.decimalValue))
-                  .toFixed() || 0,
-            };
-          });
-          this.dataSource = new MatTableDataSource<any>(dataFlat);
+        this.totalHolder = this.keyWord?.length > 0 ? res?.account?.length : this.tokenDetail?.holder;
+        if (this.totalHolder > this.numberTopHolder) {
+          this.pageData.length = this.numberTopHolder;
+        } else {
+          this.pageData.length = this.totalHolder;
         }
+
+        let dataFlat = res.account?.map((item) => {
+          let amount = item.balances?.find((k) => k.denom === this.tokenDetail?.denomHash)?.amount;
+
+          return {
+            owner: item.address,
+            amount,
+            balance: amount,
+            percent_hold: (amount / this.tokenDetail?.totalSupply) * 100,
+            value:
+              new BigNumber(amount)
+                .multipliedBy(this.tokenDetail?.price)
+                .dividedBy(Math.pow(10, this.decimalValue))
+                .toFixed() || 0,
+          };
+        });
+        this.dataSource = new MatTableDataSource<any>(dataFlat);
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {

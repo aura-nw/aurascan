@@ -35,6 +35,7 @@ export class TokenOverviewComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
+    this.getInfoNative();
 
     if (this.tokenDetail.modeToken === EModeToken.CWToken) {
       if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
@@ -66,10 +67,6 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail.holderChange = Math.abs(this.tokenDetail.holderChange);
     }
 
-    if (this.tokenDetail.modeToken === EModeToken.StakingCoin) {
-      this.tokenDetail['price'] = this.global.price.aura || 0;
-    }
-
     this.tokenDetail['supplyAmount'] = balanceOf(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
     this.tokenDetail['supplyValue'] = new BigNumber(this.tokenDetail['supplyAmount'])
       .multipliedBy(this.tokenDetail?.price)
@@ -96,6 +93,22 @@ export class TokenOverviewComponent implements OnInit {
     };
     this.tokenService.getListTokenHolderNFT(payload).subscribe((res) => {
       this.tokenDetail['holder'] = res.view_count_holder_cw721_aggregate?.aggregate?.count || 0;
+    });
+  }
+
+  getInfoNative() {
+    this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
+      if (res?.data) {
+        const supplyAmount = balanceOf(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
+        const supplyValue = new BigNumber(supplyAmount).multipliedBy(res.data.current_price).toFixed();
+        this.tokenDetail = {
+          ...this.tokenDetail,
+          price: res.data.current_price || this.tokenDetail.price,
+          change: res.data.price_change_percentage_24h,
+          supplyAmount,
+          supplyValue,
+        };
+      }
     });
   }
 }

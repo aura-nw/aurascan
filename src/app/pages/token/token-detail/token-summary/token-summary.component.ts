@@ -30,7 +30,7 @@ export class TokenSummaryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getChannelInfoByDenom();
+    // this.getChannelInfoByDenom();
   }
 
   getChannelInfoByDenom() {

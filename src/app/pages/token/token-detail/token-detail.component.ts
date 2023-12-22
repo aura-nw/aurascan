@@ -13,6 +13,7 @@ import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-detail',
@@ -38,6 +39,7 @@ export class TokenDetailComponent implements OnInit {
     private contractService: ContractService,
     private datePipe: DatePipe,
     private ibcService: IBCService,
+    private global: Globals
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +58,7 @@ export class TokenDetailComponent implements OnInit {
       } else {
         this.getDataCoin(paramData);
       }
+      this.getDenomHolder(paramData);
     }
   }
 
@@ -156,10 +159,10 @@ export class TokenDetailComponent implements OnInit {
       this.loading = false;
       this.errTxt = 'No Data';
     }
-    this.getDenomHolder(findData);
+    this.getInfoTokenIBC(findData);
   }
 
-  async getDenomHolder(data) {
+  async getInfoTokenIBC(data) {
     const [denom, channel] = await Promise.all([
       this.ibcService.getTotalSupplyLCD(encodeURIComponent(data?.denom)),
       this.ibcService.getChannelInfoByDenom(encodeURIComponent(data?.denom)),
@@ -178,27 +181,28 @@ export class TokenDetailComponent implements OnInit {
       totalSupply: _.get(denom, 'data.amount.amount' || 0),
       channelPath: _.get(channel, 'data.denom_trace'),
     };
-
-    this.ibcService.getDenomHolder(data?.denom).subscribe((res) => {
-      this.tokenDetail['holder'] = _.get(res, 'account_aggregate.aggregate.count');
-    });
     this.loading = false;
   }
 
   async getDataNative(denomNative: string) {
     const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative);
-    console.log(tempTotal);
-    
     this.tokenDetail = {
       modeToken: EModeToken.StakingCoin,
       name: this.chainInfo.chainName,
-      price: 1,
+      denomHash: this.chainInfo?.currencies[0].coinMinimalDenom,
       symbol: this.chainInfo?.currencies[0].coinDenom,
       isValueUp: false,
+      price: this.global.price.aura,
       change: 0,
       decimals: this.chainInfo?.currencies[0].coinDecimals,
       totalSupply: _.get(tempTotal, 'data.amount.amount' || 0),
     };
     this.loading = false;
+  }
+
+  getDenomHolder(paramData){
+    this.ibcService.getDenomTotalHolder(paramData).subscribe((res) => {
+      this.tokenDetail['holder'] = _.get(res, 'account_aggregate.aggregate.count');
+    });
   }
 }
