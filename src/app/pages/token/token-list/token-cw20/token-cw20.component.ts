@@ -27,11 +27,13 @@ import {
   TIMEOUT_ERROR,
   TOKEN_ID_GET_PRICE,
 } from '../../../../core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
+import { MAX_LENGTH_SEARCH_TOKEN, TokenType } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import local from 'src/app/core/utils/storage/local';
+import {balanceOf, getBalance} from "src/app/core/utils/common/parsing";
+import BigNumber from "bignumber.js";
 
 @Component({
   selector: 'app-token-cw20',
@@ -46,8 +48,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     { matColumnDef: 'token', headerCellDef: 'name' },
     { matColumnDef: 'type', headerCellDef: 'type' },
     { matColumnDef: 'price', headerCellDef: 'price' },
-    { matColumnDef: 'circulating_market_cap', headerCellDef: 'circulatingMarketCap' },
-    { matColumnDef: 'onChainMarketCap', headerCellDef: 'onChainMarketCap' },
+    { matColumnDef: 'total_supply', headerCellDef: 'In-Chain Supply Amount' },
+    { matColumnDef: 'onChainMarketCap', headerCellDef: 'In-Chain Supply' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
@@ -65,14 +67,13 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   image_s3 = this.environmentService.imageUrl;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   isLoading = true;
-  filterButtons = [];
-  ContractRegisterType = ContractRegisterType;
-
+  filterType = [];
+  tokenType = TokenType;
   searchSubject = new Subject();
   destroy$ = new Subject<void>();
   dataTable = [];
-
   listTokenIBC;
+  nativeToken;
 
   constructor(
     public translate: TranslateService,
@@ -89,24 +90,62 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.listTokenIBC = local.getItem(STORAGE_KEYS.LIST_TOKEN_IBC);
-
+    this.getTokenData();
     this.getPriceBTC();
-    this.getListToken();
     this.searchSubject
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
         if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
-          this.getListToken();
+          this.searchData();
         } else {
           this.pageChange.selectPage(0);
         }
       });
+
+    this.nativeToken = [{
+      "created_at": "2023-09-14T03:36:41.199Z",
+      "updated_at": "2023-12-18T08:36:11.425Z",
+      "id": 1,
+      "contract_address": null,
+      "coin_id": "_",
+      "symbol": "AURA",
+      "name": "Aura Native",
+      "image": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png",
+      "max_supply": "0.000000",
+      "current_price": "0.000000",
+      "price_change_percentage_24h": 0,
+      "total_volume": "0.000000",
+      "circulating_supply": "0.000000",
+      "circulating_market_cap": "0.000000",
+      "description": null,
+      "market_cap": "0.000000",
+      "fully_diluted_valuation": "0.000000",
+      "verify_status": null,
+      "verify_text": null,
+      "denom": "utaura",
+      "decimal": 6,
+      "chain_id": null,
+      "display": "AURA",
+      "total_supply": 5.1
+    }]
   }
 
   onKeyUp() {
     this.searchSubject.next(this.textSearch);
+  }
+
+  async getListTokenIBC() {
+    this.listTokenIBC = local.getItem(STORAGE_KEYS.LIST_TOKEN_IBC);
+    const res = await this.tokenService.getTokenSupply();
+    const supply = _.get(res, 'data.supply');
+    this.listTokenIBC.forEach(token => {
+      supply.forEach(s => {
+        if (token.denom === s.denom) {
+          token.total_supply = balanceOf(Number(s?.amount) || 0, +token.decimal) || 0
+        }
+      })
+    })
   }
 
   getAllCW20Token(): Observable<any> {
@@ -144,113 +183,146 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     );
   }
 
-  getListToken() {
-    this.textSearch = this.textSearch?.trim();
-    const payload = {
-      limit: this.pageData.pageSize,
-      offset: this.pageData.pageIndex * this.pageData.pageSize,
-    };
-    // Check table exist for search and pagination
-    if (this.dataTable.length > 0) {
-      let result = this.dataTable
-        ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
-        .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
-        .slice(payload?.offset, payload?.offset + payload?.limit);
-      // Search with text search
-      if (this.textSearch) {
-        result = this.dataTable
-          .filter(
-            (item) =>
-              item.name.toLowerCase().includes(this.textSearch.toLowerCase()) ||
-              item.contract_address == this.textSearch.toLowerCase(),
-          )
-          ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap);
+  searchData() {
+    if (this.textSearch.trim().length > 0) {
+      this.textSearch = this.textSearch?.trim();
+      const payload = {
+        limit: this.pageData.pageSize,
+        offset: this.pageData.pageIndex * this.pageData.pageSize,
+      };
+      const result = this.dataTable.filter(
+        (item) =>
+          item.name.toLowerCase().includes(this.textSearch.toLowerCase()) ||
+          item.contract_address == this.textSearch.toLowerCase(),
+      );
+      this.dataSource.data = result.slice(payload?.offset, payload?.offset + payload?.limit);
+    } else {
+      this.drawTable();
+    }
+    this.pageData.length = this.dataSource.data?.length;
+  }
 
-        this.dataSource.data = result.slice(payload?.offset, payload?.offset + payload?.limit);
-        this.pageData.length = result?.length;
+  getListToken() {
+    // Get the first time data init screen
+    this.getListTokenIBC().then(r => {
+        this.getAllCW20Token()
+          .pipe(takeLast(1))
+          .subscribe({
+            next: (res) => {
+              this.tokenService.tokensMarket$
+                .pipe(
+                  filter((data) => _.isArray(data)),
+                  take(1),
+                )
+                .subscribe({
+                  next: (tokenMarket) => {
+                    // Flat data for mapping response api
+                    const mappedData = res?.map((item) => {
+                      const foundToken = tokenMarket?.find((f) => f.contract_address === item?.smart_contract?.address);
+                      const cw20_total_holder_stats = item.cw20_total_holder_stats;
+                      let changePercent = 0;
+                      if (cw20_total_holder_stats?.length > 1) {
+                        changePercent =
+                          (cw20_total_holder_stats[1].total_holder * 100) / cw20_total_holder_stats[0].total_holder - 100;
+                      }
+
+                      return {
+                        coin_id: foundToken?.coin_id || '',
+                        contract_address: item.smart_contract.address || '',
+                        name: foundToken?.name || item.name || '',
+                        symbol: foundToken?.symbol || item.symbol || '',
+                        image: foundToken?.image || item.marketing_info?.logo?.url || '',
+                        holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
+                        isHolderUp: changePercent >= 0,
+                        holderChange: Math.abs(changePercent),
+                        description: foundToken?.description || item.marketing_info?.description || '',
+                        verify_status: foundToken?.verify_status || '',
+                        verify_text: foundToken?.verify_text || '',
+                        circulating_market_cap: +foundToken?.circulating_market_cap || 0,
+                        onChainMarketCap: +foundToken?.circulating_market_cap || 0,
+                        volume: +foundToken?.total_volume || 0,
+                        price: +foundToken?.current_price || 0,
+                        isValueUp:
+                          foundToken?.price_change_percentage_24h && foundToken?.price_change_percentage_24h >= 0,
+                        change: foundToken?.price_change_percentage_24h || 0,
+                        max_total_supply: foundToken?.max_supply || 0,
+                        fully_diluted_market_cap: foundToken?.fully_diluted_valuation || 0,
+                        total_supply: getBalance(item.total_supply, item.decimal),
+                      };
+                    });
+                    // store datatable
+                    let dataList = []
+                    if (this.filterType.includes(this.tokenType.IBC)) {
+                      dataList.push(...this.listTokenIBC);
+                    }
+                    if (this.filterType.includes(this.tokenType.NATIVE)) {
+                      dataList.push(...this.nativeToken);
+                    }
+                    if (this.filterType.includes(this.tokenType.CW20)) {
+                      dataList.push(...mappedData);
+                    }
+                    if (this.filterType.length === 0) {
+                      dataList.push(...this.listTokenIBC);
+                      dataList.push(...this.nativeToken);
+                      dataList.push(...mappedData);
+                    }
+                    this.dataTable = dataList;
+                    this.drawTable();
+                    // this.dataSource.data = this.dataSource.data.slice(payload?.offset, payload?.offset + payload?.limit);
+                    this.pageData.length = this.dataSource.data.length;
+                    this.isLoading = false;
+                  },
+                  error: (e) => {
+                    if (e.name === TIMEOUT_ERROR) {
+                      this.errTxt = e.message;
+                    } else {
+                      this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+                    }
+                    this.isLoading = false;
+                  },
+                });
+            },
+            error: (e) => {
+              if (e.name === TIMEOUT_ERROR) {
+                this.errTxt = e.message;
+              } else {
+                this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
+              }
+              this.isLoading = false;
+            },
+          });
+      }
+    );
+  }
+
+  getTokenData(val?: string) {
+    if (val) {
+      if (this.filterType.includes(val)) {
+        this.filterType = this.filterType.filter(item => item !== val)
       } else {
-        this.dataSource.data = result;
-        this.pageData.length = this.dataTable?.length;
+        this.filterType.push(val);
       }
     } else {
-      // Get the first time data init screen
-      this.getAllCW20Token()
-        .pipe(takeLast(1))
-        .subscribe({
-          next: (res) => {
-            this.tokenService.tokensMarket$
-              .pipe(
-                filter((data) => _.isArray(data)),
-                take(1),
-              )
-              .subscribe({
-                next: (tokenMarket) => {
-                  // Flat data for mapping response api
-                  const mappedData = res?.map((item) => {
-                    const foundToken = tokenMarket?.find((f) => f.contract_address === item?.smart_contract?.address);
-
-                    const cw20_total_holder_stats = item.cw20_total_holder_stats;
-
-                    let changePercent = 0;
-                    if (cw20_total_holder_stats?.length > 1) {
-                      changePercent =
-                        (cw20_total_holder_stats[1].total_holder * 100) / cw20_total_holder_stats[0].total_holder - 100;
-                    }
-
-                    return {
-                      coin_id: foundToken?.coin_id || '',
-                      contract_address: item.smart_contract.address || '',
-                      name: foundToken?.name || item.name || '',
-                      symbol: foundToken?.symbol || item.symbol || '',
-                      image: foundToken?.image || item.marketing_info?.logo?.url || '',
-                      holders: item.cw20_holders_aggregate?.aggregate?.count || 0,
-                      isHolderUp: changePercent >= 0,
-                      holderChange: Math.abs(changePercent),
-                      description: foundToken?.description || item.marketing_info?.description || '',
-                      verify_status: foundToken?.verify_status || '',
-                      verify_text: foundToken?.verify_text || '',
-                      circulating_market_cap: +foundToken?.circulating_market_cap || 0,
-                      onChainMarketCap: +foundToken?.circulating_market_cap || 0,
-                      volume: +foundToken?.total_volume || 0,
-                      price: +foundToken?.current_price || 0,
-                      isValueUp:
-                        foundToken?.price_change_percentage_24h && foundToken?.price_change_percentage_24h >= 0,
-                      change: foundToken?.price_change_percentage_24h || 0,
-                      max_total_supply: foundToken?.max_supply || 0,
-                      fully_diluted_market_cap: foundToken?.fully_diluted_valuation || 0,
-                    };
-                  });
-                  // store datatable
-                  mappedData.push(...this.listTokenIBC);
-                  this.dataTable = mappedData;
-                  // Sort and slice 20 frist record.
-                  this.dataSource.data = mappedData
-                    ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
-                    .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
-                    .slice(payload?.offset, payload?.offset + payload?.limit);
-                  this.pageData.length = res?.length;
-                  this.isLoading = false;
-                },
-                error: (e) => {
-                  if (e.name === TIMEOUT_ERROR) {
-                    this.errTxt = e.message;
-                  } else {
-                    this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
-                  }
-                  this.isLoading = false;
-                },
-              });
-          },
-          error: (e) => {
-            if (e.name === TIMEOUT_ERROR) {
-              this.errTxt = e.message;
-            } else {
-              this.errTxt = e.error.error.statusCode + ' ' + e.error.error.message;
-            }
-            this.isLoading = false;
-          },
-        });
+      this.filterType = [];
     }
+    this.getListToken();
+  }
+
+  drawTable() {
+    const auraToken = this.nativeToken.sort((a, b) => this.compare(a.total_supply, b.total_supply, false))
+      .sort((a, b) => this.compare(a.onChainMarketCap, b.onChainMarketCap, false))
+      .sort((a, b) => this.compare(a.price, b.price, false));
+    const verifiedToken = this.dataTable.filter(token => token.verify_status === "VERIFIED")
+      .sort((a, b) => this.compare(a.total_supply, b.total_supply, false))
+      .sort((a, b) => this.compare(a.onChainMarketCap, b.onChainMarketCap, false))
+      .sort((a, b) => this.compare(a.price, b.price, false))
+    const otherToken = this.dataTable.filter(token => token.verify_status !== "VERIFIED").sort((a, b) => this.compare(a.total_supply, b.total_supply, false))
+      .sort((a, b) => this.compare(a.onChainMarketCap, b.onChainMarketCap, false))
+      .sort((a, b) => this.compare(a.price, b.price, false));
+    this.dataSource.data = [];
+    this.dataSource.data = [...auraToken];
+    this.dataSource.data = this.dataSource.data.concat(verifiedToken);
+    this.dataSource.data = this.dataSource.data.concat(otherToken);
   }
 
   paginatorEmit(event): void {
@@ -260,10 +332,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   sortData(sort: Sort) {
     this.pageChange.selectPage(0);
     this.dataSource.data.forEach((data) => {
-      data.circulating_market_cap = +data.circulating_market_cap;
-      data.volume = +data.volume;
+      data.total_supply = +data.total_supply;
+      data.onChainMarketCap = +data.onChainMarketCap;
       data.price = +data.price;
-      data.holders = +data.holders;
     });
     let data = this.dataTable;
     if (!sort.active || sort.direction === '') {
@@ -275,13 +346,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.sortedData = data.sort((a, b) => {
       switch (sort.active) {
         case 'price':
-          return this.compare(a.price, b.price, isAsc);
-        case 'volume':
-          return this.compare(a.volume, b.volume, isAsc);
-        case 'circulating_market_cap':
-          return this.compare(a.circulating_market_cap, b.circulating_market_cap, isAsc);
+          return this.compare(a.price, b.price, !isAsc);
+        case 'total_supply':
+          return this.compare(a.total_supply, b.total_supply, !isAsc);
         case 'onChainMarketCap':
-          return this.compare(a.onChainMarketCap, b.onChainMarketCap, isAsc);
+          return this.compare(a.onChainMarketCap, b.onChainMarketCap, !isAsc);
         default:
           return 0;
       }
@@ -311,12 +380,13 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+    return (BigNumber(a).lt(b) ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   resetSearch() {
     this.textSearch = '';
-    this.onKeyUp();
+    this.drawTable();
+    this.pageData.length = this.dataSource.data?.length;
   }
 
   pageEvent(e: PageEvent): void {
@@ -326,15 +396,15 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
     if (this.textSearch) {
-      this.getListToken();
+      this.getTokenData();
     } else {
       if (this.sortedData) {
         this.dataSource.data = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
       } else {
-        this.dataSource.data = this.dataTable
-          ?.sort((a, b) => b.circulating_market_cap - a.circulating_market_cap)
-          .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
-          .slice(payload?.offset, payload?.offset + payload?.limit);
+        // this.dataSource.data = this.dataTable
+        //   ?.sort((a, b) => this.compare(a.total_supply, b.total_supply, true))
+        //   .sort((a, b) => (a.verify_status === b.verify_status ? 0 : a.verify_status ? -1 : 1))
+        //   .slice(payload?.offset, payload?.offset + payload?.limit);
       }
     }
   }
@@ -343,26 +413,5 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.BTC).subscribe((res) => {
       this.global.price.btc = res.data || 0;
     });
-  }
-
-  filterButton(val: string) {
-    const i = this.filterButtons.findIndex((i) => i === val);
-
-    switch (val) {
-      case 'All':
-        this.filterButtons = [];
-        break;
-      case ContractRegisterType.CW20:
-      case ContractRegisterType.CW721:
-      case ContractRegisterType.CW4973:
-      case '': //Others
-      default:
-        if (i >= 0) {
-          this.filterButtons = this.filterButtons.filter((item) => item !== val);
-        } else {
-          this.filterButtons.push(val);
-        }
-    }
-    // this.pageEvent(0);
   }
 }

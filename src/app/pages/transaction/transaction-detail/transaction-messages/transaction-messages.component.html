@@ -157,14 +157,14 @@
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="d-flex flex-wrap mb-2">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balance | mask : 'separator.6' }}
-        <span class="text--primary">{{
-          transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom === coinMinimalDenom
+      <div
+        class="col-12 col-lg-9"
+        [innerHTML]="
+          (transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom === coinMinimalDenom
             ? denom
             : transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom
-        }}</span>
-      </div>
+          ) | ibcDenom : transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount
+        "></div>
     </div>
     <app-messages-item
       [label]="'Origin Amount'"
@@ -181,14 +181,9 @@
       [label]="'Sequence'"
       [value]="getLongValue(data?.packet?.sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="d-flex flex-wrap mb-2" *ngIf="ibcData?.receive?.denom">
+    <div class="d-flex flex-wrap mb-2" *ngIf="ibcData?.receive?.denomOrigin">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData?.amount | balance | mask : 'separator.6' }}
-        <span class="text--primary">{{
-          ibcData?.receive?.denom === coinMinimalDenom ? denom : ibcData?.receive?.denom
-        }}</span>
-      </div>
+      <div class="col-12 col-lg-9" [innerHTML]="ibcData?.receive?.denomOrigin | ibcDenom : ibcData?.amount"></div>
     </div>
     <app-messages-item
       [label]="'Origin Amount'"
@@ -454,7 +449,8 @@
               <div class="ml-2">
                 <span
                   *ngIf="item?.coins?.length > 0"
-                  [innerHTML]="item?.coins[0]?.amount + item?.coins[0]?.denom | convertLogAmount"></span>
+                  [innerHTML]="item?.coins[0]?.denom | ibcDenom : item?.coins[0]?.amount">
+                </span>
               </div>
             </div>
           </div>

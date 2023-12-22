@@ -36,7 +36,7 @@
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <ng-container *ngIf="!tokenDetail?.isNFTContract">
             <div class="aura-tooltip-contain">
-              <span *ngIf="infoSearch['balance'] === 0">0</span>
+              <span *ngIf="infoSearch['balance'] == 0">0</span>
               <span
                 class="aura-tooltip-object"
                 *ngIf="
@@ -58,7 +58,7 @@
                 [content]="
                   (infoSearch['balance'] | balance : tokenDetail.decimals | lt : 0.001)
                     ? (infoSearch['balance'] | balance : tokenDetail.decimals)
-                    : (infoSearch['balance'] | balance : tokenDetail.decimals | formatStringNumber)
+                    : (infoSearch['balance'] | balance : tokenDetail.decimals | mask : 'separator')
                 ">
               </app-tooltip-customize>
             </div>
@@ -83,7 +83,7 @@
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | lt : 0.001) ||
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | gte : 1000000)
                 "
-                [content]="infoSearch['value'] | formatStringNumber">
+                [content]="infoSearch['value'] | mask : 'separator'">
               </app-tooltip-customize>
             </div>
             (
@@ -102,7 +102,7 @@
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | lt : 0.001) ||
                   (infoSearch['balance'] * tokenDetail.price | balance : tokenDetail.decimals | gte : 1000000)
                 "
-                [content]="infoSearch['valueAura'] | formatStringNumber">
+                [content]="infoSearch['valueAura'] | mask : 'separator'">
               </app-tooltip-customize>
             </div>
             {{ denom }})

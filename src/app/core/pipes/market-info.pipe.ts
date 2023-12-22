@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import BigNumber from 'bignumber.js';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { CommonService } from '../services/common.service';
+import { getBalance } from '../utils/common/parsing';
 
 @Pipe({ name: 'marketInfo' })
 export class MarketInfoPipe implements PipeTransform {
@@ -54,5 +57,27 @@ export class MarketInfoPipe implements PipeTransform {
     }
 
     return key ? marketInfo[key] : marketInfo;
+  }
+}
+
+@Pipe({ name: 'ibcDenom' })
+export class IbcDenomPipe implements PipeTransform {
+  constructor(private commonService: CommonService) {}
+
+  transform(value: string, amount?: string): string {
+    if (!value) return '';
+    const isIbc = value.startsWith('ibc');
+
+    let data = this.commonService.mappingNameIBC(value);
+
+    if (!amount) {
+      return data['display'];
+    }
+
+    const balance = BigNumber(getBalance(amount, data['decimals']));
+
+    return balance.lte(0)
+      ? '-'
+      : balance.toFormat() + `<span class="${isIbc ? 'text--primary' : ''} ml-1"> ${data['display']} </span>`;
   }
 }

@@ -4,10 +4,11 @@ import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { DATEFORMAT } from '../constants/common.constant';
+import { DATEFORMAT, STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
+import local from '../utils/storage/local';
 
 @Injectable({ providedIn: 'root' })
 export class CommonService {
@@ -75,6 +76,7 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
+    const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
     let result = {
       display: this.chainInfo.currencies[0].coinDenom,
       decimals: this.chainInfo.currencies[0].coinDecimals,
@@ -87,7 +89,7 @@ export class CommonService {
         }
       } catch {}
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.listTokenIBC?.find((k) => k.denom === temp) || {
+      result = listTokenIBC?.find((k) => k.denom === temp) || {
         display: value,
         symbol: value,
       };

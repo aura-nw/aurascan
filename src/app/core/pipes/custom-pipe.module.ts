@@ -3,18 +3,9 @@ import { NgModule } from '@angular/core';
 import { CustomDatePipe, DateCustomPipe } from './date.pipe';
 import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
 import { JsonPipe } from './json.pipe';
-import { MarketInfoPipe } from './market-info.pipe';
+import { IbcDenomPipe, MarketInfoPipe } from './market-info.pipe';
 import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-tag.pipe';
-import {
-  BalancePipe,
-  ConvertLogAmountPipe,
-  FormatDigitPipe,
-  FormatStringNumberPipe,
-  GtePipe,
-  GtPipe,
-  LtePipe,
-  LtPipe,
-} from './number.pipe';
+import { BalancePipe, FormatDigitPipe, GtePipe, GtPipe, LtePipe, LtPipe } from './number.pipe';
 import { CutStringPipe, StringEllipsisPipe } from './string.pipe';
 import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
 
@@ -27,7 +18,6 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     ImageURLPipe,
     CustomDatePipe,
     ReplaceIpfsPipe,
-    ConvertLogAmountPipe,
     DisplayTypeToolTipPipe,
     FormatDigitPipe,
     NameTagPipe,
@@ -36,12 +26,12 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    FormatStringNumberPipe,
     BalancePipe,
     GtePipe,
     LtePipe,
     GtPipe,
     LtPipe,
+    IbcDenomPipe,
   ],
   exports: [
     JsonPipe,
@@ -50,7 +40,6 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     CustomDatePipe,
     StringEllipsisPipe,
     ReplaceIpfsPipe,
-    ConvertLogAmountPipe,
     DisplayTypeToolTipPipe,
     FormatDigitPipe,
     NameTagPipe,
@@ -59,12 +48,13 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     DateCustomPipe,
-    FormatStringNumberPipe,
     BalancePipe,
     GtePipe,
     LtePipe,
     GtPipe,
     LtPipe,
+    IbcDenomPipe,
   ],
+  providers: [],
 })
 export class CustomPipeModule {}
