@@ -2,9 +2,9 @@
   <div class="text--white fw-semibold h1">IBC Relayers</div>
   <div class="text--gray-4 d-flex align-items-center mt-2 mt-lg-0 body" *ngIf="timeUpdate">
     Updated at
-    <span class="ml-1">{{ timeUpdate | customDate : 'yyyy-MM-dd' }}</span>
+    <span class="ml-1">{{ timeUpdate | customDateTime: 'DateOnly' }}</span>
     <div class="divider divider-vertical divider-lighter mx-2"></div>
-    <span>{{ timeUpdate | customDate : 'HH:mm:ss' }}</span>
+    <span>{{ timeUpdate | customDate: 'HH:mm:ss' }}</span>
   </div>
 </div>
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
@@ -88,7 +88,7 @@
                         class="mr-2"
                         width="24px"
                         height="24px" />
-                      {{ data['chainName'] | ellipsis : 30 }}
+                      {{ data['chainName'] | ellipsis: 30 }}
                     </div>
                     <div
                       *ngSwitchCase="'status'"
@@ -125,7 +125,7 @@
                   class="mr-2"
                   width="24px"
                   height="24px" />
-                {{ data['chainName'] | ellipsis : 20 }}
+                {{ data['chainName'] | ellipsis: 20 }}
               </div>
               <div class="txt-status d-flex align-items-center" [ngClass]="data.open_channel === 0 ? 'inactive' : ''">
                 <span class="icon-connect"></span>

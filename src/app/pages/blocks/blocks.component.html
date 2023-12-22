@@ -23,7 +23,7 @@
                         *ngSwitchCase="'block_hash'"
                         class="text--primary cursor-pointer block-link"
                         [routerLink]="['/blocks', data['height']]">
-                        {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
+                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
                       <a
                         *ngSwitchCase="'proposer'"
@@ -78,10 +78,10 @@
                 class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +
-                  (data.timestamp | customDate : 'yyyy-MM-dd') +
+                  (data.timestamp | customDateTime: 'DateOnly') +
                   '</span>' +
                   '<span>' +
-                  (data.timestamp | customDate : 'HH:mm:ss') +
+                  (data.timestamp | customDate: 'HH:mm:ss') +
                   '</span>'
               }
             ]"></app-card-mob-simple>

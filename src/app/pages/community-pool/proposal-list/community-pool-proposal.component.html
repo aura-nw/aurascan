@@ -57,21 +57,21 @@
               <th mat-header-cell *matHeaderCellDef>Amount</th>
               <td mat-cell *matCellDef="let element">
                 <div class="aura-tooltip-contain mb-0 text--gray-1 fw-normal">
-                  <div class="aura-tooltip-object" *ngIf="element?.amount[0].amount | balance : 6 | lt : 0.001">
+                  <div class="aura-tooltip-object" *ngIf="element?.amount[0].amount | balance: 6 | lt: 0.001">
                     {{ '<0.001' }}
                   </div>
                   <div
                     [class.aura-tooltip-object]="element?.amount[0].amount !== 0"
-                    [class.cursor-text]="element?.amount[0].amount | balance : 6 | lt : 1000000"
-                    *ngIf="element?.amount[0].amount | balance : 6 | gte : 0.001"
+                    [class.cursor-text]="element?.amount[0].amount | balance: 6 | lt: 1000000"
+                    *ngIf="element?.amount[0].amount | balance: 6 | gte: 0.001"
                     [appBigNumber]="element?.amount[0].amount"
                     [decimal]="6"></div>
                   <app-tooltip-customize
                     *ngIf="
-                      (element?.amount[0].amount | balance : 6 | lt : 0.001) ||
-                      (element?.amount[0].amount | balance : 6 | gte : 1000000)
+                      (element?.amount[0].amount | balance: 6 | lt: 0.001) ||
+                      (element?.amount[0].amount | balance: 6 | gte: 1000000)
                     "
-                    [content]="element?.amount[0].amount | balance : 6 | mask : 'separator'">
+                    [content]="element?.amount[0].amount | balance: 6 | mask: 'separator'">
                   </app-tooltip-customize>
                 </div>
                 <span class="text--white fw-normal"> {{ denom }}</span>
@@ -85,9 +85,9 @@
                 <div
                   *ngIf="element.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
                   class="d-flex align-items-center fw-normal">
-                  <span>{{ element.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
+                  <span>{{ element.voting_end_time | customDateTime: 'DateOnly' }}</span>
                   <div class="mx-1"></div>
-                  <span>{{ element.voting_end_time | customDate : 'HH:mm:ss' }}</span>
+                  <span>{{ element.voting_end_time | customDate: 'HH:mm:ss' }}</span>
                 </div>
                 <div
                   class="body-02 d-flex align-items-center"
@@ -126,12 +126,12 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
                       '>' +
-                      (distributionAcc | nameTag | ellipsis : 16) +
+                      (distributionAcc | nameTag | ellipsis: 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
                       '>' +
-                      (distributionAcc | nameTag | ellipsis : 8 : 8) +
+                      (distributionAcc | nameTag | ellipsis: 8 : 8) +
                       '</a>'
                 },
                 {
@@ -142,12 +142,12 @@
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.recipient) +
                       '>' +
-                      (data.recipient | nameTag | ellipsis : 16) +
+                      (data.recipient | nameTag | ellipsis: 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
                       ('/account/' + data.recipient) +
                       '>' +
-                      (data.recipient | nameTag | ellipsis : 8 : 8) +
+                      (data.recipient | nameTag | ellipsis: 8 : 8) +
                       '</a>'
                 },
                 {
@@ -162,11 +162,11 @@
                   info:
                     data.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
                       ? '<span>' +
-                        (data.voting_end_time | customDate : 'yyyy-MM-dd') +
+                        (data.voting_end_time | customDateTime: 'DateOnly') +
                         '</span>' +
                         ' ' +
                         '<span>' +
-                        (data.voting_end_time | customDate : 'HH:mm:ss') +
+                        (data.voting_end_time | customDate: 'HH:mm:ss') +
                         '</span>'
                       : '-'
                 }

@@ -68,7 +68,7 @@
                           *ngSwitchCase="'tx_hash'"
                           class="text--primary cursor-pointer"
                           [routerLink]="['/transaction', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | ellipsis : 8 : 8 }}</span>
+                          <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                         </a>
                         <app-name-tag [value]="data[template.matColumnDef]" *ngSwitchCase="'grantee'"></app-name-tag>
                         <div *ngSwitchCase="'type'">
@@ -80,7 +80,7 @@
                         <div *ngSwitchCase="'limit'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | balance | mask : 'separator.6' }}
+                            {{ data[template.matColumnDef] | balance | mask: 'separator.6' }}
                             <span class="ml-1">{{ denom }}</span>
                           </ng-container>
                         </div>
@@ -88,7 +88,7 @@
                           <span class="{{ data['reason'] === 'Expired' && isActive ? 'text--red-3' : '' }}">
                             {{
                               data[template.matColumnDef]
-                                ? (data[template.matColumnDef] | customDate : 'yyyy-MM-dd')
+                                ? (data[template.matColumnDef] | customDateTime: 'DateOnly')
                                 : '-'
                             }}
                           </span>
@@ -96,7 +96,7 @@
                         <div *ngSwitchCase="'spendable'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | balance | mask : 'separator.6' }}
+                            {{ data[template.matColumnDef] | balance | mask: 'separator.6' }}
                             <span class="ml-1">{{ denom }}</span>
                           </ng-container>
                         </div>

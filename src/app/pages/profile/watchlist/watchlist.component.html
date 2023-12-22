@@ -74,7 +74,7 @@
                 </div>
                 <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
                   <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
-                    <span>{{ data[template.matColumnDef] | ellipsis : 8 : 8 }}</span>
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                   </a>
                   <div class="aura-tooltip-contain">
                     <div
@@ -98,19 +98,19 @@
                   class="pe-auto aura-tooltip-contain"
                   [ngClass]="(data.address | isPublicNameTag) ? 'box-name-tag' : ''">
                   <div class="aura-tooltip-object">
-                    {{ (data.address | isPublicNameTag) ? (data.address | nameTag : false | ellipsis : 10) : '-' }}
+                    {{ (data.address | isPublicNameTag) ? (data.address | nameTag: false | ellipsis: 10) : '-' }}
                   </div>
 
                   <app-tooltip-customize
                     *ngIf="data.address | isPublicNameTag"
-                    [content]="data.address | nameTag : false"></app-tooltip-customize>
+                    [content]="data.address | nameTag: false"></app-tooltip-customize>
                 </div>
                 <div
                   *ngSwitchCase="'private_name_tag'"
                   class="pe-auto aura-tooltip-contain"
                   [ngClass]="(data.address | isPrivateNameTag) ? 'private-name-tag' : ''">
                   <div class="aura-tooltip-object">
-                    {{ (data.address | isPrivateNameTag) ? (data.address | nameTag | ellipsis : 12) : '-' }}
+                    {{ (data.address | isPrivateNameTag) ? (data.address | nameTag | ellipsis: 12) : '-' }}
                   </div>
 
                   <app-tooltip-customize
@@ -152,7 +152,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <div class="card__title">
             <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
-              <span class="fw-semibold">{{ data.address | ellipsis : 8 : 8 }}</span>
+              <span class="fw-semibold">{{ data.address | ellipsis: 8 : 8 }}</span>
             </a>
             <div class="text--gray-5 line-claim w-100" style="max-width: 170px" [class.aura-tooltip-object]="data.note">
               {{ data.note || 'Note:-' }}
@@ -209,18 +209,18 @@
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Public name tag</div>
             <div class="line-claim" [ngClass]="(data.address | isPublicNameTag) ? 'box-name-tag' : ''">
-              {{ (data.address | isPublicNameTag) ? (data.address | nameTag : false | ellipsis : 18) : '-' }}
+              {{ (data.address | isPublicNameTag) ? (data.address | nameTag: false | ellipsis: 18) : '-' }}
             </div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Private name tag</div>
             <div class="line-claim" [ngClass]="(data.address | isPrivateNameTag) ? 'private-name-tag' : ''">
-              {{ (data.address | isPrivateNameTag) ? (data.address | nameTag | ellipsis : 22) : '-' }}
+              {{ (data.address | isPrivateNameTag) ? (data.address | nameTag | ellipsis: 22) : '-' }}
             </div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Added time</div>
-            <div>{{ data.created_at | customDate : 'yyyy-MM-dd' }}</div>
+            <div>{{ data.created_at | customDateTime: 'DateOnly' }}</div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Group tracking</div>
