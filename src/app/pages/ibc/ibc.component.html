@@ -2,9 +2,9 @@
   <div class="text--white fw-semibold h1">IBC Relayers</div>
   <div class="text--gray-4 d-flex align-items-center mt-2 mt-lg-0 body" *ngIf="timeUpdate">
     Updated at
-    <span class="ml-1">{{ timeUpdate | customDate : 'yyyy-MM-dd' }}</span>
+    <span class="ml-1">{{ timeUpdate | customDate: 'yyyy-MM-dd' }}</span>
     <div class="divider divider-vertical divider-lighter mx-2"></div>
-    <span>{{ timeUpdate | customDate : 'HH:mm:ss' }}</span>
+    <span>{{ timeUpdate | customDate: 'HH:mm:ss' }}</span>
   </div>
 </div>
 <section class="box-ibc-relayer">
@@ -18,7 +18,7 @@
     <div class="col-lg-3 col-6">
       <div class="item">
         Total Channels
-        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.totalOpen || '0/0'}}</div>
+        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.totalOpen || '0/0' }}</div>
       </div>
     </div>
     <div class="col-lg-3 col-6">
@@ -50,12 +50,12 @@
               [(ngModel)]="textSearch"
               (keyup)="searchListIBC()"
               name="search"
-              autocomplete="off"/>
+              autocomplete="off" />
             <button
               type="submit"
               class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
               (click)="getListIBC()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
@@ -63,7 +63,7 @@
                 !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -87,8 +87,8 @@
                         alt=""
                         class="mr-2"
                         width="24px"
-                        height="24px"/>
-                      {{ data['chainName'] | ellipsis : 30 }}
+                        height="24px" />
+                      {{ data['chainName'] | ellipsis: 30 }}
                     </div>
                     <div
                       *ngSwitchCase="'status'"
@@ -114,7 +114,7 @@
             [ngClass]="row.open_channel > 0 ? 'cursor-pointer' : ''"
             (click)="openPopup(row)"></tr>
         </table>
-        \
+
         <div class="d-lg-none mobile">
           <div *ngFor="let data of dataSourceMobile" class="card-chain" (click)="openPopup(data)">
             <div class="d-flex align-items-center justify-content-between">
@@ -124,8 +124,8 @@
                   alt=""
                   class="mr-2"
                   width="24px"
-                  height="24px"/>
-                {{ data['chainName'] | ellipsis : 20 }}
+                  height="24px" />
+                {{ data['chainName'] | ellipsis: 20 }}
               </div>
               <div class="txt-status d-flex align-items-center" [ngClass]="data.open_channel === 0 ? 'inactive' : ''">
                 <span class="icon-connect"></span>
