@@ -49,7 +49,7 @@
             <div class="col-auto col-lg-2 text--gray-4">TxHash</div>
             <div class="col-auto col-lg-10 text--gray-1">
               <span class="d-none d-lg-block">{{ transaction?.tx_hash }}</span>
-              <span class="d-lg-none">{{ transaction?.tx_hash | cutStringPipe : 8 : 8 }}</span>
+              <span class="d-lg-none">{{ transaction?.tx_hash | ellipsis : 8 : 8 }}</span>
             </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
@@ -109,11 +109,7 @@
               <div>Memo</div>
             </div>
             <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
-              {{
-                !transaction?.memo
-                  ? '-'
-                  : (transaction?.memo | cutStringPipe : (environmentService.isMobile ? 25 : 100))
-              }}
+              {{ !transaction?.memo ? '-' : (transaction?.memo | ellipsis : (environmentService.isMobile ? 25 : 100)) }}
             </div>
           </div>
         </div>

@@ -23,7 +23,7 @@
                         *ngSwitchCase="'block_hash'"
                         class="text--primary cursor-pointer block-link"
                         [routerLink]="['/blocks', data['height']]">
-                        {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                        {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                       </a>
                       <a
                         *ngSwitchCase="'proposer'"
