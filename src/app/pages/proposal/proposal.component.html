@@ -45,7 +45,7 @@
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>{{ lastedItem.voting_start_time | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
-                      <span>{{ lastedItem.voting_start_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_start_time | customDateTime: 'TimeOnly' }}</span>
                     </div>
                     <div
                       class="text--gray-1 body-02 d-flex align-items-center"
@@ -60,7 +60,7 @@
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>{{ lastedItem.voting_end_time | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
-                      <span>{{ lastedItem.voting_end_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDateTime: 'TimeOnly' }}</span>
                     </div>
                     <div
                       class="text--gray-1 body-02 d-flex align-items-center"
@@ -221,7 +221,7 @@
                       }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
                       <span *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{
-                        lastedItem.voting_start_time | customDate: 'HH:mm:ss'
+                        lastedItem.voting_start_time | customDateTime: 'TimeOnly'
                       }}</span>
                     </div>
                     <div
@@ -237,7 +237,7 @@
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span>{{ lastedItem.voting_end_time | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ lastedItem.voting_end_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDateTime: 'TimeOnly' }}</span>
                     </div>
                     <div
                       class="text--white d-flex align-items-center"
@@ -388,7 +388,7 @@
                   *ngIf="element.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                   <span>{{ element.voting_start_time | customDateTime: 'DateOnly' }}</span>
                   <div class="divider divider-vertical mx-2"></div>
-                  <span>{{ element.voting_start_time | customDate: 'HH:mm:ss' }}</span>
+                  <span>{{ element.voting_start_time | customDateTime: 'TimeOnly' }}</span>
                 </div>
                 <div
                   class="body-02 d-flex align-items-center"
@@ -405,7 +405,7 @@
                 <div class="body-02 d-flex align-items-center">
                   <span>{{ element.submit_time | customDateTime: 'DateOnly' }}</span>
                   <div class="divider divider-vertical mx-2"></div>
-                  <span>{{ element.submit_time | customDate: 'HH:mm:ss' }}</span>
+                  <span>{{ element.submit_time | customDateTime: 'TimeOnly' }}</span>
                 </div>
               </td>
             </ng-container>
@@ -455,7 +455,7 @@
                       (data.voting_start_time | customDateTime: 'DateOnly') +
                       '</span>' +
                       '<span>' +
-                      (data.voting_start_time | customDate: 'HH:mm:ss') +
+                      (data.voting_start_time | customDateTime: 'TimeOnly') +
                       '</span>'
                     : '-'
               },
@@ -467,7 +467,7 @@
                   (data.submit_time | customDateTime: 'DateOnly') +
                   '</span>' +
                   '<span>' +
-                  (data.submit_time | customDate: 'HH:mm:ss') +
+                  (data.submit_time | customDateTime: 'TimeOnly') +
                   '</span>'
               }
             ]"></app-card-mob-simple>

@@ -82,7 +82,7 @@
                         <div class="text--gray-5 body-02 d-flex align-items-center">
                           <span>{{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDateTime: 'TimeOnly' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -93,7 +93,7 @@
                         <div class="text--gray-5 body-02 d-flex align-items-center">
                           <span>{{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDateTime: 'TimeOnly' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -163,7 +163,7 @@
                     (data.timestamp | customDateTime: 'DateOnly') +
                     '</span>' +
                     '<span>' +
-                    (data.timestamp | customDate: 'HH:mm:ss') +
+                    (data.timestamp | customDateTime: 'TimeOnly') +
                     '</span></div>'
                 }
               ]"></app-card-mob-simple>
@@ -202,7 +202,7 @@
                       (data.timestamp | customDateTime: 'DateOnly') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      (data.timestamp | customDateTime: 'TimeOnly') +
                       '</span></div>'
                     : '-'
                 }
@@ -266,7 +266,7 @@
                       (data.timestamp | customDateTime: 'DateOnly') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      (data.timestamp | customDateTime: 'TimeOnly') +
                       '</span></div>'
                     : '-'
                 }

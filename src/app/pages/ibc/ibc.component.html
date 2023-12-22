@@ -4,7 +4,7 @@
     Updated at
     <span class="ml-1">{{ timeUpdate | customDateTime: 'DateOnly' }}</span>
     <div class="divider divider-vertical divider-lighter mx-2"></div>
-    <span>{{ timeUpdate | customDate: 'HH:mm:ss' }}</span>
+    <span>{{ timeUpdate | customDateTime: 'TimeOnly' }}</span>
   </div>
 </div>
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>

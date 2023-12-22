@@ -84,7 +84,7 @@
                 <span>(</span>
                 <span>{{ transaction?.timestamp | customDateTime: 'DateOnly' }}</span>
                 <div class="divider divider-vertical divider-lighter mx-2"></div>
-                <span>{{ transaction?.timestamp | customDate: 'HH:mm:ss' }}</span>
+                <span>{{ transaction?.timestamp | customDateTime: 'TimeOnly' }}</span>
                 <span>)</span>
               </div>
             </div>

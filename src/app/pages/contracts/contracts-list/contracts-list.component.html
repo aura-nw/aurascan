@@ -144,7 +144,7 @@
                       *ngIf="data[template.matColumnDef] === ContractVerifyType.Verified">
                       <span>{{ data['verified_at'] | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ data['verified_at'] | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ data['verified_at'] | customDateTime: 'TimeOnly' }}</span>
                     </div>
                     <div *ngIf="data[template.matColumnDef] !== ContractVerifyType.Verified">-</div>
                   </ng-container>

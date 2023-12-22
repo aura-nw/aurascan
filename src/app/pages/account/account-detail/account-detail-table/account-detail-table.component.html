@@ -60,7 +60,7 @@
                       <div class="d-flex align-items-center">
                         <span>{{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}</span>
                         <div class="divider divider-vertical divider-lighter mx-2"></div>
-                        <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                        <span>{{ data[template.matColumnDef] | customDateTime: 'TimeOnly' }}</span>
                       </div>
                       <div class="small-body">({{ (data[template.matColumnDef] | dateCustom: false)[1] }})</div>
                     </div>
@@ -190,7 +190,7 @@
                     <div class="d-flex align-items-center body-mob">
                       <span>{{ item.completion_time | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-1"></div>
-                      <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ item.completion_time | customDateTime: 'TimeOnly' }}</span>
                     </div>
                   </div>
                 </div>
@@ -250,7 +250,7 @@
                     <div class="d-flex align-items-center">
                       <span>{{ item.completion_time | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ item.completion_time | customDateTime: 'TimeOnly' }}</span>
                     </div>
                   </div>
                 </div>
@@ -269,7 +269,7 @@
                     <div class="d-flex align-items-center">
                       <span>{{ item.date_format | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.date_format | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ item.date_format | customDateTime: 'TimeOnly' }}</span>
                     </div>
                   </div>
                 </div>

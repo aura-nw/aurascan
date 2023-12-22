@@ -87,7 +87,7 @@
             <div class="d-flex align-items-center" *ngIf="proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
               <span>{{ proDetail?.voting_start_time | customDateTime: 'DateOnly' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proDetail?.voting_start_time | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ proDetail?.voting_start_time | customDateTime: 'TimeOnly' }}</span>
             </div>
             <div class="d-flex align-items-center" *ngIf="proStatus.key === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
               <span>-</span>
@@ -100,7 +100,7 @@
             <div class="d-flex align-items-center" *ngIf="proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
               <span>{{ proDetail?.voting_end_time | customDateTime: 'DateOnly' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proDetail?.voting_end_time | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ proDetail?.voting_end_time | customDateTime: 'TimeOnly' }}</span>
             </div>
             <div class="d-flex align-items-center" *ngIf="proStatus.key === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
               <span>-</span>
@@ -152,7 +152,7 @@
             <div class="d-flex align-items-center">
               <span>{{ proDetail.submit_time | customDateTime: 'DateOnly' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proDetail.submit_time | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ proDetail.submit_time | customDateTime: 'TimeOnly' }}</span>
             </div>
           </div>
         </div>
@@ -162,7 +162,7 @@
             <div class="d-flex align-items-center">
               <span>{{ proDetail.deposit_end_time | customDateTime: 'DateOnly' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proDetail.deposit_end_time | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ proDetail.deposit_end_time | customDateTime: 'TimeOnly' }}</span>
             </div>
           </div>
         </div>

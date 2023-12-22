@@ -87,7 +87,7 @@
                   class="d-flex align-items-center fw-normal">
                   <span>{{ element.voting_end_time | customDateTime: 'DateOnly' }}</span>
                   <div class="mx-1"></div>
-                  <span>{{ element.voting_end_time | customDate: 'HH:mm:ss' }}</span>
+                  <span>{{ element.voting_end_time | customDateTime: 'TimeOnly' }}</span>
                 </div>
                 <div
                   class="body-02 d-flex align-items-center"
@@ -166,7 +166,7 @@
                         '</span>' +
                         ' ' +
                         '<span>' +
-                        (data.voting_end_time | customDate: 'HH:mm:ss') +
+                        (data.voting_end_time | customDateTime: 'TimeOnly') +
                         '</span>'
                       : '-'
                 }
