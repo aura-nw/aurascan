@@ -50,7 +50,12 @@ export class TokenDetailComponent implements OnInit {
         this.getTokenDetailNFT();
       }
     } else {
-      this.getDataCoin(paramData);
+      //check is native coin
+      if (paramData === this.chainInfo?.currencies[0].coinMinimalDenom) {
+        this.getDataNative(paramData);
+      } else {
+        this.getDataCoin(paramData);
+      }
     }
   }
 
@@ -143,9 +148,14 @@ export class TokenDetailComponent implements OnInit {
     this.tokenDetail['hasMoreTx'] = event;
   }
 
-  async getDataCoin(denom) {
+  getDataCoin(denom) {
     const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
     let findData = listTokenIBC?.find((k) => k['denom']?.indexOf(denom) > 0);
+    // check exit ibc denom
+    if (!findData) {
+      this.loading = false;
+      this.errTxt = 'No Data';
+    }
     this.getDenomHolder(findData);
   }
 
@@ -172,6 +182,23 @@ export class TokenDetailComponent implements OnInit {
     this.ibcService.getDenomHolder(data?.denom).subscribe((res) => {
       this.tokenDetail['holder'] = _.get(res, 'account_aggregate.aggregate.count');
     });
+    this.loading = false;
+  }
+
+  async getDataNative(denomNative: string) {
+    const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative);
+    console.log(tempTotal);
+    
+    this.tokenDetail = {
+      modeToken: EModeToken.StakingCoin,
+      name: this.chainInfo.chainName,
+      price: 1,
+      symbol: this.chainInfo?.currencies[0].coinDenom,
+      isValueUp: false,
+      change: 0,
+      decimals: this.chainInfo?.currencies[0].coinDecimals,
+      totalSupply: _.get(tempTotal, 'data.amount.amount' || 0),
+    };
     this.loading = false;
   }
 }

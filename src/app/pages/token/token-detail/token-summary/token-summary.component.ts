@@ -6,6 +6,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ProjectDetail } from 'src/app/core/models/project';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-summary',
@@ -25,6 +26,7 @@ export class TokenSummaryComponent implements OnInit {
     private ibcService: IBCService,
     private router: ActivatedRoute,
     private environmentService: EnvironmentService,
+    public global: Globals,
   ) {}
 
   ngOnInit(): void {
