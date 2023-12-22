@@ -67,7 +67,7 @@ export class IBCService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/chain-info`);
   }
 
-  getListIbcRelayer(keyword) {
+  getListIbcRelayer() {
     const operationsDoc = `
     query ChainConnected(
       $chain_name: String = null
@@ -95,7 +95,7 @@ export class IBCService extends CommonService {
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        variables: { chain_name: keyword || null },
+        variables: {},
         operationName: 'ChainConnected',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));

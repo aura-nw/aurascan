@@ -7,7 +7,6 @@
     <span>{{ timeUpdate | customDateTime: 'TimeOnly' }}</span>
   </div>
 </div>
-<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <section class="box-ibc-relayer">
   <div class="row box-title-relay py-lg-6 py-4">
     <div class="col-lg-3 col-6 mb-lg-0 mb-lg-0 mb-2">
@@ -19,7 +18,7 @@
     <div class="col-lg-3 col-6">
       <div class="item">
         Total Channels
-        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.totalOpen }}</div>
+        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.totalOpen || '0/0' }}</div>
       </div>
     </div>
     <div class="col-lg-3 col-6">
@@ -49,7 +48,7 @@
               placeholder="Search by Chain name"
               [maxLength]="maxLengthSearch"
               [(ngModel)]="textSearch"
-              (keyup)="onKeyUp()"
+              (keyup)="searchListIBC()"
               name="search"
               autocomplete="off" />
             <button
@@ -70,7 +69,8 @@
         </form>
       </div>
       <!-- Table -->
-      <div class="overflow-scroll-x" *ngIf="pageData?.length > 0; else noValues">
+      <app-loading-sprint *ngIf="isLoadingTable"></app-loading-sprint>
+      <div class="overflow-scroll-x" *ngIf="pageData?.length > 0 && !isLoadingTable; else noValues">
         <table mat-table [dataSource]="dataSource" class="aura-table ibc-relayer-table d-none d-lg-block">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
@@ -165,7 +165,7 @@
 
       <!-- No data -->
       <ng-template #noValues>
-        <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+        <app-table-no-data *ngIf="!isLoadingTable" [textNull]="errTxt"></app-table-no-data>
       </ng-template>
     </div>
   </div>
