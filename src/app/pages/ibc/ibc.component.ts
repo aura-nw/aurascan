@@ -1,21 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
-import { STORAGE_KEYS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { IBCService } from 'src/app/core/services/ibc.service';
-import { PopupIBCDetailComponent } from './popup-ibc-detail/popup-ibc-detail.component';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { IBCService } from 'src/app/core/services/ibc.service';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
 import local from 'src/app/core/utils/storage/local';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import { PopupIBCDetailComponent } from './popup-ibc-detail/popup-ibc-detail.component';
 
 @Component({
   selector: 'app-ibc',
@@ -24,7 +23,7 @@ import local from 'src/app/core/utils/storage/local';
 })
 export class IBCComponent implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
-  isLoading = true;
+  isLoadingTable = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 5,
@@ -35,11 +34,14 @@ export class IBCComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   errTxt: string;
   dataSourceMobile = [];
-  relayerInfo: any;
+  relayerInfo = {
+    connectedChain: 0,
+    totalOpen: undefined,
+    totalSend: 0,
+    totalReceive: 0,
+  };
   timeUpdate: string;
-
-  searchSubject = new Subject();
-  destroy$ = new Subject<void>();
+  rawData = [];
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'no', headerCellDef: 'No', headerWidth: 8 },
@@ -67,17 +69,6 @@ export class IBCComponent implements OnInit {
     this.ibcService.listInfoChain = listInfoChain;
     this.getListInfoChain();
 
-    this.searchSubject
-      .asObservable()
-      .pipe(debounceTime(500), takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
-          this.getListIBC();
-        } else {
-          this.pageChange.selectPage(0);
-        }
-      });
-
     // check back event
     const isShowPopup = local.getItem(STORAGE_KEYS.SHOW_POPUP_IBC);
     if (isShowPopup == 'true') {
@@ -85,7 +76,7 @@ export class IBCComponent implements OnInit {
       if (ibcDetail) {
         this.openPopup(ibcDetail);
         local.removeItem(STORAGE_KEYS.SHOW_POPUP_IBC);
-        local.removeItem(STORAGE_KEYS.IBC_DETAIL)
+        local.removeItem(STORAGE_KEYS.IBC_DETAIL);
       }
     }
   }
@@ -107,10 +98,7 @@ export class IBCComponent implements OnInit {
   }
 
   getListIBC() {
-    this.dataSource.data = [];
-    this.textSearch = this.textSearch?.trim();
-    const keySearch = this.textSearch ? `%${this.textSearch}%` : '';
-    this.ibcService.getListIbcRelayer(keySearch).subscribe({
+    this.ibcService.getListIbcRelayer().subscribe({
       next: (res) => {
         const m_view_ibc_relayer_statistic = _.get(res, 'm_view_ibc_relayer_statistic') || [];
 
@@ -122,45 +110,43 @@ export class IBCComponent implements OnInit {
           element['image'] = dataChain?.chainImage;
         });
 
-        this.dataSource.data = m_view_ibc_relayer_statistic;
-        this.pageData.length = m_view_ibc_relayer_statistic?.length;
-
-        if (this.dataSource?.data) {
-          let dataMobTemp = this.dataSource.data?.slice(
-            this.pageData.pageIndex * this.pageData.pageSize,
-            this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-          );
-          if (dataMobTemp.length !== 0) {
-            this.dataSourceMobile = dataMobTemp;
-          } else {
-            this.dataSourceMobile = this.dataSource.data?.slice(
-              (this.pageData.pageIndex - 1) * this.pageData.pageSize,
-              (this.pageData.pageIndex - 1) * this.pageData.pageSize + this.pageData.pageSize,
-            );
-          }
-        }
+        this.rawData = m_view_ibc_relayer_statistic;
+        this.setDataList(m_view_ibc_relayer_statistic);
       },
       error: (e) => {
-        this.isLoading = false;
+        this.isLoadingTable = false;
         this.errTxt = e.status + ' ' + e.statusText;
       },
       complete: () => {
-        this.isLoading = false;
+        this.isLoadingTable = false;
       },
     });
   }
 
-  resetSearch(): void {
-    this.textSearch = '';
-    this.dataSource.data = [];
-    this.pageData.length = 0;
+  setDataList(lstData) {
+    this.dataSource.data = lstData;
+    this.pageData.length = lstData?.length;
+
+    if (this.dataSource?.data) {
+      let dataMobTemp = this.dataSource.data?.slice(
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
+      if (dataMobTemp.length !== 0) {
+        this.dataSourceMobile = dataMobTemp;
+      } else {
+        this.dataSourceMobile = this.dataSource.data?.slice(
+          (this.pageData.pageIndex - 1) * this.pageData.pageSize,
+          (this.pageData.pageIndex - 1) * this.pageData.pageSize + this.pageData.pageSize,
+        );
+      }
+    }
     this.pageChange.selectPage(0);
-    this.dataSourceMobile = [];
-    this.getListIBC();
   }
 
-  onKeyUp() {
-    this.searchSubject.next(this.textSearch);
+  resetSearch(): void {
+    this.textSearch = '';
+    this.setDataList(this.rawData)
   }
 
   paginatorEmit(event): void {
@@ -201,5 +187,16 @@ export class IBCComponent implements OnInit {
         local.setItem(STORAGE_KEYS.LIST_INFO_CHAIN, res.data);
       },
     });
+  }
+
+  searchListIBC() {
+    if (!this.textSearch) {
+      this.setDataList(this.rawData);
+      return;
+    }
+
+    const result =
+      this.rawData?.filter((k) => k['chainName']?.toLowerCase().includes(this.textSearch?.toLowerCase())) || [];
+    this.setDataList(result);
   }
 }
