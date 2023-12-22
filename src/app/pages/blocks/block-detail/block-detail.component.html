@@ -246,7 +246,7 @@
                   label: 'Fee',
                   info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
                 },
-                { label: 'Time', info: (data.timestamp | dateCustom: false)[1] }
+                { label: 'Time', info: (data.timestamp | customDateTime: 'DateTime') }
               ]"></app-card-mob-simple>
           </div>
         </ng-container>

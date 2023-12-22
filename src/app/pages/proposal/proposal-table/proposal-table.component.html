@@ -158,7 +158,7 @@
                   class: 'card__date text--gray-1 body-01',
                   info:
                     '<div class=text-end>' +
-                    (data.timestamp | dateCustom: false)[0] +
+                    (data.timestamp | customDateTime: 'Distance') +
                     '</div><div class=text--gray-5><span>' +
                     (data.timestamp | customDateTime: 'DateOnly') +
                     '</span>' +
@@ -196,7 +196,7 @@
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
-                      (data.timestamp | dateCustom: false)[0] +
+                      (data.timestamp | customDateTime: 'Distance') +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
                       (data.timestamp | customDateTime: 'DateOnly') +
@@ -260,7 +260,7 @@
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
-                      (data.timestamp | dateCustom: false)[0] +
+                      (data.timestamp | customDateTime: 'Distance') +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
                       (data.timestamp | customDateTime: 'DateOnly') +
