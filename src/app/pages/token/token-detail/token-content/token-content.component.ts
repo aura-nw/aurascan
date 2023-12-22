@@ -129,7 +129,7 @@ export class TokenContentComponent implements OnInit {
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
-          if (this.tokenDetail.type !== ContractRegisterType.CW20) {
+          if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
             this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
             window.location.href = `/tokens/${this.linkToken}/${this.contractAddress}?a=${encodeURIComponent(
               this.paramQuery,
@@ -153,7 +153,7 @@ export class TokenContentComponent implements OnInit {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-      if (this.tokenDetail.type !== ContractRegisterType.CW20) {
+      if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
         this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
         window.location.href = `/tokens/${this.linkToken}/${params.contractAddress}`;
       } else {

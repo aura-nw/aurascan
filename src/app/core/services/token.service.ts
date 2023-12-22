@@ -540,21 +540,16 @@ export class TokenService extends CommonService {
     return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
   }
 
-  getListTransactionTokenIBC(denom_hash: string): Observable<any> {
+  getListTransactionTokenIBC(payload: {
+    denom: string;
+    limit: number;
+    offset: number;
+    address: string;
+  }): Observable<any> {
     const operationsDoc = `
-    query DenomTransfer(
-      $denom_hash: String = null
-      $limit: Int = null
-      $offset: Int = null
-      $address: String = null
-    ) {
-      ${this.envDB} {
-        ibc_ics20(
-          where: { denom: { _eq: $denom_hash } _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}
-          order_by: { id: desc }
-          limit: $limit
-          offset: $offset
-        ) {
+    query DenomTransfer($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
+      auratestnet {
+        ibc_ics20(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}, order_by: {id: desc}, limit: $limit, offset: $offset) {
           denom
           sender
           receiver
@@ -570,19 +565,29 @@ export class TokenService extends CommonService {
             }
           }
         }
+        ibc_ics20_aggregate(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}) {
+          aggregate {
+            count
+          }
+        }
       }
     }
     `;
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
-        variables: {},
+        variables: {
+          denom: payload.denom,
+          limit: payload.limit,
+          offset: payload.offset,
+          address: payload.address,
+        },
         operationName: 'DenomTransfer',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getDenomHolder(payload): Observable<any> {
+  getDenomHolder(denomHash: string): Observable<any> {
     const operationsDoc = `
     query DenomHolder(
       $denom: String = null
@@ -610,7 +615,7 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          denom: 'ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20'
+          denom: denomHash,
         },
         operationName: 'DenomHolder',
       })

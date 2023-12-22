@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
+import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
@@ -27,17 +28,21 @@ export class TokenOverviewComponent implements OnInit {
     private tokenService: TokenService,
     private route: ActivatedRoute,
     private environmentService: EnvironmentService,
+    private coingecko: CoingeckoService,
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
-    if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
-      this.getTotalSupply();
-      this.getHolderNFT();
-    } else {
-      this.getTotalHolder();
+
+    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+      if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
+        this.getTotalSupply();
+        this.getHolderNFT();
+      } else {
+        this.getTotalHolder();
+      }
     }
 
     //set price change
@@ -59,6 +64,10 @@ export class TokenOverviewComponent implements OnInit {
     if (this.tokenDetail.holderChange < 0) {
       this.tokenDetail['isHolderUp'] = false;
       this.tokenDetail.holderChange = Math.abs(this.tokenDetail.holderChange);
+    }
+
+    if (this.tokenDetail.modeToken === EModeToken.StakingCoin) {
+      this.tokenDetail['price'] = this.global.price.aura || 0;
     }
 
     this.tokenDetail['supplyAmount'] = balanceOf(this.tokenDetail.totalSupply, this.tokenDetail.decimals);

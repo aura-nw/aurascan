@@ -79,8 +79,9 @@
             <div class="text--white d-flex align-items-center">
               {{ channelId }}
               <i
+                *ngIf="channelCounterId"
                 class="ph-arrow-square-out-fill body-01 h4-mob ml-4 cursor-pointer"
-                [routerLink]="['/ibc-relayer/', channelId, 'channel-45']"></i>
+                [routerLink]="['/ibc-relayer/', channelId, channelCounterId]"></i>
             </div>
           </div>
         </td>
@@ -92,7 +93,9 @@
         <td colspan="2">
           <div class="d-flex align-items-center py-2">
             <div class="first-col text--gray-5">Staking Bonded</div>
-            <div class="text--gray-1">6.5M / 27.5M</div>
+            <div class="text--gray-1">
+              {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.total_aura || 0 }}
+            </div>
           </div>
         </td>
       </tr>

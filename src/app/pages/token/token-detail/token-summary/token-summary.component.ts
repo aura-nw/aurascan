@@ -6,6 +6,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ProjectDetail } from 'src/app/core/models/project';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-summary',
@@ -17,6 +18,7 @@ export class TokenSummaryComponent implements OnInit {
   projectDetail: ProjectDetail;
   EModeToken = EModeToken;
   channelId: string;
+  channelCounterId: string;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -24,17 +26,20 @@ export class TokenSummaryComponent implements OnInit {
     private ibcService: IBCService,
     private router: ActivatedRoute,
     private environmentService: EnvironmentService,
+    public global: Globals,
   ) {}
 
   ngOnInit(): void {
     this.getChannelInfoByDenom();
   }
 
-  async getChannelInfoByDenom() {
+  getChannelInfoByDenom() {
     const denomHash = this.router.snapshot.paramMap.get('contractAddress');
     if (!denomHash?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
-      const tempChannel = await this.ibcService.getChannelInfoByDenom(encodeURIComponent(denomHash));
-      this.channelId = 'channel-11' || _.get(tempChannel, 'data.denom_trace.path')?.replace('transfer/', '');
+      this.channelId = this.tokenDetail.channelPath?.path?.replace('transfer/', '');
+      this.ibcService.getChannelCounter(this.channelId).subscribe((res) => {
+        this.channelCounterId = _.get(res, 'ibc_channel[0].counterparty_channel_id');
+      });
     }
   }
 }

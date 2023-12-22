@@ -79,6 +79,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   typeContract: string;
   contractAddress: string;
   EModeToken = EModeToken;
+  linkAddress: string;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -94,6 +95,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.contractAddress = this.tokenDetail?.contract_address;
     this.typeContract = this.tokenDetail?.type;
     this.route.queryParams.subscribe((params) => {
@@ -103,7 +105,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    if (this.typeContract !== this.contractType.CW20) {
+    if (this.typeContract && this.typeContract !== this.contractType.CW20) {
       this.linkToken = this.typeContract === this.contractType.CW721 ? 'token-nft' : 'token-abt';
     }
     this.getListData();
@@ -266,28 +268,29 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   async getListTransactionTokenIBC(nextKey = null, isReload = false) {
+    const denomFilter = this.tokenDetail.channelPath?.path + '/' + this.tokenDetail.channelPath?.base_denom;
     let payload = {
-      limit: 100,
-      address: this.keyWord,
+      limit: this.pageData.pageSize,
       heightLT: nextKey,
-      contractAddr: this.contractAddress,
+      denom: denomFilter,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      address: null,
     };
 
-    // if (this.keyWord) {
-    //   if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
-    //     payload['txHash'] = this.keyWord;
-    //   } else {
-    //     payload['sender'] = this.keyWord;
-    //     payload['receiver'] = this.keyWord;
-    //   }
-    // }
+    if (this.keyWord) {
+      if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
+        payload['txHash'] = this.keyWord;
+      } else {
+        payload['address'] = this.keyWord;
+      }
+    }
 
-    this.tokenService.getListTransactionTokenIBC('').subscribe({
+    this.tokenService.getListTransactionTokenIBC(payload).subscribe({
       next: (res) => {
         if (res) {
           this.nextKey = null;
           if (res.ibc_ics20.length >= 100) {
-            this.nextKey = res?.ibc_ics20[res.ibc_ics20.length - 1].height;
+            this.nextKey = res?.ibc_ics20[res.ibc_ics20.length - 1]?.height;
             this.hasMore.emit(true);
           } else {
             this.hasMore.emit(false);
@@ -305,7 +308,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             this.dataSource.data = [...txs];
           }
 
-          this.pageData.length = this.dataSource.data.length;
+          this.pageData.length = res.ibc_ics20_aggregate?.aggregate?.count;
           this.resultLength.emit(this.pageData.length);
         }
       },
@@ -343,12 +346,17 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.pageData = e;
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getListData(this.nextKey);
-      this.currentKey = this.nextKey;
+    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+      const { length, pageIndex, pageSize } = e;
+      const next = length <= (pageIndex + 2) * pageSize;
+      this.pageData = e;
+      if (next && this.nextKey && this.currentKey !== this.nextKey) {
+        this.getListData(this.nextKey);
+        this.currentKey = this.nextKey;
+      }
+    } else {
+      this.pageData.pageIndex = e.pageIndex;
+      this.getListData();
     }
   }
 

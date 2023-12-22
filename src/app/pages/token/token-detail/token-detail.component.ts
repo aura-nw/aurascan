@@ -50,7 +50,12 @@ export class TokenDetailComponent implements OnInit {
         this.getTokenDetailNFT();
       }
     } else {
-      this.getDataCoin(paramData);
+      //check is native coin
+      if (paramData === this.chainInfo?.currencies[0].coinMinimalDenom) {
+        this.getDataNative(paramData);
+      } else {
+        this.getDataCoin(paramData);
+      }
     }
   }
 
@@ -143,31 +148,57 @@ export class TokenDetailComponent implements OnInit {
     this.tokenDetail['hasMoreTx'] = event;
   }
 
-  async getDataCoin(denom) {
-    this.getTokenDetailByDenom();
+  getDataCoin(denom) {
     const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
     let findData = listTokenIBC?.find((k) => k['denom']?.indexOf(denom) > 0);
-    const decimals = findData?.decimal || this.chainInfo?.currencies[0].coinDecimals;
-    let totalSupply = 0;
-    if (findData?.denom) {
-      const tempDenom = await this.ibcService.getTotalSupplyLCD(encodeURIComponent(findData?.denom));
-      totalSupply = _.get(tempDenom, 'data.amount.amount' || 0); 
+    // check exit ibc denom
+    if (!findData) {
+      this.loading = false;
+      this.errTxt = 'No Data';
     }
+    this.getDenomHolder(findData);
+  }
 
+  async getDenomHolder(data) {
+    const [denom, channel] = await Promise.all([
+      this.ibcService.getTotalSupplyLCD(encodeURIComponent(data?.denom)),
+      this.ibcService.getChannelInfoByDenom(encodeURIComponent(data?.denom)),
+    ]);
+
+    const decimals = data?.decimal || this.chainInfo?.currencies[0].coinDecimals;
     this.tokenDetail = {
-      modeToken: findData?.denom ? EModeToken.IBCCoin : EModeToken.StakingCoin,
-      denomHash: findData?.denom,
-      name: findData?.name,
-      price: findData?.current_price,
-      symbol: findData?.symbol || findData?.display,
-      isValueUp: findData?.price_change_percentage_24h && findData?.price_change_percentage_24h >= 0,
-      change: findData?.price_change_percentage_24h || 0,
+      modeToken: data?.denom ? EModeToken.IBCCoin : EModeToken.StakingCoin,
+      denomHash: data?.denom,
+      name: data?.name,
+      price: data?.current_price,
+      symbol: data?.symbol || data?.display,
+      isValueUp: data?.price_change_percentage_24h && data?.price_change_percentage_24h >= 0,
+      change: data?.price_change_percentage_24h || 0,
       decimals,
-      totalSupply,
+      totalSupply: _.get(denom, 'data.amount.amount' || 0),
+      channelPath: _.get(channel, 'data.denom_trace'),
     };
+
+    this.ibcService.getDenomHolder(data?.denom).subscribe((res) => {
+      this.tokenDetail['holder'] = _.get(res, 'account_aggregate.aggregate.count');
+    });
     this.loading = false;
   }
 
-  getTokenDetailByDenom(): void {
+  async getDataNative(denomNative: string) {
+    const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative);
+    console.log(tempTotal);
+    
+    this.tokenDetail = {
+      modeToken: EModeToken.StakingCoin,
+      name: this.chainInfo.chainName,
+      price: 1,
+      symbol: this.chainInfo?.currencies[0].coinDenom,
+      isValueUp: false,
+      change: 0,
+      decimals: this.chainInfo?.currencies[0].coinDecimals,
+      totalSupply: _.get(tempTotal, 'data.amount.amount' || 0),
+    };
+    this.loading = false;
   }
 }
