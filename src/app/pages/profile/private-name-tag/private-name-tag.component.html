@@ -23,9 +23,9 @@
             [maxLength]="maxLengthSearch"
             (keyup)="onKeyUp()"
             name="search"
-            autocomplete="off" />
+            autocomplete="off"/>
           <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
           </button>
           <button
             type="reset"
@@ -33,7 +33,7 @@
               !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
             }}"
             (click)="resetFilterSearch()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
           </button>
         </div>
       </form>
@@ -69,7 +69,7 @@
                     height="16"
                     class="cursor-pointer"
                     (click)="updateFavorite(data)"
-                    *ngIf="data.isFavorite" />
+                    *ngIf="data.isFavorite"/>
                 </div>
                 <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
                   <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
@@ -106,11 +106,11 @@
                     <i
                       class="ph ph-note-pencil body-01 cursor-pointer aura-tooltip-object"
                       (click)="openPopup(data)"></i>
-                    <app-tooltip-customize [content]="'Edit'"> </app-tooltip-customize>
+                    <app-tooltip-customize [content]="'Edit'"></app-tooltip-customize>
                   </div>
                   <div class="aura-tooltip-contain ml-6">
                     <i class="ph ph-x body-01 cursor-pointer aura-tooltip-object" (click)="openPopupDelete(data)"></i>
-                    <app-tooltip-customize [content]="'Remove'"> </app-tooltip-customize>
+                    <app-tooltip-customize [content]="'Remove'"></app-tooltip-customize>
                   </div>
                 </div>
               </ng-container>
@@ -145,11 +145,11 @@
                 height="16"
                 class="cursor-pointer"
                 (click)="updateFavorite(data)"
-                *ngIf="data.isFavorite" />
+                *ngIf="data.isFavorite"/>
             </div>
             <div class="dropdown aura-dropdown">
               <button class="button px-2" id="delegateAction2" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="assets/icons/icons-svg/white/DotsThreeOutlineVertical.svg" alt="" />
+                <img [src]="'assets/icons/icons-svg/white/DotsThreeOutlineVertical.svg' | imageS3" alt=""/>
               </button>
               <ul
                 class="dropdown-menu aura-dropdown-menu border-sm border-gray-9 border-radius--sm"

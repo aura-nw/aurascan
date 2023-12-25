@@ -5,14 +5,14 @@
       <div class="box-connect d-lg-flex justify-content-between align-items-center">
         <div class="box-connect-chain d-flex align-items-center">
           <div class="d-flex justify-content-lg-center align-items-center">
-            <img src="assets/images/logo/auraTitleLogo.png" alt="" class="img-chain" />
+            <img [src]="'assets/images/logo/auraTitleLogo.png' | imageS3" alt="" class="img-chain"/>
             <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
                 <span
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     chainInfo.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                  >{{ chainInfo.chainName | ellipsis : maxDisplayChar }}</span
+                >{{ chainInfo.chainName | ellipsis : maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
               </div>
@@ -26,16 +26,16 @@
         <div class="box-connect-chain mt-6 mt-lg-0 d-flex align-items-center pl-lg-9">
           <div class="d-flex justify-content-lg-center align-items-center">
             <img
-              [src]="counterInfo?.chainImage ? counterInfo?.chainImage : 'assets/images/logo/auraTitleLogo.png'"
+              [src]="counterInfo?.chainImage ? counterInfo?.chainImage : ('assets/images/logo/auraTitleLogo.png' | imageS3)"
               alt=""
-              class="img-chain" />
+              class="img-chain"/>
             <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
                 <span
                   class="body-01 body-02-mob fw-semibold text--white mb-1 {{
                     counterInfo?.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                   }}"
-                  >{{ counterInfo?.chainName | ellipsis : maxDisplayChar }}</span
+                >{{ counterInfo?.chainName | ellipsis : maxDisplayChar }}</span
                 >
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
               </div>
