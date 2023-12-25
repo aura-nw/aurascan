@@ -8,7 +8,6 @@
               <th mat-header-cell *matHeaderCellDef>
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
-
               <td mat-cell *matCellDef="let data" style="max-width: 200px">
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
