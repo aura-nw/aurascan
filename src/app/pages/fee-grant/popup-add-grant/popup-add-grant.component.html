@@ -6,7 +6,7 @@
         class="icon-close"
         [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
         alt=""
-        (click)="closeDialog()"/>
+        (click)="closeDialog()" />
     </div>
   </div>
   <div class="card-body">
@@ -28,7 +28,7 @@
               class="form-control form-check-input"
               placeholder="Grantee's address"
               (ngModelChange)="checkFormValid()"
-              [class.form-control--error]="grantForm.get('grantee_address')?.invalid && isSubmit"/>
+              [class.form-control--error]="grantForm.get('grantee_address')?.invalid && isSubmit" />
             <div class="error" *ngIf="isInvalidAddress">This is not aura's externally owned account</div>
           </div>
         </div>
@@ -50,7 +50,7 @@
                 separatorLimit="9999"
                 placeholder="Amount"
                 (ngModelChange)="checkFormValid()"
-                formControlName="amount"/>
+                formControlName="amount" />
               <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
             </div>
           </div>
@@ -74,7 +74,7 @@
                 [style]="'max-width: 90%'"
                 placeholder="yyyy-mm-dd"
                 (ngModelChange)="checkFormValid()"
-                formControlName="expiration_time"/>
+                formControlName="expiration_time" />
               <button class="mr-1 button" *ngIf="grantForm.get('expiration_time')?.value" (click)="removeTime()">
                 <i class="ph ph-x h2 cursor-pointer text--white"></i>
               </button>
@@ -102,7 +102,7 @@
                 id="granted"
                 class="radio-box radio-box--dark"
                 [checked]="periodShow"
-                (change)="changePeriodStage(true)"/>
+                (change)="changePeriodStage(true)" />
               <label for="granted" class="ml-2 mb-0 text-justify">Yes</label>
             </div>
             <div class="form-group d-flex align-items-center ml-8">
@@ -112,7 +112,7 @@
                 id="not-granted"
                 class="radio-box radio-box--dark"
                 [checked]="!periodShow"
-                (change)="changePeriodStage(false)"/>
+                (change)="changePeriodStage(false)" />
               <label for="not-granted" class="ml-2 mb-0 text-justify">No</label>
             </div>
           </div>
@@ -137,7 +137,7 @@
                   mask="separator.6"
                   separatorLimit="9999"
                   (ngModelChange)="checkFormValid()"
-                  formControlName="period_amount"/>
+                  formControlName="period_amount" />
                 <div class="d-flex align-items-center mr-2">
                   <button
                     class="button button-flat button--sm button-max body-02"
@@ -167,7 +167,7 @@
                   mask="separator.0"
                   separatorLimit="99999"
                   (ngModelChange)="checkFormValid()"
-                  formControlName="period_day"/>
+                  formControlName="period_day" />
                 <div class="input-group-append h6 fw-normal mb-0">days</div>
               </div>
               <div class="error" *ngIf="isInvalidPeriod">
@@ -201,7 +201,7 @@
                 id="execute-contract"
                 class="check-box check-box--dark"
                 formControlName="isExecute"
-                (ngModelChange)="checkFormValid()"/>
+                (ngModelChange)="checkFormValid()" />
               <label for="execute-contract" class="ml-2 mb-0 text-justify"> Execute Contract </label>
             </div>
           </div>
@@ -253,7 +253,7 @@
                       formControlName="address"
                       (ngModelChange)="checkFormValid()"
                       type="text"
-                      class="form-control"/>
+                      class="form-control" />
                     <button class="mr-5 button" *ngIf="i > 0" (click)="removeContract(i)">
                       <i class="ph ph-x h2 cursor-pointer text--white"></i>
                     </button>
@@ -275,11 +275,11 @@
       <div class="row mt-6">
         <div class="card-note">
           <div class="d-flex align-items-center">
-            <img [src]="'assets/icons/icons-svg/color/warning.svg' | imageS3" alt="" width="20"/>
+            <img [src]="'assets/icons/icons-svg/color/warning.svg' | imageS3" alt="" width="20" />
             <div class="body fw-semibold ml-2">NOTE</div>
           </div>
           <div class="mt-2 body">
-            If field “Spend Limit Amount” is empty, there is no spend limit and any amount can be spent.<br/>
+            If field “Spend Limit Amount” is empty, there is no spend limit and any amount can be spent.<br />
             If field “Expiration Time” is empty, there is no expiry date for the granted amount.
           </div>
         </div>
