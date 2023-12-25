@@ -232,7 +232,7 @@ export class NFTDetailComponent implements OnInit {
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
             element['type'] = getTypeTx(element.tx)?.action;
-            if (element['type'] === ModeExecuteTransaction.Burn || element['type'] === ModeExecuteTransaction.UnEquip) {
+            if (element['type'] === ModeExecuteTransaction.Burn || element['type'] === ModeExecuteTransaction.UnEquip || element['type'] === ModeExecuteTransaction.Unwrap) {
               element['to_address'] = NULL_ADDRESS;
             } else if (
               element['type'] === ModeExecuteTransaction.Approve ||
