@@ -11,14 +11,14 @@
         <div class="box-connect d-lg-flex mb-lg-3 justify-content-between align-items-center">
           <div class="box-connect-chain d-flex align-items-center">
             <div class="d-flex justify-content-lg-center align-items-center">
-              <img [src]="'assets/images/logo/auraTitleLogo.png' | imageS3" class="img-chain" alt=""/>
+              <img [src]="'assets/images/logo/auraTitleLogo.png' | imageS3" class="img-chain" alt="" />
               <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
                 <div class="aura-tooltip-contain">
                   <span
                     class="body-01 body-02-mob fw-semibold text--white {{
                       chainInfo.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                     }}"
-                  >{{ chainInfo.chainName | ellipsis : maxDisplayChar }}
+                    >{{ chainInfo.chainName | ellipsis: maxDisplayChar }}
                   </span>
                   <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
                 </div>
@@ -34,16 +34,18 @@
           <div class="box-connect-chain mt-6 mt-lg-0 d-flex align-items-center pl-lg-9">
             <div class="d-flex justify-content-lg-center align-items-center">
               <img
-                [src]="counterInfo?.chainImage ? counterInfo?.chainImage : ('assets/images/logo/auraTitleLogo.png' | imageS3)"
+                [src]="
+                  counterInfo?.chainImage ? counterInfo?.chainImage : ('assets/images/logo/auraTitleLogo.png' | imageS3)
+                "
                 alt=""
-                class="img-chain"/>
+                class="img-chain" />
               <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
                 <div class="aura-tooltip-contain">
                   <span
                     class="body-01 body-02-mob fw-semibold text--white {{
                       counterInfo?.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
                     }}"
-                  >{{ counterInfo?.chainName | ellipsis : maxDisplayChar }}
+                    >{{ counterInfo?.chainName | ellipsis: maxDisplayChar }}
                   </span>
                   <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
                 </div>
@@ -68,13 +70,13 @@
                 *ngIf="template.headerCellDef !== 'channel' && template.headerCellDef !== 'counter'"></div>
               <div *ngIf="template.headerCellDef === 'channel'" class="aura-tooltip-contain">
                 <span class="{{ chainInfo.chainName?.length > 15 ? 'aura-tooltip-object' : '' }}">
-                  {{ chainInfo.chainName | ellipsis : 15 }}
+                  {{ chainInfo.chainName | ellipsis: 15 }}
                 </span>
                 <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
               </div>
               <div *ngIf="template.headerCellDef === 'counter'" class="aura-tooltip-contain">
                 <span class="{{ counterInfo?.chainName?.length > 15 ? 'aura-tooltip-object' : '' }}">
-                  {{ counterInfo?.chainName | ellipsis : 15 }}
+                  {{ counterInfo?.chainName | ellipsis: 15 }}
                 </span>
                 <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
               </div>

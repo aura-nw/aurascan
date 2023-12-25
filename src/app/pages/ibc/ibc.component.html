@@ -50,12 +50,12 @@
               [(ngModel)]="textSearch"
               (keyup)="searchListIBC()"
               name="search"
-              autocomplete="off"/>
+              autocomplete="off" />
             <button
               type="submit"
               class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
               (click)="getListIBC()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
@@ -63,7 +63,7 @@
                 !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -87,7 +87,7 @@
                         alt=""
                         class="mr-2"
                         width="24px"
-                        height="24px"/>
+                        height="24px" />
                       {{ data['chainName'] | ellipsis: 30 }}
                     </div>
                     <div
@@ -124,7 +124,7 @@
                   alt=""
                   class="mr-2"
                   width="24px"
-                  height="24px"/>
+                  height="24px" />
                 {{ data['chainName'] | ellipsis: 20 }}
               </div>
               <div class="txt-status d-flex align-items-center" [ngClass]="data.open_channel === 0 ? 'inactive' : ''">

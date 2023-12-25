@@ -23,9 +23,9 @@
             [maxLength]="maxLengthSearch"
             (keyup)="onKeyUp()"
             name="search"
-            autocomplete="off"/>
+            autocomplete="off" />
           <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
             type="reset"
@@ -33,7 +33,7 @@
               !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
             }}"
             (click)="resetFilterSearch()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
       </form>
@@ -69,11 +69,11 @@
                     height="16"
                     class="cursor-pointer"
                     (click)="updateFavorite(data)"
-                    *ngIf="data.isFavorite"/>
+                    *ngIf="data.isFavorite" />
                 </div>
                 <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
                   <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
-                    <span>{{ data[template.matColumnDef] | ellipsis : 8 : 8 }}</span>
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                   </a>
                   <div class="aura-tooltip-contain">
                     <div
@@ -93,10 +93,10 @@
                   {{ data[template.matColumnDef] }}
                 </div>
                 <div *ngSwitchCase="'name_tag'" class="profile-private-name-tag pe-auto">
-                  <div>{{ data.nameTag | ellipsis : 25 }}</div>
+                  <div>{{ data.nameTag | ellipsis: 25 }}</div>
                 </div>
                 <div *ngSwitchCase="'createdAt'">
-                  {{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}
+                  {{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}
                 </div>
                 <div *ngSwitchCase="'updatedAt'">
                   {{ (data[template.matColumnDef] | dateCustom)[0] }}
@@ -126,7 +126,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <div class="card__title">
             <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
-              <span class="fw-semibold">{{ data.address | ellipsis : 8 : 8 }}</span>
+              <span class="fw-semibold">{{ data.address | ellipsis: 8 : 8 }}</span>
             </a>
             <div class="text--gray-5 line-claim w-100" [class.aura-tooltip-object]="data.note">
               {{ data.note || 'Note:-' }}
@@ -145,11 +145,11 @@
                 height="16"
                 class="cursor-pointer"
                 (click)="updateFavorite(data)"
-                *ngIf="data.isFavorite"/>
+                *ngIf="data.isFavorite" />
             </div>
             <div class="dropdown aura-dropdown">
               <button class="button px-2" id="delegateAction2" data-bs-toggle="dropdown" aria-expanded="false">
-                <img [src]="'assets/icons/icons-svg/white/DotsThreeOutlineVertical.svg' | imageS3" alt=""/>
+                <img [src]="'assets/icons/icons-svg/white/DotsThreeOutlineVertical.svg' | imageS3" alt="" />
               </button>
               <ul
                 class="dropdown-menu aura-dropdown-menu border-sm border-gray-9 border-radius--sm"
@@ -182,7 +182,7 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Added time</div>
-            <div class="text--white">{{ data.createdAt | customDate : 'yyyy-MM-dd' }}</div>
+            <div class="text--white">{{ data.createdAt | customDate: 'yyyy-MM-dd' }}</div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Updated time</div>

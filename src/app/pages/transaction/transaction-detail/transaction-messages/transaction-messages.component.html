@@ -163,7 +163,7 @@
           (transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom === coinMinimalDenom
             ? denom
             : transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom
-          ) | ibcDenom : transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount
+          ) | ibcDenom: transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount
         "></div>
     </div>
     <app-messages-item
@@ -183,7 +183,7 @@
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="d-flex flex-wrap mb-2" *ngIf="ibcData?.receive?.denomOrigin">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
-      <div class="col-12 col-lg-9" [innerHTML]="ibcData?.receive?.denomOrigin | ibcDenom : ibcData?.amount"></div>
+      <div class="col-12 col-lg-9" [innerHTML]="ibcData?.receive?.denomOrigin | ibcDenom: ibcData?.amount"></div>
     </div>
     <app-messages-item
       [label]="'Origin Amount'"
@@ -215,7 +215,7 @@
     <div class="d-flex flex-wrap mb-2">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ ibcData?.acknowledgement?.amount | balance | mask : 'separator.6' }}
+        {{ ibcData?.acknowledgement?.amount | balance | mask: 'separator.6' }}
         <span class="text--white">{{ denom }}</span>
       </div>
     </div>
@@ -386,27 +386,28 @@
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
-                      <span class="d-lg-none">{{ item.tx_hash | ellipsis : 8 : 8 }}</span>
+                      <span class="d-lg-none">{{ item.tx_hash | ellipsis: 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </a>
                     <span *ngIf="item.denom !== denom">
-                      <span class="d-lg-none">{{ item.tx_hash | ellipsis : 8 : 8 }}</span>
+                      <span class="d-lg-none">{{ item.tx_hash | ellipsis: 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </span>
                   </div>
                   <div class="mt-1 ibc__date">
                     <div class="d-flex justify-content-end">
-                      <img [src]="'assets/icons/icons-svg/color/Check.svg' | imageS3"
-                           width="16"
-                           height="16"
-                           *ngIf="item.effected"
-                           class="mr-1"/>
+                      <img
+                        [src]="'assets/icons/icons-svg/color/Check.svg' | imageS3"
+                        width="16"
+                        height="16"
+                        *ngIf="item.effected"
+                        class="mr-1" />
                       {{ (item.time | dateCustom)[0] }}
                     </div>
                     <div class="d-flex justify-content-end align-items-center ml-2">
-                      <span>({{ item.time | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>({{ item.time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-1 mx-md-2"></div>
-                      <span>{{ item.time | customDate : 'HH:mm:ss' }})</span>
+                      <span>{{ item.time | customDate: 'HH:mm:ss' }})</span>
                     </div>
                   </div>
                 </div>
@@ -421,7 +422,7 @@
   <ng-template #multiSend>
     <div class="card-info box-multisend">
       <div class="card-text header-title d-flex align-items-center">
-        <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2"/>
+        <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2" />
         Multisend
       </div>
       <div class="body-multisend">
@@ -448,7 +449,7 @@
               <div class="ml-2">
                 <span
                   *ngIf="item?.coins?.length > 0"
-                  [innerHTML]="item?.coins[0]?.denom | ibcDenom : item?.coins[0]?.amount">
+                  [innerHTML]="item?.coins[0]?.denom | ibcDenom: item?.coins[0]?.amount">
                 </span>
               </div>
             </div>
@@ -511,7 +512,7 @@
     <div class="mb-3 d-flex box-header">
       <div class="col-12 col-lg-3">
         <div class="card-text header-title d-flex align-items-center">
-          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2"/>
+          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2" />
           {{ data.label || displayTitleTX() }}
         </div>
       </div>

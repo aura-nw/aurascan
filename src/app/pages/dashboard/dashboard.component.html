@@ -8,7 +8,7 @@
               <img
                 [src]="'assets/images/pages/banner_aurascan.png' | imageS3"
                 alt="Random first slide"
-                class="carousel__img"/>
+                class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
@@ -27,7 +27,7 @@
                 <div class="d-flex flex-column px-lg-4 flex-shrink-0 flex-grow-1">
                   <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
-                      <img [src]="'assets/images/logo/auraTitleLogo.png' | imageS3" alt="" width="40" height="40"/>
+                      <img [src]="'assets/images/logo/auraTitleLogo.png' | imageS3" alt="" width="40" height="40" />
                       <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">AURA</div>
                       <div class="aura-tooltip-contain">
                         <a
@@ -45,18 +45,18 @@
                       <div class="ml-4">
                         <div class="mb-2 body-03 text--gray-1">Price</div>
                         <div class="text--white h4 mb-0 fw-semibold">
-                          <span>{{ tokenInfo ? '$' + (tokenInfo?.current_price | number : '1.2-4') : '-' }}</span>
+                          <span>{{ tokenInfo ? '$' + (tokenInfo?.current_price | number: '1.2-4') : '-' }}</span>
                           <span
                             *ngIf="tokenInfo"
                             class="ml-1 body
                       {{ tokenInfo.price_change_percentage_24h > 0 ? 'text--green-3' : 'text--red-3' }}">
                             {{
-                            tokenInfo.price_change_percentage_24h
-                              ? '(' +
-                              (tokenInfo.price_change_percentage_24h > 0 ? '+' : '') +
-                              (tokenInfo.price_change_percentage_24h | number : '1.2-2') +
-                              '%)'
-                              : ''
+                              tokenInfo.price_change_percentage_24h
+                                ? '(' +
+                                  (tokenInfo.price_change_percentage_24h > 0 ? '+' : '') +
+                                  (tokenInfo.price_change_percentage_24h | number: '1.2-2') +
+                                  '%)'
+                                : ''
                             }}
                           </span>
                         </div>
@@ -68,7 +68,7 @@
                       <div class="ml-4">
                         <div class="mb-2 body-03 text--gray-1">Market Cap</div>
                         <div class="text--white h4 mb-0 fw-semibold">
-                          <span>{{ tokenInfo ? '$' + (tokenInfo.market_cap | number : '1.0-0') : '-' }}</span>
+                          <span>{{ tokenInfo ? '$' + (tokenInfo.market_cap | number: '1.0-0') : '-' }}</span>
                         </div>
                       </div>
                     </div>
@@ -78,7 +78,7 @@
                       <div class="ml-4">
                         <div class="mb-2 body-03 text--gray-1">24h Vol Trading</div>
                         <div class="text--white h4 mb-0 fw-semibold">
-                          <span>{{ tokenInfo ? '$' + (tokenInfo.total_volume | number : '1.0-0') : '-' }}</span>
+                          <span>{{ tokenInfo ? '$' + (tokenInfo.total_volume | number: '1.0-0') : '-' }}</span>
                         </div>
                       </div>
                     </div>
@@ -188,7 +188,7 @@
                 alt=""
                 class="icon-brand"
                 width="32px"
-                height="32px"/>
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Bonded Token</div>
               </div>
@@ -205,7 +205,7 @@
                 alt=""
                 class="icon-brand"
                 width="32px"
-                height="32px"/>
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Inflation rate</div>
               </div>
@@ -222,7 +222,7 @@
                 alt=""
                 class="icon-brand"
                 width="32px"
-                height="32px"/>
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Staking APR</div>
               </div>
@@ -243,7 +243,7 @@
               <img
                 [src]="'assets/images/pages/banner_aurascan.png' | imageS3"
                 alt="Random first slide"
-                class="carousel__img"/>
+                class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
@@ -267,7 +267,7 @@
                     aria-expanded="false">
                     <span class="body text-start line-claim">{{
                       curr_voting_Period ? curr_voting_Period.title : voting_Period_arr[0].title
-                      }}</span>
+                    }}</span>
                   </button>
                   <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light py-2 px-2">
                     <ng-container *ngFor="let item of voting_Period_arr">
@@ -303,25 +303,25 @@
                 <div>
                   <div class="text--gray-2">Yes</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{ curr_voting_Period ? (curr_voting_Period.tally.yes | formatDigit : 2) : '0,0' }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.yes | formatDigit: 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
                   <div class="text--gray-2">No</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{ curr_voting_Period ? (curr_voting_Period.tally.no | formatDigit : 2) : '0,0' }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no | formatDigit: 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
                   <div class="text--gray-2">Veto</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{ curr_voting_Period ? (curr_voting_Period.tally.no_with_veto | formatDigit : 2) : '0,0' }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no_with_veto | formatDigit: 2) : '0,0' }}%
                   </div>
                 </div>
                 <div>
                   <div class="text--gray-2">Abstain</div>
                   <div class="text--gray-1 fw-semibold mt-1">
-                    {{ curr_voting_Period ? (curr_voting_Period.tally.abstain | formatDigit : 2) : '0,0' }}%
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.abstain | formatDigit: 2) : '0,0' }}%
                   </div>
                 </div>
               </div>
@@ -330,7 +330,7 @@
           <div
             class="d-flex flex-column align-items-center justify-content-center h-100"
             *ngIf="voting_Period_arr.length === 0 && !errTxtVoting && !isLoadingVoting">
-            <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt=""/>
+            <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt="" />
             <div class="text--gray-3">No proposal within the voting period</div>
           </div>
           <app-table-no-data
@@ -378,7 +378,7 @@
                             *ngSwitchCase="'proposer'"
                             class="text--primary cursor-pointer break-all"
                             [routerLink]="['/validators', data.operator_address]">
-                            {{ data[template.matColumnDef] | ellipsis : 10 }}
+                            {{ data[template.matColumnDef] | ellipsis: 10 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
@@ -451,7 +451,7 @@
                             *ngSwitchCase="'tx_hash'"
                             class="text--primary cursor-pointer hash-link"
                             [routerLink]="['/transaction', data['tx_hash']]">
-                            {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
+                            {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
@@ -462,7 +462,7 @@
                           <div *ngSwitchCase="'type'">
                             <div class="aura-status aura-tooltip-contain">
                               <div class="label__status aura-tooltip-object">
-                                {{ data[template.matColumnDef] | ellipsis : 20 }}
+                                {{ data[template.matColumnDef] | ellipsis: 20 }}
                                 <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
                                   +{{ data.lstType?.length - 1 }}
                                 </div>
