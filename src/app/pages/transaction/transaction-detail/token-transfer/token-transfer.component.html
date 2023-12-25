@@ -27,7 +27,7 @@
                               <span
                                 *ngIf="data | marketInfo : 'symbol'"
                                 class="caption text-sm mb-1 aura-tooltip-object">
-                                {{ data | marketInfo : 'symbol' | stringEllipsis : maxLengthSymbol }}</span
+                                {{ data | marketInfo : 'symbol' | ellipsis : maxLengthSymbol }}</span
                               >
                               <app-tooltip-customize
                                 [content]="data | marketInfo : 'symbol'"
@@ -36,7 +36,7 @@
                             </div>
 
                             <span *ngIf="!breakpoint.value.matches" class="body-02">
-                              {{ data | marketInfo : 'name' | stringEllipsis : 20 }}
+                              {{ data | marketInfo : 'name' | ellipsis : 20 }}
                             </span>
                             <ng-container *ngIf="breakpoint.value.matches">
                               <span
