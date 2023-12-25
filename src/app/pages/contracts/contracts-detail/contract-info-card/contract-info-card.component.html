@@ -8,7 +8,7 @@
       aria-expanded="false">
       <h6 class="h4-mob mb-0 text--white fw-semibold">Information</h6>
       <button class="button d-lg-none" type="button">
-        <img src="assets/icons/icons-svg/white/chevron-down-white.svg" alt="" width="20px" />
+        <i class="ph ph-caret-down text--white h3"></i>
       </button>
     </div>
     <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
@@ -22,17 +22,13 @@
       </div>
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
-        <ng-container
-          *ngIf="
-            commonService.setNameTag(contractDetail?.address, null, false) !== contractDetail?.address;
-            else NoNameTag
-          ">
+        <ng-container *ngIf="(contractDetail?.address | nameTag : false) !== contractDetail?.address; else NoNameTag">
           <div class="box-name-tag">
-            <span class="line-claim">{{ commonService.setNameTag(contractDetail?.address, null, false) || '-' }}</span>
+            <span class="line-claim">{{ (contractDetail?.address | nameTag : false) || '-' }}</span>
             <a
               target="_blank"
-              [href]="extendLink(commonService.findUrlNameTag(contractDetail?.address))"
-              *ngIf="commonService.findUrlNameTag(contractDetail?.address)">
+              [href]="extendLink(contractDetail?.address | nameTag : null : 'url')"
+              *ngIf="contractDetail?.address | nameTag : null : 'url'">
               <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer mb-1"></i>
             </a>
           </div>
@@ -44,15 +40,15 @@
 
         <button
           class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-1 btn-private"
-          *ngIf="!commonService.checkPrivate(contractDetail?.address)"
+          *ngIf="!(contractDetail?.address | isPrivateNameTag)"
           (click)="editPrivateName()">
           <span class="caption fw-normal"> Set Private Name Tag </span>
         </button>
         <div
-          *ngIf="commonService.checkPrivate(contractDetail?.address)"
+          *ngIf="contractDetail?.address | isPrivateNameTag"
           class="mt-2 d-inline-flex box-private align-items-center text--white">
           <div class="d-inline-flex align-items-center private-name-tag">
-            <span class="line-claim">{{ commonService.setNameTag(contractDetail?.address) || '-' }}</span>
+            <span class="line-claim">{{ (contractDetail?.address | nameTag) || '-' }}</span>
           </div>
           <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
         </div>
@@ -68,7 +64,7 @@
       aria-expanded="false">
       <h6 class="h4-mob mb-0 text--white fw-semibold">More Info</h6>
       <button class="button d-lg-none" type="button">
-        <img src="assets/icons/icons-svg/white/chevron-down-white.svg" alt="" width="20px" />
+        <i class="ph ph-caret-down text--white h3"></i>
       </button>
     </div>
     <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
@@ -92,7 +88,7 @@
           </span>
           at txn
           <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-            {{ contractDetail?.tx_hash | cutStringPipe : 6 : 6 }}
+            {{ contractDetail?.tx_hash | ellipsis : 6 : 6 }}
           </a>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TabsAccountLink } from '../core/constants/account.enum';
-import { LENGTH_CHARACTER, NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
+import { LENGTH_CHARACTER, NULL_ADDRESS, NUMBER_CONVERT, STORAGE_KEYS } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
 import {
   CodeTransaction,
@@ -11,8 +11,9 @@ import {
   TypeTransaction,
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
+import { convertTxNative } from '../core/utils/common/info-common';
 import { balanceOf } from '../core/utils/common/parsing';
-import { getDataIBC } from '../core/utils/common/info-common';
+import local from '../core/utils/storage/local';
 Injectable();
 
 export class Globals {
@@ -21,7 +22,6 @@ export class Globals {
     aura: 0,
     btc: 0,
   };
-  listNameTag = [];
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
@@ -355,7 +355,7 @@ export function convertDataAccountTransaction(
   coinInfo,
   modeQuery,
   setReceive = false,
-  currentAddress,
+  currentAddress = null,
   coinConfig = null,
 ) {
   const txs = _.get(data, 'transaction').map((element) => {
@@ -407,52 +407,49 @@ export function convertDataAccountTransaction(
           toAddress = data.to;
           fromAddress = data.from;
           let { type, action } = getTypeTx(element, i);
-          let amountString = data.amount + denom;
-          let decimal = 6;
+          let amountString = data.amount + data.denom || denom;
+          let decimal = coinInfo.coinDecimals;
           let amountTemp = data.amount;
+          let denomOrigin;
           if (amountString?.indexOf('ibc') > -1) {
-            const dataIBC = getDataIBC(amountString, coinConfig);
+            const dataIBC = convertTxNative(amountString, coinInfo.coinDecimals);
             decimal = dataIBC['decimal'];
-            amount = balanceOf(Number(data.amount) || 0, dataIBC['decimal'] || 6);
-            denom = dataIBC['display'].indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
+            amount = balanceOf(Number(data.amount) || 0, dataIBC['decimal'] || decimal);
+            denomOrigin = dataIBC['denom'];
+            denom = dataIBC['display']?.indexOf('ibc') === -1 ? 'ibc/' + dataIBC['display'] : dataIBC['display'];
           } else {
-            amount = balanceOf(Number(data.amount) || 0, coinInfo.coinDecimals);
+            amount = balanceOf(Number(data.amount) || 0, decimal);
+            denom = coinInfo.coinDenom;
           }
-          const result = { type, toAddress, fromAddress, amount, denom, amountTemp, action, decimal };
+          const result = { type, toAddress, fromAddress, amount, denom, amountTemp, action, decimal, denomOrigin };
           arrTemp.push(result);
         });
         arrEvent = arrTemp;
         break;
       case TabsAccountLink.FtsTxs:
-        arrEvent = _.get(element, 'events')?.map((item, index) => {
+        arrEvent = _.get(element, 'cw20_activities')?.map((item, index) => {
           let { type, action } = getTypeTx(element, index);
-          let fromAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].from') || NULL_ADDRESS;
-          let toAddress = _.get(item, 'smart_contract_events[0].cw20_activities[0].to') || NULL_ADDRESS;
-          let denom = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.symbol');
-          let amountTemp = _.get(item, 'smart_contract_events[0].cw20_activities[0].amount');
-          let decimal = _.get(item, 'smart_contract_events[0].smart_contract.cw20_contract.decimal');
+          let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
+          let toAddress = _.get(item, 'to') || NULL_ADDRESS;
+          let denom = _.get(item, 'cw20_contract.symbol');
+          let amountTemp = _.get(item, 'amount');
+          let decimal = _.get(item, 'cw20_contract.decimal');
           let amount = balanceOf(amountTemp || 0, +decimal);
-          let contractAddress = _.get(item, 'smart_contract_events[0].smart_contract.address');
+          let contractAddress = _.get(item, 'cw20_contract.smart_contract.address');
           return { type, fromAddress, toAddress, amount, denom, contractAddress, action, amountTemp, decimal };
         });
         break;
       case TabsAccountLink.NftTxs:
-        arrEvent = _.get(element, 'events')?.map((item, index) => {
+        arrEvent = _.get(element, 'cw721_activities')?.map((item, index) => {
           let { type, action } = getTypeTx(element, index);
-          let fromAddress = _.get(item, 'smart_contract_events[0].cw721_activity.from') || NULL_ADDRESS;
-          let toAddress =
-            _.get(item, 'smart_contract_events[0].cw721_activity.to') ||
-            _.get(item, 'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address') ||
-            NULL_ADDRESS;
+          let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
+          let toAddress = _.get(item, 'to') || _.get(item, 'cw721_contract.smart_contract.address') || NULL_ADDRESS;
           if (action === 'burn') {
             toAddress = NULL_ADDRESS;
           }
 
-          let contractAddress = _.get(
-            item,
-            'smart_contract_events[0].cw721_activity.cw721_contract.smart_contract.address',
-          );
-          let tokenId = _.get(item, 'smart_contract_events[0].cw721_activity.cw721_token.token_id');
+          let contractAddress = _.get(item, 'cw721_contract.smart_contract.address');
+          let tokenId = _.get(item, 'cw721_token.token_id');
           let eventAttr = element.event_attribute_index;
           return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
         });
@@ -571,11 +568,42 @@ export function convertDataTransactionSimple(data, coinInfo) {
   return txs;
 }
 
-export function clearLocalData(){
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
-  localStorage.removeItem('userEmail');
-  localStorage.removeItem('listNameTag');
-  localStorage.removeItem('lstWatchList');
-  localStorage.removeItem('registerFCM');
+export function clearLocalData() {
+  local.removeItem(STORAGE_KEYS.USER_DATA);
+  local.removeItem(STORAGE_KEYS.LIST_NAME_TAG);
+  local.removeItem(STORAGE_KEYS.LIST_WATCH_LIST);
+  local.removeItem(STORAGE_KEYS.REGISTER_FCM);
+}
+
+export function convertTxIBC(data, coinInfo) {
+  const txs = _.get(data, 'ibc_ics20').map((data) => {
+    let element = data.ibc_message?.transaction;
+    const code = _.get(element, 'code');
+    let typeOrigin = _.get(element, 'transaction_messages[0].type');
+    const lstTypeTemp = _.get(element, 'transaction_messages');
+
+    let type = _.find(TYPE_TRANSACTION, { label: typeOrigin })?.value || typeOrigin?.split('.').pop();
+    if (type.startsWith('Msg')) {
+      type = type?.replace('Msg', '');
+    }
+
+    const status = code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+    let amountTemp = _.get(data, 'amount');
+    let amount = balanceOf(amountTemp || 0, coinInfo.coinDecimals);
+
+    return {
+      code,
+      tx_hash: _.get(element, 'hash'),
+      type,
+      status,
+      fee: balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals),
+      height: _.get(element, 'height'),
+      timestamp: _.get(element, 'timestamp'),
+      amount,
+      amountTemp,
+      denom: _.get(data, 'denom'),
+      lstTypeTemp,
+    };
+  });
+  return txs;
 }

@@ -1,13 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
-  MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { ABTActionType } from 'src/app/core/constants/token.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -26,6 +28,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   isLoading = false;
   MEDIA_TYPE = MEDIA_TYPE;
   imageUrl = '';
+  dfImg = '';
   animationUrl = '';
   ABT_ACTION = ABTActionType;
   currentABTAction = ABTActionType.Reject;
@@ -40,6 +43,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     private translate: TranslateService,
     private dialog: MatDialog,
     private soulboundService: SoulboundService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -59,6 +63,27 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
         this.imageUrl = this.commonService.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
       }
     }
+    const ipfsDomain = this.environmentService.ipfsDomain;
+
+    if (this.imageUrl.startsWith(ipfsDomain) || this.animationUrl.startsWith(ipfsDomain)) {
+      if (this.soulboundDetail?.token_img && !this.soulboundDetail?.token_img.startsWith(ipfsDomain)) {
+        this.imageUrl = this.soulboundDetail?.token_img;
+      }
+      if (this.soulboundDetail?.animation_url && !this.soulboundDetail?.animation_url.startsWith(ipfsDomain)) {
+        if (!this.soulboundDetail?.token_img) {
+          if (this.soulboundDetail.img_type === 'image/gif') {
+            this.imageUrl = this.soulboundDetail?.animation_url;
+          } else {
+            this.animationUrl = this.soulboundDetail?.animation_url;
+          }
+        } else if (this.soulboundDetail.img_type !== MEDIA_TYPE.IMG) {
+          this.animationUrl = this.soulboundDetail?.animation_url;
+        } else {
+          this.imageUrl = this.soulboundDetail?.token_img;
+        }
+      }
+    }
+    this.dfImg = this.commonService.getDefaultImg();
   }
 
   handleRejectABT(rejectAll = false) {

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
 import { CodeTransaction } from '../../../../core/constants/transaction.enum';
 
 export interface CardMobSimpleValidatorAddress {
@@ -63,7 +62,7 @@ export class CardMobAccountComponent implements OnInit {
   statusTransaction = CodeTransaction;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  constructor(public commonService: CommonService, private environmentService: EnvironmentService) {}
+  constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     if (this.modeQuery !== this.tabsData.ExecutedTxs) {

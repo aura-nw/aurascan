@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-schema-viewer',
@@ -8,11 +10,11 @@ import { Component, OnInit } from '@angular/core';
 export class SchemaViewerComponent implements OnInit {
   data;
   content;
-  constructor() {}
 
   ngOnInit(): void {
-    this.data = JSON.parse(localStorage.getItem('contractRawData'));
-    if (this.data.type === 'json') {
+    this.data = local.getItem<any>(STORAGE_KEYS.CONTRACT_RAW_DATA);
+
+    if (this.data?.type === 'json') {
       this.content = JSON.stringify(this.data.content).split(' ').join('').split('\\n').join('');
     } else {
       this.content = this.data.content;

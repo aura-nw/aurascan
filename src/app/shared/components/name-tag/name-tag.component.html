@@ -5,11 +5,11 @@
       [routerLink]="['/' + url, paramUrl || value]"
       class="text--primary break-all d-flex"
       [ngClass]="[
-        isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
+        isBox && !(paramUrl || value | checkDisplayTooltip) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
-        commonService.checkPrivate(paramUrl || value) ? 'private-name-tag' : ''
+        (paramUrl || value | isPrivateNameTag) ? 'private-name-tag' : ''
       ]"
-      [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
+      [class.aura-tooltip-object]="!(paramUrl || value | checkDisplayTooltip)">
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
     <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
@@ -21,11 +21,11 @@
       [href]="url + value"
       class="text--primary break-all d-flex"
       [ngClass]="[
-        isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
+        isBox && !(paramUrl || value | checkDisplayTooltip) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
-        commonService.checkPrivate(paramUrl || value) ? 'private-name-tag' : ''
+        (paramUrl || value | isPrivateNameTag) ? 'private-name-tag' : ''
       ]"
-      [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
+      [class.aura-tooltip-object]="!(paramUrl || value | checkDisplayTooltip)">
       <ng-container [ngTemplateOutlet]="contentData"> </ng-container>
     </a>
     <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
@@ -38,22 +38,22 @@
     <span
       class="break-all"
       [ngClass]="[
-        isBox && !commonService.checkDisplayTooltip(paramUrl || value) ? 'box-name-tag' : '',
+        isBox && !(paramUrl || value | checkDisplayTooltip) ? 'box-name-tag' : '',
         widthAuto ? 'w-auto' : '',
-        commonService.checkPrivate(paramUrl || value) ? 'private-name-tag' : ''
+        (paramUrl || value | isPrivateNameTag) ? 'private-name-tag' : ''
       ]"
-      [class.aura-tooltip-object]="!commonService.checkDisplayTooltip(paramUrl || value)">
+      [class.aura-tooltip-object]="!(paramUrl || value | checkDisplayTooltip)">
       <ng-container *ngIf="!fullText">
         <img
           [src]="'assets/images/icons/token-contract.svg' | imageS3"
-          [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+          [ngClass]="(paramUrl || value | checkDisplayTooltip) ? 'mr-1' : 'icon-name-tag'"
           width="16px"
           height="16px"
           *ngIf="iconContract" />
         <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
       </ng-container>
       <ng-container *ngIf="fullText">
-        <span class="d-none d-lg-flex">{{ commonService.setNameTag(value || paramUrl) || '-' }}</span>
+        <span class="d-none d-lg-flex">{{ (value || paramUrl | nameTag) || '-' }}</span>
         <span class="d-flex d-lg-none justify-content-center">
           <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
         </span>
@@ -74,18 +74,18 @@
     [src]="'assets/images/icons/token-contract.svg' | imageS3"
     *ngIf="isTokenDetail && isContractAddress(value)"
     alt=""
-    [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+    [ngClass]="(paramUrl || value | checkDisplayTooltip) ? 'mr-1' : 'icon-name-tag'"
     width="16px"
     height="16px" />
   <img
     [src]="'assets/images/icons/token-contract.svg' | imageS3"
-    [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+    [ngClass]="(paramUrl || value | checkDisplayTooltip) ? 'mr-1' : 'icon-name-tag'"
     width="16px"
     height="16px"
     *ngIf="iconContract" />
   <img
     [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-    [ngClass]="commonService.checkDisplayTooltip(paramUrl || value) ? 'mr-1' : 'icon-name-tag'"
+    [ngClass]="(paramUrl || value | checkDisplayTooltip) ? 'mr-1' : 'icon-name-tag'"
     alt="contract_verification"
     width="16px"
     height="16px"
@@ -95,13 +95,13 @@
   </ng-container>
   <ng-container *ngIf="fullText">
     <ng-container *ngIf="!fullTextMob">
-      <span class="d-none d-lg-flex">{{ commonService.setNameTag(value || paramUrl) || '-' }}</span>
+      <span class="d-none d-lg-flex">{{ (value || paramUrl | nameTag) || '-' }}</span>
       <span class="d-flex d-lg-none justify-content-center">
         <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
       </span>
     </ng-container>
     <ng-container *ngIf="fullTextMob">
-      <span>{{ commonService.setNameTag(value || paramUrl) || '-' }}</span>
+      <span>{{ (value || paramUrl | nameTag) || '-' }}</span>
     </ng-container>
   </ng-container>
   <ng-container *ngIf="extendUrl && extendUrlLink">
@@ -112,11 +112,11 @@
 </ng-template>
 
 <ng-template #displayNameTag>
-  <ng-container *ngIf="!commonService.checkDisplayTooltip(paramUrl || value)">
-    {{ (commonService.setNameTag(value) | cutStringPipe : maxCharacter) || '-' }}
+  <ng-container *ngIf="!(paramUrl || value | checkDisplayTooltip)">
+    {{ (value | nameTag | ellipsis : maxCharacter) || '-' }}
   </ng-container>
 
-  <ng-container *ngIf="commonService.checkDisplayTooltip(paramUrl || value)">
-    {{ (commonService.setNameTag(value) | cutStringPipe : 8 : 8) || '-' }}
+  <ng-container *ngIf="paramUrl || value | checkDisplayTooltip">
+    {{ (value | nameTag | ellipsis : 8 : 8) || '-' }}
   </ng-container>
 </ng-template>

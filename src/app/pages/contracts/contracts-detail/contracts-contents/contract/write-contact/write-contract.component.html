@@ -28,17 +28,14 @@
 
   <div class="box-content text--white mt-3">
     <ng-container *ngFor="let msg of root; index as index">
-      <!-- <p>{{ index + 1 }}.{{ getRequired(msg) }} <br />{{ msg | json }}</p> -->
       <mat-expansion-panel hideToggle *ngIf="msg.fieldName" class="custom-expansion-panel outline">
         <mat-expansion-panel-header class="content-contract txt-header">
           <mat-panel-title class="item-content body-02 text--gray-1">
             {{ index + 1 }}. {{ msg.fieldName }}
           </mat-panel-title>
-          <mat-panel-description> </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
-          <!-- {{ msg.fieldList | json}} -->
           <ng-container *ngFor="let item of msg.fieldList">
             <div [class.d-none]="item.fieldName === 'fund'" class="d-lg-block">
               <div class="d-flex align-items-center mb-2">

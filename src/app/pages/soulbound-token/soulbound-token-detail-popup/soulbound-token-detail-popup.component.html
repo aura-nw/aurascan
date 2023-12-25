@@ -11,7 +11,7 @@
             *ngIf="
               (getTypeFile(soulboundDetail) !== MEDIA_TYPE.IMG && !soulboundDetail?.ipfs?.animation_url) || isError
             "
-            [src]="commonService.getDefaultImg()" />
+            [src]="dfImg" />
           <img
             *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG && isError === false"
             (error)="error()"
@@ -66,18 +66,18 @@
             <div class="nft__prop">
               <div class="caption fw-normal">
                 <span class="d-none d-lg-flex">
-                  {{ prop.trait_type | stringEllipsis : 18 }}
+                  {{ prop.trait_type | ellipsis : 18 }}
                 </span>
                 <span class="d-flex d-lg-none">
-                  {{ prop.trait_type | stringEllipsis : 13 }}
+                  {{ prop.trait_type | ellipsis : 13 }}
                 </span>
               </div>
               <div class="h5 body-mob fw-semibold mb-0 text--white">
                 <span class="d-none d-lg-flex">
-                  {{ prop.value | stringEllipsis : 13 }}
+                  {{ prop.value | ellipsis : 13 }}
                 </span>
                 <span class="d-flex d-lg-none">
-                  {{ prop.value | stringEllipsis : 10 }}
+                  {{ prop.value | ellipsis : 10 }}
                 </span>
               </div>
             </div>
@@ -100,7 +100,7 @@
           [clickOutsideEnabled]="true"
           (clickOutside)="dropdownList.classList.remove('show')"
           (click)="dropdownList.classList.add('show')">
-          <img [src]="'assets/icons/icons-svg/white/chevron-down-white.svg' | imageS3" alt="" width="20px" />
+          <i class="ph ph-caret-down text--white h3"></i>
         </span>
       </button>
       <ul

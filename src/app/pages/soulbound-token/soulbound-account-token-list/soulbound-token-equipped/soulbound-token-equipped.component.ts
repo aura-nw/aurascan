@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource as MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -43,7 +42,6 @@ export class SoulboundTokenEquippedComponent implements OnInit {
     private soulboundService: SoulboundService,
     private route: ActivatedRoute,
     private walletService: WalletService,
-    public commonService: CommonService,
     private contractService: ContractService,
     private toastr: NgxToastrService,
   ) {}
@@ -95,7 +93,9 @@ export class SoulboundTokenEquippedComponent implements OnInit {
         this.countSelected = res.data.filter((k) => k.picked)?.length || 0;
         this.soulboundData.data = res.data;
         this.pageData.length = res.meta.count;
-        this.totalSBT.emit(this.pageData.length);
+        if (!this.textSearch) {
+          this.totalSBT.emit(this.pageData.length);
+        }
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {

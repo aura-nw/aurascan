@@ -1,0 +1,17 @@
+.table-transfer-assets {
+  height: 315px;
+  overflow-x: auto;
+}
+.card-body {
+  @media (min-height: 912px) {
+    height: 347px;
+  }
+}
+.card-ibc-assets {
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--aura-gray-9);
+  &:not(:last-child) {
+    margin-bottom: 16px;
+  }
+}

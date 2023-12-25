@@ -1,17 +1,14 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { from } from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { LENGTH_CHARACTER } from '../../../app/core/constants/common.constant';
-import { EventService } from '../../core/services/event.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
-import { WalletService } from '../../core/services/wallet.service';
-import { LAYOUT_MODE } from '../layouts.model';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
+import local from 'src/app/core/utils/storage/local';
+import { UserStorage } from 'src/app/core/models/auth.models';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -22,26 +19,19 @@ import { MenuItem } from './menu.model';
 /**
  * Horizontal-Topbar Component
  */
-export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
-  mode: string | undefined;
-  layoutMode!: string;
+export class HorizontaltopbarComponent implements OnInit {
   menuItems: MenuItem[] = MENU;
 
-  valueset: any;
   searchValue = null;
   pageTitle = null;
-  innerWidth;
+  innerWidth: number;
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
-  userEmail = '';
-  isNotiUnread = false;
+  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
 
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
-
-  @Output() settingsButtonClicked = new EventEmitter();
-  @Output() mobileMenuButtonClicked = new EventEmitter();
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -52,218 +42,21 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   constructor(
     public router: Router,
     public translate: TranslateService,
-    private eventService: EventService,
-    private walletService: WalletService,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
-    private commonService: CommonService,
-  ) {
-    router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.activateMenu();
-      }
-    });
-
-    // const features = this.environmentService.chainConfig.features;
-
-    // this.menuItems.forEach((item) => {
-    //   if (item.subItems) {
-    //     item.subItems.forEach((subItem) => {
-    //       const links = subItem.link.split('/');
-
-    //       // Check disabled for statistics menu,
-    //       if (['statistics', 'tokens'].includes(links[1])) {
-    //         const foundIndex = features.findIndex((item) => item === links[1]);
-    //         item.disabled = foundIndex < 0 ? true : false;
-    //         return;
-    //       }
-
-    //       // Check disabled submenu
-    //       const path = links.pop();
-
-    //       const foundIndex = features.findIndex((item) => item === path);
-
-    //       subItem.disabled = foundIndex < 0 ? true : false;
-    //     });
-    //   }
-    // });
-  }
+    private nameTagService: NameTagService,
+  ) {}
 
   ngOnInit(): void {
     this.getMenuLink();
-    this.layoutMode = LAYOUT_MODE;
     this.checkEnv();
-
-    // check account is in whitelist (Account Bound Token)
-    from([1])
-      .pipe(
-        delay(800),
-        mergeMap((_) => this.walletService.wallet$),
-      )
-      .subscribe((wallet) => {
-        if (wallet) {
-          this.currentAddress = this.walletService.wallet?.bech32Address;
-        } else {
-          this.currentAddress = null;
-        }
-      });
-
-    // check exit email
-    this.userEmail = localStorage.getItem('userEmail');
   }
 
   checkEnv() {
-    this.innerWidth = window.innerWidth;
     this.pageTitle =
       this.innerWidth > 992
         ? this.environmentService.environment.label.desktop
         : this.environmentService.environment.label.mobile;
-  }
-
-  /**
-   * Returns true or false if given menu item has child or not
-   * @param item menuItem
-   */
-  hasItems(item: MenuItem) {
-    return item.subItems !== undefined ? item.subItems.length > 0 : false;
-  }
-
-  /**
-   * on settings button clicked from topbar
-   */
-  onSettingsButtonClicked() {
-    document.body.classList.toggle('right-bar-enabled');
-  }
-
-  /**
-   * On menu click
-   */
-  onMenuClick(event: any) {
-    const nextEl = event.target.nextElementSibling;
-    if (nextEl) {
-      const parentEl = event.target.parentNode;
-      if (parentEl) {
-        parentEl.classList.remove('show');
-      }
-      nextEl.classList.toggle('show');
-    }
-    return false;
-  }
-
-  ngAfterViewInit() {
-    this.activateMenu();
-  }
-
-  /**
-   * remove active and mm-active class
-   */
-  _removeAllClass(className: any) {
-    const els = document.getElementsByClassName(className);
-    while (els[0]) {
-      els[0].classList.remove(className);
-    }
-  }
-
-  /**
-   * Topbar Light-Dark Mode Change
-   */
-  changeMode(mode: string) {
-    this.mode = mode;
-    this.layoutMode = mode;
-    this.eventService.broadcast('changeMode', mode);
-  }
-
-  /**
-   * Toggle the menu bar when having mobile screen
-   */
-  toggleMobileMenu(event: any) {
-    event.preventDefault();
-    this.mobileMenuButtonClicked.emit();
-  }
-
-  /**
-   * Toggles the right sidebar
-   */
-  toggleRightSidebar() {
-    this.settingsButtonClicked.emit();
-  }
-
-  /**
-   * Activates the menu
-   */
-  private activateMenu() {
-    const resetParent = (el: any) => {
-      const parent = el.parentElement;
-      if (parent) {
-        parent.classList.remove('active');
-        const parent2 = parent.parentElement;
-        this._removeAllClass('mm-active');
-        this._removeAllClass('mm-show');
-        if (parent2) {
-          parent2.classList.remove('active');
-          const parent3 = parent2.parentElement;
-          if (parent3) {
-            parent3.classList.remove('active');
-            const parent4 = parent3.parentElement;
-            if (parent4) {
-              parent4.classList.remove('active');
-              const parent5 = parent4.parentElement;
-              if (parent5) {
-                parent5.classList.remove('active');
-                const menuelement = document.getElementById('topnav-menu-content');
-                if (menuelement !== null)
-                  if (menuelement.classList.contains('show'))
-                    document.getElementById('topnav-menu-content')!.classList.remove('show');
-              }
-            }
-          }
-        }
-      }
-    };
-
-    // activate menu item based on location
-    const links: any = document.getElementsByClassName('side-nav-link-ref');
-    let matchingMenuItem = null;
-    // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < links.length; i++) {
-      // reset menu
-      resetParent(links[i]);
-    }
-    // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < links.length; i++) {
-      // tslint:disable-next-line: no-string-literal
-      if (location.pathname === links[i]['pathname']) {
-        matchingMenuItem = links[i];
-        break;
-      }
-    }
-
-    if (matchingMenuItem) {
-      const parent = matchingMenuItem.parentElement;
-      /**
-       * TODO: This is hard coded way of expading/activating parent menu dropdown and working till level 3.
-       * We should come up with non hard coded approach
-       */
-      if (parent) {
-        parent.classList.add('active');
-        const parent2 = parent.parentElement;
-        if (parent2) {
-          parent2.classList.add('active');
-          const parent3 = parent2.parentElement;
-          if (parent3) {
-            parent3.classList.add('active');
-            const parent4 = parent3.parentElement;
-            if (parent4) {
-              parent4.classList.add('active');
-              const parent5 = parent4.parentElement;
-              if (parent5) {
-                parent5.classList.add('active');
-              }
-            }
-          }
-        }
-      }
-    }
   }
 
   async handleSearch() {
@@ -273,7 +66,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     const regexRule = VALIDATORS.HASHRULE;
     if (this.searchValue) {
       this.searchValue = this.searchValue.trim();
-      const addressNameTag = this.commonService.findNameTag(this.searchValue);
+      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
       if (addressNameTag?.length > 0) {
         let urlLink = addressNameTag.length === LENGTH_CHARACTER.CONTRACT ? 'contracts' : 'account';
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -395,7 +188,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
   removeConfigCSV(data) {
     if (data.link === '/export-csv') {
-      localStorage.removeItem('setDataExport');
+      local.removeItem(STORAGE_KEYS.SET_DATA_EXPORT);
     }
   }
 }

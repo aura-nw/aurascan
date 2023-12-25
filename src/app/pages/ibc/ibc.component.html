@@ -1,0 +1,172 @@
+<div class="d-lg-flex justify-content-between align-items-center">
+  <div class="text--white fw-semibold h1">IBC Relayers</div>
+  <div class="text--gray-4 d-flex align-items-center mt-2 mt-lg-0 body" *ngIf="timeUpdate">
+    Updated at
+    <span class="ml-1">{{ timeUpdate | customDate: 'yyyy-MM-dd' }}</span>
+    <div class="divider divider-vertical divider-lighter mx-2"></div>
+    <span>{{ timeUpdate | customDate: 'HH:mm:ss' }}</span>
+  </div>
+</div>
+<section class="box-ibc-relayer">
+  <div class="row box-title-relay py-lg-6 py-4">
+    <div class="col-lg-3 col-6 mb-lg-0 mb-lg-0 mb-2">
+      <div class="item">
+        Connected Chains
+        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.connectedChain | number }}</div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="item">
+        Total Channels
+        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.totalOpen || '0/0' }}</div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="item">
+        Total Send
+        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.totalSend | number }}</div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="item">
+        Total Receive
+        <div class="body-01 text--white fw-semibold mt-1">{{ relayerInfo.totalReceive | number }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <!-- Title -->
+      <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-center mb-4" *ngIf="!errTxt">
+        <div class="h2 mt-0 text--white">Chain Connected</div>
+        <form class="aura-form single-input-field search-form mt-4 mt-lg-0" #searchForm>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search by Chain name"
+              [maxLength]="maxLengthSearch"
+              [(ngModel)]="textSearch"
+              (keyup)="searchListIBC()"
+              name="search"
+              autocomplete="off" />
+            <button
+              type="submit"
+              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+              (click)="getListIBC()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+            <button
+              type="reset"
+              class="btn-reset cursor-pointer {{
+                !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+              }}"
+              (click)="resetSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+          </div>
+        </form>
+      </div>
+      <!-- Table -->
+      <app-loading-sprint *ngIf="isLoadingTable"></app-loading-sprint>
+      <div class="overflow-scroll-x" *ngIf="pageData?.length > 0 && !isLoadingTable; else noValues">
+        <table mat-table [dataSource]="dataSource" class="aura-table ibc-relayer-table d-none d-lg-block">
+          <ng-container *ngFor="let template of templates; index as i">
+            <ng-container [matColumnDef]="template.matColumnDef">
+              <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+              <td mat-cell *matCellDef="let data; let i = index">
+                <div>
+                  <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
+                    <div *ngSwitchCase="'no'">#{{ pageData.pageIndex * pageData.pageSize + i + 1 }}</div>
+                    <div *ngSwitchCase="'chain'" class="d-flex align-items-center">
+                      <img
+                        [src]="data.image ? data.image : 'assets/images/logo/auraTitleLogo.png'"
+                        alt=""
+                        class="mr-2"
+                        width="24px"
+                        height="24px" />
+                      {{ data['chainName'] | ellipsis: 30 }}
+                    </div>
+                    <div
+                      *ngSwitchCase="'status'"
+                      class="txt-status d-flex align-items-center"
+                      [ngClass]="data.open_channel === 0 ? 'inactive' : ''">
+                      <span class="icon-connect"></span>
+                      {{ data.open_channel === 0 ? 'Inactive' : 'Active' }}
+                    </div>
+                    <div *ngSwitchCase="'channels'" class="">
+                      {{ data.open_channel || 0 }}/{{ data.total_channel || 0 }}
+                    </div>
+                    <div *ngSwitchDefault>{{ data[template.matColumnDef] | number }}</div>
+                  </ng-container>
+                </div>
+              </td>
+            </ng-container>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="row-chain"
+            [ngClass]="row.open_channel > 0 ? 'cursor-pointer' : ''"
+            (click)="openPopup(row)"></tr>
+        </table>
+
+        <div class="d-lg-none mobile">
+          <div *ngFor="let data of dataSourceMobile" class="card-chain" (click)="openPopup(data)">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="mr-6 d-flex align-items-center justify-content-center text--white">
+                <img
+                  [src]="data.image ? data.image : 'assets/images/logo/auraTitleLogo.png'"
+                  alt=""
+                  class="mr-2"
+                  width="24px"
+                  height="24px" />
+                {{ data['chainName'] | ellipsis: 20 }}
+              </div>
+              <div class="txt-status d-flex align-items-center" [ngClass]="data.open_channel === 0 ? 'inactive' : ''">
+                <span class="icon-connect"></span>
+                {{ data.open_channel === 0 ? 'Inactive' : 'Active' }}
+              </div>
+            </div>
+            <div class="divider divider-horizontal divider-lighter my-2"></div>
+            <div class="card__content text--white">
+              <div class="d-flex align-items-center mb-2 justify-content-between">
+                <div class="body text--gray-4 label__content">Total</div>
+                <div class="text--gray-1">{{ data.total_asset_transfer }}</div>
+              </div>
+              <div class="d-flex align-items-center mb-2 justify-content-between">
+                <div class="body text--gray-4 label__content">Receive</div>
+                <div class="text--gray-1">{{ data.receive_asset_transfer }}</div>
+              </div>
+              <div class="d-flex align-items-center mb-2 justify-content-between">
+                <div class="body text--gray-4 label__content">Send</div>
+                <div class="text--gray-1">{{ data.send_asset_transfer }}</div>
+              </div>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="body text--gray-4 label__content">Channels</div>
+                <div class="text--gray-1">{{ data.open_channel || 0 }}/{{ data.total_channel || 0 }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center justify-content-md-end">
+          <app-paginator
+            [length]="pageData.length"
+            [pageSize]="pageData.pageSize"
+            (paginator)="paginatorEmit($event)"
+            (pageEvent)="pageEvent($event)">
+          </app-paginator>
+        </div>
+      </div>
+
+      <!-- No data -->
+      <ng-template #noValues>
+        <app-table-no-data *ngIf="!isLoadingTable" [textNull]="errTxt"></app-table-no-data>
+      </ng-template>
+    </div>
+  </div>
+</section>

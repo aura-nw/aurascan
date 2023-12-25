@@ -15,13 +15,11 @@
   </div>
   <div class="box-content text--white mt-4">
     <ng-container *ngFor="let msg of root; index as index">
-      <!-- {{ child | json }} -->
       <mat-expansion-panel hideToggle *ngIf="msg.fieldName" class="custom-expansion-panel outline">
         <mat-expansion-panel-header class="content-contract txt-header">
           <mat-panel-title class="item-content body-02 text--gray-1">
             {{ index + 1 }}. {{ msg.fieldName }}
           </mat-panel-title>
-          <mat-panel-description> </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
