@@ -1,26 +1,27 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TokenService } from 'src/app/core/services/token.service';
+import {AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ContractRegisterType} from 'src/app/core/constants/contract.enum';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TokenService} from 'src/app/core/services/token.service';
 import {
   LENGTH_CHARACTER,
   NULL_ADDRESS,
   PAGE_EVENT,
   TIMEOUT_ERROR,
 } from '../../../../../../core/constants/common.constant';
-import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
+import {TYPE_TRANSACTION} from '../../../../../../core/constants/transaction.constant';
 import {
   CodeTransaction,
   ModeExecuteTransaction,
   StatusTransaction,
 } from '../../../../../../core/constants/transaction.enum';
-import { TableTemplate } from '../../../../../../core/models/common.model';
-import { CommonService } from '../../../../../../core/services/common.service';
-import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { getTypeTx } from '../../../../../../global/global';
+import {TableTemplate} from '../../../../../../core/models/common.model';
+import {CommonService} from '../../../../../../core/services/common.service';
+import {shortenAddress} from '../../../../../../core/utils/common/shorten';
+import {getTypeTx} from '../../../../../../global/global';
+import * as _ from "lodash";
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -37,24 +38,24 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
-    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From' },
-    { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'amountToken', headerCellDef: 'Amount', isShort: true },
+    {matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true},
+    {matColumnDef: 'type', headerCellDef: 'Method', isShort: true},
+    {matColumnDef: 'status', headerCellDef: 'Result'},
+    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
+    {matColumnDef: 'from_address', headerCellDef: 'From'},
+    {matColumnDef: 'to_address', headerCellDef: 'To'},
+    {matColumnDef: 'amountToken', headerCellDef: 'Amount', isShort: true},
   ];
 
   NFTTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
-    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From' },
-    { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'token_id', headerCellDef: 'Token ID' },
-    { matColumnDef: 'details', headerCellDef: 'Details' },
+    {matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true},
+    {matColumnDef: 'type', headerCellDef: 'Method', isShort: true},
+    {matColumnDef: 'status', headerCellDef: 'Result'},
+    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
+    {matColumnDef: 'from_address', headerCellDef: 'From'},
+    {matColumnDef: 'to_address', headerCellDef: 'To'},
+    {matColumnDef: 'token_id', headerCellDef: 'Token ID'},
+    {matColumnDef: 'details', headerCellDef: 'Details'},
   ];
 
   displayedColumns: string[];
@@ -89,7 +90,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private tokenService: TokenService,
     private router: Router,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -170,6 +172,10 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
             element['type'] = getTypeTx(element.tx)?.action;
+            if (element['type'] === undefined) {
+              const _type = element['tx'].transaction_messages[0]?.content['@type'];
+              element['type'] = _.find(TYPE_TRANSACTION, {label: _type})?.value || _type.split('.').pop();
+            }
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
@@ -273,7 +279,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
+    const {length, pageIndex, pageSize} = e;
     const next = length <= (pageIndex + 2) * pageSize;
     this.pageData = e;
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
