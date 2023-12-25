@@ -123,14 +123,14 @@
               [content]="[
                 {
                   label: 'Voter',
-                  class: !(data.voter | checkDisplayTooltip)
+                  class: !(data.voter | nameTagTooltipPipe)
                     ? (data.voter | isPrivateNameTag)
                       ? 'name-tag private-name-tag mb-0 text--primary'
                       : 'name-tag text--primary mb-0'
                     : 'text--primary',
                   info: !data?.voter
                     ? '-'
-                    : !(data.voter | checkDisplayTooltip)
+                    : !(data.voter | nameTagTooltipPipe)
                       ? '<a class=text--primary href=' +
                         ('/account/' + data.voter) +
                         '>' +
@@ -214,14 +214,14 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: !(data.depositors | checkDisplayTooltip)
+                  class: !(data.depositors | nameTagTooltipPipe)
                     ? (data.depositors | isPrivateNameTag)
                       ? 'name-tag private-name-tag mb-0 text--primary'
                       : 'name-tag text--primary mb-0'
                     : 'text--primary',
                   info: !data?.depositors
                     ? '-'
-                    : !(data.depositors | checkDisplayTooltip)
+                    : !(data.depositors | nameTagTooltipPipe)
                       ? '<a class=text--primary href=' +
                         ('/account/' + data.depositors) +
                         '>' +

@@ -121,8 +121,8 @@
                 {
                   address: distributionAcc,
                   label: 'Sender',
-                  class: !(distributionAcc | checkDisplayTooltip) ? 'name-tag' : '',
-                  info: !(distributionAcc | checkDisplayTooltip)
+                  class: !(distributionAcc | nameTagTooltipPipe) ? 'name-tag' : '',
+                  info: !(distributionAcc | nameTagTooltipPipe)
                     ? '<a class=text--primary href=' +
                       ('/account/' + distributionAcc) +
                       '>' +
@@ -137,8 +137,8 @@
                 {
                   address: data.recipient,
                   label: 'Recipient',
-                  class: !(data.recipient | checkDisplayTooltip) ? 'name-tag' : '',
-                  info: !(data.recipient | checkDisplayTooltip)
+                  class: !(data.recipient | nameTagTooltipPipe) ? 'name-tag' : '',
+                  info: !(data.recipient | nameTagTooltipPipe)
                     ? '<a class=text--primary href=' +
                       ('/account/' + data.recipient) +
                       '>' +

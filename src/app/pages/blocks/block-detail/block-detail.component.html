@@ -175,9 +175,7 @@
                               </div>
                             </div>
 
-                            <app-tooltip-customize
-                              [class]="'message-custom'"
-                              [content]="data.lstType | displayTypeToolTip">
+                            <app-tooltip-customize [class]="'message-custom'" [content]="data.lstType | combineTxsMsg">
                             </app-tooltip-customize>
                           </div>
                         </div>

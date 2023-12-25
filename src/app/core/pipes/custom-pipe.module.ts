@@ -6,8 +6,8 @@ import { JsonPipe } from './json.pipe';
 import { IbcDenomPipe, MarketInfoPipe } from './market-info.pipe';
 import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-tag.pipe';
 import { BalancePipe, FormatDigitPipe, GtePipe, GtPipe, LtePipe, LtPipe } from './number.pipe';
-import { EllipsisPipe } from './string.pipe';
-import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
+import { CombineTxsMsgPipe, EllipsisPipe } from './string.pipe';
+import { NameTagTooltipPipe } from './tooltip.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -15,11 +15,11 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     JsonPipe,
     ImageURLPipe,
     ReplaceIpfsPipe,
-    DisplayTypeToolTipPipe,
+    CombineTxsMsgPipe,
     FormatDigitPipe,
     NameTagPipe,
     MarketInfoPipe,
-    CheckDisplayTooltip,
+    NameTagTooltipPipe,
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     BalancePipe,
@@ -35,11 +35,11 @@ import { CheckDisplayTooltip, DisplayTypeToolTipPipe } from './tooltip.pipe';
     JsonPipe,
     ImageURLPipe,
     ReplaceIpfsPipe,
-    DisplayTypeToolTipPipe,
+    CombineTxsMsgPipe,
     FormatDigitPipe,
     NameTagPipe,
     MarketInfoPipe,
-    CheckDisplayTooltip,
+    NameTagTooltipPipe,
     IsPublicNameTagPipe,
     IsPrivateNameTagPipe,
     BalancePipe,

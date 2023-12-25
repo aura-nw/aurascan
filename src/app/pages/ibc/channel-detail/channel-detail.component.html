@@ -127,9 +127,7 @@
                           </div>
                         </div>
 
-                        <app-tooltip-customize
-                          [class]="'message-custom'"
-                          [content]="data.lstTypeTemp | displayTypeToolTip">
+                        <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
                         </app-tooltip-customize>
                       </div>
                     </div>

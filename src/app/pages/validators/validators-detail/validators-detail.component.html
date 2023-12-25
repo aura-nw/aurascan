@@ -373,12 +373,12 @@
                     [content]="[
                       {
                         label: '',
-                        class: !(data.delegator_address | checkDisplayTooltip)
+                        class: !(data.delegator_address | nameTagTooltipPipe)
                           ? (data.delegator_address | isPrivateNameTag)
                             ? 'name-tag private-name-tag text--primary'
                             : 'name-tag text--primary'
                           : 'text--primary',
-                        info: !(data.delegator_address | checkDisplayTooltip)
+                        info: !(data.delegator_address | nameTagTooltipPipe)
                           ? (data.delegator_address | nameTag | ellipsis: 16)
                           : (data.delegator_address | nameTag | ellipsis: 6 : 6)
                       },
