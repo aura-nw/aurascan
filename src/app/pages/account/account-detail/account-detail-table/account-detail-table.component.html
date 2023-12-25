@@ -37,7 +37,7 @@
                           [decimal]="0"></div>
                         <app-tooltip-customize
                           *ngIf="data[template.matColumnDef] >= 1000000"
-                          [content]="data[template.matColumnDef] | formatDigit : 2">
+                          [content]="data[template.matColumnDef] | formatDigit: 2">
                         </app-tooltip-customize>
                       </div>
                       <span class="text--white ml-1"> {{ denom }}</span>
@@ -51,22 +51,22 @@
                           [decimal]="0"></div>
                         <app-tooltip-customize
                           *ngIf="data[template.matColumnDef] >= 1000000"
-                          [content]="data[template.matColumnDef] | formatDigit : 2">
+                          [content]="data[template.matColumnDef] | formatDigit: 2">
                         </app-tooltip-customize>
                       </div>
                       <span class="text--white ml-1"> {{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'completion_time'">
                       <div class="d-flex align-items-center">
-                        <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
+                        <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
                         <div class="divider divider-vertical divider-lighter mx-2"></div>
-                        <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
+                        <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
                       </div>
-                      <div class="small-body">({{ (data[template.matColumnDef] | dateCustom : false)[1] }})</div>
+                      <div class="small-body">({{ (data[template.matColumnDef] | dateCustom: false)[1] }})</div>
                     </div>
                     <div *ngSwitchCase="'vesting_schedule'">
-                      {{ (data['date_format'] | dateCustom : false)[1] }} <br />({{
-                        (data['date_format'] | dateCustom : false)[0]
+                      {{ (data['date_format'] | dateCustom: false)[1] }} <br />({{
+                        (data['date_format'] | dateCustom: false)[0]
                       }})
                     </div>
                     <a
@@ -175,7 +175,7 @@
                         {{ item.validator_name }}
                       </span>
                     </div>
-                    <div class="text--white">{{ (item.completion_time | dateCustom : false)[1] }}</div>
+                    <div class="text--white">{{ (item.completion_time | dateCustom: false)[1] }}</div>
                   </a>
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between body-01">
@@ -188,9 +188,9 @@
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Completion Time</div>
                     <div class="d-flex align-items-center body-mob">
-                      <span>{{ item.completion_time | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-1"></div>
-                      <span>{{ item.completion_time | customDate : 'HH:mm:ss' }}</span>
+                      <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
@@ -248,9 +248,9 @@
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Time</div>
                     <div class="d-flex align-items-center">
-                      <span>{{ item.completion_time | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.completion_time | customDate : 'HH:mm:ss' }}</span>
+                      <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
@@ -267,9 +267,9 @@
                   <div class="d-flex justify-content-between mt-3">
                     <div class="text--gray-4">Vesting Schedule</div>
                     <div class="d-flex align-items-center">
-                      <span>{{ item.date_format | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>{{ item.date_format | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.date_format | customDate : 'HH:mm:ss' }}</span>
+                      <span>{{ item.date_format | customDate: 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
