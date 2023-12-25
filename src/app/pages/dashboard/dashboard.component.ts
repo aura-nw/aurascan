@@ -1,26 +1,26 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { formatNumber } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { Router } from '@angular/router';
-import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {formatNumber} from '@angular/common';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {Router} from '@angular/router';
+import {IChartApi, ISeriesApi, createChart} from 'lightweight-charts';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Subject, Subscription, timer } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
-import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { timeToUnix } from 'src/app/core/helpers/date';
-import { ProposalService } from 'src/app/core/services/proposal.service';
-import { ValidatorService } from 'src/app/core/services/validator.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { TableTemplate } from '../../../app/core/models/common.model';
-import { BlockService } from '../../../app/core/services/block.service';
-import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR } from '../../core/constants/common.constant';
-import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
-import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import {Subject, Subscription, timer} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {VOTING_STATUS} from 'src/app/core/constants/proposal.constant';
+import {CoingeckoService} from 'src/app/core/data-services/coingecko.service';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {timeToUnix} from 'src/app/core/helpers/date';
+import {ProposalService} from 'src/app/core/services/proposal.service';
+import {ValidatorService} from 'src/app/core/services/validator.service';
+import {WalletService} from 'src/app/core/services/wallet.service';
+import {TableTemplate} from '../../../app/core/models/common.model';
+import {BlockService} from '../../../app/core/services/block.service';
+import {TransactionService} from '../../../app/core/services/transaction.service';
+import {CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR} from '../../core/constants/common.constant';
+import {Globals, convertDataBlock, convertDataTransactionSimple} from '../../global/global';
+import {CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS} from './dashboard-chart-options';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,20 +32,20 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   chartRangeData = CHART_RANGE;
 
   templatesBlock: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
-    { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    {matColumnDef: 'height', headerCellDef: 'Height'},
+    {matColumnDef: 'proposer', headerCellDef: 'Proposer'},
+    {matColumnDef: 'num_txs', headerCellDef: 'Txs'},
+    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
   ];
 
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
 
   templatesTx: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'type', headerCellDef: 'Message' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash'},
+    {matColumnDef: 'height', headerCellDef: 'Height'},
+    {matColumnDef: 'type', headerCellDef: 'Message'},
+    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
   ];
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
@@ -54,6 +54,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  bannerList = this.environmentService.banner;
 
   chart: IChartApi = null;
   areaSeries: ISeriesApi<'Area'> = null;
@@ -124,6 +125,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initChart();
     this.getCoinInfo(this.chartRange);
     this.getVotingPeriod();
+    console.log(this.bannerList)
   }
 
   ngOnDestroy(): void {
@@ -138,6 +140,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getListTransaction();
     this.cdr.detectChanges();
   }
+
   // config chart
   initChart() {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
@@ -282,7 +285,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.chartRange = type;
 
-    const { value } = CHART_CONFIG[this.chartRange];
+    const {value} = CHART_CONFIG[this.chartRange];
 
     this.coingecko
       .getChartData(
@@ -290,11 +293,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         {
           days: value,
         },
-        { type: this.chartRange },
+        {type: this.chartRange},
       )
       .subscribe((res) => {
         if (res?.data?.length > 0) {
-          const { dataX, dataY } = this.parseDataFromApi(res.data);
+          const {dataX, dataY} = this.parseDataFromApi(res.data);
 
           this.originalData = [...this.originalData, ...res?.data];
           if (this.originalData.length > 0) {
@@ -318,7 +321,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     // update tooltip
-    this.chart.subscribeCrosshairMove(({ point, time, seriesPrices }) => {
+    this.chart.subscribeCrosshairMove(({point, time, seriesPrices}) => {
       if (
         point === undefined ||
         !time ||
@@ -348,8 +351,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         return;
       }
 
-      const { width, height, margin } = this.toolTipConfig;
-      const { clientWidth, clientHeight } = container;
+      const {width, height, margin} = this.toolTipConfig;
+      const {clientWidth, clientHeight} = container;
 
       const shiftedCoordinate = Math.max(0, Math.min(clientWidth - width, point.x - 50));
 
@@ -381,7 +384,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             }
 
             if (pro?.tally) {
-              const { yes, no, no_with_veto, abstain } = pro?.tally;
+              const {yes, no, no_with_veto, abstain} = pro?.tally;
               let totalVote = +yes + +no + +no_with_veto + +abstain;
               if (this.voting_Period_arr[index].tally) {
                 this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;
