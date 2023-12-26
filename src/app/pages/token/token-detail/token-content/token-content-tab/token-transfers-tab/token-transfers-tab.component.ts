@@ -18,9 +18,9 @@ import {
   StatusTransaction,
 } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
-import { CommonService } from '../../../../../../core/services/common.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { getTypeTx } from '../../../../../../global/global';
+import * as _ from 'lodash';
+import { getTypeTx } from 'src/app/core/utils/common/info-common';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -169,7 +169,11 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['timestamp'] = element.tx.timestamp;
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.tx)?.action;
+            element['type'] = getTypeTx(element.tx)?.type;
+            if (element['type'] === undefined) {
+              const _type = element['tx'].transaction_messages[0]?.content['@type'];
+              element['type'] = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
+            }
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
@@ -230,7 +234,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['timestamp'] = element.tx.timestamp;
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.tx)?.action;
+            element['type'] = getTypeTx(element.tx)?.type;
             element['decimal'] = element.cw20_contract.decimal;
           });
           if (this.dataSource.data.length > 0 && !isReload) {
