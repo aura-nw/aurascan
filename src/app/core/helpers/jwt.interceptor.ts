@@ -5,7 +5,10 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { UserService } from '../services/user.service';
 import { NotificationsService } from '../services/notifications.service';
 import { Router } from '@angular/router';
-import {clearLocalData} from "src/app/global/global";
+import { clearLocalData } from 'src/app/global/global';
+import local from '../utils/storage/local';
+import { STORAGE_KEYS } from '../constants/common.constant';
+import { UserStorage } from '../models/auth.models';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -23,17 +26,22 @@ export class JwtInterceptor implements HttpInterceptor {
     }
     const graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
     // get list name tag if not login email
-    const userEmail = localStorage.getItem('userEmail');
-    let accessToken = localStorage.getItem('accessToken');
-    if (!accessToken || !userEmail) {
+    const userStorage = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA);
+    if (!userStorage) {
       return next.handle(request);
     }
 
-    const jwtToken = this.parseJwt(accessToken);
+    let jwtToken;
+    try {
+      jwtToken = this.parseJwt(userStorage.accessToken);
+    } catch {
+      return next.handle(request);
+    }
+
     if (!this.isReloadToken && jwtToken.exp < Date.now() / 1000) {
       this.isReloadToken = true;
       const payload = {
-        refreshToken: localStorage.getItem('refreshToken').replace(/"/g, ''),
+        refreshToken: userStorage.refreshToken,
       };
       this.userService.refreshToken(payload).subscribe({
         next: (res) => {
@@ -55,9 +63,13 @@ export class JwtInterceptor implements HttpInterceptor {
             }, 500);
           }
 
-          localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
-          localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
-          accessToken = res.accessToken;
+          const userData = {
+            email: userStorage.email,
+            accessToken: res.accessToken,
+            refreshToken: res.refreshToken,
+          };
+
+          local.setItem(STORAGE_KEYS.USER_DATA, userData);
         },
         error: (err) => {
           this.isReloadToken = false;
@@ -78,10 +90,10 @@ export class JwtInterceptor implements HttpInterceptor {
       });
     }
 
-    if (accessToken && request.url.indexOf(graphUrl) === -1) {
+    if (userStorage.accessToken && request.url.indexOf(graphUrl) === -1) {
       request = request.clone({
         setHeaders: {
-          Authorization: 'Bearer ' + accessToken.replace(/"/g, ''),
+          Authorization: 'Bearer ' + userStorage.accessToken,
         },
       });
     }

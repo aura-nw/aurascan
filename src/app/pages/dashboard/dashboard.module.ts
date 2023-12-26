@@ -6,7 +6,7 @@ import { NgbCarouselModule, NgbDropdownModule, NgbNavModule } from '@ng-bootstra
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
@@ -30,7 +30,7 @@ import { DashboardComponent } from './dashboard.component';
     MaterialModule,
     NgxMaskPipe,
     NgxMaskDirective,
-    CommonPipeModule,
+    CustomPipeModule,
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,

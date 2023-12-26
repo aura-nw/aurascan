@@ -1,0 +1,177 @@
+<div class="card card-ibc">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="h2 h3-mob mb-0 text--white w-100 fw-700 fw-semibold-mob">Relayer Details</div>
+      <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-center px-4 px-lg-0 mt-6 mt-lg-0 mb-4 mb-lg-0">
+      <div class="col-12 col-lg-11">
+        <div class="box-connect d-lg-flex mb-lg-3 justify-content-between align-items-center">
+          <div class="box-connect-chain d-flex align-items-center">
+            <div class="d-flex justify-content-lg-center align-items-center">
+              <img src="assets/images/logo/auraTitleLogo.png" class="img-chain" alt="" />
+              <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
+                <div class="aura-tooltip-contain">
+                  <span
+                    class="body-01 body-02-mob fw-semibold text--white {{
+                      chainInfo.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
+                    }}"
+                    >{{ chainInfo.chainName | ellipsis : maxDisplayChar }}
+                  </span>
+                  <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
+                </div>
+                <div class="mt-1">{{ chainInfo.chainId }}</div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="box-connected flex-column align-items-center caption-mob body-02 justify-content-center d-none d-lg-flex">
+            <div class="fw-semibold">Connected</div>
+            <div class="caption fw-normal mt-1">{{ data.open_channel }}/{{ data.total_channel }} channel</div>
+          </div>
+          <div class="box-connect-chain mt-6 mt-lg-0 d-flex align-items-center pl-lg-9">
+            <div class="d-flex justify-content-lg-center align-items-center">
+              <img
+                [src]="counterInfo?.chainImage ? counterInfo?.chainImage : 'assets/images/logo/auraTitleLogo.png'"
+                alt=""
+                class="img-chain" />
+              <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
+                <div class="aura-tooltip-contain">
+                  <span
+                    class="body-01 body-02-mob fw-semibold text--white {{
+                      counterInfo?.chainName?.length > maxDisplayChar ? 'aura-tooltip-object' : ''
+                    }}"
+                    >{{ counterInfo?.chainName | ellipsis : maxDisplayChar }}
+                  </span>
+                  <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
+                </div>
+                <div class="mt-1">{{ counterInfo?.chainId }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="divider divider-horizontal d-none d-lg-block"></div>
+          <div class="divider divider-vertical d-lg-none"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-scroll-x" *ngIf="pageData?.length > 0; else noValues">
+      <table mat-table [dataSource]="dataSource" class="aura-table relayer-detail-table d-none d-lg-block">
+        <ng-container *ngFor="let template of templates; index as i">
+          <ng-container [matColumnDef]="template.matColumnDef">
+            <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth" class="text-normal">
+              <div
+                [innerHTML]="template.headerCellDef | translate"
+                *ngIf="template.headerCellDef !== 'channel' && template.headerCellDef !== 'counter'"></div>
+              <div *ngIf="template.headerCellDef === 'channel'" class="aura-tooltip-contain">
+                <span class="{{ chainInfo.chainName?.length > 15 ? 'aura-tooltip-object' : '' }}">
+                  {{ chainInfo.chainName | ellipsis : 15 }}
+                </span>
+                <app-tooltip-customize [content]="chainInfo.chainName"></app-tooltip-customize>
+              </div>
+              <div *ngIf="template.headerCellDef === 'counter'" class="aura-tooltip-contain">
+                <span class="{{ counterInfo?.chainName?.length > 15 ? 'aura-tooltip-object' : '' }}">
+                  {{ counterInfo?.chainName | ellipsis : 15 }}
+                </span>
+                <app-tooltip-customize [content]="counterInfo?.chainName"></app-tooltip-customize>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let data; let i = index">
+              <div>
+                <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
+                  <div *ngSwitchCase="'channel_id'" class="d-flex align-items-center">
+                    <span style="min-width: 130px">{{ data[template.matColumnDef] }}</span>
+                    <i
+                      class="ph ph-link-simple-horizontal"
+                      [ngClass]="data.state !== 'Close' ? 'text--green-6' : ''"></i>
+                  </div>
+                  <div
+                    *ngSwitchCase="'state'"
+                    class="txt-state d-flex align-items-center"
+                    [ngClass]="data.state === 'Close' ? 'close' : ''">
+                    <span class="icon-connect"></span>
+                    {{ data[template.matColumnDef] }}
+                  </div>
+                  <div *ngSwitchCase="'operatingSince'">
+                    {{ !data[template.matColumnDef] ? '-' : (data[template.matColumnDef] | dateCustom)[0] }}
+                  </div>
+                  <div *ngSwitchCase="'total'">{{ data.state === 'Close' ? '-' : data?.total?.aggregate.count }}</div>
+                  <div *ngSwitchCase="'receive'">
+                    {{ data.state === 'Close' ? '-' : data?.receive?.aggregate.count }}
+                  </div>
+                  <div *ngSwitchCase="'send'">{{ data.state === 'Close' ? '-' : data?.send?.aggregate.count }}</div>
+                  <div *ngSwitchCase="'channels'" class="">{{ data[template.matColumnDef] }}</div>
+                  <div *ngSwitchCase="'action'" class="">
+                    <button
+                      class="button button--sm button-pill button-outline"
+                      [disabled]="data.state === 'Close'"
+                      (click)="showDetail(data)">
+                      <span>View</span>
+                    </button>
+                  </div>
+                  <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <div class="d-lg-none mobile" [class.safari-device]="isSafari">
+        <div *ngFor="let data of dataSourceMobile" class="card-relayer" (click)="showDetail(data)">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <span>{{ data.channel_id }}</span>
+              <i
+                class="ph ph-link-simple-horizontal px-2"
+                [ngClass]="data.state !== 'Close' ? 'text--green-6' : ''"></i>
+              <span>{{ data.counterparty_channel_id }}</span>
+            </div>
+            <div class="txt-state d-flex align-items-center" [ngClass]="data.state === 'Close' ? 'close' : ''">
+              <span class="icon-connect"></span>
+              {{ data.state }}
+            </div>
+          </div>
+          <div class="divider divider-horizontal divider-lighter my-2"></div>
+          <div class="card__content text--white body-01">
+            <div class="d-flex align-items-center mb-2 justify-content-between">
+              <div class="body text--gray-4 label__content">Operating Since</div>
+              <div>{{ !data.operatingSince ? '-' : (data.operatingSince | dateCustom)[0] }}</div>
+            </div>
+            <div class="d-flex align-items-center mb-2 justify-content-between">
+              <div class="body text--gray-4 label__content">Total</div>
+              <div>{{ data.total?.aggregate.count }}</div>
+            </div>
+            <div class="d-flex align-items-center mb-2 justify-content-between">
+              <div class="body text--gray-4 label__content">Receive</div>
+              <div>{{ data.receive?.aggregate.count }}</div>
+            </div>
+            <div class="d-flex align-items-center mb-2 justify-content-between">
+              <div class="body text--gray-4 label__content">Send</div>
+              <div>{{ data.send?.aggregate.count }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center justify-content-md-end">
+        <app-paginator
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noValues>
+    <ng-container *ngIf="!isLoading">
+      <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+    </ng-container>
+  </ng-template>
+</div>

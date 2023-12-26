@@ -5,20 +5,20 @@ import {
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { Subject, forkJoin } from 'rxjs';
+import * as _ from 'lodash';
+import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
-import * as _ from 'lodash';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -59,22 +59,19 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     public nameTagService: NameTagService,
     private dialog: MatDialog,
     private toastr: NgxToastrService,
-    private global: Globals,
     private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
-    const dataNameTag = localStorage.getItem('setAddressNameTag');
+    const dataNameTag = local.getItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
     if (dataNameTag && dataNameTag !== 'undefined') {
-      const data = JSON.parse(dataNameTag);
-      localStorage.removeItem('setAddressNameTag');
+      local.removeItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
 
       setTimeout(() => {
-        this.openPopup(data, true);
+        this.openPopup(dataNameTag, true);
       }, 500);
     }
 
-    this.commonService.listNameTag = this.global.listNameTag;
     this.getListPrivateName();
     this.searchSubject
       .asObservable()
@@ -239,13 +236,10 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
       keyword: null,
     };
 
-    const listNameTag = localStorage.getItem('listNameTag');
+    const listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
     this.nameTagService.getListPrivateNameTag(payloadPrivate).subscribe((privateName) => {
-      try {
-        let data = JSON.parse(listNameTag);
-        this.global.listNameTag = this.commonService.listNameTag = data;
-      } catch (e) {}
-      let listTemp = this.global.listNameTag?.map((element) => {
+      this.nameTagService.listNameTag = listNameTag;
+      let listTemp = this.nameTagService.listNameTag?.map((element) => {
         const address = _.get(element, 'address');
         let name_tag = _.get(element, 'name_tag');
         let isPrivate = false;
@@ -272,7 +266,8 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
         element['isPrivate'] = true;
       });
       const result = [...listTemp, ...lstPrivate];
-      this.global.listNameTag = this.commonService.listNameTag = result;
+      this.nameTagService.listNameTag = [...result];
+      local.setItem(STORAGE_KEYS.LIST_NAME_TAG, result);
     });
   }
 }

@@ -251,7 +251,7 @@
                             </div>
                           </div>
                           <span [class.text-jailed]="data['jailed']" class="break-word">
-                            {{ data[template.matColumnDef] | stringEllipsis : 15 }}
+                            {{ data[template.matColumnDef] | ellipsis : 15 }}
                           </span>
                         </a>
                         <div *ngSwitchCase="'percent_power'" class="box-percent-power">

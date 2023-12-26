@@ -10,7 +10,8 @@ declare global {
   interface Window extends KeplrWindow {
     coin98: {
       keplr: Keplr;
-    };
+    };    
+    leap: Keplr
 
     handleCredentialResponse: (response: any) => void;
   }

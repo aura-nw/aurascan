@@ -2,9 +2,12 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-login',
@@ -47,7 +50,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     // check exit email
-    const userEmail = localStorage.getItem('userEmail');
+    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     if (userEmail) {
       this.route.navigate(['/']);
     }
@@ -138,11 +141,9 @@ export class LoginComponent implements OnInit {
         this.userService.loginWithPassword(payload).subscribe({
           next: (res) => {
             if (!res.error) {
-              localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
-              localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
-              localStorage.setItem('userEmail', JSON.stringify(res.email));
-              localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
-              localStorage.setItem('registerFCM', 'true');
+              local.setItem(STORAGE_KEYS.USER_DATA, { ...res, email: res.userEmail || res.email });
+              local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, res.provider || 'password');
+              local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
               this.route.navigate(['/profile']);
 
               setTimeout(() => {
@@ -244,11 +245,9 @@ export class LoginComponent implements OnInit {
 
         this.userService.loginWithGoogle(payload).subscribe({
           next: (res) => {
-            localStorage.setItem('accessToken', JSON.stringify(res.accessToken));
-            localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken));
-            localStorage.setItem('userEmail', JSON.stringify(res.userEmail));
-            localStorage.setItem('provider', JSON.stringify(res.provider || 'password'));
-            localStorage.setItem('registerFCM', 'true');
+            local.setItem(STORAGE_KEYS.USER_DATA, { ...res, email: res.userEmail || res.email });
+            local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, res.provider || 'password');
+            local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
             window.location.href = '/profile';
 
             setTimeout(() => {

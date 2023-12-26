@@ -201,13 +201,13 @@
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'timestamp'">
-                            {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                            {{ (data[template.matColumnDef] | dateCustom)[0] }}
                           </div>
                           <a
                             *ngSwitchCase="'block_hash'"
                             class="text--primary cursor-pointer"
                             [routerLink]="['/blocks', data.height]">
-                            {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                            {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
@@ -239,7 +239,7 @@
                       {
                         label: data.height,
                         class: 'body-01 text--gray-1',
-                        info: commonService.getDateValue(data.timestamp)[0]
+                        info: (data.timestamp | dateCustom)[0]
                       },
                       { label: 'Txs', class: 'body-01 text--gray-1', info: data.num_txs.toString() },
                       {
@@ -372,14 +372,14 @@
                     [content]="[
                       {
                         label: '',
-                        class: !commonService.checkDisplayTooltip(data.delegator_address)
-                          ? commonService.checkPrivate(data.delegator_address)
+                        class: !(data.delegator_address | checkDisplayTooltip)
+                          ? (data.delegator_address | isPrivateNameTag)
                             ? 'name-tag private-name-tag text--primary'
                             : 'name-tag text--primary'
                           : 'text--primary',
-                        info: !commonService.checkDisplayTooltip(data.delegator_address)
-                          ? (commonService.setNameTag(data.delegator_address) | cutStringPipe : 16)
-                          : (commonService.setNameTag(data.delegator_address) | cutStringPipe : 6 : 6)
+                        info: !(data.delegator_address | checkDisplayTooltip)
+                          ? (data.delegator_address | nameTag | ellipsis : 16)
+                          : (data.delegator_address | nameTag | ellipsis : 6 : 6)
                       },
                       {
                         label: 'Amount',
@@ -431,13 +431,13 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <div *ngSwitchCase="'timestamp'">
-                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                              {{ (data[template.matColumnDef] | dateCustom)[0] }}
                             </div>
                             <a
                               *ngSwitchCase="'tx_hash'"
                               class="text--primary cursor-pointer hash-link"
                               [routerLink]="['/transaction', data['tx_hash']]">
-                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                              {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
                               <ng-container *ngIf="data['amount'] === 'More'">
@@ -489,7 +489,7 @@
                             '<a class=text--primary href=/transaction/' +
                             data.tx_hash +
                             '>' +
-                            (data.tx_hash | cutStringPipe : 6 : 6) +
+                            (data.tx_hash | ellipsis : 6 : 6) +
                             '</a>'
                         },
                         {

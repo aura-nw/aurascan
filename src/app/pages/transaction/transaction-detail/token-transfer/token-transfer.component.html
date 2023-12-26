@@ -21,42 +21,31 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'assets'">
                         <div class="d-flex align-items-center">
-                          <img
-                            class="rounded-circle"
-                            [src]="data.cw20_contract?.marketing_info?.logo?.url || defaultLogoToken"
-                            width="20"
-                            height="20" />
+                          <img class="rounded-circle" [src]="data | marketInfo : 'logo'" width="20" height="20" />
                           <div class="ml-3 d-flex transfer-token-info">
                             <div class="aura-tooltip-contain">
                               <span
-                                *ngIf="data.cw20_contract.symbol"
-                                class="caption text-sm mb-1 aura-tooltip-object"
-                                >{{ data.cw20_contract.symbol | stringEllipsis : 15 }}</span
+                                *ngIf="data | marketInfo : 'symbol'"
+                                class="caption text-sm mb-1 aura-tooltip-object">
+                                {{ data | marketInfo : 'symbol' | ellipsis : maxLengthSymbol }}</span
                               >
                               <app-tooltip-customize
-                                [content]="data.cw20_contract.symbol"
+                                [content]="data | marketInfo : 'symbol'"
                                 [className]="'tooltip--right'">
                               </app-tooltip-customize>
                             </div>
 
-                            <span
-                              *ngIf="data.cw20_contract.name && !breakpoint.value.matches"
-                              class="body-02 d-xl-none"
-                              >{{ data.cw20_contract.name | stringEllipsis : 25 }}</span
-                            >
-                            <span
-                              *ngIf="data.cw20_contract.name && !breakpoint.value.matches"
-                              class="body-02 d-none d-xl-inline"
-                              >{{ data.cw20_contract.name }}</span
-                            >
+                            <span *ngIf="!breakpoint.value.matches" class="body-02">
+                              {{ data | marketInfo : 'name' | ellipsis : 20 }}
+                            </span>
                             <ng-container *ngIf="breakpoint.value.matches">
                               <span
                                 class="aura-tooltip-object"
-                                *ngIf="(data.amount | balanceOf : data.decimal) < 0.001">
-                                <0,001
+                                *ngIf="data.amount | balance : data.decimal | lt : 0.001">
+                                {{ '<0.001' }}
                               </span>
                               <span
-                                *ngIf="(data.amount | balanceOf : data.decimal) >= 0.001"
+                                *ngIf="data.amount | balance : data.decimal | gte : 0.001"
                                 class="body-02"
                                 [appBigNumber]="data.amount"
                                 [decimal]="data.decimal"></span>
@@ -71,49 +60,55 @@
                           <span class="caption fw-normal text--gray-4 mb-1">Amount</span>
                           <div
                             class="aura-tooltip-object"
-                            *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) < 0.001">
-                            <0,001
+                            *ngIf="data[template.matColumnDef] | balance : data.decimal | lt : 0.001">
+                            {{ '<0.001' }}
                           </div>
-                          <app-tooltip-customize
-                            [content]="data[template.matColumnDef] | convertSmallNumber : data.decimal">
-                          </app-tooltip-customize>
-                          <span
-                            *ngIf="(data[template.matColumnDef] | balanceOf : data.decimal) >= 0.001"
-                            class="body-02"
+
+                          <div
+                            class="aura-tooltip-object body-02"
+                            *ngIf="data[template.matColumnDef] | balance : data.decimal | gte : 0.001"
+                            [class.cursor-text]="data[template.matColumnDef] | balance : data.decimal | lt : 1000000"
                             [appBigNumber]="data[template.matColumnDef]"
-                            [decimal]="data.decimal"></span>
+                            [decimal]="data.decimal"></div>
+                          <app-tooltip-customize
+                            *ngIf="
+                              (data[template.matColumnDef] | balance : data.decimal | lt : 0.001) ||
+                              (data[template.matColumnDef] | balance : data.decimal | gte : 1000000)
+                            "
+                            [content]="data[template.matColumnDef] | balance : data.decimal | mask : 'separator'">
+                          </app-tooltip-customize>
                         </div>
                       </ng-container>
 
                       <div *ngSwitchCase="'transfer'" class="d-inline-block transfer-address">
                         <div class="mb-1 text-start d-flex align-items-center">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >From</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            From
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [value]="data.from || nullAddress"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [value]="data.from || nullAddress"
                             [maxCharacter]="13"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                         </div>
                         <div class="text-start d-flex align-items-center">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >To</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            To
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [value]="data.to || nullAddress"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [value]="data.to || nullAddress"
                             [maxCharacter]="13"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
@@ -205,9 +200,9 @@
 
                       <div *ngSwitchCase="'transfer'">
                         <div class="mb-1 d-flex align-items-center line-claim">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >From</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            From
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
                             [isLink]="data.from ? true : false"
@@ -222,9 +217,9 @@
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                         </div>
                         <div class="d-flex align-items-center line-claim">
-                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block"
-                            >To</span
-                          >
+                          <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block">
+                            To
+                          </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
                             [isLink]="data.to ? true : false"
