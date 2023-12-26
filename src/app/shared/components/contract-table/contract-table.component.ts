@@ -1,15 +1,15 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {TranslateService} from '@ngx-translate/core';
-import {LENGTH_CHARACTER, PAGE_EVENT} from 'src/app/core/constants/common.constant';
-import {TRANSACTION_TYPE_ENUM} from 'src/app/core/constants/transaction.enum';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TableTemplate} from 'src/app/core/models/common.model';
-import {DROPDOWN_ELEMENT, ITableContract} from 'src/app/core/models/contract.model';
-import {balanceOf, parseLabel} from 'src/app/core/utils/common/parsing';
-import {DropdownElement} from 'src/app/shared/components/dropdown/dropdown.component';
-import {getTypeTx} from "src/app/core/utils/common/info-common";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TranslateService } from '@ngx-translate/core';
+import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { DROPDOWN_ELEMENT, ITableContract } from 'src/app/core/models/contract.model';
+import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
+import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+import { getTypeTx } from 'src/app/core/utils/common/info-common';
 
 export interface TableData {
   txHash: string;
@@ -63,8 +63,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   constructor(
     public translate: TranslateService,
     private environmentService: EnvironmentService,
-  ) {
-  }
+  ) {}
 
   ngOnChanges(): void {
     if (this.dataList?.data) {
@@ -125,8 +124,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       if (typeof msg === 'string') {
         try {
           msg = JSON.parse(contract.messages[0]?.msg);
-        } catch (e) {
-        }
+        } catch (e) {}
       }
 
       switch (contract.typeOrigin) {
