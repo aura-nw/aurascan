@@ -348,7 +348,7 @@
             <div>
               <ng-container [ngSwitch]="template.matColumnDef">
                 <div *ngSwitchCase="'timestamp'">
-                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                  {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                 </div>
                 <a
                   *ngSwitchCase="'tx_hash'"
@@ -382,7 +382,7 @@
                       </div>
                     </div>
 
-                    <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | displayTypeToolTip">
+                    <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
                     </app-tooltip-customize>
                   </div>
                 </div>

@@ -2,9 +2,9 @@
   <div class="text--white fw-semibold h1">IBC Relayers</div>
   <div class="text--gray-4 d-flex align-items-center mt-2 mt-lg-0 body" *ngIf="timeUpdate">
     Updated at
-    <span class="ml-1">{{ timeUpdate | customDate: 'yyyy-MM-dd' }}</span>
+    <span class="ml-1">{{ timeUpdate | customDateTime: 'DateOnly' }}</span>
     <div class="divider divider-vertical divider-lighter mx-2"></div>
-    <span>{{ timeUpdate | customDate: 'HH:mm:ss' }}</span>
+    <span>{{ timeUpdate | customDateTime: 'TimeOnly' }}</span>
   </div>
 </div>
 <section class="box-ibc-relayer">

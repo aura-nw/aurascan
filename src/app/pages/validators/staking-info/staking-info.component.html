@@ -32,7 +32,7 @@
               width="20"
               height="20"
               *ngIf="isLoading" />
-            <span class="text--black">Claim Reward: {{ +dataDelegate.stakingToken || 0 | mask : 'separator.6' }}</span>
+            <span class="text--black">Claim Reward: {{ +dataDelegate.stakingToken || 0 | mask: 'separator.6' }}</span>
             <span class="ml-1 text--black">{{ denom }}</span>
           </button>
         </div>
@@ -205,9 +205,7 @@
               <span [appBigNumber]="validator.balance" [decimal]="0"></span>
               <span class="text--white ml-1">{{ denom }}</span>
             </div>
-            <div class="text--gray-5">
-              {{ (validator.completion_time | dateCustom :  false)[1] }}
-            </div>
+            <div class="text--gray-5">{{ validator.completion_time | customDateTime: 'Distance' }}</div>
           </div>
         </div>
         <div class="divider divider-horizontal"></div>
@@ -239,7 +237,7 @@
               </div>
             </div>
             <div class="body-02 text--gray-5 text-end">
-              {{ (validator.completion_time | dateCustom : false)[1] }}
+              {{ validator.completion_time | customDateTime: 'Distance' }}
             </div>
           </div>
         </ng-container>
