@@ -31,13 +31,13 @@
     <app-table-no-data *ngIf="!loadingContract && errTxt" [textNull]="errTxt"></app-table-no-data>
     <app-contract-table
       [length]="limit"
-      *ngIf="!loadingContract && countCurrent === contractTab.Transactions && contractTransaction['data'] && !errTxt"
+      *ngIf="!loadingContract && currentTab === contractTab.Transactions && contractTransaction['data'] && !errTxt"
       [dataList]="contractTransaction"
       [templates]="templates"
       [contractInfo]="contractInfo"
       (onViewSelected)="filterTransaction($event)"></app-contract-table>
     <app-contract
-      *ngIf="!loadingContract && countCurrent === contractTab.Contract && !errTxt"
+      *ngIf="!loadingContract && currentTab === contractTab.Contract && !errTxt"
       [contractTypeData]="contractTypeData"
       [contractsAddress]="contractsAddress"></app-contract>
   </div>
