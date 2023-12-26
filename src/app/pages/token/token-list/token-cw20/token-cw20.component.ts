@@ -72,6 +72,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   listTokenIBC: any;
   nativeToken: any;
   isMobileMatched = false;
+  dataSourceMobile = [];
   breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
@@ -330,6 +331,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     }
     this.dataSource.data = this.dataSource.data.concat(verifiedToken);
     this.dataSource.data = this.dataSource.data.concat(otherToken);
+
+    this.dataSourceMobile = this.dataSource.data.slice(
+      this.pageData.pageIndex * this.pageData.pageSize,
+      this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+    );
   }
 
   paginatorEmit(event): void {
@@ -398,9 +404,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
 
-    if (!this.textSearch && this.sortedData) {
-      this.dataSource.data = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
-    }
+    this.dataSourceMobile = this.dataSource.data.slice(
+      this.pageData.pageIndex * this.pageData.pageSize,
+      this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+    );
   }
 
   filterToken(val: string = null) {

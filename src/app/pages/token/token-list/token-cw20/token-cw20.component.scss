@@ -87,4 +87,7 @@
   background-color: var(--aura-gray-9);
   font-size: 1.6rem;
   line-height: 2rem;
+  .item-amount {
+    max-width: calc(100vw - 280px);
+  }
 }
