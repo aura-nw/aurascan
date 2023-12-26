@@ -81,15 +81,6 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.contractInfo.contractsAddress = this.contractsAddress;
-    this.aRoute.queryParams.subscribe((params) => {
-      this.currentTab = params.tabId || this.changeTab;
-      if (this.currentTab === this.contractTab.Transactions) {
-        this.getTransaction();
-      } else {
-        this.loadingContract = false;
-      }
-    });
-
     this.aRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       const { tabId } = params;
       if (tabId && Object.values(ContractTab).includes(tabId as ContractTab)) {
@@ -98,15 +89,19 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         this.activeId = _tabId >= 0 ? _tabId : 0;
 
         if (tabId === ContractTab.Contract) {
+          this.loadingContract = false;
           const reload = this.router.getCurrentNavigation()?.extras?.state?.reload;
 
           if (reload) {
             this.contractService.loadContractDetail(this.contractsAddress);
           }
+        } else {
+          this.getTransaction();
         }
       } else {
         this.currentTab = ContractTab.Transactions;
         this.activeId = 0;
+        this.getTransaction();
       }
     });
 
