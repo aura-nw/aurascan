@@ -113,7 +113,7 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'created_at'">
                     <div class="d-flex align-items-center ml-1">
-                      <span>{{ data['created_at'] | customDate : 'yyyy-MM-dd HH:mm:ss' }}</span>
+                      <span>{{ data['created_at'] | customDateTime: 'DateTime' }}</span>
                     </div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'verified_at'">
@@ -123,7 +123,7 @@
                           data['verified_at'] && data['contract_verification'] === contractVerifyType.Verified;
                           else unVerify
                         ">
-                        {{ data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss' }}
+                        {{ data['verified_at'] | customDateTime: 'DateTime' }}
                       </span>
                       <ng-template #unVerify>
                         <span #unVerify>-</span>
