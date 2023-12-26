@@ -42,6 +42,7 @@
                   </div>
                 </div>
               </div>
+              <div class="divider divider-item"></div>
               <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
                 <div class="text--gray-5 body-02">Circulating Supply Market Cap</div>
                 <div class="body-02 text--gray-1">${{ tokenDetail.circulating_market_cap | formatDigit: 2 }}</div>
@@ -56,9 +57,9 @@
               <div
                 [class.flex-item]="!tokenDetail.isNFTContract"
                 [ngClass]="{ 'd-flex': tokenDetail.isNFTContract, 'align-items-center': tokenDetail.isNFTContract }">
-                <span class="text--gray-5 body-02 fixed-col"
-                  ><ng-container *ngIf="tokenDetail.type === contractType.CW20">Max </ng-container>Total Supply:</span
-                >
+                <span class="text--gray-5 body-02 fixed-col">
+                  <ng-container *ngIf="tokenDetail.type === contractType.CW20">Max </ng-container>Total Supply:
+                </span>
                 <div class="body-02 text--gray-1">
                   <ng-container *ngIf="!tokenDetail.isNFTContract">
                     <ng-container *ngIf="+tokenDetail.max_total_supply === 0">-</ng-container>
@@ -72,7 +73,7 @@
                   </ng-container>
                 </div>
               </div>
-
+              <div class="divider divider-item" *ngIf="!tokenDetail.isNFTContract"></div>
               <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
                 <div class="text--gray-5 body-02">Fully Diluted Market Cap</div>
                 <div class="body-02 text--gray-1">

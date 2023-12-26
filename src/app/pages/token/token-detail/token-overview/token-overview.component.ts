@@ -35,7 +35,10 @@ export class TokenOverviewComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
-    this.getInfoNative();
+
+    if (this.tokenDetail.modeToken === EModeToken.StakingCoin) {
+      this.getInfoNative();
+    }
 
     if (this.tokenDetail.modeToken === EModeToken.CWToken) {
       if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
