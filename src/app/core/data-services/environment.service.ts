@@ -1,9 +1,9 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {ChainInfo} from '@keplr-wallet/types';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
-import {BehaviorSubject, Subject, lastValueFrom, takeUntil} from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Subject, takeUntil } from 'rxjs';
 
 export interface IConfiguration {
   environment: {
@@ -38,7 +38,7 @@ export interface IConfiguration {
     banner: {
       src: string;
       url: string;
-    }[]
+    }[];
   };
   api: {
     backend: string;
@@ -122,7 +122,7 @@ export class EnvironmentService {
   }
 
   get graphql() {
-    const {graphql, url} = _.get(this.configValue, 'api.horoscope');
+    const { graphql, url } = _.get(this.configValue, 'api.horoscope');
     return url + graphql;
   }
 
@@ -146,7 +146,10 @@ export class EnvironmentService {
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
-  constructor(private http: HttpClient, private layout: BreakpointObserver) {
+  constructor(
+    private http: HttpClient,
+    private layout: BreakpointObserver,
+  ) {
     this.breakpoint$.subscribe((state) => {
       this.isMobile = state?.matches ? true : false;
     });
