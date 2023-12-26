@@ -1,12 +1,12 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {TranslateService} from '@ngx-translate/core';
+import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import {Observable, Subject, of} from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -18,17 +18,17 @@ import {
   takeLast,
   takeUntil,
 } from 'rxjs/operators';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {IBCService} from 'src/app/core/services/ibc.service';
-import {TokenService} from 'src/app/core/services/token.service';
-import {balanceOf, getBalance} from 'src/app/core/utils/common/parsing';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { IBCService } from 'src/app/core/services/ibc.service';
+import { TokenService } from 'src/app/core/services/token.service';
+import { balanceOf, getBalance } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
-import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
-import {DATEFORMAT, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR} from '../../../../core/constants/common.constant';
-import {ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN} from '../../../../core/constants/token.constant';
-import {TableTemplate} from '../../../../core/models/common.model';
-import {Globals} from '../../../../global/global';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import { DATEFORMAT, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../../core/constants/common.constant';
+import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
+import { TableTemplate } from '../../../../core/models/common.model';
+import { Globals } from '../../../../global/global';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-token-cw20',
@@ -39,13 +39,13 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'id', headerCellDef: 'id'},
-    {matColumnDef: 'token', headerCellDef: 'name'},
-    {matColumnDef: 'type', headerCellDef: 'type'},
-    {matColumnDef: 'price', headerCellDef: 'price'},
-    {matColumnDef: 'totalSupply', headerCellDef: 'In-Chain Supply Amount'},
-    {matColumnDef: 'inChainValue', headerCellDef: 'In-Chain Supply'},
-    {matColumnDef: 'holder', headerCellDef: 'Holder'},
+    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'token', headerCellDef: 'name' },
+    { matColumnDef: 'type', headerCellDef: 'type' },
+    { matColumnDef: 'price', headerCellDef: 'price' },
+    { matColumnDef: 'totalSupply', headerCellDef: 'In-Chain Supply Amount' },
+    { matColumnDef: 'inChainValue', headerCellDef: 'In-Chain Supply' },
+    { matColumnDef: 'holder', headerCellDef: 'Holder' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
