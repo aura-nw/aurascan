@@ -120,6 +120,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     const supply = _.get(res, 'data.supply');
     this.listTokenIBC.forEach((token) => {
       token.type = ETokenCoinType.IBC;
+      token.isHolderUp = true;
       supply.forEach((s) => {
         if (token.denom === s.denom) {
           token.totalSupply = balanceOf(Number(s?.amount) || 0, +token.decimal) || 0;
@@ -304,6 +305,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           price: this.nativeToken.current_price,
           inChainValue: totalSupply * this.nativeToken.current_price,
           denom: this.chainInfo.coinMinimalDenom,
+          isHolderUp: true,
           type: ETokenCoinType.NATIVE,
         };
       });
