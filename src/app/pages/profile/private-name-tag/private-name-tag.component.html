@@ -73,7 +73,7 @@
                 </div>
                 <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
                   <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
-                    <span>{{ data[template.matColumnDef] | ellipsis : 8 : 8 }}</span>
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                   </a>
                   <div class="aura-tooltip-contain">
                     <div
@@ -93,13 +93,13 @@
                   {{ data[template.matColumnDef] }}
                 </div>
                 <div *ngSwitchCase="'name_tag'" class="profile-private-name-tag pe-auto">
-                  <div>{{ data.nameTag | ellipsis : 25 }}</div>
+                  <div>{{ data.nameTag | ellipsis: 25 }}</div>
                 </div>
                 <div *ngSwitchCase="'createdAt'">
-                  {{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}
+                  {{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}
                 </div>
                 <div *ngSwitchCase="'updatedAt'">
-                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                  {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                 </div>
                 <div *ngSwitchCase="'action'" class="text-end">
                   <div class="aura-tooltip-contain">
@@ -126,7 +126,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <div class="card__title">
             <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
-              <span class="fw-semibold">{{ data.address | ellipsis : 8 : 8 }}</span>
+              <span class="fw-semibold">{{ data.address | ellipsis: 8 : 8 }}</span>
             </a>
             <div class="text--gray-5 line-claim w-100" [class.aura-tooltip-object]="data.note">
               {{ data.note || 'Note:-' }}
@@ -182,11 +182,11 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Added time</div>
-            <div class="text--white">{{ data.createdAt | customDate : 'yyyy-MM-dd' }}</div>
+            <div class="text--white">{{ data.createdAt | customDateTime: 'DateOnly' }}</div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Updated time</div>
-            <div class="text--white">{{ (data.updatedAt | dateCustom)[0] }}</div>
+            <div class="text--white">{{ data.updatedAt | customDateTime: 'Distance' }}</div>
           </div>
         </div>
       </div>

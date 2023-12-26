@@ -37,15 +37,13 @@
               </ng-container>
               <ng-container *ngIf="template.matColumnDef === 'created_at'">
                 <div class="d-flex align-items-center ml-1">
-                  <span *ngIf="data['created_at']">{{ data['created_at'] | customDate : 'yyyy-MM-dd HH:mm:ss' }}</span>
+                  <span *ngIf="data['created_at']">{{ data['created_at'] | customDateTime: 'DateTime' }}</span>
                   <span *ngIf="!data['created_at']">-</span>
                 </div>
               </ng-container>
               <ng-container *ngIf="template.matColumnDef === 'verified_at'">
                 <div class="d-flex align-items-center ml-1">
-                  <span *ngIf="data['verified_at']">{{
-                    data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss'
-                  }}</span>
+                  <span *ngIf="data['verified_at']">{{ data['verified_at'] | customDateTime: 'DateTime' }}</span>
                   <span *ngIf="!data['verified_at']">-</span>
                 </div>
               </ng-container>
