@@ -1,13 +1,13 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Component, OnInit} from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import {
   LENGTH_CHARACTER,
@@ -16,25 +16,25 @@ import {
   PAGE_EVENT,
   TIMEOUT_ERROR,
 } from 'src/app/core/constants/common.constant';
-import {TYPE_CW4973} from 'src/app/core/constants/contract.constant';
-import {ContractRegisterType, ContractVerifyType} from 'src/app/core/constants/contract.enum';
-import {MESSAGES_CODE_CONTRACT} from 'src/app/core/constants/messages.constant';
-import {SB_TYPE} from 'src/app/core/constants/soulbound.constant';
-import {CodeTransaction, ModeExecuteTransaction, StatusTransaction} from 'src/app/core/constants/transaction.enum';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TableTemplate} from 'src/app/core/models/common.model';
-import {CommonService} from 'src/app/core/services/common.service';
-import {ContractService} from 'src/app/core/services/contract.service';
-import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
-import {SoulboundService} from 'src/app/core/services/soulbound.service';
-import {TokenService} from 'src/app/core/services/token.service';
-import {WalletService} from 'src/app/core/services/wallet.service';
-import {checkTypeFile} from 'src/app/core/utils/common/info-common';
-import {balanceOf} from 'src/app/core/utils/common/parsing';
-import {getTypeTx} from 'src/app/global/global';
-import {MediaExpandComponent} from 'src/app/shared/components/media-expand/media-expand.component';
-import {PopupShareComponent} from './popup-share/popup-share.component';
-import {TYPE_TRANSACTION} from "src/app/core/constants/transaction.constant";
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
+import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { TokenService } from 'src/app/core/services/token.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { getTypeTx } from 'src/app/global/global';
+import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
+import { PopupShareComponent } from './popup-share/popup-share.component';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 
 @Component({
   selector: 'app-nft-detail',
@@ -49,13 +49,13 @@ export class NFTDetailComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash'},
-    {matColumnDef: 'type', headerCellDef: 'Method'},
-    {matColumnDef: 'status', headerCellDef: 'Result'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
-    {matColumnDef: 'from_address', headerCellDef: 'From'},
-    {matColumnDef: 'to_address', headerCellDef: 'To'},
-    {matColumnDef: 'price', headerCellDef: 'Price'},
+    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
+    { matColumnDef: 'type', headerCellDef: 'Method' },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'from_address', headerCellDef: 'From' },
+    { matColumnDef: 'to_address', headerCellDef: 'To' },
+    { matColumnDef: 'price', headerCellDef: 'Price' },
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -225,8 +225,7 @@ export class NFTDetailComponent implements OnInit {
           txs.forEach((element) => {
             element['tx_hash'] = element.tx.hash;
             element['from_address'] = element.from || NULL_ADDRESS;
-            element['to_address'] =
-              element.to || NULL_ADDRESS;
+            element['to_address'] = element.to || NULL_ADDRESS;
             element['token_id'] = element.cw721_token.token_id;
             element['timestamp'] = element.tx.timestamp;
             element['status'] =
@@ -240,8 +239,7 @@ export class NFTDetailComponent implements OnInit {
               if (typeof msg === 'string') {
                 try {
                   msg = JSON.parse(msg);
-                } catch (e) {
-                }
+                } catch (e) {}
               }
               element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
             }
