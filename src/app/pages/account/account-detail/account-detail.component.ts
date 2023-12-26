@@ -8,9 +8,9 @@ import BigNumber from 'bignumber.js';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IUser } from 'src/app/core/models/auth.models';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
@@ -46,7 +46,7 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
-  userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
+  userEmail = this.userService.getCurrentUser()?.email;
 
   destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
@@ -72,6 +72,7 @@ export class AccountDetailComponent implements OnInit {
     private soulboundService: SoulboundService,
     private router: Router,
     private nameTagService: NameTagService,
+    private userService: UserService,
   ) {
     this.chartOptions = CHART_OPTION();
   }

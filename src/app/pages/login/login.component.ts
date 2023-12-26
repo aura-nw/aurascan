@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     // check exit email
-    const userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
+    const userEmail = this.userService.getCurrentUser()?.email;
     if (userEmail) {
       this.route.navigate(['/']);
     }

@@ -23,7 +23,7 @@ export class JwtInterceptor implements HttpInterceptor {
     }
     const graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
     // get list name tag if not login email
-    const user = this.userService.getCurrentUser(); //local.getItem<IUser>(STORAGE_KEYS.USER_DATA);
+    const user = this.userService.getCurrentUser();
     if (!user) {
       return next.handle(request);
     }

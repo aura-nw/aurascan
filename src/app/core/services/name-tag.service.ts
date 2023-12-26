@@ -3,9 +3,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import local from '../utils/storage/local';
-import { STORAGE_KEYS } from '../constants/common.constant';
-import { IUser } from '../models/auth.models';
+import { UserService } from './user.service';
 
 @Injectable({ providedIn: 'root' })
 export class NameTagService extends CommonService {
@@ -15,6 +13,7 @@ export class NameTagService extends CommonService {
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
+    private userService: UserService,
   ) {
     super(http, environmentService);
   }
@@ -60,7 +59,7 @@ export class NameTagService extends CommonService {
       return '';
     }
 
-    const userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
+    const userEmail = this.userService.getCurrentUser()?.email;
     let address = '';
     if (this.listNameTag?.length > 0) {
       if (userEmail) {

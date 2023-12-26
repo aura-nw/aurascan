@@ -5,6 +5,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { IUser } from 'src/app/core/models/auth.models';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { isSafari } from 'src/app/core/utils/common/validation';
 import local from 'src/app/core/utils/storage/local';
 
@@ -56,6 +57,7 @@ export class NotificationComponent {
     private router: Router,
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
+    private userService: UserService,
   ) {}
 
   onScroll(event): void {
@@ -75,7 +77,7 @@ export class NotificationComponent {
   ngOnInit(): void {
     this.isSafari = isSafari();
     // check exit email
-    const userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
+    const userEmail = this.userService.getCurrentUser()?.email;
     if (!userEmail) {
       return;
     }

@@ -3,12 +3,10 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { clearLocalData } from 'src/app/global/global';
-import local from 'src/app/core/utils/storage/local';
-import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { IUser } from 'src/app/core/models/auth.models';
+import { EnvironmentService } from '../../../core/data-services/environment.service';
 
 @Component({
   selector: 'app-authenticate-mail',
@@ -39,10 +37,11 @@ export class AuthenticateMailComponent implements OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private notificationsService: NotificationsService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
-    this.userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
+    this.userEmail = this.userService.getCurrentUser()?.email;
   }
 
   ngOnDestroy(): void {
