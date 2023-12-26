@@ -28,6 +28,7 @@ import { DATEFORMAT, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../..
 import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-token-cw20',
@@ -70,6 +71,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   dataTable = [];
   listTokenIBC: any;
   nativeToken: any;
+  isMobileMatched = false;
+  breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  searchExplain = false;
 
   constructor(
     public translate: TranslateService,
@@ -78,7 +82,14 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private datePipe: DatePipe,
     private ibcService: IBCService,
-  ) {}
+    private breakpointObserver: BreakpointObserver,
+  ) {
+    this.breakpoint$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
+      if (state) {
+        this.isMobileMatched = state.matches;
+      }
+    });
+  }
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
