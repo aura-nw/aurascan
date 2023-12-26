@@ -142,16 +142,16 @@
                     <div
                       class="d-flex align-items-center ml-1"
                       *ngIf="data[template.matColumnDef] === ContractVerifyType.Verified">
-                      <span>{{ data['verified_at'] | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>{{ data['verified_at'] | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ data['verified_at'] | customDate : 'HH:mm:ss' }}</span>
+                      <span>{{ data['verified_at'] | customDateTime: 'TimeOnly' }}</span>
                     </div>
                     <div *ngIf="data[template.matColumnDef] !== ContractVerifyType.Verified">-</div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'name'">
                     <div class="aura-tooltip-contain">
                       <span class="aura-tooltip-object text-nowrap">
-                        {{ (data[template.matColumnDef] | ellipsis : 28) || '-' }}
+                        {{ (data[template.matColumnDef] | ellipsis: 28) || '-' }}
                       </span>
                       <app-tooltip-customize [content]="data[template.matColumnDef]"></app-tooltip-customize>
                     </div>
@@ -159,7 +159,7 @@
                   <ng-container *ngIf="template.matColumnDef === 'label'">
                     <div class="aura-tooltip-contain">
                       <span class="aura-tooltip-object text-nowrap">
-                        {{ (data[template.matColumnDef] | ellipsis : 22) || '-' }}
+                        {{ (data[template.matColumnDef] | ellipsis: 22) || '-' }}
                       </span>
                       <app-tooltip-customize [content]="data[template.matColumnDef]"></app-tooltip-customize>
                     </div>
@@ -168,7 +168,7 @@
                   <ng-container *ngIf="template.matColumnDef === 'token_tracker'">
                     <div class="aura-tooltip-contain">
                       <a class="aura-tooltip-object" *ngIf="data['token_tracker']" [routerLink]="data.url">
-                        {{ data['token_tracker'] | ellipsis : 18 }}
+                        {{ data['token_tracker'] | ellipsis: 18 }}
                       </a>
                       <span
                         *ngIf="

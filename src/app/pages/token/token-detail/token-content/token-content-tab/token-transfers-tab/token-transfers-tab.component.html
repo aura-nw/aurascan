@@ -1,3 +1,5 @@
+<app-loading-sprint *ngIf="loading"></app-loading-sprint>
+
 <ng-container *ngIf="!loading">
   <div *ngIf="nextKey && !errTxt" class="body-03 caption-mob fw-normal-mob text--gray-5 mb-lg-3">
     More than {{ pageData?.length | number }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
@@ -6,15 +8,24 @@
     A total of {{ pageData?.length | number }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
   </div>
   <div *ngIf="pageData?.length > 0" class="divider divider-horizontal my-4 d-lg-none"></div>
-  <app-loading-sprint *ngIf="loading"></app-loading-sprint>
   <div class="transfer-table-container overflow-scroll-x">
-    <ng-container *ngIf="pageData?.length > 0; else noValues">
+    <ng-container *ngIf="pageData?.length > 0 && !loading; else noValues">
       <table mat-table [dataSource]="dataSource" class="aura-table">
         <ng-container *ngFor="let template of template; index as i">
           <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
             <ng-container *ngSwitchCase="'type'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-15">
-                <div [innerHTML]="template.headerCellDef | translate"></div>
+              <th mat-header-cell *matHeaderCellDef class="col-per-20">
+                <div [innerHTML]="template.headerCellDef | translate" class="ml-3"></div>
+              </th>
+            </ng-container>
+            <ng-container *ngSwitchCase="'status'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-8">
+                <div [innerHTML]="template.headerCellDef | translate" class="mr-3"></div>
+              </th>
+            </ng-container>
+            <ng-container *ngSwitchCase="'token_id'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-8">
+                <div [innerHTML]="template.headerCellDef | translate" class="mr-3"></div>
               </th>
             </ng-container>
             <ng-container *ngSwitchCase="'tx_hash'">
@@ -105,7 +116,7 @@
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'status'">
-                      <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                      <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase pr-4">
                         <div *ngSwitchCase="'Success'" class="text--green-3">
                           {{ data[template.matColumnDef] }}
                         </div>
@@ -118,12 +129,12 @@
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'timestamp'">
-                      {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                      {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
                       <div class="aura-status text-capitalize aura-tooltip-contain status">
                         <div class="aura-tooltip-object">
-                          <span>{{ data[template.matColumnDef] }}</span>
+                          <span>{{ data[template.matColumnDef] | ellipsis: 25 }}</span>
                           <span *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                             +{{ data.lstTypeTemp?.length - 1 }}
                           </span>
@@ -132,7 +143,7 @@
                         <app-tooltip-customize
                           *ngIf="tokenDetail.modeToken !== EModeToken.CWToken"
                           [class]="'message-custom'"
-                          [content]="data.lstTypeTemp | displayTypeToolTip">
+                          [content]="data.lstTypeTemp | combineTxsMsg">
                         </app-tooltip-customize>
                       </div>
                     </ng-container>
@@ -223,13 +234,13 @@
                       <span *ngIf="data['token_id']?.length === 0"> - </span>
                       <span *ngIf="data['token_id'] === 'More'"> More </span>
                       <span class="text--primary" *ngIf="data['status'] === 'Fail'">
-                        {{ data[template.matColumnDef] | ellipsis: 16 }}
+                        {{ data[template.matColumnDef] | ellipsis: 12 }}
                       </span>
                       <a
-                        class="text--primary"
+                        class="text--primary pr-lg-3"
                         href="/tokens/{{ linkToken }}/{{ linkAddress }}?a={{ encodeData(data['token_id']) }}"
                         *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
-                        {{ data[template.matColumnDef] | ellipsis: 16 }}
+                        {{ data[template.matColumnDef] | ellipsis: 12 }}
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
@@ -243,11 +254,6 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell g-no-data" colspan="9999">
-            {{ 'NO DATA' | translate }}
-          </td>
-        </tr>
       </table>
     </ng-container>
     <ng-template #noValues>

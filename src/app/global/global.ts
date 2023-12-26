@@ -11,9 +11,10 @@ import {
   TypeTransaction,
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
-import { convertTxNative } from '../core/utils/common/info-common';
+import { convertTxNative, getTypeTx } from '../core/utils/common/info-common';
 import { balanceOf } from '../core/utils/common/parsing';
 import local from '../core/utils/storage/local';
+
 Injectable();
 
 export class Globals {
@@ -500,31 +501,8 @@ export function convertDataAccountTransaction(
   return txs;
 }
 
-export function getTypeTx(element, index = 0) {
-  let type = element?.transaction_messages[0]?.content['@type'];
-  let action;
-  if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
-    try {
-      let dataTemp = _.get(element, 'transaction_messages[0].content.msg');
-      if (typeof dataTemp === 'string') {
-        try {
-          dataTemp = JSON.parse(dataTemp);
-        } catch (e) {}
-      }
-      action = Object.keys(dataTemp)[0];
-      type = 'Contract: ' + action;
-    } catch (e) {}
-  } else {
-    type = _.find(TYPE_TRANSACTION, { label: type })?.value || type.split('.').pop();
-    if (type.startsWith('Msg')) {
-      type = type?.replace('Msg', '');
-    }
-  }
-  return { type, action };
-}
-
 export function convertDataTransactionSimple(data, coinInfo) {
-  const txs = _.get(data, 'transaction').map((element) => {
+  return _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
     let typeOrigin = _.get(element, 'transaction_messages[0].type');
@@ -566,7 +544,6 @@ export function convertDataTransactionSimple(data, coinInfo) {
       lstType,
     };
   });
-  return txs;
 }
 
 export function clearLocalData() {
