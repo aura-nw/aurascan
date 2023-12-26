@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/auth.models';
+import { IUser } from 'src/app/core/models/auth.models';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
@@ -12,7 +13,7 @@ import local from 'src/app/core/utils/storage/local';
   styleUrls: ['./profile-settings.component.scss'],
 })
 export class ProfileSettingsComponent implements OnInit {
-  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+  userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
   changePassForm;
   hideOldPassword = true;
   hideNewPassword = true;
@@ -27,6 +28,7 @@ export class ProfileSettingsComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private userService: UserService,
     private toastr: NgxToastrService,
+    private route: Router,
   ) {}
 
   ngOnInit(): void {

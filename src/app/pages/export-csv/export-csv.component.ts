@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { UserStorage } from 'src/app/core/models/auth.models';
+import { IUser } from 'src/app/core/models/auth.models';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import local from 'src/app/core/utils/storage/local';
@@ -46,7 +46,7 @@ export class ExportCsvComponent implements OnInit {
   ngOnInit(): void {
     this.renderCaptcha();
     // check exit email
-    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    this.userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
     this.formInit();
 
     //get data config from account detail

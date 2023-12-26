@@ -8,7 +8,7 @@ import BigNumber from 'bignumber.js';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UserStorage } from 'src/app/core/models/auth.models';
+import { IUser } from 'src/app/core/models/auth.models';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import local from 'src/app/core/utils/storage/local';
@@ -46,7 +46,7 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
-  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+  userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
 
   destroyed$ = new Subject<void>();
   timerUnSub: Subscription;

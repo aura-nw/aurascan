@@ -4,7 +4,7 @@ import { ProfileTab } from 'src/app/core/constants/profile.enum';
 import { Location } from '@angular/common';
 import local from 'src/app/core/utils/storage/local';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/auth.models';
+import { IUser } from 'src/app/core/models/auth.models';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     // check exit email
-    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    const userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
     if (!userEmail) {
       this.router.navigate(['/']);
     }

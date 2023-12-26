@@ -4,7 +4,7 @@ import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/lega
 import { ActivatedRoute, Router } from '@angular/router';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { UserStorage } from 'src/app/core/models/auth.models';
+import { IUser } from 'src/app/core/models/auth.models';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     // check exit email
-    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    const userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
     if (userEmail) {
       this.route.navigate(['/']);
     }
@@ -146,6 +146,8 @@ export class LoginComponent implements OnInit {
               local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
               this.route.navigate(['/profile']);
 
+              this.userService.setUser({ ...res, email: res.userEmail || res.email });
+
               setTimeout(() => {
                 location.reload();
               }, 1000);
@@ -156,6 +158,8 @@ export class LoginComponent implements OnInit {
             this.addError(error?.message || err.statusText);
             this.errorCode = error?.code;
             this.isError = true;
+
+            this.userService.setUser(null);
           },
         });
         break;

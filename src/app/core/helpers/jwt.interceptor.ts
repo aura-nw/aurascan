@@ -1,14 +1,11 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { EnvironmentService } from '../data-services/environment.service';
-import { UserService } from '../services/user.service';
-import { NotificationsService } from '../services/notifications.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { clearLocalData } from 'src/app/global/global';
-import local from '../utils/storage/local';
-import { STORAGE_KEYS } from '../constants/common.constant';
-import { UserStorage } from '../models/auth.models';
+import { EnvironmentService } from '../data-services/environment.service';
+import { NotificationsService } from '../services/notifications.service';
+import { UserService } from '../services/user.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -26,14 +23,14 @@ export class JwtInterceptor implements HttpInterceptor {
     }
     const graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
     // get list name tag if not login email
-    const userStorage = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA);
-    if (!userStorage) {
+    const user = this.userService.getCurrentUser(); //local.getItem<IUser>(STORAGE_KEYS.USER_DATA);
+    if (!user) {
       return next.handle(request);
     }
 
     let jwtToken;
     try {
-      jwtToken = this.parseJwt(userStorage.accessToken);
+      jwtToken = this.parseJwt(user.accessToken);
     } catch {
       return next.handle(request);
     }
@@ -41,7 +38,7 @@ export class JwtInterceptor implements HttpInterceptor {
     if (!this.isReloadToken && jwtToken.exp < Date.now() / 1000) {
       this.isReloadToken = true;
       const payload = {
-        refreshToken: userStorage.refreshToken,
+        refreshToken: user.refreshToken,
       };
       this.userService.refreshToken(payload).subscribe({
         next: (res) => {
@@ -64,12 +61,13 @@ export class JwtInterceptor implements HttpInterceptor {
           }
 
           const userData = {
-            email: userStorage.email,
+            email: user.email,
             accessToken: res.accessToken,
             refreshToken: res.refreshToken,
           };
 
-          local.setItem(STORAGE_KEYS.USER_DATA, userData);
+          // local.setItem(STORAGE_KEYS.USER_DATA, userData);
+          this.userService.setUser(userData);
         },
         error: (err) => {
           this.isReloadToken = false;
@@ -90,10 +88,10 @@ export class JwtInterceptor implements HttpInterceptor {
       });
     }
 
-    if (userStorage.accessToken && request.url.indexOf(graphUrl) === -1) {
+    if (user.accessToken && request.url.indexOf(graphUrl) === -1) {
       request = request.clone({
         setHeaders: {
-          Authorization: 'Bearer ' + userStorage.accessToken,
+          Authorization: 'Bearer ' + user.accessToken,
         },
       });
     }

@@ -5,10 +5,10 @@ import { Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
-import {clearLocalData} from "src/app/global/global";
+import { clearLocalData } from 'src/app/global/global';
 import local from 'src/app/core/utils/storage/local';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/auth.models';
+import { IUser } from 'src/app/core/models/auth.models';
 
 @Component({
   selector: 'app-authenticate-mail',
@@ -42,7 +42,7 @@ export class AuthenticateMailComponent implements OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    this.userEmail = local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
   }
 
   ngOnDestroy(): void {
@@ -52,7 +52,7 @@ export class AuthenticateMailComponent implements OnDestroy {
   }
 
   dismiss(): void {
-    this.buttonDismiss.nativeElement.click();    
+    this.buttonDismiss.nativeElement.click();
   }
 
   disconnect(): void {

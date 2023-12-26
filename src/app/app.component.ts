@@ -12,7 +12,8 @@ import { NotificationsService } from './core/services/notifications.service';
 import { ValidatorService } from './core/services/validator.service';
 import { WatchListService } from './core/services/watch-list.service';
 import local from './core/utils/storage/local';
-import { UserStorage } from './core/models/auth.models';
+import { IUser } from './core/models/auth.models';
+import { UserService } from './core/services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit {
   //   this.chainInfo?.chainId || ''
   // );
   isFirstLoad = true;
-  userEmail = '';
+  user: IUser;
   constructor(
     private commonService: CommonService,
     private globals: Globals,
@@ -34,9 +35,11 @@ export class AppComponent implements OnInit {
     private validatorService: ValidatorService,
     private notificationsService: NotificationsService,
     private watchListService: WatchListService,
+    private userService: UserService,
   ) {}
   ngOnInit(): void {
-    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    this.user = this.userService.initUser();
+
     this.getInfoCommon();
     this.getPriceToken();
     this.getDataFromStorage();
@@ -84,7 +87,7 @@ export class AppComponent implements OnInit {
     };
 
     // get list name tag if not login email
-    if (!this.userEmail) {
+    if (!this.user?.accessToken) {
       this.nameTagService.getListNameTag(payload).subscribe((res) => {
         this.nameTagService.listNameTag = res.data?.nameTags;
         local.setItem(STORAGE_KEYS.LIST_NAME_TAG, res.data?.nameTags);
@@ -159,7 +162,7 @@ export class AppComponent implements OnInit {
     this.getListNameTag();
 
     // get watch list form local storage
-    if (this.userEmail) {
+    if (this.user?.accessToken) {
       this.getWatchlist();
       // check register fcm token
       const registerFCM = local.getItem(STORAGE_KEYS.REGISTER_FCM);

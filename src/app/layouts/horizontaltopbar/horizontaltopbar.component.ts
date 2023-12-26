@@ -3,12 +3,12 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { UserService } from 'src/app/core/services/user.service';
+import local from 'src/app/core/utils/storage/local';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-import local from 'src/app/core/utils/storage/local';
-import { UserStorage } from 'src/app/core/models/auth.models';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -28,7 +28,7 @@ export class HorizontaltopbarComponent implements OnInit {
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
-  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+  userEmail: string;
 
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
@@ -45,11 +45,14 @@ export class HorizontaltopbarComponent implements OnInit {
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
     this.getMenuLink();
     this.checkEnv();
+
+    this.userEmail = this.userService.getCurrentUser()?.email;
   }
 
   checkEnv() {
