@@ -29,7 +29,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     }),
   );
 
-  countCurrent: string = ContractTab.Transactions;
+  currentTab: string = ContractTab.Transactions;
   contractTab = ContractTab;
   contractVerifyType = ContractVerifyType;
   activeId = 0;
@@ -45,6 +45,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   };
   dataInstantiate = [];
   loadingContract = true;
+  isFirstLoad = true;
 
   destroyed$ = new Subject<void>();
   timerGetUpTime: any;
@@ -80,25 +81,27 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.contractInfo.contractsAddress = this.contractsAddress;
-    this.getTransaction();
-
     this.aRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       const { tabId } = params;
       if (tabId && Object.values(ContractTab).includes(tabId as ContractTab)) {
-        this.countCurrent = tabId as ContractTab;
+        this.currentTab = tabId as ContractTab;
         const _tabId = this.TABS.findIndex((tab) => tab.key === tabId);
         this.activeId = _tabId >= 0 ? _tabId : 0;
 
         if (tabId === ContractTab.Contract) {
+          this.loadingContract = false;
           const reload = this.router.getCurrentNavigation()?.extras?.state?.reload;
 
           if (reload) {
             this.contractService.loadContractDetail(this.contractsAddress);
           }
+        } else {
+          this.getTransaction();
         }
       } else {
-        this.countCurrent = ContractTab.Transactions;
+        this.currentTab = ContractTab.Transactions;
         this.activeId = 0;
+        this.getTransaction();
       }
     });
 
@@ -110,7 +113,14 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   changeTab(tabId): void {
     tabId = tabId || 'transactions';
     this.location.replaceState('/contracts/' + this.contractInfo.contractsAddress + '?tabId=' + tabId);
-    this.countCurrent = tabId;
+    this.currentTab = tabId;
+
+    //check fist load tab tx of contract
+    if (this.isFirstLoad && this.currentTab === ContractTab.Transactions && !this.contractTransaction['count']) {
+      this.loadingContract = true;
+      this.getTransaction();
+      this.isFirstLoad = false;
+    }
   }
 
   getTransaction(isInit = true): void {
