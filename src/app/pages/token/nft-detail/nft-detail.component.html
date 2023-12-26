@@ -8,7 +8,7 @@
       <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap">
         <ng-container *ngIf="!nftDetail?.isDisplayName">
           <span class="mr-1">{{ nftDetail?.name || nftDetail?.token_name }}</span>
-          <span class="mr-2">#{{ nftDetail?.token_id | ellipsis : 8 : 8 }}</span>
+          <span class="mr-2">#{{ nftDetail?.token_id | ellipsis: 8 : 8 }}</span>
         </ng-container>
         <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
         <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
@@ -75,7 +75,7 @@
             <div class="d-flex align-items-center d-lg-flex d-none">
               <h1 class="fw-bold sub-text text--white mb-0 mr-1">
                 <ng-container *ngIf="!nftDetail?.isDisplayName">
-                  {{ nftDetail?.name || nftDetail?.token_name }} #{{ nftDetail?.token_id | ellipsis : 8 : 8 }}
+                  {{ nftDetail?.name || nftDetail?.token_name }} #{{ nftDetail?.token_id | ellipsis: 8 : 8 }}
                 </ng-container>
                 <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
               </h1>
@@ -242,7 +242,7 @@
                     {{ nftDetail?.token_id }}
                   </span>
                   <span class="d-lg-none d-flex">
-                    {{ nftDetail?.token_id | ellipsis : 10 }}
+                    {{ nftDetail?.token_id | ellipsis: 10 }}
                   </span>
                 </div>
                 <div class="aura-tooltip-contain">
@@ -283,18 +283,18 @@
                       <div class="card-info py-4 text-center">
                         <div class="caption fw-normal text--white">
                           <span class="d-none d-lg-block">
-                            {{ prop.trait_type | ellipsis : 15 }}
+                            {{ prop.trait_type | ellipsis: 15 }}
                           </span>
                           <span class="d-block d-lg-none">
-                            {{ prop.trait_type | ellipsis : 18 }}
+                            {{ prop.trait_type | ellipsis: 18 }}
                           </span>
                         </div>
                         <div class="mt-2 caption text--white">
                           <span class="d-none d-lg-block">
-                            {{ prop.value | ellipsis : 14 }}
+                            {{ prop.value | ellipsis: 14 }}
                           </span>
                           <span class="d-block d-lg-none">
-                            {{ prop.value | ellipsis : 17 }}
+                            {{ prop.value | ellipsis: 17 }}
                           </span>
                         </div>
                       </div>
@@ -348,7 +348,7 @@
               <ng-container [ngSwitch]="template.matColumnDef">
                 <ng-container *ngSwitchCase="'tx_hash'">
                   <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
-                    {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
+                    {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                   </a>
                 </ng-container>
                 <ng-container *ngSwitchCase="'status'">
@@ -365,7 +365,7 @@
                   </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'timestamp'">
-                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                  {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                 </ng-container>
                 <ng-container *ngSwitchCase="'type'">
                   <div class="aura-status text-capitalize">
@@ -379,7 +379,7 @@
                         data.modeExecute === modeExecuteTransaction.Take ||
                         data[template.matColumnDef]?.startsWith('Null')
                       ">
-                      <span>{{ data[template.matColumnDef] | ellipsis : 8 : 8 }}</span>
+                      <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                     </ng-container>
                     <ng-container
                       *ngIf="
@@ -412,7 +412,7 @@
                       data.modeExecute === modeExecuteTransaction.Take ||
                       data[template.matColumnDef]?.startsWith('Null')
                     ">
-                    <span>{{ data[template.matColumnDef] | ellipsis : 8 : 8 }}</span>
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                   </ng-container>
                   <ng-container *ngIf="!data[template.matColumnDef]?.startsWith('Null')">
                     <app-name-tag
@@ -439,7 +439,7 @@
                     <span [class.text--primary]="data.denom !== denom" class="ml-1">{{ data.denom || denom }}</span>
                     <app-tooltip-customize
                       *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
-                      [content]="data[template.matColumnDef] | mask : 'separator.6'">
+                      [content]="data[template.matColumnDef] | mask: 'separator.6'">
                     </app-tooltip-customize>
                   </div>
                   <div *ngIf="!data[template.matColumnDef]">-</div>
