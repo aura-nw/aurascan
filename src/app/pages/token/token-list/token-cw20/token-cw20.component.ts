@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
@@ -28,7 +29,6 @@ import { DATEFORMAT, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../..
 import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-token-cw20',
@@ -73,7 +73,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   nativeToken: any;
   isMobileMatched = false;
   breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  searchExplain = false;
 
   constructor(
     public translate: TranslateService,
@@ -173,8 +172,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       };
       const result = this.dataTable?.filter(
         (item) =>
-          item.name.toLowerCase().includes(this.textSearch.toLowerCase()) ||
-          item.contract_address == this.textSearch.toLowerCase(),
+          item.name?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
+          item.contract_address?.toLowerCase() == this.textSearch.toLowerCase() ||
+          item.symbol?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
+          item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
       );
       this.dataSource.data = result;
     } else {
@@ -242,7 +243,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                   }
                   if (this.filterType.length === 0) {
                     dataList.push(...this.listTokenIBC);
-                    dataList.push(...[this.nativeToken]);
                     dataList.push(...mappedData);
                   }
                   this.dataTable = dataList;
