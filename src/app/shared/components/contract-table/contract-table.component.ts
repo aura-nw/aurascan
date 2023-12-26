@@ -2,15 +2,14 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
-import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { DROPDOWN_ELEMENT, ITableContract } from 'src/app/core/models/contract.model';
 import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+import { getTypeTx } from 'src/app/core/utils/common/info-common';
 
 export interface TableData {
   txHash: string;
@@ -142,7 +141,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
           to = contract.messages[0].to_address;
           break;
         case TRANSACTION_TYPE_ENUM.ExecuteContract:
-          method = Object.keys(msg)[0];
+          method = getTypeTx(contract.tx.tx.body, 0)?.type;
           value = +contract.messages[0].funds[0]?.amount;
           from = contract.messages[0].sender;
           to = contract.messages[0].contract;
@@ -151,8 +150,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
           if (msg && Object.keys(msg)[0]?.length > 1) {
             method = Object.keys(msg)[0];
           } else {
-            const typeTemp = contract.messages[0]['@type'];
-            method = _.find(TYPE_TRANSACTION, { label: typeTemp })?.value || typeTemp.split('.').pop();
+            method = getTypeTx(contract.tx.tx.body, 0)?.type;
           }
           if (contract.messages[0]?.funds) {
             value = +contract.messages[0]?.funds[0]?.amount;
