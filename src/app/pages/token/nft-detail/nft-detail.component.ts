@@ -226,17 +226,15 @@ export class NFTDetailComponent implements OnInit {
             element['tx_hash'] = element.tx.hash;
             element['from_address'] = element.from || NULL_ADDRESS;
             element['to_address'] =
-              element.to || element.cw721_token.cw721_contract.smart_contract.address || NULL_ADDRESS;
+              element.to || NULL_ADDRESS;
             element['token_id'] = element.cw721_token.token_id;
             element['timestamp'] = element.tx.timestamp;
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.tx)?.action;
-            if (element['type'] === ModeExecuteTransaction.Burn || element['type'] === ModeExecuteTransaction.UnEquip || element['type'] === ModeExecuteTransaction.Unwrap) {
-              element['to_address'] = NULL_ADDRESS;
-            } else if (
-              element['type'] === ModeExecuteTransaction.Approve ||
-              element['type'] === ModeExecuteTransaction.Revoke
+            element['type'] = getTypeTx(element.tx)?.type;
+            if (
+              element['action'] === ModeExecuteTransaction.Approve ||
+              element['action'] === ModeExecuteTransaction.Revoke
             ) {
               let msg = element?.tx.transaction_messages[0]?.content?.msg;
               if (typeof msg === 'string') {
@@ -246,11 +244,7 @@ export class NFTDetailComponent implements OnInit {
                 }
               }
               element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
-            } else if (element['type'] === undefined) {
-              const _type = element['tx'].transaction_messages[0]?.content['@type'];
-              element['type'] = _.find(TYPE_TRANSACTION, {label: _type})?.value || _type.split('.').pop();
             }
-
             if (element.tx.transaction_messages[0].content?.funds?.length > 0) {
               let dataDenom = this.commonService.mappingNameIBC(
                 element.tx.transaction_messages[0].content?.funds[0]?.denom,

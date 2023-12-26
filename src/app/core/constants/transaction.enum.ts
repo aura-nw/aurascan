@@ -122,7 +122,6 @@ export enum ModeExecuteTransaction {
   ProvideLiquidity = 'provide_liquidity',
   Approve = 'approve',
   Revoke = 'revoke',
-  Unwrap = 'unwrap'
 }
 
 export enum pipeTypeData {

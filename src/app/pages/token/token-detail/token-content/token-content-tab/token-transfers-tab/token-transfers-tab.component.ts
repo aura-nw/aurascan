@@ -171,7 +171,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['timestamp'] = element.tx.timestamp;
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.tx)?.action;
+            element['type'] = getTypeTx(element.tx)?.type;
             if (element['type'] === undefined) {
               const _type = element['tx'].transaction_messages[0]?.content['@type'];
               element['type'] = _.find(TYPE_TRANSACTION, {label: _type})?.value || _type.split('.').pop();
@@ -236,7 +236,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['timestamp'] = element.tx.timestamp;
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.tx)?.action;
+            element['type'] = getTypeTx(element.tx)?.type;
             element['decimal'] = element.cw20_contract.decimal;
           });
           if (this.dataSource.data.length > 0 && !isReload) {
