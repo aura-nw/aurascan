@@ -31,14 +31,18 @@ export class ChartStatsComponent implements OnInit {
   prevTime = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000);
   isLoading = true;
   errTxt: string;
+  maxValueDailyAddress = 0;
 
-  constructor(public translate: TranslateService, private statisticService: StatisticService) {}
+  constructor(
+    public translate: TranslateService,
+    private statisticService: StatisticService,
+  ) {}
 
   ngOnInit() {
+    this.getDailyTransactionData();
     this.dailyTransactionChartInit();
     this.uniqueAddressChartInit();
     this.dailyAddressChartInit();
-    this.getDailyTransactionData();
   }
 
   dailyTransactionChartInit() {
@@ -66,6 +70,10 @@ export class ChartStatsComponent implements OnInit {
       leftPriceScale: {
         visible: true,
         borderColor: '#494C58',
+        scaleMargins: {
+          top: 0.4,
+          bottom: 0.05,
+        },
       },
       rightPriceScale: {
         visible: false,
@@ -176,6 +184,10 @@ export class ChartStatsComponent implements OnInit {
       leftPriceScale: {
         visible: true,
         borderColor: '#494C58',
+        scaleMargins: {
+          top: 0.3,
+          bottom: 0.01,
+        },
       },
       rightPriceScale: {
         visible: false,
@@ -189,7 +201,14 @@ export class ChartStatsComponent implements OnInit {
       },
       handleScroll: false,
     });
-    this.dailyAddressChartSeries = this.dailyAddressChart.addAreaSeries({});
+    this.dailyAddressChartSeries = this.dailyAddressChart.addLineSeries({
+      autoscaleInfoProvider: () => ({
+        priceRange: {
+          minValue: 0,
+          maxValue: this.maxValueDailyAddress,
+        },
+      }),
+    });
     this.dailyAddressChartSeries.applyOptions({
       lineColor: '#2CB1F5',
       topColor: 'rgba(44, 177, 245, 0)',
@@ -250,7 +269,7 @@ export class ChartStatsComponent implements OnInit {
             valueArrActive.push(data.daily_active_addresses);
             timeArr.push(data.date);
           });
-
+          this.maxValueDailyAddress = Math.max(...valueArrActive);
           this.drawChart(valueArrDaily, timeArr, 'dailyTrans');
           this.drawChart(valueArrUnique, timeArr, 'uniqueAddress');
           this.drawChart(valueArrActive, timeArr, 'dailyAddress');
