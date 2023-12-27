@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { STORAGE_KEYS, TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
 import { CommonService } from './core/services/common.service';
 import { TokenService } from './core/services/token.service';
@@ -6,7 +6,7 @@ import { getInfo } from './core/utils/common/info-common';
 import { Globals } from './global/global';
 // import eruda from 'eruda';
 import * as _ from 'lodash';
-import { forkJoin, map } from 'rxjs';
+import { forkJoin, map, Subject, takeUntil } from 'rxjs';
 import { NameTagService } from './core/services/name-tag.service';
 import { NotificationsService } from './core/services/notifications.service';
 import { ValidatorService } from './core/services/validator.service';
@@ -20,13 +20,16 @@ import { UserService } from './core/services/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   // TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
   // isTestnet = this.TESTNET.includes(
   //   this.chainInfo?.chainId || ''
   // );
   isFirstLoad = true;
   user: IUser;
+
+  destroyed$ = new Subject<void>();
+
   constructor(
     private commonService: CommonService,
     private globals: Globals,
@@ -37,8 +40,16 @@ export class AppComponent implements OnInit {
     private watchListService: WatchListService,
     private userService: UserService,
   ) {}
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
   ngOnInit(): void {
-    this.user = this.userService.initUser();
+    this.userService.user$?.pipe(takeUntil(this.destroyed$)).subscribe((user) => {
+      this.user = user;
+    });
 
     this.getInfoCommon();
     this.getPriceToken();

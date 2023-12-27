@@ -19,6 +19,7 @@ export class UserService extends CommonService {
     private environmentService: EnvironmentService,
   ) {
     super(http, environmentService);
+    this.initUser();
   }
 
   initUser() {
@@ -34,12 +35,14 @@ export class UserService extends CommonService {
       return this.userSubject$?.getValue();
     }
 
+    // Get from local if the userObject$ is not initialized
     return local.getItem<IUser>(STORAGE_KEYS.USER_DATA);
   }
 
   setUser(user: IUser) {
     if (user) {
       this.userSubject$.next(user);
+      local.setItem(STORAGE_KEYS.USER_DATA, user);
     } else {
       // TODO: Handle null case
     }

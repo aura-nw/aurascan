@@ -1,6 +1,7 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -19,7 +20,7 @@ import { MenuItem } from './menu.model';
 /**
  * Horizontal-Topbar Component
  */
-export class HorizontaltopbarComponent implements OnInit {
+export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = MENU;
 
   searchValue = null;
@@ -39,6 +40,8 @@ export class HorizontaltopbarComponent implements OnInit {
     this.checkEnv();
   }
 
+  destroy$ = new Subject();
+
   constructor(
     public router: Router,
     public translate: TranslateService,
@@ -48,11 +51,18 @@ export class HorizontaltopbarComponent implements OnInit {
     private userService: UserService,
   ) {}
 
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+
   ngOnInit(): void {
     this.getMenuLink();
     this.checkEnv();
 
-    this.userEmail = this.userService.getCurrentUser()?.email;
+    this.userService.user$?.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
+      this.userEmail = currentUser ? currentUser.email : null;
+    });
   }
 
   checkEnv() {

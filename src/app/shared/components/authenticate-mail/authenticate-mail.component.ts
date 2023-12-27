@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { clearLocalData } from 'src/app/global/global';
@@ -14,14 +14,11 @@ import { EnvironmentService } from '../../../core/data-services/environment.serv
   styleUrls: ['./authenticate-mail.component.scss'],
 })
 export class AuthenticateMailComponent implements OnDestroy {
-  userEmail = null;
-
   @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.chainId;
-  isMobileMatched = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
     tap((state) => {
       if (state) {
@@ -31,6 +28,10 @@ export class AuthenticateMailComponent implements OnDestroy {
   );
 
   destroy$ = new Subject<void>();
+
+  userEmail = null;
+  isMobileMatched = false;
+
   constructor(
     private envService: EnvironmentService,
     private layout: BreakpointObserver,
@@ -41,7 +42,9 @@ export class AuthenticateMailComponent implements OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userEmail = this.userService.getCurrentUser()?.email;
+    this.userService.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
+      this.userEmail = user?.email;
+    });
   }
 
   ngOnDestroy(): void {

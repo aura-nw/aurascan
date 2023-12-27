@@ -46,10 +46,10 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
-  userEmail = this.userService.getCurrentUser()?.email;
+  userEmail = '';
 
   destroyed$ = new Subject<void>();
-  timerUnSub: Subscription;
+
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.stakingTime}`;
 
@@ -84,7 +84,12 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
-    this.route.params.subscribe((params) => {
+
+    this.userService.user$?.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
+      this.userEmail = currentUser ? currentUser.email : null;
+    });
+
+    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
         this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
@@ -101,10 +106,6 @@ export class AccountDetailComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-
-    if (this.timerUnSub) {
-      this.timerUnSub.unsubscribe();
-    }
   }
 
   loadDataTemp(): void {

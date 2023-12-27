@@ -141,16 +141,16 @@ export class LoginComponent implements OnInit {
         this.userService.loginWithPassword(payload).subscribe({
           next: (res) => {
             if (!res.error) {
-              local.setItem(STORAGE_KEYS.USER_DATA, { ...res, email: res.userEmail || res.email });
+              // local.setItem(STORAGE_KEYS.USER_DATA, { ...res, email: res.userEmail || res.email });
               local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, res.provider || 'password');
               local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
-              this.route.navigate(['/profile']);
 
               this.userService.setUser({ ...res, email: res.userEmail || res.email });
+              this.route.navigate(['/profile']);
 
-              setTimeout(() => {
-                location.reload();
-              }, 1000);
+              // setTimeout(() => {
+              //   location.reload();
+              // }, 1000);
             }
           },
           error: (err) => {

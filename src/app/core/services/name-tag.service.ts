@@ -60,6 +60,8 @@ export class NameTagService extends CommonService {
     }
 
     const userEmail = this.userService.getCurrentUser()?.email;
+    console.log(userEmail);
+
     let address = '';
     if (this.listNameTag?.length > 0) {
       if (userEmail) {
