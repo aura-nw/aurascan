@@ -9,6 +9,7 @@ import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
 import local from 'src/app/core/utils/storage/local';
 import { UserStorage } from 'src/app/core/models/auth.models';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -24,7 +25,6 @@ export class HorizontaltopbarComponent implements OnInit {
 
   searchValue = null;
   pageTitle = null;
-  innerWidth: number;
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
@@ -33,18 +33,13 @@ export class HorizontaltopbarComponent implements OnInit {
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.innerWidth = window.innerWidth;
-    this.checkEnv();
-  }
-
   constructor(
     public router: Router,
     public translate: TranslateService,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
+    private notificationsService: NotificationsService,
   ) {}
 
   ngOnInit(): void {
@@ -53,10 +48,9 @@ export class HorizontaltopbarComponent implements OnInit {
   }
 
   checkEnv() {
-    this.pageTitle =
-      this.innerWidth > 992
-        ? this.environmentService.environment.label.desktop
-        : this.environmentService.environment.label.mobile;
+    this.pageTitle = this.notificationsService.isMobileMatched
+      ? this.environmentService.environment.label.mobile
+      : this.environmentService.environment.label.desktop;
   }
 
   async handleSearch() {
