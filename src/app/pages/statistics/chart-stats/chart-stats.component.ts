@@ -32,6 +32,7 @@ export class ChartStatsComponent implements OnInit {
   isLoading = true;
   errTxt: string;
   maxValueDailyAddress = 0;
+  maxValueDailyTx = 0;
 
   constructor(
     public translate: TranslateService,
@@ -87,7 +88,14 @@ export class ChartStatsComponent implements OnInit {
       },
       handleScroll: false,
     });
-    this.dailyTransactionChartSeries = this.dailyTransactionChart.addAreaSeries({});
+    this.dailyTransactionChartSeries = this.dailyTransactionChart.addAreaSeries({
+      autoscaleInfoProvider: () => ({
+        priceRange: {
+          minValue: 0,
+          maxValue: this.maxValueDailyTx,
+        },
+      }),
+    });
 
     this.dailyTransactionChartSeries.applyOptions({
       lineColor: '#2CB1F5',
@@ -270,6 +278,7 @@ export class ChartStatsComponent implements OnInit {
             timeArr.push(data.date);
           });
           this.maxValueDailyAddress = Math.max(...valueArrActive);
+          this.maxValueDailyTx = Math.max(...valueArrDaily);
           this.drawChart(valueArrDaily, timeArr, 'dailyTrans');
           this.drawChart(valueArrUnique, timeArr, 'uniqueAddress');
           this.drawChart(valueArrActive, timeArr, 'dailyAddress');
