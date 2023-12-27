@@ -360,7 +360,7 @@ export class IBCService extends CommonService {
     return axios.get(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`);
   }
 
-  getDenomTotalHolder(denomHash) {
+  getDenomTotalHolder(denomHash: string) {
     const operationsDoc = `
     query DenomTotalHolder ($denom: String = null) {
       ${this.envDB} {
