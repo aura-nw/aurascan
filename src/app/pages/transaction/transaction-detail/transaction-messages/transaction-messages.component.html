@@ -448,6 +448,7 @@
               <i class="ph-currency-circle-dollar mx-auto h3 mr-2 mb-0 text--white"></i>
               <div class="ml-2">
                 <span
+                  class="pr-lg-0 pr-4"
                   *ngIf="item?.coins?.length > 0"
                   [innerHTML]="item?.coins[0]?.denom | ibcDenom: item?.coins[0]?.amount">
                 </span>
