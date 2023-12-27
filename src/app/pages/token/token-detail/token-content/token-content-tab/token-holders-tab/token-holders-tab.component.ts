@@ -12,6 +12,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { ActivatedRoute } from '@angular/router';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -221,9 +222,9 @@ export class TokenHoldersTabComponent implements OnInit {
             owner: item.address,
             amount,
             balance: amount,
-            percent_hold: (amount / this.tokenDetail?.totalSupply) * 100,
+            percent_hold: new BigNumber(amount).dividedBy(this.tokenDetail?.totalSupply).multipliedBy(100),
             value:
-              new BigNumber(amount)
+            new BigNumber(amount)
                 .multipliedBy(this.tokenDetail?.price)
                 .dividedBy(Math.pow(10, this.decimalValue))
                 .toFixed() || 0,
