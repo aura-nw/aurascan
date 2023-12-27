@@ -548,7 +548,7 @@ export class TokenService extends CommonService {
   }): Observable<any> {
     const operationsDoc = `
     query DenomTransfer($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
-      auratestnet {
+      ${this.envDB} {
         ibc_ics20(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}, order_by: {id: desc}, limit: $limit, offset: $offset) {
           denom
           sender
