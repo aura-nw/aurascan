@@ -120,6 +120,8 @@ export class TokenTableComponent implements OnChanges {
     } else {
       this.accountService.getAssetCW20ByOwner(payload).subscribe({
         next: (res) => {
+          console.log(res);
+          
           let data: any;
           if (res?.data?.length > 0) {
             let lstToken = _.get(res, 'data').map((element) => {
@@ -128,6 +130,7 @@ export class TokenTableComponent implements OnChanges {
                 data.change = data.price_change_percentage_24h;
                 data.isValueUp = true;
                 data['balance'] = data['balance'] || 0;
+                data.value = data.value;
                 if (data.change !== '-' && data.change < 0) {
                   data.isValueUp = false;
                   data.change = Number(data.change.toString().substring(1));

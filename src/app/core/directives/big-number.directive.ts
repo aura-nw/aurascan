@@ -14,7 +14,6 @@ export class BigNumberDirective implements AfterViewInit {
   @Input() tokenPrice: any;
   @Input() auraValue: boolean = false;
   @Input() votingPower: boolean = false;
-
   element: HTMLElement;
 
   constructor(
