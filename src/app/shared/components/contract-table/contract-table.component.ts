@@ -130,12 +130,12 @@ export class ContractTableComponent implements OnInit, OnChanges {
       switch (contract.typeOrigin) {
         case TRANSACTION_TYPE_ENUM.InstantiateContract:
         case TRANSACTION_TYPE_ENUM.InstantiateContract2:
-          method = 'instantiate';
+          method = 'Instantiate';
           from = contract.messages[0].sender;
           to = contract.contract_address || this.contractInfo.contractsAddress;
           break;
         case TRANSACTION_TYPE_ENUM.Send:
-          method = 'transfer';
+          method = 'Transfer';
           value = +contract.messages[0]?.amount[0].amount;
           from = contract.messages[0].from_address;
           to = contract.messages[0].to_address;
