@@ -120,8 +120,6 @@ export class TokenTableComponent implements OnChanges {
     } else {
       this.accountService.getAssetCW20ByOwner(payload).subscribe({
         next: (res) => {
-          console.log(res);
-          
           let data: any;
           if (res?.data?.length > 0) {
             let lstToken = _.get(res, 'data').map((element) => {

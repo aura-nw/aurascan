@@ -68,22 +68,22 @@
                             <div class="aura-tooltip-contain">
                               <span
                                 class="aura-tooltip-object"
-                                *ngIf="data[template.matColumnDef] | balance: 6 | lt: 0.001">
+                                *ngIf="data[template.matColumnDef] | balance: decimal | lt: 0.001">
                                 {{ '<0.001' }}
                               </span>
                               <span
-                                *ngIf="data[template.matColumnDef] | balance: 6 | gte: 0.001"
+                                *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
                                 class="aura-tooltip-object"
-                                [class.cursor-text]="data[template.matColumnDef] | balance: 6 | lt: 1000000"
+                                [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
                                 [appBigNumber]="data[template.matColumnDef]"
                                 [decimal]="6"></span>
                               <span class="ml-1">{{ denom }}</span>
                               <app-tooltip-customize
                                 *ngIf="
-                                  (data[template.matColumnDef] | balance: 6 | lt: 0.001) ||
-                                  (data[template.matColumnDef] | balance: 6 | gte: 1000000)
+                                  (data[template.matColumnDef] | balance: decimal | lt: 0.001) ||
+                                  (data[template.matColumnDef] | balance: decimal | gte: 1000000)
                                 "
-                                [content]="data[template.matColumnDef] | balance: 6 | mask: 'separator'">
+                                [content]="data[template.matColumnDef] | balance: decimal | mask: 'separator'">
                               </app-tooltip-customize>
                             </div>
                           </ng-container>
@@ -103,22 +103,22 @@
                             <div class="aura-tooltip-contain">
                               <span
                                 class="aura-tooltip-object"
-                                *ngIf="data[template.matColumnDef] | balance: 6 | lt: 0.001">
+                                *ngIf="data[template.matColumnDef] | balance: decimal | lt: 0.001">
                                 {{ '<0.001' }}
                               </span>
                               <span
-                                *ngIf="data[template.matColumnDef] | balance: 6 | gte: 0.001"
+                                *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
                                 class="aura-tooltip-object"
-                                [class.cursor-text]="data[template.matColumnDef] | balance: 6 | lt: 1000000"
+                                [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
                                 [appBigNumber]="data[template.matColumnDef]"
                                 [decimal]="6"></span>
                               <span class="ml-1">{{ denom }}</span>
                               <app-tooltip-customize
                                 *ngIf="
-                                  (data[template.matColumnDef] | balance: 6 | lt: 0.001) ||
-                                  (data[template.matColumnDef] | balance: 6 | gte: 1000000)
+                                  (data[template.matColumnDef] | balance: decimal | lt: 0.001) ||
+                                  (data[template.matColumnDef] | balance: decimal | gte: 1000000)
                                 "
-                                [content]="data[template.matColumnDef] | balance: 6 | mask: 'separator'">
+                                [content]="data[template.matColumnDef] | balance: decimal | mask: 'separator'">
                               </app-tooltip-customize>
                             </div>
                           </ng-container>

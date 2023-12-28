@@ -19,6 +19,7 @@ export class ContractsOverviewCardComponent implements OnChanges {
   contractRegisterType = ContractRegisterType;
   linkNft = 'token-nft';
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
   verifiedStatus = '';
   verifiedText = '';
 
@@ -33,7 +34,7 @@ export class ContractsOverviewCardComponent implements OnChanges {
     this.contractBalance = balanceReq?.data?.balances[0]?.amount ? balanceReq?.data?.balances[0]?.amount : 0;
     this.contractValue = new BigNumber(this.contractBalance)
       .dividedBy(BigNumber(10).pow(6))
-      .multipliedBy(BigNumber(this.global.price.aura));
+      .multipliedBy(BigNumber(this.tokenService.nativePrice));
     this.tokenService.tokensMarket$
       .pipe(
         filter((data) => _.isArray(data)),
