@@ -119,7 +119,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.listTokenIBC = local.getItem(STORAGE_KEYS.LIST_TOKEN_IBC);
     const res = await this.tokenService.getTokenSupply();
     const supply = _.get(res, 'data.supply');
-    this.listTokenIBC.forEach((token) => {
+    this.listTokenIBC?.forEach((token) => {
       token.type = ETokenCoinType.IBC;
       token.isHolderUp = true;
       supply.forEach((s) => {
@@ -127,6 +127,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           token.totalSupply = getBalance(s?.amount || 0, token.decimal);
         }
       });
+      token.inChainValue = new BigNumber(token.totalSupply || 0).multipliedBy(token.price || 0) || 0;
     });
   }
 
@@ -168,10 +169,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   searchData() {
     if (this.textSearch?.trim().length > 0) {
       this.textSearch = this.textSearch?.trim();
-      const payload = {
-        limit: this.pageData.pageSize,
-        offset: this.pageData.pageIndex * this.pageData.pageSize,
-      };
       const result = this.dataTable?.filter(
         (item) =>
           item.name?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
@@ -209,6 +206,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                       changePercent =
                         (cw20_total_holder_stats[1].total_holder * 100) / cw20_total_holder_stats[0].total_holder - 100;
                     }
+                    const totalSupply = getBalance(item.total_supply, item.decimal);
 
                     return {
                       coin_id: foundToken?.coin_id || '',
@@ -223,7 +221,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                       verify_status: foundToken?.verify_status || '',
                       verify_text: foundToken?.verify_text || '',
                       circulating_market_cap: +foundToken?.circulating_market_cap || 0,
-                      inChainValue: +foundToken?.circulating_market_cap || 0,
+                      inChainValue:
+                        new BigNumber(totalSupply).multipliedBy(foundToken?.current_price) ||
+                        +foundToken?.circulating_market_cap ||
+                        0,
                       volume: +foundToken?.total_volume || 0,
                       price: +foundToken?.current_price || 0,
                       isValueUp:
@@ -244,6 +245,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     dataList.push(...mappedData);
                   }
                   if (this.filterType.length === 0) {
+                    dataList.push(...[this.nativeToken]);
                     dataList.push(...this.listTokenIBC);
                     dataList.push(...mappedData);
                   }
@@ -304,7 +306,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           decimals: this.chainInfo.coinDecimals,
           totalSupply,
           price: this.nativeToken.current_price,
-          inChainValue: totalSupply * this.nativeToken.current_price,
+          inChainValue: new BigNumber(totalSupply).multipliedBy(this.nativeToken.current_price) || 0,
           denom: this.chainInfo.coinMinimalDenom,
           isHolderUp: true,
           type: ETokenCoinType.NATIVE,
@@ -315,13 +317,13 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   drawTable() {
     const auraToken = [this.nativeToken];
     const verifiedToken = this.dataTable
-      .filter((token) => token.verify_status === 'VERIFIED')
+      .filter((token) => token.verify_status === 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))
       .sort((a, b) => this.compare(a.inChainValue, b.inChainValue, false))
       .sort((a, b) => this.compare(a.totalSupply, b.totalSupply, false));
 
     const otherToken = this.dataTable
-      .filter((token) => token.verify_status !== 'VERIFIED')
+      .filter((token) => token.verify_status !== 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))
       .sort((a, b) => this.compare(a.inChainValue, b.inChainValue, false))
       .sort((a, b) => this.compare(a.totalSupply, b.totalSupply, false));
