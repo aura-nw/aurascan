@@ -7,7 +7,7 @@ import { EModeToken } from 'src/app/core/constants/token.enum';
 import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { getBalance } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -70,7 +70,7 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail.holderChange = Math.abs(this.tokenDetail.holderChange);
     }
 
-    this.tokenDetail['supplyAmount'] = balanceOf(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
+    this.tokenDetail['supplyAmount'] = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
     this.tokenDetail['supplyValue'] = new BigNumber(this.tokenDetail['supplyAmount'])
       .multipliedBy(this.tokenDetail?.price)
       .toFixed();
@@ -104,7 +104,7 @@ export class TokenOverviewComponent implements OnInit {
       (k) => k.coin_id === this.environmentService.coingecko?.ids[0],
     );
 
-    const supplyAmount = balanceOf(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
+    const supplyAmount = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
     const supplyValue = new BigNumber(supplyAmount).multipliedBy(nativeToken?.current_price).toFixed();
     this.tokenDetail = {
       ...this.tokenDetail,
