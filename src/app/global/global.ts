@@ -362,6 +362,7 @@ export function convertDataAccountTransaction(
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
+
     const lstTypeTemp = _.get(element, 'transaction_messages');
     let type;
     if (lstTypeTemp) {
@@ -407,7 +408,7 @@ export function convertDataAccountTransaction(
         element?.coin_transfers?.forEach((data, i) => {
           toAddress = data.to;
           fromAddress = data.from;
-          let { type, action } = getTypeTx(element, i);
+          let { type, action } = getTypeTx(element);
           let amountString = data.amount + data.denom || denom;
           let decimal = coinInfo.coinDecimals;
           let amountTemp = data.amount;
@@ -429,7 +430,7 @@ export function convertDataAccountTransaction(
         break;
       case TabsAccountLink.FtsTxs:
         arrEvent = _.get(element, 'cw20_activities')?.map((item, index) => {
-          let { type, action } = getTypeTx(element, index);
+          let { type, action } = getTypeTx(element);
           let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
           let toAddress = _.get(item, 'to') || NULL_ADDRESS;
           let denom = _.get(item, 'cw20_contract.symbol');
@@ -442,7 +443,7 @@ export function convertDataAccountTransaction(
         break;
       case TabsAccountLink.NftTxs:
         arrEvent = _.get(element, 'cw721_activities')?.map((item, index) => {
-          let { type, action } = getTypeTx(element, index);
+          let { type, action } = getTypeTx(element);
           let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
           let toAddress = _.get(item, 'to') || _.get(item, 'cw721_contract.smart_contract.address') || NULL_ADDRESS;
           if (action === 'burn') {
@@ -556,14 +557,7 @@ export function convertTxIBC(data, coinInfo) {
   const txs = _.get(data, 'ibc_ics20').map((data) => {
     let element = data.ibc_message?.transaction;
     const code = _.get(element, 'code');
-    let typeOrigin = _.get(element, 'transaction_messages[0].type');
     const lstTypeTemp = _.get(element, 'transaction_messages');
-
-    let type = _.find(TYPE_TRANSACTION, { label: typeOrigin })?.value || typeOrigin?.split('.').pop();
-    if (type.startsWith('Msg')) {
-      type = type?.replace('Msg', '');
-    }
-
     const status = code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
     let amountTemp = _.get(data, 'amount');
     let amount = balanceOf(amountTemp || 0, coinInfo.coinDecimals);
@@ -571,8 +565,10 @@ export function convertTxIBC(data, coinInfo) {
     return {
       code,
       tx_hash: _.get(element, 'hash'),
-      type,
+      type: getTypeTx(element)?.type,
       status,
+      from_address: _.get(data, 'sender'),
+      to_address: _.get(data, 'receiver'),
       fee: balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals),
       height: _.get(element, 'height'),
       timestamp: _.get(element, 'timestamp'),

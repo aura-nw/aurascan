@@ -158,9 +158,8 @@ export function getSigningType(provider: WALLET_PROVIDER) {
   }
 }
 
-export function getTypeTx(element, index = 0) {
-  let type = _.get(element, "transaction_messages[0].content['@type']") || element.messages[0]['@type'];
-
+export function getTypeTx(element) {
+  let type = _.get(element, "transaction_messages[0].content['@type']") || _.get(element, "messages[0]['@type']");
   let action;
   if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
     try {

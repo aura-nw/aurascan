@@ -3,31 +3,31 @@
 <div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt && !isLoading">
   <div class="filter-group d-flex align-items-center flex-nowrap">
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.length === 0"
       (click)="filterButton('All')">
       All types
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(ContractRegisterType.CW20)"
       (click)="filterButton(ContractRegisterType.CW20)">
       CW-20
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(ContractRegisterType.CW721)"
       (click)="filterButton(ContractRegisterType.CW721)">
       CW-721
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(ContractRegisterType.CW4973)"
       (click)="filterButton(ContractRegisterType.CW4973)">
       CW-4973
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes('')"
       (click)="filterButton('')">
       Others
@@ -173,8 +173,8 @@
                       <span
                         *ngIf="
                           !data['code']?.type ||
-                          (data['code']?.type === contractRegisterType.CW20 && !data['cw20_contract']?.name) ||
-                          (data['code']?.type === contractRegisterType.CW721 && !data['cw721_contract']?.name)
+                          (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
+                          (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
                         ">
                         -
                       </span>

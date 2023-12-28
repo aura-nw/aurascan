@@ -1,4 +1,4 @@
-import { MenuItem } from './menu.model';
+import {MenuItem} from './menu.model';
 
 export enum MenuName {
   Dashboard = 'Dashboard',
@@ -7,9 +7,9 @@ export enum MenuName {
   Validator = 'Validator',
   Block = 'Block',
   Token = 'Token',
-  TokenCW20 = 'TokenCW20',
-  TokenCW721 = 'TokenCW721',
-  TokenCW4973 = 'TokenCW4973',
+  TokenCW20 = 'Coins & Tokens',
+  TokenCW721 = 'NFTs',
+  TokenCW4973 = 'ABTs',
   Statistic = 'Statistic',
   ChartStats = 'Chart & Stats',
   TopStatistics = 'Top Statistics',
@@ -81,21 +81,21 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         id: 1,
-        label: 'CW-20 Top Tokens',
+        label: 'Coins & Tokens',
         link: '/tokens',
         name: MenuName.TokenCW20,
         icon: 'coins',
       },
       {
         id: 2,
-        label: 'CW-721 Top Tokens',
+        label: 'NFTs',
         link: '/tokens/tokens-nft',
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
       },
       {
         id: 3,
-        label: 'CW-4973 Top Tokens',
+        label: 'ABTs',
         link: '/tokens/token-abt',
         name: MenuName.TokenCW4973,
         icon: 'icon icon-bound-token',
@@ -234,21 +234,21 @@ export const MENU_MOB: MenuItem[] = [
     subItems: [
       {
         id: 1,
-        label: 'CW-20 Top Tokens',
+        label: 'Coins & Tokens',
         link: '/tokens',
         name: MenuName.TokenCW20,
         icon: 'coins',
       },
       {
         id: 2,
-        label: 'CW-721 Top Tokens',
+        label: 'NFTs',
         link: '/tokens/tokens-nft',
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
       },
       {
         id: 3,
-        label: 'CW-4973 Top Tokens',
+        label: 'ABTs',
         link: '/tokens/token-abt',
         name: MenuName.TokenCW4973,
         icon: 'icon icon-bound-token',
