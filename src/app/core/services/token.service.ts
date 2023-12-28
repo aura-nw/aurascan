@@ -547,7 +547,7 @@ export class TokenService extends CommonService {
     address: string;
   }): Observable<any> {
     const operationsDoc = `
-    query DenomTransfer($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
+    query queryListTxIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
       ${this.envDB} {
         ibc_ics20(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}, order_by: {id: desc}, limit: $limit, offset: $offset) {
           denom
@@ -559,6 +559,7 @@ export class TokenService extends CommonService {
               hash
               transaction_messages {
                 type
+                content
               }
               timestamp
               code
@@ -582,14 +583,14 @@ export class TokenService extends CommonService {
           offset: payload.offset,
           address: payload.address,
         },
-        operationName: 'DenomTransfer',
+        operationName: 'queryListTxIBC',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getDenomHolder(denomHash: string, address: string): Observable<any> {
     const operationsDoc = `
-    query DenomHolder(
+    query queryHolderIBC(
       $denom: String = null
       $limit: Int = null
       $offset: Int = null
@@ -618,7 +619,7 @@ export class TokenService extends CommonService {
           denom: denomHash,
           address: address,
         },
-        operationName: 'DenomHolder',
+        operationName: 'queryHolderIBC',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

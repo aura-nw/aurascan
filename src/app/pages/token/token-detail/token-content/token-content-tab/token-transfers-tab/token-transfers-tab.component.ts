@@ -182,11 +182,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['status'] =
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
             element['type'] = getTypeTx(element.tx)?.type;
-            if (element['type'] === undefined) {
-              const _type = element['tx'].transaction_messages[0]?.content['@type'];
-              element['type'] = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
-            }
+            element['lstTypeTemp'] = _.get(element, 'tx.transaction_messages');
           });
+          
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
           } else {
@@ -248,6 +246,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
               element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
             element['type'] = getTypeTx(element.tx)?.type;
             element['decimal'] = element.cw20_contract.decimal;
+            element['lstTypeTemp'] = _.get(element, 'tx.transaction_messages');
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
@@ -295,7 +294,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       next: (res) => {
         if (res) {
           this.nextKey = null;
-          if (res.ibc_ics20.length >= 100) {
+          if (res.ibc_ics20?.length >= this.pageData.pageSize) {
             this.nextKey = res?.ibc_ics20[res.ibc_ics20.length - 1]?.height;
             this.hasMore.emit(true);
           } else {

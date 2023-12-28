@@ -130,18 +130,18 @@ export class ContractTableComponent implements OnInit, OnChanges {
       switch (contract.typeOrigin) {
         case TRANSACTION_TYPE_ENUM.InstantiateContract:
         case TRANSACTION_TYPE_ENUM.InstantiateContract2:
-          method = 'instantiate';
+          method = 'Instantiate';
           from = contract.messages[0].sender;
           to = contract.contract_address || this.contractInfo.contractsAddress;
           break;
         case TRANSACTION_TYPE_ENUM.Send:
-          method = 'transfer';
+          method = 'Transfer';
           value = +contract.messages[0]?.amount[0].amount;
           from = contract.messages[0].from_address;
           to = contract.messages[0].to_address;
           break;
         case TRANSACTION_TYPE_ENUM.ExecuteContract:
-          method = getTypeTx(contract.tx.tx.body, 0)?.type;
+          method = getTypeTx(contract.tx.tx.body)?.type;
           value = +contract.messages[0].funds[0]?.amount;
           from = contract.messages[0].sender;
           to = contract.messages[0].contract;
@@ -150,7 +150,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
           if (msg && Object.keys(msg)[0]?.length > 1) {
             method = Object.keys(msg)[0];
           } else {
-            method = getTypeTx(contract.tx.tx.body, 0)?.type;
+            method = getTypeTx(contract.tx.tx.body)?.type;
           }
           if (contract.messages[0]?.funds) {
             value = +contract.messages[0]?.funds[0]?.amount;

@@ -104,11 +104,11 @@ export class TokenHoldersTabComponent implements OnInit {
               value:
                 new BigNumber(item.amount)
                   .multipliedBy(this.tokenDetail.price)
-                  .dividedBy(Math.pow(10, this.decimalValue))
+                  .dividedBy(BigNumber(10).pow(this.decimalValue))
                   .toFixed() || 0,
             };
           });
-          this.dataSource = new MatTableDataSource<any>(dataFlat);
+          this.dataSource.data = [...dataFlat];
         }
       },
       error: (e) => {
@@ -224,13 +224,13 @@ export class TokenHoldersTabComponent implements OnInit {
             balance: amount,
             percent_hold: new BigNumber(amount).dividedBy(this.tokenDetail?.totalSupply).multipliedBy(100),
             value:
-            new BigNumber(amount)
+              new BigNumber(amount)
                 .multipliedBy(this.tokenDetail?.price)
-                .dividedBy(Math.pow(10, this.decimalValue))
+                .dividedBy(BigNumber(10).pow(this.decimalValue))
                 .toFixed() || 0,
           };
         });
-        this.dataSource = new MatTableDataSource<any>(dataFlat);
+        this.dataSource.data = [...dataFlat];
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
