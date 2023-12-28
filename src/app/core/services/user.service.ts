@@ -2,11 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { clearLocalData } from 'src/app/global/global';
 import { CW20_TRACKING, CW721_TRACKING, STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IUser } from '../models/auth.models';
 import local from '../utils/storage/local';
 import { CommonService } from './common.service';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends CommonService {
@@ -17,6 +19,7 @@ export class UserService extends CommonService {
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
+    private notificationsService: NotificationsService,
   ) {
     super(http, environmentService);
     this.initUser();
@@ -52,7 +55,7 @@ export class UserService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/users/register-with-password`, payload);
   }
 
-  loginWithPassword(payload): Observable<any> {
+  loginWithPassword(payload: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/login-with-password`, payload);
   }
 
@@ -81,7 +84,11 @@ export class UserService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
   }
 
-  logout() {}
+  logout() {
+    this.notificationsService.deleteToken();
+    this.setUser(null);
+    clearLocalData();
+  }
 
   getListTxByAddress(payload) {
     const operationsDoc = `

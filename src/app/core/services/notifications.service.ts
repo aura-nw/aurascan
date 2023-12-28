@@ -151,7 +151,14 @@ export class NotificationsService {
     return this.http.get<any>(`${this.apiUrl}/quota-notifications`);
   }
 
-  deleteToken(token) {
-    return this.http.delete<any>(`${this.apiUrl}/users/delete-notification-token/${token}`);
+  deleteToken() {
+    return this.http.delete<any>(`${this.apiUrl}/users/delete-notification-token/${this.currentFcmToken}`).subscribe({
+      complete: () => {
+        this.currentFcmToken = null;
+      },
+      error: () => {
+        this.currentFcmToken = null;
+      },
+    });
   }
 }

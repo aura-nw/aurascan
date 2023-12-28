@@ -44,14 +44,7 @@ export class JwtInterceptor implements HttpInterceptor {
         next: (res) => {
           this.isReloadToken = false;
           if (res.error?.statusCode === 400) {
-            // remove current fcm token
-            this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
-              (res) => {},
-              () => (this.notificationsService.currentFcmToken = null),
-              () => (this.notificationsService.currentFcmToken = null),
-            );
-
-            clearLocalData();
+            this.userService.logout();
             // redirect to log out
             this.router.navigate(['/login']);
 
@@ -71,14 +64,8 @@ export class JwtInterceptor implements HttpInterceptor {
         },
         error: (err) => {
           this.isReloadToken = false;
-          // remove current fcm token
-          this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
-            (res) => {},
-            () => (this.notificationsService.currentFcmToken = null),
-            () => (this.notificationsService.currentFcmToken = null),
-          );
 
-          clearLocalData();
+          this.userService.logout();
           this.router.navigate(['/login']);
 
           setTimeout(() => {

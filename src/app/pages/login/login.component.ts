@@ -4,7 +4,7 @@ import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/lega
 import { ActivatedRoute, Router } from '@angular/router';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { IUser } from 'src/app/core/models/auth.models';
+import { ELoginProvider } from 'src/app/core/models/auth.models';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
@@ -141,16 +141,14 @@ export class LoginComponent implements OnInit {
         this.userService.loginWithPassword(payload).subscribe({
           next: (res) => {
             if (!res.error) {
-              // local.setItem(STORAGE_KEYS.USER_DATA, { ...res, email: res.userEmail || res.email });
-              local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, res.provider || 'password');
               local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
 
-              this.userService.setUser({ ...res, email: res.userEmail || res.email });
+              this.userService.setUser({
+                ...res,
+                email: res.userEmail || res.email,
+                provider: ELoginProvider.Password,
+              });
               this.route.navigate(['/profile']);
-
-              // setTimeout(() => {
-              //   location.reload();
-              // }, 1000);
             }
           },
           error: (err) => {
@@ -249,14 +247,15 @@ export class LoginComponent implements OnInit {
 
         this.userService.loginWithGoogle(payload).subscribe({
           next: (res) => {
-            local.setItem(STORAGE_KEYS.USER_DATA, { ...res, email: res.userEmail || res.email });
-            local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, res.provider || 'password');
             local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
-            window.location.href = '/profile';
 
-            setTimeout(() => {
-              location.reload();
-            }, 1000);
+            this.userService.setUser({
+              ...res,
+              email: res.userEmail || res.email,
+              provider: res.provider || ELoginProvider.Password,
+            });
+
+            this.route.navigate(['/profile']);
           },
           error: (err) => {
             this.addError(err?.error?.error?.details?.message);
