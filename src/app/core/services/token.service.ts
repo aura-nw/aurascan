@@ -34,6 +34,8 @@ export class TokenService extends CommonService {
           marketing_info
           name
           symbol
+          total_supply
+          decimal
           smart_contract {
             address
           }
@@ -536,5 +538,93 @@ export class TokenService extends CommonService {
 
   getCoinMarkets(coinsId: string[]): Observable<any[]> {
     return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
+  }
+
+  getListTransactionTokenIBC(payload: {
+    denom: string;
+    limit: number;
+    offset: number;
+    address: string;
+  }): Observable<any> {
+    const operationsDoc = `
+    query queryListTxIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
+      ${this.envDB} {
+        ibc_ics20(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}, order_by: {id: desc}, limit: $limit, offset: $offset) {
+          denom
+          sender
+          receiver
+          amount
+          ibc_message {
+            transaction {
+              hash
+              transaction_messages {
+                type
+                content
+              }
+              timestamp
+              code
+            }
+          }
+        }
+        ibc_ics20_aggregate(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          denom: payload.denom,
+          limit: payload.limit,
+          offset: payload.offset,
+          address: payload.address,
+        },
+        operationName: 'queryListTxIBC',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getDenomHolder(denomHash: string, address: string): Observable<any> {
+    const operationsDoc = `
+    query queryHolderIBC(
+      $denom: String = null
+      $limit: Int = null
+      $offset: Int = null
+      $address: String = null
+    ) {
+      ${this.envDB} {
+        account(
+          where: {
+            balances: { _contains: [{ denom: $denom }] }
+            address: { _eq: $address }
+          }
+          order_by: {}
+          limit: $limit
+          offset: $offset
+        ) {
+          address
+          balances
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          denom: denomHash,
+          address: address,
+        },
+        operationName: 'queryHolderIBC',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getTokenSupply() {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}`);
   }
 }

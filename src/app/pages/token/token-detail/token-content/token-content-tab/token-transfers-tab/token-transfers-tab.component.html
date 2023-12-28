@@ -1,3 +1,5 @@
+<app-loading-sprint *ngIf="loading"></app-loading-sprint>
+
 <ng-container *ngIf="!loading">
   <div *ngIf="nextKey && !errTxt" class="body-03 caption-mob fw-normal-mob text--gray-5 mb-lg-3">
     More than {{ pageData?.length | number }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
@@ -7,13 +9,13 @@
   </div>
   <div *ngIf="pageData?.length > 0" class="divider divider-horizontal my-4 d-lg-none"></div>
   <div class="transfer-table-container overflow-scroll-x">
-    <ng-container *ngIf="pageData?.length > 0; else noValues">
+    <ng-container *ngIf="pageData?.length > 0 && !loading; else noValues">
       <table mat-table [dataSource]="dataSource" class="aura-table">
         <ng-container *ngFor="let template of template; index as i">
           <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
             <ng-container *ngSwitchCase="'type'">
               <th mat-header-cell *matHeaderCellDef class="col-per-20">
-                <div [innerHTML]="template.headerCellDef | translate" class="ml-5"></div>
+                <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
             <ng-container *ngSwitchCase="'status'">
@@ -130,11 +132,18 @@
                       {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
-                      <div class="aura-status aura-tooltip-contain">
-                        <span class="status aura-tooltip-object">
-                          {{ data[template.matColumnDef] | ellipsis: 25 }}
-                        </span>
-                        <app-tooltip-customize [content]="data.lstTypeTemp | combineTxsMsg"> </app-tooltip-customize>
+                      <div class="aura-status aura-tooltip-contain status">
+                        <div class="aura-tooltip-object">
+                          <span>{{ data[template.matColumnDef] | ellipsis: 25 }}</span>
+                          <span *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+                            +{{ data.lstTypeTemp?.length - 1 }}
+                          </span>
+                        </div>
+
+                        <app-tooltip-customize
+                          [class]="'message-custom'"
+                          [content]="data.lstTypeTemp | combineTxsMsg">
+                        </app-tooltip-customize>
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'">
@@ -160,7 +169,7 @@
                             <app-name-tag
                               [value]="data[template.matColumnDef]"
                               [isHref]="true"
-                              [url]="'/tokens/' + linkToken + '/' + contractAddress + '?a='"
+                              [url]="'/tokens/' + linkToken + '/' + linkAddress + '?a='"
                               [isTokenDetail]="true"
                               *ngIf="
                                 data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
@@ -192,7 +201,7 @@
                           [value]="data[template.matColumnDef]"
                           [isHref]="true"
                           [isTokenDetail]="true"
-                          [url]="'/tokens/' + linkToken + '/' + contractAddress + '?a='"
+                          [url]="'/tokens/' + linkToken + '/' + linkAddress + '?a='"
                           [type]="data.type"
                           *ngIf="
                             !data[template.matColumnDef]?.startsWith('Null') && data[template.matColumnDef]
@@ -223,12 +232,12 @@
                     <ng-container *ngSwitchCase="'token_id'">
                       <span *ngIf="data['token_id']?.length === 0"> - </span>
                       <span *ngIf="data['token_id'] === 'More'"> More </span>
-                      <span class="text--primary pr-lg-3" *ngIf="data['status'] === 'Fail'">
+                      <span class="text--primary" *ngIf="data['status'] === 'Fail'">
                         {{ data[template.matColumnDef] | ellipsis: 12 }}
                       </span>
                       <a
                         class="text--primary pr-lg-3"
-                        href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
+                        href="/tokens/{{ linkToken }}/{{ linkAddress }}?a={{ encodeData(data['token_id']) }}"
                         *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
                         {{ data[template.matColumnDef] | ellipsis: 12 }}
                       </a>
@@ -244,15 +253,10 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell g-no-data" colspan="9999">
-            {{ 'NO DATA' | translate }}
-          </td>
-        </tr>
       </table>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+      <app-table-no-data [textNull]="errTxt" *ngIf="!loading"></app-table-no-data>
     </ng-template>
   </div>
   <app-paginator
@@ -261,7 +265,3 @@
     (paginator)="paginatorEmit($event)"
     (pageEvent)="pageEvent($event)"></app-paginator>
 </ng-container>
-
-<div *ngIf="loading">
-  <app-loading-sprint></app-loading-sprint>
-</div>
