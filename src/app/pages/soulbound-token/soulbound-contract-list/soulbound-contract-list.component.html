@@ -1,9 +1,9 @@
-<h1 class="mb-0 text--white">ABT Creator</h1>
+<h1 class="mb-0 text--white">{{ 'PAGES.ABT.ABTCreator' | translate }}</h1>
 <section class="mt-6">
   <div class="card">
     <div class="card-body">
       <ng-container *ngIf="currentAddress && !loading">
-        <div *ngIf="!isNoData" class="h2 mb-4 mb-lg-0 text--white">Smart Contracts</div>
+        <div *ngIf="!isNoData" class="h2 mb-4 mb-lg-0 text--white">{{ 'PAGES.ABT.smartContracts' | translate }}</div>
         <div
           *ngIf="!isNoData && !errTxt"
           class="d-flex flex-column flex-lg-row justify-content-lg-between flex-lg-row-reverse align-items-lg-center mb-4">
@@ -17,9 +17,9 @@
                 [maxLength]="maxLengthSearch"
                 (keyup.enter)="searchToken()"
                 name="search"
-                autocomplete="off" />
+                autocomplete="off"/>
               <button type="submit" class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
               <button
                 type="reset"
@@ -27,14 +27,14 @@
                   !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
                 }}"
                 (click)="resetSearch()">
-                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
             </div>
           </form>
           <div class="body text--gray-4 mt-4 mt-lg-0">
             {{
-              'COMMON.TOTAL_OF'
-                | translate : { value: pageData?.length | number, unit: pageData?.length > 1 ? 'records' : 'record' }
+            'COMMON.TOTAL_OF'
+              | translate : {value: pageData?.length | number, unit: pageData?.length > 1 ? 'records' : 'record'}
             }}
           </div>
         </div>
@@ -46,7 +46,7 @@
           <table mat-table [dataSource]="dataSource" class="aura-table">
             <!-- Number Column -->
             <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef>No</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'LABEL.NO' | translate }}</th>
               <td mat-cell *matCellDef="let element; let i = index" class="py-4">
                 <span>{{ pageData?.pageIndex * 20 + i + 1 }}</span>
               </td>
@@ -54,7 +54,7 @@
 
             <!-- Contract address -->
             <ng-container matColumnDef="contract_address">
-              <th mat-header-cell *matHeaderCellDef class="col-per-30">Contract Address</th>
+              <th mat-header-cell *matHeaderCellDef class="col-per-30">{{ 'LABEL.CONTRACT_ADDRESS' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="py-4">
                 <div class="d-flex justify-content-start">
                   <app-name-tag
@@ -68,19 +68,19 @@
 
             <!-- Create data -->
             <ng-container matColumnDef="total">
-              <th mat-header-cell *matHeaderCellDef>Created Data</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'PAGES.ABT.createdData' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="py-4">{{ element.total }}</td>
             </ng-container>
 
             <!-- Claimed QTY -->
             <ng-container matColumnDef="claimed_qty">
-              <th mat-header-cell *matHeaderCellDef>Claimed Qty</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'PAGES.ABT.claimedQty' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="py-4">{{ element.claimed_qty }}</td>
             </ng-container>
 
             <!-- Unclaimed QTY -->
             <ng-container matColumnDef="unclaimed_qty">
-              <th mat-header-cell *matHeaderCellDef>Unclaimed Qty</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'PAGES.ABT.unClaimedQty' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="py-4">{{ element.unclaimed_qty }}</td>
             </ng-container>
 
@@ -91,7 +91,7 @@
                 <button
                   class="button border-radius--sm button-outline button--sm text--white"
                   (click)="openDialog(element.smart_contract?.address)">
-                  Create New
+                  {{ 'BUTTON.createNew' | translate }}
                 </button>
               </td>
             </ng-container>

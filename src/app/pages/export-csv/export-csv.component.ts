@@ -1,16 +1,17 @@
-import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { saveAs } from 'file-saver';
-import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { UserStorage } from 'src/app/core/models/auth.models';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import {DatePipe} from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {saveAs} from 'file-saver';
+import {TabsAccount, TabsAccountLink} from 'src/app/core/constants/account.enum';
+import {DATEFORMAT, STORAGE_KEYS} from 'src/app/core/constants/common.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {UserStorage} from 'src/app/core/models/auth.models';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
 import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
+
 @Component({
   selector: 'app-export-csv',
   templateUrl: './export-csv.component.html',
@@ -41,7 +42,8 @@ export class ExportCsvComponent implements OnInit {
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.renderCaptcha();
@@ -104,7 +106,7 @@ export class ExportCsvComponent implements OnInit {
     }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    let { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
+    let {address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock} = this.csvForm.value;
 
     if (startDate || endDate) {
       startDate = this.getConvertDate(startDate);
@@ -202,7 +204,7 @@ export class ExportCsvComponent implements OnInit {
 
   checkFormValid(): boolean {
     this.getAddress.setValue(this.getAddress?.value?.trim());
-    const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
+    const {address, endDate, fromBlock, startDate, toBlock} = this.csvForm.value;
 
     this.isValidBlock = true;
 
@@ -258,7 +260,7 @@ export class ExportCsvComponent implements OnInit {
     this.isFilterDate = true;
   }
 
-  getReponseCaptcha() {
+  getResponseCaptcha() {
     this.downloadCSV(grecaptcha.getResponse(this.responseCaptcha));
   }
 

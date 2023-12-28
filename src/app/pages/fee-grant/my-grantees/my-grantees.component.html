@@ -38,9 +38,9 @@
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
               name="search"
-              autocomplete="off" />
+              autocomplete="off"/>
             <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
             <button
               type="reset"
@@ -48,14 +48,14 @@
                 !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetFilterSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
           </div>
         </form>
         <div class="mt-4 mt-lg-0 text--gray-1">
           {{
-            'PAGES.FEE_GRANT.transactionFound'
-              | translate : { value: pageData?.length || 0 | number, unit: pageData?.length > 0 ? 's' : '' }
+          'PAGES.FEE_GRANT.transactionFound'
+            | translate : {value: pageData?.length || 0 | number, unit: pageData?.length > 0 ? 's' : ''}
           }}
         </div>
       </div>
@@ -85,7 +85,7 @@
                           {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                         </div>
                         <div *ngSwitchCase="'limit'">
-                          <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
+                          <ng-container *ngIf="+data[template.matColumnDef] == 0"> -</ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
                             {{ data[template.matColumnDef] | balance | mask: 'separator.6' }}
                             <span class="ml-1">{{ denom }}</span>
@@ -94,14 +94,14 @@
                         <div *ngSwitchCase="'expiration'">
                           <span class="{{ data['reason'] === 'Expired' && isActive ? 'text--red-3' : '' }}">
                             {{
-                              data[template.matColumnDef]
-                                ? (data[template.matColumnDef] | customDateTime: 'DateOnly')
-                                : '-'
+                            data[template.matColumnDef]
+                              ? (data[template.matColumnDef] | customDateTime: 'DateOnly')
+                              : '-'
                             }}
                           </span>
                         </div>
                         <div *ngSwitchCase="'spendable'">
-                          <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
+                          <ng-container *ngIf="+data[template.matColumnDef] == 0"> -</ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
                             {{ data[template.matColumnDef] | balance | mask: 'separator.6' }}
                             <span class="ml-1">{{ denom }}</span>
@@ -154,8 +154,8 @@
             <app-table-no-data
               [textNull]="
                 this.isActive
-                  ? 'You don\'t have any active granted fee allowance to others'
-                  : 'You don\'t have any inactive granted fee allowance to others'
+                  ? ('MESSAGES.NO_ACTIVE_GRANTED_FEE_ALLOW' | translate)
+                  : ('MESSAGES.NO_INACTIVE_GRANTED_FEE_ALLOW' | translate)
               "
               *ngIf="!loading && isNoData"></app-table-no-data>
             <app-table-no-data *ngIf="!loading && !isNoData"></app-table-no-data>

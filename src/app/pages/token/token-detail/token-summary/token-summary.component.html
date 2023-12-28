@@ -11,16 +11,16 @@
               class="dropdown-menu aura-dropdown-menu token-summary-more"
               *ngIf="!tokenDetail.isNFTContract"
               aria-labelledby="token-summary-more">
-              <li class="dropdown-item cursor-pointer">Add token to Web3</li>
-              <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+              <li class="dropdown-item cursor-pointer">{{ 'PAGES.TOKEN.addTokenWeb3' | translate }}</li>
+              <li class="dropdown-item cursor-pointer">{{ 'PAGES.TOKEN.updateNameTag' | translate }}</li>
             </ul>
             <ul
               class="dropdown-menu aura-dropdown-menu token-summary-more"
               *ngIf="tokenDetail.isNFTContract"
               aria-labelledby="token-summary-more">
-              <li class="dropdown-item cursor-pointer">Add token to Web3</li>
-              <li class="dropdown-item cursor-pointer">Update Token Info</li>
-              <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+              <li class="dropdown-item cursor-pointer">{{ 'PAGES.TOKEN.addTokenWeb3' | translate }}</li>
+              <li class="dropdown-item cursor-pointer">{{ 'PAGES.TOKEN.updateTokenInfo' | translate }}</li>
+              <li class="dropdown-item cursor-pointer">{{ 'PAGES.TOKEN.updateNameTag' | translate }}</li>
             </ul>
           </div>
         </div>
@@ -75,7 +75,7 @@
       <tr *ngIf="!tokenDetail.isNFTContract">
         <td colspan="2">
           <div class="d-flex align-items-center py-2">
-            <div class="first-col text--gray-5">Path</div>
+            <div class="first-col text--gray-5">{{ "LABEL.PATH" | translate }}</div>
             <div class="text--white d-flex align-items-center">
               {{ tokenDetail.channelPath?.path }}
               <!-- <i
@@ -92,7 +92,7 @@
       <tr>
         <td colspan="2">
           <div class="d-flex align-items-center py-2">
-            <div class="first-col text--gray-5">Staking Bonded</div>
+            <div class="first-col text--gray-5">{{ "PAGES.TOKEN.StakingBonded" | translate }}</div>
             <div class="text--gray-1">
               {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.total_aura || 0 }}
             </div>
@@ -102,7 +102,7 @@
       <tr>
         <td colspan="2">
           <div class="d-flex align-items-center py-2">
-            <div class="first-col text--gray-5">Decimals:</div>
+            <div class="first-col text--gray-5">{{ "PAGES.TOKEN.decimalsLabel" | translate }}</div>
             <div class="text--gray-11">{{ tokenDetail?.decimals }}</div>
           </div>
         </td>

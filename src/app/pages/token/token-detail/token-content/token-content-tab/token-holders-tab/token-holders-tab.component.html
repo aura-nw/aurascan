@@ -30,7 +30,7 @@
                 *matHeaderCellDef
                 [style.width.%]="template?.headerWidth"
                 [ngClass]="template.matColumnDef === 'owner' ? 'col-address' : ''">
-                <div class="text-capitalize" *ngIf="template.matColumnDef === 'balance'">Quantity</div>
+                <div class="text-capitalize" *ngIf="template.matColumnDef === 'balance'">{{ "PAGES.TOKEN.quantity" | translate }}</div>
                 <div
                   [innerHTML]="template.headerCellDef | translate"
                   class="text-capitalize"

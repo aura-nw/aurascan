@@ -36,8 +36,8 @@
 
                     <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
                       (<span
-                        >{{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change || 0 | formatDigit: 2 }}%</span
-                      >)
+                    >{{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change || 0 | formatDigit: 2 }}%</span
+                    >)
                     </span>
                   </div>
                 </div>
@@ -81,9 +81,9 @@
                 <div class="text--gray-5 body-02">{{ 'PAGES.TOKEN.fullyDiluted' | translate }}</div>
                 <div class="body-02 text--gray-1">
                   ${{
-                    +tokenDetail.max_total_supply === 0
-                      ? (tokenDetail.circulating_market_cap | formatDigit: 2)
-                      : (tokenDetail.fully_diluted_market_cap | formatDigit: 2)
+                  +tokenDetail.max_total_supply === 0
+                    ? (tokenDetail.circulating_market_cap | formatDigit: 2)
+                    : (tokenDetail.fully_diluted_market_cap | formatDigit: 2)
                   }}
                 </div>
               </div>
@@ -102,7 +102,7 @@
               </div>
               <div class="divider divider-item"></div>
               <div class="pl-4">
-                <div class="text--gray-5 caption fw-normal">Type</div>
+                <div class="text--gray-5 caption fw-normal">{{ "LABEL.TYPE" | translate }}</div>
                 <div class="body-02 text--gray-11">{{ tokenDetail.modeToken }}</div>
               </div>
             </div>
@@ -125,15 +125,15 @@
 
                     <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
                       (<span
-                        >{{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change || 0 | formatDigit: 2 }}%</span
-                      >)
+                    >{{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change || 0 | formatDigit: 2 }}%</span
+                    >)
                     </span>
                   </div>
                 </div>
               </div>
               <div class="divider divider-item"></div>
               <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
-                <div class="text--gray-5 caption fw-normal">In-chain Supply Amount</div>
+                <div class="text--gray-5 caption fw-normal">{{ "PAGES.TOKEN.inChainSupplyAmount" | translate }}</div>
                 <div class="body-02 text--gray-11">
                   {{ tokenDetail.supplyAmount | formatDigit: 0 }}
                   {{ tokenDetail?.name }}
@@ -146,7 +146,7 @@
         <tr>
           <td colspan="2">
             <div class="d-flex">
-              <span class="text--gray-5 body-02 fixed-col">In-chain Supply Value</span>
+              <span class="text--gray-5 body-02 fixed-col">{{ "PAGES.TOKEN.inChainSupplyValue" | translate }}</span>
               <div class="body-02 text--gray-11">{{ tokenDetail['supplyValue'] || 0 | formatDigit: 2 }}$</div>
             </div>
           </td>
@@ -156,7 +156,7 @@
       <tr>
         <td colspan="2" [ngClass]="params ? 'border-none' : ''">
           <div class="d-flex">
-            <div class="body-02 text--gray-5 fixed-col">Holders:</div>
+            <div class="body-02 text--gray-5 fixed-col">{{ "LABEL.HOLDERS" | translate }}:</div>
             <div class="body-02 text--gray-1">
               {{ tokenDetail?.holder || 0 | mask: 'separator.0' }}
               <span
@@ -164,7 +164,7 @@
                 *ngIf="!tokenDetail.isNFTContract">
                 (<span>
                   {{ tokenDetail.isHolderUp ? '↑' : '↓' }} {{ tokenDetail.holderChange || 0 | formatDigit: 2 }}% </span
-                >)
+              >)
               </span>
             </div>
           </div>

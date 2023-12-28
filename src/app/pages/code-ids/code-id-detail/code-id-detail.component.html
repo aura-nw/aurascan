@@ -15,7 +15,7 @@
         </div>
         <div class="row mt-2">
           <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Creator</div>
+            <div class="text--gray-4 body">{{ 'LABEL.CREATOR' | translate }}</div>
           </div>
           <div class="col-6 col-lg-auto">
             <app-name-tag
@@ -26,15 +26,15 @@
         </div>
         <div class="row mt-2">
           <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Tx Hash</div>
+            <div class="text--gray-4 body">{{ 'LABEL.TX_HASH' | translate }}</div>
           </div>
           <div class="col-6 col-lg-auto">
             <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-none d-lg-block">{{
               codeIdDetail.tx_hash
-            }}</a>
+              }}</a>
             <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-lg-none">{{
               codeIdDetail.tx_hash | ellipsis: 8 : 8
-            }}</a>
+              }}</a>
           </div>
         </div>
         <div class="row mt-2">
@@ -89,6 +89,7 @@
   </section>
 </ng-container>
 <ng-container *ngIf="!codeIdDetail && !isLoading"
-  ><div class="text--white text-center my-lg-20 mb-5 h6">{{ 'MESSAGES.CODE_ID_NOT_FOUND' | translate }}</div>
+>
+  <div class="text--white text-center my-lg-20 mb-5 h6">{{ 'MESSAGES.CODE_ID_NOT_FOUND' | translate }}</div>
   <div class="py-lg-20"></div>
 </ng-container>

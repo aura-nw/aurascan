@@ -185,6 +185,7 @@
     },
     "TOKEN": {
       "cw20Title": "CW-20 Tokens",
+      "quantity": "Quantity",
       "circulatingMC": "Circulating Market Cap",
       "onChainMC": "On-Chain Market Cap",
       "tokenContract": "Token Contract",
@@ -203,7 +204,6 @@
       "itemActivity": "Item Activity",
       "owner": "Owner",
       "tokenDetail": "Token detail",
-      "createNew": "Create New",
       "abtURI": "Account Bound Token URI",
       "creatorAddress": "Creator’s Address",
       "btc": "BTC",
@@ -216,12 +216,23 @@
       "priceLabel": "Price:",
       "circulatingSupply": "CIRCULATING SUPPLY MARKET CAP",
       "max": "Max",
+      "minPrice": "Min. Price",
       "totalSupply": "Total Supply:",
       "fullyDiluted": "FULLY DILUTED MARKET CAP",
       "transferLabel": "Transfer:",
       "filterByTx": "FILTER BY TOKEN TXN HASH",
       "filterByAddress": "FILTER BY ADDRESS",
-      "balance": "BALANCE"
+      "lastSaleItem": "Last Sale (Item)",
+      "lastSaleContract": "Last Sale (Contract)",
+      "balance": "BALANCE",
+      "inChainSupplyAmount": "In-chain Supply Amount",
+      "inChainSupplyValue": "In-chain Supply Value",
+      "addTokenWeb3": "Add token to Web3",
+      "updateNameTag": "Update Name Tag",
+      "updateTokenInfo": "Update Token Info",
+      "StakingBonded": "Staking Bonded",
+      "searchHolder": "Search by Coin/Token name, symbol, IBC denom, Hash, Contract address",
+      "TOTAL_OF": "A total of {{ value }} {{ unit }} found"
     },
     "CONTRACT": {
       "contractVer": "Contract Ver",
@@ -262,6 +273,8 @@
       "verifyProcess": "Verify process ({{ currentStep }}/4)"
     },
     "FEE_GRANT": {
+      "myGrantees": "My Grantees",
+      "myGranters": "My Granters",
       "granteeAddress": "Grantee's address",
       "granterAddress": "Granter's address",
       "addNewGrant": "Add New Grant",
@@ -327,7 +340,8 @@
       "exportCsv": "Export CSV",
       "coinAndToken": "Coins & Tokens",
       "accountInfo": "Account Info",
-      "totalValue": "Total Value"
+      "totalValue": "Total Value",
+      "goToContractDetail": "Go to Contract Details"
     },
     "CODE_ID": {
       "ownerMsg": "Are you the Code ID's owner?",
@@ -502,6 +516,13 @@
       "enterNote": "Enter note",
       "noteLimit": " Character limit:  {{ value }}/{{ length }} <br /> A personal note of this address. Kindly note that DO NOT input any passwords or private key here",
       "requiedNote:": "All fields are required except Personal Note"
+    },
+    "ABT": {
+      "ABTCreator": "ABT Creator",
+      "smartContracts": "Smart Contracts",
+      "claimedQty": "Claimed Qty",
+      "unClaimedQty": "Unclaimed Qty",
+      "createdData": "Created Data"
     }
   },
   "NOTICE": {
@@ -548,7 +569,10 @@
     "PASSWORD_NOT_MATCH": "The password confirmation does not match",
     "NO_COIN_N_TOKEN": "No coins & tokens",
     "FETCHING_DATA": "Fetching data, might take longer than usual. <br />Please come back later or ",
-    "CODE_ID_NOT_FOUND": "Code ID was not found!"
+    "CODE_ID_NOT_FOUND": "Code ID was not found!",
+    "NO_ACTIVE_GRANTED_FEE_ALLOW": "You don't have any active granted fee allowance to others",
+    "NO_INACTIVE_GRANTED_FEE_ALLOW": "You don't have any inactive granted fee allowance to others",
+    "CONNECT_TO_EXPER_FEEGRANT": "Kindly connect wallet to experience feegrant functions"
   },
   "VERIFY_CODE_ID_ERR": {
     "E001": "Code ID not found",
@@ -601,6 +625,8 @@
   "LABEL": {
     "AURA": "AURA",
     "NAME": "Name",
+    "MORE": "More",
+    "PATH": "Path",
     "AMOUNT_STAKED": "Amount Staked",
     "BONDED": "Bonded",
     "INFLATION": "Inflation",
@@ -721,6 +747,7 @@
     "VERIFY_PUBLISH": "Verify & Publish",
     "CONNECT_TO_WEB3": "Connect to Web3",
     "CONNECTED_TO_WEB3": "Connected to Web3",
-    "DOWNLOAD": "Download"
+    "DOWNLOAD": "Download",
+    "createNew": "Create New"
   }
 }
