@@ -387,7 +387,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   // }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (BigNumber(a).lt(b) ? -1 : 1) * (isAsc ? 1 : -1);
+    return (BigNumber(a).lt(BigNumber(b)) ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   resetSearch() {
