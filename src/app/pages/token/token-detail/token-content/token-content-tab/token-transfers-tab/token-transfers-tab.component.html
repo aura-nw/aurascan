@@ -15,7 +15,7 @@
           <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
             <ng-container *ngSwitchCase="'type'">
               <th mat-header-cell *matHeaderCellDef class="col-per-20">
-                <div [innerHTML]="template.headerCellDef | translate" class="ml-3"></div>
+                <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
             <ng-container *ngSwitchCase="'status'">
@@ -132,7 +132,7 @@
                       {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
-                      <div class="aura-status text-capitalize aura-tooltip-contain status">
+                      <div class="aura-status aura-tooltip-contain status">
                         <div class="aura-tooltip-object">
                           <span>{{ data[template.matColumnDef] | ellipsis: 25 }}</span>
                           <span *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
