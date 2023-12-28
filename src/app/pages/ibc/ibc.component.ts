@@ -15,6 +15,7 @@ import { NotificationsService } from 'src/app/core/services/notifications.servic
 import local from 'src/app/core/utils/storage/local';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupIBCDetailComponent } from './popup-ibc-detail/popup-ibc-detail.component';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-ibc',
@@ -42,6 +43,8 @@ export class IBCComponent implements OnInit {
   };
   timeUpdate: string;
   rawData = [];
+  searchSubject = new Subject();
+  destroy$ = new Subject<void>();
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'no', headerCellDef: 'No', headerWidth: 8 },
@@ -62,6 +65,13 @@ export class IBCComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchSubject
+      .asObservable()
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.textSearch = this.textSearch?.trim();
+        this.searchListIBC();
+      });
     this.getReplayerInfo();
     this.getListIBC();
 
@@ -146,7 +156,7 @@ export class IBCComponent implements OnInit {
 
   resetSearch(): void {
     this.textSearch = '';
-    this.setDataList(this.rawData)
+    this.setDataList(this.rawData);
   }
 
   paginatorEmit(event): void {
@@ -187,6 +197,10 @@ export class IBCComponent implements OnInit {
         local.setItem(STORAGE_KEYS.LIST_INFO_CHAIN, res.data);
       },
     });
+  }
+
+  onKeyUp() {
+    this.searchSubject.next(this.textSearch);
   }
 
   searchListIBC() {

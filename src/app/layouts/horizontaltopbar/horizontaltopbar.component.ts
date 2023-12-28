@@ -1,9 +1,10 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
@@ -25,7 +26,6 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
 
   searchValue = null;
   pageTitle = null;
-  innerWidth: number;
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
@@ -33,12 +33,6 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
 
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.innerWidth = window.innerWidth;
-    this.checkEnv();
-  }
 
   destroy$ = new Subject();
 
@@ -66,10 +60,9 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   }
 
   checkEnv() {
-    this.pageTitle =
-      this.innerWidth > 992
-        ? this.environmentService.environment.label.desktop
-        : this.environmentService.environment.label.mobile;
+    this.pageTitle = this.environmentService.isMobile
+      ? this.environmentService.environment.label.mobile
+      : this.environmentService.environment.label.desktop;
   }
 
   async handleSearch() {

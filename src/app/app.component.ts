@@ -63,7 +63,6 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
     this.getInfoCommon();
-    this.getPriceToken();
     this.getDataFromStorage();
     //get list token market
     this.tokenService.getCoinData();
@@ -74,7 +73,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     setInterval(() => {
       this.getListValidator();
-      this.getPriceToken();
       //get list token market
       this.tokenService.getCoinData();
     }, 600000);
@@ -93,12 +91,6 @@ export class AppComponent implements OnInit, OnDestroy {
   getInfoCommon(): void {
     this.commonService.status().subscribe((res) => {
       getInfo(this.globals, res);
-    });
-  }
-
-  getPriceToken(): void {
-    this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.AURA).subscribe((res) => {
-      this.globals.price.aura = res.data || 0;
     });
   }
 

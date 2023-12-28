@@ -51,7 +51,7 @@
                 <div class="break-word" [innerHtml]="item.display"></div>
                 <div class="mt-2 d-flex align-items-center caption fw-normal text--gray-2">
                   <i class="ph ph-clock mr-1"></i>
-                  {{ (item.created_at | dateCustom)[0] }}
+                  {{ item.created_at | customDateTime: 'Distance' }}
                 </div>
               </div>
             </div>

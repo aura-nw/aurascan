@@ -1,14 +1,17 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { filter, take } from 'rxjs';
-import { DATEFORMAT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-token-detail',
@@ -23,26 +26,36 @@ export class TokenDetailComponent implements OnInit {
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   contractType = ContractRegisterType;
   errTxt: string;
+  EModeToken = EModeToken;
+
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     private router: ActivatedRoute,
-    private route: Router,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private contractService: ContractService,
     private datePipe: DatePipe,
+    private ibcService: IBCService,
   ) {}
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    if (this.contractAddress === 'null') {
-      this.route.navigate(['/']);
-    }
-
-    if (this.router.snapshot.url[0]?.path === 'token') {
-      this.getTokenDetail();
+    const paramData = this.router.snapshot.paramMap.get('contractAddress');
+    if (paramData?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
+      this.contractAddress = paramData;
+      if (this.router.snapshot.url[0]?.path === 'token') {
+        this.getTokenDetail();
+      } else {
+        this.getTokenDetailNFT();
+      }
     } else {
-      this.getTokenDetailNFT();
+      //check is native coin
+      if (paramData === this.chainInfo?.currencies[0].coinMinimalDenom) {
+        this.getDataNative(paramData);
+      } else {
+        this.getDataCoin(paramData);
+      }
+      this.getDenomHolder(paramData);
     }
   }
 
@@ -75,6 +88,7 @@ export class TokenDetailComponent implements OnInit {
                 token.price = tokenMarket?.current_price || 0;
                 token.verify_status = tokenMarket?.verify_status || '';
                 token.verify_text = tokenMarket?.verify_text || '';
+                token.modeToken = EModeToken.CWToken;
                 token.fully_diluted_market_cap =
                   tokenMarket?.fully_diluted_valuation || token.max_total_supply * token.price;
                 token.price_change_percentage_24h = tokenMarket?.price_change_percentage_24h || 0;
@@ -107,7 +121,8 @@ export class TokenDetailComponent implements OnInit {
         }
         const isNFTContract = true;
         const contract_address = _.get(res, 'smart_contract[0].address');
-        this.tokenDetail = { name, type, contract_address, isNFTContract };
+        const modeToken = EModeToken.CWToken;
+        this.tokenDetail = { name, type, contract_address, isNFTContract, modeToken };
         this.tokenDetail.contract_verification =
           res.smart_contract[0].code.code_id_verifications[0]?.verification_status;
       },
@@ -131,5 +146,60 @@ export class TokenDetailComponent implements OnInit {
 
   getMoreTx(event) {
     this.tokenDetail['hasMoreTx'] = event;
+  }
+
+  getDataCoin(denom) {
+    const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
+    let findData = listTokenIBC?.find((k) => k['denom']?.indexOf(denom) > 0);
+    // check exit ibc denom
+    if (!findData) {
+      this.loading = false;
+      this.errTxt = 'No Data';
+    }
+    this.getInfoTokenIBC(findData);
+  }
+
+  async getInfoTokenIBC(data) {
+    const [denom, channel] = await Promise.all([
+      this.ibcService.getTotalSupplyLCD(encodeURIComponent(data?.denom)),
+      this.ibcService.getChannelInfoByDenom(encodeURIComponent(data?.denom)),
+    ]);
+
+    const decimals = data?.decimal || this.chainInfo?.currencies[0].coinDecimals;
+    this.tokenDetail = {
+      modeToken: data?.denom ? EModeToken.IBCCoin : EModeToken.StakingCoin,
+      denomHash: data?.denom,
+      name: data?.name,
+      price: data?.current_price,
+      symbol: data?.symbol || data?.display,
+      isValueUp: data?.price_change_percentage_24h && data?.price_change_percentage_24h >= 0,
+      change: data?.price_change_percentage_24h || 0,
+      decimals,
+      totalSupply: _.get(denom, 'data.amount.amount' || 0),
+      channelPath: _.get(channel, 'data.denom_trace'),
+    };
+    this.loading = false;
+  }
+
+  async getDataNative(denomNative: string) {
+    const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative);
+    this.tokenDetail = {
+      modeToken: EModeToken.StakingCoin,
+      name: this.chainInfo.chainName,
+      denomHash: this.chainInfo?.currencies[0].coinMinimalDenom,
+      symbol: this.chainInfo?.currencies[0].coinDenom,
+      isValueUp: false,
+      price: this.tokenService.nativePrice,
+      change: 0,
+      decimals: this.chainInfo?.currencies[0].coinDecimals,
+      totalSupply: _.get(tempTotal, 'data.amount.amount' || 0),
+    };
+    this.loading = false;
+  }
+
+  getDenomHolder(paramData){
+    this.ibcService.getDenomTotalHolder(paramData).subscribe((res) => {
+      this.tokenDetail['holder'] = _.get(res, 'account_aggregate.aggregate.count');
+    });
   }
 }
