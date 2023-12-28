@@ -14,9 +14,14 @@ import { CommonService } from './common.service';
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
   tokensMarket$ = new BehaviorSubject<any[]>(null);
+  nativePrice$ = new BehaviorSubject<number>(null);
 
   get tokensMarket() {
     return this.tokensMarket$.getValue();
+  }
+
+  get nativePrice() {
+    return this.nativePrice$.getValue();
   }
 
   constructor(
@@ -317,10 +322,6 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getPriceToken(tokenId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
-  }
-
   getListAssetCommunityPool() {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
   }
@@ -488,6 +489,10 @@ export class TokenService extends CommonService {
           }
 
           const tokensFiltered = res.filter((token) => token.coin_id);
+
+          // get price native token
+          const nativeToken = tokensFiltered?.find((k) => k.coin_id === this.environmentService.coingecko?.ids[0]);
+          this.nativePrice$.next(nativeToken?.current_price);
 
           const coinsId = tokensFiltered.map((coin: { coin_id: string }) => coin.coin_id);
           if (coinsId?.length > 0) {

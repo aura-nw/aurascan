@@ -51,7 +51,7 @@ export class TokenContentComponent implements OnInit {
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.chainInfo;
-  auraPrice = this.global.price.aura;
+  auraPrice = this.tokenService.nativePrice;
 
   constructor(
     private route: ActivatedRoute,

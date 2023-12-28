@@ -4,11 +4,9 @@ import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
-import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { getBalance } from 'src/app/core/utils/common/parsing';
-import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-overview',
@@ -24,11 +22,9 @@ export class TokenOverviewComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    public global: Globals,
-    private tokenService: TokenService,
+    public tokenService: TokenService,
     private route: ActivatedRoute,
     private environmentService: EnvironmentService,
-    private coingecko: CoingeckoService,
   ) {}
 
   ngOnInit(): void {
