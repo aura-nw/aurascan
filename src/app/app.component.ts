@@ -49,6 +49,17 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userService.user$?.pipe(takeUntil(this.destroyed$)).subscribe((user) => {
       this.user = user;
+
+      this.getListNameTag();
+
+      if (this.user?.accessToken) {
+        this.getWatchlist();
+        // check register fcm token
+        const registerFCM = local.getItem(STORAGE_KEYS.REGISTER_FCM);
+        if (registerFCM == 'true') {
+          this.notificationsService.registerFcmToken();
+        }
+      }
     });
 
     this.getInfoCommon();
@@ -170,17 +181,6 @@ export class AppComponent implements OnInit, OnDestroy {
     // get name tag form local storage
     const listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
     this.nameTagService.listNameTag = listNameTag;
-    this.getListNameTag();
-
-    // get watch list form local storage
-    if (this.user?.accessToken) {
-      this.getWatchlist();
-      // check register fcm token
-      const registerFCM = local.getItem(STORAGE_KEYS.REGISTER_FCM);
-      if (registerFCM == 'true') {
-        this.notificationsService.registerFcmToken();
-      }
-    }
 
     // get list name validator form local storage
     const listTokenIBC = local.getItem<[]>(STORAGE_KEYS.LIST_TOKEN_IBC);

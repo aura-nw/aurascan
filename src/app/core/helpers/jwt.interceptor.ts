@@ -2,7 +2,6 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { clearLocalData } from 'src/app/global/global';
 import { EnvironmentService } from '../data-services/environment.service';
 import { NotificationsService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
@@ -44,6 +43,7 @@ export class JwtInterceptor implements HttpInterceptor {
         next: (res) => {
           this.isReloadToken = false;
           if (res.error?.statusCode === 400) {
+            this.notificationsService.deleteToken();
             this.userService.logout();
             // redirect to log out
             this.router.navigate(['/login']);
@@ -65,6 +65,7 @@ export class JwtInterceptor implements HttpInterceptor {
         error: (err) => {
           this.isReloadToken = false;
 
+          this.notificationsService.deleteToken();
           this.userService.logout();
           this.router.navigate(['/login']);
 

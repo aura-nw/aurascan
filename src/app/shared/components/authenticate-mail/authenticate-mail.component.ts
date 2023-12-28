@@ -58,7 +58,9 @@ export class AuthenticateMailComponent implements OnDestroy {
   }
 
   disconnect(): void {
+    this.notificationsService.deleteToken();
     this.userService.logout();
+    this.userEmail = null;
 
     // check is screen profile
     if (this.route.snapshot['_routerState']?.url === '/profile') {

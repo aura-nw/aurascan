@@ -70,8 +70,7 @@ export class NotificationsService {
       let notification = payload.notification;
 
       // check exit email
-      const userEmail = this.userService.getCurrentUser()?.email; // local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.email;
-      console.log(userEmail);
+      const userEmail = this.userService.getCurrentUser()?.email;
 
       if ('serviceWorker' in navigator && userEmail) {
         navigator.serviceWorker.getRegistrations().then((registration) => {

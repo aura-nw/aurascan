@@ -8,7 +8,6 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { IUser } from '../models/auth.models';
 import local from '../utils/storage/local';
 import { CommonService } from './common.service';
-import { NotificationsService } from './notifications.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends CommonService {
@@ -19,7 +18,6 @@ export class UserService extends CommonService {
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
-    private notificationsService: NotificationsService,
   ) {
     super(http, environmentService);
     this.initUser();
@@ -85,7 +83,6 @@ export class UserService extends CommonService {
   }
 
   logout() {
-    this.notificationsService.deleteToken();
     this.setUser(null);
     clearLocalData();
   }
