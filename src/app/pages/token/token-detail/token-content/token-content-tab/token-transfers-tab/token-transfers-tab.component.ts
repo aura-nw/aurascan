@@ -23,6 +23,7 @@ import { TableTemplate } from '../../../../../../core/models/common.model';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
 import { convertTxIBC } from '../../../../../../global/global';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -82,6 +83,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   contractAddress: string;
   EModeToken = EModeToken;
   linkAddress: string;
+  destroyed$ = new Subject<void>();
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -100,7 +102,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.contractAddress = this.tokenDetail?.contract_address;
     this.typeContract = this.tokenDetail?.type;
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       this.keyWord = params?.a || '';
     });
 
@@ -120,6 +122,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+
     if (this.timerGetUpTime) {
       clearInterval(this.timerGetUpTime);
     }
@@ -184,7 +189,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['type'] = getTypeTx(element.tx)?.type;
             element['lstTypeTemp'] = _.get(element, 'tx.transaction_messages');
           });
-          
+
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
           } else {

@@ -100,18 +100,18 @@ export class TokenOverviewComponent implements OnInit {
   }
 
   getInfoNative() {
-    this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
-      if (res?.data) {
-        const supplyAmount = balanceOf(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
-        const supplyValue = new BigNumber(supplyAmount).multipliedBy(res.data.current_price).toFixed();
-        this.tokenDetail = {
-          ...this.tokenDetail,
-          price: res.data.current_price || this.tokenDetail.price,
-          change: res.data.price_change_percentage_24h,
-          supplyAmount,
-          supplyValue,
-        };
-      }
-    });
+    let nativeToken = this.tokenService.tokensMarket?.find(
+      (k) => k.coin_id === this.environmentService.coingecko?.ids[0],
+    );
+
+    const supplyAmount = balanceOf(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
+    const supplyValue = new BigNumber(supplyAmount).multipliedBy(nativeToken?.current_price).toFixed();
+    this.tokenDetail = {
+      ...this.tokenDetail,
+      price: nativeToken?.current_price || this.tokenDetail.price,
+      change: nativeToken?.price_change_percentage_24h,
+      supplyAmount,
+      supplyValue,
+    };
   }
 }

@@ -124,7 +124,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       token.isHolderUp = true;
       supply.forEach((s) => {
         if (token.denom === s.denom) {
-          token.totalSupply = balanceOf(Number(s?.amount) || 0, +token.decimal) || 0;
+          token.totalSupply = getBalance(s?.amount || 0, token.decimal);
         }
       });
     });
@@ -316,15 +316,15 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     const auraToken = [this.nativeToken];
     const verifiedToken = this.dataTable
       .filter((token) => token.verify_status === 'VERIFIED')
-      .sort((a, b) => this.compare(+a.price, +b.price, false))
-      .sort((a, b) => this.compare(+a.inChainValue, +b.inChainValue, false))
-      .sort((a, b) => this.compare(+a.totalSupply, +b.totalSupply, false));
+      .sort((a, b) => this.compare(a.price, b.price, false))
+      .sort((a, b) => this.compare(a.inChainValue, b.inChainValue, false))
+      .sort((a, b) => this.compare(a.totalSupply, b.totalSupply, false));
 
     const otherToken = this.dataTable
       .filter((token) => token.verify_status !== 'VERIFIED')
-      .sort((a, b) => this.compare(+a.price, +b.price, false))
-      .sort((a, b) => this.compare(+a.inChainValue, +b.inChainValue, false))
-      .sort((a, b) => this.compare(+a.totalSupply, +b.totalSupply, false));
+      .sort((a, b) => this.compare(a.price, b.price, false))
+      .sort((a, b) => this.compare(a.inChainValue, b.inChainValue, false))
+      .sort((a, b) => this.compare(a.totalSupply, b.totalSupply, false));
 
     if (this.filterType.includes(ETokenCoinType.NATIVE) || this.filterType.length === 0) {
       this.dataSource.data = [...auraToken];
