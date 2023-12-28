@@ -130,8 +130,11 @@
                       {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
-                      <div class="aura-status text-capitalize">
-                        <span class="status">{{ data[template.matColumnDef] | ellipsis: 25 }}</span>
+                      <div class="aura-status aura-tooltip-contain">
+                        <span class="status aura-tooltip-object">
+                          {{ data[template.matColumnDef] | ellipsis: 25 }}
+                        </span>
+                        <app-tooltip-customize [content]="data.lstTypeTemp | combineTxsMsg"> </app-tooltip-customize>
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'">
