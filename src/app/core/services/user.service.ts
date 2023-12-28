@@ -177,11 +177,7 @@ export class UserService extends CommonService {
             code
             transaction_messages {
               type
-            content
-            content
-            type
               content
-            type
             }
             cw20_activities(where: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}]}) {
               action

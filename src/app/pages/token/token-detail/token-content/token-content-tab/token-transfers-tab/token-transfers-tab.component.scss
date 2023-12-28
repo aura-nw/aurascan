@@ -56,3 +56,8 @@
     min-width: 50px;
   }
 }
+.transfer-table-container {
+  tr.mat-header-row {
+    text-transform: initial;
+  }
+}

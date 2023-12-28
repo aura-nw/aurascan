@@ -1,9 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EModeToken } from 'src/app/core/constants/token.enum';
+import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { getBalance } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -15,6 +19,7 @@ export class TokenOverviewComponent implements OnInit {
   @Input() tokenDetail: any;
   params = '';
   contractType = ContractRegisterType;
+  EModeToken = EModeToken;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
@@ -23,21 +28,29 @@ export class TokenOverviewComponent implements OnInit {
     private tokenService: TokenService,
     private route: ActivatedRoute,
     private environmentService: EnvironmentService,
+    private coingecko: CoingeckoService,
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
-    if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
-      this.getTotalSupply();
-      this.getHolderNFT();
-    } else {
-      this.getTotalHolder();
+
+    if (this.tokenDetail.modeToken === EModeToken.StakingCoin) {
+      this.getInfoNative();
+    }
+
+    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+      if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
+        this.getTotalSupply();
+        this.getHolderNFT();
+      } else {
+        this.getTotalHolder();
+      }
     }
 
     //set price change
-    this.tokenDetail['change'] = this.tokenDetail.price_change_percentage_24h;
+    this.tokenDetail['change'] = this.tokenDetail['change'] || this.tokenDetail.price_change_percentage_24h;
     this.tokenDetail['isValueUp'] = true;
     if (this.tokenDetail['change'] < 0) {
       this.tokenDetail['isValueUp'] = false;
@@ -56,6 +69,11 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail['isHolderUp'] = false;
       this.tokenDetail.holderChange = Math.abs(this.tokenDetail.holderChange);
     }
+
+    this.tokenDetail['supplyAmount'] = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
+    this.tokenDetail['supplyValue'] = new BigNumber(this.tokenDetail['supplyAmount'])
+      .multipliedBy(this.tokenDetail?.price)
+      .toFixed();
   }
 
   getTotalHolder() {
@@ -79,5 +97,21 @@ export class TokenOverviewComponent implements OnInit {
     this.tokenService.getListTokenHolderNFT(payload).subscribe((res) => {
       this.tokenDetail['holder'] = res.view_count_holder_cw721_aggregate?.aggregate?.count || 0;
     });
+  }
+
+  getInfoNative() {
+    let nativeToken = this.tokenService.tokensMarket?.find(
+      (k) => k.coin_id === this.environmentService.coingecko?.ids[0],
+    );
+
+    const supplyAmount = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
+    const supplyValue = new BigNumber(supplyAmount).multipliedBy(nativeToken?.current_price).toFixed();
+    this.tokenDetail = {
+      ...this.tokenDetail,
+      price: nativeToken?.current_price || this.tokenDetail.price,
+      change: nativeToken?.price_change_percentage_24h,
+      supplyAmount,
+      supplyValue,
+    };
   }
 }

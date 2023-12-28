@@ -21,6 +21,7 @@ export class EllipsisPipe implements PipeTransform {
 export class CombineTxsMsgPipe implements PipeTransform {
   transform(value: any[]): string {
     const lst: string[] = value.map((element: unknown) => {
+      element = element['content'] || element;
       const msgType = element['type'] || element['@type'];
       let type: string;
       if (msgType === TRANSACTION_TYPE_ENUM.ExecuteContract) {

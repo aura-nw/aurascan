@@ -69,7 +69,7 @@
                       class="aura-status"
                       [style.justify-content]="template?.justify || 'flex-start'"
                       *ngIf="data[template.matColumnDef]">
-                      <div class="status text-capitalize" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
+                      <div class="status" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
                         {{ data[template.matColumnDef] }}
                       </div>
                     </div>
