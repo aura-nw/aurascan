@@ -1,6 +1,7 @@
 .aura-status {
   display: flex;
   align-items: center;
+  min-width: 200px;
   .status {
     padding: 8px 16px;
     border-radius: 4px;
@@ -77,9 +78,6 @@
       aspect-ratio: 1 / 1;
     }
   }
-}
-.object-fit--none {
-  object-fit: none;
 }
 .card__ntf-detail {
   &-item {
