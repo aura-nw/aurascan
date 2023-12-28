@@ -44,7 +44,7 @@
         <div class="aura-tooltip-object">
           <div *ngIf="contractValue === 0">0</div>
           <div *ngIf="contractValue | lt: '0.01'">
-            {{ '<0.01' }}
+            {{ '< $0.01' }}
           </div>
           <ng-container *ngIf="contractValue | gte: '0.01'">
             $<span

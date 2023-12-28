@@ -65,8 +65,27 @@
                         <div *ngSwitchCase="'limit'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | balance | mask: 'separator.6' }}
-                            <span class="ml-1">{{ denom }}</span>
+                            <div class="aura-tooltip-contain">
+                              <span
+                                class="aura-tooltip-object"
+                                *ngIf="data[template.matColumnDef] | balance: 6 | lt: 0.001">
+                                {{ '<0.001' }}
+                              </span>
+                              <span
+                                *ngIf="data[template.matColumnDef] | balance: 6 | gte: 0.001"
+                                class="aura-tooltip-object"
+                                [class.cursor-text]="data[template.matColumnDef] | balance: 6 | lt: 1000000"
+                                [appBigNumber]="data[template.matColumnDef]"
+                                [decimal]="6"></span>
+                              <span class="ml-1">{{ denom }}</span>
+                              <app-tooltip-customize
+                                *ngIf="
+                                  (data[template.matColumnDef] | balance: 6 | lt: 0.001) ||
+                                  (data[template.matColumnDef] | balance: 6 | gte: 1000000)
+                                "
+                                [content]="data[template.matColumnDef] | balance: 6 | mask: 'separator'">
+                              </app-tooltip-customize>
+                            </div>
                           </ng-container>
                         </div>
                         <div *ngSwitchCase="'expiration'">
@@ -81,8 +100,27 @@
                         <div *ngSwitchCase="'spendable'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | balance | mask: 'separator.6' }}
-                            <span class="ml-1">{{ denom }}</span>
+                            <div class="aura-tooltip-contain">
+                              <span
+                                class="aura-tooltip-object"
+                                *ngIf="data[template.matColumnDef] | balance: 6 | lt: 0.001">
+                                {{ '<0.001' }}
+                              </span>
+                              <span
+                                *ngIf="data[template.matColumnDef] | balance: 6 | gte: 0.001"
+                                class="aura-tooltip-object"
+                                [class.cursor-text]="data[template.matColumnDef] | balance: 6 | lt: 1000000"
+                                [appBigNumber]="data[template.matColumnDef]"
+                                [decimal]="6"></span>
+                              <span class="ml-1">{{ denom }}</span>
+                              <app-tooltip-customize
+                                *ngIf="
+                                  (data[template.matColumnDef] | balance: 6 | lt: 0.001) ||
+                                  (data[template.matColumnDef] | balance: 6 | gte: 1000000)
+                                "
+                                [content]="data[template.matColumnDef] | balance: 6 | mask: 'separator'">
+                              </app-tooltip-customize>
+                            </div>
                           </ng-container>
                         </div>
                         <div *ngSwitchCase="'reason'" class="d-flex justify-content-between align-items-center">

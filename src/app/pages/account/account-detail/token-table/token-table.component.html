@@ -246,7 +246,7 @@
                     <div class="aura-tooltip-contain" *ngIf="element.contract_address === '-'">
                       <div class="aura-tooltip-object">
                         <div *ngIf="element.value | lt: '0.01'">
-                          {{ '<0.01' }}
+                          {{ '< $0.01' }}
                         </div>
                         <ng-container *ngIf="element.value | gte: '0.01'">
                           $<span
@@ -265,7 +265,7 @@
                       <div *ngIf="element.value === 0">0</div>
                       <ng-container *ngIf="element.value !== 0">
                         <div class="aura-tooltip-object" *ngIf="element.value | lt: '0.01'">
-                          {{ '<0.01' }}
+                          {{ '< $0.01' }}
                         </div>
 
                         <div
