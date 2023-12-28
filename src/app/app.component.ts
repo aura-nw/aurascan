@@ -13,6 +13,7 @@ import { ValidatorService } from './core/services/validator.service';
 import { WatchListService } from './core/services/watch-list.service';
 import local from './core/utils/storage/local';
 import { UserStorage } from './core/models/auth.models';
+import { EnvironmentService } from './core/data-services/environment.service';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +39,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     this.getInfoCommon();
-    this.getPriceToken();
     this.getDataFromStorage();
     //get list token market
     this.tokenService.getCoinData();
@@ -49,7 +49,6 @@ export class AppComponent implements OnInit {
 
     setInterval(() => {
       this.getListValidator();
-      this.getPriceToken();
       //get list token market
       this.tokenService.getCoinData();
     }, 600000);
@@ -68,12 +67,6 @@ export class AppComponent implements OnInit {
   getInfoCommon(): void {
     this.commonService.status().subscribe((res) => {
       getInfo(this.globals, res);
-    });
-  }
-
-  getPriceToken(): void {
-    this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.AURA).subscribe((res) => {
-      this.globals.price.aura = res.data || 0;
     });
   }
 

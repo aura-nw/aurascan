@@ -11,9 +11,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ContractService } from 'src/app/core/services/contract.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
-import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-detail',
@@ -39,7 +37,6 @@ export class TokenDetailComponent implements OnInit {
     private contractService: ContractService,
     private datePipe: DatePipe,
     private ibcService: IBCService,
-    private global: Globals
   ) {}
 
   ngOnInit(): void {
@@ -192,7 +189,7 @@ export class TokenDetailComponent implements OnInit {
       denomHash: this.chainInfo?.currencies[0].coinMinimalDenom,
       symbol: this.chainInfo?.currencies[0].coinDenom,
       isValueUp: false,
-      price: this.global.price.aura,
+      price: this.tokenService.nativePrice,
       change: 0,
       decimals: this.chainInfo?.currencies[0].coinDecimals,
       totalSupply: _.get(tempTotal, 'data.amount.amount' || 0),
