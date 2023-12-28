@@ -7,7 +7,11 @@
         }})
       </span>
       <span class="small-body text--light-gray" *ngIf="totalHolder <= numberTopHolder">
-        A total of {{ totalHolder || 0 | number }} token holder{{ totalHolder > 1 ? 's' : '' }}
+        {{
+          'COMMON.TOTAL_OF'
+            | translate
+              : { value: totalHolder || 0 | number, unit: pageData?.length > 1 ? 'token holders' : 'token holder' }
+        }}
       </span>
     </div>
   </div>
@@ -126,7 +130,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell g-no-data" colspan="9999">
-              {{ 'NO DATA' | translate }}
+              {{ 'LABEL.NO_DATA' | translate }}
             </td>
           </tr>
         </table>

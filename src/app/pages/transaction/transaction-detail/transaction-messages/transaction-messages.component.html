@@ -29,7 +29,7 @@
                   <ng-container [ngSwitch]="item.specialCase" *ngIf="item.specialCase">
                     <div *ngSwitchCase="specialCase.ByteCode">
                       <div class="d-flex flex-wrap mb-2">
-                        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Byte Code</div>
+                        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'PAGES.TRANSACTION_DETAILS.byteCode' | translate }}</div>
                         <div class="col-12 col-lg-9 text--gray-1">
                           <div [class.line-claim-v]="!seeLessArr[i]" class="overflow-hidden">
                             {{ item?.value }}
@@ -38,13 +38,13 @@
                             (click)="seeLessArr[i] = true"
                             class="text--primary cursor-pointer mt-1"
                             *ngIf="!seeLessArr[i]">
-                            See More
+                            {{ 'COMMON.SEE_MORE' | translate }}
                           </div>
                           <div
                             (click)="seeLessArr[i] = false"
                             class="text--primary cursor-pointer mt-1"
                             *ngIf="seeLessArr[i]">
-                            See Less
+                            {{ 'COMMON.SEE_LESS' | translate }}
                           </div>
                         </div>
                       </div>
@@ -61,7 +61,7 @@
 
               <ng-container *ngIf="element.length == 0">
                 <div class="d-flex flex-wrap mb-2">
-                  <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
+                  <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'PAGES.TRANSACTION_DETAILS.message' | translate }}</div>
                   <div class="col-12 col-lg-9">
                     <pre
                       id="json"
@@ -126,7 +126,7 @@
       <div class="card text--white">
         <div class="card-body body">
           <div class="d-flex flex-wrap mb-2">
-            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Message</div>
+            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'PAGES.TRANSACTION_DETAILS.message' | translate }}</div>
             <div class="col-12 col-lg-9">
               <pre id="json" class="raw-content text--white px-4" [innerHtml]="item | appJson"></pre>
             </div>
@@ -143,7 +143,7 @@
   <ng-template #ibcTransfer let-data="data">
     {{ getDataIBC(ibcListMapping.Transfer) }}
     <app-messages-item
-      [label]="'Sender'"
+      [label]="'LABEL.SENDER'"
       [value]="transactionDetail?.messages[0]?.sender"
       [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Receiver'" [value]="transactionDetail?.messages[0]?.receiver"></app-messages-item>
@@ -167,11 +167,11 @@
         "></div>
     </div>
     <app-messages-item
-      [label]="'Origin Amount'"
+      [label]="'PAGES.TRANSACTION_DETAILS.originAmount' | translate"
       [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <app-messages-item
-      [label]="'Origin Denom'"
+      [label]="'PAGES.TRANSACTION_DETAILS.originDenom' | translate"
       [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom"></app-messages-item>
   </ng-template>
 
@@ -202,7 +202,7 @@
       [label]="'Receiver'"
       [value]="ibcData?.receiver"
       [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
-    <app-messages-item [label]="'Sender'" [value]="ibcData?.sender"></app-messages-item>
+    <app-messages-item [label]="'LABEL.SENDER'" [value]="ibcData?.sender"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
 
@@ -213,7 +213,7 @@
       [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="d-flex flex-wrap mb-2">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'COMMON.AMOUNT' | translate }}</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.acknowledgement?.amount | balance | mask: 'separator.6' }}
         <span class="text--white">{{ denom }}</span>
@@ -226,7 +226,7 @@
     <app-messages-item [label]="'Origin Denom'" [value]="ibcData?.acknowledgement?.denom"></app-messages-item>
     <app-messages-item [label]="'Receiver'" [value]="ibcData?.acknowledgement?.receiver"></app-messages-item>
     <app-messages-item
-      [label]="'Sender'"
+      [label]="'LABEL.SENDER'"
       [value]="ibcData?.acknowledgement?.sender"
       [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
@@ -251,7 +251,7 @@
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
     <div class="d-flex flex-wrap mb-2">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Data</div>
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'COMMON.DATA' | translate }}</div>
       <div class="col-12 col-lg-9">
         <pre
           id="json"
@@ -260,81 +260,81 @@
       </div>
     </div>
     <app-messages-item
-      [label]="'Timeout Revision Number'"
+      [label]="'PAGES.TRANSACTION_DETAILS.timeoutRevisionNumber' | translate"
       [value]="ibcData?.time_out[index - 1]?.packet?.timeout_height?.revision_number"></app-messages-item>
     <app-messages-item
-      [label]="'Timeout Revision Height'"
+      [label]="'PAGES.TRANSACTION_DETAILS.timeoutRevisionHeight' | translate"
       [value]="ibcData?.time_out[index - 1]?.packet?.timeout_height?.revision_height"></app-messages-item>
     <app-messages-item
-      [label]="'Timeout Timestamp'"
+      [label]="'PAGES.TRANSACTION_DETAILS.timeoutTimestamp' | translate"
       [value]="ibcData?.time_out[index - 1]?.packet?.timeout_timestamp"></app-messages-item>
     <app-messages-item
-      [label]="'Proof Revision Number'"
+      [label]="'PAGES.TRANSACTION_DETAILS.proofRevisionNumber' | translate"
       [value]="ibcData?.time_out[index - 1]?.proof_height?.revision_number"></app-messages-item>
     <app-messages-item
-      [label]="'Proof Revision Height'"
+      [label]="'PAGES.TRANSACTION_DETAILS.proofRevisionHeight' | translate"
       [value]="ibcData?.time_out[index - 1]?.proof_height?.revision_height"></app-messages-item>
     <app-messages-item
-      [label]="'Next Sequence Recv'"
+      [label]="'PAGES.TRANSACTION_DETAILS.nextSequenceRecv' | translate"
       [value]="getLongValue(ibcData?.time_out[index - 1]?.next_sequence_recv)"></app-messages-item>
     <app-messages-item
-      [label]="'Signer'"
+      [label]="'PAGES.TRANSACTION_DETAILS.signer' | translate"
       [value]="ibcData?.time_out[index - 1]?.signer"
       [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
   </ng-template>
 
   <ng-template #ibcUpdateClient let-data="data">
     <app-messages-item
-      [label]="'Signer'"
+      [label]="'PAGES.TRANSACTION_DETAILS.signer' | translate"
       [value]="data?.signer"
       [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Client ID'" [value]="data?.client_id"></app-messages-item>
     <app-messages-item
-      [label]="'block'"
+      [label]="'COMMON.BLOCK' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.version?.block"></app-messages-item>
     <app-messages-item [label]="'app'" [value]="data[keyIbc]?.signed_header?.header?.version?.app"></app-messages-item>
     <app-messages-item [label]="'chain_id'" [value]="data[keyIbc]?.signed_header?.header?.chain_id"></app-messages-item>
     <app-messages-item
-      [label]="'height'"
+      [label]="'COMMON.HEIGHT' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.height"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <app-messages-item [label]="'time'" [value]="data[keyIbc]?.signed_header?.header?.time"></app-messages-item>
     <app-messages-item
-      [label]="'hash'"
+      [label]="'LABEL.HASH' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.last_block_id?.part_set_header?.hash"></app-messages-item>
     <app-messages-item
-      [label]="'total'"
+      [label]="'LABEL.TOTAL' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.last_block_id?.part_set_header?.total"></app-messages-item>
     <app-messages-item
-      [label]="'last_commit_hash'"
+      [label]="'LABEL.LAST_COMMIT_HASH' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.last_commit_hash"></app-messages-item>
     <app-messages-item
-      [label]="'data_hash'"
+      [label]="'LABEL.LAST_COMMIT_HASH' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.data_hash"></app-messages-item>
     <app-messages-item
-      [label]="'validators_hash'"
+      [label]="'LABEL.VALIDATORS_HASH' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.validators_hash"></app-messages-item>
     <app-messages-item
-      [label]="'next_validators_hash'"
+      [label]="'LABEL.NEXT_VALIDATORS_HASH' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.next_validators_hash"></app-messages-item>
     <app-messages-item
-      [label]="'consensus_hash'"
+      [label]="'LABEL.CONSENSUS_HASH' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.consensus_hash"></app-messages-item>
-    <app-messages-item [label]="'app_hash'" [value]="data[keyIbc]?.signed_header?.header?.app_hash"></app-messages-item>
+    <app-messages-item [label]="'LABEL.APP_HASH' | translate" [value]="data[keyIbc]?.signed_header?.header?.app_hash"></app-messages-item>
     <app-messages-item
-      [label]="'last_results_hash'"
+      [label]="'LABEL.LAST_RESULTS_HASH' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.last_results_hash"></app-messages-item>
     <app-messages-item
-      [label]="'evidence_hash'"
+      [label]="'LABEL.EVIDENCE_HASH' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.evidence_hash"></app-messages-item>
     <app-messages-item
-      [label]="'proposer_address'"
+      [label]="'LABEL.PROPOSER_ADDRESS' | translate"
       [value]="data[keyIbc]?.signed_header?.header?.proposer_address"></app-messages-item>
   </ng-template>
 
   <ng-template #ibcChannelOpen let-data="data">
     <app-messages-item
-      [label]="'Sequence'"
+      [label]="'PAGES.TRANSACTION_DETAILS.sequence' | translate"
       [value]="getLongValue(ibcData?.packet_sequence)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
   </ng-template>
@@ -343,7 +343,7 @@
     <div *ngIf="listIBCProgress?.length > 0">
       <div class="divider divider-horizontal mt-4 mb-6"></div>
       <div class="d-flex flex-wrap mb-2 ibc-process">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">IBC Progress</div>
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'PAGES.TRANSACTION_DETAILS.IBCProgress' | translate }}</div>
         <div class="col-12 col-lg-9" style="word-break: break-word">
           <ng-container
             [ngTemplateOutlet]="ibcItem"
@@ -423,12 +423,12 @@
     <div class="card-info box-multisend">
       <div class="card-text header-title d-flex align-items-center">
         <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2" />
-        Multisend
+        {{ 'PAGES.TRANSACTION_DETAILS.multisend' | translate }}
       </div>
       <div class="body-multisend">
         <ng-container *ngFor="let item of transactionDetail?.messages[0]?.outputs; let i = index">
           <div class="d-flex justify-content-between mx-4 my-5">
-            <div class="txt-label">From</div>
+            <div class="txt-label">{{ 'COMMON.FROM' | translate }}</div>
             <div class="txt-address">
               <app-name-tag
                 [url]="isContractAddress(transactionDetail?.messages[0]?.inputs[0]?.address) ? 'contracts' : 'account'"
@@ -436,7 +436,7 @@
                 [fullText]="true"
                 [fullTextMob]="true"></app-name-tag>
             </div>
-            <div class="txt-label">To</div>
+            <div class="txt-label">{{ 'COMMON.TO' | translate }}</div>
             <div class="txt-address">
               <app-name-tag
                 [url]="isContractAddress(item?.address) ? 'contracts' : 'account'"
@@ -469,9 +469,9 @@
   <ng-template #logEvent let-data="data" let-idx="idx">
     <ng-container *ngIf="transactionDetail.code === codeTransaction.Success">
       <div class="d-flex flex-wrap mb-2">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Event Log</div>
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ 'PAGES.TRANSACTION_DETAILS.eventLog' | translate }}</div>
         <div class="col-12 col-lg-9 text--gray-1">
-          <mat-slide-toggle (click)="changeShowData(idx)">Show all events</mat-slide-toggle>
+          <mat-slide-toggle (click)="changeShowData(idx)">{{ 'PAGES.TRANSACTION_DETAILS.showAllEvents' | translate }}</mat-slide-toggle>
           <div class="box-event-log mt-2" *ngIf="isDisplay[idx]">
             <ng-container *ngFor="let element of data; let index = index">
               <div class="item-event-log" *ngIf="index === idx">

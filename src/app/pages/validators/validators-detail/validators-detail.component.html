@@ -1,11 +1,14 @@
 <div class="d-flex align-items-center mb-4 mb-md-6 mt-3">
-  <app-pagetitle title="Validator Details" [displayInfo]="true" class="flex-grow-1"></app-pagetitle>
+  <app-pagetitle
+    title="{{ 'PAGES.VALIDATOR_DETAIL.validatorDetails' | translate }}"
+    [displayInfo]="true"
+    class="flex-grow-1"></app-pagetitle>
   <button
     type="button"
     class="button button-pill button-flat button--lg button--sm-mob ml-6 fw-semibold text--black"
     *ngIf="currentValidatorDetail && !currentValidatorDetail?.jailed"
     (click)="openDialog()">
-    Delegate
+    {{ 'PAGES.VALIDATOR.delegate' | translate }}
   </button>
 </div>
 
@@ -50,11 +53,13 @@
               "
               [class.status-jailed]="currentValidatorDetail?.jailed"
               [ngClass]="{ 'small-body': breakpoint.value.matches }">
-              <ng-container *ngIf="currentValidatorDetail?.jailed"> Jailed </ng-container>
-              <ng-container *ngIf="currentValidatorDetail?.status === statusValidator.Active"> Active </ng-container>
+              <ng-container *ngIf="currentValidatorDetail?.jailed"> {{ 'COMMON.JAILED' | translate }}</ng-container>
+              <ng-container *ngIf="currentValidatorDetail?.status === statusValidator.Active">{{
+                'COMMON.ACTIVE' | translate
+              }}</ng-container>
               <ng-container
                 *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active">
-                inActive
+                {{ 'COMMON.INACTIVE' | translate }}
               </ng-container>
             </div>
           </div>
@@ -63,23 +68,23 @@
       <div class="row mt-4">
         <div class="col-12 col-lg-6">
           <div class="d-flex position-relative">
-            <h6 class="mb-0 text--gray-1">Operator Address</h6>
+            <h6 class="mb-0 text--gray-1">
+              {{ 'PAGES.VALIDATOR_DETAIL.operatorAddress' | translate }}
+            </h6>
             <div class="img-wrap aura-tooltip-contain ml-1">
               <img
                 class="img-question aura-tooltip-object"
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
                 *ngIf="!breakpoint.value.matches" />
-              <app-tooltip-customize
-                [content]="
-                  'Validator operator address at which token holders delegate <br/>their voting powers to.'
-                "></app-tooltip-customize>
+              <app-tooltip-customize [content]="'MESSAGES.EXPLAIN_OPERATOR_ADDRESS' | translate">
+              </app-tooltip-customize>
             </div>
           </div>
           <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
         </div>
         <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-          <h6 class="mb-0 text--gray-1">Address</h6>
+          <h6 class="mb-0 text--gray-1">{{ 'COMMON.ADDRESS' | translate }}</h6>
           <app-name-tag
             [value]="currentValidatorDetail?.acc_address"
             [url]="'account'"
@@ -94,7 +99,9 @@
       <div class="row mt-4" *ngIf="soulboundList && soulboundList.length > 0">
         <div class="col-12">
           <!-- Aura Marking Milestone -->
-          <div class="body-01 text--gray-4 mb-2">Aura Marking Milestone</div>
+          <div class="body-01 text--gray-4 mb-2">
+            {{ 'PAGES.VALIDATOR_DETAIL.auraMarkingMilestone' | translate }}
+          </div>
           <div class="soulbound-feature-tokens mt-2">
             <app-soulbound-feature-tokens
               [extend]="false"
@@ -108,7 +115,7 @@
         <div class="col-12 col-lg-6">
           <!-- Website -->
           <div class="row">
-            <div class="col-6">Website</div>
+            <div class="col-6">{{ 'PAGES.VALIDATOR_DETAIL.website' | translate }}</div>
             <div class="col-6 text-end text-lg-start">
               <a
                 class="text--primary cursor-pointer"
@@ -120,14 +127,14 @@
           </div>
           <!-- Commission -->
           <div class="row mt-3">
-            <div class="col-6">Commission</div>
+            <div class="col-6">{{ 'PAGES.VALIDATOR.commission' | translate }}</div>
             <div class="col-6 text--gray-1 text-end text-lg-start">
               {{ currentValidatorDetail?.commission | percent: number2Digit }}
             </div>
           </div>
           <!-- Uptime -->
           <div class="row mt-3">
-            <div class="col-6">Uptime</div>
+            <div class="col-6">{{ 'PAGES.VALIDATOR_DETAIL.uptime' | translate }}</div>
             <div class="col-6 text--gray-1 text-end text-lg-start">
               <ng-container *ngIf="currentValidatorDetail['status'] === statusValidator.Active">
                 {{ currentValidatorDetail['up_time'] || 100 | formatDigit: 2 }}%
@@ -139,7 +146,7 @@
         <div class="col-12 col-lg-6">
           <!-- Voting Power -->
           <div class="row mt-3 mt-lg-0">
-            <div class="col-6">Voting Power</div>
+            <div class="col-6">{{ 'PAGES.VALIDATOR.votingPower' | translate }}</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
                 <span class="text--gray-1">{{ +currentValidatorDetail?.power | mask: 'separator.6' }}</span>
@@ -150,14 +157,14 @@
           </div>
           <!-- Bonded Height -->
           <div class="row mt-3">
-            <div class="col-6">Bonded Height</div>
+            <div class="col-6">{{ 'PAGES.VALIDATOR_DETAIL.bondedHeight' | translate }}</div>
             <div class="col-6 text--gray-1 text-end text-lg-start">
               {{ currentValidatorDetail?.bonded_height | number }}
             </div>
           </div>
           <!-- Self Bonded -->
           <div class="row mt-3">
-            <div class="col-6">Self Bonded</div>
+            <div class="col-6">{{ 'PAGES.VALIDATOR_DETAIL.selfBonded' | translate }}</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
                 <span class="text--gray-1">{{ +currentValidatorDetail?.self_bonded | mask: 'separator.6' }}</span>
@@ -170,7 +177,7 @@
       </div>
       <!-- Details -->
       <div class="mt-3">
-        <div>Details</div>
+        <div>{{ 'COMMON.DETAILS' | translate }}</div>
         <div class="editorial-container p-4 mt-2" *ngIf="currentValidatorDetail?.details">
           <div id="marked" class="editorial"></div>
         </div>
@@ -185,8 +192,9 @@
     <div class="col-xl-6">
       <div class="card text--white">
         <div class="card-header d-lg-flex align-items-center justify-content-between header-mob pb-0">
-          <h3 class="h2-mob mb-0 text--gray-1">Proposed Blocks</h3>
-          <!-- <div class="body-01 text--gray-5 mt-1 mt-lg-0">Total: {{ lengthBlock || 0 | number }} blocks</div> -->
+          <h3 class="h2-mob mb-0 text--gray-1">
+            {{ 'PAGES.VALIDATOR_DETAIL.proposedBlocks' | translate }}
+          </h3>
         </div>
         <div class="card-body article-1 pt-4">
           <ng-container *ngIf="lengthBlock > 0 && !isLoadingBlock; else noValues">
@@ -242,9 +250,9 @@
                         class: 'body-01 text--gray-1',
                         info: (data.timestamp | customDateTime: 'Distance')
                       },
-                      { label: 'Txs', class: 'body-01 text--gray-1', info: data.num_txs.toString() },
+                      { label: 'LABEL.TXS' | translate, class: 'body-01 text--gray-1', info: data.num_txs.toString() },
                       {
-                        label: 'Voting Start',
+                        label: 'PAGES.VALIDATOR_DETAIL.votingStart' | translate,
                         class: 'card__date text--gray-1 body-01-mob',
                         info:
                           '<span>' +
@@ -279,17 +287,19 @@
       <div class="card text--white">
         <div class="card-header d-lg-flex align-items-center header-mob pb-0">
           <div class="flex-grow-1 d-flex align-items-center">
-            <h3 class="h2-mob text--gray-1 mb-0">Uptime</h3>
+            <h3 class="h2-mob text--gray-1 mb-0">{{ 'PAGES.VALIDATOR_DETAIL.uptime' | translate }}</h3>
             <div class="img-wrap aura-tooltip-contain ml-1">
               <img
                 class="img-question aura-tooltip-object"
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
                 *ngIf="!breakpoint.value.matches" />
-              <app-tooltip-customize [content]="'Missed Blocks are displayed with an X'"></app-tooltip-customize>
+              <app-tooltip-customize [content]="'MESSAGES.MISSED_BLOCKS' | translate"></app-tooltip-customize>
             </div>
           </div>
-          <div class="body-01 text--gray-5 mt-1 mt-lg-0">Last {{ numberLastBlock }} Blocks</div>
+          <div class="body-01 text--gray-5 mt-1 mt-lg-0">
+            {{ 'PAGES.VALIDATOR_DETAIL.lastBlocks' | translate : { numberLastBlock: numberLastBlock } }}
+          </div>
         </div>
         <div class="text-center box-uptime">
           <div class="card-body article-1 pt-4">
@@ -328,7 +338,7 @@
     <div class="col-xl-6">
       <div class="card text--white">
         <div class="card-header d-lg-flex align-items-center justify-content-between header-mob pb-0">
-          <h3 class="h2-mob mb-0 text--gray-1">Delegators</h3>
+          <h3 class="h2-mob mb-0 text--gray-1">{{ 'PAGES.VALIDATOR_DETAIL.delegators' | translate }}</h3>
         </div>
         <div class="card-body article-1 pt-4">
           <ng-container *ngIf="lengthDelegator > 0 && !isLoadingDelegators; else noValues">
@@ -383,7 +393,7 @@
                           : (data.delegator_address | nameTag | ellipsis: 6 : 6)
                       },
                       {
-                        label: 'Amount',
+                        label: 'COMMON.AMOUNT' | translate,
                         class: 'body-01 text--gray-1',
                         info: (data.amount | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
                       }
@@ -412,7 +422,7 @@
     <div class="col-xl-6">
       <div class="card text--white">
         <div class="card-header align-items-center d-flex header-mob pb-0">
-          <h3 class="h2-mob mb-0 text--gray-1">Power Events</h3>
+          <h3 class="h2-mob mb-0 text--gray-1">{{ 'PAGES.VALIDATOR_DETAIL.powerEvents' | translate }}</h3>
         </div>
         <div class="card-body article-1 pt-4">
           <div *ngIf="isLoadingPower" class="m-auto mt-20">
@@ -445,7 +455,7 @@
                                 <a
                                   class="text--primary cursor-pointer hash-link"
                                   [routerLink]="['/transaction', data['tx_hash']]">
-                                  More
+                                  {{ 'MENUITEMS.MORE' | translate }}
                                 </a>
                               </ng-container>
                               <ng-container *ngIf="!data['amount']">0</ng-container>
@@ -494,7 +504,7 @@
                             '</a>'
                         },
                         {
-                          label: 'Amount',
+                          label: 'COMMON.AMOUNT' | translate,
                           info:
                             !data.amount || data.amount === 0 || data.amount === 'More'
                               ? data.amount.toString()
@@ -503,7 +513,7 @@
                                 : '<span class=text--danger>' + '- ' + (data.amount | mask: 'separator.6') + '</span>'
                         },
                         {
-                          label: 'Time',
+                          label: 'COMMON.TIME' | translate,
                           class: 'card__date text--gray-1 body-01-mob',
                           info:
                             '<span>' +

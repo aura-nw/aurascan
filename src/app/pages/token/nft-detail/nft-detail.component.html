@@ -14,7 +14,7 @@
         <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
           <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
         </button>
-        <span class="burnt-tag caption" *ngIf="nftDetail?.burned">Burnt</span>
+        <span class="burnt-tag caption" *ngIf="nftDetail?.burned">{{ 'PAGES.TOKEN.burnt' | translate }}</span>
       </h1>
       <div class="mt-2">
         <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]">{{
@@ -82,14 +82,14 @@
               <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
                 <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
               </button>
-              <span class="burnt-tag" *ngIf="nftDetail?.burned">Burnt</span>
+              <span class="burnt-tag" *ngIf="nftDetail?.burned">{{ 'PAGES.TOKEN.burnt' | translate }}</span>
             </div>
             <ng-container *ngIf="isSoulBound">
               <button
                 *ngIf="nftDetail.burned === false && userAddress === nftDetail?.owner"
                 class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
                 (click)="unEquipSBT()">
-                <span>Un-equip</span>
+                <span>{{ 'PAGES.TOKEN.unEquip' | translate }}</span>
               </button>
             </ng-container>
           </div>
@@ -160,9 +160,11 @@
           </div>
           <!-- End card info -->
           <div class="card card__ntf-detail mb-0">
-            <h2 class="mb-0 h5-mob text--white card__ntf-detail-item" id="popupCopy">Details</h2>
+            <h2 class="mb-0 h5-mob text--white card__ntf-detail-item" id="popupCopy">
+              {{ 'COMMON.DETAILS' | translate }}
+            </h2>
             <div class="card__ntf-detail-item body">
-              <div class="label-detail text--gray-5">Owner:</div>
+              <div class="label-detail text--gray-5">{{ 'PAGES.TOKEN.owner' | translate }}:</div>
               <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner && !nftDetail?.burned">
                 <app-name-tag
                   [value]="nftDetail?.owner"
@@ -181,12 +183,12 @@
                       class="cursor-pointer btn-copy"
                       alt="" />
                   </button>
-                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
+                  <app-tooltip-customize [content]="'BUTTON.COPIED' | translate"> </app-tooltip-customize>
                 </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
-              <div class="label-detail text--gray-5">Contract Address:</div>
+              <div class="label-detail text--gray-5">{{ 'LABEL.CONTRACT_ADDRESS' | translate }}:</div>
               <div class="d-flex align-items-center position-relative">
                 <app-name-tag
                   [value]="nftDetail?.contract_address"
@@ -206,12 +208,12 @@
                       class="cursor-pointer btn-copy"
                       alt="" />
                   </button>
-                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
+                  <app-tooltip-customize [content]="'BUTTON.COPIED' | translate"> </app-tooltip-customize>
                 </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
-              <div class="label-detail text--gray-5">Creator:</div>
+              <div class="label-detail text--gray-5">{{ 'LABEL.CREATOR' | translate }}:</div>
               <div class="d-flex align-items-center">
                 <app-name-tag
                   [value]="nftDetail?.creator"
@@ -230,12 +232,12 @@
                       class="cursor-pointer btn-copy"
                       alt="" />
                   </button>
-                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
+                  <app-tooltip-customize [content]="'BUTTON.COPIED' | translate"> </app-tooltip-customize>
                 </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
-              <div class="label-detail text--gray-5">Token ID:</div>
+              <div class="label-detail text--gray-5">{{ 'COMMON.TOKEN_ID' | translate }}:</div>
               <div class="d-flex align-items-center">
                 <div class="text--gray-1 fw-normal-mob">
                   <span class="d-lg-flex d-none">
@@ -256,12 +258,12 @@
                       class="ml-2 cursor-pointer btn-copy"
                       alt="" />
                   </button>
-                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
+                  <app-tooltip-customize [content]="'BUTTON.COPIED' | translate"> </app-tooltip-customize>
                 </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
-              <div class="label-detail text--gray-5">Token Standard:</div>
+              <div class="label-detail text--gray-5">{{ 'PAGES.TOKEN.tokenStandard' | translate }}:</div>
               <div class="text--gray-1 fw-normal-mob">
                 {{ isSoulBound ? 'CW-4973' : 'CW-721' }}
               </div>
@@ -273,7 +275,9 @@
     <div class="row mt-4 flex-column-reverse flex-lg-row" *ngIf="isSoulBound">
       <div class="col-12 col-lg-4 mt-4 mt-lg-0">
         <div class="card card--sb-information mb-0">
-          <div class="card-header card-header--has-border h2 text--white box-prop">Properties</div>
+          <div class="card-header card-header--has-border h2 text--white box-prop">
+            {{ 'LABEL.PROPERTIES' | translate }}
+          </div>
           <ng-container *ngIf="nftDetail?.media_info?.onchain?.metadata?.attributes">
             <ng-container *ngIf="isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)">
               <div class="box-prop-item">
@@ -312,7 +316,9 @@
       </div>
       <div class="col-12 col-lg-8 pl-lg-3">
         <div class="card card--sb-information mb-0">
-          <div class="card-header card-header--has-border h2 text--white pt-4 pb-5 pt-lg-6 pb-lg-4">Description</div>
+          <div class="card-header card-header--has-border h2 text--white pt-4 pb-5 pt-lg-6 pb-lg-4">
+            {{ 'PAGES.TOKEN.description' | translate }}
+          </div>
           <div class="card-body text--gray-1 body-03 sb-props">
             {{ nftDetail?.media_info?.onchain?.metadata?.description || '-' }}
           </div>
@@ -321,11 +327,14 @@
     </div>
   </div>
   <div class="card card-body mt-4 mt-lg-6">
-    <h2 class="text--white mb-0">Item Activity</h2>
+    <h2 class="text--white mb-0">{{ 'PAGES.TOKEN.itemActivity' | translate }}</h2>
 
     <div class="divider divider-horizontal d-none d-lg-block mt-2"></div>
     <div class="text--gray-5 body-02 caption-mob fw-normal-mob mt-3 mb-2 mb-lg-3">
-      A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
+      {{
+        'COMMON.TOTAL_OF'
+          | translate : { value: pageData?.length | number, unit: pageData?.length > 1 ? 'records' : 'record' }
+      }}
     </div>
     <div class="overflow-scroll-x aura-table-contain" style="max-height: 600px">
       <app-loading-sprint *ngIf="loadingTable" class="m-auto mt-10"></app-loading-sprint>

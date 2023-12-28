@@ -2,7 +2,10 @@
   <div>
     <h1 class="mb-0 text--white">Code IDs</h1>
     <div class="text--gray-5 body-02 d-none d-lg-block" *ngIf="!errTxt && !isLoading">
-      A total of {{ pageData?.length | number }} Code ID{{ pageData?.length > 1 ? 's' : '' }} found
+      {{
+        'COMMON.TOTAL_OF'
+          | translate : { value: pageData?.length | number, unit: pageData?.length > 1 ? 'Code IDs' : 'Code ID' }
+      }}
     </div>
   </div>
   <form
@@ -62,7 +65,11 @@
           </form>
           <div class="d-flex justify-content-between align-items-center my-4 my-lg-0">
             <div class="text--gray-5 caption-mob fw-normal-mob flex-shrink-0">
-              A total of {{ pageData?.length | number }} Code ID{{ pageData?.length > 1 ? 's' : '' }} found
+              {{
+                'COMMON.TOTAL_OF'
+                  | translate
+                    : { value: pageData?.length | number, unit: pageData?.length > 1 ? 'Code IDs' : 'Code ID' }
+              }}
             </div>
           </div>
         </div>
@@ -137,7 +144,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
-                {{ 'NO DATA' | translate }}
+                {{ 'LABEL.NO_DATA' | translate }}
               </td>
             </tr>
           </table>

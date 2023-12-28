@@ -34,7 +34,10 @@
           </div>
         </form>
         <div class="mt-4 mt-lg-0 text--gray-1">
-          {{ pageData?.length || 0 }} transaction{{ pageData?.length > 0 ? 's' : '' }} found
+          {{
+            'PAGES.FEE_GRANT.transactionFound'
+              | translate : { value: pageData?.length || 0 | number, unit: pageData?.length > 0 ? 's' : '' }
+          }}
         </div>
       </div>
       <div class="mt-4">

@@ -13,9 +13,9 @@
           height="16"
           class="mr-2" />
         <div>
-          Are you the Code ID's owner?
-          <a class="text--primary" (click)="navigateToVerify()"> Verify and Publish </a>
-          your Code ID source code today!
+          {{ 'PAGES.CODE_ID.ownerMsg' | translate }}
+          <a class="text--primary" (click)="navigateToVerify()"> {{ 'PAGES.CODE_ID.verifyAndPublish' | translate }} </a>
+          {{ 'PAGES.CODE_ID.yourCodeID' | translate }}
         </div>
       </div>
     </ng-container>
@@ -29,11 +29,13 @@
           height="16"
           class="mr-2 mt-1" />
         <div>
-          <div>This code ID source code is currently pending in Verify and Publish process.</div>
+          <div>{{ 'PAGES.CODE_ID.pendingMsg' | translate }}</div>
           <div>
-            Kindly click
-            <a class="text--primary cursor-pointer" (click)="navigateToVerify()"> here </a>
-            for more detail
+            {{ 'PAGES.CODE_ID.kindlyClick' | translate }}
+            <a class="text--primary cursor-pointer" (click)="navigateToVerify()">
+              {{ 'PAGES.CODE_ID.here' | translate }}
+            </a>
+            {{ 'PAGES.CODE_ID.forMoreDetail' | translate }}
           </div>
         </div>
       </div>
@@ -48,13 +50,13 @@
           height="16"
           class="mr-2" />
         <div>
-          Are you the Code ID's owner?
-          <a class="text--primary" (click)="navigateToVerify()"> Verify and Publish </a>
-          your Code ID source code today!
+          {{ 'PAGES.CODE_ID.ownerMsg' | translate }}
+          <a class="text--primary" (click)="navigateToVerify()"> {{ 'PAGES.CODE_ID.verifyAndPublish' | translate }} </a>
+          {{ 'PAGES.CODE_ID.yourCodeID' | translate }}
         </div>
       </div>
       <div class="mt-4 mt-lg-6">
-        Let check the status of the last time this Code ID source code was unable to Verify and Publish
+        {{ 'PAGES.CODE_ID.checkStatus' | translate }}
       </div>
       <app-contract-verify-steps [codeID]="codeIdDetail.code_id"></app-contract-verify-steps>
     </ng-container>
@@ -62,19 +64,19 @@
     <ng-container *ngIf="codeIdDetail?.contract_verification === contractVerifyType.Verified">
       <div class="d-flex fw-semibold">
         <img [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="" width="16px" height="16px" />
-        <div class="ml-2">Code ID Verified</div>
+        <div class="ml-2">{{ 'PAGES.CODE_ID.verified' | translate }}</div>
       </div>
       <div class="mt-6 fw-semibold">
-        <span class="text--gray-5">Compiler Version: </span>
+        <span class="text--gray-5">{{ 'PAGES.CODE_ID.complierVer' | translate }}</span>
         <span>{{ codeIdDetail.compiler_version }}</span>
       </div>
       <div class="mt-2 fw-semibold" *ngIf="codeIdDetail.verified_at">
-        <span class="text--gray-5">Verified Time: </span>
+        <span class="text--gray-5">{{ 'PAGES.CODE_ID.verifiedTime' | translate }} </span>
         <span>{{ codeIdDetail.verified_at | customDateTime: 'DateTime' }}</span>
       </div>
       <div class="d-flex mt-6">
         <i class="icon icon-file-document text--gray-4"></i>
-        <div class="ml-2 fw">Link Code ID source code</div>
+        <div class="ml-2 fw">{{ 'PAGES.CODE_ID.linkSourceCode' | translate }}</div>
       </div>
 
       <div class="form-group mt-4 d-flex align-items-center">
@@ -90,9 +92,9 @@
             #tooltip
             (click)="commonService.showToolTip(tooltip)"
             [cdkCopyToClipboard]="codeIdDetail.url">
-            <span class="body-01">Copy</span>
+            <span class="body-01">{{ 'BUTTON.COPY' | translate }}</span>
           </button>
-          <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+          <app-tooltip-customize [content]="'BUTTON.COPIED' | translate"> </app-tooltip-customize>
         </div>
       </div>
     </ng-container>

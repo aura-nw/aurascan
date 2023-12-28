@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
@@ -30,6 +31,7 @@ import { ContractTableComponent } from './contract-table.component';
     RouterModule,
     SharedModule,
     NameTagModule,
+    TranslateModule
   ],
   exports: [ContractTableComponent],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],

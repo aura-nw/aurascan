@@ -2,7 +2,7 @@
   <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">
       <div class="h2 h3-mob mb-0 text--white w-100 fw-700 fw-semibold-mob">
-        {{ isEditMode ? 'Edit' : 'Create' }} Private Name Tag
+        {{ (isEditMode ? 'BUTTON.EDIT' : 'BUTTON.CREATE') | translate }} {{ 'LABEL.PRIVATE_NAME_TAG' | translate }}
       </div>
       <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
     </div>
@@ -16,12 +16,12 @@
       autocomplete="off">
       <div class="box-content">
         <mat-slide-toggle (click)="changeFavorite()" formControlName="isFavorite">
-          <span>Set favorite in tag list</span>
+          <span>{{ 'PAGES.NAME_TAG.setFav' | translate }}</span>
         </mat-slide-toggle>
         <!-- Type -->
         <div class="row mt-4">
           <div class="col-lg-3 col-12">
-            <label class="form-label mb-0">Type</label>
+            <label class="form-label mb-0">{{ 'LABEL.TYPE' | translate }}</label>
           </div>
           <div class="col-auto">
             <div class="d-flex align-items-center">
@@ -34,7 +34,7 @@
                   [checked]="isAccount"
                   [disabled]="isEditMode"
                   (change)="changeType(true)" />
-                <label for="account" class="ml-2 mb-0 text-justify">Account</label>
+                <label for="account" class="ml-2 mb-0 text-justify">{{ 'PAGES.NAME_TAG.account' | translate }}</label>
               </div>
               <div class="form-group d-flex align-items-center ml-8">
                 <input
@@ -45,7 +45,7 @@
                   [checked]="isContract"
                   [disabled]="isEditMode"
                   (change)="changeType(false)" />
-                <label for="contract" class="ml-2 mb-0 text-justify">Contract</label>
+                <label for="contract" class="ml-2 mb-0 text-justify">{{ 'LABEL.CONTRACT' | translate }}</label>
               </div>
             </div>
           </div>
@@ -54,7 +54,7 @@
         <!-- Public Name Tag -->
         <div class="row mt-4">
           <div class="col-lg-3 col-12">
-            <label class="form-label">Public Name Tag</label>
+            <label class="form-label">{{ 'PAGES.NAME_TAG.publicNameTag' | translate }}</label>
           </div>
           <div
             class="col-auto"
@@ -85,7 +85,7 @@
             <div
               *ngIf="getAddress?.value?.length > 0 && !isValidAddress && (isAccount || isContract)"
               class="text--danger mt-2 caption fw-normal">
-              Invalid aura address format
+              {{ 'NOTICE.AURA_ADDRESS_INVALID' | translate }}
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@
         <!-- Private Name Tag -->
         <div class="row mt-4 align-items-center">
           <div class="col-lg-3 col-12">
-            <label class="form-label">Private Name Tag</label>
+            <label class="form-label">{{ 'LABEL.PRIVATE_NAME_TAG' | translate }}</label>
           </div>
           <div class="col-lg-9 col-12">
             <div class="input-group form-check-input pr-0">
@@ -104,21 +104,23 @@
                 formControlName="name"
                 (blur)="isError = false"
                 (keypress)="checkValidNameTag($event)"
-                placeholder="Enter private name tag" />
+                placeholder="{{ 'PAGES.NAME_TAG.enterPrivateNameTag' | translate }}" />
             </div>
           </div>
         </div>
         <div class="d-flex offset-lg-3 text--gray-4 mt-1 caption fw-normal font-italic">
-          <div class="ml-lg-1">
-            Character limit: {{ privateNameForm.value?.name?.length || 0 }}/{{ maxLengthNameTag }} <br />
-            Set private name tag to easily identify this address in Aurascan only from your view
-          </div>
+          <div
+            class="ml-lg-1"
+            [innerHTML]="
+              'PAGES.NAME_TAG.characterLimit'
+                | translate : { value: privateNameForm.value?.name?.length || 0, length: maxLengthNameTag }
+            "></div>
         </div>
 
         <!-- Personal Note -->
         <div class="row mt-4">
           <div class="col-lg-3 col-12 mt-2">
-            <label class="form-label">Personal Note (Optional)</label>
+            <label class="form-label">{{ 'PAGES.NAME_TAG.personalNote' | translate }}</label>
           </div>
           <div class="col-lg-9 col-12">
             <textarea
@@ -127,25 +129,27 @@
               formControlName="note"
               (blur)="isError = false"
               [maxLength]="maxLengthNote"
-              placeholder="Enter note"
+              placeholder="{{ 'PAGES.NAME_TAG.enterNote' | translate }}"
               class="form-check-input col-12 text-area txt-note"
               style="height: auto"></textarea>
           </div>
         </div>
         <div class="d-flex offset-lg-3 text--gray-4 mt-2 caption fw-normal font-italic">
-          <div class="ml-lg-1">
-            Character limit: {{ privateNameForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br />
-            A personal note of this address. Kindly note that DO NOT input any passwords or private key here
-          </div>
+          <div
+            class="ml-lg-1"
+            [innerHTML]="
+              'PAGES.NAME_TAG.noteLimit'
+                | translate : { value: privateNameForm.value.note?.length || 0, length: maxLengthNote }
+            "></div>
         </div>
 
-        <div class="mt-4 text--gray-1 caption fw-normal">All fields are required except Personal Note</div>
+        <div class="mt-4 text--gray-1 caption fw-normal">{{ 'PAGES.NAME_TAG.requiedNote' | translate }}</div>
       </div>
 
       <!-- button group -->
       <div class="d-flex px-6 py-6 justify-content-end">
         <button class="button button--md button-pill button-outline btn" type="button" (click)="closeDialog()">
-          <span>Cancel</span>
+          <span>{{ 'BUTTON.CANCEL' | translate }}</span>
         </button>
         <button
           class="button button--md button-outline button-pill button-flat ml-4 btn btn-create"
@@ -158,7 +162,7 @@
             (isAccount === false && isContract === false)
           ">
           <span class="text--black">
-            {{ isEditMode ? 'Edit' : 'Create' }}
+            {{ (isEditMode ? 'BUTTON.EDIT' : 'BUTTON.CREATE') | translate }}
           </span>
         </button>
       </div>

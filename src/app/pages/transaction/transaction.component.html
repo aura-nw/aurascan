@@ -1,4 +1,4 @@
-<app-pagetitle title="Transactions" [displayInfo]="true"></app-pagetitle>
+<app-pagetitle title="{{ 'COMMON.TRANSACTIONS' | translate }}" [displayInfo]="true"></app-pagetitle>
 <section *ngIf="!loading" class="mt-4 mt-md-6">
   <ng-container *ngIf="dataTx?.length > 0; else noValues">
     <div class="card">
@@ -10,7 +10,10 @@
                 <th
                   mat-header-cell
                   *matHeaderCellDef
-                  [class.col-per-13]="template.headerCellDef === 'Height' || template.headerCellDef === 'Result'">
+                  [class.col-per-13]="
+                    template.headerCellDef === ('COMMON.HEIGHT' | translate) ||
+                    template.headerCellDef === ('LABEL.RESULT' | translate)
+                  ">
                   <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
 
@@ -73,7 +76,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
-                {{ 'NO DATA' | translate }}
+                {{ 'LABEL.NO_DATA' | translate }}
               </td>
             </tr>
           </table>
@@ -92,12 +95,12 @@
             }"
             [content]="[
               {
-                label: 'Fee',
+                label: 'LABEL.FEE' | translate,
                 class: 'body-01-mob text--gray-1',
                 info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
               },
               {
-                label: 'Time',
+                label: 'COMMON.TIME' | translate,
                 class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +

@@ -32,7 +32,10 @@
             </div>
           </form>
           <div class="body text--gray-4 mt-4 mt-lg-0">
-            A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
+            {{
+              'COMMON.TOTAL_OF'
+                | translate : { value: pageData?.length | number, unit: pageData?.length > 1 ? 'records' : 'record' }
+            }}
           </div>
         </div>
       </ng-container>
@@ -97,7 +100,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
-                {{ 'NO DATA' | translate }}
+                {{ 'LABEL.NO_DATA' | translate }}
               </td>
             </tr>
           </table>

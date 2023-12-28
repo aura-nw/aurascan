@@ -61,7 +61,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
 
   constructor(
-    public translate: TranslateService,
     private environmentService: EnvironmentService,
   ) {}
 

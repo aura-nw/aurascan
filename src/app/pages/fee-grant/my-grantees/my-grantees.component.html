@@ -1,13 +1,17 @@
 <div class="d-flex justify-content-between align-items-center">
   <div class="button-switch-stage">
-    <button class="button" [class.active]="isActive" (click)="changeType(true)">Active</button>
-    <button class="button" [class.active]="!isActive" (click)="changeType(false)">Inactive</button>
+    <button class="button" [class.active]="isActive" (click)="changeType(true)">
+      {{ 'COMMON.ACTIVE' | translate }}
+    </button>
+    <button class="button" [class.active]="!isActive" (click)="changeType(false)">
+      {{ 'COMMON.INACTIVE' | translate }}
+    </button>
   </div>
   <button
     *ngIf="currentAddress"
     class="button button-outline button-outline--gradient button--md button-pill"
     (click)="openCreatePopup()">
-    <span>Add New Grant</span>
+    <span>{{ 'PAGES.FEE_GRANT.addNewGrant' | translate }}</span>
   </button>
   <button
     #connectButton
@@ -17,7 +21,7 @@
     data-bs-toggle="offcanvas"
     data-bs-target="#offcanvasWallet"
     aria-controls="offcanvasWallet">
-    <span>Add New Grant</span>
+    <span>{{ 'PAGES.FEE_GRANT.addNewGrant' | translate }}</span>
   </button>
 </div>
 
@@ -49,7 +53,10 @@
           </div>
         </form>
         <div class="mt-4 mt-lg-0 text--gray-1">
-          {{ pageData?.length || 0 }} transaction{{ pageData?.length > 0 ? 's' : '' }} found
+          {{
+            'PAGES.FEE_GRANT.transactionFound'
+              | translate : { value: pageData?.length || 0 | number, unit: pageData?.length > 0 ? 's' : '' }
+          }}
         </div>
       </div>
       <div class="mt-4">
@@ -105,7 +112,7 @@
                             *ngIf="currentAddress"
                             class="button button--sm button-pill button-outline"
                             (click)="showRevoke(data['grantee'], data['granter'])">
-                            <span>Revoke</span>
+                            <span>{{ 'BUTTON.REVOKE' }}</span>
                           </button>
                           <button
                             #connectButton
@@ -115,7 +122,7 @@
                             data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasWallet"
                             aria-controls="offcanvasWallet">
-                            <span>Revoke</span>
+                            <span>{{ 'BUTTON.REVOKE' }}</span>
                           </button>
                         </div>
                         <div *ngSwitchCase="'reason'" class="d-flex justify-content-between align-items-center">

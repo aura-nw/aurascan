@@ -123,7 +123,7 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumnsFTs"></tr>
               <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell g-no-data" colspan="9999">
-                  {{ 'NO DATA' | translate }}
+                  {{ 'LABEL.NO_DATA' | translate }}
                 </td>
               </tr>
             </table>
@@ -205,13 +205,13 @@
                           </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [maxCharacter]="30"
                             [value]="data.from || nullAddress"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.from ? true : false"
+                            [isLink]="!!data.from"
                             [maxCharacter]="14"
                             [value]="data.from || nullAddress"
                             [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
@@ -222,13 +222,13 @@
                           </span>
                           <app-name-tag
                             *ngIf="!breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [maxCharacter]="20"
                             [value]="data.to || nullAddress"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
                           <app-name-tag
                             *ngIf="breakpoint.value.matches"
-                            [isLink]="data.to ? true : false"
+                            [isLink]="!!data.to"
                             [maxCharacter]="14"
                             [value]="data.to || nullAddress"
                             [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
@@ -256,7 +256,7 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumnsNFTs"></tr>
               <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell g-no-data" colspan="9999">
-                  {{ 'NO DATA' | translate }}
+                  {{ 'LABEL.NO_DATA' | translate }}
                 </td>
               </tr>
             </table>
