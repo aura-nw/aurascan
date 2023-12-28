@@ -10,8 +10,8 @@
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)">
-            <span class="h5 mb-0" [class.text--white]="customNav.activeId === index">
-              {{ tab.value }} ({{ countVote.get(tab.key) || 0 }})
+            <span class="h5 mb-0 text-capitalize" [class.text--white]="customNav.activeId === index">
+              {{ tab.value | lowercase }} ({{ countVote.get(tab.key) || 0 }})
             </span>
           </a>
         </li>

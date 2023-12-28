@@ -7,13 +7,13 @@
       padding-right: 20px;
     }
     &:after {
-     content: '';
-     position: absolute;
-     top: 0;
-     bottom: 0;
-     right: 0;
-     width: 1px;
-     background-color: var(--aura-dark-gray);
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 1px;
+      background-color: var(--aura-dark-gray);
     }
   }
   table.aura-basic-table {
@@ -26,5 +26,9 @@
   }
 }
 .fixed-col {
-  min-width: 135px;
+  min-width: 180px;
+}
+.divider-item {
+  height: 40px;
+  width: 1px;
 }
