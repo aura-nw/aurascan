@@ -1,7 +1,11 @@
 .aura-status {
   display: flex;
   align-items: center;
-  min-width: 200px;
+  margin-right: 12px;
+  min-width: 260px;
+  @media (min-width: 912px) {
+    min-width: 215px;
+  }
   .status {
     padding: 8px 16px;
     border-radius: 4px;
@@ -128,7 +132,6 @@
     @media (min-width: 992px) {
       margin: 0 -8px;
     }
-
   }
   &__col {
     padding: 0 4px;

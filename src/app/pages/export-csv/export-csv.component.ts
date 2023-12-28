@@ -1,13 +1,14 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
+import { Subject, takeUntil } from 'rxjs';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { UserStorage } from 'src/app/core/models/auth.models';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
@@ -16,7 +17,7 @@ declare var grecaptcha: any;
   templateUrl: './export-csv.component.html',
   styleUrls: ['./export-csv.component.scss'],
 })
-export class ExportCsvComponent implements OnInit {
+export class ExportCsvComponent implements OnInit, OnDestroy {
   csvForm: FormGroup;
   isError = false;
   isFilterDate = true;
@@ -35,18 +36,28 @@ export class ExportCsvComponent implements OnInit {
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
 
+  destroyed$ = new Subject<void>();
   constructor(
     private formBuilder: FormBuilder,
     private commonService: CommonService,
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
+    private userService: UserService,
   ) {}
 
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
   ngOnInit(): void {
+    this.userService.user$.pipe(takeUntil(this.destroyed$)).subscribe((user) => {
+      // check exit email
+      this.userEmail = user?.email;
+    });
+
     this.renderCaptcha();
-    // check exit email
-    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     this.formInit();
 
     //get data config from account detail

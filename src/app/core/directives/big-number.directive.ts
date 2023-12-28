@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { NgxMaskPipe } from 'ngx-mask';
 import { Globals } from 'src/app/global/global';
 import { IntlFormat } from '../utils/common/parsing';
+import { TokenService } from '../services/token.service';
 
 @Directive({
   selector: 'span[appBigNumber],div[appBigNumber]',
@@ -18,8 +19,8 @@ export class BigNumberDirective implements AfterViewInit {
 
   constructor(
     private mask: NgxMaskPipe,
+    private tokenService: TokenService,
     private elRef: ElementRef,
-    private global: Globals,
   ) {
     this.element = elRef.nativeElement;
   }
@@ -44,7 +45,7 @@ export class BigNumberDirective implements AfterViewInit {
 
     // price with Aura
     if (this.auraValue) {
-      amountValue = amountValue.dividedBy(this.global.price.aura);
+      amountValue = amountValue.dividedBy(this.tokenService.nativePrice);
     }
 
     if (amountValue.lt(0.000001)) {

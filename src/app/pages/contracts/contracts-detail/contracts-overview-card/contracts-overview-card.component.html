@@ -59,7 +59,7 @@
         </app-tooltip-customize>
 
         <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
-          (${{ global.price.aura | mask: 'separator.6' }}/{{ denom | uppercase }})
+          (${{ tokenService.nativePrice| mask : 'separator.6' }}/{{ denom | uppercase }})
         </span>
       </div>
     </div>
@@ -77,7 +77,7 @@
             <a
               class="text--primary break-word line-claim-v--des"
               [routerLink]="['/tokens/token/', contractDetail?.address]">
-              {{ contractDetail | marketInfo: 'name' }} ({{ contractDetail | marketInfo: 'symbol' }})
+              {{ contractDetail | marketInfo : 'name' }} ({{ contractDetail | marketInfo : 'symbol' }})
             </a>
             <div class="aura-tooltip-contain">
               <div class="status cursor-pointer aura-tooltip-object">
