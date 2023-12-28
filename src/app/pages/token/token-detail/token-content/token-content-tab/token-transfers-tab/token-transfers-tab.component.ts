@@ -2,7 +2,9 @@ import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnIni
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import {
@@ -19,8 +21,9 @@ import {
 } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import * as _ from 'lodash';
+import { convertTxIBC } from '../../../../../../global/global';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -28,8 +31,7 @@ import { getTypeTx } from 'src/app/core/utils/common/info-common';
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
 export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
-  @Input() typeContract: string;
-  @Input() contractAddress: string;
+  @Input() tokenDetail: any;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
   @Input() decimalValue: number;
@@ -77,6 +79,11 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   contractType = ContractRegisterType;
   timerGetUpTime: any;
   errTxt: string;
+  typeContract: string;
+  contractAddress: string;
+  EModeToken = EModeToken;
+  linkAddress: string;
+  destroyed$ = new Subject<void>();
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -92,14 +99,17 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
+    this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
+    this.contractAddress = this.tokenDetail?.contract_address;
+    this.typeContract = this.tokenDetail?.type;
+    this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       this.keyWord = params?.a || '';
     });
 
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    if (this.typeContract !== this.contractType.CW20) {
+    if (this.typeContract && this.typeContract !== this.contractType.CW20) {
       this.linkToken = this.typeContract === this.contractType.CW721 ? 'token-nft' : 'token-abt';
     }
     this.getListData();
@@ -112,16 +122,23 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+
     if (this.timerGetUpTime) {
       clearInterval(this.timerGetUpTime);
     }
   }
 
   getListData(nextKey = null, isReload = false) {
-    if (this.typeContract !== this.contractType.CW20) {
-      this.getListTransactionTokenCW721(nextKey, isReload);
+    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+      if (this.typeContract !== this.contractType.CW20) {
+        this.getListTransactionTokenCW721(nextKey, isReload);
+      } else {
+        this.getListTransactionTokenCW20(nextKey, isReload);
+      }
     } else {
-      this.getListTransactionTokenCW20(nextKey, isReload);
+      this.getListTransactionTokenIBC(nextKey, isReload);
     }
   }
 
@@ -172,7 +189,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['type'] = getTypeTx(element.tx)?.type;
             element['lstTypeTemp'] = _.get(element, 'tx.transaction_messages');
           });
-          
+
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
           } else {
@@ -260,12 +277,75 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     });
   }
 
+  async getListTransactionTokenIBC(nextKey = null, isReload = false) {
+    const denomFilter = this.tokenDetail.channelPath?.path + '/' + this.tokenDetail.channelPath?.base_denom;
+    let payload = {
+      limit: this.pageData.pageSize,
+      heightLT: nextKey,
+      denom: denomFilter,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      address: null,
+    };
+
+    if (this.keyWord) {
+      if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
+        payload['txHash'] = this.keyWord;
+      } else {
+        payload['address'] = this.keyWord;
+      }
+    }
+
+    this.tokenService.getListTransactionTokenIBC(payload).subscribe({
+      next: (res) => {
+        if (res) {
+          this.nextKey = null;
+          if (res.ibc_ics20?.length >= this.pageData.pageSize) {
+            this.nextKey = res?.ibc_ics20[res.ibc_ics20.length - 1]?.height;
+            this.hasMore.emit(true);
+          } else {
+            this.hasMore.emit(false);
+          }
+
+          const txs = convertTxIBC(res, this.coinInfo);
+          txs.forEach((element) => {
+            element['amount'] = element.amountTemp || 0;
+            element['decimal'] = this.tokenDetail?.decimals || this.tokenDetail?.decimal;
+          });
+
+          if (this.dataSource.data.length > 0 && !isReload) {
+            this.dataSource.data = [...this.dataSource.data, ...txs];
+          } else {
+            this.dataSource.data = [...txs];
+          }
+
+          this.pageData.length = res.ibc_ics20_aggregate?.aggregate?.count;
+          this.resultLength.emit(this.pageData.length);
+        }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
+  }
+
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   getTemplate(): Array<TableTemplate> {
-    return this.typeContract !== this.contractType.CW20 ? this.NFTTemplates : this.noneNFTTemplates;
+    let result = this.noneNFTTemplates;
+    if (this.typeContract && this.typeContract !== this.contractType.CW20) {
+      result = this.NFTTemplates;
+    }
+    return result;
   }
 
   shortenAddress(address: string): string {
@@ -276,12 +356,17 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.pageData = e;
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getListData(this.nextKey);
-      this.currentKey = this.nextKey;
+    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+      const { length, pageIndex, pageSize } = e;
+      const next = length <= (pageIndex + 2) * pageSize;
+      this.pageData = e;
+      if (next && this.nextKey && this.currentKey !== this.nextKey) {
+        this.getListData(this.nextKey);
+        this.currentKey = this.nextKey;
+      }
+    } else {
+      this.pageData.pageIndex = e.pageIndex;
+      this.getListData();
     }
   }
 

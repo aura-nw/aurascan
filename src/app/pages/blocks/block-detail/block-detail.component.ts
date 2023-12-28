@@ -29,7 +29,7 @@ export class BlockDetailComponent implements OnInit {
   TAB = [
     {
       id: 0,
-      value: 'SUMMARY',
+      value: 'Summary',
     },
     {
       id: 1,
