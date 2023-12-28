@@ -1,24 +1,59 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
-import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
-import { TYPE_MULTI_VER } from '../constants/transaction.constant';
+import { clearLocalData } from 'src/app/global/global';
+import { CW20_TRACKING, CW721_TRACKING, STORAGE_KEYS } from '../constants/common.constant';
+import { EnvironmentService } from '../data-services/environment.service';
+import { IUser } from '../models/auth.models';
+import local from '../utils/storage/local';
+import { CommonService } from './common.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends CommonService {
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  private userSubject$: BehaviorSubject<IUser | null>;
+
+  user$: Observable<IUser | null>;
+
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+  ) {
     super(http, environmentService);
+    this.initUser();
+  }
+
+  initUser() {
+    const user = local.getItem<IUser>(STORAGE_KEYS.USER_DATA);
+    this.userSubject$ = new BehaviorSubject(user || null);
+
+    this.user$ = this.userSubject$.asObservable();
+    return user;
+  }
+
+  getCurrentUser() {
+    if (this.userSubject$) {
+      return this.userSubject$?.getValue();
+    }
+
+    // Get from local if the userObject$ is not initialized
+    return local.getItem<IUser>(STORAGE_KEYS.USER_DATA);
+  }
+
+  setUser(user: IUser) {
+    if (user) {
+      this.userSubject$.next(user);
+      local.setItem(STORAGE_KEYS.USER_DATA, user);
+    } else {
+      // TODO: Handle null case
+    }
   }
 
   registerUser(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/users/register-with-password`, payload);
   }
 
-  loginWithPassword(payload): Observable<any> {
+  loginWithPassword(payload: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/login-with-password`, payload);
   }
 
@@ -45,6 +80,11 @@ export class UserService extends CommonService {
   refreshToken(payload): Observable<any> {
     this.apiUrl = this.apiUrl || this.environmentService.backend;
     return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
+  }
+
+  logout() {
+    this.setUser(null);
+    clearLocalData();
   }
 
   getListTxByAddress(payload) {

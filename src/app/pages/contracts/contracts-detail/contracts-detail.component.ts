@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { TIMEOUT_ERROR, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/auth.models';
+import { STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -29,6 +29,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     public commonService: CommonService,
     private router: Router,
+    private userService: UserService,
   ) {}
 
   ngOnDestroy(): void {
@@ -106,7 +107,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
   }
 
   editWatchList() {
-    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    const userEmail = this.userService.getCurrentUser()?.email;
     if (userEmail) {
       local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.contractAddress);
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
