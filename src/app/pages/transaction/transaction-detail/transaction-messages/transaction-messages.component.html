@@ -396,13 +396,7 @@
                   </div>
                   <div class="mt-1 ibc__date">
                     <div class="d-flex justify-content-end">
-                      asdfasfasdf
-                      <img
-                        [src]="'assets/icons/icons-svg/color/Check.svg'"
-                        width="16"
-                        height="16"
-                        *ngIf="item.effected"
-                        class="mr-1" />
+                      <i class="ph ph-check mr-1 text--green-4 body-01" *ngIf="item.effected"></i>
                       {{ item.time | customDateTime: 'Distance' }}
                     </div>
                     <div class="d-flex justify-content-end align-items-center ml-2">
@@ -523,4 +517,4 @@
   </ng-template>
 </div>
 
-<ng-template #noValues> -</ng-template>
+<ng-template #noValues> - </ng-template>
