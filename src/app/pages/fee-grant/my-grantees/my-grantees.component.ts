@@ -65,6 +65,7 @@ export class MyGranteesComponent implements OnInit {
   timerGetFeeGrant: any;
   isSearchData = false;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
 
   constructor(
     public translate: TranslateService,
