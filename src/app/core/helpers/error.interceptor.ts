@@ -5,7 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { clearLocalData } from 'src/app/global/global';
 import { STORAGE_KEYS } from '../constants/common.constant';
-import { UserStorage } from '../models/auth.models';
+import { IUser } from '../models/auth.models';
 import local from '../utils/storage/local';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (
           err.status === 401 &&
           err.error.error.message !== this.msgErrorOldPass &&
-          local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.refreshToken
+          local.getItem<IUser>(STORAGE_KEYS.USER_DATA)?.refreshToken
         ) {
           clearLocalData();
           this.router.navigate(['/login']);

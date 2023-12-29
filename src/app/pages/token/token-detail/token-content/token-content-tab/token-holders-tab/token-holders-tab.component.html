@@ -3,7 +3,7 @@
     <div class="body-03 caption-mob fw-normal-mob text--gray-5">
       <span class="small-body text--light-gray" *ngIf="totalHolder > numberTopHolder">
         Top {{ numberTopHolder | number }} holders (From a total of {{ totalHolder || 0 | number }} holder{{
-        totalHolder > 1 ? 's' : ''
+          totalHolder > 1 ? 's' : ''
         }})
       </span>
       <span class="small-body text--light-gray" *ngIf="totalHolder <= numberTopHolder">
@@ -75,7 +75,7 @@
                             (data[template.matColumnDef] | balance: decimalValue | lt: 0.001) ||
                             (data[template.matColumnDef] | balance: decimalValue | gte: 1000000)
                           "
-                          [content]="data[template.matColumnDef] | balance: decimalValue | mask : 'separator'">
+                          [content]="data[template.matColumnDef] | balance: decimalValue | mask: 'separator'">
                         </app-tooltip-customize>
                       </div>
                     </ng-container>
@@ -97,7 +97,13 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'value'">
                       <div *ngIf="tokenDetail.price > 0" class="aura-tooltip-contain d-flex">
+                        <span
+                          class="aura-tooltip-object"
+                          *ngIf="tokenDetail.price * data['balance'] | balance: decimalValue | lt: 0.01">
+                          {{ '< $0.01' }}
+                        </span>
                         <div
+                          *ngIf="tokenDetail.price * data['balance'] | balance: decimalValue | gte: 0.01"
                           class="aura-tooltip-object"
                           [class.cursor-text]="
                             tokenDetail.price * data['balance'] | balance: decimalValue | lt: 1000000
@@ -107,10 +113,10 @@
                           [tokenPrice]="tokenDetail?.price"></div>
                         <app-tooltip-customize
                           *ngIf="
-                            (tokenDetail.price * data['balance'] | balance: decimalValue | lt: 0.001) ||
+                            (tokenDetail.price * data['balance'] | balance: decimalValue | lt: 0.01) ||
                             (tokenDetail.price * data['balance'] | balance: decimalValue | gte: 1000000)
                           "
-                          [content]="data['value'] | mask : 'separator'">
+                          [content]="data['value'] | mask: 'separator'">
                         </app-tooltip-customize>
                       </div>
                       <span *ngIf="tokenDetail.price <= 0">$0.00</span>

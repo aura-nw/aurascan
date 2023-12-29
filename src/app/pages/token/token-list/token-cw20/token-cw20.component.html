@@ -102,7 +102,7 @@
             *ngIf="pageData?.length > 0 && !isLoadingTable; else noValues">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef class="text-capitalize">No</th>
+              <th mat-header-cell *matHeaderCellDef>No</th>
               <td mat-cell *matCellDef="let element; let i = index" class="vertical-align-top py-4">
                 <span>{{ pageData?.pageIndex * 20 + i + 1 }}</span>
               </td>
@@ -140,7 +140,7 @@
             <!-- Type Column -->
             <ng-container matColumnDef="type">
               <th mat-header-cell *matHeaderCellDef class="col-per-13 text-capitalize">{{ "LABEL.TYPE" | translate }}</th>
-              <td mat-cell *matCellDef="let element" class="title-cell py-4 vertical-align-top">
+              <td mat-cell *matCellDef="let element" class="title-cell py-4 vertical-align-top text-capitalize">
                 {{ element.type || ETokenCoinType.CW20 }}
               </td>
             </ng-container>

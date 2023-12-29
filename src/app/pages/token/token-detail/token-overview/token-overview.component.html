@@ -27,10 +27,10 @@
                   <div class="text--gray-1">
                     <span class="small-body">${{ +tokenDetail.price | mask: 'separator.6' }}</span>
                     <span class="caption fw-normal text--gray-5">
-                      <ng-container *ngIf="global.price.aura">
-                        @{{ +tokenDetail.price / +global.price.aura || 0 | mask: 'separator.2' }}
+                      <ng-container *ngIf="tokenService.nativePrice">
+                        @{{ +tokenDetail.price / +tokenService.nativePrice || 0 | mask: 'separator.2' }}
                       </ng-container>
-                      <ng-container *ngIf="!global.price.aura">-</ng-container>
+                      <ng-container *ngIf="!tokenService.nativePrice">-</ng-container>
                       {{ denom }}
                     </span>
 
@@ -120,12 +120,12 @@
                   <div class="text--gray-11">
                     <span class="small-body">${{ +tokenDetail.price | mask: 'separator.6' }}</span>
                     <span class="caption fw-normal">
-                      <ng-container *ngIf="!global.price.aura">-</ng-container>
+                      <ng-container *ngIf="!tokenService.nativePrice">-</ng-container>
                     </span>
 
                     <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
-                      (<span
-                    >{{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change || 0 | formatDigit: 2 }}%</span
+                      (<span>
+                        {{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change || 0 | formatDigit: 2 }}% </span
                     >)
                     </span>
                   </div>
