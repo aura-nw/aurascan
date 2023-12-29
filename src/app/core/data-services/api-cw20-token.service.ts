@@ -128,15 +128,12 @@ export class ApiCw20TokenService {
 
   parseIbcTokens(account, coinsMarkets): IAsset[] {
     const ibcBalances = account.data?.balances?.filter((balance) => balance.denom !== this.currencies.coinMinimalDenom);
-
     return ibcBalances
       ? ibcBalances
           .map((item): Partial<IAsset> => {
             const coinMarket = coinsMarkets.find((coin) => item.denom === coin.denom);
-
             const amount = getBalance(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals);
             const value = new BigNumber(amount).multipliedBy(coinMarket?.current_price || 0);
-
             return coinMarket
               ? {
                   name: coinMarket?.name,

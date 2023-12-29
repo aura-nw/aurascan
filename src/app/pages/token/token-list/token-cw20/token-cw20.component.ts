@@ -28,7 +28,6 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
 import { DATEFORMAT, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../../core/constants/common.constant';
 import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
-import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw20',
@@ -77,7 +76,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   constructor(
     public translate: TranslateService,
-    public global: Globals,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private datePipe: DatePipe,
