@@ -1,13 +1,13 @@
-import {DatePipe} from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {saveAs} from 'file-saver';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { saveAs } from 'file-saver';
 import { Subject, takeUntil } from 'rxjs';
-import {TabsAccount, TabsAccountLink} from 'src/app/core/constants/account.enum';
-import {DATEFORMAT, STORAGE_KEYS} from 'src/app/core/constants/common.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {CommonService} from 'src/app/core/services/common.service';
-import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 
@@ -45,7 +45,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
     private userService: UserService,
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();
