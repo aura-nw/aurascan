@@ -83,7 +83,7 @@
                     <div *ngSwitchCase="'no'">#{{ pageData.pageIndex * pageData.pageSize + i + 1 }}</div>
                     <div *ngSwitchCase="'chain'" class="d-flex align-items-center">
                       <img
-                        [src]="data.image ? data.image : ('assets/images/logo/auraTitleLogo.png' | imageS3)"
+                        [src]="data.image ? data.image : ('assets/images/logo/auraTitleLogo.png')"
                         alt=""
                         class="mr-2"
                         width="24px"
@@ -120,7 +120,7 @@
             <div class="d-flex align-items-center justify-content-between">
               <div class="mr-6 d-flex align-items-center justify-content-center text--white">
                 <img
-                  [src]="data.image ? data.image : ('assets/images/logo/auraTitleLogo.png' | imageS3)"
+                  [src]="data.image ? data.image : ('assets/images/logo/auraTitleLogo.png')"
                   alt=""
                   class="mr-2"
                   width="24px"
