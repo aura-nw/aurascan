@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { clearLocalData } from 'src/app/global/global';
 import { CW20_TRACKING, CW721_TRACKING, STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -10,17 +10,28 @@ import local from '../utils/storage/local';
 import { CommonService } from './common.service';
 
 @Injectable({ providedIn: 'root' })
-export class UserService extends CommonService {
+export class UserService {
   private userSubject$: BehaviorSubject<IUser | null>;
-
   user$: Observable<IUser | null>;
+
+  apiUrl: string;
+  graphUrl: string;
+  envDB: string;
 
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
   ) {
-    super(http, environmentService);
     this.initUser();
+
+    this.environmentService.config.subscribe((config) => {
+      if (config) {
+        const { api } = config;
+        this.apiUrl = api.backend;
+        this.graphUrl = api.horoscope?.url + api.horoscope?.graphql;
+        this.envDB = api.horoscope.chain;
+      }
+    });
   }
 
   initUser() {
@@ -105,6 +116,7 @@ export class UserService extends CommonService {
       }
     }
     `;
+
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
