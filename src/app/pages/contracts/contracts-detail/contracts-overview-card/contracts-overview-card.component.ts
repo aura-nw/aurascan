@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
+import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { filter, take } from 'rxjs/operators';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
@@ -14,9 +15,11 @@ import { TokenService } from 'src/app/core/services/token.service';
 export class ContractsOverviewCardComponent implements OnChanges {
   @Input() contractDetail: any;
   contractBalance;
+  contractValue;
   contractRegisterType = ContractRegisterType;
   linkNft = 'token-nft';
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
   verifiedStatus = '';
   verifiedText = '';
 
@@ -29,7 +32,9 @@ export class ContractsOverviewCardComponent implements OnChanges {
   async ngOnChanges() {
     const balanceReq = await this.contractService.getContractBalance(this.contractDetail.address);
     this.contractBalance = balanceReq?.data?.balances[0]?.amount ? balanceReq?.data?.balances[0]?.amount : 0;
-
+    this.contractValue = new BigNumber(this.contractBalance)
+      .dividedBy(BigNumber(10).pow(this.decimal))
+      .multipliedBy(BigNumber(this.tokenService.nativePrice));
     this.tokenService.tokensMarket$
       .pipe(
         filter((data) => _.isArray(data)),

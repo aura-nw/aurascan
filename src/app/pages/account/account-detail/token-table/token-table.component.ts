@@ -128,6 +128,7 @@ export class TokenTableComponent implements OnChanges {
                 data.change = data.price_change_percentage_24h;
                 data.isValueUp = true;
                 data['balance'] = data['balance'] || 0;
+                data.value = data.value;
                 if (data.change !== '-' && data.change < 0) {
                   data.isValueUp = false;
                   data.change = Number(data.change.toString().substring(1));
