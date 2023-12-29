@@ -24,9 +24,9 @@
     <div class="mt-3">
       <div class="text--gray-4 caption fw-normal mb-1">Value</div>
       <div class="text--gray-light">
-        <span [appBigNumber]="contractBalance" [decimal]="6" [tokenPrice]="global.price.aura"></span>
+        <span [appBigNumber]="contractBalance" [decimal]="6" [tokenPrice]="tokenService.nativePrice"></span>
         <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
-          (${{ global.price.aura | mask : 'separator.6' }}/{{ denom | uppercase }})
+          (${{ tokenService.nativePrice| mask : 'separator.6' }}/{{ denom | uppercase }})
         </span>
       </div>
     </div>

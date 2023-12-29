@@ -96,10 +96,10 @@
                   <div>{{ data.nameTag | ellipsis: 25 }}</div>
                 </div>
                 <div *ngSwitchCase="'createdAt'">
-                  {{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}
+                  {{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}
                 </div>
                 <div *ngSwitchCase="'updatedAt'">
-                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                  {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                 </div>
                 <div *ngSwitchCase="'action'" class="text-end">
                   <div class="aura-tooltip-contain">
@@ -182,11 +182,11 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Added time</div>
-            <div class="text--white">{{ data.createdAt | customDate: 'yyyy-MM-dd' }}</div>
+            <div class="text--white">{{ data.createdAt | customDateTime: 'DateOnly' }}</div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Updated time</div>
-            <div class="text--white">{{ (data.updatedAt | dateCustom)[0] }}</div>
+            <div class="text--white">{{ data.updatedAt | customDateTime: 'Distance' }}</div>
           </div>
         </div>
       </div>

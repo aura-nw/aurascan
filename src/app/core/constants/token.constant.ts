@@ -1,4 +1,4 @@
-import { TokenTab } from "./token.enum";
+import {TokenTab} from "./token.enum";
 
 export const TOKEN_TAB = [
   {
@@ -28,3 +28,9 @@ export const TOKEN_TAB = [
 ];
 
 export const MAX_LENGTH_SEARCH_TOKEN = 100;
+
+export enum ETokenCoinType {
+  NATIVE = 'staking coin',
+  IBC = 'IBC coin',
+  CW20 = 'CW20 token',
+}

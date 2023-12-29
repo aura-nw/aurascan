@@ -10,6 +10,9 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
+import { EModeToken } from 'src/app/core/constants/token.enum';
+import { ActivatedRoute } from '@angular/router';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -53,20 +56,30 @@ export class TokenHoldersTabComponent implements OnInit {
   numberTop = 0;
   totalHolder = 0;
   errTxt: string;
+  EModeToken = EModeToken;
+  linkAddress: string;
+
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    if (this.typeContract !== ContractRegisterType.CW20) {
-      this.getQuantity();
+    this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
+    if (this.typeContract) {
+      if (this.typeContract !== ContractRegisterType.CW20) {
+        this.getQuantity();
+      } else {
+        this.getHolder();
+      }
     } else {
-      this.getHolder();
+      this.getDenomHolder();
     }
+
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
@@ -91,11 +104,11 @@ export class TokenHoldersTabComponent implements OnInit {
               value:
                 new BigNumber(item.amount)
                   .multipliedBy(this.tokenDetail.price)
-                  .dividedBy(Math.pow(10, this.decimalValue))
+                  .dividedBy(BigNumber(10).pow(this.decimalValue))
                   .toFixed() || 0,
             };
           });
-          this.dataSource = new MatTableDataSource<any>(dataFlat);
+          this.dataSource.data = [...dataFlat];
         }
       },
       error: (e) => {
@@ -165,7 +178,11 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getTemplate(): Array<TableTemplate> {
-    return this.typeContract !== ContractRegisterType.CW20 ? this.CW721Templates : this.CW20Templates;
+    let result = this.CW20Templates;
+    if (this.typeContract && this.typeContract !== ContractRegisterType.CW20) {
+      result = this.CW721Templates;
+    }
+    return result;
   }
 
   paginatorEmit(event): void {
@@ -186,5 +203,46 @@ export class TokenHoldersTabComponent implements OnInit {
       this.totalQuantity = config?.count || 0;
       this.getHolderNFT();
     } catch (error) {}
+  }
+
+  getDenomHolder() {
+    this.tokenService.getDenomHolder(this.tokenDetail?.denomHash, this.keyWord || null).subscribe({
+      next: (res) => {
+        this.totalHolder = this.keyWord?.length > 0 ? res?.account?.length : this.tokenDetail?.holder;
+        if (this.totalHolder > this.numberTopHolder) {
+          this.pageData.length = this.numberTopHolder;
+        } else {
+          this.pageData.length = this.totalHolder;
+        }
+
+        let dataFlat = res.account?.map((item) => {
+          let amount = item.balances?.find((k) => k.denom === this.tokenDetail?.denomHash)?.amount;
+
+          return {
+            owner: item.address,
+            amount,
+            balance: amount,
+            percent_hold: new BigNumber(amount).dividedBy(this.tokenDetail?.totalSupply).multipliedBy(100),
+            value:
+              new BigNumber(amount)
+                .multipliedBy(this.tokenDetail?.price)
+                .dividedBy(BigNumber(10).pow(this.decimalValue))
+                .toFixed() || 0,
+          };
+        });
+        this.dataSource.data = [...dataFlat];
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 }

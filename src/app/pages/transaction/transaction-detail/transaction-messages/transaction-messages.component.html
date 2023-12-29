@@ -402,12 +402,12 @@
                         height="16"
                         *ngIf="item.effected"
                         class="mr-1" />
-                      {{ (item.time | dateCustom)[0] }}
+                      {{ item.time | customDateTime: 'Distance' }}
                     </div>
                     <div class="d-flex justify-content-end align-items-center ml-2">
-                      <span>({{ item.time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>({{ item.time | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-1 mx-md-2"></div>
-                      <span>{{ item.time | customDate: 'HH:mm:ss' }})</span>
+                      <span>{{ item.time | customDateTime: 'TimeOnly' }})</span>
                     </div>
                   </div>
                 </div>
@@ -448,6 +448,7 @@
               <i class="ph-currency-circle-dollar mx-auto h3 mr-2 mb-0 text--white"></i>
               <div class="ml-2">
                 <span
+                  class="pr-lg-0 pr-4"
                   *ngIf="item?.coins?.length > 0"
                   [innerHTML]="item?.coins[0]?.denom | ibcDenom: item?.coins[0]?.amount">
                 </span>

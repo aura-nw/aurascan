@@ -181,7 +181,7 @@
                     <div
                       class="d-flex {{ element.isValueUp ? 'text--green-3' : 'text--red-3' }}"
                       *ngIf="element.change !== '-'; else defaultValues">
-                      <span>{{ element.isValueUp ? '↑' : '↓' }}{{ element.change | formatDigit: 2 }}% </span>
+                      <span>{{ element.isValueUp ? '↑' : '↓' }} {{ element.change | formatDigit: 2 }}% </span>
                     </div>
                   </div>
                 </div>

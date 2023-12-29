@@ -43,8 +43,9 @@
     color: var(--aura-gray-2);
     font-weight: 600;
     flex: 1 0 auto;
+    border: 1px solid var(--aura-gray-6);
     &:not(:last-child) {
-      margin-right: 8px;
+      margin-right: 16px;
     }
     &.active {
       border: 1px solid var(--aura-green-3);

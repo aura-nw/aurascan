@@ -4,7 +4,7 @@
       <div class="carousel">
         <ngb-carousel [showNavigationArrows]="false">
           <ng-template ngbSlide>
-            <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
+            <a class="picsum-img-wrapper" target="_blank" href="https://play.monsterra.io/">
               <img
                 [src]="'assets/images/pages/banner_aurascan.png' | imageS3"
                 alt="Random first slide"
@@ -239,7 +239,7 @@
       <div class="mb-4 mb-lg-6 carousel">
         <ngb-carousel [showNavigationArrows]="false" [showNavigationIndicators]="false">
           <ng-template ngbSlide>
-            <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
+            <a class="picsum-img-wrapper" target="_blank" href="https://play.monsterra.io/">
               <img
                 [src]="'assets/images/pages/banner_aurascan.png' | imageS3"
                 alt="Random first slide"
@@ -372,7 +372,7 @@
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'timestamp'">
-                            {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                            {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                           </div>
                           <a
                             *ngSwitchCase="'proposer'"
@@ -445,7 +445,7 @@
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'timestamp'">
-                            {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                            {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                           </div>
                           <a
                             *ngSwitchCase="'tx_hash'"
@@ -470,7 +470,7 @@
 
                               <app-tooltip-customize
                                 [class]="'message-custom'"
-                                [content]="data.lstType | displayTypeToolTip">
+                                [content]="data.lstType | combineTxsMsg">
                               </app-tooltip-customize>
                             </div>
                           </div>

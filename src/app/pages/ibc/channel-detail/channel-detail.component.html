@@ -65,7 +65,7 @@
         <div class="item">
           Operating Since
           <div class="body-01 body-mob text--white fw-semibold mt-1">
-            {{ !channelDetail.operatingSince ? '-' : (channelDetail.operatingSince | dateCustom)[0] }}
+            {{ !channelDetail.operatingSince ? '-' : (channelDetail.operatingSince | customDateTime: 'Distance') }}
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <div *ngSwitchCase="'timestamp'">
-                      {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                      {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                     </div>
                     <a
                       *ngSwitchCase="'tx_hash'"
@@ -129,9 +129,7 @@
                           </div>
                         </div>
 
-                        <app-tooltip-customize
-                          [class]="'message-custom'"
-                          [content]="data.lstTypeTemp | displayTypeToolTip">
+                        <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
                         </app-tooltip-customize>
                       </div>
                     </div>

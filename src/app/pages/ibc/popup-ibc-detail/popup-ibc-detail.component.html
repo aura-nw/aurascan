@@ -98,7 +98,9 @@
                     {{ data[template.matColumnDef] }}
                   </div>
                   <div *ngSwitchCase="'operatingSince'">
-                    {{ !data[template.matColumnDef] ? '-' : (data[template.matColumnDef] | dateCustom)[0] }}
+                    {{
+                      !data[template.matColumnDef] ? '-' : (data[template.matColumnDef] | customDateTime: 'Distance')
+                    }}
                   </div>
                   <div *ngSwitchCase="'total'">{{ data.state === 'Close' ? '-' : data?.total?.aggregate.count }}</div>
                   <div *ngSwitchCase="'receive'">
@@ -143,7 +145,7 @@
           <div class="card__content text--white body-01">
             <div class="d-flex align-items-center mb-2 justify-content-between">
               <div class="body text--gray-4 label__content">Operating Since</div>
-              <div>{{ !data.operatingSince ? '-' : (data.operatingSince | dateCustom)[0] }}</div>
+              <div>{{ !data.operatingSince ? '-' : (data.operatingSince | customDateTime: 'Distance') }}</div>
             </div>
             <div class="d-flex align-items-center mb-2 justify-content-between">
               <div class="body text--gray-4 label__content">Total</div>
