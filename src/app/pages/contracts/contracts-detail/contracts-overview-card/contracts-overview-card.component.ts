@@ -33,7 +33,7 @@ export class ContractsOverviewCardComponent implements OnChanges {
     const balanceReq = await this.contractService.getContractBalance(this.contractDetail.address);
     this.contractBalance = balanceReq?.data?.balances[0]?.amount ? balanceReq?.data?.balances[0]?.amount : 0;
     this.contractValue = new BigNumber(this.contractBalance)
-      .dividedBy(BigNumber(10).pow(6))
+      .dividedBy(BigNumber(10).pow(this.decimal))
       .multipliedBy(BigNumber(this.tokenService.nativePrice));
     this.tokenService.tokensMarket$
       .pipe(
