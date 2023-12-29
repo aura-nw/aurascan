@@ -243,26 +243,40 @@
                 <div class="d-flex flex-column">
                   <span class="text--gray-4 caption fw-normal">Value</span>
                   <span *ngIf="element.price > 0; else defaultValues">
-                    <ng-container *ngIf="element.contract_address === '-'">
-                      ${{ element.value | formatDigit: 2 }}
-                    </ng-container>
+                    <div class="aura-tooltip-contain" *ngIf="element.contract_address === '-'">
+                      <div class="aura-tooltip-object">
+                        <div *ngIf="element.value | lt: '0.01'">
+                          {{ '< $0.01' }}
+                        </div>
+                        <ng-container *ngIf="element.value | gte: '0.01'">
+                          $<span
+                            class="aura-tooltip-object"
+                            [appBigNumber]="(element.value | balance: 0 : true).toFixed(2)"
+                            [decimal]="0"></span>
+                        </ng-container>
+                      </div>
+                      <app-tooltip-customize
+                        *ngIf="(element.value | lt: '0.01') || (element.value | gte: '1000000')"
+                        [content]="element.value | mask: 'separator'">
+                      </app-tooltip-customize>
+                    </div>
 
                     <div class="aura-tooltip-contain" *ngIf="element.contract_address !== '-'">
                       <div *ngIf="element.value === 0">0</div>
                       <ng-container *ngIf="element.value !== 0">
-                        <div class="aura-tooltip-object" *ngIf="element.value | lt: '0.001'">
-                          {{ '<0.001' }}
+                        <div class="aura-tooltip-object" *ngIf="element.value | lt: '0.01'">
+                          {{ '< $0.01' }}
                         </div>
 
                         <div
-                          *ngIf="element.value | gte: '0.001'"
+                          *ngIf="element.value | gte: '0.01'"
                           class="aura-tooltip-object"
                           [appBigNumber]="element.balance"
                           [decimal]="element.decimals"
                           [tokenPrice]="element.price"></div>
 
                         <app-tooltip-customize
-                          *ngIf="(element.value | lt: '0.001') || (element.value | gte: '1000000')"
+                          *ngIf="(element.value | lt: '0.01') || (element.value | gte: '1000000')"
                           [content]="element.value | mask: 'separator'">
                         </app-tooltip-customize>
                       </ng-container>

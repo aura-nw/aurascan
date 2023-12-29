@@ -19,10 +19,6 @@ Injectable();
 
 export class Globals {
   dataHeader = new CommonDataDto();
-  price = {
-    aura: 0,
-    btc: 0,
-  };
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
