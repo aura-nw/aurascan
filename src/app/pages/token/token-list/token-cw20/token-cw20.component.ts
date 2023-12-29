@@ -222,7 +222,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                       verify_text: foundToken?.verify_text || '',
                       circulating_market_cap: +foundToken?.circulating_market_cap || 0,
                       inChainValue:
-                        new BigNumber(totalSupply).multipliedBy(foundToken?.current_price) ||
+                        new BigNumber(totalSupply).multipliedBy(foundToken?.current_price || 0) ||
                         +foundToken?.circulating_market_cap ||
                         0,
                       volume: +foundToken?.total_volume || 0,
