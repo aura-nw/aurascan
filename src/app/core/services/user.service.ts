@@ -116,37 +116,22 @@ export class UserService {
       }
     }
     `;
-    console.log('QueryTxOfAccount');
-    console.log(this.graphUrl);
 
-    try {
-      return this.http
-        .post<any>(this.graphUrl, {
-          query: operationsDoc,
-          variables: {
-            limit: payload.limit || 40,
-            address: payload.address,
-            heightLT: payload.heightLT,
-            listTxMsgType: payload.listTxMsgType,
-            listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
-            startTime: payload.startTime,
-            endTime: payload.endTime,
-          },
-          operationName: 'QueryTxOfAccount',
-        })
-        .pipe(
-          map((res) => (res?.data ? res?.data[this.envDB] : null)),
-          catchError((e) => {
-            console.log('ee', e);
-
-            return of(null);
-          }),
-        );
-    } catch (e) {
-      console.log('eeee', e);
-
-      return of(null);
-    }
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit || 40,
+          address: payload.address,
+          heightLT: payload.heightLT,
+          listTxMsgType: payload.listTxMsgType,
+          listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+        },
+        operationName: 'QueryTxOfAccount',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListNativeTransfer(payload) {
