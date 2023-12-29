@@ -12,7 +12,7 @@
 <div class="txt-title">Profile settings</div>
 <div class="mt-4">
   <span class="mr-2 caption text--gray-4">Email</span>
-  <span class="body text--white d-lg-inline-flex d-block mt-1 mt-lg-0">{{ userEmail }}</span>
+  <span class="body text--white d-lg-inline-flex d-block mt-1 mt-lg-0">{{ user?.email }}</span>
 </div>
 <h3 class="fw-bold text--gray-4 mt-8 h4-mob">{{ textTitle }}</h3>
 <div>
@@ -22,7 +22,7 @@
     autocomplete="off"
     (ngSubmit)="onSubmit()">
     <!-- Old password -->
-    <div class="row mt-4" *ngIf="currentProvider !== 'google'">
+    <div class="row mt-4" *ngIf="user?.provider !== 'google'">
       <div class="col-12 col-lg-6">
         <div class="form-group">
           <label for="old_password" class="form-label body-01">Old password</label>
