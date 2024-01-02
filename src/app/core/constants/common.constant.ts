@@ -55,6 +55,13 @@ export const CHART_RANGE = {
   MONTH_12: '12M',
 };
 
+// Exclude PrefixAccAddr
+export const ADDRESS_LENGTH_RULE = {
+  ADDRESS: 39,
+  CONTRACT: 59,
+  TRANSACTION: 64,
+};
+
 export const LENGTH_CHARACTER = {
   ADDRESS: 43,
   CONTRACT: 63,

@@ -10,6 +10,7 @@ import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { Globals } from 'src/app/global/global';
+import { isAddress, isContract } from '../utils/common/validation';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -303,10 +304,12 @@ export class ContractService extends CommonService {
   getListCodeId(data: any): Observable<any> {
     let keyword = data?.keyword ? data?.keyword : null;
     let subQuery = '';
+    const prefix = this.environmentService.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
+
     if (keyword) {
-      if (keyword.length >= LENGTH_CHARACTER.CONTRACT) {
+      if (isContract(keyword, prefix)) {
         subQuery = `smart_contracts: {address: {_eq: "${keyword}"}}`;
-      } else if (keyword.length >= LENGTH_CHARACTER.ADDRESS) {
+      } else if (isAddress(keyword, prefix)) {
         subQuery = `creator: {_eq: "${keyword}"}`;
       } else {
         subQuery = `code_id: {_eq: ${keyword}}`;

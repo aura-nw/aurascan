@@ -219,6 +219,8 @@ export class WatchListComponent implements OnInit, OnDestroy {
   }
 
   urlType(address) {
-    return isContract(address) ? '/contracts' : '/account';
+    return isContract(address, this.environmentService.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr)
+      ? '/contracts'
+      : '/account';
   }
 }

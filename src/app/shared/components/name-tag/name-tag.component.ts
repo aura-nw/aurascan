@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common.service';
-import { isContract } from 'src/app/core/utils/common/validation';
 import { Globals } from 'src/app/global/global';
 
 @Component({
