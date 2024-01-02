@@ -85,27 +85,29 @@
                 [content]="infoSearch['value'] | mask: 'separator'">
               </app-tooltip-customize>
             </div>
-            (
-            <div class="aura-tooltip-contain" *ngIf="infoSearch['balance']">
-              <span class="aura-tooltip-object" *ngIf="infoSearch['valueAura'] | lt: 0.001">
-                {{ '<0.001' }}
-              </span>
-              <div
-                *ngIf="infoSearch['valueAura'] | gt: 0.001"
-                class="aura-tooltip-object"
-                [class.cursor-text]="infoSearch['valueAura'] | gte: 1000000"
-                [appBigNumber]="infoSearch['balance']"
-                [decimal]="tokenDetail.decimals"
-                [auraValue]="true"
-                [tokenPrice]="tokenDetail.price"></div>
-              <app-tooltip-customize
-                *ngIf="(infoSearch['valueAura'] | lt: 0.001) || (infoSearch['valueAura'] | gte: 1000000)"
-                [content]="infoSearch['valueAura'] | mask: 'separator'">
-              </app-tooltip-customize>
-            </div>
-            {{ denom }})
+            <ng-container *ngIf="tokenDetail.modeToken !== EModeToken?.StakingCoin">
+              (
+              <div class="aura-tooltip-contain" *ngIf="infoSearch['balance']">
+                <span class="aura-tooltip-object" *ngIf="infoSearch['valueAura'] | lt: 0.001">
+                  {{ '<0.001' }}
+                </span>
+                <div
+                  *ngIf="infoSearch['valueAura'] | gt: 0.001"
+                  class="aura-tooltip-object"
+                  [class.cursor-text]="infoSearch['valueAura'] | gte: 1000000"
+                  [appBigNumber]="infoSearch['balance']"
+                  [decimal]="tokenDetail.decimals"
+                  [auraValue]="true"
+                  [tokenPrice]="tokenDetail.price"></div>
+                <app-tooltip-customize
+                  *ngIf="(infoSearch['valueAura'] | lt: 0.001) || (infoSearch['valueAura'] | gte: 1000000)"
+                  [content]="infoSearch['valueAura'] | mask: 'separator'">
+                </app-tooltip-customize>
+              </div>
+              {{ coinInfo['coinDenom'] }})
+            </ng-container>
           </ng-container>
-          <ng-container *ngIf="!(tokenDetail.price > 0)"> $0.00 (0 {{ denom }})</ng-container>
+          <ng-container *ngIf="!(tokenDetail.price > 0)"> $0.00 (0 {{ coinInfo['coinDenom'] }})</ng-container>
         </div>
       </div>
     </div>
