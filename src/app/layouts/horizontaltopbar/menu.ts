@@ -95,7 +95,7 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 3,
-        label: 'ABTs',
+        label: 'Account Bound Tokens',
         link: '/tokens/token-abt',
         name: MenuName.TokenCW4973,
         icon: 'icon icon-bound-token',
@@ -248,7 +248,7 @@ export const MENU_MOB: MenuItem[] = [
       },
       {
         id: 3,
-        label: 'ABTs',
+        label: 'Account Bound Tokens',
         link: '/tokens/token-abt',
         name: MenuName.TokenCW4973,
         icon: 'icon icon-bound-token',
