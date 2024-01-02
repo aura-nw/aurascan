@@ -9,6 +9,7 @@
   .menu-item {
     position: relative;
     padding: var(--spacer-3);
+
     .menu-link {
       display: flex;
       align-items: center;
@@ -30,8 +31,14 @@
 
     .box-menu {
       min-width: 210px;
+
+      &#popContent3 {
+        min-width: 190px;
+      }
+
       li.dropdown-item.menu-link {
         color: var(--aura-gray-1);
+
         &.active,
         &:hover {
           background: rgba(54, 56, 67, 0.5);
