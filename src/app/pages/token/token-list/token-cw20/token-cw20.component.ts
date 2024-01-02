@@ -46,8 +46,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   sort: MatSort;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   isLoading = true;
 
   searchSubject = new Subject();

@@ -2,10 +2,10 @@
   "environment": {
     "name": "develop",
     "label": {
-      "desktop": "Nois Testnet",
-      "mobile": "Nois Testnet"
+      "desktop": "Sei Testnet",
+      "mobile": "Sei Testnet"
     },
-    "logo": "https://testnet.nois.explorers.guru/chains/nois_white.svg",
+    "logo": "https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/arctic/chain.png",
     "notice": {
       "content": null,
       "url": null
@@ -16,38 +16,29 @@
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
     "coins": [],
-    "features": [
-      "CW20",
-      "CW721",
-      "FEE_GRANT",
-      "COMMUNITY_POOL",
-      "PROFILE",
-      "TOP_STATISTICS",
-      "EXPORT_CSV",
-      "STATISTICS"
-    ],
+    "features": ["CW20", "CW721", "FEE_GRANT", "COMMUNITY_POOL", "PROFILE", "TOP_STATISTICS", "STATISTICS"],
     "chain_info": {
-      "chainId": "nois-testnet-005",
-      "chainName": "Nois Testnet",
-      "rpc": "https://nois-testnet-rpc.itrocket.net/",
-      "rest": "https://nois-testnet-api.itrocket.net/",
+      "chainId": "atlantic-2",
+      "chainName": "Sei Testnet",
+      "rpc": "https://rpc.atlantic-2.seinetwork.io/",
+      "rest": "https://rest.atlantic-2.seinetwork.io/",
       "bip44": { "coinType": 118 },
       "bech32Config": {
-        "bech32PrefixAccAddr": "nois",
-        "bech32PrefixAccPub": "noispub",
-        "bech32PrefixValAddr": "noisvaloper",
-        "bech32PrefixValPub": "noisvaloperpub",
-        "bech32PrefixConsAddr": "noisvalcons",
-        "bech32PrefixConsPub": "noisvalconspub"
+        "bech32PrefixAccAddr": "sei",
+        "bech32PrefixAccPub": "seipub",
+        "bech32PrefixValAddr": "seivaloper",
+        "bech32PrefixValPub": "seivaloperpub",
+        "bech32PrefixConsAddr": "seivalcons",
+        "bech32PrefixConsPub": "seivalconspub"
       },
-      "currencies": [{ "coinDenom": "NOIS", "coinMinimalDenom": "unois", "coinDecimals": 6 }],
-      "feeCurrencies": [{ "coinDenom": "NOIS", "coinMinimalDenom": "unois", "coinDecimals": 6 }],
-      "stakeCurrency": { "coinDenom": "NOIS", "coinMinimalDenom": "unois", "coinDecimals": 6 },
+      "currencies": [{ "coinDenom": "SEI", "coinMinimalDenom": "usei", "coinDecimals": 6 }],
+      "feeCurrencies": [{ "coinDenom": "SEI", "coinMinimalDenom": "usei", "coinDecimals": 6 }],
+      "stakeCurrency": { "coinDenom": "SEI", "coinMinimalDenom": "usei", "coinDecimals": 6 },
       "coinType": 118,
-      "gasPriceStep": { "low": 0.001, "average": 0.0025, "high": 0.004 },
+      "gasPriceStep": { "low": 0.1, "average": 0.2, "high": 0.3 },
       "features": ["ibc-transfer"],
       "walletUrlForStaking": "https://testnet.nois.explorers.guru/validators",
-      "logo": "",
+      "logo": "https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/arctic/chain.png",
       "explorer": "https://testnet.nois.explorers.guru/",
       "beta": "false"
     }
@@ -62,7 +53,7 @@
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": ["aura-network"]
+      "ids": ["sei-network"]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -73,7 +64,7 @@
       "url": "https://indexer-v2.dev.aurascan.io/api",
       "graphql": "/v2/graphql",
       "rest": "/v2",
-      "chain": "nois"
+      "chain": "sei"
     }
   }
 }
