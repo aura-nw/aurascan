@@ -43,7 +43,7 @@
       <div class="text--gray-4 caption fw-normal mb-1">Value</div>
       <div class="text--gray-light aura-tooltip-contain d-flex">
         <div class="aura-tooltip-object d-flex">
-          <div *ngIf="contractValue == 0">0</div>
+          <div *ngIf="contractValue == 0">$0.00</div>
           <div class="aura-tooltip-object" *ngIf="contractValue != 0">
             <div *ngIf="contractValue | lt: 0.01">
               {{ '< $0.01' }}
