@@ -81,14 +81,14 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         id: 1,
-        label: 'Coins & Tokens',
+        label: 'Fungible Tokens',
         link: '/tokens',
         name: MenuName.TokenCW20,
         icon: 'coins',
       },
       {
         id: 2,
-        label: 'NFTs',
+        label: 'Non-fungible Tokens',
         link: '/tokens/tokens-nft',
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
@@ -234,14 +234,14 @@ export const MENU_MOB: MenuItem[] = [
     subItems: [
       {
         id: 1,
-        label: 'Coins & Tokens',
+        label: 'Fungible Tokens',
         link: '/tokens',
         name: MenuName.TokenCW20,
         icon: 'coins',
       },
       {
         id: 2,
-        label: 'NFTs',
+        label: 'Non-fungible Tokens',
         link: '/tokens/tokens-nft',
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
