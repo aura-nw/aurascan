@@ -2,10 +2,12 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
-import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { isContract } from 'src/app/core/utils/common/validation';
 @Component({
   selector: 'app-nft-list',
   templateUrl: './nft-list.component.html',
@@ -38,7 +40,11 @@ export class NftListComponent implements OnInit, OnChanges {
   ];
   errTxt: string;
 
-  constructor(private accountService: AccountService, private router: Router) {}
+  constructor(
+    private accountService: AccountService,
+    private router: Router,
+    private env: EnvironmentService,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {
@@ -66,7 +72,10 @@ export class NftListComponent implements OnInit, OnChanges {
     };
 
     if (this.nftFilter) {
-      if (this.textSearch.length === LENGTH_CHARACTER.CONTRACT && this.textSearch !== this.nftFilter) {
+      if (
+        isContract(this.textSearch, this.env.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr) &&
+        this.textSearch !== this.nftFilter
+      ) {
         this.nftList = [];
         this.searchNotFound = true;
         this.pageData.length = 0;

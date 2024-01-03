@@ -6,6 +6,7 @@ import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { isContract } from 'src/app/core/utils/common/validation';
 import { LENGTH_CHARACTER } from '../../../app/core/constants/common.constant';
 import { EventService } from '../../core/services/event.service';
 import { LanguageService } from '../../core/services/language.service';
@@ -279,7 +280,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
       this.searchValue = this.searchValue.trim();
       const addressNameTag = this.commonService.findNameTag(this.searchValue);
       if (addressNameTag?.length > 0) {
-        let urlLink = addressNameTag.length === LENGTH_CHARACTER.CONTRACT ? 'contracts' : 'account';
+        let urlLink = isContract(addressNameTag, this.prefixNormalAdd) ? 'contracts' : 'account';
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
           this.router.navigate([urlLink, addressNameTag]);
         });
@@ -289,7 +290,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
       if (regexRule.test(this.searchValue)) {
         //check is start with 'aura' and length >= normal address
         if (this.searchValue.startsWith(this.prefixNormalAdd) && this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
-          if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
+          if (isContract(this.searchValue.length, this.prefixNormalAdd)) {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               this.router.navigate(['contracts', this.searchValue]);
             });

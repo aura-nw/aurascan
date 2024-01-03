@@ -62,10 +62,11 @@ export const ADDRESS_LENGTH_RULE = {
   TRANSACTION: 64,
 };
 
+// Only sei network
 export const LENGTH_CHARACTER = {
-  ADDRESS: 43,
-  CONTRACT: 63,
-  TRANSACTION: 64,
+  ADDRESS: 42, // sei1j765q89e9296jsy65eg0lepgwq3wfldw0gst7h
+  CONTRACT: 62, // sei18nrpvyugkns9sqrpzzu4c7jkq9cf6vs69zjv6mtsd2xpp5e2a2ls3uyxl3
+  TRANSACTION: 64, // BAB6EFE4CDCC34CD889EF6FF8E395690FE43A43B4649B364A1E4A12C7887B74B
 };
 
 export const NULL_ADDRESS = 'Null address';
