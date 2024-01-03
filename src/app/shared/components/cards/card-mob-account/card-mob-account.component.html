@@ -117,10 +117,10 @@
                   *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"></span>
               </div>
 
-              <div [class.text--primary]="item.denom !== denom" [class.text--white]="item.denom === denom" class="ml-1">
-                <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">{{
-                  item.denom || denom | ellipsis: 19
-                }}</ng-container>
+              <div class="ml-1 text--primary">
+                <a [routerLink]="['/tokens/token', item.linkDenom]" *ngIf="modeQuery !== tabsData.FtsTxs">
+                  {{ item.denom || coinInfo.coinDenom | ellipsis: 19 }}
+                </a>
                 <a [routerLink]="['/tokens/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
                   {{ item.denom | ellipsis: 19 }}
                 </a>

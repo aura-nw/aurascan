@@ -401,7 +401,7 @@
                 </div>
                 <div *ngSwitchCase="'fee'">
                   {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                  <span class="text--white">{{ denom }}</span>
+                  <span class="text--white" [appLinkDenom]>{{ denom }}</span>
                 </div>
                 <div *ngSwitchCase="'amount'">
                   <ng-container *ngFor="let item of data.arrEvent; let index = index">
@@ -434,7 +434,7 @@
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
                           <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
-                            <div [class.aura-tooltip-object]="item.denom !== denom">
+                            <div [class.aura-tooltip-object]="item.denom !== denom" [appLinkDenom]="item.denomOrigin">
                               {{ item.denom | ellipsis: 19 }}
                             </div>
 
@@ -447,7 +447,7 @@
                           <a
                             class=""
                             [routerLink]="['/tokens/token', item.contractAddress]"
-                            *ngIf="modeQuery === tabsData.FtsTxs">
+                            *ngIf="modeQuery === tabsData.FtsTxs" [appLinkDenom]>
                             {{ item.denom | ellipsis: 19 }}
                           </a>
                         </span>
@@ -595,7 +595,7 @@
         label: data.tx_hash | ellipsis: 8 : 8,
         subLabelContent: data.type,
         subLabelClass: 'btn-mob',
-        status: data.code
+        status: data.code,
       }"
       [content]="[
         {
@@ -606,7 +606,8 @@
         {
           label: 'Fee',
           class: 'text--gray-1 body-02-mob',
-          info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
+          info: (+data.fee | mask: 'separator.6') + 
+          ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + denom + '</a>'
         }
       ]"></app-card-mob-account>
   </div>

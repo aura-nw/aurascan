@@ -16,15 +16,17 @@
       <div class="text--gray-4 caption fw-normal mb-1">AURA Balance</div>
       <div class="d-flex align-items-center">
         <div class="text--gray-light mr-1 aura-tooltip-contain">
-          <div *ngIf="contractBalance === 0">0 {{ denom }}</div>
+          <div *ngIf="contractBalance === 0">
+            0 <span [appLinkDenom]>{{ denom }}</span>
+          </div>
           <div
             class="aura-tooltip-object"
             *ngIf="contractBalance !== 0 && (contractBalance | balance: decimal : true).lt(0.001)">
-            {{ '<0.001' }} {{ denom }}
+            {{ '<0.001' }} <span [appLinkDenom]>{{ denom }}</span>
           </div>
           <ng-container *ngIf="(contractBalance | balance: decimal : true).gte(0.001)">
             <span class="aura-tooltip-object" [appBigNumber]="contractBalance" [decimal]="6"></span>
-            {{ denom }}
+            <span [appLinkDenom]>{{ denom }}</span>
           </ng-container>
 
           <app-tooltip-customize

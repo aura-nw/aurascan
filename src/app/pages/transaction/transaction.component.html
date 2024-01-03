@@ -60,7 +60,7 @@
                       </div>
                       <div *ngSwitchCase="'fee'">
                         {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                        <span class="text--white">{{ denom }}</span>
+                        <a class="text--white" [appLinkDenom]>{{ denom }}</a>
                       </div>
                       <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                     </ng-container>
@@ -81,20 +81,21 @@
         <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
           <app-card-mob-simple
             *ngFor="let data of dataTx"
-            [link]="'/transaction/' + data.tx_hash"
             [title]="{
               size: 'md',
               titleClass: 'h6-mob',
               label: data.tx_hash | ellipsis: 6 : 6,
               subLabelContent: data.type,
               subLabelClass: 'label__status',
-              status: data.code
+              status: data.code,
+              link: '/transaction/' + data.tx_hash
             }"
             [content]="[
               {
                 label: 'Fee',
                 class: 'body-01-mob text--gray-1',
-                info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
+                info: (+data.fee | mask: 'separator.6') +
+                 ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + denom + '</a>'
               },
               {
                 label: 'Time',

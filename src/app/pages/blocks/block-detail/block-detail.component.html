@@ -194,12 +194,12 @@
                         </div>
                         <div *ngSwitchCase="'fee'">
                           {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                          <span class="text--white">{{ denom }}</span>
+                          <span class="text--white" [appLinkDenom]>{{ denom }}</span>
                         </div>
                         <div *ngSwitchCase="'amount'">
                           <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                             <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                            <span class="text--white ml-1">{{ data?.denom | ibcDenom }}</span>
+                            <span class="text--white ml-1" [appLinkDenom]="data?.denom">{{ data?.denom | ibcDenom }}</span>
                           </ng-container>
                           <ng-template #displayNonNumber>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
@@ -230,19 +230,20 @@
           <div class="d-lg-none box-block-tx" *ngIf="dataSource?.data?.length > 0">
             <app-card-mob-simple
               *ngFor="let data of dataSource.data"
-              [link]="'/transaction/' + data.tx_hash"
               [dataCard]="data"
               [title]="{
                 size: 'md',
                 label: data.tx_hash | ellipsis: 6 : 6,
                 subLabelContent: data.type,
                 subLabelClass: 'label__status',
-                status: data.code
+                status: data.code,
+                link: '/transaction/' + data.tx_hash
               }"
               [content]="[
                 {
                   label: 'Fee',
-                  info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
+                  info: (+data.fee | mask: 'separator.6') + 
+                  ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + denom + '</a>'
                 },
                 { label: 'Time', info: (data.timestamp | customDateTime: 'DateTime') }
               ]"></app-card-mob-simple>

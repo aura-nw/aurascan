@@ -74,7 +74,7 @@
                     [content]="element?.amount[0].amount | balance: 6 | mask: 'separator'">
                   </app-tooltip-customize>
                 </div>
-                <span class="text--white fw-normal"> {{ denom }}</span>
+                <span class="text--white fw-normal" [appLinkDenom]> {{ denom }}</span>
               </td>
             </ng-container>
 

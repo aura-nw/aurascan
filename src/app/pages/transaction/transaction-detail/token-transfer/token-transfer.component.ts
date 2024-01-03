@@ -44,7 +44,7 @@ export class TokenTransferComponent implements OnInit {
   maxLengthSymbol = 20;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
@@ -99,7 +99,7 @@ export class TokenTransferComponent implements OnInit {
                 let dataAmount = {};
                 cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
                 cw20_contract['name'] = cw20_contract['name'] || this.denom;
-                let decimal = cw20_contract['decimal'] || this.coinDecimals;
+                let decimal = cw20_contract['decimal'] || this.coinInfo.coinDecimals;
                 let from = event.event_attributes[index - 2]?.value;
                 if (event.event_attributes[index - 2]?.composite_key === 'coin_received.receiver') {
                   from = event.event_attributes[0]?.value;

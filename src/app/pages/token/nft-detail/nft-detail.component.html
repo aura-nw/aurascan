@@ -436,7 +436,12 @@
                       *ngIf="data[template.matColumnDef] >= 0.001"
                       [appBigNumber]="data[template.matColumnDef]"
                       [decimal]="0"></div>
-                    <span [class.text--primary]="data.denom !== denom" class="ml-1">{{ data.denom || denom }}</span>
+                    <span
+                      [class.text--primary]="data.denom !== denom"
+                      class="ml-1"
+                      [appLinkDenom]>
+                      {{ data.denom || denom }}
+                    </span>
                     <app-tooltip-customize
                       *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
                       [content]="data[template.matColumnDef] | mask: 'separator.6'">

@@ -20,6 +20,7 @@ export interface CardMobSimpleTitle {
   rankNum?: number;
   status?: number;
   isFail?: boolean;
+  link?: string;
 }
 export interface CardMobSimpleContent {
   label: string;
@@ -61,7 +62,7 @@ export class CardMobAccountComponent implements OnInit {
   tabsData = TabsAccountLink;
   statusTransaction = CodeTransaction;
 
-  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
   constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
@@ -70,6 +71,7 @@ export class CardMobAccountComponent implements OnInit {
     }
 
     this.dataCard?.arrEvent?.forEach((element) => {
+      element['linkDenom'] = element.denomOrigin?.replace('ibc/','') || this.coinInfo.coinMinimalDenom;
       element.address = element.fromAddress;
       element.isFromAddress = true;
       if (element.toAddress !== this.currentAddress) {
