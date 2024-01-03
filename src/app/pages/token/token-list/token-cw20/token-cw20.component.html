@@ -1,4 +1,4 @@
-<h1 class="mb-0 text--white">Coins & Tokens</h1>
+<h1 class="mb-0 text--white">Fungible Tokens</h1>
 <div class="d-flex justify-content-between mt-lg-6 mt-4">
   <div class="filter-group d-flex align-items-center flex-nowrap">
     <button
@@ -156,7 +156,26 @@
               <th mat-header-cell *matHeaderCellDef>In-Chain Supply Amount</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.totalSupply >= 0; else noData">
-                  {{ element.totalSupply | mask: 'separator.2' }}
+                  <div class="aura-tooltip-contain">
+                    <div class="aura-tooltip-object">
+                      <div class="text--gray-1 item-amount">
+                        <span *ngIf="element.totalSupply | lt: 0.001">
+                          {{ element.totalSupply == 0 ? 0 : '< 0.001' }}
+                        </span>
+                        <span
+                          [decimal]="0"
+                          [appBigNumber]="element.totalSupply || 0"
+                          *ngIf="element.totalSupply | gte: 0.001"></span>
+                      </div>
+                    </div>
+                    <app-tooltip-customize
+                      *ngIf="
+                        ((element.totalSupply | gte: 1000000) || (element.totalSupply | lt: 0.001)) &&
+                        element.totalSupply != 0
+                      "
+                      [content]="element.totalSupply | mask: 'separator'">
+                    </app-tooltip-customize>
+                  </div>
                 </ng-container>
               </td>
             </ng-container>
@@ -166,7 +185,25 @@
               <th mat-header-cell *matHeaderCellDef>In-Chain Supply Value</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.inChainValue >= 0; else noData">
-                  ${{ element.inChainValue | formatDigit: 2 }}
+                  <div class="aura-tooltip-contain">
+                    <div class="aura-tooltip-object">
+                      <div class="text--gray-1 item-amount">
+                        <span *ngIf="element.inChainValue | lt: 0.01">
+                          {{ element.inChainValue == 0 ? '$0.00' : '< $0.01' }}
+                        </span>
+                        <div *ngIf="element.inChainValue | gte: 0.01">
+                          $<span [decimal]="0" [appBigNumber]="(element.inChainValue || 0).toFixed(2)"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <app-tooltip-customize
+                      *ngIf="
+                        (element.inChainValue | gte: 1000000) ||
+                        ((element.inChainValue | lt: 0.01) && element.inChainValue != 0)
+                      "
+                      [content]="element.inChainValue | mask: 'separator'">
+                    </app-tooltip-customize>
+                  </div>
                 </ng-container>
               </td>
             </ng-container>
@@ -200,7 +237,7 @@
                   <a
                     [routerLink]="['/tokens/token', data.contract_address || data.denom?.replace('ibc/', '')]"
                     class="text--primary">
-                    {{ data.name | ellipsis: 15 }}
+                    {{ data.name | ellipsis: 12 }}
                     <span *ngIf="data.symbol"> ({{ data.symbol | ellipsis: 8 }}) </span>
                   </a>
                   <div class="status cursor-pointer aura-tooltip-contain">
@@ -216,7 +253,7 @@
                   </div>
                 </div>
               </div>
-              <div class="text--white flex-shrink-0 mt-1">{{ data.type || ETokenCoinType.CW20 }}</div>
+              <div class="text--white flex-shrink-0 mt-1 text-capitalize">{{ data.type || ETokenCoinType.CW20 }}</div>
               <div class="divider divider-horizontal my-3 divider-lighter"></div>
               <div class="d-flex justify-content-between">
                 <div class="text--gray-4 body-mob">Price</div>
@@ -227,13 +264,26 @@
               <div class="d-flex justify-content-between mt-3">
                 <div class="text--gray-4 body-mob">In-Chain Supply Amount</div>
                 <ng-container *ngIf="data.totalSupply >= 0; else noData">
-                  <div class="text--gray-1 break-word item-amount">{{ data.totalSupply | mask: 'separator.2' }}</div>
+                  <div class="text--gray-1 item-amount">
+                    <span *ngIf="data.totalSupply | lt: 0.001">{{ data.totalSupply == 0 ? 0 : '< 0.001' }}</span>
+                    <span
+                      [decimal]="0"
+                      [appBigNumber]="data.totalSupply || 0"
+                      *ngIf="data.totalSupply | gte: 0.001"></span>
+                  </div>
                 </ng-container>
               </div>
               <div class="d-flex justify-content-between mt-3">
                 <div class="text--gray-4 body-mob">In-Chain Supply Value</div>
                 <ng-container *ngIf="data.inChainValue >= 0; else noData">
-                  <div class="text--gray-1 break-word item-amount">${{ data.inChainValue | formatDigit: 2 }}</div>
+                  <div class="text--gray-1 item-amount">
+                    <span *ngIf="data.inChainValue | lt: 0.01">
+                      {{ data.inChainValue == 0 ? '$0.00' : '< $0.01' }}
+                    </span>
+                    <div *ngIf="data.inChainValue | gte: 0.01">
+                      $<span [decimal]="0" [appBigNumber]="(data.inChainValue || 0).toFixed(2)"></span>
+                    </div>
+                  </div>
                 </ng-container>
               </div>
               <div class="d-flex justify-content-between mt-3">
@@ -264,4 +314,4 @@
     </div>
   </div>
 </ng-container>
-<ng-template #noData> <span class="{{isMobileMatched ? 'text--white' : ''}}">-</span></ng-template>
+<ng-template #noData> <span class="{{ isMobileMatched ? 'text--white' : '' }}">-</span></ng-template>

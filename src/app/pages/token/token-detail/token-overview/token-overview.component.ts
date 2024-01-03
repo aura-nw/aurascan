@@ -68,7 +68,7 @@ export class TokenOverviewComponent implements OnInit {
 
     this.tokenDetail['supplyAmount'] = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
     this.tokenDetail['supplyValue'] = new BigNumber(this.tokenDetail['supplyAmount'])
-      .multipliedBy(this.tokenDetail?.price)
+      .multipliedBy(this.tokenDetail?.price || 0)
       .toFixed();
   }
 
