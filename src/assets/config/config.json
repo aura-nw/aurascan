@@ -1,9 +1,9 @@
 {
   "environment": {
-    "name": "develop",
+    "name": "Mainnet",
     "label": {
-      "desktop": "Sei Testnet",
-      "mobile": "Sei Testnet"
+      "desktop": "Sei Mainnet",
+      "mobile": "Sei Mainnet"
     },
     "logo": "https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/arctic/chain.png",
     "notice": {
@@ -18,10 +18,10 @@
     "coins": [],
     "features": ["CW20", "CW721", "FEE_GRANT", "COMMUNITY_POOL", "PROFILE", "TOP_STATISTICS", "STATISTICS"],
     "chain_info": {
-      "chainId": "atlantic-2",
-      "chainName": "Sei Testnet",
-      "rpc": "https://rpc.atlantic-2.seinetwork.io/",
-      "rest": "https://rest.atlantic-2.seinetwork.io/",
+      "chainId": "pacific-1",
+      "chainName": "Sei Mainnet",
+      "rpc": "https://rpc-sei.toolsme.pro/",
+      "rest": "https://rest.cosmos.directory/sei/",
       "bip44": { "coinType": 118 },
       "bech32Config": {
         "bech32PrefixAccAddr": "sei",
@@ -64,7 +64,7 @@
       "url": "https://indexer-v2.dev.aurascan.io/api",
       "graphql": "/v2/graphql",
       "rest": "/v2",
-      "chain": "sei"
+      "chain": "pacific"
     }
   }
 }
