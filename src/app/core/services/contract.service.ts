@@ -6,11 +6,10 @@ import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { SmartContractListReq } from 'src/app/core/models/contract.model';
-import { LENGTH_CHARACTER } from '../constants/common.constant';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
 import { Globals } from 'src/app/global/global';
+import { EnvironmentService } from '../data-services/environment.service';
 import { isAddress, isContract } from '../utils/common/validation';
+import { CommonService } from './common.service';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -18,12 +17,17 @@ export class ContractService extends CommonService {
   contractObservable: Observable<any>;
   chainInfo = this.environmentService.chainInfo;
   apiUrl = `${this.environmentService.backend}`;
+  bech32PrefixAccAddr = this.environmentService.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
 
   get contract() {
     return this.contract$.value;
   }
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService, private global: Globals) {
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+    private global: Globals,
+  ) {
     super(http, environmentService);
     this.contractObservable = this.contract$.asObservable();
   }
@@ -60,9 +64,9 @@ export class ContractService extends CommonService {
       keyword = addressNameTag;
     }
 
-    if (keyword?.length >= LENGTH_CHARACTER.CONTRACT) {
+    if (isContract(keyword, this.bech32PrefixAccAddr)) {
       address = keyword;
-    } else if (keyword?.length >= LENGTH_CHARACTER.ADDRESS) {
+    } else if (isAddress(keyword, this.bech32PrefixAccAddr)) {
       creator = keyword;
     } else if (/^\d+$/.test(keyword)) {
       codeId = +keyword;
@@ -74,6 +78,7 @@ export class ContractService extends CommonService {
     } else {
       updateQuery = '';
     }
+
     const operationsDoc = `
     query querySmartContractList($limit: Int = 100, $offset: Int = 0, $type: [String!], $address: String = null, $creator: String =null) {
       ${this.envDB} {
@@ -304,12 +309,11 @@ export class ContractService extends CommonService {
   getListCodeId(data: any): Observable<any> {
     let keyword = data?.keyword ? data?.keyword : null;
     let subQuery = '';
-    const prefix = this.environmentService.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
 
     if (keyword) {
-      if (isContract(keyword, prefix)) {
+      if (isContract(keyword, this.bech32PrefixAccAddr)) {
         subQuery = `smart_contracts: {address: {_eq: "${keyword}"}}`;
-      } else if (isAddress(keyword, prefix)) {
+      } else if (isAddress(keyword, this.bech32PrefixAccAddr)) {
         subQuery = `creator: {_eq: "${keyword}"}`;
       } else {
         subQuery = `code_id: {_eq: ${keyword}}`;
