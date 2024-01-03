@@ -8,17 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { Observable, Subject, of } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  map,
-  mergeMap,
-  repeat,
-  take,
-  takeLast,
-  takeUntil,
-} from 'rxjs/operators';
+import { debounceTime, filter, map, mergeMap, repeat, take, takeLast, takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -72,6 +62,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   nativeToken: any;
   isMobileMatched = false;
   dataSourceMobile = [];
+  lstCw20Token = [];
+  listDataFilter = [];
+
   breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
@@ -99,13 +92,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.getTokenData();
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
-          this.searchData();
-        } else {
-          this.pageChange.selectPage(0);
-        }
+        this.searchData();
       });
   }
 
@@ -167,7 +156,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   searchData() {
     if (this.textSearch?.trim().length > 0) {
       this.textSearch = this.textSearch?.trim();
-      const result = this.dataTable?.filter(
+      const lstSearch = this.listDataFilter?.length > 0 ? this.listDataFilter : this.dataTable;
+      const result = lstSearch?.filter(
         (item) =>
           item.name?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
           item.contract_address?.toLowerCase() == this.textSearch.toLowerCase() ||
@@ -175,10 +165,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
       );
       this.dataSource.data = result;
-    } else {
-      this.drawTable();
+      this.pageData.length = this.dataSource.data.length;
+      this.pageChange.selectPage(0);
     }
-    this.pageData.length = this.dataSource.data?.length;
   }
 
   getListToken() {
@@ -196,7 +185,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
               .subscribe({
                 next: (tokenMarket) => {
                   // Flat data for mapping response api
-                  const mappedData = res?.map((item) => {
+                  this.lstCw20Token = res?.map((item) => {
                     const foundToken = tokenMarket?.find((f) => f.contract_address === item?.smart_contract?.address);
                     const cw20_total_holder_stats = item.cw20_total_holder_stats;
                     let changePercent = 0;
@@ -234,28 +223,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                       type: ETokenCoinType.CW20,
                     };
                   });
-                  let dataList = [];
-                  this.dataSource.data = [];
-                  if (this.filterType.includes(ETokenCoinType.IBC)) {
-                    dataList.push(...this.listTokenIBC);
-                  }
-                  if (this.filterType.includes(ETokenCoinType.CW20)) {
-                    dataList.push(...mappedData);
-                  }
-                  if (this.filterType.length === 0) {
-                    dataList.push(...[this.nativeToken]);
-                    dataList.push(...this.listTokenIBC);
-                    dataList.push(...mappedData);
-                  }
+                  const dataList = this.executeFilter();
                   this.dataTable = dataList;
                   this.drawTable();
-
-                  // handle search
-                  if (this.textSearch?.trim().length > 0) {
-                    this.searchData();
-                  } else {
-                    this.pageData.length = this.dataSource.data.length;
-                  }
+                  this.pageData.length = this.dataSource.data.length;
                   this.isLoadingTable = false;
                 },
                 error: (e) => {
@@ -303,8 +274,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           contract_address: null,
           decimals: this.chainInfo.coinDecimals,
           totalSupply,
-          price: this.nativeToken.current_price,
-          inChainValue: new BigNumber(totalSupply).multipliedBy(this.nativeToken.current_price) || 0,
+          price: this.nativeToken.current_price || 0,
+          inChainValue: new BigNumber(totalSupply).multipliedBy(this.nativeToken.current_price || 0) || 0,
           denom: this.chainInfo.coinMinimalDenom,
           isHolderUp: true,
           type: ETokenCoinType.NATIVE,
@@ -342,50 +313,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.dataSource.paginator = event;
   }
 
-  // sortData(sort: Sort) {
-  //   let data = this.dataTable;
-  //   if (!sort.active || sort.direction === '') {
-  //     this.sortedData = data;
-  //     return;
-  //   }
-
-  //   const isAsc = sort.direction === 'asc';
-  //   this.sortedData = data.sort((a, b) => {
-  //     switch (sort.active) {
-  //       case 'price':
-  //         return this.compare(+a.price, +b.price, !isAsc);
-  //       case 'totalSupply':
-  //         return this.compare(+a.totalSupply, +b.totalSupply, !isAsc);
-  //       case 'inChainValue':
-  //         return this.compare(+a.inChainValue, +b.inChainValue, !isAsc);
-  //       default:
-  //         return 0;
-  //     }
-  //   });
-
-  //   if (sort.active === 'change') {
-  //     let lstUp = this.sortedData
-  //       .filter((data) => data.isValueUp)
-  //       ?.sort((a, b) => this.compare(a.change, b.change, isAsc));
-  //     let lstDown = this.sortedData
-  //       .filter((data) => !data.isValueUp)
-  //       .sort((a, b) => this.compare(a.change, b.change, !isAsc));
-  //     this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
-  //   }
-  //   const payload = {
-  //     limit: this.pageData.pageSize,
-  //     offset: this.pageData.pageIndex * this.pageData.pageSize,
-  //   };
-
-  //   let dataFilter = this.sortedData.slice(payload?.offset, payload?.offset + payload?.limit);
-  //   this.pageData = {
-  //     length: this.pageData.length,
-  //     pageSize: this.pageData.pageSize,
-  //     pageIndex: this.pageData.pageIndex,
-  //   };
-  //   this.dataSource.data = dataFilter;
-  // }
-
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (BigNumber(a).lt(BigNumber(b)) ? -1 : 1) * (isAsc ? 1 : -1);
   }
@@ -419,7 +346,36 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     } else {
       this.filterType.push(val);
     }
-    this.getListToken();
-    this.pageChange.selectPage(0);
+
+    const dataList = this.executeFilter();
+    if (this.textSearch?.trim().length > 0) {
+      this.searchData();
+    } else {
+      this.dataSource.data = dataList;
+      this.pageData.length = this.dataSource.data.length;
+      this.pageChange.selectPage(0);
+    }
+    this.isLoadingTable = false;
+  }
+
+  executeFilter(){
+    let dataList = [];
+    this.dataSource.data = [];
+    if (this.filterType.includes(ETokenCoinType.NATIVE)) {
+      dataList.push(...[this.nativeToken]);
+    }
+    if (this.filterType.includes(ETokenCoinType.IBC)) {
+      dataList.push(...this.listTokenIBC);
+    }
+    if (this.filterType.includes(ETokenCoinType.CW20)) {
+      dataList.push(...this.lstCw20Token);
+    }
+    if (this.filterType.length === 0) {
+      dataList.push(...[this.nativeToken]);
+      dataList.push(...this.listTokenIBC);
+      dataList.push(...this.lstCw20Token);
+    }
+    this.listDataFilter = dataList;
+    return dataList;
   }
 }

@@ -103,9 +103,9 @@
                 [content]="infoSearch['valueAura'] | mask: 'separator'">
               </app-tooltip-customize>
             </div>
-            {{ denom }})
+            {{ coinInfo['coinDenom'] }})
           </ng-container>
-          <ng-container *ngIf="!(tokenDetail.price > 0)"> $0.00 (0 {{ denom }})</ng-container>
+          <ng-container *ngIf="!(tokenDetail.price > 0)"> $0.00 (0 {{ coinInfo['coinDenom'] }})</ng-container>
         </div>
       </div>
     </div>

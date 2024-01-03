@@ -9,9 +9,9 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import local from 'src/app/core/utils/storage/local';
-import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { EModeToken, TokenTab } from '../../../../core/constants/token.enum';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-token-content',
@@ -46,12 +46,12 @@ export class TokenContentComponent implements OnInit {
   activeTabID = 0;
   textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
   linkAddress: string;
+  EModeToken = EModeToken;
 
-  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   chainInfo = this.environmentService.chainInfo;
-  auraPrice = this.tokenService.nativePrice;
 
   constructor(
     private route: ActivatedRoute,
@@ -59,7 +59,7 @@ export class TokenContentComponent implements OnInit {
     private layout: BreakpointObserver,
     private tokenService: TokenService,
     private nameTagService: NameTagService,
-    private global: Globals,
+    private contractService: ContractService,
   ) {}
 
   ngOnInit(): void {
@@ -133,6 +133,9 @@ export class TokenContentComponent implements OnInit {
         } else {
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
         }
+      } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
+        this.isSearchAddress = true;
+        this.getInfoAddress(this.paramQuery);
       }
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
@@ -185,7 +188,7 @@ export class TokenContentComponent implements OnInit {
     try {
       if (this.tokenDetail.isNFTContract) {
         this.countBalanceNFT(address);
-      } else {
+      } else if (this.contractAddress) {
         const data = await client.queryContractSmart(this.contractAddress, queryData);
         this.infoSearch['balance'] = data?.balance;
         this.infoSearch['value'] = new BigNumber(data?.balance)
@@ -195,8 +198,24 @@ export class TokenContentComponent implements OnInit {
         this.infoSearch['valueAura'] = new BigNumber(data?.balance)
           .multipliedBy(this.tokenDetail.price)
           .dividedBy(Math.pow(10, this.tokenDetail.decimals))
-          .dividedBy(this.auraPrice)
+          .dividedBy(this.tokenService.nativePrice)
           .toFixed();
+      } else {
+        this.infoSearch['balance'] = 0;
+        const tempBalance = await this.contractService.getContractBalance(address);
+        if (tempBalance?.data?.balances?.length > 0) {
+          this.infoSearch['balance'] =
+            tempBalance?.data?.balances?.find((k) => k.denom === this.tokenDetail?.denomHash)?.amount || 0;
+          this.infoSearch['value'] = new BigNumber(this.infoSearch['balance'] || 0)
+            .multipliedBy(this.tokenDetail.price || 0)
+            .dividedBy(Math.pow(10, this.tokenDetail.decimals))
+            .toFixed();
+          this.infoSearch['valueAura'] = new BigNumber(this.infoSearch['balance'] || 0)
+            .multipliedBy(this.tokenDetail.price || 0)
+            .dividedBy(Math.pow(10, this.tokenDetail.decimals))
+            .dividedBy(this.tokenService.nativePrice)
+            .toFixed();
+        }
       }
     } catch (error) {}
   }

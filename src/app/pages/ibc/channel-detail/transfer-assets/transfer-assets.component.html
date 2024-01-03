@@ -51,7 +51,7 @@
                             <img
                               [src]="
                                 !data['dataDenom']?.image
-                                  ? 'assets/images/logo/auraTitleLogo.png'
+                                  ? ('assets/images/logo/auraTitleLogo.png')
                                   : data['dataDenom']?.image
                               "
                               alt=""
@@ -128,7 +128,9 @@
                   <div class="d-flex align-items-center">
                     <img
                       [src]="
-                        !data['dataDenom']?.image ? 'assets/images/logo/auraTitleLogo.png' : data['dataDenom']?.image
+                        !data['dataDenom']?.image
+                          ? ('assets/images/logo/auraTitleLogo.png')
+                          : data['dataDenom']?.image
                       "
                       alt=""
                       class="mr-2"
@@ -219,7 +221,7 @@
                             <img
                               [src]="
                                 !data['dataDenom']?.image
-                                  ? 'assets/images/logo/auraTitleLogo.png'
+                                  ? ('assets/images/logo/auraTitleLogo.png')
                                   : data['dataDenom']?.image
                               "
                               alt=""
@@ -296,7 +298,9 @@
                   <div class="d-flex align-items-center">
                     <img
                       [src]="
-                        !data['dataDenom']?.image ? 'assets/images/logo/auraTitleLogo.png' : data['dataDenom']?.image
+                        !data['dataDenom']?.image
+                          ? ('assets/images/logo/auraTitleLogo.png')
+                          : data['dataDenom']?.image
                       "
                       alt=""
                       class="mr-2"

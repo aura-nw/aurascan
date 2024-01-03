@@ -70,12 +70,7 @@
     <ng-template #modalManage let-modal>
       <div class="box-address">
         <div class="text-end mb-4 cursor-pointer">
-          <img
-            [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
-            alt=""
-            width="16"
-            height="16"
-            (click)="closePopup()" />
+          <i class="ph ph-x h3 cursor-pointer text--white" (click)="closePopup()"></i>
         </div>
         <app-qr [address]="contractAddress || ''"> </app-qr>
       </div>
