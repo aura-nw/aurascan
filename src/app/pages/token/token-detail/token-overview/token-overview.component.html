@@ -27,10 +27,10 @@
                   <div class="text--gray-1">
                     <span class="small-body">${{ +tokenDetail.price | mask: 'separator.6' }}</span>
                     <span class="caption fw-normal text--gray-5">
-                      <ng-container *ngIf="tokenService.nativePrice">
-                        @{{ +tokenDetail.price / +tokenService.nativePrice || 0 | mask: 'separator.2' }}
+                      @<ng-container *ngIf="tokenService.nativePrice && tokenService.nativePrice > 0">
+                        {{ +tokenDetail.price / +tokenService.nativePrice || 0 | mask: 'separator.2' }}
                       </ng-container>
-                      <ng-container *ngIf="!tokenService.nativePrice">-</ng-container>
+                      <ng-container *ngIf="!tokenService.nativePrice">0</ng-container>
                       {{ denom }}
                     </span>
 
@@ -115,11 +115,7 @@
                 </div>
                 <div class="body-02">
                   <div class="text--gray-11">
-                    <span class="small-body">${{ +tokenDetail.price | mask: 'separator.6' }}</span>
-                    <span class="caption fw-normal">
-                      <ng-container *ngIf="!tokenService.nativePrice">-</ng-container>
-                    </span>
-
+                    <span class="small-body">${{ +tokenDetail.price || 0 | mask: 'separator.6' }}</span>
                     <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
                       (<span>
                         {{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change || 0 | formatDigit: 2 }}% </span
@@ -143,7 +139,7 @@
         <tr>
           <td colspan="2">
             <div class="d-flex">
-              <span class="text--gray-5 body-02 fixed-col">In-chain Supply Value</span>
+              <span class="text--gray-5 body-02 fixed-col">In-Chain Supply Value</span>
               <div class="body-02 text--gray-11">{{ tokenDetail['supplyValue'] || 0 | formatDigit: 2 }}$</div>
             </div>
           </td>

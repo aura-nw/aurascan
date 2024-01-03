@@ -86,16 +86,16 @@
               <div *ngSwitchCase="eTransType.IBCTransfer">
                 <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }">
                 </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCReceived">
                 <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }">
                 </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCAcknowledgement">
-                <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"></ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCUpdateClient">
                 <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }">
@@ -104,7 +104,7 @@
               <div *ngSwitchCase="eTransType.IBCTimeout">
                 <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item, index: i }">
                 </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
                 <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }">
@@ -396,12 +396,7 @@
                   </div>
                   <div class="mt-1 ibc__date">
                     <div class="d-flex justify-content-end">
-                      <img
-                        src="assets/icons/icons-svg/color/Check.svg"
-                        width="16px"
-                        height="16px"
-                        *ngIf="item.effected"
-                        class="mr-1" />
+                      <i class="ph ph-check mr-1 text--green-4 body-01" *ngIf="item.effected"></i>
                       {{ item.time | customDateTime: 'Distance' }}
                     </div>
                     <div class="d-flex justify-content-end align-items-center ml-2">
@@ -487,7 +482,7 @@
                         {{ item.type }}
                       </div>
                     </mat-panel-title>
-                    <mat-panel-description> </mat-panel-description>
+                    <mat-panel-description></mat-panel-description>
                   </mat-expansion-panel-header>
 
                   <div class="content-log">

@@ -1,11 +1,7 @@
 <div class="wallet-list-container">
   <div class="d-flex justify-content-between align-items-center popup-header px-6">
     <h2 class="text--white h3-mob fw-semibold mb-0">Connect your wallet</h2>
-    <img
-      (click)="dialogRef.close()"
-      class="icon-close close-dialog"
-      [src]="'assets/icons/icons-svg/white/close.svg'"
-      alt="" />
+    <i class="ph ph-x h2 cursor-pointer text--white ml-10" (click)="dialogRef.close()"></i>
   </div>
   <div class="pt-9 pb-12 px-4 px-lg-6 d-lg-flex">
     <div class="wallet-list">
@@ -17,7 +13,7 @@
           [class.d-none]="isMobileMatched && wallet.disableMobile"
           (click)="connectWallet(wallet.name)">
           <div class="d-flex align-items-center">
-            <img class="wallet-icon" [src]="wallet.icon | imageS3" />
+            <img class="wallet-icon" [src]="wallet.icon | imageS3"/>
             <span class="h5 text--white ml-3">{{ wallet.name | titlecase }}</span>
           </div>
         </li>
@@ -25,7 +21,7 @@
     </div>
     <div
       class="ml-lg-6 mt-6 mt-lg-0 wallet-info px-4 py-5 d-flex flex-column align-items-center justify-content-center">
-      <img [src]="'assets/images/digital-wallet.png' | imageS3" alt="" />
+      <img [src]="'assets/images/digital-wallet.png' | imageS3" alt=""/>
       <div class="body mt-4 text--gray-1 text-center">
         Wallets are used to send, receive, store digital assets like Aura and NFTs.
       </div>
