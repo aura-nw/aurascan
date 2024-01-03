@@ -3,12 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
-import * as _ from 'lodash';
 import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
+import { IBCService } from 'src/app/core/services/ibc.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 
 @Component({
@@ -41,6 +41,8 @@ export class TokenTransferComponent implements OnInit {
   ];
   displayedColumnsFTs: string[] = this.templatesFTs.map((dta) => dta.matColumnDef);
   displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
+  maxLengthSymbol = 20;
+
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinDecimals = this.environmentService.chainInfo.currencies[0].coinDecimals;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -51,13 +53,22 @@ export class TokenTransferComponent implements OnInit {
     private transactionService: TransactionService,
     private layout: BreakpointObserver,
     private commonService: CommonService,
+    private ibcService: IBCService,
   ) {}
 
   ngOnInit(): void {
+    if (this.environmentService.isMobile) {
+      this.maxLengthSymbol = 10;
+    }
+
     if (this.transaction['status'] == 'Fail') {
       return;
     }
 
+    this.getTokenTransfer();
+  }
+
+  getTokenTransfer() {
     let coinTransfer = [];
     this.transactionService
       .getListTransferFromTx(this.transaction['tx_hash'], this.transaction['height'])
@@ -89,18 +100,25 @@ export class TokenTransferComponent implements OnInit {
                 cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
                 cw20_contract['name'] = cw20_contract['name'] || this.denom;
                 let decimal = cw20_contract['decimal'] || this.coinDecimals;
+                let from = event.event_attributes[index - 2]?.value;
+                if (event.event_attributes[index - 2]?.composite_key === 'coin_received.receiver') {
+                  from = event.event_attributes[0]?.value;
+                }
+                let to = event.event_attributes[index]?.value;
                 if (amountTemp.indexOf('ibc') >= 0) {
                   dataAmount = this.commonService.mappingNameIBC(amountTemp);
                   cw20_contract['name'] = dataAmount['name'];
                   cw20_contract['symbol'] = dataAmount['display'];
-                  decimal = dataAmount['decimal'];
+                  cw20_contract['ibc_denom'] = dataAmount['denom'] || dataAmount['symbol'];
+                  decimal = dataAmount['decimals'];
+                  from = event.event_attributes?.find((k) => k.composite_key === 'coin_spent.spender')?.value;
+                  for (let idx = 0; idx < event.event_attributes; idx++) {
+                    if (idx >= index && event.event_attributes[idx].composite_key === 'coin_spent.receiver') {
+                      to = event.event_attributes[idx]?.value;
+                    }
+                  }
                 }
                 let amount = +amountTemp.match(/\d+/g)[0];
-                let from = event.event_attributes[index - 2]?.value;
-                if (event.event_attributes[index - 2].composite_key === 'coin_received.receiver') {
-                  from = event.event_attributes[0]?.value;
-                }
-                const to = event.event_attributes[index].value;
                 coinTransfer.push({ amount, cw20_contract, from, to, decimal });
               });
             }
@@ -120,6 +138,24 @@ export class TokenTransferComponent implements OnInit {
           });
         }
       });
+  }
+
+  getIBCTransfer() {
+    this.ibcService.getIBCTransfer(this.transaction['tx_hash']).subscribe((res) => {
+      let coinIBC = [];
+      res?.coin_transfer?.forEach((element) => {
+        let cw20_contract = {};
+        let dataAmount = this.commonService.mappingNameIBC(element.denom);
+        cw20_contract['symbol'] = dataAmount['symbol'] || this.denom;
+        cw20_contract['name'] = dataAmount['symbol'] || this.denom;
+        const decimal = dataAmount['decimals'] || 6;
+        const amount = element.amount;
+        const from = element.from;
+        const to = element.to;
+        coinIBC.push({ amount, cw20_contract, from, to, decimal });
+      });
+      this.dataSourceFTs.data = [...this.dataSourceFTs.data, ...coinIBC];
+    });
   }
 
   navigateToNFTDetail(address: string, tokenId: number): void {

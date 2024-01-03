@@ -350,13 +350,13 @@
             <div>
               <ng-container [ngSwitch]="template.matColumnDef">
                 <div *ngSwitchCase="'timestamp'">
-                  {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
                 </div>
                 <a
                   *ngSwitchCase="'tx_hash'"
                   class="text--primary cursor-pointer hash-link"
                   [routerLink]="['/transaction', data['tx_hash']]">
-                  {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                  {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                 </a>
                 <a
                   *ngSwitchCase="'height'"
@@ -378,7 +378,7 @@
                 <div *ngSwitchCase="'type'">
                   <div class="aura-status aura-tooltip-contain p-0">
                     <div class="status cursor-pointer aura-tooltip-object">
-                      {{ data[template.matColumnDef] | stringEllipsis : 25 }}
+                      {{ data[template.matColumnDef] | ellipsis: 22 }}
                       <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                         +{{ data.lstTypeTemp?.length - 1 }}
                       </div>
@@ -413,22 +413,31 @@
                       *ngIf="index < data.limit">
                       <div class="item-show d-flex align-items-center">
                         <div class="aura-tooltip-contain">
+                          <div *ngIf="+item.amountTemp === 0">0</div>
                           <div
                             class="aura-tooltip-object"
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) < 0.001 && item.amountTemp != 0">
-                            <0,001
+                            *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance: item.decimal | lt: 0.001)">
+                            {{ '<0.001' }}
                           </div>
-                          <app-tooltip-customize [content]="item.amountTemp | convertSmallNumber : item.decimal">
-                          </app-tooltip-customize>
                           <div
-                            *ngIf="(item.amountTemp | balanceOf : item.decimal) >= 0.001 || item.amountTemp == 0"
+                            [class.aura-tooltip-object]="item.amountTemp !== 0"
+                            [class.cursor-text]="item.amountTemp | balance: item.decimal | lt: 1000000"
+                            *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"
                             [appBigNumber]="item.amountTemp"
                             [decimal]="item.decimal"></div>
+                          <app-tooltip-customize
+                            *ngIf="
+                              +item.amountTemp !== 0 &&
+                              ((item.amountTemp | balance: item.decimal | lt: 0.001) ||
+                                (item.amountTemp | balance: item.decimal | gte: 1000000))
+                            "
+                            [content]="item.amountTemp | balance: item.decimal | mask: 'separator'">
+                          </app-tooltip-customize>
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
                           <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
-                            <div [class.aura-tooltip-object]="item.denomOrigin">
-                              {{ item.denom || denom | stringEllipsis : 19 }}
+                            <div [class.aura-tooltip-object]="item.denom !== denom">
+                              {{ item.denom | ellipsis: 19 }}
                             </div>
 
                             <app-tooltip-customize
@@ -441,7 +450,7 @@
                             class=""
                             [routerLink]="['/tokens/token', item.contractAddress]"
                             *ngIf="modeQuery === tabsData.FtsTxs">
-                            {{ item.denom | stringEllipsis : 19 }}
+                            {{ item.denom | ellipsis: 19 }}
                           </a>
                         </span>
                       </div>
@@ -515,7 +524,7 @@
                             class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8"
                             (click)="expandData(data)"
                             *ngIf="data.arrEvent?.length > 1">
-                            <ng-container *ngIf="data.arrEvent?.length > 100"> >99 </ng-container>
+                            <ng-container *ngIf="data.arrEvent?.length > 100"> >99</ng-container>
                             <ng-container *ngIf="data.arrEvent?.length <= 100">
                               +{{ data.arrEvent?.length - 1 }}
                             </ng-container>
@@ -542,7 +551,7 @@
                             *ngIf="item.tokenId"
                             [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
                             class="text--primary cursor-pointer"
-                            >#{{ item.tokenId | stringEllipsis : (item.tokenId?.length > 8 ? 5 : 8) }}</a
+                            >#{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}</a
                           >
                           <ng-container *ngIf="!item.tokenId">-</ng-container>
                         </div>
@@ -585,7 +594,7 @@
       [title]="{
         size: 'md',
         titleClass: 'body-02-mob',
-        label: data.tx_hash | cutStringPipe : 8 : 8,
+        label: data.tx_hash | ellipsis: 8 : 8,
         subLabelContent: data.type,
         subLabelClass: 'btn-mob',
         status: data.code
@@ -599,7 +608,7 @@
         {
           label: 'Fee',
           class: 'text--gray-1 body-02-mob',
-          info: (data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
+          info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
         }
       ]"></app-card-mob-account>
   </div>

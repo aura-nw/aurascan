@@ -47,7 +47,7 @@ export class AccountService extends CommonService {
           offset: $offset
           where: {
             cw721_contract: {
-              smart_contract: { address: { _eq: $contract_address }, name: {_neq: "crates.io:cw4973"} }
+              smart_contract: { address: { _eq: $contract_address }, name: {_neq: "${TYPE_CW4973}"} }
             }
             token_id: { _eq: $tokenId }
             owner: { _eq: $owner }
@@ -71,7 +71,7 @@ export class AccountService extends CommonService {
             }
           }
         }
-        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "crates.io:cw4973"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
+        cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
           aggregate {
             count
           }
@@ -94,10 +94,6 @@ export class AccountService extends CommonService {
         operationName: 'queryAssetCW721',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getTotalAssets(account_id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/total-asset/${account_id}`);
   }
 
   getListCollectionByOwner(payload): Observable<any> {

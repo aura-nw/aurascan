@@ -1,18 +1,29 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
+import { CoingeckoService } from '../data-services/coingecko.service';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
+  tokensMarket$ = new BehaviorSubject<any[]>(null);
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  get tokensMarket() {
+    return this.tokensMarket$.getValue();
+  }
+
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+    private coingeckoService: CoingeckoService,
+  ) {
     super(http, environmentService);
   }
 
@@ -58,7 +69,15 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListCW721Token(payload, textSearch = null): Observable<any> {
+  getTokenMarketData(payload = {}): Observable<any> {
+    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
+
+    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/token-market`, {
+      params,
+    });
+  }
+
+  getListCW721Token(payload, textSearch: string = null): Observable<any> {
     if (textSearch?.length > 0) {
       textSearch = '%' + textSearch + '%';
     }
@@ -99,7 +118,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getTokenDetail(address, date): Observable<any> {
+  getTokenDetail(address: string, date): Observable<any> {
     const operationsDoc = `query queryCW20Detail($address: String, $date: date) { 
       ${this.envDB} { smart_contract(where: {address: {_eq: $address}}) {
           address
@@ -108,6 +127,9 @@ export class TokenService extends CommonService {
             symbol
             marketing_info
             decimal
+            smart_contract {
+              address
+            }
             cw20_holders {
               address
               amount
@@ -138,7 +160,13 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTokenNFTFromIndexer(payload): Observable<any> {
+  getListTokenNFTFromIndexer(payload: {
+    limit: number;
+    offset: number;
+    contractAddress: string;
+    token_id: string;
+    owner: string;
+  }): Observable<any> {
     const operationsDoc = `
     query queryListInventory(
       $contract_address: String
@@ -203,7 +231,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  countTotalTokenCW721(contract_address): Observable<any> {
+  countTotalTokenCW721(contract_address: string): Observable<any> {
     const operationsDoc = `
     query queryCountTotalToken721($contract_address: String) {
       ${this.envDB} {
@@ -259,7 +287,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTokenHolderNFT(payload) {
+  getListTokenHolderNFT(payload: { limit: number; contractAddress: string }) {
     const operationsDoc = `
     query queryListHolderNFT($contract_address: String, $limit: Int = 10) {
       ${this.envDB} {
@@ -295,9 +323,18 @@ export class TokenService extends CommonService {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
   }
 
-  getCW721Transfer(payload): Observable<any> {
-    let queryName = 'CW721Transfer';
-    let queryCondition = '_neq';
+  getCW721Transfer(payload: {
+    isCW4973?: boolean;
+    isNFTDetail?: boolean;
+    contractAddr?: string;
+    sender?: string;
+    receiver?: string;
+    tokenId?: string;
+    idLte?: string;
+    txHash?: string;
+  }): Observable<any> {
+    let queryName = payload.isCW4973 ? 'CW4973Transfer' : 'CW721Transfer';
+    let queryCondition = payload.isCW4973 ? '_eq' : '_neq';
     let queryActionNotIn = payload.isNFTDetail
       ? ['']
       : ['approve', 'instantiate', 'revoke', 'approve_all', 'revoke_all', ''];
@@ -437,5 +474,67 @@ export class TokenService extends CommonService {
         operationName: 'queryListTxsCW20',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getCoinData() {
+    this.http
+      .get<any>(`${this.apiUrl}/cw20-tokens/token-market`)
+      .pipe(
+        switchMap((res: any[]) => {
+          if (res?.length === 0) {
+            return of(null);
+          }
+
+          const tokensFiltered = res.filter((token) => token.coin_id);
+
+          const coinsId = tokensFiltered.map((coin: { coin_id: string }) => coin.coin_id);
+          if (coinsId?.length > 0) {
+            return forkJoin({
+              tokensMarket: of(tokensFiltered),
+              coinMarkets: this.getCoinMarkets(coinsId),
+            });
+          }
+
+          return forkJoin({
+            tokensMarket: of(tokensFiltered),
+            coinMarkets: of(null),
+          });
+        }),
+        map((data) => {
+          if (data) {
+            const { coinMarkets, tokensMarket } = data;
+
+            return tokensMarket.map((token) => {
+              if (!token.coin_id) {
+                return token;
+              }
+
+              const coin = coinMarkets.find((item) => item.id === token.coin_id);
+
+              if (!coin) {
+                return token;
+              }
+
+              return {
+                ...token,
+                max_supply: coin.max_supply,
+                current_price: coin.current_price,
+                price_change_percentage_24h: coin.price_change_percentage_24h,
+                total_volume: coin.total_volume,
+                circulating_supply: coin.circulating_supply,
+                fully_diluted_valuation: coin.fully_diluted_valuation,
+              };
+            });
+          }
+          return [];
+        }),
+      )
+      .subscribe((res) => {
+        this.tokensMarket$.next(res);
+      });
+  }
+
+  getCoinMarkets(coinsId: string[]): Observable<any[]> {
+    return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
   }
 }

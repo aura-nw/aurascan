@@ -9,8 +9,7 @@ import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { Globals } from 'src/app/global/global';
-import { isAddress, isContract } from '../utils/common/validation';
+import { NameTagService } from './name-tag.service';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -23,7 +22,11 @@ export class ContractService extends CommonService {
     return this.contract$.value;
   }
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService, private global: Globals) {
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+    private nameTagService: NameTagService,
+  ) {
     super(http, environmentService);
     this.contractObservable = this.contract$.asObservable();
   }
@@ -55,7 +58,7 @@ export class ContractService extends CommonService {
         : 'code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973"}';
     }
 
-    const addressNameTag = this.findNameTag(keyword, this.global.listNameTag);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
     if (addressNameTag?.length > 0) {
       keyword = addressNameTag;
     }
@@ -133,7 +136,7 @@ export class ContractService extends CommonService {
           instantiate_hash
           name
           version
-          label     
+          label  
           cw721_contract {
             name
             symbol
@@ -141,6 +144,9 @@ export class ContractService extends CommonService {
           cw20_contract {
             name
             symbol
+            smart_contract {
+              address
+            }  
           }
           code {
             type
@@ -304,12 +310,10 @@ export class ContractService extends CommonService {
   getListCodeId(data: any): Observable<any> {
     let keyword = data?.keyword ? data?.keyword : null;
     let subQuery = '';
-    const prefix = this.environmentService.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
-
     if (keyword) {
-      if (isContract(keyword, prefix)) {
+      if (keyword.length >= LENGTH_CHARACTER.CONTRACT) {
         subQuery = `smart_contracts: {address: {_eq: "${keyword}"}}`;
-      } else if (isAddress(keyword, prefix)) {
+      } else if (keyword.length >= LENGTH_CHARACTER.ADDRESS) {
         subQuery = `creator: {_eq: "${keyword}"}`;
       } else {
         subQuery = `code_id: {_eq: ${keyword}}`;

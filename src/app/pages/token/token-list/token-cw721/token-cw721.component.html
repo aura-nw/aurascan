@@ -57,8 +57,10 @@
                     <a
                       [routerLink]="['/tokens/token-nft', element.cw721_contract?.smart_contract?.address]"
                       class="text--primary text-nowrap">
-                      {{ element.cw721_contract?.name | stringEllipsis : 30 }}
-                      <span *ngIf="element.cw721_contract?.symbol">({{ element.cw721_contract?.symbol }})</span>
+                      {{ element.cw721_contract?.name | ellipsis : 30 }}
+                      <span *ngIf="element.cw721_contract?.symbol"
+                        >({{ element.cw721_contract?.symbol | ellipsis : 10 }})</span
+                      >
                     </a>
                     <div class="body-02 fw-normal caption-mob mb-0 text--gray-6 pr-5 desc">
                       {{ element.description }}

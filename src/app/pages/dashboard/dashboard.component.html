@@ -4,7 +4,7 @@
       <div class="carousel">
         <ngb-carousel [showNavigationArrows]="false">
           <ng-template ngbSlide>
-            <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
+            <a class="picsum-img-wrapper" target="_blank" href="https://play.monsterra.io/">
               <img
                 [src]="'assets/images/pages/banner_aurascan.png' | imageS3"
                 alt="Random first slide"
@@ -241,7 +241,7 @@
       <div class="mb-4 mb-lg-6 carousel">
         <ngb-carousel [showNavigationArrows]="false" [showNavigationIndicators]="false">
           <ng-template ngbSlide>
-            <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
+            <a class="picsum-img-wrapper" target="_blank" href="https://play.monsterra.io/">
               <img
                 [src]="'assets/images/pages/banner_aurascan.png' | imageS3"
                 alt="Random first slide"
@@ -374,13 +374,13 @@
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'timestamp'">
-                            {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                            {{ (data[template.matColumnDef] | dateCustom)[0] }}
                           </div>
                           <a
                             *ngSwitchCase="'proposer'"
                             class="text--primary cursor-pointer break-all"
                             [routerLink]="['/validators', data.operator_address]">
-                            {{ data[template.matColumnDef] | stringEllipsis : 10 }}
+                            {{ data[template.matColumnDef] | ellipsis : 10 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
@@ -447,13 +447,13 @@
                       <div>
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'timestamp'">
-                            {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                            {{ (data[template.matColumnDef] | dateCustom)[0] }}
                           </div>
                           <a
                             *ngSwitchCase="'tx_hash'"
                             class="text--primary cursor-pointer hash-link"
                             [routerLink]="['/transaction', data['tx_hash']]">
-                            {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                            {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
@@ -464,7 +464,7 @@
                           <div *ngSwitchCase="'type'">
                             <div class="aura-status aura-tooltip-contain">
                               <div class="label__status aura-tooltip-object">
-                                {{ data[template.matColumnDef] | cutStringPipe : 20 }}
+                                {{ data[template.matColumnDef] | ellipsis : 20 }}
                                 <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
                                   +{{ data.lstType?.length - 1 }}
                                 </div>

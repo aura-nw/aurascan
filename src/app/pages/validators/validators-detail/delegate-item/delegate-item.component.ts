@@ -7,10 +7,9 @@ import {
   TIME_OUT_CALL_API,
 } from 'src/app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE } from 'src/app/core/constants/validator.enum';
-import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { AccountService } from 'src/app/core/services/account.service';
-import { CommonService } from 'src/app/core/services/common.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -49,7 +48,6 @@ export class DelegateItemComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    public commonService: CommonService,
     private walletService: WalletService,
     private modalService: NgbModal,
     private accountService: AccountService,
@@ -105,24 +103,30 @@ export class DelegateItemComponent implements OnInit {
   //Get data for wallet info and list staking
   getDataWallet() {
     if (this.userAddress) {
-      this.accountService.getAccountDetail(this.userAddress).subscribe((res) => {
-        if (res) {
-          this.dataDelegate = {
-            ...this.dataDelegate,
-            delegableVesting: res?.data?.delegable_vesting,
-            delegatedToken: res?.data?.delegated,
-            availableToken: res?.data?.available,
-            stakingToken: res?.data?.stake_reward,
-            dialogMode: DIALOG_STAKE_MODE.Delegate,
-            validatorDetail:
-              res?.data?.delegations?.find(
-                (k) => k.validator_address === this.currentValidatorDetail?.operator_address,
-              ) || {},
-          };
-          this.dataDelegate.validatorDetail['amount_staked'] = this.dataDelegate?.validatorDetail?.amount || 0;
+      this.dataDelegate = { dialogMode: DIALOG_STAKE_MODE.Delegate };
+      this.accountService.getAccountDetail(this.userAddress).subscribe(
+        (res) => {
+          if (res) {
+            this.dataDelegate = {
+              ...this.dataDelegate,
+              delegableVesting: res?.data?.delegable_vesting,
+              delegatedToken: res?.data?.delegated,
+              availableToken: res?.data?.available,
+              stakingToken: res?.data?.stake_reward,
+              validatorDetail:
+                res?.data?.delegations?.find(
+                  (k) => k.validator_address === this.currentValidatorDetail?.operator_address,
+                ) || {},
+            };
+            this.dataDelegate.validatorDetail['amount_staked'] = this.dataDelegate?.validatorDetail?.amount || 0;
+            document.getElementById('buttonOpenDialog').click();
+          }
+        },
+        (err) => {
           document.getElementById('buttonOpenDialog').click();
-        }
-      });
+        },
+        () => {},
+      );
     }
   }
 
@@ -172,7 +176,6 @@ export class DelegateItemComponent implements OnInit {
           },
           senderAddress: this.userAddress,
           network: this.chainInfo,
-          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 

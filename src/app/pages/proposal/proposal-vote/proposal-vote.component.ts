@@ -4,7 +4,7 @@ import {
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
 import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
-import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IVotingDialog } from 'src/app/core/models/proposal.model';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
@@ -45,7 +45,6 @@ export class ProposalVoteComponent implements OnInit {
       },
       senderAddress: this.walletService.wallet.bech32Address,
       network: this.chainInfo,
-      signingType: ESigningType.Keplr,
       chainId: this.chainId,
     });
 

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { ContractService } from 'src/app/core/services/contract.service';
+import local from 'src/app/core/utils/storage/local';
 @Component({
   selector: 'app-code-id-detail',
   templateUrl: './code-id-detail.component.html',
@@ -27,13 +28,17 @@ export class CodeIdDetailComponent implements OnInit {
   codeIdDetail;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
-  constructor(private router: ActivatedRoute, private route: Router, private contractService: ContractService) {}
+  constructor(
+    private router: ActivatedRoute,
+    private route: Router,
+    private contractService: ContractService,
+  ) {}
 
   ngOnInit(): void {
     this.codeId = this.router.snapshot.paramMap.get('codeId');
-    if (localStorage.getItem('isVerifyTab') == 'true') {
+    if (local.getItem(STORAGE_KEYS.IS_VERIFY_TAB) == 'true') {
       this.tabIndex = 1;
-      localStorage.setItem('isVerifyTab', null);
+      local.removeItem(STORAGE_KEYS.IS_VERIFY_TAB);
     }
 
     if (this.codeId === 'null') {

@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
@@ -89,6 +90,10 @@ export class EnvironmentService {
     return _.get(this.configValue, 'chainConfig.chain_info.chainId');
   }
 
+  get coinDecimals() {
+    return _.get(this.configValue, 'chainConfig.chain_info.currencies[0].coinDecimals');
+  }
+
   get stakingTime() {
     return _.get(this.configValue, 'chainConfig.stakingTime');
   }
@@ -134,7 +139,19 @@ export class EnvironmentService {
   get coingecko() {
     return _.get(this.configValue, 'api.coingecko');
   }
-  constructor(private http: HttpClient) {}
+
+  destroyed$ = new Subject<void>();
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
+  constructor(private http: HttpClient, private layout: BreakpointObserver) {
+    this.breakpoint$.subscribe((state) => {
+      this.isMobile = state?.matches ? true : false;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 
   loadConfig() {
     return lastValueFrom(this.http.get<IConfiguration>(this.configUri))

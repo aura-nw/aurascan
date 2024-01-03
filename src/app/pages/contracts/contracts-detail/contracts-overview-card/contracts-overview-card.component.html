@@ -7,13 +7,13 @@
     aria-expanded="false">
     <h6 class="h4-mob mb-0 text--white fw-semibold">Contract Overview</h6>
     <button class="button d-lg-none" type="button">
-      <img src="assets/icons/icons-svg/white/chevron-down-white.svg" alt="" width="20px" />
+      <i  class="ph ph-caret-down text--white h3"></i>
     </button>
   </div>
   <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
   <div class="card__body body-02 body-mob collapse" id="title1">
     <div>
-      <div class="text--gray-4 caption fw-normal mb-1">{{ denom | titlecase }} Balance</div>
+      <div class="text--gray-4 caption fw-normal mb-1">AURA Balance</div>
       <div class="d-flex align-items-center">
         <div class="text--gray-light mr-1">
           <span [appBigNumber]="contractBalance" [decimal]="6"></span> {{ denom }}
@@ -44,7 +44,7 @@
             <a
               class="text--primary break-word line-claim-v--des"
               [routerLink]="['/tokens/token/', contractDetail?.address]">
-              {{ contractDetail?.cw20_contract?.name }} ({{ contractDetail?.cw20_contract?.symbol }})
+              {{ contractDetail | marketInfo : 'name' }} ({{ contractDetail | marketInfo : 'symbol' }})
             </a>
             <div class="aura-tooltip-contain">
               <div class="status cursor-pointer aura-tooltip-object">
@@ -56,7 +56,7 @@
                   class="ml-1 mb-1"
                   *ngIf="verifiedStatus === 'VERIFIED'" />
               </div>
-              <app-tooltip-customize [content]="verifiedText || 'Verified by Aura Network'"> </app-tooltip-customize>
+              <app-tooltip-customize [content]="verifiedText || 'Verified by Aura Network'"></app-tooltip-customize>
             </div>
           </div>
           <a

@@ -7,12 +7,12 @@ import * as _ from 'lodash';
 import { NUMBER_2_DIGIT, NUM_BLOCK, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
+import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { Globals, convertDataBlock } from 'src/app/global/global';
+import { convertDataBlock } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 const marked = require('marked');
 @Component({
@@ -21,7 +21,6 @@ const marked = require('marked');
   styleUrls: ['./validators-detail.component.scss'],
 })
 export class ValidatorsDetailComponent implements OnInit {
-  EFeature = EFeature;
   currentAddress: string;
   currentValidatorDetail: any;
 
@@ -97,14 +96,12 @@ export class ValidatorsDetailComponent implements OnInit {
     private validatorService: ValidatorService,
     private blockService: BlockService,
     public commonService: CommonService,
-    private global: Globals,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private walletService: WalletService,
   ) {}
 
   ngOnInit(): void {
-    this.commonService['listNameTag'] = this.global?.listNameTag;
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.getDetail(true);
     this.timerGetBlock = setInterval(() => {

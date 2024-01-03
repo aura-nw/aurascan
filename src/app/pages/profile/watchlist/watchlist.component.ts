@@ -7,7 +7,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT, TIMEOUT_ERROR, TOTAL_GROUP_TRACKING } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR, TOTAL_GROUP_TRACKING } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -16,10 +16,10 @@ import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { isContract } from 'src/app/core/utils/common/validation';
-import { Globals } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupWatchlistComponent } from './popup-watchlist/popup-watchlist.component';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-watchlist',
@@ -62,22 +62,19 @@ export class WatchListComponent implements OnInit, OnDestroy {
     public nameTagService: NameTagService,
     private dialog: MatDialog,
     private toastr: NgxToastrService,
-    private global: Globals,
     private environmentService: EnvironmentService,
     private watchListService: WatchListService,
   ) {}
 
   ngOnInit(): void {
-    const dataWatchList = localStorage.getItem('setAddressWatchList');
+    const dataWatchList = local.getItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST);
     if (dataWatchList && dataWatchList !== 'undefined') {
-      const address = JSON.parse(dataWatchList);
-      localStorage.removeItem('setAddressWatchList');
+      local.removeItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST);
       setTimeout(() => {
-        this.openPopup({ address: address });
+        this.openPopup({ address: dataWatchList });
       }, 500);
     }
 
-    this.commonService.listNameTag = this.global.listNameTag;
     this.getWatchlist();
     this.searchSubject
       .asObservable()
@@ -112,7 +109,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
 
     this.watchListService.getListWatchList(payload).subscribe(
       (res) => {
-        localStorage.setItem('lstWatchList', JSON.stringify(res?.data));
+        local.setItem(STORAGE_KEYS.LIST_WATCH_LIST, res?.data);
         this.dataSource.data = res.data;
         this.pageData.length = res?.meta?.count || 0;
 
@@ -159,7 +156,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
       if (result) {
         setTimeout(() => {
           this.getWatchlist();
-        }, 3000);
+        }, 2000);
       }
     });
   }
@@ -219,8 +216,6 @@ export class WatchListComponent implements OnInit, OnDestroy {
   }
 
   urlType(address) {
-    return isContract(address, this.environmentService.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr)
-      ? '/contracts'
-      : '/account';
+    return isContract(address) ? '/contracts' : '/account';
   }
 }

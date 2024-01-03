@@ -5,19 +5,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { MaterialModule } from '../../../app/material.module';
-import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { AccountService } from '../../../app/core/services/account.service';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
+import { MaterialModule } from '../../../app/material.module';
 import { SharedModule } from '../../../app/shared/shared.module';
+import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { PopupDelegateModule } from './popup-delegate/popup-delegate.module';
@@ -26,7 +27,6 @@ import { DelegateItemComponent } from './validators-detail/delegate-item/delegat
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
 import { ValidatorsComponent } from './validators.component';
-import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [ValidatorsComponent, ValidatorsDetailComponent, StakingInfoComponent, DelegateItemComponent],
@@ -36,7 +36,7 @@ import { MASK_CONFIG } from 'src/app/app.config';
     MaterialModule,
     NgxMaskDirective,
     NgxMaskPipe,
-    CommonPipeModule,
+    CustomPipeModule,
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,

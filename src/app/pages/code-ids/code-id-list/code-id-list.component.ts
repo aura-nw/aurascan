@@ -7,8 +7,8 @@ import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constan
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { shortenAddress } from '../../../core/utils/common/shorten';
 
@@ -44,7 +44,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractVerifyType = ContractVerifyType;
 
-  constructor(private contractService: ContractService, private commonService: CommonService) {}
+  constructor(private contractService: ContractService, private nameTagService: NameTagService) {}
 
   ngOnInit(): void {
     this.getListCodeIds();
@@ -78,7 +78,7 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
       keyword: this.textSearch,
     };
 
-    const addressNameTag = this.commonService.findNameTag(this.textSearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
     if (addressNameTag?.length > 0) {
       payload['keyword'] = addressNameTag;
     }

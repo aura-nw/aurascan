@@ -1,9 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe, formatNumber } from '@angular/common';
+import { formatNumber } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
-import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
+import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subject, Subscription, timer } from 'rxjs';
@@ -17,10 +17,9 @@ import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
-import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR } from '../../core/constants/common.constant';
-import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
+import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
 @Component({
@@ -100,7 +99,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   breakpoint$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
-    public commonService: CommonService,
     private blockService: BlockService,
     private transactionService: TransactionService,
     public global: Globals,
@@ -214,6 +212,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.environmentService.coingecko?.ids[0]) {
       return;
     }
+
     this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
       if (res?.data) {
         this.tokenInfo = res.data;

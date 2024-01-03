@@ -39,7 +39,7 @@
         </div>
       </div>
 
-      <div class="content-notify" id="scrollBox" (scroll)="onScroll($event)" [class.paddingSafari]="isSafari">
+      <div class="content-notify" id="scrollBox" (scroll)="onScroll($event)" [class.safari-device]="isSafari">
         <ng-container *ngIf="lstData?.length > 0; else noNoti">
           <ng-container *ngFor="let item of lstData">
             <div class="item cursor-pointer" (click)="readNoti(item)" [ngClass]="{ item__read: item.is_read }">
@@ -51,7 +51,7 @@
                 <div class="break-word" [innerHtml]="item.display"></div>
                 <div class="mt-2 d-flex align-items-center caption fw-normal text--gray-2">
                   <i class="ph ph-clock mr-1"></i>
-                  {{ commonService.getDateValue(item.created_at)[0] }}
+                  {{ (item.created_at | dateCustom)[0] }}
                 </div>
               </div>
             </div>
@@ -61,7 +61,7 @@
 
       <ng-template #noNoti>
         <div class="box-no-noti" *ngIf="!isLoading">
-          {{ isTabAll ? 'You don\'t have any notification' : 'You don\'t have any unread notification' }}
+          {{ isTabAll ? 'You don’t have any notification' : 'You don’t have any unread notification' }}
         </div>
         <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
       </ng-template>

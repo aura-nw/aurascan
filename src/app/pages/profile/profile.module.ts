@@ -14,7 +14,7 @@ import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.m
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { CommonPipeModule } from '../../core/pipes/common-pipe.module';
+import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { MaterialModule } from '../../material.module';
 import { SharedModule } from '../../shared/shared.module';
 import { PopupNameTagComponent } from './private-name-tag/popup-name-tag/popup-name-tag.component';
@@ -42,7 +42,7 @@ import { WatchListComponent } from './watchlist/watchlist.component';
     SharedModule,
     MaterialModule,
     TranslateModule,
-    CommonPipeModule,
+    CustomPipeModule,
     NgxMaskDirective,
     NgxMaskPipe,
     LoadingImageModule,
@@ -53,12 +53,6 @@ import { WatchListComponent } from './watchlist/watchlist.component';
     PaginatorModule,
     TooltipCustomizeModule,
   ],
-  providers: [
-    UntypedFormBuilder,
-    UserService,
-    NameTagService,
-    WatchListService,
-    provideEnvironmentNgxMask(MASK_CONFIG),
-  ],
+  providers: [UntypedFormBuilder, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class ProfileModule {}

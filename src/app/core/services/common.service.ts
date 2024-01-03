@@ -2,20 +2,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
-import * as _ from 'lodash';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { DATEFORMAT } from '../constants/common.constant';
+import { Observable } from 'rxjs';
+import { DATEFORMAT, STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
+import local from '../utils/storage/local';
 
 @Injectable({ providedIn: 'root' })
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.coins;
-  private networkQuerySubject: BehaviorSubject<any>;
-  public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.chainInfo;
 
   horoscope = this._environmentService.horoscope;
@@ -24,26 +22,15 @@ export class CommonService {
   envDB = this.horoscope?.chain;
 
   chainId = this._environmentService.chainId;
-  addressPrefix = 'aura';
-  listNameTag = [];
+  addressPrefix = '';
   listValidator = [];
+  listTokenIBC = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this._environmentService.config.asObservable().subscribe((res) => {
       this.apiUrl = res.api.backend;
       this.addressPrefix = res.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
     });
-    const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
-    this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);
-    this.networkQueryOb = this.networkQuerySubject.asObservable();
-  }
-
-  public get getNetwork(): any {
-    return this.networkQuerySubject.value;
-  }
-
-  public set setNetwork(data: any) {
-    this.networkQuerySubject.next(data);
   }
 
   status(): Observable<any> {
@@ -89,7 +76,11 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
-    let result = {};
+    const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
+    let result = {
+      display: this.chainInfo.currencies[0].coinDenom,
+      decimals: this.chainInfo.currencies[0].coinDecimals,
+    };
     if (value.indexOf('ibc') >= 0) {
       try {
         if (!value.startsWith('ibc')) {
@@ -97,13 +88,14 @@ export class CommonService {
           value = value?.replace(temp, '');
         }
       } catch {}
-      result = { display: value, decimals: 6 };
       let temp = value.slice(value.indexOf('ibc'));
-      result = this.coins.find((k) => k.denom === temp) || {};
-      result['display'] = result['display'] || value;
-    } else {
-      result = { display: this.chainInfo.currencies[0].coinDenom, decimals: 6 };
+      result = listTokenIBC?.find((k) => k.denom === temp) || {
+        display: value,
+        symbol: value,
+      };
+      result['decimals'] = result['decimal'] || result['decimals'] || this.chainInfo.currencies[0].coinDecimals;
     }
+
     return result;
   }
 
@@ -115,50 +107,6 @@ export class CommonService {
     return this._environmentService.imageUrl + 'images/aura__ntf-default-img.png';
   }
 
-  getListNameTag(payload) {
-    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
-    return this._http.get<any>(`${this.apiUrl}/public-name-tag`, {
-      params,
-    });
-  }
-
-  setNameTag(address, listNameTag = [], getPrivate = true) {
-    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
-    const nameTag = this.listNameTag?.find((k) => k.address === address);
-    let result = nameTag?.name_tag || address;
-    if (getPrivate) {
-      result = nameTag?.name_tag_private || result;
-    }
-    return result;
-  }
-
-  findNameTag(keySearch, listNameTag = []) {
-    if(!keySearch){
-      return '';
-    }
-    const userEmail = localStorage.getItem('userEmail');
-    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
-    if (this.listNameTag?.length > 0) {
-      let result;
-      if (userEmail) {
-        result = this.listNameTag?.find((k) => k.name_tag_private?.trim() === keySearch?.trim())?.address || '';
-      }
-      if (!result) {
-        result = this.listNameTag?.find((k) => k.name_tag?.trim() === keySearch?.trim())?.address || '';
-      }
-      return result;
-    }
-  }
-
-  checkDisplayTooltip(address): boolean {
-    let result = false;
-    const nameTag = this.listNameTag?.find((k) => k.address === address);
-    if (!nameTag || nameTag?.name_tag === address) {
-      result = true;
-    }
-    return result;
-  }
-
   showToolTip(element) {
     if (element.classList.contains('disabled-hover')) {
       element.classList.remove('disabled-hover');
@@ -168,34 +116,6 @@ export class CommonService {
         element.classList.add('disabled-hover');
       }, 800);
     }
-  }
-
-  findUrlNameTag(address) {
-    let result = '';
-    const nameTag = this.listNameTag?.find((k) => k.address === address);
-    if (nameTag?.enterpriseUrl?.length > 0) {
-      result = nameTag?.enterpriseUrl;
-    }
-    return result;
-  }
-
-  checkPublic(address, listNameTag = []): boolean {
-    this.listNameTag = this.listNameTag?.length > 0 ? this.listNameTag : listNameTag;
-    let result = false;
-    const nameTag = this.listNameTag?.find((k) => k.address === address && k.name_tag?.length > 0);
-    if (nameTag && nameTag?.name_tag !== address) {
-      result = true;
-    }
-    return result;
-  }
-
-  checkPrivate(address): boolean {
-    let result = false;
-    const nameTag = this.listNameTag?.find((k) => k.address === address && k.isPrivate);
-    if (nameTag?.name_tag_private) {
-      result = true;
-    }
-    return result;
   }
 
   exportCSV(payload, getPrivate = false): Observable<any> {

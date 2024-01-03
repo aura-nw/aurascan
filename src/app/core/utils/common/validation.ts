@@ -1,15 +1,15 @@
-import { ADDRESS_LENGTH_RULE } from '../../constants/common.constant';
+import { LENGTH_CHARACTER } from '../../constants/common.constant';
 import { bech32 } from 'bech32';
 
-export function isContract(adr: string, addressPrefix: string): boolean {
-  if (adr?.startsWith(addressPrefix) && adr?.replace(addressPrefix, '').length === ADDRESS_LENGTH_RULE.CONTRACT) {
+export function isContract(adr: string, addressPrefix = 'aura'): boolean {
+  if (adr?.startsWith(addressPrefix) && adr?.length === LENGTH_CHARACTER.CONTRACT) {
     return true;
   }
   return false;
 }
 
-export function isAddress(adr: string, addressPrefix: string): boolean {
-  if (adr?.startsWith(addressPrefix) && adr?.replace(addressPrefix, '').length === ADDRESS_LENGTH_RULE.ADDRESS) {
+export function isAddress(adr: string, addressPrefix = 'aura'): boolean {
+  if (adr?.startsWith(addressPrefix) && adr?.length === LENGTH_CHARACTER.ADDRESS) {
     return true;
   }
   return false;

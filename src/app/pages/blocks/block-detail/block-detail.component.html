@@ -77,7 +77,7 @@
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-3 text--gray-4">Block Time</div>
               <div class="col-auto col-lg-9 text-end text-lg-start text--gray-1 d-lg-flex align-items-center">
-                <div>{{ commonService.getDateValue(blockDetail?.timestamp)[0] }}</div>
+                <div>{{ (blockDetail?.timestamp | dateCustom)[0] }}</div>
                 <div class="d-flex align-items-center ml-1">
                   <span class="d-none d-lg-block">(</span>
                   <span>{{ blockDetail?.timestamp | customDate : 'yyyy-MM-dd' }}</span>
@@ -152,13 +152,13 @@
                     <div>
                       <ng-container [ngSwitch]="template.matColumnDef">
                         <div *ngSwitchCase="'timestamp'">
-                          {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                          {{ (data[template.matColumnDef] | dateCustom)[0] }}
                         </div>
                         <a
                           *ngSwitchCase="'tx_hash'"
                           class="text--primary cursor-pointer hash-link"
                           [routerLink]="['/transaction', data['tx_hash']]">
-                          {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                          {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                         </a>
                         <a
                           *ngSwitchCase="'height'"
@@ -201,7 +201,7 @@
                         <div *ngSwitchCase="'amount'">
                           <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                             <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                            <span class="text--white ml-1">{{ data?.denom | convertLogAmount : true }}</span>
+                            <span class="text--white ml-1">{{ data?.denom | ibcDenom }}</span>
                           </ng-container>
                           <ng-template #displayNonNumber>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
@@ -236,7 +236,7 @@
               [dataCard]="data"
               [title]="{
                 size: 'md',
-                label: data.tx_hash | cutStringPipe : 6 : 6,
+                label: data.tx_hash | ellipsis : 6 : 6,
                 subLabelContent: data.type,
                 subLabelClass: 'label__status',
                 status: data.code
@@ -246,7 +246,7 @@
                   label: 'Fee',
                   info: (+data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
                 },
-                { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+                { label: 'Time', info: (data.timestamp | dateCustom : false)[1] }
               ]"></app-card-mob-simple>
           </div>
         </ng-container>
@@ -279,8 +279,8 @@
               <div class="content-log">
                 <ng-container *ngFor="let data of item?.attributes; let idx = index">
                   <div class="ml-5 mb-2 row">
-                    <span class="col-12 col-lg-3 text--gray-4 body-02 fw-normal">{{ data.key | decodeData }}</span>
-                    <span class="col-12 col-lg-9 body-01 break-all"> {{ data.value | decodeData }} </span>
+                    <span class="col-12 col-lg-3 text--gray-4 body-02 fw-normal">{{ data.key }}</span>
+                    <span class="col-12 col-lg-9 body-01 break-all"> {{ data.value }} </span>
                   </div>
                 </ng-container>
               </div>

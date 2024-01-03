@@ -4,19 +4,22 @@ import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import BigNumber from 'bignumber.js';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApiAccountService } from 'src/app/core/data-services/api-account.service';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { EFeature } from 'src/app/core/models/common.model';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants/account.enum';
-import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
+import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
-import { Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
@@ -46,7 +49,7 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
-  userEmail = null;
+  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
 
   destroyed$ = new Subject<void>();
   timerUnSub: Subscription;
@@ -67,18 +70,21 @@ export class AccountDetailComponent implements OnInit {
     public commonService: CommonService,
     private route: ActivatedRoute,
     private accountService: AccountService,
-    private global: Globals,
     private walletService: WalletService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
     private environmentService: EnvironmentService,
     private router: Router,
+    private nameTagService: NameTagService,
   ) {
     this.chartOptions = CHART_OPTION();
   }
 
+  get totalValue() {
+    return BigNumber(this.totalValueToken).minus(this.totalValueNft);
+  }
+
   ngOnInit(): void {
-    this.userEmail = localStorage.getItem('userEmail');
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
@@ -111,17 +117,6 @@ export class AccountDetailComponent implements OnInit {
         this.userAddress = wallet.bech32Address;
       }
     });
-
-    let retrievedObject = localStorage.getItem('accountDetail');
-    if (retrievedObject) {
-      let data = JSON.parse(retrievedObject);
-      let dataAccount = JSON.parse(data?.dataAccount);
-      if (dataAccount && dataAccount.acc_address === this.currentAddress) {
-        this.currentAccountDetail = dataAccount;
-
-        this.chartOptions = JSON.parse(data?.dataChart);
-      }
-    }
   }
 
   getAccountDetail(): void {
@@ -201,13 +196,12 @@ export class AccountDetailComponent implements OnInit {
   }
 
   editPrivateName() {
-    const userEmail = localStorage.getItem('userEmail');
-    const dataNameTag = this.global.listNameTag?.find((k) => k.address === this.currentAddress);
-    if (userEmail) {
+    const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.currentAddress);
+    if (this.userEmail) {
       if (dataNameTag) {
-        localStorage.setItem('setAddressNameTag', JSON.stringify(dataNameTag));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        localStorage.setItem('setAddressNameTag', JSON.stringify({ address: this.currentAddress }));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, JSON.stringify({ address: this.currentAddress }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {
@@ -217,13 +211,10 @@ export class AccountDetailComponent implements OnInit {
 
   checkWatchList() {
     // get watch list form local storage
-    const lstWatchList = localStorage.getItem('lstWatchList');
-    try {
-      let data = JSON.parse(lstWatchList);
-      if (data.find((k) => k.address === this.currentAddress)) {
-        this.isWatchList = true;
-      }
-    } catch (e) {}
+    const lstWatchList = local.getItem<any>(STORAGE_KEYS.LIST_WATCH_LIST);
+    if (lstWatchList?.find((k) => k.address === this.currentAddress)) {
+      this.isWatchList = true;
+    }
   }
 
   handleWatchList() {
@@ -235,9 +226,8 @@ export class AccountDetailComponent implements OnInit {
   }
 
   editWatchList() {
-    const userEmail = localStorage.getItem('userEmail');
-    if (userEmail) {
-      localStorage.setItem('setAddressWatchList', JSON.stringify(this.currentAddress));
+    if (this.userEmail) {
+      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.currentAddress);
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

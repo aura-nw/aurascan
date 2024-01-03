@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActiveToast, ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { MESSAGES_CODE } from '../constants/messages.constant';
 import { ResponseTemplate } from '../models/common.model';
@@ -25,7 +25,7 @@ export class NgxToastrService {
     this.toastrService.success(message, title, {
       positionClass: this.POSITION_CLASS,
       timeOut: configTimeOut,
-      toastClass: 'aura-toast'
+      toastClass: 'aura-toast',
     });
   }
 
@@ -79,7 +79,10 @@ export class NgxToastrService {
 
   loading(txHash: string, title = '', configTimeOut = 5000): void {
     if (this.toastrService.toasts.length === 0) {
-      const message ='<a href="transaction/' + txHash + ' "target="_blank" class="toastr-link">Check your transaction on the explorer</a>';
+      const message =
+        '<a href="transaction/' +
+        txHash +
+        ' "target="_blank" class="toastr-link">Check your transaction on the explorer</a>';
       this.toastrService.info(message, 'Transaction is in progress', {
         positionClass: this.POSITION_CLASS,
         enableHtml: true,

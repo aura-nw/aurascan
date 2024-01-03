@@ -1,18 +1,24 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import {
+  DATEFORMAT,
+  LENGTH_CHARACTER,
+  PAGE_EVENT,
+  STORAGE_KEYS,
+  TIMEOUT_ERROR,
+} from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { LIST_TRANSACTION_FILTER } from 'src/app/core/constants/transaction.enum';
+import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
+import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
@@ -52,7 +58,7 @@ export class AccountTransactionTableComponent {
 
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 14 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 17 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 22 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 17 },
     { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 24 },
     { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 20 },
@@ -98,7 +104,6 @@ export class AccountTransactionTableComponent {
 
   constructor(
     private environmentService: EnvironmentService,
-    public commonService: CommonService,
     private userService: UserService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
@@ -248,6 +253,7 @@ export class AccountTransactionTableComponent {
     const address = this.currentAddress;
     let startDate = null;
     let endDate = null;
+    this.errTxt = null;
 
     if (this.transactionFilter.startDate && this.transactionFilter.endDate) {
       startDate = this.getConvertDate(this.transactionFilter.startDate);
@@ -267,17 +273,52 @@ export class AccountTransactionTableComponent {
     };
 
     if (this.isSearchOther) {
-      const isSameType = (listIn, listNotIn) => listIn?.label === listNotIn;
-      const onlyInLeft = (left, right, compareFunction) =>
-        left.filter((leftValue) => !right.some((rightValue) => compareFunction(leftValue, rightValue)));
-      const lstTemp = onlyInLeft(this.tnxTypeOrigin, this.transactionFilter.type, isSameType);
-      let result = [];
-      lstTemp.forEach((element) => {
-        result.push(element.label);
-      });
-      payload['listTxMsgTypeNotIn'] = result || null;
+      const listTxMsgTypeNotIn = _.pull(
+        [...this.tnxTypeOrigin.map((item) => item.label)],
+        ...this.transactionFilter.type,
+      );
+      payload['listTxMsgTypeNotIn'] = listTxMsgTypeNotIn || null;
     } else {
-      payload['listTxMsgType'] = this.transactionFilter.type || null;
+      payload['listTxMsgType'] = this.transactionFilter.type ? [...this.transactionFilter.type] : null;
+    }
+
+    // set type for filter in
+    if (payload.listTxMsgType?.length > 0) {
+      let arrMultiVer = payload.listTxMsgType?.filter((k) => TYPE_MULTI_VER.includes(k));
+      if (arrMultiVer?.length > 0) {
+        arrMultiVer.forEach((element) => {
+          switch (element) {
+            case TRANSACTION_TYPE_ENUM.Vote:
+              payload.listTxMsgType.push(TRANSACTION_TYPE_ENUM.VoteV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.Deposit:
+              payload.listTxMsgType.push(TRANSACTION_TYPE_ENUM.DepositV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
+              payload.listTxMsgType.push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
+              break;
+          }
+        });
+      }
+    }
+    // set type for filter not in
+    else if (payload['listTxMsgTypeNotIn']?.length > 0) {
+      let arrMultiVer = payload['listTxMsgTypeNotIn']?.filter((k) => TYPE_MULTI_VER.includes(k));
+      if (arrMultiVer?.length > 0) {
+        arrMultiVer.forEach((element) => {
+          switch (element) {
+            case TRANSACTION_TYPE_ENUM.Vote:
+              payload['listTxMsgTypeNotIn'].push(TRANSACTION_TYPE_ENUM.VoteV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.Deposit:
+              payload['listTxMsgTypeNotIn'].push(TRANSACTION_TYPE_ENUM.DepositV2);
+              break;
+            case TRANSACTION_TYPE_ENUM.SubmitProposalTx:
+              payload['listTxMsgTypeNotIn'].push(TRANSACTION_TYPE_ENUM.SubmitProposalTxV2);
+              break;
+          }
+        });
+      }
     }
 
     switch (this.modeQuery) {
@@ -573,8 +614,8 @@ export class AccountTransactionTableComponent {
 
   initTnxFilterPanel() {
     if (this.transactionFilter.type) {
-      this.listTypeSelectedTemp = this.tnxTypeOrigin?.filter((type) =>
-        this.transactionFilter?.type?.includes(type.label),
+      this.listTypeSelectedTemp = this.tnxTypeOrigin?.filter(
+        (type) => this.transactionFilter?.type?.includes(type.label),
       );
       if (this.listTypeSelectedTemp?.length === this.tnxTypeOrigin?.length) {
         this.checkAll = true;
@@ -595,7 +636,10 @@ export class AccountTransactionTableComponent {
   }
 
   linkExportPage() {
-    localStorage.setItem('setDataExport', JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }));
+    local.setItem(
+      STORAGE_KEYS.SET_DATA_EXPORT,
+      JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }),
+    );
     this.router.navigate(['/export-csv']);
   }
 

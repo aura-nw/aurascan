@@ -33,7 +33,7 @@
               codeIdDetail.tx_hash
             }}</a>
             <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-lg-none">{{
-              codeIdDetail.tx_hash | cutStringPipe : 8 : 8
+              codeIdDetail.tx_hash | ellipsis : 8 : 8
             }}</a>
           </div>
         </div>

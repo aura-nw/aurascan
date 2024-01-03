@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { UserStorage } from 'src/app/core/models/auth.models';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { isValidBench32Address } from 'src/app/core/utils/common/validation';
+import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
 @Component({
@@ -22,17 +23,16 @@ export class ExportCsvComponent implements OnInit {
   isValidAddress = true;
   isValidBlock = true;
   userEmail;
-  tabsAccount = TabsAccount;
+  TabsAccount = TabsAccount;
   dataType = '';
   minDate;
   minDateEnd;
   maxDate;
   maxDateEnd;
-  tabsData = TabsAccountLink;
+  TabsAccountLink = TabsAccountLink;
   isDownload = false;
   responseCaptcha;
   isValidCaptcha = false;
-
   siteKey = this.environmentService.siteKeyCaptcha;
 
   constructor(
@@ -46,11 +46,11 @@ export class ExportCsvComponent implements OnInit {
   ngOnInit(): void {
     this.renderCaptcha();
     // check exit email
-    this.userEmail = localStorage.getItem('userEmail');
+    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
     this.formInit();
 
     //get data config from account detail
-    const dataConfig = localStorage.getItem('setDataExport');
+    const dataConfig = local.getItem<[]>(STORAGE_KEYS.SET_DATA_EXPORT);
 
     if (dataConfig?.length > 0) {
       this.setDataConfig(dataConfig);
@@ -86,14 +86,14 @@ export class ExportCsvComponent implements OnInit {
 
   mappingDataExport(dataType) {
     switch (dataType) {
-      case this.tabsData.NativeTxs:
-        return this.tabsAccount.NativeTxs;
-      case this.tabsData.FtsTxs:
-        return this.tabsAccount.FtsTxs;
-      case this.tabsData.NftTxs:
-        return this.tabsAccount.NftTxs;
+      case TabsAccountLink.NativeTxs:
+        return this.TabsAccount.NativeTxs;
+      case TabsAccountLink.FtsTxs:
+        return this.TabsAccount.FtsTxs;
+      case TabsAccountLink.NftTxs:
+        return this.TabsAccount.NftTxs;
       default:
-        return this.tabsAccount.ExecutedTxs;
+        return this.TabsAccount.ExecutedTxs;
     }
   }
 
@@ -144,10 +144,8 @@ export class ExportCsvComponent implements OnInit {
           const errMsg = JSON.parse((<any>e.target).result)?.error;
           if (errMsg?.statusCode === 401 && errMsg?.message == 'Unauthorized') {
             if (this.csvForm.value.displayPrivate) {
-              localStorage.removeItem('accessToken');
-              localStorage.removeItem('refreshToken');
-              localStorage.removeItem('userEmail');
-              localStorage.removeItem('listNameTag');
+              local.removeItem(STORAGE_KEYS.USER_DATA);
+              local.removeItem(STORAGE_KEYS.LIST_NAME_TAG);
               window.location.reload();
             }
           } else {
@@ -195,7 +193,7 @@ export class ExportCsvComponent implements OnInit {
   changeTypeFilter(type) {
     this.dataType = type;
     this.csvForm.value.dataType = this.dataType;
-    if (type !== this.tabsData.ExecutedTxs) {
+    if (type !== this.TabsAccountLink.ExecutedTxs) {
       this.isFilterDate = true;
       this.csvForm.value.isFilterDate = this.isFilterDate;
     }

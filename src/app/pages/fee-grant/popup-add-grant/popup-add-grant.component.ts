@@ -4,7 +4,7 @@ import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
   MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
@@ -182,7 +182,6 @@ export class PopupAddGrantComponent implements OnInit {
               },
               senderAddress: granter,
               network: this.environmentService.chainInfo,
-              signingType: ESigningType.Keplr,
               chainId: this.walletService.chainId,
             });
 

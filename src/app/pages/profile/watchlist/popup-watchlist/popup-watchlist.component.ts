@@ -1,13 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { isAddress, isContract, isSafari, isValidBench32Address } from 'src/app/core/utils/common/validation';
@@ -85,7 +86,6 @@ export class PopupWatchlistComponent implements OnInit {
   };
 
   quota = this.environmentService.chainConfig.quotaSetWatchList;
-  addressPrefix = this.environmentService.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -96,6 +96,7 @@ export class PopupWatchlistComponent implements OnInit {
     private commonService: CommonService,
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -191,10 +192,10 @@ export class PopupWatchlistComponent implements OnInit {
 
     if (this.getAddress.value?.length > 0) {
       this.isValidAddress = false;
-      if (isValidBench32Address(this.getAddress?.value, this.addressPrefix)) {
+      if (isValidBench32Address(this.getAddress?.value, this.commonService.addressPrefix)) {
         this.isValidAddress =
-          (isAddress(this.getAddress.value, this.addressPrefix) && this.isAccount) ||
-          (isContract(this.getAddress.value, this.addressPrefix) && this.isContract);
+          (isAddress(this.getAddress.value) && this.isAccount) ||
+          (isContract(this.getAddress.value) && this.isContract);
       }
     }
 
@@ -216,9 +217,10 @@ export class PopupWatchlistComponent implements OnInit {
   onSubmit() {
     this.isSubmit = true;
     const { favorite, address, note, id } = this.watchlistForm.value;
+
     let payload = {
       address: address,
-      type: isAddress(address, this.addressPrefix) ? 'account' : 'contract',
+      type: isAddress(address) ? 'account' : 'contract',
       favorite: favorite,
       tracking: this.isTracking,
       note: note,
@@ -307,12 +309,12 @@ export class PopupWatchlistComponent implements OnInit {
     this.privateNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const tempPublic = this.commonService.setNameTag(this.getAddress.value, null, false);
-      const tempPrivate = this.commonService.setNameTag(this.getAddress.value);
+      const tempPublic = this.nameTagService.findNameTagByAddress(this.getAddress.value, false);
+      const tempPrivate = this.nameTagService.findNameTagByAddress(this.getAddress.value);
       if (tempPublic !== this.getAddress.value) {
         this.publicNameTag = tempPublic;
       }
-      if (this.commonService.checkPrivate(this.getAddress.value) && tempPrivate !== this.getAddress.value) {
+      if (this.nameTagService.isPrivate(this.getAddress.value) && tempPrivate !== this.getAddress.value) {
         this.privateNameTag = tempPrivate;
       }
     }

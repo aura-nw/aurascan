@@ -9,7 +9,7 @@ import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginato
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
+import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { MappingErrorService } from '../../core/services/mapping-error.service';
 import { ProposalService } from '../../core/services/proposal.service';
 import { MaterialModule } from '../../material.module';
@@ -28,6 +28,7 @@ import { ProposalTableComponent } from './proposal-table/proposal-table.componen
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
 import { MASK_CONFIG } from 'src/app/app.config';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,7 @@ import { MASK_CONFIG } from 'src/app/app.config';
     MaterialModule,
     TranslateModule,
     FormsModule,
-    CommonPipeModule,
+    CustomPipeModule,
     NgbProgressbarModule,
     NgbNavModule,
     NgxMaskDirective,
@@ -60,12 +61,8 @@ import { MASK_CONFIG } from 'src/app/app.config';
     CustomPaginatorModule,
     NameTagModule,
     TooltipCustomizeModule,
+    CommonDirectiveModule,
   ],
-  providers: [
-    ProposalService,
-    MappingErrorService,
-    ValidatorService,
-    provideEnvironmentNgxMask(MASK_CONFIG),
-  ],
+  providers: [ProposalService, MappingErrorService, ValidatorService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class ProposalModule {}

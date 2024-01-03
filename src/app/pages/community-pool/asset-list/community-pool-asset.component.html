@@ -89,15 +89,11 @@
                 <ng-container *ngFor="let data of dataSourceMob; index as i">
                   <app-card-mob-simple
                     [tokenData]="{
-                      logo: data.logo ? data.logo : defaultLogoToken,
-                      name: data.name,
+                    logo: data.logo ? data.logo : defaultLogoToken,
+                    name: data.name,
                       info: data.symbol ? data.symbol : (denom | uppercase)
-                    }"
-                    [tokenAmount]="{
-                      amount: data.amount,
-                      decimal: data.decimal,
-                      isAura: true ? data.logo === '' : false
-                    }">
+                  }"
+                    [tokenAmount]="{ amount: data.amount, decimal: data.decimal, isAura: true ? data.logo === '' : false }">
                   </app-card-mob-simple>
                 </ng-container>
                 <app-paginator

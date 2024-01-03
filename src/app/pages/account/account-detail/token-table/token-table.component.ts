@@ -3,12 +3,12 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { COIN_TOKEN_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
+import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
-import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
@@ -41,17 +41,17 @@ export class TokenTableComponent implements OnChanges {
     },
     {
       label: 'Native Coin',
-      value: 'native',
+      value: COIN_TOKEN_TYPE.NATIVE,
       quantity: 0,
     },
     {
       label: 'IBC Token',
-      value: 'ibc',
+      value: COIN_TOKEN_TYPE.IBC,
       quantity: 0,
     },
     {
       label: 'CW-20 Token',
-      value: 'cw20',
+      value: COIN_TOKEN_TYPE.CW20,
       quantity: 0,
     },
   ];
@@ -73,13 +73,13 @@ export class TokenTableComponent implements OnChanges {
   coinMiniDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
   image_s3 = this.environmentService.imageUrl;
-  defaultLogo = this.environmentService.environment?.logo;
+  defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
 
   constructor(
     private accountService: AccountService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
-    private commonService: CommonService,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {}
@@ -102,7 +102,7 @@ export class TokenTableComponent implements OnChanges {
 
       // Search with text search
       let txtSearch = this.textSearch.trim();
-      const addressNameTag = this.commonService.findNameTag(this.textSearch);
+      const addressNameTag = this.nameTagService.findAddressByNameTag(this.textSearch);
       if (addressNameTag?.length > 0) {
         txtSearch = addressNameTag;
       }
@@ -119,7 +119,7 @@ export class TokenTableComponent implements OnChanges {
       this.dataSource.data = [...searchList];
     } else {
       this.accountService.getAssetCW20ByOwner(payload).subscribe({
-        next: (res: ResponseDto) => {
+        next: (res) => {
           let data: any;
           if (res?.data?.length > 0) {
             let lstToken = _.get(res, 'data').map((element) => {
@@ -154,15 +154,19 @@ export class TokenTableComponent implements OnChanges {
             this.dataSource.data = [];
           }
           this.totalAssets.emit(this.pageData?.length || 0);
+          this.totalValue.emit(res?.totalValue);
           this.setTokenFilter(this.listTokenType[0]);
         },
         error: (e) => {
           if (e.name === TIMEOUT_ERROR) {
             this.errTxt = e.message;
           } else {
-            this.errTxt = e?.status + ' ' + e?.error?.message; // Nois Only
+            if (e.error?.error?.statusCode) {
+              this.errTxt = e.error?.error?.statusCode + ' ' + e.error?.error?.message;
+            } else {
+              this.errTxt = e.error?.message;
+            }
           }
-
           this.assetsLoading = false;
         },
         complete: () => {

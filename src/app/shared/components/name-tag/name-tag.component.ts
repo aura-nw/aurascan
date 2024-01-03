@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common.service';
-import { Globals } from 'src/app/global/global';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 
 @Component({
   selector: 'app-name-tag',
@@ -29,16 +29,12 @@ export class NameTagComponent implements OnInit {
 
   extendUrlLink = '';
 
-  constructor(public commonService: CommonService, private global: Globals) {}
+  constructor(public commonService: CommonService, public nameTagService: NameTagService) {}
 
   ngOnInit(): void {
     if (this.extendUrl) {
-      this.extendUrlLink = this.commonService.findUrlNameTag(this.value || this.paramUrl);
+      this.extendUrlLink = this.nameTagService.findUrlByAddress(this.value || this.paramUrl);
     }
-
-    setTimeout(() => {
-      this.commonService['listNameTag'] = this.commonService['listNameTag'] || this.global?.listNameTag;
-    }, 1000);
   }
 
   isContractAddress(address) {
@@ -52,11 +48,11 @@ export class NameTagComponent implements OnInit {
 
   displayContent(value) {
     let result = value;
-    if (this.commonService.checkPublic(value)) {
-      result += '<br>' + 'Public name: ' + this.commonService.setNameTag(value, this.global.listNameTag, false);
+    if (this.nameTagService.isPublic(value)) {
+      result += '<br>' + 'Public name: ' + this.nameTagService.findNameTagByAddress(value, false);
     }
-    if (this.commonService.checkPrivate(value)) {
-      result += '<br>' + 'Private name: ' + this.commonService.setNameTag(value, this.global.listNameTag);
+    if (this.nameTagService.isPrivate(value)) {
+      result += '<br>' + 'Private name: ' + this.nameTagService.findNameTagByAddress(value);
     }
     return result;
   }
