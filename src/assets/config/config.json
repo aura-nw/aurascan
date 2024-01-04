@@ -21,7 +21,7 @@
       "chainId": "pacific-1",
       "chainName": "Sei Mainnet",
       "rpc": "https://rpc-sei.toolsme.pro/",
-      "rest": "https://rest.cosmos.directory/sei/",
+      "rest": "https://rest.cosmos.directory/sei",
       "bip44": { "coinType": 118 },
       "bech32Config": {
         "bech32PrefixAccAddr": "sei",
@@ -48,8 +48,8 @@
     "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/"
   },
   "api": {
-    "backend": "https://explorer-api.dev.aura.network/api/v1",
-    "socket": "https://explorer-api.dev.aura.network",
+    "backend": "https://sei-api.dev.aurascan.io/api/v1",
+    "socket": "https://sei-api.dev.aurascan.io/",
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",

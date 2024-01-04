@@ -496,10 +496,10 @@ export class TokenService extends CommonService {
 
           const coinsId = tokensFiltered.map((coin: { coin_id: string }) => coin.coin_id);
 
-          const nativeTokenId = this.environmentService.coingecko.ids[0]
+          const nativeTokenId = this.environmentService.coingecko.ids[0];
 
-          if(!coinsId.includes(nativeTokenId)) {
-            coinsId.push(nativeTokenId)
+          if (!coinsId.includes(nativeTokenId)) {
+            coinsId.push(nativeTokenId);
           }
 
           if (coinsId?.length > 0) {

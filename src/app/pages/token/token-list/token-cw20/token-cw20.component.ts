@@ -256,7 +256,10 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   async getTokenNative() {
-    const tempTotal = await this.ibcService.getTotalSupplyLCD(this.chainInfo.coinMinimalDenom);
+    const tempTotal = await this.ibcService.getTotalSupplyLCD(this.chainInfo.coinMinimalDenom).catch(() => {
+      return 0;
+    });
+
     this.tokenService.tokensMarket$
       .pipe(
         filter((data) => _.isArray(data)),
@@ -264,7 +267,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       )
       .subscribe((res) => {
         this.nativeToken = res.find((k) => k.coin_id === this.environmentService.coingecko.ids[0]);
-        const totalSupply = balanceOf(_.get(tempTotal, 'data.amount.amount' || 0), this.chainInfo.coinDecimals);
+        const totalSupply = balanceOf(_.get(tempTotal, 'data.amount.amount') || 0, this.chainInfo.coinDecimals);
 
         this.nativeToken = {
           ...this.nativeToken,
@@ -285,13 +288,13 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   drawTable() {
     const auraToken = [this.nativeToken];
     const verifiedToken = this.dataTable
-      .filter((token) => token.verify_status === 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
+      .filter((token) => token && token?.verify_status === 'VERIFIED' && token?.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))
       .sort((a, b) => this.compare(a.inChainValue, b.inChainValue, false))
       .sort((a, b) => this.compare(a.totalSupply, b.totalSupply, false));
 
     const otherToken = this.dataTable
-      .filter((token) => token.verify_status !== 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
+      .filter((token) => token && token?.verify_status !== 'VERIFIED' && token?.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))
       .sort((a, b) => this.compare(a.inChainValue, b.inChainValue, false))
       .sort((a, b) => this.compare(a.totalSupply, b.totalSupply, false));
