@@ -8,14 +8,14 @@
             <span class="body-02 body-01-mob text--gray-3">Available Balance: </span>
             <h6 class="mb-0">
               <span class="text--gray-1" [appBigNumber]="+dataStakeInfo['availableToken'] || 0" [decimal]="0"></span>
-              <span class="ml-1 text--white">{{ denom }}</span>
+              <span class="ml-1" appLinkDenom>{{ denom }}</span>
             </h6>
           </div>
           <div class="mb-3 mb-lg-0 d-flex justify-content-between">
             <span class="body-02 body-01-mob text--gray-3">Total Staked: </span>
             <h6 class="mb-0">
               <span class="text--gray-1" [appBigNumber]="+dataStakeInfo['delegatedToken'] || 0" [decimal]="0"></span>
-              <span class="ml-1 text--white">{{ denom }}</span>
+              <span class="ml-1" appLinkDenom>{{ denom }}</span>
             </h6>
           </div>
         </div>
@@ -76,11 +76,11 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'amount_staked'" class="pl-lg-1">
                         <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                        <span class="text--white"> {{ denom }}</span>
+                        <span appLinkDenom> {{ denom }}</span>
                       </div>
                       <div *ngSwitchCase="'pending_reward'">
                         <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                        <span class="text--white"> {{ denom }}</span>
+                        <span appLinkDenom> {{ denom }}</span>
                       </div>
                       <div *ngSwitchCase="'action'" class="py-4">
                         <button
@@ -162,7 +162,7 @@
                     <span>{{ template['headerCellDef'] }}</span>
                     <div>
                       <span class="text--white" [appBigNumber]="validator[template.matColumnDef]" [decimal]="0"></span>
-                      <span *ngIf="template['headerCellDef']" class="ml-2 text--white">
+                      <span *ngIf="template['headerCellDef']" class="ml-2" appLinkDenom>
                         {{ denom }}
                       </span>
                     </div>
@@ -203,7 +203,7 @@
           <div class="col-9 text--gray-1 body-02 pl-0 pl-lg-1">
             <div>
               <span [appBigNumber]="validator.balance" [decimal]="0"></span>
-              <span class="text--white ml-1">{{ denom }}</span>
+              <span class="ml-1" appLinkDenom>{{ denom }}</span>
             </div>
             <div class="text--gray-5">{{ validator.completion_time | customDateTime: 'Distance' }}</div>
           </div>
@@ -233,7 +233,7 @@
               </a>
               <div class="body-01 text-end">
                 <span class="text--white" [appBigNumber]="validator.balance" [decimal]="0"></span>
-                <span class="text--white ml-1">{{ denom }}</span>
+                <span class="ml-1" appLinkDenom>{{ denom }}</span>
               </div>
             </div>
             <div class="body-02 text--gray-5 text-end">
