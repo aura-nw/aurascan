@@ -16,7 +16,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -44,6 +44,7 @@ export class AccountTransactionTableComponent {
   tabsData = TabsAccountLink;
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
   displayFilter = false;
+  EFeature = EFeature;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
