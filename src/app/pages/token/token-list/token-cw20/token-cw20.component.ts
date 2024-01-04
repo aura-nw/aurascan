@@ -51,7 +51,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   chainInfo = this.environmentService.chainInfo.currencies[0];
   chainName = this.environmentService.chainInfo.chainName;
   image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   isLoadingTable = true;
   filterType = [];
   ETokenCoinType = ETokenCoinType;
@@ -358,7 +357,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.isLoadingTable = false;
   }
 
-  executeFilter(){
+  executeFilter() {
     let dataList = [];
     this.dataSource.data = [];
     if (this.filterType.includes(ETokenCoinType.NATIVE)) {
