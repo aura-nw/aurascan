@@ -58,7 +58,7 @@
                           *ngIf="data[template.matColumnDef] >= 0.001"
                           [appBigNumber]="data[template.matColumnDef]"
                           [decimal]="0"></div>
-                        <span class="ml-1" [appLinkDenom]>{{ coinInfo.coinDenom }}</span>
+                        <span class="ml-1" appLinkDenom>{{ coinInfo.coinDenom }}</span>
                         <app-tooltip-customize
                           *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
                           [content]="data[template.matColumnDef]">

@@ -415,7 +415,7 @@
               <th mat-header-cell *matHeaderCellDef>Total Deposit</th>
               <td mat-cell *matCellDef="let element">
                 {{ element.total_deposit[0]?.amount || 0 | mask: 'separator.6' }}
-                <span [appLinkDenom]>{{ denom }}</span>
+                <span appLinkDenom>{{ denom }}</span>
               </td>
             </ng-container>
 

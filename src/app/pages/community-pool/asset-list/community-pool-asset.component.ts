@@ -117,6 +117,7 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
         this.listAssetLcd = _.get(res, 'data.pool');
 
         this.listAssetLcd.forEach((element) => {
+          element.isNative = false;
           let findItem = this.listCoin.find((i) => i.denom === element.denom);
           if (findItem) {
             element.decimal = findItem.decimal;
@@ -129,6 +130,7 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
             element.logo = '';
             element.name = 'Aura';
             element.amount = element.amount / NUMBER_CONVERT;
+            element.isNative = true;
             auraAsset = element;
           }
         });

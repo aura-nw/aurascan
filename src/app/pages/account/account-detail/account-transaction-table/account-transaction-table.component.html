@@ -401,7 +401,7 @@
                 </div>
                 <div *ngSwitchCase="'fee'">
                   {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                  <span [appLinkDenom]>{{ denom }}</span>
+                  <span appLinkDenom>{{ denom }}</span>
                 </div>
                 <div *ngSwitchCase="'amount'">
                   <ng-container *ngFor="let item of data.arrEvent; let index = index">

@@ -43,7 +43,7 @@
       </ng-container>
       <ng-container *ngSwitchDefault>{{ value || '-' }}</ng-container>
       <ng-container *ngIf="denom?.display && value !== '-'">
-        <span *ngIf="value" [appLinkDenom]>{{ denom?.display }}</span>
+        <span *ngIf="value" appLinkDenom>{{ denom?.display }}</span>
       </ng-container>
     </ng-container>
   </div>

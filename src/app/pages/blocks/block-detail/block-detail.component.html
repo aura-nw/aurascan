@@ -194,7 +194,7 @@
                         </div>
                         <div *ngSwitchCase="'fee'">
                           {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                          <span [appLinkDenom]>{{ denom }}</span>
+                          <span appLinkDenom>{{ denom }}</span>
                         </div>
                         <div *ngSwitchCase="'amount'">
                           <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
