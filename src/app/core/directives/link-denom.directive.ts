@@ -3,27 +3,26 @@ import { Router } from '@angular/router';
 import { EnvironmentService } from '../data-services/environment.service';
 
 @Directive({
-  selector: '[appLinkDenom]',
-  providers: [],
+  selector: 'appLinkDenom, [appLinkDenom]',
 })
 export class LinkDenomDirective {
   coinInfo = this.environmentService.chainInfo.currencies[0];
   linkItem = '';
-  element: HTMLElement;
 
   @Input() appLinkDenom: string;
 
   @HostListener('click', ['$event'])
   linkEvent(event) {
-    this.router.navigate([this.linkItem]);
+    if (this.linkItem?.length > 0) {
+      this.router.navigate([this.linkItem]);
+    }
   }
 
   constructor(
     private environmentService: EnvironmentService,
     public router: Router,
-    elRef: ElementRef,
+    private elRef: ElementRef,
   ) {
-    this.element = elRef.nativeElement;
   }
 
   ngOnInit(): void {
@@ -37,14 +36,13 @@ export class LinkDenomDirective {
     this.linkItem = `/tokens/token/${linkToken}`;
 
     //create parent a with link
-    let parent = this.element.parentNode;
+    const element: HTMLElement = this.elRef.nativeElement;
+    const parent = element.parentNode;
     const linkElement = document.createElement('a');
-    parent.replaceChild(linkElement, this.element);
     linkElement.setAttribute('href', this.linkItem);
     linkElement.setAttribute('onclick', 'return false');
     linkElement.classList.add('text--primary');
-    this.element.classList.remove('text--white');
-    linkElement.appendChild(this.element);
-    return;
+    parent.replaceChild(linkElement, element);
+    linkElement.appendChild(element);
   }
 }

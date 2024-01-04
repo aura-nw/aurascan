@@ -73,10 +73,10 @@
     </div>
     <div *ngIf="tokenAmount" class="body-03-mob h5 mb-0 d-flex align-items-center justify-content-between">
       <div class="text--gray-4">Amount</div>
-      <span class="text--gray-1" *ngIf="tokenAmount.isAura" [appBigNumber]="tokenAmount.amount" [decimal]="0"></span>
+      <span class="text--gray-1" *ngIf="tokenAmount.isNative" [appBigNumber]="tokenAmount.amount" [decimal]="0"></span>
       <span
         class="text--gray-1"
-        *ngIf="!tokenAmount.isAura"
+        *ngIf="!tokenAmount.isNative"
         [appBigNumber]="tokenAmount.amount"
         [decimal]="tokenAmount.decimal"></span>
     </div>

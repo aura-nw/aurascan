@@ -426,7 +426,7 @@
           <div class="mb-1">
             <span>Voting power - {{ validatorDetail?.percent_power }}%</span>&nbsp;
             <span>({{ validatorDetail?.power | mask: 'separator.6' }}</span>
-            <span class="text--white ml-1" [appLinkDenom]>{{ denom }}</span
+            <span class="ml-1" [appLinkDenom]>{{ denom }}</span
             >)
           </div>
         </div>
@@ -439,7 +439,7 @@
             <span class="ml-3 fw-normal">
               {{ dataDelegate?.validatorDetail?.amount_staked | mask: 'separator.6' }}
             </span>
-            <span class="text--white fw-normal" [appLinkDenom]> {{ denom }} </span>
+            <span class="fw-normal" [appLinkDenom]> {{ denom }} </span>
           </div>
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
@@ -519,7 +519,7 @@
               <span class="ml-3">
                 {{ dataDelegate?.validatorDetail?.amount_staked | mask: 'separator.6' }}
               </span>
-              <span class="text--white" [appLinkDenom]> {{ denom }} </span>
+              <span [appLinkDenom]> {{ denom }} </span>
             </div>
             <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input [(ngModel)]="amountFormat" [max]="maxNumberInput" mask="separator.6" (blur)="resetCheck()" />
@@ -531,7 +531,7 @@
                   MAX
                 </button>
               </div>
-              <div class="input-group-append text--white" [appLinkDenom]>{{ denom }}</div>
+              <div class="input-group-append" [appLinkDenom]>{{ denom }}</div>
             </div>
           </div>
         </div>
