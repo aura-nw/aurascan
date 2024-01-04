@@ -16,7 +16,7 @@
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
     "coins": [],
-    "features": ["CW20", "CW721", "FEE_GRANT", "COMMUNITY_POOL", "PROFILE", "TOP_STATISTICS", "STATISTICS"],
+    "features": ["CW20", "CW721", "FEE_GRANT", "COMMUNITY_POOL", "PROFILE", "TOP_STATISTICS", "STATISTICS", "EXPORT_CSV"],
     "chain_info": {
       "chainId": "pacific-1",
       "chainName": "Sei Mainnet",
