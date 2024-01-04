@@ -12,7 +12,10 @@ import { CommonService } from './common.service';
 export class TransactionService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+  ) {
     super(http, environmentService);
   }
 

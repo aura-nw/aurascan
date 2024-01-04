@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { DecodeDataPipe } from './coded.pipe';
 import { CustomTimeDatePipe } from './date.pipe';
 import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
 import { JsonPipe } from './json.pipe';
@@ -30,6 +31,7 @@ import { NameTagTooltipPipe } from './tooltip.pipe';
     IbcDenomPipe,
     EllipsisPipe,
     CustomTimeDatePipe,
+    DecodeDataPipe,
   ],
   exports: [
     JsonPipe,
@@ -50,6 +52,7 @@ import { NameTagTooltipPipe } from './tooltip.pipe';
     IbcDenomPipe,
     EllipsisPipe,
     CustomTimeDatePipe,
+    DecodeDataPipe,
   ],
   providers: [],
 })
