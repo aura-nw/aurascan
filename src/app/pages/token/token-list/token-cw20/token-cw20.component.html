@@ -191,7 +191,7 @@
                         <span *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01)">
                           {{ element.price == 0 ? '$0.00' : '< $0.01' }}
                         </span>
-                        <div *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)">
+                        <div *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(0.01)">
                           <span [decimal]="0" [appBigNumber]="element.totalSupply" [tokenPrice]="element.price"></span>
                         </div>
                       </div>
@@ -280,7 +280,7 @@
                     <span *ngIf="(data.totalSupply | balance: 0 : true).multipliedBy(data.price).lt(0.01)">
                       {{ data.price == 0 ? '$0.00' : '< $0.01' }}
                     </span>
-                    <div *ngIf="(data.totalSupply | balance: 0 : true).multipliedBy(data.price).gte(1000000)">
+                    <div *ngIf="(data.totalSupply | balance: 0 : true).multipliedBy(data.price).gte(0.01)">
                       <span [decimal]="0" [appBigNumber]="data.totalSupply" [tokenPrice]="data.price"></span>
                     </div>
                   </div>

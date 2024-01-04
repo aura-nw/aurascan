@@ -52,7 +52,7 @@
                   <ng-container matColumnDef="symbol">
                     <th mat-header-cell *matHeaderCellDef>Symbol</th>
                     <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                      <span [appLinkDenom]="element.denom">{{ element.symbol ? element.symbol : 'AURA' }}</span>
+                      <span [appLinkDenom]="element.denom">{{ element.symbol ? element.symbol : (nativeName | uppercase) }}</span>
                     </td>
                   </ng-container>
 
@@ -101,7 +101,7 @@
                     [tokenData]="{
                       logo: data.logo ? data.logo : defaultLogoToken,
                       name: data.name,
-                      info: data.symbol ? data.symbol : 'AURA'
+                      info: data.symbol ? data.symbol : (nativeName | uppercase)
                     }"
                     [tokenAmount]="{
                       amount: data.amount,
