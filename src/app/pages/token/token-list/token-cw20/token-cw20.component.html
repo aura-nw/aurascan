@@ -173,7 +173,7 @@
                         ((element.totalSupply | gte: 1000000) || (element.totalSupply | lt: 0.001)) &&
                         element.totalSupply != 0
                       "
-                      [content]="element.totalSupply | mask: 'separator'">
+                      [content]="element.totalSupply | mask: 'separator.6'">
                     </app-tooltip-customize>
                   </div>
                 </ng-container>
@@ -201,7 +201,9 @@
                         (element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01) ||
                         (element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)
                       "
-                      [content]="element.inChainValue | mask: 'separator'">
+                      [content]="
+                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price) | mask: 'separator.6'
+                      ">
                     </app-tooltip-customize>
                   </div>
                 </ng-container>
