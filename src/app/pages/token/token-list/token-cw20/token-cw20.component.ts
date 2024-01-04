@@ -290,6 +290,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   drawTable(dataFilter = [], isSearch = false) {
     const tableFilter = dataFilter?.length > 0 || isSearch ? dataFilter : this.dataTable;
+    this.dataSource.data = [];
     const auraToken = [this.nativeToken];
     const verifiedToken = tableFilter
       .filter((token) => token.verify_status === 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
@@ -326,8 +327,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   resetSearch() {
     this.textSearch = '';
     this.dataSource.data = [];
+    this.isLoadingTable = true;
     this.getListToken();
-    this.pageData.length = this.dataSource.data?.length;
   }
 
   pageEvent(e: PageEvent): void {
@@ -366,7 +367,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   executeFilter() {
     let dataList = [];
-    this.dataSource.data = [];
     if (this.filterType.includes(ETokenCoinType.NATIVE)) {
       dataList.push(...[this.nativeToken]);
     }
