@@ -90,6 +90,7 @@ export class ValidatorsDetailComponent implements OnInit {
   hexAddress = null;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  minimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   timeInterval = this.environmentService.chainConfig.blockTime;
 

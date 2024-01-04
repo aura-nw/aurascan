@@ -92,7 +92,7 @@
                                 [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
                                 [appBigNumber]="data[template.matColumnDef]"
                                 [decimal]="6"></span>
-                              <span class="ml-1">{{ denom }}</span>
+                              <span class="ml-1" appLinkDenom>{{ denom }}</span>
                               <app-tooltip-customize
                                 *ngIf="
                                   (data[template.matColumnDef] | balance: decimal | lt: 0.001) ||
@@ -127,7 +127,7 @@
                                 [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
                                 [appBigNumber]="data[template.matColumnDef]"
                                 [decimal]="6"></span>
-                              <span class="ml-1">{{ denom }}</span>
+                              <span class="ml-1" appLinkDenom>{{ denom }}</span>
                               <app-tooltip-customize
                                 *ngIf="
                                   (data[template.matColumnDef] | balance: decimal | lt: 0.001) ||
