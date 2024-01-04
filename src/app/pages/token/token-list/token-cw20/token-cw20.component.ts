@@ -256,9 +256,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   async getTokenNative() {
-    const tempTotal = await this.ibcService.getTotalSupplyLCD(this.chainInfo.coinMinimalDenom).catch(() => {
-      return 0;
-    });
+    const tempTotal = await this.ibcService.getTotalSupplyLCD(this.chainInfo.coinMinimalDenom);
 
     this.tokenService.tokensMarket$
       .pipe(
