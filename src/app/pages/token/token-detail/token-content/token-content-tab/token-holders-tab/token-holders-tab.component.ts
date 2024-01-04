@@ -208,24 +208,22 @@ export class TokenHoldersTabComponent implements OnInit {
   getDenomHolder() {
     this.tokenService.getDenomHolder(this.tokenDetail?.denomHash, this.keyWord || null).subscribe({
       next: (res) => {
-        this.totalHolder = this.keyWord?.length > 0 ? res?.account?.length : this.tokenDetail?.holder;
+        this.totalHolder = res?.account_balance_aggregate.aggregate.count;
         if (this.totalHolder > this.numberTopHolder) {
           this.pageData.length = this.numberTopHolder;
         } else {
           this.pageData.length = this.totalHolder;
         }
 
-        let dataFlat = res.account?.map((item) => {
-          let amount = item.balances?.find((k) => k.denom === this.tokenDetail?.denomHash)?.amount;
-
+        const dataFlat = res.account_balance?.map((item) => {
           return {
-            owner: item.address,
-            amount,
-            balance: amount,
-            percent_hold: new BigNumber(amount).dividedBy(this.tokenDetail?.totalSupply).multipliedBy(100),
+            owner: item.account.address,
+            amount: item.amount,
+            balance: item.amount,
+            percent_hold: new BigNumber(item.amount).dividedBy(this.tokenDetail?.totalSupply).multipliedBy(100),
             value:
-              new BigNumber(amount)
-                .multipliedBy(this.tokenDetail?.price)
+              new BigNumber(item.amount)
+                .multipliedBy(this.tokenDetail?.price || 0)
                 .dividedBy(BigNumber(10).pow(this.decimalValue))
                 .toFixed() || 0,
           };

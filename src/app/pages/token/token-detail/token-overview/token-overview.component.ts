@@ -32,18 +32,7 @@ export class TokenOverviewComponent implements OnInit {
       this.params = params?.a || '';
     });
 
-    if (this.tokenDetail.modeToken === EModeToken.StakingCoin) {
-      this.getInfoNative();
-    }
-
-    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
-      if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
-        this.getTotalSupply();
-        this.getHolderNFT();
-      } else {
-        this.getTotalHolder();
-      }
-    }
+    this.getDataDetail();
 
     //set price change
     this.tokenDetail['change'] = this.tokenDetail['change'] || this.tokenDetail.price_change_percentage_24h;
@@ -109,5 +98,33 @@ export class TokenOverviewComponent implements OnInit {
       supplyAmount,
       supplyValue,
     };
+  }
+
+  getDataDetail() {
+    switch (this.tokenDetail.modeToken) {
+      case EModeToken.CWToken:
+        if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
+          this.getTotalSupply();
+          this.getHolderNFT();
+        } else {
+          this.getTotalHolder();
+        }
+        break;
+      case EModeToken.StakingCoin:
+        this.getInfoNative();
+        this.getDenomHolder(this.tokenDetail?.denomHash);
+        break;
+      case EModeToken.IBCCoin:
+        this.getDenomHolder(this.tokenDetail?.denomHash);
+        break;
+    }
+  }
+
+  getDenomHolder(paramData){
+    this.tokenService.getDenomHolder(paramData).subscribe({
+      next: (res) => {
+        this.tokenDetail.holder = res?.account_balance_aggregate.aggregate.count;
+      },
+    });
   }
 }

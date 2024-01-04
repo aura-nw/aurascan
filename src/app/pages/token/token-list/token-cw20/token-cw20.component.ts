@@ -109,6 +109,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.listTokenIBC?.forEach((token) => {
       token.type = ETokenCoinType.IBC;
       token.isHolderUp = true;
+      token.price = token.current_price || token.price;
       supply.forEach((s) => {
         if (token.denom === s.denom) {
           token.totalSupply = getBalance(s?.amount || 0, token.decimal);
@@ -164,7 +165,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           item.symbol?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
           item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
       );
-      this.dataSource.data = result;
+      if (result?.length > 0) {
+        this.drawTable(result);
+      } else {
+        this.dataSource.data = [];
+      }
       this.pageData.length = this.dataSource.data.length;
       this.pageChange.selectPage(0);
     }
@@ -283,15 +288,17 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       });
   }
 
-  drawTable() {
+  drawTable(dataFilter = [], isSearch = false) {
+    const tableFilter = dataFilter?.length > 0 || isSearch ? dataFilter : this.dataTable;
+    this.dataSource.data = [];
     const auraToken = [this.nativeToken];
-    const verifiedToken = this.dataTable
+    const verifiedToken = tableFilter
       .filter((token) => token.verify_status === 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))
       .sort((a, b) => this.compare(a.inChainValue, b.inChainValue, false))
       .sort((a, b) => this.compare(a.totalSupply, b.totalSupply, false));
 
-    const otherToken = this.dataTable
+    const otherToken = tableFilter
       .filter((token) => token.verify_status !== 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))
       .sort((a, b) => this.compare(a.inChainValue, b.inChainValue, false))
@@ -320,8 +327,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   resetSearch() {
     this.textSearch = '';
     this.dataSource.data = [];
-    this.drawTable();
-    this.pageData.length = this.dataSource.data?.length;
+    this.isLoadingTable = true;
+    this.getListToken();
   }
 
   pageEvent(e: PageEvent): void {
@@ -351,16 +358,15 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     if (this.textSearch?.trim().length > 0) {
       this.searchData();
     } else {
-      this.dataSource.data = dataList;
+      this.drawTable(dataList);
       this.pageData.length = this.dataSource.data.length;
       this.pageChange.selectPage(0);
     }
     this.isLoadingTable = false;
   }
 
-  executeFilter(){
+  executeFilter() {
     let dataList = [];
-    this.dataSource.data = [];
     if (this.filterType.includes(ETokenCoinType.NATIVE)) {
       dataList.push(...[this.nativeToken]);
     }

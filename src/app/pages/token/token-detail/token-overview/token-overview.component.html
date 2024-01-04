@@ -95,7 +95,9 @@
             <div class="d-flex align-items-center">
               <div class="flex-item">
                 <span class="text--gray-5 caption fw-normal fixed-col">Denom</span>
-                <div class="body-02 text--gray-11">{{ tokenDetail.symbol }}</div>
+                <div class="body-02 text--gray-11">
+                  {{ tokenDetail.modeToken === EModeToken.StakingCoin ? tokenDetail.denomHash : tokenDetail.symbol }}
+                </div>
               </div>
               <div class="divider divider-item"></div>
               <div class="pl-4">
@@ -129,7 +131,7 @@
                 <div class="text--gray-5 caption fw-normal">In-chain Supply Amount</div>
                 <div class="body-02 text--gray-11">
                   {{ tokenDetail.supplyAmount | formatDigit: 0 }}
-                  {{ tokenDetail?.name }}
+                  {{ tokenDetail?.symbol }}
                 </div>
               </div>
             </div>

@@ -34,6 +34,7 @@ export class ApiCw20TokenService {
 
   chainInfo = this.env.chainInfo;
   currencies = this.chainInfo.currencies[0];
+  nativeName = this.env.environment.nativeName;
 
   apiAccount = inject(ApiAccountService);
 
@@ -109,7 +110,7 @@ export class ApiCw20TokenService {
   parseNativeToken(account, coinsMarkets) {
     const coinMarket = coinsMarkets.find((coin) => coin.coin_id === TOKEN_ID_GET_PRICE.AURA);
     return {
-      name: 'Aura',
+      name: this.nativeName,
       symbol: this.currencies.coinDenom,
       decimals: this.currencies.coinDecimals,
       denom: this.currencies.coinMinimalDenom,
