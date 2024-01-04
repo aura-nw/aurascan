@@ -495,6 +495,13 @@ export class TokenService extends CommonService {
           this.nativePrice$.next(nativeToken?.current_price);
 
           const coinsId = tokensFiltered.map((coin: { coin_id: string }) => coin.coin_id);
+
+          const nativeTokenId = this.environmentService.coingecko.ids[0]
+
+          if(!coinsId.includes(nativeTokenId)) {
+            coinsId.push(nativeTokenId)
+          }
+
           if (coinsId?.length > 0) {
             return forkJoin({
               tokensMarket: of(tokensFiltered),
