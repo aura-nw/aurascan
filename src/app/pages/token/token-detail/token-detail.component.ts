@@ -55,7 +55,6 @@ export class TokenDetailComponent implements OnInit {
       } else {
         this.getDataCoin(paramData);
       }
-      this.getDenomHolder(paramData);
     }
   }
 
@@ -195,11 +194,5 @@ export class TokenDetailComponent implements OnInit {
       totalSupply: _.get(tempTotal, 'data.amount.amount' || 0),
     };
     this.loading = false;
-  }
-
-  getDenomHolder(paramData){
-    this.ibcService.getDenomTotalHolder(paramData).subscribe((res) => {
-      this.tokenDetail['holder'] = _.get(res, 'account_aggregate.aggregate.count');
-    });
   }
 }

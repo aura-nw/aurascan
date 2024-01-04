@@ -510,7 +510,7 @@ export class TokenService extends CommonService {
         map((data) => {
           if (data) {
             const { coinMarkets, tokensMarket } = data;
-
+            
             return tokensMarket.map((token) => {
               if (!token.coin_id) {
                 return token;
@@ -593,26 +593,20 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getDenomHolder(denomHash: string, address: string): Observable<any> {
+  getDenomHolder(denomHash: string, address: string = null): Observable<any> {
     const operationsDoc = `
-    query queryHolderIBC(
-      $denom: String = null
-      $limit: Int = null
-      $offset: Int = null
-      $address: String = null
-    ) {
+    query queryHolderIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
       ${this.envDB} {
-        account(
-          where: {
-            balances: { _contains: [{ denom: $denom }] }
-            address: { _eq: $address }
+        account_balance(where: {account: {address: {_eq: $address}}, denom: {_eq: $denom}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
+          account {
+            address
           }
-          order_by: {}
-          limit: $limit
-          offset: $offset
-        ) {
-          address
-          balances
+          amount
+        }
+        account_balance_aggregate (where: {account: {address: {_eq: $address}}, denom: {_eq: $denom}}) {
+          aggregate {
+            count
+          }
         }
       }
     }
