@@ -1,16 +1,20 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
-import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Subject, takeUntil } from 'rxjs';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 
 export interface IConfiguration {
   environment: {
+    name: string;
     label: {
       desktop: string;
       mobile: string;
     };
+    logo: string;
     notice: {
       content: string;
       url: string;
@@ -31,6 +35,7 @@ export interface IConfiguration {
     }[];
     features: string[];
     chain_info: ChainInfo & { gasPriceStep: any };
+    cosmos_sdk_version?: string;
   };
   image: {
     validator: string;
@@ -167,5 +172,30 @@ export class EnvironmentService {
 
   async load(): Promise<void> {
     await this.loadConfig();
+    await this.extendsTxType();
+
+    this.getNodeInfo();
+  }
+
+  extendsTxType(): Promise<void> {
+    return lastValueFrom(this.http.get('./assets/config/tx_type_config.json')).then((typeConfigs) => {
+      (typeConfigs as any[]).forEach((data) => {
+        TRANSACTION_TYPE_ENUM[data.label] = data.label;
+        TypeTransaction[data.value] = data.value;
+        TYPE_TRANSACTION.push({ label: TRANSACTION_TYPE_ENUM[data.label], value: TypeTransaction[data.value] });
+      });
+    });
+  }
+
+  getNodeInfo(): void {
+    this.http.get(`${this.chainInfo.rest}/cosmos/base/tendermint/v1beta1/node_info`).subscribe((data: any) => {
+      const cosmos_sdk_version = data?.application_version?.cosmos_sdk_version;
+      if (cosmos_sdk_version) {
+        const configuration: IConfiguration = this.configValue;
+        configuration.chainConfig.cosmos_sdk_version = cosmos_sdk_version;
+
+        this.config.next(configuration);
+      }
+    });
   }
 }
