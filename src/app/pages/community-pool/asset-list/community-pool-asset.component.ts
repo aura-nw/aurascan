@@ -44,8 +44,6 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   listCoin = this.environmentService.coins;
   listAssetLcd = [];
   searchSubject = new Subject();
@@ -53,6 +51,8 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   statusConstant = PROPOSAL_STATUS;
   isLoading = true;
   errText = null;
+
+  chainName = this.environmentService.chainName;
 
   constructor(
     public translate: TranslateService,
@@ -127,7 +127,7 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
             element.decimal = 6;
             element.symbol = '';
             element.logo = '';
-            element.name = 'Aura';
+            element.name = this.environmentService.chainName;
             element.amount = element.amount / NUMBER_CONVERT;
             auraAsset = element;
           }

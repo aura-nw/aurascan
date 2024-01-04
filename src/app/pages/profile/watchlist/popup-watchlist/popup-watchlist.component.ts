@@ -86,6 +86,7 @@ export class PopupWatchlistComponent implements OnInit {
   };
 
   quota = this.environmentService.chainConfig.quotaSetWatchList;
+  chainName = this.environmentService.chainName.toLowerCase();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -192,10 +193,10 @@ export class PopupWatchlistComponent implements OnInit {
 
     if (this.getAddress.value?.length > 0) {
       this.isValidAddress = false;
-      if (isValidBench32Address(this.getAddress?.value, this.commonService.addressPrefix)) {
+      if (this.commonService.isBech32Address(this.getAddress?.value)) {
         this.isValidAddress =
-          (isAddress(this.getAddress.value) && this.isAccount) ||
-          (isContract(this.getAddress.value) && this.isContract);
+          (this.commonService.isValidAddress(this.getAddress.value) && this.isAccount) ||
+          (this.commonService.isValidContract(this.getAddress.value) && this.isContract);
       }
     }
 
@@ -220,7 +221,7 @@ export class PopupWatchlistComponent implements OnInit {
 
     let payload = {
       address: address,
-      type: isAddress(address) ? 'account' : 'contract',
+      type: isAddress(address, this.commonService.addressPrefix) ? 'account' : 'contract',
       favorite: favorite,
       tracking: this.isTracking,
       note: note,

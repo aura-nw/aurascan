@@ -25,7 +25,7 @@
               placeholder="Grantee's address"
               (ngModelChange)="checkFormValid()"
               [class.form-control--error]="grantForm.get('grantee_address')?.invalid && isSubmit" />
-            <div class="error" *ngIf="isInvalidAddress">This is not aura's externally owned account</div>
+            <div class="error" *ngIf="isInvalidAddress">This is not {{ chainName }}'s externally owned account</div>
           </div>
         </div>
       </div>

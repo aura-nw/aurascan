@@ -22,8 +22,6 @@ export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
   tokenDetail: any;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   contractType = ContractRegisterType;
   errTxt: string;
   EModeToken = EModeToken;
@@ -197,7 +195,7 @@ export class TokenDetailComponent implements OnInit {
     this.loading = false;
   }
 
-  getDenomHolder(paramData){
+  getDenomHolder(paramData) {
     this.ibcService.getDenomTotalHolder(paramData).subscribe((res) => {
       this.tokenDetail['holder'] = _.get(res, 'account_aggregate.aggregate.count');
     });

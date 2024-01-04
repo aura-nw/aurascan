@@ -101,8 +101,7 @@
               <td mat-cell *matCellDef="let element">
                 <div class="d-flex align-items-center">
                   <div>
-                    <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
-                    <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
+                    <img [appImg]="element?.image" class="image-token" alt="" />
                   </div>
                   <div>
                     <a

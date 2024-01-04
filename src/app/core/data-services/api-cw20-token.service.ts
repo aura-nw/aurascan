@@ -107,9 +107,10 @@ export class ApiCw20TokenService {
   }
 
   parseNativeToken(account, coinsMarkets) {
-    const coinMarket = coinsMarkets.find((coin) => coin.coin_id === TOKEN_ID_GET_PRICE.AURA);
+    const nativeId = this.env.coingecko.ids[0];
+    const coinMarket = coinsMarkets.find((coin) => coin.coin_id === nativeId);
     return {
-      name: 'Aura',
+      name: this.env.chainName,
       symbol: this.currencies.coinDenom,
       decimals: this.currencies.coinDecimals,
       denom: this.currencies.coinMinimalDenom,
