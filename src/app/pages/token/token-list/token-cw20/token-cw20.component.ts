@@ -165,8 +165,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           item.symbol?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
           item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
       );
-      this.drawTable(result, true)
-      // this.dataSource.data = result;
+      if (result?.length > 0) {
+        this.drawTable(result);
+      } else {
+        this.dataSource.data = [];
+      }
       this.pageData.length = this.dataSource.data.length;
       this.pageChange.selectPage(0);
     }
@@ -323,7 +326,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   resetSearch() {
     this.textSearch = '';
     this.dataSource.data = [];
-    this.drawTable();
+    this.getListToken();
     this.pageData.length = this.dataSource.data?.length;
   }
 

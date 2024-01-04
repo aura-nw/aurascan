@@ -188,21 +188,18 @@
                   <div class="aura-tooltip-contain">
                     <div class="aura-tooltip-object">
                       <div class="text--gray-1 item-amount">
-                        <span *ngIf="element.price * element.totalSupply | lt: 0.01">
+                        <span *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01)">
                           {{ element.price == 0 ? '$0.00' : '< $0.01' }}
                         </span>
-                        <div *ngIf="element.price * element.totalSupply | gte: 0.01">
-                          <span
-                            [decimal]="0"
-                            [appBigNumber]="element.totalSupply"
-                            [tokenPrice]="element.price"></span>
+                        <div *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)">
+                          <span [decimal]="0" [appBigNumber]="element.totalSupply" [tokenPrice]="element.price"></span>
                         </div>
                       </div>
                     </div>
                     <app-tooltip-customize
                       *ngIf="
-                        (element.price * element.totalSupply | lt: 0.01) ||
-                        (element.price * element.totalSupply | gte: 1000000)
+                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01) ||
+                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)
                       "
                       [content]="element.inChainValue | mask: 'separator'">
                     </app-tooltip-customize>
@@ -280,14 +277,11 @@
                 <div class="text--gray-4 body-mob">In-Chain Supply Value</div>
                 <ng-container *ngIf="data.price > 0; else zeroValue">
                   <div class="text--gray-1 item-amount">
-                    <span *ngIf="data.price * data.totalSupply | lt: 0.01">
+                    <span *ngIf="(data.totalSupply | balance: 0 : true).multipliedBy(data.price).lt(0.01)">
                       {{ data.price == 0 ? '$0.00' : '< $0.01' }}
                     </span>
-                    <div *ngIf="data.price * data.totalSupply | gte: 0.01">
-                      <span
-                        [decimal]="0"
-                        [appBigNumber]="data.totalSupply"
-                        [tokenPrice]="data.price"></span>
+                    <div *ngIf="(data.totalSupply | balance: 0 : true).multipliedBy(data.price).gte(1000000)">
+                      <span [decimal]="0" [appBigNumber]="data.totalSupply" [tokenPrice]="data.price"></span>
                     </div>
                   </div>
                 </ng-container>
