@@ -328,6 +328,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.textSearch = '';
     this.dataSource.data = [];
     this.isLoadingTable = true;
+    this.pageData.pageIndex = 0;
     this.getListToken();
   }
 
