@@ -18,7 +18,7 @@ jobs:
           echo REPO_MANIFEST_NAME=gitops >> $GITHUB_ENV
           echo REPO_MANIFEST_URL=github.com/aura-nw/gitops.git >> $GITHUB_ENV
           echo REPO_MANIFEST_BRANCH=master >> $GITHUB_ENV
-          echo REPO_MANIFEST_ENV_TEST=./clusters/k8s-testnet-serenity/explorer-nois >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_TEST=./clusters/k8s-testnet-serenity/explorer-sei >> $GITHUB_ENV
           echo REPO_MANIFEST_TAG_IMAGE=image_explorer_frontend >> $GITHUB_ENV
       - name: Build the Docker image and push it to the registry
         env:
