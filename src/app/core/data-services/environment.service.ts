@@ -78,6 +78,10 @@ export class EnvironmentService {
     return _.get(this.configValue, 'environment');
   }
 
+  get chainName() {
+    return _.startCase(_.camelCase(this.chainInfo?.bech32Config?.bech32PrefixAccAddr));
+  }
+
   get chainConfig() {
     return _.get(this.configValue, 'chainConfig');
   }
@@ -142,7 +146,10 @@ export class EnvironmentService {
 
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-  constructor(private http: HttpClient, private layout: BreakpointObserver) {
+  constructor(
+    private http: HttpClient,
+    private layout: BreakpointObserver,
+  ) {
     this.breakpoint$.subscribe((state) => {
       this.isMobile = state?.matches ? true : false;
     });
