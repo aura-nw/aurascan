@@ -501,20 +501,27 @@ export function convertDataTransactionSimple(data, coinInfo) {
   return _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
-    let typeOrigin = _.get(element, 'transaction_messages[0].type');
-    let lstType = _.get(element, 'transaction_messages');
+    const txMessages = _.get(element, 'transaction_messages');
+    const txBodyMsgType = _.get(element, 'data[0][@type]');
 
-    let type = _.find(TYPE_TRANSACTION, { label: typeOrigin })?.value || typeOrigin.split('.').pop();
-    if (type.startsWith('Msg')) {
-      type = type?.replace('Msg', '');
-    }
+    let type = '';
+    if (txMessages?.length > 0) {
+      const msgType = _.get(txMessages, '[0].type');
 
-    if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
-      try {
-        let dataTemp = JSON.parse(lstType[0]?.content?.msg);
-        let action = Object.keys(dataTemp)[0];
-        type = 'Contract: ' + action;
-      } catch {}
+      type = _.find(TYPE_TRANSACTION, { label: msgType })?.value || msgType?.split('.').pop();
+      if (msgType === TRANSACTION_TYPE_ENUM.ExecuteContract) {
+        try {
+          let dataTemp = JSON.parse(txMessages[0]?.content?.msg);
+          let action = Object.keys(dataTemp)[0];
+          type = 'Contract: ' + action;
+        } catch {}
+      }
+
+      if (type?.startsWith('Msg')) {
+        type = type?.replace('Msg', '');
+      }
+    } else {
+      type = txBodyMsgType?.split('.').pop();
     }
 
     const status =
@@ -537,7 +544,7 @@ export function convertDataTransactionSimple(data, coinInfo) {
       height,
       timestamp,
       tx,
-      lstType,
+      lstType: txMessages,
     };
   });
 }

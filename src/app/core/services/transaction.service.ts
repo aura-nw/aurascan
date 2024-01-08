@@ -115,6 +115,7 @@ export class TransactionService extends CommonService {
           gas_used
           gas_wanted
           fee
+          data(path: "tx.body.messages")
           transaction_messages {
             type
             content
