@@ -16,12 +16,21 @@
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
     "coins": [],
-    "features": ["CW20", "CW721", "FEE_GRANT", "COMMUNITY_POOL", "PROFILE", "TOP_STATISTICS", "STATISTICS", "EXPORT_CSV"],
+    "features": [
+      "CW20",
+      "CW721",
+      "FEE_GRANT",
+      "COMMUNITY_POOL",
+      "PROFILE",
+      "TOP_STATISTICS",
+      "STATISTICS",
+      "EXPORT_CSV"
+    ],
     "chain_info": {
       "chainId": "pacific-1",
       "chainName": "Sei Mainnet",
-      "rpc": "https://rpc-sei.toolsme.pro/",
-      "rest": "https://rest.cosmos.directory/sei",
+      "rpc": "https://sei-rpc.polkachu.com",
+      "rest": "https://sei-api.polkachu.com",
       "bip44": { "coinType": 118 },
       "bech32Config": {
         "bech32PrefixAccAddr": "sei",
