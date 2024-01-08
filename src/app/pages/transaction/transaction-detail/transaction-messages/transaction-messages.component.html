@@ -379,7 +379,7 @@
           </div>
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of listIBCProgress">
-              <div class="d-lg-flex justify-content-between">
+              <div class="d-lg-flex justify-content-between" *ngIf="item.typeTx === type">
                 <div>
                   <!-- {{ denomIBC || ibcData?.receive?.denomOrigin | ellipsis : 25 }} -->
                 </div>
