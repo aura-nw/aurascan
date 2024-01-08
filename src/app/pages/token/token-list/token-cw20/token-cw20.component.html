@@ -37,10 +37,7 @@
         (keyup)="onKeyUp()"
         name="search"
         autocomplete="off" />
-      <button
-        type="submit"
-        class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-        (click)="getListToken()">
+      <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
         <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
       </button>
       <button
@@ -146,7 +143,20 @@
               <th mat-header-cell *matHeaderCellDef>Price</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.price; else noData">
-                  <div class="mb-1 text--gray-1">${{ element.price | mask: 'separator.6' }}</div>
+                  <div class="aura-tooltip-contain">
+                    <div class="mb-1 text--gray-1 aura-tooltip-object">
+                      <span *ngIf="element.price | lt: 0.01">{{ '< $0.01' }}</span>
+                      <span
+                        [decimal]="0"
+                        [tokenPrice]="element.price"
+                        [appBigNumber]="1"
+                        *ngIf="element.price | gte: 0.01"></span>
+                    </div>
+                    <app-tooltip-customize
+                      *ngIf="element.price | lt: 0.01"
+                      [content]="element.price | mask: 'separator.6'">
+                    </app-tooltip-customize>
+                  </div>
                 </ng-container>
               </td>
             </ng-container>
@@ -201,9 +211,7 @@
                         (element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01) ||
                         (element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)
                       "
-                      [content]="
-                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price) | mask: 'separator.6'
-                      ">
+                      [content]="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFormat(6)">
                     </app-tooltip-customize>
                   </div>
                 </ng-container>
@@ -260,7 +268,14 @@
               <div class="d-flex justify-content-between">
                 <div class="text--gray-4 body-mob">Price</div>
                 <ng-container *ngIf="data.price > 0; else noData">
-                  <div class="text--gray-1">${{ data.price | mask: 'separator.6' }}</div>
+                  <div class="text--gray-1">
+                    <span *ngIf="data.price | lt: 0.01">{{ '< $0.01' }}</span>
+                    <span
+                      [decimal]="0"
+                      [tokenPrice]="data.price"
+                      [appBigNumber]="1"
+                      *ngIf="data.price | gte: 0.01"></span>
+                  </div>
                 </ng-container>
               </div>
               <div class="d-flex justify-content-between mt-3">

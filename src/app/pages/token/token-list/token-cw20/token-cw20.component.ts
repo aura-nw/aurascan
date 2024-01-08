@@ -166,7 +166,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
       );
       if (result?.length > 0) {
-        this.drawTable(result);
+        this.drawTable(result, true);
       } else {
         this.dataSource.data = [];
       }
@@ -291,7 +291,16 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   drawTable(dataFilter = [], isSearch = false) {
     const tableFilter = dataFilter?.length > 0 || isSearch ? dataFilter : this.dataTable;
     this.dataSource.data = [];
-    const auraToken = [this.nativeToken];
+
+    //check search for native token
+    const auraToken = !isSearch
+      ? [this.nativeToken]
+      : [this.nativeToken].filter(
+          (item) =>
+            item.name?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
+            item.symbol?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
+            item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
+        );
     const verifiedToken = tableFilter
       .filter((token) => token.verify_status === 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))
