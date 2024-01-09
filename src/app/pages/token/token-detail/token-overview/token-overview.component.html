@@ -139,7 +139,10 @@
       <tr>
         <td colspan="2" [ngClass]="params ? 'border-none' : ''">
           <div class="d-flex align-items-center">
-            <div class="flex-item">
+            <div
+              class="{{
+                tokenDetail.modeToken === EModeToken.CWToken && !tokenDetail.isNFTContract ? 'flex-item' : 'd-flex'
+              }}">
               <div class="body-02 text--gray-5 fixed-col">Holders:</div>
               <div class="body-02 text--gray-1">
                 {{ tokenDetail?.holder || 0 | mask: 'separator.0' }}
