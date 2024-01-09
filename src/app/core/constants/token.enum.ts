@@ -32,6 +32,6 @@ export enum ABTActionType {
 
 export enum EModeToken {
   StakingCoin = 'Staking Coin',
-  IBCCoin = 'IBC Coin',
+  IBCCoin = 'IBC Token',
   CWToken = 'CW Token',
 }

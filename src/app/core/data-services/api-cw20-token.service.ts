@@ -34,10 +34,15 @@ export class ApiCw20TokenService {
 
   chainInfo = this.env.chainInfo;
   currencies = this.chainInfo.currencies[0];
+  nativeName = this.env.environment.nativeName;
 
   apiAccount = inject(ApiAccountService);
 
-  constructor(private http: HttpClient, private env: EnvironmentService, private tokenService: TokenService) {}
+  constructor(
+    private http: HttpClient,
+    private env: EnvironmentService,
+    private tokenService: TokenService,
+  ) {}
 
   getByOwner(address: string) {
     return forkJoin([
@@ -64,7 +69,13 @@ export class ApiCw20TokenService {
 
         const totalValue = allTokens
           .filter((item) => item.verify_status === 'VERIFIED')
-          .reduce((prev, current) => BigNumber(current?.value).plus(prev).toFixed(), 0);
+          .reduce(
+            (prev, current) =>
+              BigNumber(current?.value)
+                .plus(prev)
+                .toFixed(),
+            0,
+          );
 
         return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),

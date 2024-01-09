@@ -11,6 +11,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ContractService } from 'src/app/core/services/contract.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { getBalance } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -53,7 +54,6 @@ export class TokenDetailComponent implements OnInit {
       } else {
         this.getDataCoin(paramData);
       }
-      this.getDenomHolder(paramData);
     }
   }
 
@@ -82,15 +82,13 @@ export class TokenDetailComponent implements OnInit {
                 token.decimals = token.cw20_contract.decimal;
                 token.type = this.contractType.CW20;
                 token.max_total_supply = tokenMarket?.max_supply || 0;
-                token.circulating_market_cap = tokenMarket?.circulating_market_cap || 0;
                 token.price = tokenMarket?.current_price || 0;
                 token.verify_status = tokenMarket?.verify_status || '';
                 token.verify_text = tokenMarket?.verify_text || '';
                 token.modeToken = EModeToken.CWToken;
-                token.fully_diluted_market_cap =
-                  tokenMarket?.fully_diluted_valuation || token.max_total_supply * token.price;
                 token.price_change_percentage_24h = tokenMarket?.price_change_percentage_24h || 0;
                 token.contract_verification = token.code?.code_id_verifications[0]?.verification_status;
+                token.totalSupply = token.cw20_contract.total_supply;
                 this.tokenDetail = token;
               });
           }
@@ -168,7 +166,7 @@ export class TokenDetailComponent implements OnInit {
       modeToken: data?.denom ? EModeToken.IBCCoin : EModeToken.StakingCoin,
       denomHash: data?.denom,
       name: data?.name,
-      price: data?.current_price,
+      price: data?.current_price || 0,
       symbol: data?.symbol || data?.display,
       isValueUp: data?.price_change_percentage_24h && data?.price_change_percentage_24h >= 0,
       change: data?.price_change_percentage_24h || 0,
@@ -187,17 +185,11 @@ export class TokenDetailComponent implements OnInit {
       denomHash: this.chainInfo?.currencies[0].coinMinimalDenom,
       symbol: this.chainInfo?.currencies[0].coinDenom,
       isValueUp: false,
-      price: this.tokenService.nativePrice,
+      price: this.tokenService.nativePrice || 0,
       change: 0,
       decimals: this.chainInfo?.currencies[0].coinDecimals,
       totalSupply: _.get(tempTotal, 'data.amount.amount', 0),
     };
     this.loading = false;
-  }
-
-  getDenomHolder(paramData) {
-    this.ibcService.getDenomTotalHolder(paramData).subscribe((res) => {
-      this.tokenDetail['holder'] = _.get(res, 'account_aggregate.aggregate.count');
-    });
   }
 }

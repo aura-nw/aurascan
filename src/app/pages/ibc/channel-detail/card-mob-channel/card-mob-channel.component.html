@@ -47,7 +47,7 @@
           class="mr-1"
           [appBigNumber]="dataCard['amount']"
           [decimal]="0"></span>
-        <span>{{ dataCard.dataDenom?.symbol | ellipsis: 16 }}</span>
+        <span [appLinkDenom]="dataCard.denom">{{ dataCard.dataDenom?.symbol | ellipsis: 16 }}</span>
       </div>
     </div>
   </div>

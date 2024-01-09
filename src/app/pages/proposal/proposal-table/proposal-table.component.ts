@@ -84,7 +84,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   pageValidatorIndex = 0;
   proposalMode = PROPOSAL_TABLE_MODE;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
 
   pageData: PageEvent = {
     length: 0,

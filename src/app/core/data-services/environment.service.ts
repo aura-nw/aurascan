@@ -19,6 +19,7 @@ export interface IConfiguration {
       content: string;
       url: string;
     };
+    nativeName: string;
   };
   chainConfig: {
     stakingTime: string;
