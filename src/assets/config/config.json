@@ -2,8 +2,8 @@
   "environment": {
     "name": "Mainnet",
     "label": {
-      "desktop": "Sei Mainnet",
-      "mobile": "Sei Mainnet"
+      "desktop": "Sei",
+      "mobile": "Sei"
     },
     "logo": "https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/arctic/chain.png",
     "notice": {
