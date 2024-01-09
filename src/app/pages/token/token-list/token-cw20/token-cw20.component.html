@@ -205,7 +205,10 @@
                         (element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01) ||
                         (element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)
                       "
-                      [content]="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFormat(6)">
+                      [content]="
+                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFormat(6)
+                          | mask: 'separator'
+                      ">
                     </app-tooltip-customize>
                   </div>
                 </ng-container>
@@ -264,7 +267,7 @@
                 <ng-container *ngIf="data.price > 0; else noData">
                   <div class="text--gray-1">
                     <span *ngIf="data.price | lt: 0.000001">{{ data.price == 0 ? 0 : '< $0.000001' }}</span>
-                    <span *ngIf="data.price | gte: 0.000001">{{ data.price | mask:'separator.6' }}</span>
+                    <span *ngIf="data.price | gte: 0.000001">{{ data.price | mask: 'separator.6' }}</span>
                   </div>
                 </ng-container>
               </div>

@@ -258,7 +258,7 @@
                       </div>
                       <app-tooltip-customize
                         *ngIf="(element.value | lt: '0.01') || (element.value | gte: '1000000')"
-                        [content]="element.value | mask: 'separator'">
+                        [content]="(element.value | balance: 0 : true).toFixed(10) | mask: 'separator'">
                       </app-tooltip-customize>
                     </div>
 
