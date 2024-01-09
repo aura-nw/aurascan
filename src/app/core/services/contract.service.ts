@@ -70,7 +70,7 @@ export class ContractService extends CommonService {
       name = '%' + keyword + '%';
       updateQuery = `_and: {_or: [{name: {_like: "${name}"}}, {code_id: {_eq: ${codeId}}}]},`;
     } else if (keyword?.length > 0) {
-      filterName = `_ilike: "${'%' + keyword + '%'}"`;
+      filterName = `_ilike: "%${keyword}%"`;
     } else {
       updateQuery = '';
     }
@@ -84,13 +84,13 @@ export class ContractService extends CommonService {
           ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {${filterName}}}],`
           : `_or: [{code: {type: {_in: $type}}}, {name: {${filterName}}}],`;
       } else {
-        filterName = ', ' + filterName;
+        filterName = `, ${filterName}`;
         typeQuery = contractType?.includes(FILTER_ALL)
           ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {_eq: "crates.io:cw4973"}}],`
           : `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
       }
     } else if (contractType?.includes(ContractRegisterType.CW721) || contractType?.includes(ContractRegisterType.CW20)) {
-      filterName = ', ' + filterName;
+      filterName = `, ${filterName}`;
       typeQuery = contractType?.includes(FILTER_ALL)
         ? `code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}, name: {_neq: "crates.io:cw4973" ${filterName}}`
         : `code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973" ${filterName}}`;
