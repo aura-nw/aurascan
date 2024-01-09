@@ -40,7 +40,7 @@ export class TokenTableComponent implements OnChanges {
       quantity: 0,
     },
     {
-      label: 'Native Coin',
+      label: 'Native',
       value: COIN_TOKEN_TYPE.NATIVE,
       quantity: 0,
     },
@@ -50,7 +50,7 @@ export class TokenTableComponent implements OnChanges {
       quantity: 0,
     },
     {
-      label: 'CW-20 Token',
+      label: 'CW20 Token',
       value: COIN_TOKEN_TYPE.CW20,
       quantity: 0,
     },

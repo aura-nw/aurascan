@@ -177,7 +177,12 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     const data: Blob = new Blob([buffer], {
       type: 'text/csv;charset=utf-8',
     });
-    const fileName = 'export-account-' + payload.dataType + '-' + payload.address + '.csv';
+    const fileName =
+      'export-account-' +
+      (payload.dataType === TabsAccountLink.NativeTxs ? 'native-ibc-transfer' : payload.dataType) +
+      '-' +
+      payload.address +
+      '.csv';
     saveAs(data, fileName);
     this.isDownload = false;
     this.isValidCaptcha = false;

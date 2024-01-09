@@ -218,7 +218,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                         +foundToken?.circulating_market_cap ||
                         0,
                       volume: +foundToken?.total_volume || 0,
-                      price: +foundToken?.current_price || 0,
+                      price: foundToken?.current_price || 0,
                       isValueUp:
                         foundToken?.price_change_percentage_24h && foundToken?.price_change_percentage_24h >= 0,
                       change: foundToken?.price_change_percentage_24h || 0,
