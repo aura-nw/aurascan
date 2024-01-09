@@ -125,7 +125,7 @@
                       (tokenDetail.totalSupply | balance: 0 : true).multipliedBy(tokenDetail.price).gte(1000000)
                     "
                     [content]="
-                      (tokenDetail.totalSupply | balance: 0 : true).multipliedBy(tokenDetail.price).toFormat(6)
+                      (tokenDetail.totalSupply | balance: 0 : true).multipliedBy(tokenDetail.price).toFormat()
                         | mask: 'separator.2'
                     ">
                   </app-tooltip-customize>

@@ -53,13 +53,13 @@
             <ng-container *ngIf="contractValue | gte: '0.01'">
               $<span
                 class="aura-tooltip-object"
-                [appBigNumber]="(contractValue | balance: 0 : true).toFixed(2)"
+                [appBigNumber]="contractValue | balance | mask: 'separator.2'"
                 [decimal]="0"></span>
             </ng-container>
           </div>
           <app-tooltip-customize
             *ngIf="(contractValue | lt: '0.01') || (contractValue | gte: '1000000')"
-            [content]="contractValue | mask: 'separator'">
+            [content]="contractValue | balance | mask: 'separator'">
           </app-tooltip-customize>
 
           <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">

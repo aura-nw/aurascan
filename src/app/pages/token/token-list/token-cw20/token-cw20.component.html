@@ -11,19 +11,19 @@
       class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterType.includes(ETokenCoinType.NATIVE)"
       (click)="filterToken(ETokenCoinType.NATIVE)">
-      Native
+      {{ ETokenCoinType.NATIVE }}
     </button>
     <button
       class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterType.includes(ETokenCoinType.IBC)"
       (click)="filterToken(ETokenCoinType.IBC)">
-      IBC Token
+      {{ ETokenCoinType.IBC }}
     </button>
     <button
       class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterType.includes(ETokenCoinType.CW20)"
       (click)="filterToken(ETokenCoinType.CW20)">
-      CW20 Token
+      {{ ETokenCoinType.CW20 }}
     </button>
   </div>
   <form class="aura-form single-input-field search-form" #searchForm *ngIf="!isMobileMatched">
@@ -145,8 +145,8 @@
                 <ng-container *ngIf="element.price > 0; else noData">
                   <div class="aura-tooltip-contain">
                     <div class="mb-1 text--gray-1 aura-tooltip-object">
-                      <span *ngIf="element.price | lt: 0.000001">{{ element.price == 0 ? 0 : '< $0.000001' }}</span>
-                      <span *ngIf="element.price | gte: 0.000001">{{ element.price | mask:'separator.6' }}</span>
+                      <span *ngIf="element.price | lt: 0.000001">{{ '< $0.000001' }}</span>
+                      <span *ngIf="element.price | gte: 0.000001">{{ element.price | mask: 'separator.6' }}</span>
                     </div>
                     <app-tooltip-customize *ngIf="element.price | lt: 0.000001" [content]="element.price">
                     </app-tooltip-customize>
@@ -206,8 +206,8 @@
                         (element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)
                       "
                       [content]="
-                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFormat(6)
-                          | mask: 'separator'
+                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFormat()
+                          | mask: 'separator.2'
                       ">
                     </app-tooltip-customize>
                   </div>
@@ -266,7 +266,7 @@
                 <div class="text--gray-4 body-mob">Price</div>
                 <ng-container *ngIf="data.price > 0; else noData">
                   <div class="text--gray-1">
-                    <span *ngIf="data.price | lt: 0.000001">{{ data.price == 0 ? 0 : '< $0.000001' }}</span>
+                    <span *ngIf="data.price | lt: 0.000001">{{ '< $0.000001' }}</span>
                     <span *ngIf="data.price | gte: 0.000001">{{ data.price | mask: 'separator.6' }}</span>
                   </div>
                 </ng-container>
@@ -288,7 +288,7 @@
                 <ng-container *ngIf="data.price > 0; else zeroValue">
                   <div class="text--gray-1 item-amount">
                     <span *ngIf="(data.totalSupply | balance: 0 : true).multipliedBy(data.price).lt(0.01)">
-                      {{ data.price == 0 ? '$0.00' : '< $0.01' }}
+                      {{ '< $0.01' }}
                     </span>
                     <div *ngIf="(data.totalSupply | balance: 0 : true).multipliedBy(data.price).gte(0.01)">
                       <span [decimal]="0" [appBigNumber]="data.totalSupply" [tokenPrice]="data.price"></span>

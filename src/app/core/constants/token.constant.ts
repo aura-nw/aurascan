@@ -31,6 +31,6 @@ export const MAX_LENGTH_SEARCH_TOKEN = 100;
 
 export enum ETokenCoinType {
   NATIVE = 'Native',
-  IBC = 'IBC token',
-  CW20 = 'CW20 token',
+  IBC = 'IBC Token',
+  CW20 = 'CW20 Token',
 }
