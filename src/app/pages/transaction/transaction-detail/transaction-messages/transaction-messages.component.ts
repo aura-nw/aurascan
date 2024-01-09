@@ -57,7 +57,6 @@ export class TransactionMessagesComponent implements OnInit {
     TimeOut: 'timeout_packet',
   };
   spendLimitAmount = 0;
-  typeGrantAllowance = 'Basic';
   denomIBC = '';
   seeLessArr = [false];
   totalAmountExecute = 0;
@@ -70,6 +69,11 @@ export class TransactionMessagesComponent implements OnInit {
     MultiSend: 'MultiSend',
     EventLog: 'EventLog',
   };
+  typeGrant = {
+    Basic: 'Basic',
+    Periodic: 'Periodic',
+  };
+  typeGrantAllowance = this.typeGrant.Basic;
   currentIndex = 0;
   transactionTypeArr = [];
   codeTransaction = CodeTransaction;
@@ -116,7 +120,7 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
     ) {
       this.checkGetReward();
-    }  else if (
+    } else if (
       //get data if type = IBC
       this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1
     ) {
@@ -494,14 +498,14 @@ export class TransactionMessagesComponent implements OnInit {
           } else {
             type = _.get(this.transactionDetail?.messages[0]?.allowance, "['@type']");
           }
-          if (type.indexOf('Periodic') > 0) {
-            this.typeGrantAllowance = 'Periodic';
+          if (type.indexOf(this.typeGrant.Periodic) > 0) {
+            this.typeGrantAllowance = this.typeGrant.Periodic;
           }
           this.spendLimitAmount =
             _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') ||
             _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.basic.spend_limit[0].amount') ||
             _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.basic.spend_limit[0].amount');
-          if (this.typeGrantAllowance === 'Basic') {
+          if (this.typeGrantAllowance === this.typeGrant.Basic) {
             this.spendLimitAmount =
               _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') ||
               _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.spend_limit[0].amount') ||
@@ -537,7 +541,7 @@ export class TransactionMessagesComponent implements OnInit {
                   data?.allowance?.allowance?.basic?.expiration,
               ) || '-',
           });
-          if (this.typeGrantAllowance === 'Periodic') {
+          if (this.typeGrantAllowance === this.typeGrant.Periodic) {
             result.push({
               key: 'Period Spend Limit',
               value:
