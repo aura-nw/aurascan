@@ -14,7 +14,7 @@
             ngbNavLink
             (click)="changeTab(tab.value)"
             [class.active]="currentTab === tab.value"
-            class="button button-tab-menu body fw-semibold cursor-pointer text-capitalize">
+            class="button button-tab-menu body fw-semibold cursor-pointer text-normal">
             <span class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--gray-1' : 'text--gray-light' }}">
               {{ tab.label }}
             </span>
