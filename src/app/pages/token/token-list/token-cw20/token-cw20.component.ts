@@ -166,7 +166,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
       );
       if (result?.length > 0) {
-        this.drawTable(result);
+        this.drawTable(result, true);
       } else {
         this.dataSource.data = [];
       }
@@ -212,18 +212,16 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                       description: foundToken?.description || item.marketing_info?.description || '',
                       verify_status: foundToken?.verify_status || '',
                       verify_text: foundToken?.verify_text || '',
-                      circulating_market_cap: +foundToken?.circulating_market_cap || 0,
                       inChainValue:
                         new BigNumber(totalSupply).multipliedBy(foundToken?.current_price || 0) ||
-                        +foundToken?.circulating_market_cap ||
+                        new BigNumber(foundToken?.circulating_market_cap) ||
                         0,
                       volume: +foundToken?.total_volume || 0,
-                      price: +foundToken?.current_price || 0,
+                      price: foundToken?.current_price || 0,
                       isValueUp:
                         foundToken?.price_change_percentage_24h && foundToken?.price_change_percentage_24h >= 0,
                       change: foundToken?.price_change_percentage_24h || 0,
                       max_total_supply: foundToken?.max_supply || 0,
-                      fully_diluted_market_cap: foundToken?.fully_diluted_valuation || 0,
                       totalSupply: getBalance(item.total_supply, item.decimal),
                       type: ETokenCoinType.CW20,
                     };
@@ -291,7 +289,16 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   drawTable(dataFilter = [], isSearch = false) {
     const tableFilter = dataFilter?.length > 0 || isSearch ? dataFilter : this.dataTable;
     this.dataSource.data = [];
-    const auraToken = [this.nativeToken];
+
+    //check search for native token
+    const auraToken = !isSearch
+      ? [this.nativeToken]
+      : [this.nativeToken].filter(
+          (item) =>
+            item.name?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
+            item.symbol?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
+            item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
+        );
     const verifiedToken = tableFilter
       .filter((token) => token.verify_status === 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))

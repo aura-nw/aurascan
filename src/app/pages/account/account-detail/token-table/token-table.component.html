@@ -3,7 +3,7 @@
     <div class="card-body p-0">
       <!-- Title -->
       <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!assetsLoading">
-        <h3 class="mb-3 fw-700 text--gray-light-2 mb-xl-0">Coins & Tokens ({{ pageData?.length || 0 }})</h3>
+        <h3 class="mb-3 fw-700 text--gray-light-2 mb-xl-0">Fungible Tokens ({{ pageData?.length || 0 }})</h3>
         <div class="d-flex flex-lg-row align-items-center justify-content-end gap-2">
           <div
             class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100"
@@ -252,13 +252,13 @@
                         <ng-container *ngIf="element.value | gte: '0.01'">
                           $<span
                             class="aura-tooltip-object"
-                            [appBigNumber]="(element.value | balance: 0 : true).toFixed(2)"
+                            [appBigNumber]="element.value | balance | mask: 'separator.2'"
                             [decimal]="0"></span>
                         </ng-container>
                       </div>
                       <app-tooltip-customize
                         *ngIf="(element.value | lt: '0.01') || (element.value | gte: '1000000')"
-                        [content]="element.value | mask: 'separator'">
+                        [content]="element.value | balance | mask: 'separator.6'">
                       </app-tooltip-customize>
                     </div>
 
