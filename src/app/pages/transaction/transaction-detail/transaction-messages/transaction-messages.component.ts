@@ -491,25 +491,26 @@ export class TransactionMessagesComponent implements OnInit {
 
         case this.eTransType.MsgGrantAllowance:
           let type;
-          if (this.transactionDetail?.messages[0]?.allowance?.allowance?.allowance) {
-            type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.allowance.['@type']");
-          } else if (this.transactionDetail?.messages[0]?.allowance?.allowance) {
-            type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.['@type']");
+          const dataAllowance = _.get(this.transactionDetail, 'messages[0].allowance');
+          if (dataAllowance?.allowance?.allowance) {
+            type = _.get(dataAllowance, "allowance.allowance.['@type']");
+          } else if (dataAllowance?.allowance) {
+            type = _.get(dataAllowance, "allowance.['@type']");
           } else {
-            type = _.get(this.transactionDetail?.messages[0]?.allowance, "['@type']");
+            type = _.get(dataAllowance, "['@type']");
           }
           if (type.indexOf(this.typeGrant.Periodic) > 0) {
             this.typeGrantAllowance = this.typeGrant.Periodic;
           }
           this.spendLimitAmount =
-            _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') ||
-            _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.basic.spend_limit[0].amount') ||
-            _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.basic.spend_limit[0].amount');
+            _.get(dataAllowance, 'basic.spend_limit[0].amount') ||
+            _.get(dataAllowance, 'allowance.basic.spend_limit[0].amount') ||
+            _.get(dataAllowance, 'allowance.allowance.basic.spend_limit[0].amount');
           if (this.typeGrantAllowance === this.typeGrant.Basic) {
             this.spendLimitAmount =
-              _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') ||
-              _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.spend_limit[0].amount') ||
-              _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.spend_limit[0].amount');
+              _.get(dataAllowance, 'spend_limit[0].amount') ||
+              _.get(dataAllowance, 'allowance.spend_limit[0].amount') ||
+              _.get(dataAllowance, 'allowance.allowance.spend_limit[0].amount');
           }
 
           result.push({
