@@ -92,6 +92,7 @@ export class TransactionMessagesComponent implements OnInit {
     if (this.transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1) {
       this.checkTypeMessage();
     }
+
     // set key ibc update client when old type
     if (this.transactionDetail?.messages[0]?.header) {
       this.keyIbc = 'header';
@@ -115,30 +116,7 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
     ) {
       this.checkGetReward();
-    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MsgGrantAllowance) {
-      let type;
-      if (this.transactionDetail?.messages[0]?.allowance?.allowance?.allowance) {
-        type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.allowance.['@type']");
-      } else if (this.transactionDetail?.messages[0]?.allowance?.allowance) {
-        type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.['@type']");
-      } else {
-        type = _.get(this.transactionDetail?.messages[0]?.allowance, "['@type']");
-      }
-      if (type.indexOf('Periodic') > 0) {
-        this.typeGrantAllowance = 'Periodic';
-      }
-
-      this.spendLimitAmount =
-        _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') ||
-        _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.basic.spend_limit[0].amount') ||
-        _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.basic.spend_limit[0].amount');
-      if (this.typeGrantAllowance === 'Basic') {
-        this.spendLimitAmount =
-          _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') ||
-          _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.spend_limit[0].amount') ||
-          _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.spend_limit[0].amount');
-      }
-    } else if (
+    }  else if (
       //get data if type = IBC
       this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1
     ) {
@@ -491,9 +469,8 @@ export class TransactionMessagesComponent implements OnInit {
             link: { url: '/account', data: data.proposer, nameTag: true },
           });
           if (this.transactionDetail?.tx?.logs?.length > 0) {
-            const proposalData = this.transactionDetail?.tx?.logs[0]?.events?.find(
-              (k) => k.type === 'submit_proposal',
-            )?.attributes;
+            const proposalData = this.transactionDetail?.tx?.logs[0]?.events?.find((k) => k.type === 'submit_proposal')
+              ?.attributes;
             result.push({
               key: 'Proposal Id',
               value: this.getLongValue(proposalData?.find((k) => k.key === 'proposal_id')?.value),
@@ -509,6 +486,28 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.MsgGrantAllowance:
+          let type;
+          if (this.transactionDetail?.messages[0]?.allowance?.allowance?.allowance) {
+            type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.allowance.['@type']");
+          } else if (this.transactionDetail?.messages[0]?.allowance?.allowance) {
+            type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.['@type']");
+          } else {
+            type = _.get(this.transactionDetail?.messages[0]?.allowance, "['@type']");
+          }
+          if (type.indexOf('Periodic') > 0) {
+            this.typeGrantAllowance = 'Periodic';
+          }
+          this.spendLimitAmount =
+            _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') ||
+            _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.basic.spend_limit[0].amount') ||
+            _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.basic.spend_limit[0].amount');
+          if (this.typeGrantAllowance === 'Basic') {
+            this.spendLimitAmount =
+              _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') ||
+              _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.spend_limit[0].amount') ||
+              _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.spend_limit[0].amount');
+          }
+
           result.push({
             key: 'Granter',
             value: this.nameTagService.findNameTagByAddress(data.granter),
