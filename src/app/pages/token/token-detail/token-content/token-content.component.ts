@@ -66,7 +66,7 @@ export class TokenContentComponent implements OnInit {
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     let tabFilter;
     switch (this.tokenDetail.modeToken) {
-      case EModeToken.StakingCoin:
+      case EModeToken.Native:
         tabFilter = this.tabStaking;
         this.currentTab = this.tokenTab.Holders;
         this.textPlaceHolder = 'Filter Address/Name Tag';
@@ -119,7 +119,7 @@ export class TokenContentComponent implements OnInit {
       let tempTabs;
       this.paramQuery = addressNameTag || this.searchTemp;
       // check if mode not equal native coin
-      if (this.tokenDetail.modeToken !== EModeToken?.StakingCoin) {
+      if (this.tokenDetail.modeToken !== EModeToken?.Native) {
         if (
           this.textSearch.length === LENGTH_CHARACTER.TRANSACTION &&
           this.textSearch == this.textSearch.toUpperCase()
