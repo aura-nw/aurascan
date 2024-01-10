@@ -12,7 +12,6 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { ActivatedRoute } from '@angular/router';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -45,7 +44,7 @@ export class TokenHoldersTabComponent implements OnInit {
   displayedColumns: string[];
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 20,
+    pageSize: 5,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   loading = true;

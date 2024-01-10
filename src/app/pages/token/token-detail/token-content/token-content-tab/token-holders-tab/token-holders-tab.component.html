@@ -39,7 +39,7 @@
                 <div [classList]="[template.cssClass]">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'id'">
-                      <span class="token-id">{{ pageData?.pageIndex * 20 + i + 1 }}</span>
+                      <span class="token-id">{{ pageData?.pageIndex * pageData?.pageSize + i + 1 }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'owner'">
                       <app-name-tag
