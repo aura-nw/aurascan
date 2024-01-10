@@ -4,6 +4,7 @@ import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import {
   DATEFORMAT,
@@ -238,16 +239,6 @@ export class AccountTransactionTableComponent {
     this.searchType();
   }
 
-  getConvertDate(date, lastDate = false) {
-    if (!date) {
-      return null;
-    }
-
-    let temp = this.datePipe.transform(date, DATEFORMAT.DATE_ONLY);
-    let subStringDate = lastDate ? 'T24:00:000Z' : 'T00:00:000Z';
-    return temp + subStringDate;
-  }
-
   getTxsAddress(nextKey = null): void {
     const address = this.currentAddress;
     let startDate = null;
@@ -255,8 +246,8 @@ export class AccountTransactionTableComponent {
     this.errTxt = null;
 
     if (this.transactionFilter.startDate && this.transactionFilter.endDate) {
-      startDate = this.getConvertDate(this.transactionFilter.startDate);
-      endDate = this.getConvertDate(this.transactionFilter.endDate, true);
+      startDate = moment(this.transactionFilter.startDate).startOf('day').toISOString();
+      endDate = moment(this.transactionFilter.endDate).endOf('day').toISOString();
     }
 
     let payload = {
