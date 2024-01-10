@@ -5,7 +5,7 @@
       <div class="box-connect d-lg-flex justify-content-between align-items-center">
         <div class="box-connect-chain d-flex align-items-center">
           <div class="d-flex justify-content-lg-center align-items-center">
-            <img [src]="'assets/images/logo/auraTitleLogo.png'" alt="" class="img-chain" />
+            <img [appImg]="'assets/images/logo/title-logo.png'" alt="" class="img-chain" />
             <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div class="aura-tooltip-contain">
                 <span
@@ -225,8 +225,14 @@
             {
               label: 'Fee',
               class: 'text--gray-1 body-02-mob',
-              info: (data.fee | mask: 'separator.6') + '<span> ' +
-                ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + coinInfo.coinDenom + '</a>'
+              info:
+                (data.fee | mask: 'separator.6') +
+                '<span> ' +
+                ' <a class=text--primary href=' +
+                ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+                '>' +
+                coinInfo.coinDenom +
+                '</a>'
             }
           ]"></app-card-mob-channel>
       </div>
