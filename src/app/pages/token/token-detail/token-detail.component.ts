@@ -163,7 +163,7 @@ export class TokenDetailComponent implements OnInit {
 
     const decimals = data?.decimal || this.chainInfo?.currencies[0].coinDecimals;
     this.tokenDetail = {
-      modeToken: data?.denom ? EModeToken.IBCCoin : EModeToken.StakingCoin,
+      modeToken: data?.denom ? EModeToken.IBCCoin : EModeToken.Native,
       denomHash: data?.denom,
       name: data?.name,
       price: data?.current_price || 0,
@@ -180,7 +180,7 @@ export class TokenDetailComponent implements OnInit {
   async getDataNative(denomNative: string) {
     const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative).catch(() => 0);
     this.tokenDetail = {
-      modeToken: EModeToken.StakingCoin,
+      modeToken: EModeToken.Native,
       name: this.chainInfo.chainName,
       denomHash: this.chainInfo?.currencies[0].coinMinimalDenom,
       symbol: this.chainInfo?.currencies[0].coinDenom,
