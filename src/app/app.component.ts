@@ -14,6 +14,7 @@ import { WatchListService } from './core/services/watch-list.service';
 import local from './core/utils/storage/local';
 import { IUser } from './core/models/auth.models';
 import { UserService } from './core/services/user.service';
+import { EnvironmentService } from './core/data-services/environment.service';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
   user: IUser;
 
   destroyed$ = new Subject<void>();
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
 
   constructor(
     private commonService: CommonService,
@@ -39,6 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private notificationsService: NotificationsService,
     private watchListService: WatchListService,
     private userService: UserService,
+    private environmentService: EnvironmentService
   ) {}
 
   ngOnDestroy(): void {
@@ -201,7 +204,8 @@ export class AppComponent implements OnInit, OnDestroy {
       .getTokenMarketData(payload)
       .pipe(
         map((res) => {
-          return res.map((element) => ({
+          const listFilterIBC = res.filter(k => k.denom !== this.coinMinimalDenom);
+          return listFilterIBC?.map((element) => ({
             ...element,
             display: element['display'] || element['symbol'],
           }));

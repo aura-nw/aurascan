@@ -74,21 +74,21 @@
                   <div class="aura-tooltip-contain">
                     <div class="aura-tooltip-object">
                       <div class="text--gray-1 item-amount">
-                        <span *ngIf="tokenDetail.totalSupply | lt: 0.001">
-                          {{ tokenDetail.totalSupply == 0 ? 0 : '< 0.001' }}
+                        <span *ngIf="tokenDetail.supplyAmount | lt: 0.001">
+                          {{ tokenDetail.supplyAmount == 0 ? 0 : '< 0.001' }}
                         </span>
                         <span
                           [decimal]="0"
-                          [appBigNumber]="tokenDetail.totalSupply || 0"
-                          *ngIf="tokenDetail.totalSupply | gte: 0.001"></span>
+                          [appBigNumber]="tokenDetail.supplyAmount || 0"
+                          *ngIf="tokenDetail.supplyAmount | gte: 0.001"></span>
                       </div>
                     </div>
                     <app-tooltip-customize
                       *ngIf="
-                        ((tokenDetail.totalSupply | gte: 1000000) || (tokenDetail.totalSupply | lt: 0.001)) &&
-                        tokenDetail.totalSupply != 0
+                        ((tokenDetail.supplyAmount | gte: 1000000) || (tokenDetail.supplyAmount | lt: 0.001)) &&
+                        tokenDetail.supplyAmount != 0
                       "
-                      [content]="tokenDetail.totalSupply | mask: 'separator.6'">
+                      [content]="tokenDetail.supplyAmount | mask: 'separator.6'">
                     </app-tooltip-customize>
                   </div>
                   {{ tokenDetail?.symbol }}
@@ -107,25 +107,25 @@
                   <div class="aura-tooltip-object">
                     <div class="text--gray-1 item-amount">
                       <span
-                        *ngIf="(tokenDetail.totalSupply | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
+                        *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
                         {{ tokenDetail.price == 0 ? '$0.00' : '< $0.01' }}
                       </span>
                       <div
-                        *ngIf="(tokenDetail.totalSupply | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
+                        *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
                         <span
                           [decimal]="0"
-                          [appBigNumber]="tokenDetail.totalSupply"
+                          [appBigNumber]="tokenDetail.supplyAmount"
                           [tokenPrice]="tokenDetail.price"></span>
                       </div>
                     </div>
                   </div>
                   <app-tooltip-customize
                     *ngIf="
-                      (tokenDetail.totalSupply | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01) ||
-                      (tokenDetail.totalSupply | balance: 0 : true).multipliedBy(tokenDetail.price).gte(1000000)
+                      (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01) ||
+                      (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(1000000)
                     "
                     [content]="
-                      (tokenDetail.totalSupply | balance: 0 : true).multipliedBy(tokenDetail.price).toFormat()
+                      (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).toFormat()
                         | mask: 'separator'
                     ">
                   </app-tooltip-customize>
