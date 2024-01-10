@@ -35,6 +35,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   responseCaptcha;
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
+  prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
 
   destroyed$ = new Subject<void>();
   constructor(
