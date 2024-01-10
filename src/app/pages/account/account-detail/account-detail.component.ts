@@ -237,7 +237,7 @@ export class AccountDetailComponent implements OnInit {
       if (dataNameTag) {
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, JSON.stringify({ address: this.currentAddress }));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, ({ address: this.currentAddress }));
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {
