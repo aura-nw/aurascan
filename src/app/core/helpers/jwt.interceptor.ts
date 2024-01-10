@@ -16,27 +16,26 @@ export class JwtInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {
-    if (!this.environmentService.horoscope) {
+    if (!this.environmentService.horoscope || request.url?.indexOf('refresh-token') > -1) {
       return next.handle(request);
     }
 
-    const graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
-
     // get list name tag if not login email
     const user = this.userService.getCurrentUser();
-    if (request.url?.indexOf('refresh-token') > -1 || request.url.indexOf(graphUrl) > -1 || !user) {
+    const isApiBE = request.url.indexOf(this.environmentService.backend) > -1;
+    if (!isApiBE || !user?.accessToken) {
       return next.handle(request);
     }
 
     let jwtToken;
     try {
-      jwtToken = this.parseJwt(user.accessToken);
+      jwtToken = this.parseJwt(user?.accessToken);
     } catch {
-      return next.handle(request);
+      return EMPTY;
     }
 
     if (jwtToken.exp >= Date.now() / 1000) {
-      if (user.accessToken && request.url.indexOf(graphUrl) === -1) {
+      if (user.accessToken) {
         request = request.clone({
           setHeaders: {
             Authorization: 'Bearer ' + user.accessToken,
@@ -62,13 +61,11 @@ export class JwtInterceptor implements HttpInterceptor {
           };
           this.userService.setUser(userData);
 
-          if (userData.accessToken) {
-            request = request.clone({
-              setHeaders: {
-                Authorization: 'Bearer ' + userData.accessToken,
-              },
-            });
-          }
+          request = request.clone({
+            setHeaders: {
+              Authorization: 'Bearer ' + userData.accessToken,
+            },
+          });
           return next.handle(request);
         }),
         catchError((error) => {
