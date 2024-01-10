@@ -594,7 +594,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getDenomHolder(denomHash: string, address: string = null): Observable<any> {
+  getDenomHolder(denomHash: string, limit: number = 100, address: string = null): Observable<any> {
     const operationsDoc = `
     query queryHolderIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
       ${this.envDB} {
@@ -618,6 +618,7 @@ export class TokenService extends CommonService {
         variables: {
           denom: denomHash,
           address: address,
+          limit: limit
         },
         operationName: 'queryHolderIBC',
       })

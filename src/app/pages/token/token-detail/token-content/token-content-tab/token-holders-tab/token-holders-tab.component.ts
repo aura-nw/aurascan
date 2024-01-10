@@ -205,41 +205,46 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getDenomHolder() {
-    this.tokenService.getDenomHolder(this.tokenDetail?.denomHash, this.keyWord || null).subscribe({
-      next: (res) => {
-        this.totalHolder = res?.account_balance_aggregate.aggregate.count;
-        if (this.totalHolder > this.numberTopHolder) {
-          this.pageData.length = this.numberTopHolder;
-        } else {
-          this.pageData.length = this.totalHolder;
-        }
+    this.tokenService
+      .getDenomHolder(this.tokenDetail?.denomHash, this.pageData.pageSize, this.keyWord || null)
+      .subscribe({
+        next: (res) => {
+          console.log(res);
 
-        const dataFlat = res.account_balance?.map((item) => {
-          return {
-            owner: item.account.address,
-            amount: item.amount,
-            balance: item.amount,
-            percent_hold: new BigNumber(item.amount).dividedBy(this.tokenDetail?.totalSupply).multipliedBy(100),
-            value:
-              new BigNumber(item.amount)
-                .multipliedBy(this.tokenDetail?.price || 0)
-                .dividedBy(BigNumber(10).pow(this.decimalValue))
-                .toFixed() || 0,
-          };
-        });
-        this.dataSource.data = [...dataFlat];
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+          this.totalHolder = res?.account_balance_aggregate.aggregate.count;
+          if (this.totalHolder > this.numberTopHolder) {
+            this.pageData.length = this.numberTopHolder;
+          } else {
+            this.pageData.length = this.totalHolder;
+          }
+
+          const dataFlat = res.account_balance?.map(async (item) => {
+            // const res = await this.tokenService.getListAssetCommunityPool();
+            return {
+              owner: item.account.address,
+              amount: item.amount,
+              balance: item.amount,
+              percent_hold: new BigNumber(item.amount).dividedBy(this.tokenDetail?.totalSupply).multipliedBy(100),
+              value:
+                new BigNumber(item.amount)
+                  .multipliedBy(this.tokenDetail?.price || 0)
+                  .dividedBy(BigNumber(10).pow(this.decimalValue))
+                  .toFixed() || 0,
+            };
+          });
+          this.dataSource.data = [...dataFlat];
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 }
