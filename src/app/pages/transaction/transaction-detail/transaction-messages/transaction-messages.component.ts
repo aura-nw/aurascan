@@ -528,7 +528,7 @@ export class TransactionMessagesComponent implements OnInit {
             key: 'Spend Limit',
             value: this.spendLimitAmount,
             pipeType: pipeTypeData.BalanceOf,
-            denom: this.spendLimitAmount > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
           });
           result.push({
             key: 'Expiration',
