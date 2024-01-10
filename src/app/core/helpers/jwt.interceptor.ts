@@ -5,6 +5,7 @@ import { EMPTY, Observable, catchError, map, of, switchMap } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { NotificationsService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -15,15 +16,15 @@ export class JwtInterceptor implements HttpInterceptor {
     private router: Router,
   ) {}
 
-  intercept(request: HttpRequest<any>, next: HttpHandler) {
-    if (!this.environmentService.horoscope || request.url?.indexOf('refresh-token') > -1) {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (!this.environmentService.config) {
       return next.handle(request);
     }
 
     // get list name tag if not login email
     const user = this.userService.getCurrentUser();
     const isApiBE = request.url.indexOf(this.environmentService.backend) > -1;
-    if (!isApiBE || !user?.accessToken) {
+    if (!isApiBE || !user?.accessToken || request.url?.indexOf('refresh-token') > -1) {
       return next.handle(request);
     }
 
@@ -38,7 +39,7 @@ export class JwtInterceptor implements HttpInterceptor {
       if (user.accessToken) {
         request = request.clone({
           setHeaders: {
-            Authorization: 'Bearer ' + user.accessToken,
+            Authorization: `Bearer ${user.accessToken}`,
           },
         });
       }
@@ -63,7 +64,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
           request = request.clone({
             setHeaders: {
-              Authorization: 'Bearer ' + userData.accessToken,
+              Authorization: `Bearer ${userData.accessToken}`,
             },
           });
           return next.handle(request);
