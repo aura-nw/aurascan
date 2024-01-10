@@ -149,10 +149,10 @@ export class UserService {
       ${this.envDB} {
         transaction(
           where: {
+            timestamp: { _lte: $end_time, _gte: $start_time }
             coin_transfers: {
               _or: [{ from: { _eq: $from } }, { to: { _eq: $to } }]
               block_height: { _lt: $height_lt, _gt: $height_gt }
-              transaction: { timestamp: { _lte: $end_time, _gte: $start_time } }
               message: { type: { _in: $msg_types_in, _nin: $msg_types_nin } }
             }
           }
