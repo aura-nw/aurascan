@@ -110,7 +110,7 @@ export class TokenOverviewComponent implements OnInit {
           this.getTotalHolder();
         }
         break;
-      case EModeToken.StakingCoin:
+      case EModeToken.Native:
         this.getInfoNative();
         this.getDenomHolder(this.tokenDetail?.denomHash);
         break;
