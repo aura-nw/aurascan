@@ -107,8 +107,18 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     const res = await this.tokenService.getTokenSupply();
     const supply = _.get(res, 'data.supply');
     this.listTokenIBC?.forEach((token) => {
+      let changePercent = 0;
+      if (token?.tokenHolderStatistics?.length > 1) {
+        changePercent =
+          (token?.tokenHolderStatistics[1].totalHolder * 100) / token?.tokenHolderStatistics[0].totalHolder - 100;
+      }
       token.type = ETokenCoinType.IBC;
-      token.isHolderUp = true;
+      token.holders =
+        token?.tokenHolderStatistics?.length > 0
+          ? token?.tokenHolderStatistics?.[token?.tokenHolderStatistics?.length - 1]?.totalHolder
+          : 0;
+      token.isHolderUp = changePercent >= 0;
+      token.holderChange = Math.abs(changePercent);
       token.price = token.current_price || token.price;
       supply.forEach((s) => {
         if (token.denom === s.denom) {
@@ -268,6 +278,14 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       )
       .subscribe((res) => {
         this.nativeToken = res.find((k) => k.coin_id === this.environmentService.coingecko.ids[0]);
+        const dataNative = local.getItem<any>(STORAGE_KEYS.DATA_NATIVE);
+        let changePercent = 0;
+        if (dataNative?.tokenHolderStatistics?.length > 1) {
+          changePercent =
+            (dataNative.tokenHolderStatistics[1].totalHolder * 100) / dataNative.tokenHolderStatistics[0].totalHolder -
+            100;
+        }
+
         const totalSupply = balanceOf(_.get(tempTotal, 'data.amount.amount' || 0), this.chainInfo.coinDecimals);
 
         this.nativeToken = {
@@ -280,8 +298,13 @@ export class TokenCw20Component implements OnInit, OnDestroy {
           price: this.nativeToken.current_price || 0,
           inChainValue: new BigNumber(totalSupply).multipliedBy(this.nativeToken.current_price || 0) || 0,
           denom: this.chainInfo.coinMinimalDenom,
-          isHolderUp: true,
           type: ETokenCoinType.NATIVE,
+          holders:
+            dataNative?.tokenHolderStatistics?.length > 0
+              ? dataNative?.tokenHolderStatistics?.[dataNative?.tokenHolderStatistics?.length - 1]?.totalHolder
+              : 0,
+          isHolderUp: changePercent >= 0,
+          holderChange: Math.abs(changePercent),
         };
       });
   }
