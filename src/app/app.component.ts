@@ -41,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private notificationsService: NotificationsService,
     private watchListService: WatchListService,
     private userService: UserService,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnDestroy(): void {
@@ -204,7 +204,11 @@ export class AppComponent implements OnInit, OnDestroy {
       .getTokenMarketData(payload)
       .pipe(
         map((res) => {
-          const listFilterIBC = res.filter(k => k.denom !== this.coinMinimalDenom);
+          const nativeData = res.find((k) => k.denom === this.coinMinimalDenom);
+          if (nativeData?.coin_id) {
+            local.setItem(STORAGE_KEYS.DATA_NATIVE, nativeData);
+          }
+          const listFilterIBC = res.filter((k) => k.denom !== this.coinMinimalDenom);
           return listFilterIBC?.map((element) => ({
             ...element,
             display: element['display'] || element['symbol'],
