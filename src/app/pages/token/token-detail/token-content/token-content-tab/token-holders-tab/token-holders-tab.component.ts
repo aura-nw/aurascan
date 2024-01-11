@@ -111,7 +111,9 @@ export class TokenHoldersTabComponent implements OnInit {
               return {
                 owner: item.address,
                 balance: item.amount,
-                percent_hold: (item.amount / item.cw20_contract.total_supply) * 100,
+                percent_hold: BigNumber(item.amount)
+                  .dividedBy(BigNumber(item.cw20_contract.total_supply))
+                  .multipliedBy(100),
                 value:
                   new BigNumber(item.amount)
                     .multipliedBy(this.tokenDetail?.price)
