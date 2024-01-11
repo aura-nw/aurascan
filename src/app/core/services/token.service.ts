@@ -295,11 +295,11 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTokenHolderNFT(payload: { limit: number; contractAddress: string }) {
+  getListTokenHolderNFT(payload: { limit: string | number; offset?: string | number; contractAddress: string }) {
     const operationsDoc = `
-    query queryListHolderNFT($contract_address: String, $limit: Int = 10) {
+    query queryListHolderNFT($contract_address: String, $limit: Int = 10, $offset: Int) {
       ${this.envDB} {
-        view_count_holder_cw721(limit: $limit, where: {contract_address: {_eq: $contract_address}}, order_by: {count: desc}) {
+        view_count_holder_cw721(limit: $limit, offset: $offset, where: {contract_address: {_eq: $contract_address}}, order_by: {count: desc}) {
           count
           owner
         }
@@ -316,6 +316,7 @@ export class TokenService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload?.limit || 20,
+          offset: payload.offset || 0,
           contract_address: payload?.contractAddress,
         },
         operationName: 'queryListHolderNFT',
@@ -511,7 +512,7 @@ export class TokenService extends CommonService {
         map((data) => {
           if (data) {
             const { coinMarkets, tokensMarket } = data;
-            
+
             return tokensMarket.map((token) => {
               if (!token.coin_id) {
                 return token;
@@ -594,7 +595,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getDenomHolder(denomHash: string, address: string = null): Observable<any> {
+  getDenomHolder(payload: { denomHash: string; limit?: number; offset?: number; address?: string }): Observable<any> {
     const operationsDoc = `
     query queryHolderIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
       ${this.envDB} {
@@ -616,8 +617,10 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          denom: denomHash,
-          address: address,
+          denom: payload.denomHash,
+          address: payload.address,
+          limit: payload.limit || 100,
+          offset: payload.offset || 0,
         },
         operationName: 'queryHolderIBC',
       })
@@ -626,5 +629,9 @@ export class TokenService extends CommonService {
 
   getTokenSupply() {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}`);
+  }
+
+  getAmountNative(address: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/account/${address}`).pipe(catchError((_) => of([])));
   }
 }
