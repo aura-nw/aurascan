@@ -177,7 +177,7 @@
                         ((element.totalSupply | gte: 1000000) || (element.totalSupply | lt: 0.001)) &&
                         element.totalSupply != 0
                       "
-                      [content]="element.totalSupply | mask: 'separator.6'">
+                      [content]="element.totalSupply | mask: 'separator'">
                     </app-tooltip-customize>
                   </div>
                 </ng-container>

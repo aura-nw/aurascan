@@ -441,7 +441,7 @@
                     </span>
                     <app-tooltip-customize
                       *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
-                      [content]="data[template.matColumnDef] | mask: 'separator.6'">
+                      [content]="data[template.matColumnDef] | mask: 'separator'">
                     </app-tooltip-customize>
                   </div>
                   <div *ngIf="!data[template.matColumnDef]">-</div>
