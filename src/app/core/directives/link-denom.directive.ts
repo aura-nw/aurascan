@@ -10,6 +10,7 @@ export class LinkDenomDirective {
   linkItem = '';
 
   @Input() appLinkDenom: string;
+  @Input() isDisable: boolean = false;
 
   @HostListener('click', ['$event'])
   linkEvent(event) {
@@ -22,11 +23,12 @@ export class LinkDenomDirective {
     private environmentService: EnvironmentService,
     public router: Router,
     private elRef: ElementRef,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.addLink();
+    if (!this.isDisable) {
+      this.addLink();
+    }
   }
 
   addLink() {
