@@ -11,7 +11,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { isAddress, isContract, isSafari, isValidBench32Address } from 'src/app/core/utils/common/validation';
+import { isAddress, isSafari } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-watchlist',
