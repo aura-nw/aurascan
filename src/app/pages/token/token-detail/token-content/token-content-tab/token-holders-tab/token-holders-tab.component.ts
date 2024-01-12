@@ -235,6 +235,22 @@ export class TokenHoldersTabComponent implements OnInit {
           this.totalHolder = element?.account_balance_aggregate?.aggregate?.count;
 
           let accountBalance = element['account_balance'];
+          if (this.tokenDetail.modeToken === this.EModeToken.IBCCoin) {
+            accountBalance?.forEach((item) => {
+              item.balance = item.amount;
+              item.owner = item.account?.address;
+              item.percent_hold = BigNumber(item.amount)
+                .dividedBy(this.tokenDetail?.totalSupply)
+                .multipliedBy(100);
+              item.value =
+                BigNumber(item.amount)
+                  .multipliedBy(this.tokenDetail?.price || 0)
+                  .dividedBy(BigNumber(10).pow(this.decimalValue))
+                  .toFixed() || 0;
+            });
+            return of(accountBalance);
+          }
+
           const addressList = accountBalance?.map((k) => {
             return k.account?.address;
           });
@@ -253,6 +269,10 @@ export class TokenHoldersTabComponent implements OnInit {
                     .dividedBy(BigNumber(10).pow(this.decimalValue))
                     .toFixed() || 0;
               });
+
+              if (accountBalance?.length == 1 && this.keyWord) {
+                this.tokenService.filterBalanceNative$.next(accountBalance[0]?.balance);
+              }
 
               // sort list data with amount desc
               const sortData = accountBalance?.sort((a, b) => this.compare(a.amount, b.amount, false));
