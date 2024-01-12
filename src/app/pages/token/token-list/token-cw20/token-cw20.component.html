@@ -188,7 +188,7 @@
             <ng-container matColumnDef="inChainValue">
               <th mat-header-cell *matHeaderCellDef>In-Chain Supply Value</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <ng-container *ngIf="element.price > 0; else zeroValue">
+                <ng-container *ngIf="element.price > 0 && element.totalSupply > 0; else zeroValue">
                   <div class="aura-tooltip-contain">
                     <div class="aura-tooltip-object">
                       <div class="text--gray-1 item-amount">
@@ -285,7 +285,7 @@
               </div>
               <div class="d-flex justify-content-between mt-3">
                 <div class="text--gray-4 body-mob">In-Chain Supply Value</div>
-                <ng-container *ngIf="data.price > 0; else zeroValue">
+                <ng-container *ngIf="data.price > 0 && data.totalSupply > 0; else zeroValue">
                   <div class="text--gray-1 item-amount">
                     <span *ngIf="(data.totalSupply | balance: 0 : true).multipliedBy(data.price).lt(0.01)">
                       {{ '< $0.01' }}
