@@ -6,6 +6,10 @@ import { EnvironmentService } from '../data-services/environment.service';
 export class DecodeDataPipe implements PipeTransform {
   constructor(private environmentService: EnvironmentService) {}
   transform(value: string): string {
+    if (!value) {
+      return value;
+    }
+
     const cosmos_sdk_version = this.environmentService?.chainConfig?.cosmos_sdk_version || 'v0.47.4';
     return gte(cosmos_sdk_version, 'v0.47.4') ? value : atob(value);
   }
