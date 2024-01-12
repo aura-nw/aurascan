@@ -120,8 +120,9 @@ export class TokenOverviewComponent implements OnInit {
     }
   }
 
-  getDenomHolder(paramData){
-    this.tokenService.getDenomHolder(paramData).subscribe({
+  getDenomHolder(paramData: string){
+    const payload = {denomHash: paramData}
+    this.tokenService.getDenomHolder(payload).subscribe({
       next: (res) => {
         this.tokenDetail.holder = res?.account_balance_aggregate.aggregate.count;
       },

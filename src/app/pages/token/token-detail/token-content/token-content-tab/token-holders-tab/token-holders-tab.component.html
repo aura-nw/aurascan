@@ -16,11 +16,7 @@
 <!-- Table -->
 <div class="row">
   <div class="col-12">
-    <div *ngIf="loading" class="m-auto">
-      <app-loading-sprint></app-loading-sprint>
-    </div>
-    <ng-container *ngIf="pageData?.length > 0; else noValues">
-      <div class="overflow-scroll-x aura-table-contain">
+      <div class="overflow-scroll-x" *ngIf="pageData?.length > 0; else noValues">
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of template; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
@@ -39,7 +35,7 @@
                 <div [classList]="[template.cssClass]">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'id'">
-                      <span class="token-id">{{ pageData?.pageIndex * 20 + i + 1 }}</span>
+                      <span class="token-id">{{ pageData?.pageIndex * pageData?.pageSize + i + 1 }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'owner'">
                       <app-name-tag
@@ -144,8 +140,9 @@
         (paginator)="paginatorEmit($event)"
         (pageEvent)="pageEvent($event)">
       </app-paginator>
-    </ng-container>
+
     <ng-template #noValues>
+      <app-loading-sprint *ngIf="loading"></app-loading-sprint>
       <app-table-no-data *ngIf="!loading" [textNull]="errTxt"></app-table-no-data>
     </ng-template>
   </div>

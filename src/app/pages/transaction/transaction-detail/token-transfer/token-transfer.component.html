@@ -30,7 +30,10 @@
                                 [appLinkDenom]="
                                   (data | marketInfo: 'symbol') == coinInfo.coinDenom
                                     ? coinInfo.coinMinimalDenom
-                                    : (data?.cw20_contract?.ibc_denom)
+                                    : data?.cw20_contract?.ibc_denom
+                                "
+                                [isDisable]="
+                                  (data | marketInfo: 'symbol') != coinInfo.coinDenom && !data?.cw20_contract?.ibc_denom
                                 ">
                                 {{ data | marketInfo: 'symbol' | ellipsis: maxLengthSymbol }}
                               </span>
