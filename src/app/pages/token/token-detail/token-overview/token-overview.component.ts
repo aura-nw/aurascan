@@ -2,11 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { getBalance } from 'src/app/core/utils/common/parsing';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-token-overview',
@@ -49,10 +51,12 @@ export class TokenOverviewComponent implements OnInit {
         100;
     }
 
-    this.tokenDetail['isHolderUp'] = true;
-    if (this.tokenDetail.holderChange < 0) {
-      this.tokenDetail['isHolderUp'] = false;
-      this.tokenDetail.holderChange = Math.abs(this.tokenDetail.holderChange);
+    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+      this.tokenDetail['isHolderUp'] = true;
+      if (this.tokenDetail.holderChange < 0) {
+        this.tokenDetail['isHolderUp'] = false;
+        this.tokenDetail.holderChange = Math.abs(this.tokenDetail.holderChange);
+      }
     }
 
     this.tokenDetail['supplyAmount'] = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
@@ -91,12 +95,23 @@ export class TokenOverviewComponent implements OnInit {
 
     const supplyAmount = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
     const supplyValue = new BigNumber(supplyAmount).multipliedBy(nativeToken?.current_price).toFixed();
+
+    const dataNative = local.getItem<any>(STORAGE_KEYS.DATA_NATIVE);
+    let changePercent = 0;
+    if (dataNative?.tokenHolderStatistics?.length > 1) {
+      changePercent =
+        (dataNative.tokenHolderStatistics[1].totalHolder * 100) / dataNative.tokenHolderStatistics[0].totalHolder - 100;
+    }
+
     this.tokenDetail = {
       ...this.tokenDetail,
       price: nativeToken?.current_price || this.tokenDetail.price,
       change: nativeToken?.price_change_percentage_24h,
       supplyAmount,
       supplyValue,
+      holder: dataNative.tokenHolderStatistics[dataNative.tokenHolderStatistics?.length - 1]?.totalHolder,
+      isHolderUp: changePercent >= 0,
+      holderChange: Math.abs(changePercent),
     };
   }
 
@@ -112,7 +127,6 @@ export class TokenOverviewComponent implements OnInit {
         break;
       case EModeToken.Native:
         this.getInfoNative();
-        this.getDenomHolder(this.tokenDetail?.denomHash);
         break;
       case EModeToken.IBCCoin:
         this.getDenomHolder(this.tokenDetail?.denomHash);
@@ -120,12 +134,23 @@ export class TokenOverviewComponent implements OnInit {
     }
   }
 
-  getDenomHolder(paramData: string){
-    const payload = {denomHash: paramData}
-    this.tokenService.getDenomHolder(payload).subscribe({
-      next: (res) => {
-        this.tokenDetail.holder = res?.account_balance_aggregate.aggregate.count;
-      },
-    });
+  getDenomHolder(paramData: string) {
+    const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
+    const holderInfo = listTokenIBC?.find((k) => k['denom'] == paramData);
+    if (holderInfo?.denom) {
+      let changePercent = 0;
+      if (holderInfo?.tokenHolderStatistics?.length > 1) {
+        changePercent =
+          (holderInfo.tokenHolderStatistics[1]?.totalHolder * 100) / holderInfo.tokenHolderStatistics[0]?.totalHolder -
+          100;
+      }
+
+      this.tokenDetail = {
+        ...this.tokenDetail,
+        holder: holderInfo.tokenHolderStatistics[holderInfo.tokenHolderStatistics?.length - 1]?.totalHolder,
+        isHolderUp: changePercent >= 0,
+        holderChange: Math.abs(changePercent),
+      };
+    }
   }
 }

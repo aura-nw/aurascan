@@ -177,11 +177,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
     this.nameTagService.listNameTag = listNameTag;
 
-    // get list name validator form local storage
-    const listTokenIBC = local.getItem<[]>(STORAGE_KEYS.LIST_TOKEN_IBC);
-    if (!listTokenIBC) {
-      this.commonService.listTokenIBC = listTokenIBC;
-    }
+    // get list token IBC
     this.getListTokenIBC();
   }
 

@@ -135,7 +135,10 @@ export class TokenContentComponent implements OnInit {
         }
       } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
         this.isSearchAddress = true;
-        this.getInfoAddress(this.paramQuery);
+        this.tokenService.filterBalanceNative$.subscribe((res) => {
+          this.infoSearch['balance'] = res || 0;
+          this.setFilterValue(this.infoSearch['balance']);
+        });
       }
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
@@ -206,15 +209,7 @@ export class TokenContentComponent implements OnInit {
         if (tempBalance?.data?.balances?.length > 0) {
           this.infoSearch['balance'] =
             tempBalance?.data?.balances?.find((k) => k.denom === this.tokenDetail?.denomHash)?.amount || 0;
-          this.infoSearch['value'] = new BigNumber(this.infoSearch['balance'] || 0)
-            .multipliedBy(this.tokenDetail.price || 0)
-            .dividedBy(Math.pow(10, this.tokenDetail.decimals))
-            .toFixed();
-          this.infoSearch['valueAura'] = new BigNumber(this.infoSearch['balance'] || 0)
-            .multipliedBy(this.tokenDetail.price || 0)
-            .dividedBy(Math.pow(10, this.tokenDetail.decimals))
-            .dividedBy(this.tokenService.nativePrice)
-            .toFixed();
+          this.setFilterValue(this.infoSearch['balance']);
         }
       }
     } catch (error) {}
@@ -236,5 +231,17 @@ export class TokenContentComponent implements OnInit {
     this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
       this.infoSearch['balance'] = res.cw721_token_aggregate?.aggregate?.count || 0;
     });
+  }
+
+  setFilterValue(balance: string | number) {
+    this.infoSearch['value'] = new BigNumber(balance || 0)
+      .multipliedBy(this.tokenDetail.price || 0)
+      .dividedBy(Math.pow(10, this.tokenDetail.decimals))
+      .toFixed();
+    this.infoSearch['valueAura'] = new BigNumber(balance || 0)
+      .multipliedBy(this.tokenDetail.price || 0)
+      .dividedBy(Math.pow(10, this.tokenDetail.decimals))
+      .dividedBy(this.tokenService.nativePrice)
+      .toFixed();
   }
 }
