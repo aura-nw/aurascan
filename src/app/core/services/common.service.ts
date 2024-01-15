@@ -24,7 +24,6 @@ export class CommonService {
   chainId = this._environmentService.chainId;
   addressPrefix = '';
   listValidator = [];
-  listTokenIBC = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this._environmentService.config.asObservable().subscribe((res) => {
