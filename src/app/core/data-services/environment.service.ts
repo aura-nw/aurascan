@@ -16,7 +16,7 @@ export interface IConfiguration {
       url: string;
     };
     nativeName: string;
-    delegateAddress: string;
+    bondedTokensPoolAddress: string;
   };
   chainConfig: {
     stakingTime: string;

@@ -60,7 +60,7 @@ export class TokenHoldersTabComponent implements OnInit {
   linkAddress: string;
   countTotal = 0;
 
-  delegateAddress = this.environmentService.environment.delegateAddress;
+  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -79,7 +79,7 @@ export class TokenHoldersTabComponent implements OnInit {
 
     // get minus balance delegate address
     if (this.tokenDetail.modeToken === EModeToken.Native) {
-      this.getNativeBalance(this.delegateAddress).subscribe((res) => {
+      this.getNativeBalance(this.bondedTokensPoolAddress).subscribe((res) => {
         this.tokenDetail['totalSupply'] = BigNumber(this.tokenDetail?.totalSupply).minus(res.data?.amount) || 0;
       });
     }
