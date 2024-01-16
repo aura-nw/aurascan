@@ -124,7 +124,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
       if (dataNameTag) {
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, JSON.stringify({ address: this.userAddress }));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, { address: this.userAddress });
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {

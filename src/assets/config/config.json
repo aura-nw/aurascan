@@ -9,7 +9,9 @@
     "notice": {
       "content": null,
       "url": null
-    }
+    },
+    "nativeName": "Aura",
+    "bondedTokensPoolAddress": "aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"
   },
   "chainConfig": {
     "stakingTime": "86400",
@@ -36,6 +38,13 @@
         "name": "Serenity Aura 3",
         "display": "AURA",
         "denom": "ibc/0BE15F56B56143F8E36B346577011F6661D3445EDC3B81891A9779F85ED90D75",
+        "decimal": 6,
+        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
+      },
+      {
+        "name": "Serenity Aura 4",
+        "display": "AURA4",
+        "denom": "ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20",
         "decimal": 6,
         "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
       }
@@ -82,7 +91,9 @@
         "average": 0.0025,
         "high": 0.004
       },
-      "features": ["ibc-transfer"],
+      "features": [
+        "ibc-transfer"
+      ],
       "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
       "logo": "https://i.imgur.com/zi0mTYb.png",
       "explorer": "https://explorer.dev.aura.network/",
@@ -99,7 +110,9 @@
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": ["aura-network"]
+      "ids": [
+        "aura-network"
+      ]
     },
     "google": {
       "url": "apps.googleusercontent.com",
