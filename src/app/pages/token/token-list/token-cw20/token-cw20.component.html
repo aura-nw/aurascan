@@ -206,7 +206,7 @@
                         (element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)
                       "
                       [content]="
-                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFormat()
+                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFixed()
                           | mask: 'separator'
                       ">
                     </app-tooltip-customize>
