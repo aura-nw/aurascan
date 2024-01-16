@@ -91,7 +91,6 @@ export const NUMBER_ONLY_DECIMAL = '1.0-0';
 export const NUMBER_2_DIGIT = '1.2-2';
 export const NUMBER_6_DIGIT = '1.2-6';
 export const TOTAL_GROUP_TRACKING = 7;
-export const ADDRESS_DELEGATE = 'aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw';
 export const STORAGE_KEYS = {
   USER_EMAIL: 'userEmail',
   LIST_VALIDATOR: 'listValidator',

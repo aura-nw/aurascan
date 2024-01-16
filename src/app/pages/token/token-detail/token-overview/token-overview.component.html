@@ -65,12 +65,12 @@
                             {{ tokenDetail.price == 0 ? '$0.00' : '< $0.001' }}
                           </span>
                           <span *ngIf="tokenDetail.price | gte: 0.001">
-                            ${{ +tokenDetail.price || 0 | mask: 'separator.3' }}
+                            ${{ +tokenDetail.price | mask: 'separator.3' }}
                           </span>
                         </div>
 
                         <app-tooltip-customize
-                          *ngIf="(+tokenDetail.price | lt: 0.001) || (+tokenDetail.price | gte: 1000000)"
+                          *ngIf="(tokenDetail.price | lt: 0.001) || (tokenDetail.price | gte: 1000000)"
                           [content]="+tokenDetail.price | mask: 'separator'">
                         </app-tooltip-customize>
                       </div>

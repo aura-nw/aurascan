@@ -83,7 +83,7 @@
                     <span *ngIf="!this.typeContract || this.typeContract === contractType.CW20">
                       <ng-container
                         *ngIf="
-                          tokenDetail.modeToken !== EModeToken.Native || data.owner !== ADDRESS_DELEGATE;
+                          tokenDetail.modeToken !== EModeToken.Native || data.owner !== delegateAddress;
                           else noData
                         ">
                         {{ data[template.matColumnDef] | formatDigit: 2 }}%
