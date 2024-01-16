@@ -51,7 +51,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   chainInfo = this.environmentService.chainInfo.currencies[0];
   chainName = this.environmentService.chainInfo.chainName;
   image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   isLoadingTable = true;
   filterType = [];
   ETokenCoinType = ETokenCoinType;
@@ -104,6 +103,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   async getListTokenIBC() {
     this.listTokenIBC = local.getItem(STORAGE_KEYS.LIST_TOKEN_IBC);
+
+    if (this.listTokenIBC?.length == 0) {
+      return;
+    }
+
     const res = await this.tokenService.getTokenSupply();
     const supply = _.get(res, 'data.supply');
     this.listTokenIBC?.forEach((token) => {
@@ -389,7 +393,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     if (this.textSearch?.trim().length > 0) {
       this.searchData();
     } else {
-      this.drawTable(dataList);
+      this.drawTable(dataList, true);
       this.pageData.length = this.dataSource.data.length;
       this.pageChange.selectPage(0);
     }

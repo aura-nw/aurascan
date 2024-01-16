@@ -23,8 +23,6 @@ export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
   tokenDetail: any;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   contractType = ContractRegisterType;
   errTxt: string;
   EModeToken = EModeToken;
@@ -180,7 +178,7 @@ export class TokenDetailComponent implements OnInit {
   }
 
   async getDataNative(denomNative: string) {
-    const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative);
+    const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative).catch(() => 0);
     this.tokenDetail = {
       modeToken: EModeToken.Native,
       name: this.chainInfo.chainName,
@@ -190,7 +188,7 @@ export class TokenDetailComponent implements OnInit {
       price: this.tokenService.nativePrice || 0,
       change: 0,
       decimals: this.chainInfo?.currencies[0].coinDecimals,
-      totalSupply: _.get(tempTotal, 'data.amount.amount' || 0),
+      totalSupply: _.get(tempTotal, 'data.amount.amount', 0),
     };
     this.loading = false;
   }

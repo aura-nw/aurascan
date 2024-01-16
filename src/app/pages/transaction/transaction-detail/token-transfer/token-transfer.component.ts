@@ -18,8 +18,6 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 })
 export class TokenTransferComponent implements OnInit {
   @Input() transaction: Number;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   nullAddress = NULL_ADDRESS;
   dataSourceFTs = new MatTableDataSource<any>([]);
   dataSourceNFTs = new MatTableDataSource<any>([]);
@@ -163,10 +161,7 @@ export class TokenTransferComponent implements OnInit {
   }
 
   isContractAddress(address) {
-    if (address?.startsWith('aura') && address?.length === LENGTH_CHARACTER.CONTRACT) {
-      return true;
-    }
-    return false;
+    return this.commonService.isValidContract(address);
   }
 
   encodeData(data) {
