@@ -1,14 +1,14 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable, catchError, map, of, switchMap } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { NotificationsService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  isReloadToken = false;
   constructor(
     private environmentService: EnvironmentService,
     private userService: UserService,
@@ -17,40 +17,42 @@ export class JwtInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!this.environmentService.horoscope) {
+    if (!this.environmentService.config) {
       return next.handle(request);
     }
-    const graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
+
     // get list name tag if not login email
     const user = this.userService.getCurrentUser();
-    if (!user) {
+    const isApiBE = request.url.indexOf(this.environmentService.backend) > -1;
+    if (!isApiBE || !user?.accessToken || request.url?.indexOf('refresh-token') > -1) {
       return next.handle(request);
     }
 
     let jwtToken;
     try {
-      jwtToken = this.parseJwt(user.accessToken);
+      jwtToken = this.parseJwt(user?.accessToken);
     } catch {
-      return next.handle(request);
+      return EMPTY;
     }
 
-    if (!this.isReloadToken && jwtToken.exp < Date.now() / 1000) {
-      this.isReloadToken = true;
+    if (jwtToken.exp >= Date.now() / 1000) {
+      if (user.accessToken) {
+        request = request.clone({
+          setHeaders: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        });
+      }
+      return next.handle(request);
+    } else {
       const payload = {
         refreshToken: user.refreshToken,
       };
-      this.userService.refreshToken(payload).subscribe({
-        next: (res) => {
-          this.isReloadToken = false;
-          if (res.error?.statusCode === 400) {
-            this.notificationsService.deleteToken();
-            this.userService.logout();
-            // redirect to log out
-            this.router.navigate(['/login']);
 
-            setTimeout(() => {
-              location.reload();
-            }, 500);
+      return this.userService.refreshToken(payload).pipe(
+        switchMap((res) => {
+          if (res.error?.statusCode === 400) {
+            throw new Error(res.error);
           }
 
           const userData = {
@@ -58,32 +60,25 @@ export class JwtInterceptor implements HttpInterceptor {
             accessToken: res.accessToken,
             refreshToken: res.refreshToken,
           };
-
-          // local.setItem(STORAGE_KEYS.USER_DATA, userData);
           this.userService.setUser(userData);
-        },
-        error: (err) => {
-          this.isReloadToken = false;
 
+          request = request.clone({
+            setHeaders: {
+              Authorization: `Bearer ${userData.accessToken}`,
+            },
+          });
+          return next.handle(request);
+        }),
+        catchError((error) => {
           this.notificationsService.deleteToken();
           this.userService.logout();
+
           this.router.navigate(['/login']);
 
-          setTimeout(() => {
-            location.reload();
-          }, 500);
-        },
-      });
+          return EMPTY;
+        }),
+      );
     }
-
-    if (user.accessToken && request.url.indexOf(graphUrl) === -1) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: 'Bearer ' + user.accessToken,
-        },
-      });
-    }
-    return next.handle(request);
   }
 
   parseJwt(token) {

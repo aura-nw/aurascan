@@ -104,7 +104,7 @@
                         ((tokenDetail.supplyAmount | gte: 1000000) || (tokenDetail.supplyAmount | lt: 0.001)) &&
                         tokenDetail.supplyAmount != 0
                       "
-                      [content]="tokenDetail.supplyAmount | mask: 'separator.6'">
+                      [content]="tokenDetail.supplyAmount | mask: 'separator'">
                     </app-tooltip-customize>
                   </div>
                   {{ tokenDetail?.symbol }}
@@ -119,10 +119,17 @@
             <div class="d-flex">
               <span class="text--gray-5 body-02 fixed-col">In-Chain Supply Value</span>
               <div class="body-02 text--gray-11">
-                <ng-container *ngIf="tokenDetail.price > 0; else zeroValue">
-                  <div class="aura-tooltip-contain">
-                    <div class="aura-tooltip-object">
-                      <div class="text--gray-1 item-amount">
+                <div class="aura-tooltip-contain">
+                  <div class="aura-tooltip-object">
+                    <div class="text--gray-1 item-amount">
+                      <span
+                        *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
+                        {{ tokenDetail.price == 0 || tokenDetail.supplyAmount == 0 ? '$0.00' : '< $0.01' }}
+                      </span>
+                      <div
+                        *ngIf="
+                          (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)
+                        ">
                         <span
                           *ngIf="
                             (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)
@@ -151,7 +158,19 @@
                       ">
                     </app-tooltip-customize>
                   </div>
-                </ng-container>
+                  <app-tooltip-customize
+                    *ngIf="
+                      tokenDetail.price > 0 &&
+                      tokenDetail.supplyAmount > 0 &&
+                      ((tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01) ||
+                        (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(1000000))
+                    "
+                    [content]="
+                      (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).toFormat()
+                        | mask: 'separator'
+                    ">
+                  </app-tooltip-customize>
+                </div>
               </div>
             </div>
           </td>
@@ -204,5 +223,3 @@
     </table>
   </div>
 </div>
-
-<ng-template #zeroValue> <span>$0.00</span></ng-template>
