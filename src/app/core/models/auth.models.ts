@@ -1,6 +1,6 @@
 export interface IUser {
   email: string;
-  refreshToken: string;
+  refreshToken?: string;
   accessToken: string;
   provider?: ELoginProvider;
 }

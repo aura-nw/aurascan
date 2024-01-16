@@ -1,3 +1,4 @@
+import { GoogleLoginProvider, SocialAuthService, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
@@ -8,7 +9,6 @@ import { ELoginProvider } from 'src/app/core/models/auth.models';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -46,9 +46,12 @@ export class LoginComponent implements OnInit {
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
     private cdr: ChangeDetectorRef,
+    private authService: SocialAuthService,
   ) {}
 
   ngOnInit(): void {
+    this.initGoogleLogin();
+
     // check exit email
     const userEmail = this.userService.getCurrentUser()?.email;
     if (userEmail) {
@@ -62,7 +65,10 @@ export class LoginComponent implements OnInit {
     }
 
     this.formInit();
-    this.initGoogleLogin();
+    this.loginForm = this.fb.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+    });
   }
 
   get getEmail() {
@@ -101,11 +107,6 @@ export class LoginComponent implements OnInit {
     this.errorMessage = [];
     this.isForgotScreen = false;
     this.isError = false;
-
-    // load google api script
-    this.loadScript('GoogleLoginProvider', 'https://accounts.google.com/gsi/client', () => {
-      // Callback
-    });
   }
 
   checkVerifyPassword() {
@@ -237,47 +238,48 @@ export class LoginComponent implements OnInit {
   }
 
   initGoogleLogin() {
-    // inject callback function
-    window.handleCredentialResponse = (response) => {
-      if (response.credential) {
-        const payload = {
-          token: response.credential,
-          site: 'main',
-        };
-
-        this.userService.loginWithGoogle(payload).subscribe({
-          next: (res) => {
-            local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
-
-            this.userService.setUser({
-              ...res,
-              email: res.userEmail || res.email,
-              provider: res.provider || ELoginProvider.Password,
-            });
-
-            this.route.navigate(['/profile']);
-          },
-          error: (err) => {
-            this.addError(err?.error?.error?.details?.message);
-          },
-        });
-      }
+    const initialConfig: SocialAuthServiceConfig = {
+      autoLogin: false,
+      providers: [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider(this.clientId),
+        },
+        // Add other providers if needed
+      ],
     };
-    // load google api script
-    this.loadScript('GoogleLoginProvider', 'https://accounts.google.com/gsi/client', () => {
-      // Callback
-    });
-  }
 
-  loadScript(id: string, src: string, onload: any): void {
-    // get document if platform is only browser
-    if (typeof document !== 'undefined' && !document.getElementById(id)) {
-      let signInJS = document.createElement('script');
-      signInJS.async = true;
-      signInJS.src = src;
-      signInJS.onload = onload;
-      const parentElement = document.head;
-      parentElement.appendChild(signInJS);
-    }
+    // this.authService.initialize(initialConfig);
+    
+    // Initialize GoogleLoginProvider with the initial client ID
+    const initialClientId = 'YOUR_INITIAL_GOOGLE_CLIENT_ID';
+    // this.authService.initState(new GoogleLoginProvider(initialClientId));
+
+    // const googleProvider = this.authService.getProvider(GoogleLoginProvider.PROVIDER_ID);
+
+
+    this.authService.authState.subscribe((response) => {
+      const payload = {
+        token: response.idToken,
+        site: 'main',
+      };
+
+      this.userService.loginWithGoogle(payload).subscribe({
+        next: (res) => {
+          local.setItem(STORAGE_KEYS.REGISTER_FCM, 'true');
+
+          this.userService.setUser({
+            ...res,
+            email: res.userEmail || res.email,
+            provider: res.provider || ELoginProvider.Password,
+          });
+
+          this.route.navigate(['/profile']);
+        },
+        error: (err) => {
+          this.addError(err?.error?.error?.details?.message);
+        },
+      });
+    });
   }
 }

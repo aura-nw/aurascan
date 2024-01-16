@@ -26,6 +26,8 @@ import { LayoutsModule } from './layouts/layouts.module';
 import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
 import { NgHttpCachingLocalStorage, NgHttpCachingModule, NgHttpCachingStrategy } from 'ng-http-caching';
+import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 initializeApp(environment.firebaseConfig);
 
 @NgModule({
@@ -80,6 +82,20 @@ initializeApp(environment.firebaseConfig);
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
     { provide: MAT_DATE_FORMATS, useValue: MAT_DATE_FORMATS_VALUE },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            // 497080190781-ggrc5026i4ha2d834liaimbsalp7lqet.apps.googleusercontent.com
+            // 3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08.apps.googleusercontent.com/
+            provider: new GoogleLoginProvider('')
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    },
   ],
   bootstrap: [AppComponent],
 })

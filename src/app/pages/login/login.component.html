@@ -184,25 +184,10 @@
           </div>
           <div class="py-6 text--white body-01">or</div>
 
-          <div class="box-sign-google">
-            <div
-              id="g_id_onload"
-              [attr.data-client_id]="clientId"
-              data-context="use"
-              data-ux_mode="popup"
-              data-callback="handleCredentialResponse"
-              data-auto_prompt="false"></div>
-
-            <div
-              class="g_id_signin"
-              data-type="standard"
-              data-shape="rectangular"
-              data-theme="outline"
-              data-text="signin_with"
-              data-size="large"
-              data-locale="en-GB"
-              data-logo_alignment="left"></div>
-          </div>
+          <asl-google-signin-button 
+            type="standard" id="g_id_signin" class="d-flex justify-content-center" size='medium' text="signup_with" 
+            data-locale="en" context="signin" >
+          </asl-google-signin-button>
 
           <div class="mt-lg-6 mt-4 body-mob">
             <span class="body-02">By continuing, you agree to our</span>
