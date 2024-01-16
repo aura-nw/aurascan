@@ -59,14 +59,13 @@
                 <div class="body-02">
                   <div class="text--gray-11">
                     <span class="small-body">
-                      $
                       <div class="aura-tooltip-contain">
                         <div class="aura-tooltip-object">
                           <span *ngIf="tokenDetail.price | lt: 0.001">
                             {{ tokenDetail.price == 0 ? '$0.00' : '< $0.001' }}
                           </span>
                           <span *ngIf="tokenDetail.price | gte: 0.001">
-                            {{ +tokenDetail.price || 0 | mask: 'separator.3' }}
+                            ${{ +tokenDetail.price || 0 | mask: 'separator.3' }}
                           </span>
                         </div>
 

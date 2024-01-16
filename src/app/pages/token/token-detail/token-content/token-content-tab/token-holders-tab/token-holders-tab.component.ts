@@ -6,7 +6,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { forkJoin, map, of, switchMap } from 'rxjs';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { ADDRESS_DELEGATE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -59,6 +59,7 @@ export class TokenHoldersTabComponent implements OnInit {
   EModeToken = EModeToken;
   linkAddress: string;
   countTotal = 0;
+  ADDRESS_DELEGATE = ADDRESS_DELEGATE;
 
   chainInfo = this.environmentService.chainInfo;
 
@@ -75,6 +76,13 @@ export class TokenHoldersTabComponent implements OnInit {
 
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
+
+    // get minus balance delegate address
+    if (this.tokenDetail.modeToken === EModeToken.Native) {
+      this.getNativeBalance(ADDRESS_DELEGATE).subscribe((res) => {
+        this.tokenDetail['totalSupply'] = BigNumber(this.tokenDetail?.totalSupply).minus(res.data?.amount) || 0;
+      });
+    }
   }
 
   getListData() {

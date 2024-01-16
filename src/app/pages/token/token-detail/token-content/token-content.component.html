@@ -68,7 +68,7 @@
         </div>
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
-          <ng-container *ngIf="tokenDetail.price > 0">
+          <ng-container *ngIf="tokenDetail.price > 0 && infoSearch['balance'] > 0; else zeroValue">
             <div class="aura-tooltip-contain" *ngIf="infoSearch['balance']">
               <span class="aura-tooltip-object" *ngIf="infoSearch['value'] | lt: 0.01">
                 {{ '< $0.01' }}
@@ -194,3 +194,5 @@
       [typeContract]="tokenDetail?.type"></app-token-contract-tab>
   </div>
 </section>
+
+<ng-template #zeroValue>$0.00</ng-template>
