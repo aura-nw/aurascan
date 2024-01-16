@@ -146,7 +146,7 @@
                   <div class="aura-tooltip-contain">
                     <div class="mb-1 text--gray-1 aura-tooltip-object">
                       <span *ngIf="element.price | lt: 0.000001">{{ '< $0.000001' }}</span>
-                      <span *ngIf="element.price | gte: 0.000001">{{ element.price | mask: 'separator.6' }}</span>
+                      <span *ngIf="element.price | gte: 0.000001">{{ +element.price | mask: 'separator.6' }}</span>
                     </div>
                     <app-tooltip-customize *ngIf="element.price | lt: 0.000001" [content]="element.price">
                     </app-tooltip-customize>
@@ -206,7 +206,7 @@
                         (element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)
                       "
                       [content]="
-                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFormat()
+                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFixed()
                           | mask: 'separator'
                       ">
                     </app-tooltip-customize>
