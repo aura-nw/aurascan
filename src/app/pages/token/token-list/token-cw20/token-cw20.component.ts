@@ -209,8 +209,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     const cw20_total_holder_stats = item.cw20_total_holder_stats;
                     let changePercent = 0;
                     if (cw20_total_holder_stats?.length > 1) {
-                      changePercent =
-                        (cw20_total_holder_stats[1].total_holder * 100) / cw20_total_holder_stats[0].total_holder - 100;
+                      const [before, after, ..._] = cw20_total_holder_stats;
+                      changePercent = before.total_holder == 0 ? 0 : (after * 100) / before.total_holder - 100;
                     }
                     const totalSupply = getBalance(item.total_supply, item.decimal);
 
