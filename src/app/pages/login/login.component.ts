@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
   isForgotScreen = false;
   isError = false;
   errorResendMsg = 'Only can do resend email after 5 minute, please wait and click Resend again.';
+  isNativeApp = false;
 
   clientId = this.environmentService.googleClientId;
 
@@ -49,6 +50,8 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.checkNativeApp();
+
     // check exit email
     const userEmail = this.userService.getCurrentUser()?.email;
     if (userEmail) {
@@ -278,6 +281,18 @@ export class LoginComponent implements OnInit {
       signInJS.onload = onload;
       const parentElement = document.head;
       parentElement.appendChild(signInJS);
+    }
+  }
+
+  checkNativeApp() {
+    if ((window.coin98 || window.leap) && window.innerWidth <= 800) {
+      try {
+        if (window.coin98 && window.coin98?.keplr['name']?.toLowerCase().indexOf('coin98') > -1) {
+          this.isNativeApp = true;
+        } else if (window.leap && window.leap['mode'] == 'mobile-web') {
+          this.isNativeApp = true;
+        }
+      } catch {}
     }
   }
 }
