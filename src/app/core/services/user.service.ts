@@ -56,7 +56,7 @@ export class UserService {
       this.userSubject$.next(user);
       local.setItem(STORAGE_KEYS.USER_DATA, user);
     } else {
-      // TODO: Handle null case
+      this.userSubject$.next(null);
     }
   }
 
