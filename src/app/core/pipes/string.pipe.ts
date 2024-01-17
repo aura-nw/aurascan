@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import * as _ from 'lodash';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
+import { CommonService } from '../services/common.service';
 
 @Pipe({ name: 'ellipsis' })
 export class EllipsisPipe implements PipeTransform {
@@ -46,5 +47,13 @@ export class CombineTxsMsgPipe implements PipeTransform {
     }
 
     return lst.splice(0, 3).join(', ');
+  }
+}
+
+@Pipe({ name: 'isContract' })
+export class IsContractPipe implements PipeTransform {
+  constructor(private commonService: CommonService) {}
+  transform(address: string): boolean {
+    return this.commonService.isValidContract(address);
   }
 }

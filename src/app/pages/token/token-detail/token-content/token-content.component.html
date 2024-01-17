@@ -21,8 +21,9 @@
           </div>
           <div class="mt-2">
             <app-name-tag
+              [iconContract]="textSearch | isContract"
               [value]="textSearch"
-              [url]="textSearch?.length > lengthNormalAddress ? '/contracts' : '/account'"
+              [url]="(textSearch | isContract) ? '/contracts' : '/account'"
               [fullText]="true"
               [widthAuto]="true"
               [tooltipPosition]="'tooltip--right'"
@@ -105,7 +106,6 @@
             </div>
             {{ coinInfo['coinDenom'] }})
           </ng-container>
-          <ng-container *ngIf="!(tokenDetail.price > 0)"> $0.00 (0 {{ coinInfo['coinDenom'] }})</ng-container>
         </div>
       </div>
     </div>
