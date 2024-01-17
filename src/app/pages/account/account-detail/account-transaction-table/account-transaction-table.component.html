@@ -464,8 +464,8 @@
                       <div class="item-show d-flex justify-content-between align-items-center">
                         <app-name-tag
                           [value]="item.fromAddress || currentAddress"
-                          [url]="(item.fromAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
-                          [iconContract]="(item.fromAddress || currentAddress)?.length > lengthAddress"
+                          [url]="((item.fromAddress || currentAddress) | isContract) ? 'contracts' : 'account'"
+                          [iconContract]="(item.fromAddress || currentAddress) | isContract"
                           [isLink]="
                             !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                             item.fromAddress !== currentAddress
@@ -510,8 +510,8 @@
                         <div [style]="'min-width: 148px'">
                           <app-name-tag
                             [value]="item.toAddress || currentAddress"
-                            [url]="(item.toAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
-                            [iconContract]="(item.toAddress || currentAddress)?.length > lengthAddress"
+                            [url]="((item.toAddress || currentAddress) | isContract) ? 'contracts' : 'account'"
+                            [iconContract]="(item.toAddress || currentAddress) | isContract"
                             [isLink]="
                               !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                               item.toAddress !== currentAddress

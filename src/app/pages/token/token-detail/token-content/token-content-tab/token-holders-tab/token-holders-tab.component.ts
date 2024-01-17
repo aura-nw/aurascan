@@ -240,6 +240,10 @@ export class TokenHoldersTabComponent implements OnInit {
       .getDenomHolder(payload)
       .pipe(
         switchMap((element) => {
+          if (element?.account_balance?.length === 0) {
+            return of([]);
+          }
+
           this.totalHolder = element?.account_balance_aggregate?.aggregate?.count;
 
           let accountBalance = element['account_balance'];
