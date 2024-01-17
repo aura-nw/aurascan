@@ -182,7 +182,7 @@
               >Register</a
             >
           </div>
-          <ng-container *ngIf="!isNativeApp">
+          <ng-container *ngIf="!environmentService.isNativeApp">
             <div class="py-6 text--white body-01">or</div>
 
             <div class="box-sign-google">
@@ -206,7 +206,7 @@
             </div>
           </ng-container>
 
-          <div class="mt-lg-6 body-mob {{!isNativeApp ? 'mt-4' : 'mt-6'}}">
+          <div class="mt-lg-6 body-mob {{!environmentService.isNativeApp ? 'mt-4' : 'mt-6'}}">
             <span class="body-02">By continuing, you agree to our</span>
             <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms"
               >Terms and Conditions</a
