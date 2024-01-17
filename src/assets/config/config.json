@@ -9,7 +9,9 @@
     "notice": {
       "content": null,
       "url": null
-    }
+    },
+    "nativeName": "Aura",
+    "bondedTokensPoolAddress": ""
   },
   "chainConfig": {
     "stakingTime": "86400",

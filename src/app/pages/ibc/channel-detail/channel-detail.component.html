@@ -225,14 +225,8 @@
             {
               label: 'Fee',
               class: 'text--gray-1 body-02-mob',
-              info:
-                (data.fee | mask: 'separator.6') +
-                '<span> ' +
-                ' <a class=text--primary href=' +
-                ('/tokens/token/' + coinInfo.coinMinimalDenom) +
-                '>' +
-                coinInfo.coinDenom +
-                '</a>'
+              info: (+data.fee | mask: 'separator.6') + '<span> ' +
+                ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + coinInfo.coinDenom + '</a>'
             }
           ]"></app-card-mob-channel>
       </div>

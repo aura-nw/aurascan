@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import * as _ from 'lodash';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, catchError, of, takeUntil } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -151,6 +151,10 @@ export class NotificationsService {
   }
 
   deleteToken() {
+    if (!this.currentFcmToken) {
+      return of(null);
+    }
+
     return this.http.delete<any>(`${this.apiUrl}/users/delete-notification-token/${this.currentFcmToken}`).subscribe({
       complete: () => {
         this.currentFcmToken = null;

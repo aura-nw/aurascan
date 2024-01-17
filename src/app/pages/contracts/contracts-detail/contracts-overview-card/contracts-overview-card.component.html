@@ -26,7 +26,7 @@
           </div>
           <ng-container *ngIf="(contractBalance | balance: decimal : true).gte(0.001)">
             <span class="aura-tooltip-object" [appBigNumber]="contractBalance" [decimal]="6"></span>
-            <span appLinkDenom>{{ denom }}</span>
+            <span appLinkDenom> {{ denom }}</span>
           </ng-container>
 
           <app-tooltip-customize
@@ -63,7 +63,7 @@
           </app-tooltip-customize>
 
           <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
-            (${{ tokenService.nativePrice | mask: 'separator.6' }}/{{ denom | uppercase }})
+            (${{ +tokenService.nativePrice | mask: 'separator.6' }}/{{ denom | uppercase }})
           </span>
         </div>
       </div>
