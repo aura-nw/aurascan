@@ -11,7 +11,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ContractService } from 'src/app/core/services/contract.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { getBalance } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({

@@ -261,14 +261,21 @@ export class TokenHoldersTabComponent implements OnInit {
           );
         }),
       )
-      .subscribe((res) => {
-        if (this.totalHolder > this.numberTopHolder) {
-          this.pageData.length = this.numberTopHolder;
-        } else {
-          this.pageData.length = this.totalHolder;
-        }
-        this.dataSource = new MatTableDataSource<any>(res);
-        this.loading = false;
+      .subscribe({
+        next: (res) => {
+          if (this.totalHolder > this.numberTopHolder) {
+            this.pageData.length = this.numberTopHolder;
+          } else {
+            this.pageData.length = this.totalHolder;
+          }
+          this.dataSource = new MatTableDataSource<any>(res);
+        },
+        error: () => {
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
       });
   }
 
