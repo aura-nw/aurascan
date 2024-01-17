@@ -182,29 +182,31 @@
               >Register</a
             >
           </div>
-          <div class="py-6 text--white body-01">or</div>
+          <ng-container *ngIf="!isNativeApp">
+            <div class="py-6 text--white body-01">or</div>
 
-          <div class="box-sign-google">
-            <div
-              id="g_id_onload"
-              [attr.data-client_id]="clientId"
-              data-context="use"
-              data-ux_mode="popup"
-              data-callback="handleCredentialResponse"
-              data-auto_prompt="false"></div>
+            <div class="box-sign-google">
+              <div
+                id="g_id_onload"
+                [attr.data-client_id]="clientId"
+                data-context="use"
+                data-ux_mode="popup"
+                data-callback="handleCredentialResponse"
+                data-auto_prompt="false"></div>
 
-            <div
-              class="g_id_signin"
-              data-type="standard"
-              data-shape="rectangular"
-              data-theme="outline"
-              data-text="signin_with"
-              data-size="large"
-              data-locale="en-GB"
-              data-logo_alignment="left"></div>
-          </div>
+              <div
+                class="g_id_signin"
+                data-type="standard"
+                data-shape="rectangular"
+                data-theme="outline"
+                data-text="signin_with"
+                data-size="large"
+                data-locale="en-GB"
+                data-logo_alignment="left"></div>
+            </div>
+          </ng-container>
 
-          <div class="mt-lg-6 mt-4 body-mob">
+          <div class="mt-lg-6 body-mob {{!isNativeApp ? 'mt-4' : 'mt-6'}}">
             <span class="body-02">By continuing, you agree to our</span>
             <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms"
               >Terms and Conditions</a
