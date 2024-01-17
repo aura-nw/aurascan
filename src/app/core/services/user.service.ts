@@ -95,6 +95,8 @@ export class UserService {
 
   logout() {
     this.setUser(null);
+    this.userSubject$ = new BehaviorSubject(null);
+    this.user$ = this.userSubject$.asObservable();
     clearLocalData();
   }
 
