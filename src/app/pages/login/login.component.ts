@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
     private userService: UserService,
     private router: ActivatedRoute,
     private route: Router,
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
     private toastr: NgxToastrService,
     private cdr: ChangeDetectorRef,
   ) {}

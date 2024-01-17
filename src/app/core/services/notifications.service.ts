@@ -117,16 +117,18 @@ export class NotificationsService {
       await this.requestPermission();
     }
 
-    this.http
-      .post(`${this.apiUrl}/users/register-notification-token`, {
-        token: this.currentFcmToken,
-      })
-      .subscribe((res: any) => {
-        if (res) {
-          local.removeItem(STORAGE_KEYS.REGISTER_FCM);
-          this.userId = res.data.user_id;
-        }
-      });
+    if (this.currentFcmToken) {
+      this.http
+        .post(`${this.apiUrl}/users/register-notification-token`, {
+          token: this.currentFcmToken,
+        })
+        .subscribe((res: any) => {
+          if (res) {
+            local.removeItem(STORAGE_KEYS.REGISTER_FCM);
+            this.userId = res.data.user_id;
+          }
+        });
+    }
   }
 
   getListNoti(payload) {
