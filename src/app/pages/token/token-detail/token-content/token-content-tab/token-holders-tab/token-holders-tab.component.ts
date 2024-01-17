@@ -241,9 +241,7 @@ export class TokenHoldersTabComponent implements OnInit {
       .pipe(
         switchMap((element) => {
           if (element?.account_balance?.length === 0) {
-            this.dataSource = new MatTableDataSource<any>([]);
-            this.loading = false;
-            return of(null);
+            return of([]);
           }
 
           this.totalHolder = element?.account_balance_aggregate?.aggregate?.count;
