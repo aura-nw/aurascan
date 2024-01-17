@@ -39,6 +39,7 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'owner'">
                     <app-name-tag
+                      [iconContract]="data[template.matColumnDef] | isContract"
                       [value]="data[template.matColumnDef]"
                       [fullText]="true"
                       [fullTextMob]="true"

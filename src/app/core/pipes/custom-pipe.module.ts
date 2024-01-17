@@ -8,6 +8,7 @@ import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-t
 import { BalancePipe, FormatDigitPipe, GtePipe, GtPipe, LtePipe, LtPipe } from './number.pipe';
 import { CombineTxsMsgPipe, EllipsisPipe } from './string.pipe';
 import { NameTagTooltipPipe } from './tooltip.pipe';
+import { IsContractPipe } from './address.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -30,6 +31,7 @@ import { NameTagTooltipPipe } from './tooltip.pipe';
     IbcDenomPipe,
     EllipsisPipe,
     CustomTimeDatePipe,
+    IsContractPipe,
   ],
   exports: [
     JsonPipe,
@@ -50,6 +52,7 @@ import { NameTagTooltipPipe } from './tooltip.pipe';
     IbcDenomPipe,
     EllipsisPipe,
     CustomTimeDatePipe,
+    IsContractPipe,
   ],
   providers: [],
 })
