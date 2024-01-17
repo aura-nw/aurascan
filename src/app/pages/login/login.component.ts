@@ -285,9 +285,9 @@ export class LoginComponent implements OnInit {
   }
 
   checkNativeApp() {
-    if ((window.coin98 || window.leap) && window.innerWidth <= 800) {
+    if ((window.coin98 || window.leap) && this.environmentService.isMobile) {
       try {
-        if (window.coin98 && window.coin98?.keplr['name']?.toLowerCase().indexOf('coin98') > -1) {
+        if (window.coin98?.keplr) {
           this.isNativeApp = true;
         } else if (window.leap && window.leap['mode'] == 'mobile-web') {
           this.isNativeApp = true;
