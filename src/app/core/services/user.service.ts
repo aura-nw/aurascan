@@ -56,7 +56,7 @@ export class UserService {
       this.userSubject$.next(user);
       local.setItem(STORAGE_KEYS.USER_DATA, user);
     } else {
-      // TODO: Handle null case
+      this.userSubject$.next(null);
     }
   }
 
@@ -95,8 +95,6 @@ export class UserService {
 
   logout() {
     this.setUser(null);
-    this.userSubject$ = new BehaviorSubject(null);
-    this.user$ = this.userSubject$.asObservable();
     clearLocalData();
   }
 
