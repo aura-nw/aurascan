@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
+import { ELeapMode } from '../constants/wallet.constant';
 
 export interface IConfiguration {
   environment: {
@@ -65,6 +66,7 @@ export interface IConfiguration {
 export class EnvironmentService {
   configUri = './assets/config/config.json';
   isMobile = false;
+  isNativeApp = false;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
 
   get configValue(): IConfiguration {
@@ -143,6 +145,8 @@ export class EnvironmentService {
     this.breakpoint$.subscribe((state) => {
       this.isMobile = state?.matches ? true : false;
     });
+
+    this.checkNativeApp();
   }
 
   ngOnDestroy(): void {
@@ -169,5 +173,15 @@ export class EnvironmentService {
 
   async load(): Promise<void> {
     await this.loadConfig();
+  }
+
+  checkNativeApp() {
+    if ((window.coin98 || window.leap) && this.isMobile) {
+      try {
+        if (window.coin98?.keplr ||  window.leap?.mode == ELeapMode.MobileWeb) {
+          this.isNativeApp = true;
+        }
+      } catch {}
+    }
   }
 }
