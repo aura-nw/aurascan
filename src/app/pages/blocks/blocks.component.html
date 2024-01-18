@@ -23,7 +23,7 @@
                         *ngSwitchCase="'block_hash'"
                         class="text--primary cursor-pointer block-link"
                         [routerLink]="['/blocks', data['height']]">
-                        {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
+                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
                       <a
                         *ngSwitchCase="'proposer'"
@@ -32,7 +32,7 @@
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'timestamp'">
-                        {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                        {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                       </div>
                       <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                     </ng-container>
@@ -58,7 +58,7 @@
               size: 'md',
               titleClass: 'h6-mob',
               label: data.height,
-              subLabelContent: (data.timestamp | dateCustom)[0],
+              subLabelContent: (data.timestamp | customDateTime: 'Distance'),
               subLabelClass: 'text--gray-1 h6-mob w-time justify-content-end'
             }"
             [content]="[
@@ -78,10 +78,10 @@
                 class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +
-                  (data.timestamp | customDate : 'yyyy-MM-dd') +
+                  (data.timestamp | customDateTime: 'DateOnly') +
                   '</span>' +
                   '<span>' +
-                  (data.timestamp | customDate : 'HH:mm:ss') +
+                  (data.timestamp | customDateTime: 'TimeOnly') +
                   '</span>'
               }
             ]"></app-card-mob-simple>

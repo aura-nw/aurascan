@@ -86,16 +86,16 @@
               <div *ngSwitchCase="eTransType.IBCTransfer">
                 <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }">
                 </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCReceived">
                 <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }">
                 </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCAcknowledgement">
-                <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"></ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCUpdateClient">
                 <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }">
@@ -104,7 +104,7 @@
               <div *ngSwitchCase="eTransType.IBCTimeout">
                 <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item, index: i }">
                 </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
                 <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }">
@@ -163,7 +163,7 @@
           (transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom === coinMinimalDenom
             ? denom
             : transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom
-          ) | ibcDenom : transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount
+          ) | ibcDenom: transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount
         "></div>
     </div>
     <app-messages-item
@@ -183,7 +183,7 @@
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="d-flex flex-wrap mb-2" *ngIf="ibcData?.receive?.denomOrigin">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
-      <div class="col-12 col-lg-9" [innerHTML]="ibcData?.receive?.denomOrigin | ibcDenom : ibcData?.amount"></div>
+      <div class="col-12 col-lg-9" [innerHTML]="ibcData?.receive?.denomOrigin | ibcDenom: ibcData?.amount"></div>
     </div>
     <app-messages-item
       [label]="'Origin Amount'"
@@ -215,8 +215,8 @@
     <div class="d-flex flex-wrap mb-2">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ ibcData?.acknowledgement?.amount | balance | mask : 'separator.6' }}
-        <span class="text--white">{{ denom }}</span>
+        {{ ibcData?.acknowledgement?.amount | balance | mask: 'separator.6' }}
+        <span appLinkDenom>{{ denom }}</span>
       </div>
     </div>
     <app-messages-item
@@ -379,35 +379,30 @@
           </div>
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of listIBCProgress">
-              <div class="d-lg-flex justify-content-between">
+              <div class="d-lg-flex justify-content-between" *ngIf="item.typeTx === type">
                 <div>
                   <!-- {{ denomIBC || ibcData?.receive?.denomOrigin | ellipsis : 25 }} -->
                 </div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
-                      <span class="d-lg-none">{{ item.tx_hash | ellipsis : 8 : 8 }}</span>
+                      <span class="d-lg-none">{{ item.tx_hash | ellipsis: 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </a>
                     <span *ngIf="item.denom !== denom">
-                      <span class="d-lg-none">{{ item.tx_hash | ellipsis : 8 : 8 }}</span>
+                      <span class="d-lg-none">{{ item.tx_hash | ellipsis: 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </span>
                   </div>
                   <div class="mt-1 ibc__date">
                     <div class="d-flex justify-content-end">
-                      <img
-                        src="assets/icons/icons-svg/color/Check.svg"
-                        width="16px"
-                        height="16px"
-                        *ngIf="item.effected"
-                        class="mr-1" />
-                      {{ (item.time | dateCustom)[0] }}
+                      <i class="ph ph-check mr-1 text--green-4 body-01" *ngIf="item.effected"></i>
+                      {{ item.time | customDateTime: 'Distance' }}
                     </div>
                     <div class="d-flex justify-content-end align-items-center ml-2">
-                      <span>({{ item.time | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>({{ item.time | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-1 mx-md-2"></div>
-                      <span>{{ item.time | customDate : 'HH:mm:ss' }})</span>
+                      <span>{{ item.time | customDateTime: 'TimeOnly' }})</span>
                     </div>
                   </div>
                 </div>
@@ -448,8 +443,9 @@
               <i class="ph-currency-circle-dollar mx-auto h3 mr-2 mb-0 text--white"></i>
               <div class="ml-2">
                 <span
+                  class="pr-lg-0 pr-4"
                   *ngIf="item?.coins?.length > 0"
-                  [innerHTML]="item?.coins[0]?.denom | ibcDenom : item?.coins[0]?.amount">
+                  [innerHTML]="item?.coins[0]?.denom | ibcDenom: item?.coins[0]?.amount">
                 </span>
               </div>
             </div>
@@ -486,7 +482,7 @@
                         {{ item.type }}
                       </div>
                     </mat-panel-title>
-                    <mat-panel-description> </mat-panel-description>
+                    <mat-panel-description></mat-panel-description>
                   </mat-expansion-panel-header>
 
                   <div class="content-log">

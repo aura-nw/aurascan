@@ -11,7 +11,7 @@
   background: transparent;
   tr.mat-header-row {
     height: 32px;
-    text-transform: uppercase;
+    text-transform: capitalize;
   }
   tr.mat-row,
   tr.mat-footer-row {

@@ -121,7 +121,7 @@ export enum ModeExecuteTransaction {
   Send = 'send',
   ProvideLiquidity = 'provide_liquidity',
   Approve = 'approve',
-  Revoke = 'revoke'
+  Revoke = 'revoke',
 }
 
 export enum pipeTypeData {

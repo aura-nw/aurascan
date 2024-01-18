@@ -348,7 +348,7 @@
             <div>
               <ng-container [ngSwitch]="template.matColumnDef">
                 <div *ngSwitchCase="'timestamp'">
-                  {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                  {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                 </div>
                 <a
                   *ngSwitchCase="'tx_hash'"
@@ -382,7 +382,7 @@
                       </div>
                     </div>
 
-                    <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | displayTypeToolTip">
+                    <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
                     </app-tooltip-customize>
                   </div>
                 </div>
@@ -401,7 +401,7 @@
                 </div>
                 <div *ngSwitchCase="'fee'">
                   {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                  <span class="text--white">{{ denom }}</span>
+                  <span appLinkDenom>{{ denom }}</span>
                 </div>
                 <div *ngSwitchCase="'amount'">
                   <ng-container *ngFor="let item of data.arrEvent; let index = index">
@@ -434,7 +434,7 @@
                         </div>
                         <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
                           <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
-                            <div [class.aura-tooltip-object]="item.denom !== denom">
+                            <div [class.aura-tooltip-object]="item.denom !== denom" [appLinkDenom]="item.denomOrigin">
                               {{ item.denom | ellipsis: 19 }}
                             </div>
 
@@ -464,8 +464,8 @@
                       <div class="item-show d-flex justify-content-between align-items-center">
                         <app-name-tag
                           [value]="item.fromAddress || currentAddress"
-                          [url]="(item.fromAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
-                          [iconContract]="(item.fromAddress || currentAddress)?.length > lengthAddress"
+                          [url]="((item.fromAddress || currentAddress) | isContract) ? 'contracts' : 'account'"
+                          [iconContract]="(item.fromAddress || currentAddress) | isContract"
                           [isLink]="
                             !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                             item.fromAddress !== currentAddress
@@ -510,8 +510,8 @@
                         <div [style]="'min-width: 148px'">
                           <app-name-tag
                             [value]="item.toAddress || currentAddress"
-                            [url]="(item.toAddress || currentAddress)?.length > lengthAddress ? 'contracts' : 'account'"
-                            [iconContract]="(item.toAddress || currentAddress)?.length > lengthAddress"
+                            [url]="((item.toAddress || currentAddress) | isContract) ? 'contracts' : 'account'"
+                            [iconContract]="(item.toAddress || currentAddress) | isContract"
                             [isLink]="
                               !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                               item.toAddress !== currentAddress
@@ -595,7 +595,7 @@
         label: data.tx_hash | ellipsis: 8 : 8,
         subLabelContent: data.type,
         subLabelClass: 'btn-mob',
-        status: data.code
+        status: data.code,
       }"
       [content]="[
         {
@@ -606,7 +606,8 @@
         {
           label: 'Fee',
           class: 'text--gray-1 body-02-mob',
-          info: (+data.fee | mask: 'separator.6') + '<span class=text--white> ' + denom + '</span>'
+          info: (+data.fee | mask: 'separator.6') + 
+          ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + denom + '</a>'
         }
       ]"></app-card-mob-account>
   </div>

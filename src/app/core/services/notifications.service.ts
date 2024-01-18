@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import * as _ from 'lodash';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, catchError, of, takeUntil } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import local from '../utils/storage/local';
-import { STORAGE_KEYS } from '../constants/common.constant';
-import { UserStorage } from '../models/auth.models';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +35,7 @@ export class NotificationsService {
   set currentFcmToken(e: string) {
     this._currentFcmToken = e;
   }
+
   get currentFcmToken() {
     return this._currentFcmToken;
   }
@@ -43,6 +44,7 @@ export class NotificationsService {
     private http: HttpClient,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
+    private userService: UserService,
   ) {
     this.environmentService.config.asObservable().subscribe((res) => {
       this.apiUrl = res.api.backend;
@@ -68,7 +70,8 @@ export class NotificationsService {
       let notification = payload.notification;
 
       // check exit email
-      const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+      const userEmail = this.userService.getCurrentUser()?.email;
+
       if ('serviceWorker' in navigator && userEmail) {
         navigator.serviceWorker.getRegistrations().then((registration) => {
           registration[0].showNotification(notification.title, {
@@ -114,16 +117,18 @@ export class NotificationsService {
       await this.requestPermission();
     }
 
-    this.http
-      .post(`${this.apiUrl}/users/register-notification-token`, {
-        token: this.currentFcmToken,
-      })
-      .subscribe((res: any) => {
-        if (res) {
-          local.removeItem(STORAGE_KEYS.REGISTER_FCM);
-          this.userId = res.data.user_id;
-        }
-      });
+    if (this.currentFcmToken) {
+      this.http
+        .post(`${this.apiUrl}/users/register-notification-token`, {
+          token: this.currentFcmToken,
+        })
+        .subscribe((res: any) => {
+          if (res) {
+            local.removeItem(STORAGE_KEYS.REGISTER_FCM);
+            this.userId = res.data.user_id;
+          }
+        });
+    }
   }
 
   getListNoti(payload) {
@@ -147,7 +152,18 @@ export class NotificationsService {
     return this.http.get<any>(`${this.apiUrl}/quota-notifications`);
   }
 
-  deleteToken(token) {
-    return this.http.delete<any>(`${this.apiUrl}/users/delete-notification-token/${token}`);
+  deleteToken() {
+    if (!this.currentFcmToken) {
+      return of(null);
+    }
+
+    return this.http.delete<any>(`${this.apiUrl}/users/delete-notification-token/${this.currentFcmToken}`).subscribe({
+      complete: () => {
+        this.currentFcmToken = null;
+      },
+      error: () => {
+        this.currentFcmToken = null;
+      },
+    });
   }
 }

@@ -16,7 +16,7 @@ export class TokenContractTabComponent implements OnInit {
   @Input() typeContract: string;
 
   contractType = TokenContractType;
-  countCurrent = this.contractType.ReadContract;
+  currentTab = this.contractType.ReadContract;
   tokenDetail: any;
   contractVerifyType = ContractVerifyType;
   isLoading = true;
@@ -29,7 +29,7 @@ export class TokenContractTabComponent implements OnInit {
   }
 
   changeTab(tabId): void {
-    this.countCurrent = tabId;
+    this.currentTab = tabId;
   }
 
   getContractDetail() {

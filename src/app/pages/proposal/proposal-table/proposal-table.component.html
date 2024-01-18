@@ -58,7 +58,7 @@
                           *ngIf="data[template.matColumnDef] >= 0.001"
                           [appBigNumber]="data[template.matColumnDef]"
                           [decimal]="0"></div>
-                        <span class="text--white ml-1">{{ denom }}</span>
+                        <span class="ml-1" appLinkDenom>{{ coinInfo.coinDenom }}</span>
                         <app-tooltip-customize
                           *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
                           [content]="data[template.matColumnDef]">
@@ -78,22 +78,22 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">
-                        <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
+                        <div>{{ data[template.matColumnDef] | customDateTime: 'Distance' }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDateTime: 'TimeOnly' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'timestamp'">
                       <div *ngIf="data[template.matColumnDef]">
-                        <div>{{ (data[template.matColumnDef] | dateCustom)[0] }}</div>
+                        <div>{{ data[template.matColumnDef] | customDateTime: 'Distance' }}</div>
                         <div class="text--gray-5 body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDateTime: 'TimeOnly' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -123,24 +123,24 @@
               [content]="[
                 {
                   label: 'Voter',
-                  class: !(data.voter | checkDisplayTooltip)
+                  class: !(data.voter | nameTagTooltipPipe)
                     ? (data.voter | isPrivateNameTag)
                       ? 'name-tag private-name-tag mb-0 text--primary'
                       : 'name-tag text--primary mb-0'
                     : 'text--primary',
                   info: !data?.voter
                     ? '-'
-                    : !(data.voter | checkDisplayTooltip)
-                    ? '<a class=text--primary href=' +
-                      ('/account/' + data.voter) +
-                      '>' +
-                      (data.voter | nameTag | ellipsis : 16) +
-                      '</a>'
-                    : '<a class=text--primary href=' +
-                      ('/account/' + data.voter) +
-                      '>' +
-                      (data.voter | nameTag | ellipsis : 8 : 8) +
-                      '</a>'
+                    : !(data.voter | nameTagTooltipPipe)
+                      ? '<a class=text--primary href=' +
+                        ('/account/' + data.voter) +
+                        '>' +
+                        (data.voter | nameTag | ellipsis: 16) +
+                        '</a>'
+                      : '<a class=text--primary href=' +
+                        ('/account/' + data.voter) +
+                        '>' +
+                        (data.voter | nameTag | ellipsis: 8 : 8) +
+                        '</a>'
                 },
                 {
                   label: 'TxHash',
@@ -158,12 +158,12 @@
                   class: 'card__date text--gray-1 body-01',
                   info:
                     '<div class=text-end>' +
-                    (data.timestamp | dateCustom : false)[0] +
+                    (data.timestamp | customDateTime: 'Distance') +
                     '</div><div class=text--gray-5><span>' +
-                    (data.timestamp | customDate : 'yyyy-MM-dd') +
+                    (data.timestamp | customDateTime: 'DateOnly') +
                     '</span>' +
                     '<span>' +
-                    (data.timestamp | customDate : 'HH:mm:ss') +
+                    (data.timestamp | customDateTime: 'TimeOnly') +
                     '</span></div>'
                 }
               ]"></app-card-mob-simple>
@@ -196,13 +196,13 @@
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
-                      (data.timestamp | dateCustom : false)[0] +
+                      (data.timestamp | customDateTime: 'Distance') +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDate : 'yyyy-MM-dd') +
+                      (data.timestamp | customDateTime: 'DateOnly') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate : 'HH:mm:ss') +
+                      (data.timestamp | customDateTime: 'TimeOnly') +
                       '</span></div>'
                     : '-'
                 }
@@ -214,24 +214,24 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: !(data.depositors | checkDisplayTooltip)
+                  class: !(data.depositors | nameTagTooltipPipe)
                     ? (data.depositors | isPrivateNameTag)
                       ? 'name-tag private-name-tag mb-0 text--primary'
                       : 'name-tag text--primary mb-0'
                     : 'text--primary',
                   info: !data?.depositors
                     ? '-'
-                    : !(data.depositors | checkDisplayTooltip)
-                    ? '<a class=text--primary href=' +
-                      ('/account/' + data.depositors) +
-                      '>' +
-                      (data.depositors | nameTag | ellipsis : 16) +
-                      '</a>'
-                    : '<a class=text--primary href=' +
-                      ('/account/' + data.depositors) +
-                      '>' +
-                      (data.depositors | nameTag | ellipsis : 8 : 8) +
-                      '</a>'
+                    : !(data.depositors | nameTagTooltipPipe)
+                      ? '<a class=text--primary href=' +
+                        ('/account/' + data.depositors) +
+                        '>' +
+                        (data.depositors | nameTag | ellipsis: 16) +
+                        '</a>'
+                      : '<a class=text--primary href=' +
+                        ('/account/' + data.depositors) +
+                        '>' +
+                        (data.depositors | nameTag | ellipsis: 8 : 8) +
+                        '</a>'
                 },
                 {
                   label: 'TxHash',
@@ -249,10 +249,9 @@
                   class: 'h6 mb-0 text--gray-1',
                   info: data.amount
                     ? '<span class=mr-1>' +
-                      (data.amount < 0.001 ? '<0.001' : (data.amount | mask : 'separator.6')) +
-                      '</span><span class=text--white>' +
-                      denom +
-                      '</span>'
+                      (data.amount < 0.001 ? '<0.001' : (data.amount | mask: 'separator.6')) +
+                      '</span>' + 
+                      ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + coinInfo.coinDenom + '</a>'
                     : '-'
                 },
                 {
@@ -260,13 +259,13 @@
                   class: 'card__date text--gray-1 body-01',
                   info: data.timestamp
                     ? '<div class=text-end>' +
-                      (data.timestamp | dateCustom : false)[0] +
+                      (data.timestamp | customDateTime: 'Distance') +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDate : 'yyyy-MM-dd') +
+                      (data.timestamp | customDateTime: 'DateOnly') +
                       '</span>' +
                       '<span>' +
-                      (data.timestamp | customDate : 'HH:mm:ss') +
+                      (data.timestamp | customDateTime: 'TimeOnly') +
                       '</span></div>'
                     : '-'
                 }

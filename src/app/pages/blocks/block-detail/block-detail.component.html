@@ -77,12 +77,12 @@
             <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-3 text--gray-4">Block Time</div>
               <div class="col-auto col-lg-9 text-end text-lg-start text--gray-1 d-lg-flex align-items-center">
-                <div>{{ (blockDetail?.timestamp | dateCustom)[0] }}</div>
+                <div>{{ blockDetail?.timestamp | customDateTime: 'Distance' }}</div>
                 <div class="d-flex align-items-center ml-1">
                   <span class="d-none d-lg-block">(</span>
-                  <span>{{ blockDetail?.timestamp | customDate : 'yyyy-MM-dd' }}</span>
+                  <span>{{ blockDetail?.timestamp | customDateTime: 'DateOnly' }}</span>
                   <div class="divider divider-vertical divider-lighter mx-2"></div>
-                  <span>{{ blockDetail?.timestamp | customDate : 'HH:mm:ss' }}</span>
+                  <span>{{ blockDetail?.timestamp | customDateTime: 'TimeOnly' }}</span>
                   <span class="d-none d-lg-block">)</span>
                 </div>
               </div>
@@ -152,13 +152,13 @@
                     <div>
                       <ng-container [ngSwitch]="template.matColumnDef">
                         <div *ngSwitchCase="'timestamp'">
-                          {{ (data[template.matColumnDef] | dateCustom)[0] }}
+                          {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                         </div>
                         <a
                           *ngSwitchCase="'tx_hash'"
                           class="text--primary cursor-pointer hash-link"
                           [routerLink]="['/transaction', data['tx_hash']]">
-                          {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
+                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                         </a>
                         <a
                           *ngSwitchCase="'height'"
@@ -175,9 +175,7 @@
                               </div>
                             </div>
 
-                            <app-tooltip-customize
-                              [class]="'message-custom'"
-                              [content]="data.lstType | displayTypeToolTip">
+                            <app-tooltip-customize [class]="'message-custom'" [content]="data.lstType | combineTxsMsg">
                             </app-tooltip-customize>
                           </div>
                         </div>
@@ -195,13 +193,13 @@
                           </div>
                         </div>
                         <div *ngSwitchCase="'fee'">
-                          {{ +data[template.matColumnDef] | mask : 'separator.6' }}
-                          <span class="text--white">{{ denom }}</span>
+                          {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                          <span appLinkDenom>{{ denom }}</span>
                         </div>
                         <div *ngSwitchCase="'amount'">
                           <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                             <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                            <span class="text--white ml-1">{{ data?.denom | ibcDenom }}</span>
+                            <span class="ml-1" [appLinkDenom]="data?.denom">{{ data?.denom | ibcDenom }}</span>
                           </ng-container>
                           <ng-template #displayNonNumber>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
@@ -232,21 +230,22 @@
           <div class="d-lg-none box-block-tx" *ngIf="dataSource?.data?.length > 0">
             <app-card-mob-simple
               *ngFor="let data of dataSource.data"
-              [link]="'/transaction/' + data.tx_hash"
               [dataCard]="data"
               [title]="{
                 size: 'md',
-                label: data.tx_hash | ellipsis : 6 : 6,
+                label: data.tx_hash | ellipsis: 6 : 6,
                 subLabelContent: data.type,
                 subLabelClass: 'label__status',
-                status: data.code
+                status: data.code,
+                link: '/transaction/' + data.tx_hash
               }"
               [content]="[
                 {
                   label: 'Fee',
-                  info: (+data.fee | mask : 'separator.6') + '<span class=text--white> ' + denom + '</span>'
+                  info: (+data.fee | mask: 'separator.6') + 
+                  ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + denom + '</a>'
                 },
-                { label: 'Time', info: (data.timestamp | dateCustom : false)[1] }
+                { label: 'Time', info: (data.timestamp | customDateTime: 'DateTime') }
               ]"></app-card-mob-simple>
           </div>
         </ng-container>

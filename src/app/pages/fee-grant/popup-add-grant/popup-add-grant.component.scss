@@ -34,3 +34,17 @@
     font-size: 1.8rem;
   }
 }
+.aura-form {
+  .input-group {
+    button.button.button-primary.active {
+      font-size: 1.4rem;
+      line-height: 1.6rem;
+      border-radius: 4px;
+
+      @media (min-width: 992px) {
+        font-size: 1.6rem;
+        line-height: 2rem;
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { STORAGE_KEYS, TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
 import { CommonService } from './core/services/common.service';
 import { TokenService } from './core/services/token.service';
@@ -6,26 +6,32 @@ import { getInfo } from './core/utils/common/info-common';
 import { Globals } from './global/global';
 // import eruda from 'eruda';
 import * as _ from 'lodash';
-import { forkJoin, map } from 'rxjs';
+import { forkJoin, map, Subject, takeUntil } from 'rxjs';
 import { NameTagService } from './core/services/name-tag.service';
 import { NotificationsService } from './core/services/notifications.service';
 import { ValidatorService } from './core/services/validator.service';
 import { WatchListService } from './core/services/watch-list.service';
 import local from './core/utils/storage/local';
-import { UserStorage } from './core/models/auth.models';
+import { IUser } from './core/models/auth.models';
+import { UserService } from './core/services/user.service';
+import { EnvironmentService } from './core/data-services/environment.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   // TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
   // isTestnet = this.TESTNET.includes(
   //   this.chainInfo?.chainId || ''
   // );
   isFirstLoad = true;
-  userEmail = '';
+  user: IUser;
+
+  destroyed$ = new Subject<void>();
+  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+
   constructor(
     private commonService: CommonService,
     private globals: Globals,
@@ -34,11 +40,32 @@ export class AppComponent implements OnInit {
     private validatorService: ValidatorService,
     private notificationsService: NotificationsService,
     private watchListService: WatchListService,
+    private userService: UserService,
+    private environmentService: EnvironmentService,
   ) {}
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
   ngOnInit(): void {
-    this.userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    this.userService.user$?.pipe(takeUntil(this.destroyed$)).subscribe((user) => {
+      this.user = user;
+
+      this.getListNameTag();
+
+      if (this.user?.accessToken) {
+        this.getWatchlist();
+        // check register fcm token
+        const registerFCM = local.getItem(STORAGE_KEYS.REGISTER_FCM);
+        if (registerFCM == 'true') {
+          this.notificationsService.registerFcmToken();
+        }
+      }
+    });
+
     this.getInfoCommon();
-    this.getPriceToken();
     this.getDataFromStorage();
     //get list token market
     this.tokenService.getCoinData();
@@ -49,7 +76,6 @@ export class AppComponent implements OnInit {
 
     setInterval(() => {
       this.getListValidator();
-      this.getPriceToken();
       //get list token market
       this.tokenService.getCoinData();
     }, 600000);
@@ -71,12 +97,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  getPriceToken(): void {
-    this.tokenService.getPriceToken(TOKEN_ID_GET_PRICE.AURA).subscribe((res) => {
-      this.globals.price.aura = res.data || 0;
-    });
-  }
-
   getListNameTag() {
     const payload = {
       limit: 500,
@@ -84,7 +104,7 @@ export class AppComponent implements OnInit {
     };
 
     // get list name tag if not login email
-    if (!this.userEmail) {
+    if (!this.user?.accessToken) {
       this.nameTagService.getListNameTag(payload).subscribe((res) => {
         this.nameTagService.listNameTag = res.data?.nameTags;
         local.setItem(STORAGE_KEYS.LIST_NAME_TAG, res.data?.nameTags);
@@ -156,23 +176,8 @@ export class AppComponent implements OnInit {
     // get name tag form local storage
     const listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
     this.nameTagService.listNameTag = listNameTag;
-    this.getListNameTag();
 
-    // get watch list form local storage
-    if (this.userEmail) {
-      this.getWatchlist();
-      // check register fcm token
-      const registerFCM = local.getItem(STORAGE_KEYS.REGISTER_FCM);
-      if (registerFCM == 'true') {
-        this.notificationsService.registerFcmToken();
-      }
-    }
-
-    // get list name validator form local storage
-    const listTokenIBC = local.getItem<[]>(STORAGE_KEYS.LIST_TOKEN_IBC);
-    if (!listTokenIBC) {
-      this.commonService.listTokenIBC = listTokenIBC;
-    }
+    // get list token IBC
     this.getListTokenIBC();
   }
 
@@ -195,7 +200,12 @@ export class AppComponent implements OnInit {
       .getTokenMarketData(payload)
       .pipe(
         map((res) => {
-          return res.map((element) => ({
+          const nativeData = res.find((k) => k.denom === this.coinMinimalDenom);
+          if (nativeData?.coin_id) {
+            local.setItem(STORAGE_KEYS.DATA_NATIVE, nativeData);
+          }
+          const listFilterIBC = res.filter((k) => k.denom !== this.coinMinimalDenom);
+          return listFilterIBC?.map((element) => ({
             ...element,
             display: element['display'] || element['symbol'],
           }));

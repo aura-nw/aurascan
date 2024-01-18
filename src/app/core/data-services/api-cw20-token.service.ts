@@ -34,6 +34,7 @@ export class ApiCw20TokenService {
 
   chainInfo = this.env.chainInfo;
   currencies = this.chainInfo.currencies[0];
+  nativeName = this.env.environment.nativeName;
 
   apiAccount = inject(ApiAccountService);
 
@@ -109,7 +110,7 @@ export class ApiCw20TokenService {
   parseNativeToken(account, coinsMarkets) {
     const coinMarket = coinsMarkets.find((coin) => coin.coin_id === TOKEN_ID_GET_PRICE.AURA);
     return {
-      name: 'Aura',
+      name: this.nativeName,
       symbol: this.currencies.coinDenom,
       decimals: this.currencies.coinDecimals,
       denom: this.currencies.coinMinimalDenom,
@@ -128,15 +129,12 @@ export class ApiCw20TokenService {
 
   parseIbcTokens(account, coinsMarkets): IAsset[] {
     const ibcBalances = account.data?.balances?.filter((balance) => balance.denom !== this.currencies.coinMinimalDenom);
-
     return ibcBalances
       ? ibcBalances
           .map((item): Partial<IAsset> => {
             const coinMarket = coinsMarkets.find((coin) => item.denom === coin.denom);
-
             const amount = getBalance(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals);
             const value = new BigNumber(amount).multipliedBy(coinMarket?.current_price || 0);
-
             return coinMarket
               ? {
                   name: coinMarket?.name,
