@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, switchMap } from 'rxjs';
+import { Subject, switchMap, takeUntil } from 'rxjs';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ELoginProvider, IUser } from 'src/app/core/models/auth.models';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -38,7 +38,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userService.user$.subscribe((user) => {
+    this.userService.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
       if (!user) {
         this.router.navigate(['/']);
       }
