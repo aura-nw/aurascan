@@ -72,6 +72,7 @@ export class EnvironmentService {
   configUri = './assets/config/config.json';
   isMobile = false;
   isNativeApp = false;
+  defaultImage = '';
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
 
   get configValue(): IConfiguration {

@@ -6,7 +6,7 @@ import { EnvironmentService } from '../data-services/environment.service';
 })
 export class ImageDirective implements OnInit, OnChanges {
   @Input() appImg: string;
-  @Input() defaultImage: string = this.env.environment.logo;
+  @Input() defaultImage: string = `${this.env.imageUrl}images/icons/token-logo.png`;
 
   get ref() {
     return this.elr.nativeElement;

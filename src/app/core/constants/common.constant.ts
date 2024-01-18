@@ -57,9 +57,16 @@ export const CHART_RANGE = {
 };
 
 // Only sei address
+// export const LENGTH_CHARACTER = {
+//   ADDRESS: 42,
+//   CONTRACT: 62,
+//   TRANSACTION: 64,
+// };
+
+// Only aura address
 export const LENGTH_CHARACTER = {
-  ADDRESS: 42,
-  CONTRACT: 62,
+  ADDRESS: 43,
+  CONTRACT: 63,
   TRANSACTION: 64,
 };
 
