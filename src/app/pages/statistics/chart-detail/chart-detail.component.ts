@@ -8,13 +8,14 @@ import { NgxMaskPipe } from 'ngx-mask';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { CHART_RANGE, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportStatisticChart } from 'src/app/core/helpers/export';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 import {
   CHART_CONFIG,
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
-  STATISTIC_CHART_DETAIL_OPTIONS
+  STATISTIC_CHART_DETAIL_OPTIONS,
 } from 'src/app/pages/dashboard/dashboard-chart-options';
 
 @Component({
@@ -46,6 +47,8 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   toolTipHeight = 80;
   toolTipMargin = 15;
 
+  chainName = this.env.chainName;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -53,6 +56,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     private statisticService: StatisticService,
     private datepipe: DatePipe,
     private maskService: NgxMaskPipe,
+    private env: EnvironmentService,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
     if (
@@ -72,16 +76,16 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   setDataWithChartType() {
     switch (this.chartType) {
       case 'daily-transactions':
-        this.theTitle = 'Aura Daily Transactions Chart';
+        this.theTitle = `${this.chainName} Daily Transactions Chart`;
         this.chartName = 'Transactions per Day';
         break;
       case 'unique-addresses':
-        this.theTitle = 'Aura Unique Addresses Chart';
-        this.chartName = 'Aura cumulative Address Growth';
+        this.theTitle = `${this.chainName} Unique Addresses Chart`;
+        this.chartName = `${this.chainName} cumulative Address Growth`;
         break;
       case 'daily_active_addresses':
-        this.theTitle = 'Active Aura Addresses Chart';
-        this.chartName = 'Active Aura addresses per day';
+        this.theTitle = `Active ${this.chainName} Addresses Chart`;
+        this.chartName = `Active ${this.chainName} addresses per day`;
         break;
       default:
         this.router.navigate(['/']);

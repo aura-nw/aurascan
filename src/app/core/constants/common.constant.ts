@@ -56,9 +56,10 @@ export const CHART_RANGE = {
   MONTH_12: '12M',
 };
 
+// Only sei address
 export const LENGTH_CHARACTER = {
-  ADDRESS: 43,
-  CONTRACT: 63,
+  ADDRESS: 42,
+  CONTRACT: 62,
   TRANSACTION: 64,
 };
 

@@ -8,9 +8,12 @@ import { getBalance } from '../utils/common/parsing';
 @Pipe({ name: 'marketInfo' })
 export class MarketInfoPipe implements PipeTransform {
   image_s3 = this.env.imageUrl;
-  defaultLogoToken = `${this.image_s3}images/icons/token-logo.png`;
+  defaultLogoToken = this.env.environment.logo || `${this.image_s3}images/icons/token-logo.png`;
 
-  constructor(private env: EnvironmentService, private token: TokenService) {}
+  constructor(
+    private env: EnvironmentService,
+    private token: TokenService,
+  ) {}
 
   transform(value: any, key?: 'logo' | 'name' | 'symbol'): any {
     let marketInfo = {

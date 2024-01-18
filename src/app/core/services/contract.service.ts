@@ -7,11 +7,10 @@ import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
+import { ContractRegisterType } from '../constants/contract.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { NameTagService } from './name-tag.service';
-import { ContractRegisterType } from '../constants/contract.enum';
-import { isAddress, isContract } from '../utils/common/validation';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -61,9 +60,9 @@ export class ContractService extends CommonService {
     }
 
     let filterName = '';
-    if (isContract(keyword)) {
+    if (this.isValidContract(keyword)) {
       address = keyword;
-    } else if (isAddress(keyword)) {
+    } else if (this.isValidAddress(keyword)) {
       creator = keyword;
     } else if (/^\d+$/.test(keyword)) {
       codeId = +keyword;
@@ -75,7 +74,7 @@ export class ContractService extends CommonService {
       updateQuery = '';
     }
 
-    const FILTER_ALL = ''; 
+    const FILTER_ALL = '';
     let typeQuery = 'code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}';
     if (isIncludeCW4973) {
       if (contractType?.length >= 2) {
@@ -89,7 +88,10 @@ export class ContractService extends CommonService {
           ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {_eq: "crates.io:cw4973"}}],`
           : `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
       }
-    } else if (contractType?.includes(ContractRegisterType.CW721) || contractType?.includes(ContractRegisterType.CW20)) {
+    } else if (
+      contractType?.includes(ContractRegisterType.CW721) ||
+      contractType?.includes(ContractRegisterType.CW20)
+    ) {
       filterName = `, ${filterName}`;
       typeQuery = contractType?.includes(FILTER_ALL)
         ? `code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}, name: {_neq: "crates.io:cw4973" ${filterName}}`
