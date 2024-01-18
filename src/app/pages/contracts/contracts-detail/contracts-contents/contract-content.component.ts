@@ -8,7 +8,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 import { convertDataTransaction } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
@@ -33,7 +32,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   contractTab = ContractTab;
   contractVerifyType = ContractVerifyType;
   activeId = 0;
-  limit = 25;
+  LIMIT = 25;
   contractTransaction = {};
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
   errTxt: string;
@@ -55,7 +54,6 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   constructor(
     private commonService: CommonService,
     private contractService: ContractService,
-    private transactionService: TransactionService,
     private router: Router,
     private aRoute: ActivatedRoute,
     private environmentService: EnvironmentService,
@@ -126,11 +124,11 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   getTransaction(isInit = true): void {
     if (this.commonService.isValidContract(this.contractsAddress)) {
       const payload = {
-        limit: this.limit,
-        value: this.contractsAddress,
-        key: '_contract_address',
+        limit: this.LIMIT,
+        contractAddress: this.contractsAddress,
       };
-      this.transactionService.getListTxCondition(payload).subscribe({
+
+      this.contractService.queryTxOfContract(payload).subscribe({
         next: (res) => {
           const data = res;
           if (res) {

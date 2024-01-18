@@ -425,4 +425,81 @@ export class ContractService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
+
+  queryTxOfContract({
+    contractAddress,
+    heightGT,
+    heightLT,
+    limit = 100,
+    action,
+  }: {
+    contractAddress: string;
+    heightGT?: string;
+    heightLT?: string;
+    limit?: number;
+    action?: 'execute' | 'instantiate';
+  }) {
+    let eventAction = '';
+    if (action) {
+      eventAction = action == 'instantiate' ? 'action: {_eq: "instantiate"}' : 'action: {_neq: "instantiate"}';
+    }
+    const smart_contract_events = eventAction
+      ? `smart_contract_events: {
+        ${eventAction}
+        smart_contract: {
+          address: {_eq: $contractAddress}
+        }
+      }`
+      : ``;
+
+    const query = `
+    query TxOfContract($limit: Int = 100, $heightGT: Int = null, $heightLT: Int = null, $hash: String = null, $height: Int = null, $contractAddress: String = null) {
+      pacific {
+        transaction_join_group_smart_contract_event(
+          args: {contractaddress: $contractAddress}
+          limit: $limit
+          where: {
+            hash: {_eq: $hash}
+            height: {_eq: $height}
+            _and: [
+              {height: {_gt: $heightGT}}
+              {height: {_lt: $heightLT}}
+            ]
+            ${smart_contract_events}
+          }
+          order_by: {height: desc}) {
+          id
+          height
+          hash
+          timestamp
+          code
+          gas_used
+          gas_wanted
+          data
+        }
+      }
+    }        
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: query,
+        variables: {
+          contractAddress,
+          heightGT,
+          heightLT,
+          limit,
+        },
+        operationName: 'TxOfContract',
+      })
+      .pipe(
+        map((res) => (res?.data ? res?.data[this.envDB] : null)),
+        map((data) =>
+          data
+            ? {
+                transaction: data['transaction_join_group_smart_contract_event'],
+              }
+            : null,
+        ),
+      );
+  }
 }

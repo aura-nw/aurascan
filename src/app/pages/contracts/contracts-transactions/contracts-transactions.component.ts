@@ -7,7 +7,7 @@ import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.consta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
-import { TransactionService } from 'src/app/core/services/transaction.service';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { convertDataTransaction } from 'src/app/global/global';
 
 @Component({
@@ -46,8 +46,12 @@ export class ContractsTransactionsComponent implements OnInit {
   modeTxType = { Out: 0, In: 1, Instantiate: 2 };
   hashIns = '';
   hasLoadIns = true;
-  payload = {
-    limit: 100,
+  payload: {
+    contractAddress: string;
+    heightGT?: string;
+    heightLT?: string;
+    limit?: number;
+    action?: 'execute' | 'instantiate';
   };
   errTxt: string;
   coinInfo = this.environmentService.chainInfo.currencies[0];
@@ -57,7 +61,7 @@ export class ContractsTransactionsComponent implements OnInit {
     private router: Router,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
-    private transactionService: TransactionService,
+    private contractService: ContractService,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
@@ -71,7 +75,10 @@ export class ContractsTransactionsComponent implements OnInit {
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractInfo.contractsAddress = this.contractAddress;
-    this.payload['value'] = this.contractAddress;
+    this.payload = {
+      contractAddress: this.contractAddress,
+    };
+
     this.getData();
     this.timerGetUpTime = setInterval(() => {
       this.errTxt = null;
@@ -97,17 +104,25 @@ export class ContractsTransactionsComponent implements OnInit {
       if (params['label']) {
         this.label = params['label'] || this.modeTxType.Out;
       }
-      this.payload['key'] = null;
-      this.payload['compositeKey'] = null;
+
       switch (+this.label) {
         case 1:
-          this.payload['compositeKey'] = 'execute._contract_address';
+          this.payload = {
+            ...this.payload,
+            action: 'execute',
+          };
           break;
         case 2:
-          this.payload['compositeKey'] = 'instantiate._contract_address';
+          this.payload = {
+            ...this.payload,
+            action: 'instantiate',
+          };
           break;
         default:
-          this.payload['key'] = '_contract_address';
+          this.payload = {
+            ...this.payload,
+            action: undefined,
+          };
           break;
       }
       this.getDataTable(null, isReload);
@@ -120,7 +135,7 @@ export class ContractsTransactionsComponent implements OnInit {
       return;
     }
     this.payload['heightLT'] = nextKey;
-    this.transactionService.getListTxCondition(this.payload).subscribe({
+    this.contractService.queryTxOfContract(this.payload).subscribe({
       next: (dataExecute) => {
         if (dataExecute) {
           const txsExecute = convertDataTransaction(dataExecute, this.coinInfo);

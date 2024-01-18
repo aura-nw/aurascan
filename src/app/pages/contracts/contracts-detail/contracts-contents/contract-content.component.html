@@ -30,8 +30,8 @@
     <app-loading-sprint *ngIf="loadingContract"></app-loading-sprint>
     <app-table-no-data *ngIf="!loadingContract && errTxt" [textNull]="errTxt"></app-table-no-data>
     <app-contract-table
-      [length]="limit"
-      *ngIf="!loadingContract && contractTransaction['data'] && !errTxt"
+      [length]="LIMIT"
+      *ngIf="!loadingContract && !errTxt"
       [dataList]="contractTransaction"
       [templates]="templates"
       [contractInfo]="contractInfo"
