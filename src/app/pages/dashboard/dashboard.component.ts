@@ -18,7 +18,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR } from '../../core/constants/common.constant';
+import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR, TITLE_LOGO } from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
   coingeckoCoinId = this.environmentService.coingecko.ids[0];
-  chainLogo = 'assets/images/logo/title-logo.png';
+  chainLogo = TITLE_LOGO;
   nativeName = this.environmentService.environment.nativeName;
 
   chart: IChartApi = null;

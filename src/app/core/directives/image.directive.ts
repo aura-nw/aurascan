@@ -1,12 +1,13 @@
 import { Directive, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 import { EnvironmentService } from '../data-services/environment.service';
+import { TITLE_LOGO } from '../constants/common.constant';
 @Directive({
   selector: '[appImg]img',
 })
 export class ImageDirective implements OnInit, OnChanges {
   @Input() appImg: string;
-  @Input() defaultImage: string = `${this.env.imageUrl}images/icons/token-logo.png`;
+  @Input() defaultImage: string = `${this.env.imageUrl + TITLE_LOGO}`;
 
   get ref() {
     return this.elr.nativeElement;
