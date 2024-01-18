@@ -1,12 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { UserStorage } from 'src/app/core/models/auth.models';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { isSafari } from 'src/app/core/utils/common/validation';
-import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-notification',
@@ -56,6 +54,7 @@ export class NotificationComponent {
     private router: Router,
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
+    private userService: UserService,
   ) {}
 
   onScroll(event): void {
@@ -75,7 +74,7 @@ export class NotificationComponent {
   ngOnInit(): void {
     this.isSafari = isSafari();
     // check exit email
-    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    const userEmail = this.userService.getCurrentUser()?.email;
     if (!userEmail) {
       return;
     }

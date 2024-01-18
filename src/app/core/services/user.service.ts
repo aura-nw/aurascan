@@ -1,24 +1,70 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { clearLocalData } from 'src/app/global/global';
+import { CW20_TRACKING, CW721_TRACKING, STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
+import { IUser } from '../models/auth.models';
+import local from '../utils/storage/local';
 import { CommonService } from './common.service';
-import { map } from 'rxjs/operators';
-import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
-import { TRANSACTION_TYPE_ENUM } from '../constants/transaction.enum';
-import { TYPE_MULTI_VER } from '../constants/transaction.constant';
 
 @Injectable({ providedIn: 'root' })
-export class UserService extends CommonService {
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
-    super(http, environmentService);
+export class UserService {
+  private userSubject$: BehaviorSubject<IUser | null>;
+  user$: Observable<IUser | null>;
+
+  apiUrl: string;
+  graphUrl: string;
+  envDB: string;
+
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+  ) {
+    this.initUser();
+
+    this.environmentService.config.subscribe((config) => {
+      if (config) {
+        const { api } = config;
+        this.apiUrl = api.backend;
+        this.graphUrl = api.horoscope?.url + api.horoscope?.graphql;
+        this.envDB = api.horoscope.chain;
+      }
+    });
+  }
+
+  initUser() {
+    const user = local.getItem<IUser>(STORAGE_KEYS.USER_DATA);
+    this.userSubject$ = new BehaviorSubject(user || null);
+
+    this.user$ = this.userSubject$.asObservable();
+    return user;
+  }
+
+  getCurrentUser() {
+    if (this.userSubject$) {
+      return this.userSubject$?.getValue();
+    }
+
+    // Get from local if the userObject$ is not initialized
+    return local.getItem<IUser>(STORAGE_KEYS.USER_DATA);
+  }
+
+  setUser(user: IUser) {
+    if (user) {
+      this.userSubject$.next(user);
+      local.setItem(STORAGE_KEYS.USER_DATA, user);
+    } else {
+      this.userSubject$.next(null);
+    }
   }
 
   registerUser(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/users/register-with-password`, payload);
   }
 
-  loginWithPassword(payload): Observable<any> {
+  loginWithPassword(payload: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/login-with-password`, payload);
   }
 
@@ -47,6 +93,13 @@ export class UserService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/auth/refresh-token`, payload);
   }
 
+  logout() {
+    this.setUser(null);
+    this.userSubject$ = new BehaviorSubject(null);
+    this.user$ = this.userSubject$.asObservable();
+    clearLocalData();
+  }
+
   getListTxByAddress(payload) {
     const operationsDoc = `
     query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc, $address: String = null) {
@@ -65,6 +118,7 @@ export class UserService extends CommonService {
       }
     }
     `;
+
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
@@ -97,10 +151,10 @@ export class UserService extends CommonService {
       ${this.envDB} {
         transaction(
           where: {
+            timestamp: { _lte: $end_time, _gte: $start_time }
             coin_transfers: {
               _or: [{ from: { _eq: $from } }, { to: { _eq: $to } }]
               block_height: { _lt: $height_lt, _gt: $height_gt }
-              transaction: { timestamp: { _lte: $end_time, _gte: $start_time } }
               message: { type: { _in: $msg_types_in, _nin: $msg_types_nin } }
             }
           }
@@ -177,11 +231,7 @@ export class UserService extends CommonService {
             code
             transaction_messages {
               type
-            content
-            content
-            type
               content
-            type
             }
             cw20_activities(where: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}]}) {
               action

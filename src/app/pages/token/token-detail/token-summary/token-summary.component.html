@@ -3,7 +3,7 @@
     <tr>
       <td colspan="2">
         <div class="d-flex justify-content-between align-items-center">
-          <div class="h6 h3-mob mb-0">
+          <div class="h4 mb-0">
             <span class="text--white">Profile Summary </span>
           </div>
           <div class="dropdown aura-dropdown">
@@ -26,27 +26,89 @@
         </div>
       </td>
     </tr>
-    <tr>
-      <td colspan="2">
-        <div class="d-flex align-items-center py-2">
-          <div class="first-col text--gray-5">Contract:</div>
-          <div class="break-word">
-            <app-name-tag
-              [value]="tokenDetail?.contract_address"
-              [url]="'contracts'"
-              [fullText]="true"></app-name-tag>
+
+    <ng-container *ngIf="tokenDetail.modeToken === EModeToken.CWToken">
+      <tr>
+        <td colspan="2">
+          <div class="d-flex align-items-center py-2">
+            <div class="first-col text--gray-5">Contract:</div>
+            <div class="break-word">
+              <app-name-tag
+                [value]="tokenDetail?.contract_address"
+                [url]="'contracts'"
+                [fullText]="true"></app-name-tag>
+            </div>
           </div>
-        </div>
-      </td>
-    </tr>
-    <tr *ngIf="!tokenDetail.isNFTContract">
-      <td colspan="2">
-        <div class="d-flex align-items-center py-2">
-          <div class="first-col text--gray-5">Decimals:</div>
-          <div class="text--white">{{ tokenDetail?.decimals }}</div>
-        </div>
-      </td>
-    </tr>
+        </td>
+      </tr>
+      <tr *ngIf="!tokenDetail.isNFTContract">
+        <td colspan="2">
+          <div class="d-flex align-items-center py-2">
+            <div class="first-col text--gray-5">Decimals:</div>
+            <div class="text--white">{{ tokenDetail?.decimals }}</div>
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+
+    <ng-container *ngIf="tokenDetail.modeToken === EModeToken.IBCCoin">
+      <tr>
+        <td colspan="2">
+          <div class="d-flex align-items-center py-2">
+            <div class="first-col text--gray-5">Hash</div>
+            <div class="break-word text--primary d-flex align-items-center">
+              {{ tokenDetail.denomHash | ellipsis: 10 : 6 }}
+              <div class="aura-tooltip-contain">
+                <button
+                  class="button btn-border aura-tooltip-object disabled-hover p-0 ml-2"
+                  #tooltip
+                  (click)="commonService.showToolTip(tooltip)"
+                  [cdkCopyToClipboard]="tokenDetail.denomHash">
+                  <i class="ph ph-copy text--white body-01"></i>
+                </button>
+                <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="!tokenDetail.isNFTContract">
+        <td colspan="2">
+          <div class="d-flex align-items-center py-2">
+            <div class="first-col text--gray-5">Path</div>
+            <div class="text--white d-flex align-items-center">
+              {{ tokenDetail.channelPath?.path }}
+              <!-- <i
+                *ngIf="channelCounterId"
+                class="ph-arrow-square-out-fill body-01 h4-mob ml-4 cursor-pointer"
+                [routerLink]="['/ibc-relayer/', channelId, channelCounterId]"></i> -->
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+
+    <ng-container *ngIf="tokenDetail.modeToken === EModeToken.Native">
+      <tr>
+        <td colspan="2">
+          <div class="d-flex align-items-center py-2">
+            <div class="first-col text--gray-5">Staking Bonded</div>
+            <div class="text--gray-1">
+              {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.total_aura || 0 }}
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="d-flex align-items-center py-2">
+            <div class="first-col text--gray-5">Decimals:</div>
+            <div class="text--gray-11">{{ tokenDetail?.decimals }}</div>
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+
     <tr>
       <td colspan="2">
         <div class="d-flex align-items-center py-2">

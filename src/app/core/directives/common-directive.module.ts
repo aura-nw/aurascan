@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { NumberDirective } from './number.directive';
 import { BigNumberDirective } from './big-number.directive';
-
-
+import { LinkDenomDirective } from './link-denom.directive';
 
 @NgModule({
   declarations: [
     NumberDirective,
-    BigNumberDirective
+    BigNumberDirective,
+    LinkDenomDirective
   ],
   imports: [
   ],
   exports: [
     NumberDirective,
-    BigNumberDirective
+    BigNumberDirective,
+    LinkDenomDirective
   ]
 })
 export class CommonDirectiveModule { }

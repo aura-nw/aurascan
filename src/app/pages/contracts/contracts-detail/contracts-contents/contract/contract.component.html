@@ -53,20 +53,20 @@
     <div class="button-tab-group">
       <button
         class="button-tab"
-        [class.active]="countCurrent === contractType.Code"
+        [class.active]="currentTab === contractType.Code"
         (click)="changeTab(contractType.Code)">
         <span>Code</span>
       </button>
       <button
         class="button-tab"
-        [class.active]="countCurrent === contractType.ReadContract"
+        [class.active]="currentTab === contractType.ReadContract"
         (click)="changeTab(contractType.ReadContract)">
         <span class="d-none d-lg-block">Read Contract</span>
         <span class="d-lg-none">Read</span>
       </button>
       <button
         class="button-tab"
-        [class.active]="countCurrent === contractType.WriteContract"
+        [class.active]="currentTab === contractType.WriteContract"
         (click)="changeTab(contractType.WriteContract)">
         <span class="d-none d-lg-block">Write Contract</span>
         <span class="d-lg-none">Write</span>
@@ -99,13 +99,13 @@
 <div class="mt-4 mt-lg-8">
   <ng-container *ngIf="contractDetail && contractTypeData === contractVerifyType.Verified">
     <app-code-contract
-      *ngIf="countCurrent === contractType.Code"
+      *ngIf="currentTab === contractType.Code"
       [contractDetailData]="contractDetail"></app-code-contract>
     <app-read-contract
-      *ngIf="countCurrent === contractType.ReadContract"
+      *ngIf="currentTab === contractType.ReadContract"
       [contractDetailData]="contractDetail"></app-read-contract>
     <app-write-contract
-      *ngIf="countCurrent === contractType.WriteContract"
+      *ngIf="currentTab === contractType.WriteContract"
       [contractDetailData]="contractDetail"></app-write-contract>
   </ng-container>
 </div>

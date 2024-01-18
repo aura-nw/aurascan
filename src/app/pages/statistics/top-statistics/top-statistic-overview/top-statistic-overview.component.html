@@ -24,7 +24,9 @@
         <div class="card-info px-6 py-6">
           <div class="d-flex justify-content-between align-items-center">
             <div class="body text--gray-2">Top {{ denom }} Spender</div>
-            <div class="body text--gray-2">Amount {{ denom }}</div>
+            <div class="body text--gray-2">
+              Amount <span appLinkDenom>{{ denom }}</span>
+            </div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
@@ -34,7 +36,7 @@
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>
             <div class="body text--gray-1">
-              {{ (transactionsData.top_amount_sent[0]?.amount | balance : coinDecimals | mask : 'separator.6') ?? 0 }}
+              {{ (transactionsData.top_amount_sent[0]?.amount | balance: coinDecimals | mask: 'separator.6') ?? 0 }}
             </div>
           </div>
         </div>
@@ -43,7 +45,7 @@
         <div class="card-info px-6 py-6">
           <div class="d-flex justify-content-between align-items-center">
             <div class="body text--gray-2">Top {{ denom }} Receiver</div>
-            <div class="body text--gray-2">Amount {{ denom }}</div>
+            <div class="body text--gray-2">Amount <span appLinkDenom>{{ denom }}</span></div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
@@ -53,9 +55,7 @@
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>
             <div class="body text--gray-1">
-              {{
-                (transactionsData.top_amount_received[0]?.amount | balance : coinDecimals | mask : 'separator.6') ?? 0
-              }}
+              {{ (transactionsData.top_amount_received[0]?.amount | balance: coinDecimals | mask: 'separator.6') ?? 0 }}
             </div>
           </div>
         </div>

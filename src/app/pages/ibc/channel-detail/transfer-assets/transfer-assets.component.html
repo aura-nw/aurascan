@@ -51,7 +51,7 @@
                             <img
                               [src]="
                                 !data['dataDenom']?.image
-                                  ? 'assets/images/logo/auraTitleLogo.png'
+                                  ? ('assets/images/logo/auraTitleLogo.png')
                                   : data['dataDenom']?.image
                               "
                               alt=""
@@ -99,8 +99,8 @@
                               <app-tooltip-customize
                                 *ngIf="
                                   data.amount !== 0 &&
-                                  ((data.amount | balance: data.decimal | lt: 0.001) ||
-                                    (data.amount | balance: data.decimal | gte: 1000000))
+                                  ((data.amount | balance: data['dataDenom']?.decimals | lt: 0.001) ||
+                                    (data.amount | balance: data['dataDenom']?.decimals | gte: 1000000))
                                 "
                                 [content]="data.amount | balance: data['dataDenom']?.decimals | mask: 'separator'">
                               </app-tooltip-customize>
@@ -128,7 +128,9 @@
                   <div class="d-flex align-items-center">
                     <img
                       [src]="
-                        !data['dataDenom']?.image ? 'assets/images/logo/auraTitleLogo.png' : data['dataDenom']?.image
+                        !data['dataDenom']?.image
+                          ? ('assets/images/logo/auraTitleLogo.png')
+                          : data['dataDenom']?.image
                       "
                       alt=""
                       class="mr-2"
@@ -219,7 +221,7 @@
                             <img
                               [src]="
                                 !data['dataDenom']?.image
-                                  ? 'assets/images/logo/auraTitleLogo.png'
+                                  ? ('assets/images/logo/auraTitleLogo.png')
                                   : data['dataDenom']?.image
                               "
                               alt=""
@@ -296,7 +298,9 @@
                   <div class="d-flex align-items-center">
                     <img
                       [src]="
-                        !data['dataDenom']?.image ? 'assets/images/logo/auraTitleLogo.png' : data['dataDenom']?.image
+                        !data['dataDenom']?.image
+                          ? ('assets/images/logo/auraTitleLogo.png')
+                          : data['dataDenom']?.image
                       "
                       alt=""
                       class="mr-2"

@@ -59,14 +59,17 @@
     i.ph-caret-down {
       display: none;
     }
+
     i.ph-caret-up {
       display: flex;
     }
   }
+
   &[aria-expanded='false'] {
     i.ph-caret-down {
       display: flex;
     }
+
     i.ph-caret-up {
       display: none;
     }
@@ -78,6 +81,7 @@
   @media (max-width: 415px) {
     justify-content: center;
   }
+
   .box-record {
     .btn-record {
       height: 32px;
@@ -87,8 +91,9 @@
       background-color: var(--aura-gray-10);
       color: var(--aura-gray-4);
     }
+
     .menu-record {
-      inset: 0px auto auto 8px !important;
+      inset: 30px auto auto 8px !important;
       width: 75px;
       min-width: auto;
     }
