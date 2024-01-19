@@ -95,8 +95,6 @@ export class BlockDetailComponent implements OnInit {
           block['chainid'] = _.get(res.block[0], 'data.block.header.chain_id');
           block['json_data'] = _.get(res.block[0], 'data.block');
           block['gas_used'] = block['gas_wanted'] = 0;
-          // block['events'] = _.get(res.block[0], 'data.block_result.finalize_block_events');
-          // const blockEnd = _.get(res.block[0], 'data.block_result.end_block_events');
           block['events'] = _.get(res.block[0], 'data.block_result.begin_block_events');
           const blockEnd = _.get(res.block[0], 'data.block_result.end_block_events');
           if (blockEnd) {
