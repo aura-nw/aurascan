@@ -70,7 +70,10 @@
                         </div>
 
                         <app-tooltip-customize
-                          *ngIf="(tokenDetail.price | lt: 0.001) || (tokenDetail.price | gte: 1000000)"
+                          *ngIf="
+                            (tokenDetail.price != 0 && (tokenDetail.price | lt: 0.001)) ||
+                            (tokenDetail.price | gte: 1000000)
+                          "
                           [content]="+tokenDetail.price | mask: 'separator'">
                         </app-tooltip-customize>
                       </div>

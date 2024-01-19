@@ -212,7 +212,9 @@ export class TokenContentComponent implements OnInit {
           this.setFilterValue(this.infoSearch['balance']);
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      this.infoSearch['balance'] = 0;
+    }
   }
 
   getMoreTx(event) {
