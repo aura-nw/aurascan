@@ -14,7 +14,7 @@ import { StatisticService } from 'src/app/core/services/statistic.service';
 import {
   CHART_CONFIG,
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
-  STATISTIC_CHART_DETAIL_OPTIONS
+  STATISTIC_CHART_DETAIL_OPTIONS,
 } from 'src/app/pages/dashboard/dashboard-chart-options';
 
 @Component({
@@ -36,6 +36,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   originalData = [];
   isLoading = true;
   errTxt: string;
+  rawData: any;
 
   maxAmount = 0;
   minAmount = 0;
@@ -117,6 +118,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
             let dayMax;
             let dayMin;
             let tempArr = [...res.daily_statistics];
+            this.rawData = tempArr;
 
             switch (this.chartType) {
               case 'daily-transactions':
@@ -150,7 +152,30 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
             this.maxAmountDate = formatDate(dayMax, 'dd/MM/yyyy', 'en-US');
             this.minAmountDate = formatDate(dayMin, 'dd/MM/yyyy', 'en-US');
 
+            console.log(tempArr);
+            
             const chartData = this.makeChartData(dataX, dataY);
+            let arrValueDaily = [];
+            dataX.forEach((data) => {
+              arrValueDaily.push(data);
+            });
+            const minValue = Math.min(...arrValueDaily);
+            const maxValue = Math.max(...arrValueDaily);
+            this.areaSeries = this.chart.addAreaSeries({
+              autoscaleInfoProvider: () => ({
+                priceRange: {
+                  minValue: minValue,
+                  maxValue: maxValue,
+                },
+              }),
+            });
+
+            this.areaSeries.applyOptions({
+              lineColor: '#2CB1F5',
+              topColor: 'rgba(136,198,203,0)',
+              bottomColor: 'rgba(119, 182, 188, 0)',
+            });
+
             if (this.originalData.length === chartData.length) {
               this.endData = true;
             }

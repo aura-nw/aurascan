@@ -68,6 +68,10 @@ export const STATISTIC_CHART_DETAIL_OPTIONS: DeepPartial<ChartOptions> = {
   },
   leftPriceScale: {
     visible: true,
+    // scaleMargins: {
+    //   top: 0.6,
+    //   bottom: 0.05,
+    // },
   },
   rightPriceScale: {
     visible: false,
