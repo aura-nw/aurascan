@@ -21,7 +21,7 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'assets'">
                         <div class="d-flex align-items-center">
-                          <img class="rounded-circle" [src]="data | marketInfo: 'logo'" width="20" height="20" />
+                          <img class="rounded-circle" [appImg]="data | marketInfo: 'logo'" width="20" height="20" />
                           <div class="ml-3 d-flex transfer-token-info">
                             <div class="aura-tooltip-contain">
                               <span

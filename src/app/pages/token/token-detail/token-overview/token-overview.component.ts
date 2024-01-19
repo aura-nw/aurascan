@@ -99,8 +99,8 @@ export class TokenOverviewComponent implements OnInit {
     const dataNative = local.getItem<any>(STORAGE_KEYS.DATA_NATIVE);
     let changePercent = 0;
     if (dataNative?.tokenHolderStatistics?.length > 1) {
-      changePercent =
-        (dataNative.tokenHolderStatistics[1].totalHolder * 100) / dataNative.tokenHolderStatistics[0].totalHolder - 100;
+      const [before, after, ..._] = dataNative.tokenHolderStatistics;
+      changePercent = before.totalHolder == 0 ? 0 : (after.totalHolder * 100) / before.totalHolder - 100;
     }
 
     this.tokenDetail = {

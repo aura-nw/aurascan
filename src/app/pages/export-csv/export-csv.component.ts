@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
+import * as moment from 'moment';
 import { Subject, takeUntil } from 'rxjs';
 import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
@@ -35,6 +36,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   responseCaptcha;
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
+  prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
 
   destroyed$ = new Subject<void>();
   constructor(
@@ -118,8 +120,8 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     let { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
 
     if (startDate || endDate) {
-      startDate = this.getConvertDate(startDate);
-      endDate = this.getConvertDate(endDate, true);
+      startDate = moment(startDate).startOf('day').toISOString();
+      endDate = moment(endDate).endOf('day').toISOString();
     }
 
     let payload = {
@@ -256,16 +258,6 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
 
     return true;
-  }
-
-  getConvertDate(date, lastDate = false) {
-    if (!date) {
-      return null;
-    }
-
-    let temp = this.datePipe.transform(date, DATEFORMAT.DATE_ONLY);
-    let subStringDate = lastDate ? 'T24:00:000Z' : 'T00:00:000Z';
-    return temp + subStringDate;
   }
 
   resetData() {

@@ -1,6 +1,6 @@
-<app-pagetitle title="Aura Charts & Statistics"></app-pagetitle>
+<app-pagetitle title="{{ chainName }} Charts & Statistics"></app-pagetitle>
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
-<section class="chart-stats mt-8 mt-lg-6 {{!isLoading && !errTxt ? 'd-block' : 'd-none'}}">
+<section class="chart-stats mt-8 mt-lg-6 {{ !isLoading && !errTxt ? 'd-block' : 'd-none' }}">
   <div class="card">
     <div class="card-body">
       <div class="container-fluid px-0">
@@ -27,7 +27,7 @@
               <div class="w-100 chart-contain pl-1 pl-lg-0 mt-4">
                 <div id="uniqueAddressChart"></div>
                 <div class="chart__name">
-                  <span class="text--gray-1 caption fw-normal">Aura cumulative Address Growth</span>
+                  <span class="text--gray-1 caption fw-normal">{{ chainName }} cumulative Address Growth</span>
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
               <div class="w-100 chart-contain pl-1 pl-lg-0 mt-4">
                 <div id="dailyAddressChart"></div>
                 <div class="chart__name">
-                  <span class="text--gray-1 caption fw-normal">Active Aura addresses per day</span>
+                  <span class="text--gray-1 caption fw-normal">Active {{ chainName }} addresses per day</span>
                 </div>
               </div>
             </div>

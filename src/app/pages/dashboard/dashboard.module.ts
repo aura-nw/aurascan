@@ -17,6 +17,7 @@ import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-custom
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -37,6 +38,7 @@ import { DashboardComponent } from './dashboard.component';
     TableNoDataModule,
     NgbCarouselModule,
     TooltipCustomizeModule,
+    CommonDirectiveModule
   ],
   providers: [
     DatePipe,
