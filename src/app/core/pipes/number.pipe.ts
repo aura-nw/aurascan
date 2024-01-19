@@ -12,7 +12,7 @@ export class FormatDigitPipe implements PipeTransform {
 
 @Pipe({ name: 'balance' })
 export class BalancePipe implements PipeTransform {
-  transform(amount: number, decimal: number = 0, notFixed = false): any {
+  transform(amount: number | string, decimal: number = 0, notFixed = false): any {
     const value = BigNumber(amount).dividedBy(BigNumber(10).pow(decimal));
 
     return notFixed ? value : value.toFixed();

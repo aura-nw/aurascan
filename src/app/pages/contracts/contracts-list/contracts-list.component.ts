@@ -9,7 +9,7 @@ import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
-import { TableTemplate } from '../../../core/models/common.model';
+import { EFeature, TableTemplate } from '../../../core/models/common.model';
 import { ContractService } from '../../../core/services/contract.service';
 import { shortenAddress } from '../../../core/utils/common/shorten';
 
@@ -19,6 +19,7 @@ import { shortenAddress } from '../../../core/utils/common/shorten';
   styleUrls: ['./contracts-list.component.scss'],
 })
 export class ContractsListComponent implements OnInit, OnDestroy {
+  EFeature = EFeature;
   typeCW4973 = TYPE_CW4973;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },

@@ -38,7 +38,11 @@ export class ApiCw20TokenService {
 
   apiAccount = inject(ApiAccountService);
 
-  constructor(private http: HttpClient, private env: EnvironmentService, private tokenService: TokenService) {}
+  constructor(
+    private http: HttpClient,
+    private env: EnvironmentService,
+    private tokenService: TokenService,
+  ) {}
 
   getByOwner(address: string) {
     return forkJoin([
@@ -65,7 +69,13 @@ export class ApiCw20TokenService {
 
         const totalValue = allTokens
           .filter((item) => item.verify_status === 'VERIFIED')
-          .reduce((prev, current) => BigNumber(current?.value).plus(prev).toFixed(), 0);
+          .reduce(
+            (prev, current) =>
+              BigNumber(current?.value)
+                .plus(prev)
+                .toFixed(),
+            0,
+          );
 
         return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),
@@ -108,9 +118,10 @@ export class ApiCw20TokenService {
   }
 
   parseNativeToken(account, coinsMarkets) {
-    const coinMarket = coinsMarkets.find((coin) => coin.coin_id === TOKEN_ID_GET_PRICE.AURA);
+    const nativeId = this.env.coingecko.ids[0];
+    const coinMarket = coinsMarkets.find((coin) => coin.coin_id === nativeId);
     return {
-      name: this.nativeName,
+      name: this.env.chainName,
       symbol: this.currencies.coinDenom,
       decimals: this.currencies.coinDecimals,
       denom: this.currencies.coinMinimalDenom,

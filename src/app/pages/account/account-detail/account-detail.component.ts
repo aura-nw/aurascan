@@ -8,6 +8,7 @@ import BigNumber from 'bignumber.js';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { EFeature } from 'src/app/core/models/common.model';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -60,6 +61,7 @@ export class AccountDetailComponent implements OnInit {
   totalSBT = 0;
   isContractAddress = false;
   isWatchList = false;
+  EFeature = EFeature;
 
   constructor(
     public commonService: CommonService,
