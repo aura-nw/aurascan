@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
-import { getAmount, getDataInfo } from 'src/app/global/global';
-import { MEDIA_TYPE, NUMBER_CONVERT, STORAGE_KEYS } from '../../constants/common.constant';
-import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
-import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
-import { ESigningType, WALLET_PROVIDER } from '../../constants/wallet.constant';
-import { WalletStorage } from '../../models/wallet';
+import {getAmount, getDataInfo} from 'src/app/global/global';
+import {MEDIA_TYPE, NUMBER_CONVERT, STORAGE_KEYS} from '../../constants/common.constant';
+import {TYPE_TRANSACTION} from '../../constants/transaction.constant';
+import {CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM} from '../../constants/transaction.enum';
+import {ESigningType, WALLET_PROVIDER} from '../../constants/wallet.constant';
+import {WalletStorage} from '../../models/wallet';
 import local from '../storage/local';
-import { balanceOf } from './parsing';
+import {balanceOf} from './parsing';
 
 export function getInfo(globals: any, data: any): void {
   globals.dataHeader = data;
@@ -28,11 +28,11 @@ export function formatNumber(number: number, args?: any): any {
   let key = '';
 
   const powers = [
-    { key: 'Q', value: Math.pow(10, 15) },
-    { key: 'T', value: Math.pow(10, 12) },
-    { key: 'B', value: Math.pow(10, 9) },
-    { key: 'M', value: Math.pow(10, 6) },
-    { key: 'K', value: 1000 },
+    {key: 'Q', value: Math.pow(10, 15)},
+    {key: 'T', value: Math.pow(10, 12)},
+    {key: 'B', value: Math.pow(10, 9)},
+    {key: 'M', value: Math.pow(10, 6)},
+    {key: 'K', value: 1000},
   ];
 
   for (let i = 0; i < powers.length; i++) {
@@ -131,11 +131,12 @@ export function convertTxNative(value: string, decimal = 6) {
         let temp = value?.match(/\d+/g)[0];
         value = value?.replace(temp, '');
       }
-    } catch {}
+    } catch {
+    }
     display = value.slice(value.indexOf('ibc'));
-    result = listTokenIBC?.find((k) => k.denom === display) || { display: value, decimal: decimal };
+    result = listTokenIBC?.find((k) => k.denom === display) || {display: value, decimal: decimal};
   } else {
-    result = { display: display, decimal: decimal };
+    result = {display: display, decimal: decimal};
   }
   result['denom'] = result['denom'] || display;
   return result;
@@ -167,16 +168,18 @@ export function getTypeTx(element) {
       if (typeof dataTemp === 'string') {
         try {
           dataTemp = JSON.parse(dataTemp);
-        } catch (e) {}
+        } catch (e) {
+        }
       }
       action = Object.keys(dataTemp)[0];
       type = 'Contract: ' + action;
-    } catch (e) {}
+    } catch (e) {
+    }
   } else {
-    type = _.find(TYPE_TRANSACTION, { label: type })?.value || type.split('.').pop();
+    type = _.find(TYPE_TRANSACTION, {label: type})?.value || type.split('.').pop();
     if (type.startsWith('Msg')) {
       type = type?.replace('Msg', '');
     }
   }
-  return { type, action };
+  return {type, action};
 }
