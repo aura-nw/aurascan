@@ -38,7 +38,7 @@
                 "
                 [src]="defaultImgToken" />
               <img
-                (click)="expandMedia()"
+                (click)="expandMedia(imageUrl && animationUrl ? animationUrl : imageUrl, MEDIA_TYPE.IMG)"
                 *ngIf="
                   (nftType === MEDIA_TYPE.IMG || (nftDetail?.media_info?.onchain?.metadata?.image && !animationUrl)) &&
                   isError === false
@@ -46,21 +46,21 @@
                 (error)="error()"
                 [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
               <video
-                (click)="expandMedia()"
+                (click)="expandMedia(animationUrl, MEDIA_TYPE.VIDEO, imageUrl)"
                 [src]="animationUrl"
                 controls
                 controlsList="nodownload"
                 *ngIf="nftType === MEDIA_TYPE.VIDEO && nftDetail.media_info?.offchain?.animation?.url"
                 poster="{{ imageUrl }}"></video>
               <app-model-view
-                (click)="expandMedia()"
+                (click)="expandMedia(animationUrl, MEDIA_TYPE._3D, imageUrl)"
                 *ngIf="nftType === MEDIA_TYPE._3D && nftDetail.media_info?.offchain?.animation?.url"
                 [modelUrl]="animationUrl"
                 [disablePan]="false"
                 [previewImg]="imageUrl">
               </app-model-view>
               <app-audio-player
-                (click)="expandMedia()"
+                (click)="expandMedia(animationUrl, MEDIA_TYPE.AUDIO, imageUrl)"
                 *ngIf="nftType === MEDIA_TYPE.AUDIO && nftDetail.media_info?.offchain?.animation?.url"
                 [src]="animationUrl"
                 [previewImg]="imageUrl">

@@ -346,22 +346,15 @@ export class NFTDetailComponent implements OnInit {
     return typeof data === 'object' && data !== null;
   }
 
-  expandMedia(): void {
-    let content;
-    if (this.nftType === MEDIA_TYPE.IMG) {
-      content = this.imageUrl;
-    } else {
-      content = this.animationUrl;
-    }
-
+  expandMedia(src: string, type: MEDIA_TYPE, mediaPoster?: string): void {
     if (!this.isMobileMatched) {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = false;
       dialogConfig.panelClass = 'transparent-dialog';
       dialogConfig.data = {
-        mediaType: this.nftType,
-        mediaSrc: content,
-        mediaPoster: this.imageUrl,
+        mediaType: type,
+        mediaSrc: src,
+        mediaPoster: mediaPoster,
       };
       this.dialog.open(MediaExpandComponent, dialogConfig);
     }
