@@ -101,7 +101,6 @@ export class BlockDetailComponent implements OnInit {
             block['events'] = block['events'].concat(blockEnd);
           }
           this.blockDetail = block;
-
           //get list tx detail
           let txs = [];
           const payload = {

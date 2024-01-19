@@ -69,10 +69,8 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
           res.instantiate_msg_schema = _.get(res, 'code.code_id_verifications[0].instantiate_msg_schema');
           res.query_msg_schema = _.get(res, 'code.code_id_verifications[0].query_msg_schema');
           res.contract_hash = _.get(res, 'code.code_id_verifications[0].data_hash');
-          this.contractDetail = res;
-        } else {
-          this.contractDetail = null;
         }
+        this.contractDetail = res;
       },
     });
   }

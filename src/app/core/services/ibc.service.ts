@@ -353,11 +353,17 @@ export class IBCService extends CommonService {
   }
 
   getTotalSupplyLCD(denomHash: string) {
-    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}/by_denom?denom=${denomHash}`);
+    // Cosmos SDK version 0.47.0 - Rest API
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}/by_denom?denom=${denomHash}`).catch(() => ({
+      amount: {
+        denom: denomHash,
+        amount: '0',
+      },
+    }));
   }
 
   getChannelInfoByDenom(denomHash: string) {
-    return axios.get(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`);
+    return axios.get(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`).catch(() => null);
   }
 
   getDenomTotalHolder(denomHash: string) {
