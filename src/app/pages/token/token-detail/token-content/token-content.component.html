@@ -173,7 +173,6 @@
       [tokenDetail]="tokenDetail"
       [keyWord]="textSearch"
       [isSearchAddress]="isSearchAddress"
-      (resultLength)="getLength($event)"
       [decimalValue]="tokenDetail?.decimals || 0"
       (hasMore)="getMoreTx($event)">
     </app-token-transfers-tab>

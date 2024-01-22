@@ -25,6 +25,7 @@ export interface TableData {
   fee: number;
   gas_used: number;
   gas_wanted: number;
+  lst_type?: Array<any>;
 }
 
 @Component({
@@ -179,6 +180,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
         fee: +contract.fee,
         gas_used: +contract.gas_used,
         gas_wanted: +contract.gas_wanted,
+        lst_type: contract.lstType
       };
       return tableDta;
     });

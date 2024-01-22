@@ -117,7 +117,7 @@
               <div *ngFor="let data of dataIBCSending?.data" class="card-ibc-assets">
                 <div class="d-flex align-items-center justify-content-between text--white">
                   <div class="d-flex align-items-center">
-                    <img [src]="data['dataDenom']?.image" alt="" class="mr-2" width="20px" height="20px" />
+                    <img [appImg]="data['dataDenom']?.image" alt="" class="mr-2" width="20px" height="20px" />
                     <span>{{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis: 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>

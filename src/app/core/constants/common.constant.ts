@@ -113,3 +113,5 @@ export const STORAGE_KEYS = {
   LAST_USED_PROVIDER: 'LAST_USED_PROVIDER',
   DATA_NATIVE: 'nativeData',
 };
+
+export const TITLE_LOGO = 'images/logo/title-logo.png';
