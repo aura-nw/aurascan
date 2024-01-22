@@ -10,6 +10,7 @@ import { BalancePipe, FormatDigitPipe, GtePipe, GtPipe, LtePipe, LtPipe } from '
 import { CombineTxsMsgPipe, EllipsisPipe } from './string.pipe';
 import { NameTagTooltipPipe } from './tooltip.pipe';
 import { IsContractPipe } from './address.pipe';
+import { checkIBCPipe } from './ibc.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -34,6 +35,7 @@ import { IsContractPipe } from './address.pipe';
     CustomTimeDatePipe,
     DecodeDataPipe,
     IsContractPipe,
+    checkIBCPipe
   ],
   exports: [
     JsonPipe,
@@ -56,6 +58,7 @@ import { IsContractPipe } from './address.pipe';
     CustomTimeDatePipe,
     DecodeDataPipe,
     IsContractPipe,
+    checkIBCPipe
   ],
   providers: [],
 })

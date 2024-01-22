@@ -275,7 +275,7 @@ export class TransactionService extends CommonService {
     const operationsDoc = `
     query queryListSequence($limit: Int, $compositeKey: [String!] = "", $value: String = "", $channel: String = "") {
       ${this.envDB} {
-        transaction(limit: $limit, where: {event_attributes: {composite_key: {_in: ["acknowledge_packet.packet_src_channel", "send_packet.packet_src_channel", "recv_packet.packet_src_channel"]}, value: {_eq: $channel}}, _and: {event_attributes: {composite_key: {_in: $compositeKey}, value: {_eq: $value}}}}) {
+        transaction(limit: $limit, where: {event_attributes: {composite_key: {_in: ["acknowledge_packet.packet_src_channel", "send_packet.packet_src_channel", "recv_packet.packet_src_channel", "timeout_packet.packet_src_channel"]}, value: {_eq: $channel}}, _and: {event_attributes: {composite_key: {_in: $compositeKey}, value: {_eq: $value}}}}) {
           height
           hash
           timestamp

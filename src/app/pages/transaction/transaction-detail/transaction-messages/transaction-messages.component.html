@@ -347,34 +347,34 @@
         <div class="col-12 col-lg-9" style="word-break: break-word">
           <ng-container
             [ngTemplateOutlet]="ibcItem"
-            [ngTemplateOutletContext]="{ type: eTransType.IBCTransfer, title: 'Transfer' }"
-            *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
+            [ngTemplateOutletContext]="{ type: eTransType.IBCTransfer, title: ibcType.Transfer }"
+            *ngIf="eTransType.IBCTransfer | checkIBC: listIBCProgress">
           </ng-container>
 
-          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout)?.length === 0">
+          <ng-container *ngIf="!(eTransType.IBCTimeout | checkIBC: listIBCProgress)">
             <ng-container
               [ngTemplateOutlet]="ibcItem"
-              [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: 'Receive' }"
-              *ngIf="filterIBCType(eTransType.IBCReceived)?.length > 0">
+              [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: ibcType.Receive }"
+              *ngIf="eTransType.IBCReceived | checkIBC: listIBCProgress">
             </ng-container>
             <ng-container
               [ngTemplateOutlet]="ibcItem"
-              [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: 'Acknowledgement' }"
-              *ngIf="filterIBCType(eTransType.IBCAcknowledgement)?.length > 0">
+              [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: ibcType.Acknowledgement }"
+              *ngIf="eTransType.IBCAcknowledgement | checkIBC: listIBCProgress">
             </ng-container>
           </ng-container>
 
           <ng-container
-            *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0"
+            *ngIf="eTransType.IBCTimeout | checkIBC: listIBCProgress"
             [ngTemplateOutlet]="ibcItem"
-            [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }">
+            [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: ibcType.TimeOut }">
           </ng-container>
         </div>
       </div>
       <ng-template #ibcItem let-type="type" let-title="title">
         <div class="ibc-item" *ngIf="listIBCProgress">
-          <div class="d-flex align-items-center">
-            <div class="ibc-checker mr-2" [ngClass]="type === eTransType.IBCTimeout ? 'timeout' : ''"></div>
+          <div class="d-flex align-items-center text-capitalize">
+            <div class="ibc-checker mr-2" [ngClass]="type === eTransType.IBCTimeout ? ibcType.TimeOut : ''"></div>
             <div class="text--green-4" [ngClass]="type === eTransType.IBCTimeout ? 'text--red-3' : ''">{{ title }}</div>
           </div>
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
