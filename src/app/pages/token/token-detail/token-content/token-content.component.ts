@@ -21,7 +21,6 @@ import { ContractService } from 'src/app/core/services/contract.service';
 export class TokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
-  @Output() resultLength = new EventEmitter<any>();
   @Output() hasMore = new EventEmitter<any>();
 
   tabStaking = [TokenTab.Holders];
@@ -34,7 +33,6 @@ export class TokenContentComponent implements OnInit {
   searchTemp: string = '';
   isSearchTx = false;
   isSearchAddress = false;
-  resultSearch = 0;
   tokenTab = TokenTab;
   currentTab = this.tokenTab.Transfers;
   tabsBackup: any;
@@ -162,11 +160,6 @@ export class TokenContentComponent implements OnInit {
     }
   }
 
-  getLength(result: string) {
-    this.resultSearch = Number(result) || 0;
-    this.resultLength.emit(this.resultSearch);
-  }
-
   resetSearch() {
     this.searchTemp = '';
     if (this.paramQuery) {
@@ -208,7 +201,6 @@ export class TokenContentComponent implements OnInit {
           .dividedBy(this.tokenService.nativePrice)
           .toFixed();
       } else {
-        this.infoSearch['balance'] = 0;
         const tempBalance = await this.contractService.getContractBalance(address).catch((error) => null);
         if (tempBalance?.data?.balances?.length > 0) {
           this.infoSearch['balance'] =

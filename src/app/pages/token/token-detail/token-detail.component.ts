@@ -135,10 +135,6 @@ export class TokenDetailComponent implements OnInit {
     });
   }
 
-  getLength(result: string) {
-    this.tokenDetail['totalTransfer'] = Number(result) || 0;
-  }
-
   getMoreTx(event) {
     this.tokenDetail['hasMoreTx'] = event;
   }
