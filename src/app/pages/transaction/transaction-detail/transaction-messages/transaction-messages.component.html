@@ -244,7 +244,7 @@
     {{ getDataIBC(ibcListMapping.TimeOut) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="getLongValue(ibcData?.time_out[index - 1]?.next_sequence_recv)"
+      [value]="getLongValue(ibcData?.timeout[index - 1]?.next_sequence_recv)"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
@@ -256,30 +256,30 @@
         <pre
           id="json"
           class="raw-content text--white px-4"
-          [innerHtml]="ibcData?.time_out[index - 1]?.data | appJson"></pre>
+          [innerHtml]="ibcData?.timeout[index - 1]?.data | appJson"></pre>
       </div>
     </div>
     <app-messages-item
       [label]="'Timeout Revision Number'"
-      [value]="ibcData?.time_out[index - 1]?.packet?.timeout_height?.revision_number"></app-messages-item>
+      [value]="ibcData?.timeout[index - 1]?.packet?.timeout_height?.revision_number"></app-messages-item>
     <app-messages-item
       [label]="'Timeout Revision Height'"
-      [value]="ibcData?.time_out[index - 1]?.packet?.timeout_height?.revision_height"></app-messages-item>
+      [value]="ibcData?.timeout[index - 1]?.packet?.timeout_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Timeout Timestamp'"
-      [value]="ibcData?.time_out[index - 1]?.packet?.timeout_timestamp"></app-messages-item>
+      [value]="ibcData?.timeout[index - 1]?.packet?.timeout_timestamp"></app-messages-item>
     <app-messages-item
       [label]="'Proof Revision Number'"
-      [value]="ibcData?.time_out[index - 1]?.proof_height?.revision_number"></app-messages-item>
+      [value]="ibcData?.timeout[index - 1]?.proof_height?.revision_number"></app-messages-item>
     <app-messages-item
       [label]="'Proof Revision Height'"
-      [value]="ibcData?.time_out[index - 1]?.proof_height?.revision_height"></app-messages-item>
+      [value]="ibcData?.timeout[index - 1]?.proof_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Next Sequence Recv'"
-      [value]="getLongValue(ibcData?.time_out[index - 1]?.next_sequence_recv)"></app-messages-item>
+      [value]="getLongValue(ibcData?.timeout[index - 1]?.next_sequence_recv)"></app-messages-item>
     <app-messages-item
       [label]="'Signer'"
-      [value]="ibcData?.time_out[index - 1]?.signer"
+      [value]="ibcData?.timeout[index - 1]?.signer"
       [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
   </ng-template>
 
