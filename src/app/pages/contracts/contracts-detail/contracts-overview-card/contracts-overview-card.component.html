@@ -38,7 +38,9 @@
             [content]="contractBalance | balance: decimal | mask: 'separator'">
           </app-tooltip-customize>
         </div>
-        <a class="text--primary text-underline" [routerLink]="['/account', contractDetail.address]"> More info</a>
+        <a class="text--primary text-decoration-underline" [routerLink]="['/account', contractDetail.address]">
+          More info</a
+        >
       </div>
     </div>
     <div class="mt-3">
