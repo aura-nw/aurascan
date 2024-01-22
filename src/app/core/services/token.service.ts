@@ -34,6 +34,10 @@ export class TokenService extends CommonService {
     return this.totalTransfer$.getValue();
   }
 
+  setTotalTransfer(value: number) {
+    this.totalTransfer$.next(value)
+  }
+
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,

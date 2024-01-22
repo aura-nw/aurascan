@@ -30,7 +30,7 @@ export class TokenOverviewComponent implements OnInit {
   ) {}
 
   ngOnDestroy(): void {
-    this.tokenService.totalTransfer$.next(0);
+    this.tokenService.setTotalTransfer(null)
   }
 
   ngOnInit(): void {

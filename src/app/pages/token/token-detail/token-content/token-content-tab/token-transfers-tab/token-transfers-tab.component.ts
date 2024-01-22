@@ -196,7 +196,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           }
 
           this.pageData.length = this.dataSource.data.length;
-          this.tokenService.totalTransfer$.next(this.pageData.length);
+          this.tokenService.setTotalTransfer(this.pageData.length);
         }
       },
       error: (e) => {
