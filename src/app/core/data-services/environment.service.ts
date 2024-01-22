@@ -83,7 +83,7 @@ export class EnvironmentService {
   }
 
   get chainName() {
-    return _.startCase(_.camelCase(this.chainInfo?.bech32Config?.bech32PrefixAccAddr));
+    return this.environment.nativeName || _.startCase(_.camelCase(this.chainInfo?.bech32Config?.bech32PrefixAccAddr));
   }
 
   get chainConfig() {
@@ -215,7 +215,7 @@ export class EnvironmentService {
   checkNativeApp() {
     if ((window.coin98 || window.leap) && this.isMobile) {
       try {
-        if (window.coin98?.keplr ||  window.leap?.mode == ELeapMode.MobileWeb) {
+        if (window.coin98?.keplr || window.leap?.mode == ELeapMode.MobileWeb) {
           this.isNativeApp = true;
         }
       } catch {}

@@ -13,7 +13,7 @@
   <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
   <div class="card__body body-02 body-mob collapse" id="title1">
     <div>
-      <div class="text--gray-4 caption fw-normal mb-1">AURA Balance</div>
+      <div class="text--gray-4 caption fw-normal mb-1">{{ chainName | uppercase }} Balance</div>
       <div class="d-flex align-items-center">
         <div class="text--gray-light mr-1 aura-tooltip-contain">
           <div *ngIf="contractBalance === 0">
@@ -38,7 +38,7 @@
             [content]="contractBalance | balance: decimal | mask: 'separator'">
           </app-tooltip-customize>
         </div>
-        <a class="text--primary" [routerLink]="['/account', contractDetail.address]"> More info</a>
+        <a class="text--primary text-underline" [routerLink]="['/account', contractDetail.address]"> More info</a>
       </div>
     </div>
     <div class="mt-3">
