@@ -16,6 +16,7 @@ export class TokenService extends CommonService {
   tokensMarket$ = new BehaviorSubject<any[]>(null);
   nativePrice$ = new BehaviorSubject<number>(null);
   filterBalanceNative$ = new BehaviorSubject<number>(null);
+  totalTransfer$ = new BehaviorSubject<number>(null);
 
   get tokensMarket() {
     return this.tokensMarket$.getValue();
@@ -27,6 +28,10 @@ export class TokenService extends CommonService {
 
   get filterBalanceNative() {
     return this.filterBalanceNative$.getValue();
+  }
+
+  get totalTransfer() {
+    return this.totalTransfer$.getValue();
   }
 
   constructor(

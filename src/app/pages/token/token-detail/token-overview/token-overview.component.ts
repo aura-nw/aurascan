@@ -29,6 +29,10 @@ export class TokenOverviewComponent implements OnInit {
     private environmentService: EnvironmentService,
   ) {}
 
+  ngOnDestroy(): void {
+    this.tokenService.totalTransfer$.next(0);
+  }
+
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';

@@ -35,7 +35,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
   @Input() decimalValue: number;
-  @Output() resultLength = new EventEmitter<any>();
   @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
@@ -197,7 +196,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           }
 
           this.pageData.length = this.dataSource.data.length;
-          this.resultLength.emit(this.pageData.length);
+          this.tokenService.totalTransfer$.next(this.pageData.length);
         }
       },
       error: (e) => {
@@ -260,7 +259,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           }
 
           this.pageData.length = this.dataSource.data.length;
-          this.resultLength.emit(this.pageData.length);
+          this.tokenService.totalTransfer$.next(this.pageData.length);
         }
       },
       error: (e) => {
@@ -319,7 +318,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           }
 
           this.pageData.length = res.ibc_ics20_aggregate?.aggregate?.count;
-          this.resultLength.emit(this.pageData.length);
+          this.tokenService.totalTransfer$.next(this.pageData.length);
         }
       },
       error: (e) => {
