@@ -36,11 +36,6 @@
               </th>
               <td mat-cell *matCellDef="let data" [ngClass]="template.isNameTag ? 'nameTag' : ''">
                 <ng-container [ngSwitch]="template.type">
-                  <ng-container *ngSwitchCase="'hash-url-se'">
-                    <a class="text--primary cursor-pointer hash-link">
-                      {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
-                    </a>
-                  </ng-container>
                   <ng-container *ngSwitchCase="'hash-url'">
                     <div *ngIf="!data[template.matColumnDef]">-</div>
                     <ng-container *ngIf="data[template.matColumnDef]">
@@ -66,19 +61,18 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
                     <div
-                      class="aura-status"
+                      class="aura-status aura-tooltip-contain d-flex align-items-center"
                       [style.justify-content]="template?.justify || 'flex-start'"
                       *ngIf="data[template.matColumnDef]">
-                      <div class="status" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
+                      <div class="status aura-tooltip-object" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
                         {{ data[template.matColumnDef] }}
                       </div>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'type'">
-                    <div class="method" *ngIf="data[template.matColumnDef]">
-                      <div class="text-capitalize" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
-                        {{ data[template.matColumnDef] }}
+                      <div *ngIf="data.lst_type?.length > 1" class="ml-1 text--gray-4">
+                        +{{ data.lst_type?.length - 1 }}
                       </div>
+
+                      <app-tooltip-customize [class]="'message-custom'" [content]="data.lst_type | combineTxsMsg">
+                      </app-tooltip-customize>
                     </div>
                   </ng-container>
                   <ng-container *ngSwitchCase="'result'">
@@ -99,9 +93,6 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'time-distance'">
                     {{ data[template.matColumnDef] | dfnsFormatDistanceToNowStrictPure }}
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'short-string'">
-                    {{ data[template.matColumnDef] | ellipsis : 8 : 8 }}
                   </ng-container>
                   <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                 </ng-container>
