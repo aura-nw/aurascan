@@ -452,9 +452,8 @@
                           </div>
                           <a
                             *ngSwitchCase="'tx_hash'"
-                            [style.width.px]="template?.headerWidth"
                             class="text--primary cursor-pointer hash-link"
-                            [copyBtn]="data['tx_hash']"
+                            [copyBtn]="data[template.matColumnDef]"
                             [routerLink]="['/transaction', data['tx_hash']]">
                             {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                           </a>

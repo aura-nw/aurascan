@@ -102,8 +102,8 @@ app-tooltip-customize.tooltip--right {
 }
 
 .tooltip-copy {
-  position: fixed;
-  transform: translate3d(-22px, -50px, 0);
+  position: absolute;
+  // transform: translate3d(-12px, -45px, 0);
   display: none;
   align-items: center;
   justify-content: center;

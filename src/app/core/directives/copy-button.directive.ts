@@ -15,8 +15,8 @@ export class CopyButtonDirective {
       this.topPos = this.button.getBoundingClientRect().top;
       this.leftPos = this.button.getBoundingClientRect().left;
 
-      this.tooltip.style.top = this.topPos + 'px';
-      this.tooltip.style.left = this.leftPos + 'px';
+      // this.tooltip.style.top = this.topPos + 'px';
+      // this.tooltip.style.left = this.leftPos + 'px';
     }
   }
 
@@ -31,7 +31,7 @@ export class CopyButtonDirective {
     this.button = document.createElement('button');
 
     const icon = document.createElement('i');
-    this.button.classList.add('button', 'button--xxs', 'button--sm-mob', 'button-circle', 'ml-2');
+    this.button.classList.add('button', 'button--xxs', 'button--sm-mob');
     icon.classList.add('ph', 'ph-copy', 'text--white', 'body-01');
     contain.classList.add('d-flex', 'align-items-center');
     parent.replaceChild(contain, element);
@@ -43,10 +43,12 @@ export class CopyButtonDirective {
     this.tooltip = document.createElement('div');
     this.tooltip.innerHTML = 'Copied!';
     this.tooltip.classList.add('tooltip-copy');
+    console.log(this.button.getBoundingClientRect());
+    
     this.topPos = this.button.getBoundingClientRect().top;
     this.leftPos = this.button.getBoundingClientRect().left;
-    this.tooltip.style.top = this.topPos + 'px';
-    this.tooltip.style.left = this.leftPos + 'px';
+    // this.tooltip.style.top = this.topPos + 'px';
+    // this.tooltip.style.left = this.leftPos + 'px';
     contain.appendChild(this.tooltip);
 
     // click show tooltip
@@ -55,7 +57,7 @@ export class CopyButtonDirective {
       navigator.clipboard.writeText(content);
       setTimeout(() => {
         this.tooltip.classList.remove('show');
-      }, 1000);
+      }, 50000);
     });
   }
 }
