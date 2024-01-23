@@ -13,6 +13,7 @@ import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table
 import { SharedModule } from '../../shared.module';
 import { NameTagModule } from '../name-tag/name-tag.module';
 import { ContractTableComponent } from './contract-table.component';
+import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.module';
 
 @NgModule({
   declarations: [ContractTableComponent],
@@ -30,6 +31,7 @@ import { ContractTableComponent } from './contract-table.component';
     RouterModule,
     SharedModule,
     NameTagModule,
+    TooltipCustomizeModule
   ],
   exports: [ContractTableComponent],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],

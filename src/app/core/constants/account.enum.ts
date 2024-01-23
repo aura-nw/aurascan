@@ -47,9 +47,9 @@ export enum WalletAcount {
 
 export enum TabsAccount {
   ExecutedTxs = 'Executed',
-  NativeTxs = 'Native Transfer',
+  NativeTxs = 'Native/ibc Transfer',
   FtsTxs = 'CW20 Transfer',
-  NftTxs = 'NFT transfer',
+  NftTxs = 'NFT Transfer',
 }
 
 export enum TabsAccountLink {

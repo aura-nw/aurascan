@@ -1,18 +1,14 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { EnvironmentService } from '../data-services/environment.service';
-import { UserService } from '../services/user.service';
-import { NotificationsService } from '../services/notifications.service';
 import { Router } from '@angular/router';
-import { clearLocalData } from 'src/app/global/global';
-import local from '../utils/storage/local';
-import { STORAGE_KEYS } from '../constants/common.constant';
-import { UserStorage } from '../models/auth.models';
+import { EMPTY, Observable, catchError, map, of, switchMap } from 'rxjs';
+import { EnvironmentService } from '../data-services/environment.service';
+import { NotificationsService } from '../services/notifications.service';
+import { UserService } from '../services/user.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  isReloadToken = false;
   constructor(
     private environmentService: EnvironmentService,
     private userService: UserService,
@@ -21,83 +17,68 @@ export class JwtInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!this.environmentService.horoscope) {
+    if (!this.environmentService.config) {
       return next.handle(request);
     }
-    const graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
+
     // get list name tag if not login email
-    const userStorage = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA);
-    if (!userStorage) {
+    const user = this.userService.getCurrentUser();
+    const isApiBE = request.url.indexOf(this.environmentService.backend) > -1;
+    if (!isApiBE || !user?.accessToken || request.url?.indexOf('refresh-token') > -1) {
       return next.handle(request);
     }
 
     let jwtToken;
     try {
-      jwtToken = this.parseJwt(userStorage.accessToken);
+      jwtToken = this.parseJwt(user?.accessToken);
     } catch {
-      return next.handle(request);
+      return EMPTY;
     }
 
-    if (!this.isReloadToken && jwtToken.exp < Date.now() / 1000) {
-      this.isReloadToken = true;
+    if (jwtToken.exp >= Date.now() / 1000) {
+      if (user.accessToken) {
+        request = request.clone({
+          setHeaders: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        });
+      }
+      return next.handle(request);
+    } else {
       const payload = {
-        refreshToken: userStorage.refreshToken,
+        refreshToken: user.refreshToken,
       };
-      this.userService.refreshToken(payload).subscribe({
-        next: (res) => {
-          this.isReloadToken = false;
+
+      return this.userService.refreshToken(payload).pipe(
+        switchMap((res) => {
           if (res.error?.statusCode === 400) {
-            // remove current fcm token
-            this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
-              (res) => {},
-              () => (this.notificationsService.currentFcmToken = null),
-              () => (this.notificationsService.currentFcmToken = null),
-            );
-
-            clearLocalData();
-            // redirect to log out
-            this.router.navigate(['/login']);
-
-            setTimeout(() => {
-              location.reload();
-            }, 500);
+            throw new Error(res.error);
           }
 
           const userData = {
-            email: userStorage.email,
+            email: user.email,
             accessToken: res.accessToken,
             refreshToken: res.refreshToken,
           };
+          this.userService.setUser(userData);
 
-          local.setItem(STORAGE_KEYS.USER_DATA, userData);
-        },
-        error: (err) => {
-          this.isReloadToken = false;
-          // remove current fcm token
-          this.notificationsService.deleteToken(this.notificationsService.currentFcmToken).subscribe(
-            (res) => {},
-            () => (this.notificationsService.currentFcmToken = null),
-            () => (this.notificationsService.currentFcmToken = null),
-          );
+          request = request.clone({
+            setHeaders: {
+              Authorization: `Bearer ${userData.accessToken}`,
+            },
+          });
+          return next.handle(request);
+        }),
+        catchError((error) => {
+          this.notificationsService.deleteToken();
+          this.userService.logout();
 
-          clearLocalData();
           this.router.navigate(['/login']);
 
-          setTimeout(() => {
-            location.reload();
-          }, 500);
-        },
-      });
+          return EMPTY;
+        }),
+      );
     }
-
-    if (userStorage.accessToken && request.url.indexOf(graphUrl) === -1) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: 'Bearer ' + userStorage.accessToken,
-        },
-      });
-    }
-    return next.handle(request);
   }
 
   parseJwt(token) {

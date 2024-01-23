@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/auth.models';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -18,6 +18,7 @@ export class ContractInfoCardComponent implements OnInit {
   constructor(
     private router: Router,
     private nameTagService: NameTagService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {}
@@ -28,13 +29,13 @@ export class ContractInfoCardComponent implements OnInit {
   }
 
   editPrivateName() {
-    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    const userEmail = this.userService.getCurrentUser()?.email;
     const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.contractDetail?.address);
     if (userEmail) {
       if (dataNameTag) {
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, JSON.stringify({ address: this.contractDetail?.address }));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, { address: this.contractDetail?.address });
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {

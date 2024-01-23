@@ -60,21 +60,21 @@
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
             <div
-              *ngIf="(currentAddress | nameTag : false) !== currentAddress"
+              *ngIf="(currentAddress | nameTag: false) !== currentAddress"
               class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
               <div class="d-inline-flex w-100 aura-tooltip-object align-items-center justify-content-between">
-                <span class="line-claim">{{ (currentAddress | nameTag : false) || '-' }}</span>
+                <span class="line-claim">{{ (currentAddress | nameTag: false) || '-' }}</span>
                 <a
                   target="_blank"
-                  [href]="extendLink(currentAddress | nameTag : null : 'url')"
-                  *ngIf="currentAddress | nameTag : null : 'url'">
+                  [href]="extendLink(currentAddress | nameTag: null : 'url')"
+                  *ngIf="currentAddress | nameTag: null : 'url'">
                   <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
                 </a>
               </div>
 
               <app-tooltip-customize
                 *ngIf="currentAddress | isPublicNameTag"
-                [content]="'Public name: ' + (currentAddress | nameTag : false)"></app-tooltip-customize>
+                [content]="'Public name: ' + (currentAddress | nameTag: false)"></app-tooltip-customize>
             </div>
           </div>
 
@@ -101,16 +101,20 @@
             <div>
               <div class="h5 mb-1 text--white">Total Value</div>
               <div class="aura-tooltip-contain">
-                <span
-                  class="h1 mb-0 fw-700 mb-0 text-gradient d-inline aura-tooltip-object"
-                  [class.cursor-text]="(totalValue.gte(0.001) && totalValue.lt(1000000)) || totalValue.eq(0)"
-                  *ngIf="!isNoData">
-                  $<span [decimal]="0" [appBigNumber]="totalValue.toFixed() || 0"></span>
-                </span>
+                <div class="h1 mb-0 fw-700 mb-0 text-gradient d-inlfa-inverse aura-tooltip-object">
+                  <span *ngIf="totalValue.lt(0.01)">
+                    {{ totalValue.eq(0) ? '$0' : '< $0.01' }}
+                  </span>
+                  <span
+                    [class.cursor-text]="totalValue.gte(0.01) && totalValue.lt(1000000)"
+                    *ngIf="!isNoData && totalValue.gte(0.01)">
+                    $<span [decimal]="0" [appBigNumber]="totalValue.toFixed() || 0"></span>
+                  </span>
+                </div>
 
                 <app-tooltip-customize
                   *ngIf="!totalValue.eq(0) && (totalValue.lt(0.001) || totalValue.gte(1000000))"
-                  [content]="totalValue.toFixed() | mask : 'separator'">
+                  [content]="totalValue.toFixed() | mask: 'separator'">
                 </app-tooltip-customize>
               </div>
               <img
@@ -166,7 +170,10 @@
 
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!--SBT  -->
-  <div class="card" *ngIf="totalSBTPick > 0 || (currentAddress === userAddress && totalSBT > 0)">
+  <div
+    class="card"
+    *ngIf="totalSBTPick > 0 || (currentAddress === userAddress && totalSBT > 0)"
+    [appFeature]="EFeature.Cw4973">
     <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
       <app-soulbound-feature-tokens
         [extend]="true"
@@ -179,7 +186,10 @@
   </div>
 
   <!-- NFT -->
-  <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
+  <app-nft-list
+    [address]="currentAddress"
+    (totalValueNft)="totalValueNft = $event"
+    [appFeature]="EFeature.Cw721"></app-nft-list>
 
   <!-- Staking-->
   <app-account-stake

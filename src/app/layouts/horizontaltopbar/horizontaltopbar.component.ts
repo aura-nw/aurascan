@@ -1,15 +1,16 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
+import { UserService } from 'src/app/core/services/user.service';
+import local from 'src/app/core/utils/storage/local';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-import local from 'src/app/core/utils/storage/local';
-import { UserStorage } from 'src/app/core/models/auth.models';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -20,7 +21,7 @@ import { NotificationsService } from 'src/app/core/services/notifications.servic
 /**
  * Horizontal-Topbar Component
  */
-export class HorizontaltopbarComponent implements OnInit {
+export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = MENU;
 
   searchValue = null;
@@ -28,10 +29,12 @@ export class HorizontaltopbarComponent implements OnInit {
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
-  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+  userEmail: string;
 
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
+
+  destroy$ = new Subject();
 
   constructor(
     public router: Router,
@@ -40,15 +43,52 @@ export class HorizontaltopbarComponent implements OnInit {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private notificationsService: NotificationsService,
+    private userService: UserService,
   ) {}
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
 
   ngOnInit(): void {
     this.getMenuLink();
     this.checkEnv();
+    this.checkFeatures();
+
+    this.userService.user$?.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
+      this.userEmail = currentUser ? currentUser.email : null;
+    });
+  }
+
+  checkFeatures() {
+    const features = this.environmentService.chainConfig.features;
+
+    if (features.length > 0) {
+      this.menuItems.forEach((item) => {
+        if (item.subItems) {
+          let isEnabledMenu = false;
+          item.subItems.forEach((subItem) => {
+            const featureName = subItem.featureName;
+
+            const foundIndex = features.findIndex((item) => item === featureName);
+
+            // If have featureName, check disable
+            subItem.disabled = featureName ? (foundIndex < 0 ? true : false) : false;
+
+            isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
+          });
+        } else {
+          const featureName = item.featureName;
+          const foundIndex = features.findIndex((item) => item === featureName);
+          item.disabled = foundIndex < 0 ? true : false;
+        }
+      });
+    }
   }
 
   checkEnv() {
-    this.pageTitle = this.notificationsService.isMobileMatched
+    this.pageTitle = this.environmentService.isMobile
       ? this.environmentService.environment.label.mobile
       : this.environmentService.environment.label.desktop;
   }

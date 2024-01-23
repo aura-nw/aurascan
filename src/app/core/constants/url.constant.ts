@@ -6,5 +6,6 @@ export const LCD_COSMOS = {
   DISTRIBUTION: 'cosmos/distribution/v1beta1/community_pool',
   BALANCE: 'cosmos/bank/v1beta1/balances',
   DELEGATION: 'cosmos/staking/v1beta1/delegations',
-  REWARD: 'cosmos/distribution/v1beta1/delegators'
+  REWARD: 'cosmos/distribution/v1beta1/delegators',
+  SUPPLY: 'cosmos/bank/v1beta1/supply',
 };

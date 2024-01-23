@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
@@ -25,7 +25,7 @@ import local from 'src/app/core/utils/storage/local';
   templateUrl: './private-name-tag.component.html',
   styleUrls: ['./private-name-tag.component.scss'],
 })
-export class PrivateNameTagComponent implements OnInit, OnDestroy {
+export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
 
   templates: Array<TableTemplate> = [
@@ -61,17 +61,16 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy {
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
   ) {}
-
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     const dataNameTag = local.getItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
     if (dataNameTag && dataNameTag !== 'undefined') {
       local.removeItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
 
-      setTimeout(() => {
-        this.openPopup(dataNameTag, true);
-      }, 500);
+      this.openPopup(dataNameTag, true);
     }
+  }
 
+  ngOnInit(): void {
     this.getListPrivateName();
     this.searchSubject
       .asObservable()

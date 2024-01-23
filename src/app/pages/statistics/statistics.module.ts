@@ -17,6 +17,7 @@ import { StatisticsRoutingModule } from './statistics-routing.module';
 import { TopStatisticOverviewComponent } from './top-statistics/top-statistic-overview/top-statistic-overview.component';
 import { TopStatisticTransactionComponent } from './top-statistics/top-statistic-transaction/top-statistic-transaction.component';
 import { TopStatisticsComponent } from './top-statistics/top-statistics.component';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { TopStatisticsComponent } from './top-statistics/top-statistics.componen
     NgxMaskPipe,
     NameTagModule,
     MaterialModule,
+    CommonDirectiveModule
   ],
   providers: [StatisticService, provideEnvironmentNgxMask(MASK_CONFIG), NgxMaskPipe],
 })

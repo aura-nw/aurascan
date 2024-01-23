@@ -1,11 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
+import { forkJoin, map, of, switchMap } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -42,7 +45,7 @@ export class TokenHoldersTabComponent implements OnInit {
   displayedColumns: string[];
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 20,
+    pageSize: 5,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   loading = true;
@@ -53,68 +56,100 @@ export class TokenHoldersTabComponent implements OnInit {
   numberTop = 0;
   totalHolder = 0;
   errTxt: string;
+  EModeToken = EModeToken;
+  linkAddress: string;
+  countTotal = 0;
+
+  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    if (this.typeContract !== ContractRegisterType.CW20) {
-      this.getQuantity();
-    } else {
-      this.getHolder();
-    }
+    this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
+    this.getListData();
+
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
+
+    // get minus balance delegate address
+    if (this.tokenDetail.modeToken === EModeToken.Native && this.bondedTokensPoolAddress) {
+      this.getNativeBalance(this.bondedTokensPoolAddress).subscribe((res) => {
+        this.tokenDetail['totalSupply'] = BigNumber(this.tokenDetail?.totalSupply).minus(res.data?.amount) || 0;
+      });
+    }
+  }
+
+  getListData() {
+    if (this.typeContract) {
+      if (this.typeContract !== ContractRegisterType.CW20) {
+        this.getQuantity();
+      } else {
+        this.getHolder();
+      }
+    } else {
+      this.getDenomHolder();
+    }
   }
 
   getHolder() {
-    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.contractAddress).subscribe({
-      next: (res) => {
-        const data = _.get(res, `cw20_holder`);
-        const count = _.get(res, `cw20_holder_aggregate`);
-        if (data?.length > 0) {
-          this.totalHolder = count.aggregate?.count;
-          if (this.totalHolder > this.numberTopHolder) {
-            this.pageData.length = this.numberTopHolder;
-          } else {
-            this.pageData.length = this.totalHolder;
+    this.tokenService
+      .getListTokenHolder(
+        this.pageData.pageSize,
+        this.pageData.pageSize * this.pageData.pageIndex,
+        this.contractAddress,
+      )
+      .subscribe({
+        next: (res) => {
+          const data = _.get(res, `cw20_holder`);
+          const count = _.get(res, `cw20_holder_aggregate`);
+          if (data?.length > 0) {
+            this.totalHolder = count.aggregate?.count;
+            if (this.totalHolder > this.numberTopHolder) {
+              this.pageData.length = this.numberTopHolder;
+            } else {
+              this.pageData.length = this.totalHolder;
+            }
+            let dataFlat = data?.map((item) => {
+              return {
+                owner: item.address,
+                balance: item.amount,
+                percent_hold: BigNumber(item.amount)
+                  .dividedBy(BigNumber(item.cw20_contract.total_supply))
+                  .multipliedBy(100),
+                value:
+                  new BigNumber(item.amount)
+                    .multipliedBy(this.tokenDetail?.price)
+                    .dividedBy(BigNumber(10).pow(this.decimalValue))
+                    .toFixed() || 0,
+              };
+            });
+            this.dataSource = new MatTableDataSource<any>(dataFlat);
           }
-          let dataFlat = data?.map((item) => {
-            return {
-              owner: item.address,
-              balance: item.amount,
-              percent_hold: (item.amount / item.cw20_contract.total_supply) * 100,
-              value:
-                new BigNumber(item.amount)
-                  .multipliedBy(this.tokenDetail.price)
-                  .dividedBy(Math.pow(10, this.decimalValue))
-                  .toFixed() || 0,
-            };
-          });
-          this.dataSource = new MatTableDataSource<any>(dataFlat);
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 
   getHolderNFT() {
     const payload = {
-      limit: this.numberTopHolder,
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageSize * this.pageData.pageIndex,
       contractAddress: this.contractAddress,
     };
     this.tokenService.getListTokenHolderNFT(payload).subscribe({
@@ -165,7 +200,11 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getTemplate(): Array<TableTemplate> {
-    return this.typeContract !== ContractRegisterType.CW20 ? this.CW721Templates : this.CW20Templates;
+    let result = this.CW20Templates;
+    if (this.typeContract && this.typeContract !== ContractRegisterType.CW20) {
+      result = this.CW721Templates;
+    }
+    return result;
   }
 
   paginatorEmit(event): void {
@@ -174,6 +213,7 @@ export class TokenHoldersTabComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
+    this.getListData();
   }
 
   async getQuantity() {
@@ -186,5 +226,96 @@ export class TokenHoldersTabComponent implements OnInit {
       this.totalQuantity = config?.count || 0;
       this.getHolderNFT();
     } catch (error) {}
+  }
+
+  getDenomHolder() {
+    const payload = {
+      denomHash: this.tokenDetail?.denomHash,
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      address: this.keyWord || null,
+    };
+
+    this.tokenService
+      .getDenomHolder(payload)
+      .pipe(
+        switchMap((element) => {
+          if (element?.account_balance?.length === 0) {
+            return of([]);
+          }
+
+          this.totalHolder = element?.account_balance_aggregate?.aggregate?.count;
+
+          let accountBalance = element['account_balance'];
+          if (this.tokenDetail.modeToken === this.EModeToken.IBCCoin) {
+            accountBalance?.forEach((item) => {
+              item.balance = item.amount;
+              item.owner = item.account?.address;
+              item.percent_hold = BigNumber(item.amount)
+                .dividedBy(this.tokenDetail?.totalSupply)
+                .multipliedBy(100);
+              item.value =
+                BigNumber(item.amount)
+                  .multipliedBy(this.tokenDetail?.price || 0)
+                  .dividedBy(BigNumber(10).pow(this.decimalValue))
+                  .toFixed() || 0;
+            });
+            return of(accountBalance);
+          }
+
+          const addressList = accountBalance?.map((k) => {
+            return k.account?.address;
+          });
+
+          return this.getListNativeBalance(addressList).pipe(
+            map((res) => {
+              accountBalance?.forEach((item, index) => {
+                item.amount = item.balance = _.get(res[index], 'data.amount');
+                item.owner = item.account?.address;
+                item.percent_hold = BigNumber(item.amount)
+                  .dividedBy(this.tokenDetail?.totalSupply)
+                  .multipliedBy(100);
+                item.value =
+                  BigNumber(item.amount)
+                    .multipliedBy(this.tokenDetail?.price || 0)
+                    .dividedBy(BigNumber(10).pow(this.decimalValue))
+                    .toFixed() || 0;
+              });
+
+              if (accountBalance?.length == 1 && this.keyWord) {
+                this.tokenService.filterBalanceNative$.next(accountBalance[0]?.balance);
+              }
+
+              // sort list data with amount desc
+              const sortData = accountBalance?.sort((a, b) => this.compare(a.amount, b.amount, false));
+              return sortData;
+            }),
+          );
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          if (this.totalHolder > this.numberTopHolder) {
+            this.pageData.length = this.numberTopHolder;
+          } else {
+            this.pageData.length = this.totalHolder;
+          }
+          this.dataSource = new MatTableDataSource<any>(res);
+        },
+        error: () => {
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
+  }
+
+  getNativeBalance(address) {
+    return this.tokenService.getAmountNative(address);
+  }
+
+  getListNativeBalance(address: Array<any>) {
+    return forkJoin(address.map((a) => this.getNativeBalance(a)));
   }
 }

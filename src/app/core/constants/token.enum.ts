@@ -29,3 +29,9 @@ export enum ABTActionType {
   Reject = 'Reject this ABT',
   RejectAll = 'Reject all ABTs from this Creator'
 }
+
+export enum EModeToken {
+  Native = 'Native',
+  IBCCoin = 'IBC Token',
+  CWToken = 'CW20 Token',
+}

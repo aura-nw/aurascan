@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { getAmount, getDataInfo } from 'src/app/global/global';
 import { MEDIA_TYPE, NUMBER_CONVERT, STORAGE_KEYS } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from '../../constants/transaction.enum';
+import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 import { ESigningType, WALLET_PROVIDER } from '../../constants/wallet.constant';
 import { WalletStorage } from '../../models/wallet';
 import local from '../storage/local';
@@ -156,4 +156,27 @@ export function getSigningType(provider: WALLET_PROVIDER) {
     default:
       return ESigningType.Keplr;
   }
+}
+
+export function getTypeTx(element) {
+  let type = _.get(element, "transaction_messages[0].content['@type']") || _.get(element, "messages[0]['@type']");
+  let action;
+  if (type === TRANSACTION_TYPE_ENUM.ExecuteContract) {
+    try {
+      let dataTemp = _.get(element, 'transaction_messages[0].content.msg') || _.get(element, 'messages[0].msg');
+      if (typeof dataTemp === 'string') {
+        try {
+          dataTemp = JSON.parse(dataTemp);
+        } catch (e) {}
+      }
+      action = Object.keys(dataTemp)[0];
+      type = 'Contract: ' + action;
+    } catch (e) {}
+  } else {
+    type = _.find(TYPE_TRANSACTION, { label: type })?.value || type.split('.').pop();
+    if (type.startsWith('Msg')) {
+      type = type?.replace('Msg', '');
+    }
+  }
+  return { type, action };
 }

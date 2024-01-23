@@ -35,3 +35,8 @@ export enum ESigningType {
   Coin98 = 'Coin98',
   Leap = 'Leap',
 }
+
+export enum ELeapMode {
+  Core = 'core',
+  MobileWeb = 'mobile-web'
+}

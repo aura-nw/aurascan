@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Subject, switchMap, takeUntil } from 'rxjs';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { UserStorage } from 'src/app/core/models/auth.models';
+import { ELoginProvider, IUser } from 'src/app/core/models/auth.models';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
@@ -11,31 +13,43 @@ import local from 'src/app/core/utils/storage/local';
   templateUrl: './profile-settings.component.html',
   styleUrls: ['./profile-settings.component.scss'],
 })
-export class ProfileSettingsComponent implements OnInit {
-  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
-  changePassForm;
+export class ProfileSettingsComponent implements OnInit, OnDestroy {
+  changePassForm: UntypedFormGroup;
   hideOldPassword = true;
   hideNewPassword = true;
   hideConfirmPassword = true;
   isSubmit = false;
   errorMessage = '';
-  currentProvider = 'password';
   isError = false;
   textTitle = 'Change password';
+  user: IUser;
+
+  destroy$ = new Subject<void>();
 
   constructor(
     private fb: UntypedFormBuilder,
     private userService: UserService,
     private toastr: NgxToastrService,
+    private router: Router,
   ) {}
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   ngOnInit(): void {
-    this.currentProvider = local.getItem(STORAGE_KEYS.LOGIN_PROVIDER);
-    this.formInit();
+    this.userService.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
+      if (!user) {
+        this.router.navigate(['/']);
+      }
+      this.user = user;
 
-    if (this.currentProvider === 'google') {
-      this.textTitle = 'Create password';
-    }
+      if (user.provider === ELoginProvider.Google) {
+        this.textTitle = 'Create password';
+      }
+
+      this.formInit();
+    });
   }
 
   get getOldPassword() {
@@ -68,35 +82,52 @@ export class ProfileSettingsComponent implements OnInit {
     });
 
     // check required if type = password
-    if (this.currentProvider != 'google') {
+    if (this.user.provider != ELoginProvider.Google) {
       this.changePassForm.controls['old_password']?.addValidators([Validators.required]);
     }
   }
 
   onSubmit() {
     this.errorMessage = '';
+
     let payload = {
       oldPassword: this.changePassForm.value?.old_password,
       password: this.changePassForm.value?.new_password,
       passwordConfirmation: this.changePassForm.value?.cf_new_password,
     };
-    this.userService.changePassword(payload).subscribe({
-      next: (res) => {
-        const passwordText = this.currentProvider === 'google' ? 'Password created' : 'Password changed';
-        this.toastr.successWithTitle('Please use the new password next time you log in.', passwordText);
 
-        if (this.currentProvider === 'google') {
-          local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, 'password');
-          setTimeout(() => {
-            window.location.reload();
-          }, 4000);
-        }
-      },
-      error: (error) => {
-        this.isError = true;
-        this.errorMessage = error?.error?.error?.details?.message;
-      },
-    });
+    this.userService
+      .changePassword(payload)
+      .pipe(
+        switchMap(() => {
+          const isGoogleProvider = this.user.provider === ELoginProvider.Google;
+
+          const passwordText = isGoogleProvider ? 'Password created' : 'Password changed';
+          this.toastr.successWithTitle('Please use the new password next time you log in.', passwordText);
+
+          if (isGoogleProvider) {
+            local.setItem(STORAGE_KEYS.LOGIN_PROVIDER, ELoginProvider.Password);
+          }
+
+          this.changePassForm.reset();
+
+          return this.userService.loginWithPassword({
+            email: this.user.email,
+            password: payload.password,
+          });
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          if (!res.error) {
+            this.userService.setUser({ ...res, email: res.userEmail || res.email });
+          }
+        },
+        error: (error) => {
+          this.isError = true;
+          this.errorMessage = error?.error?.error?.details?.message;
+        },
+      });
   }
 
   checkDisableForm() {

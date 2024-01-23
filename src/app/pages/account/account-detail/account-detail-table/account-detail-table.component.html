@@ -37,10 +37,10 @@
                           [decimal]="0"></div>
                         <app-tooltip-customize
                           *ngIf="data[template.matColumnDef] >= 1000000"
-                          [content]="data[template.matColumnDef] | formatDigit : 2">
+                          [content]="data[template.matColumnDef] | formatDigit: 2">
                         </app-tooltip-customize>
                       </div>
-                      <span class="text--white ml-1"> {{ denom }}</span>
+                      <span class="ml-1" appLinkDenom> {{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'reward'" class="d-flex align-items-center">
                       <div class="aura-tooltip-contain d-flex">
@@ -51,23 +51,23 @@
                           [decimal]="0"></div>
                         <app-tooltip-customize
                           *ngIf="data[template.matColumnDef] >= 1000000"
-                          [content]="data[template.matColumnDef] | formatDigit : 2">
+                          [content]="data[template.matColumnDef] | formatDigit: 2">
                         </app-tooltip-customize>
                       </div>
-                      <span class="text--white ml-1"> {{ denom }}</span>
+                      <span class="ml-1" appLinkDenom> {{ denom }} </span>
                     </div>
                     <div *ngSwitchCase="'completion_time'">
                       <div class="d-flex align-items-center">
-                        <span>{{ data[template.matColumnDef] | customDate : 'yyyy-MM-dd' }}</span>
+                        <span>{{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}</span>
                         <div class="divider divider-vertical divider-lighter mx-2"></div>
-                        <span>{{ data[template.matColumnDef] | customDate : 'HH:mm:ss' }}</span>
+                        <span>{{ data[template.matColumnDef] | customDateTime: 'TimeOnly' }}</span>
                       </div>
-                      <div class="small-body">({{ (data[template.matColumnDef] | dateCustom : false)[1] }})</div>
+                      <div class="small-body">({{ data[template.matColumnDef] | customDateTime: 'Distance' }})</div>
                     </div>
                     <div *ngSwitchCase="'vesting_schedule'">
-                      {{ (data['date_format'] | dateCustom : false)[1] }} <br />({{
-                        (data['date_format'] | dateCustom : false)[0]
-                      }})
+                      {{ data['date_format'] | customDateTime: 'DateTime' }}
+                      <br />
+                      ({{ data['date_format'] | customDateTime: 'Distance' }})
                     </div>
                     <a
                       *ngSwitchCase="'validator_src_name'"
@@ -144,14 +144,14 @@
                     <div class="text--gray-4">Amount</div>
                     <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
-                      <span class="text--white"> {{ denom }}</span>
+                      <span appLinkDenom> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Reward</div>
                     <div class="text-end">
                       <span [appBigNumber]="item.reward" [decimal]="0"></span>
-                      <span class="text--white"> {{ denom }}</span>
+                      <span appLinkDenom> {{ denom }}</span>
                     </div>
                   </div>
                 </div>
@@ -175,22 +175,22 @@
                         {{ item.validator_name }}
                       </span>
                     </div>
-                    <div class="text--white">{{ (item.completion_time | dateCustom : false)[1] }}</div>
+                    <div class="text--white">{{ item.completion_time | customDateTime: 'DateTime' }}</div>
                   </a>
                   <div class="divider divider-horizontal divider-lighter my-3"></div>
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
-                      <span class="text--white"> {{ denom }}</span>
+                      <span appLinkDenom> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Completion Time</div>
                     <div class="d-flex align-items-center body-mob">
-                      <span>{{ item.completion_time | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>{{ item.completion_time | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-1"></div>
-                      <span>{{ item.completion_time | customDate : 'HH:mm:ss' }}</span>
+                      <span>{{ item.completion_time | customDateTime: 'TimeOnly' }}</span>
                     </div>
                   </div>
                 </div>
@@ -242,15 +242,15 @@
                     <div class="text--gray-4">Amount</div>
                     <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
-                      <span class="text--white"> {{ denom }}</span>
+                      <span appLinkDenom> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Time</div>
                     <div class="d-flex align-items-center">
-                      <span>{{ item.completion_time | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>{{ item.completion_time | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.completion_time | customDate : 'HH:mm:ss' }}</span>
+                      <span>{{ item.completion_time | customDateTime: 'TimeOnly' }}</span>
                     </div>
                   </div>
                 </div>
@@ -261,15 +261,15 @@
                     <div class="text--gray-4">Amount</div>
                     <div class="text-end">
                       <span [appBigNumber]="item.amount" [decimal]="0"></span>
-                      <span class="text--white"> {{ denom }}</span>
+                      <span appLinkDenom> {{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between mt-3">
                     <div class="text--gray-4">Vesting Schedule</div>
                     <div class="d-flex align-items-center">
-                      <span>{{ item.date_format | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>{{ item.date_format | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.date_format | customDate : 'HH:mm:ss' }}</span>
+                      <span>{{ item.date_format | customDateTime: 'TimeOnly' }}</span>
                     </div>
                   </div>
                 </div>

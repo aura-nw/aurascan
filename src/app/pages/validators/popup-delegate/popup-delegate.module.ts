@@ -9,6 +9,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { CustomPipeModule } from '../../../core/pipes/custom-pipe.module';
 import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
 import { PopupDelegateComponent } from './popup-delegate.component';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [PopupDelegateComponent],
@@ -21,6 +22,7 @@ import { PopupDelegateComponent } from './popup-delegate.component';
     TableNoDataModule,
     FormsModule,
     NgxMaskPipe,
+    CommonDirectiveModule
   ],
   exports: [PopupDelegateComponent],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
