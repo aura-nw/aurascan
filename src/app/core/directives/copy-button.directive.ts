@@ -48,14 +48,14 @@ export class CopyButtonDirective {
     this.tooltip.style.top = this.topPos + 'px';
     this.tooltip.style.left = this.leftPos + 'px';
     contain.appendChild(this.tooltip);
-    // tooltip effect
 
-    this.button.onclick = function () {
-      if (content?.length > 0) {
-        console.log(content)
-        navigator.clipboard.writeText(content).then(() => {
-        });
-      }
-    };
+    // click show tooltip
+    this.button.addEventListener('click', () => {
+      this.tooltip.classList.add('show');
+      navigator.clipboard.writeText(content);
+      setTimeout(() => {
+        this.tooltip.classList.remove('show');
+      }, 1000);
+    });
   }
 }

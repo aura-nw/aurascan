@@ -103,23 +103,23 @@ app-tooltip-customize.tooltip--right {
 
 .tooltip-copy {
   position: fixed;
-  transform: translate3d(-28px, -40px, 0);
-  display: flex;
+  transform: translate3d(-22px, -50px, 0);
+  display: none;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  //height: 20px;
-  padding: 4px 10px;
-  border-radius: 8px;
+  padding: 8px;
+  border-radius: 4px;
   background-color: var(--aura-gray-8);
   color: var(--aura-white);
   z-index: 99999;
-  font-size: 13px;
-  opacity: 0;
+  font-size: 1.2rem;
+  opacity: 1;
   transition: opacity .35s ease-in-out;
-
+  text-transform: initial;
+  font-weight: 600;
   &.show {
     opacity: 1;
+    display: flex;
   }
 
   &:before {
