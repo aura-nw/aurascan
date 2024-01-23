@@ -60,8 +60,8 @@ export class TokenHoldersTabComponent implements OnInit {
   linkAddress: string;
   countTotal = 0;
 
-  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
   chainInfo = this.environmentService.chainInfo;
+  bondedTokensPoolAddress = this.environmentService.bondedTokensPoolAddress;
 
   constructor(
     private tokenService: TokenService,

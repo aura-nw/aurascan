@@ -8,4 +8,5 @@ export const LCD_COSMOS = {
   DELEGATION: 'cosmos/staking/v1beta1/delegations',
   REWARD: 'cosmos/distribution/v1beta1/delegators',
   SUPPLY: 'cosmos/bank/v1beta1/supply',
+  MODULE_ACCOUNTS: 'cosmos/auth/v1beta1/module_accounts',
 };

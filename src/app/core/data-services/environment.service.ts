@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
+import { LCD_COSMOS } from '../constants/url.constant';
 import { ELeapMode } from '../constants/wallet.constant';
 
 export interface IConfiguration {
@@ -21,7 +22,6 @@ export interface IConfiguration {
       url: string;
     };
     nativeName: string;
-    bondedTokensPoolAddress: string;
   };
   chainConfig: {
     stakingTime: string;
@@ -72,6 +72,7 @@ export class EnvironmentService {
   configUri = './assets/config/config.json';
   isMobile = false;
   isNativeApp = false;
+  bondedTokensPoolAddress = null;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
 
   get configValue(): IConfiguration {
@@ -188,6 +189,7 @@ export class EnvironmentService {
     await this.extendsTxType();
 
     this.getNodeInfo();
+    this.getBondedAddress();
   }
 
   extendsTxType(): Promise<void> {
@@ -220,5 +222,11 @@ export class EnvironmentService {
         }
       } catch {}
     }
+  }
+
+  getBondedAddress() {
+    this.http.get(`${this.chainInfo.rest}/${LCD_COSMOS.MODULE_ACCOUNTS}/bonded_tokens_pool`).subscribe((res: any) => {
+      this.bondedTokensPoolAddress = _.get(res, 'account.base_account.address');
+    });
   }
 }
