@@ -1,4 +1,3 @@
-import { ChainInfo } from '@keplr-wallet/types';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 import { BasicAllowance, PeriodicAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/feegrant';
 import { MsgGrantAllowance, MsgRevokeAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
@@ -8,7 +7,7 @@ import { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 import AllowedContractAllowance from './custom-feegrant';
 // Staking
-export function Delegate(senderAddress, { to, amount }, network: ChainInfo) {
+export function Delegate(senderAddress, { to, amount }, network: any) {
   /* istanbul ignore next */
   const msg = MsgDelegate.fromPartial({
     delegatorAddress: senderAddress,
@@ -24,7 +23,7 @@ export function Delegate(senderAddress, { to, amount }, network: ChainInfo) {
   };
 }
 
-export function Undelegate(senderAddress, { from, amount }, network: ChainInfo) {
+export function Undelegate(senderAddress, { from, amount }, network: any) {
   /* istanbul ignore next */
   return {
     typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
@@ -108,7 +107,7 @@ export interface IGrantBasicAllowance {
 export function GrantBasicAllowance(
   senderAddress: string,
   { granter, grantee, spendLimit, expiration }: IGrantBasicAllowance,
-  network: ChainInfo,
+  network: any,
 ) {
   let msgGrantAllowance;
 
@@ -141,7 +140,7 @@ export interface IGrantPeriodicAllowance {
 export function GrantPeriodicAllowance(
   senderAddress: string,
   { granter, grantee, spendLimit, expiration, period, periodSpendLimit }: IGrantPeriodicAllowance,
-  network: ChainInfo,
+  network: any,
 ) {
   let msgGrantAllowance;
 
@@ -189,7 +188,7 @@ export function GrantMsgAllowance(
     periodSpendLimit,
     executeContract,
   }: IGrantMsgAllowance,
-  network: ChainInfo,
+  network: any,
 ) {
   let msgAllowance;
 
@@ -332,7 +331,7 @@ export function setPeriodicAllowance(expiration, spendLimit, period, periodSpend
   return periodicAllowance;
 }
 
-export function RevokeAllowance(senderAddress: string, { granter, grantee }: IGrantBasicAllowance, network: ChainInfo) {
+export function RevokeAllowance(senderAddress: string, { granter, grantee }: IGrantBasicAllowance, network: any) {
   const msgRevokeAllowance = MsgRevokeAllowance.fromPartial({
     grantee,
     granter,

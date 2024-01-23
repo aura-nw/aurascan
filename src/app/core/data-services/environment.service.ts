@@ -1,7 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
@@ -37,7 +36,7 @@ export interface IConfiguration {
       logo: string;
     }[];
     features: string[];
-    chain_info: ChainInfo & { gasPriceStep: any };
+    chain_info: any;
     cosmos_sdk_version?: string;
   };
   image: {
@@ -212,13 +211,5 @@ export class EnvironmentService {
     });
   }
 
-  checkNativeApp() {
-    if ((window.coin98 || window.leap) && this.isMobile) {
-      try {
-        if (window.coin98?.keplr || window.leap?.mode == ELeapMode.MobileWeb) {
-          this.isNativeApp = true;
-        }
-      } catch {}
-    }
-  }
+  checkNativeApp() {}
 }

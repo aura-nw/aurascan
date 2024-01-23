@@ -1,18 +1,9 @@
-import { Keplr, Window as KeplrWindow } from '@keplr-wallet/types';
-
 declare module '@ckeditor/ckeditor5-build-classic' {
   const ClassicEditorBuild: any;
   export = ClassicEditorBuild;
 }
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Window extends KeplrWindow {
-    coin98: {
-      keplr: Keplr;
-    };    
-    leap: Keplr
-
-    handleCredentialResponse: (response: any) => void;
-  }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface Window {
+  handleCredentialResponse: (response: any) => void;
 }
