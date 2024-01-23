@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { DecodeDataPipe } from './coded.pipe';
 import { CustomTimeDatePipe } from './date.pipe';
 import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
 import { JsonPipe } from './json.pipe';
@@ -31,6 +32,7 @@ import { IsContractPipe } from './address.pipe';
     IbcDenomPipe,
     EllipsisPipe,
     CustomTimeDatePipe,
+    DecodeDataPipe,
     IsContractPipe,
   ],
   exports: [
@@ -52,6 +54,7 @@ import { IsContractPipe } from './address.pipe';
     IbcDenomPipe,
     EllipsisPipe,
     CustomTimeDatePipe,
+    DecodeDataPipe,
     IsContractPipe,
   ],
   providers: [],

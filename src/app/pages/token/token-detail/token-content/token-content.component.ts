@@ -21,7 +21,6 @@ import { ContractService } from 'src/app/core/services/contract.service';
 export class TokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
-  @Output() resultLength = new EventEmitter<any>();
   @Output() hasMore = new EventEmitter<any>();
 
   tabStaking = [TokenTab.Holders];
@@ -34,11 +33,14 @@ export class TokenContentComponent implements OnInit {
   searchTemp: string = '';
   isSearchTx = false;
   isSearchAddress = false;
-  resultSearch = 0;
   tokenTab = TokenTab;
   currentTab = this.tokenTab.Transfers;
   tabsBackup: any;
-  infoSearch = {};
+  infoSearch: {
+    balance?: string | number;
+    value?: string | number;
+    valueAura?: string | number;
+  } = {};
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
@@ -158,11 +160,6 @@ export class TokenContentComponent implements OnInit {
     }
   }
 
-  getLength(result: string) {
-    this.resultSearch = Number(result) || 0;
-    this.resultLength.emit(this.resultSearch);
-  }
-
   resetSearch() {
     this.searchTemp = '';
     if (this.paramQuery) {
@@ -204,15 +201,20 @@ export class TokenContentComponent implements OnInit {
           .dividedBy(this.tokenService.nativePrice)
           .toFixed();
       } else {
-        this.infoSearch['balance'] = 0;
-        const tempBalance = await this.contractService.getContractBalance(address);
+        const tempBalance = await this.contractService.getContractBalance(address).catch((error) => null);
         if (tempBalance?.data?.balances?.length > 0) {
           this.infoSearch['balance'] =
             tempBalance?.data?.balances?.find((k) => k.denom === this.tokenDetail?.denomHash)?.amount || 0;
           this.setFilterValue(this.infoSearch['balance']);
+        } else {
+          this.infoSearch.balance = 0;
+          this.infoSearch.value = 0;
+          this.infoSearch.valueAura = 0;
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      this.infoSearch['balance'] = 0;
+    }
   }
 
   getMoreTx(event) {

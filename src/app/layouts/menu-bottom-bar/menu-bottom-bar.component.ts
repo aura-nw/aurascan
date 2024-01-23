@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
@@ -26,12 +27,16 @@ export class MenuBottomBarComponent implements OnInit {
     public router: Router,
     private walletService: WalletService,
     private notificationsService: NotificationsService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
     this.notificationsService.hiddenFooterSubject.subscribe((res) => {
       this.hiddenFooter = res;
     });
+    
+    this.checkFeatures();
+
     for (let menu of this.menu) {
       if (!menu.subItems) {
         this.menuLink.push(menu.link);
@@ -86,6 +91,32 @@ export class MenuBottomBarComponent implements OnInit {
           overlay.click();
         }
       }
+    }
+  }
+
+  checkFeatures() {
+    const features = this.environmentService.chainConfig.features;
+
+    if (features.length > 0) {
+      this.menu.forEach((item) => {
+        if (item.subItems) {
+          let isEnabledMenu = false;
+          item.subItems.forEach((subItem) => {
+            const featureName = subItem.featureName;
+
+            const foundIndex = features.findIndex((item) => item === featureName);
+
+            // If have featureName, check disable
+            subItem.disabled = featureName ? (foundIndex < 0 ? true : false) : false;
+
+            isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
+          });
+        } else {
+          const featureName = item.featureName;
+          const foundIndex = features.findIndex((item) => item === featureName);
+          item.disabled = foundIndex < 0 ? true : false;
+        }
+      });
     }
   }
 

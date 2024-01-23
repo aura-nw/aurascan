@@ -1,4 +1,4 @@
-import {Directive, ElementRef, HostListener, Input} from '@angular/core';
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
@@ -20,8 +20,7 @@ export class CopyButtonDirective {
     }
   }
 
-  constructor(private elRef: ElementRef) {
-  }
+  constructor(private elRef: ElementRef) {}
 
   ngOnInit(): void {
     const element: HTMLElement = this.elRef.nativeElement;
@@ -50,7 +49,6 @@ export class CopyButtonDirective {
     this.tooltip.style.left = this.leftPos + 'px';
     contain.appendChild(this.tooltip);
     // tooltip effect
-    setTimeout
 
     this.button.onclick = function () {
       if (content?.length > 0) {

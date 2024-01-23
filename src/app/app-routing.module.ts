@@ -1,6 +1,24 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { inject, NgModule } from '@angular/core';
+import { Router, RouterModule, Routes, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
+import { EnvironmentService } from './core/data-services/environment.service';
+import { EFeature } from './core/models/common.model';
 import { LayoutComponent } from './layouts/layout.component';
+
+export const isEnabled = (
+  functionNames: string,
+): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> => {
+  const config = inject(EnvironmentService);
+  const router = inject(Router);
+
+  const features = config.configValue['chainConfig']?.features;
+
+  if (features.findIndex((item) => item === functionNames) >= 0 || features.length === 0) {
+    return true;
+  }
+
+  return router.navigate(['']);
+};
 
 const routes: Routes = [
   {
@@ -50,19 +68,23 @@ const routes: Routes = [
       {
         path: 'fee-grant',
         loadChildren: () => import('./pages/fee-grant/fee-grant.module').then((m) => m.FeeGrantModule),
+        canMatch: [() => isEnabled(EFeature.FeeGrant)],
       },
       {
         path: 'accountbound',
         loadChildren: () =>
           import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule),
+        canMatch: [() => isEnabled(EFeature.Cw4973)],
       },
       {
         path: 'community-pool',
         loadChildren: () => import('./pages/community-pool/community-pool.module').then((m) => m.CommunityPoolModule),
+        canMatch: [() => isEnabled(EFeature.CommunityPool)],
       },
       {
         path: 'login',
         loadChildren: () => import('./pages/login/login.module').then((m) => m.LoginModule),
+        canMatch: [() => isEnabled(EFeature.Profile)],
       },
       {
         path: 'user',
@@ -71,10 +93,12 @@ const routes: Routes = [
       {
         path: 'profile',
         loadChildren: () => import('./pages/profile/profile.module').then((m) => m.ProfileModule),
+        canMatch: [() => isEnabled(EFeature.Profile)],
       },
       {
         path: 'export-csv',
         loadChildren: () => import('./pages/export-csv/export-csv.module').then((m) => m.ExportCsvModule),
+        canMatch: [() => isEnabled(EFeature.ExportCsv)],
       },
       {
         path: 'account',
@@ -91,6 +115,7 @@ const routes: Routes = [
       {
         path: 'ibc-relayer',
         loadChildren: () => import('./pages/ibc/ibc.module').then((m) => m.IBCModule),
+        canMatch: [() => isEnabled(EFeature.IbcRelayer)],
       },
     ],
   },

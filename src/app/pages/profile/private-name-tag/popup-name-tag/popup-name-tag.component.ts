@@ -35,6 +35,7 @@ export class PopupNameTagComponent implements OnInit {
     Contract: 'contract',
   };
   quota = this.environmentService.chainConfig.quotaSetPrivateName;
+  chainName = this.environmentService.chainName.toLowerCase();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

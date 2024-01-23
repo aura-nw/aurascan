@@ -48,16 +48,7 @@
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'no'">#{{ idx + 1 }}</div>
                           <div *ngSwitchCase="'asset'" class="d-flex align-items-center">
-                            <img
-                              [src]="
-                                !data['dataDenom']?.image
-                                  ? ('assets/images/logo/auraTitleLogo.png')
-                                  : data['dataDenom']?.image
-                              "
-                              alt=""
-                              class="mr-1"
-                              width="20px"
-                              height="20px" />
+                            <img [appImg]="data['dataDenom']?.image" alt="" class="mr-1" width="20px" height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
                                 {{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis: 20 }}
@@ -126,16 +117,7 @@
               <div *ngFor="let data of dataIBCSending?.data" class="card-ibc-assets">
                 <div class="d-flex align-items-center justify-content-between text--white">
                   <div class="d-flex align-items-center">
-                    <img
-                      [src]="
-                        !data['dataDenom']?.image
-                          ? ('assets/images/logo/auraTitleLogo.png')
-                          : data['dataDenom']?.image
-                      "
-                      alt=""
-                      class="mr-2"
-                      width="20px"
-                      height="20px" />
+                    <img [appImg]="data['dataDenom']?.image" alt="" class="mr-2" width="20px" height="20px" />
                     <span>{{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis: 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
@@ -218,16 +200,7 @@
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <div *ngSwitchCase="'no'">#{{ idx + 1 }}</div>
                           <div *ngSwitchCase="'asset'">
-                            <img
-                              [src]="
-                                !data['dataDenom']?.image
-                                  ? ('assets/images/logo/auraTitleLogo.png')
-                                  : data['dataDenom']?.image
-                              "
-                              alt=""
-                              class="mr-1"
-                              width="20px"
-                              height="20px" />
+                            <img [appImg]="data['dataDenom']?.image" alt="" class="mr-1" width="20px" height="20px" />
                             <div class="aura-tooltip-contain">
                               <div class="aura-tooltip-object">
                                 {{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis: 20 }}
@@ -296,16 +269,7 @@
               <div *ngFor="let data of dataIBCReceiving?.data" class="card-ibc-assets">
                 <div class="d-flex align-items-center justify-content-between text--white">
                   <div class="d-flex align-items-center">
-                    <img
-                      [src]="
-                        !data['dataDenom']?.image
-                          ? ('assets/images/logo/auraTitleLogo.png')
-                          : data['dataDenom']?.image
-                      "
-                      alt=""
-                      class="mr-2"
-                      width="20px"
-                      height="20px" />
+                    <img [appImg]="data['dataDenom']?.image" alt="" class="mr-2" width="20px" height="20px" />
                     <span>{{ data['dataDenom']?.name || data['dataDenom']?.symbol | ellipsis: 20 }}</span>
                   </div>
                   <span class="text--gray-2">{{ data.denom === denom ? 'Native Coin' : 'IBC Token' }}</span>
