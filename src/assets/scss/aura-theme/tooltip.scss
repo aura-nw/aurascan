@@ -103,8 +103,10 @@ app-tooltip-customize.tooltip--right {
 
 .tooltip-copy {
   position: absolute;
-  // transform: translate3d(-12px, -45px, 0);
+  transform: translate(-50%, 50%);
   display: none;
+  bottom: -30px;
+  left: 50%;
   align-items: center;
   justify-content: center;
   padding: 8px;
@@ -125,14 +127,14 @@ app-tooltip-customize.tooltip--right {
   &:before {
     content: '';
     position: absolute;
-    bottom: 0;
+    top: -5px;
     left: 50%;
-    transform: translate(-50%, 100%);
+    transform: translate(-50%, -50%);
     display: block;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-top: 10px solid var(--aura-gray-8);
+    border-bottom: 10px solid var(--aura-gray-8);
   }
 }

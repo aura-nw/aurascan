@@ -346,6 +346,7 @@
                           <app-name-tag
                             *ngSwitchCase="'delegator_address'"
                             [value]="data.delegator_address"
+                            [copyBtn]="data[template.matColumnDef]"
                             [tooltipPosition]="'tooltip--right'"></app-name-tag>
                           <div *ngSwitchCase="'amount'">
                             {{ data[template.matColumnDef] | mask: 'separator.6' }}
@@ -437,6 +438,7 @@
                             </div>
                             <a
                               *ngSwitchCase="'tx_hash'"
+                              [copyBtn]="data[template.matColumnDef]"
                               class="text--primary cursor-pointer hash-link"
                               [routerLink]="['/transaction', data['tx_hash']]">
                               {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}

@@ -10,15 +10,12 @@ export class CopyButtonDirective {
   button;
   tooltip;
 
-  @HostListener('window:scroll', ['$event']) onScroll(event) {
-    if (this.button && this.tooltip) {
-      this.topPos = this.button.getBoundingClientRect().top;
-      this.leftPos = this.button.getBoundingClientRect().left;
-
-      // this.tooltip.style.top = this.topPos + 'px';
-      // this.tooltip.style.left = this.leftPos + 'px';
-    }
-  }
+  // @HostListener('window:scroll', ['$event']) onScroll(event) {
+  //   if (this.button && this.tooltip) {
+  //     this.topPos = this.button.getBoundingClientRect().top;
+  //     this.leftPos = this.button.getBoundingClientRect().left;
+  //   }
+  // }
 
   constructor(private elRef: ElementRef) {}
 
@@ -31,25 +28,18 @@ export class CopyButtonDirective {
     this.button = document.createElement('button');
 
     const icon = document.createElement('i');
-    this.button.classList.add('button', 'button--xxs', 'button--sm-mob');
+    this.button.classList.add('button', 'button--xxs', 'button--sm-mob', 'position-relative');
     icon.classList.add('ph', 'ph-copy', 'text--white', 'body-01');
     contain.classList.add('d-flex', 'align-items-center');
     parent.replaceChild(contain, element);
     this.button.appendChild(icon);
     contain.appendChild(element);
-    contain.appendChild(this.button);
-
     // tooltip
     this.tooltip = document.createElement('div');
     this.tooltip.innerHTML = 'Copied!';
     this.tooltip.classList.add('tooltip-copy');
-    console.log(this.button.getBoundingClientRect());
-    
-    this.topPos = this.button.getBoundingClientRect().top;
-    this.leftPos = this.button.getBoundingClientRect().left;
-    // this.tooltip.style.top = this.topPos + 'px';
-    // this.tooltip.style.left = this.leftPos + 'px';
-    contain.appendChild(this.tooltip);
+    this.button.appendChild(this.tooltip);
+    contain.appendChild(this.button);
 
     // click show tooltip
     this.button.addEventListener('click', () => {
@@ -57,7 +47,7 @@ export class CopyButtonDirective {
       navigator.clipboard.writeText(content);
       setTimeout(() => {
         this.tooltip.classList.remove('show');
-      }, 50000);
+      }, 1000);
     });
   }
 }
