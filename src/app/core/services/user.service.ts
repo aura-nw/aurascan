@@ -100,9 +100,9 @@ export class UserService {
 
   getListTxByAddress(payload) {
     const operationsDoc = `
-    query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc, $address: String = null) {
-      ${this.envDB} {
-        transaction(where: {timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}, sender: {_eq: $address}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
+    query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: _varchar = null, $listTxMsgTypeNotIn: _varchar = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc, $address: String = null) {
+      ${this.envDB}  {
+        transaction_join_group_transaction_message(args: {limitvalue: $limit, senderaddress: $address, typesin: $listTxMsgType, typesnotin: $listTxMsgTypeNotIn}, where: {timestamp: {_lte: $endTime, _gte: $startTime}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
           hash
           height
           fee
@@ -114,7 +114,7 @@ export class UserService {
           }
         }
       }
-    }
+    }    
     `;
 
     return this.http
@@ -131,29 +131,39 @@ export class UserService {
         },
         operationName: 'QueryTxOfAccount',
       })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+      .pipe(
+        map((res) => (res?.data ? res?.data[this.envDB] : null)),
+        map((data) => ({
+          transaction: data['transaction_join_group_transaction_message'],
+        })),
+      );
   }
 
   getListNativeTransfer(payload) {
-    const operationsDoc = `
-    query CoinTransfer(
+    const operationsDoc = `query CoinTransfer(
       $from: String = null
       $to: String = null
       $start_time: timestamptz = null
       $end_time: timestamptz = null
-      $msg_types_in: [String!] = null
-      $msg_types_nin: [String!] = null
+      $msg_types_in: _varchar = null
+      $msg_types_nin: _varchar = null
       $height_gt: Int = null
       $height_lt: Int = null
       $limit: Int = null) {
       ${this.envDB} {
-        transaction(
+        transaction_join_group_coin_transfer(
+          args: {
+            addressfrom: $from
+            addressto: $to
+            limitvalue: $limit
+            typesin: $msg_types_in
+            typesnotin: $msg_types_nin
+          }
           where: {
             timestamp: { _lte: $end_time, _gte: $start_time }
             coin_transfers: {
               _or: [{ from: { _eq: $from } }, { to: { _eq: $to } }]
               block_height: { _lt: $height_lt, _gt: $height_gt }
-              message: { type: { _in: $msg_types_in, _nin: $msg_types_nin } }
             }
           }
           limit: $limit
@@ -195,7 +205,12 @@ export class UserService {
         },
         operationName: 'CoinTransfer',
       })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+      .pipe(
+        map((res) => (res?.data ? res?.data[this.envDB] : null)),
+        map((data) => ({
+          transaction: data['transaction_join_group_coin_transfer'],
+        })),
+      );
   }
 
   getListFTByAddress(payload) {
