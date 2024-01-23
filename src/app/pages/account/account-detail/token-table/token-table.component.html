@@ -17,7 +17,7 @@
                 id="tokenFilter"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <span>{{ tokenFilterItem?.label | ellipsis: 16 }} ({{ tokenFilterItem?.quantity }})</span>
+                <span>{{ tokenFilterItem?.label | ellipsis: 16 }} ({{ tokenFilterItem?.quantity || 0 }})</span>
                 <i class="ph ph-caret-down text--white h3"></i>
                 <i class="ph ph-caret-up text--white h3"></i>
               </button>

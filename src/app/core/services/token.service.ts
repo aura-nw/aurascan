@@ -16,6 +16,7 @@ export class TokenService extends CommonService {
   tokensMarket$ = new BehaviorSubject<any[]>(null);
   nativePrice$ = new BehaviorSubject<number>(null);
   filterBalanceNative$ = new BehaviorSubject<number>(null);
+  totalTransfer$ = new BehaviorSubject<number>(null);
 
   get tokensMarket() {
     return this.tokensMarket$.getValue();
@@ -27,6 +28,14 @@ export class TokenService extends CommonService {
 
   get filterBalanceNative() {
     return this.filterBalanceNative$.getValue();
+  }
+
+  get totalTransfer() {
+    return this.totalTransfer$.getValue();
+  }
+
+  setTotalTransfer(value: number) {
+    this.totalTransfer$.next(value)
   }
 
   constructor(
@@ -502,6 +511,13 @@ export class TokenService extends CommonService {
           this.nativePrice$.next(nativeToken?.current_price);
 
           const coinsId = tokensFiltered.map((coin: { coin_id: string }) => coin.coin_id);
+
+          const nativeTokenId = this.environmentService.coingecko.ids[0];
+
+          if (!coinsId.includes(nativeTokenId)) {
+            coinsId.push(nativeTokenId);
+          }
+
           if (coinsId?.length > 0) {
             return forkJoin({
               tokensMarket: of(tokensFiltered),

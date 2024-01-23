@@ -5,12 +5,12 @@ import { Subject, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
+import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -54,10 +54,37 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getMenuLink();
     this.checkEnv();
+    this.checkFeatures();
 
     this.userService.user$?.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
       this.userEmail = currentUser ? currentUser.email : null;
     });
+  }
+
+  checkFeatures() {
+    const features = this.environmentService.chainConfig.features;
+
+    if (features.length > 0) {
+      this.menuItems.forEach((item) => {
+        if (item.subItems) {
+          let isEnabledMenu = false;
+          item.subItems.forEach((subItem) => {
+            const featureName = subItem.featureName;
+
+            const foundIndex = features.findIndex((item) => item === featureName);
+
+            // If have featureName, check disable
+            subItem.disabled = featureName ? (foundIndex < 0 ? true : false) : false;
+
+            isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
+          });
+        } else {
+          const featureName = item.featureName;
+          const foundIndex = features.findIndex((item) => item === featureName);
+          item.disabled = foundIndex < 0 ? true : false;
+        }
+      });
+    }
   }
 
   checkEnv() {

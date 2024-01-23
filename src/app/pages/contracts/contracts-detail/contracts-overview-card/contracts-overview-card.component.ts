@@ -23,6 +23,7 @@ export class ContractsOverviewCardComponent implements OnChanges {
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
   verifiedStatus = '';
   verifiedText = '';
+  chainName = this.environmentService.chainName;
 
   constructor(
     private environmentService: EnvironmentService,

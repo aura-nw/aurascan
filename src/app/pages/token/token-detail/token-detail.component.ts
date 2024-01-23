@@ -11,7 +11,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ContractService } from 'src/app/core/services/contract.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { getBalance } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -23,8 +22,6 @@ export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
   tokenDetail: any;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   contractType = ContractRegisterType;
   errTxt: string;
   EModeToken = EModeToken;
@@ -138,10 +135,6 @@ export class TokenDetailComponent implements OnInit {
     });
   }
 
-  getLength(result: string) {
-    this.tokenDetail['totalTransfer'] = Number(result) || 0;
-  }
-
   getMoreTx(event) {
     this.tokenDetail['hasMoreTx'] = event;
   }
@@ -180,7 +173,7 @@ export class TokenDetailComponent implements OnInit {
   }
 
   async getDataNative(denomNative: string) {
-    const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative);
+    const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative).catch(() => 0);
     this.tokenDetail = {
       modeToken: EModeToken.Native,
       name: this.chainInfo.chainName,
@@ -190,7 +183,7 @@ export class TokenDetailComponent implements OnInit {
       price: this.tokenService.nativePrice || 0,
       change: 0,
       decimals: this.chainInfo?.currencies[0].coinDecimals,
-      totalSupply: _.get(tempTotal, 'data.amount.amount' || 0),
+      totalSupply: _.get(tempTotal, 'data.amount.amount', 0),
     };
     this.loading = false;
   }
