@@ -51,7 +51,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   chainInfo = this.environmentService.chainInfo.currencies[0];
   chainName = this.environmentService.chainInfo.chainName;
   image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   isLoadingTable = true;
   filterType = [];
   ETokenCoinType = ETokenCoinType;
@@ -104,6 +103,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   async getListTokenIBC() {
     this.listTokenIBC = local.getItem(STORAGE_KEYS.LIST_TOKEN_IBC);
+
+    if (this.listTokenIBC?.length == 0) {
+      return;
+    }
+
     const res = await this.tokenService.getTokenSupply();
     const supply = _.get(res, 'data.supply');
     this.listTokenIBC?.forEach((token) => {
@@ -205,8 +209,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
                     const cw20_total_holder_stats = item.cw20_total_holder_stats;
                     let changePercent = 0;
                     if (cw20_total_holder_stats?.length > 1) {
+                      const [before, after, ..._] = cw20_total_holder_stats;
                       changePercent =
-                        (cw20_total_holder_stats[1].total_holder * 100) / cw20_total_holder_stats[0].total_holder - 100;
+                        before.total_holder == 0 ? 0 : (after.total_holder * 100) / before.total_holder - 100;
                     }
                     const totalSupply = getBalance(item.total_supply, item.decimal);
 
@@ -271,6 +276,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   async getTokenNative() {
     const tempTotal = await this.ibcService.getTotalSupplyLCD(this.chainInfo.coinMinimalDenom);
+
     this.tokenService.tokensMarket$
       .pipe(
         filter((data) => _.isArray(data)),
@@ -389,7 +395,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     if (this.textSearch?.trim().length > 0) {
       this.searchData();
     } else {
-      this.drawTable(dataList);
+      this.drawTable(dataList, true);
       this.pageData.length = this.dataSource.data.length;
       this.pageChange.selectPage(0);
     }

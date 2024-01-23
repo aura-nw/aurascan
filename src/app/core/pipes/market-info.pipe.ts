@@ -10,7 +10,10 @@ export class MarketInfoPipe implements PipeTransform {
   image_s3 = this.env.imageUrl;
   defaultLogoToken = `${this.image_s3}images/icons/token-logo.png`;
 
-  constructor(private env: EnvironmentService, private token: TokenService) {}
+  constructor(
+    private env: EnvironmentService,
+    private token: TokenService,
+  ) {}
 
   transform(value: any, key?: 'logo' | 'name' | 'symbol'): any {
     let marketInfo = {

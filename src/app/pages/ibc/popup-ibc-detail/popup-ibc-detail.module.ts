@@ -12,6 +12,7 @@ import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PopupIBCDetailComponent } from './popup-ibc-detail.component';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [PopupIBCDetailComponent],
@@ -29,6 +30,7 @@ import { PopupIBCDetailComponent } from './popup-ibc-detail.component';
     NgxMaskPipe,
     CustomPipeModule,
     TooltipCustomizeModule,
+    CommonDirectiveModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })

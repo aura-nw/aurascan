@@ -42,9 +42,9 @@ export class CombineTxsMsgPipe implements PipeTransform {
       return type;
     });
     if (lst?.length > 5) {
-      return lst.splice(0, 4).join(', ').concat(', ...');
+      return lst?.splice(0, 5)?.join(', ').concat(', ...');
     }
 
-    return lst.splice(0, 3).join(', ');
+    return lst?.join(', ');
   }
 }
