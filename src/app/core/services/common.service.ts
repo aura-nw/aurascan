@@ -42,7 +42,7 @@ export class CommonService {
   }
 
   getAccountDistribution() {
-    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.ACCOUNT}/distribution`);
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.MODULE_ACCOUNTS}/distribution`);
   }
 
   getDateValue(time, isCustom = true) {

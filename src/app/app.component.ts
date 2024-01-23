@@ -179,12 +179,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // get list token IBC
     this.getListTokenIBC();
-
-    // get bondedAddress
-    const bondedAddress = local.getItem(STORAGE_KEYS.BONDED_ADDRESS);
-    if (!bondedAddress) {
-      this.getBondedAddress();
-    }
   }
 
   getWatchlist() {
@@ -220,13 +214,5 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe((listTokenIBC) => {
         local.setItem(STORAGE_KEYS.LIST_TOKEN_IBC, listTokenIBC);
       });
-  }
-
-  async getBondedAddress() {
-    const res = await this.tokenService.getBondedAddress();
-    const bondedAddress = _.get(res, 'data.account.base_account.address');
-    if (bondedAddress) {
-      local.setItem(STORAGE_KEYS.BONDED_ADDRESS, bondedAddress);
-    }
   }
 }
