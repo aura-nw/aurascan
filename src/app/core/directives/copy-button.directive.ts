@@ -1,11 +1,24 @@
-import {Directive, ElementRef, Input} from '@angular/core';
+import {Directive, ElementRef, HostListener, Input} from '@angular/core';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
 })
 export class CopyButtonDirective {
   @Input() copyBtn: string;
+  topPos;
+  leftPos;
+  button;
+  tooltip;
 
+  @HostListener('window:scroll', ['$event']) onScroll(event) {
+    if (this.button && this.tooltip) {
+      this.topPos = this.button.getBoundingClientRect().top;
+      this.leftPos = this.button.getBoundingClientRect().left;
+
+      this.tooltip.style.top = this.topPos + 'px';
+      this.tooltip.style.left = this.leftPos + 'px';
+    }
+  }
 
   constructor(private elRef: ElementRef) {
   }
@@ -16,20 +29,34 @@ export class CopyButtonDirective {
     const content = this.copyBtn;
     const parent = element.parentNode;
     const contain = document.createElement('div');
-    const button = document.createElement('button');
+    this.button = document.createElement('button');
 
     const icon = document.createElement('i');
-    button.classList.add('button', 'button--xxs', 'button--sm-mob', 'button-circle', 'ml-2');
+    this.button.classList.add('button', 'button--xxs', 'button--sm-mob', 'button-circle', 'ml-2');
     icon.classList.add('ph', 'ph-copy', 'text--white', 'body-01');
     contain.classList.add('d-flex', 'align-items-center');
     parent.replaceChild(contain, element);
-    button.appendChild(icon);
+    this.button.appendChild(icon);
     contain.appendChild(element);
-    contain.appendChild(button);
+    contain.appendChild(this.button);
 
-    button.onclick = function () {
+    // tooltip
+    this.tooltip = document.createElement('div');
+    this.tooltip.innerHTML = 'Copied!';
+    this.tooltip.classList.add('tooltip-copy');
+    this.topPos = this.button.getBoundingClientRect().top;
+    this.leftPos = this.button.getBoundingClientRect().left;
+    this.tooltip.style.top = this.topPos + 'px';
+    this.tooltip.style.left = this.leftPos + 'px';
+    contain.appendChild(this.tooltip);
+    // tooltip effect
+    setTimeout
+
+    this.button.onclick = function () {
       if (content?.length > 0) {
         console.log(content)
+        navigator.clipboard.writeText(content).then(() => {
+        });
       }
     };
   }
