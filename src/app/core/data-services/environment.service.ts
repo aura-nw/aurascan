@@ -74,7 +74,7 @@ export class EnvironmentService {
   isNativeApp = false;
   bondedTokensPoolAddress = null;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
-  nextHeight$ = new BehaviorSubject<number | string>(null);
+  latestBlockHeight$ = new BehaviorSubject<number | string>(null);
 
   get configValue(): IConfiguration {
     return this.config?.value;
@@ -150,8 +150,8 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.coingecko');
   }
 
-  setNextHeight(value: string | number){
-    this.nextHeight$.next(value);
+  setLatestBlockHeight(value: string | number){
+    this.latestBlockHeight$.next(value);
   }
 
   destroyed$ = new Subject<void>();

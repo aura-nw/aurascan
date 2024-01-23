@@ -131,9 +131,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getCoinInfo(this.chartRange);
     this.getVotingPeriod();
 
-    this.environmentService.nextHeight$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
-      if (res) {
-        this.getInfoData();
+    this.environmentService.latestBlockHeight$.pipe(takeUntil(this.destroy$)).subscribe((height) => {
+      if (height) {
+        this.getInfoData(height);
       }
     });
   }
@@ -144,10 +144,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //get all data for dashboard
-  getInfoData() {
+  getInfoData(height = null) {
     this.getMarketInfo();
-    this.getListBlock();
-    this.getListTransaction();
+    this.getListBlock(height);
+    this.getListTransaction(height);
     this.cdr.detectChanges();
   }
   // config chart
@@ -230,10 +230,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getListBlock(): void {
+  getListBlock(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
-      nextHeight: this.global?.dataHeader.total_blocks,
+      nextHeight: height,
     };
     this.blockService.getDataBlock(payload).subscribe({
       next: (res) => {
@@ -256,10 +256,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getListTransaction(): void {
+  getListTransaction(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
-      heightLT: this.global?.dataHeader.total_blocks,
+      heightLT: height,
     };
     this.transactionService.getListTx(payload).subscribe({
       next: (res) => {

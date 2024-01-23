@@ -94,7 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
   getInfoCommon(): void {
     this.commonService.status().subscribe((res) => {
       getInfo(this.globals, res);
-      this.environmentService.setNextHeight(res?.total_blocks);
+      this.environmentService.setLatestBlockHeight(res?.total_blocks);
     });
   }
 
