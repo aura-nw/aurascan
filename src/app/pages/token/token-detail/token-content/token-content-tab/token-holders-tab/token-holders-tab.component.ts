@@ -6,13 +6,14 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { forkJoin, map, of, switchMap } from 'rxjs';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -59,8 +60,8 @@ export class TokenHoldersTabComponent implements OnInit {
   EModeToken = EModeToken;
   linkAddress: string;
   countTotal = 0;
+  bondedTokensPoolAddress = local.getItem(STORAGE_KEYS.BONDED_ADDRESS);
 
-  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(

@@ -655,4 +655,8 @@ export class TokenService extends CommonService {
   getAmountNative(address: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/account/${address}`).pipe(catchError((_) => of([])));
   }
+
+  getBondedAddress() {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.ACCOUNT}/bonded_tokens_pool`);
+  }
 }
