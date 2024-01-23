@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { forkJoin, map, of, switchMap } from 'rxjs';
+import { forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
@@ -79,8 +79,12 @@ export class TokenHoldersTabComponent implements OnInit {
 
     // get minus balance delegate address
     if (this.tokenDetail.modeToken === EModeToken.Native && this.bondedTokensPoolAddress) {
-      this.getNativeBalance(this.bondedTokensPoolAddress).subscribe((res) => {
-        this.tokenDetail['totalSupply'] = BigNumber(this.tokenDetail?.totalSupply).minus(res.data?.amount) || 0;
+      this.getListNativeBalance([this.bondedTokensPoolAddress]).subscribe((res) => {
+        const amount = _.get(res, 'data[0].amount') || 0;
+
+        const totalSupply = this.tokenDetail?.totalSupply;
+
+        this.tokenDetail['totalSupply'] = BigNumber(totalSupply).minus(amount) || 0;
       });
     }
   }
@@ -263,14 +267,15 @@ export class TokenHoldersTabComponent implements OnInit {
             return of(accountBalance);
           }
 
-          const addressList = accountBalance?.map((k) => {
-            return k.account?.address;
-          });
+          const addressList = accountBalance
+            ?.map((ab) => ab?.account?.address)
+            .filter((address: string) => address?.length > 0);
 
           return this.getListNativeBalance(addressList).pipe(
             map((res) => {
+              const data = res?.data;
               accountBalance?.forEach((item, index) => {
-                item.amount = item.balance = _.get(res[index], 'data.amount');
+                item.amount = item.balance = _.get(data[index], 'amount');
                 item.owner = item.account?.address;
                 item.percent_hold = BigNumber(item.amount)
                   .dividedBy(this.tokenDetail?.totalSupply)
@@ -286,9 +291,8 @@ export class TokenHoldersTabComponent implements OnInit {
                 this.tokenService.filterBalanceNative$.next(accountBalance[0]?.balance);
               }
 
-              // sort list data with amount desc
-              const sortData = accountBalance?.sort((a, b) => this.compare(a.amount, b.amount, false));
-              return sortData;
+              // sort list data with amount desc - abnormal case
+              return accountBalance?.sort((a, b) => this.compare(a.amount, b.amount, false));
             }),
           );
         }),
@@ -311,11 +315,7 @@ export class TokenHoldersTabComponent implements OnInit {
       });
   }
 
-  getNativeBalance(address) {
-    return this.tokenService.getAmountNative(address);
-  }
-
-  getListNativeBalance(address: Array<any>) {
-    return forkJoin(address.map((a) => this.getNativeBalance(a)));
+  getListNativeBalance(addressList: string[]) {
+    return this.tokenService.getAmountNative(addressList);
   }
 }

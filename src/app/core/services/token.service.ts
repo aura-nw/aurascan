@@ -35,7 +35,7 @@ export class TokenService extends CommonService {
   }
 
   setTotalTransfer(value: number) {
-    this.totalTransfer$.next(value)
+    this.totalTransfer$.next(value);
   }
 
   constructor(
@@ -652,7 +652,11 @@ export class TokenService extends CommonService {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}`);
   }
 
-  getAmountNative(address: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/account/${address}`).pipe(catchError((_) => of([])));
+  getAmountNative(address: string[]): Observable<any> {
+    if (address?.length == 0) {
+      return of([]);
+    }
+
+    return this.http.get<any>(`${this.apiUrl}/account/list/${address.join(',')}`).pipe(catchError((_) => of([])));
   }
 }
