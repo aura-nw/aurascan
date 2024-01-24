@@ -346,7 +346,6 @@
                           <app-name-tag
                             *ngSwitchCase="'delegator_address'"
                             [value]="data.delegator_address"
-                            [copyBtn]="data[template.matColumnDef]"
                             [tooltipPosition]="'tooltip--right'"></app-name-tag>
                           <div *ngSwitchCase="'amount'">
                             {{ data[template.matColumnDef] | mask: 'separator.6' }}
