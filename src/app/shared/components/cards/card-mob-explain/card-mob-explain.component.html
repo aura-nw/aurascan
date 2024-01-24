@@ -32,7 +32,7 @@
         [innerHTML]="data.info"></div>
       <div *ngIf="data.isAmount" class="{{ data.class }}">
         <span [appBigNumber]="data.info"></span>
-        <span class="ml-2 text--white">{{ denom }}</span>
+        <span class="ml-2" appLinkDenom>{{ denom }}</span>
       </div>
     </div>
   </div>

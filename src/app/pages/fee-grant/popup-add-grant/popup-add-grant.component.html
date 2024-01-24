@@ -2,11 +2,7 @@
   <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">
       <div class="h1 mb-0 text--white w-100 fw-700">Add New Grant</div>
-      <img
-        class="icon-close"
-        [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
-        alt=""
-        (click)="closeDialog()" />
+      <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
     </div>
   </div>
   <div class="card-body">
@@ -29,7 +25,7 @@
               placeholder="Grantee's address"
               (ngModelChange)="checkFormValid()"
               [class.form-control--error]="grantForm.get('grantee_address')?.invalid && isSubmit" />
-            <div class="error" *ngIf="isInvalidAddress">This is not aura's externally owned account</div>
+            <div class="error" *ngIf="isInvalidAddress">This is not {{ chainName }}'s externally owned account</div>
           </div>
         </div>
       </div>
@@ -76,7 +72,7 @@
                 (ngModelChange)="checkFormValid()"
                 formControlName="expiration_time" />
               <button class="mr-1 button" *ngIf="grantForm.get('expiration_time')?.value" (click)="removeTime()">
-                <img src="assets/icons/icons-svg/white/close.svg" alt="" />
+                <i class="ph ph-x h2 cursor-pointer text--white"></i>
               </button>
               <div class="mr-5 h6 mb-0 text--primary position-relative">
                 <i
@@ -140,10 +136,10 @@
                   formControlName="period_amount" />
                 <div class="d-flex align-items-center mr-2">
                   <button
-                    class="button button-flat button--sm button-max body-02"
+                    class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
                     type="button"
                     (click)="getMaxToken('period_amount')">
-                    Max
+                    MAX
                   </button>
                 </div>
                 <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
@@ -255,7 +251,7 @@
                       type="text"
                       class="form-control" />
                     <button class="mr-5 button" *ngIf="i > 0" (click)="removeContract(i)">
-                      <img src="assets/icons/icons-svg/white/close.svg" alt="" />
+                      <i class="ph ph-x h2 cursor-pointer text--white"></i>
                     </button>
                   </div>
                 </div>
@@ -275,7 +271,7 @@
       <div class="row mt-6">
         <div class="card-note">
           <div class="d-flex align-items-center">
-            <img src="assets/icons/icons-svg/color/warning.svg" alt="" width="20px" />
+            <img [src]="'assets/icons/icons-svg/color/warning.svg' | imageS3" alt="" width="20" />
             <div class="body fw-semibold ml-2">NOTE</div>
           </div>
           <div class="mt-2 body">

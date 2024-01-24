@@ -24,11 +24,11 @@ export class CodeIdContractsTabComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'contract_address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contracts' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
+    { matColumnDef: 'contract_address', headerCellDef: 'Contract Address', isUrl: '/contracts' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', isUrl: '/transaction' },
     { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account' },
     { matColumnDef: 'type', headerCellDef: 'Message' },
-    { matColumnDef: 'created_at', headerCellDef: 'INSTANTIATED at' },
+    { matColumnDef: 'created_at', headerCellDef: 'Instantiated at' },
     { matColumnDef: 'verified_at', headerCellDef: 'Verified at' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -36,7 +36,10 @@ export class CodeIdContractsTabComponent implements OnInit {
   isLoading = true;
   errTxt: string;
 
-  constructor(private contractService: ContractService, private datePipe: DatePipe) {}
+  constructor(
+    private contractService: ContractService,
+    private datePipe: DatePipe,
+  ) {}
 
   ngOnInit(): void {
     this.getListContractByCode();

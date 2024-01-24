@@ -29,7 +29,7 @@ export class BlockDetailComponent implements OnInit {
   TAB = [
     {
       id: 0,
-      value: 'SUMMARY',
+      value: 'Summary',
     },
     {
       id: 1,
@@ -101,7 +101,6 @@ export class BlockDetailComponent implements OnInit {
             block['events'] = block['events'].concat(blockEnd);
           }
           this.blockDetail = block;
-
           //get list tx detail
           let txs = [];
           const payload = {

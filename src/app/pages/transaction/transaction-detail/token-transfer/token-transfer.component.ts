@@ -18,8 +18,6 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 })
 export class TokenTransferComponent implements OnInit {
   @Input() transaction: Number;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   nullAddress = NULL_ADDRESS;
   dataSourceFTs = new MatTableDataSource<any>([]);
   dataSourceNFTs = new MatTableDataSource<any>([]);
@@ -43,8 +41,7 @@ export class TokenTransferComponent implements OnInit {
   displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
   maxLengthSymbol = 20;
 
-  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  coinInfo = this.environmentService.chainInfo.currencies[0];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
@@ -97,9 +94,9 @@ export class TokenTransferComponent implements OnInit {
               arrAmount.forEach((amountTemp) => {
                 let cw20_contract = {};
                 let dataAmount = {};
-                cw20_contract['symbol'] = cw20_contract['symbol'] || this.denom;
-                cw20_contract['name'] = cw20_contract['name'] || this.denom;
-                let decimal = cw20_contract['decimal'] || this.coinDecimals;
+                cw20_contract['symbol'] = cw20_contract['symbol'] || this.coinInfo.coinDenom;
+                cw20_contract['name'] = cw20_contract['name'] || this.coinInfo.coinDenom;
+                let decimal = cw20_contract['decimal'] || this.coinInfo.coinDecimals;
                 let from = event.event_attributes[index - 2]?.value;
                 if (event.event_attributes[index - 2]?.composite_key === 'coin_received.receiver') {
                   from = event.event_attributes[0]?.value;
@@ -146,8 +143,8 @@ export class TokenTransferComponent implements OnInit {
       res?.coin_transfer?.forEach((element) => {
         let cw20_contract = {};
         let dataAmount = this.commonService.mappingNameIBC(element.denom);
-        cw20_contract['symbol'] = dataAmount['symbol'] || this.denom;
-        cw20_contract['name'] = dataAmount['symbol'] || this.denom;
+        cw20_contract['symbol'] = dataAmount['symbol'] || this.coinInfo.coinDenom;
+        cw20_contract['name'] = dataAmount['symbol'] || this.coinInfo.coinDenom;
         const decimal = dataAmount['decimals'] || 6;
         const amount = element.amount;
         const from = element.from;
@@ -164,10 +161,7 @@ export class TokenTransferComponent implements OnInit {
   }
 
   isContractAddress(address) {
-    if (address?.startsWith('aura') && address?.length === LENGTH_CHARACTER.CONTRACT) {
-      return true;
-    }
-    return false;
+    return this.commonService.isValidContract(address);
   }
 
   encodeData(data) {

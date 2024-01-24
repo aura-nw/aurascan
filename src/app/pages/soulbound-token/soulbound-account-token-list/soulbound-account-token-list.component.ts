@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
-import { UserStorage } from 'src/app/core/models/auth.models';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import local from 'src/app/core/utils/storage/local';
 
@@ -50,6 +50,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     private soulboundService: SoulboundService,
     public commonService: CommonService,
     private nameTagService: NameTagService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -117,13 +118,13 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   }
 
   editPrivateName() {
-    const userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+    const userEmail = this.userService.getCurrentUser()?.email;
     const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.userAddress);
     if (userEmail) {
       if (dataNameTag) {
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, JSON.stringify({ address: this.userAddress }));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, { address: this.userAddress });
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {

@@ -4,7 +4,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
 import { COIN_TOKEN_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
@@ -40,17 +40,17 @@ export class TokenTableComponent implements OnChanges {
       quantity: 0,
     },
     {
-      label: 'Native Coin',
+      label: ETokenCoinType.NATIVE,
       value: COIN_TOKEN_TYPE.NATIVE,
       quantity: 0,
     },
     {
-      label: 'IBC Token',
+      label: ETokenCoinType.IBC,
       value: COIN_TOKEN_TYPE.IBC,
       quantity: 0,
     },
     {
-      label: 'CW-20 Token',
+      label: ETokenCoinType.CW20,
       value: COIN_TOKEN_TYPE.CW20,
       quantity: 0,
     },
@@ -128,6 +128,7 @@ export class TokenTableComponent implements OnChanges {
                 data.change = data.price_change_percentage_24h;
                 data.isValueUp = true;
                 data['balance'] = data['balance'] || 0;
+                data.value = data.value;
                 if (data.change !== '-' && data.change < 0) {
                   data.isValueUp = false;
                   data.change = Number(data.change.toString().substring(1));

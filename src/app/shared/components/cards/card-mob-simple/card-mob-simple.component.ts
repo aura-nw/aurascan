@@ -18,6 +18,7 @@ export interface CardMobSimpleTitle {
   rankNum?: number;
   status?: number;
   isFail?: boolean;
+  link?: string;
 }
 export interface CardMobSimpleContent {
   label: string;
@@ -35,7 +36,8 @@ export interface CardMobSimpleToken {
 export interface CardMobSimpleAmount{
   amount: string;
   decimal: number;
-  isAura: boolean;
+  isNative: boolean;
+  denom?: string;
 }
 
 @Component({

@@ -28,6 +28,7 @@ export const NETWORK = [
 export const DATEFORMAT = {
   DATETIME_UTC: 'yyyy-MM-dd HH:mm:ss',
   DATE_ONLY: 'yyyy-MM-dd',
+  TIME_ONLY: 'HH:mm:ss',
 };
 
 export const NUMBER_CONVERT = 1000000; //10^6 satoshi unit
@@ -55,6 +56,7 @@ export const CHART_RANGE = {
   MONTH_12: '12M',
 };
 
+// Only aura address
 export const LENGTH_CHARACTER = {
   ADDRESS: 43,
   CONTRACT: 63,
@@ -108,5 +110,8 @@ export const STORAGE_KEYS = {
   CONTRACT_RAW_DATA: 'contractRawData',
   IS_VERIFY_TAB: 'isVerifyTab',
   TAB_UNEQUIP: 'tabUnEquip',
-  LAST_USED_PROVIDER: 'LAST_USED_PROVIDER'
+  LAST_USED_PROVIDER: 'LAST_USED_PROVIDER',
+  DATA_NATIVE: 'nativeData',
 };
+
+export const TITLE_LOGO = 'images/logo/title-logo.png';

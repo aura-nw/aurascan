@@ -5,13 +5,13 @@ import { ActivatedRoute } from '@angular/router';
 import { sha256 } from 'js-sha256';
 import * as _ from 'lodash';
 import { Subject, map } from 'rxjs';
-import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR, TITLE_LOGO } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import local from 'src/app/core/utils/storage/local';
-import { Globals, convertTxIBC } from 'src/app/global/global';
+import { convertTxIBC } from 'src/app/global/global';
 
 @Component({
   selector: 'app-channel-detail',
@@ -45,13 +45,13 @@ export class ChannelDetailComponent implements OnInit {
   counterInfo: any;
   destroy$ = new Subject<void>();
   maxDisplayChar = 22;
+  TITLE_LOGO = TITLE_LOGO;
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
     public commonService: CommonService,
-    public global: Globals,
     private route: ActivatedRoute,
     private ibcService: IBCService,
     private environmentService: EnvironmentService,

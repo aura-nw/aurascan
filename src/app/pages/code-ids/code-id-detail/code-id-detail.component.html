@@ -33,7 +33,7 @@
               codeIdDetail.tx_hash
             }}</a>
             <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-lg-none">{{
-              codeIdDetail.tx_hash | ellipsis : 8 : 8
+              codeIdDetail.tx_hash | ellipsis: 8 : 8
             }}</a>
           </div>
         </div>
@@ -60,7 +60,7 @@
             <div class="text--gray-4 body">Created At</div>
           </div>
           <div class="col-6 col-lg-auto">
-            <div class="text--gray-1 body">{{ codeIdDetail.created_at | customDate : 'yyyy-MM-dd HH:mm:ss' }}</div>
+            <div class="text--gray-1 body">{{ codeIdDetail.created_at | customDateTime: 'DateTime' }}</div>
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@
           <ng-container *ngFor="let tab of TAB; index as index">
             <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1 flex-lg-shrink-1 flex-lg-grow-0 px-lg-4">
               <a ngbNavLink (click)="tabIndex = tab.id" class="fw-semibold">
-                <span>{{ tab.value | uppercase }}</span>
+                <span>{{ tab.value }}</span>
               </a>
             </li>
           </ng-container>

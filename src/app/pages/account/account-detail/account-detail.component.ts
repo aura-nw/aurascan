@@ -8,9 +8,10 @@ import BigNumber from 'bignumber.js';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UserStorage } from 'src/app/core/models/auth.models';
+import { EFeature } from 'src/app/core/models/common.model';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
@@ -46,10 +47,10 @@ export class AccountDetailComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   isNoData = false;
-  userEmail = local.getItem<UserStorage>(STORAGE_KEYS.USER_DATA)?.email;
+  userEmail = '';
 
   destroyed$ = new Subject<void>();
-  timerUnSub: Subscription;
+
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.stakingTime}`;
 
@@ -60,6 +61,7 @@ export class AccountDetailComponent implements OnInit {
   totalSBT = 0;
   isContractAddress = false;
   isWatchList = false;
+  EFeature = EFeature;
 
   constructor(
     public commonService: CommonService,
@@ -72,6 +74,7 @@ export class AccountDetailComponent implements OnInit {
     private soulboundService: SoulboundService,
     private router: Router,
     private nameTagService: NameTagService,
+    private userService: UserService,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -83,7 +86,12 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
-    this.route.params.subscribe((params) => {
+
+    this.userService.user$?.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
+      this.userEmail = currentUser ? currentUser.email : null;
+    });
+
+    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
         this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
@@ -100,10 +108,6 @@ export class AccountDetailComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-
-    if (this.timerUnSub) {
-      this.timerUnSub.unsubscribe();
-    }
   }
 
   loadDataTemp(): void {
@@ -233,7 +237,7 @@ export class AccountDetailComponent implements OnInit {
       if (dataNameTag) {
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, JSON.stringify({ address: this.currentAddress }));
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, { address: this.currentAddress });
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {

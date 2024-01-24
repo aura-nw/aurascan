@@ -75,7 +75,7 @@
               <input
                 type="text"
                 formControlName="address"
-                placeholder="aura..."
+                placeholder="{{ chainName }}..."
                 class="input-address"
                 (change)="checkPublicNameTag()"
                 (input)="checkFormValid(); isError = false"
@@ -85,7 +85,7 @@
             <div
               *ngIf="getAddress?.value?.length > 0 && !isValidAddress && (isAccount || isContract)"
               class="text--danger mt-2 caption fw-normal">
-              Invalid aura address format
+              Invalid {{ chainName }} address format
             </div>
           </div>
         </div>

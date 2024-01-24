@@ -9,6 +9,7 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
 import local from '../utils/storage/local';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({ providedIn: 'root' })
 export class CommonService {
@@ -24,7 +25,6 @@ export class CommonService {
   chainId = this._environmentService.chainId;
   addressPrefix = '';
   listValidator = [];
-  listTokenIBC = [];
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this._environmentService.config.asObservable().subscribe((res) => {
@@ -42,7 +42,7 @@ export class CommonService {
   }
 
   getAccountDistribution() {
-    return axios.get(`${this.chainInfo.rest}/cosmos/auth/v1beta1/module_accounts/distribution`);
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.MODULE_ACCOUNTS}/distribution`);
   }
 
   getDateValue(time, isCustom = true) {

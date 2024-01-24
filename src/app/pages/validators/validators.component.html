@@ -69,7 +69,9 @@
         <ng-container *ngFor="let tab of TABS; index as index">
           <li [ngbNavItem]="index">
             <a ngbNavLink (click)="changeType(tab.key)">
-              <span class="h5 mb-0" [class.text--white]="customNav.activeId === index">{{ tab.label }}</span>
+              <span class="h5 mb-0 text-capitalize" [class.text--white]="customNav.activeId === index">
+                {{ tab.label | lowercase }}
+              </span>
             </a>
           </li>
         </ng-container>
@@ -178,7 +180,7 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'commission'">
-                          {{ data[template.matColumnDef] | percent : number2Digit }}
+                          {{ data[template.matColumnDef] | percent: number2Digit }}
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
                           <div [style.min-width]="'120px'" class="text-end aura-tooltip-contain">
@@ -204,12 +206,12 @@
                               data.percent_power === maxPercentPower && typeValidator === statusValidator.Active
                                 ? '167px'
                                 : data.percent_power < 0.01
-                                ? 1 + 'px'
-                                : data.percent_power < 0.1
-                                ? 3 + 'px'
-                                : data.percent_power < 1
-                                ? 7 + 'px'
-                                : (((data.percent_power * 100) / maxPercentPower) * 167) / 100 + 'px'
+                                  ? 1 + 'px'
+                                  : data.percent_power < 0.1
+                                    ? 3 + 'px'
+                                    : data.percent_power < 1
+                                      ? 7 + 'px'
+                                      : (((data.percent_power * 100) / maxPercentPower) * 167) / 100 + 'px'
                             "></div>
                           <span class="percent-vote fw-normal" *ngIf="data['status'] === statusValidator.Active">{{
                             data['percent_power'] + '%'
@@ -234,7 +236,7 @@
                         </div>
                         <div *ngSwitchCase="'uptime'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ calculatorUpTime(data['account_address']) | formatDigit : 2 }}%
+                            {{ calculatorUpTime(data['account_address']) | formatDigit: 2 }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
@@ -251,7 +253,7 @@
                             </div>
                           </div>
                           <span [class.text-jailed]="data['jailed']" class="break-word">
-                            {{ data[template.matColumnDef] | ellipsis : 15 }}
+                            {{ data[template.matColumnDef] | ellipsis: 15 }}
                           </span>
                         </a>
                         <div *ngSwitchCase="'percent_power'" class="box-percent-power">
@@ -354,7 +356,7 @@
                           </ng-container>
                           <ng-container *ngSwitchCase="'Commission'">
                             <div class="text--gray-1">
-                              {{ validator[template.matColumnDef] | percent : number2Digit }}
+                              {{ validator[template.matColumnDef] | percent: number2Digit }}
                             </div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Participation'">
@@ -416,15 +418,15 @@
               <span class="modal__title break-all">{{ validatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ validatorDetail?.commission | percent : number2Digit }}
+              Commission - {{ validatorDetail?.commission | percent: number2Digit }}
             </div>
           </div>
         </div>
         <div class="body-01 text--gray-5">
           <div class="mb-1">
             <span>Voting power - {{ validatorDetail?.percent_power }}%</span>&nbsp;
-            <span>({{ validatorDetail?.power | mask : 'separator.6' }}</span>
-            <span class="text--white ml-1">{{ denom }}</span
+            <span>({{ validatorDetail?.power | mask: 'separator.6' }}</span>
+            <span class="ml-1" appLinkDenom>{{ denom }}</span
             >)
           </div>
         </div>
@@ -435,9 +437,9 @@
           <div class="mt-2 h6 text--white mb-0">
             <span>Available for undelegation</span>
             <span class="ml-3 fw-normal">
-              {{ dataDelegate?.validatorDetail?.amount_staked | mask : 'separator.6' }}
+              {{ dataDelegate?.validatorDetail?.amount_staked | mask: 'separator.6' }}
             </span>
-            <span class="text--white fw-normal"> {{ denom }} </span>
+            <span class="fw-normal" appLinkDenom> {{ denom }} </span>
           </div>
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
@@ -505,7 +507,7 @@
                     <span class="option__name">{{ item.title | translate }}</span>
                   </div>
                   <div class="option-label text--gray-1">
-                    Commission - {{ item.commission | translate | percent : number2Digit }}
+                    Commission - {{ item.commission | translate | percent: number2Digit }}
                   </div>
                 </div>
               </mat-option>
@@ -515,9 +517,9 @@
             <div class="mt-6 body-01 body-02-mob">
               <span>Available for redelegation</span>
               <span class="ml-3">
-                {{ dataDelegate?.validatorDetail?.amount_staked | mask : 'separator.6' }}
+                {{ dataDelegate?.validatorDetail?.amount_staked | mask: 'separator.6' }}
               </span>
-              <span class="text--white"> {{ denom }} </span>
+              <span appLinkDenom> {{ denom }} </span>
             </div>
             <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input [(ngModel)]="amountFormat" [max]="maxNumberInput" mask="separator.6" (blur)="resetCheck()" />
@@ -529,7 +531,7 @@
                   MAX
                 </button>
               </div>
-              <div class="input-group-append text--white">{{ denom }}</div>
+              <div class="input-group-append" appLinkDenom>{{ denom }}</div>
             </div>
           </div>
         </div>

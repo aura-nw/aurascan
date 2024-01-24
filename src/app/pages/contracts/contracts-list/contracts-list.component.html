@@ -3,31 +3,34 @@
 <div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt && !isLoading">
   <div class="filter-group d-flex align-items-center flex-nowrap">
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.length === 0"
       (click)="filterButton('All')">
       All types
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(ContractRegisterType.CW20)"
-      (click)="filterButton(ContractRegisterType.CW20)">
+      (click)="filterButton(ContractRegisterType.CW20)"
+      [appFeature]="EFeature.Cw20">
       CW-20
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(ContractRegisterType.CW721)"
-      (click)="filterButton(ContractRegisterType.CW721)">
+      (click)="filterButton(ContractRegisterType.CW721)"
+      [appFeature]="EFeature.Cw721">
       CW-721
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(ContractRegisterType.CW4973)"
-      (click)="filterButton(ContractRegisterType.CW4973)">
+      (click)="filterButton(ContractRegisterType.CW4973)"
+      [appFeature]="EFeature.Cw4973">
       CW-4973
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes('')"
       (click)="filterButton('')">
       Others
@@ -142,16 +145,16 @@
                     <div
                       class="d-flex align-items-center ml-1"
                       *ngIf="data[template.matColumnDef] === ContractVerifyType.Verified">
-                      <span>{{ data['verified_at'] | customDate : 'yyyy-MM-dd' }}</span>
+                      <span>{{ data['verified_at'] | customDateTime: 'DateOnly' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ data['verified_at'] | customDate : 'HH:mm:ss' }}</span>
+                      <span>{{ data['verified_at'] | customDateTime: 'TimeOnly' }}</span>
                     </div>
                     <div *ngIf="data[template.matColumnDef] !== ContractVerifyType.Verified">-</div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'name'">
                     <div class="aura-tooltip-contain">
                       <span class="aura-tooltip-object text-nowrap">
-                        {{ (data[template.matColumnDef] | ellipsis : 28) || '-' }}
+                        {{ (data[template.matColumnDef] | ellipsis: 28) || '-' }}
                       </span>
                       <app-tooltip-customize [content]="data[template.matColumnDef]"></app-tooltip-customize>
                     </div>
@@ -159,7 +162,7 @@
                   <ng-container *ngIf="template.matColumnDef === 'label'">
                     <div class="aura-tooltip-contain">
                       <span class="aura-tooltip-object text-nowrap">
-                        {{ (data[template.matColumnDef] | ellipsis : 22) || '-' }}
+                        {{ (data[template.matColumnDef] | ellipsis: 22) || '-' }}
                       </span>
                       <app-tooltip-customize [content]="data[template.matColumnDef]"></app-tooltip-customize>
                     </div>
@@ -168,13 +171,13 @@
                   <ng-container *ngIf="template.matColumnDef === 'token_tracker'">
                     <div class="aura-tooltip-contain">
                       <a class="aura-tooltip-object" *ngIf="data['token_tracker']" [routerLink]="data.url">
-                        {{ data['token_tracker'] | ellipsis : 18 }}
+                        {{ data['token_tracker'] | ellipsis: 18 }}
                       </a>
                       <span
                         *ngIf="
                           !data['code']?.type ||
-                          (data['code']?.type === contractRegisterType.CW20 && !data['cw20_contract']?.name) ||
-                          (data['code']?.type === contractRegisterType.CW721 && !data['cw721_contract']?.name)
+                          (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
+                          (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
                         ">
                         -
                       </span>

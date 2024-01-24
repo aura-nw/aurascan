@@ -44,7 +44,7 @@
     min-width: 150px;
   }
   .aura-table th.mat-header-cell:nth-child(2) {
-    min-width: 200px;
+    min-width: 250px;
   }
   .aura-table th.mat-header-cell:nth-child(5) {
     min-width: 200px;
@@ -54,5 +54,10 @@
   }
   .aura-table th.mat-header-cell:nth-child(1) {
     min-width: 50px;
+  }
+}
+.transfer-table-container {
+  tr.mat-header-row {
+    text-transform: initial;
   }
 }

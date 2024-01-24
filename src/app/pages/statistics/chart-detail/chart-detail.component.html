@@ -3,15 +3,16 @@
     <app-pagetitle title="{{ theTitle }}"></app-pagetitle>
     <ng-container *ngIf="!isLoading && !errTxt">
       <p class="text--gray-1 mt-5" *ngIf="chartType === 'daily-transactions'">
-        The chart highlights the total number of transactions on the Aura Blockchain Network with daily individual
-        breakdown
+        The chart highlights the total number of transactions on the {{ chainName }} Blockchain Network with daily
+        individual breakdown
       </p>
       <p class="text--gray-1 mt-5" *ngIf="chartType === 'unique-addresses'">
-        The chart shows the total distinct numbers of address on the Aura Blockchain Network and the increase in the
-        number of address daily.
+        The chart shows the total distinct numbers of address on the {{ chainName }} Blockchain Network and the increase
+        in the number of address daily.
       </p>
       <p class="text--gray-1 mt-5" *ngIf="chartType === 'daily_active_addresses'">
-        The Active Aura Addresses chart shows the daily number of unique addresses that were active on the network
+        The Active {{ chainName }} Addresses chart shows the daily number of unique addresses that were active on the
+        network
       </p>
     </ng-container>
   </div>
