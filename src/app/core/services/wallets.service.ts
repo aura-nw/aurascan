@@ -7,23 +7,33 @@ import {
   MainWalletBase,
   SessionOptions,
   SignerOptions,
+  WalletAccount,
   WalletConnectOptions,
   WalletManager,
   WalletName,
 } from '@cosmos-kit/core';
 import { assets } from 'chain-registry';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WalletsService implements OnDestroy {
+  // wallet config
   logger = new Logger('DEBUG');
   walletManager: WalletManager | null = null;
-
   chain: Chain;
 
-  get wallets() {
-    return this.walletManager?.mainWallets || [];
+  // account subject config
+  walletAccountSubject$ = new BehaviorSubject<WalletAccount>(null);
+  walletAccount$: Observable<WalletAccount> = this.walletAccountSubject$.asObservable();
+
+  set walletAccount(walletAccount: WalletAccount) {
+    this.walletAccountSubject$.next(walletAccount);
+  }
+
+  get walletAccount() {
+    return this.walletAccountSubject$.getValue();
   }
 
   constructor() {}
@@ -79,8 +89,8 @@ export class WalletsService implements OnDestroy {
     await this.walletManager.onMounted();
   }
 
-  get state() {
-    return this.walletManager.state;
+  get wallets() {
+    return this.walletManager?.mainWallets || [];
   }
 
   getChainWallet(walletName: WalletName): ChainWalletBase {

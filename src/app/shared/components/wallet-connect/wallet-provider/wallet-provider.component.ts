@@ -43,7 +43,9 @@ export class WalletProviderComponent implements AfterViewInit {
         return this.currentChainWallet.client.getAccount(this.currentChainWallet.chainId);
       })
       .then((account) => {
-        console.log(account);
+        if (account) {
+          this.onClose.emit(account);
+        }
       })
       .catch((e) => {
         console.error(e);

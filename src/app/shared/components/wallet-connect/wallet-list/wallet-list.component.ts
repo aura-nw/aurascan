@@ -31,6 +31,10 @@ export class WalletListComponent implements OnInit {
   ngOnDestroy(): void {}
 
   close(walletAccount: WalletAccount): void {
-    !!!walletAccount && this.dialogRef.close();
+    if (walletAccount) {
+      this.wallet.walletAccount = walletAccount;
+    }
+
+    this.dialogRef.close();
   }
 }

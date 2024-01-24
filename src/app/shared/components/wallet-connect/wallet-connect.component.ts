@@ -2,18 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { wallets as coin98Wallets } from '@cosmos-kit/coin98';
-import { MainWalletBase, WalletBase, WalletConnectOptions } from '@cosmos-kit/core';
+import { MainWalletBase, WalletAccount, WalletConnectOptions } from '@cosmos-kit/core';
 import { wallets as keplrWallets } from '@cosmos-kit/keplr';
 import { wallets as leapWallets } from '@cosmos-kit/leap';
 import { chains } from 'chain-registry';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CommonService } from 'src/app/core/services/common.service';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletsService } from 'src/app/core/services/wallets.service';
 import { wallets as coin98MobileWallets } from 'src/app/core/utils/wallets/coin98-mobile';
 import { wallets as walletConnect } from 'src/app/core/utils/wallets/wallet-connect/wc';
-import { WalletListComponent } from './wallet-list/wallet-list.component';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-sheet.component';
+import { WalletListComponent } from './wallet-list/wallet-list.component';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-wallet-connect',
@@ -21,11 +22,11 @@ import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-
   styleUrls: ['./wallet-connect.component.scss'],
 })
 export class WalletConnectComponent implements OnInit {
-  wallet$: Observable<any> = of(null);
+  wallet$: Observable<WalletAccount> = this.walletsService.walletAccount$;
 
-  CHAIN_NAME = 'aura';
+  CHAIN_ID = this.env.chainId;
 
-  chain = chains.find((c) => c.chain_name == this.CHAIN_NAME);
+  chain = chains.find((c) => c.chain_id == this.CHAIN_ID);
 
   walletSupportedList = [
     ...keplrWallets,
@@ -54,6 +55,7 @@ export class WalletConnectComponent implements OnInit {
     private dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
     private notificationsService: NotificationsService,
+    private env: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -66,15 +68,15 @@ export class WalletConnectComponent implements OnInit {
         disableIframe: true,
       });
 
-      this.popup();
+      this.configActions();
 
-      this.walletsService.walletManager.getWalletRepo(this.CHAIN_NAME).openView();
+      this.walletsService.walletManager.getWalletRepo(this.chain.chain_name).openView();
     } catch (error) {
       console.log('initWalletManager error', error);
     }
   }
 
-  popup() {
+  configActions() {
     this.walletsService.walletManager.setActions({
       viewOpen: this.openWalletPopup.bind(this),
     });
@@ -106,23 +108,5 @@ export class WalletConnectComponent implements OnInit {
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
-  }
-
-  connect(wallet: WalletBase) {
-    console.log(wallet);
-
-    const chainWallet = this.walletsService.getChainWallet(wallet.walletName);
-
-    chainWallet
-      ?.connect()
-      .then(() => {
-        return chainWallet.client.getAccount(chainWallet.chainId);
-      })
-      .then((account) => {
-        console.log(account);
-      })
-      .catch((e) => {
-        console.log('Eeee', e);
-      });
   }
 }
