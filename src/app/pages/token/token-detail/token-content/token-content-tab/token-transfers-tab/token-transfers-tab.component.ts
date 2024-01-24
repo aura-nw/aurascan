@@ -286,9 +286,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       address: null,
     };
 
-    console.log(payload);
-    
-
     if (this.keyWord) {
       if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
         payload['txHash'] = this.keyWord;
