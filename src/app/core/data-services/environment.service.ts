@@ -74,7 +74,7 @@ export class EnvironmentService {
   isNativeApp = false;
   bondedTokensPoolAddress = null;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
-  latestBlockHeight$ = new BehaviorSubject<number | string>(null);
+  latestBlockHeight$ = new Subject<number | string>();
 
   get configValue(): IConfiguration {
     return this.config?.value;
