@@ -455,6 +455,7 @@ export class TokenService extends CommonService {
           from
           to
           sender
+          height
           cw20_contract {
             smart_contract {
               address

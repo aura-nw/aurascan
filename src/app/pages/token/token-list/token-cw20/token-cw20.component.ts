@@ -93,7 +93,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       .asObservable()
       .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.searchData();
+        if (this.textSearch?.length > 0) {
+          this.searchData();
+        } else {
+          this.getListToken();
+        }
       });
   }
 
@@ -320,14 +324,16 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.dataSource.data = [];
 
     //check search for native token
-    const auraToken = !isSearch
-      ? [this.nativeToken]
-      : [this.nativeToken].filter(
-          (item) =>
-            item.name?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
-            item.symbol?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
-            item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
-        );
+    let auraToken = [this.nativeToken];
+    if (isSearch && this.textSearch?.length > 0) {
+      auraToken = [this.nativeToken].filter(
+        (item) =>
+          item.name?.toLowerCase().includes(this.textSearch?.toLowerCase()) ||
+          item.symbol?.toLowerCase().includes(this.textSearch?.toLowerCase()) ||
+          item.denom?.toLowerCase().includes(this.textSearch?.toLowerCase()),
+      );
+    }
+
     const verifiedToken = tableFilter
       .filter((token) => token.verify_status === 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))
