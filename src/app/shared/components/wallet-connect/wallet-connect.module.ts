@@ -12,9 +12,19 @@ import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.m
 import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-sheet.component';
 import { WalletConnectComponent } from './wallet-connect.component';
 import { WalletListComponent } from './wallet-list/wallet-list.component';
+import { WalletProviderComponent } from './wallet-provider/wallet-provider.component';
+import { QrcodeComponent } from './qrcode/qrcode.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { SharedModule } from '../../shared.module';
 
 @NgModule({
-  declarations: [WalletConnectComponent, WalletListComponent, WalletBottomSheetComponent],
+  declarations: [
+    WalletConnectComponent,
+    WalletListComponent,
+    WalletBottomSheetComponent,
+    WalletProviderComponent,
+    QrcodeComponent,
+  ],
   imports: [
     CommonModule,
     NgApexchartsModule,
@@ -26,6 +36,8 @@ import { WalletListComponent } from './wallet-list/wallet-list.component';
     ClipboardModule,
     TooltipCustomizeModule,
     MaterialModule,
+    QRCodeModule,
+    SharedModule,
   ],
   exports: [WalletConnectComponent],
 })
