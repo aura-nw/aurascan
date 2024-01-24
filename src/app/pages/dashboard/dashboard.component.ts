@@ -18,7 +18,13 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR, TITLE_LOGO } from '../../core/constants/common.constant';
+import {
+  CHART_RANGE,
+  NUMBER_6_DIGIT,
+  PAGE_EVENT,
+  TIMEOUT_ERROR,
+  TITLE_LOGO,
+} from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
@@ -120,13 +126,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.timerUnSub = timer(0, 60000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.getInfoData());
-
+    this.getInfoData();
     this.initChart();
     this.getCoinInfo(this.chartRange);
     this.getVotingPeriod();
+
+    this.environmentService.latestBlockHeight$.pipe(takeUntil(this.destroy$)).subscribe((height) => {
+      if (height) {
+        this.getInfoData(height);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -135,10 +144,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //get all data for dashboard
-  getInfoData() {
+  getInfoData(height = null) {
     this.getMarketInfo();
-    this.getListBlock();
-    this.getListTransaction();
+    this.getListBlock(height);
+    this.getListTransaction(height);
     this.cdr.detectChanges();
   }
   // config chart
@@ -221,9 +230,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getListBlock(): void {
+  getListBlock(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
+      nextHeight: height,
     };
     this.blockService.getDataBlock(payload).subscribe({
       next: (res) => {
@@ -246,9 +256,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getListTransaction(): void {
+  getListTransaction(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
+      heightLT: height,
     };
     this.transactionService.getListTx(payload).subscribe({
       next: (res) => {
