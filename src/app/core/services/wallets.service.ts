@@ -14,8 +14,7 @@ import {
   WalletName,
 } from '@cosmos-kit/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { allAssets } from '../utils/cosmoskit';
-import local from '../utils/storage/local';
+import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
 
 @Injectable({
   providedIn: 'root',
@@ -99,7 +98,7 @@ export class WalletsService implements OnDestroy {
   }
 
   disconnect() {
-    const walletName = localStorage.getItem('cosmos-kit@2:core//current-wallet');
+    const walletName = localStorage.getItem(STORAGE_KEY.CURRENT_WALLET);
 
     this.getChainWallet(walletName)
       ?.disconnect(true, { walletconnect: { removeAllPairings: true } })
@@ -108,7 +107,13 @@ export class WalletsService implements OnDestroy {
       });
   }
 
-  connect(wallet: Wallet | WalletName, callback?: () => void) {
+  connect(
+    wallet: Wallet | WalletName,
+    callback?: {
+      success?: () => void;
+      error?: (error) => void;
+    },
+  ) {
     const currentChainWallet = this.getChainWallet(typeof wallet == 'string' ? wallet : wallet.name);
 
     currentChainWallet
@@ -118,7 +123,10 @@ export class WalletsService implements OnDestroy {
       })
       .then((account) => {
         this.walletAccount = account;
-        callback?.();
+        callback?.success?.();
+      })
+      .catch((e) => {
+        callback?.error?.(e);
       });
 
     return currentChainWallet;
@@ -142,25 +150,5 @@ export class WalletsService implements OnDestroy {
     wallet.activate();
 
     return wallet;
-  }
-
-  getMainWallet() {
-    return this.walletManager.getMainWallet(this.chain.chain_name);
-  }
-
-  getWalletRepo() {
-    return this.walletManager.getWalletRepo(this.chain.chain_name);
-  }
-
-  getChainRecord() {
-    return this.walletManager.getChainRecord(this.chain.chain_name);
-  }
-
-  getChainLogo() {
-    return this.walletManager.getChainLogo(this.chain.chain_name);
-  }
-
-  signWithWC(chainWallet) {
-    return chainWallet.client.signArbitrary(this.chain.chain_id, chainWallet.address, 'Test message');
   }
 }

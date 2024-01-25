@@ -43,12 +43,15 @@ export class WalletProviderComponent implements AfterViewInit {
   }
 
   connect(wallet: Wallet) {
-    this.currentChainWallet = this.walletService.connect(
-      wallet,
-      (() => {
+    this.currentChainWallet = this.walletService.connect(wallet, {
+      success: (() => {
         this.close();
       }).bind(this),
-    );
+      error: ((e) => {
+        console.error(e);
+        this.currentChainWallet = null;
+      }).bind(this),
+    });
   }
 
   close() {

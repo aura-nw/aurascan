@@ -1,5 +1,6 @@
 import { allAssets } from './assets';
 import { allChains } from './chains';
+import { STORAGE_KEY } from './contanst';
 import { desktopWallets, mobileWallets, wcWallets } from './wallets';
 
-export { allAssets, allChains, desktopWallets, mobileWallets, wcWallets };
+export { STORAGE_KEY, allAssets, allChains, desktopWallets, mobileWallets, wcWallets };
