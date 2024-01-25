@@ -1,21 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { wallets as coin98Wallets } from '@cosmos-kit/coin98';
-import { MainWalletBase, WalletAccount, WalletConnectOptions } from '@cosmos-kit/core';
-import { wallets as keplrWallets } from '@cosmos-kit/keplr';
-import { wallets as leapWallets } from '@cosmos-kit/leap';
-import { chains } from 'chain-registry';
+import { WalletAccount, WalletConnectOptions } from '@cosmos-kit/core';
 import { Observable } from 'rxjs';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletsService } from 'src/app/core/services/wallets.service';
-import { wallets as coin98MobileWallets } from 'src/app/core/utils/wallets/coin98-mobile';
-import { wallets as walletConnect } from 'src/app/core/utils/wallets/wallet-connect/wc';
+import { allChains, desktopWallets, mobileWallets, wcWallets } from 'src/app/core/utils/cosmoskit';
 import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-sheet.component';
 import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { allChains, desktopWallets, mobileWallets } from 'src/app/core/utils/wallets';
 
 @Component({
   selector: 'app-wallet-connect',
@@ -29,7 +23,7 @@ export class WalletConnectComponent implements OnInit {
 
   chain = allChains.find((c) => c.chain_id == this.CHAIN_ID);
 
-  walletSupportedList = this.env.isMobile ? mobileWallets : desktopWallets;
+  walletSupportedList = this.env.isMobile ? mobileWallets : [...desktopWallets, ...wcWallets];
 
   walletConnectionOption: WalletConnectOptions = {
     signClient: {

@@ -13,7 +13,7 @@ import {
   WalletName,
 } from '@cosmos-kit/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { allAssets } from '../utils/wallets';
+import { allAssets } from '../utils/cosmoskit';
 
 @Injectable({
   providedIn: 'root',
