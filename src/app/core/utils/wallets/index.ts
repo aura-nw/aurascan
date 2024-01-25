@@ -9,6 +9,9 @@ const coin98wallets = [..._coin98wallets, ..._coin98WalletMobile];
 coin98wallets.forEach((wallet) => {
   if (wallet.walletInfo) {
     wallet.walletInfo.logo = LOGO_COIN98;
+
+    // Change prettyName mobile
+    wallet.walletInfo.prettyName = 'Coin98';
   }
 });
 

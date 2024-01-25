@@ -3,11 +3,11 @@
     <h2 class="text--white h3-mob fw-semibold mb-0">Connect your wallet</h2>
     <i class="ph ph-x h2 cursor-pointer text--white ml-10" (click)="close()"></i>
   </div>
-  <div class="popup-body">
+  <div class="popup-body d-lg-flex">
     <div class="wallet-list">
       <div class="body text--gray-2 mb-4">Select a provider to connect or create a wallet</div>
       <ul class="mb-6">
-        <p class="h4 text--white fw-semibold">Installed Wallets</p>
+        <p class="h4 text--white fw-semibold" *ngIf="otherWallets?.length">Installed Wallets</p>
         <li
           *ngFor="let wallet of wallets"
           class="wallet-item mt-1"
@@ -22,7 +22,7 @@
         </li>
       </ul>
 
-      <ul *ngIf="otherWallets?.length > 0">
+      <ul *ngIf="otherWallets?.length">
         <p class="h4 text--white fw-semibold">Other wallets</p>
         <li *ngFor="let wallet of otherWallets" class="wallet-item mt-1" (click)="connect(wallet)">
           <div class="d-flex align-items-center">

@@ -7,8 +7,4 @@ import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dia
 })
 export class WalletDialogComponent {
   constructor(public dialogRef: MatDialogRef<WalletDialogComponent>) {}
-
-  close(): void {
-    this.dialogRef.close();
-  }
 }

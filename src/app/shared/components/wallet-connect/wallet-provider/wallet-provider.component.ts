@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChainWalletBase, State, Wallet, WalletAccount } from '@cosmos-kit/core';
-import { WalletsService } from 'src/app/core/services/wallets.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { coin98wallets, keplrWallets, leapWallets, wcWallets } from 'src/app/core/utils/wallets';
 @Component({
   selector: 'app-wallet-provider',
@@ -9,6 +9,7 @@ import { coin98wallets, keplrWallets, leapWallets, wcWallets } from 'src/app/cor
   styleUrls: ['./wallet-provider.component.scss'],
 })
 export class WalletProviderComponent implements AfterViewInit {
+  @Input() mode: 'MOBILE' | 'DESKTOP';
   @Output() onClose = new EventEmitter<WalletAccount>();
 
   chainName = this.environmentService.chainName;
@@ -27,7 +28,11 @@ export class WalletProviderComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.walletService.walletManager.isWalletNotExist;
+    if (this.mode == 'MOBILE') {
+      this.otherWallets = [];
+
+      this.wallets = [...coin98wallets, ...leapWallets].filter((w) => w.isModeWalletConnect).map((w) => w.walletInfo);
+    }
   }
 
   isWalletNotExited(wallet: Wallet) {

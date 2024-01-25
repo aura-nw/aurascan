@@ -69,21 +69,19 @@ export class WalletConnectComponent implements OnInit {
       });
 
       this.configActions();
-
-      this.walletsService.walletManager.getWalletRepo(this.chain.chain_name).openView();
     } catch (error) {
       console.log('initWalletManager error', error);
     }
   }
 
   configActions() {
-    this.walletsService.walletManager.setActions({
+    this.walletsService.walletManager?.setActions({
       viewOpen: this.openWalletPopup.bind(this),
     });
   }
 
   openWalletPopup() {
-    if (this.walletsService.walletManager?.isMobile) {
+    if (this.walletsService.walletManager?.isMobile || this.env.isMobile) {
       this.notificationsService.hiddenFooterSubject.next(true);
       this.bottomSheet.open(WalletBottomSheetComponent, {
         panelClass: 'wallet-popup--mob',
