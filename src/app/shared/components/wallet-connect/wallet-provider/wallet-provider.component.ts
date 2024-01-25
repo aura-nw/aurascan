@@ -57,10 +57,6 @@ export class WalletProviderComponent implements AfterViewInit {
       });
   }
 
-  getLogo(wallet: Wallet) {
-    return typeof wallet.logo == 'string' ? wallet.logo : wallet.logo.major;
-  }
-
   close() {
     this.onClose.emit(null);
   }

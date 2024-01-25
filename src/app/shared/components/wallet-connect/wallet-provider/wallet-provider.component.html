@@ -14,7 +14,7 @@
           [ngClass]="{ disabled: isWalletNotExited(wallet) }"
           (click)="connect(wallet)">
           <div class="d-flex align-items-center">
-            <img class="wallet-icon" [src]="getLogo(wallet)" />
+            <img class="wallet-icon" [src]="wallet.logo" />
             <span class="h4 text--white ml-3">
               {{ wallet.prettyName }}
             </span>
@@ -26,7 +26,7 @@
         <p class="h4 text--white fw-semibold">Other wallets</p>
         <li *ngFor="let wallet of otherWallets" class="wallet-item mt-1" (click)="connect(wallet)">
           <div class="d-flex align-items-center">
-            <img class="wallet-icon" [src]="getLogo(wallet)" />
+            <img class="wallet-icon" [src]="wallet.logo" />
             <span class="h4 text--white ml-3">
               {{ wallet.prettyName }}
             </span>
@@ -48,7 +48,7 @@
           <app-qrcode
             class="w-100"
             [qrdata]="currentChainWallet?.qrUrl"
-            [imageSrc]="getLogo(otherWallets[0])"></app-qrcode>
+            [imageSrc]="otherWallets[0]?.logo?.toString()"></app-qrcode>
         </div>
       </ng-template>
     </div>
