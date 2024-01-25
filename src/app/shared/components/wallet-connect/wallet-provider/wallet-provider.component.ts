@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
-import { ChainWalletBase, State, Wallet, WalletAccount } from '@cosmos-kit/core';
+import { ChainWalletBase, State, Wallet } from '@cosmos-kit/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WalletsService } from 'src/app/core/services/wallets.service';
 import { desktopWallets, mobileWallets, wcWallets } from 'src/app/core/utils/cosmoskit';
@@ -10,7 +10,7 @@ import { desktopWallets, mobileWallets, wcWallets } from 'src/app/core/utils/cos
 })
 export class WalletProviderComponent implements AfterViewInit {
   @Input() mode: 'MOBILE' | 'DESKTOP';
-  @Output() onClose = new EventEmitter<WalletAccount>();
+  @Output() onClose = new EventEmitter<void>();
 
   chainName = this.environmentService.chainName;
 
@@ -25,7 +25,7 @@ export class WalletProviderComponent implements AfterViewInit {
     private environmentService: EnvironmentService,
   ) {}
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     if (this.mode == 'MOBILE') {
       this.wallets = mobileWallets.map((w) => w.walletInfo);
     } else {
@@ -38,22 +38,17 @@ export class WalletProviderComponent implements AfterViewInit {
     return this.walletService.wallets.find((w) => w.walletName == wallet.name)?.clientMutable.state == State.Error;
   }
 
-  connect(wallet: Wallet) {
-    this.currentChainWallet = this.walletService.getChainWallet(wallet.name);
+  stateOfWallet(wallet: Wallet) {
+    return this.walletService.getChainWallet(wallet.name)?.state;
+  }
 
-    this.currentChainWallet
-      ?.connect()
-      .then(() => {
-        return this.currentChainWallet.client.getAccount(this.currentChainWallet.chainId);
-      })
-      .then((account) => {
-        if (account) {
-          this.onClose.emit(account);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+  connect(wallet: Wallet) {
+    this.currentChainWallet = this.walletService.connect(
+      wallet,
+      (() => {
+        this.close();
+      }).bind(this),
+    );
   }
 
   close() {

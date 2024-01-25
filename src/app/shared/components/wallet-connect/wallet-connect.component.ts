@@ -47,7 +47,7 @@ export class WalletConnectComponent implements OnInit {
     private env: EnvironmentService,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     try {
       this.walletsService.initWalletManager({
         chain: this.chain,
@@ -58,6 +58,8 @@ export class WalletConnectComponent implements OnInit {
       });
 
       this.configActions();
+
+      await this.walletsService.restoreAccounts();
     } catch (error) {
       console.log('initWalletManager error', error);
     }
@@ -86,7 +88,9 @@ export class WalletConnectComponent implements OnInit {
     }
   }
 
-  disconnect(): void {}
+  disconnect(): void {
+    this.walletsService.disconnect();
+  }
 
   copyMessage(text: string) {
     const dummy = document.createElement('textarea');

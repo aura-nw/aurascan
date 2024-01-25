@@ -7,6 +7,7 @@ import {
   MainWalletBase,
   SessionOptions,
   SignerOptions,
+  Wallet,
   WalletAccount,
   WalletConnectOptions,
   WalletManager,
@@ -14,6 +15,7 @@ import {
 } from '@cosmos-kit/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { allAssets } from '../utils/cosmoskit';
+import local from '../utils/storage/local';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +27,8 @@ export class WalletsService implements OnDestroy {
   chain: Chain;
 
   // account subject config
-  walletAccountSubject$ = new BehaviorSubject<WalletAccount>(null);
-  walletAccount$: Observable<WalletAccount> = this.walletAccountSubject$.asObservable();
+  walletAccountSubject$: BehaviorSubject<WalletAccount>;
+  walletAccount$: Observable<WalletAccount>;
 
   set walletAccount(walletAccount: WalletAccount) {
     this.walletAccountSubject$.next(walletAccount);
@@ -36,7 +38,10 @@ export class WalletsService implements OnDestroy {
     return this.walletAccountSubject$.getValue();
   }
 
-  constructor() {}
+  constructor() {
+    this.walletAccountSubject$ = new BehaviorSubject<WalletAccount>(null);
+    this.walletAccount$ = this.walletAccountSubject$.asObservable();
+  }
 
   ngOnDestroy(): void {
     this.walletManager?.onUnmounted();
@@ -91,6 +96,40 @@ export class WalletsService implements OnDestroy {
 
   get wallets() {
     return this.walletManager?.mainWallets || [];
+  }
+
+  disconnect() {
+    const walletName = localStorage.getItem('cosmos-kit@2:core//current-wallet');
+
+    this.getChainWallet(walletName)
+      ?.disconnect(true, { walletconnect: { removeAllPairings: true } })
+      .then(() => {
+        this.walletAccount = null;
+      });
+  }
+
+  connect(wallet: Wallet | WalletName, callback?: () => void) {
+    const currentChainWallet = this.getChainWallet(typeof wallet == 'string' ? wallet : wallet.name);
+
+    currentChainWallet
+      ?.connect(true)
+      .then(() => {
+        return currentChainWallet.client.getAccount(currentChainWallet.chainId);
+      })
+      .then((account) => {
+        this.walletAccount = account;
+        callback?.();
+      });
+
+    return currentChainWallet;
+  }
+
+  async restoreAccounts() {
+    const walletName = localStorage.getItem('cosmos-kit@2:core//current-wallet');
+
+    if (walletName) {
+      this.connect(walletName);
+    }
   }
 
   getChainWallet(walletName: WalletName): ChainWalletBase {
