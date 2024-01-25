@@ -13,7 +13,7 @@ import { WalletsService } from 'src/app/core/services/wallets.service';
 import { wallets as coin98MobileWallets } from 'src/app/core/utils/wallets/coin98-mobile';
 import { wallets as walletConnect } from 'src/app/core/utils/wallets/wallet-connect/wc';
 import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-sheet.component';
-import { WalletListComponent } from './wallet-list/wallet-list.component';
+import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
@@ -92,7 +92,7 @@ export class WalletConnectComponent implements OnInit {
         this.notificationsService.hiddenFooterSubject.next(false);
       });
     } else {
-      this.dialog.open(WalletListComponent, {
+      this.dialog.open(WalletDialogComponent, {
         panelClass: 'wallet-popup',
         width: '730px',
       });
