@@ -27,7 +27,7 @@
                       </a>
                       <a
                         *ngSwitchCase="'proposer'"
-                        [copyBtn]="data[template.matColumnDef]"
+                        [copyBtn]="data['operator_address']"
                         class="line-claim-v text--primary cursor-pointer validator-link"
                         [routerLink]="['/validators', data['operator_address']]">
                         {{ data[template.matColumnDef] }}

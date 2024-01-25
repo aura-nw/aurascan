@@ -27,6 +27,7 @@ import { SoulboundTokenContractComponent } from './soulbound-token-contract/soul
 import { SoulboundTokenCreatePopupComponent } from './soulbound-token-create-popup/soulbound-token-create-popup.component';
 import { SoulboundTokenDetailPopupComponent } from './soulbound-token-detail-popup/soulbound-token-detail-popup.component';
 import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
+    CommonDirectiveModule
   ],
   providers: [UntypedFormBuilder, SoulboundService],
 })

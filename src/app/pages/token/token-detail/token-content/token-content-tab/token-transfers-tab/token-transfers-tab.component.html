@@ -140,14 +140,15 @@
                           </span>
                         </div>
 
-                        <app-tooltip-customize
-                          [class]="'message-custom'"
-                          [content]="data.lstTypeTemp | combineTxsMsg">
+                        <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
                         </app-tooltip-customize>
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'">
-                      <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
+                      <a
+                        class="text--primary"
+                        [routerLink]="['/transaction', data.tx_hash]"
+                        [copyBtn]="data[template.matColumnDef]">
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
                     </ng-container>
@@ -196,7 +197,7 @@
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'to_address'">
-                      <div class="pl-4 pl-lg-0" [style.min-width]="'200px'">
+                      <div class="pl-4 pl-lg-0" [style.min-width]="'210px'">
                         <app-name-tag
                           [value]="data[template.matColumnDef]"
                           [isHref]="true"

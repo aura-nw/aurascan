@@ -29,9 +29,12 @@
             <div class="text--gray-4 body">Tx Hash</div>
           </div>
           <div class="col-6 col-lg-auto">
-            <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-none d-lg-block">{{
-              codeIdDetail.tx_hash
-            }}</a>
+            <a
+              [routerLink]="['/transaction', codeIdDetail.tx_hash]"
+              class="text--primary body d-none d-lg-block"
+              [copyBtn]="codeIdDetail.tx_hash">
+              {{ codeIdDetail.tx_hash }}
+            </a>
             <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-lg-none">{{
               codeIdDetail.tx_hash | ellipsis: 8 : 8
             }}</a>

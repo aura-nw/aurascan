@@ -355,7 +355,8 @@
                 <a
                   *ngSwitchCase="'tx_hash'"
                   class="text--primary cursor-pointer hash-link"
-                  [routerLink]="['/transaction', data['tx_hash']]">
+                  [routerLink]="['/transaction', data['tx_hash']]"
+                  [copyBtn]="data[template.matColumnDef]">
                   {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                 </a>
                 <a
@@ -466,8 +467,8 @@
                       <div class="item-show d-flex justify-content-between align-items-center">
                         <app-name-tag
                           [value]="item.fromAddress || currentAddress"
-                          [url]="((item.fromAddress || currentAddress) | isContract) ? 'contracts' : 'account'"
-                          [iconContract]="(item.fromAddress || currentAddress) | isContract"
+                          [url]="(item.fromAddress || currentAddress | isContract) ? 'contracts' : 'account'"
+                          [iconContract]="item.fromAddress || currentAddress | isContract"
                           [isLink]="
                             !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                             item.fromAddress !== currentAddress
@@ -512,8 +513,8 @@
                         <div [style]="'min-width: 148px'">
                           <app-name-tag
                             [value]="item.toAddress || currentAddress"
-                            [url]="((item.toAddress || currentAddress) | isContract) ? 'contracts' : 'account'"
-                            [iconContract]="(item.toAddress || currentAddress) | isContract"
+                            [url]="(item.toAddress || currentAddress | isContract) ? 'contracts' : 'account'"
+                            [iconContract]="item.toAddress || currentAddress | isContract"
                             [isLink]="
                               !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                               item.toAddress !== currentAddress
@@ -597,7 +598,7 @@
         label: data.tx_hash | ellipsis: 8 : 8,
         subLabelContent: data.type,
         subLabelClass: 'btn-mob',
-        status: data.code,
+        status: data.code
       }"
       [content]="[
         {
@@ -608,8 +609,13 @@
         {
           label: 'Fee',
           class: 'text--gray-1 body-02-mob',
-          info: (+data.fee | mask: 'separator.6') + 
-          ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + denom + '</a>'
+          info:
+            (+data.fee | mask: 'separator.6') +
+            ' <a class=text--primary href=' +
+            ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+            '>' +
+            denom +
+            '</a>'
         }
       ]"></app-card-mob-account>
   </div>

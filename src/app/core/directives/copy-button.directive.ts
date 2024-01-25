@@ -1,25 +1,21 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { Directive, ElementRef, Input } from '@angular/core';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
 })
 export class CopyButtonDirective {
   @Input() copyBtn: string;
-  topPos;
-  leftPos;
+  @Input() isDisableCopy: boolean = false;
   button;
   tooltip;
-
-  // @HostListener('window:scroll', ['$event']) onScroll(event) {
-  //   if (this.button && this.tooltip) {
-  //     this.topPos = this.button.getBoundingClientRect().top;
-  //     this.leftPos = this.button.getBoundingClientRect().left;
-  //   }
-  // }
 
   constructor(private elRef: ElementRef) {}
 
   ngOnInit(): void {
+    if (this.isDisableCopy) {
+      return;
+    }
+
     const element: HTMLElement = this.elRef.nativeElement;
     if (!element) return;
     const content = this.copyBtn;
@@ -30,7 +26,7 @@ export class CopyButtonDirective {
     const icon = document.createElement('i');
     this.button.classList.add('button', 'button--xxs', 'position-relative');
     icon.classList.add('ph', 'ph-copy', 'text--white', 'body-01');
-    contain.classList.add('d-flex', 'align-items-center');
+    contain.classList.add('d-inline-flex', 'align-items-center');
     parent.replaceChild(contain, element);
     this.button.appendChild(icon);
     contain.appendChild(element);
@@ -44,10 +40,20 @@ export class CopyButtonDirective {
     // click show tooltip
     this.button.addEventListener('click', () => {
       this.tooltip.classList.add('show');
-      navigator.clipboard.writeText(content);
+      this.copyMessage(content);
+
       setTimeout(() => {
         this.tooltip.classList.remove('show');
       }, 1000);
     });
+  }
+
+  copyMessage(text: string) {
+    const dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
   }
 }

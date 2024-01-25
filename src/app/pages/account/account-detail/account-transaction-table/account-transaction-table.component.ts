@@ -58,10 +58,10 @@ export class AccountTransactionTableComponent {
 
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 14 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 22 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 17 },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 24 },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 20 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 22 },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 18 },
   ];
 
   displayedColumns: string[];
@@ -356,7 +356,7 @@ export class AccountTransactionTableComponent {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 15 });
+        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;
