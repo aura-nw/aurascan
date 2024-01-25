@@ -10,7 +10,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
 
@@ -48,7 +48,7 @@ export class SoulboundContractListComponent implements OnInit {
   constructor(
     private soulboundService: SoulboundService,
     public dialog: MatDialog,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private router: Router,
     private nameTagService: NameTagService,
   ) {}

@@ -13,7 +13,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { AbtRejectPopupComponent } from 'src/app/pages/soulbound-token/abt-reject-popup/abt-reject-popup.component';
 
@@ -38,7 +38,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public soulboundDetail: any,
     public dialogRef: MatDialogRef<SoulboundTokenDetailPopupComponent>,
     public commonService: CommonService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private toastr: NgxToastrService,
     private translate: TranslateService,
     private dialog: MatDialog,

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { allChains, desktopWallets, mobileWallets, wcWallets } from 'src/app/core/utils/cosmoskit';
 import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-sheet.component';
 import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
@@ -40,7 +40,7 @@ export class WalletConnectComponent implements OnInit {
 
   constructor(
     public commonService: CommonService,
-    private walletsService: WalletsService,
+    private walletsService: WalletService,
     private dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
     private notificationsService: NotificationsService,

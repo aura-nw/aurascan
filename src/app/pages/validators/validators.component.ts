@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import {
@@ -117,7 +117,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private validatorService: ValidatorService,
     private modalService: NgbModal,
     private accountService: AccountService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private toastr: NgxToastrService,
     private mappingErrorService: MappingErrorService,
     private router: Router,

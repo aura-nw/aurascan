@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { from, interval } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import {
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
@@ -62,7 +62,7 @@ export class SummaryInfoComponent implements OnInit {
 
   constructor(
     private proposalService: ProposalService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     public dialog: MatDialog,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,

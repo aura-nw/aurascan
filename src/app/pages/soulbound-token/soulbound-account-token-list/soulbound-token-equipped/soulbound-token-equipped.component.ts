@@ -9,7 +9,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
@@ -41,7 +41,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   constructor(
     private soulboundService: SoulboundService,
     private route: ActivatedRoute,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private contractService: ContractService,
     private toastr: NgxToastrService,
   ) {}

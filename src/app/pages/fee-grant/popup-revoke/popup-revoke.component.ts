@@ -6,7 +6,7 @@ import {
 import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-popup-revoke',
@@ -19,7 +19,7 @@ export class PopupRevokeComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { granterAddress: string; granteeAddress: string },
     public dialogRef: MatDialogRef<PopupRevokeComponent>,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
   ) {}

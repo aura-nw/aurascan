@@ -14,7 +14,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private environmentService: EnvironmentService,
     private cdr: ChangeDetectorRef,
     private proposalService: ProposalService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,

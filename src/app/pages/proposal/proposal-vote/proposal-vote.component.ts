@@ -9,7 +9,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { IVotingDialog } from 'src/app/core/models/proposal.model';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-proposal-vote',
@@ -27,7 +27,7 @@ export class ProposalVoteComponent implements OnInit {
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private mappingErrorService: MappingErrorService,
   ) {
     this.keyVote = data.voteValue ?? null;

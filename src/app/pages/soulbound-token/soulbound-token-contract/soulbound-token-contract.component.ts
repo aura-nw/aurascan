@@ -12,7 +12,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
 
@@ -52,7 +52,7 @@ export class SoulboundTokenContractComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private soulboundService: SoulboundService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     public commonService: CommonService,
     private nameTagService: NameTagService,
   ) {}

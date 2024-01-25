@@ -12,7 +12,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { AccountService } from 'src/app/core/services/account.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
 
 @Component({
@@ -48,7 +48,7 @@ export class DelegateItemComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private modalService: NgbModal,
     private accountService: AccountService,
     private toastr: NgxToastrService,

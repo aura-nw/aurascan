@@ -28,7 +28,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile, getTypeTx } from 'src/app/core/utils/common/info-common';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
@@ -98,7 +98,7 @@ export class NFTDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
     private router: ActivatedRoute,
     private soulboundService: SoulboundService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private toastr: NgxToastrService,
     private contractService: ContractService,
     private dialog: MatDialog,

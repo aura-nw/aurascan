@@ -18,7 +18,7 @@ import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { PopupAddGrantComponent } from 'src/app/pages/fee-grant/popup-add-grant/popup-add-grant.component';
 import { PopupRevokeComponent } from 'src/app/pages/fee-grant/popup-revoke/popup-revoke.component';
 
@@ -73,7 +73,7 @@ export class MyGranteesComponent implements OnInit {
     private dialog: MatDialog,
     private feeGrantService: FeeGrantService,
     private toastr: NgxToastrService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private mappingErrorService: MappingErrorService,
     private router: Router,
     private nameTagService: NameTagService,

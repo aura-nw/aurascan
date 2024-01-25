@@ -7,7 +7,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -45,7 +45,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private cdr: ChangeDetectorRef,
     private soulboundService: SoulboundService,
     public commonService: CommonService,

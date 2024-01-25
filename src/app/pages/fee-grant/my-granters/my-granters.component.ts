@@ -10,7 +10,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-my-granters',
@@ -57,7 +57,7 @@ export class MyGrantersComponent implements OnInit {
   constructor(
     private environmentService: EnvironmentService,
     private feeGrantService: FeeGrantService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private router: Router,
     private nameTagService: NameTagService,
   ) {}

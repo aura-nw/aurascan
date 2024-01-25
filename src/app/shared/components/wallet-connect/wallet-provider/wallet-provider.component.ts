@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChainWalletBase, State, Wallet } from '@cosmos-kit/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { desktopWallets, mobileWallets, wcWallets } from 'src/app/core/utils/cosmoskit';
 @Component({
   selector: 'app-wallet-provider',
@@ -21,7 +21,7 @@ export class WalletProviderComponent implements AfterViewInit {
   currentChainWallet: ChainWalletBase;
 
   constructor(
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private environmentService: EnvironmentService,
   ) {}
 

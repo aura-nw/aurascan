@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import io, { Socket } from 'socket.io-client';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { SoulboundService } from './soulbound.service';
-import { WalletsService } from './wallets.service';
+import { WalletService } from './wallet.service';
 
 interface RedisResponse {
   Code: string;
@@ -33,7 +33,7 @@ export class WSService {
   constructor(
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
   ) {
     this.wsData = new BehaviorSubject<any>(null);
     this.data$ = this.wsData.asObservable();

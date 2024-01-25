@@ -19,7 +19,7 @@ import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
 @Injectable({
   providedIn: 'root',
 })
-export class WalletsService implements OnDestroy {
+export class WalletService implements OnDestroy {
   // wallet config
   logger = new Logger('DEBUG');
   walletManager: WalletManager | null = null;

@@ -14,7 +14,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
 
@@ -44,7 +44,7 @@ export class PopupAddGrantComponent implements OnInit {
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
     private formBuilder: UntypedFormBuilder,
     private environmentService: EnvironmentService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private toastr: NgxToastrService,
     private feeGrantService: FeeGrantService,
     private dialog: MatDialog,

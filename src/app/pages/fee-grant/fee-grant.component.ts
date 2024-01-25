@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-fee-grant',
@@ -22,7 +22,7 @@ export class FeeGrantComponent implements OnInit {
       value: 'My Granters',
     },
   ];
-  constructor(private walletService: WalletsService) {}
+  constructor(private walletService: WalletService) {}
 
   ngOnInit(): void {
     from([1])

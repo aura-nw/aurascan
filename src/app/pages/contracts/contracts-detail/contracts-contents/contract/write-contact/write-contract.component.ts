@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
 
 @Component({
@@ -29,7 +29,7 @@ export class WriteContractComponent implements OnInit {
   root: any[];
 
   constructor(
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private toastr: NgxToastrService,
     private translate: TranslateService,
     private dialog: MatDialog,

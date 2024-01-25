@@ -8,7 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-soulbound-token-create-popup',
@@ -28,7 +28,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<SoulboundTokenCreatePopupComponent>,
     private environmentService: EnvironmentService,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private soulboundService: SoulboundService,
     private toastr: NgxToastrService,
     private commonService: CommonService,

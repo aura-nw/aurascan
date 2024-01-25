@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { WSService } from 'src/app/core/services/ws.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import local from 'src/app/core/utils/storage/local';
@@ -41,7 +41,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   constructor(
     private soulboundService: SoulboundService,
     private dialog: MatDialog,
-    private walletService: WalletsService,
+    private walletService: WalletService,
     private router: ActivatedRoute,
     private contractService: ContractService,
     private wSService: WSService,
