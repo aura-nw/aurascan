@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatTableDataSource as MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
@@ -9,7 +9,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
@@ -41,14 +41,14 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   constructor(
     private soulboundService: SoulboundService,
     private route: ActivatedRoute,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private contractService: ContractService,
     private toastr: NgxToastrService,
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
-      this.walletAddress = this.walletService.wallet?.bech32Address;
+    this.walletService.walletAccount$.subscribe((wallet) => {
+      this.walletAddress = this.walletService.walletAccount?.address;
     });
 
     this.route.params.subscribe((params) => {

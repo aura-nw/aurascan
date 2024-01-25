@@ -151,4 +151,16 @@ export class WalletsService implements OnDestroy {
 
     return wallet;
   }
+
+  signAndBroadcast(payload: any, ...payl) {
+    return null;
+  }
+
+  execute(...a) {
+    return null;
+  }
+
+  getWalletSign(...param) {
+    return null;
+  }
 }

@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { from, interval } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import {
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
@@ -19,7 +20,6 @@ import {
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { CommonService } from '../../../../core/services/common.service';
 import { ProposalService } from '../../../../core/services/proposal.service';
-import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
 const marked = require('marked');
@@ -62,7 +62,7 @@ export class SummaryInfoComponent implements OnInit {
 
   constructor(
     private proposalService: ProposalService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     public dialog: MatDialog,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
@@ -71,7 +71,7 @@ export class SummaryInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProposalDetail();
-    this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
+    this.walletService.walletAccount$.subscribe((wallet) => this.getVotedProposal());
   }
 
   enabledReload() {
@@ -359,7 +359,7 @@ export class SummaryInfoComponent implements OnInit {
     const expiredTime = +moment(proDetail.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {
-      const account = this.walletService.getAccount();
+      const account = this.walletService.walletAccount;
       if (account) {
         this.openDialog({
           id,
@@ -380,7 +380,7 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   getVotedProposal() {
-    const addr = this.walletService.wallet?.bech32Address || null;
+    const addr = this.walletService.walletAccount?.address || null;
     if (addr) {
       const payload = {
         proposal_id: this.proposalId?.toString(),

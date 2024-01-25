@@ -6,6 +6,7 @@ import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
 import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
 
@@ -25,7 +26,7 @@ export class MenuBottomBarComponent implements OnInit {
 
   constructor(
     public router: Router,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private notificationsService: NotificationsService,
     private environmentService: EnvironmentService,
   ) {}
@@ -34,7 +35,7 @@ export class MenuBottomBarComponent implements OnInit {
     this.notificationsService.hiddenFooterSubject.subscribe((res) => {
       this.hiddenFooter = res;
     });
-    
+
     this.checkFeatures();
 
     for (let menu of this.menu) {
@@ -56,11 +57,11 @@ export class MenuBottomBarComponent implements OnInit {
     from([1])
       .pipe(
         delay(800),
-        mergeMap((_) => this.walletService.wallet$),
+        mergeMap((_) => this.walletService.walletAccount$),
       )
       .subscribe((wallet) => {
         if (wallet) {
-          this.currentAddress = this.walletService.wallet?.bech32Address;
+          this.currentAddress = wallet.address;
         } else {
           this.currentAddress = null;
         }

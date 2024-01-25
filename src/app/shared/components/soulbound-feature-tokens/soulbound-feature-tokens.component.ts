@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { WSService } from 'src/app/core/services/ws.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import local from 'src/app/core/utils/storage/local';
@@ -41,7 +41,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   constructor(
     private soulboundService: SoulboundService,
     private dialog: MatDialog,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private router: ActivatedRoute,
     private contractService: ContractService,
     private wSService: WSService,
@@ -55,9 +55,9 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     }
 
     this.userAddress = this.router.snapshot.paramMap.get('address');
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       this.soulboundUnclaimedNum = 0;
-      this.wallet = wallet?.bech32Address;
+      this.wallet = wallet?.address;
       this.getABTNotify();
       this.getData();
       if (this.reloadAPI) {

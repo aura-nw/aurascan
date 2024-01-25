@@ -10,7 +10,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 
 @Component({
   selector: 'app-my-granters',
@@ -57,13 +57,13 @@ export class MyGrantersComponent implements OnInit {
   constructor(
     private environmentService: EnvironmentService,
     private feeGrantService: FeeGrantService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private router: Router,
     private nameTagService: NameTagService,
   ) {}
 
   ngOnInit() {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
         window.addEventListener('keplr_keystorechange', () => {
           this.isNoData = true;
@@ -72,7 +72,7 @@ export class MyGrantersComponent implements OnInit {
             this.router.navigate([currentRoute]); // navigate to same route
           });
         });
-        this.currentAddress = wallet.bech32Address;
+        this.currentAddress = wallet.address;
         this.isNoData = false;
         this.getGrantersData();
       } else {

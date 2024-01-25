@@ -7,12 +7,12 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import * as moment from 'moment';
 import { tap } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
 import { ProposalService } from '../../core/services/proposal.service';
-import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 
@@ -65,21 +65,21 @@ export class ProposalComponent implements OnInit {
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe(() => this.getFourLastedProposal());
+    this.walletService.walletAccount$.subscribe(() => this.getFourLastedProposal());
   }
 
   getFourLastedProposal() {
     this.proposalService.getProposalData({ limit: 4 }).subscribe({
       next: (res) => {
         if (res?.proposal) {
-          const addr = this.walletService.wallet?.bech32Address || null;
+          const addr = this.walletService.walletAccount?.address || null;
           this.proposalData = res.proposal;
           if (this.proposalData?.length > 0) {
             this.proposalData.forEach((pro, index) => {
@@ -210,7 +210,7 @@ export class ProposalComponent implements OnInit {
     const expiredTime = +moment(item.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {
-      const account = this.walletService.getAccount();
+      const account = this.walletService.walletAccount;
       if (account) {
         this.openDialog({
           id,

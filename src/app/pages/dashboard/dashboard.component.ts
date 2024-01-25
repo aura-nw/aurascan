@@ -14,11 +14,17 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR, TITLE_LOGO } from '../../core/constants/common.constant';
+import {
+  CHART_RANGE,
+  NUMBER_6_DIGIT,
+  PAGE_EVENT,
+  TIMEOUT_ERROR,
+  TITLE_LOGO,
+} from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
@@ -106,7 +112,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private environmentService: EnvironmentService,
     private cdr: ChangeDetectorRef,
     private proposalService: ProposalService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private validatorService: ValidatorService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
@@ -420,7 +426,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     // re-draw chart when connect coin98 app in mobile
-    this.walletService.wallet$.pipe(takeUntil(this.destroy$)).subscribe((wallet) => {
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroy$)).subscribe((wallet) => {
       if (wallet && this.isMobileMatched) {
         if (this.originalData.length === 0) {
           this.originalData = this.cacheData;

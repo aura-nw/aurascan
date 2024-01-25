@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 
 @Component({
   selector: 'app-fee-grant',
@@ -22,17 +22,17 @@ export class FeeGrantComponent implements OnInit {
       value: 'My Granters',
     },
   ];
-  constructor(private walletService: WalletService) {}
+  constructor(private walletService: WalletsService) {}
 
   ngOnInit(): void {
     from([1])
       .pipe(
         delay(600),
-        mergeMap((_) => this.walletService.wallet$),
+        mergeMap((_) => this.walletService.walletAccount$),
       )
       .subscribe((wallet) => {
         if (wallet) {
-          this.currentAddress = wallet.bech32Address;
+          this.currentAddress = wallet.address;
         } else {
           this.currentAddress = null;
         }

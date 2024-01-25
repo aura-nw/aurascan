@@ -7,7 +7,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -45,7 +45,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private cdr: ChangeDetectorRef,
     private soulboundService: SoulboundService,
     public commonService: CommonService,
@@ -55,10 +55,10 @@ export class SoulboundAccountTokenListComponent implements OnInit {
 
   ngOnInit(): void {
     this.userAddress = this.route.snapshot.paramMap.get('address');
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       this.TABS = this.TAB_EQUIPPED;
       if (wallet) {
-        if (wallet?.bech32Address === this.userAddress) {
+        if (wallet?.address === this.userAddress) {
           this.TABS = this.TAB_ALL;
         }
       }
@@ -96,7 +96,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   }
 
   getABTNotify(): void {
-    this.soulboundService.getNotify(this.walletService.wallet?.bech32Address).subscribe((res) => {
+    this.soulboundService.getNotify(this.walletService.walletAccount?.address).subscribe((res) => {
       this.totalNotify = res.data.notify || 0;
     });
   }

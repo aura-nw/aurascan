@@ -1,12 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+} from '@angular/material/legacy-dialog';
+import { WalletAccount } from '@cosmos-kit/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
 
 @Component({
@@ -19,22 +23,22 @@ export class WriteContractComponent implements OnInit {
 
   isExpand = false;
   userAddress = '';
-  walletAccount: any;
+  walletAccount: WalletAccount;
 
   jsValidator = new Validator();
   root: any[];
 
   constructor(
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private toastr: NgxToastrService,
     private translate: TranslateService,
     private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
-        this.userAddress = wallet?.bech32Address;
+        this.userAddress = wallet.address;
       } else {
         this.userAddress = null;
       }
@@ -84,7 +88,7 @@ export class WriteContractComponent implements OnInit {
   }
 
   connectWallet(): void {
-    this.walletAccount = this.walletService.getAccount();
+    this.walletAccount = this.walletService.walletAccount;
   }
 
   getProperties(schema: Schema) {

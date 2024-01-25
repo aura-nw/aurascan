@@ -29,6 +29,7 @@ import { MappingErrorService } from '../../../app/core/services/mapping-error.se
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 
 @Component({
   selector: 'app-validators',
@@ -117,7 +118,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private validatorService: ValidatorService,
     private modalService: NgbModal,
     private accountService: AccountService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private toastr: NgxToastrService,
     private mappingErrorService: MappingErrorService,
     private router: Router,
@@ -129,15 +130,17 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.getCountProposal();
-    this.walletService.wallet$.subscribe((wallet) => {
-      if (wallet) {
-        this.dataDelegate = null;
-        this.lstUndelegate = null;
-        this.userAddress = wallet.bech32Address;
-        this.getDataWallet();
-      } else {
-        this.userAddress = null;
-      }
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe({
+      next: (account) => {
+        if (account) {
+          this.dataDelegate = null;
+          this.lstUndelegate = null;
+          this.userAddress = account.address;
+          this.getDataWallet();
+        } else {
+          this.userAddress = null;
+        }
+      },
     });
     this.getList();
     this._routerSubscription = this.router.events.subscribe(() => {
@@ -323,8 +326,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.currentValidatorDialog = address;
     this.isClaimRewardLoading = true;
     const view = async () => {
-      const account = this.walletService.getAccount();
-      if (account && account.bech32Address) {
+      const account = this.walletService.walletAccount;
+      if (account && account.address) {
         this.clicked = true;
         this.amountFormat = null;
         this.isHandleStake = false;
@@ -502,7 +505,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           },
           senderAddress: this.userAddress,
           network: this.chainInfo,
-          chainId: this.walletService.chainId,
+          chainId: this.walletService.chain?.chain_id,
         });
 
         this.checkStatusExecuteBlock(hash, error);
@@ -524,7 +527,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             },
             senderAddress: this.userAddress,
             network: this.chainInfo,
-            chainId: this.walletService.chainId,
+            chainId: this.walletService.chain?.chain_id,
           },
           this.lstValidatorData?.length,
         );
@@ -551,7 +554,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           },
           senderAddress: this.userAddress,
           network: this.chainInfo,
-          chainId: this.walletService.chainId,
+          chainId: this.walletService.chain.chain_id,
         });
 
         this.checkStatusExecuteBlock(hash, error);
@@ -577,7 +580,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           },
           senderAddress: this.userAddress,
           network: this.chainInfo,
-          chainId: this.walletService.chainId,
+          chainId: this.walletService.chain.chain_id,
         });
 
         this.checkStatusExecuteBlock(hash, error);

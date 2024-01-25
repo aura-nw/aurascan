@@ -28,7 +28,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { checkTypeFile, getTypeTx } from 'src/app/core/utils/common/info-common';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
@@ -98,7 +98,7 @@ export class NFTDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
     private router: ActivatedRoute,
     private soulboundService: SoulboundService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private toastr: NgxToastrService,
     private contractService: ContractService,
     private dialog: MatDialog,
@@ -116,9 +116,9 @@ export class NFTDetailComponent implements OnInit {
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.nftId = this.router.snapshot.paramMap.get('nftId');
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
-        this.userAddress = wallet.bech32Address;
+        this.userAddress = wallet.address;
       } else {
         this.userAddress = null;
       }
@@ -280,7 +280,7 @@ export class NFTDetailComponent implements OnInit {
   }
 
   async execute(data) {
-    const user = this.walletService.wallet?.bech32Address;
+    const user = this.walletService.walletAccount?.address;
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
     let dataWallet = await this.walletService.getWalletSign(user, this.nftDetail.token_id);

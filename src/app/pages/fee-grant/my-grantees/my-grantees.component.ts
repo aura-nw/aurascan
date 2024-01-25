@@ -18,7 +18,7 @@ import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { PopupAddGrantComponent } from 'src/app/pages/fee-grant/popup-add-grant/popup-add-grant.component';
 import { PopupRevokeComponent } from 'src/app/pages/fee-grant/popup-revoke/popup-revoke.component';
 
@@ -73,14 +73,14 @@ export class MyGranteesComponent implements OnInit {
     private dialog: MatDialog,
     private feeGrantService: FeeGrantService,
     private toastr: NgxToastrService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private mappingErrorService: MappingErrorService,
     private router: Router,
     private nameTagService: NameTagService,
   ) {}
 
   ngOnInit() {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
         window.addEventListener('keplr_keystorechange', () => {
           this.isNoData = true;
@@ -89,7 +89,7 @@ export class MyGranteesComponent implements OnInit {
             this.router.navigate([currentRoute]); // navigate to same route
           });
         });
-        this.currentAddress = wallet.bech32Address;
+        this.currentAddress = wallet.address;
         this.isNoData = false;
         this.getGranteesData();
         this.timerGetFeeGrant = setInterval(() => {

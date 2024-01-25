@@ -12,7 +12,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { AccountService } from 'src/app/core/services/account.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
 
 @Component({
@@ -48,7 +48,7 @@ export class DelegateItemComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private modalService: NgbModal,
     private accountService: AccountService,
     private toastr: NgxToastrService,
@@ -57,10 +57,10 @@ export class DelegateItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
         this.dataDelegate = null;
-        this.userAddress = wallet.bech32Address;
+        this.userAddress = wallet.address;
       } else {
         this.userAddress = null;
       }
@@ -83,8 +83,8 @@ export class DelegateItemComponent implements OnInit {
   viewPopupDetail(staticDataModal: any) {
     if (!this.dialogOpen) {
       const view = async () => {
-        const account = this.walletService.getAccount();
-        if (account && account.bech32Address) {
+        const account = this.walletService.walletAccount;
+        if (account && account.address) {
           this.amountFormat = null;
           this.resetCheck();
           this.modalReference = this.modalService.open(staticDataModal, {
@@ -176,7 +176,7 @@ export class DelegateItemComponent implements OnInit {
           },
           senderAddress: this.userAddress,
           network: this.chainInfo,
-          chainId: this.walletService.chainId,
+          chainId: this.walletService.chain.chain_id,
         });
 
         this.isOpenDialog = false;

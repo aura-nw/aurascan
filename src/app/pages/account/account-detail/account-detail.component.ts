@@ -6,21 +6,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import BigNumber from 'bignumber.js';
 import { ChartComponent } from 'ng-apexcharts';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EFeature } from 'src/app/core/models/common.model';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
-import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
-import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
+import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
 
 @Component({
   selector: 'app-account-detail',
@@ -67,7 +67,7 @@ export class AccountDetailComponent implements OnInit {
     public commonService: CommonService,
     private route: ActivatedRoute,
     private accountService: AccountService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
     private environmentService: EnvironmentService,
@@ -112,9 +112,9 @@ export class AccountDetailComponent implements OnInit {
 
   loadDataTemp(): void {
     //get data from client for my account
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
-        this.userAddress = wallet.bech32Address;
+        this.userAddress = wallet.address;
       }
       this.getSBTPick();
       this.getTotalSBT();
