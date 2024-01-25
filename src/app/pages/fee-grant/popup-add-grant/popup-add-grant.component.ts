@@ -1,20 +1,20 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
   MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
 
@@ -44,7 +44,7 @@ export class PopupAddGrantComponent implements OnInit {
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
     private formBuilder: UntypedFormBuilder,
     private environmentService: EnvironmentService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private toastr: NgxToastrService,
     private feeGrantService: FeeGrantService,
     private dialog: MatDialog,
@@ -130,7 +130,7 @@ export class PopupAddGrantComponent implements OnInit {
       return;
     }
 
-    const granter = this.walletService.wallet?.bech32Address;
+    const granter = this.walletService.walletAccount?.address;
     const {
       grantee_address,
       expiration_time,
@@ -184,7 +184,7 @@ export class PopupAddGrantComponent implements OnInit {
               },
               senderAddress: granter,
               network: this.environmentService.chainInfo,
-              chainId: this.walletService.chainId,
+              chainId: this.walletService.chain.chain_id,
             });
 
             if (hash) {
@@ -214,7 +214,7 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   checkFormValid(): boolean {
-    const granter = this.walletService.wallet?.bech32Address;
+    const granter = this.walletService.walletAccount?.address;
     const { grantee_address, expiration_time, period_amount, period_day, amount, isExecute, execute_contract } =
       this.grantForm.value;
 

@@ -163,4 +163,13 @@ export class WalletsService implements OnDestroy {
   getWalletSign(...param) {
     return null;
   }
+
+  getAccount() {
+    // const account = this.wallet;
+    // if (account) {
+    //   return account;
+    // }
+    // this.openWalletPopup();
+    // return null;
+  }
 }

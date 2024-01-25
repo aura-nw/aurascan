@@ -1,14 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import {
-  MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 
 @Component({
   selector: 'app-soulbound-token-create-popup',
@@ -28,7 +28,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<SoulboundTokenCreatePopupComponent>,
     private environmentService: EnvironmentService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
     private soulboundService: SoulboundService,
     private toastr: NgxToastrService,
     private commonService: CommonService,
@@ -56,7 +56,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
   }
 
   async onSubmit() {
-    const minter = this.walletService.wallet?.bech32Address;
+    const minter = this.walletService.walletAccount?.address;
     let { soulboundTokenURI, receiverAddress } = this.createSBTokenForm.value;
     soulboundTokenURI = soulboundTokenURI.trim();
     receiverAddress = receiverAddress.trim();

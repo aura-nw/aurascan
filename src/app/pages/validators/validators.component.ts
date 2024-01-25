@@ -11,6 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import {
@@ -28,8 +29,6 @@ import { AccountService } from '../../../app/core/services/account.service';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
-import { WalletService } from '../../../app/core/services/wallet.service';
-import { WalletsService } from 'src/app/core/services/wallets.service';
 
 @Component({
   selector: 'app-validators',

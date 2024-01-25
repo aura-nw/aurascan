@@ -25,26 +25,10 @@ export class WalletService implements OnDestroy {
     return this._wallet$.getValue();
   }
 
-  setWallet(nextState: WalletKey): void {
-    this._wallet$.next(nextState);
-  }
-
-  isMobileMatched = false;
-  breakpoint$ = this.breakpointObserver
-    .observe([Breakpoints.Small, Breakpoints.XSmall])
-    .pipe(takeUntil(this.destroyed$));
-
   constructor(
     private environmentService: EnvironmentService,
-    private breakpointObserver: BreakpointObserver,
     public translate: TranslateService,
   ) {
-    this.breakpoint$.subscribe((state) => {
-      if (state) {
-        this.isMobileMatched = state.matches;
-      }
-    });
-
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
   }
@@ -90,10 +74,6 @@ export class WalletService implements OnDestroy {
   signMessage(base64String: string) {}
 
   async execute(userAddress, contract_address, msg, feeGas = null) {}
-
-  suggestChain(w: any) {
-    return w.experimentalSuggestChain(this.chainInfo);
-  }
 
   async getWalletSign(minter, message) {}
 

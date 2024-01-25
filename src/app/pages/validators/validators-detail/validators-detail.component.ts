@@ -13,7 +13,7 @@ import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletsService } from 'src/app/core/services/wallets.service';
 import { convertDataBlock } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 const marked = require('marked');
@@ -103,7 +103,7 @@ export class ValidatorsDetailComponent implements OnInit {
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
   ) {}
 
   ngOnInit(): void {
@@ -427,9 +427,9 @@ export class ValidatorsDetailComponent implements OnInit {
   openDialog() {
     const view = async () => {
       const account = this.walletService.getAccount();
-      if (account && account.bech32Address) {
-        this.isOpenDialog = true;
-      }
+      // if (account && account.bech32Address) {
+      //   this.isOpenDialog = true;
+      // }
     };
     view();
   }

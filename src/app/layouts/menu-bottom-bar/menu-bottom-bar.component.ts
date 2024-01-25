@@ -5,7 +5,6 @@ import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
 import { WalletsService } from 'src/app/core/services/wallets.service';
 import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
 import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';

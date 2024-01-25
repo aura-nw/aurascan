@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import io, { Socket } from 'socket.io-client';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { SoulboundService } from './soulbound.service';
-import { WalletService } from './wallet.service';
+import { WalletsService } from './wallets.service';
 
 interface RedisResponse {
   Code: string;
@@ -33,7 +33,7 @@ export class WSService {
   constructor(
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
-    private walletService: WalletService,
+    private walletService: WalletsService,
   ) {
     this.wsData = new BehaviorSubject<any>(null);
     this.data$ = this.wsData.asObservable();
@@ -143,7 +143,7 @@ export class WSService {
         ReceiverAddress: '',
       };
 
-      const currentWallet = this.walletService.wallet?.bech32Address;
+      const currentWallet = this.walletService.walletAccount.address;
       if (currentWallet && redisResponse.ReceiverAddress === currentWallet) {
         callBack && callBack();
         this.soulboundService.getNotify(currentWallet).subscribe((res) => {
