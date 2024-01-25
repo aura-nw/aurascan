@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/
 import { ChainWalletBase, State, Wallet, WalletAccount } from '@cosmos-kit/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WalletsService } from 'src/app/core/services/wallets.service';
-import { coin98wallets, keplrWallets, leapWallets, wcWallets } from 'src/app/core/utils/wallets';
+import { desktopWallets, mobileWallets, wcWallets } from 'src/app/core/utils/wallets';
 @Component({
   selector: 'app-wallet-provider',
   templateUrl: './wallet-provider.component.html',
@@ -14,11 +14,9 @@ export class WalletProviderComponent implements AfterViewInit {
 
   chainName = this.environmentService.chainName;
 
-  wallets = [...coin98wallets, ...keplrWallets, ...leapWallets]
-    .filter((w) => w.isModeExtension)
-    .map((w) => w.walletInfo);
+  wallets: Wallet[] = [];
 
-  otherWallets = wcWallets.map((w) => w.walletInfo);
+  otherWallets: Wallet[] = [];
 
   currentChainWallet: ChainWalletBase;
 
@@ -29,9 +27,10 @@ export class WalletProviderComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.mode == 'MOBILE') {
-      this.otherWallets = [];
-
-      this.wallets = [...coin98wallets, ...leapWallets].filter((w) => w.isModeWalletConnect).map((w) => w.walletInfo);
+      this.wallets = mobileWallets.map((w) => w.walletInfo);
+    } else {
+      this.wallets = desktopWallets.map((w) => w.walletInfo);
+      this.otherWallets = wcWallets.map((w) => w.walletInfo);
     }
   }
 

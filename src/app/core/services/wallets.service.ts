@@ -12,8 +12,8 @@ import {
   WalletManager,
   WalletName,
 } from '@cosmos-kit/core';
-import { assets } from 'chain-registry';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { allAssets } from '../utils/wallets';
 
 @Injectable({
   providedIn: 'root',
@@ -69,7 +69,7 @@ export class WalletsService implements OnDestroy {
 
     this.chain = chain;
 
-    const assetLists = assets.filter((asset) => (asset.chain_name = chain.chain_name));
+    const assetLists = allAssets.filter((asset) => (asset.chain_name = chain.chain_name));
 
     this.walletManager = new WalletManager(
       [chain],

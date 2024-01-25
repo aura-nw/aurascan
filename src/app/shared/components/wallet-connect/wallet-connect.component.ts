@@ -15,6 +15,7 @@ import { wallets as walletConnect } from 'src/app/core/utils/wallets/wallet-conn
 import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-sheet.component';
 import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { allChains, desktopWallets, mobileWallets } from 'src/app/core/utils/wallets';
 
 @Component({
   selector: 'app-wallet-connect',
@@ -26,15 +27,9 @@ export class WalletConnectComponent implements OnInit {
 
   CHAIN_ID = this.env.chainId;
 
-  chain = chains.find((c) => c.chain_id == this.CHAIN_ID);
+  chain = allChains.find((c) => c.chain_id == this.CHAIN_ID);
 
-  walletSupportedList = [
-    ...keplrWallets,
-    ...leapWallets,
-    ...coin98Wallets,
-    ...coin98MobileWallets,
-    ...walletConnect,
-  ] as MainWalletBase[];
+  walletSupportedList = this.env.isMobile ? mobileWallets : desktopWallets;
 
   walletConnectionOption: WalletConnectOptions = {
     signClient: {
