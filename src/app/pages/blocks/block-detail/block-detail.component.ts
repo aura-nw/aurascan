@@ -110,8 +110,8 @@ export class BlockDetailComponent implements OnInit {
               next: (res) => {
                 if (res?.transaction?.length > 0) {
                   this.getListTx(res?.transaction);
-                  this.loadingTxs = false;
                 }
+                this.loadingTxs = false;
               },
               error: (e) => {
                 if (e.name === TIMEOUT_ERROR) {
@@ -122,7 +122,7 @@ export class BlockDetailComponent implements OnInit {
                 this.loadingTxs = false;
               },
             });
-          }, 2000);
+          }, 1000);
         } else {
           setTimeout(() => {
             this.getDetailByHeight();
