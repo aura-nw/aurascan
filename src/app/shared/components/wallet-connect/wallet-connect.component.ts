@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { Chain } from '@chain-registry/types';
 import { WalletAccount, WalletConnectOptions } from '@cosmos-kit/core';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -8,6 +9,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { allChains, desktopWallets, mobileWallets, wcWallets } from 'src/app/core/utils/cosmoskit';
+import { getGasPriceByChain } from 'src/app/core/utils/cosmoskit/helpers/gas';
 import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-sheet.component';
 import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
 
@@ -17,14 +19,9 @@ import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
   styleUrls: ['./wallet-connect.component.scss'],
 })
 export class WalletConnectComponent implements OnInit {
-  wallet$: Observable<WalletAccount> = this.walletsService.walletAccount$;
-
   CHAIN_ID = this.env.chainId;
-
   chain = allChains.find((c) => c.chain_id == this.CHAIN_ID);
-
   walletSupportedList = this.env.isMobile ? mobileWallets : [...desktopWallets, ...wcWallets];
-
   walletConnectionOption: WalletConnectOptions = {
     signClient: {
       projectId: 'f371e1f6882d401122d20c719baf663a',
@@ -37,6 +34,14 @@ export class WalletConnectComponent implements OnInit {
       },
     },
   };
+
+  signerOptions = {
+    signingCosmwasm: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
+    signingStargate: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
+  };
+
+  wallet$: Observable<WalletAccount> = this.walletsService.walletAccount$;
+  chainInfo = this.env.chainInfo;
 
   constructor(
     public commonService: CommonService,
@@ -55,6 +60,7 @@ export class WalletConnectComponent implements OnInit {
         throwErrors: true,
         walletConnectOptions: this.walletConnectionOption,
         disableIframe: true,
+        signerOptions: this.signerOptions as any,
       });
 
       this.configActions();

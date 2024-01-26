@@ -1,7 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Chain } from '@chain-registry/types';
+import { EncodeObject } from '@cosmjs/proto-signing';
+import { StdFee } from '@cosmjs/stargate';
 import {
   ChainWalletBase,
+  CosmosClientType,
   EndpointOptions,
   Logger,
   MainWalletBase,
@@ -14,7 +17,7 @@ import {
   WalletName,
 } from '@cosmos-kit/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
+import { STORAGE_KEY, allAssets } from '../utils/cosmoskit';
 
 @Injectable({
   providedIn: 'root',
@@ -147,9 +150,19 @@ export class WalletService implements OnDestroy {
 
     const wallet = this.walletManager.getChainWallet(this.chain.chain_name, walletName);
 
-    wallet.activate();
+    !wallet.isActive && wallet.activate();
 
     return wallet;
+  }
+
+  async signAndBroadcast_V2(messages: EncodeObject[], fee?: StdFee | number, memo?: string, type?: CosmosClientType) {
+    const walletName = localStorage.getItem('cosmos-kit@2:core//current-wallet');
+
+    if (walletName) {
+      return this.getChainWallet(walletName)?.signAndBroadcast(messages, fee, memo, type);
+    }
+
+    return null;
   }
 
   signAndBroadcast(payload: any, ...payl) {
