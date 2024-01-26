@@ -279,8 +279,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   async getTokenNative() {
-    const tempTotal = await this.ibcService.getTotalSupplyLCD(this.chainInfo.coinMinimalDenom);
-
     this.tokenService.tokensMarket$
       .pipe(
         filter((data) => _.isArray(data)),
@@ -296,7 +294,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
             100;
         }
 
-        const totalSupply = balanceOf(_.get(tempTotal, 'data.amount.amount' || 0), this.chainInfo.coinDecimals);
+        const totalSupply = balanceOf(_.get(dataNative, 'totalSupply' || 0), this.chainInfo.coinDecimals);
 
         this.nativeToken = {
           ...this.nativeToken,

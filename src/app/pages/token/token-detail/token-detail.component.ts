@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { filter, take } from 'rxjs';
+import { filter, forkJoin, take } from 'rxjs';
 import { DATEFORMAT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
@@ -27,6 +28,7 @@ export class TokenDetailComponent implements OnInit {
   EModeToken = EModeToken;
 
   chainInfo = this.environmentService.chainInfo;
+  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
 
   constructor(
     private router: ActivatedRoute,
@@ -49,7 +51,7 @@ export class TokenDetailComponent implements OnInit {
     } else {
       //check is native coin
       if (paramData === this.chainInfo?.currencies[0].coinMinimalDenom) {
-        this.getDataNative(paramData);
+        this.getDataNative();
       } else {
         this.getDataCoin(paramData);
       }
@@ -158,7 +160,7 @@ export class TokenDetailComponent implements OnInit {
 
     const decimals = data?.decimal || this.chainInfo?.currencies[0].coinDecimals;
     this.tokenDetail = {
-      modeToken: data?.denom ? EModeToken.IBCCoin : EModeToken.Native,
+      modeToken: EModeToken.IBCCoin,
       denomHash: data?.denom,
       name: data?.name,
       price: data?.current_price || 0,
@@ -172,8 +174,8 @@ export class TokenDetailComponent implements OnInit {
     this.loading = false;
   }
 
-  async getDataNative(denomNative: string) {
-    const tempTotal = await this.ibcService.getTotalSupplyLCD(denomNative).catch(() => 0);
+  async getDataNative() {
+    const dataNative = local.getItem<any>(STORAGE_KEYS.DATA_NATIVE);
     this.tokenDetail = {
       modeToken: EModeToken.Native,
       name: this.chainInfo.chainName,
@@ -183,7 +185,7 @@ export class TokenDetailComponent implements OnInit {
       price: this.tokenService.nativePrice || 0,
       change: 0,
       decimals: this.chainInfo?.currencies[0].coinDecimals,
-      totalSupply: _.get(tempTotal, 'data.amount.amount', 0),
+      totalSupply: dataNative.totalSupply,
     };
     this.loading = false;
   }

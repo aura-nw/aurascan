@@ -76,17 +76,6 @@ export class TokenHoldersTabComponent implements OnInit {
 
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
-
-    // get minus balance delegate address
-    if (this.tokenDetail.modeToken === EModeToken.Native && this.bondedTokensPoolAddress?.length > 0) {
-      this.getListNativeBalance(this.bondedTokensPoolAddress).subscribe((res) => {
-        res?.forEach((item) => {
-          this.tokenDetail['totalSupply'] = BigNumber(this.tokenDetail?.totalSupply).minus(
-            BigNumber(_.get(item, 'data.amount')),
-          );
-        });
-      });
-    }
   }
 
   getListData() {

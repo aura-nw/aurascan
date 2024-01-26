@@ -664,4 +664,8 @@ export class TokenService extends CommonService {
   getAmountNative(address: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/account/${address}`).pipe(catchError((_) => of([])));
   }
+
+  getListAmountNative(address: string[]): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/account/list/${address}`).pipe(catchError((_) => of([])));
+  }
 }
