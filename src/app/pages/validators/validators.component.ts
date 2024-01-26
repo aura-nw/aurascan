@@ -5,6 +5,7 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { MatSort, Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 import { MsgDelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
 import * as _ from 'lodash';
 import { Subject, Subscription } from 'rxjs';
@@ -523,6 +524,33 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   handleClaim() {
+    if (Number(this.dataDelegate.stakingToken) > 0) {
+      try {
+        const msg = this.lstValidatorData.map((vd) => ({
+          typeUrl: TRANSACTION_TYPE_ENUM.GetReward,
+          value: MsgWithdrawDelegatorReward.fromPartial({
+            validatorAddress: vd,
+            delegatorAddress: this.userAddress,
+          }),
+        }));
+        this.isLoading = true;
+
+        this.walletService
+          .signAndBroadcast_V2(msg)
+          .then((broadcastResult) => {
+            assertIsBroadcastTxSuccess(broadcastResult);
+            this.checkStatusExecuteBlock(broadcastResult.transactionHash, null);
+          })
+          .catch((error) => {
+            console.error(error);
+            this.checkStatusExecuteBlock(null, error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+  handleClaim2() {
     if (Number(this.dataDelegate.stakingToken) > 0) {
       const executeClaim = async () => {
         this.isLoading = true;
