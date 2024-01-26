@@ -1,7 +1,7 @@
 .transfer-card {
   .card-nodata,
   .table-token {
-    height: 205px;
+    height: 305px;
     margin-bottom: 0;
     overflow-y: auto;
 
@@ -9,9 +9,11 @@
       tr.mat-row {
         height: 68px;
       }
+
       td.mat-cell:first-of-type {
         padding-left: 8px;
       }
+
       td.mat-cell {
         max-width: 150px;
       }

@@ -1,22 +1,24 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnInit } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { Router } from '@angular/router';
-import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
-import { IBCService } from 'src/app/core/services/ibc.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {Router} from '@angular/router';
+import {LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT} from 'src/app/core/constants/common.constant';
+import {TRANSACTION_TYPE_ENUM} from 'src/app/core/constants/transaction.enum';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TableTemplate} from 'src/app/core/models/common.model';
+import {CommonService} from 'src/app/core/services/common.service';
+import {IBCService} from 'src/app/core/services/ibc.service';
+import {TransactionService} from 'src/app/core/services/transaction.service';
+import {takeUntil} from "rxjs/operators";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-token-transfer',
   templateUrl: './token-transfer.component.html',
   styleUrls: ['./token-transfer.component.scss'],
 })
-export class TokenTransferComponent implements OnInit {
+export class TokenTransferComponent implements OnInit, OnDestroy {
   @Input() transaction: Number;
   nullAddress = NULL_ADDRESS;
   dataSourceFTs = new MatTableDataSource<any>([]);
@@ -27,22 +29,24 @@ export class TokenTransferComponent implements OnInit {
     pageIndex: 1,
   };
   templatesFTs: Array<TableTemplate> = [
-    { matColumnDef: 'assets', headerCellDef: 'assets' },
-    { matColumnDef: 'amount', headerCellDef: 'amount' },
-    { matColumnDef: 'transfer', headerCellDef: 'transfer' },
+    {matColumnDef: 'assets', headerCellDef: 'assets'},
+    {matColumnDef: 'amount', headerCellDef: 'amount'},
+    {matColumnDef: 'transfer', headerCellDef: 'transfer'},
   ];
 
   templatesNFTs: Array<TableTemplate> = [
-    { matColumnDef: 'nft', headerCellDef: 'nft' },
-    { matColumnDef: 'transfer', headerCellDef: 'transfer' },
-    { matColumnDef: 'action', headerCellDef: 'action' },
+    {matColumnDef: 'nft', headerCellDef: 'nft'},
+    {matColumnDef: 'transfer', headerCellDef: 'transfer'},
+    {matColumnDef: 'action', headerCellDef: 'action'},
   ];
   displayedColumnsFTs: string[] = this.templatesFTs.map((dta) => dta.matColumnDef);
   displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
   maxLengthSymbol = 20;
+  ellipsisStringLength = 8;
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  destroy$ = new Subject<void>();
 
   constructor(
     private environmentService: EnvironmentService,
@@ -51,12 +55,26 @@ export class TokenTransferComponent implements OnInit {
     private layout: BreakpointObserver,
     private commonService: CommonService,
     private ibcService: IBCService,
-  ) {}
+  ) {
+    this.breakpoint$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
+      if (state?.matches) {
+        this.maxLengthSymbol = 10;
+        this.ellipsisStringLength = 6;
+      } else {
+        this.maxLengthSymbol = 20;
+        this.ellipsisStringLength = 8;
+      }
+    });
+  }
+
+
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   ngOnInit(): void {
-    if (this.environmentService.isMobile) {
-      this.maxLengthSymbol = 10;
-    }
 
     if (this.transaction['status'] == 'Fail') {
       return;
@@ -116,7 +134,7 @@ export class TokenTransferComponent implements OnInit {
                   }
                 }
                 let amount = +amountTemp.match(/\d+/g)[0];
-                coinTransfer.push({ amount, cw20_contract, from, to, decimal });
+                coinTransfer.push({amount, cw20_contract, from, to, decimal});
               });
             }
           });
@@ -149,7 +167,7 @@ export class TokenTransferComponent implements OnInit {
         const amount = element.amount;
         const from = element.from;
         const to = element.to;
-        coinIBC.push({ amount, cw20_contract, from, to, decimal });
+        coinIBC.push({amount, cw20_contract, from, to, decimal});
       });
       this.dataSourceFTs.data = [...this.dataSourceFTs.data, ...coinIBC];
     });
