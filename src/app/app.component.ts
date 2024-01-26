@@ -15,6 +15,8 @@ import local from './core/utils/storage/local';
 import { IUser } from './core/models/auth.models';
 import { UserService } from './core/services/user.service';
 import { EnvironmentService } from './core/data-services/environment.service';
+import { IBCService } from './core/services/ibc.service';
+import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject<void>();
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
+  excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
 
   constructor(
     private commonService: CommonService,
@@ -42,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private watchListService: WatchListService,
     private userService: UserService,
     private environmentService: EnvironmentService,
+    private ibcService: IBCService,
   ) {}
 
   ngOnDestroy(): void {
@@ -208,7 +212,7 @@ export class AppComponent implements OnInit, OnDestroy {
         map((res) => {
           const nativeData = res.find((k) => k.denom === this.coinMinimalDenom);
           if (nativeData?.coin_id) {
-            local.setItem(STORAGE_KEYS.DATA_NATIVE, nativeData);
+            this.getDataNative(nativeData);
           }
           const listFilterIBC = res.filter((k) => k.denom !== this.coinMinimalDenom);
           return listFilterIBC?.map((element) => ({
@@ -219,6 +223,22 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .subscribe((listTokenIBC) => {
         local.setItem(STORAGE_KEYS.LIST_TOKEN_IBC, listTokenIBC);
+      });
+  }
+
+  async getDataNative(nativeData) {
+    const tempTotal = await this.ibcService.getTotalSupplyLCD(this.coinMinimalDenom).catch(() => '0');
+    let totalSupply = BigNumber(_.get(tempTotal, 'data.amount.amount') || '0');
+
+    this.tokenService
+      .getListAmountNative(this.excludedAddresses)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((res) => {
+        res?.data?.forEach((item) => {
+          totalSupply = totalSupply.minus(BigNumber(_.get(item, 'amount')));
+        });
+        nativeData['totalSupply'] = totalSupply.toFixed();
+        local.setItem(STORAGE_KEYS.DATA_NATIVE, nativeData);
       });
   }
 }
