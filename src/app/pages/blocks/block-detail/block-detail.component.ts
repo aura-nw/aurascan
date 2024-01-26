@@ -101,29 +101,28 @@ export class BlockDetailComponent implements OnInit {
           }
 
           //get list tx detail
-          let txs = [];
-          const payload = {
-            limit: 100,
-            height: this.blockHeight,
-          };
-          this.transactionService.getListTx(payload).subscribe({
-            next: (res) => {
-              if (res?.transaction?.length > 0) {
-                this.getListTx(res?.transaction);
+          setTimeout(() => {
+            const payload = {
+              limit: 100,
+              height: this.blockHeight,
+            };
+            this.transactionService.getListTx(payload).subscribe({
+              next: (res) => {
+                if (res?.transaction?.length > 0) {
+                  this.getListTx(res?.transaction);
+                  this.loadingTxs = false;
+                }
+              },
+              error: (e) => {
+                if (e.name === TIMEOUT_ERROR) {
+                  this.errTxtTxs = e.message;
+                } else {
+                  this.errTxtTxs = e.status + ' ' + e.statusText;
+                }
                 this.loadingTxs = false;
-              }
-            },
-            error: (e) => {
-              if (e.name === TIMEOUT_ERROR) {
-                this.errTxtTxs = e.message;
-              } else {
-                this.errTxtTxs = e.status + ' ' + e.statusText;
-              }
-              this.loadingTxs = false;
-            },
-          });
-
-          await Promise.all(txs);
+              },
+            });
+          }, 2000);
         } else {
           setTimeout(() => {
             this.getDetailByHeight();
