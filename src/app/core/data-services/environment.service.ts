@@ -22,9 +22,9 @@ export interface IConfiguration {
       url: string;
     };
     nativeName: string;
-    excludedAddresses: string[];
   };
   chainConfig: {
+    excludedAddresses: string[];
     stakingTime: string;
     blockTime: number;
     quotaSetPrivateName: number;

@@ -17,7 +17,7 @@ export class TokenService extends CommonService {
   nativePrice$ = new BehaviorSubject<number>(null);
   filterBalanceNative$ = new BehaviorSubject<number>(null);
   totalTransfer$ = new BehaviorSubject<number>(null);
-  excludedAddresses = this.environmentService.environment.excludedAddresses;
+  excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
 
   get tokensMarket() {
     return this.tokensMarket$.getValue();

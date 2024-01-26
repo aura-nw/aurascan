@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject<void>();
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
-  excludedAddresses = this.environmentService.environment.excludedAddresses;
+  excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
 
   constructor(
     private commonService: CommonService,

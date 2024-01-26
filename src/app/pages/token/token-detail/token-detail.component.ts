@@ -28,7 +28,7 @@ export class TokenDetailComponent implements OnInit {
   EModeToken = EModeToken;
 
   chainInfo = this.environmentService.chainInfo;
-  excludedAddresses = this.environmentService.environment.excludedAddresses;
+  excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
 
   constructor(
     private router: ActivatedRoute,
@@ -185,7 +185,7 @@ export class TokenDetailComponent implements OnInit {
       price: this.tokenService.nativePrice || 0,
       change: 0,
       decimals: this.chainInfo?.currencies[0].coinDecimals,
-      totalSupply: dataNative.totalSupply,
+      totalSupply: dataNative?.totalSupply,
     };
     this.loading = false;
   }

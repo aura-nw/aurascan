@@ -61,7 +61,6 @@ export class TokenHoldersTabComponent implements OnInit {
   countTotal = 0;
 
   chainInfo = this.environmentService.chainInfo;
-  excludedAddresses = this.environmentService.environment.excludedAddresses;
 
   constructor(
     private tokenService: TokenService,
