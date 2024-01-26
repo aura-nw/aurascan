@@ -1,8 +1,8 @@
-import { Writer } from 'protobufjs/minimal';
+import { BinaryWriter } from 'cosmjs-types/binary';
 import { Any } from 'cosmjs-types/google/protobuf/any';
 
 const AllowedContractAllowance = {
-  encode: (message, writer = Writer.create()) => {
+  encode: (message, writer = BinaryWriter.create()) => {
     if (message.allowance !== undefined) {
       Any.encode(message.allowance, writer.uint32(10).fork()).ldelim();
     }

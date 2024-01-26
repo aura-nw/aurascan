@@ -5,15 +5,18 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { MatSort, Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MsgDelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
 import * as _ from 'lodash';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { getFee } from 'src/app/core/utils/signing/fee';
+import { assertIsBroadcastTxSuccess } from 'src/app/core/utils/signing/transaction-manager';
 import {
   MAX_NUMBER_INPUT,
   NUMBER_2_DIGIT,
@@ -491,25 +494,31 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleDelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const executeDelegate = async () => {
-        this.isLoading = true;
-        const { hash, error } = await this.walletService.signAndBroadcast({
-          messageType: SIGNING_MESSAGE_TYPES.STAKE,
-          message: {
-            to: [this.validatorDetail.validator_address],
-            amount: {
-              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: this.coinMinimalDenom,
-            },
-          },
-          senderAddress: this.userAddress,
-          network: this.chainInfo,
-          chainId: this.walletService.chain?.chain_id,
-        });
+      const msg = MsgDelegate.fromPartial({
+        delegatorAddress: this.userAddress,
+        validatorAddress: this.validatorDetail.validator_address,
+        amount: {
+          amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
+          denom: this.coinMinimalDenom,
+        },
+      });
 
-        this.checkStatusExecuteBlock(hash, error);
+      const msgUrl = {
+        typeUrl: TRANSACTION_TYPE_ENUM.Delegate,
+        value: msg,
       };
-      executeDelegate();
+
+      this.isLoading = true;
+
+      this.walletService
+        .signAndBroadcast_V2([msgUrl])
+        .then((broadcastResult) => {
+          assertIsBroadcastTxSuccess(broadcastResult);
+          this.checkStatusExecuteBlock(broadcastResult.transactionHash, null);
+        })
+        .catch((error) => {
+          this.checkStatusExecuteBlock(null, error);
+        });
     }
   }
 
@@ -643,8 +652,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   checkStatusExecuteBlock(hash, error) {
     this.checkHashAction(hash);
     if (error) {
-      if (error != 'Request rejected') {
-        let errorMessage = this.mappingErrorService.checkMappingError('', error);
+      if (!error.toString().includes('Request rejected')) {
+        let errorMessage = this.mappingErrorService.checkMappingError(
+          '',
+          typeof error == 'number' ? error : error?.code,
+        );
         this.toastr.error(errorMessage);
       }
       this.resetData();

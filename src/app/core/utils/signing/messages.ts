@@ -246,7 +246,7 @@ export function setBasicAllowance(expiration, spendLimit, network) {
 
   if (expiration) {
     timestamp = Timestamp.fromPartial({
-      seconds: expiration / 1000,
+      seconds: BigInt(expiration / 1000),
       nanos: 0,
     });
   }
@@ -276,7 +276,7 @@ export function setPeriodicAllowance(expiration, spendLimit, period, periodSpend
 
   if (expiration) {
     timestamp = Timestamp.fromPartial({
-      seconds: expiration / 1000,
+      seconds: BigInt(expiration / 1000),
       nanos: 0,
     });
   }
@@ -291,7 +291,7 @@ export function setPeriodicAllowance(expiration, spendLimit, period, periodSpend
     let now = new Date();
     let timeReset = now?.getTime() / 1000 + Number(period);
     periodReset = Timestamp.fromPartial({
-      seconds: timeReset,
+      seconds: BigInt(timeReset),
       nanos: 0,
     });
   }
