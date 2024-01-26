@@ -108,8 +108,9 @@ export class BlockDetailComponent implements OnInit {
           };
           this.transactionService.getListTx(payload).subscribe({
             next: (res) => {
-              if (res?.transaction) {
-                txs = res?.transaction;
+              if (res?.transaction?.length > 0) {
+                this.getListTx(res?.transaction);
+                this.loadingTxs = false;
               }
             },
             error: (e) => {
@@ -123,21 +124,6 @@ export class BlockDetailComponent implements OnInit {
           });
 
           await Promise.all(txs);
-          setTimeout(() => {
-            if (txs?.length > 0) {
-              let dataTempTx = {};
-              dataTempTx['transaction'] = txs;
-              if (txs.length > 0) {
-                txs = convertDataTransactionSimple(dataTempTx, this.coinInfo);
-                dataTempTx['transaction'].forEach((k) => {
-                  this.blockDetail['gas_used'] += +k?.gas_used;
-                  this.blockDetail['gas_wanted'] += +k?.gas_wanted;
-                });
-                this.dataSource.data = txs;
-              }
-            }
-            this.loadingTxs = false;
-          }, 1000);
         } else {
           setTimeout(() => {
             this.getDetailByHeight();
@@ -159,17 +145,20 @@ export class BlockDetailComponent implements OnInit {
   }
 
   mappingBlockData(res) {
-    const block = convertDataBlock(res)[0];
-    block['round'] = _.get(res.block[0], 'data.block.last_commit.round');
-    block['chainid'] = _.get(res.block[0], 'data.block.header.chain_id');
-    block['json_data'] = _.get(res.block[0], 'data.block');
-    block['gas_used'] = block['gas_wanted'] = 0;
-    block['events'] = _.get(res.block[0], 'data.block_result.begin_block_events');
-    const blockEnd = _.get(res.block[0], 'data.block_result.end_block_events');
-    if (blockEnd) {
-      block['events'] = block['events'].concat(blockEnd);
+    const blockArr = convertDataBlock(res);
+    if (blockArr?.length > 0) {
+      const block = blockArr[0];
+      block['round'] = _.get(res.block[0], 'data.block.last_commit.round');
+      block['chainid'] = _.get(res.block[0], 'data.block.header.chain_id');
+      block['json_data'] = _.get(res.block[0], 'data.block');
+      block['gas_used'] = block['gas_wanted'] = 0;
+      block['events'] = _.get(res.block[0], 'data.block_result.begin_block_events');
+      const blockEnd = _.get(res.block[0], 'data.block_result.end_block_events');
+      if (blockEnd) {
+        block['events'] = block['events'].concat(blockEnd);
+      }
+      this.blockDetail = block;
     }
-    this.blockDetail = block;
   }
 
   checkAmountValue(amount: number, txHash: string) {
@@ -196,5 +185,18 @@ export class BlockDetailComponent implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  getListTx(txs) {
+    let dataTempTx = {};
+    dataTempTx['transaction'] = txs;
+    if (txs.length > 0) {
+      txs = convertDataTransactionSimple(dataTempTx, this.coinInfo);
+      dataTempTx['transaction'].forEach((k) => {
+        this.blockDetail['gas_used'] += +k?.gas_used;
+        this.blockDetail['gas_wanted'] += +k?.gas_wanted;
+      });
+      this.dataSource.data = txs;
+    }
   }
 }
