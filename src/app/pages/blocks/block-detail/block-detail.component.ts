@@ -90,17 +90,16 @@ export class BlockDetailComponent implements OnInit {
     this.blockService.getDataBlockDetail(payload).subscribe({
       next: async (res) => {
         if (res?.block?.length > 0) {
-          const block = convertDataBlock(res)[0];
-          block['round'] = _.get(res.block[0], 'data.block.last_commit.round');
-          block['chainid'] = _.get(res.block[0], 'data.block.header.chain_id');
-          block['json_data'] = _.get(res.block[0], 'data.block');
-          block['gas_used'] = block['gas_wanted'] = 0;
-          block['events'] = _.get(res.block[0], 'data.block_result.begin_block_events');
-          const blockEnd = _.get(res.block[0], 'data.block_result.end_block_events');
-          if (blockEnd) {
-            block['events'] = block['events'].concat(blockEnd);
+          const linkS3 = _.get(res, 'block[0].data.linkS3');
+          if (linkS3?.length > 0) {
+            this.blockService.getRawData(linkS3).subscribe((data) => {
+              res.block[0].data = data;
+              this.mappingBlockData(res);
+            });
+          } else {
+            this.mappingBlockData(res);
           }
-          this.blockDetail = block;
+
           //get list tx detail
           let txs = [];
           const payload = {
@@ -157,6 +156,20 @@ export class BlockDetailComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  mappingBlockData(res) {
+    const block = convertDataBlock(res)[0];
+    block['round'] = _.get(res.block[0], 'data.block.last_commit.round');
+    block['chainid'] = _.get(res.block[0], 'data.block.header.chain_id');
+    block['json_data'] = _.get(res.block[0], 'data.block');
+    block['gas_used'] = block['gas_wanted'] = 0;
+    block['events'] = _.get(res.block[0], 'data.block_result.begin_block_events');
+    const blockEnd = _.get(res.block[0], 'data.block_result.end_block_events');
+    if (blockEnd) {
+      block['events'] = block['events'].concat(blockEnd);
+    }
+    this.blockDetail = block;
   }
 
   checkAmountValue(amount: number, txHash: string) {
