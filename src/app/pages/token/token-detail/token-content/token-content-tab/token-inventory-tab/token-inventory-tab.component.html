@@ -30,7 +30,7 @@
                   <span class="d-inline-block d-lg-none">{{ item.token_id | ellipsis: 5 : 5 }}</span>
                 </a>
               </div>
-              <div class="mt-1 nft__info" [ngClass]="!(item.owner | nameTagTooltipPipe) ? 'name-tag-mob' : ''">
+              <div class="mt-1 nft__info d-flex" [ngClass]="!(item.owner | nameTagTooltipPipe) ? 'name-tag-mob' : ''">
                 <span class="small-text mr-1 text--gray-1">Owner:</span>
                 <a
                   class="small-text text--primary d-lg-none hover-link"
@@ -46,6 +46,7 @@
                 <app-name-tag
                   class="small-text text--primary d-none d-lg-inline hover-link"
                   [value]="item.owner"
+                  [isShorterText]="true"
                   [isHref]="true"
                   [url]="'/tokens/' + linkToken + '/' + item.contract_address + '?a='"></app-name-tag>
               </div>

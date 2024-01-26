@@ -25,15 +25,23 @@ export class NameTagComponent implements OnInit {
   @Input() extendUrl = false;
   @Input() widthAuto = false;
   @Input() maxCharacter = 16;
+  @Input() isShorterText = false;
   @Input() tooltipPosition: 'tooltip--left' | 'tooltip--right' | 'tooltip--below' | null = null;
 
   extendUrlLink = '';
 
-  constructor(public commonService: CommonService, public nameTagService: NameTagService) {}
+  constructor(
+    public commonService: CommonService,
+    public nameTagService: NameTagService,
+  ) {}
 
   ngOnInit(): void {
     if (this.extendUrl) {
       this.extendUrlLink = this.nameTagService.findUrlByAddress(this.value || this.paramUrl);
+    }
+
+    if (this.isShorterText) {
+      this.maxCharacter = 12;
     }
   }
 

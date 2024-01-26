@@ -1,4 +1,4 @@
-<section class="d-inline-flex name-tag-content align-items-center">
+<section class="d-inline-flex name-tag-content">
   <ng-container *ngIf="isLink; else displayText">
     <div class="aura-tooltip-contain d-flex align-items-center">
       <a
@@ -38,7 +38,7 @@
         #tooltip
         (click)="commonService.showToolTip(tooltip)"
         [cdkCopyToClipboard]="paramUrl || value">
-        <i class="ph ph-copy text--white body-01"></i>
+        <i class="ph ph-copy text--white body-01 mb-1"></i>
       </button>
       <app-tooltip-customize [content]="'Copied!'" [className]="'custom-position'"> </app-tooltip-customize>
     </div>
@@ -128,7 +128,8 @@
     </ng-container>
 
     <ng-container *ngIf="paramUrl || value | nameTagTooltipPipe">
-      {{ (value | nameTag | ellipsis: 8 : 8) || '-' }}
+      <ng-container *ngIf="isShorterText">{{ (value | nameTag | ellipsis: 6 : 6) || '-' }}</ng-container>
+      <ng-container *ngIf="!isShorterText">{{ (value | nameTag | ellipsis: 8 : 8) || '-' }}</ng-container>
     </ng-container>
   </ng-template>
 </section>
