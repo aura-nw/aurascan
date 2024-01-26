@@ -502,9 +502,8 @@ export function convertDataTransactionSimple(data, coinInfo) {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
     const txMessages = _.get(element, 'transaction_messages');
-    const txBodyMsgType = _.get(element, 'data[0][@type]');
 
-    let type = '';
+    let type = '-';
     if (txMessages?.length > 0) {
       const msgType = _.get(txMessages, '[0].type');
 
@@ -520,8 +519,6 @@ export function convertDataTransactionSimple(data, coinInfo) {
       if (type?.startsWith('Msg')) {
         type = type?.replace('Msg', '');
       }
-    } else {
-      type = txBodyMsgType?.split('.').pop();
     }
 
     const status =

@@ -1,1 +1,6 @@
-[]
+[
+  {
+    "label": "/seiprotocol.seichain.oracle.MsgAggregateExchangeRateVote",
+    "value": "Aggregate Exchange Rate Vote"
+  }
+]
