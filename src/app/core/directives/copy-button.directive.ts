@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input } from '@angular/core';
+import {Directive, ElementRef, Input} from '@angular/core';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
@@ -9,10 +9,11 @@ export class CopyButtonDirective {
   button;
   tooltip;
 
-  constructor(private elRef: ElementRef) {}
+  constructor(private elRef: ElementRef) {
+  }
 
   ngOnInit(): void {
-    if (this.isDisableCopy) {
+    if (this.isDisableCopy || !this.copyBtn) {
       return;
     }
 

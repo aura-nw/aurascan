@@ -4,12 +4,12 @@
       <div *ngIf="title.label" class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
         <span *ngIf="title.rankNum" class="mr-2 {{ title.titleClass ? title.titleClass : '' }}">{{
           title.rankNum
-        }}</span>
+          }}</span>
         <span class="{{ title.titleClass ? title.titleClass : '' }}">{{ title.label }}</span>
       </div>
       <div class="d-flex align-items-center">
         <div *ngIf="title.status && +title.status !== statusTransaction.Success" class="mr-2">
-          <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px" />
+          <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px"/>
         </div>
         <div *ngIf="title.subLabelContent" class="sub-label body {{ title.subLabelClass ? title.subLabelClass : '' }}">
           <span>{{ title.subLabelContent }}</span>
@@ -30,7 +30,7 @@
       </div>
       <a [routerLink]="['/validators', validatorData.validatorAddress]" class="h5 mb-0 ml-2 text--primary">{{
         validatorData.validatorName
-      }}</a>
+        }}</a>
     </div>
     <span class="divider divider-horizontal d-block my-3" *ngIf="title || validatorData"></span>
     <div *ngIf="content && content.length > 0">
@@ -47,17 +47,17 @@
       <div *ngIf="title.label" class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
         <span *ngIf="title.rankNum" class="mr-2 {{ title.titleClass ? title.titleClass : '' }}">{{
           title.rankNum
-        }}</span>
+          }}</span>
         <span
           class="{{ title.titleClass ? title.titleClass : '' }}"
           [routerLink]="title.link"
           [copyBtn]="title.label"
-          >{{ title.label }}</span
+        >{{ title.label }}</span
         >
       </div>
       <div class="d-flex align-items-center">
         <div *ngIf="title.status && title.status !== statusTransaction.Success" class="mr-2">
-          <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px" />
+          <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px"/>
         </div>
         <div *ngIf="title.subLabelContent" class="sub-label body {{ title.subLabelClass ? title.subLabelClass : '' }}">
           <span>{{ title.subLabelContent }}</span>
@@ -67,7 +67,7 @@
     <div *ngIf="tokenData" class="text--primary body h5 mb-3 d-flex align-items-center justify-content-between">
       <div class="d-flex align-items-center">
         <div class="avt">
-          <img class="rounded-circle" [appImg]="tokenData.logo" width="18" height="18" />
+          <img class="rounded-circle" [appImg]="tokenData.logo" width="18" height="18"/>
         </div>
         <h6
           *ngIf="tokenData.name"
@@ -96,7 +96,7 @@
       </div>
       <a [routerLink]="['/validators', validatorData.validatorAddress]" class="h5 mb-0 ml-2 text--primary">{{
         validatorData.validatorName
-      }}</a>
+        }}</a>
     </div>
     <span class="divider divider-horizontal d-block my-3" *ngIf="title || validatorData"></span>
     <div *ngIf="content && content.length > 0">
