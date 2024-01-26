@@ -28,7 +28,7 @@ export class TokenDetailComponent implements OnInit {
   EModeToken = EModeToken;
 
   chainInfo = this.environmentService.chainInfo;
-  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
+  excludedAddresses = this.environmentService.environment.excludedAddresses;
 
   constructor(
     private router: ActivatedRoute,

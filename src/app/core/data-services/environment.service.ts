@@ -22,7 +22,7 @@ export interface IConfiguration {
       url: string;
     };
     nativeName: string;
-    bondedTokensPoolAddress: string[];
+    excludedAddresses: string[];
   };
   chainConfig: {
     stakingTime: string;
@@ -73,7 +73,7 @@ export class EnvironmentService {
   configUri = './assets/config/config.json';
   isMobile = false;
   isNativeApp = false;
-  bondedTokensPoolAddress = null;
+  excludedAddresses = null;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
   latestBlockHeight$ = new Subject<number | string>();
 

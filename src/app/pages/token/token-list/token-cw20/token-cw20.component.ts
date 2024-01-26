@@ -294,7 +294,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
             100;
         }
 
-        const totalSupply = balanceOf(_.get(dataNative, 'totalSupply' || 0), this.chainInfo.coinDecimals);
+        const totalSupply = balanceOf(_.get(dataNative, 'totalSupply') || 0, this.chainInfo.coinDecimals);
 
         this.nativeToken = {
           ...this.nativeToken,

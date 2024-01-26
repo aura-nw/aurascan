@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject<void>();
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
-  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
+  excludedAddresses = this.environmentService.environment.excludedAddresses;
 
   constructor(
     private commonService: CommonService,
@@ -228,16 +228,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async getDataNative(nativeData) {
     const tempTotal = await this.ibcService.getTotalSupplyLCD(this.coinMinimalDenom).catch(() => '0');
-    let totalSupply: any = _.get(tempTotal, 'data.amount.amount') || '0';
+    const totalSupply = BigNumber(_.get(tempTotal, 'data.amount.amount') || '0');
 
     this.tokenService
-      .getListAmountNative(this.bondedTokensPoolAddress)
+      .getListAmountNative(this.excludedAddresses)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((res) => {
         res?.data?.forEach((item) => {
-          totalSupply = BigNumber(totalSupply).minus(BigNumber(_.get(item, 'amount')));
+          totalSupply.minus(BigNumber(_.get(item, 'amount')));
         });
-        nativeData['totalSupply'] = totalSupply;
+        nativeData['totalSupply'] = totalSupply.toFixed();
         local.setItem(STORAGE_KEYS.DATA_NATIVE, nativeData);
       });
   }

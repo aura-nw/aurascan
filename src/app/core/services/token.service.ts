@@ -17,7 +17,7 @@ export class TokenService extends CommonService {
   nativePrice$ = new BehaviorSubject<number>(null);
   filterBalanceNative$ = new BehaviorSubject<number>(null);
   totalTransfer$ = new BehaviorSubject<number>(null);
-  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
+  excludedAddresses = this.environmentService.environment.excludedAddresses;
 
   get tokensMarket() {
     return this.tokensMarket$.getValue();
@@ -623,7 +623,7 @@ export class TokenService extends CommonService {
     limit?: number;
     offset?: number;
     address?: string;
-    removeBondedAddress?: boolean;
+    isExcludedAddresses?: boolean;
   }): Observable<any> {
     const operationsDoc = `
     query queryHolderIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null, $addressNotIn: [String!] = null) {
@@ -650,7 +650,7 @@ export class TokenService extends CommonService {
           address: payload.address,
           limit: payload.limit || 100,
           offset: payload.offset || 0,
-          addressNotIn: payload.removeBondedAddress ? this.bondedTokensPoolAddress : [],
+          addressNotIn: payload.isExcludedAddresses ? this.excludedAddresses : [],
         },
         operationName: 'queryHolderIBC',
       })

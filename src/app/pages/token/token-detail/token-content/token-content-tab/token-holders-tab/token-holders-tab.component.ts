@@ -61,7 +61,7 @@ export class TokenHoldersTabComponent implements OnInit {
   countTotal = 0;
 
   chainInfo = this.environmentService.chainInfo;
-  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
+  excludedAddresses = this.environmentService.environment.excludedAddresses;
 
   constructor(
     private tokenService: TokenService,
@@ -227,7 +227,7 @@ export class TokenHoldersTabComponent implements OnInit {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       address: this.keyWord || null,
-      removeBondedAddress: this.tokenDetail.modeToken === this.EModeToken.Native,
+      isExcludedAddresses: this.tokenDetail.modeToken === this.EModeToken.Native,
     };
 
     this.tokenService
