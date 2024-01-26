@@ -61,7 +61,7 @@ export class TokenHoldersTabComponent implements OnInit {
   countTotal = 0;
 
   chainInfo = this.environmentService.chainInfo;
-  bondedTokensPoolAddress = this.environmentService.bondedTokensPoolAddress;
+  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
 
   constructor(
     private tokenService: TokenService,
@@ -78,9 +78,13 @@ export class TokenHoldersTabComponent implements OnInit {
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
     // get minus balance delegate address
-    if (this.tokenDetail.modeToken === EModeToken.Native && this.bondedTokensPoolAddress) {
-      this.getNativeBalance(this.bondedTokensPoolAddress).subscribe((res) => {
-        this.tokenDetail['totalSupply'] = BigNumber(this.tokenDetail?.totalSupply).minus(res.data?.amount) || 0;
+    if (this.tokenDetail.modeToken === EModeToken.Native && this.bondedTokensPoolAddress?.length > 0) {
+      this.getListNativeBalance(this.bondedTokensPoolAddress).subscribe((res) => {
+        res?.forEach((item) => {
+          this.tokenDetail['totalSupply'] = BigNumber(this.tokenDetail?.totalSupply).minus(
+            BigNumber(_.get(item, 'data.amount')),
+          );
+        });
       });
     }
   }
@@ -234,6 +238,7 @@ export class TokenHoldersTabComponent implements OnInit {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       address: this.keyWord || null,
+      removeBondedAddress: this.tokenDetail.modeToken === this.EModeToken.Native,
     };
 
     this.tokenService

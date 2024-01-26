@@ -17,6 +17,7 @@ export class TokenService extends CommonService {
   nativePrice$ = new BehaviorSubject<number>(null);
   filterBalanceNative$ = new BehaviorSubject<number>(null);
   totalTransfer$ = new BehaviorSubject<number>(null);
+  bondedTokensPoolAddress = this.environmentService.environment.bondedTokensPoolAddress;
 
   get tokensMarket() {
     return this.tokensMarket$.getValue();
@@ -35,7 +36,7 @@ export class TokenService extends CommonService {
   }
 
   setTotalTransfer(value: number) {
-    this.totalTransfer$.next(value)
+    this.totalTransfer$.next(value);
   }
 
   constructor(
@@ -617,11 +618,17 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getDenomHolder(payload: { denomHash: string; limit?: number; offset?: number; address?: string }): Observable<any> {
+  getDenomHolder(payload: {
+    denomHash: string;
+    limit?: number;
+    offset?: number;
+    address?: string;
+    removeBondedAddress?: boolean;
+  }): Observable<any> {
     const operationsDoc = `
-    query queryHolderIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
+    query queryHolderIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null, $addressNotIn: [String!] = null) {
       ${this.envDB} {
-        account_balance(where: {account: {address: {_eq: $address}}, denom: {_eq: $denom}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
+        account_balance(where: {account: {address: {_eq: $address, _nin: $addressNotIn}}, denom: {_eq: $denom}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
           account {
             address
           }
@@ -643,6 +650,7 @@ export class TokenService extends CommonService {
           address: payload.address,
           limit: payload.limit || 100,
           offset: payload.offset || 0,
+          addressNotIn: payload.removeBondedAddress ? this.bondedTokensPoolAddress : [],
         },
         operationName: 'queryHolderIBC',
       })
