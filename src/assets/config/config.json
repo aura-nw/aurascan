@@ -11,7 +11,7 @@
       "url": null
     },
     "nativeName": "Aura",
-    "bondedTokensPoolAddress": "aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"
+    "bondedTokensPoolAddress": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"]
   },
   "chainConfig": {
     "stakingTime": "86400",
