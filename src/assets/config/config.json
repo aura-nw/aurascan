@@ -10,10 +10,10 @@
       "content": null,
       "url": null
     },
-    "nativeName": "Aura",
-    "bondedTokensPoolAddress": "aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"
+    "nativeName": "Aura"
   },
   "chainConfig": {
+    "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
     "stakingTime": "86400",
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
