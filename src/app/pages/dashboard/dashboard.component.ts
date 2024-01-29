@@ -18,9 +18,16 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR, TITLE_LOGO } from '../../core/constants/common.constant';
+import {
+  CHART_RANGE,
+  NUMBER_6_DIGIT,
+  PAGE_EVENT,
+  TIMEOUT_ERROR,
+  TITLE_LOGO,
+} from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -80,12 +87,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   staking_APR = 0;
   tokenInfo: {
-    coinId: string;
     current_price: number;
     market_cap: number;
     max_supply: number;
     price_change_percentage_24h: number;
-    timestamp: string;
     total_volume: number;
   };
 
@@ -104,13 +109,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private transactionService: TransactionService,
     public global: Globals,
     private environmentService: EnvironmentService,
-    private cdr: ChangeDetectorRef,
     private proposalService: ProposalService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private coingecko: CoingeckoService,
+    private tokenService: TokenService,
   ) {
     this.breakpoint$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state) {
@@ -120,13 +125,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.timerUnSub = timer(0, 60000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.getInfoData());
-
+    this.getMarketInfo();
     this.initChart();
     this.getCoinInfo(this.chartRange);
     this.getVotingPeriod();
+
+    this.environmentService.latestBlockHeight$.pipe(takeUntil(this.destroy$)).subscribe((height) => {
+      if (height !== undefined) {
+        const latestHeight = height ? +height + 1 : height;
+        this.getListBlock(latestHeight);
+        this.getListTransaction(latestHeight);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -134,13 +144,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  //get all data for dashboard
-  getInfoData() {
-    this.getMarketInfo();
-    this.getListBlock();
-    this.getListTransaction();
-    this.cdr.detectChanges();
-  }
   // config chart
   initChart() {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
@@ -214,16 +217,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
-      if (res?.data) {
-        this.tokenInfo = res.data;
-      }
+    this.tokenService.tokensMarket$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      this.tokenInfo = res.find((k) => k.coin_id === this.environmentService.coingecko?.ids[0]);
     });
   }
 
-  getListBlock(): void {
+  getListBlock(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
+      nextHeight: height,
     };
     this.blockService.getDataBlock(payload).subscribe({
       next: (res) => {
@@ -246,9 +248,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getListTransaction(): void {
+  getListTransaction(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
+      heightLT: height,
     };
     this.transactionService.getListTx(payload).subscribe({
       next: (res) => {
