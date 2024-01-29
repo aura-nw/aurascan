@@ -25,7 +25,7 @@ export class CopyButtonDirective {
     this.button = document.createElement('button');
 
     const icon = document.createElement('i');
-    this.button.classList.add('button', 'button--xxs', 'position-relative');
+    this.button.classList.add('button', 'button--xxs', 'position-relative', 'pr-0');
     icon.classList.add('ph', 'ph-copy', 'text--white', 'body-01');
     contain.classList.add('d-inline-flex', 'align-items-center');
     parent.replaceChild(contain, element);

@@ -1,17 +1,18 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
-import { sha256 } from 'js-sha256';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {PageEvent} from '@angular/material/paginator';
+import {ActivatedRoute} from '@angular/router';
+import {sha256} from 'js-sha256';
 import * as _ from 'lodash';
-import { Subject, map } from 'rxjs';
-import { PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR, TITLE_LOGO } from 'src/app/core/constants/common.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
-import { IBCService } from 'src/app/core/services/ibc.service';
+import {Subject, map} from 'rxjs';
+import {PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR, TITLE_LOGO} from 'src/app/core/constants/common.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TableTemplate} from 'src/app/core/models/common.model';
+import {CommonService} from 'src/app/core/services/common.service';
+import {IBCService} from 'src/app/core/services/ibc.service';
 import local from 'src/app/core/utils/storage/local';
-import { convertTxIBC } from 'src/app/global/global';
+import {convertTxIBC} from 'src/app/global/global';
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-channel-detail',
@@ -24,13 +25,13 @@ export class ChannelDetailComponent implements OnInit {
   errTxt: string;
 
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'fee', headerCellDef: 'Fee' },
-    { matColumnDef: 'height', headerCellDef: 'Height' },
+    {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash'},
+    {matColumnDef: 'type', headerCellDef: 'Type'},
+    {matColumnDef: 'status', headerCellDef: 'Result'},
+    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
+    {matColumnDef: 'amount', headerCellDef: 'Amount'},
+    {matColumnDef: 'fee', headerCellDef: 'Fee'},
+    {matColumnDef: 'height', headerCellDef: 'Height'},
   ];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -49,13 +50,16 @@ export class ChannelDetailComponent implements OnInit {
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   chainInfo = this.environmentService.chainInfo;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     public commonService: CommonService,
     private route: ActivatedRoute,
     private ibcService: IBCService,
+    private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
-  ) {}
+  ) {
+  }
 
   @HostListener('window:popstate', ['$event'])
   onPopState(event) {
@@ -136,7 +140,7 @@ export class ChannelDetailComponent implements OnInit {
               };
             }
           });
-          return { listTx: txs || [], total: res.total_tx.aggregate.count || 0 };
+          return {listTx: txs || [], total: res.total_tx.aggregate.count || 0};
         }),
       )
       .subscribe({

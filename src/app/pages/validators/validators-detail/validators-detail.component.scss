@@ -127,17 +127,6 @@ form.search-form {
   }
 }
 
-.custom-card-mob-simple {
-  background-color: var(--aura-gray-9);
-  border-radius: var(--spacer-2);
-  padding: var(--spacer-3);
-
-  ::ng-deep .name-tag:not(.private-name-tag):after {
-    right: -1px;
-    border-right-color: var(--aura-gray-9);
-  }
-}
-
 ::ng-deep .soulbound-feature-tokens app-soulbound-feature-tokens .soulbound-list {
   .nft-card {
     min-height: fit-content !important;
