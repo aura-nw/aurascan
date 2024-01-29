@@ -33,11 +33,10 @@ export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
   },
   handleScale: false,
   handleScroll: false,
-  
 };
 
 export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'] = {
-  lineColor: '#5EE6D0',
+  lineColor: '#FD805F',
   topColor: 'rgba(136,198,203,0.12)',
   bottomColor: 'rgba(119, 182, 188, 0.01)',
   priceFormat: {
