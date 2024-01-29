@@ -1,13 +1,5 @@
 footer {
-  // background-color: var(--aura-black);
   border-top: 1px solid var(--aura-gray-9);
-
-  // mask-image: url('./../../../assets/images/mask.png');
-  // mask-repeat: no-repeat;
-  background-image: url('./../../../assets/images/mask.png');
-  background-position: center;
-  background-size: cover 600px;
-  background-repeat: no-repeat;
 
   .footer {
     &__menu {
@@ -130,6 +122,8 @@ footer {
   .bottom-bar {
     border-top: 1px solid var(--aura-gray-9);
     padding-bottom: 82px;
+    position: relative;
+    z-index: 1;
     .caption-2 {
       font-size: 12px;
       line-height: 20px;
