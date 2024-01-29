@@ -5,7 +5,7 @@ export const STATISTIC_CHART_OPTIONS: Partial<ChartOptions> = {
       name: 'statistic',
       type: 'line',
       data: [],
-      color: '#2CB1F5',
+      color: '#FD805F',
     },
   ],
   chart: {
