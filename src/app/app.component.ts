@@ -96,15 +96,15 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   getInfoCommon(): void {
-    this.commonService.status().subscribe(
-      (res) => {
+    this.commonService.status().subscribe({
+      next: (res) => {
         getInfo(this.globals, res);
-        this.environmentService.setLatestBlockHeight(res?.total_blocks);
+        this.environmentService.setLatestBlockHeight(res?.total_blocks || null);
       },
-      (error) => {
+      error: () => {
         this.environmentService.setLatestBlockHeight(null);
       },
-    );
+    });
   }
 
   getListNameTag() {

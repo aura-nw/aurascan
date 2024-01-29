@@ -75,7 +75,7 @@ export class EnvironmentService {
   isNativeApp = false;
   excludedAddresses = null;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
-  latestBlockHeight$ = new Subject<number | string>();
+  latestBlockHeight$ = new BehaviorSubject<number | string>(undefined);
 
   get configValue(): IConfiguration {
     return this.config?.value;
