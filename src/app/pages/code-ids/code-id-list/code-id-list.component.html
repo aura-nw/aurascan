@@ -17,15 +17,15 @@
         [maxLength]="maxLengthSearch"
         (keyup)="onKeyUp()"
         name="search"
-        autocomplete="off" />
+        autocomplete="off"/>
       <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-        <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+        <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
       </button>
       <button
         type="reset"
         class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
         (click)="resetFilterSearch()">
-        <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+        <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
       </button>
     </div>
   </form>
@@ -46,9 +46,9 @@
                 [maxLength]="maxLengthSearch"
                 (keyup)="onKeyUp()"
                 name="search"
-                autocomplete="off" />
+                autocomplete="off"/>
               <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
               <button
                 type="reset"
@@ -56,7 +56,7 @@
                   !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
                 }}"
                 (click)="resetFilterSearch()">
-                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
             </div>
           </form>
@@ -70,8 +70,8 @@
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
-                <th mat-header-cell *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate" [style.width]="'160px'"></div>
+                <th mat-header-cell *matHeaderCellDef [style.min-width]="template.headerWidth + 'px'">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
                   <ng-container *ngIf="template.matColumnDef === 'code_id'">
@@ -82,7 +82,7 @@
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                           alt="result"
                           width="16px"
-                          height="16px" />
+                          height="16px"/>
                       </div>
                       <a
                         class="text--primary"

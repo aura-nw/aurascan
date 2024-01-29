@@ -170,6 +170,7 @@
   .box-name-tag:not(.private-name-tag),
   .name-tag:not(.private-name-tag) {
     &:after {
+      right: -1px;
       border-right: 15px solid var(--aura-gray-10);
     }
   }

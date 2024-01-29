@@ -6,6 +6,7 @@ import {Directive, ElementRef, Input} from '@angular/core';
 export class CopyButtonDirective {
   @Input() copyBtn: string;
   @Input() isDisableCopy: boolean = false;
+  @Input() btnClass: string[];
   button;
   tooltip;
 
@@ -26,6 +27,11 @@ export class CopyButtonDirective {
 
     const icon = document.createElement('i');
     this.button.classList.add('button', 'button--xxs', 'position-relative', 'pr-0');
+    if (this.btnClass?.length > 0) {
+      this.btnClass.forEach((c) => {
+        this.button.classList.add(c);
+      })
+    }
     icon.classList.add('ph', 'ph-copy', 'text--white', 'body-01');
     contain.classList.add('d-inline-flex', 'align-items-center');
     parent.replaceChild(contain, element);
