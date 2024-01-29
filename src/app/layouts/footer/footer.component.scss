@@ -1,6 +1,13 @@
 footer {
-  background-color: var(--aura-black);
+  // background-color: var(--aura-black);
   border-top: 1px solid var(--aura-gray-9);
+
+  // mask-image: url('./../../../assets/images/mask.png');
+  // mask-repeat: no-repeat;
+  background-image: url('./../../../assets/images/mask.png');
+  background-position: center;
+  background-size: cover 600px;
+  background-repeat: no-repeat;
 
   .footer {
     &__menu {
