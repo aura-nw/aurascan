@@ -131,8 +131,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getVotingPeriod();
 
     this.environmentService.latestBlockHeight$.pipe(takeUntil(this.destroy$)).subscribe((height) => {
-      this.getListBlock(height);
-      this.getListTransaction(height);
+      if (height !== undefined) {
+        const latestHeight = height ? +height + 1 : height;
+        this.getListBlock(latestHeight);
+        this.getListTransaction(latestHeight);
+      }
     });
   }
 

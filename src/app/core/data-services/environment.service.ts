@@ -24,6 +24,7 @@ export interface IConfiguration {
     nativeName: string;
   };
   chainConfig: {
+    excludedAddresses: string[];
     stakingTime: string;
     blockTime: number;
     quotaSetPrivateName: number;
@@ -72,9 +73,9 @@ export class EnvironmentService {
   configUri = './assets/config/config.json';
   isMobile = false;
   isNativeApp = false;
-  bondedTokensPoolAddress = null;
+  excludedAddresses = null;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
-  latestBlockHeight$ = new Subject<number | string>();
+  latestBlockHeight$ = new BehaviorSubject<number | string>(undefined);
 
   get configValue(): IConfiguration {
     return this.config?.value;
@@ -150,7 +151,7 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.coingecko');
   }
 
-  setLatestBlockHeight(value: string | number){
+  setLatestBlockHeight(value: string | number) {
     this.latestBlockHeight$.next(value);
   }
 
@@ -194,7 +195,6 @@ export class EnvironmentService {
     await this.extendsTxType();
 
     this.getNodeInfo();
-    this.getBondedAddress();
   }
 
   extendsTxType(): Promise<void> {
@@ -227,11 +227,5 @@ export class EnvironmentService {
         }
       } catch {}
     }
-  }
-
-  getBondedAddress() {
-    this.http.get(`${this.chainInfo.rest}/${LCD_COSMOS.MODULE_ACCOUNTS}/bonded_tokens_pool`).subscribe((res: any) => {
-      this.bondedTokensPoolAddress = _.get(res, 'account.base_account.address');
-    });
   }
 }
