@@ -27,13 +27,9 @@
     }
 
     &.active {
-      color: var(--aura-primary);
-      border: 1px solid var(--aura-primary);
+      border: 1px solid var(--aura-orange-1);
+      background-color: var(--aura-orange-1);
       border-radius: 4px;
-
-      .page-link {
-        color: var(--aura-primary);
-      }
     }
 
     &.disabled {
