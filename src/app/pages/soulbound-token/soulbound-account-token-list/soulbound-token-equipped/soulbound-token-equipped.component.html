@@ -19,12 +19,12 @@
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
               name="search"
-              autocomplete="off" />
+              autocomplete="off"/>
             <button
               type="submit"
               class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}"
               (click)="searchToken()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
             <button
               type="reset"
@@ -32,7 +32,7 @@
                 !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
           </div>
         </form>
@@ -41,66 +41,69 @@
         <app-loading-sprint></app-loading-sprint>
       </div>
       <div *ngIf="!loading">
-        <!-- Token list -->
-        <div
-          id="nft-cards"
-          class="nft-cards token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
-          *ngIf="soulboundData?.data?.length > 0; else noValues">
-          <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
-            <div class="nft-cards__item-border">
-              <div class="nft-cards__item">
-                <app-nft-card
-                  [nftLink]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
-                  [nftItem]="token"
-                  nftId="{{ 'nft#' + i }}"
-                  [nftType]="getTypeFile(token)">
-                </app-nft-card>
-                <div class="box-nft-info d-block">
-                  <div class="nft__info body-01 caption-mob fw-normal">
-                    <span class="mr-1 text--gray-1">Token:</span>
-                    <span
-                      class="text--primary hover-link"
-                      (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)"
+        <ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
+          <!-- Token list -->
+          <div
+            id="nft-cards"
+            class="nft-cards token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
+            *ngIf="soulboundData?.data?.length > 0; else noValues">
+            <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
+              <div class="nft-cards__item-border">
+                <div class="nft-cards__item">
+                  <app-nft-card
+                    [nftLink]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
+                    [nftItem]="token"
+                    nftId="{{ 'nft#' + i }}"
+                    [nftType]="getTypeFile(token)">
+                  </app-nft-card>
+                  <div class="box-nft-info d-block">
+                    <div class="nft__info body-01 caption-mob fw-normal">
+                      <span class="mr-1 text--gray-1">Token:</span>
+                      <span
+                        class="text--primary hover-link"
+                        (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)"
                       >{{ token.token_name }}</span
-                    >
-                  </div>
-                  <div class="nft__info body-01 caption-mob fw-normal mt-1">
-                    <span class="mr-1 text--gray-1">Token ID:</span>
-                    <span
-                      class="text--primary hover-link"
-                      (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)">
-                      <span class="d-lg-inline-block d-none">{{ token.token_id | ellipsis : 12 }}</span>
-                      <span class="d-lg-none d-inline-block">{{ token.token_id | ellipsis : 9 }}</span>
+                      >
+                    </div>
+                    <div class="nft__info body-01 caption-mob fw-normal mt-1"
+                         [copyBtn]="token.token_id" [btnClass]="['mt-1', 'pl-1']">
+                      <span class="mr-1 text--gray-1">Token ID:</span>
+                      <span
+                        class="text--primary hover-link"
+                        (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)">
+                      <span *ngIf="!breakpoint.value.matches">{{ token.token_id | ellipsis : 12 }}</span>
+                      <span *ngIf="breakpoint.value.matches">{{ token.token_id | ellipsis : 6 }}</span>
                     </span>
+                    </div>
                   </div>
                 </div>
+                <ng-container *ngIf="userAddress === walletAddress">
+                  <i
+                    class="ph-bookmark-simple-thin token__bookmark token__bookmark--unequipped"
+                    (click)="getSBTDetail(token.contract_address, token.token_id)"
+                    *ngIf="!token.picked"></i>
+                  <i
+                    class="ph-bookmark-simple-fill token__bookmark token__bookmark--equipped"
+                    (click)="getSBTDetail(token.contract_address, token.token_id, false)"
+                    *ngIf="token.picked"></i>
+                </ng-container>
               </div>
-              <ng-container *ngIf="userAddress === walletAddress">
-                <i
-                  class="ph-bookmark-simple-thin token__bookmark token__bookmark--unequipped"
-                  (click)="getSBTDetail(token.contract_address, token.token_id)"
-                  *ngIf="!token.picked"></i>
-                <i
-                  class="ph-bookmark-simple-fill token__bookmark token__bookmark--equipped"
-                  (click)="getSBTDetail(token.contract_address, token.token_id, false)"
-                  *ngIf="token.picked"></i>
-              </ng-container>
             </div>
           </div>
-        </div>
-        <app-paginator
-          [length]="pageData?.length"
-          [pageSize]="pageData?.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator>
-        <ng-template #noValues>
-          <app-table-no-data
-            textNull="This account have not yet equipped any ABT"
-            *ngIf="!loading && !searchValue && !errTxt"></app-table-no-data>
-          <app-table-no-data [textNull]="errTxt" *ngIf="errTxt"></app-table-no-data>
-          <app-table-no-data *ngIf="!loading && searchValue"></app-table-no-data>
-        </ng-template>
+          <app-paginator
+            [length]="pageData?.length"
+            [pageSize]="pageData?.pageSize"
+            (paginator)="paginatorEmit($event)"
+            (pageEvent)="pageEvent($event)">
+          </app-paginator>
+          <ng-template #noValues>
+            <app-table-no-data
+              textNull="This account have not yet equipped any ABT"
+              *ngIf="!loading && !searchValue && !errTxt"></app-table-no-data>
+            <app-table-no-data [textNull]="errTxt" *ngIf="errTxt"></app-table-no-data>
+            <app-table-no-data *ngIf="!loading && searchValue"></app-table-no-data>
+          </ng-template>
+        </ng-container>
       </div>
     </div>
   </div>

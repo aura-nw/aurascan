@@ -1,40 +1,42 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
-import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatLegacySelect as MatSelect} from '@angular/material/legacy-select';
+import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute, Router} from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import BigNumber from 'bignumber.js';
-import { ChartComponent } from 'ng-apexcharts';
-import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { EFeature } from 'src/app/core/models/common.model';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { UserService } from 'src/app/core/services/user.service';
+import {ChartComponent} from 'ng-apexcharts';
+import {Subject, Subscription} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {EFeature} from 'src/app/core/models/common.model';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {SoulboundService} from 'src/app/core/services/soulbound.service';
+import {UserService} from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
-import { WalletService } from '../../../../app/core/services/wallet.service';
-import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
-import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants/account.enum';
-import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
-import { AccountService } from '../../../core/services/account.service';
-import { CommonService } from '../../../core/services/common.service';
-import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
+import {EnvironmentService} from '../../../../app/core/data-services/environment.service';
+import {WalletService} from '../../../../app/core/services/wallet.service';
+import {ACCOUNT_WALLET_COLOR} from '../../../core/constants/account.constant';
+import {ACCOUNT_WALLET_COLOR_ENUM, WalletAcount} from '../../../core/constants/account.enum';
+import {DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS} from '../../../core/constants/common.constant';
+import {AccountService} from '../../../core/services/account.service';
+import {CommonService} from '../../../core/services/common.service';
+import {chartCustomOptions, ChartOptions, CHART_OPTION} from './chart-options';
 
 @Component({
   selector: 'app-account-detail',
   templateUrl: './account-detail.component.html',
   styleUrls: ['./account-detail.component.scss'],
 })
-export class AccountDetailComponent implements OnInit {
+export class AccountDetailComponent implements OnInit, OnDestroy {
   @ViewChild('assetTypeSelect') assetTypeSelect: MatSelect;
+
   @HostListener('window:scroll', ['$event'])
   closeOptionPanelSection(_) {
     if (this.assetTypeSelect !== undefined) {
       this.assetTypeSelect.close();
     }
   }
+
   public chartOptions: Partial<ChartOptions>;
   @ViewChild('walletChart') chart: ChartComponent;
   @ViewChild(MatSort) sort: MatSort;
@@ -177,8 +179,10 @@ export class AccountDetailComponent implements OnInit {
           });
         }
       },
-      () => {},
-      () => {},
+      () => {
+      },
+      () => {
+      },
     );
   }
 
@@ -211,8 +215,10 @@ export class AccountDetailComponent implements OnInit {
       (res) => {
         this.totalSBTPick = res.data.length;
       },
-      () => {},
-      () => {},
+      () => {
+      },
+      () => {
+      },
     );
   }
 
@@ -221,8 +227,10 @@ export class AccountDetailComponent implements OnInit {
       (res) => {
         this.totalSBT = res.data;
       },
-      () => {},
-      () => {},
+      () => {
+      },
+      () => {
+      },
     );
   }
 
@@ -237,9 +245,9 @@ export class AccountDetailComponent implements OnInit {
       if (dataNameTag) {
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, { address: this.currentAddress });
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, {address: this.currentAddress});
       }
-      this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+      this.router.navigate(['/profile'], {queryParams: {tab: 'private'}});
     } else {
       this.router.navigate(['/login']);
     }
@@ -255,7 +263,7 @@ export class AccountDetailComponent implements OnInit {
 
   handleWatchList() {
     if (this.isWatchList) {
-      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+      this.router.navigate(['/profile'], {queryParams: {tab: 'watchList'}});
     } else {
       this.editWatchList();
     }
@@ -264,7 +272,7 @@ export class AccountDetailComponent implements OnInit {
   editWatchList() {
     if (this.userEmail) {
       local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.currentAddress);
-      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+      this.router.navigate(['/profile'], {queryParams: {tab: 'watchList'}});
     } else {
       this.router.navigate(['/login']);
     }

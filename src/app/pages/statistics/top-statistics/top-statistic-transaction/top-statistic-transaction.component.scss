@@ -5,15 +5,19 @@
     width: 70px;
   }
 }
+
 .aura-table th.mat-header-cell {
   min-width: 100px;
 }
+
 .aura-table th.mat-header-cell:nth-child(1) {
   min-width: 80px;
 }
+
 .aura-table th.mat-header-cell:nth-child(2) {
-  min-width: 190px;
+  min-width: 220px;
 }
+
 .aura-table th.mat-header-cell:nth-child(3),
 .aura-table th.mat-header-cell:nth-child(4) {
   min-width: 140px;
@@ -24,6 +28,7 @@
     .box-name-tag {
       &:not(.private-name-tag) {
         background-color: var(--aura-gray-8) !important;
+
         &:after {
           border-right: 15px solid var(--aura-gray-10) !important;
         }
