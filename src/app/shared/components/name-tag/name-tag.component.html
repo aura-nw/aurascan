@@ -60,7 +60,7 @@
             [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
             width="16px"
             height="16px"
-            *ngIf="iconContract"/>
+            *ngIf="iconContract" />
           <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
         </ng-container>
         <ng-container *ngIf="fullText">
@@ -87,20 +87,20 @@
       alt=""
       [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       width="16px"
-      height="16px"/>
+      height="16px" />
     <img
       [src]="'assets/images/icons/token-contract.svg' | imageS3"
       [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       width="16px"
       height="16px"
-      *ngIf="iconContract"/>
+      *ngIf="iconContract" />
     <img
       [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
       [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       alt="contract_verification"
       width="16px"
       height="16px"
-      *ngIf="iconVerify"/>
+      *ngIf="iconVerify" />
     <ng-container *ngIf="!fullText">
       <ng-container [ngTemplateOutlet]="displayNameTag"></ng-container>
     </ng-container>

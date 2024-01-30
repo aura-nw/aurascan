@@ -58,24 +58,27 @@
                 <a [routerLink]="['/blocks', data.height]" class="h6-mob mb-0 ml-2 text--primary">
                   {{ data.height }}
                 </a>
-                <div class="text--gray-1 h6-mob">{{data.timestamp | customDateTime: 'Distance'}}</div>
+                <div class="text--gray-1 h6-mob">{{ data.timestamp | customDateTime: 'Distance' }}</div>
               </div>
               <span class="divider divider-horizontal divider-lighter d-block my-3"></span>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">Proposer</div>
-                <a href="/validators/{{data.operator_address}}"
-                   class="text--primary"
-                   [copyBtn]="data.operator_address">{{data.proposer}}</a>
+                <a
+                  href="/validators/{{ data.operator_address }}"
+                  class="text--primary"
+                  [copyBtn]="data.operator_address"
+                  >{{ data.proposer }}</a
+                >
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">Txs</div>
-                <div class="body-01 text--gray-1">{{data.num_txs.toString()}}</div>
+                <div class="body-01 text--gray-1">{{ data.num_txs.toString() }}</div>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">Time</div>
                 <div class="card__date text--gray-1 body-01-mob">
-                  <span>{{ (data.timestamp | customDateTime: 'DateOnly') }}</span>
-                  <span>{{ (data.timestamp | customDateTime: 'TimeOnly') }}</span>
+                  <span>{{ data.timestamp | customDateTime: 'DateOnly' }}</span>
+                  <span>{{ data.timestamp | customDateTime: 'TimeOnly' }}</span>
                 </div>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/f
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { MaterialModule } from 'src/app/material.module';
@@ -27,7 +28,6 @@ import { SoulboundTokenContractComponent } from './soulbound-token-contract/soul
 import { SoulboundTokenCreatePopupComponent } from './soulbound-token-create-popup/soulbound-token-create-popup.component';
 import { SoulboundTokenDetailPopupComponent } from './soulbound-token-detail-popup/soulbound-token-detail-popup.component';
 import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
-import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -62,7 +62,7 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
-    CommonDirectiveModule
+    CommonDirectiveModule,
   ],
   providers: [UntypedFormBuilder, SoulboundService],
 })

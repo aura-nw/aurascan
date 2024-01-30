@@ -1,13 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {ActivatedRoute, Router} from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, Input, OnInit } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import {LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TokenService} from 'src/app/core/services/token.service';
-import {checkTypeFile} from 'src/app/core/utils/common/info-common';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TokenService } from 'src/app/core/services/token.service';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
   selector: 'app-token-inventory-tab',
@@ -36,8 +36,7 @@ export class TokenInventoryComponent implements OnInit {
     private environmentService: EnvironmentService,
     private router: Router,
     private layout: BreakpointObserver,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {

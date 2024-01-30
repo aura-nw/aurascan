@@ -1,17 +1,17 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatTableDataSource as MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute} from '@angular/router';
-import {MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {MESSAGES_CODE} from 'src/app/core/constants/messages.constant';
-import {SB_TYPE} from 'src/app/core/constants/soulbound.constant';
-import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
-import {ContractService} from 'src/app/core/services/contract.service';
-import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
-import {SoulboundService} from 'src/app/core/services/soulbound.service';
-import {WalletService} from 'src/app/core/services/wallet.service';
-import {checkTypeFile} from 'src/app/core/utils/common/info-common';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
+import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
   selector: 'app-soulbound-token-equipped',
@@ -46,9 +46,8 @@ export class SoulboundTokenEquippedComponent implements OnInit {
     private walletService: WalletService,
     private contractService: ContractService,
     private toastr: NgxToastrService,
-    private layout: BreakpointObserver
-  ) {
-  }
+    private layout: BreakpointObserver,
+  ) {}
 
   ngOnInit(): void {
     this.walletService.wallet$.subscribe((wallet) => {

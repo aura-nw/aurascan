@@ -1,14 +1,14 @@
-import {DatePipe} from '@angular/common';
-import {Component, Input, OnInit} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import { DatePipe } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import * as _ from 'lodash';
-import {DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {TYPE_CW4973} from 'src/app/core/constants/contract.constant';
-import {ContractRegisterType} from 'src/app/core/constants/contract.enum';
-import {TableTemplate} from 'src/app/core/models/common.model';
-import {ContractService} from 'src/app/core/services/contract.service';
-import {shortenAddress} from '../../../../core/utils/common/shorten';
+import { DATEFORMAT, LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { shortenAddress } from '../../../../core/utils/common/shorten';
 
 @Component({
   selector: 'app-code-id-contracts-tab',
@@ -24,12 +24,12 @@ export class CodeIdContractsTabComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'contract_address', headerCellDef: 'Contract Address', isUrl: '/contracts', headerWidth: 230},
-    {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', isUrl: '/transaction', headerWidth: 220},
-    {matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 200},
-    {matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 200},
-    {matColumnDef: 'created_at', headerCellDef: 'Instantiated at', headerWidth: 200},
-    {matColumnDef: 'verified_at', headerCellDef: 'Verified at', headerWidth: 200},
+    { matColumnDef: 'contract_address', headerCellDef: 'Contract Address', isUrl: '/contracts', headerWidth: 230 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', isUrl: '/transaction', headerWidth: 220 },
+    { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 200 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 200 },
+    { matColumnDef: 'created_at', headerCellDef: 'Instantiated at', headerWidth: 200 },
+    { matColumnDef: 'verified_at', headerCellDef: 'Verified at', headerWidth: 200 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
@@ -39,8 +39,7 @@ export class CodeIdContractsTabComponent implements OnInit {
   constructor(
     private contractService: ContractService,
     private datePipe: DatePipe,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getListContractByCode();

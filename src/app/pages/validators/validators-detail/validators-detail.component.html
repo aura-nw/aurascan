@@ -69,7 +69,7 @@
                 class="img-question aura-tooltip-object"
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
-                *ngIf="!breakpoint.value.matches"/>
+                *ngIf="!breakpoint.value.matches" />
               <app-tooltip-customize
                 [content]="
                   'Validator operator address at which token holders delegate <br/>their voting powers to.'
@@ -285,7 +285,7 @@
                 class="img-question aura-tooltip-object"
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
-                *ngIf="!breakpoint.value.matches"/>
+                *ngIf="!breakpoint.value.matches" />
               <app-tooltip-customize [content]="'Missed Blocks are displayed with an X'"></app-tooltip-customize>
             </div>
           </div>
@@ -310,7 +310,7 @@
                       href="/blocks/{{ itemBlock?.height }}"
                       currentitem="false">
                       <div class="d-flex">
-                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt=""/>
+                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
                       </div>
                     </a>
                     <app-tooltip-customize [content]="itemBlock?.height || 0"></app-tooltip-customize>
@@ -368,19 +368,27 @@
             </div>
             <div *ngIf="breakpoint.value.matches">
               <div class="custom-card-mob-simple body-01 mb-2" *ngFor="let data of dataSourceDelegatorMob">
-                <a [routerLink]="['/account', data.delegator_address]"
-                   class="{{!(data.delegator_address | nameTagTooltipPipe)
-                          ? (data.delegator_address | isPrivateNameTag)
-                            ? 'name-tag private-name-tag text--primary'
-                            : 'name-tag text--primary'
-                          : 'text--primary'}}" [copyBtn]="data.delegator_address">
-                  {{ !(data.delegator_address | nameTagTooltipPipe) ? (data.delegator_address | nameTag | ellipsis: 16) : (data.delegator_address | nameTag | ellipsis: 6 : 6) }}
+                <a
+                  [routerLink]="['/account', data.delegator_address]"
+                  class="{{
+                    !(data.delegator_address | nameTagTooltipPipe)
+                      ? (data.delegator_address | isPrivateNameTag)
+                        ? 'name-tag private-name-tag text--primary'
+                        : 'name-tag text--primary'
+                      : 'text--primary'
+                  }}"
+                  [copyBtn]="data.delegator_address">
+                  {{
+                    !(data.delegator_address | nameTagTooltipPipe)
+                      ? (data.delegator_address | nameTag | ellipsis: 16)
+                      : (data.delegator_address | nameTag | ellipsis: 6 : 6)
+                  }}
                 </a>
                 <div class="mt-3 d-flex align-items-center justify-content-between">
                   <div class="text--gray-4">Amount</div>
                   <div class="d-flex">
-                    <div class="text--white mr-2">{{data.amount | mask: 'separator.6'}}</div>
-                    <a class="text--primary" href='/tokens/token/{{minimalDenom}}'>{{denom}}</a>
+                    <div class="text--white mr-2">{{ data.amount | mask: 'separator.6' }}</div>
+                    <a class="text--primary" href="/tokens/token/{{ minimalDenom }}">{{ denom }}</a>
                   </div>
                 </div>
               </div>
@@ -475,21 +483,27 @@
             <div *ngIf="breakpoint.value.matches">
               <div class="custom-card-mob-simple body-01 mb-2" *ngFor="let data of dataSourcePowerMob">
                 <div class="d-flex align-items-center justify-content-between text--primary">
-                  <a href="/blocks/{{data.height}}">{{data.height}}</a>
-                  <a href="/transaction/{{data.tx_hash}}"
-                     [copyBtn]="data.tx_hash">{{data.tx_hash | ellipsis: 6 : 6}}</a>
+                  <a href="/blocks/{{ data.height }}">{{ data.height }}</a>
+                  <a href="/transaction/{{ data.tx_hash }}" [copyBtn]="data.tx_hash">{{
+                    data.tx_hash | ellipsis: 6 : 6
+                  }}</a>
                 </div>
                 <div class="d-flex align-items-center justify-content-between mt-3">
                   <div class="text--gray-4">Amount</div>
-                  <div [innerHTML]="(!data.amount || data.amount === 0 || data.amount === 'More') ? data.amount.toString() : 
-                                     (data.isStakeMode ? '<span class=text--info>'+ '\+ ' +(data.amount | mask: 'separator.6')+'</span>'
-                                     :'<span class=text--danger>'+ '\- ' +(data.amount | mask: 'separator.6')+'</span>')"></div>
+                  <div
+                    [innerHTML]="
+                      !data.amount || data.amount === 0 || data.amount === 'More'
+                        ? data.amount.toString()
+                        : data.isStakeMode
+                          ? '<span class=text--info>' + '\+ ' + (data.amount | mask: 'separator.6') + '</span>'
+                          : '<span class=text--danger>' + '\- ' + (data.amount | mask: 'separator.6') + '</span>'
+                    "></div>
                 </div>
                 <div class="d-flex align-items-center justify-content-between mt-3">
                   <div class="text--gray-4">Time</div>
                   <div class="card__date text--gray-1 body-01-mob">
-                    <span>{{ (data.timestamp | customDateTime: 'DateOnly') }}</span>
-                    <span>{{ (data.timestamp | customDateTime: 'TimeOnly') }}</span>
+                    <span>{{ data.timestamp | customDateTime: 'DateOnly' }}</span>
+                    <span>{{ data.timestamp | customDateTime: 'TimeOnly' }}</span>
                   </div>
                 </div>
               </div>

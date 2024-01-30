@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import {LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {TYPE_CW4973} from 'src/app/core/constants/contract.constant';
-import {ContractRegisterType} from 'src/app/core/constants/contract.enum';
-import {ContractService} from 'src/app/core/services/contract.service';
+import { LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { ContractService } from 'src/app/core/services/contract.service';
 import local from 'src/app/core/utils/storage/local';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-code-id-detail',
@@ -37,8 +37,7 @@ export class CodeIdDetailComponent implements OnInit {
     private route: Router,
     private contractService: ContractService,
     private layout: BreakpointObserver,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.codeId = this.router.snapshot.paramMap.get('codeId');

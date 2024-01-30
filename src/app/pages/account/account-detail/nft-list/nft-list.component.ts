@@ -1,14 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {Router} from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { Router } from '@angular/router';
 import * as _ from 'lodash';
-import {LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
-import {AccountService} from 'src/app/core/services/account.service';
-import {checkTypeFile} from 'src/app/core/utils/common/info-common';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {takeUntil} from "rxjs/operators";
-import {Subject} from "rxjs";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { AccountService } from 'src/app/core/services/account.service';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
   selector: 'app-nft-list',
@@ -47,8 +47,8 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private accountService: AccountService,
     private layout: BreakpointObserver,
-    private router: Router) {
-  }
+    private router: Router,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {

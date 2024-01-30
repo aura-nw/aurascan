@@ -6,6 +6,7 @@ import { NgbCarouselModule, NgbDropdownModule, NgbNavModule } from '@ng-bootstra
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -17,7 +18,6 @@ import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-custom
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -38,7 +38,7 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     TableNoDataModule,
     NgbCarouselModule,
     TooltipCustomizeModule,
-    CommonDirectiveModule
+    CommonDirectiveModule,
   ],
   providers: [
     DatePipe,
@@ -49,5 +49,4 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     provideEnvironmentNgxMask(MASK_CONFIG),
   ],
 })
-export class DashboardModule {
-}
+export class DashboardModule {}

@@ -29,17 +29,20 @@
             <div class="text--gray-4 body">Tx Hash</div>
           </div>
           <div class="col-7 col-lg-auto">
-            <a *ngIf="!breakpoint.value.matches"
-               [routerLink]="['/transaction', codeIdDetail.tx_hash]"
-               class="text--primary body"
-               [copyBtn]="codeIdDetail.tx_hash">
+            <a
+              *ngIf="!breakpoint.value.matches"
+              [routerLink]="['/transaction', codeIdDetail.tx_hash]"
+              class="text--primary body"
+              [copyBtn]="codeIdDetail.tx_hash">
               {{ codeIdDetail.tx_hash }}
             </a>
-            <a *ngIf="breakpoint.value.matches"
-               [copyBtn]="codeIdDetail.tx_hash"
-               [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body">{{
-              codeIdDetail.tx_hash | ellipsis: 8 : 8
-              }}</a>
+            <a
+              *ngIf="breakpoint.value.matches"
+              [copyBtn]="codeIdDetail.tx_hash"
+              [routerLink]="['/transaction', codeIdDetail.tx_hash]"
+              class="text--primary body"
+              >{{ codeIdDetail.tx_hash | ellipsis: 8 : 8 }}</a
+            >
           </div>
         </div>
         <div class="row mt-2">
@@ -93,8 +96,7 @@
     </div>
   </section>
 </ng-container>
-<ng-container *ngIf="!codeIdDetail && !isLoading"
->
+<ng-container *ngIf="!codeIdDetail && !isLoading">
   <div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
   <div class="py-lg-20"></div>
 </ng-container>

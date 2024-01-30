@@ -1,18 +1,19 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { formatNumber } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
-import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -25,9 +26,8 @@ import {
   TIMEOUT_ERROR,
   TITLE_LOGO,
 } from '../../core/constants/common.constant';
-import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
+import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -143,7 +143,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 
   // config chart
   initChart() {

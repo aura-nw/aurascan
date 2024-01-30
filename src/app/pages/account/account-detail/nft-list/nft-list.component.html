@@ -54,9 +54,9 @@
                   [ngModelOptions]="{ standalone: true }"
                   (keyup.enter)="searchTokenNft()"
                   name="search"
-                  autocomplete="off"/>
+                  autocomplete="off" />
                 <button type="submit" class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                 </button>
                 <button
                   type="reset"
@@ -68,7 +68,7 @@
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
                     alt=""
                     width="24"
-                    height="24"/>
+                    height="24" />
                 </button>
               </div>
             </form>
@@ -111,8 +111,8 @@
                       (click)="
                         handleRouterLink('/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id))
                       ">
-                      <span *ngIf="!breakpoint.value.matches">{{ item.token_id | ellipsis : 12 }}</span>
-                      <span *ngIf="breakpoint.value.matches">{{ item.token_id | ellipsis : 9 }}</span>
+                      <span *ngIf="!breakpoint.value.matches">{{ item.token_id | ellipsis: 12 }}</span>
+                      <span *ngIf="breakpoint.value.matches">{{ item.token_id | ellipsis: 9 }}</span>
                     </span>
                   </div>
                 </div>

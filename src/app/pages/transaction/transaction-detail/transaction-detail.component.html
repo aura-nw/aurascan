@@ -34,7 +34,7 @@
             #tooltip
             [cdkCopyToClipboard]="transaction.tx | json"
             (click)="commonService.showToolTip(tooltip)">
-            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt=""/>
+            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
           </button>
           <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
         </div>
@@ -48,10 +48,9 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4 d-flex align-items-center">TxHash</div>
             <div class="col-auto col-lg-10 text--gray-1 d-flex align-items-center">
-              <span class="d-none d-lg-block"
-                    [copyBtn]="transaction?.tx_hash"
-                    [btnClass]="['mr-2']"
-              >{{ transaction?.tx_hash }}</span>
+              <span class="d-none d-lg-block" [copyBtn]="transaction?.tx_hash" [btnClass]="['mr-2']">{{
+                transaction?.tx_hash
+              }}</span>
               <span class="d-lg-none">{{ transaction?.tx_hash | ellipsis: 8 : 8 }}</span>
             </div>
           </div>
@@ -65,10 +64,10 @@
                     : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
                 "
                 width="20px"
-                height="20px"/>
+                height="20px" />
               <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">{{
                 transaction?.status | uppercase
-                }}</span>
+              }}</span>
             </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">

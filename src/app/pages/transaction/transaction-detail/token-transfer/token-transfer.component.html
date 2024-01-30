@@ -6,7 +6,9 @@
           <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">Token Transfer</h5>
         </div>
         <div class="pb-2">
-          <div class="table-responsive table-token spacer-tooltip" *ngIf="dataSourceFTs?.data?.length > 0; else noFTValues">
+          <div
+            class="table-responsive table-token spacer-tooltip"
+            *ngIf="dataSourceFTs?.data?.length > 0; else noFTValues">
             <table mat-table [dataSource]="dataSourceFTs" class="aura-table none-header">
               <ng-container *ngFor="let template of templatesFTs; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
@@ -21,7 +23,12 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'assets'">
                         <div class="d-flex align-items-center">
-                          <img class="rounded-circle" [appImg]="data | marketInfo: 'logo'" width="20" height="20" alt=""/>
+                          <img
+                            class="rounded-circle"
+                            [appImg]="data | marketInfo: 'logo'"
+                            width="20"
+                            height="20"
+                            alt="" />
                           <div class="ml-3 d-flex transfer-token-info">
                             <div class="aura-tooltip-contain">
                               <span
@@ -154,7 +161,9 @@
           <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">NFT Transfer</h5>
         </div>
         <div class="pb-2">
-          <div class="table-responsive table-token spacer-tooltip" *ngIf="dataSourceNFTs.data.length > 0; else noValues">
+          <div
+            class="table-responsive table-token spacer-tooltip"
+            *ngIf="dataSourceNFTs.data.length > 0; else noValues">
             <table mat-table [dataSource]="dataSourceNFTs" class="aura-table nft-list none-header">
               <ng-container *ngFor="let template of templatesNFTs; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
@@ -189,7 +198,10 @@
                             <app-name-tag
                               [maxCharacter]="30"
                               [isLink]="true"
-                              [value]="data?.cw721_contract?.smart_contract?.address | ellipsis: ellipsisStringLength : ellipsisStringLength"
+                              [value]="
+                                data?.cw721_contract?.smart_contract?.address
+                                  | ellipsis: ellipsisStringLength : ellipsisStringLength
+                              "
                               [iconContract]="true"
                               [url]="'contracts'"></app-name-tag>
                           </div>
@@ -197,7 +209,10 @@
                             <app-name-tag
                               [maxCharacter]="14"
                               [isLink]="true"
-                              [value]="data?.cw721_contract?.smart_contract?.address | ellipsis: ellipsisStringLength : ellipsisStringLength"
+                              [value]="
+                                data?.cw721_contract?.smart_contract?.address
+                                  | ellipsis: ellipsisStringLength : ellipsisStringLength
+                              "
                               [iconContract]="true"
                               [url]="'contracts'"></app-name-tag>
                           </div>

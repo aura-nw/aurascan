@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {convertDataBlock} from 'src/app/global/global';
-import {TableTemplate} from '../../../app/core/models/common.model';
-import {BlockService} from '../../../app/core/services/block.service';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { convertDataBlock } from 'src/app/global/global';
+import { TableTemplate } from '../../../app/core/models/common.model';
+import { BlockService } from '../../../app/core/services/block.service';
 
 @Component({
   selector: 'app-blocks',
@@ -13,11 +13,11 @@ import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 })
 export class BlocksComponent implements OnInit {
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'height', headerCellDef: 'Height'},
-    {matColumnDef: 'block_hash', headerCellDef: 'Block Hash'},
-    {matColumnDef: 'proposer', headerCellDef: 'Proposer'},
-    {matColumnDef: 'num_txs', headerCellDef: 'Txs'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'block_hash', headerCellDef: 'Block Hash' },
+    { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
+    { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
@@ -27,8 +27,9 @@ export class BlocksComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
-    private layout: BreakpointObserver, private blockService: BlockService) {
-  }
+    private layout: BreakpointObserver,
+    private blockService: BlockService,
+  ) {}
 
   ngOnInit(): void {
     this.getList();

@@ -19,12 +19,12 @@
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
               name="search"
-              autocomplete="off"/>
+              autocomplete="off" />
             <button
               type="submit"
               class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}"
               (click)="searchToken()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
@@ -32,7 +32,7 @@
                 !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -61,19 +61,25 @@
                       <span class="mr-1 text--gray-1">Token:</span>
                       <span
                         class="text--primary hover-link"
-                        (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)"
-                      >{{ token.token_name }}</span
+                        (click)="
+                          handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)
+                        "
+                        >{{ token.token_name }}</span
                       >
                     </div>
-                    <div class="nft__info body-01 caption-mob fw-normal mt-1"
-                         [copyBtn]="token.token_id" [btnClass]="['mt-1', 'pl-1']">
+                    <div
+                      class="nft__info body-01 caption-mob fw-normal mt-1"
+                      [copyBtn]="token.token_id"
+                      [btnClass]="['mt-1', 'pl-1']">
                       <span class="mr-1 text--gray-1">Token ID:</span>
                       <span
                         class="text--primary hover-link"
-                        (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)">
-                      <span *ngIf="!breakpoint.value.matches">{{ token.token_id | ellipsis : 12 }}</span>
-                      <span *ngIf="breakpoint.value.matches">{{ token.token_id | ellipsis : 6 }}</span>
-                    </span>
+                        (click)="
+                          handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)
+                        ">
+                        <span *ngIf="!breakpoint.value.matches">{{ token.token_id | ellipsis: 12 }}</span>
+                        <span *ngIf="breakpoint.value.matches">{{ token.token_id | ellipsis: 6 }}</span>
+                      </span>
                     </div>
                   </div>
                 </div>

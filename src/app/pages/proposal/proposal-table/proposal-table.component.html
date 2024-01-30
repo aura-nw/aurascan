@@ -27,8 +27,8 @@
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
-                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                    '-'
+                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                        '-'
                     }}
                   </a>
                 </ng-container>
@@ -75,7 +75,7 @@
                     <ng-container *ngSwitchCase="'rank'">
                       <span [class.label-circle]="data[template.matColumnDef] <= 3">{{
                         data[template.matColumnDef]
-                        }}</span>
+                      }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">
@@ -123,33 +123,48 @@
             <div class="custom-card-mob-simple body-01 mb-2">
               <div class="d-flex align-items-center justify-content-between">
                 <div class="text--gray-4">Voter</div>
-                <div [copyBtn]="data.voter"
-                     class="{{ !(data.voter | nameTagTooltipPipe)
-                    ? (data.voter | isPrivateNameTag)
-                      ? 'name-tag private-name-tag mb-0 text--primary'
-                      : 'name-tag text--primary mb-0'
-                    : 'text--primary' }}"
-                     [innerHTML]="!data?.voter ? '-' : 
-                      !(data.voter | nameTagTooltipPipe) ? '<a class=text--primary href=' + ('/account/' + data.voter) + '>' + (data.voter | nameTag | ellipsis: 16) + '</a>'
-                      : '<a class=text--primary href=' + ('/account/' + data.voter) + '>' + (data.voter | nameTag | ellipsis: 8 : 8) + '</a>'"></div>
+                <div
+                  [copyBtn]="data.voter"
+                  class="{{
+                    !(data.voter | nameTagTooltipPipe)
+                      ? (data.voter | isPrivateNameTag)
+                        ? 'name-tag private-name-tag mb-0 text--primary'
+                        : 'name-tag text--primary mb-0'
+                      : 'text--primary'
+                  }}"
+                  [innerHTML]="
+                    !data?.voter
+                      ? '-'
+                      : !(data.voter | nameTagTooltipPipe)
+                        ? '<a class=text--primary href=' +
+                          ('/account/' + data.voter) +
+                          '>' +
+                          (data.voter | nameTag | ellipsis: 16) +
+                          '</a>'
+                        : '<a class=text--primary href=' +
+                          ('/account/' + data.voter) +
+                          '>' +
+                          (data.voter | nameTag | ellipsis: 8 : 8) +
+                          '</a>'
+                  "></div>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">TxHash</div>
-                <a href="/transaction/{{data.txhash}}"
-                   class="text--primary"
-                   [copyBtn]="data.txhash">{{data.txhash | ellipsis: 6 : 6}}</a>
+                <a href="/transaction/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
+                  data.txhash | ellipsis: 6 : 6
+                }}</a>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">Answer</div>
-                <div class="body-01 text--gray-1">{{getVoteValue(data.vote_option)}}</div>
+                <div class="body-01 text--gray-1">{{ getVoteValue(data.vote_option) }}</div>
               </div>
               <div class="d-flex justify-content-between mt-3">
                 <div class="text--gray-4">Time</div>
                 <div class="card__date text--gray-1 body-01-mob">
-                  <div class=text-end>{{data.timestamp | customDateTime: 'Distance'}}</div>
-                  <div class=text--gray-5>
-                    <span>{{data.timestamp | customDateTime: 'DateOnly'}}</span>
-                    <span>{{data.timestamp | customDateTime: 'TimeOnly'}}</span>
+                  <div class="text-end">{{ data.timestamp | customDateTime: 'Distance' }}</div>
+                  <div class="text--gray-5">
+                    <span>{{ data.timestamp | customDateTime: 'DateOnly' }}</span>
+                    <span>{{ data.timestamp | customDateTime: 'TimeOnly' }}</span>
                   </div>
                 </div>
               </div>
@@ -160,9 +175,7 @@
             <div class="custom-card-mob-simple body-01 mb-2">
               <div class="text--primary body h5 mb-0 d-flex align-items-center">
                 <div class="avt">
-                  <app-loading-image
-                    [identity]="data.validator_identity"
-                    [srcImg]="data.image_url">
+                  <app-loading-image [identity]="data.validator_identity" [srcImg]="data.image_url">
                   </app-loading-image>
                   <span class="avt__num">{{ data.rank }}</span>
                 </div>
@@ -173,21 +186,21 @@
               <span class="divider divider-horizontal divider-lighter d-block my-3"></span>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">TxHash</div>
-                <a href="/transaction/{{data.txhash}}"
-                   class="text--primary"
-                   [copyBtn]="data.txhash">{{data.txhash | ellipsis: 6 : 6}}</a>
+                <a href="/transaction/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
+                  data.txhash | ellipsis: 6 : 6
+                }}</a>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">Answer</div>
-                <div class="body-01 text--gray-1">{{getVoteValue(data.vote_option)}}</div>
+                <div class="body-01 text--gray-1">{{ getVoteValue(data.vote_option) }}</div>
               </div>
               <div class="d-flex justify-content-between mt-3">
                 <div class="text--gray-4">Time</div>
                 <div class="card__date text--gray-1 body-01-mob">
-                  <div class=text-end>{{data.timestamp | customDateTime: 'Distance'}}</div>
-                  <div class=text--gray-5>
-                    <span>{{data.timestamp | customDateTime: 'DateOnly'}}</span>
-                    <span>{{data.timestamp | customDateTime: 'TimeOnly'}}</span>
+                  <div class="text-end">{{ data.timestamp | customDateTime: 'Distance' }}</div>
+                  <div class="text--gray-5">
+                    <span>{{ data.timestamp | customDateTime: 'DateOnly' }}</span>
+                    <span>{{ data.timestamp | customDateTime: 'TimeOnly' }}</span>
                   </div>
                 </div>
               </div>
@@ -198,37 +211,61 @@
             <div class="custom-card-mob-simple body-01 mb-2">
               <div class="d-flex align-items-center justify-content-between">
                 <div class="text--gray-4">Depositor</div>
-                <div [copyBtn]="data.depositors"
-                     class="{{ !(data.depositors | nameTagTooltipPipe)
-                    ? (data.depositors | isPrivateNameTag)
-                      ? 'name-tag private-name-tag mb-0 text--primary'
-                      : 'name-tag text--primary mb-0'
-                    : 'text--primary' }}"
-                     [innerHTML]="!data?.depositors ? '-' : 
-                      !(data.depositors | nameTagTooltipPipe) ? '<a class=text--primary href=' + ('/account/' + data.depositors) + '>' + (data.depositors | nameTag | ellipsis: 16) + '</a>'
-                      : '<a class=text--primary href=' + ('/account/' + data.depositors) + '>' + (data.depositors | nameTag | ellipsis: 8 : 8) + '</a>'"></div>
+                <div
+                  [copyBtn]="data.depositors"
+                  class="{{
+                    !(data.depositors | nameTagTooltipPipe)
+                      ? (data.depositors | isPrivateNameTag)
+                        ? 'name-tag private-name-tag mb-0 text--primary'
+                        : 'name-tag text--primary mb-0'
+                      : 'text--primary'
+                  }}"
+                  [innerHTML]="
+                    !data?.depositors
+                      ? '-'
+                      : !(data.depositors | nameTagTooltipPipe)
+                        ? '<a class=text--primary href=' +
+                          ('/account/' + data.depositors) +
+                          '>' +
+                          (data.depositors | nameTag | ellipsis: 16) +
+                          '</a>'
+                        : '<a class=text--primary href=' +
+                          ('/account/' + data.depositors) +
+                          '>' +
+                          (data.depositors | nameTag | ellipsis: 8 : 8) +
+                          '</a>'
+                  "></div>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">TxHash</div>
-                <a href="/transaction/{{data.hash}}"
-                   class="text--primary"
-                   [copyBtn]="data.hash">{{data.hash | ellipsis: 6 : 6}}</a>
+                <a href="/transaction/{{ data.hash }}" class="text--primary" [copyBtn]="data.hash">{{
+                  data.hash | ellipsis: 6 : 6
+                }}</a>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">Amount</div>
-                <div class="h6 mb-0 text--gray-1"
-                     [innerHTML]="data.amount ? 
-                     ('<span class=mr-1>' + (data.amount < 0.001 ? '<0.001' : (data.amount | mask: 'separator.6')) + '</span>' + 
-                     '<a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + coinInfo.coinDenom + '</a>')
-                      : '-'"></div>
+                <div
+                  class="h6 mb-0 text--gray-1"
+                  [innerHTML]="
+                    data.amount
+                      ? '<span class=mr-1>' +
+                        (data.amount < 0.001 ? '<0.001' : (data.amount | mask: 'separator.6')) +
+                        '</span>' +
+                        '<a class=text--primary href=' +
+                        ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+                        '>' +
+                        coinInfo.coinDenom +
+                        '</a>'
+                      : '-'
+                  "></div>
               </div>
               <div class="d-flex justify-content-between mt-3">
                 <div class="text--gray-4">Time</div>
                 <div class="card__date text--gray-1 body-01-mob">
-                  <div class=text-end>{{data.timestamp | customDateTime: 'Distance'}}</div>
-                  <div class=text--gray-5>
-                    <span>{{data.timestamp | customDateTime: 'DateOnly'}}</span>
-                    <span>{{data.timestamp | customDateTime: 'TimeOnly'}}</span>
+                  <div class="text-end">{{ data.timestamp | customDateTime: 'Distance' }}</div>
+                  <div class="text--gray-5">
+                    <span>{{ data.timestamp | customDateTime: 'DateOnly' }}</span>
+                    <span>{{ data.timestamp | customDateTime: 'TimeOnly' }}</span>
                   </div>
                 </div>
               </div>

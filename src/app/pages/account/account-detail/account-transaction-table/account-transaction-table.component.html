@@ -77,14 +77,14 @@
                 matStartDate
                 placeholder="Start date"
                 [(ngModel)]="transactionFilter.startDate"
-                readonly/>
+                readonly />
               <input
                 matEndDate
                 placeholder="End date"
                 [(ngModel)]="transactionFilter.endDate"
                 class="pl-3 cursor-pointer"
                 readonly
-                (ngModelChange)="searchType()"/>
+                (ngModelChange)="searchType()" />
             </mat-date-range-input>
             <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true" id="datepicker-toggle">
               <mat-icon matDatepickerToggleIcon class="d-flex align-items-center">
@@ -102,7 +102,7 @@
                   alt=""
                   width="24"
                   height="24"
-                  (click)="clearFilter(modeFilter.date)"/>
+                  (click)="clearFilter(modeFilter.date)" />
               </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
@@ -199,11 +199,11 @@
                   [ngModelOptions]="{ standalone: true }"
                   (ngModelChange)="searchTransactionType()"
                   name="search"
-                  autocomplete="off"/>
+                  autocomplete="off" />
                 <button
                   type="submit"
                   class="btn-search {{ transactionTypeKeyWord && transactionTypeKeyWord?.length > 0 ? 'd-none' : '' }}">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                 </button>
                 <button
                   type="reset"
@@ -217,7 +217,7 @@
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
                     alt=""
                     width="24"
-                    height="24"/>
+                    height="24" />
                 </button>
               </div>
               <div
@@ -241,7 +241,7 @@
                     id="all"
                     [checked]="checkAll"
                     (change)="onChangeTnxFilterType($event, 'all')"
-                    class="check-box check-box--dark"/>
+                    class="check-box check-box--dark" />
                   <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
                 </div>
                 <div class="divider divider-horizontal my-2"></div>
@@ -254,7 +254,7 @@
                       [checked]="checkedTnx(type)"
                       id="type-{{ i }}"
                       (change)="onChangeTnxFilterType($event, type)"
-                      class="check-box check-box--dark"/>
+                      class="check-box check-box--dark" />
                     <label for="type-{{ i }}" class="ml-2 mb-0 text-justify pl-1"> {{ type.value }} </label>
                   </div>
                 </div>
@@ -429,32 +429,32 @@
                               [decimal]="item.decimal"></div>
                             <app-tooltip-customize
                               *ngIf="
-                              +item.amountTemp !== 0 &&
-                              ((item.amountTemp | balance: item.decimal | lt: 0.001) ||
-                                (item.amountTemp | balance: item.decimal | gte: 1000000))
-                            "
+                                +item.amountTemp !== 0 &&
+                                ((item.amountTemp | balance: item.decimal | lt: 0.001) ||
+                                  (item.amountTemp | balance: item.decimal | gte: 1000000))
+                              "
                               [content]="item.amountTemp | balance: item.decimal | mask: 'separator'">
                             </app-tooltip-customize>
                           </div>
                           <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
-                          <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
-                            <div [class.aura-tooltip-object]="item.denom !== denom" [appLinkDenom]="item.denomOrigin">
-                              {{ item.denom | ellipsis: 19 }}
-                            </div>
+                            <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
+                              <div [class.aura-tooltip-object]="item.denom !== denom" [appLinkDenom]="item.denomOrigin">
+                                {{ item.denom | ellipsis: 19 }}
+                              </div>
 
-                            <app-tooltip-customize
-                              [className]="'tooltip--left'"
-                              [class]="'message-custom'"
-                              [content]="item.denomOrigin">
-                            </app-tooltip-customize>
-                          </div>
-                          <a
-                            class=""
-                            [routerLink]="['/tokens/token', item.contractAddress]"
-                            *ngIf="modeQuery === tabsData.FtsTxs">
-                            {{ item.denom | ellipsis: 19 }}
-                          </a>
-                        </span>
+                              <app-tooltip-customize
+                                [className]="'tooltip--left'"
+                                [class]="'message-custom'"
+                                [content]="item.denomOrigin">
+                              </app-tooltip-customize>
+                            </div>
+                            <a
+                              class=""
+                              [routerLink]="['/tokens/token', item.contractAddress]"
+                              *ngIf="modeQuery === tabsData.FtsTxs">
+                              {{ item.denom | ellipsis: 19 }}
+                            </a>
+                          </span>
                         </div>
                       </div>
                     </ng-container>
@@ -468,16 +468,18 @@
                         <div class="item-show d-flex justify-content-between align-items-center">
                           <div
                             [copyBtn]="item.fromAddress"
-                            [isDisableCopy]="!(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                            item.fromAddress !== currentAddress">
+                            [isDisableCopy]="
+                              !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                              item.fromAddress !== currentAddress
+                            ">
                             <app-name-tag
                               [value]="item.fromAddress || currentAddress"
                               [url]="(item.fromAddress || currentAddress | isContract) ? 'contracts' : 'account'"
                               [iconContract]="item.fromAddress || currentAddress | isContract"
                               [isLink]="
-                            !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                            item.fromAddress !== currentAddress
-                          "></app-name-tag>
+                                !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                                item.fromAddress !== currentAddress
+                              "></app-name-tag>
                           </div>
                           <div class="box-token-transfer d-flex mr-8">
                             <span
@@ -491,21 +493,21 @@
                       </div>
                     </ng-container>
                     <div class="mt-3 mb-4 caption fw-normal d-lg-none" *ngIf="data.expand">
-                    <span
-                      (click)="seeMoreData(data)"
-                      *ngIf="data.limit < data.arrEvent?.length"
-                      class="cursor-pointer mr-8"
-                    >See more</span
-                    >
+                      <span
+                        (click)="seeMoreData(data)"
+                        *ngIf="data.limit < data.arrEvent?.length"
+                        class="cursor-pointer mr-8"
+                        >See more</span
+                      >
                       <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                     </div>
                     <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="data.arrEvent?.length > 1 && data.expand">
-                    <span
-                      (click)="seeMoreData(data)"
-                      *ngIf="data.limit < data.arrEvent?.length"
-                      class="cursor-pointer mr-8"
-                    >See more</span
-                    >
+                      <span
+                        (click)="seeMoreData(data)"
+                        *ngIf="data.limit < data.arrEvent?.length"
+                        class="cursor-pointer mr-8"
+                        >See more</span
+                      >
                       <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                     </div>
                   </div>
@@ -516,18 +518,21 @@
                         [class.show-detail]="data.expand || index === 0"
                         *ngIf="index < data.limit">
                         <div class="item-show d-flex align-items-center">
-                          <div [style]="'min-width: 148px'"
-                               [copyBtn]="item.fromAddress"
-                               [isDisableCopy]=" !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                item.toAddress !== currentAddress">
+                          <div
+                            [style]="'min-width: 148px'"
+                            [copyBtn]="item.fromAddress"
+                            [isDisableCopy]="
+                              !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                              item.toAddress !== currentAddress
+                            ">
                             <app-name-tag
                               [value]="item.toAddress || currentAddress"
                               [url]="(item.toAddress || currentAddress | isContract) ? 'contracts' : 'account'"
                               [iconContract]="item.toAddress || currentAddress | isContract"
                               [isLink]="
-                              !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                              item.toAddress !== currentAddress
-                            "></app-name-tag>
+                                !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                                item.toAddress !== currentAddress
+                              "></app-name-tag>
                           </div>
                           <ng-container *ngIf="index === 0">
                             <div
@@ -561,7 +566,7 @@
                               *ngIf="item.tokenId"
                               [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
                               class="text--primary cursor-pointer"
-                            >#{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}</a
+                              >#{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}</a
                             >
                             <ng-container *ngIf="!item.tokenId">-</ng-container>
                           </div>
@@ -602,31 +607,31 @@
         [currentType]="currentType"
         [expand]="isFirst"
         [title]="{
-        size: 'md',
-        titleClass: 'body-02-mob',
-        label: data.tx_hash | ellipsis: 8 : 8,
-        subLabelContent: data.type,
-        subLabelClass: 'btn-mob',
-        status: data.code
-      }"
+          size: 'md',
+          titleClass: 'body-02-mob',
+          label: data.tx_hash | ellipsis: 8 : 8,
+          subLabelContent: data.type,
+          subLabelClass: 'btn-mob',
+          status: data.code
+        }"
         [content]="[
-        {
-          label: 'Height',
-          class: 'text--gray-1 body-02-mob fw-semibold',
-          info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
-        },
-        {
-          label: 'Fee',
-          class: 'text--gray-1 body-02-mob',
-          info:
-            (+data.fee | mask: 'separator.6') +
-            ' <a class=text--primary href=' +
-            ('/tokens/token/' + coinInfo.coinMinimalDenom) +
-            '>' +
-            denom +
-            '</a>'
-        }
-      ]"></app-card-mob-account>
+          {
+            label: 'Height',
+            class: 'text--gray-1 body-02-mob fw-semibold',
+            info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+          },
+          {
+            label: 'Fee',
+            class: 'text--gray-1 body-02-mob',
+            info:
+              (+data.fee | mask: 'separator.6') +
+              ' <a class=text--primary href=' +
+              ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+              '>' +
+              denom +
+              '</a>'
+          }
+        ]"></app-card-mob-account>
     </div>
     <app-paginator
       [length]="pageData.length"
