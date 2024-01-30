@@ -245,6 +245,11 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         to: chartLength,
       });
     }
+
+    this.chart.timeScale().applyOptions({
+      fixRightEdge: true,
+    });
+
     this.chart.priceScale().applyOptions({
       autoScale: true,
     });
