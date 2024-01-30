@@ -7,7 +7,7 @@ import { TITLE_LOGO } from '../constants/common.constant';
 })
 export class ImageDirective implements OnInit, OnChanges {
   @Input() appImg: string;
-  @Input() defaultImage: string = `${this.env.imageUrl + TITLE_LOGO}`;
+  @Input() defaultImage: string = `assets/images/logo/title-logo.png`;
 
   get ref() {
     return this.elr.nativeElement;
@@ -26,7 +26,7 @@ export class ImageDirective implements OnInit, OnChanges {
 
   ngOnInit(): void {
     if (!this.ref.src && this.appImg) {
-      this.ref.src = this.appImg;
+      this.ref.src = this.appImg || this.defaultImage;
     }
 
     this.elr.nativeElement.onerror = () => {
