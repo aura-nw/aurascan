@@ -338,7 +338,7 @@ export function convertDataBlock(data) {
   const block = _.get(data, 'block').map((element) => {
     const height = _.get(element, 'height');
     const block_hash = _.get(element, 'hash');
-    const num_txs = _.get(element, 'txs.length') || _.get(element, 'data.block.data.txs.length') || 0;
+    const num_txs = _.get(element, 'tx_count') || 0;
     const proposer = _.get(element, 'validator.description.moniker');
     const operator_address = _.get(element, 'validator.operator_address');
     const timestamp = _.get(element, 'time');

@@ -93,7 +93,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       .asObservable()
       .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.searchData();
+        if (this.textSearch?.length > 0) {
+          this.searchData();
+        } else {
+          this.getListToken();
+        }
       });
   }
 
@@ -275,8 +279,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   }
 
   async getTokenNative() {
-    const tempTotal = await this.ibcService.getTotalSupplyLCD(this.chainInfo.coinMinimalDenom);
-
     this.tokenService.tokensMarket$
       .pipe(
         filter((data) => _.isArray(data)),
@@ -292,7 +294,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
             100;
         }
 
-        const totalSupply = balanceOf(_.get(tempTotal, 'data.amount.amount' || 0), this.chainInfo.coinDecimals);
+        const totalSupply = balanceOf(_.get(dataNative, 'totalSupply') || 0, this.chainInfo.coinDecimals);
 
         this.nativeToken = {
           ...this.nativeToken,
@@ -320,14 +322,16 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.dataSource.data = [];
 
     //check search for native token
-    const auraToken = !isSearch
-      ? [this.nativeToken]
-      : [this.nativeToken].filter(
-          (item) =>
-            item.name?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
-            item.symbol?.toLowerCase().includes(this.textSearch.toLowerCase()) ||
-            item.denom?.toLowerCase().includes(this.textSearch.toLowerCase()),
-        );
+    let auraToken = [this.nativeToken];
+    if (isSearch && this.textSearch?.length > 0) {
+      auraToken = [this.nativeToken].filter(
+        (item) =>
+          item.name?.toLowerCase().includes(this.textSearch?.toLowerCase()) ||
+          item.symbol?.toLowerCase().includes(this.textSearch?.toLowerCase()) ||
+          item.denom?.toLowerCase().includes(this.textSearch?.toLowerCase()),
+      );
+    }
+
     const verifiedToken = tableFilter
       .filter((token) => token.verify_status === 'VERIFIED' && token.symbol !== this.chainInfo.coinDenom)
       .sort((a, b) => this.compare(a.price, b.price, false))

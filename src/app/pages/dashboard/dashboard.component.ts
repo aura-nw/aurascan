@@ -1,9 +1,9 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {formatNumber} from '@angular/common';
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {Router} from '@angular/router';
-import {IChartApi, ISeriesApi, createChart} from 'lightweight-charts';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { formatNumber } from '@angular/common';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { Router } from '@angular/router';
+import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subject, Subscription, timer } from 'rxjs';
@@ -18,9 +18,16 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR, TITLE_LOGO } from '../../core/constants/common.constant';
+import {
+  CHART_RANGE,
+  NUMBER_6_DIGIT,
+  PAGE_EVENT,
+  TIMEOUT_ERROR,
+  TITLE_LOGO,
+} from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,20 +39,20 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   chartRangeData = CHART_RANGE;
 
   templatesBlock: Array<TableTemplate> = [
-    {matColumnDef: 'height', headerCellDef: 'Height'},
-    {matColumnDef: 'proposer', headerCellDef: 'Proposer'},
-    {matColumnDef: 'num_txs', headerCellDef: 'Txs'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
+    { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
 
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
 
   templatesTx: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash'},
-    {matColumnDef: 'height', headerCellDef: 'Height'},
-    {matColumnDef: 'type', headerCellDef: 'Message'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'type', headerCellDef: 'Message' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
@@ -80,12 +87,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   staking_APR = 0;
   tokenInfo: {
-    coinId: string;
     current_price: number;
     market_cap: number;
     max_supply: number;
     price_change_percentage_24h: number;
-    timestamp: string;
     total_volume: number;
   };
 
@@ -104,13 +109,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private transactionService: TransactionService,
     public global: Globals,
     private environmentService: EnvironmentService,
-    private cdr: ChangeDetectorRef,
     private proposalService: ProposalService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private coingecko: CoingeckoService,
+    private tokenService: TokenService,
   ) {
     this.breakpoint$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state) {
@@ -120,13 +125,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.timerUnSub = timer(0, 60000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.getInfoData());
-
+    this.getMarketInfo();
     this.initChart();
     this.getCoinInfo(this.chartRange);
     this.getVotingPeriod();
+
+    this.environmentService.latestBlockHeight$.pipe(takeUntil(this.destroy$)).subscribe((height) => {
+      if (height !== undefined) {
+        const latestHeight = height ? +height + 1 : height;
+        this.getListBlock(latestHeight);
+        this.getListTransaction(latestHeight);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -134,13 +144,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  //get all data for dashboard
-  getInfoData() {
-    this.getMarketInfo();
-    this.getListBlock();
-    this.getListTransaction();
-    this.cdr.detectChanges();
-  }
 
   // config chart
   initChart() {
@@ -215,16 +218,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
-      if (res?.data) {
-        this.tokenInfo = res.data;
-      }
+    this.tokenService.tokensMarket$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      this.tokenInfo = res.find((k) => k.coin_id === this.environmentService.coingecko?.ids[0]);
     });
   }
 
-  getListBlock(): void {
+  getListBlock(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
+      nextHeight: height,
     };
     this.blockService.getDataBlock(payload).subscribe({
       next: (res) => {
@@ -247,9 +249,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getListTransaction(): void {
+  getListTransaction(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
+      heightLT: height,
     };
     this.transactionService.getListTx(payload).subscribe({
       next: (res) => {
@@ -286,7 +289,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.chartRange = type;
 
-    const {value} = CHART_CONFIG[this.chartRange];
+    const { value } = CHART_CONFIG[this.chartRange];
 
     this.coingecko
       .getChartData(
@@ -294,11 +297,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         {
           days: value,
         },
-        {type: this.chartRange},
+        { type: this.chartRange },
       )
       .subscribe((res) => {
         if (res?.data?.length > 0) {
-          const {dataX, dataY} = this.parseDataFromApi(res.data);
+          const { dataX, dataY } = this.parseDataFromApi(res.data);
 
           this.originalData = [...this.originalData, ...res?.data];
           if (this.originalData.length > 0) {
@@ -322,7 +325,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     // update tooltip
-    this.chart.subscribeCrosshairMove(({point, time, seriesPrices}) => {
+    this.chart.subscribeCrosshairMove(({ point, time, seriesPrices }) => {
       if (
         point === undefined ||
         !time ||
@@ -352,8 +355,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         return;
       }
 
-      const {width, height, margin} = this.toolTipConfig;
-      const {clientWidth, clientHeight} = container;
+      const { width, height, margin } = this.toolTipConfig;
+      const { clientWidth, clientHeight } = container;
 
       const shiftedCoordinate = Math.max(0, Math.min(clientWidth - width, point.x - 50));
 
@@ -385,7 +388,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             }
 
             if (pro?.tally) {
-              const {yes, no, no_with_veto, abstain} = pro?.tally;
+              const { yes, no, no_with_veto, abstain } = pro?.tally;
               let totalVote = +yes + +no + +no_with_veto + +abstain;
               if (this.voting_Period_arr[index].tally) {
                 this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;

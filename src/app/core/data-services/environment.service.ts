@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
+import { LCD_COSMOS } from '../constants/url.constant';
 import { ELeapMode } from '../constants/wallet.constant';
 
 export interface IConfiguration {
@@ -21,9 +22,9 @@ export interface IConfiguration {
       url: string;
     };
     nativeName: string;
-    bondedTokensPoolAddress: string;
   };
   chainConfig: {
+    excludedAddresses: string[];
     stakingTime: string;
     blockTime: number;
     quotaSetPrivateName: number;
@@ -72,7 +73,9 @@ export class EnvironmentService {
   configUri = './assets/config/config.json';
   isMobile = false;
   isNativeApp = false;
+  excludedAddresses = null;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
+  latestBlockHeight$ = new BehaviorSubject<number | string>(undefined);
 
   get configValue(): IConfiguration {
     return this.config?.value;
@@ -146,6 +149,10 @@ export class EnvironmentService {
 
   get coingecko() {
     return _.get(this.configValue, 'api.coingecko');
+  }
+
+  setLatestBlockHeight(value: string | number) {
+    this.latestBlockHeight$.next(value);
   }
 
   destroyed$ = new Subject<void>();

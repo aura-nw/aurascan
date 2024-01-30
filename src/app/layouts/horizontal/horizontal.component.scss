@@ -3,3 +3,26 @@
     padding-top: 52px !important;
   }
 }
+
+@media (min-width: 992px) {
+  .main-content {
+    min-height: calc(100vh - 72px - 379px);
+    .page-content {
+      min-height: inherit;
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  .mask-footer {
+    height: 600px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+
+    background-image: url('./../../../assets/images/mask.png');
+    background-position: center;
+    background-size: 100% 600px;
+    background-repeat: no-repeat;
+  }
+}
