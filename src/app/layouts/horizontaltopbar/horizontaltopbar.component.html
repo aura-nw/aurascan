@@ -8,11 +8,11 @@
             <a routerLink="/" class="logo logo-light">
               <figure class="my-0">
                 <picture>
-                  <source media="(min-width: 992px)" [srcset]="'assets/images/logo/aura-explorer-logo.png'" />
+                  <source media="(min-width: 992px)" [srcset]="'assets/images/logo/aura-explorer-logo.png' | imageS3" />
                   <source
                     media="(min-width: 320px)"
-                    [srcset]="'assets/images/logo/aura-explorer-logo@mob.png'" />
-                  <img [src]="'assets/images/logo/aura-explorer-logo@mob.png'" alt="" loading="lazy" />
+                    [srcset]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" />
+                  <img [src]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" alt="" loading="lazy" />
                 </picture>
               </figure>
             </a>
