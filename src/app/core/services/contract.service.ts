@@ -466,8 +466,7 @@ export class ContractService extends CommonService {
               {height: {_lt: $heightLT}}
             ]
             ${smart_contract_events}
-          }
-          order_by: {height: desc}) {
+          }) {
           id
           height
           hash
