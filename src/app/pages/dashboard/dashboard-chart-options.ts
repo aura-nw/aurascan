@@ -37,8 +37,8 @@ export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
 
 export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'] = {
   lineColor: '#FD805F',
-  topColor: 'rgba(136,198,203,0.12)',
-  bottomColor: 'rgba(119, 182, 188, 0.01)',
+  topColor: 'rgba(253, 128, 95, 0.12)',
+  bottomColor: 'rgba(253, 128, 95, 0.01)',
   priceFormat: {
     type: 'price',
     precision: 4,

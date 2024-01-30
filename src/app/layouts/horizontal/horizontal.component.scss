@@ -9,6 +9,8 @@
     min-height: calc(100vh - 72px - 379px);
     .page-content {
       min-height: inherit;
+      position: relative;
+      z-index: 1;
     }
   }
 
