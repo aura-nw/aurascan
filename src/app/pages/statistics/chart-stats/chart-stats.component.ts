@@ -103,7 +103,7 @@ export class ChartStatsComponent implements OnInit {
     });
 
     this.dailyTransactionChartSeries.applyOptions({
-      lineColor: '#2CB1F5',
+      lineColor: '#FD805F',
       topColor: 'rgba(136,198,203,0)',
       bottomColor: 'rgba(119, 182, 188, 0)',
       priceFormat: {
@@ -158,9 +158,9 @@ export class ChartStatsComponent implements OnInit {
     });
     this.uniqueAddressChartSeries = this.uniqueAddressChart.addAreaSeries({});
     this.uniqueAddressChartSeries.applyOptions({
-      lineColor: '#2CB1F5',
-      topColor: 'rgba(44, 177, 245, 0.2)',
-      bottomColor: 'rgba(44, 177, 245, 0.08)',
+      lineColor: '#FD805F',
+      topColor: 'rgba(253, 128, 95, 0.2)',
+      bottomColor: 'rgba(253, 128, 95, 0.08)',
       priceFormat: {
         type: 'price',
         precision: 0,
@@ -214,7 +214,7 @@ export class ChartStatsComponent implements OnInit {
       },
       handleScroll: false,
     });
-    this.dailyAddressChartSeries = this.dailyAddressChart.addLineSeries({
+    this.dailyAddressChartSeries = this.dailyAddressChart.addAreaSeries({
       autoscaleInfoProvider: () => ({
         priceRange: {
           minValue: 0,
@@ -223,7 +223,7 @@ export class ChartStatsComponent implements OnInit {
       }),
     });
     this.dailyAddressChartSeries.applyOptions({
-      lineColor: '#2CB1F5',
+      lineColor: '#FD805F',
       topColor: 'rgba(44, 177, 245, 0)',
       bottomColor: 'rgba(44, 177, 245, 0)',
       priceFormat: {
