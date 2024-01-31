@@ -86,7 +86,11 @@ export class ContractService extends CommonService {
         filterName = `, ${filterName}`;
         typeQuery = contractType?.includes(FILTER_ALL)
           ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {_eq: "crates.io:cw4973"}}],`
-          : `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
+          : (() => {
+              // CW4973 is CW721 Type
+              contractType = [ContractRegisterType.CW721];
+              return `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
+            })();
       }
     } else if (
       contractType?.includes(ContractRegisterType.CW721) ||
