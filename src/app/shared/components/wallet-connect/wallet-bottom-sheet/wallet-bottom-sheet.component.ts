@@ -24,7 +24,6 @@ export class WalletBottomSheetComponent implements OnInit {
     {
       name: WALLET_PROVIDER.KEPLR,
       icon: '../../../../../../assets/images/icon-keplr.svg',
-      disableMobile: true,
     },
     {
       name: WALLET_PROVIDER.LEAP,
