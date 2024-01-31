@@ -304,7 +304,7 @@
                       [ngStyle]="{
                         'background-color':
                           itemBlock?.isSign !== false && currentValidatorDetail?.status === statusValidator.Active
-                            ? '#5EE6D0'
+                            ? '#67c091'
                             : ''
                       }"
                       href="/blocks/{{ itemBlock?.height }}"
@@ -385,8 +385,13 @@
                       {
                         label: 'Amount',
                         class: 'body-01 text--gray-1',
-                        info: (data.amount | mask: 'separator.6') +
-                         ' <a class=text--primary href=' + ('/tokens/token/' + minimalDenom) + '>' + denom + '</a>'
+                        info:
+                          (data.amount | mask: 'separator.6') +
+                          ' <a class=text--primary href=' +
+                          ('/tokens/token/' + minimalDenom) +
+                          '>' +
+                          denom +
+                          '</a>'
                       }
                     ]"></app-card-mob-simple>
                 </div>
@@ -451,7 +456,7 @@
                               </ng-container>
                               <ng-container *ngIf="!data['amount']">0</ng-container>
                               <ng-container *ngIf="data['amount'] !== 'More' && data['amount'] > 0">
-                                <span [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
+                                <span [ngStyle]="{ color: data['isStakeMode'] ? '#67c091' : '#D5625E' }">
                                   {{ data['isStakeMode'] ? '+' : '-' }}
                                   {{ data[template.matColumnDef] | mask: 'separator.6' }}
                                 </span>
