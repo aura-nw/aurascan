@@ -101,8 +101,7 @@
               <td mat-cell *matCellDef="let element">
                 <div class="d-flex align-items-center">
                   <div>
-                    <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
-                    <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
+                    <img [appImg]="element?.image" [defaultImage]="defaultLogoAura" class="image-token" alt="" />
                   </div>
                   <div>
                     <a
@@ -250,10 +249,7 @@
                           {{ '< $0.01' }}
                         </div>
                         <ng-container *ngIf="element.value | gte: '0.01'">
-                          <span
-                            [appBigNumber]="element.balance"
-                            [tokenPrice]="element.price"
-                            [decimal]="0"></span>
+                          <span [appBigNumber]="element.balance" [tokenPrice]="element.price" [decimal]="0"></span>
                         </ng-container>
                       </div>
                       <app-tooltip-customize
