@@ -78,6 +78,11 @@ export class SoulboundContractListComponent implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
   searchToken() {
     this.isSearchData = true;
     this.pageData.pageIndex = 0;
