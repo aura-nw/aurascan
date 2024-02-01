@@ -1,4 +1,15 @@
 .transfer-card {
+  .card-body {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    margin-top: 1.5px;
+  }
+
+  .card-header {
+    position: relative;
+    z-index: 10;
+  }
+
   .card-nodata,
   .table-token {
     height: 305px;
@@ -15,7 +26,13 @@
       }
 
       td.mat-cell {
-        max-width: 150px;
+        max-width: 175px;
+      }
+
+      @media (max-width: 414px) {
+        ::ng-deep a {
+          font-size: 12px;
+        }
       }
     }
 

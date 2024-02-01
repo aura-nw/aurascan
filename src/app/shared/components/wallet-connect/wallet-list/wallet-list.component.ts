@@ -1,12 +1,12 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import { Subject, takeUntil } from 'rxjs';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { DialogService } from 'src/app/core/services/dialog.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { WALLET_PROVIDER } from '../../../../core/constants/wallet.constant';
-import { IWalletInfo } from '../../../../core/models/wallet';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {Component, OnInit} from '@angular/core';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {Subject, takeUntil} from 'rxjs';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {DialogService} from 'src/app/core/services/dialog.service';
+import {WalletService} from 'src/app/core/services/wallet.service';
+import {WALLET_PROVIDER} from '../../../../core/constants/wallet.constant';
+import {IWalletInfo} from '../../../../core/models/wallet';
 
 @Component({
   selector: 'app-wallet-list',
@@ -24,7 +24,7 @@ export class WalletListComponent implements OnInit {
     {
       name: WALLET_PROVIDER.KEPLR,
       icon: '../../../../../../assets/images/icon-keplr.svg',
-      disableMobile: true,
+      // disableMobile: true,
     },
     {
       name: WALLET_PROVIDER.LEAP,
