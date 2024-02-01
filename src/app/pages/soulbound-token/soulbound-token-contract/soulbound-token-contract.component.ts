@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { ActivatedRoute } from '@angular/router';
-import { from } from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, from } from 'rxjs';
+import { delay, mergeMap, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { SB_TYPE, SOUL_BOUND_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -47,6 +47,7 @@ export class SoulboundTokenContractComponent implements OnInit {
   lstTypeSB = SOUL_BOUND_TYPE;
   sbType = SB_TYPE;
   errTxt: string;
+  destroyed$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -55,6 +56,7 @@ export class SoulboundTokenContractComponent implements OnInit {
     private walletService: WalletService,
     public commonService: CommonService,
     private nameTagService: NameTagService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -62,14 +64,20 @@ export class SoulboundTokenContractComponent implements OnInit {
       .pipe(
         delay(800),
         mergeMap((_) => this.walletService.wallet$),
+        takeUntil(this.destroyed$),
       )
       .subscribe((wallet) => {
         if (wallet) {
+          // check change wallet
+          if (this.currentAddress && this.currentAddress !== this.walletService.wallet?.bech32Address) {
+            this.router.navigate(['/accountbound']);
+          }
+
           this.contractAddress = this.route.snapshot.paramMap.get('address');
           this.currentAddress = this.walletService.wallet?.bech32Address;
           this.getListToken();
         } else {
-          this.currentAddress = null;
+          this.router.navigate(['/accountbound']);
         }
       });
   }
