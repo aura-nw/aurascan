@@ -27,12 +27,12 @@
     cursor: pointer;
     border: 2px solid var(--aura-green-3);
     border-radius: 5px;
-    display: -webkit-flex;
+    background-color: var(--aura-green-3);
+
     display: flex;
-    -webkit-align-items: center;
     align-items: center;
-    -webkit-justify-content: center;
     justify-content: center;
+
     width: 31px;
     height: 31px;
 
@@ -52,7 +52,13 @@
     }
 
     .img-uptime-miss {
-      filter: $filter-uptime-icon;
+      width: 31px;
+      height: 31px;
+    }
+
+    &.block-fail {
+      border: none;
+      background-color: transparent;
     }
   }
 
@@ -64,6 +70,11 @@
       margin: 0 5px 7px 5px;
       width: 24px;
       height: 24px;
+
+      .img-uptime-miss {
+        width: 24px;
+        height: 24px;
+      }
     }
 
     .header-mob {

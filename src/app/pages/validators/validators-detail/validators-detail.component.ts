@@ -208,6 +208,10 @@ export class ValidatorsDetailComponent implements OnInit {
     }
   }
 
+  isBlockFail(itemBlock: { isSign: boolean }) {
+    return !(itemBlock?.isSign !== false && this.currentValidatorDetail?.status === STATUS_VALIDATOR.Active);
+  }
+
   getListBlockWithOperator(nextKeyBlock = null, isInit = true): void {
     let payload = {
       limit: 100,

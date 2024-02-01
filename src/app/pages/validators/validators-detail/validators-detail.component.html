@@ -296,21 +296,17 @@
             <div class="uptime-content m-lg-auto">
               <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
               <ng-container *ngIf="!lastBlockLoading">
-                <ng-container *ngFor="let itemBlock of arrLastBlock; let index = index">
+                <ng-container *ngFor="let itemBlock of arrLastBlock">
                   <div class="aura-tooltip-contain">
                     <a
                       class="block-uptime tool-tip aura-tooltip-object"
-                      [ngClass]=""
-                      [ngStyle]="{
-                        'background-color':
-                          itemBlock?.isSign !== false && currentValidatorDetail?.status === statusValidator.Active
-                            ? '#67c091'
-                            : ''
-                      }"
+                      [class.block-fail]="isBlockFail(itemBlock)"
                       href="/blocks/{{ itemBlock?.height }}"
                       currentitem="false">
                       <div class="d-flex">
-                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                        <ng-container *ngIf="isBlockFail(itemBlock)">
+                          <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                        </ng-container>
                       </div>
                     </a>
                     <app-tooltip-customize [content]="itemBlock?.height || 0"></app-tooltip-customize>
