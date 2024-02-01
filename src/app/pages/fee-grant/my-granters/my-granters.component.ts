@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
-import { Subject, delay, from, mergeMap, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
@@ -18,7 +18,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
   templateUrl: './my-granters.component.html',
   styleUrls: ['./my-granters.component.scss'],
 })
-export class MyGrantersComponent implements OnInit {
+export class MyGrantersComponent implements OnInit, OnDestroy {
   loading = true;
   isActive = true;
   textSearch = '';
@@ -66,7 +66,7 @@ export class MyGrantersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
         this.currentAddress = wallet.bech32Address;
         this.getGrantersData();
@@ -77,6 +77,14 @@ export class MyGrantersComponent implements OnInit {
         this.dataSource.data = [];
       }
     });
+  }
+
+  /**
+   * ngOnDestroy
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   getGrantersData() {

@@ -8,7 +8,7 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { Subject, delay, from, mergeMap, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
@@ -80,7 +80,7 @@ export class MyGranteesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
         this.currentAddress = wallet.bech32Address;
         this.getGranteesData();

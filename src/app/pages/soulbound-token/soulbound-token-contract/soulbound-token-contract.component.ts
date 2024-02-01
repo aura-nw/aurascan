@@ -60,7 +60,7 @@ export class SoulboundTokenContractComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
         // check change wallet
         if (this.currentAddress && this.currentAddress !== wallet.bech32Address) {

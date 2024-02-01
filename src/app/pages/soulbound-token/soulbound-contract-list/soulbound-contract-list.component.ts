@@ -3,8 +3,8 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
-import { Subject, from } from 'rxjs';
-import { delay, mergeMap, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -55,7 +55,7 @@ export class SoulboundContractListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
         this.currentAddress = this.walletService.wallet?.bech32Address;
         this.getListSmartContract();
