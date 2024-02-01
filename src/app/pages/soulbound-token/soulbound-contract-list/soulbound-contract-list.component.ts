@@ -63,11 +63,7 @@ export class SoulboundContractListComponent implements OnInit {
       )
       .subscribe((wallet) => {
         if (wallet) {
-          window.addEventListener('keplr_keystorechange', () => {
-            this.isNoData = true;
-          });
           this.currentAddress = this.walletService.wallet?.bech32Address;
-          this.isNoData = false;
           this.getListSmartContract();
         } else {
           this.currentAddress = null;
