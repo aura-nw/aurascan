@@ -2,7 +2,7 @@
   <app-pagetitle title="Validator Details" [displayInfo]="true" class="flex-grow-1"></app-pagetitle>
   <button
     type="button"
-    class="button button-pill button-flat button--lg button--sm-mob ml-6 fw-semibold text--black"
+    class="button button-pill button-flat button--lg button--sm-mob ml-6 text--black"
     *ngIf="currentValidatorDetail && !currentValidatorDetail?.jailed"
     (click)="openDialog()">
     Delegate
@@ -41,7 +41,7 @@
                   </div>
                 </div>
               </div>
-              <h5 class="mb-0 text--primary break-all">{{ currentValidatorDetail?.title }}</h5>
+              <h5 class="mb-0 text--white break-all">{{ currentValidatorDetail?.title }}</h5>
             </div>
             <div
               class="valid-status caption"
