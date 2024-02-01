@@ -60,26 +60,20 @@ export class SoulboundTokenContractComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    from([1])
-      .pipe(
-        delay(800),
-        mergeMap((_) => this.walletService.wallet$),
-        takeUntil(this.destroyed$),
-      )
-      .subscribe((wallet) => {
-        if (wallet) {
-          // check change wallet
-          if (this.currentAddress && this.currentAddress !== wallet.bech32Address) {
-            this.router.navigate(['/accountbound']);
-          }
-
-          this.contractAddress = this.route.snapshot.paramMap.get('address');
-          this.currentAddress = this.walletService.wallet?.bech32Address;
-          this.getListToken();
-        } else {
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        // check change wallet
+        if (this.currentAddress && this.currentAddress !== wallet.bech32Address) {
           this.router.navigate(['/accountbound']);
         }
-      });
+
+        this.contractAddress = this.route.snapshot.paramMap.get('address');
+        this.currentAddress = this.walletService.wallet?.bech32Address;
+        this.getListToken();
+      } else {
+        this.router.navigate(['/accountbound']);
+      }
+    });
   }
 
   ngOnDestroy(): void {

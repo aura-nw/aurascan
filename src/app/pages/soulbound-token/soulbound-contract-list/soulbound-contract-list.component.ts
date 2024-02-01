@@ -55,23 +55,17 @@ export class SoulboundContractListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    from([1])
-      .pipe(
-        delay(800),
-        mergeMap((_) => this.walletService.wallet$),
-        takeUntil(this.destroyed$)
-      )
-      .subscribe((wallet) => {
-        if (wallet) {
-          this.currentAddress = this.walletService.wallet?.bech32Address;
-          this.getListSmartContract();
-        } else {
-          this.currentAddress = null;
-          this.pageChange?.selectPage(0);
-          this.dataSource.data = [];
-          this.loading = false;
-        }
-      });
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.currentAddress = this.walletService.wallet?.bech32Address;
+        this.getListSmartContract();
+      } else {
+        this.currentAddress = null;
+        this.pageChange?.selectPage(0);
+        this.dataSource.data = [];
+        this.loading = false;
+      }
+    });
   }
 
   ngOnDestroy(): void {

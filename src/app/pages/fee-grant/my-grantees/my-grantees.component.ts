@@ -80,23 +80,17 @@ export class MyGranteesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    from([1])
-      .pipe(
-        delay(800),
-        mergeMap((_) => this.walletService.wallet$),
-        takeUntil(this.destroyed$),
-      )
-      .subscribe((wallet) => {
-        if (wallet) {
-          this.currentAddress = wallet.bech32Address;
-          this.getGranteesData();
-        } else {
-          this.loading = false;
-          this.currentAddress = null;
-          this.pageEvent(0);
-          this.dataSource.data = [];
-        }
-      });
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.currentAddress = wallet.bech32Address;
+        this.getGranteesData();
+      } else {
+        this.loading = false;
+        this.currentAddress = null;
+        this.pageEvent(0);
+        this.dataSource.data = [];
+      }
+    });
 
     this.timerGetFeeGrant = setInterval(() => {
       if (this.pageData.pageIndex === 1) {
