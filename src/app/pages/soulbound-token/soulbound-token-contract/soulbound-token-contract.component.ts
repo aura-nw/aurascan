@@ -69,7 +69,7 @@ export class SoulboundTokenContractComponent implements OnInit {
       .subscribe((wallet) => {
         if (wallet) {
           // check change wallet
-          if (this.currentAddress && this.currentAddress !== this.walletService.wallet?.bech32Address) {
+          if (this.currentAddress && this.currentAddress !== wallet.bech32Address) {
             this.router.navigate(['/accountbound']);
           }
 
@@ -80,6 +80,11 @@ export class SoulboundTokenContractComponent implements OnInit {
           this.router.navigate(['/accountbound']);
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   searchToken() {
