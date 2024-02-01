@@ -152,12 +152,6 @@ $textColors: (
   }
 }
 
-.text-gradient {
-  background: var(--aura-gradient-general);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .text-hover-gray {
   color: #9da2af;
 }
