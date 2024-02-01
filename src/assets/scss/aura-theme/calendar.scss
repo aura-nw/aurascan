@@ -59,7 +59,7 @@ mat-datepicker-toggle.mat-datepicker-toggle {
   }
 .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
   border-radius: 8px;
-  background: #2BBBA3 !important;
+  background: var(--aura-orange-1) !important;
   -webkit-background-clip: unset !important;
   -webkit-text-fill-color: unset !important;
   font-weight: 400 !important;
