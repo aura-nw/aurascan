@@ -120,7 +120,8 @@ $textColors: (
   'gray-light-2',
   'gray-11',
   'green-6',
-  'gray-light-3'
+  'gray-light-3',
+  'orange-1'
 );
 @each $color in $textColors {
   .text--#{$color} {
