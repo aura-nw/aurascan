@@ -1,11 +1,10 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { EMPTY, Observable, catchError, map, of, switchMap } from 'rxjs';
+import { EMPTY, Observable, catchError, switchMap } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { NotificationsService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
-import * as moment from 'moment';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -24,6 +23,15 @@ export class JwtInterceptor implements HttpInterceptor {
     // get list name tag if not login email
     const user = this.userService.getCurrentUser();
     const isApiBE = request.url.indexOf(this.environmentService.backend) > -1;
+
+    if (isApiBE) {
+      request = request.clone({
+        setHeaders: {
+          'chain-id': this.environmentService.chainId,
+        },
+      });
+    }
+
     if (!isApiBE || !user?.accessToken || request.url?.indexOf('refresh-token') > -1) {
       return next.handle(request);
     }
