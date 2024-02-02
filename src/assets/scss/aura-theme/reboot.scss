@@ -12,7 +12,7 @@
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: #fff;
-  background: linear-gradient(339deg, #ffd569 23.57%, #fc8e4f 50.76%, #ff697b 76.37%);
+  background: var(--aura-gray-5);
 }
 
 h1,
