@@ -401,7 +401,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
-            denom: data.min_self_delegation > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -410,7 +410,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
-            denom: data.min_self_delegation > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           result.push({
@@ -465,7 +465,7 @@ export class TransactionMessagesComponent implements OnInit {
             key: 'Amount',
             value: data.initial_deposit[0]?.amount,
             pipeType: pipeTypeData.BalanceOf,
-            denom: data.initial_deposit[0]?.amount > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
           });
           result.push({
             key: 'Proposer',
