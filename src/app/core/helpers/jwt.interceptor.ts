@@ -23,15 +23,6 @@ export class JwtInterceptor implements HttpInterceptor {
     // get list name tag if not login email
     const user = this.userService.getCurrentUser();
     const isApiBE = request.url.indexOf(this.environmentService.backend) > -1;
-
-    if (isApiBE) {
-      request = request.clone({
-        setHeaders: {
-          'chain-id': this.environmentService.chainId,
-        },
-      });
-    }
-
     if (!isApiBE || !user?.accessToken || request.url?.indexOf('refresh-token') > -1) {
       return next.handle(request);
     }
