@@ -101,14 +101,10 @@
               <td mat-cell *matCellDef="let element">
                 <div class="d-flex align-items-center">
                   <div>
-                    <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
-                    <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
+                    <img [appImg]="element?.image" [defaultImage]="defaultLogoAura" class="image-token" alt="" />
                   </div>
                   <div>
-                    <a
-                      class="d-flex align-items-center"
-                      [routerLink]="['/tokens/token', element.contract_address]"
-                      *ngIf="element.contract_address !== '-'">
+                    <a class="d-flex align-items-center" [routerLink]="['/tokens/token', element.tokenUrl]">
                       <div class="d-flex align-items-center">
                         <div class="ml-2 body-03 fw-semibold">
                           {{ element.name | ellipsis: 30 }}
@@ -128,25 +124,6 @@
                         </div>
                       </div>
                     </a>
-                    <div class="d-flex align-items-center" *ngIf="element.contract_address === '-'">
-                      <div class="ml-2 body-03 fw-semibold">
-                        {{ element.name | ellipsis: 19 }}
-                      </div>
-
-                      <div class="aura-tooltip-contain">
-                        <div class="status cursor-pointer aura-tooltip-object">
-                          <img
-                            [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
-                            alt=""
-                            width="18"
-                            height="18"
-                            class="ml-1"
-                            *ngIf="element.verify_status === 'VERIFIED'" />
-                        </div>
-                        <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
-                        </app-tooltip-customize>
-                      </div>
-                    </div>
                     <span class="ml-2">{{ element.symbol }}</span>
                   </div>
                 </div>
@@ -250,10 +227,7 @@
                           {{ '< $0.01' }}
                         </div>
                         <ng-container *ngIf="element.value | gte: '0.01'">
-                          <span
-                            [appBigNumber]="element.balance"
-                            [tokenPrice]="element.price"
-                            [decimal]="0"></span>
+                          <span [appBigNumber]="element.balance" [tokenPrice]="element.price" [decimal]="0"></span>
                         </ng-container>
                       </div>
                       <app-tooltip-customize

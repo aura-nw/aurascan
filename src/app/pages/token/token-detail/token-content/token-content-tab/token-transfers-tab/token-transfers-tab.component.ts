@@ -311,12 +311,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
             element['decimal'] = this.tokenDetail?.decimals || this.tokenDetail?.decimal;
           });
 
-          if (this.dataSource.data.length > 0 && !isReload) {
-            this.dataSource.data = [...this.dataSource.data, ...txs];
-          } else {
-            this.dataSource.data = [...txs];
-          }
-
+          this.dataSource = new MatTableDataSource(txs);
           this.pageData.length = res.ibc_ics20_aggregate?.aggregate?.count;
           this.tokenService.totalTransfer$.next(this.pageData.length);
         }

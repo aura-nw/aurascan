@@ -41,10 +41,10 @@
 
 @media (max-width: 991.99px) {
   .aura-table.coin-table td.mat-cell:nth-child(1),
-  .aura-table.coin-table td.mat-cell:nth-child(2) {
+  .aura-table.coin-table td.mat-cell:nth-child(2),
+  .aura-table.coin-table td.mat-cell:nth-child(3) {
     min-width: 200px;
   }
-  .aura-table.coin-table td.mat-cell:nth-child(3),
   .aura-table.coin-table td.mat-cell:nth-child(4),
   .aura-table.coin-table td.mat-cell:nth-child(5) {
     min-width: 120px;
