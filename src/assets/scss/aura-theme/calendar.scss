@@ -11,14 +11,14 @@ mat-datepicker-toggle.mat-datepicker-toggle {
 .mat-datepicker-content {
   margin-top: 8px !important;
   background-color: var(--aura-gray-10);
-  border: 1px solid #9DA1AC;
+  border: 1px solid #9da1ac;
   border-radius: 8px !important;
 }
 .mat-calendar-body-cell-content {
   border-radius: 8px !important;
 }
 .mat-calendar-body-selected {
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   background-color: transparent;
   color: var(--aura-white);
 }
@@ -33,7 +33,14 @@ mat-datepicker-toggle.mat-datepicker-toggle {
 .mat-date-range-input-inner::-webkit-input-placeholder {
   color: var(--aura-white);
 }
-.mat-calendar-body-cell:not(.mat-calendar-body-disabled) > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled)
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.cdk-keyboard-focused
+  .mat-calendar-body-active
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.cdk-program-focused
+  .mat-calendar-body-active
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
   background-color: transparent;
   &:before {
     content: '';
@@ -44,22 +51,29 @@ mat-datepicker-toggle.mat-datepicker-toggle {
     height: 4px;
     border-radius: 4px;
     width: 0;
-    background: linear-gradient(113.1deg, #5EE6D0 13.45%, #BFC6FF 50.33%, #FFBA69 85.05%);
-    transition: width .35s ease-in-out;
+    background: linear-gradient(113.1deg, #5ee6d0 13.45%, #bfc6ff 50.33%, #ffba69 85.05%);
+    transition: width 0.35s ease-in-out;
   }
 }
-.mat-calendar-body-cell:not(.mat-calendar-body-disabled):not(.mat-calendar-body-active):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):not(.mat-calendar-body-active):hover
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.cdk-keyboard-focused
+  .mat-calendar-body-active
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.cdk-program-focused
+  .mat-calendar-body-active
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
   &:before {
     width: 12px;
   }
   font-weight: 900;
-  background: var(--aura-gradient-general);
+  background: var(--aura-gradient-button);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  }
+}
 .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
   border-radius: 8px;
-  background: #2BBBA3 !important;
+  background: var(--aura-orange-1) !important;
   -webkit-background-clip: unset !important;
   -webkit-text-fill-color: unset !important;
   font-weight: 400 !important;

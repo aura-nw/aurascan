@@ -214,7 +214,7 @@ export class ChartStatsComponent implements OnInit {
       },
       handleScroll: false,
     });
-    this.dailyAddressChartSeries = this.dailyAddressChart.addLineSeries({
+    this.dailyAddressChartSeries = this.dailyAddressChart.addAreaSeries({
       autoscaleInfoProvider: () => ({
         priceRange: {
           minValue: 0,
