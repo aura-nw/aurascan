@@ -77,6 +77,16 @@
     max-width: unset;
   }
 }
+
+.price-label {
+  font-size: 14px !important;
+  min-width: 110px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .card-summary-info {
   .divider-vertical {
     min-height: 64px;
