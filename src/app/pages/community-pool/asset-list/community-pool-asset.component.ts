@@ -53,9 +53,6 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   chainName = this.environmentService.chainName;
   listCoin = this.environmentService.coins;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
-  nativeName = this.environmentService.environment.nativeName;
 
   constructor(
     public translate: TranslateService,
