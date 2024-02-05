@@ -2,7 +2,7 @@
   <app-pagetitle title="Validator Details" [displayInfo]="true" class="flex-grow-1"></app-pagetitle>
   <button
     type="button"
-    class="button button-pill button-flat button--lg button--sm-mob ml-6 fw-semibold text--black"
+    class="button button-pill button-flat button--lg button--sm-mob ml-6 text--black"
     *ngIf="currentValidatorDetail && !currentValidatorDetail?.jailed"
     (click)="openDialog()">
     Delegate
@@ -41,7 +41,7 @@
                   </div>
                 </div>
               </div>
-              <h5 class="mb-0 text--primary break-all">{{ currentValidatorDetail?.title }}</h5>
+              <h5 class="mb-0 text--white break-all">{{ currentValidatorDetail?.title }}</h5>
             </div>
             <div
               class="valid-status caption"
@@ -295,21 +295,17 @@
             <div class="uptime-content m-lg-auto">
               <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
               <ng-container *ngIf="!lastBlockLoading">
-                <ng-container *ngFor="let itemBlock of arrLastBlock; let index = index">
+                <ng-container *ngFor="let itemBlock of arrLastBlock">
                   <div class="aura-tooltip-contain">
                     <a
                       class="block-uptime tool-tip aura-tooltip-object"
-                      [ngClass]=""
-                      [ngStyle]="{
-                        'background-color':
-                          itemBlock?.isSign !== false && currentValidatorDetail?.status === statusValidator.Active
-                            ? '#5EE6D0'
-                            : ''
-                      }"
+                      [class.block-fail]="isBlockFail(itemBlock)"
                       href="/blocks/{{ itemBlock?.height }}"
                       currentitem="false">
                       <div class="d-flex">
-                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                        <ng-container *ngIf="isBlockFail(itemBlock)">
+                          <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                        </ng-container>
                       </div>
                     </a>
                     <app-tooltip-customize [content]="itemBlock?.height || 0"></app-tooltip-customize>
@@ -384,8 +380,13 @@
                       {
                         label: 'Amount',
                         class: 'body-01 text--gray-1',
-                        info: (data.amount | mask: 'separator.6') +
-                         ' <a class=text--primary href=' + ('/tokens/token/' + minimalDenom) + '>' + denom + '</a>'
+                        info:
+                          (data.amount | mask: 'separator.6') +
+                          ' <a class=text--primary href=' +
+                          ('/tokens/token/' + minimalDenom) +
+                          '>' +
+                          denom +
+                          '</a>'
                       }
                     ]"></app-card-mob-simple>
                 </div>
@@ -450,7 +451,7 @@
                               </ng-container>
                               <ng-container *ngIf="!data['amount']">0</ng-container>
                               <ng-container *ngIf="data['amount'] !== 'More' && data['amount'] > 0">
-                                <span [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
+                                <span [ngStyle]="{ color: data['isStakeMode'] ? '#67c091' : '#D5625E' }">
                                   {{ data['isStakeMode'] ? '+' : '-' }}
                                   {{ data[template.matColumnDef] | mask: 'separator.6' }}
                                 </span>
