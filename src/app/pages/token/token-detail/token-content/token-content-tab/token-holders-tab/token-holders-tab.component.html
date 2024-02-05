@@ -82,13 +82,7 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'percent_hold'">
                     <span *ngIf="!this.typeContract || this.typeContract === contractType.CW20">
-                      <ng-container
-                        *ngIf="
-                          tokenDetail.modeToken !== EModeToken.Native || data.owner !== bondedTokensPoolAddress;
-                          else noData
-                        ">
-                        {{ data[template.matColumnDef] | formatDigit: 2 }}%
-                      </ng-container>
+                      {{ data[template.matColumnDef] | formatDigit: 2 }}%
                     </span>
                     <ng-container *ngIf="this.typeContract && this.typeContract !== contractType.CW20">
                       <span>{{ data.percent_hold || 0 | formatDigit: 2 }} %</span>
