@@ -121,7 +121,7 @@ export class TokenTableComponent implements OnChanges {
       searchList.map((token) => ({
         ...token,
         tokenUrl:
-          (token?.type !== 'cw20'
+          (token?.type !== COIN_TOKEN_TYPE.CW20
             ? token.denom?.replace('ibc/', '') // Ibc and native link
             : token.contract_address) || '',
       }));
@@ -153,7 +153,7 @@ export class TokenTableComponent implements OnChanges {
               .map((token) => ({
                 ...token,
                 tokenUrl:
-                  (token?.type !== 'cw20'
+                  (token?.type !== COIN_TOKEN_TYPE.CW20
                     ? token.denom?.replace('ibc/', '') // Ibc and native link
                     : token.contract_address) || '',
               }));
