@@ -6,8 +6,6 @@ import * as _ from 'lodash';
 import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
-import { LCD_COSMOS } from '../constants/url.constant';
-import { ELeapMode } from '../constants/wallet.constant';
 import { isMobileBrowser } from '../helpers/wallet';
 
 export interface IConfiguration {
@@ -166,7 +164,7 @@ export class EnvironmentService {
       this.isMobile = state?.matches ? true : false;
     });
 
-    this.checkNativeApp();
+    this.isNativeApp = isMobileBrowser();
   }
 
   ngOnDestroy(): void {
@@ -218,11 +216,5 @@ export class EnvironmentService {
         this.config.next(configuration);
       }
     });
-  }
-
-  checkNativeApp() {
-    if (this.isMobile && isMobileBrowser) {
-      this.isNativeApp = true;
-    }
   }
 }
