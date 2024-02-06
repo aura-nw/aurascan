@@ -92,7 +92,7 @@
                   nftId="{{ 'nft#' + i }}"
                   [nftType]="getTypeFile(item)"></app-nft-card>
                 <div class="nft-cards__label">
-                  <span class="text-gradient">CW-721</span>
+                  <span class="text--white">CW-721</span>
                 </div>
                 <div class="nft__body">
                   <div class="nft__info d-flex">
@@ -111,8 +111,8 @@
                       (click)="
                         handleRouterLink('/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id))
                       ">
-                      <span class="d-none d-lg-inline-block">{{ item.token_id | ellipsis : 12 }}</span>
-                      <span class="d-inline-block d-lg-none">{{ item.token_id | ellipsis : 9 }}</span>
+                      <span class="d-none d-lg-inline-block">{{ item.token_id | ellipsis: 12 }}</span>
+                      <span class="d-inline-block d-lg-none">{{ item.token_id | ellipsis: 9 }}</span>
                     </span>
                   </div>
                 </div>

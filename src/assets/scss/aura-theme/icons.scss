@@ -1,4 +1,4 @@
-@import "icons-variable";
+@import 'icons-variable';
 .aura-icon {
   font-size: 20px;
   position: relative;
@@ -13,18 +13,6 @@
     right: 0;
     bottom: 0;
   }
-  &-circle {
-    padding: var(--spacer-3);
-    background: var(--aura-gradient-general);
-    border-radius: 50%;
-    color: var(--aura-black);
-    font-size: 48px;
-    &:before {
-      width: 0.5em;
-      height: 0.5em;
-      margin: auto;
-    }
-  }
 }
 
 .icon-close {
@@ -35,42 +23,42 @@
 @each $icon-name in $icon-variables {
   .icon-#{$icon-name} {
     &::before {
-      background: url("../../icons/icons-svg/basic/#{$icon-name}.svg") no-repeat center;
+      background: url('../../icons/icons-svg/basic/#{$icon-name}.svg') no-repeat center;
       background-size: contain;
     }
-  };
+  }
   .icon-#{$icon-name}.icon--multi-color {
     &::before {
-      background: url("../../icons/icons-svg/color/#{$icon-name}.svg") no-repeat center;
+      background: url('../../icons/icons-svg/color/#{$icon-name}.svg') no-repeat center;
       background-size: contain;
     }
-  };
+  }
   .icon-#{$icon-name}.icon--switch-stage {
     &::before {
-      background: url("../../icons/icons-svg/basic/#{$icon-name}.svg") no-repeat center;
+      background: url('../../icons/icons-svg/basic/#{$icon-name}.svg') no-repeat center;
       background-size: contain;
-      transition: background .35s ease-in-out;
+      transition: background 0.35s ease-in-out;
     }
     @media (min-width: 992px) {
-       &:hover {
-         &::before {
-           background: url("../../icons/icons-svg/color/#{$icon-name}.svg") no-repeat center;
-           background-size: contain;
-         }
-       }
+      &:hover {
+        &::before {
+          background: url('../../icons/icons-svg/color/#{$icon-name}.svg') no-repeat center;
+          background-size: contain;
+        }
+      }
     }
     &:active {
       &::before {
-        background: url("../../icons/icons-svg/color/#{$icon-name}.svg") no-repeat center;
+        background: url('../../icons/icons-svg/color/#{$icon-name}.svg') no-repeat center;
         background-size: contain;
       }
     }
-  };
+  }
 }
 @each $icon-name in $icon-black-variables {
   .icon-#{$icon-name} {
     &::before {
-      background: url("../../icons/icons-svg/black/#{$icon-name}.svg") no-repeat center;
+      background: url('../../icons/icons-svg/black/#{$icon-name}.svg') no-repeat center;
       background-size: contain;
     }
   }

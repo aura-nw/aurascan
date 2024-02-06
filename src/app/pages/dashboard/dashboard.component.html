@@ -27,16 +27,16 @@
                 <div class="d-flex flex-column px-lg-4 flex-shrink-0 flex-grow-1">
                   <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
-                      <img [appImg]="chainLogo" alt="" width="40" height="40" />
+                      <img [appImg]="chainLogo" alt="chain-logo" height="36" />
                       <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">
                         {{ nativeName | uppercase }}
                       </div>
                       <div class="aura-tooltip-contain">
                         <a
-                          href="https://www.coingecko.com/en/coins/{{coingeckoCoinId}}"
+                          href="https://www.coingecko.com/en/coins/{{ coingeckoCoinId }}"
                           target="_blank"
                           class="ml-2 p-0 button button--ssm button-ghost aura-tooltip-object">
-                          <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
+                          <i class="ph-arrow-square-out-fill text--white body-01 h1-mob mb-0"></i>
                         </a>
                         <app-tooltip-customize [content]="'Open CoinGecko'"></app-tooltip-customize>
                       </div>
@@ -92,9 +92,7 @@
               <div class="align-items-center pt-6 px-4 pr-lg-6 pl-lg-1">
                 <div class="d-lg-flex flex-wrap mb-4">
                   <!-- Tabs -->
-                  <div class="button-switch-stage button-switch-stage__3">
-                    <button type="button" disabled class="text--white">Price chart</button>
-                  </div>
+                  <div class="h4 price-label text--white">Price chart</div>
                   <div class="ms-auto mt-4 mt-md-0">
                     <div class="d-flex align-items-center chart__options">
                       <div class="button-switch-stage button-switch-stage__2">
