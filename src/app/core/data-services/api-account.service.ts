@@ -131,12 +131,12 @@ export class ApiAccountService {
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L117
   parseBalance(account, isGetAlBalances = false) {
     const defaultBalance = { amount: '0', denom: this.currencies.coinMinimalDenom };
-    const lengthBalance = _.get(account, '[0].balances.length') || 0;
-    const balances = lengthBalance > 0 ? account[0]?.balances : [defaultBalance];
+    const balance = _.get(account, '[0].balances') || [];
+    const balances = balance?.length > 0 ? account[0]?.balances : [defaultBalance];
 
     return isGetAlBalances
       ? balances
-      : lengthBalance > 0
+      : balance?.length > 0
         ? account[0]?.balances?.find((item) => item.denom === this.currencies.coinMinimalDenom)
         : defaultBalance;
   }
@@ -144,7 +144,7 @@ export class ApiAccountService {
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L132
   parseAvailableBalance(account) {
     const spendableBalances = _.get(account, '[0].spendable_balances') || [];
-    if (spendableBalances == 0) {
+    if (spendableBalances?.length == 0) {
       return 0;
     }
 
