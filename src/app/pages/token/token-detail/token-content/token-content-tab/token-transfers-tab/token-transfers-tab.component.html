@@ -100,7 +100,7 @@
                         [decimal]="data.decimal"></div>
                       <app-tooltip-customize
                         *ngIf="
-                          data.amount !== 0 &&
+                          +data.amount !== 0 &&
                           ((data.amount | balance: data.decimal | lt: 0.001) ||
                             (data.amount | balance: data.decimal | gte: 1000000))
                         "
