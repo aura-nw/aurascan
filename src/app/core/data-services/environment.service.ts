@@ -8,6 +8,7 @@ import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { ELeapMode } from '../constants/wallet.constant';
+import { isMobileBrowser } from '../helpers/wallet';
 
 export interface IConfiguration {
   environment: {
@@ -220,16 +221,8 @@ export class EnvironmentService {
   }
 
   checkNativeApp() {
-    if ((window.coin98 || window.leap || window.keplr) && this.isMobile) {
-      try {
-        if (
-          window.coin98?.keplr ||
-          window.leap?.mode == ELeapMode.MobileWeb ||
-          window.keplr?.mode == ELeapMode.MobileWeb
-        ) {
-          this.isNativeApp = true;
-        }
-      } catch {}
+    if (this.isMobile && isMobileBrowser) {
+      this.isNativeApp = true;
     }
   }
 }
