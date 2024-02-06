@@ -131,7 +131,7 @@ export class ApiAccountService {
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L117
   parseBalance(account, isGetAlBalances = false) {
     const defaultBalance = { amount: '0', denom: this.currencies.coinDecimals };
-    const lengthBalance = _.get(account, '[0].balance.length');
+    const lengthBalance = _.get(account, '[0].balances.length');
     const balances = lengthBalance > 0 ? account[0]?.balances : [defaultBalance];
 
     return isGetAlBalances

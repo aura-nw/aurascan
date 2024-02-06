@@ -220,9 +220,13 @@ export class EnvironmentService {
   }
 
   checkNativeApp() {
-    if ((window.coin98 || window.leap) && this.isMobile) {
+    if ((window.coin98 || window.leap || window.keplr) && this.isMobile) {
       try {
-        if (window.coin98?.keplr || window.leap?.mode == ELeapMode.MobileWeb) {
+        if (
+          window.coin98?.keplr ||
+          window.leap?.mode == ELeapMode.MobileWeb ||
+          window.keplr?.mode == ELeapMode.MobileWeb
+        ) {
           this.isNativeApp = true;
         }
       } catch {}
