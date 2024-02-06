@@ -143,13 +143,12 @@ export class ApiAccountService {
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L132
   parseAvailableBalance(account) {
-    const lengthSpendableBalance = _.get(account, '[0].spendable_balances.length') || 0;
-    if (!account || lengthSpendableBalance == 0) {
+    const spendableBalances = _.get(account, '[0].spendable_balances') || [];
+    if (spendableBalances == 0) {
       return 0;
     }
 
-    const spendable_balances = account[0]?.spendable_balances || [];
-    const value = spendable_balances?.find((f) => f.denom === this.currencies.coinMinimalDenom);
+    const value = spendableBalances?.find((f) => f.denom === this.currencies.coinMinimalDenom);
     const amount = value.amount || 0;
     return balanceOf(amount, this.currencies.coinDecimals);
   }
