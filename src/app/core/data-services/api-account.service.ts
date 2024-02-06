@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Coin } from '@cosmjs/stargate';
 import * as _ from 'lodash';
-
-import { catchError, EMPTY, expand, forkJoin, from, map, Observable, of, reduce, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, expand, forkJoin, map, Observable, of, reduce, switchMap } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { EnvironmentService } from './environment.service';
 import { VALIDATOR_ACCOUNT_TEMPLATE } from './template';
@@ -132,11 +130,15 @@ export class ApiAccountService {
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L117
   parseBalance(account, isGetAlBalances = false) {
-    const balances = account ? account[0]?.balances : [];
+    const defaultBalance = { amount: '0', denom: this.currencies.coinDecimals };
+    const lengthBalance = _.get(account, '[0].balances.length');
+    const balances = lengthBalance > 0 ? account[0]?.balances : [defaultBalance];
 
     return isGetAlBalances
       ? balances
-      : account[0]?.balances.find((item) => item.denom === this.currencies.coinMinimalDenom);
+      : lengthBalance > 0
+        ? account[0]?.balances?.find((item) => item.denom === this.currencies.coinMinimalDenom)
+        : defaultBalance;
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L132

@@ -1,5 +1,5 @@
 a.text-link:hover {
-  color: var(--aura-green-3) !important;
+  color: var(--aura-blue-shade-3) !important;
 }
 section.chart-stats .chart-contain {
   .chart__name {
@@ -29,7 +29,7 @@ section.chart-stats .chart-contain {
       width: 100%;
       height: 1.5px;
       z-index: 2;
-      background: linear-gradient(113.1deg, #5ee6d0 13.45%, #bfc6ff 50.33%, #ffba69 85.05%);
+      background: linear-gradient(117deg, #ffd569 0%, #fc8e4f 21.39%, #ff697b 34.6%);
     }
   }
 }
