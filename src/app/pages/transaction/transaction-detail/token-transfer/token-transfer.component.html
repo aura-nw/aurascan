@@ -78,8 +78,9 @@
                             [decimal]="data.decimal"></div>
                           <app-tooltip-customize
                             *ngIf="
-                              (data[template.matColumnDef] | balance: data.decimal | lt: 0.001) ||
-                              (data[template.matColumnDef] | balance: data.decimal | gte: 1000000)
+                              +data[template.matColumnDef] !== 0 &&
+                              ((data[template.matColumnDef] | balance: data.decimal | lt: 0.001) ||
+                                (data[template.matColumnDef] | balance: data.decimal | gte: 1000000))
                             "
                             [content]="data[template.matColumnDef] | balance: data.decimal | mask: 'separator'">
                           </app-tooltip-customize>
