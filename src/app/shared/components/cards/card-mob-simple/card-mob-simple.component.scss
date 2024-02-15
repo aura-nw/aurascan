@@ -4,7 +4,7 @@
   padding: 14px var(--spacer-3);
   margin-bottom: var(--spacer-2);
 
-  &>* {
+  & > * {
     color: var(--aura-white);
   }
 
@@ -26,6 +26,7 @@
     text-align: center;
     display: flex;
     align-items: center;
+
     span {
       white-space: nowrap;
       overflow: hidden !important;
@@ -96,22 +97,4 @@
 
 .line-claim {
   max-width: 130px;
-}
-
-::ng-deep.card__date {
-  span:first-child {
-    margin-right: 16px;
-    position: relative;
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: -8px;
-      width: 1px;
-      height: 10px;
-      background-color: var(--aura-gray-8);
-    }
-  }
 }

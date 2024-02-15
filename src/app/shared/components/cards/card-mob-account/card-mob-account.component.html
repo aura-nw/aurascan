@@ -3,7 +3,7 @@
     *ngIf="title.label"
     class="d-flex justify-content-between align-items-center"
     [ngStyle]="{ 'margin-bottom': '6px' }">
-    <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
+    <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}" [copyBtn]="dataCard['tx_hash']">
       <span
         class="{{ title.titleClass ? title.titleClass : '' }}"
         [routerLink]="['/transaction', dataCard['tx_hash']]"
@@ -70,23 +70,25 @@
               <span class="caption fw-normal text--gray-4 txt-from-to">
                 {{ item['address'] === item['toAddress'] ? 'To:' : 'From:' }}
               </span>
-              <ng-container *ngIf="!(item['address'] | nameTagTooltipPipe)">
-                <app-name-tag
-                  [value]="item['address']"
-                  [isLink]="!item['address']?.startsWith('Null')"
-                  [maxCharacter]="12"></app-name-tag>
-              </ng-container>
-              <ng-container *ngIf="item['address'] | nameTagTooltipPipe">
-                <a
-                  *ngIf="!item['address']?.startsWith('Null')"
-                  class="text--primary cursor-pointer block-link"
-                  [routerLink]="['/account', item['address']]">
-                  {{ item['address'] | ellipsis: 6 : 6 }}
-                </a>
-                <span *ngIf="item['address']?.startsWith('Null') || currentAddress?.startsWith('Null')">
-                  {{ (item['address'] | ellipsis: 6 : 6) || '-' }}
-                </span>
-              </ng-container>
+              <div [copyBtn]="item['address']" [btnClass]="['pl-1']">
+                <ng-container *ngIf="!(item['address'] | nameTagTooltipPipe)">
+                  <app-name-tag
+                    [value]="item['address']"
+                    [isLink]="!item['address']?.startsWith('Null')"
+                    [maxCharacter]="12"></app-name-tag>
+                </ng-container>
+                <ng-container *ngIf="item['address'] | nameTagTooltipPipe">
+                  <a
+                    *ngIf="!item['address']?.startsWith('Null')"
+                    class="text--primary cursor-pointer block-link"
+                    [routerLink]="['/account', item['address']]">
+                    {{ item['address'] | ellipsis: 6 : 6 }}
+                  </a>
+                  <span *ngIf="item['address']?.startsWith('Null') || currentAddress?.startsWith('Null')">
+                    {{ (item['address'] | ellipsis: 6 : 6) || '-' }}
+                  </span>
+                </ng-container>
+              </div>
             </div>
             <div class="d-flex align-items-center">
               <div>

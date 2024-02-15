@@ -1,10 +1,11 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { sha256 } from 'js-sha256';
 import * as _ from 'lodash';
-import { Subject, map } from 'rxjs';
+import { map, Subject } from 'rxjs';
 import { PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR, TITLE_LOGO } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -49,11 +50,13 @@ export class ChannelDetailComponent implements OnInit {
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   chainInfo = this.environmentService.chainInfo;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     public commonService: CommonService,
     private route: ActivatedRoute,
     private ibcService: IBCService,
+    private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
   ) {}
 

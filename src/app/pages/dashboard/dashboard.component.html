@@ -439,7 +439,9 @@
                       *matHeaderCellDef
                       [class.width-txhash]="template.headerCellDef === 'Tx Hash'"
                       [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
-                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        [class.pl-3]="template.headerCellDef === 'Height'"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>
@@ -450,12 +452,13 @@
                           <a
                             *ngSwitchCase="'tx_hash'"
                             class="text--primary cursor-pointer hash-link"
+                            [copyBtn]="data[template.matColumnDef]"
                             [routerLink]="['/transaction', data['tx_hash']]">
                             {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
-                            class="text--primary cursor-pointer block-link"
+                            class="text--primary cursor-pointer block-link pl-3"
                             [routerLink]="['/blocks', data['height']]">
                             {{ data[template.matColumnDef] }}
                           </a>

@@ -4,6 +4,7 @@
   height: 3px;
   background-color: #dddddd;
   position: relative;
+
   &__process {
     position: absolute;
     top: 0;
@@ -14,6 +15,7 @@
     height: 100%;
   }
 }
+
 @media (max-width: 991.99px) {
   .aura-table th.mat-header-cell:nth-child(1) {
     min-width: 80px;
@@ -22,6 +24,7 @@
     min-width: 150px;
   }
 }
+
 .col-address {
-  min-width: 370px !important;
+  min-width: 400px !important;
 }
