@@ -39,12 +39,6 @@
     .hide-td {
       display: none;
     }
-
-    @media (max-width: 992px) {
-      .nft-list .mat-cell {
-        padding-right: 0 !important;
-      }
-    }
   }
 
   .transfer-token-info {
@@ -56,6 +50,9 @@
   }
 
   .transfer-address {
-    min-width: 180px;
+    min-width: 190px;
+    @media (min-width: 991.98px) {
+      min-width: 225px;
+    }
   }
 }
