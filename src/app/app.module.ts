@@ -27,6 +27,7 @@ import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
 import { NgHttpCachingLocalStorage, NgHttpCachingModule, NgHttpCachingStrategy } from 'ng-http-caching';
 import { CommonDirectiveModule } from './core/directives/common-directive.module';
+import { ChainInfoInterceptor } from './core/helpers/chain-info.interceptor';
 initializeApp(environment.firebaseConfig);
 
 @NgModule({
@@ -67,6 +68,7 @@ initializeApp(environment.firebaseConfig);
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ChainInfoInterceptor, multi: true },
     { provide: DEFAULT_TIMEOUT, useValue: 10000 },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     DatePipe,

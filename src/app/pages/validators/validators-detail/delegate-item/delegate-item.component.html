@@ -19,18 +19,18 @@
             </div>
           </div>
           <div class="ml-2">
-            <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
+            <div class="h1 mb-0 text--white fw-bolder d-inline-block">
               <span class="modal__title break-all">{{ currentValidatorDetail?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ currentValidatorDetail?.commission | percent : number2Digit }}
+              Commission - {{ currentValidatorDetail?.commission | percent: number2Digit }}
             </div>
           </div>
         </div>
         <div class="body-01 text--gray-5">
           <div class="mb-1">
             <span>Voting power - {{ currentValidatorDetail?.percent_power }}%</span>&nbsp;
-            <span>({{ currentValidatorDetail?.power | mask : 'separator.6' }}</span>
+            <span>({{ currentValidatorDetail?.power | mask: 'separator.6' }}</span>
             <span class="ml-1" appLinkDenom>{{ denom }}</span
             >)
           </div>
@@ -43,7 +43,7 @@
           <input type="number" [max]="maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
           <div class="d-flex align-items-center mr-4">
             <button
-              class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
+              class="button button-primary active button-flat button--xs button--sm-mob button-max"
               type="button"
               (click)="getMaxToken()">
               MAX

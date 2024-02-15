@@ -120,7 +120,8 @@ $textColors: (
   'gray-light-2',
   'gray-11',
   'green-6',
-  'gray-light-3'
+  'gray-light-3',
+  'orange-1'
 );
 @each $color in $textColors {
   .text--#{$color} {
@@ -150,12 +151,6 @@ $textColors: (
   .fw-normal-mob {
     font-weight: 400 !important;
   }
-}
-
-.text-gradient {
-  background: var(--aura-gradient-general);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .text-hover-gray {

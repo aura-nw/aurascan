@@ -11,7 +11,6 @@ body {
   cursor: pointer !important;
 }
 
-
 .cursor-text {
   cursor: text !important;
 }
@@ -368,7 +367,7 @@ body {
 
 .mat-slide-toggle.mat-checked {
   .mat-slide-toggle-bar {
-    background-color: #2bbba3 !important;
+    background-color: var(--aura-orange-1) !important;
   }
 
   .mat-slide-toggle-thumb {
@@ -379,7 +378,7 @@ body {
 .mode-disable.mat-slide-toggle {
   &.mat-checked {
     .mat-slide-toggle-bar {
-      background-color: #2bbba3 !important;
+      background-color: var(--aura-orange-1) !important;
     }
   }
 

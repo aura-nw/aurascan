@@ -116,6 +116,16 @@ export class TokenTableComponent implements OnChanges {
           (item) => item.name?.toLowerCase().includes(txtSearch.toLowerCase()) || item.contract_address == txtSearch,
         );
       }
+
+      // Mapping token Url to navigare token detail page for Ibc and Native
+      searchList.map((token) => ({
+        ...token,
+        tokenUrl:
+          (token?.type !== COIN_TOKEN_TYPE.CW20
+            ? token.denom?.replace('ibc/', '') // Ibc and native link
+            : token.contract_address) || '',
+      }));
+
       this.dataSource.data = [...searchList];
     } else {
       this.accountService.getAssetCW20ByOwner(payload).subscribe({
@@ -137,7 +147,16 @@ export class TokenTableComponent implements OnChanges {
               return data;
             });
 
-            lstToken = lstToken?.filter((k) => k?.symbol);
+            lstToken = lstToken
+              ?.filter((k) => k?.symbol)
+              // Mapping token Url to navigare token detail page for Ibc and Native
+              .map((token) => ({
+                ...token,
+                tokenUrl:
+                  (token?.type !== COIN_TOKEN_TYPE.CW20
+                    ? token.denom?.replace('ibc/', '') // Ibc and native link
+                    : token.contract_address) || '',
+              }));
             // store datatable
             this.dataTable = lstToken;
             // Sort and slice 20 frist record.

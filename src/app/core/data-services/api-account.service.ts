@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Coin } from '@cosmjs/stargate';
 import * as _ from 'lodash';
-
-import { catchError, EMPTY, expand, forkJoin, from, map, Observable, of, reduce, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, expand, forkJoin, map, Observable, of, reduce, switchMap } from 'rxjs';
 import { balanceOf } from '../utils/common/parsing';
 import { EnvironmentService } from './environment.service';
 import { VALIDATOR_ACCOUNT_TEMPLATE } from './template';
@@ -132,28 +130,27 @@ export class ApiAccountService {
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L117
   parseBalance(account, isGetAlBalances = false) {
-    const balances = account ? account[0]?.balances : [];
+    const defaultBalance = { amount: '0', denom: this.currencies.coinMinimalDenom };
+    const balance = _.get(account, '[0].balances') || [];
+    const balances = balance?.length > 0 ? account[0]?.balances : [defaultBalance];
 
     return isGetAlBalances
       ? balances
-      : account[0]?.balances.find((item) => item.denom === this.currencies.coinMinimalDenom);
+      : balance?.length > 0
+        ? account[0]?.balances?.find((item) => item.denom === this.currencies.coinMinimalDenom)
+        : defaultBalance;
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L132
   parseAvailableBalance(account) {
-    if (account) {
-      const spendable_balances = account[0]?.spendable_balances;
-
-      const value = spendable_balances?.find((f) => f.denom === this.currencies.coinMinimalDenom);
-
-      if (value) {
-        const amount = value.amount;
-
-        return balanceOf(amount, this.currencies.coinDecimals);
-      }
+    const spendableBalances = _.get(account, '[0].spendable_balances') || [];
+    if (spendableBalances?.length == 0) {
+      return 0;
     }
 
-    return 0;
+    const value = spendableBalances?.find((f) => f.denom === this.currencies.coinMinimalDenom);
+    const amount = value.amount || 0;
+    return balanceOf(amount, this.currencies.coinDecimals);
   }
 
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L283
