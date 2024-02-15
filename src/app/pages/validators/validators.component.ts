@@ -1,23 +1,15 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
-import { MsgDelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
+import { MsgBeginRedelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
 import * as _ from 'lodash';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
-import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ProposalService } from 'src/app/core/services/proposal.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { getFee } from 'src/app/core/utils/signing/fee';
-import { assertIsBroadcastTxSuccess } from 'src/app/core/utils/signing/transaction-manager';
 import {
   MAX_NUMBER_INPUT,
   NUMBER_2_DIGIT,
@@ -25,14 +17,21 @@ import {
   NUM_BLOCK,
   TIMEOUT_ERROR,
   TIME_OUT_CALL_API,
-} from '../../../app/core/constants/common.constant';
-import { DIALOG_STAKE_MODE, STATUS_VALIDATOR, VOTING_POWER_LEVEL } from '../../../app/core/constants/validator.enum';
-import { SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
-import { DataDelegateDto, TableTemplate } from '../../../app/core/models/common.model';
-import { AccountService } from '../../../app/core/services/account.service';
-import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
-import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
-import { ValidatorService } from '../../../app/core/services/validator.service';
+} from 'src/app/core/constants/common.constant';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
+import { DIALOG_STAKE_MODE, STATUS_VALIDATOR, VOTING_POWER_LEVEL } from 'src/app/core/constants/validator.enum';
+import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { DataDelegateDto, TableTemplate } from 'src/app/core/models/common.model';
+import { AccountService } from 'src/app/core/services/account.service';
+import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { ProposalService } from 'src/app/core/services/proposal.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { getFee } from 'src/app/core/utils/signing/fee';
 
 @Component({
   selector: 'app-validators',
@@ -495,30 +494,29 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleDelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const msg = MsgDelegate.fromPartial({
+      this.isLoading = true;
+
+      const msg = {
         delegatorAddress: this.userAddress,
         validatorAddress: this.validatorDetail.validator_address,
         amount: {
           amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
           denom: this.coinMinimalDenom,
         },
-      });
-
-      const msgUrl = {
-        typeUrl: TRANSACTION_TYPE_ENUM.Delegate,
-        value: msg,
       };
 
-      this.isLoading = true;
-
       this.walletService
-        .signAndBroadcast_V2([msgUrl])
+        .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount, 'auto')
         .then((broadcastResult) => {
-          assertIsBroadcastTxSuccess(broadcastResult);
-          this.checkStatusExecuteBlock(broadcastResult.transactionHash, null);
+          let error = undefined;
+          if (broadcastResult?.code != 0) {
+            error = broadcastResult;
+          }
+
+          this.checkTxStatusOnchain({ success: broadcastResult, error });
         })
         .catch((error) => {
-          this.checkStatusExecuteBlock(null, error);
+          this.checkTxStatusOnchain({ error });
         });
     }
   }
@@ -526,102 +524,91 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleClaim() {
     if (Number(this.dataDelegate.stakingToken) > 0) {
       try {
+        this.isLoading = true;
+
         const msg = this.lstValidatorData.map((vd) => ({
           typeUrl: TRANSACTION_TYPE_ENUM.GetReward,
           value: MsgWithdrawDelegatorReward.fromPartial({
-            validatorAddress: vd,
+            validatorAddress: vd.validator_address,
             delegatorAddress: this.userAddress,
           }),
         }));
-        this.isLoading = true;
 
         this.walletService
-          .signAndBroadcast_V2(msg)
+          .signAndBroadcast_V2(this.userAddress, msg)
           .then((broadcastResult) => {
-            assertIsBroadcastTxSuccess(broadcastResult);
-            this.checkStatusExecuteBlock(broadcastResult.transactionHash, null);
+            let error = undefined;
+            if (broadcastResult?.code != 0) {
+              error = broadcastResult;
+            }
+
+            this.checkTxStatusOnchain({ success: broadcastResult, error });
           })
           .catch((error) => {
-            console.error(error);
-            this.checkStatusExecuteBlock(null, error);
+            this.checkTxStatusOnchain({ error });
           });
       } catch (error) {
         console.error(error);
       }
     }
   }
-  handleClaim2() {
-    if (Number(this.dataDelegate.stakingToken) > 0) {
-      const executeClaim = async () => {
-        this.isLoading = true;
-        this.isClaimRewardLoading = true;
-        const { hash, error } = await this.walletService.signAndBroadcast(
-          {
-            messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
-            message: {
-              from: this.lstValidatorData,
-            },
-            senderAddress: this.userAddress,
-            network: this.chainInfo,
-            chainId: this.walletService.chain?.chain_id,
-          },
-          this.lstValidatorData?.length,
-        );
-
-        this.checkStatusExecuteBlock(hash, error);
-      };
-      executeClaim();
-    }
-  }
 
   handleUndelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const executeUnStaking = async () => {
-        this.isLoading = true;
-        const { hash, error } = await this.walletService.signAndBroadcast({
-          messageType: SIGNING_MESSAGE_TYPES.UNSTAKE,
-          message: {
-            from: [this.validatorDetail.validator_address],
-            amount: {
-              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: this.coinMinimalDenom,
-            },
-          },
-          senderAddress: this.userAddress,
-          network: this.chainInfo,
-          chainId: this.walletService.chain.chain_id,
-        });
-
-        this.checkStatusExecuteBlock(hash, error);
+      this.isLoading = true;
+      const amount = {
+        amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
+        denom: this.coinMinimalDenom,
       };
-      executeUnStaking();
+
+      this.walletService
+        .undelegateTokens(this.userAddress, this.validatorDetail.validator_address, amount)
+        .then((broadcastResult) => {
+          let error = undefined;
+          if (broadcastResult?.code != 0) {
+            error = broadcastResult;
+          }
+
+          this.checkTxStatusOnchain({ success: broadcastResult, error });
+        })
+        .catch((error) => {
+          this.checkTxStatusOnchain({ error });
+        });
     }
   }
 
   handleRedelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const executeReStaking = async () => {
-        this.isLoading = true;
-        const { hash, error } = await this.walletService.signAndBroadcast({
-          messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
-          message: {
-            src_address: this.validatorDetail.validator_address,
-            to_address: this.selectedValidator,
-            amount: {
-              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: this.coinMinimalDenom,
-            },
-          },
-          senderAddress: this.userAddress,
-          network: this.chainInfo,
-          chainId: this.walletService.chain.chain_id,
-        });
+      this.isLoading = true;
 
-        this.checkStatusExecuteBlock(hash, error);
+      const msg = {
+        typeUrl: TRANSACTION_TYPE_ENUM.Redelegate,
+        value: MsgBeginRedelegate.fromPartial({
+          delegatorAddress: this.userAddress,
+          validatorSrcAddress: this.validatorDetail.validator_address,
+          validatorDstAddress: this.selectedValidator,
+          amount: {
+            amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
+            denom: this.coinMinimalDenom,
+          },
+        }),
       };
-      executeReStaking();
+
+      this.walletService
+        .signAndBroadcast_V2(this.userAddress, [msg])
+        .then((broadcastResult) => {
+          let error = undefined;
+          if (broadcastResult?.code != 0) {
+            error = broadcastResult;
+          }
+
+          this.checkTxStatusOnchain({ success: broadcastResult, error });
+        })
+        .catch((error) => {
+          this.checkTxStatusOnchain({ error });
+        });
     }
   }
 
@@ -677,18 +664,26 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.commissionLabel = label;
   }
 
-  checkStatusExecuteBlock(hash, error) {
-    this.checkHashAction(hash);
+  checkTxStatusOnchain({ success, error }: { success?: any; error?: { message: string; code: number } }) {
     if (error) {
-      if (!error.toString().includes('Request rejected')) {
-        let errorMessage = this.mappingErrorService.checkMappingError(
-          '',
-          typeof error == 'number' ? error : error?.code,
-        );
+      const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : error;
+
+      if (!message?.toString().toLowerCase().includes('request rejected')) {
+        let errorMessage = this.mappingErrorService.checkMappingError('', code);
         this.toastr.error(errorMessage);
       }
       this.resetData();
     } else {
+      const hash = success?.transactionHash;
+      this.isLoading = false;
+      this.modalReference?.close();
+
+      if (!hash) {
+        return;
+      }
+
+      this.toastr.loading(hash);
+
       setTimeout(() => {
         this.mappingErrorService.checkDetailTx(hash).then(() => {
           this.getList();

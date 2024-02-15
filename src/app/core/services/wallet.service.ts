@@ -1,10 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Chain } from '@chain-registry/types';
 import { EncodeObject } from '@cosmjs/proto-signing';
-import { StdFee } from '@cosmjs/stargate';
+import { Coin, StdFee } from '@cosmjs/stargate';
 import {
   ChainWalletBase,
-  CosmosClientType,
   EndpointOptions,
   Logger,
   MainWalletBase,
@@ -17,7 +16,7 @@ import {
   WalletName,
 } from '@cosmos-kit/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { STORAGE_KEY, allAssets } from '../utils/cosmoskit';
+import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
 
 @Injectable({
   providedIn: 'root',
@@ -155,14 +154,14 @@ export class WalletService implements OnDestroy {
     return wallet;
   }
 
-  async signAndBroadcast_V2(messages: EncodeObject[], fee?: StdFee | number, memo?: string, type?: CosmosClientType) {
-    const walletName = localStorage.getItem('cosmos-kit@2:core//current-wallet');
-
-    if (walletName) {
-      return this.getChainWallet(walletName)?.signAndBroadcast(messages, fee, memo, type);
-    }
-
-    return null;
+  async signAndBroadcast_V2(
+    signerAddress: string,
+    messages: EncodeObject[],
+    fee: StdFee | number | 'auto' = 'auto',
+    memo?: string,
+    timeoutHeight?: bigint,
+  ) {
+    return (await this.getSigningCosmWasmClient()).signAndBroadcast(signerAddress, messages, fee, memo, timeoutHeight);
   }
 
   signAndBroadcast(payload: any, ...payl) {
@@ -184,5 +183,35 @@ export class WalletService implements OnDestroy {
     // }
     // this.openWalletPopup();
     // return null;
+  }
+
+  async delegateTokens(
+    delegatorAddress: string,
+    validatorAddress: string,
+    amount: Coin,
+    fee: StdFee | 'auto' | number = 'auto',
+    memo?: string,
+  ) {
+    return this.getSigningCosmWasmClient().then((client) =>
+      client.delegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
+    );
+  }
+
+  async undelegateTokens(
+    delegatorAddress: string,
+    validatorAddress: string,
+    amount: Coin,
+    fee: StdFee | 'auto' | number = 'auto',
+    memo?: string,
+  ) {
+    return this.getSigningCosmWasmClient().then((client) =>
+      client.undelegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
+    );
+  }
+
+  getSigningCosmWasmClient() {
+    const walletName = localStorage.getItem('cosmos-kit@2:core//current-wallet');
+
+    return this.getChainWallet(walletName).getSigningCosmWasmClient();
   }
 }
