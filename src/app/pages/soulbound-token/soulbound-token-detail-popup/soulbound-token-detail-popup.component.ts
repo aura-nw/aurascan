@@ -160,25 +160,24 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
     try {
       this.walletService
-        .execute(this.currentAddress, this.soulboundDetail.contract_address, data)
-        .then((e) => {
-          if ((e as any).result?.error) {
-            this.toastr.error(msgError);
-          } else {
-            if ((e as any)?.transactionHash) {
-              this.toastr.loading((e as any)?.transactionHash);
-              setTimeout(() => {
-                this.isLoading = false;
-                this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-                this.dialogRef.close();
-              }, 4000);
-            }
+        .executeContract(this.currentAddress, this.soulboundDetail.contract_address, data)
+        .then((result) => {
+          if (result?.transactionHash) {
+            this.toastr.loading(result.transactionHash);
+
+            setTimeout(() => {
+              this.isLoading = false;
+              this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+              this.dialogRef.close();
+            }, 4000);
           }
         })
         .catch((error) => {
           if (!error.toString().includes('Request rejected')) {
             this.toastr.error(msgError);
           }
+
+          this.isLoading = false;
         });
     } catch (error) {
       this.toastr.error(`Error: ${msgError}`);

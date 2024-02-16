@@ -107,15 +107,15 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     );
   }
 
-  async signWalletABT(receiverAddress, minter, soulboundTokenURI) {
+  async signWalletABT(receiverAddress: string, minter: string, soulboundTokenURI: string) {
     const AGREEMENT = 'Agreement(string chain_id,address active,address passive,string tokenURI)';
     const message = AGREEMENT + this.network.chainId + receiverAddress + minter + soulboundTokenURI;
-    let dataWallet = await this.walletService.getWalletSign(minter, message);
+    let signResult = await this.walletService.signArbitrary(minter, message);
 
     const payload = {
-      signature: dataWallet['signature'],
+      signature: signResult['signature'],
       msg: message,
-      pubKey: dataWallet['pub_key']?.value,
+      pubKey: signResult['pub_key']?.value,
       contract_address: this.data.contractAddress,
       receiver_address: receiverAddress,
       token_uri: soulboundTokenURI,

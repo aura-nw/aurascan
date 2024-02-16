@@ -131,11 +131,12 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   }
 
   async updatePick(data, pick = true) {
-    let dataWallet = await this.walletService.getWalletSign(this.walletAddress, data.token_id);
+    let signResult = await this.walletService.signArbitrary(this.walletAddress, data.token_id);
+
     const payload = {
-      signature: dataWallet['signature'],
+      signature: signResult['signature'],
       msg: data.token_id.toString(),
-      pubKey: dataWallet['pub_key']?.value,
+      pubKey: signResult['pub_key']?.value,
       id: data.token_id,
       picked: pick,
       contractAddress: data.contract_address,

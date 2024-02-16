@@ -169,10 +169,6 @@ export class WalletService implements OnDestroy {
     return null;
   }
 
-  execute(...a) {
-    return null;
-  }
-
   executeContract(
     senderAddress: string,
     contractAddress: string,
@@ -184,10 +180,6 @@ export class WalletService implements OnDestroy {
     return this.getSigningCosmWasmClient().then(
       (client) => client?.execute(senderAddress, contractAddress, msg, fee, memo, funds),
     );
-  }
-
-  getWalletSign(...param) {
-    return null;
   }
 
   signArbitrary(signer: string, data: string | Uint8Array) {
