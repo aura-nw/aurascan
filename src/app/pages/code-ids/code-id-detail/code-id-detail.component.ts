@@ -6,6 +6,8 @@ import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { ContractService } from 'src/app/core/services/contract.service';
 import local from 'src/app/core/utils/storage/local';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
 @Component({
   selector: 'app-code-id-detail',
   templateUrl: './code-id-detail.component.html',
@@ -28,11 +30,13 @@ export class CodeIdDetailComponent implements OnInit {
   ];
   codeIdDetail;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private router: ActivatedRoute,
     private route: Router,
     private contractService: ContractService,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {

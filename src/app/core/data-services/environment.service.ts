@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
-import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 import { isMobileBrowser } from '../helpers/wallet';
@@ -43,6 +43,10 @@ export interface IConfiguration {
   image: {
     validator: string;
     assets: string;
+    banner: {
+      src: string;
+      url: string;
+    }[];
   };
   api: {
     backend: string;
@@ -114,6 +118,10 @@ export class EnvironmentService {
 
   get imageUrl() {
     return _.get(this.configValue, 'image.assets');
+  }
+
+  get banner() {
+    return _.get(this.configValue, 'image.banner');
   }
 
   get ipfsDomain() {

@@ -4,10 +4,25 @@ import { BigNumberDirective } from './big-number.directive';
 import { ImageDirective } from './image.directive';
 import { FeatureDirective } from './feature.directive';
 import { LinkDenomDirective } from './link-denom.directive';
+import { CopyButtonDirective } from './copy-button.directive';
 
 @NgModule({
-  declarations: [NumberDirective, BigNumberDirective, ImageDirective, FeatureDirective, LinkDenomDirective],
+  declarations: [
+    NumberDirective,
+    BigNumberDirective,
+    ImageDirective,
+    FeatureDirective,
+    LinkDenomDirective,
+    CopyButtonDirective,
+  ],
   imports: [],
-  exports: [NumberDirective, BigNumberDirective, ImageDirective, FeatureDirective, LinkDenomDirective],
+  exports: [
+    NumberDirective,
+    BigNumberDirective,
+    ImageDirective,
+    FeatureDirective,
+    LinkDenomDirective,
+    CopyButtonDirective,
+  ],
 })
 export class CommonDirectiveModule {}

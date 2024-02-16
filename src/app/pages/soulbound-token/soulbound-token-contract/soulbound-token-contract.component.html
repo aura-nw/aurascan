@@ -7,7 +7,7 @@
         <div class="d-flex align-items-center">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Contract</div>
           <div class="ml-2 contract-address h4 mb-0">
-            <span class="d-lg-none body-mob fw-semibold">{{ contractAddress | nameTag | ellipsis : 8 }}</span>
+            <span class="d-lg-none body-mob fw-semibold">{{ contractAddress | nameTag | ellipsis: 8 }}</span>
             <span class="d-none d-lg-block fw-semibold">{{ contractAddress | nameTag }}</span>
           </div>
         </div>
@@ -95,7 +95,7 @@
               <td mat-cell *matCellDef="let element" class="py-4">
                 <div class="d-flex align-items-center">
                   <a class="hover-link" href="{{ element.token_uri | replaceIpfs }}" target="_blank">
-                    {{ element.token_uri | ellipsis : 40 }}
+                    {{ element.token_uri | ellipsis: 40 }}
                   </a>
                 </div>
               </td>
@@ -112,7 +112,11 @@
             <!-- TOKEN ID -->
             <ng-container matColumnDef="token_id">
               <th mat-header-cell *matHeaderCellDef>Token ID</th>
-              <td mat-cell *matCellDef="let element" class="py-4">{{ element.token_id }}</td>
+              <td mat-cell *matCellDef="let element" class="py-4">
+                <div [copyBtn]="element.token_id">
+                  {{ element.token_id }}
+                </div>
+              </td>
             </ng-container>
 
             <!-- STATUS -->
