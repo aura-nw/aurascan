@@ -8,6 +8,7 @@ import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { convertDataTransaction } from '../../../global/global';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -65,34 +66,14 @@ export class TransactionDetailComponent implements OnInit {
       this.transactionService.getListTxDetail(payload).subscribe({
         next: (res) => {
           if (res?.transaction?.length > 0) {
-            const txs = convertDataTransaction(res, this.coinInfo);
-            this.transaction = txs[0];
-            this.transaction = {
-              ...this.transaction,
-              chainid: this.chainId,
-              gas_used: _.get(res?.transaction[0], 'gas_used'),
-              gas_wanted: _.get(res?.transaction[0], 'gas_wanted'),
-              raw_log: _.get(res?.transaction[0], 'data.tx_response.raw_log'),
-              type: this.transaction.typeOrigin,
-            };
-
-            if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
-              this.errorMessage = this.transaction.raw_log;
-              this.errorMessage = this.mappingErrorService.checkMappingErrorTxDetail(
-                this.errorMessage,
-                this.transaction.code,
-              );
-
-              // get height error box
-              setTimeout(() => {
-                const lengthChar = document.getElementById('contentError')?.innerText?.length;
-                const widthContent = document.getElementById('contentError')?.offsetWidth;
-
-                // cal width text/content
-                if (lengthChar * 7.1 > widthContent * 3) {
-                  this.isDisplayMore = true;
-                }
-              }, 500);
+            const linkS3 = _.get(res, 'transaction[0].data.linkS3');
+            if (linkS3?.length > 0) {
+              this.commonService.getRawData(linkS3).subscribe((data) => {
+                res.transaction[0]['data'] = data;
+                this.handleLoadData(res);
+              });
+            } else {
+              this.handleLoadData(res);
             }
           } else {
             setTimeout(() => {
@@ -108,13 +89,46 @@ export class TransactionDetailComponent implements OnInit {
           }
           this.loading = false;
         },
-        complete: () => {
-          this.loading = false;
-        },
+        complete: () => {},
       });
     } else {
       this.loading = false;
     }
+  }
+
+  handleLoadData(res) {
+    const txs = convertDataTransaction(res, this.coinInfo);
+    this.transaction = txs[0];
+    const fee = balanceOf(_.get(res, 'transaction[0].amount') || 0, this.coinInfo.coinDecimals).toFixed(
+      this.coinInfo.coinDecimals,
+    );
+
+    this.transaction = {
+      ...this.transaction,
+      fee,
+      chainid: this.chainId,
+      gas_used: _.get(res?.transaction[0], 'gas_used'),
+      gas_wanted: _.get(res?.transaction[0], 'gas_wanted'),
+      raw_log: _.get(res?.transaction[0], 'data.tx_response.raw_log'),
+      type: this.transaction.typeOrigin,
+    };
+
+    if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
+      this.errorMessage = this.transaction.raw_log;
+      this.errorMessage = this.mappingErrorService.checkMappingErrorTxDetail(this.errorMessage, this.transaction.code);
+
+      // get height error box
+      setTimeout(() => {
+        const lengthChar = document.getElementById('contentError')?.innerText?.length;
+        const widthContent = document.getElementById('contentError')?.offsetWidth;
+
+        // cal width text/content
+        if (lengthChar * 7.1 > widthContent * 3) {
+          this.isDisplayMore = true;
+        }
+      }, 500);
+    }
+    this.loading = false;
   }
 
   changeType(type: boolean): void {

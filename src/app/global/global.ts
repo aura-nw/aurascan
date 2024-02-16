@@ -21,7 +21,7 @@ export class Globals {
   dataHeader = new CommonDataDto();
 }
 
-export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
+export function getAmount(arrayMsg, type) {
   let amount = 0;
   let amountFormat;
   let eTransType = TRANSACTION_TYPE_ENUM;
@@ -222,7 +222,6 @@ export function convertDataTransaction(data, coinInfo) {
   const txs = _.get(data, 'transaction').map((element) => {
     if (!element['data']['body']) {
       element['data']['body'] = element['data']['tx']['body'];
-      element['data']['auth_info'] = element['data']['tx']['auth_info'];
     }
 
     const code = _.get(element, 'code');
@@ -259,12 +258,7 @@ export function convertDataTransaction(data, coinInfo) {
       });
     }
 
-    const _amount = getAmount(
-      _.get(element, 'data.body.messages'),
-      _type,
-      _.get(element, 'data.body.raw_log'),
-      coinInfo.coinMinimalDenom,
-    );
+    const _amount = getAmount(_.get(element, 'data.body.messages'), _type);
 
     const typeOrigin = _type;
     let amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
@@ -298,10 +292,6 @@ export function convertDataTransaction(data, coinInfo) {
 
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-
-    const fee = balanceOf(_.get(element, 'data.auth_info.fee.amount[0].amount') || 0, coinInfo.coinDecimals).toFixed(
-      coinInfo.coinDecimals,
-    );
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
     const gas_used = _.get(element, 'gas_used');
@@ -318,7 +308,6 @@ export function convertDataTransaction(data, coinInfo) {
       type,
       status,
       amount,
-      fee,
       height,
       timestamp,
       gas_used,
