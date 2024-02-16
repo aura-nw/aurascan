@@ -38,6 +38,7 @@ export class WalletConnectComponent implements OnInit {
   signerOptions = {
     signingCosmwasm: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
     signingStargate: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
+    preferredSignType: (_: Chain) => 'direct',
   };
 
   wallet$: Observable<WalletAccount> = this.walletsService.walletAccount$;

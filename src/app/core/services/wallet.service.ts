@@ -6,6 +6,7 @@ import { Coin, StdFee } from '@cosmjs/stargate';
 import {
   Actions,
   ChainWalletBase,
+  CosmosClientType,
   EndpointOptions,
   Logger,
   MainWalletBase,
@@ -25,9 +26,9 @@ import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
 })
 export class WalletService implements OnDestroy {
   // wallet config
-  private logger = new Logger('DEBUG');
-  private walletManager: WalletManager | null = null;
-  private chain: Chain;
+  private _logger = new Logger('DEBUG');
+  private _walletManager: WalletManager | null = null;
+  private _chain: Chain;
 
   // account subject config
   private _walletAccountSubject$: BehaviorSubject<WalletAccount>;
@@ -42,7 +43,11 @@ export class WalletService implements OnDestroy {
   }
 
   get isMobile() {
-    return this.walletManager.isMobile;
+    return this._walletManager.isMobile;
+  }
+
+  get connectedChain() {
+    return this._chain;
   }
 
   constructor() {
@@ -51,7 +56,7 @@ export class WalletService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.walletManager?.onUnmounted();
+    this._walletManager?.onUnmounted();
   }
 
   private _getSigningStargateClient() {
@@ -63,8 +68,8 @@ export class WalletService implements OnDestroy {
   }
 
   setWalletAction(config: Actions) {
-    this.walletManager?.setActions(config);
-    this.walletManager?.getWalletRepo(this.chain.chain_id)?.setActions(config);
+    this._walletManager?.setActions(config);
+    this._walletManager?.getWalletRepo(this._chain.chain_id)?.setActions(config);
   }
 
   async initWalletManager({
@@ -92,14 +97,14 @@ export class WalletService implements OnDestroy {
       throw new Error('Chain is required');
     }
 
-    this.chain = chain;
+    this._chain = chain;
 
     const assetLists = allAssets.filter((asset) => (asset.chain_name = chain.chain_name));
 
-    this.walletManager = new WalletManager(
+    this._walletManager = new WalletManager(
       [chain],
       wallets,
-      this.logger,
+      this._logger,
       throwErrors,
       subscribeConnectEvents,
       disableIframe,
@@ -111,11 +116,11 @@ export class WalletService implements OnDestroy {
       sessionOptions,
     );
 
-    await this.walletManager.onMounted();
+    await this._walletManager.onMounted();
   }
 
   get wallets() {
-    return this.walletManager?.mainWallets || [];
+    return this._walletManager?.mainWallets || [];
   }
 
   disconnect() {
@@ -165,7 +170,7 @@ export class WalletService implements OnDestroy {
       return null;
     }
 
-    const wallet = this.walletManager.getChainWallet(this.chain.chain_name, _walletName);
+    const wallet = this._walletManager.getChainWallet(this._chain.chain_name, _walletName);
 
     !wallet.isActive && wallet.activate();
 
@@ -196,7 +201,7 @@ export class WalletService implements OnDestroy {
   }
 
   signArbitrary(signer: string, data: string | Uint8Array) {
-    return this.getChainWallet()?.client?.signArbitrary(this.chain.chain_id, signer, data);
+    return this.getChainWallet()?.client?.signArbitrary(this._chain.chain_id, signer, data);
   }
 
   getAccount() {
@@ -206,7 +211,7 @@ export class WalletService implements OnDestroy {
       return account;
     }
 
-    const repo = this.walletManager.getWalletRepo(this.chain?.chain_id);
+    const repo = this._walletManager.getWalletRepo(this._chain?.chain_id);
 
     repo?.openView();
     return null;
@@ -234,6 +239,10 @@ export class WalletService implements OnDestroy {
     return this._getSigningCosmWasmClient().then((client) =>
       client.undelegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
     );
+  }
+
+  estimateFee(messages: EncodeObject[], type?: CosmosClientType, memo?: string, multiplier?: number) {
+    return this.getChainWallet().estimateFee(messages, type, memo, multiplier);
   }
 
   signAndBroadcastStargate(

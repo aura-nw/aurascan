@@ -7,7 +7,6 @@ import { MsgRevokeAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-
 @Component({
   selector: 'app-popup-revoke',
   templateUrl: './popup-revoke.component.html',
@@ -29,7 +28,7 @@ export class PopupRevokeComponent implements OnInit {
     this.dialogRef.close(hash);
   }
 
-  revoke() {
+  async revoke() {
     const account = this.walletService.getAccount();
 
     if (!account) {
@@ -44,8 +43,11 @@ export class PopupRevokeComponent implements OnInit {
       }),
     };
 
+    const revokeMultiplier = 1.7; // revoke multiplier - NOT FOR ALL
+    const fee = await this.walletService.estimateFee([msg], 'stargate', '', revokeMultiplier).catch(() => undefined);
+
     this.walletService
-      .signAndBroadcast(account.address, [msg])
+      .signAndBroadcastStargate(account.address, [msg], fee, '')
       .then((result) => {
         this.closeDialog(result.transactionHash);
       })

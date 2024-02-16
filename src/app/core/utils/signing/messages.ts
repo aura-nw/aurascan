@@ -289,7 +289,7 @@ export function setPeriodicAllowance(expiration, spendLimit, period, periodSpend
       nanos: 0,
     });
     let now = new Date();
-    let timeReset = now?.getTime() / 1000 + Number(period);
+    let timeReset = Math.floor(now?.getTime() / 1000) + Number(period);
     periodReset = Timestamp.fromPartial({
       seconds: BigInt(timeReset),
       nanos: 0,

@@ -172,7 +172,7 @@ export class PopupAddGrantComponent implements OnInit {
                 : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE;
 
           const msg = messageCreators[messageType](
-            '',
+            granter,
             {
               granter,
               grantee: grantee_address?.trim(),
@@ -188,26 +188,35 @@ export class PopupAddGrantComponent implements OnInit {
             this.environmentService.chainInfo,
           );
 
-          this.walletService
-            .signAndBroadcast(granter, [msg])
-            .then((result) => {
-              console.log(result);
-
-              this.closeDialog(result?.transactionHash);
-            })
-            .catch((error) => {
-              console.log(error);
-
-              if (error != 'Request rejected') {
-                let errorMessage = this.mappingErrorService.checkMappingError('', error);
-                this.toastr.error(errorMessage);
-              }
-            });
+          this.executeGrant(granter, msg);
         },
         (error) => {},
         () => {},
       );
     }
+  }
+
+  async executeGrant(granter: string, msg) {
+    const multiplier = 1.7; // Grant multiplier
+    const fee = await this.walletService.estimateFee([msg], 'stargate', '', multiplier).catch(() => undefined);
+
+    this.walletService
+      .signAndBroadcastStargate(granter, [msg], fee, '')
+      .then((result) => {
+        this.closeDialog(result?.transactionHash);
+      })
+      .catch((error) => {
+        console.log(error);
+
+        if (error?.message != 'Request rejected') {
+          try {
+            let errorMessage = this.mappingErrorService.checkMappingError(error?.message, error?.code);
+            this.toastr.error(errorMessage);
+          } catch (e) {
+            this.toastr.error(error);
+          }
+        }
+      });
   }
 
   addClassFocus(e: HTMLInputElement) {
