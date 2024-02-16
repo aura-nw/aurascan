@@ -198,7 +198,7 @@
                         </span>
                         <app-name-tag
                           [isLink]="!!data.from"
-                          [maxCharacter]="breakpoint.value.matches ? 14 : 30"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 20"
                           [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress"
                           [isShorterText]="true"
@@ -211,7 +211,7 @@
                         <app-name-tag
                           [isLink]="!!data.to"
                           [iconContract]="data.to | isContract"
-                          [maxCharacter]="breakpoint.value.matches ? 14 : 20"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 20"
                           [value]="data.to || nullAddress"
                           [isShorterText]="true"
                           [url]="(data.to | isContract) ? 'contracts' : 'account'"></app-name-tag>
