@@ -3,7 +3,7 @@
     *ngIf="title.label"
     class="d-flex justify-content-between align-items-center"
     [ngStyle]="{ 'margin-bottom': '6px' }">
-    <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
+    <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}" [copyBtn]="dataCard['tx_hash']">
       <span
         class="{{ title.titleClass ? title.titleClass : '' }}"
         [routerLink]="['/transaction', dataCard['tx_hash']]"
@@ -74,9 +74,9 @@
                 <app-name-tag
                   [value]="item['address']"
                   [isLink]="!item['address']?.startsWith('Null')"
-                  [maxCharacter]="12"></app-name-tag>
+                  [maxCharacter]="10"></app-name-tag>
               </ng-container>
-              <ng-container *ngIf="item['address'] | nameTagTooltipPipe">
+              <div [copyBtn]="item['address']" [btnClass]="['pl-2']" *ngIf="item['address'] | nameTagTooltipPipe">
                 <a
                   *ngIf="!item['address']?.startsWith('Null')"
                   class="text--primary cursor-pointer block-link"
@@ -86,7 +86,7 @@
                 <span *ngIf="item['address']?.startsWith('Null') || currentAddress?.startsWith('Null')">
                   {{ (item['address'] | ellipsis: 6 : 6) || '-' }}
                 </span>
-              </ng-container>
+              </div>
             </div>
             <div class="d-flex align-items-center">
               <div>

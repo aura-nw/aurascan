@@ -31,7 +31,7 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <app-name-tag
-                [fullText]="true"
+                [isShorterText]="environmentService.isMobile"
                 [value]="transactionsData.top_amount_sent[0]?.address"
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>
@@ -45,12 +45,14 @@
         <div class="card-info px-6 py-6">
           <div class="d-flex justify-content-between align-items-center">
             <div class="body text--gray-2">Top {{ denom }} Receiver</div>
-            <div class="body text--gray-2">Amount <span appLinkDenom>{{ denom }}</span></div>
+            <div class="body text--gray-2">
+              Amount <span appLinkDenom>{{ denom }}</span>
+            </div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <app-name-tag
-                [fullText]="true"
+                [isShorterText]="environmentService.isMobile"
                 [value]="transactionsData.top_amount_received[0]?.address"
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>
@@ -69,7 +71,7 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <app-name-tag
-                [fullText]="true"
+                [isShorterText]="environmentService.isMobile"
                 [value]="transactionsData.top_tx_sent[0]?.address"
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>
@@ -88,7 +90,7 @@
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
               <app-name-tag
-                [fullText]="true"
+                [isShorterText]="environmentService.isMobile"
                 [value]="transactionsData.top_gas_used[0]?.address"
                 [tooltipPosition]="'tooltip--right'"></app-name-tag>
             </div>

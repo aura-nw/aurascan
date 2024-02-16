@@ -2,13 +2,10 @@
   <div class="row d-lg-none mb-4">
     <div class="col">
       <div class="carousel">
-        <ngb-carousel [showNavigationArrows]="false">
-          <ng-template ngbSlide>
-            <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
-              <img
-                [src]="'assets/images/pages/banner_aurascan.png' | imageS3"
-                alt="Random first slide"
-                class="carousel__img" />
+        <ngb-carousel [showNavigationArrows]="bannerList.length > 1" [showNavigationIndicators]="bannerList.length > 1">
+          <ng-template ngbSlide *ngFor="let item of bannerList">
+            <a class="picsum-img-wrapper" target="_blank" [href]="item.url">
+              <img [src]="item.src | imageS3" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
@@ -237,13 +234,10 @@
   <div class="row">
     <div class="col-12 col-lg-8 d-none d-lg-block">
       <div class="mb-4 mb-lg-6 carousel">
-        <ngb-carousel [showNavigationArrows]="false" [showNavigationIndicators]="false">
-          <ng-template ngbSlide>
-            <a class="picsum-img-wrapper" target="_blank" href="https://beta.seekhype.io/">
-              <img
-                [src]="'assets/images/pages/banner_aurascan.png' | imageS3"
-                alt="Random first slide"
-                class="carousel__img" />
+        <ngb-carousel [showNavigationArrows]="bannerList.length > 1" [showNavigationIndicators]="bannerList.length > 1">
+          <ng-template ngbSlide *ngFor="let item of bannerList">
+            <a class="picsum-img-wrapper" target="_blank" [href]="item.url">
+              <img [src]="item.src | imageS3" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
@@ -439,7 +433,9 @@
                       *matHeaderCellDef
                       [class.width-txhash]="template.headerCellDef === 'Tx Hash'"
                       [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
-                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        [class.pl-3]="template.headerCellDef === 'Height'"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>
@@ -450,12 +446,13 @@
                           <a
                             *ngSwitchCase="'tx_hash'"
                             class="text--primary cursor-pointer hash-link"
+                            [copyBtn]="data[template.matColumnDef]"
                             [routerLink]="['/transaction', data['tx_hash']]">
                             {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
-                            class="text--primary cursor-pointer block-link"
+                            class="text--primary cursor-pointer block-link pl-3"
                             [routerLink]="['/blocks', data['height']]">
                             {{ data[template.matColumnDef] }}
                           </a>
