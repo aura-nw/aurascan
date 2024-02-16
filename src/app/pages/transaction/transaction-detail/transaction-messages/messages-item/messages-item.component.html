@@ -7,6 +7,7 @@
         <ng-container *ngIf="value !== '[do-not-modify]'">
           <ng-container *ngIf="dataLink?.nameTag">
             <app-name-tag
+              class="msg-item"
               [value]="value || dataLink?.data"
               [url]="dataLink?.url || '/account'"
               [fullText]="true"
@@ -49,4 +50,4 @@
   </div>
 </div>
 
-<ng-template #noValues> - </ng-template>
+<ng-template #noValues> -</ng-template>
