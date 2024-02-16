@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
   MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
@@ -15,6 +15,7 @@ import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
 
@@ -162,42 +163,46 @@ export class PopupAddGrantComponent implements OnInit {
             }
           }
           const timeEndDate = moment(expiration_time)?.toDate()?.setHours(23, 59, 59);
-          const executeAddGrant = async () => {
-            const { hash, error } = await this.walletService.signAndBroadcast({
-              messageType:
-                isInstantiate || isExecute
-                  ? SIGNING_MESSAGE_TYPES.GRANT_MSG_ALLOWANCE
-                  : period_amount && this.periodShow
-                    ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE
-                    : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
-              message: {
-                granter,
-                grantee: grantee_address?.trim(),
-                spendLimit: amount,
-                expiration: expiration_time ? timeEndDate : null,
-                period: period_day ? period_day * this.dayConvert : undefined,
-                periodSpendLimit: period_amount,
-                isPeriodic: this.periodShow,
-                isInstantiate: isInstantiate,
-                isExecute: isExecute,
-                executeContract: execute_contract,
-              },
-              senderAddress: granter,
-              network: this.environmentService.chainInfo,
-              chainId: this.walletService.chain.chain_id,
-            });
 
-            if (hash) {
-              this.closeDialog(hash);
-            } else {
+          const messageType =
+            isInstantiate || isExecute
+              ? SIGNING_MESSAGE_TYPES.GRANT_MSG_ALLOWANCE
+              : period_amount && this.periodShow
+                ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE
+                : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE;
+
+          const msg = messageCreators[messageType](
+            '',
+            {
+              granter,
+              grantee: grantee_address?.trim(),
+              spendLimit: amount,
+              expiration: expiration_time ? timeEndDate : null,
+              period: period_day ? period_day * this.dayConvert : undefined,
+              periodSpendLimit: period_amount,
+              isPeriodic: this.periodShow,
+              isInstantiate: isInstantiate,
+              isExecute: isExecute,
+              executeContract: execute_contract,
+            },
+            this.environmentService.chainInfo,
+          );
+
+          this.walletService
+            .signAndBroadcast_V2(granter, [msg])
+            .then((result) => {
+              console.log(result);
+
+              this.closeDialog(result?.transactionHash);
+            })
+            .catch((error) => {
+              console.log(error);
+
               if (error != 'Request rejected') {
                 let errorMessage = this.mappingErrorService.checkMappingError('', error);
                 this.toastr.error(errorMessage);
               }
-            }
-          };
-
-          executeAddGrant();
+            });
         },
         (error) => {},
         () => {},

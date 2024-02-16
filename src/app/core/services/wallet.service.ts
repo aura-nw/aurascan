@@ -165,10 +165,6 @@ export class WalletService implements OnDestroy {
     return (await this.getSigningCosmWasmClient()).signAndBroadcast(signerAddress, messages, fee, memo, timeoutHeight);
   }
 
-  signAndBroadcast(payload: any, ...payl) {
-    return null;
-  }
-
   executeContract(
     senderAddress: string,
     contractAddress: string,
