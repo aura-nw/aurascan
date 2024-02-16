@@ -1,4 +1,5 @@
-import {Directive, ElementRef, Input} from '@angular/core';
+import { Directive, ElementRef, Input } from '@angular/core';
+import { NULL_ADDRESS } from '../constants/common.constant';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
@@ -10,11 +11,10 @@ export class CopyButtonDirective {
   button;
   tooltip;
 
-  constructor(private elRef: ElementRef) {
-  }
+  constructor(private elRef: ElementRef) {}
 
   ngOnInit(): void {
-    if (this.isDisableCopy || !this.copyBtn) {
+    if (this.isDisableCopy || !this.copyBtn || this.copyBtn === NULL_ADDRESS) {
       return;
     }
 
@@ -30,7 +30,7 @@ export class CopyButtonDirective {
     if (this.btnClass?.length > 0) {
       this.btnClass.forEach((c) => {
         this.button.classList.add(c);
-      })
+      });
     }
     icon.classList.add('ph', 'ph-copy', 'text--white', 'body-01');
     contain.classList.add('d-inline-flex', 'align-items-center');

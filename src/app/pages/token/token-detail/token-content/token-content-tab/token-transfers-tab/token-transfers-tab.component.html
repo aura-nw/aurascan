@@ -166,6 +166,7 @@
                             [isHref]="true"
                             [url]="'/tokens/' + linkToken + '/' + linkAddress + '?a='"
                             [isTokenDetail]="true"
+                            [maxCharacter]="15"
                             *ngIf="
                               data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
                             "></app-name-tag>
@@ -191,11 +192,12 @@
                     </div>
                   </ng-container>
                   <ng-container *ngSwitchCase="'to_address'">
-                    <div class="pl-4 pl-lg-0" [style.min-width]="'200px'">
+                    <div class="pl-4 pl-lg-0" [style.min-width]="'210px'">
                       <app-name-tag
                         [value]="data[template.matColumnDef]"
                         [isHref]="true"
                         [isTokenDetail]="true"
+                        [maxCharacter]="15"
                         [url]="'/tokens/' + linkToken + '/' + linkAddress + '?a='"
                         [type]="data.type"
                         *ngIf="

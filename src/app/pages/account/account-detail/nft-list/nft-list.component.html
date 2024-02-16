@@ -111,8 +111,8 @@
                       (click)="
                         handleRouterLink('/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id))
                       ">
-                      <span class="d-none d-lg-inline-block">{{ item.token_id | ellipsis: 12 }}</span>
-                      <span class="d-inline-block d-lg-none">{{ item.token_id | ellipsis: 9 }}</span>
+                      <span *ngIf="!breakpoint.value.matches">{{ item.token_id | ellipsis: 10 }}</span>
+                      <span *ngIf="breakpoint.value.matches">{{ item.token_id | ellipsis: 5 }}</span>
                     </span>
                   </div>
                 </div>

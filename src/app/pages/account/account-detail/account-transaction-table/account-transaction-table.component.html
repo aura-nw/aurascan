@@ -466,21 +466,14 @@
                         [class.show-detail]="data.expand || index === 0"
                         *ngIf="index < data.limit">
                         <div class="item-show d-flex justify-content-between align-items-center">
-                          <div
-                            [copyBtn]="item.fromAddress"
-                            [isDisableCopy]="
+                          <app-name-tag
+                            [value]="item.fromAddress || currentAddress"
+                            [url]="(item.fromAddress || currentAddress | isContract) ? 'contracts' : 'account'"
+                            [iconContract]="item.fromAddress || currentAddress | isContract"
+                            [isLink]="
                               !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                               item.fromAddress !== currentAddress
-                            ">
-                            <app-name-tag
-                              [value]="item.fromAddress || currentAddress"
-                              [url]="(item.fromAddress || currentAddress | isContract) ? 'contracts' : 'account'"
-                              [iconContract]="item.fromAddress || currentAddress | isContract"
-                              [isLink]="
-                                !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                item.fromAddress !== currentAddress
-                              "></app-name-tag>
-                          </div>
+                            "></app-name-tag>
                           <div class="box-token-transfer d-flex mr-8">
                             <span
                               class="token-transfer-status d-inline-flex align-items-center caption"
@@ -518,13 +511,7 @@
                         [class.show-detail]="data.expand || index === 0"
                         *ngIf="index < data.limit">
                         <div class="item-show d-flex align-items-center">
-                          <div
-                            [style]="'min-width: 148px'"
-                            [copyBtn]="item.fromAddress"
-                            [isDisableCopy]="
-                              !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                              item.toAddress !== currentAddress
-                            ">
+                          <div [style]="'min-width: 148px'">
                             <app-name-tag
                               [value]="item.toAddress || currentAddress"
                               [url]="(item.toAddress || currentAddress | isContract) ? 'contracts' : 'account'"
@@ -574,6 +561,7 @@
                             <app-name-tag
                               [iconContract]="true"
                               [url]="'contracts'"
+                              [isShorterText]="true"
                               [value]="item.contractAddress"
                               [isLink]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                           </div>

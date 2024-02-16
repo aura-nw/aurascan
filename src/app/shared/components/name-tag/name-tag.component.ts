@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NULL_ADDRESS} from "src/app/core/constants/common.constant";
 
 @Component({
   selector: 'app-name-tag',
@@ -9,6 +10,7 @@ import { NameTagService } from 'src/app/core/services/name-tag.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NameTagComponent implements OnInit {
+  nullAddress = NULL_ADDRESS;
   @Input() value = '';
   @Input() url = 'account';
   @Input() fullText = false;
@@ -24,7 +26,7 @@ export class NameTagComponent implements OnInit {
   @Input() isTokenDetail = false;
   @Input() extendUrl = false;
   @Input() widthAuto = false;
-  @Input() maxCharacter = 16;
+  @Input() maxCharacter = 12;
   @Input() isShorterText = false;
   @Input() tooltipPosition: 'tooltip--left' | 'tooltip--right' | 'tooltip--below' | null = null;
 
@@ -33,7 +35,8 @@ export class NameTagComponent implements OnInit {
   constructor(
     public commonService: CommonService,
     public nameTagService: NameTagService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     if (this.extendUrl) {
@@ -41,12 +44,8 @@ export class NameTagComponent implements OnInit {
     }
 
     if (this.isShorterText) {
-      this.maxCharacter = 12;
+      this.maxCharacter = 8;
     }
-  }
-
-  isContractAddress(address) {
-    return this.commonService.isValidContract(address);
   }
 
   extendLink(url) {

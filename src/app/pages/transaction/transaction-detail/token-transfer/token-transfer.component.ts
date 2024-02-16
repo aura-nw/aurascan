@@ -176,10 +176,6 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
     this.router.navigate([`/tokens/token-nft/${address}/${enCode}`]);
   }
 
-  isContractAddress(address) {
-    return this.commonService.isValidContract(address);
-  }
-
   encodeData(data) {
     return encodeURIComponent(data);
   }
