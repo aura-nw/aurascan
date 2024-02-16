@@ -28,7 +28,7 @@
                           [appImg]="data | marketInfo: 'logo'"
                           width="20"
                           height="20"
-                          alt="" />
+                          alt=""/>
                         <div class="ml-3 d-flex transfer-token-info">
                           <div class="aura-tooltip-contain">
                             <span
@@ -106,6 +106,7 @@
                           [maxCharacter]="breakpoint.value.matches ? 10 : 16"
                           [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress"
+                          [isShorterText]="true"
                           [url]="(data.from | isContract) ? 'contracts' : 'account'"></app-name-tag>
                       </div>
                       <div class="text-start d-flex align-items-center justify-content-between">
@@ -117,6 +118,7 @@
                           [maxCharacter]="breakpoint.value.matches ? 10 : 16"
                           [iconContract]="data.to | isContract"
                           [value]="data.to || nullAddress"
+                          [isShorterText]="true"
                           [url]="(data.to | isContract) ? 'contracts' : 'account'"></app-name-tag>
                       </div>
                     </div>
@@ -184,6 +186,7 @@
                           [isLink]="true"
                           [value]="data?.cw721_contract?.smart_contract?.address"
                           [iconContract]="true"
+                          [isShorterText]="true"
                           [url]="'contracts'"></app-name-tag>
                       </div>
                     </ng-container>
@@ -198,6 +201,7 @@
                           [maxCharacter]="breakpoint.value.matches ? 14 : 30"
                           [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress"
+                          [isShorterText]="true"
                           [url]="(data.from | isContract) ? 'contracts' : 'account'"></app-name-tag>
                       </div>
                       <div class="d-flex align-items-center justify-content-between justify-content-lg-start">
@@ -209,6 +213,7 @@
                           [iconContract]="data.to | isContract"
                           [maxCharacter]="breakpoint.value.matches ? 14 : 20"
                           [value]="data.to || nullAddress"
+                          [isShorterText]="true"
                           [url]="(data.to | isContract) ? 'contracts' : 'account'"></app-name-tag>
                       </div>
                     </div>

@@ -4,9 +4,10 @@
     min-width: 410px;
   }
 }
+
 @media (max-width: 991.99px) {
   .aura-table th.mat-header-cell:not(:nth-child(2)) {
-    min-width: 180px;
+    min-width: 200px;
   }
   .aura-table th.mat-header-cell:nth-child(2) {
     min-width: 320px;
@@ -15,9 +16,11 @@
     min-width: 50px;
   }
 }
+
 .vertical-align-top {
   vertical-align: top;
 }
+
 .desc {
   overflow: hidden;
   text-overflow: ellipsis;

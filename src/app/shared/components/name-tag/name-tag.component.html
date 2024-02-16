@@ -60,7 +60,7 @@
             [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
             width="16px"
             height="16px"
-            *ngIf="iconContract" />
+            *ngIf="iconContract"/>
           <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
         </ng-container>
         <ng-container *ngIf="fullText">
@@ -79,7 +79,7 @@
       </app-tooltip-customize>
     </div>
 
-    <div class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex align-items-center">
+    <div class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex align-items-center" *ngIf="(paramUrl || value) !== nullAddress">
       <button
         class="button button--xxs px-1 aura-tooltip-object disabled-hover"
         #tooltip
@@ -98,20 +98,20 @@
       alt=""
       [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       width="16px"
-      height="16px" />
+      height="16px"/>
     <img
       [src]="'assets/images/icons/token-contract.svg' | imageS3"
       [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       width="16px"
       height="16px"
-      *ngIf="iconContract" />
+      *ngIf="iconContract"/>
     <img
       [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
       [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       alt="contract_verification"
       width="16px"
       height="16px"
-      *ngIf="iconVerify" />
+      *ngIf="iconVerify"/>
     <ng-container *ngIf="!fullText">
       <ng-container [ngTemplateOutlet]="displayNameTag"></ng-container>
     </ng-container>
@@ -139,7 +139,8 @@
     </ng-container>
 
     <ng-container *ngIf="paramUrl || value | nameTagTooltipPipe">
-      <ng-container *ngIf="isShorterText">{{ (value | nameTag | ellipsis: 6 : 6) || '-' }}</ng-container>
+      <ng-container *ngIf="isShorterText && (paramUrl || value) === nullAddress">{{ (value | nameTag | ellipsis: 6 : 6) || '-' }}</ng-container>
+      <ng-container *ngIf="isShorterText && (paramUrl || value) !== nullAddress">{{ (value | nameTag | ellipsis: 5 : 5) || '-' }}</ng-container>
       <ng-container *ngIf="!isShorterText">{{ (value | nameTag | ellipsis: 8 : 8) || '-' }}</ng-container>
     </ng-container>
   </ng-template>
