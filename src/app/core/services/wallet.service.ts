@@ -155,7 +155,7 @@ export class WalletService implements OnDestroy {
     return wallet;
   }
 
-  async signAndBroadcast_V2(
+  async signAndBroadcast(
     signerAddress: string,
     messages: EncodeObject[],
     fee: StdFee | number | 'auto' = 'auto',

@@ -51,7 +51,7 @@ export class ProposalVoteComponent {
     };
 
     this.walletService
-      .signAndBroadcast_V2(account.address, [msg])
+      .signAndBroadcast(account.address, [msg])
       .then((result) => {
         if (result?.transactionHash) {
           this.toastr.loading(result.transactionHash);

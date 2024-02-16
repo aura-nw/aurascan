@@ -535,7 +535,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         }));
 
         this.walletService
-          .signAndBroadcast_V2(this.userAddress, msg)
+          .signAndBroadcast(this.userAddress, msg)
           .then((broadcastResult) => {
             let error = undefined;
             if (broadcastResult?.code != 0) {
@@ -597,7 +597,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       };
 
       this.walletService
-        .signAndBroadcast_V2(this.userAddress, [msg])
+        .signAndBroadcast(this.userAddress, [msg])
         .then((broadcastResult) => {
           let error = undefined;
           if (broadcastResult?.code != 0) {

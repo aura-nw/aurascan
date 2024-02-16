@@ -189,7 +189,7 @@ export class PopupAddGrantComponent implements OnInit {
           );
 
           this.walletService
-            .signAndBroadcast_V2(granter, [msg])
+            .signAndBroadcast(granter, [msg])
             .then((result) => {
               console.log(result);
 

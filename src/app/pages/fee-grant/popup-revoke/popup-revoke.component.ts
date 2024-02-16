@@ -45,7 +45,7 @@ export class PopupRevokeComponent implements OnInit {
     };
 
     this.walletService
-      .signAndBroadcast_V2(account.address, [msg])
+      .signAndBroadcast(account.address, [msg])
       .then((result) => {
         this.closeDialog(result.transactionHash);
       })
