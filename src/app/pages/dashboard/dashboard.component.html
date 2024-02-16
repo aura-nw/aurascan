@@ -2,7 +2,7 @@
   <div class="row d-lg-none mb-4">
     <div class="col">
       <div class="carousel">
-        <ngb-carousel [showNavigationArrows]="true" [showNavigationIndicators]="true">
+        <ngb-carousel [showNavigationArrows]="bannerList.length > 1" [showNavigationIndicators]="bannerList.length > 1">
           <ng-template ngbSlide *ngFor="let item of bannerList">
             <a class="picsum-img-wrapper" target="_blank" [href]="item.url">
               <img [src]="item.src | imageS3" alt="Random first slide" class="carousel__img" />
@@ -234,7 +234,7 @@
   <div class="row">
     <div class="col-12 col-lg-8 d-none d-lg-block">
       <div class="mb-4 mb-lg-6 carousel">
-        <ngb-carousel [showNavigationArrows]="true" [showNavigationIndicators]="true">
+        <ngb-carousel [showNavigationArrows]="bannerList.length > 1" [showNavigationIndicators]="bannerList.length > 1">
           <ng-template ngbSlide *ngFor="let item of bannerList">
             <a class="picsum-img-wrapper" target="_blank" [href]="item.url">
               <img [src]="item.src | imageS3" alt="Random first slide" class="carousel__img" />
