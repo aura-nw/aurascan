@@ -427,9 +427,9 @@ export class ValidatorsDetailComponent implements OnInit {
   openDialog() {
     const view = async () => {
       const account = this.walletService.getAccount();
-      // if (account && account.bech32Address) {
-      //   this.isOpenDialog = true;
-      // }
+      if (account?.address) {
+        this.isOpenDialog = true;
+      }
     };
     view();
   }

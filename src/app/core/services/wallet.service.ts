@@ -195,12 +195,13 @@ export class WalletService implements OnDestroy {
   }
 
   getAccount() {
-    // const account = this.wallet;
-    // if (account) {
-    //   return account;
-    // }
+    const account = this.walletAccount;
+
+    if (account) {
+      return account;
+    }
     // this.openWalletPopup();
-    // return null;
+    return null;
   }
 
   async delegateTokens(
