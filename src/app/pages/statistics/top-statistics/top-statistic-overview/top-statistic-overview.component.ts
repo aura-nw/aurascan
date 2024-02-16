@@ -24,7 +24,7 @@ export class TopStatisticOverviewComponent implements OnInit {
 
   constructor(
     private statisticService: StatisticService,
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

@@ -74,7 +74,7 @@
                 <app-name-tag
                   [value]="item['address']"
                   [isLink]="!item['address']?.startsWith('Null')"
-                  [maxCharacter]="12"></app-name-tag>
+                  [maxCharacter]="10"></app-name-tag>
               </ng-container>
               <div [copyBtn]="item['address']" [btnClass]="['pl-2']" *ngIf="item['address'] | nameTagTooltipPipe">
                 <a

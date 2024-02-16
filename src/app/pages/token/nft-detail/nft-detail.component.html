@@ -170,19 +170,6 @@
                   [widthAuto]="true"
                   [url]="nftDetail?.owner?.length > lengthNormalAddress ? 'contracts' : 'account'"
                   [maxCharacter]="11"></app-name-tag>
-                <div class="aura-tooltip-contain">
-                  <button
-                    class="button button--xxs aura-tooltip-object disabled-hover"
-                    #tooltip
-                    (click)="commonService.showToolTip(tooltip)"
-                    [cdkCopyToClipboard]="nftDetail?.owner">
-                    <img
-                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                      class="cursor-pointer btn-copy"
-                      alt="" />
-                  </button>
-                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
-                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -195,19 +182,6 @@
                   [widthAuto]="true"
                   [iconVerify]="nftDetail['verification_status'] === ContractVerifyType.Verified"
                   [maxCharacter]="11"></app-name-tag>
-                <div class="aura-tooltip-contain">
-                  <button
-                    class="button button--xxs aura-tooltip-object disabled-hover"
-                    #tooltip
-                    (click)="commonService.showToolTip(tooltip)"
-                    [cdkCopyToClipboard]="nftDetail?.contract_address">
-                    <img
-                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                      class="cursor-pointer btn-copy"
-                      alt="" />
-                  </button>
-                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
-                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -219,44 +193,18 @@
                   [widthAuto]="true"
                   [url]="nftDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"
                   [maxCharacter]="11"></app-name-tag>
-                <div class="aura-tooltip-contain">
-                  <button
-                    class="button button--xxs aura-tooltip-object disabled-hover"
-                    #tooltipcreator
-                    (click)="commonService.showToolTip(tooltipcreator)"
-                    [cdkCopyToClipboard]="nftDetail?.creator">
-                    <img
-                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                      class="cursor-pointer btn-copy"
-                      alt="" />
-                  </button>
-                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
-                </div>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Token ID:</div>
               <div class="d-flex align-items-center">
-                <div class="text--gray-1 fw-normal-mob">
+                <div class="text--gray-1 fw-normal-mob" [copyBtn]="nftDetail?.token_id">
                   <span class="d-lg-flex d-none">
                     {{ nftDetail?.token_id }}
                   </span>
                   <span class="d-lg-none d-flex">
                     {{ nftDetail?.token_id | ellipsis: 10 }}
                   </span>
-                </div>
-                <div class="aura-tooltip-contain">
-                  <button
-                    class="button button--xxs aura-tooltip-object disabled-hover"
-                    #tooltipId
-                    (click)="commonService.showToolTip(tooltipId)"
-                    [cdkCopyToClipboard]="nftDetail?.token_id">
-                    <img
-                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                      class="ml-2 cursor-pointer btn-copy"
-                      alt="" />
-                  </button>
-                  <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
                 </div>
               </div>
             </div>
