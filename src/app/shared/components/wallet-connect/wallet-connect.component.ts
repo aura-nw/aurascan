@@ -72,13 +72,13 @@ export class WalletConnectComponent implements OnInit {
   }
 
   configActions() {
-    this.walletsService.walletManager?.setActions({
+    this.walletsService.setWalletAction({
       viewOpen: this.openWalletPopup.bind(this),
     });
   }
 
   openWalletPopup() {
-    if (this.walletsService.walletManager?.isMobile || this.env.isMobile) {
+    if (this.walletsService?.isMobile || this.env.isMobile) {
       this.notificationsService.hiddenFooterSubject.next(true);
       this.bottomSheet.open(WalletBottomSheetComponent, {
         panelClass: 'wallet-popup--mob',
