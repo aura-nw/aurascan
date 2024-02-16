@@ -90,6 +90,7 @@ export class ValidatorsDetailComponent implements OnInit {
   hexAddress = null;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  minimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   timeInterval = this.environmentService.chainConfig.blockTime;
 
@@ -205,6 +206,10 @@ export class ValidatorsDetailComponent implements OnInit {
         },
       });
     }
+  }
+
+  isBlockFail(itemBlock: { isSign: boolean }) {
+    return !(itemBlock?.isSign !== false && this.currentValidatorDetail?.status === STATUS_VALIDATOR.Active);
   }
 
   getListBlockWithOperator(nextKeyBlock = null, isInit = true): void {

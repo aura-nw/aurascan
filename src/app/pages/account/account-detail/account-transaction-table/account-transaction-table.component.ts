@@ -1,22 +1,30 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import * as moment from 'moment';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import {
-  DATEFORMAT,
-  LENGTH_CHARACTER,
-  PAGE_EVENT,
-  STORAGE_KEYS,
-  TIMEOUT_ERROR,
-} from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -27,7 +35,7 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
   templateUrl: './account-transaction-table.component.html',
   styleUrls: ['./account-transaction-table.component.scss'],
 })
-export class AccountTransactionTableComponent {
+export class AccountTransactionTableComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   @Input() address: string;
   @Input() modeQuery: string;
@@ -44,10 +52,11 @@ export class AccountTransactionTableComponent {
   tabsData = TabsAccountLink;
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
   displayFilter = false;
+  EFeature = EFeature;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 20 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
     { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 12 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
     { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 20 },
@@ -55,11 +64,11 @@ export class AccountTransactionTableComponent {
   ];
 
   templatesToken: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 14 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 22 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 17 },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 24 },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 20 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12 },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 25 },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 22 },
   ];
 
   displayedColumns: string[];
@@ -96,6 +105,8 @@ export class AccountTransactionTableComponent {
   };
   isSearchOther = false;
   countFilter = 0;
+  destroyed$ = new Subject<void>();
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
@@ -106,18 +117,10 @@ export class AccountTransactionTableComponent {
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private router: Router,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
-    this.initTnxFilter();
-    if (this.tnxTypeOrigin?.length === 0) {
-      this.getListTypeFilter();
-    } else {
-      this.tnxType = this.tnxTypeOrigin;
-      this.tnxTypeOrigin = [...this.tnxType];
-      this.lstType.emit(this.tnxTypeOrigin);
-    }
-
     this.route.queryParams.subscribe((params) => {
       if (params?.type) {
         this.currentType = params.type || AccountTxType.Sent;
@@ -133,6 +136,14 @@ export class AccountTransactionTableComponent {
         this.getTxsAddress();
       }
     });
+  }
+
+  /**
+   * ngOnDestroy
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   initTnxFilter() {
@@ -237,16 +248,6 @@ export class AccountTransactionTableComponent {
     this.searchType();
   }
 
-  getConvertDate(date, lastDate = false) {
-    if (!date) {
-      return null;
-    }
-
-    let temp = this.datePipe.transform(date, DATEFORMAT.DATE_ONLY);
-    let subStringDate = lastDate ? 'T24:00:000Z' : 'T00:00:000Z';
-    return temp + subStringDate;
-  }
-
   getTxsAddress(nextKey = null): void {
     const address = this.currentAddress;
     let startDate = null;
@@ -254,8 +255,8 @@ export class AccountTransactionTableComponent {
     this.errTxt = null;
 
     if (this.transactionFilter.startDate && this.transactionFilter.endDate) {
-      startDate = this.getConvertDate(this.transactionFilter.startDate);
-      endDate = this.getConvertDate(this.transactionFilter.endDate, true);
+      startDate = moment(this.transactionFilter.startDate).startOf('day').toISOString();
+      endDate = moment(this.transactionFilter.endDate).endOf('day').toISOString();
     }
 
     let payload = {
@@ -364,7 +365,7 @@ export class AccountTransactionTableComponent {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 15 });
+        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;
@@ -643,5 +644,16 @@ export class AccountTransactionTableComponent {
 
   encodeData(data) {
     return encodeURIComponent(data);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.initTnxFilter();
+    if (this.tnxTypeOrigin?.length === 0) {
+      this.getListTypeFilter();
+    } else {
+      this.tnxType = this.tnxTypeOrigin;
+      this.tnxTypeOrigin = [...this.tnxType];
+      this.lstType.emit(this.tnxTypeOrigin);
+    }
   }
 }

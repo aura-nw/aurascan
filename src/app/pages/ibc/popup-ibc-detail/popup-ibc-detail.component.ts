@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { map } from 'rxjs';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR, TITLE_LOGO } from 'src/app/core/constants/common.constant';
 import { Relayer } from 'src/app/core/constants/ibc.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -36,6 +36,7 @@ export class PopupIBCDetailComponent implements OnInit {
   relayerType = Relayer;
   maxDisplayChar = 22;
   isSafari = isSafari();
+  TITLE_LOGO = TITLE_LOGO;
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'channel_id', headerCellDef: 'channel', headerWidth: 20 },

@@ -3,7 +3,7 @@
     *ngIf="title.label"
     class="d-flex justify-content-between align-items-center"
     [ngStyle]="{ 'margin-bottom': '6px' }">
-    <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
+    <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}" [copyBtn]="dataCard['tx_hash']">
       <span
         class="{{ title.titleClass ? title.titleClass : '' }}"
         [routerLink]="['/transaction', dataCard['tx_hash']]"
@@ -70,23 +70,25 @@
               <span class="caption fw-normal text--gray-4 txt-from-to">
                 {{ item['address'] === item['toAddress'] ? 'To:' : 'From:' }}
               </span>
-              <ng-container *ngIf="!(item['address'] | nameTagTooltipPipe)">
-                <app-name-tag
-                  [value]="item['address']"
-                  [isLink]="!item['address']?.startsWith('Null')"
-                  [maxCharacter]="12"></app-name-tag>
-              </ng-container>
-              <ng-container *ngIf="item['address'] | nameTagTooltipPipe">
-                <a
-                  *ngIf="!item['address']?.startsWith('Null')"
-                  class="text--primary cursor-pointer block-link"
-                  [routerLink]="['/account', item['address']]">
-                  {{ item['address'] | ellipsis: 6 : 6 }}
-                </a>
-                <span *ngIf="item['address']?.startsWith('Null') || currentAddress?.startsWith('Null')">
-                  {{ (item['address'] | ellipsis: 6 : 6) || '-' }}
-                </span>
-              </ng-container>
+              <div [copyBtn]="item['address']" [btnClass]="['pl-1']">
+                <ng-container *ngIf="!(item['address'] | nameTagTooltipPipe)">
+                  <app-name-tag
+                    [value]="item['address']"
+                    [isLink]="!item['address']?.startsWith('Null')"
+                    [maxCharacter]="12"></app-name-tag>
+                </ng-container>
+                <ng-container *ngIf="item['address'] | nameTagTooltipPipe">
+                  <a
+                    *ngIf="!item['address']?.startsWith('Null')"
+                    class="text--primary cursor-pointer block-link"
+                    [routerLink]="['/account', item['address']]">
+                    {{ item['address'] | ellipsis: 6 : 6 }}
+                  </a>
+                  <span *ngIf="item['address']?.startsWith('Null') || currentAddress?.startsWith('Null')">
+                    {{ (item['address'] | ellipsis: 6 : 6) || '-' }}
+                  </span>
+                </ng-container>
+              </div>
             </div>
             <div class="d-flex align-items-center">
               <div>
@@ -117,10 +119,10 @@
                   *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"></span>
               </div>
 
-              <div [class.text--primary]="item.denom !== denom" [class.text--white]="item.denom === denom" class="ml-1">
-                <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">{{
-                  item.denom || denom | ellipsis: 19
-                }}</ng-container>
+              <div class="ml-1 text--primary">
+                <a [routerLink]="['/tokens/token', item.linkDenom]" *ngIf="modeQuery !== tabsData.FtsTxs">
+                  {{ item.denom || coinInfo.coinDenom | ellipsis: 19 }}
+                </a>
                 <a [routerLink]="['/tokens/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
                   {{ item.denom | ellipsis: 19 }}
                 </a>
@@ -133,7 +135,7 @@
                   item['address'] === item['fromAddress'] ? 'text--green-3' : 'text--red-3'
                 }}">
                 <i class="icon icon-nft text--white mr-1" [style]="'font-size: 16px'"></i>
-                {{ item.tokenId || '-' | ellipsis: 4 : 4 }}
+                {{ item.tokenId || '-' | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
               </div>
               <i
                 [style]="'margin-top: 2px'"

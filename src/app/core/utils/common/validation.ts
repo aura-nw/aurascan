@@ -1,14 +1,14 @@
 import { LENGTH_CHARACTER } from '../../constants/common.constant';
 import { bech32 } from 'bech32';
 
-export function isContract(adr: string, addressPrefix = 'aura'): boolean {
+export function isContract(adr: string, addressPrefix: string): boolean {
   if (adr?.startsWith(addressPrefix) && adr?.length === LENGTH_CHARACTER.CONTRACT) {
     return true;
   }
   return false;
 }
 
-export function isAddress(adr: string, addressPrefix = 'aura'): boolean {
+export function isAddress(adr: string, addressPrefix: string): boolean {
   if (adr?.startsWith(addressPrefix) && adr?.length === LENGTH_CHARACTER.ADDRESS) {
     return true;
   }
@@ -22,7 +22,7 @@ export function isSafari(): boolean {
   return result;
 }
 
-export function isValidBench32Address(address: string, addressPrefix = 'aura'): boolean {
+export function isValidBench32Address(address: string, addressPrefix: string): boolean {
   if (!address) {
     return false;
   }

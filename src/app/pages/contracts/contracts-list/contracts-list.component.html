@@ -3,31 +3,34 @@
 <div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt && !isLoading">
   <div class="filter-group d-flex align-items-center flex-nowrap">
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.length === 0"
       (click)="filterButton('All')">
       All types
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(ContractRegisterType.CW20)"
-      (click)="filterButton(ContractRegisterType.CW20)">
+      (click)="filterButton(ContractRegisterType.CW20)"
+      [appFeature]="EFeature.Cw20">
       CW-20
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(ContractRegisterType.CW721)"
-      (click)="filterButton(ContractRegisterType.CW721)">
+      (click)="filterButton(ContractRegisterType.CW721)"
+      [appFeature]="EFeature.Cw721">
       CW-721
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(ContractRegisterType.CW4973)"
-      (click)="filterButton(ContractRegisterType.CW4973)">
+      (click)="filterButton(ContractRegisterType.CW4973)"
+      [appFeature]="EFeature.Cw4973">
       CW-4973
     </button>
     <button
-      class="button button-pill button-flat"
+      class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes('')"
       (click)="filterButton('')">
       Others
@@ -98,7 +101,7 @@
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
                 <th mat-header-cell *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate" [style.min-width]="'120px'"></div>
+                  <div [innerHTML]="template.headerCellDef | translate" [style.min-width]="'150px'"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
                   <ng-container *ngIf="template.isNameTag">
@@ -173,8 +176,8 @@
                       <span
                         *ngIf="
                           !data['code']?.type ||
-                          (data['code']?.type === contractRegisterType.CW20 && !data['cw20_contract']?.name) ||
-                          (data['code']?.type === contractRegisterType.CW721 && !data['cw721_contract']?.name)
+                          (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
+                          (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
                         ">
                         -
                       </span>

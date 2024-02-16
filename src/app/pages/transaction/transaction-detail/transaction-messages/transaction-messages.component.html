@@ -86,16 +86,16 @@
               <div *ngSwitchCase="eTransType.IBCTransfer">
                 <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }">
                 </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCReceived">
                 <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }">
                 </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCAcknowledgement">
-                <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"></ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCUpdateClient">
                 <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }">
@@ -104,7 +104,7 @@
               <div *ngSwitchCase="eTransType.IBCTimeout">
                 <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item, index: i }">
                 </ng-container>
-                <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+                <ng-container *ngTemplateOutlet="ibcProgress"></ng-container>
               </div>
               <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
                 <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }">
@@ -216,7 +216,7 @@
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.acknowledgement?.amount | balance | mask: 'separator.6' }}
-        <span class="text--white">{{ denom }}</span>
+        <span appLinkDenom>{{ denom }}</span>
       </div>
     </div>
     <app-messages-item
@@ -379,7 +379,7 @@
           </div>
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of listIBCProgress">
-              <div class="d-lg-flex justify-content-between">
+              <div class="d-lg-flex justify-content-between" *ngIf="item.typeTx === type">
                 <div>
                   <!-- {{ denomIBC || ibcData?.receive?.denomOrigin | ellipsis : 25 }} -->
                 </div>
@@ -396,12 +396,7 @@
                   </div>
                   <div class="mt-1 ibc__date">
                     <div class="d-flex justify-content-end">
-                      <img
-                        src="assets/icons/icons-svg/color/Check.svg"
-                        width="16px"
-                        height="16px"
-                        *ngIf="item.effected"
-                        class="mr-1" />
+                      <i class="ph ph-check mr-1 text--green-4 body-01" *ngIf="item.effected"></i>
                       {{ item.time | customDateTime: 'Distance' }}
                     </div>
                     <div class="d-flex justify-content-end align-items-center ml-2">
@@ -448,6 +443,7 @@
               <i class="ph-currency-circle-dollar mx-auto h3 mr-2 mb-0 text--white"></i>
               <div class="ml-2">
                 <span
+                  class="pr-lg-0 pr-4"
                   *ngIf="item?.coins?.length > 0"
                   [innerHTML]="item?.coins[0]?.denom | ibcDenom: item?.coins[0]?.amount">
                 </span>
@@ -486,7 +482,7 @@
                         {{ item.type }}
                       </div>
                     </mat-panel-title>
-                    <mat-panel-description> </mat-panel-description>
+                    <mat-panel-description></mat-panel-description>
                   </mat-expansion-panel-header>
 
                   <div class="content-log">

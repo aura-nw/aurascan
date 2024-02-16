@@ -1,8 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { Subject, takeUntil } from 'rxjs';
 import { WALLET_PROVIDER } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IWalletInfo } from 'src/app/core/models/wallet';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -14,6 +15,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 })
 export class WalletBottomSheetComponent implements OnInit {
   walletProvider = WALLET_PROVIDER;
+  chainName = this.environmentService.chainName;
   walletList: IWalletInfo[] = [
     {
       name: WALLET_PROVIDER.COIN98,
@@ -22,7 +24,6 @@ export class WalletBottomSheetComponent implements OnInit {
     {
       name: WALLET_PROVIDER.KEPLR,
       icon: '../../../../../../assets/images/icon-keplr.svg',
-      disableMobile: true,
     },
     {
       name: WALLET_PROVIDER.LEAP,
@@ -40,6 +41,7 @@ export class WalletBottomSheetComponent implements OnInit {
     private dlgService: DialogService,
     private walletService: WalletService,
     public bottomSheetRef: MatBottomSheetRef<WalletBottomSheetComponent>,
+    private environmentService: EnvironmentService,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {

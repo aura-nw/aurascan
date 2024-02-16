@@ -42,7 +42,8 @@
                   <ng-container *ngIf="!template.isNameTag">
                     <a
                       [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                      [class.disabled-link]="!data[template.matColumnDef]">
+                      [class.disabled-link]="!data[template.matColumnDef]"
+                      [copyBtn]="data[template.matColumnDef]">
                       {{ shortenAddress(data[template.matColumnDef]) || '-' }}
                     </a>
                   </ng-container>
@@ -58,7 +59,7 @@
                           *ngIf="data[template.matColumnDef] >= 0.001"
                           [appBigNumber]="data[template.matColumnDef]"
                           [decimal]="0"></div>
-                        <span class="text--white ml-1">{{ denom }}</span>
+                        <span class="ml-1" appLinkDenom>{{ coinInfo.coinDenom }}</span>
                         <app-tooltip-customize
                           *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
                           [content]="data[template.matColumnDef]">
@@ -119,158 +120,156 @@
         <ng-container *ngFor="let data of this.dataSource?.data; index as i">
           <!-- VOTES -->
           <ng-container *ngIf="type === proposalMode.VOTES">
-            <app-card-mob-simple
-              [content]="[
-                {
-                  label: 'Voter',
-                  class: !(data.voter | nameTagTooltipPipe)
-                    ? (data.voter | isPrivateNameTag)
-                      ? 'name-tag private-name-tag mb-0 text--primary'
-                      : 'name-tag text--primary mb-0'
-                    : 'text--primary',
-                  info: !data?.voter
-                    ? '-'
-                    : !(data.voter | nameTagTooltipPipe)
-                      ? '<a class=text--primary href=' +
-                        ('/account/' + data.voter) +
-                        '>' +
-                        (data.voter | nameTag | ellipsis: 16) +
-                        '</a>'
-                      : '<a class=text--primary href=' +
-                        ('/account/' + data.voter) +
-                        '>' +
-                        (data.voter | nameTag | ellipsis: 8 : 8) +
-                        '</a>'
-                },
-                {
-                  label: 'TxHash',
-                  class: 'body-01',
-                  info:
-                    '<a class=text--primary href=' +
-                    ('/transaction/' + data.txhash) +
-                    '>' +
-                    (data.txhash ? shortenAddress(data.txhash) : '-') +
-                    '</a>'
-                },
-                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.vote_option) },
-                {
-                  label: 'Time',
-                  class: 'card__date text--gray-1 body-01',
-                  info:
-                    '<div class=text-end>' +
-                    (data.timestamp | customDateTime: 'Distance') +
-                    '</div><div class=text--gray-5><span>' +
-                    (data.timestamp | customDateTime: 'DateOnly') +
-                    '</span>' +
-                    '<span>' +
-                    (data.timestamp | customDateTime: 'TimeOnly') +
-                    '</span></div>'
-                }
-              ]"></app-card-mob-simple>
+            <div class="custom-card-mob-simple body-01 mb-2">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="text--gray-4">Voter</div>
+                <div
+                  [copyBtn]="data.voter"
+                  class="{{
+                    !(data.voter | nameTagTooltipPipe)
+                      ? (data.voter | isPrivateNameTag)
+                        ? 'name-tag private-name-tag mb-0 text--primary'
+                        : 'name-tag text--primary mb-0'
+                      : 'text--primary'
+                  }}"
+                  [innerHTML]="
+                    !data?.voter
+                      ? '-'
+                      : !(data.voter | nameTagTooltipPipe)
+                        ? '<a class=text--primary href=' +
+                          ('/account/' + data.voter) +
+                          '>' +
+                          (data.voter | nameTag | ellipsis: 16) +
+                          '</a>'
+                        : '<a class=text--primary href=' +
+                          ('/account/' + data.voter) +
+                          '>' +
+                          (data.voter | nameTag | ellipsis: 8 : 8) +
+                          '</a>'
+                  "></div>
+              </div>
+              <div class="d-flex align-items-center justify-content-between mt-3">
+                <div class="text--gray-4">TxHash</div>
+                <a href="/transaction/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
+                  data.txhash | ellipsis: 6 : 6
+                }}</a>
+              </div>
+              <div class="d-flex align-items-center justify-content-between mt-3">
+                <div class="text--gray-4">Answer</div>
+                <div class="body-01 text--gray-1">{{ getVoteValue(data.vote_option) }}</div>
+              </div>
+              <div class="d-flex justify-content-between mt-3">
+                <div class="text--gray-4">Time</div>
+                <div class="card__date text--gray-1 body-01-mob">
+                  <div class="text-end">{{ data.timestamp | customDateTime: 'Distance' }}</div>
+                  <div class="text--gray-5">
+                    <span>{{ data.timestamp | customDateTime: 'DateOnly' }}</span>
+                    <span>{{ data.timestamp | customDateTime: 'TimeOnly' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </ng-container>
           <!-- VALIDATORS_VOTES -->
           <ng-container *ngIf="type === proposalMode.VALIDATORS_VOTES">
-            <app-card-mob-simple
-              [validatorData]="{
-                imgUrl: data.image_url,
-                validatorName: data.validator_name,
-                validatorAddress: data.operator_address,
-                validatorNumber: data.rank,
-                validatorIdentity: data.validator_identity
-              }"
-              [content]="[
-                {
-                  label: 'TxHash',
-                  class: 'body-01',
-                  info: data.txhash
-                    ? '<a class=text--primary href=' +
-                      ('/transaction/' + data.txhash) +
-                      '>' +
-                      shortenAddress(data.txhash) +
-                      '</a>'
-                    : '<span class=text--gray-1>-</span>'
-                },
-                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.vote_option) },
-                {
-                  label: 'Time',
-                  class: 'card__date text--gray-1 body-01',
-                  info: data.timestamp
-                    ? '<div class=text-end>' +
-                      (data.timestamp | customDateTime: 'Distance') +
-                      '</div>' +
-                      '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDateTime: 'DateOnly') +
-                      '</span>' +
-                      '<span>' +
-                      (data.timestamp | customDateTime: 'TimeOnly') +
-                      '</span></div>'
-                    : '-'
-                }
-              ]"></app-card-mob-simple>
+            <div class="custom-card-mob-simple body-01 mb-2">
+              <div class="text--primary body h5 mb-0 d-flex align-items-center">
+                <div class="avt">
+                  <app-loading-image [identity]="data.validator_identity" [srcImg]="data.image_url">
+                  </app-loading-image>
+                  <span class="avt__num">{{ data.rank }}</span>
+                </div>
+                <a [routerLink]="['/validators', data.operator_address]" class="h5 mb-0 ml-2 text--primary">
+                  {{ data.validator_name }}
+                </a>
+              </div>
+              <span class="divider divider-horizontal divider-lighter d-block my-3"></span>
+              <div class="d-flex align-items-center justify-content-between mt-3">
+                <div class="text--gray-4">TxHash</div>
+                <a href="/transaction/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
+                  data.txhash | ellipsis: 6 : 6
+                }}</a>
+              </div>
+              <div class="d-flex align-items-center justify-content-between mt-3">
+                <div class="text--gray-4">Answer</div>
+                <div class="body-01 text--gray-1">{{ getVoteValue(data.vote_option) }}</div>
+              </div>
+              <div class="d-flex justify-content-between mt-3">
+                <div class="text--gray-4">Time</div>
+                <div class="card__date text--gray-1 body-01-mob">
+                  <div class="text-end">{{ data.timestamp | customDateTime: 'Distance' }}</div>
+                  <div class="text--gray-5">
+                    <span>{{ data.timestamp | customDateTime: 'DateOnly' }}</span>
+                    <span>{{ data.timestamp | customDateTime: 'TimeOnly' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </ng-container>
           <!-- DEPOSITORS -->
           <ng-container *ngIf="type === proposalMode.DEPOSITORS">
-            <app-card-mob-simple
-              [content]="[
-                {
-                  label: 'Depositor',
-                  class: !(data.depositors | nameTagTooltipPipe)
-                    ? (data.depositors | isPrivateNameTag)
-                      ? 'name-tag private-name-tag mb-0 text--primary'
-                      : 'name-tag text--primary mb-0'
-                    : 'text--primary',
-                  info: !data?.depositors
-                    ? '-'
-                    : !(data.depositors | nameTagTooltipPipe)
-                      ? '<a class=text--primary href=' +
-                        ('/account/' + data.depositors) +
+            <div class="custom-card-mob-simple body-01 mb-2">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="text--gray-4">Depositor</div>
+                <div
+                  [copyBtn]="data.depositors"
+                  class="{{
+                    !(data.depositors | nameTagTooltipPipe)
+                      ? (data.depositors | isPrivateNameTag)
+                        ? 'name-tag private-name-tag mb-0 text--primary'
+                        : 'name-tag text--primary mb-0'
+                      : 'text--primary'
+                  }}"
+                  [innerHTML]="
+                    !data?.depositors
+                      ? '-'
+                      : !(data.depositors | nameTagTooltipPipe)
+                        ? '<a class=text--primary href=' +
+                          ('/account/' + data.depositors) +
+                          '>' +
+                          (data.depositors | nameTag | ellipsis: 16) +
+                          '</a>'
+                        : '<a class=text--primary href=' +
+                          ('/account/' + data.depositors) +
+                          '>' +
+                          (data.depositors | nameTag | ellipsis: 8 : 8) +
+                          '</a>'
+                  "></div>
+              </div>
+              <div class="d-flex align-items-center justify-content-between mt-3">
+                <div class="text--gray-4">TxHash</div>
+                <a href="/transaction/{{ data.hash }}" class="text--primary" [copyBtn]="data.hash">{{
+                  data.hash | ellipsis: 6 : 6
+                }}</a>
+              </div>
+              <div class="d-flex align-items-center justify-content-between mt-3">
+                <div class="text--gray-4">Amount</div>
+                <div
+                  class="h6 mb-0 text--gray-1"
+                  [innerHTML]="
+                    data.amount
+                      ? '<span class=mr-1>' +
+                        (data.amount < 0.001 ? '<0.001' : (data.amount | mask: 'separator.6')) +
+                        '</span>' +
+                        '<a class=text--primary href=' +
+                        ('/tokens/token/' + coinInfo.coinMinimalDenom) +
                         '>' +
-                        (data.depositors | nameTag | ellipsis: 16) +
+                        coinInfo.coinDenom +
                         '</a>'
-                      : '<a class=text--primary href=' +
-                        ('/account/' + data.depositors) +
-                        '>' +
-                        (data.depositors | nameTag | ellipsis: 8 : 8) +
-                        '</a>'
-                },
-                {
-                  label: 'TxHash',
-                  class: 'body-01',
-                  info: data.hash
-                    ? '<a class=text--primary href=' +
-                      ('/transaction/' + data.hash) +
-                      '>' +
-                      shortenAddress(data.hash) +
-                      '</a>'
-                    : '<span class=text--gray-1>-</span>'
-                },
-                {
-                  label: 'Amount',
-                  class: 'h6 mb-0 text--gray-1',
-                  info: data.amount
-                    ? '<span class=mr-1>' +
-                      (data.amount < 0.001 ? '<0.001' : (data.amount | mask: 'separator.6')) +
-                      '</span><span class=text--white>' +
-                      denom +
-                      '</span>'
-                    : '-'
-                },
-                {
-                  label: 'Time',
-                  class: 'card__date text--gray-1 body-01',
-                  info: data.timestamp
-                    ? '<div class=text-end>' +
-                      (data.timestamp | customDateTime: 'Distance') +
-                      '</div>' +
-                      '<div class=text--gray-5><span>' +
-                      (data.timestamp | customDateTime: 'DateOnly') +
-                      '</span>' +
-                      '<span>' +
-                      (data.timestamp | customDateTime: 'TimeOnly') +
-                      '</span></div>'
-                    : '-'
-                }
-              ]"></app-card-mob-simple>
+                      : '-'
+                  "></div>
+              </div>
+              <div class="d-flex justify-content-between mt-3">
+                <div class="text--gray-4">Time</div>
+                <div class="card__date text--gray-1 body-01-mob">
+                  <div class="text-end">{{ data.timestamp | customDateTime: 'Distance' }}</div>
+                  <div class="text--gray-5">
+                    <span>{{ data.timestamp | customDateTime: 'DateOnly' }}</span>
+                    <span>{{ data.timestamp | customDateTime: 'TimeOnly' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

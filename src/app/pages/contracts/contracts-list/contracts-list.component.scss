@@ -7,35 +7,47 @@
 }
 
 .aura-table.contract-table th.mat-header-cell:nth-child(1) {
-  min-width: 220px;
+  min-width: 250px;
 }
+
 .aura-table.contract-table th.mat-header-cell:nth-child(2) {
   min-width: 210px;
 }
+
 .aura-table.contract-table th.mat-header-cell:nth-child(3) {
   min-width: 190px;
 }
+
 .aura-table.contract-table th.mat-header-cell:nth-child(5),
 .aura-table.contract-table th.mat-header-cell:nth-child(7) {
   max-width: 100px;
 }
+
 .aura-table.contract-table th.mat-header-cell:nth-child(6) {
   min-width: 180px;
 }
+
 .aura-table.contract-table th.mat-header-cell:nth-child(8) {
-  min-width: 180px;
+  min-width: 250px;
+  @media (min-width: 991.98px) {
+    min-width: 180px;
+  }
 }
+
 .aura-table.contract-table th.mat-header-cell:nth-child(4) {
   max-width: 130px;
 }
+
 .filter-group {
   overflow: auto;
   -ms-overflow-style: none; /* for Internet Explorer, Edge */
   scrollbar-width: none; /* for Firefox */
   overflow-y: auto;
+
   &::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
   }
+
   button.button {
     height: 30px;
     padding: 0 12px;
@@ -43,12 +55,16 @@
     color: var(--aura-gray-2);
     font-weight: 600;
     flex: 1 0 auto;
+    border: 1px solid var(--aura-gray-6);
+
     &:not(:last-child) {
-      margin-right: 8px;
+      margin-right: 16px;
     }
+
     &.active {
       border: 1px solid var(--aura-green-3);
     }
+
     @media (min-width: 991.98px) {
       &:hover {
         border: 1px solid var(--aura-green-3);

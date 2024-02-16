@@ -5,7 +5,7 @@
   margin-bottom: var(--spacer-4);
   border: 1px solid var(--aura-gray-9);
 
-  &>* {
+  & > * {
     color: var(--aura-white);
   }
 
@@ -31,7 +31,7 @@
   border-top: 1px solid var(--aura-gray-9);
 
   .content-expand {
-    max-height: 250px;
+    //max-height: 250px;
     //overflow-x: auto;
     padding-right: 10px;
 

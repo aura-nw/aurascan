@@ -6,6 +6,7 @@ import { NgbCarouselModule, NgbDropdownModule, NgbNavModule } from '@ng-bootstra
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -37,6 +38,7 @@ import { DashboardComponent } from './dashboard.component';
     TableNoDataModule,
     NgbCarouselModule,
     TooltipCustomizeModule,
+    CommonDirectiveModule,
   ],
   providers: [
     DatePipe,

@@ -8,7 +8,7 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
@@ -65,6 +65,7 @@ export class MyGranteesComponent implements OnInit {
   timerGetFeeGrant: any;
   isSearchData = false;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
 
   constructor(
     public translate: TranslateService,
@@ -79,23 +80,10 @@ export class MyGranteesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
-        window.addEventListener('keplr_keystorechange', () => {
-          this.isNoData = true;
-          const currentRoute = this.router.url;
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate([currentRoute]); // navigate to same route
-          });
-        });
         this.currentAddress = wallet.bech32Address;
-        this.isNoData = false;
         this.getGranteesData();
-        this.timerGetFeeGrant = setInterval(() => {
-          if (this.pageData.pageIndex === 1) {
-            this.getListGrant();
-          }
-        }, 30000);
       } else {
         this.loading = false;
         this.currentAddress = null;
@@ -103,6 +91,12 @@ export class MyGranteesComponent implements OnInit {
         this.dataSource.data = [];
       }
     });
+
+    this.timerGetFeeGrant = setInterval(() => {
+      if (this.pageData.pageIndex === 1) {
+        this.getListGrant();
+      }
+    }, 30000);
   }
 
   /**

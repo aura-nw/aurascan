@@ -41,8 +41,6 @@ export class TokenCw721Component implements OnInit {
   sortOrder = 'desc';
   searchSubject = new Subject();
   destroy$ = new Subject<void>();
-  image_s3 = this.environmentService.imageUrl;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   isLoading = true;
   errTxt: string;
 

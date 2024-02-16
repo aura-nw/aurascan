@@ -16,7 +16,7 @@ export class ContractComponent implements OnInit {
   @Input() contractsAddress: string;
 
   contractType = ContractType;
-  countCurrent = this.contractType.Code;
+  currentTab = this.contractType.Code;
   contractVerifyType = ContractVerifyType;
   contractAddress: string;
   contractDetail: any;
@@ -66,7 +66,7 @@ export class ContractComponent implements OnInit {
   }
 
   changeTab(tabId): void {
-    this.countCurrent = tabId;
+    this.currentTab = tabId;
   }
 
   navigateToVerify(codeId: string) {

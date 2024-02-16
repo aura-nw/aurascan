@@ -5,7 +5,7 @@
 <ng-container *ngIf="nftDetail && (nftDetail.type === contractType.CW721 || nftDetail.type === contractType.CW4973)">
   <div class="text--white">
     <div class="d-lg-none">
-      <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap">
+      <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap break-word">
         <ng-container *ngIf="!nftDetail?.isDisplayName">
           <span class="mr-1">{{ nftDetail?.name || nftDetail?.token_name }}</span>
           <span class="mr-2">#{{ nftDetail?.token_id | ellipsis: 8 : 8 }}</span>
@@ -17,7 +17,7 @@
         <span class="burnt-tag caption" *ngIf="nftDetail?.burned">Burnt</span>
       </h1>
       <div class="mt-2">
-        <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]">{{
+        <a class="text--primary h6 mb-0 mt-2 break-word" [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]">{{
           nftDetail?.name || nftDetail?.token_name
         }}</a>
       </div>
@@ -73,7 +73,7 @@
         <div class="d-lg-flex flex-column h-100">
           <div class="d-lg-flex justify-content-between">
             <div class="d-flex align-items-center d-lg-flex d-none">
-              <h1 class="fw-bold sub-text text--white mb-0 mr-1">
+              <h1 class="fw-bold sub-text text--white mb-0 mr-1 break-word">
                 <ng-container *ngIf="!nftDetail?.isDisplayName">
                   {{ nftDetail?.name || nftDetail?.token_name }} #{{ nftDetail?.token_id | ellipsis: 8 : 8 }}
                 </ng-container>
@@ -368,7 +368,7 @@
                   {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                 </ng-container>
                 <ng-container *ngSwitchCase="'type'">
-                  <div class="aura-status text-capitalize">
+                  <div class="aura-status">
                     <span class="status">{{ data[template.matColumnDef] }}</span>
                   </div>
                 </ng-container>
@@ -436,10 +436,12 @@
                       *ngIf="data[template.matColumnDef] >= 0.001"
                       [appBigNumber]="data[template.matColumnDef]"
                       [decimal]="0"></div>
-                    <span [class.text--primary]="data.denom !== denom" class="ml-1">{{ data.denom || denom }}</span>
+                    <span class="ml-1" appLinkDenom>
+                      {{ data.denom || denom }}
+                    </span>
                     <app-tooltip-customize
                       *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
-                      [content]="data[template.matColumnDef] | mask: 'separator.6'">
+                      [content]="data[template.matColumnDef] | mask: 'separator'">
                     </app-tooltip-customize>
                   </div>
                   <div *ngIf="!data[template.matColumnDef]">-</div>

@@ -5,9 +5,10 @@
     [ngStyle]="{ 'margin-bottom': '6px' }">
     <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
       <span
+        [copyBtn]="dataCard['tx_hash']"
         class="{{ title.titleClass ? title.titleClass : '' }}"
         [routerLink]="['/transaction', dataCard['tx_hash']]"
-        >{{ title.label }}</span
+      >{{ title.label }}</span
       >
     </div>
     <span class="caption {{ dataCard.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">
@@ -38,9 +39,16 @@
         *ngIf="data.info && data.label !== 'Amount'"
         class="{{ data.class ? data.class : 'text--gray-1' }} mb-0"
         [innerHTML]="data.info"></div>
-      <div *ngIf="data.label === 'Amount'" class="text--gray-1">
-        <span class="mr-1" [appBigNumber]="dataCard['amount']" [decimal]="0"></span>
-        <span>{{ dataCard.dataDenom?.symbol | ellipsis: 16 }}</span>
+      <div *ngIf="data.label === 'Amount'" class="text--gray-1 d-flex">
+        <span class="mr-1" *ngIf="dataCard['amount'] | lt: '0.001'">
+          {{ '<0.001' }}
+        </span>
+        <span
+          *ngIf="dataCard['amount'] | gte: '0.001'"
+          class="mr-1"
+          [appBigNumber]="dataCard['amount']"
+          [decimal]="0"></span>
+        <span [appLinkDenom]="dataCard.denom">{{ dataCard.dataDenom?.symbol | ellipsis: 16 }}</span>
       </div>
     </div>
   </div>

@@ -34,10 +34,15 @@ export class ApiCw20TokenService {
 
   chainInfo = this.env.chainInfo;
   currencies = this.chainInfo.currencies[0];
+  nativeName = this.env.environment.nativeName;
 
   apiAccount = inject(ApiAccountService);
 
-  constructor(private http: HttpClient, private env: EnvironmentService, private tokenService: TokenService) {}
+  constructor(
+    private http: HttpClient,
+    private env: EnvironmentService,
+    private tokenService: TokenService,
+  ) {}
 
   getByOwner(address: string) {
     return forkJoin([
@@ -64,7 +69,13 @@ export class ApiCw20TokenService {
 
         const totalValue = allTokens
           .filter((item) => item.verify_status === 'VERIFIED')
-          .reduce((prev, current) => BigNumber(current?.value).plus(prev).toFixed(), 0);
+          .reduce(
+            (prev, current) =>
+              BigNumber(current?.value)
+                .plus(prev)
+                .toFixed(),
+            0,
+          );
 
         return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),
@@ -107,9 +118,10 @@ export class ApiCw20TokenService {
   }
 
   parseNativeToken(account, coinsMarkets) {
-    const coinMarket = coinsMarkets.find((coin) => coin.coin_id === TOKEN_ID_GET_PRICE.AURA);
+    const nativeId = this.env.coingecko.ids[0];
+    const coinMarket = coinsMarkets.find((coin) => coin.coin_id === nativeId);
     return {
-      name: 'Aura',
+      name: this.env.chainName,
       symbol: this.currencies.coinDenom,
       decimals: this.currencies.coinDecimals,
       denom: this.currencies.coinMinimalDenom,
@@ -128,15 +140,12 @@ export class ApiCw20TokenService {
 
   parseIbcTokens(account, coinsMarkets): IAsset[] {
     const ibcBalances = account.data?.balances?.filter((balance) => balance.denom !== this.currencies.coinMinimalDenom);
-
     return ibcBalances
       ? ibcBalances
           .map((item): Partial<IAsset> => {
             const coinMarket = coinsMarkets.find((coin) => item.denom === coin.denom);
-
             const amount = getBalance(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals);
             const value = new BigNumber(amount).multipliedBy(coinMarket?.current_price || 0);
-
             return coinMarket
               ? {
                   name: coinMarket?.name,

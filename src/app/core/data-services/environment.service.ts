@@ -4,19 +4,26 @@ import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import { BehaviorSubject, lastValueFrom, Subject, takeUntil } from 'rxjs';
+import { TYPE_TRANSACTION } from '../constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
+import { isMobileBrowser } from '../helpers/wallet';
 
 export interface IConfiguration {
   environment: {
+    name: string;
     label: {
       desktop: string;
       mobile: string;
     };
+    logo: string;
     notice: {
       content: string;
       url: string;
     };
+    nativeName: string;
   };
   chainConfig: {
+    excludedAddresses: string[];
     stakingTime: string;
     blockTime: number;
     quotaSetPrivateName: number;
@@ -31,6 +38,7 @@ export interface IConfiguration {
     }[];
     features: string[];
     chain_info: ChainInfo & { gasPriceStep: any };
+    cosmos_sdk_version?: string;
   };
   image: {
     validator: string;
@@ -67,7 +75,10 @@ export interface IConfiguration {
 export class EnvironmentService {
   configUri = './assets/config/config.json';
   isMobile = false;
+  isNativeApp = false;
+  excludedAddresses = null;
   config: BehaviorSubject<IConfiguration> = new BehaviorSubject(null);
+  latestBlockHeight$ = new BehaviorSubject<number | string>(undefined);
 
   get configValue(): IConfiguration {
     return this.config?.value;
@@ -75,6 +86,10 @@ export class EnvironmentService {
 
   get environment() {
     return _.get(this.configValue, 'environment');
+  }
+
+  get chainName() {
+    return this.environment.nativeName || _.startCase(_.camelCase(this.chainInfo?.bech32Config?.bech32PrefixAccAddr));
   }
 
   get chainConfig() {
@@ -143,9 +158,12 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.coingecko');
   }
 
+  setLatestBlockHeight(value: string | number) {
+    this.latestBlockHeight$.next(value);
+  }
+
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-
   constructor(
     private http: HttpClient,
     private layout: BreakpointObserver,
@@ -153,6 +171,8 @@ export class EnvironmentService {
     this.breakpoint$.subscribe((state) => {
       this.isMobile = state?.matches ? true : false;
     });
+
+    this.isNativeApp = isMobileBrowser();
   }
 
   ngOnDestroy(): void {
@@ -179,5 +199,30 @@ export class EnvironmentService {
 
   async load(): Promise<void> {
     await this.loadConfig();
+    await this.extendsTxType();
+
+    this.getNodeInfo();
+  }
+
+  extendsTxType(): Promise<void> {
+    return lastValueFrom(this.http.get('./assets/config/tx_type_config.json')).then((typeConfigs) => {
+      (typeConfigs as any[]).forEach((data) => {
+        TRANSACTION_TYPE_ENUM[data.label] = data.label;
+        TypeTransaction[data.value] = data.value;
+        TYPE_TRANSACTION.push({ label: TRANSACTION_TYPE_ENUM[data.label], value: TypeTransaction[data.value] });
+      });
+    });
+  }
+
+  getNodeInfo(): void {
+    this.http.get(`${this.chainInfo.rest}/cosmos/base/tendermint/v1beta1/node_info`).subscribe((data: any) => {
+      const cosmos_sdk_version = data?.application_version?.cosmos_sdk_version;
+      if (cosmos_sdk_version) {
+        const configuration: IConfiguration = this.configValue;
+        configuration.chainConfig.cosmos_sdk_version = cosmos_sdk_version;
+
+        this.config.next(configuration);
+      }
+    });
   }
 }

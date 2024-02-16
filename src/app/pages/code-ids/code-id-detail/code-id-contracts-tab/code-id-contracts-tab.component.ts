@@ -24,19 +24,22 @@ export class CodeIdContractsTabComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'contract_address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contracts' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
-    { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account' },
-    { matColumnDef: 'type', headerCellDef: 'Message' },
-    { matColumnDef: 'created_at', headerCellDef: 'INSTANTIATED at' },
-    { matColumnDef: 'verified_at', headerCellDef: 'Verified at' },
+    { matColumnDef: 'contract_address', headerCellDef: 'Contract Address', isUrl: '/contracts', headerWidth: 230 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', isUrl: '/transaction', headerWidth: 220 },
+    { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 200 },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 200 },
+    { matColumnDef: 'created_at', headerCellDef: 'Instantiated at', headerWidth: 200 },
+    { matColumnDef: 'verified_at', headerCellDef: 'Verified at', headerWidth: 200 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
   isLoading = true;
   errTxt: string;
 
-  constructor(private contractService: ContractService, private datePipe: DatePipe) {}
+  constructor(
+    private contractService: ContractService,
+    private datePipe: DatePipe,
+  ) {}
 
   ngOnInit(): void {
     this.getListContractByCode();

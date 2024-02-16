@@ -19,14 +19,15 @@ import { getSigner } from 'src/app/core/utils/signing/signer';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
 import { WalletBottomSheetComponent } from 'src/app/shared/components/wallet-connect/wallet-bottom-sheet/wallet-bottom-sheet.component';
 import { WalletListComponent } from 'src/app/shared/components/wallet-connect/wallet-list/wallet-list.component';
+import { STORAGE_KEYS } from '../constants/common.constant';
 import { ESigningType, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
+import { isMobileBrowser } from '../helpers/wallet';
 import { WalletStorage } from '../models/wallet';
 import { getLastProvider, getSigningType } from '../utils/common/info-common';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
-import { STORAGE_KEYS } from '../constants/common.constant';
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -288,7 +289,7 @@ export class WalletService implements OnDestroy {
     const lastProvider = getLastProvider();
     const signingType = getSigningType(lastProvider);
 
-    if (this.isMobileMatched && !this.checkExistedCoin98() && lastProvider != WALLET_PROVIDER.LEAP) {
+    if (this.isMobileMatched && !isMobileBrowser()) {
       const msgs = messageCreators[messageType](senderAddress, message, network);
       let fee;
       if (this.coin98Client) {
@@ -387,10 +388,6 @@ export class WalletService implements OnDestroy {
       );
   }
 
-  signMessage(base64String: string) {
-    return this.coin98Client.signArbitrary(this.wallet.bech32Address, base64String);
-  }
-
   async execute(userAddress, contract_address, msg, feeGas = null) {
     let signer;
     let gasStep = this.chainInfo?.gasPriceStep?.average || 0.0025;
@@ -418,7 +415,7 @@ export class WalletService implements OnDestroy {
 
     const lastProvider = getLastProvider();
 
-    if (this.isMobileMatched && !this.checkExistedCoin98() && lastProvider != WALLET_PROVIDER.LEAP) {
+    if (this.isMobileMatched && !isMobileBrowser()) {
       return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
     } else {
       let signingType: ESigningType = getSigningType(lastProvider);

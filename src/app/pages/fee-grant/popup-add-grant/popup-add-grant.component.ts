@@ -37,6 +37,8 @@ export class PopupAddGrantComponent implements OnInit {
   isRevoking = false;
   dayConvert = 24 * 60 * 60;
 
+  chainName = this.environmentService.chainName.toLowerCase();
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
@@ -166,8 +168,8 @@ export class PopupAddGrantComponent implements OnInit {
                 isInstantiate || isExecute
                   ? SIGNING_MESSAGE_TYPES.GRANT_MSG_ALLOWANCE
                   : period_amount && this.periodShow
-                  ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE
-                  : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
+                    ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE
+                    : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
               message: {
                 granter,
                 grantee: grantee_address?.trim(),

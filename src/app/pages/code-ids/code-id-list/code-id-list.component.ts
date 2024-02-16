@@ -34,18 +34,21 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'instantiates', headerCellDef: 'INSTANTIATES' },
-    { matColumnDef: 'created_at', headerCellDef: 'created at' },
-    { matColumnDef: 'verified_at', headerCellDef: 'Verified at' },
+    { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail', headerWidth: 120 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', isUrl: '/transaction', headerWidth: 250 },
+    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 250 },
+    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 120 },
+    { matColumnDef: 'instantiates', headerCellDef: 'Instantiates', headerWidth: 160 },
+    { matColumnDef: 'created_at', headerCellDef: 'created at', headerWidth: 200 },
+    { matColumnDef: 'verified_at', headerCellDef: 'Verified at', headerWidth: 200 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractVerifyType = ContractVerifyType;
 
-  constructor(private contractService: ContractService, private nameTagService: NameTagService) {}
+  constructor(
+    private contractService: ContractService,
+    private nameTagService: NameTagService,
+  ) {}
 
   ngOnInit(): void {
     this.getListCodeIds();

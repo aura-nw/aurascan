@@ -36,7 +36,6 @@ export class TransactionMessagesComponent implements OnInit {
   amountClaim = 0;
   amountCommission = 0;
   commissionAutoClaim = 0;
-  dateVesting: string;
   listAmountClaim = [];
   objMsgContract: any;
   ibcData: any;
@@ -57,7 +56,6 @@ export class TransactionMessagesComponent implements OnInit {
     TimeOut: 'timeout_packet',
   };
   spendLimitAmount = 0;
-  typeGrantAllowance = 'Basic';
   denomIBC = '';
   seeLessArr = [false];
   totalAmountExecute = 0;
@@ -70,6 +68,11 @@ export class TransactionMessagesComponent implements OnInit {
     MultiSend: 'MultiSend',
     EventLog: 'EventLog',
   };
+  typeGrant = {
+    Basic: 'Basic',
+    Periodic: 'Periodic',
+  };
+  typeGrantAllowance = this.typeGrant.Basic;
   currentIndex = 0;
   transactionTypeArr = [];
   codeTransaction = CodeTransaction;
@@ -92,6 +95,7 @@ export class TransactionMessagesComponent implements OnInit {
     if (this.transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1) {
       this.checkTypeMessage();
     }
+
     // set key ibc update client when old type
     if (this.transactionDetail?.messages[0]?.header) {
       this.keyIbc = 'header';
@@ -103,41 +107,12 @@ export class TransactionMessagesComponent implements OnInit {
       this.isTransactionTypeDefault = false;
     }
 
-    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Vesting) {
-      let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
-      this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
-    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount) {
-      let date = new Date(Number(this.transactionDetail?.messages[0]?.start_time) * 1000);
-      this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
-    } else if (
+    if (
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
     ) {
       this.checkGetReward();
-    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MsgGrantAllowance) {
-      let type;
-      if (this.transactionDetail?.messages[0]?.allowance?.allowance?.allowance) {
-        type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.allowance.['@type']");
-      } else if (this.transactionDetail?.messages[0]?.allowance?.allowance) {
-        type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.['@type']");
-      } else {
-        type = _.get(this.transactionDetail?.messages[0]?.allowance, "['@type']");
-      }
-      if (type.indexOf('Periodic') > 0) {
-        this.typeGrantAllowance = 'Periodic';
-      }
-
-      this.spendLimitAmount =
-        _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') ||
-        _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.basic.spend_limit[0].amount') ||
-        _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.basic.spend_limit[0].amount');
-      if (this.typeGrantAllowance === 'Basic') {
-        this.spendLimitAmount =
-          _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') ||
-          _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.spend_limit[0].amount') ||
-          _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.spend_limit[0].amount');
-      }
     } else if (
       //get data if type = IBC
       this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1
@@ -164,6 +139,7 @@ export class TransactionMessagesComponent implements OnInit {
         return;
       }
       let result = [];
+      let date = null;
 
       const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
       this.transactionTypeArr.push((typeTrans?.value || data['@type'].split('.').pop())?.replace('Msg', ''));
@@ -372,6 +348,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.PeriodicVestingAccount:
+          date = new Date(Number(this.transactionDetail?.messages[0]?.start_time) * 1000);
           result.push({
             key: 'From Address',
             value: this.nameTagService.findNameTagByAddress(data.from_address),
@@ -382,11 +359,12 @@ export class TransactionMessagesComponent implements OnInit {
             value: this.nameTagService.findNameTagByAddress(data.to_address),
             link: { url: '/account', data: data.to_address, nameTag: true },
           });
-          result.push({ key: 'Start Time', value: this.dateVesting });
+          result.push({ key: 'Start Time', value: this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC) });
           result.push({ key: 'Vesting Periods', value: data.vesting_periods, pipeType: pipeTypeData.Json });
           break;
 
         case this.eTransType.Vesting:
+          date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
           result.push({
             key: 'From Address',
             value: this.nameTagService.findNameTagByAddress(data.from_address),
@@ -397,7 +375,7 @@ export class TransactionMessagesComponent implements OnInit {
             value: this.nameTagService.findNameTagByAddress(data.to_address),
             link: { url: '/account', data: data.to_address, nameTag: true },
           });
-          result.push({ key: 'Vesting Schedule', value: this.dateVesting });
+          result.push({ key: 'Vesting Schedule', value: this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC) });
           break;
 
         case this.eTransType.EditValidator:
@@ -419,7 +397,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
-            denom: data.min_self_delegation > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -428,7 +406,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
-            denom: data.min_self_delegation > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           result.push({
@@ -483,7 +461,7 @@ export class TransactionMessagesComponent implements OnInit {
             key: 'Amount',
             value: data.initial_deposit[0]?.amount,
             pipeType: pipeTypeData.BalanceOf,
-            denom: data.initial_deposit[0]?.amount > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
           });
           result.push({
             key: 'Proposer',
@@ -491,9 +469,8 @@ export class TransactionMessagesComponent implements OnInit {
             link: { url: '/account', data: data.proposer, nameTag: true },
           });
           if (this.transactionDetail?.tx?.logs?.length > 0) {
-            const proposalData = this.transactionDetail?.tx?.logs[0]?.events?.find(
-              (k) => k.type === 'submit_proposal',
-            )?.attributes;
+            const proposalData = this.transactionDetail?.tx?.logs[0]?.events?.find((k) => k.type === 'submit_proposal')
+              ?.attributes;
             result.push({
               key: 'Proposal Id',
               value: this.getLongValue(proposalData?.find((k) => k.key === 'proposal_id')?.value),
@@ -509,6 +486,29 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.MsgGrantAllowance:
+          let type;
+          const dataAllowance = _.get(this.transactionDetail, 'messages[0].allowance');
+          if (dataAllowance?.allowance?.allowance) {
+            type = _.get(dataAllowance, "allowance.allowance.['@type']");
+          } else if (dataAllowance?.allowance) {
+            type = _.get(dataAllowance, "allowance.['@type']");
+          } else {
+            type = _.get(dataAllowance, "['@type']");
+          }
+          if (type.indexOf(this.typeGrant.Periodic) > 0) {
+            this.typeGrantAllowance = this.typeGrant.Periodic;
+          }
+          this.spendLimitAmount =
+            _.get(dataAllowance, 'basic.spend_limit[0].amount') ||
+            _.get(dataAllowance, 'allowance.basic.spend_limit[0].amount') ||
+            _.get(dataAllowance, 'allowance.allowance.basic.spend_limit[0].amount');
+          if (this.typeGrantAllowance === this.typeGrant.Basic) {
+            this.spendLimitAmount =
+              _.get(dataAllowance, 'spend_limit[0].amount') ||
+              _.get(dataAllowance, 'allowance.spend_limit[0].amount') ||
+              _.get(dataAllowance, 'allowance.allowance.spend_limit[0].amount');
+          }
+
           result.push({
             key: 'Granter',
             value: this.nameTagService.findNameTagByAddress(data.granter),
@@ -524,7 +524,7 @@ export class TransactionMessagesComponent implements OnInit {
             key: 'Spend Limit',
             value: this.spendLimitAmount,
             pipeType: pipeTypeData.BalanceOf,
-            denom: this.spendLimitAmount > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
           });
           result.push({
             key: 'Expiration',
@@ -538,7 +538,7 @@ export class TransactionMessagesComponent implements OnInit {
                   data?.allowance?.allowance?.basic?.expiration,
               ) || '-',
           });
-          if (this.typeGrantAllowance === 'Periodic') {
+          if (this.typeGrantAllowance === this.typeGrant.Periodic) {
             result.push({
               key: 'Period Spend Limit',
               value:

@@ -4,13 +4,20 @@ import * as _ from 'lodash';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { map } from 'rxjs/operators';
+import axios from 'axios';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({ providedIn: 'root' })
 export class IBCService extends CommonService {
-  chainInfo = this.environmentService.chainInfo;
   listInfoChain = [];
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  chainInfo = this.environmentService.chainInfo;
+  lcd = this.environmentService.chainConfig.chain_info.rest;
+
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+  ) {
     super(http, environmentService);
   }
 
@@ -341,6 +348,65 @@ export class IBCService extends CommonService {
           txHash: txHash,
         },
         operationName: 'IbcAssetTransfer',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getTotalSupplyLCD(denomHash: string) {
+    // Cosmos SDK version 0.47.0 - Rest API
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}/by_denom?denom=${denomHash}`).catch(() => ({
+      amount: {
+        denom: denomHash,
+        amount: '0',
+      },
+    }));
+  }
+
+  getChannelInfoByDenom(denomHash: string) {
+    return axios.get(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`).catch(() => null);
+  }
+
+  getDenomTotalHolder(denomHash: string) {
+    const operationsDoc = `
+    query DenomTotalHolder ($denom: String = null) {
+      ${this.envDB} {
+        account_aggregate(where: {balances: {_contains: [{denom: $denom}]}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          denom: denomHash,
+        },
+        operationName: 'DenomTotalHolder',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getChannelCounter(channel_id: string) {
+    const operationsDoc = `
+    query CounterPartyChannel($channel_id: String = null) {
+      ${this.envDB} {
+        ibc_channel(where: {channel_id: {_eq: $channel_id}}) {
+          channel_id
+          counterparty_channel_id
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          channel_id: channel_id,
+        },
+        operationName: 'CounterPartyChannel',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

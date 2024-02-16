@@ -35,6 +35,7 @@ export class BlockService extends CommonService {
           hash
           height
           time
+          tx_count
         }
       }
     }
@@ -66,6 +67,7 @@ export class BlockService extends CommonService {
           hash
           height
           time
+          tx_count
         }
       }
     }
@@ -99,6 +101,7 @@ export class BlockService extends CommonService {
           hash
           height
           time
+          tx_count
         }
       }
     }
@@ -113,5 +116,9 @@ export class BlockService extends CommonService {
         operationName: 'queryBlockDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getRawData(url): Observable<any> {
+    return this.http.get<any>(url);
   }
 }

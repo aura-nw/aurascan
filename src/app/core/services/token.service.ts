@@ -14,9 +14,29 @@ import { CommonService } from './common.service';
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
   tokensMarket$ = new BehaviorSubject<any[]>(null);
+  nativePrice$ = new BehaviorSubject<number>(null);
+  filterBalanceNative$ = new BehaviorSubject<number>(null);
+  totalTransfer$ = new BehaviorSubject<number>(null);
+  excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
 
   get tokensMarket() {
     return this.tokensMarket$.getValue();
+  }
+
+  get nativePrice() {
+    return this.nativePrice$.getValue();
+  }
+
+  get filterBalanceNative() {
+    return this.filterBalanceNative$.getValue();
+  }
+
+  get totalTransfer() {
+    return this.totalTransfer$.getValue();
+  }
+
+  setTotalTransfer(value: number) {
+    this.totalTransfer$.next(value);
   }
 
   constructor(
@@ -34,6 +54,8 @@ export class TokenService extends CommonService {
           marketing_info
           name
           symbol
+          total_supply
+          decimal
           smart_contract {
             address
           }
@@ -127,6 +149,7 @@ export class TokenService extends CommonService {
             symbol
             marketing_info
             decimal
+            total_supply
             smart_contract {
               address
             }
@@ -287,11 +310,11 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListTokenHolderNFT(payload: { limit: number; contractAddress: string }) {
+  getListTokenHolderNFT(payload: { limit: string | number; offset?: string | number; contractAddress: string }) {
     const operationsDoc = `
-    query queryListHolderNFT($contract_address: String, $limit: Int = 10) {
+    query queryListHolderNFT($contract_address: String, $limit: Int = 10, $offset: Int) {
       ${this.envDB} {
-        view_count_holder_cw721(limit: $limit, where: {contract_address: {_eq: $contract_address}}, order_by: {count: desc}) {
+        view_count_holder_cw721(limit: $limit, offset: $offset, where: {contract_address: {_eq: $contract_address}}, order_by: {count: desc}) {
           count
           owner
         }
@@ -308,15 +331,12 @@ export class TokenService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload?.limit || 20,
+          offset: payload.offset || 0,
           contract_address: payload?.contractAddress,
         },
         operationName: 'queryListHolderNFT',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getPriceToken(tokenId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
   }
 
   getListAssetCommunityPool() {
@@ -436,6 +456,7 @@ export class TokenService extends CommonService {
           from
           to
           sender
+          height
           cw20_contract {
             smart_contract {
               address
@@ -487,7 +508,18 @@ export class TokenService extends CommonService {
 
           const tokensFiltered = res.filter((token) => token.coin_id);
 
+          // get price native token
+          const nativeToken = tokensFiltered?.find((k) => k.coin_id === this.environmentService.coingecko?.ids[0]);
+          this.nativePrice$.next(nativeToken?.current_price);
+
           const coinsId = tokensFiltered.map((coin: { coin_id: string }) => coin.coin_id);
+
+          const nativeTokenId = this.environmentService.coingecko.ids[0];
+
+          if (!coinsId.includes(nativeTokenId)) {
+            coinsId.push(nativeTokenId);
+          }
+
           if (coinsId?.length > 0) {
             return forkJoin({
               tokensMarket: of(tokensFiltered),
@@ -536,5 +568,104 @@ export class TokenService extends CommonService {
 
   getCoinMarkets(coinsId: string[]): Observable<any[]> {
     return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
+  }
+
+  getListTransactionTokenIBC(payload: {
+    denom: string;
+    limit: number;
+    offset: number;
+    address: string;
+  }): Observable<any> {
+    const operationsDoc = `
+    query queryListTxIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
+      ${this.envDB} {
+        ibc_ics20(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}, order_by: {id: desc}, limit: $limit, offset: $offset) {
+          denom
+          sender
+          receiver
+          amount
+          ibc_message {
+            transaction {
+              hash
+              transaction_messages {
+                type
+                content
+              }
+              timestamp
+              code
+            }
+          }
+        }
+        ibc_ics20_aggregate(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          denom: payload.denom,
+          limit: payload.limit,
+          offset: payload.offset,
+          address: payload.address,
+        },
+        operationName: 'queryListTxIBC',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getDenomHolder(payload: {
+    denomHash: string;
+    limit?: number;
+    offset?: number;
+    address?: string;
+    isExcludedAddresses?: boolean;
+  }): Observable<any> {
+    const operationsDoc = `
+    query queryHolderIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null, $addressNotIn: [String!] = null) {
+      ${this.envDB} {
+        account_balance(where: {account: {address: {_eq: $address, _nin: $addressNotIn}}, denom: {_eq: $denom}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
+          account {
+            address
+          }
+          amount
+        }
+        account_balance_aggregate (where: {account: {address: {_eq: $address}}, denom: {_eq: $denom}}) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          denom: payload.denomHash,
+          address: payload.address,
+          limit: payload.limit || 100,
+          offset: payload.offset || 0,
+          addressNotIn: payload.isExcludedAddresses ? this.excludedAddresses : [],
+        },
+        operationName: 'queryHolderIBC',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getTokenSupply() {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}`);
+  }
+
+  getAmountNative(address: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/account/${address}`).pipe(catchError((_) => of([])));
+  }
+
+  getListAmountNative(address: string[]): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/account/list/${address}`).pipe(catchError((_) => of([])));
   }
 }

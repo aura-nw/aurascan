@@ -21,6 +21,7 @@ export class EllipsisPipe implements PipeTransform {
 export class CombineTxsMsgPipe implements PipeTransform {
   transform(value: any[]): string {
     const lst: string[] = value.map((element: unknown) => {
+      element = element['content'] || element;
       const msgType = element['type'] || element['@type'];
       let type: string;
       if (msgType === TRANSACTION_TYPE_ENUM.ExecuteContract) {
@@ -41,9 +42,9 @@ export class CombineTxsMsgPipe implements PipeTransform {
       return type;
     });
     if (lst?.length > 5) {
-      return lst.splice(0, 4).join(', ').concat(', ...');
+      return lst?.splice(0, 5)?.join(', ').concat(', ...');
     }
 
-    return lst.splice(0, 3).join(', ');
+    return lst?.join(', ');
   }
 }
