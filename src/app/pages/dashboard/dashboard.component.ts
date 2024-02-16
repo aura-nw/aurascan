@@ -61,6 +61,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  bannerList = this.environmentService.banner;
   coingeckoCoinId = this.environmentService.coingecko.ids[0];
   chainLogo = TITLE_LOGO;
   nativeName = this.environmentService.environment.nativeName;
