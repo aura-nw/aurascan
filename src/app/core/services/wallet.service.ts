@@ -228,7 +228,7 @@ export class WalletService implements OnDestroy {
     );
   }
 
-  getSigningCosmWasmClient() {
+  private getSigningCosmWasmClient() {
     const walletName = localStorage.getItem('cosmos-kit@2:core//current-wallet');
 
     return this.getChainWallet(walletName).getSigningCosmWasmClient();

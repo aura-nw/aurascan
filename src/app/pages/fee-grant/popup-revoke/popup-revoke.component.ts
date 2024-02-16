@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
-import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { MsgRevokeAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
@@ -20,7 +20,6 @@ export class PopupRevokeComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { granterAddress: string; granteeAddress: string },
     public dialogRef: MatDialogRef<PopupRevokeComponent>,
     private walletService: WalletService,
-    private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
   ) {}
 
@@ -30,28 +29,30 @@ export class PopupRevokeComponent implements OnInit {
     this.dialogRef.close(hash);
   }
 
-  executeRevoke() {
-    const granter = this.walletService.walletAccount?.address;
-    const executeRevoke = async () => {
-      const { hash, error } = await this.walletService.signAndBroadcast({
-        messageType: SIGNING_MESSAGE_TYPES.REVOKE_ALLOWANCE,
-        message: {
-          granter: this.data.granterAddress,
-          grantee: this.data.granteeAddress,
-        },
-        senderAddress: granter,
-        network: this.environmentService.chainInfo,
-        chainId: this.walletService.chain.chain_id,
-      });
+  revoke() {
+    const account = this.walletService.getAccount();
 
-      if (hash) {
-        this.closeDialog(hash);
-      } else {
-        if (error != 'Request rejected') {
+    if (!account) {
+      return;
+    }
+
+    const msg = {
+      typeUrl: TRANSACTION_TYPE_ENUM.MsgRevokeAllowance,
+      value: MsgRevokeAllowance.fromPartial({
+        granter: this.data.granterAddress,
+        grantee: this.data.granteeAddress,
+      }),
+    };
+
+    this.walletService
+      .signAndBroadcast_V2(account.address, [msg])
+      .then((result) => {
+        this.closeDialog(result.transactionHash);
+      })
+      .catch((error) => {
+        if (error?.message != 'Request rejected') {
           this.toastr.error(error);
         }
-      }
-    };
-    executeRevoke();
+      });
   }
 }
