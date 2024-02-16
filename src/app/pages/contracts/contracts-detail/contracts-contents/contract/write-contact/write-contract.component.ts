@@ -5,6 +5,7 @@ import {
 } from '@angular/material/legacy-dialog';
 import { WalletAccount } from '@cosmos-kit/core';
 import { TranslateService } from '@ngx-translate/core';
+import { log } from 'console';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
@@ -172,32 +173,27 @@ export class WriteContractComponent implements OnInit {
   execute(data, msg) {
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
-    try {
-      this.walletService
-        .execute(this.userAddress, this.contractDetailData.address, data)
-        .then((e) => {
-          msg.isLoading = false;
-          if ((e as any).result?.error) {
-            this.toastr.error(msgError);
-          } else {
-            if ((e as any)?.transactionHash) {
-              this.toastr.loading((e as any)?.transactionHash);
-              setTimeout(() => {
-                this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-              }, 4000);
-            }
-          }
-        })
-        .catch((error) => {
-          msg.isLoading = false;
-          if (!error.toString().includes('Request rejected')) {
-            msgError = error.toString().includes('out of gas') ? 'out of gas' : msgError;
-            this.toastr.error(error.toString().substring(0, 200) + '...' || msgError);
-          }
-        });
-    } catch (error) {
-      this.toastr.error(`Error: ${msgError}`);
-    }
+
+    this.walletService
+      .executeContract(this.userAddress, this.contractDetailData.address, data)
+      .then((result) => {
+        msg.isLoading = false;
+
+        if (result?.transactionHash) {
+          this.toastr.loading(result.transactionHash);
+          setTimeout(() => {
+            this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+          }, 4000);
+        }
+      })
+      .catch((error) => {
+        msg.isLoading = false;
+
+        if (!error.toString().includes('Request rejected')) {
+          msgError = error.toString().includes('out of gas') ? 'out of gas' : msgError;
+          this.toastr.error(error.toString().substring(0, 200) + '...' || msgError);
+        }
+      });
   }
 
   resetError(msg, all = false) {

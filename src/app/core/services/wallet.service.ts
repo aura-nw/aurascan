@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Chain } from '@chain-registry/types';
+import { JsonObject } from '@cosmjs/cosmwasm-stargate';
 import { EncodeObject } from '@cosmjs/proto-signing';
 import { Coin, StdFee } from '@cosmjs/stargate';
 import {
@@ -172,8 +173,33 @@ export class WalletService implements OnDestroy {
     return null;
   }
 
+  executeContract(
+    senderAddress: string,
+    contractAddress: string,
+    msg: JsonObject,
+    fee: StdFee | 'auto' | number = 'auto',
+    memo?: string,
+    funds?: readonly Coin[],
+  ) {
+    return this.getSigningCosmWasmClient().then(
+      (client) => client?.execute(senderAddress, contractAddress, msg, fee, memo, funds),
+    );
+  }
+
   getWalletSign(...param) {
     return null;
+  }
+
+  signArbitrary(signer: string, data: string | Uint8Array) {
+    const walletName = localStorage.getItem('cosmos-kit@2:core//current-wallet');
+
+    return this.getChainWallet(walletName)?.client?.signArbitrary(this.chain.chain_id, signer, data);
+  }
+
+  sign(messages: EncodeObject[]) {
+    const walletName = localStorage.getItem('cosmos-kit@2:core//current-wallet');
+
+    return this.getChainWallet(walletName).sign(messages);
   }
 
   getAccount() {

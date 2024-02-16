@@ -283,41 +283,28 @@ export class NFTDetailComponent implements OnInit {
     const user = this.walletService.walletAccount?.address;
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
-    let dataWallet = await this.walletService.getWalletSign(user, this.nftDetail.token_id);
+    let signResult = await this.walletService.signArbitrary(user, this.nftDetail.token_id);
 
     const payload = {
-      signature: dataWallet['signature'],
+      signature: signResult['signature'],
       msg: true,
-      pubKey: dataWallet['pub_key'].value,
+      pubKey: signResult['pub_key'].value,
       id: this.nftDetail?.token_id,
       status: this.sbType.PENDING,
       contractAddress: this.nftDetail?.contract_address,
     };
 
-    let feeGas = {
-      amount: [
-        {
-          amount: (this.network.gasPriceStep?.average || 0.0025).toString(),
-          denom: this.network.currencies[0].coinMinimalDenom,
-        },
-      ],
-      gas: '200000',
-    };
-
     try {
       this.walletService
-        .execute(user, this.nftDetail.contract_address, data, feeGas)
-        .then((e) => {
-          if ((e as any).result?.error) {
-            this.toastr.error(msgError);
-          } else {
-            if ((e as any)?.transactionHash) {
-              this.toastr.loading((e as any)?.transactionHash);
-              setTimeout(() => {
-                this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-                this.updateStatusSBT(payload, user);
-              }, 4000);
-            }
+        .executeContract(user, this.nftDetail.contract_address, data)
+        .then((result) => {
+          if (result?.transactionHash) {
+            this.toastr.loading(result?.transactionHash);
+
+            setTimeout(() => {
+              this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+              this.updateStatusSBT(payload, user);
+            }, 4000);
           }
         })
         .catch((error) => {
