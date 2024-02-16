@@ -28,7 +28,7 @@
                           [appImg]="data | marketInfo: 'logo'"
                           width="20"
                           height="20"
-                          alt=""/>
+                          alt="" />
                         <div class="ml-3 d-flex transfer-token-info">
                           <div class="aura-tooltip-contain">
                             <span
@@ -102,36 +102,22 @@
                           From
                         </span>
                         <app-name-tag
-                          *ngIf="!breakpoint.value.matches"
                           [isLink]="!!data.from"
-                          [iconContract]="isContractAddress(data.from)"
+                          [maxCharacter]="breakpoint.value.matches ? 10 : 16"
+                          [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress"
-                          [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
-                        <app-name-tag
-                          *ngIf="breakpoint.value.matches"
-                          [isShorterText]="true"
-                          [isLink]="!!data.from"
-                          [iconContract]="isContractAddress(data.from)"
-                          [value]="data.from || nullAddress"
-                          [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
+                          [url]="(data.from | isContract) ? 'contracts' : 'account'"></app-name-tag>
                       </div>
                       <div class="text-start d-flex align-items-center justify-content-between">
                         <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block mr-lg-2">
                           To
                         </span>
                         <app-name-tag
-                          *ngIf="!breakpoint.value.matches"
                           [isLink]="!!data.to"
-                          [iconContract]="isContractAddress(data.to)"
+                          [maxCharacter]="breakpoint.value.matches ? 10 : 16"
+                          [iconContract]="data.to | isContract"
                           [value]="data.to || nullAddress"
-                          [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
-                        <app-name-tag
-                          *ngIf="breakpoint.value.matches"
-                          [isLink]="!!data.to"
-                          [isShorterText]="true"
-                          [iconContract]="isContractAddress(data.to)"
-                          [value]="data.to || nullAddress"
-                          [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
+                          [url]="(data.to | isContract) ? 'contracts' : 'account'"></app-name-tag>
                       </div>
                     </div>
                   </ng-container>
@@ -193,27 +179,12 @@
                             <i class="ph-arrow-square-out-fill text--gray-1 body-01 h5-mob mb-0"></i>
                           </div>
                         </div>
-                        <div *ngIf="!breakpoint.value.matches">
-                          <app-name-tag
-                            [maxCharacter]="30"
-                            [isLink]="true"
-                            [value]="
-                              data?.cw721_contract?.smart_contract?.address
-                            "
-                            [iconContract]="true"
-                            [url]="'contracts'"></app-name-tag>
-                        </div>
-                        <div *ngIf="breakpoint.value.matches">
-                          <app-name-tag
-                            [isShorterText]="true"
-                            [maxCharacter]="14"
-                            [isLink]="true"
-                            [value]="
-                              data?.cw721_contract?.smart_contract?.address
-                            "
-                            [iconContract]="true"
-                            [url]="'contracts'"></app-name-tag>
-                        </div>
+                        <app-name-tag
+                          [maxCharacter]="breakpoint.value.matches ? 8 : 20"
+                          [isLink]="true"
+                          [value]="data?.cw721_contract?.smart_contract?.address"
+                          [iconContract]="true"
+                          [url]="'contracts'"></app-name-tag>
                       </div>
                     </ng-container>
 
@@ -223,40 +194,22 @@
                           From
                         </span>
                         <app-name-tag
-                          *ngIf="!breakpoint.value.matches"
                           [isLink]="!!data.from"
-                          [maxCharacter]="30"
-                          [iconContract]="isContractAddress(data.from)"
+                          [maxCharacter]="breakpoint.value.matches ? 14 : 30"
+                          [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress"
-                          [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
-                        <app-name-tag
-                          *ngIf="breakpoint.value.matches"
-                          [isLink]="!!data.from"
-                          [isShorterText]="true"
-                          [maxCharacter]="14"
-                          [iconContract]="isContractAddress(data.from)"
-                          [value]="data.from || nullAddress"
-                          [url]="isContractAddress(data.from) ? 'contracts' : 'account'"></app-name-tag>
+                          [url]="(data.from | isContract) ? 'contracts' : 'account'"></app-name-tag>
                       </div>
                       <div class="d-flex align-items-center justify-content-between justify-content-lg-start">
                         <span class="caption fw-normal text--gray-4 mr-3 transfer-address-label d-inline-block">
                           To
                         </span>
                         <app-name-tag
-                          *ngIf="!breakpoint.value.matches"
                           [isLink]="!!data.to"
-                          [iconContract]="isContractAddress(data.to)"
-                          [maxCharacter]="20"
+                          [iconContract]="data.to | isContract"
+                          [maxCharacter]="breakpoint.value.matches ? 14 : 20"
                           [value]="data.to || nullAddress"
-                          [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
-                        <app-name-tag
-                          *ngIf="breakpoint.value.matches"
-                          [isLink]="!!data.to"
-                          [isShorterText]="true"
-                          [iconContract]="isContractAddress(data.to)"
-                          [maxCharacter]="14"
-                          [value]="data.to || nullAddress"
-                          [url]="isContractAddress(data.to) ? 'contracts' : 'account'"></app-name-tag>
+                          [url]="(data.to | isContract) ? 'contracts' : 'account'"></app-name-tag>
                       </div>
                     </div>
                     <ng-container *ngIf="!breakpoint.value.matches">

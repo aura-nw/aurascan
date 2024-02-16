@@ -11,7 +11,7 @@
               [url]="dataLink?.url || '/account'"
               [fullText]="true"
               [paramUrl]="dataLink?.data || value"
-              [fullTextMob]="true"
+              [maxCharacter]="25"
               [widthAuto]="true"></app-name-tag>
           </ng-container>
           <ng-container *ngIf="!dataLink.nameTag">

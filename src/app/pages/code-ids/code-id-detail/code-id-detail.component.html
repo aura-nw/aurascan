@@ -21,6 +21,7 @@
             <app-name-tag
               [value]="codeIdDetail.creator"
               [fullText]="true"
+              [maxCharacter]="13"
               [url]="codeIdDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
           </div>
         </div>

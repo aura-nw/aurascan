@@ -45,10 +45,6 @@ export class NameTagComponent implements OnInit {
     }
   }
 
-  isContractAddress(address) {
-    return this.commonService.isValidContract(address);
-  }
-
   extendLink(url) {
     url = url.match(/^https?:/) ? url : '//' + url;
     return url;
