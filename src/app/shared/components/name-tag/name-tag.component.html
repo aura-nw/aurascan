@@ -32,9 +32,11 @@
       <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
       </app-tooltip-customize>
     </div>
-    <div class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex align-items-center">
+    <div class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex align-items-center"
+         [class.align-items-center]="isBox && !(paramUrl || value | nameTagTooltipPipe)">
       <button
         class="button button--xxs px-1 aura-tooltip-object disabled-hover"
+        [class.d-block]="(value || paramUrl | nameTag).length > 43"
         #tooltip
         (click)="commonService.showToolTip(tooltip)"
         [cdkCopyToClipboard]="paramUrl || value">
@@ -79,9 +81,12 @@
       </app-tooltip-customize>
     </div>
 
-    <div class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex align-items-center" *ngIf="(paramUrl || value) !== nullAddress">
+    <div class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex"
+         *ngIf="(paramUrl || value) !== nullAddress"
+         [class.align-items-center]="isBox && !(paramUrl || value | nameTagTooltipPipe)">
       <button
         class="button button--xxs px-1 aura-tooltip-object disabled-hover"
+        [class.d-block]="(value || paramUrl | nameTag).length > 43"
         #tooltip
         (click)="commonService.showToolTip(tooltip)"
         [cdkCopyToClipboard]="paramUrl || value">
