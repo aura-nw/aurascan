@@ -228,17 +228,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async getDataNative(nativeData) {
     const tempTotal = await this.ibcService.getTotalSupplyLCD(this.coinMinimalDenom).catch(() => '0');
-    let totalSupply = BigNumber(_.get(tempTotal, 'data.amount.amount') || '0');
-
-    this.tokenService
-      .getListAmountNative(this.excludedAddresses)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((res) => {
-        res?.data?.forEach((item) => {
-          totalSupply = totalSupply.minus(BigNumber(_.get(item, 'amount')));
-        });
-        nativeData['totalSupply'] = totalSupply.toFixed();
-        local.setItem(STORAGE_KEYS.DATA_NATIVE, nativeData);
-      });
+    nativeData['totalSupply'] = BigNumber(_.get(tempTotal, 'data.amount.amount') || '0').toFixed();
+    local.setItem(STORAGE_KEYS.DATA_NATIVE, nativeData);
   }
 }
