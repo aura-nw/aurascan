@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -116,9 +115,5 @@ export class BlockService extends CommonService {
         operationName: 'queryBlockDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getRawData(url): Observable<any> {
-    return this.http.get<any>(url);
   }
 }
