@@ -259,6 +259,9 @@ export function convertDataTransaction(data, coinInfo) {
     }
 
     const _amount = getAmount(_.get(element, 'data.body.messages'), _type);
+    const fee = balanceOf(
+      _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
+    ).toFixed(coinInfo.coinDecimals);
 
     const typeOrigin = _type;
     let amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
@@ -308,6 +311,7 @@ export function convertDataTransaction(data, coinInfo) {
       type,
       status,
       amount,
+      fee,
       height,
       timestamp,
       gas_used,
@@ -336,14 +340,7 @@ export function convertDataBlock(data) {
   return block;
 }
 
-export function convertDataAccountTransaction(
-  data,
-  coinInfo,
-  modeQuery,
-  setReceive = false,
-  currentAddress = null,
-  coinConfig = null,
-) {
+export function convertDataAccountTransaction(data, coinInfo, modeQuery, setReceive = false) {
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');

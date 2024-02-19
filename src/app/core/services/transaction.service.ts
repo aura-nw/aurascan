@@ -191,6 +191,7 @@ export class TransactionService extends CommonService {
           gas_used
           gas_wanted
           data
+          fee
         }
       }
     }

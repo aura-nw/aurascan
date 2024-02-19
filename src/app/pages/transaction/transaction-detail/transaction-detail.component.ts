@@ -99,13 +99,9 @@ export class TransactionDetailComponent implements OnInit {
   handleLoadData(res) {
     const txs = convertDataTransaction(res, this.coinInfo);
     this.transaction = txs[0];
-    const fee = balanceOf(_.get(res, 'transaction[0].amount') || 0, this.coinInfo.coinDecimals).toFixed(
-      this.coinInfo.coinDecimals,
-    );
 
     this.transaction = {
       ...this.transaction,
-      fee,
       chainid: this.chainId,
       gas_used: _.get(res?.transaction[0], 'gas_used'),
       gas_wanted: _.get(res?.transaction[0], 'gas_wanted'),
