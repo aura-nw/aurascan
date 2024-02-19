@@ -10,6 +10,7 @@ import { NotificationsService } from 'src/app/core/services/notifications.servic
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { allChains, desktopWallets, mobileWallets, wcWallets } from 'src/app/core/utils/cosmoskit';
 import { getGasPriceByChain } from 'src/app/core/utils/cosmoskit/helpers/gas';
+import { checkDesktopWallets } from 'src/app/core/utils/cosmoskit/wallets';
 import { WalletBottomSheetComponent } from './wallet-bottom-sheet/wallet-bottom-sheet.component';
 import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
 
@@ -20,7 +21,7 @@ import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
 })
 export class WalletConnectComponent implements OnInit {
   CHAIN_ID = this.env.chainId;
-  chain = allChains.find((c) => c.chain_id == this.CHAIN_ID);
+
   walletSupportedList = this.env.isMobile ? mobileWallets : [...desktopWallets, ...wcWallets];
   walletConnectionOption: WalletConnectOptions = {
     signClient: {
@@ -29,7 +30,7 @@ export class WalletConnectComponent implements OnInit {
       metadata: {
         name: 'Aurascan',
         description: 'Aura Network Explorer',
-        url: 'https://ngx-cosmoskit.vercel.app/',
+        url: 'https://x2scan.vercel.app/',
         icons: ['https://images.aura.network/aurascan/xstaxy-assets/images/logo/aura-explorer-logo.png'],
       },
     },
@@ -55,18 +56,31 @@ export class WalletConnectComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      this.walletsService.initWalletManager({
-        chain: this.chain,
-        wallets: this.walletSupportedList,
-        throwErrors: true,
-        walletConnectOptions: this.walletConnectionOption,
-        disableIframe: true,
-        signerOptions: this.signerOptions as any,
+      const chain = allChains.find((chain) => chain.chain_id == this.CHAIN_ID);
+
+      console.log('🐛Connect to chain: ', {
+        pretty_name: chain.pretty_name,
+        chain_id: chain.chain_id,
       });
 
-      this.configActions();
+      const wallets = this.walletSupportedList.filter((w) => checkDesktopWallets(w.walletName));
 
-      await this.walletsService.restoreAccounts();
+      this.walletsService
+        .initWalletManager({
+          chain,
+          wallets,
+          throwErrors: true,
+          walletConnectOptions: this.walletConnectionOption,
+          disableIframe: true,
+          signerOptions: this.signerOptions as any,
+        })
+        .then(() => {
+          this.configActions();
+          this.walletsService.restoreAccounts();
+        })
+        .catch((error) => {
+          console.log('🐛 error: ', error);
+        });
     } catch (error) {
       console.log('initWalletManager error', error);
     }

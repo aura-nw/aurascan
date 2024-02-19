@@ -19,7 +19,7 @@ import {
   WalletName,
 } from '@cosmos-kit/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
+import { allAssets, allChains, STORAGE_KEY } from '../utils/cosmoskit';
 
 @Injectable({
   providedIn: 'root',
@@ -69,7 +69,11 @@ export class WalletService implements OnDestroy {
 
   setWalletAction(config: Actions) {
     this._walletManager?.setActions(config);
-    this._walletManager?.getWalletRepo(this._chain.chain_id)?.setActions(config);
+    // try {
+    //   this._walletManager?.getWalletRepo(this._chain.chain_id)?.setActions(config);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   }
 
   async initWalletManager({
@@ -99,8 +103,6 @@ export class WalletService implements OnDestroy {
 
     this._chain = chain;
 
-    const assetLists = allAssets.filter((asset) => (asset.chain_name = chain.chain_name));
-
     this._walletManager = new WalletManager(
       [chain],
       wallets,
@@ -108,7 +110,7 @@ export class WalletService implements OnDestroy {
       throwErrors,
       subscribeConnectEvents,
       disableIframe,
-      assetLists,
+      allAssets,
       undefined, // defaultNameService
       walletConnectOptions,
       signerOptions,
@@ -156,7 +158,7 @@ export class WalletService implements OnDestroy {
     return currentChainWallet;
   }
 
-  async restoreAccounts() {
+  restoreAccounts() {
     const walletName = localStorage.getItem(STORAGE_KEY.CURRENT_WALLET);
 
     if (walletName) {

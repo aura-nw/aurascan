@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
-import { ChainWalletBase, State, Wallet } from '@cosmos-kit/core';
+import { ChainWalletBase, Wallet } from '@cosmos-kit/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { desktopWallets, mobileWallets, wcWallets } from 'src/app/core/utils/cosmoskit';
@@ -35,11 +35,17 @@ export class WalletProviderComponent implements AfterViewInit {
   }
 
   isWalletNotExited(wallet: Wallet) {
-    return this.walletService.wallets.find((w) => w.walletName == wallet.name)?.clientMutable.state == State.Error;
+    return !this.walletService.wallets.find((w) => w.walletName == wallet.name);
   }
 
-  stateOfWallet(wallet: Wallet) {
-    return this.walletService.getChainWallet(wallet.name)?.state;
+  isWalletPending(wallet: Wallet) {
+    try {
+      const chainWallet = this.walletService.getChainWallet(wallet.name);
+
+      return chainWallet?.state == 'Pending';
+    } catch (error) {
+      return false;
+    }
   }
 
   connect(wallet: Wallet) {

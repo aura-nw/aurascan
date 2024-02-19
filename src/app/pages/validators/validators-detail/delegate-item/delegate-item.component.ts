@@ -217,7 +217,7 @@ export class DelegateItemComponent implements OnInit {
     if (error) {
       const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : error;
 
-      if (!message?.toString().toLowerCase().includes('request rejected')) {
+      if (code) {
         let errorMessage = this.mappingErrorService.checkMappingError('', code);
         this.toastr.error(errorMessage);
       }

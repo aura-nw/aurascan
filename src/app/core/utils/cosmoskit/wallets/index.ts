@@ -1,12 +1,21 @@
 import { wallets as coin98Wallets } from '@cosmos-kit/coin98';
 import { MainWalletBase } from '@cosmos-kit/core';
+import { WalletName } from '@cosmos-kit/core/cjs/types';
 import { wallets as keplrWallets } from '@cosmos-kit/keplr-extension';
 import { wallets as keplrMobileWallets } from '@cosmos-kit/keplr-mobile';
 import { wallets as leapWallets } from '@cosmos-kit/leap-extension';
 import { wallets as leapSnapMetaMaskWallets } from '@cosmos-kit/leap-metamask-cosmos-snap';
 import { wallets as leapMobileWallets } from '@cosmos-kit/leap-mobile';
 import { LOGO_COIN98, LOGO_LEAP_METAMASK } from '../constant';
-import { isCoin98Browser, isKeplrBrowser, isLeapBrowser } from '../helpers/browser';
+import {
+  isCoin98Browser,
+  isCoin98Existed,
+  isKeplrBrowser,
+  isKeplrExisted,
+  isLeapBrowser,
+  isLeapExisted,
+  isMetamaskExisted,
+} from '../helpers/browser';
 import { wallets as coin98MobileWallets } from './coin98-mobile';
 import { wallets as wcWallets } from './wallet-connect/wc';
 
@@ -44,4 +53,20 @@ const desktopWallets = [
   ...leapSnapMetaMaskWallets,
 ] as MainWalletBase[];
 
-export { desktopWallets, mobileWallets, wcWallets };
+function checkDesktopWallets(walletName: WalletName) {
+  switch (walletName) {
+    case coin98Wallets[0].walletName:
+      return isCoin98Existed();
+    case keplrWallets[0].walletName:
+      return isKeplrExisted();
+    case leapWallets[0].walletName:
+      return isLeapExisted();
+    case leapSnapMetaMaskWallets[0].walletName:
+      return isMetamaskExisted();
+
+    default:
+      return true;
+  }
+}
+
+export { desktopWallets, mobileWallets, wcWallets, checkDesktopWallets };

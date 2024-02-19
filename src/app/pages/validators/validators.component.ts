@@ -508,6 +508,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.walletService
         .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount, 'auto')
         .then((broadcastResult) => {
+          console.log('🐛 broadcastResult: ', broadcastResult);
           let error = undefined;
           if (broadcastResult?.code != 0) {
             error = broadcastResult;
@@ -516,14 +517,16 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.checkTxStatusOnchain({ success: broadcastResult, error });
         })
         .catch((error) => {
+          console.log('🐛 error: ', error);
           this.checkTxStatusOnchain({ error });
         });
     }
   }
 
-  handleClaim() {
+  async handleClaim() {
     if (Number(this.dataDelegate.stakingToken) > 0) {
       try {
+        this.isClaimRewardLoading = true;
         this.isLoading = true;
 
         const msg = this.lstValidatorData.map((vd) => ({
@@ -534,9 +537,15 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           }),
         }));
 
+        const revokeMultiplier = 1.7; // revoke multiplier - NOT FOR ALL
+        const fee = await this.walletService.estimateFee(msg, 'stargate', '', revokeMultiplier);
+
+        console.log('🐛 fee: ', JSON.stringify(fee));
+
         this.walletService
-          .signAndBroadcast(this.userAddress, msg)
+          .signAndBroadcast(this.userAddress, msg, fee || 'auto')
           .then((broadcastResult) => {
+            console.log('🐛 broadcastResult: ', broadcastResult);
             let error = undefined;
             if (broadcastResult?.code != 0) {
               error = broadcastResult;
@@ -545,6 +554,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.checkTxStatusOnchain({ success: broadcastResult, error });
           })
           .catch((error) => {
+            console.log('🐛 error: ', error);
             this.checkTxStatusOnchain({ error });
           });
       } catch (error) {
@@ -664,11 +674,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.commissionLabel = label;
   }
 
-  checkTxStatusOnchain({ success, error }: { success?: any; error?: { message: string; code: number } }) {
+  checkTxStatusOnchain({ success, error }: { success?: any; error?: { message: string; code: number } | string }) {
     if (error) {
       const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : error;
 
-      if (!message?.toString().toLowerCase().includes('request rejected')) {
+      if (code) {
         let errorMessage = this.mappingErrorService.checkMappingError('', code);
         this.toastr.error(errorMessage);
       }

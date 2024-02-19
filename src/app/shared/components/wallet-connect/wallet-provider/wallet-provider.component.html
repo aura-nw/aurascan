@@ -14,8 +14,8 @@
           [ngClass]="{ disabled: isWalletNotExited(wallet) }"
           (click)="connect(wallet)">
           <div class="d-flex align-items-center">
-            <img class="wallet-icon" [src]="wallet.logo" *ngIf="stateOfWallet(wallet) != 'Pending'" />
-            <i class="spin-icon" *ngIf="stateOfWallet(wallet) == 'Pending'">
+            <img class="wallet-icon" [src]="wallet.logo" *ngIf="!isWalletPending(wallet)" />
+            <i class="spin-icon" *ngIf="isWalletPending(wallet)">
               <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fill-rule="evenodd"

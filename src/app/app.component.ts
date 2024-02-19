@@ -15,6 +15,7 @@ import local from './core/utils/storage/local';
 import { IUser } from './core/models/auth.models';
 import { UserService } from './core/services/user.service';
 import { EnvironmentService } from './core/data-services/environment.service';
+import eruda from 'eruda';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,7 @@ import { EnvironmentService } from './core/data-services/environment.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  // TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
+  TESTNET = true;
   // isTestnet = this.TESTNET.includes(
   //   this.chainInfo?.chainId || ''
   // );
@@ -80,15 +81,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.tokenService.getCoinData();
     }, 600000);
 
-    // if (this.isTestnet) {
-    //   let el = document.createElement('div');
-    //   document.body.appendChild(el);
-    //
-    //   eruda.init({
-    //     container: el,
-    //     tool: ['console', 'elements', 'resources', 'network'],
-    //   });
-    // }
+    if (this.TESTNET) {
+      let el = document.createElement('div');
+      document.body.appendChild(el);
+
+      eruda.init({
+        container: el,
+        tool: ['console', 'elements', 'resources', 'network'],
+      });
+    }
   }
 
   getInfoCommon(): void {
