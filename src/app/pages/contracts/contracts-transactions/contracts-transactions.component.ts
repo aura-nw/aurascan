@@ -96,18 +96,23 @@ export class ContractsTransactionsComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       if (params['label']) {
         this.label = params['label'] || this.modeTxType.Out;
+      } else {
+        this.label = '';
       }
       this.payload['key'] = null;
       switch (+this.label) {
+        case 0: //All
+          this.payload['actionEq'] = null;
+          this.payload['actionNEq'] = null;
+          break;
         case 1: //incoming
-          this.payload['actionNEq'] = 'execute';
+          this.payload['actionNEq'] = 'instantiate';
           break;
         case 2: //instantiate
           this.payload['actionEq'] = 'instantiate';
           break;
         default: //out
-          this.payload['actionEq'] = null;
-          this.payload['actionNEq'] = null;
+          this.payload['actionEq'] = 'execute';
           break;
       }
       this.getDataTable(null, isReload);
