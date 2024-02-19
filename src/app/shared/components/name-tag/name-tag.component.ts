@@ -44,7 +44,7 @@ export class NameTagComponent implements OnInit {
     }
 
     if (this.isShorterText) {
-      this.maxCharacter = 8;
+      this.maxCharacter = 6;
     }
   }
 
