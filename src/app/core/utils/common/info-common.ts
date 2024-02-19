@@ -1,12 +1,10 @@
 import * as _ from 'lodash';
-import { getAmount, getDataInfo } from 'src/app/global/global';
 import { MEDIA_TYPE, NUMBER_CONVERT, STORAGE_KEYS } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
-import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
+import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 import { ESigningType, WALLET_PROVIDER } from '../../constants/wallet.constant';
 import { WalletStorage } from '../../models/wallet';
 import local from '../storage/local';
-import { balanceOf } from './parsing';
 
 export function getInfo(globals: any, data: any): void {
   globals.dataHeader = data;
@@ -51,28 +49,6 @@ export function formatNumber(number: number, args?: any): any {
     return (isNegative ? '-' : '') + numberVote + key;
   }
   return (isNegative ? '-' : '') + abs + key;
-}
-
-export function parseDataTransaction(trans: any, coinMinimalDenom: string, tokenID = '') {
-  let typeOrigin = trans.data?.tx?.body?.messages[0]['@type'];
-  const typeTrans = TYPE_TRANSACTION.find((f) => f.label.toLowerCase() === typeOrigin?.toLowerCase());
-  trans.tx_hash = trans.hash;
-  //get amount of transaction
-  trans.amount = getAmount(trans.data?.tx?.body?.messages, typeOrigin, trans.tx_response?.raw_log, coinMinimalDenom);
-  trans.fee = balanceOf(trans?.data?.auth_info?.fee?.amount[0]?.amount);
-  trans.gas_limit = balanceOf(trans?.data?.auth_info?.fee?.gas_limit);
-  trans.height = trans?.height;
-  trans.timestamp = trans?.timestamp;
-  trans.status = StatusTransaction.Fail;
-  if (Number(trans?.code) === CodeTransaction.Success) {
-    trans.status = StatusTransaction.Success;
-  }
-  [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.modeExecute] =
-    getDataInfo(trans.data?.tx?.body?.messages, tokenID, trans.data?.tx_response?.raw_log);
-  trans.type = trans.method || typeTrans?.value;
-  trans.depositors = trans.data?.tx?.body?.messages[0]?.depositor;
-  trans.price = balanceOf(_.get(trans, 'data.body.messages[0].funds[0].amount'));
-  return trans;
 }
 
 export function checkTypeFile(nft: any) {

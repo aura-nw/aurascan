@@ -99,7 +99,7 @@ export class BlockDetailComponent implements OnInit {
             const linkS3 = _.get(res, 'block[0].data.linkS3');
 
             if (linkS3?.length > 0) {
-              return this.blockService.getRawData(linkS3).pipe(
+              return this.commonService.getRawData(linkS3).pipe(
                 map((data) => {
                   res.block[0].data = data;
 
