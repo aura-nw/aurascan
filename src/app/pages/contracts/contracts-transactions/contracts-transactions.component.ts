@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
-import {Subject} from 'rxjs';
-import {TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {CONTRACT_TABLE_TEMPLATES} from 'src/app/core/constants/contract.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TableTemplate} from 'src/app/core/models/common.model';
-import {ITableContract} from 'src/app/core/models/contract.model';
-import {TransactionService} from 'src/app/core/services/transaction.service';
-import {convertDataTransaction} from 'src/app/global/global';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { ITableContract } from 'src/app/core/models/contract.model';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { convertDataTransaction } from 'src/app/global/global';
 
 @Component({
   selector: 'app-contracts-transactions',
@@ -43,7 +43,7 @@ export class ContractsTransactionsComponent implements OnInit {
   txsInstantiate = [];
   currentPage = 0;
   destroyed$ = new Subject<void>();
-  modeTxType = {Out: 0, In: 1, Instantiate: 2};
+  modeTxType = { Out: 0, In: 1, Instantiate: 2 };
   hashIns = '';
   hasLoadIns = true;
   payload = {
@@ -62,10 +62,10 @@ export class ContractsTransactionsComponent implements OnInit {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
     valueColumn &&
-    ((v) => {
-      v.suffix =
-        `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
-    })(valueColumn);
+      ((v) => {
+        v.suffix =
+          `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
+      })(valueColumn);
   }
 
   ngOnInit(): void {
@@ -102,13 +102,13 @@ export class ContractsTransactionsComponent implements OnInit {
       this.payload['actionNEq'] = null;
       switch (+this.label) {
         case 1: //incoming
-          this.payload['actionEq'] = 'execute._contract_address';
+          this.payload['actionEq'] = 'execute';
           break;
         case 2: //instantiate
-          this.payload['actionEq'] = 'instantiate._contract_address';
+          this.payload['actionEq'] = 'instantiate';
           break;
         default: //out
-          this.payload['actionNEq'] = '_contract_address';
+          this.payload['actionNEq'] = 'execute';
           break;
       }
       this.getDataTable(null, isReload);
@@ -155,7 +155,7 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   onChangePage(event) {
-    const {pageIndex, pageSize} = event;
+    const { pageIndex, pageSize } = event;
     this.currentPage = pageIndex;
     const next = event.length <= (pageIndex + 2) * pageSize;
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
