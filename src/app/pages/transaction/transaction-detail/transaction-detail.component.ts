@@ -90,7 +90,9 @@ export class TransactionDetailComponent implements OnInit {
           this.loading = false;
         },
         complete: () => {
-          this.loading = false;
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
         },
       });
     } else {
