@@ -89,7 +89,9 @@ export class TransactionDetailComponent implements OnInit {
           }
           this.loading = false;
         },
-        complete: () => {},
+        complete: () => {
+          this.loading = false;
+        },
       });
     } else {
       this.loading = false;
@@ -98,18 +100,24 @@ export class TransactionDetailComponent implements OnInit {
 
   handleLoadData(res) {
     const txs = convertDataTransaction(res, this.coinInfo);
-    this.transaction = txs[0];
+    if (txs?.length === 0) {
+      this.loading = false;
+      return;
+    }
 
+    this.transaction = txs[0];
     this.transaction = {
       ...this.transaction,
       chainid: this.chainId,
-      gas_used: _.get(res?.transaction[0], 'gas_used'),
-      gas_wanted: _.get(res?.transaction[0], 'gas_wanted'),
-      raw_log: _.get(res?.transaction[0], 'data.tx_response.raw_log'),
+      gas_used: _.get(res, 'transaction[0].gas_used'),
+      gas_wanted: _.get(res, 'transaction[0].gas_wanted'),
+      raw_log: _.get(res, 'transaction[0].data.tx_response.raw_log'),
       type: this.transaction.typeOrigin,
     };
 
     if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
+      const lengthValue = 7.1;
+      const maxHeightContent = 3;
       this.errorMessage = this.transaction.raw_log;
       this.errorMessage = this.mappingErrorService.checkMappingErrorTxDetail(this.errorMessage, this.transaction.code);
 
@@ -119,7 +127,7 @@ export class TransactionDetailComponent implements OnInit {
         const widthContent = document.getElementById('contentError')?.offsetWidth;
 
         // cal width text/content
-        if (lengthChar * 7.1 > widthContent * 3) {
+        if (lengthChar * lengthValue > widthContent * maxHeightContent) {
           this.isDisplayMore = true;
         }
       }, 500);
