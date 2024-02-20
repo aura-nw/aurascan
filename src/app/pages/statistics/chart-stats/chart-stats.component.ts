@@ -36,6 +36,7 @@ export class ChartStatsComponent implements OnInit {
   maxValueDailyAddress = 0;
   minValueDailyAddress = 0;
   maxValueDailyTx = 0;
+  minValueDailyTx = 0;
 
   chainName = this.env.chainName;
 
@@ -78,7 +79,7 @@ export class ChartStatsComponent implements OnInit {
         visible: true,
         borderColor: '#494C58',
         scaleMargins: {
-          top: 0.5,
+          top: 0.1,
           bottom: 0.05,
         },
         mode: 1,
@@ -96,7 +97,14 @@ export class ChartStatsComponent implements OnInit {
       },
       handleScroll: false,
     });
-    this.dailyTransactionChartSeries = this.dailyTransactionChart.addAreaSeries({});
+    this.dailyTransactionChartSeries = this.dailyTransactionChart.addAreaSeries({
+      autoscaleInfoProvider: () => ({
+        priceRange: {
+          minValue: this.minValueDailyTx,
+          maxValue: this.maxValueDailyTx,
+        },
+      }),
+    });
 
     this.dailyTransactionChartSeries.applyOptions({
       lineColor: '#2CB1F5',
@@ -279,6 +287,7 @@ export class ChartStatsComponent implements OnInit {
           this.maxValueDailyAddress = Math.max(...valueArrActive);
           this.minValueDailyAddress = Math.min(...valueArrActive);
           this.maxValueDailyTx = Math.max(...valueArrDaily);
+          this.minValueDailyTx = Math.min(...valueArrDaily);
           this.drawChart(valueArrDaily, timeArr, 'dailyTrans');
           this.drawChart(valueArrUnique, timeArr, 'uniqueAddress');
           this.drawChart(valueArrActive, timeArr, 'dailyAddress');
