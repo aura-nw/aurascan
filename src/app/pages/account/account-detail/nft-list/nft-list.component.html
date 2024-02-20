@@ -97,12 +97,11 @@
                 <div class="nft__body">
                   <div class="nft__info d-flex">
                     <span class="mr-1 text--gray-1">Token:</span>
-                    <div
-                      class="hover-link box-name"
+                    <a
+                      class="hover-link box-name text--primary"
                       (click)="handleRouterLink('/tokens/token-nft/' + item.contract_address)">
-                      <span class="d-none d-lg-inline-block txt-token-name text--primary">{{ item.token_name }}</span>
-                      <span class="d-inline-block d-lg-none txt-token-name text--primary">{{ item.token_name }}</span>
-                    </div>
+                      <span class="d-inline-block txt-token-name">{{ item.token_name }}</span>
+                    </a>
                   </div>
                   <div class="mt-lg-1 nft__info" [copyBtn]="item.token_id" [btnClass]="['mt-lg-1']">
                     <span class="mr-1 text--gray-1">Token ID:</span>
