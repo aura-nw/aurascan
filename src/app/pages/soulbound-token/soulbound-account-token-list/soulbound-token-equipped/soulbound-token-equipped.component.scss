@@ -41,17 +41,3 @@
     border-radius: 8px;
   }
 }
-
-#token-name-1 {
-  display: inline;
-  @media (min-width: 1367px) {
-    display: none;
-  }
-}
-
-#token-name-2 {
-  display: none;
-  @media (min-width: 1367px) {
-    display: inline;
-  }
-}

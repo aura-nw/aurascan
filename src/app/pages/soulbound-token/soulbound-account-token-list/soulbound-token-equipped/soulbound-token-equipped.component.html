@@ -19,12 +19,12 @@
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
               name="search"
-              autocomplete="off"/>
+              autocomplete="off" />
             <button
               type="submit"
               class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}"
               (click)="searchToken()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
@@ -32,7 +32,7 @@
                 !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -63,10 +63,8 @@
                         class="text--primary hover-link"
                         (click)="
                           handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)
-                        "
-                      >
-                        <span id="token-name-1">{{ token.token_name | ellipsis: 10 }}</span>
-                        <span id="token-name-2">{{ token.token_name }}</span>                        
+                        ">
+                        <span>{{ token.token_name | ellipsis: 18 }}</span>
                       </span>
                     </div>
                     <div
