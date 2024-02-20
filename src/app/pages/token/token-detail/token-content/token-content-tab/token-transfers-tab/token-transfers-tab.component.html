@@ -142,12 +142,9 @@
                     </div>
                   </ng-container>
                   <ng-container *ngSwitchCase="'tx_hash'">
-                    <app-name-tag
-                      [value]="data[template.matColumnDef]"
-                      [isHref]="true"
-                      [url]="'/transaction/' + data.tx_hash"
-                      [isTokenDetail]="true"
-                      [maxCharacter]="15"></app-name-tag>
+                    <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]" [copyBtn]="data.tx_hash">
+                      {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                    </a>
                   </ng-container>
                   <ng-container *ngSwitchCase="'from_address'">
                     <div class="d-flex align-items-center">
