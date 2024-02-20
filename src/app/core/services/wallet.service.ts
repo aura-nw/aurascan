@@ -19,7 +19,7 @@ import {
   WalletName,
 } from '@cosmos-kit/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { allAssets, allChains, STORAGE_KEY } from '../utils/cosmoskit';
+import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
 
 @Injectable({
   providedIn: 'root',
