@@ -20,6 +20,8 @@ export class WalletProviderComponent implements AfterViewInit {
 
   currentChainWallet: ChainWalletBase;
 
+  isWalletConnectMode = false;
+
   constructor(
     private walletService: WalletService,
     private environmentService: EnvironmentService,
@@ -49,12 +51,16 @@ export class WalletProviderComponent implements AfterViewInit {
   }
 
   connect(wallet: Wallet) {
+    this.isWalletConnectMode = wallet.mode == 'wallet-connect';
+
     this.currentChainWallet = this.walletService.connect(wallet, {
       success: (() => {
+        this.isWalletConnectMode = false;
         this.close();
       }).bind(this),
       error: ((e) => {
         console.error(e);
+        this.isWalletConnectMode = false;
         this.currentChainWallet = null;
       }).bind(this),
     });

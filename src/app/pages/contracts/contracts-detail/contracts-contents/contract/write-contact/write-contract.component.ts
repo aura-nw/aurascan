@@ -89,7 +89,7 @@ export class WriteContractComponent implements OnInit {
   }
 
   connectWallet(): void {
-    this.walletAccount = this.walletService.walletAccount;
+    this.walletAccount = this.walletService.getAccount();
   }
 
   getProperties(schema: Schema) {

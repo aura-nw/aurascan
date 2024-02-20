@@ -153,6 +153,7 @@ export class WalletService implements OnDestroy {
       })
       .catch((e) => {
         callback?.error?.(e);
+        this._walletManager.getWalletRepo(this._chain.chain_name).disconnect();
       });
 
     return currentChainWallet;

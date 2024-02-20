@@ -49,7 +49,7 @@
     </div>
     <div
       class="ml-lg-6 mt-6 mt-lg-0 wallet-info px-4 py-5 d-flex flex-column align-items-center justify-content-center w-full">
-      <ng-container *ngIf="currentChainWallet?.qrUrl?.state != 'Done'; else qrCode">
+      <ng-container *ngIf="!(currentChainWallet?.qrUrl?.data && isWalletConnectMode); else qrCode">
         <img src="./../../../../../assets/icons/icons-svg/color/wallets.svg" alt="" />
         <div class="body mt-4 text--gray-1 text-center">
           Wallets are used to send, receive, store digital assets like {{ chainName | titlecase }} and NFTs.

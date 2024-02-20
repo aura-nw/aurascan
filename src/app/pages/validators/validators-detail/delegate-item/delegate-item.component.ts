@@ -83,7 +83,7 @@ export class DelegateItemComponent implements OnInit {
   viewPopupDetail(staticDataModal: any) {
     if (!this.dialogOpen) {
       const view = async () => {
-        const account = this.walletService.walletAccount;
+        const account = this.walletService.getAccount();
         if (account && account.address) {
           this.amountFormat = null;
           this.resetCheck();

@@ -210,7 +210,7 @@ export class ProposalComponent implements OnInit {
     const expiredTime = +moment(item.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {
-      const account = this.walletService.walletAccount;
+      const account = this.walletService.getAccount();
       if (account) {
         this.openDialog({
           id,

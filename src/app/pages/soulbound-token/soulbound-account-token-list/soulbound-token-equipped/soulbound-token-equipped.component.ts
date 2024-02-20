@@ -48,7 +48,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
 
   ngOnInit(): void {
     this.walletService.walletAccount$.subscribe((wallet) => {
-      this.walletAddress = this.walletService.walletAccount?.address;
+      this.walletAddress = wallet.address;
     });
 
     this.route.params.subscribe((params) => {

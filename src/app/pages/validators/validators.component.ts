@@ -328,7 +328,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.currentValidatorDialog = address;
     this.isClaimRewardLoading = true;
     const view = async () => {
-      const account = this.walletService.walletAccount;
+      const account = this.walletService.getAccount();
       if (account && account.address) {
         this.clicked = true;
         this.amountFormat = null;
