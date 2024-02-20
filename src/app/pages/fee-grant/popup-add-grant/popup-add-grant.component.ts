@@ -206,8 +206,6 @@ export class PopupAddGrantComponent implements OnInit {
         this.closeDialog(result?.transactionHash);
       })
       .catch((error) => {
-        console.log(error);
-
         if (error?.message != 'Request rejected') {
           try {
             let errorMessage = this.mappingErrorService.checkMappingError(error?.message, error?.code);

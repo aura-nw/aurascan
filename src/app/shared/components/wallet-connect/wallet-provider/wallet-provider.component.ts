@@ -58,8 +58,8 @@ export class WalletProviderComponent implements AfterViewInit {
         this.isWalletConnectMode = false;
         this.close();
       }).bind(this),
-      error: ((e) => {
-        console.error(e);
+      error: ((error) => {
+        console.error('Connect error: ', error);
         this.isWalletConnectMode = false;
         this.currentChainWallet = null;
       }).bind(this),

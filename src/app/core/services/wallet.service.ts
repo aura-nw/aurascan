@@ -72,7 +72,7 @@ export class WalletService implements OnDestroy {
       this._walletManager?.setActions(config);
       this._walletManager?.getWalletRepo(this._chain.chain_name)?.setActions(config);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

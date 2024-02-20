@@ -79,10 +79,10 @@ export class WalletConnectComponent implements OnInit {
           this.walletsService.restoreAccounts();
         })
         .catch((error) => {
-          console.log('🐛 error: ', error);
+          console.error('InitWalletManager Error: ', error);
         });
     } catch (error) {
-      console.log('initWalletManager error', error);
+      console.error('Init Wallet Error: ', error);
     }
   }
 
