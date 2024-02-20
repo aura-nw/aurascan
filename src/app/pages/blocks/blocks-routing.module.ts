@@ -12,10 +12,6 @@ const routes: Routes = [
     path: ':height',
     component: BlockDetailComponent
   },
-  {
-    path: 'id/:blockId',
-    component: BlockDetailComponent
-  }
 ];
 
 @NgModule({
