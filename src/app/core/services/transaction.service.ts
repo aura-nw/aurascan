@@ -182,10 +182,11 @@ export class TransactionService extends CommonService {
           hash
           timestamp
           code
-          gas_used
-          gas_wanted
           data
           fee
+          transaction_messages {
+            content
+          }
         }
       }
     }

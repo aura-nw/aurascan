@@ -17,7 +17,6 @@ export interface IContractsResponse {
   updated_at: Date;
   code: number;
   fee: string;
-  blockId: number;
   raw_log: string;
   raw_log_data: unknown;
   tx: string;
