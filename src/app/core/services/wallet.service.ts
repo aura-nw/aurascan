@@ -68,12 +68,12 @@ export class WalletService implements OnDestroy {
   }
 
   setWalletAction(config: Actions) {
-    this._walletManager?.setActions(config);
-    // try {
-    //   this._walletManager?.getWalletRepo(this._chain.chain_id)?.setActions(config);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      this._walletManager?.setActions(config);
+      this._walletManager?.getWalletRepo(this._chain.chain_name)?.setActions(config);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async initWalletManager({
@@ -213,7 +213,7 @@ export class WalletService implements OnDestroy {
       return account;
     }
 
-    const repo = this._walletManager.getWalletRepo(this._chain?.chain_id);
+    const repo = this._walletManager.getWalletRepo(this._chain?.chain_name);
 
     repo?.openView();
     return null;
