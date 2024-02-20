@@ -79,7 +79,7 @@
           </div>
 
           <button
-            class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-2 btn-private"
+            class="button button-outline button-outline__in-card button-pill mt-2 btn-private"
             *ngIf="!(currentAddress | isPrivateNameTag)"
             (click)="editPrivateName()">
             <span class="caption fw-normal"> Set Private Name Tag </span>
@@ -99,9 +99,9 @@
 
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
             <div>
-              <div class="h5 mb-1 text--white">Total Value</div>
+              <div class="body mb-1 text--white">Total Value</div>
               <div class="aura-tooltip-contain">
-                <div class="h1 mb-0 fw-700 mb-0 text-gradient d-inlfa-inverse aura-tooltip-object">
+                <div class="h1 mb-0 fw-700 mb-0 text--white d-inlfa-inverse aura-tooltip-object">
                   <span *ngIf="totalValue.lt(0.01)">
                     {{ totalValue.eq(0) ? '$0' : '< $0.01' }}
                   </span>
@@ -113,7 +113,7 @@
                 </div>
 
                 <app-tooltip-customize
-                  *ngIf="!totalValue.eq(0) && (totalValue.lt(0.001) || totalValue.gte(1000000))"
+                  *ngIf="!totalValue.eq(0) && (totalValue.lt(0.01) || totalValue.gte(1000000))"
                   [content]="totalValue.toFixed() | mask: 'separator'">
                 </app-tooltip-customize>
               </div>
@@ -127,10 +127,10 @@
             </div>
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
-                [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
+                [src]="'assets/icons/icons-svg/white/qr-code.svg' | imageS3"
                 alt=""
-                width="30px"
-                height="30px"
+                width="36px"
+                height="36px"
                 (click)="viewQrAddress(modalManage)" />
             </div>
           </div>

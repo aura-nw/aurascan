@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
+import { Subject, takeUntil } from 'rxjs';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
@@ -17,7 +18,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
   templateUrl: './my-granters.component.html',
   styleUrls: ['./my-granters.component.scss'],
 })
-export class MyGrantersComponent implements OnInit {
+export class MyGrantersComponent implements OnInit, OnDestroy {
   loading = true;
   isActive = true;
   textSearch = '';
@@ -51,6 +52,8 @@ export class MyGrantersComponent implements OnInit {
   isNoData = true;
   isSearchData = false;
   currentAddress = null;
+  destroyed$ = new Subject<void>();
+
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
 
@@ -63,17 +66,9 @@ export class MyGrantersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.walletService.walletAccount$.subscribe((wallet) => {
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
-        window.addEventListener('keplr_keystorechange', () => {
-          this.isNoData = true;
-          const currentRoute = this.router.url;
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate([currentRoute]); // navigate to same route
-          });
-        });
         this.currentAddress = wallet.address;
-        this.isNoData = false;
         this.getGrantersData();
       } else {
         this.loading = false;
@@ -82,6 +77,14 @@ export class MyGrantersComponent implements OnInit {
         this.dataSource.data = [];
       }
     });
+  }
+
+  /**
+   * ngOnDestroy
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   getGrantersData() {

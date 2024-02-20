@@ -4,13 +4,13 @@
       (click)="openWalletPopup()"
       *ngIf="!ng.wallet"
       type="button"
-      class="button button-pill box-connect caption fw-normal cursor-pointer">
+      class="button button-pill button-outline button-outline--gradient caption fw-normal cursor-pointer">
       <span class="icon-connect"></span>
       <span class="text--white">Connect Wallet</span>
     </button>
 
     <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet">
-      <div class="button button-pill button--xs box-connect caption fw-normal">
+      <div class="button button-pill button-outline button-outline--gradient button--xs caption fw-normal">
         <span class="icon-connect connected"></span>
         <span class="fw-semibold fw-normal-mob text--gray-1 d-flex align-items-center">
           <span class="txt-wallet cursor-pointer" [routerLink]="['/account/', ng.wallet?.address]">

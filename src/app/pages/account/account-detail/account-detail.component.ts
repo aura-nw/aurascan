@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,14 +27,16 @@ import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options'
   templateUrl: './account-detail.component.html',
   styleUrls: ['./account-detail.component.scss'],
 })
-export class AccountDetailComponent implements OnInit {
+export class AccountDetailComponent implements OnInit, OnDestroy {
   @ViewChild('assetTypeSelect') assetTypeSelect: MatSelect;
+
   @HostListener('window:scroll', ['$event'])
   closeOptionPanelSection(_) {
     if (this.assetTypeSelect !== undefined) {
       this.assetTypeSelect.close();
     }
   }
+
   public chartOptions: Partial<ChartOptions>;
   @ViewChild('walletChart') chart: ChartComponent;
   @ViewChild(MatSort) sort: MatSort;

@@ -4,6 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { map, of, switchMap } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
@@ -24,6 +25,8 @@ export class BlockDetailComponent implements OnInit {
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
+
+  NOT_FOUND = 'NOT_FOUND';
 
   blockDetail = undefined;
   TAB = [
@@ -87,76 +90,85 @@ export class BlockDetailComponent implements OnInit {
       limit: 1,
       height: this.blockHeight,
     };
-    this.blockService.getDataBlockDetail(payload).subscribe({
-      next: async (res) => {
-        if (res?.block?.length > 0) {
-          const block = convertDataBlock(res)[0];
-          block['round'] = _.get(res.block[0], 'data.block.last_commit.round');
-          block['chainid'] = _.get(res.block[0], 'data.block.header.chain_id');
-          block['json_data'] = _.get(res.block[0], 'data.block');
-          block['gas_used'] = block['gas_wanted'] = 0;
-          block['events'] = _.get(res.block[0], 'data.block_result.begin_block_events');
-          const blockEnd = _.get(res.block[0], 'data.block_result.end_block_events');
-          if (blockEnd) {
-            block['events'] = block['events'].concat(blockEnd);
+
+    this.blockService
+      .getDataBlockDetail(payload)
+      .pipe(
+        switchMap((res) => {
+          if (res?.block?.length > 0) {
+            const linkS3 = _.get(res, 'block[0].data.linkS3');
+
+            if (linkS3?.length > 0) {
+              return this.commonService.getRawData(linkS3).pipe(
+                map((data) => {
+                  res.block[0].data = data;
+
+                  return this.mappingBlockData(res);
+                }),
+              );
+            } else {
+              return of(this.mappingBlockData(res));
+            }
           }
-          this.blockDetail = block;
-          //get list tx detail
-          let txs = [];
+
+          throw new Error(this.NOT_FOUND);
+        }),
+        switchMap(() => {
+          this.loading = false;
+
           const payload = {
             limit: 100,
             height: this.blockHeight,
           };
-          this.transactionService.getListTx(payload).subscribe({
-            next: (res) => {
-              if (res?.transaction) {
-                txs = res?.transaction;
-              }
-            },
-            error: (e) => {
-              if (e.name === TIMEOUT_ERROR) {
-                this.errTxtTxs = e.message;
-              } else {
-                this.errTxtTxs = e.status + ' ' + e.statusText;
-              }
-              this.loadingTxs = false;
-            },
-          });
 
-          await Promise.all(txs);
-          setTimeout(() => {
-            if (txs?.length > 0) {
-              let dataTempTx = {};
-              dataTempTx['transaction'] = txs;
-              if (txs.length > 0) {
-                txs = convertDataTransactionSimple(dataTempTx, this.coinInfo);
-                dataTempTx['transaction'].forEach((k) => {
-                  this.blockDetail['gas_used'] += +k?.gas_used;
-                  this.blockDetail['gas_wanted'] += +k?.gas_wanted;
-                });
-                this.dataSource.data = txs;
+          return this.transactionService.getListTx(payload).pipe(
+            map((res) => {
+              if (res?.transaction?.length > 0) {
+                this.updateListTx(res?.transaction);
               }
+
+              return true;
+            }),
+          );
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.loadingTxs = false;
+        },
+        error: (e) => {
+          if (e === this.NOT_FOUND) {
+            setTimeout(() => {
+              this.getDetailByHeight();
+            }, 10000);
+          } else {
+            if (e.name === TIMEOUT_ERROR) {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.status + ' ' + e.statusText;
             }
             this.loadingTxs = false;
-          }, 1000);
-        } else {
-          setTimeout(() => {
-            this.getDetailByHeight();
-          }, 10000);
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+            this.loading = false;
+          }
+        },
+      });
+  }
+
+  mappingBlockData(res) {
+    const blockArr = convertDataBlock(res);
+    if (blockArr?.length > 0) {
+      const block = blockArr[0];
+      block['round'] = _.get(res.block[0], 'data.block.last_commit.round');
+      block['chainid'] = _.get(res.block[0], 'data.block.header.chain_id');
+      block['json_data'] = _.get(res.block[0], 'data.block');
+      block['gas_used'] = block['gas_wanted'] = 0;
+      block['events'] = _.get(res.block[0], 'data.block_result.begin_block_events');
+      const blockEnd = _.get(res.block[0], 'data.block_result.end_block_events');
+      if (blockEnd) {
+        block['events'] = block['events'].concat(blockEnd);
+      }
+      this.blockDetail = block;
+    }
   }
 
   checkAmountValue(amount: number, txHash: string) {
@@ -183,5 +195,18 @@ export class BlockDetailComponent implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  updateListTx(txs) {
+    let dataTempTx = {};
+    dataTempTx['transaction'] = txs;
+    if (txs.length > 0) {
+      txs = convertDataTransactionSimple(dataTempTx, this.coinInfo);
+      dataTempTx['transaction'].forEach((k) => {
+        this.blockDetail['gas_used'] += +k?.gas_used;
+        this.blockDetail['gas_wanted'] += +k?.gas_wanted;
+      });
+      this.dataSource.data = txs;
+    }
   }
 }

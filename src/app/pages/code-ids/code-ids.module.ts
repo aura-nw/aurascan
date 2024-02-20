@@ -19,6 +19,7 @@ import { CodeIdDetailComponent } from './code-id-detail/code-id-detail.component
 import { VerifyCodeIdComponent } from './code-id-detail/verify-code-id/verify-code-id.component';
 import { CodeIdListComponent } from './code-id-list/code-id-list.component';
 import { CodeIdsRoutingModule } from './code-ids-routing.module';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [CodeIdListComponent, CodeIdDetailComponent, VerifyCodeIdComponent, CodeIdContractsTabComponent],
@@ -38,6 +39,7 @@ import { CodeIdsRoutingModule } from './code-ids-routing.module';
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
+    CommonDirectiveModule
   ],
   providers: [ContractService],
 })

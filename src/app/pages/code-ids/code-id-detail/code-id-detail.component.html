@@ -1,65 +1,74 @@
 <app-pagetitle title="Code ID Details" [displayInfo]="false"></app-pagetitle>
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <ng-container *ngIf="codeIdDetail && !isLoading">
-  <section class="information mt-4 mt-lg-6">
+  <section class="information mt-4 mt-lg-6" *ngIf="{ value: breakpoint$ | async } as breakpoint">
     <div class="card">
       <div class="card-body">
         <h2 class="h3-mob text--white mb-4">Information</h2>
         <div class="row">
-          <div class="col-6 col-lg-2">
+          <div class="col-5 col-lg-2">
             <div class="text--gray-4 body">Code ID</div>
           </div>
-          <div class="col-6 col-lg-auto">
+          <div class="col-7 col-lg-auto">
             <div class="text--gray-light body">{{ codeIdDetail.code_id }}</div>
           </div>
         </div>
         <div class="row mt-2">
-          <div class="col-6 col-lg-2">
+          <div class="col-5 col-lg-2">
             <div class="text--gray-4 body">Creator</div>
           </div>
-          <div class="col-6 col-lg-auto">
+          <div class="col-7 col-lg-auto">
             <app-name-tag
               [value]="codeIdDetail.creator"
               [fullText]="true"
+              [maxCharacter]="13"
               [url]="codeIdDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
           </div>
         </div>
         <div class="row mt-2">
-          <div class="col-6 col-lg-2">
+          <div class="col-5 col-lg-2">
             <div class="text--gray-4 body">Tx Hash</div>
           </div>
-          <div class="col-6 col-lg-auto">
-            <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-none d-lg-block">{{
-              codeIdDetail.tx_hash
-            }}</a>
-            <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-lg-none">{{
-              codeIdDetail.tx_hash | ellipsis: 8 : 8
-            }}</a>
+          <div class="col-7 col-lg-auto">
+            <a
+              *ngIf="!breakpoint.value.matches"
+              [routerLink]="['/transaction', codeIdDetail.tx_hash]"
+              class="text--primary body"
+              [copyBtn]="codeIdDetail.tx_hash">
+              {{ codeIdDetail.tx_hash }}
+            </a>
+            <a
+              *ngIf="breakpoint.value.matches"
+              [copyBtn]="codeIdDetail.tx_hash"
+              [routerLink]="['/transaction', codeIdDetail.tx_hash]"
+              class="text--primary body"
+              >{{ codeIdDetail.tx_hash | ellipsis: 8 : 8 }}</a
+            >
           </div>
         </div>
         <div class="row mt-2">
-          <div class="col-6 col-lg-2">
+          <div class="col-5 col-lg-2">
             <div class="text--gray-4 body">Type</div>
           </div>
-          <div class="col-6 col-lg-auto">
+          <div class="col-7 col-lg-auto">
             <div class="text--gray-light body">
               {{ codeIdDetail.type || '-' }}
             </div>
           </div>
         </div>
         <div class="row mt-2">
-          <div class="col-6 col-lg-2">
+          <div class="col-5 col-lg-2">
             <div class="text--gray-4 body">Instantiate times</div>
           </div>
-          <div class="col-6 col-lg-auto">
+          <div class="col-7 col-lg-auto">
             <div class="text--gray-light body">{{ codeIdDetail.instantiates }}</div>
           </div>
         </div>
         <div class="row mt-2">
-          <div class="col-6 col-lg-2">
+          <div class="col-5 col-lg-2">
             <div class="text--gray-4 body">Created At</div>
           </div>
-          <div class="col-6 col-lg-auto">
+          <div class="col-7 col-lg-auto">
             <div class="text--gray-1 body">{{ codeIdDetail.created_at | customDateTime: 'DateTime' }}</div>
           </div>
         </div>
@@ -88,7 +97,7 @@
     </div>
   </section>
 </ng-container>
-<ng-container *ngIf="!codeIdDetail && !isLoading"
-  ><div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
+<ng-container *ngIf="!codeIdDetail && !isLoading">
+  <div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
   <div class="py-lg-20"></div>
 </ng-container>

@@ -36,7 +36,6 @@ export class TransactionMessagesComponent implements OnInit {
   amountClaim = 0;
   amountCommission = 0;
   commissionAutoClaim = 0;
-  dateVesting: string;
   listAmountClaim = [];
   objMsgContract: any;
   ibcData: any;
@@ -108,13 +107,7 @@ export class TransactionMessagesComponent implements OnInit {
       this.isTransactionTypeDefault = false;
     }
 
-    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Vesting) {
-      let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
-      this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
-    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount) {
-      let date = new Date(Number(this.transactionDetail?.messages[0]?.start_time) * 1000);
-      this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
-    } else if (
+    if (
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.CreateValidator ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteAuthz
@@ -146,6 +139,7 @@ export class TransactionMessagesComponent implements OnInit {
         return;
       }
       let result = [];
+      let date = null;
 
       const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === data['@type'].toLowerCase());
       this.transactionTypeArr.push((typeTrans?.value || data['@type'].split('.').pop())?.replace('Msg', ''));
@@ -354,6 +348,7 @@ export class TransactionMessagesComponent implements OnInit {
           break;
 
         case this.eTransType.PeriodicVestingAccount:
+          date = new Date(Number(this.transactionDetail?.messages[0]?.start_time) * 1000);
           result.push({
             key: 'From Address',
             value: this.nameTagService.findNameTagByAddress(data.from_address),
@@ -364,11 +359,12 @@ export class TransactionMessagesComponent implements OnInit {
             value: this.nameTagService.findNameTagByAddress(data.to_address),
             link: { url: '/account', data: data.to_address, nameTag: true },
           });
-          result.push({ key: 'Start Time', value: this.dateVesting });
+          result.push({ key: 'Start Time', value: this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC) });
           result.push({ key: 'Vesting Periods', value: data.vesting_periods, pipeType: pipeTypeData.Json });
           break;
 
         case this.eTransType.Vesting:
+          date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
           result.push({
             key: 'From Address',
             value: this.nameTagService.findNameTagByAddress(data.from_address),
@@ -379,7 +375,7 @@ export class TransactionMessagesComponent implements OnInit {
             value: this.nameTagService.findNameTagByAddress(data.to_address),
             link: { url: '/account', data: data.to_address, nameTag: true },
           });
-          result.push({ key: 'Vesting Schedule', value: this.dateVesting });
+          result.push({ key: 'Vesting Schedule', value: this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC) });
           break;
 
         case this.eTransType.EditValidator:
@@ -401,7 +397,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
-            denom: data.min_self_delegation > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           break;
@@ -410,7 +406,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Min Self Delegation',
             value: data.min_self_delegation,
-            denom: data.min_self_delegation > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
             pipeType: pipeTypeData.BalanceOf,
           });
           result.push({
@@ -465,7 +461,7 @@ export class TransactionMessagesComponent implements OnInit {
             key: 'Amount',
             value: data.initial_deposit[0]?.amount,
             pipeType: pipeTypeData.BalanceOf,
-            denom: data.initial_deposit[0]?.amount > 0 ? { display: this.denom } : null,
+            denom: dataDenom,
           });
           result.push({
             key: 'Proposer',
@@ -1003,12 +999,5 @@ export class TransactionMessagesComponent implements OnInit {
 
   changeShowData(idx) {
     this.isDisplay[idx] = !this.isDisplay[idx];
-  }
-
-  isContractAddress(address) {
-    if (this.commonService.isValidContract(address)) {
-      return true;
-    }
-    return false;
   }
 }

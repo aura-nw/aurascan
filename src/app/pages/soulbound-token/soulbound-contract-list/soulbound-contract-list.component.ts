@@ -3,8 +3,8 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
-import { from } from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -44,6 +44,7 @@ export class SoulboundContractListComponent implements OnInit {
   isNoData = true;
   isSearchData = false;
   errTxt: string;
+  destroyed$ = new Subject<void>();
 
   constructor(
     private soulboundService: SoulboundService,
@@ -54,30 +55,22 @@ export class SoulboundContractListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    from([1])
-      .pipe(
-        delay(800),
-        mergeMap((_) => this.walletService.walletAccount$),
-      )
-      .subscribe((wallet) => {
-        if (wallet) {
-          window.addEventListener('keplr_keystorechange', () => {
-            this.isNoData = true;
-            const currentRoute = this.router.url;
-            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-              this.router.navigate([currentRoute]); // navigate to same route
-            });
-          });
-          this.currentAddress = wallet?.address;
-          this.isNoData = false;
-          this.getListSmartContract();
-        } else {
-          this.currentAddress = null;
-          this.pageChange?.selectPage(0);
-          this.dataSource.data = [];
-          this.loading = false;
-        }
-      });
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
+      if (wallet) {
+        this.currentAddress = wallet.address;
+        this.getListSmartContract();
+      } else {
+        this.currentAddress = null;
+        this.pageChange?.selectPage(0);
+        this.dataSource.data = [];
+        this.loading = false;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   searchToken() {

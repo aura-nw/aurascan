@@ -426,7 +426,7 @@
             <div class="txt-label">From</div>
             <div class="txt-address">
               <app-name-tag
-                [url]="isContractAddress(transactionDetail?.messages[0]?.inputs[0]?.address) ? 'contracts' : 'account'"
+                [url]="(transactionDetail?.messages[0]?.inputs[0]?.address | isContract) ? 'contracts' : 'account'"
                 [value]="transactionDetail?.messages[0]?.inputs[0]?.address"
                 [fullText]="true"
                 [fullTextMob]="true"></app-name-tag>
@@ -434,7 +434,7 @@
             <div class="txt-label">To</div>
             <div class="txt-address">
               <app-name-tag
-                [url]="isContractAddress(item?.address) ? 'contracts' : 'account'"
+                [url]="(item?.address | isContract) ? 'contracts' : 'account'"
                 [fullText]="true"
                 [fullTextMob]="true"
                 [value]="item?.address"></app-name-tag>

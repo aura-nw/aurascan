@@ -1,18 +1,19 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { formatNumber } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
-import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -60,6 +61,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  bannerList = this.environmentService.banner;
   coingeckoCoinId = this.environmentService.coingecko.ids[0];
   chainLogo = TITLE_LOGO;
   nativeName = this.environmentService.environment.nativeName;
@@ -86,12 +88,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   staking_APR = 0;
   tokenInfo: {
-    coinId: string;
     current_price: number;
     market_cap: number;
     max_supply: number;
     price_change_percentage_24h: number;
-    timestamp: string;
     total_volume: number;
   };
 
@@ -110,13 +110,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private transactionService: TransactionService,
     public global: Globals,
     private environmentService: EnvironmentService,
-    private cdr: ChangeDetectorRef,
     private proposalService: ProposalService,
     private walletService: WalletService,
     private validatorService: ValidatorService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private coingecko: CoingeckoService,
+    private tokenService: TokenService,
   ) {
     this.breakpoint$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state) {
@@ -126,13 +126,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.timerUnSub = timer(0, 60000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.getInfoData());
-
+    this.getMarketInfo();
     this.initChart();
     this.getCoinInfo(this.chartRange);
     this.getVotingPeriod();
+
+    this.environmentService.latestBlockHeight$.pipe(takeUntil(this.destroy$)).subscribe((height) => {
+      if (height !== undefined) {
+        const latestHeight = height ? +height + 1 : height;
+        this.getListBlock(latestHeight);
+        this.getListTransaction(latestHeight);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -140,13 +145,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  //get all data for dashboard
-  getInfoData() {
-    this.getMarketInfo();
-    this.getListBlock();
-    this.getListTransaction();
-    this.cdr.detectChanges();
-  }
   // config chart
   initChart() {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
@@ -220,16 +218,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.coingecko.getCoinById(this.environmentService.coingecko?.ids[0]).subscribe((res) => {
-      if (res?.data) {
-        this.tokenInfo = res.data;
-      }
+    this.tokenService.tokensMarket$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      this.tokenInfo = res.find((k) => k.coin_id === this.environmentService.coingecko?.ids[0]);
     });
   }
 
-  getListBlock(): void {
+  getListBlock(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
+      nextHeight: height,
     };
     this.blockService.getDataBlock(payload).subscribe({
       next: (res) => {
@@ -252,9 +249,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getListTransaction(): void {
+  getListTransaction(height = null): void {
     const payload = {
       limit: PAGE_EVENT.PAGE_SIZE,
+      heightLT: height,
     };
     this.transactionService.getListTx(payload).subscribe({
       next: (res) => {

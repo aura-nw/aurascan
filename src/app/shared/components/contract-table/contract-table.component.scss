@@ -34,17 +34,26 @@
   }
 
   @media (max-width: 991.99px) {
+    thead th:nth-child(2), thead th:nth-child(7) {
+      padding-left: 32px;
+    }
     tbody tr {
       & td:not(:first-child) {
         min-width: 150px;
       }
 
       & td:nth-child(2) {
+        min-width: 270px;
+        padding-left: 32px;
+      }
+
+      & td:nth-child(7) {
         min-width: 200px;
+        padding-left: 32px;
       }
 
       & td.nameTag {
-        min-width: 170px;
+        min-width: 210px;
       }
     }
   }
