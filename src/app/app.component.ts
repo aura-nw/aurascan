@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { STORAGE_KEYS, TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
+import { STORAGE_KEYS } from './core/constants/common.constant';
 import { CommonService } from './core/services/common.service';
 import { TokenService } from './core/services/token.service';
 import { getInfo } from './core/utils/common/info-common';
 import { Globals } from './global/global';
-// import eruda from 'eruda';
+import eruda from 'eruda';
 import * as _ from 'lodash';
 import { forkJoin, map, Subject, takeUntil } from 'rxjs';
 import { NameTagService } from './core/services/name-tag.service';
@@ -15,7 +15,6 @@ import local from './core/utils/storage/local';
 import { IUser } from './core/models/auth.models';
 import { UserService } from './core/services/user.service';
 import { EnvironmentService } from './core/data-services/environment.service';
-import eruda from 'eruda';
 
 @Component({
   selector: 'app-root',
@@ -23,10 +22,8 @@ import eruda from 'eruda';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  TESTNET = true;
-  // isTestnet = this.TESTNET.includes(
-  //   this.chainInfo?.chainId || ''
-  // );
+  TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
+  isTestnet = this.TESTNET.includes(this.environmentService.chainInfo?.chainId || '');
   isFirstLoad = true;
   user: IUser;
 
