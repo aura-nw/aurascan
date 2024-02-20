@@ -104,20 +104,20 @@ app-tooltip-customize.tooltip--right {
   position: absolute;
   transform: translate(0, -100%);
   display: none;
-  // right: -4px;
   top: -12px;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 9px;
   border-radius: 4px;
   background-color: var(--aura-gray-8);
   color: var(--aura-white);
   z-index: 99999;
   font-size: 1.2rem;
+  font-weight: 400;
   opacity: 1;
   transition: opacity 0.35s ease-in-out;
   text-transform: initial;
-  font-weight: 600;
+
   &.show {
     opacity: 1;
     display: flex;
