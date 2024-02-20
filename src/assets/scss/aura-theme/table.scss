@@ -46,6 +46,9 @@
       pointer-events: none;
       color: var(--aura-white);
     }
+    &:hover {
+      color: var(--aura-blue-shade-3) !important;
+    }
   }
   mat-row,
   mat-header-row,
