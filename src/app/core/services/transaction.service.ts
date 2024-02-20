@@ -167,7 +167,7 @@ export class TransactionService extends CommonService {
               smart_contract: { address: { _eq: $value } }
               _and: [
                 { action: { _eq: $actionEq } }
-                { action: { _neq: $actionNEq } }
+                { action: { _nlike: $actionNEq } }
               ]
             }
             _and: [

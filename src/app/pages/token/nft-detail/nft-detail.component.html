@@ -17,9 +17,11 @@
         <span class="burnt-tag caption" *ngIf="nftDetail?.burned">Burnt</span>
       </h1>
       <div class="mt-2">
-        <a class="text--primary h6 mb-0 mt-2 break-word" [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]">{{
-          nftDetail?.name || nftDetail?.token_name
-        }}</a>
+        <a
+          class="text--primary h6 mb-0 mt-2 break-word"
+          [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]"
+          >{{ nftDetail?.name || nftDetail?.token_name }}</a
+        >
       </div>
     </div>
 
@@ -289,13 +291,13 @@
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef>
-              <div [innerHTML]="template.headerCellDef | translate"></div>
+              <div class="{{ template.cssClass }}" [innerHTML]="template.headerCellDef | translate"></div>
             </th>
 
             <td mat-cell *matCellDef="let data; let i = index">
               <ng-container [ngSwitch]="template.matColumnDef">
                 <ng-container *ngSwitchCase="'tx_hash'">
-                  <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
+                  <a class="text--primary" [copyBtn]="data.tx_hash" [routerLink]="['/transaction', data.tx_hash]">
                     {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                   </a>
                 </ng-container>
@@ -376,7 +378,7 @@
                   </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
-                  <div class="aura-tooltip-contain d-flex" *ngIf="data[template.matColumnDef]">
+                  <div class="aura-tooltip-contain d-flex pl-5 pl-lg-0" *ngIf="data[template.matColumnDef]">
                     <div class="aura-tooltip-object" *ngIf="data[template.matColumnDef] < 0.001"><0.001</div>
                     <div
                       [class.aura-tooltip-object]="data[template.matColumnDef] !== 0"
@@ -392,7 +394,7 @@
                       [content]="data[template.matColumnDef] | mask: 'separator'">
                     </app-tooltip-customize>
                   </div>
-                  <div *ngIf="!data[template.matColumnDef]">-</div>
+                  <div class="pl-5 pl-lg-0" *ngIf="!data[template.matColumnDef]">-</div>
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
               </ng-container>

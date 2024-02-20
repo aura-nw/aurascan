@@ -100,7 +100,7 @@ export class ContractsTransactionsComponent implements OnInit {
       this.payload['key'] = null;
       switch (+this.label) {
         case 1: //incoming
-          this.payload['actionNEq'] = 'instantiate';
+          this.payload['actionNEq'] = '%instantiate%';
           break;
         case 2: //instantiate
           this.payload['actionEq'] = 'instantiate';
