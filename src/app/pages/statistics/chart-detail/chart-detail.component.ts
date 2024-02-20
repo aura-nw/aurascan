@@ -115,6 +115,8 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
       },
       leftPriceScale: {
         visible: true,
+        mode: 1,
+        autoScale: true,
       },
       rightPriceScale: {
         visible: false,
