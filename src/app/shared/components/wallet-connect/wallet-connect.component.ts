@@ -23,18 +23,7 @@ export class WalletConnectComponent implements OnInit {
   CHAIN_ID = this.env.chainId;
 
   walletSupportedList = this.env.isMobile ? mobileWallets : [...desktopWallets, ...wcWallets];
-  walletConnectionOption: WalletConnectOptions = {
-    signClient: {
-      projectId: 'f371e1f6882d401122d20c719baf663a',
-      relayUrl: 'wss://relay.walletconnect.org',
-      metadata: {
-        name: 'Aurascan',
-        description: 'Aura Network Explorer',
-        url: 'https://x2scan.vercel.app/',
-        icons: ['https://images.aura.network/aurascan/xstaxy-assets/images/logo/aura-explorer-logo.png'],
-      },
-    },
-  };
+  walletConnectionOption: WalletConnectOptions = this.env.walletConnect;
 
   signerOptions = {
     signingCosmwasm: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
@@ -57,11 +46,6 @@ export class WalletConnectComponent implements OnInit {
   async ngOnInit() {
     try {
       const chain = allChains.find((chain) => chain.chain_id == this.CHAIN_ID);
-
-      console.log('🐛Connect to chain: ', {
-        pretty_name: chain.pretty_name,
-        chain_id: chain.chain_id,
-      });
 
       const wallets = this.walletSupportedList.filter((w) => checkDesktopWallets(w.walletName));
 

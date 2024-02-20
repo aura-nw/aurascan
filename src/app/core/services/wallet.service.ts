@@ -26,9 +26,11 @@ import { allAssets, allChains, STORAGE_KEY } from '../utils/cosmoskit';
 })
 export class WalletService implements OnDestroy {
   // wallet config
-  private _logger = new Logger('DEBUG');
+  private _logger: Logger;
   private _walletManager: WalletManager | null = null;
   private _chain: Chain;
+
+  private testnets = ['aura-testnet-2', 'serenity-testnet-001'];
 
   // account subject config
   private _walletAccountSubject$: BehaviorSubject<WalletAccount>;
@@ -102,6 +104,12 @@ export class WalletService implements OnDestroy {
     }
 
     this._chain = chain;
+
+    this._logger = new Logger(this.testnets.includes(chain.chain_id) ? 'DEBUG' : 'INFO');
+    this._logger.info('Connect to chain: ', {
+      pretty_name: chain.pretty_name,
+      chain_id: chain.chain_id,
+    });
 
     this._walletManager = new WalletManager(
       [chain],

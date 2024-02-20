@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { WalletConnectOptions } from '@cosmos-kit/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
@@ -67,6 +68,7 @@ export interface IConfiguration {
       rest: string;
       chain: string;
     };
+    walletConnect: WalletConnectOptions;
   };
 }
 
@@ -155,6 +157,10 @@ export class EnvironmentService {
 
   get coingecko() {
     return _.get(this.configValue, 'api.coingecko');
+  }
+
+  get walletConnect() {
+    return _.get(this.configValue, 'api.walletConnect');
   }
 
   setLatestBlockHeight(value: string | number) {
