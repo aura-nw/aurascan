@@ -289,7 +289,7 @@
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef>
-              <div [innerHTML]="template.headerCellDef | translate"></div>
+              <div class="{{template.cssClass}}" [innerHTML]="template.headerCellDef | translate"></div>
             </th>
 
             <td mat-cell *matCellDef="let data; let i = index">
@@ -378,7 +378,7 @@
                   </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
-                  <div class="aura-tooltip-contain d-flex" *ngIf="data[template.matColumnDef]">
+                  <div class="aura-tooltip-contain d-flex pl-5 pl-lg-0" *ngIf="data[template.matColumnDef]">
                     <div class="aura-tooltip-object" *ngIf="data[template.matColumnDef] < 0.001"><0.001</div>
                     <div
                       [class.aura-tooltip-object]="data[template.matColumnDef] !== 0"
@@ -394,7 +394,7 @@
                       [content]="data[template.matColumnDef] | mask: 'separator'">
                     </app-tooltip-customize>
                   </div>
-                  <div *ngIf="!data[template.matColumnDef]">-</div>
+                  <div class=" pl-5 pl-lg-0" *ngIf="!data[template.matColumnDef]">-</div>
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
               </ng-container>

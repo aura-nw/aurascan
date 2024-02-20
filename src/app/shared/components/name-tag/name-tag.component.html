@@ -36,7 +36,6 @@
          [class.align-items-center]="isBox && !(paramUrl || value | nameTagTooltipPipe)">
       <button
         class="button button--xxs px-1 aura-tooltip-object disabled-hover"
-        [class.d-block]="(value || paramUrl | nameTag).length > 43"
         #tooltip
         (click)="commonService.showToolTip(tooltip)"
         [cdkCopyToClipboard]="paramUrl || value">
@@ -86,7 +85,6 @@
          [class.align-items-center]="isBox && !(paramUrl || value | nameTagTooltipPipe)">
       <button
         class="button button--xxs px-1 aura-tooltip-object disabled-hover"
-        [class.d-block]="(value || paramUrl | nameTag).length > 43"
         #tooltip
         (click)="commonService.showToolTip(tooltip)"
         [cdkCopyToClipboard]="paramUrl || value">
