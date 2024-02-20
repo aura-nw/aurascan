@@ -475,15 +475,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy, OnCh
         setReceive = true;
       }
 
-      const coinConfig = this.environmentService.coins;
-      let txs = convertDataAccountTransaction(
-        data,
-        this.coinInfo,
-        this.modeQuery,
-        setReceive,
-        this.currentAddress,
-        coinConfig,
-      );
+      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
 
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
