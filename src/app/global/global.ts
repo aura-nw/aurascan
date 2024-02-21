@@ -231,30 +231,12 @@ export function convertDataTransaction(data, coinInfo) {
     let _type =
       _.get(element, 'data.body.messages[0].@type') || _.get(element, 'transaction_messages[0].content["@type"]');
     let lstType = _.get(element, 'data.body.messages') || _.get(element, 'transaction_messages');
-    let denom = coinInfo.coinDenom;
-
-    // check send token ibc same chain
-    if (_type === TRANSACTION_TYPE_ENUM.Send && messages[0]?.amount[0]?.denom !== denom) {
-      denom = messages[0].amount[0].denom;
-    }
-
-    // check transfer token ibc different chain
-    if (_type === TRANSACTION_TYPE_ENUM.IBCTransfer && messages[0]?.token?.denom !== denom) {
-      denom = messages[0].token?.denom;
-    }
 
     if (lstType?.length > 1) {
       lstType.forEach((type) => {
         const typeTemp = _.get(type, 'content[@type]') || _.get(type, '@type');
         if (typeTemp !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && typeTemp?.indexOf('ibc') > -1) {
           _type = typeTemp;
-          try {
-            let dataEncode = atob(type?.packet?.data);
-            const data = JSON.parse(dataEncode);
-            denom = data.denom;
-          } catch (e) {
-            denom = coinInfo.coinDenom;
-          }
           return;
         }
       });
@@ -311,7 +293,6 @@ export function convertDataTransaction(data, coinInfo) {
       fee,
       height,
       timestamp,
-      denom,
       messages,
       tx,
       typeOrigin,
