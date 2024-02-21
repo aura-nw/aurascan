@@ -4,14 +4,12 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
-import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -35,7 +33,7 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
   templateUrl: './account-transaction-table.component.html',
   styleUrls: ['./account-transaction-table.component.scss'],
 })
-export class AccountTransactionTableComponent implements OnInit, OnDestroy, OnChanges {
+export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   @Input() address: string;
   @Input() modeQuery: string;
@@ -121,6 +119,15 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy, OnCh
   ) {}
 
   ngOnInit(): void {
+    this.initTnxFilter();
+    if (this.tnxTypeOrigin?.length === 0) {
+      this.getListTypeFilter();
+    } else {
+      this.tnxType = this.tnxTypeOrigin;
+      this.tnxTypeOrigin = [...this.tnxType];
+      this.lstType.emit(this.tnxTypeOrigin);
+    }
+
     this.route.queryParams.subscribe((params) => {
       if (params?.type) {
         this.currentType = params.type || AccountTxType.Sent;
@@ -636,16 +643,5 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy, OnCh
 
   encodeData(data) {
     return encodeURIComponent(data);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.initTnxFilter();
-    if (this.tnxTypeOrigin?.length === 0) {
-      this.getListTypeFilter();
-    } else {
-      this.tnxType = this.tnxTypeOrigin;
-      this.tnxTypeOrigin = [...this.tnxType];
-      this.lstType.emit(this.tnxTypeOrigin);
-    }
   }
 }
