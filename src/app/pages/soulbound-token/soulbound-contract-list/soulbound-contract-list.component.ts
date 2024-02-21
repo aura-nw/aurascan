@@ -55,9 +55,9 @@ export class SoulboundContractListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
-        this.currentAddress = this.walletService.wallet?.bech32Address;
+        this.currentAddress = wallet.address;
         this.getListSmartContract();
       } else {
         this.currentAddress = null;

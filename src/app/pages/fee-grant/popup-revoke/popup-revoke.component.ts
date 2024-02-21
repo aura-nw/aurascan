@@ -3,11 +3,10 @@ import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
-import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { MsgRevokeAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-
 @Component({
   selector: 'app-popup-revoke',
   templateUrl: './popup-revoke.component.html',
@@ -20,7 +19,6 @@ export class PopupRevokeComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { granterAddress: string; granteeAddress: string },
     public dialogRef: MatDialogRef<PopupRevokeComponent>,
     private walletService: WalletService,
-    private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
   ) {}
 
@@ -30,32 +28,33 @@ export class PopupRevokeComponent implements OnInit {
     this.dialogRef.close(hash);
   }
 
-  connectWallet(): void {
-    this.walletAccount = this.walletService.getAccount();
-  }
+  async revoke() {
+    const account = this.walletService.getAccount();
 
-  executeRevoke() {
-    const granter = this.walletService.wallet?.bech32Address;
-    const executeRevoke = async () => {
-      const { hash, error } = await this.walletService.signAndBroadcast({
-        messageType: SIGNING_MESSAGE_TYPES.REVOKE_ALLOWANCE,
-        message: {
-          granter: this.data.granterAddress,
-          grantee: this.data.granteeAddress,
-        },
-        senderAddress: granter,
-        network: this.environmentService.chainInfo,
-        chainId: this.walletService.chainId,
-      });
+    if (!account) {
+      return;
+    }
 
-      if (hash) {
-        this.closeDialog(hash);
-      } else {
-        if (error != 'Request rejected') {
+    const msg = {
+      typeUrl: TRANSACTION_TYPE_ENUM.MsgRevokeAllowance,
+      value: MsgRevokeAllowance.fromPartial({
+        granter: this.data.granterAddress,
+        grantee: this.data.granteeAddress,
+      }),
+    };
+
+    const revokeMultiplier = 1.7; // revoke multiplier - NOT FOR ALL
+    const fee = await this.walletService.estimateFee([msg], 'stargate', '', revokeMultiplier).catch(() => undefined);
+
+    this.walletService
+      .signAndBroadcastStargate(account.address, [msg], fee, '')
+      .then((result) => {
+        this.closeDialog(result.transactionHash);
+      })
+      .catch((error) => {
+        if (error?.message != 'Request rejected') {
           this.toastr.error(error);
         }
-      }
-    };
-    executeRevoke();
+      });
   }
 }

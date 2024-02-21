@@ -26,7 +26,7 @@ import {
   TIMEOUT_ERROR,
   TITLE_LOGO,
 } from '../../core/constants/common.constant';
-import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
+import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
 @Component({
@@ -424,7 +424,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     // re-draw chart when connect coin98 app in mobile
-    this.walletService.wallet$.pipe(takeUntil(this.destroy$)).subscribe((wallet) => {
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroy$)).subscribe((wallet) => {
       if (wallet && this.isMobileMatched) {
         if (this.originalData.length === 0) {
           this.originalData = this.cacheData;
