@@ -554,7 +554,7 @@
                               [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
                               [copyBtn]="item.tokenId"
                               class="text--primary cursor-pointer"
-                            >#{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}</a
+                            >#{{ item.tokenId | ellipsis: 12 }}</a
                             >
                             <ng-container *ngIf="!item.tokenId">-</ng-container>
                           </div>
