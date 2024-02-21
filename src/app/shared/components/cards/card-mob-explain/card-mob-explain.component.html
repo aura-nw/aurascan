@@ -29,6 +29,7 @@
         [class.private-name-tag]="
           (data.label === 'Sender' || data.label === 'Recipient') && (data['address'] | isPrivateNameTag)
         "
+        [copyBtn]="(data.label === 'Sender' || data.label === 'Recipient') ? data['address'] : null"
         [innerHTML]="data.info"></div>
       <div *ngIf="data.isAmount" class="{{ data.class }}">
         <span [appBigNumber]="data.info"></span>
