@@ -137,7 +137,7 @@ export class SoulboundTokenContractComponent implements OnInit {
 
     this.soulboundService.getSBContractDetail(payload).subscribe({
       next: (res) => {
-        this.dataSource.data = res.data;
+        this.dataSource = new MatTableDataSource<any>(res.data);
         this.pageData.length = res.meta.count;
       },
       error: (e) => {

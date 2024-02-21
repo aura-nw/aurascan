@@ -3,6 +3,7 @@
   @media (max-width: 991.99px) {
     padding: 8px;
   }
+
   &[aria-expanded='true'] {
     border: 2px solid var(--aura-white);
   }
@@ -20,6 +21,7 @@
   .divider.divider-vertical {
     min-height: 33px;
   }
+
   .input-group {
     height: 33px;
     background-color: transparent;
@@ -36,9 +38,11 @@
       width: fit-content;
     }
   }
+
   @media (max-width: 376px) {
     width: calc(100vw - 68px);
   }
+
   .mat-date-range-input {
     width: 100%;
   }
@@ -57,6 +61,7 @@
   @media (max-width: 414px) {
     max-height: 130px;
   }
+
   ::ng-deep {
     .form-group label {
       line-height: 18px !important;
@@ -73,13 +78,16 @@
 
 .row-tx:has(.ph-caret-up) {
   background: linear-gradient(0deg, #262838, #262838), linear-gradient(0deg, #0e7e6b, #0e7e6b);
+
   ::ng-deep.box-name-tag:not(.private-name-tag) {
     &:after {
       border-right: 15px solid #262838;
     }
   }
+
   td:first-child {
     position: relative;
+
     &::before {
       content: '';
       position: absolute;
@@ -96,15 +104,19 @@
   .aura-status .status {
     background-color: unset;
   }
+
   .item-show {
     height: 56px;
     min-width: 180px;
+
     &.nft-column {
       flex-direction: column;
       align-items: flex-start;
       height: 56px !important;
+      min-width: 190px;
     }
   }
+
   .tab-nft .item-show {
     height: 64px;
   }
@@ -112,6 +124,7 @@
   tr td {
     vertical-align: top;
     padding-top: var(--spacer-4);
+
     &:nth-child(2) {
       padding-top: var(--spacer-2);
     }
@@ -122,6 +135,7 @@
     &:nth-child(3) {
       padding-top: var(--spacer-5) !important;
     }
+
     &:nth-child(2) {
       padding-top: var(--spacer-3) !important;
     }
@@ -131,26 +145,32 @@
     transition: all 0.35s ease-in-out;
     height: 0;
     overflow: hidden;
+
     &.show-detail {
       height: 56px;
     }
   }
+
   .box-number {
     border-radius: 4px;
     padding: 2px 6px 2px 6px;
     font-size: 12px;
+
     .icon-expand {
       margin-bottom: 2px;
     }
   }
+
   .box-token-transfer {
     min-width: 60px;
+
     .token-transfer-status {
       padding: var(--spacer-2) var(--spacer-4);
       color: var(--aura-green-3);
       border-radius: 4px;
       width: auto;
       margin: auto;
+
       &.status-out {
         color: var(--aura-red-3);
       }
@@ -170,8 +190,8 @@
 }
 
 .filter-contain {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
   overflow: hidden;
   overflow-x: auto;
   padding-bottom: 184px;
@@ -179,9 +199,11 @@
     overflow: visible;
     padding-bottom: 0;
   }
+
   &::-webkit-scrollbar {
     display: none;
   }
+
   .aura-dropdown-menu {
     inset: unset !important;
     width: 100%;
@@ -194,12 +216,14 @@
   right: 0;
   transform: translate(50%, -50%);
 }
+
 .box-filter__desc {
   margin-top: -200px;
   @media (min-width: 991.98px) {
     margin-top: 0;
   }
 }
+
 .filter-result {
   white-space: nowrap;
   padding: 0 var(--spacer-4);
@@ -211,6 +235,7 @@
   display: flex;
   align-items: center;
 }
+
 .tag-filter-box {
   min-height: 40px;
   border: 1px solid var(--aura-gray-9);
@@ -219,15 +244,18 @@
   padding: 0 14px;
   max-height: 100px;
   overflow-y: auto;
+
   &.has-result {
     padding: 4px;
     padding-right: 14px;
     flex-wrap: wrap;
   }
+
   .filter-result {
     height: 24px;
     padding: 0 var(--spacer-2);
     margin-bottom: var(--spacer-1);
+
     &:not(:last-child) {
       margin-right: var(--spacer-1);
     }
@@ -239,18 +267,22 @@
     i.ph-caret-down {
       display: none;
     }
+
     i.ph-caret-up {
       display: flex;
     }
   }
+
   &[aria-expanded='false'] {
     i.ph-caret-down {
       display: flex;
     }
+
     i.ph-caret-up {
       display: none;
     }
   }
+
   &:not(.filter-result) {
     min-width: 200px !important;
   }

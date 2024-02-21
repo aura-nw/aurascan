@@ -10,21 +10,21 @@ import { DROPDOWN_ELEMENT, ITableContract } from 'src/app/core/models/contract.m
 import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
+import * as _ from 'lodash';
 
 export interface TableData {
   txHash: string;
   method: string;
   status: string;
   blockHeight: number;
-  blockId: number;
   time: Date;
   from: string;
-  to: string;
+  to?: string;
   // label: string;
-  value: number;
+  value?: number;
   fee: number;
-  gas_used: number;
-  gas_wanted: number;
+  gas_used?: number;
+  gas_wanted?: number;
   lst_type?: Array<any>;
 }
 
@@ -119,7 +119,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
     const ret = this.dataList?.data?.map((contract) => {
       let value = 0;
       let from = '';
-      let to = '';
       let method = '';
       let msg = contract.messages[0]?.msg;
       if (typeof msg === 'string') {
@@ -128,59 +127,34 @@ export class ContractTableComponent implements OnInit, OnChanges {
         } catch (e) {}
       }
 
-      switch (contract.typeOrigin) {
-        case TRANSACTION_TYPE_ENUM.InstantiateContract:
-        case TRANSACTION_TYPE_ENUM.InstantiateContract2:
-          method = 'Instantiate';
-          from = contract.messages[0].sender;
-          to = contract.contract_address || this.contractInfo.contractsAddress;
-          break;
-        case TRANSACTION_TYPE_ENUM.Send:
-          method = 'Transfer';
-          value = +contract.messages[0]?.amount[0].amount;
-          from = contract.messages[0].from_address;
-          to = contract.messages[0].to_address;
-          break;
-        case TRANSACTION_TYPE_ENUM.ExecuteContract:
-          method = getTypeTx(contract.tx.tx.body)?.type;
-          value = +contract.messages[0].funds[0]?.amount;
-          from = contract.messages[0].sender;
-          to = contract.messages[0].contract;
-          break;
-        default:
-          if (msg && Object.keys(msg)[0]?.length > 1) {
-            method = Object.keys(msg)[0];
-          } else {
-            method = getTypeTx(contract.tx.tx.body)?.type;
-          }
-          if (contract.messages[0]?.funds) {
-            value = +contract.messages[0]?.funds[0]?.amount;
-          }
-          from = contract.messages[0].sender;
-          to = contract.messages[0].contract;
-          break;
+      if (
+        contract.typeOrigin === TRANSACTION_TYPE_ENUM.InstantiateContract ||
+        contract.typeOrigin === TRANSACTION_TYPE_ENUM.InstantiateContract2
+      ) {
+        method = 'Instantiate';
+      } else {
+        if (msg && Object.keys(msg)[0]?.length > 1) {
+          method = Object.keys(msg)[0];
+        } else {
+          method = getTypeTx(contract)?.type;
+        }
       }
-
-      // const label =
-      //   contract.messages[0].sender === this.contractInfo?.contractsAddress
-      //     ? ContractTransactionType.OUT
-      //     : ContractTransactionType.IN;
+      from =
+        _.get(contract, 'messages[0].sender') ||
+        _.get(contract, 'messages[0].content.sender') ||
+        _.get(contract, 'messages[0].content.from_address');
 
       const tableDta: TableData = {
         txHash: contract.tx_hash,
         method,
         status: contract.status,
         blockHeight: contract.height,
-        blockId: contract.blockId,
         time: new Date(contract.timestamp),
         from,
         // label,
-        to,
         value: balanceOf(value) || 0,
         fee: +contract.fee,
-        gas_used: +contract.gas_used,
-        gas_wanted: +contract.gas_wanted,
-        lst_type: contract.lstType
+        lst_type: contract.lstType,
       };
       return tableDta;
     });
