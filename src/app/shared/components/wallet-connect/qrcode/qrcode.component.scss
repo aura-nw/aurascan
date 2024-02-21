@@ -1,0 +1,11 @@
+.qrcode-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .qrcode-wrapper {
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--aura-gray-8);
+    display: flex;
+  }
+}

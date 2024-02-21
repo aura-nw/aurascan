@@ -91,9 +91,7 @@
         "average": 0.0025,
         "high": 0.004
       },
-      "features": [
-        "ibc-transfer"
-      ],
+      "features": ["ibc-transfer"],
       "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
       "logo": "https://i.imgur.com/zi0mTYb.png",
       "explorer": "https://explorer.dev.aura.network/",
@@ -120,9 +118,7 @@
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": [
-        "aura-network"
-      ]
+      "ids": ["aura-network"]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -134,6 +130,18 @@
       "graphql": "/v2/graphql",
       "rest": "/v2",
       "chain": "auratestnet"
+    },
+    "walletConnect": {
+      "signClient": {
+        "projectId": "eaa17bd7ef378b027e02be536441dae1",
+        "relayUrl": "wss://relay.walletconnect.org",
+        "metadata": {
+          "name": "Aurascan",
+          "description": "Aura Network Explorer",
+          "url": "https://serenity.aurascan.io/",
+          "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
+        }
+      }
     }
   }
 }
