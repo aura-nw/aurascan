@@ -18,8 +18,7 @@
                   class="py-1"
                   [class.hide-td]="i === 1 && breakpoint.value.matches"
                   [class.text-end]="i === 2"
-                  [class.pr-2]="i === 2"
-                  [class.pr-lg-5]="i === 2">
+                  [class.pr-5]="i === 2">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <div *ngSwitchCase="'assets'">
                       <div class="d-flex align-items-center">
@@ -159,7 +158,9 @@
             <ng-container *ngFor="let template of templatesNFTs; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
                 <th *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let data" class="py-1" [class.hide-td]="i === 2 && breakpoint.value.matches">
+                <td mat-cell *matCellDef="let data" class="py-1"
+                    [class.pr-5]="i === 1"
+                    [class.hide-td]="i === 2 && breakpoint.value.matches">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'nft'">
                       <div class="d-flex transfer-token-info">
