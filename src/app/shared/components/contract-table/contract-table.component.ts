@@ -139,7 +139,10 @@ export class ContractTableComponent implements OnInit, OnChanges {
           method = getTypeTx(contract)?.type;
         }
       }
-      from = _.get(contract, 'messages[0].sender') || _.get(contract, 'messages[0].content.sender');
+      from =
+        _.get(contract, 'messages[0].sender') ||
+        _.get(contract, 'messages[0].content.sender') ||
+        _.get(contract, 'messages[0].content.from_address');
 
       const tableDta: TableData = {
         txHash: contract.tx_hash,
