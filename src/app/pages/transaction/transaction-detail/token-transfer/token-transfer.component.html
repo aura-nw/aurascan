@@ -27,7 +27,7 @@
                           [appImg]="data | marketInfo: 'logo'"
                           width="20"
                           height="20"
-                          alt=""/>
+                          alt="" />
                         <div class="ml-3 d-flex transfer-token-info">
                           <div class="aura-tooltip-contain">
                             <span
@@ -158,18 +158,25 @@
             <ng-container *ngFor="let template of templatesNFTs; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
                 <th *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let data" class="py-1"
-                    [class.pr-5]="i === 1"
-                    [class.hide-td]="i === 2 && breakpoint.value.matches">
+                <td
+                  mat-cell
+                  *matCellDef="let data"
+                  class="py-1"
+                  [class.pr-5]="i === 1"
+                  [class.hide-td]="i === 2 && breakpoint.value.matches">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'nft'">
                       <div class="d-flex transfer-token-info">
                         <div *ngIf="!breakpoint.value.matches" class="mb-1 d-flex align-items-center">
                           <span class="caption fw-normal text--gray-4 mr-1 text-nowrap">Token ID</span>
-                          <span class="line-claim w-100" [copyBtn]="data?.cw721_token?.token_id">#{{ data?.cw721_token?.token_id }}</span>
+                          <span class="line-claim w-100" [copyBtn]="data?.cw721_token?.token_id"
+                            >#{{ data?.cw721_token?.token_id }}</span
+                          >
                         </div>
                         <div *ngIf="breakpoint.value.matches" class="d-flex mb-1">
-                          <span class="line-claim token-id" [copyBtn]="data?.cw721_token?.token_id">#{{ data?.cw721_token?.token_id }}</span>
+                          <span class="line-claim token-id" [copyBtn]="data?.cw721_token?.token_id"
+                            >#{{ data?.cw721_token?.token_id }}</span
+                          >
                           <div
                             *ngIf="breakpoint.value.matches"
                             class="ml-2 d-flex align-items-center"
