@@ -11,6 +11,7 @@ import { IVotingDialog } from 'src/app/core/models/proposal.model';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { parseErrorFromMetamask } from 'src/app/core/utils/cosmoskit/helpers/metamask-parser';
 
 @Component({
   selector: 'app-proposal-vote',
@@ -23,6 +24,13 @@ export class ProposalVoteComponent {
   chainInfo = this.environmentService.chainInfo;
   isLoading = false;
 
+  chainVoteOption = {
+    Yes: 1,
+    Abstain: 2,
+    No: 3,
+    NoWithVeto: 4,
+  };
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
@@ -34,7 +42,7 @@ export class ProposalVoteComponent {
     this.keyVote = data.voteValue ?? null;
   }
 
-  vote() {
+  async vote() {
     const account = this.walletService.getAccount();
 
     if (!account) {
@@ -46,12 +54,17 @@ export class ProposalVoteComponent {
       value: MsgVote.fromPartial({
         voter: account.address,
         proposalId: BigInt(this.data.id),
-        option: this.keyVote,
+        option: this.chainVoteOption[this.keyVote],
       }),
     };
 
+    this.isLoading = true;
+
+    const multiplier = 1.7; // multiplier
+    const fee = await this.walletService.estimateFee([msg], 'stargate', '', multiplier).catch(() => undefined);
+
     this.walletService
-      .signAndBroadcast(account.address, [msg])
+      .signAndBroadcast(account.address, [msg], fee)
       .then((result) => {
         if (result?.transactionHash) {
           this.toastr.loading(result.transactionHash);
@@ -61,9 +74,12 @@ export class ProposalVoteComponent {
           }, TIME_OUT_CALL_API);
         }
         this.dialogRef.close();
+        this.isLoading = false;
       })
       .catch((error) => {
-        let errorMessage = this.mappingErrorService.checkMappingError('', error?.code);
+        this.isLoading = false;
+        const { code, message } = parseErrorFromMetamask(error);
+        let errorMessage = this.mappingErrorService.checkMappingError(message, code);
         this.toastr.error(errorMessage);
         this.closeVoteForm();
       });
