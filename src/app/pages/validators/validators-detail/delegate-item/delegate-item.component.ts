@@ -57,10 +57,10 @@ export class DelegateItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
         this.dataDelegate = null;
-        this.userAddress = wallet.bech32Address;
+        this.userAddress = wallet.address;
       } else {
         this.userAddress = null;
       }
@@ -84,7 +84,7 @@ export class DelegateItemComponent implements OnInit {
     if (!this.dialogOpen) {
       const view = async () => {
         const account = this.walletService.getAccount();
-        if (account && account.bech32Address) {
+        if (account && account.address) {
           this.amountFormat = null;
           this.resetCheck();
           this.modalReference = this.modalService.open(staticDataModal, {
@@ -163,28 +163,30 @@ export class DelegateItemComponent implements OnInit {
   handleStaking() {
     this.isValidAmount();
     if (!this.isExceedAmount && !this.isValidatorJail && this.amountFormat > 0) {
-      const executeStaking = async () => {
-        this.isLoading = true;
-        const { hash, error } = await this.walletService.signAndBroadcast({
-          messageType: SIGNING_MESSAGE_TYPES.STAKE,
-          message: {
-            to: [this.currentValidatorDetail?.operator_address],
-            amount: {
-              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: this.coinMinimalDenom,
-            },
-          },
-          senderAddress: this.userAddress,
-          network: this.chainInfo,
-          chainId: this.walletService.chainId,
-        });
+      this.isLoading = true;
 
-        this.isOpenDialog = false;
-        this.dialogOpen = false;
-        this.changeStatus.emit(false);
-        this.checkStatusExecuteBlock(hash, error);
+      const msg = {
+        delegatorAddress: this.userAddress,
+        validatorAddress: this.currentValidatorDetail?.operator_address,
+        amount: {
+          amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
+          denom: this.coinMinimalDenom,
+        },
       };
-      executeStaking();
+
+      this.walletService
+        .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount)
+        .then((broadcastResult) => {
+          let error = undefined;
+          if (broadcastResult?.code != 0) {
+            error = broadcastResult;
+          }
+
+          this.checkTxStatusOnchain({ success: broadcastResult, error });
+        })
+        .catch((error) => {
+          this.checkTxStatusOnchain({ error });
+        });
     }
   }
 
@@ -208,36 +210,42 @@ export class DelegateItemComponent implements OnInit {
     }
   }
 
-  checkStatusExecuteBlock(hash, error) {
-    this.checkHashAction(hash);
+  checkTxStatusOnchain({ success, error }: { success?: any; error?: { message: string; code: number } }) {
+    this.isOpenDialog = false;
+    this.dialogOpen = false;
+
     if (error) {
-      if (error != 'Request rejected') {
-        this.toastr.error(error);
+      const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : error;
+
+      if (code) {
+        let errorMessage = this.mappingErrorService.checkMappingError('', code);
+        this.toastr.error(errorMessage);
       }
+
       this.resetData();
     } else {
+      const hash = success?.transactionHash;
+      this.isLoading = false;
+
+      if (!hash) {
+        return;
+      }
+
+      this.toastr.loading(hash);
+
       setTimeout(() => {
-        this.mappingErrorService.checkDetailTx(hash).then(() => this.reloadData.emit());
+        this.mappingErrorService.checkDetailTx(hash).then(() => {
+          this.reloadData.emit();
+        });
         this.resetData();
       }, TIME_OUT_CALL_API);
     }
   }
 
-  checkHashAction(hash) {
-    const myInterval = setInterval(() => {
-      if (hash) {
-        this.toastr.loading(hash);
-        this.isLoading = false;
-        this.modalReference?.close();
-        clearInterval(myInterval);
-      }
-    }, 500);
-  }
-
   resetData() {
     this.isLoading = false;
-    this.modalReference?.close();
     this.isHandleStake = false;
     this.changeStatus.emit(false);
+    this.modalReference?.close();
   }
 }
