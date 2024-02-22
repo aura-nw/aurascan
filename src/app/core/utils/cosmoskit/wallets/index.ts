@@ -4,7 +4,6 @@ import { WalletName } from '@cosmos-kit/core/cjs/types';
 import { wallets as keplrWallets } from '@cosmos-kit/keplr-extension';
 import { wallets as keplrMobileWallets } from '@cosmos-kit/keplr-mobile';
 import { wallets as leapWallets } from '@cosmos-kit/leap-extension';
-import { wallets as leapSnapMetaMaskWallets } from '@cosmos-kit/leap-metamask-cosmos-snap';
 import { wallets as leapMobileWallets } from '@cosmos-kit/leap-mobile';
 import { LOGO_COIN98, LOGO_LEAP_METAMASK } from '../constant';
 import {
@@ -17,6 +16,7 @@ import {
   isMetamaskExisted,
 } from '../helpers/browser';
 import { wallets as coin98MobileWallets } from './coin98-mobile';
+import { wallets as leapSnapMetaMaskWallets } from './leap-metamask-cosmos-snap';
 import { wallets as wcWallets } from './wallet-connect/wc';
 
 leapSnapMetaMaskWallets.forEach((lsw) => {
