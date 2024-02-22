@@ -8,13 +8,14 @@ import {
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
 
@@ -130,7 +131,7 @@ export class PopupAddGrantComponent implements OnInit {
       return;
     }
 
-    const granter = this.walletService.wallet?.bech32Address;
+    const granter = this.walletService.walletAccount?.address;
     const {
       grantee_address,
       expiration_time,
@@ -162,47 +163,58 @@ export class PopupAddGrantComponent implements OnInit {
             }
           }
           const timeEndDate = moment(expiration_time)?.toDate()?.setHours(23, 59, 59);
-          const executeAddGrant = async () => {
-            const { hash, error } = await this.walletService.signAndBroadcast({
-              messageType:
-                isInstantiate || isExecute
-                  ? SIGNING_MESSAGE_TYPES.GRANT_MSG_ALLOWANCE
-                  : period_amount && this.periodShow
-                    ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE
-                    : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
-              message: {
-                granter,
-                grantee: grantee_address?.trim(),
-                spendLimit: amount,
-                expiration: expiration_time ? timeEndDate : null,
-                period: period_day ? period_day * this.dayConvert : undefined,
-                periodSpendLimit: period_amount,
-                isPeriodic: this.periodShow,
-                isInstantiate: isInstantiate,
-                isExecute: isExecute,
-                executeContract: execute_contract,
-              },
-              senderAddress: granter,
-              network: this.environmentService.chainInfo,
-              chainId: this.walletService.chainId,
-            });
 
-            if (hash) {
-              this.closeDialog(hash);
-            } else {
-              if (error != 'Request rejected') {
-                let errorMessage = this.mappingErrorService.checkMappingError('', error);
-                this.toastr.error(errorMessage);
-              }
-            }
-          };
+          const messageType =
+            isInstantiate || isExecute
+              ? SIGNING_MESSAGE_TYPES.GRANT_MSG_ALLOWANCE
+              : period_amount && this.periodShow
+                ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE
+                : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE;
 
-          executeAddGrant();
+          const msg = messageCreators[messageType](
+            granter,
+            {
+              granter,
+              grantee: grantee_address?.trim(),
+              spendLimit: amount,
+              expiration: expiration_time ? timeEndDate : null,
+              period: period_day ? period_day * this.dayConvert : undefined,
+              periodSpendLimit: period_amount,
+              isPeriodic: this.periodShow,
+              isInstantiate: isInstantiate,
+              isExecute: isExecute,
+              executeContract: execute_contract,
+            },
+            this.environmentService.chainInfo,
+          );
+
+          this.executeGrant(granter, msg);
         },
         (error) => {},
         () => {},
       );
     }
+  }
+
+  async executeGrant(granter: string, msg) {
+    const multiplier = 1.7; // Grant multiplier
+    const fee = await this.walletService.estimateFee([msg], 'stargate', '', multiplier).catch(() => undefined);
+
+    this.walletService
+      .signAndBroadcastStargate(granter, [msg], fee, '')
+      .then((result) => {
+        this.closeDialog(result?.transactionHash);
+      })
+      .catch((error) => {
+        if (error?.message != 'Request rejected') {
+          try {
+            let errorMessage = this.mappingErrorService.checkMappingError(error?.message, error?.code);
+            this.toastr.error(errorMessage);
+          } catch (e) {
+            this.toastr.error(error);
+          }
+        }
+      });
   }
 
   addClassFocus(e: HTMLInputElement) {
@@ -214,7 +226,7 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   checkFormValid(): boolean {
-    const granter = this.walletService.wallet?.bech32Address;
+    const granter = this.walletService.walletAccount?.address;
     const { grantee_address, expiration_time, period_amount, period_day, amount, isExecute, execute_contract } =
       this.grantForm.value;
 

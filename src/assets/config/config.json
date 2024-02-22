@@ -13,8 +13,8 @@
     "nativeName": "Aura"
   },
   "chainConfig": {
-    "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
     "stakingTime": "86400",
+    "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
     "quotaSetWatchList": 10,
@@ -91,9 +91,7 @@
         "average": 0.0025,
         "high": 0.004
       },
-      "features": [
-        "ibc-transfer"
-      ],
+      "features": ["ibc-transfer"],
       "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
       "logo": "https://i.imgur.com/zi0mTYb.png",
       "explorer": "https://explorer.dev.aura.network/",
@@ -106,7 +104,7 @@
     "banner": [
       {
         "src": "assets/images/pages/banner_aurascan.png",
-        "url": "https://play.monsterra.io/"
+        "url": "https://beta.seekhype.io/"
       },
       {
         "src": "assets/images/pages/banner_aurascan-2.png",
@@ -120,9 +118,7 @@
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": [
-        "aura-network"
-      ]
+      "ids": ["aura-network"]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -134,6 +130,18 @@
       "graphql": "/v2/graphql",
       "rest": "/v2",
       "chain": "auratestnet"
+    },
+    "walletConnect": {
+      "signClient": {
+        "projectId": "ae69ca1df362a7183412731fb570a54b",
+        "relayUrl": "wss://relay.walletconnect.org",
+        "metadata": {
+          "name": "Aurascan",
+          "description": "Aura Network Explorer",
+          "url": "https://explorer.dev.aurascan.io/",
+          "icons": ["https://explorer.dev.aura.network/assets/images/logo/title-logo.png"]
+        }
+      }
     }
   }
 }
