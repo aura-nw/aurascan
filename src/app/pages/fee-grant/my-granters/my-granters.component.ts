@@ -66,9 +66,9 @@ export class MyGrantersComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
-        this.currentAddress = wallet.bech32Address;
+        this.currentAddress = wallet.address;
         this.getGrantersData();
       } else {
         this.loading = false;
