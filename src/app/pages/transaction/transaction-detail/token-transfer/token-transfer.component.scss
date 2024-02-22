@@ -7,7 +7,7 @@
 
   .card-header {
     position: relative;
-    //z-index: 10;
+    z-index: 10;
   }
 
   .card-nodata,
@@ -26,7 +26,7 @@
       }
 
       td.mat-cell {
-        max-width: 175px;
+        max-width: 200px;
       }
 
       @media (max-width: 414px) {
@@ -50,7 +50,7 @@
   }
 
   .transfer-address {
-    min-width: 190px;
+    min-width: 180px;
     @media (min-width: 991.98px) {
       min-width: 225px;
     }
