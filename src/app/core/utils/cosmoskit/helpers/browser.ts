@@ -1,9 +1,9 @@
 const anyWindow = window as any;
 
-export const isKeplrExisted = () => !!anyWindow?.keplr;
-export const isCoin98Existed = () => !!anyWindow?.coin98;
-export const isLeapExisted = () => !!anyWindow?.leap;
-export const isMetamaskExisted = () => !!anyWindow?.ethereum;
+export const isKeplrExtention = () => !!anyWindow?.keplr.mode.includes('extension');
+export const isCoin98Extention = () => !!anyWindow?.coin98?.keplr?.isDesktop;
+export const isLeapExtention = () => !!anyWindow?.leap?.mode.includes('core');
+export const isMetamaskExtention = () => !!anyWindow?.ethereum?.isMetaMask;
 
 export const isCoin98Browser = () => !!anyWindow?.coin98?.isMobile;
 export const isLeapBrowser = () => !!anyWindow?.leap?.mode?.includes('mobile');
