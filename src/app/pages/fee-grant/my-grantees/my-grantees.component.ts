@@ -5,7 +5,6 @@ import {
 } from '@angular/material/legacy-dialog';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
@@ -75,7 +74,6 @@ export class MyGranteesComponent implements OnInit {
     private toastr: NgxToastrService,
     private walletService: WalletService,
     private mappingErrorService: MappingErrorService,
-    private router: Router,
     private nameTagService: NameTagService,
   ) {}
 
@@ -182,6 +180,7 @@ export class MyGranteesComponent implements OnInit {
   }
 
   resetFilterSearch() {
+    this.loading = true;
     this.textSearch = '';
     this.pageEvent(0);
   }
