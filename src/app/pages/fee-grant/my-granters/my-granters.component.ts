@@ -158,6 +158,7 @@ export class MyGrantersComponent implements OnInit, OnDestroy {
   }
 
   resetFilterSearch() {
+    this.loading = true;
     this.textSearch = '';
     this.pageEvent(0);
   }

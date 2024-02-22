@@ -24,7 +24,9 @@
 <div class="mt-4 mt-lg-5 card">
   <div class="card-body">
     <ng-container *ngIf="!loading">
-      <div class="d-lg-flex flex-row-reverse justify-content-between align-items-center" *ngIf="!isNoData">
+      <div
+        class="d-lg-flex flex-row-reverse justify-content-between align-items-center"
+        *ngIf="pageData?.length > 0 || textSearch?.length > 0">
         <form (ngSubmit)="searchToken()" class="aura-form single-input-field grantees-search-form">
           <div class="input-group px-6">
             <input
@@ -182,15 +184,15 @@
           </div>
         </ng-container>
         <ng-template #noValues>
-          <ng-container>
+          <ng-container *ngIf="!loading">
             <app-table-no-data
               [textNull]="
                 this.isActive
                   ? 'You don\'t have any active granted fee allowance to others'
                   : 'You don\'t have any inactive granted fee allowance to others'
               "
-              *ngIf="!loading && isNoData"></app-table-no-data>
-            <app-table-no-data *ngIf="!loading && !isNoData"></app-table-no-data>
+              *ngIf="!textSearch"></app-table-no-data>
+            <app-table-no-data *ngIf="textSearch"></app-table-no-data>
           </ng-container>
         </ng-template>
       </div>
