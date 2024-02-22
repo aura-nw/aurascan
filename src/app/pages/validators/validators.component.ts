@@ -1,8 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
@@ -31,6 +31,7 @@ import { ProposalService } from 'src/app/core/services/proposal.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { parseErrorFromMetamask } from 'src/app/core/utils/cosmoskit/helpers/metamask-parser';
 import { getFee } from 'src/app/core/utils/signing/fee';
 
 @Component({
@@ -670,10 +671,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   checkTxStatusOnchain({ success, error }: { success?: any; error?: { message: string; code: number } | string }) {
     if (error) {
-      const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : error;
+      const { message, code } =
+        typeof error == 'string' ? { message: error, code: undefined } : parseErrorFromMetamask(error);
 
       if (code) {
-        let errorMessage = this.mappingErrorService.checkMappingError('', code);
+        let errorMessage = this.mappingErrorService.checkMappingError(message, code);
         this.toastr.error(errorMessage);
       }
       this.resetData();
