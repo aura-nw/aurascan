@@ -28,11 +28,11 @@
                           width="20"
                           height="20"
                           alt="" />
-                        <div class="ml-3 d-flex transfer-token-info">
+                        <div class="ml-2 ml-sm-3 d-flex transfer-token-info">
                           <div class="aura-tooltip-contain">
                             <span
                               *ngIf="data | marketInfo: 'symbol'"
-                              class="caption text-sm body-02-mob mb-1 aura-tooltip-object"
+                              class="caption-mob text-sm mb-1 aura-tooltip-object"
                               [appLinkDenom]="
                                 (data | marketInfo: 'symbol') == coinInfo.coinDenom
                                   ? coinInfo.coinMinimalDenom
