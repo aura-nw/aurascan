@@ -8,12 +8,12 @@ import { wallets as leapMobileWallets } from '@cosmos-kit/leap-mobile';
 import { LOGO_COIN98, LOGO_LEAP_METAMASK } from '../constant';
 import {
   isCoin98Browser,
-  isCoin98Existed,
+  isCoin98Extention,
   isKeplrBrowser,
-  isKeplrExisted,
+  isKeplrExtention,
   isLeapBrowser,
-  isLeapExisted,
-  isMetamaskExisted,
+  isLeapExtention,
+  isMetamaskExtention,
 } from '../helpers/browser';
 import { wallets as coin98MobileWallets } from './coin98-mobile';
 import { wallets as leapSnapMetaMaskWallets } from './leap-metamask-cosmos-snap';
@@ -56,13 +56,13 @@ const desktopWallets = [
 function checkDesktopWallets(walletName: WalletName) {
   switch (walletName) {
     case coin98Wallets[0].walletName:
-      return isCoin98Existed();
+      return isCoin98Extention();
     case keplrWallets[0].walletName:
-      return isKeplrExisted();
+      return isKeplrExtention();
     case leapWallets[0].walletName:
-      return isLeapExisted();
+      return isLeapExtention();
     case leapSnapMetaMaskWallets[0].walletName:
-      return isMetamaskExisted();
+      return isMetamaskExtention();
 
     default:
       return true;
