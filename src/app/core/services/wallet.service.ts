@@ -59,6 +59,10 @@ export class WalletService implements OnDestroy {
 
   ngOnDestroy(): void {
     this._walletManager?.onUnmounted();
+
+    this._walletManager.off('refresh_connection', () => {
+      this.walletAccount = undefined;
+    });
   }
 
   private _getSigningStargateClient() {
@@ -127,6 +131,8 @@ export class WalletService implements OnDestroy {
     );
 
     await this._walletManager.onMounted();
+
+    this.accountChangeEvent();
   }
 
   get wallets() {
@@ -173,6 +179,18 @@ export class WalletService implements OnDestroy {
     if (walletName) {
       this.connect(walletName);
     }
+  }
+
+  accountChangeEvent() {
+    this._walletManager.on('refresh_connection', () => {
+      this.getChainWallet()
+        .client.getAccount(this._chain.chain_id)
+        .then((account) => {
+          if (this.walletAccount && account.address != this.walletAccount.address) {
+            this.walletAccount = account;
+          }
+        });
+    });
   }
 
   getChainWallet(walletName?: WalletName): ChainWalletBase {
