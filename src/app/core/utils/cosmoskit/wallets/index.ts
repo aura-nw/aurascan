@@ -10,7 +10,9 @@ import {
   isCoin98Browser,
   isCoin98Extention,
   isKeplrBrowser,
+  isKeplrCoin98Extention,
   isKeplrExtention,
+  isKeplrLeapExtention,
   isLeapBrowser,
   isLeapExtention,
   isMetamaskExtention,
@@ -58,7 +60,7 @@ function checkDesktopWallets(walletName: WalletName) {
     case coin98Wallets[0].walletName:
       return isCoin98Extention();
     case keplrWallets[0].walletName:
-      return isKeplrExtention();
+      return isKeplrExtention() || isKeplrCoin98Extention() || isKeplrLeapExtention();
     case leapWallets[0].walletName:
       return isLeapExtention();
     case leapSnapMetaMaskWallets[0].walletName:

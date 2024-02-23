@@ -8,14 +8,10 @@
       <div class="body text--gray-2 mb-4">Select a provider to connect or create a wallet</div>
       <ul class="mb-6">
         <p class="h4 text--white fw-semibold" *ngIf="otherWallets?.length">Installed Wallets</p>
-        <li
-          *ngFor="let wallet of wallets"
-          class="wallet-item mt-1"
-          [ngClass]="{ disabled: isWalletNotExited(wallet) }"
-          (click)="connect(wallet)">
+        <li *ngFor="let wallet of wallets" class="wallet-item mt-1" (click)="connect(wallet)">
           <div class="d-flex align-items-center">
-            <img class="wallet-icon" [src]="wallet.logo" *ngIf="!isWalletPending(wallet)" />
-            <i class="spin-icon" *ngIf="isWalletPending(wallet)">
+            <img class="wallet-icon" [src]="wallet.logo" *ngIf="wallet.state != 'Pending'" />
+            <i class="spin-icon" *ngIf="wallet.state == 'Pending'">
               <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fill-rule="evenodd"
@@ -37,7 +33,7 @@
           *ngFor="let wallet of otherWallets"
           class="wallet-item mt-1"
           (click)="connect(wallet)"
-          [ngClass]="{ active: currentChainWallet?.qrUrl }">
+          [ngClass]="{ active: currentChainWallet?.qrUrl && wallet.mode == 'wallet-connect' }">
           <div class="d-flex align-items-center">
             <img class="wallet-icon" [src]="wallet.logo" />
             <span class="h4 text--white ml-3">
@@ -61,7 +57,7 @@
           <app-qrcode
             class="w-100"
             [qrdata]="currentChainWallet?.qrUrl"
-            [imageSrc]="otherWallets[0]?.logo?.toString()"></app-qrcode>
+            [imageSrc]="wcLogo"></app-qrcode>
         </div>
       </ng-template>
     </div>
