@@ -69,7 +69,7 @@ export class WalletProviderComponent implements AfterViewInit {
   }
 
   connect(wallet: Wallet & { state?: State }) {
-    this.isWalletConnectMode = wallet.mode == 'wallet-connect';
+    this.isWalletConnectMode = wallet.mode == 'wallet-connect' && !this.walletService.isMobile;
 
     if (wallet.state === State.Error) {
       window.open(_.get(wallet, 'downloads[0].link'), '_blank');
