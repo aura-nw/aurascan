@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, Renderer2 } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, Renderer2} from '@angular/core';
 
 @Component({
   selector: 'app-tooltip-customize',
@@ -9,15 +9,16 @@ export class TooltipCustomizeComponent implements AfterViewInit {
   @Input() content: string;
   @Input() class: string;
   @Input() requestGetPosition: boolean = true;
+
   constructor(private renderer: Renderer2, private el: ElementRef) {
   }
 
   ngAfterViewInit(): void {
-    if(!this.requestGetPosition) return;
+    if (!this.requestGetPosition) return;
     let parent = this.renderer.parentNode(this.el.nativeElement);
-    if(!parent) return;
+    if (!parent) return;
     let sibling = parent.querySelector('.aura-tooltip-object:not(.disabled-hover)');
-    if(!sibling) return;
+    if (!sibling) return;
     sibling.addEventListener("mouseenter", (_) => {
       let siblingObj = sibling.getBoundingClientRect();
       let tooltipObj = this.el.nativeElement.getBoundingClientRect();
@@ -36,7 +37,7 @@ export class TooltipCustomizeComponent implements AfterViewInit {
           this.el.nativeElement.style.transform = 'translate(0, -2px)';
           break;
         default :
-          this.el.nativeElement.style.left = (siblingObj.left + (siblingObj.width /2)) + 'px';
+          this.el.nativeElement.style.left = (siblingObj.left + (siblingObj.width / 2)) + 'px';
           this.el.nativeElement.style.transform = 'translate(-50%, -2px)';
           break;
       }
