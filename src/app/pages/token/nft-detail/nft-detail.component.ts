@@ -31,6 +31,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile, getTypeTx } from 'src/app/core/utils/common/info-common';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
 
@@ -308,7 +309,8 @@ export class NFTDetailComponent implements OnInit {
           }
         })
         .catch((error) => {
-          if (!error.toString().includes('Request rejected')) {
+          const _error = parseError(error);
+          if (_error?.code !== undefined) {
             this.toastr.error(msgError);
           }
         });

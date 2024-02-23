@@ -15,6 +15,7 @@ import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
@@ -206,7 +207,8 @@ export class PopupAddGrantComponent implements OnInit {
         this.closeDialog(result?.transactionHash);
       })
       .catch((error) => {
-        if (error?.message != 'Request rejected') {
+        const _error = parseError(error);
+        if (_error?.code !== undefined) {
           try {
             let errorMessage = this.mappingErrorService.checkMappingError(error?.message, error?.code);
             this.toastr.error(errorMessage);

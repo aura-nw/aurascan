@@ -11,7 +11,7 @@ import { IVotingDialog } from 'src/app/core/models/proposal.model';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { parseErrorFromMetamask } from 'src/app/core/utils/cosmoskit/helpers/metamask-parser';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 
 @Component({
   selector: 'app-proposal-vote',
@@ -78,7 +78,7 @@ export class ProposalVoteComponent {
       })
       .catch((error) => {
         this.isLoading = false;
-        const { code, message } = parseErrorFromMetamask(error);
+        const { code, message } = parseError(error);
         let errorMessage = this.mappingErrorService.checkMappingError(message, code);
         this.toastr.error(errorMessage);
         this.closeVoteForm();
