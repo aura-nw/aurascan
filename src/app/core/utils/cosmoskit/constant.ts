@@ -8,4 +8,8 @@ const STORAGE_KEY = {
   ACCOUNTS: 'cosmos-kit@2:core//accounts',
 };
 
-export { LOGO_COIN98, LOGO_LEAP_METAMASK, STORAGE_KEY };
+enum Errors {
+  NoWalletExists = 'No wallet exists',
+}
+
+export { LOGO_COIN98, LOGO_LEAP_METAMASK, STORAGE_KEY, Errors };
