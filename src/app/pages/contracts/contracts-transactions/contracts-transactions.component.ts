@@ -98,16 +98,16 @@ export class ContractsTransactionsComponent implements OnInit {
         this.label = params['label'] || this.modeTxType.Out;
       }
       this.payload['key'] = null;
+      this.payload['compositeKey'] = null;
       switch (+this.label) {
-        case 1: //incoming
-          this.payload['actionNEq'] = '%instantiate%';
+        case 1:
+          this.payload['compositeKey'] = 'execute._contract_address';
           break;
-        case 2: //instantiate
-          this.payload['actionEq'] = 'instantiate';
+        case 2:
+          this.payload['compositeKey'] = 'instantiate._contract_address';
           break;
-        default: //out
-          this.payload['actionEq'] = null;
-          this.payload['actionNEq'] = null;
+        default:
+          this.payload['key'] = '_contract_address';
           break;
       }
       this.getDataTable(null, isReload);
