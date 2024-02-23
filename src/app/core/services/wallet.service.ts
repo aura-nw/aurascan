@@ -147,6 +147,10 @@ export class WalletService implements OnDestroy {
       });
   }
 
+  getWalletRepo() {
+    return this._walletManager.getWalletRepo(this._chain.chain_id);
+  }
+
   connect(
     wallet: Wallet | WalletName,
     callback?: {
@@ -155,6 +159,12 @@ export class WalletService implements OnDestroy {
     },
   ) {
     const currentChainWallet = this.getChainWallet(typeof wallet == 'string' ? wallet : wallet.name);
+
+    if (currentChainWallet?.isWalletNotExist) {
+      window.open(currentChainWallet.downloadInfo?.link, '_blank');
+      callback?.error?.(currentChainWallet.message);
+      return undefined;
+    }
 
     currentChainWallet
       ?.connect(true)
@@ -166,25 +176,25 @@ export class WalletService implements OnDestroy {
         callback?.success?.();
       })
       .catch((e) => {
-        callback?.error?.(e);
         this._walletManager.getWalletRepo(this._chain.chain_name).disconnect();
+        callback?.error?.(e);
       });
 
     return currentChainWallet;
   }
 
   restoreAccounts() {
-    const walletName = localStorage.getItem(STORAGE_KEY.CURRENT_WALLET);
-
-    if (walletName) {
-      this.connect(walletName);
+    const account = this.getChainWallet()?.data as WalletAccount;
+    if (account) {
+      this._logger.info('Restore accounts: ', account);
+      this.walletAccount = account;
     }
   }
 
   accountChangeEvent() {
     this._walletManager.on('refresh_connection', () => {
       this.getChainWallet()
-        .client.getAccount(this._chain.chain_id)
+        ?.client?.getAccount(this._chain.chain_id)
         .then((account) => {
           if (this.walletAccount && account.address != this.walletAccount.address) {
             this.walletAccount = account;
@@ -201,7 +211,7 @@ export class WalletService implements OnDestroy {
 
     const wallet = this._walletManager.getChainWallet(this._chain.chain_name, _walletName);
 
-    !wallet.isActive && wallet.activate();
+    !wallet?.isActive && wallet?.activate();
 
     return wallet;
   }
