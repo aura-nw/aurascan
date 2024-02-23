@@ -509,6 +509,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.walletService
         .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount, 'auto')
         .then((broadcastResult) => {
+          console.log('🐛 broadcastResult: ', broadcastResult);
           let error = undefined;
           if (broadcastResult?.code != 0) {
             error = broadcastResult;
@@ -517,6 +518,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.checkTxStatusOnchain({ success: broadcastResult, error });
         })
         .catch((error) => {
+          console.log('🐛 error: ', error);
           this.checkTxStatusOnchain({ error });
         });
     }

@@ -1,4 +1,3 @@
-import { wallets as coin98Wallets } from '@cosmos-kit/coin98';
 import { MainWalletBase } from '@cosmos-kit/core';
 import { WalletName } from '@cosmos-kit/core/cjs/types';
 import { wallets as keplrWallets } from '@cosmos-kit/keplr-extension';
@@ -17,6 +16,7 @@ import {
   isLeapExtention,
   isMetamaskExtention,
 } from '../helpers/browser';
+import { wallets as coin98Wallets } from './coin98-extension';
 import { wallets as coin98MobileWallets } from './coin98-mobile';
 import { wallets as leapSnapMetaMaskWallets } from './leap-metamask-cosmos-snap';
 import { wallets as wcWallets } from './wallet-connect/wc';
