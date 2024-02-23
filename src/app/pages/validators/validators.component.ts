@@ -31,7 +31,7 @@ import { ProposalService } from 'src/app/core/services/proposal.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { parseErrorFromMetamask } from 'src/app/core/utils/cosmoskit/helpers/metamask-parser';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 import { getFee } from 'src/app/core/utils/signing/fee';
 
 @Component({
@@ -509,6 +509,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.walletService
         .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount, 'auto')
         .then((broadcastResult) => {
+          console.log('🐛 broadcastResult: ', broadcastResult);
           let error = undefined;
           if (broadcastResult?.code != 0) {
             error = broadcastResult;
@@ -517,6 +518,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.checkTxStatusOnchain({ success: broadcastResult, error });
         })
         .catch((error) => {
+          console.log('🐛 error: ', error);
           this.checkTxStatusOnchain({ error });
         });
     }
@@ -671,8 +673,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   checkTxStatusOnchain({ success, error }: { success?: any; error?: { message: string; code: number } | string }) {
     if (error) {
-      const { message, code } =
-        typeof error == 'string' ? { message: error, code: undefined } : parseErrorFromMetamask(error);
+      const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : parseError(error);
 
       if (code) {
         let errorMessage = this.mappingErrorService.checkMappingError(message, code);

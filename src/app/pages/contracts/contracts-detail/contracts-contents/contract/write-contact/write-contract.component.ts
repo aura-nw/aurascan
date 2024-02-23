@@ -12,6 +12,7 @@ import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
 
 @Component({
@@ -189,7 +190,8 @@ export class WriteContractComponent implements OnInit {
       .catch((error) => {
         msg.isLoading = false;
 
-        if (!error.toString().includes('Request rejected')) {
+        const _error = parseError(error);
+        if (_error?.code !== undefined) {
           msgError = error.toString().includes('out of gas') ? 'out of gas' : msgError;
           this.toastr.error(error.toString().substring(0, 200) + '...' || msgError);
         }
