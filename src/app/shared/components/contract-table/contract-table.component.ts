@@ -132,6 +132,8 @@ export class ContractTableComponent implements OnInit, OnChanges {
         contract.typeOrigin === TRANSACTION_TYPE_ENUM.InstantiateContract2
       ) {
         method = 'Instantiate';
+      } else if (contract.typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
+        method = contract?.type;
       } else {
         if (msg && Object.keys(msg)[0]?.length > 1) {
           method = Object.keys(msg)[0];
