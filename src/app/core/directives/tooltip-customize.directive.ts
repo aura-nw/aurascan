@@ -1,8 +1,8 @@
-import {Directive, ElementRef, Input} from '@angular/core';
-import BigNumber from "bignumber.js";
+import { Directive, ElementRef, Input } from '@angular/core';
+import BigNumber from 'bignumber.js';
 
 @Directive({
-  selector: '[appTooltip]'
+  selector: '[appTooltip]',
 })
 export class TooltipCustomizeDirective {
   @Input() appTooltip: string | { priceAmount: any; multipliedBy?: number; decimal?: number; lt?: number };
@@ -11,27 +11,31 @@ export class TooltipCustomizeDirective {
   @Input() disableTooltipHover: boolean = false;
   @Input() getTooltipPosition: boolean = true;
 
-  constructor(
-    private elRef: ElementRef) {
-  }
+  constructor(private elRef: ElementRef) {}
 
   ngOnInit(): void {
     // check show up conditional
     if (!this.appTooltip) return;
     let tooltipValue: any = '';
-    if (typeof this.appTooltip === "string") {
+    if (typeof this.appTooltip === 'string') {
       // check if tooltip is string
       tooltipValue = this.appTooltip;
     } else if (this.appTooltip.priceAmount) {
       // check if tooltip is price
       this.appTooltip.decimal = this.appTooltip.decimal ?? 0;
       if (this.appTooltip.decimal > 0) {
-        this.appTooltip.priceAmount = BigNumber(this.appTooltip.priceAmount).dividedBy(BigNumber(10).pow(this.appTooltip.decimal));
+        this.appTooltip.priceAmount = BigNumber(this.appTooltip.priceAmount).dividedBy(
+          BigNumber(10).pow(this.appTooltip.decimal),
+        );
       }
       const gte = BigNumber(+this.appTooltip.priceAmount * (this.appTooltip.multipliedBy ?? 1)).gte(BigNumber(1000000));
-      const lt = BigNumber(+this.appTooltip.priceAmount * (this.appTooltip.multipliedBy ?? 1)).lt(BigNumber(this.appTooltip.lt ?? 0.001));
+      const lt = BigNumber(+this.appTooltip.priceAmount * (this.appTooltip.multipliedBy ?? 1)).lt(
+        BigNumber(this.appTooltip.lt ?? 0.001),
+      );
       if ((gte || lt) && this.appTooltip.priceAmount != 0) {
-        tooltipValue = BigNumber(this.appTooltip.priceAmount).multipliedBy(this.appTooltip.multipliedBy ?? 1).toFormat();
+        tooltipValue = BigNumber(this.appTooltip.priceAmount)
+          .multipliedBy(this.appTooltip.multipliedBy ?? 1)
+          .toFormat();
       } else {
         tooltipValue = null;
       }
@@ -61,7 +65,7 @@ export class TooltipCustomizeDirective {
     contain.appendChild(tooltipParent);
     // set position for tooltip
     if (!this.disableTooltipHover) {
-      element.addEventListener("mouseenter", (_) => {
+      element.addEventListener('mouseenter', (_) => {
         let elementObj = element.getBoundingClientRect();
         let tooltipObj = tooltipParent.getBoundingClientRect();
         let tooltipY = elementObj.top - (tooltipObj.height + 16);
@@ -78,8 +82,8 @@ export class TooltipCustomizeDirective {
             tooltipParent.style.left = elementObj.left + 'px';
             tooltipParent.style.transform = 'translate(0, -2px)';
             break;
-          default :
-            tooltipParent.style.left = (elementObj.left + (elementObj.width / 2)) + 'px';
+          default:
+            tooltipParent.style.left = elementObj.left + elementObj.width / 2 + 'px';
             tooltipParent.style.transform = 'translate(-50%, -2px)';
             break;
         }

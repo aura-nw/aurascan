@@ -36,15 +36,15 @@
         [maxLength]="maxLengthSearch"
         (keyup)="onKeyUp()"
         name="search"
-        autocomplete="off"/>
+        autocomplete="off" />
       <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-        <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+        <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
       </button>
       <button
         type="reset"
         class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
         (click)="resetSearch()">
-        <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+        <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
       </button>
     </div>
   </form>
@@ -63,9 +63,9 @@
             [maxLength]="maxLengthSearch"
             (keyup)="onKeyUp()"
             name="search"
-            autocomplete="off"/>
+            autocomplete="off" />
           <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
             type="reset"
@@ -73,7 +73,7 @@
               !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
             }}"
             (click)="resetSearch()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
       </form>
@@ -106,7 +106,7 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-30 text-capitalize">Name</th>
               <td mat-cell *matCellDef="let element; let i = index" class="title-cell py-4 vertical-align-top">
                 <div class="d-flex align-items-center token-item">
-                  <img class="rounded-circle" [appImg]="element.image" width="18" height="18"/>
+                  <img class="rounded-circle" [appImg]="element.image" width="18" height="18" />
                   <div class="ml-3 d-flex align-items-center">
                     <a
                       [routerLink]="['/tokens/token', element.contract_address || element.denom?.replace('ibc/', '')]"
@@ -121,7 +121,7 @@
                       height="18"
                       [appTooltip]="element.verify_text || 'Verified by Aura Network'"
                       class="ml-1"
-                      *ngIf="element.verify_status === 'VERIFIED'"/>
+                      *ngIf="element.verify_status === 'VERIFIED'" />
                   </div>
                 </div>
               </td>
@@ -140,8 +140,7 @@
               <th mat-header-cell *matHeaderCellDef>Price</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.price > 0; else noData">
-                  <div class="mb-1 text--gray-1"
-                       [appTooltip]="{priceAmount: element.price, lt: 0.000001}">
+                  <div class="mb-1 text--gray-1" [appTooltip]="{ priceAmount: element.price, lt: 0.000001 }">
                     <span *ngIf="element.price | lt: 0.000001">{{ '< $0.000001' }}</span>
                     <span *ngIf="element.price | gte: 0.000001">{{ +element.price | mask: 'separator.6' }}</span>
                   </div>
@@ -154,7 +153,7 @@
               <th mat-header-cell *matHeaderCellDef>In-Chain Supply Amount</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.totalSupply >= 0; else noData">
-                  <div [appTooltip]="{priceAmount: element.totalSupply}">
+                  <div [appTooltip]="{ priceAmount: element.totalSupply }">
                     <div class="text--gray-1 item-amount">
                       <span *ngIf="element.totalSupply | lt: 0.001">
                         {{ element.totalSupply == 0 ? 0 : '< 0.001' }}
@@ -174,8 +173,7 @@
               <th mat-header-cell *matHeaderCellDef>In-Chain Supply Value</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.price > 0 && element.totalSupply > 0; else zeroValue">
-                  <div
-                    [appTooltip]="{priceAmount: element.totalSupply, multipliedBy: element.price, lt: 0.01}">
+                  <div [appTooltip]="{ priceAmount: element.totalSupply, multipliedBy: element.price, lt: 0.01 }">
                     <div class="text--gray-1 item-amount">
                       <span *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01)">
                         {{ element.price == 0 ? '$0.00' : '< $0.01' }}
@@ -213,7 +211,7 @@
           <div class="mt-4" *ngIf="pageData?.length > 0 && !isLoadingTable; else noValues">
             <div class="token-card border-radius--sm py-3 px-3 mb-2" *ngFor="let data of dataSourceMobile">
               <div class="d-flex align-items-center flex-shrink-0">
-                <img class="rounded-circle" [appImg]="data.image" width="18" height="18"/>
+                <img class="rounded-circle" [appImg]="data.image" width="18" height="18" />
                 <div class="ml-3 d-flex align-items-center">
                   <a
                     [routerLink]="['/tokens/token', data.contract_address || data.denom?.replace('ibc/', '')]"
@@ -229,7 +227,7 @@
                       height="18"
                       class="ml-1"
                       [appTooltip]="data.verify_text || 'Verified by Aura Network'"
-                      *ngIf="data.verify_status === 'VERIFIED'"/>
+                      *ngIf="data.verify_status === 'VERIFIED'" />
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@
   <section class="text--white">
     <div *ngIf="isSearchTx" class="px-4 py-4 py-lg-3 card border-none">
       <p class="caption d-flex align-item-center mb-1">
-        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px"/>
+        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px" />
         FILTER BY TOKEN TXN HASH
       </p>
       <a class="text--primary body-02 break-word" [copyBtn]="textSearch" [routerLink]="['/transaction', textSearch]">
@@ -18,7 +18,7 @@
               class="mr-2"
               alt=""
               width="18px"
-              height="18px"/>
+              height="18px" />
             FILTER BY ADDRESS
           </div>
           <div class="mt-2">
@@ -40,15 +40,14 @@
           <ng-container *ngIf="!tokenDetail?.isNFTContract">
             <span *ngIf="infoSearch['balance'] == 0 || !infoSearch['balance']">0</span>
             <span
-              [appTooltip]="{priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals}"
-              *ngIf="(infoSearch['balance'] | balance: tokenDetail.decimals | lt: 0.001) && infoSearch['balance'] != 0"
-            >
+              [appTooltip]="{ priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals }"
+              *ngIf="(infoSearch['balance'] | balance: tokenDetail.decimals | lt: 0.001) && infoSearch['balance'] != 0">
               {{ '<0.001' }}
             </span>
             <span
               *ngIf="infoSearch['balance'] | balance: tokenDetail.decimals | gte: 0.001"
               [class.cursor-text]="infoSearch['balance'] | balance: tokenDetail.decimals | lt: 1000000"
-              [appTooltip]="{priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals}"
+              [appTooltip]="{ priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals }"
               [appBigNumber]="infoSearch['balance']"
               [decimal]="tokenDetail.decimals"></span>
             {{ tokenDetail.symbol || tokenDetail.name }}
@@ -58,28 +57,26 @@
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
           <ng-container *ngIf="infoSearch.value | gt: 0; else zeroValue">
-            <span *ngIf="infoSearch['value'] | lt: 0.01"
-                  [appTooltip]="{priceAmount: infoSearch['value']}">
+            <span *ngIf="infoSearch['value'] | lt: 0.01" [appTooltip]="{ priceAmount: infoSearch['value'] }">
               {{ '< $0.01' }}
             </span>
             <span
               *ngIf="infoSearch['value'] | gt: 0.01"
               [class.cursor-text]="infoSearch['value'] | lt: 1000000"
-              [appTooltip]="{priceAmount: infoSearch['value']}"
+              [appTooltip]="{ priceAmount: infoSearch['value'] }"
               [appBigNumber]="infoSearch['balance']"
               [decimal]="tokenDetail.decimals"
               [tokenPrice]="tokenDetail.price"></span>
             (
             <span *ngIf="infoSearch['balance']">
-              <span *ngIf="infoSearch['valueAura'] | lt: 0.001"
-                    [appTooltip]="{priceAmount: infoSearch['valueAura']}">
+              <span *ngIf="infoSearch['valueAura'] | lt: 0.001" [appTooltip]="{ priceAmount: infoSearch['valueAura'] }">
                 {{ '<0.001' }}
               </span>
               <span
                 *ngIf="infoSearch['valueAura'] | gt: 0.001"
                 [class.cursor-text]="infoSearch['valueAura'] | gte: 1000000"
                 [appBigNumber]="infoSearch['balance']"
-                [appTooltip]="{priceAmount: infoSearch['valueAura']}"
+                [appTooltip]="{ priceAmount: infoSearch['valueAura'] }"
                 [decimal]="tokenDetail.decimals"
                 [auraValue]="true"
                 [tokenPrice]="tokenDetail.price"></span>
@@ -108,7 +105,7 @@
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"
               width="16px"
-              height="16px"/>
+              height="16px" />
           </a>
         </li>
       </ng-container>
@@ -131,9 +128,9 @@
             name="search"
             (keyup.enter)="handleSearch()"
             [disabled]="paramQuery?.length > 0"
-            autocomplete="off"/>
+            autocomplete="off" />
           <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
             type="reset"
@@ -141,7 +138,7 @@
               !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : ''
             }}"
             (click)="resetSearch()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
       </form>
