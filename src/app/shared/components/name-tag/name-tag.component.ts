@@ -1,7 +1,11 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {CommonService} from 'src/app/core/services/common.service';
-import {NameTagService} from 'src/app/core/services/name-tag.service';
-import {NULL_ADDRESS} from "src/app/core/constants/common.constant";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { MAX_LENGTH_NAME_TAG, NULL_ADDRESS, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { ENameTag, EScreen } from 'src/app/core/constants/account.enum';
+import { UserService } from 'src/app/core/services/user.service';
+import local from 'src/app/core/utils/storage/local';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-name-tag',
@@ -26,17 +30,24 @@ export class NameTagComponent implements OnInit {
   @Input() isTokenDetail = false;
   @Input() extendUrl = false;
   @Input() widthAuto = false;
-  @Input() maxCharacter = 12;
+  @Input() maxCharacter;
   @Input() isShorterText = false;
+  @Input() mode = ENameTag.Normal;
+  @Input() isWatchList = '';
+  @Input() screen = EScreen.Account;
   @Input() tooltipPosition: 'tooltip--left' | 'tooltip--right' | 'tooltip--below' | null = null;
 
   extendUrlLink = '';
+  ENameTag = ENameTag;
+  EScreen = EScreen;
+  maxLengthNameTag = MAX_LENGTH_NAME_TAG;
 
   constructor(
     public commonService: CommonService,
     public nameTagService: NameTagService,
-  ) {
-  }
+    private userService: UserService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     if (this.extendUrl) {
@@ -62,5 +73,20 @@ export class NameTagComponent implements OnInit {
       result += '<br>' + 'Private name: ' + this.nameTagService.findNameTagByAddress(value);
     }
     return result;
+  }
+
+  editPrivateName() {
+    const userEmail = this.userService.getCurrentUser()?.email;
+    const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.value);
+    if (userEmail) {
+      if (dataNameTag) {
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
+      } else {
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, { address: this.value });
+      }
+      this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }
