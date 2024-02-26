@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/f
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { MaterialModule } from 'src/app/material.module';
@@ -61,6 +62,7 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     NameTagModule,
     TooltipCustomizeModule,
     ClipboardModule,
+    CommonDirectiveModule,
   ],
   providers: [UntypedFormBuilder, SoulboundService],
 })

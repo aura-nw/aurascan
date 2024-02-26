@@ -2,20 +2,19 @@
   min-width: 180px;
   display: inline-block;
   @media (max-width: 991.99px) {
-    min-width: 160px;
+    min-width: 180px;
   }
 }
 
 .box-token-transfer {
   min-width: 80px;
-  margin-left: 20px;
   display: flex;
   justify-content: flex-start;
 
   .token-transfer-status {
     display: inline-flex;
     align-items: center;
-    padding: var(--spacer-2) var(--spacer-4);
+    padding: var(--spacer-2);
     color: var(--aura-green-3);
     border-radius: 4px;
     font-weight: 600;
@@ -39,6 +38,14 @@
   }
 }
 
+.aura-table th.mat-header-cell:nth-child(1) {
+  min-width: 280px;
+}
+
+.aura-table th.mat-header-cell:nth-child(5) {
+  min-width: 250px;
+}
+
 @media (max-width: 991.99px) {
   .aura-table th.mat-header-cell:not(:nth-child(5)) {
     min-width: 150px;
@@ -47,15 +54,16 @@
     min-width: 250px;
   }
   .aura-table th.mat-header-cell:nth-child(5) {
-    min-width: 200px;
+    min-width: 260px;
   }
   .aura-table th.mat-header-cell:nth-child(6) {
     min-width: 180px;
   }
   .aura-table th.mat-header-cell:nth-child(1) {
-    min-width: 50px;
+    min-width: 250px;
   }
 }
+
 .transfer-table-container {
   tr.mat-header-row {
     text-transform: initial;

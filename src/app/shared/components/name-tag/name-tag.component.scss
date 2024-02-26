@@ -1,3 +1,9 @@
 .box-name-tag {
   color: var(--aura-gray-2);
 }
+
+.name-tag-content{
+  ::ng-deep .custom-position {
+    transform: translate(-50%, -10px) !important;
+  }
+}

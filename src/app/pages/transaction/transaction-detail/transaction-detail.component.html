@@ -36,7 +36,7 @@
             (click)="commonService.showToolTip(tooltip)">
             <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
           </button>
-          <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
+          <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
         </div>
       </div>
       <div class="body py-4">
@@ -46,10 +46,12 @@
             <div class="col-auto col-lg-10 text--gray-1 mb-0">{{ transaction?.chainid }}</div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">TxHash</div>
-            <div class="col-auto col-lg-10 text--gray-1">
-              <span class="d-none d-lg-block">{{ transaction?.tx_hash }}</span>
-              <span class="d-lg-none">{{ transaction?.tx_hash | ellipsis: 8 : 8 }}</span>
+            <div class="col-auto col-lg-2 text--gray-4 d-flex align-items-center">TxHash</div>
+            <div class="col-auto col-lg-10 text--gray-1 d-flex align-items-center">
+              <div [copyBtn]="transaction?.tx_hash" [btnClass]="['mr-2']">
+                <span *ngIf="!environmentService.isMobile">{{ transaction?.tx_hash }}</span>
+                <span *ngIf="environmentService.isMobile">{{ transaction?.tx_hash | ellipsis: 8 : 8 }}</span>
+              </div>
             </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">

@@ -1,6 +1,7 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatTableDataSource as MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
@@ -37,6 +38,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   walletAddress = null;
   searchValue = '';
   errTxt: string;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private soulboundService: SoulboundService,
@@ -44,6 +46,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
     private walletService: WalletService,
     private contractService: ContractService,
     private toastr: NgxToastrService,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {

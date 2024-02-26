@@ -50,6 +50,8 @@
                         <a
                           *ngIf="data[template.matColumnDef]"
                           class="text--primary cursor-pointer hash-link"
+                          [copyBtn]="data[template.matColumnDef]"
+                          [isDisableCopy]="template.matColumnDef !== 'txHash'"
                           [routerLink]="[
                             template?.isUrl,
                             template?.paramField ? data[template?.paramField] : data[template.matColumnDef]

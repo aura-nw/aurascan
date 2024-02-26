@@ -3,22 +3,28 @@
     border-right: 1px solid var(--aura-gray-9);
     vertical-align: middle;
   }
+
   .sbt-detail {
     overflow-x: auto;
+
     &::-webkit-scrollbar {
       height: 4px;
     }
+
     ::ng-deep {
       flex-wrap: wrap;
       flex-basis: 20%;
+
       .soulbound__item {
         min-width: 120px;
       }
+
       .nft-cards__label {
         display: none;
       }
     }
   }
+
   .soulbound-feature-tokens {
     flex: 1 0 100%;
     border-top: 1px solid var(--aura-gray-9);
@@ -41,16 +47,19 @@
 
 .tab-contract {
   width: 100%;
+
   ul.aura-nav-tabs {
     flex-wrap: nowrap;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     overflow: hidden;
     overflow-x: auto;
+
     &::-webkit-scrollbar {
       display: none;
     }
   }
+
   .nav-item {
     flex-grow: 0;
     flex-shrink: 1;
@@ -61,6 +70,7 @@
     }
   }
 }
+
 ::ng-deep.search-form-sbtokenlist {
   min-width: 100%;
   @media (min-width: 992px) {
@@ -76,7 +86,6 @@
 
 ::ng-deep {
   .nft-cards__item {
-    overflow: hidden;
     .nft__info {
       overflow: hidden;
     }

@@ -78,7 +78,7 @@
     </div>
     <!-- Table -->
     <ng-container *ngIf="pageData?.length > 0; else noValues">
-      <div>
+      <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
         <div
           class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
           id="nft-cards">
@@ -97,22 +97,21 @@
                 <div class="nft__body">
                   <div class="nft__info d-flex">
                     <span class="mr-1 text--gray-1">Token:</span>
-                    <div
-                      class="hover-link box-name"
+                    <a
+                      class="hover-link box-name text--primary"
                       (click)="handleRouterLink('/tokens/token-nft/' + item.contract_address)">
-                      <span class="d-none d-lg-inline-block txt-token-name text--primary">{{ item.token_name }}</span>
-                      <span class="d-inline-block d-lg-none txt-token-name text--primary">{{ item.token_name }}</span>
-                    </div>
+                      <span class="d-inline-block txt-token-name">{{ item.token_name }}</span>
+                    </a>
                   </div>
-                  <div class="mt-lg-1 nft__info">
+                  <div class="mt-lg-1 nft__info" [copyBtn]="item.token_id" [btnClass]="['mt-lg-1']">
                     <span class="mr-1 text--gray-1">Token ID:</span>
                     <span
                       class="text--primary hover-link"
                       (click)="
                         handleRouterLink('/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id))
                       ">
-                      <span class="d-none d-lg-inline-block">{{ item.token_id | ellipsis: 12 }}</span>
-                      <span class="d-inline-block d-lg-none">{{ item.token_id | ellipsis: 9 }}</span>
+                      <span *ngIf="!breakpoint.value.matches">{{ item.token_id | ellipsis: 10 }}</span>
+                      <span *ngIf="breakpoint.value.matches">{{ item.token_id | ellipsis: 5 }}</span>
                     </span>
                   </div>
                 </div>

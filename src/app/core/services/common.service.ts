@@ -150,4 +150,8 @@ export class CommonService {
   isBech32Address(address: string) {
     return isValidBench32Address(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
   }
+
+  getRawData(url): Observable<any> {
+    return this._http.get<any>(url);
+  }
 }

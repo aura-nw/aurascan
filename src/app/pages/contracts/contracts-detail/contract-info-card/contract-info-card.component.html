@@ -22,13 +22,13 @@
       </div>
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
-        <ng-container *ngIf="(contractDetail?.address | nameTag : false) !== contractDetail?.address; else NoNameTag">
+        <ng-container *ngIf="(contractDetail?.address | nameTag: false) !== contractDetail?.address; else NoNameTag">
           <div class="box-name-tag">
-            <span class="line-claim">{{ (contractDetail?.address | nameTag : false) || '-' }}</span>
+            <span class="line-claim">{{ (contractDetail?.address | nameTag: false) || '-' }}</span>
             <a
               target="_blank"
-              [href]="extendLink(contractDetail?.address | nameTag : null : 'url')"
-              *ngIf="contractDetail?.address | nameTag : null : 'url'">
+              [href]="extendLink(contractDetail?.address | nameTag: null : 'url')"
+              *ngIf="contractDetail?.address | nameTag: null : 'url'">
               <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer mb-1"></i>
             </a>
           </div>
@@ -87,8 +87,11 @@
               [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
           </span>
           at txn
-          <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-            {{ contractDetail?.tx_hash | ellipsis : 6 : 6 }}
+          <a
+            class="text--primary ml-1 ml-lg-2"
+            [routerLink]="['/transaction', contractDetail?.tx_hash]"
+            [copyBtn]="contractDetail?.tx_hash">
+            {{ contractDetail?.tx_hash | ellipsis: 6 : 6 }}
           </a>
         </div>
       </div>

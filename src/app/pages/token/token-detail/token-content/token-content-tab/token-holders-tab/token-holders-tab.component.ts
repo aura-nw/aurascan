@@ -36,7 +36,7 @@ export class TokenHoldersTabComponent implements OnInit {
 
   CW721Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
-    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
+    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 40 },
     { matColumnDef: 'quantity', headerCellDef: 'amount', headerWidth: 12 },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 15 },
   ];

@@ -2,15 +2,15 @@
   background-color: var(--aura-gray-9);
   border-radius: var(--spacer-2);
   padding: var(--spacer-4);
-  padding-bottom: 0;
+  // padding-bottom: 0;
   margin-bottom: var(--spacer-4);
   overflow: hidden;
-  &>* {
+  & > * {
     color: var(--aura-white);
   }
   .card__content {
     &.show {
-      transition: all .35s ease-in-out;
+      transition: all 0.35s ease-in-out;
       max-height: 900px;
       padding-bottom: var(--spacer-4);
     }
@@ -21,7 +21,7 @@
       font-weight: 400;
       font-size: 1.4rem;
       line-height: 1.8rem;
-      &:not(:last-child){
+      &:not(:last-child) {
         margin-bottom: 6px;
       }
     }
@@ -34,7 +34,4 @@
 }
 .button-explain:has(.rotate) {
   transform: rotate(180deg);
-}
-.text-gray-3 {
-  color: #B4B8C0;
 }
