@@ -35,7 +35,10 @@
 
     &.label__status {
       font-weight: 600;
-      //width: 120px;
+      max-width: 130px;
+      @media (max-width: 375px) {
+        max-width: 110px;
+      }
     }
   }
 
@@ -92,7 +95,6 @@
       border-right: 15px solid var(--aura-gray-9);
     }
   }
-
 }
 
 .line-claim {
