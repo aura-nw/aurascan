@@ -1,5 +1,5 @@
-import {Directive, ElementRef, HostListener, Input} from '@angular/core';
-import {NULL_ADDRESS} from '../constants/common.constant';
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { NULL_ADDRESS } from '../constants/common.constant';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
@@ -11,8 +11,7 @@ export class CopyButtonDirective {
   button;
   tooltip;
 
-  constructor(private elRef: ElementRef) {
-  }
+  constructor(private elRef: ElementRef) {}
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     if (this.tooltip?.classList.contains('show')) {
@@ -54,16 +53,16 @@ export class CopyButtonDirective {
     const getOffset = (el) => {
       const rect = el.getBoundingClientRect();
       return {
-        left: rect.left + window.scrollX + (rect.width / 2),
+        left: rect.left + window.scrollX + rect.width / 2,
         top: rect.top,
       };
-    }
+    };
 
     // click show tooltip
     this.button.addEventListener('click', () => {
       if (this.tooltip) {
-        this.tooltip.style.top = getOffset(this.button).top + "px";
-        this.tooltip.style.left = getOffset(this.button).left + "px";
+        this.tooltip.style.top = getOffset(this.button).top + 'px';
+        this.tooltip.style.left = getOffset(this.button).left + 'px';
       }
       this.tooltip.classList.add('show');
       this.copyMessage(content);
