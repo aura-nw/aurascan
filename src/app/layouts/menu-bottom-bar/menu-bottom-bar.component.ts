@@ -34,7 +34,7 @@ export class MenuBottomBarComponent implements OnInit {
     this.notificationsService.hiddenFooterSubject.subscribe((res) => {
       this.hiddenFooter = res;
     });
-    
+
     this.checkFeatures();
 
     for (let menu of this.menu) {
@@ -56,11 +56,11 @@ export class MenuBottomBarComponent implements OnInit {
     from([1])
       .pipe(
         delay(800),
-        mergeMap((_) => this.walletService.wallet$),
+        mergeMap((_) => this.walletService.walletAccount$),
       )
       .subscribe((wallet) => {
         if (wallet) {
-          this.currentAddress = this.walletService.wallet?.bech32Address;
+          this.currentAddress = wallet.address;
         } else {
           this.currentAddress = null;
         }

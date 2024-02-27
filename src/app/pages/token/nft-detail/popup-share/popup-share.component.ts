@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-popup-share',
@@ -22,7 +21,6 @@ export class PopupShareComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<PopupShareComponent>,
-    private walletService: WalletService,
     private router: Router,
     public commonService: CommonService,
   ) {}
@@ -36,10 +34,6 @@ export class PopupShareComponent implements OnInit {
 
   closeDialog(isConfirm = false) {
     this.dialogRef.close(isConfirm);
-  }
-
-  connectWallet(): void {
-    this.walletAccount = this.walletService.getAccount();
   }
 
   executeShareLink(mode) {

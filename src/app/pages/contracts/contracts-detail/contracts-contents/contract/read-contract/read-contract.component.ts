@@ -4,7 +4,6 @@ import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
-import { WalletService } from 'src/app/core/services/wallet.service';
 @Component({
   selector: 'app-read-contract',
   templateUrl: './read-contract.component.html',
@@ -17,7 +16,7 @@ export class ReadContractComponent implements OnInit {
   jsValidator = new Validator();
   root: any[];
 
-  constructor(private walletService: WalletService, private environmentService: EnvironmentService) {}
+  constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     try {

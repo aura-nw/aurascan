@@ -143,7 +143,7 @@ export class WSService {
         ReceiverAddress: '',
       };
 
-      const currentWallet = this.walletService.wallet?.bech32Address;
+      const currentWallet = this.walletService.walletAccount.address;
       if (currentWallet && redisResponse.ReceiverAddress === currentWallet) {
         callBack && callBack();
         this.soulboundService.getNotify(currentWallet).subscribe((res) => {
