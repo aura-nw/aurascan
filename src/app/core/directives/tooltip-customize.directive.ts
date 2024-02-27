@@ -31,11 +31,9 @@ export class TooltipCustomizeDirective {
         );
       }
       const gte = BigNumber(+this.appTooltip.priceAmount)
-        .multipliedBy(this.appTooltip.multipliedBy ?? 1).gte(BigNumber(1000000));
+        .multipliedBy(this.appTooltip.multipliedBy ?? 1).gte(1000000);
       const lt = BigNumber(+this.appTooltip.priceAmount)
-        .multipliedBy(this.appTooltip.multipliedBy ?? 1).lt(
-          BigNumber(this.appTooltip.lt ?? 0.001)
-        );
+        .multipliedBy(this.appTooltip.multipliedBy ?? 1).lt(this.appTooltip.lt ?? 0.001);
       if ((gte || lt) && this.appTooltip.priceAmount != 0) {
         tooltipValue = BigNumber(this.appTooltip.priceAmount)
           .multipliedBy(this.appTooltip.multipliedBy ?? 1)
@@ -44,7 +42,7 @@ export class TooltipCustomizeDirective {
         tooltipValue = null;
       }
     }
-    if (!tooltipValue || (tooltipValue && (tooltipValue === 0 || tooltipValue === '0'))) return;
+    if (!tooltipValue || tooltipValue == '0') return;
     // get element
     const contain = document.createElement('div');
     const tooltipParent = document.createElement('div');
