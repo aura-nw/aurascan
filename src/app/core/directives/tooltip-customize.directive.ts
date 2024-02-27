@@ -15,8 +15,9 @@ export class TooltipCustomizeDirective {
   }
 
   ngOnInit(): void {
+    const element: HTMLElement = this.elRef.nativeElement;
+    if (!element || !this.appTooltip) return;
     // check show up conditional
-    if (!this.appTooltip) return;
     let tooltipValue: any = '';
     if (typeof this.appTooltip === 'string') {
       // check if tooltip is string
@@ -44,8 +45,6 @@ export class TooltipCustomizeDirective {
       }
     }
     if (!tooltipValue || (tooltipValue && (tooltipValue === 0 || tooltipValue === '0'))) return;
-    const element: HTMLElement = this.elRef.nativeElement;
-    if (!element) return;
     // get element
     const contain = document.createElement('div');
     const tooltipParent = document.createElement('div');
