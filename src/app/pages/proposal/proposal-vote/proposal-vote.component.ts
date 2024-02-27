@@ -78,10 +78,20 @@ export class ProposalVoteComponent {
       })
       .catch((error) => {
         this.isLoading = false;
-        const { code, message } = parseError(error);
-        let errorMessage = this.mappingErrorService.checkMappingError(message, code);
-        this.toastr.error(errorMessage);
-        this.closeVoteForm();
+
+        try {
+          const { code, message } = parseError(error);
+
+          let errorMessage = message;
+          if (code) {
+            errorMessage = this.mappingErrorService.checkMappingError(message, code);
+          }
+
+          this.toastr.error(errorMessage ?? message ?? 'Unknown Error');
+          this.closeVoteForm();
+        } catch (error) {
+          this.toastr.error(typeof error == 'string' ? error : 'Unknown Error');
+        }
       });
   }
 
