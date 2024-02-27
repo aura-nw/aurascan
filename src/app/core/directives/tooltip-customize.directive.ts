@@ -1,22 +1,27 @@
-import {Directive, ElementRef, Input} from '@angular/core';
+import {Directive, ElementRef, Input, OnDestroy} from '@angular/core';
 import BigNumber from 'bignumber.js';
 
 @Directive({
   selector: '[appTooltip]',
 })
-export class TooltipCustomizeDirective {
+export class TooltipCustomizeDirective implements OnDestroy {
   @Input() appTooltip: string | { priceAmount: any; multipliedBy?: number; decimal?: number; lt?: number };
-
   @Input() classTooltip: string;
   @Input() disableTooltipHover: boolean = false;
   @Input() getTooltipPosition: boolean = true;
+  element: HTMLElement
 
   constructor(private elRef: ElementRef) {
+    this.element = this.elRef.nativeElement;
+  }
+
+  ngOnDestroy(): void {
+    this.element.removeEventListener('mouseenter', () => {
+    });
   }
 
   ngOnInit(): void {
-    const element: HTMLElement = this.elRef.nativeElement;
-    if (!element || !this.appTooltip) return;
+    if (!this.element || !this.appTooltip) return;
     // check show up conditional
     let tooltipValue: any = '';
     if (typeof this.appTooltip === 'string') {
@@ -48,9 +53,9 @@ export class TooltipCustomizeDirective {
     const tooltipParent = document.createElement('div');
     const tooltip = document.createElement('div');
     // set class
-    const parent = element.parentNode;
+    const parent = this.element.parentNode;
     contain.classList.add('aura-tooltip-contain');
-    element.classList.add('aura-tooltip-object');
+    this.element.classList.add('aura-tooltip-object');
     tooltipParent.classList.add('app-tooltip-customize');
     tooltip.classList.add('aura-tooltip');
     if (this.classTooltip) {
@@ -59,35 +64,37 @@ export class TooltipCustomizeDirective {
     // set tooltip content
     tooltip.innerHTML = tooltipValue;
     // set elements to DOM
-    parent.replaceChild(contain, element);
+    parent.replaceChild(contain, this.element);
     tooltipParent.appendChild(tooltip);
-    contain.appendChild(element);
+    contain.appendChild(this.element);
     contain.appendChild(tooltipParent);
     // set position for tooltip
     if (!this.disableTooltipHover) {
-      element.addEventListener('mouseenter', (_) => {
-        let elementObj = element.getBoundingClientRect();
-        let tooltipObj = tooltipParent.getBoundingClientRect();
-        let tooltipY = elementObj.top - (tooltipObj.height + 16);
+      this.element.addEventListener('mouseenter', () => this.hoverAction(this.element, tooltipParent));
+    }
+  }
 
-        tooltipParent.style.position = 'fixed';
-        tooltipParent.style.top = tooltipY + 'px';
-        tooltipParent.style.zIndex = '9999999';
-        switch (tooltipParent.className) {
-          case 'tooltip--left':
-            tooltipParent.style.left = elementObj.right + 'px';
-            tooltipParent.style.transform = 'translate(calc(-100% - 32px), -2px)';
-            break;
-          case 'tooltip--right':
-            tooltipParent.style.left = elementObj.left + 'px';
-            tooltipParent.style.transform = 'translate(0, -2px)';
-            break;
-          default:
-            tooltipParent.style.left = elementObj.left + elementObj.width / 2 + 'px';
-            tooltipParent.style.transform = 'translate(-50%, -2px)';
-            break;
-        }
-      });
+  hoverAction(element, tooltipParent) {
+    let elementObj = element.getBoundingClientRect();
+    let tooltipObj = tooltipParent.getBoundingClientRect();
+    let tooltipY = elementObj.top - (tooltipObj.height + 16);
+
+    tooltipParent.style.position = 'fixed';
+    tooltipParent.style.top = tooltipY + 'px';
+    tooltipParent.style.zIndex = '9999999';
+    switch (tooltipParent.className) {
+      case 'tooltip--left':
+        tooltipParent.style.left = elementObj.right + 'px';
+        tooltipParent.style.transform = 'translate(calc(-100% - 32px), -2px)';
+        break;
+      case 'tooltip--right':
+        tooltipParent.style.left = elementObj.left + 'px';
+        tooltipParent.style.transform = 'translate(0, -2px)';
+        break;
+      default:
+        tooltipParent.style.left = elementObj.left + elementObj.width / 2 + 'px';
+        tooltipParent.style.transform = 'translate(-50%, -2px)';
+        break;
     }
   }
 }

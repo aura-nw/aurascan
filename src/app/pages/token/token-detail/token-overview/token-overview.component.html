@@ -105,13 +105,13 @@
                   <div class="text--gray-1 item-amount">
                     <span
                       *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
-                      {{ tokenDetail.price === 0 || tokenDetail.supplyAmount === 0 ? '$0.00' : '< $0.01' }}
+                      {{ tokenDetail.price == 0 || tokenDetail.supplyAmount == 0 ? '$0.00' : '< $0.01' }}
                     </span>
                     <div
                       *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
                       <span
                         *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
-                        {{ tokenDetail.price === 0 || tokenDetail.supplyAmount === 0 ? '$0.00' : '< $0.01' }}
+                        {{ tokenDetail.price == 0 ? '$0.00' : '< $0.01' }}
                       </span>
                       <div
                         *ngIf="
