@@ -33,7 +33,7 @@ export class TooltipCustomizeDirective {
         .multipliedBy(this.appTooltip.multipliedBy ?? 1).gte(BigNumber(1000000));
       const lt = BigNumber(+this.appTooltip.priceAmount)
         .multipliedBy(this.appTooltip.multipliedBy ?? 1).lt(
-          BigNumber(this.appTooltip.lt ?? 0.001),
+          BigNumber(this.appTooltip.lt ?? 0.001)
         );
       if ((gte || lt) && this.appTooltip.priceAmount != 0) {
         tooltipValue = BigNumber(this.appTooltip.priceAmount)
