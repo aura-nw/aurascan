@@ -22,7 +22,6 @@ export class NameTagComponent implements OnInit {
   @Input() isLink = true;
   @Input() isBox = true;
   @Input() param = '';
-  @Input() type = '';
   @Input() isHref = false;
   @Input() iconContract = false;
   @Input() iconVerify = false;
@@ -30,10 +29,9 @@ export class NameTagComponent implements OnInit {
   @Input() isTokenDetail = false;
   @Input() extendUrl = false;
   @Input() widthAuto = false;
-  @Input() maxCharacter;
+  @Input() maxCharacter = 12;
   @Input() isShorterText = false;
   @Input() mode = ENameTag.Normal;
-  @Input() isWatchList = '';
   @Input() screen = EScreen.Account;
   @Input() tooltipPosition: 'tooltip--left' | 'tooltip--right' | 'tooltip--below' | null = null;
 

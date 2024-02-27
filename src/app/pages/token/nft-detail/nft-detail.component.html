@@ -368,7 +368,6 @@
                     <app-name-tag
                       [url]="data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account'"
                       [value]="data[template.matColumnDef]"
-                      [type]="data.type"
                       [isTokenDetail]="true"
                       *ngIf="
                         data.modeExecute !== modeExecuteTransaction.Burn &&

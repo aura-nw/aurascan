@@ -199,7 +199,6 @@
                         [isTokenDetail]="true"
                         [maxCharacter]="15"
                         [url]="'/tokens/' + linkToken + '/' + linkAddress + '?a='"
-                        [type]="data.type"
                         *ngIf="
                           !data[template.matColumnDef]?.startsWith('Null') && data[template.matColumnDef]
                         "></app-name-tag>
