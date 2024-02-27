@@ -1,5 +1,5 @@
-import { Directive, ElementRef, Input } from '@angular/core';
-import { NULL_ADDRESS } from '../constants/common.constant';
+import {Directive, ElementRef, HostListener, Input} from '@angular/core';
+import {NULL_ADDRESS} from '../constants/common.constant';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
@@ -11,7 +11,14 @@ export class CopyButtonDirective {
   button;
   tooltip;
 
-  constructor(private elRef: ElementRef) {}
+  constructor(private elRef: ElementRef) {
+  }
+
+  @HostListener('window:scroll', ['$event']) onScroll(event) {
+    if (this.tooltip?.classList.contains('show')) {
+      this.tooltip?.classList.remove('show');
+    }
+  }
 
   ngOnInit(): void {
     if (this.isDisableCopy || !this.copyBtn || this.copyBtn === NULL_ADDRESS) {
@@ -26,7 +33,7 @@ export class CopyButtonDirective {
     this.button = document.createElement('button');
 
     const icon = document.createElement('i');
-    this.button.classList.add('button', 'button--xxs', 'position-relative', 'pr-0');
+    this.button.classList.add('button', 'button--xxs', 'position-relative', 'px-0', 'ml-3');
     if (this.btnClass?.length > 0) {
       this.btnClass.forEach((c) => {
         this.button.classList.add(c);
@@ -43,9 +50,21 @@ export class CopyButtonDirective {
     this.tooltip.classList.add('tooltip-copy');
     this.button.appendChild(this.tooltip);
     contain.appendChild(this.button);
+    // set position
+    const getOffset = (el) => {
+      const rect = el.getBoundingClientRect();
+      return {
+        left: rect.left + window.scrollX + (rect.width / 2),
+        top: rect.top,
+      };
+    }
 
     // click show tooltip
     this.button.addEventListener('click', () => {
+      if (this.tooltip) {
+        this.tooltip.style.top = getOffset(this.button).top + "px";
+        this.tooltip.style.left = getOffset(this.button).left + "px";
+      }
       this.tooltip.classList.add('show');
       this.copyMessage(content);
 

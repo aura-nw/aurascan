@@ -3,7 +3,7 @@
     <div class="body-03 caption-mob fw-normal-mob text--gray-5">
       <span class="small-body text--light-gray" *ngIf="totalHolder > numberTopHolder">
         Top {{ numberTopHolder | number }} holders (From a total of {{ totalHolder || 0 | number }} holder{{
-          totalHolder > 1 ? 's' : ''
+        totalHolder > 1 ? 's' : ''
         }})
       </span>
       <span class="small-body text--light-gray" *ngIf="totalHolder <= numberTopHolder">
@@ -54,30 +54,20 @@
                       "></app-name-tag>
                   </ng-container>
                   <ng-container *ngSwitchCase="'balance'">
-                    <div class="aura-tooltip-contain">
-                      <span class="aura-tooltip-object" *ngIf="+data[template.matColumnDef] == 0"> 0 </span>
-                      <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                        <span
-                          class="aura-tooltip-object"
-                          *ngIf="data[template.matColumnDef] | balance: decimalValue | lt: 0.001">
-                          <0.001
-                        </span>
-                        <span
-                          class="aura-tooltip-object"
-                          [class.cursor-text]="data[template.matColumnDef] | balance: decimalValue | lt: 1000000"
-                          *ngIf="data[template.matColumnDef] | balance: decimalValue | gte: 0.001"
-                          [appBigNumber]="data[template.matColumnDef]"
-                          [decimal]="decimalValue || 0"></span>
-                        <app-tooltip-customize
-                          *ngIf="
-                            data['balance'] != 0 &&
-                            ((data[template.matColumnDef] | balance: decimalValue | lt: 0.001) ||
-                              (data[template.matColumnDef] | balance: decimalValue | gte: 1000000))
-                          "
-                          [content]="data[template.matColumnDef] | balance: decimalValue | mask: 'separator'">
-                        </app-tooltip-customize>
-                      </ng-container>
-                    </div>
+                    <!-- Quantity column -->
+                    <span *ngIf="+data[template.matColumnDef] === 0"> 0 </span>
+                    <span *ngIf="+data[template.matColumnDef] > 0"
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimalValue }">
+                      <span
+                        *ngIf="data[template.matColumnDef] | balance: decimalValue | lt: 0.001">
+                        <0.001
+                      </span>
+                      <span
+                        [class.cursor-text]="data[template.matColumnDef] | balance: decimalValue | lt: 1000000"
+                        *ngIf="data[template.matColumnDef] | balance: decimalValue | gte: 0.001"
+                        [appBigNumber]="data[template.matColumnDef]"
+                        [decimal]="decimalValue || 0"></span>
+                    </span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'quantity'">
                     <div class="pl-8 pl-lg-0">
@@ -96,26 +86,18 @@
                     </ng-container>
                   </ng-container>
                   <ng-container *ngSwitchCase="'value'">
-                    <div *ngIf="tokenDetail.price > 0 && +data['balance'] > 0" class="aura-tooltip-contain d-flex">
+                    <div *ngIf="tokenDetail.price > 0 && +data['balance'] > 0"
+                         [appTooltip]="{ priceAmount: data['balance'], multipliedBy: tokenDetail.price, decimal: decimalValue, lt: 0.01 }">
                       <span
-                        class="aura-tooltip-object"
                         *ngIf="tokenDetail.price * data['balance'] | balance: decimalValue | lt: 0.01">
                         {{ '< $0.01' }}
                       </span>
                       <div
                         *ngIf="tokenDetail.price * data['balance'] | balance: decimalValue | gte: 0.01"
-                        class="aura-tooltip-object"
                         [class.cursor-text]="tokenDetail.price * data['balance'] | balance: decimalValue | lt: 1000000"
                         [appBigNumber]="data['balance']"
                         [decimal]="decimalValue"
                         [tokenPrice]="tokenDetail?.price"></div>
-                      <app-tooltip-customize
-                        *ngIf="
-                          (tokenDetail.price * data['balance'] | balance: decimalValue | lt: 0.01) ||
-                          (tokenDetail.price * data['balance'] | balance: decimalValue | gte: 1000000)
-                        "
-                        [content]="data['value'] | mask: 'separator'">
-                      </app-tooltip-customize>
                     </div>
                     <span *ngIf="tokenDetail.price <= 0 || +data['balance'] == 0">$0.00</span>
                   </ng-container>

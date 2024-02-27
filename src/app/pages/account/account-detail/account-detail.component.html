@@ -6,7 +6,7 @@
         [routerLink]="['/contracts/', currentAddress]"
         *ngIf="isContractAddress && breakpoint.value.matches"
         class="contract-label text--primary ml-6 caption fw-normal"
-        >Contract</a
+      >Contract</a
       >
     </div>
     <div class="d-flex box-title mb-2 mb-lg-0" [class.justify-content-between]="breakpoint.value.matches">
@@ -17,19 +17,8 @@
         <span class="body-01 text--gray-5 caption-mob fw-normal break-word">{{ currentAddress }}</span>
       </div>
       <div class="d-flex">
-        <div class="ml-lg-0 ml-4">
-          <div class="aura-tooltip-contain">
-            <button
-              class="button btn-border aura-tooltip-object disabled-hover p-lg-4"
-              #tooltip
-              (click)="commonService.showToolTip(tooltip)"
-              [cdkCopyToClipboard]="currentAddress">
-              <i class="ph ph-copy text--white body-01"></i>
-            </button>
-            <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
-          </div>
-        </div>
-        <div class="aura-tooltip-contain btn-watch-list ml-2 ml-lg-0">
+        <div class="ml-lg-0 ml-4" [copyBtn]="currentAddress"></div>
+        <div class="aura-tooltip-contain btn-watch-list ml-4 ml-lg-2">
           <button class="btn-border button aura-tooltip-object p-lg-0" #tooltip (click)="handleWatchList()">
             <i class="ph ph-star body-01" [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
           </button>
@@ -123,7 +112,7 @@
                 class="ml-10"
                 width="20"
                 height="20"
-                *ngIf="isNoData" />
+                *ngIf="isNoData"/>
             </div>
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
@@ -131,7 +120,7 @@
                 alt=""
                 width="36px"
                 height="36px"
-                (click)="viewQrAddress(modalManage)" />
+                (click)="viewQrAddress(modalManage)"/>
             </div>
           </div>
         </div>
@@ -160,7 +149,7 @@
             alt=""
             width="14"
             height="14"
-            (click)="closePopup()" />
+            (click)="closePopup()"/>
         </div>
         <app-qr [address]="currentAddress || ''"></app-qr>
       </div>
@@ -205,9 +194,9 @@
 <ng-template #reloadTemplate>
   <div class="card p-5 d-flex justify-content-between align-items-center" *ngIf="isNoData">
     <div class="text-center">
-      <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="mr-2" width="40" height="40" />
+      <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="mr-2" width="40" height="40"/>
       <div class="small-text text--light-gray mt-4">
-        Fetching data, might take longer than usual. <br />
+        Fetching data, might take longer than usual. <br/>
         Please come back later or
         <span class="link-reset-data" (click)="reloadData()">refresh the page</span>
       </div>

@@ -1,10 +1,8 @@
 app-tooltip-customize, .app-tooltip-customize {
   z-index: 2000;
   width: max-content;
-  position: absolute;
-  left: 50%;
-  bottom: 100%;
-  transform: translate(-50%, -16px);
+  position: fixed;
+  transform: translate(-50%, calc(-100% - 8px));
   max-width: 0;
   max-height: 0;
   opacity: 0;
@@ -105,10 +103,9 @@ app-tooltip-customize.tooltip--right,
 }
 
 .tooltip-copy {
-  position: absolute;
-  transform: translate(0, -100%);
+  position: fixed;
+  transform: translate(-50%, calc(-100% - 8px));
   display: none;
-  top: -12px;
   align-items: center;
   justify-content: center;
   padding: 9px;

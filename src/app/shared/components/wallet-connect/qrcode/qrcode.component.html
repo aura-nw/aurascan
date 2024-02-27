@@ -4,12 +4,11 @@
     <div class="aura-tooltip-contain">
       <button
         class="button btn-border aura-tooltip-object disabled-hover p-lg-4"
-        #tooltip
-        (click)="commonService.showToolTip(tooltip)"
+        (click)="commonService.showToolTip(this)"
         [cdkCopyToClipboard]="qrdata?.data">
         <i class="ph ph-copy text--white body-01"></i>
       </button>
-      <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
+      <app-tooltip-customize [content]="'Copied!'" #tooltip></app-tooltip-customize>
     </div>
   </div>
   <div class="qrcode-wrapper" [ngStyle]="{ 'height.px': quContainer.clientWidth }">
