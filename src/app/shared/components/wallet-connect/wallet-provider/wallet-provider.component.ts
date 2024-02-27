@@ -71,13 +71,13 @@ export class WalletProviderComponent implements AfterViewInit {
   connect(wallet: Wallet & { state?: State }) {
     this.isWalletConnectMode = wallet.mode == 'wallet-connect' && !this.walletService.isMobile;
 
+    // Only reset pending state
+    [...this.otherWallets, ...this.wallets].forEach((wallet) => {
+      wallet.state = wallet?.state == State.Pending ? State.Done : wallet.state;
+    });
+
     if (wallet.state === State.Error) {
       window.open(_.get(wallet, 'downloads[0].link'), '_blank');
-
-      // Only reset pending state
-      [...this.otherWallets, ...this.wallets].forEach((wallet) => {
-        wallet.state = wallet?.state == State.Pending ? State.Done : wallet.state;
-      });
 
       this.currentChainWallet = null;
       return;
