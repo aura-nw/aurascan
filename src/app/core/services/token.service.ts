@@ -47,54 +47,54 @@ export class TokenService extends CommonService {
     super(http, environmentService);
   }
 
-  getListToken(payload): Observable<any> {
-    const operationsDoc = `query queryCW20ListToken($name: String, $address: String, $limit: Int, $offset: Int, $date: date) { 
-      ${this.envDB} { 
-        cw20_contract(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}, limit: $limit, offset: $offset) {
-          marketing_info
-          name
-          symbol
-          total_supply
-          decimal
-          smart_contract {
-            address
-          }
-          cw20_holders_aggregate(where: {amount: {_gt: "0"}}) {
-            aggregate {
-              count
-            }
-          }
-          cw20_total_holder_stats(where: {date: {_gte: $date}}) {
-            date
-            total_holder
-          }
-        }
-        cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
-          aggregate {
-            count
-          }
-        }
-      }
-    }`;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          name: payload?.keyword ? `%${payload?.keyword}%` : null,
-          address: payload?.keyword ? payload?.keyword : null,
-          limit: payload?.limit,
-          offset: payload?.offset,
-          date: payload?.date,
-        },
-        operationName: 'queryCW20ListToken',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
+  // getListToken(payload): Observable<any> {
+  //   const operationsDoc = `query queryCW20ListToken($name: String, $address: String, $limit: Int, $offset: Int, $date: date) { 
+  //     ${this.envDB} { 
+  //       cw20_contract(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}, limit: $limit, offset: $offset) {
+  //         marketing_info
+  //         name
+  //         symbol
+  //         total_supply
+  //         decimal
+  //         smart_contract {
+  //           address
+  //         }
+  //         cw20_holders_aggregate(where: {amount: {_gt: "0"}}) {
+  //           aggregate {
+  //             count
+  //           }
+  //         }
+  //         cw20_total_holder_stats(where: {date: {_gte: $date}}) {
+  //           date
+  //           total_holder
+  //         }
+  //       }
+  //       cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
+  //         aggregate {
+  //           count
+  //         }
+  //       }
+  //     }
+  //   }`;
+  //   return this.http
+  //     .post<any>(this.graphUrl, {
+  //       query: operationsDoc,
+  //       variables: {
+  //         name: payload?.keyword ? `%${payload?.keyword}%` : null,
+  //         address: payload?.keyword ? payload?.keyword : null,
+  //         limit: payload?.limit,
+  //         offset: payload?.offset,
+  //         date: payload?.date,
+  //       },
+  //       operationName: 'queryCW20ListToken',
+  //     })
+  //     .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  // }
 
   getTokenMarketData(payload = {}): Observable<any> {
     const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
 
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/token-market`, {
+    return this.http.get<any>(`${this.apiUrl}/assets/token-market`, {
       params,
     });
   }
@@ -499,7 +499,7 @@ export class TokenService extends CommonService {
 
   getCoinData() {
     this.http
-      .get<any>(`${this.apiUrl}/cw20-tokens/token-market`)
+      .get<any>(`${this.apiUrl}/assets/token-market`)
       .pipe(
         switchMap((res: any[]) => {
           if (res?.length === 0) {
@@ -669,5 +669,14 @@ export class TokenService extends CommonService {
 
   getListAmountNative(address: string[]): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/account/list/${address}`).pipe(catchError((_) => of([])));
+  }
+
+  getListToken(payload): Observable<any> {
+    // return this.http.get<any>(`${this.apiUrl}/assets?limit=100&offset=0`).pipe(catchError((_) => of([])));
+    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
+
+    return this.http.get<any>(`${this.apiUrl}/assets`, {
+      params,
+    });
   }
 }

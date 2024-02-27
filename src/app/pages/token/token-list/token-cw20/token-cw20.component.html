@@ -121,8 +121,8 @@
                         width="18"
                         height="18"
                         class="ml-1 mb-1 aura-tooltip-object"
-                        *ngIf="element.verify_status === 'VERIFIED'" />
-                      <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
+                        *ngIf="element.verifyStatus === 'VERIFIED'" />
+                      <app-tooltip-customize [content]="element.verifyText || 'Verified by Aura Network'">
                       </app-tooltip-customize>
                     </div>
                   </div>
@@ -254,8 +254,8 @@
                       width="18"
                       height="18"
                       class="ml-1 mb-1 aura-tooltip-object"
-                      *ngIf="data.verify_status === 'VERIFIED'" />
-                    <app-tooltip-customize [content]="data.verify_text || 'Verified by Aura Network'">
+                      *ngIf="data.verifyStatus === 'VERIFIED'" />
+                    <app-tooltip-customize [content]="data.verifyText || 'Verified by Aura Network'">
                     </app-tooltip-customize>
                   </div>
                 </div>
