@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input } from '@angular/core';
+import {Directive, ElementRef, Input} from '@angular/core';
 import BigNumber from 'bignumber.js';
 
 @Directive({
@@ -11,7 +11,8 @@ export class TooltipCustomizeDirective {
   @Input() disableTooltipHover: boolean = false;
   @Input() getTooltipPosition: boolean = true;
 
-  constructor(private elRef: ElementRef) {}
+  constructor(private elRef: ElementRef) {
+  }
 
   ngOnInit(): void {
     // check show up conditional
@@ -28,10 +29,12 @@ export class TooltipCustomizeDirective {
           BigNumber(10).pow(this.appTooltip.decimal),
         );
       }
-      const gte = BigNumber(+this.appTooltip.priceAmount * (this.appTooltip.multipliedBy ?? 1)).gte(BigNumber(1000000));
-      const lt = BigNumber(+this.appTooltip.priceAmount * (this.appTooltip.multipliedBy ?? 1)).lt(
-        BigNumber(this.appTooltip.lt ?? 0.001),
-      );
+      const gte = BigNumber(+this.appTooltip.priceAmount)
+        .multipliedBy(this.appTooltip.multipliedBy ?? 1).gte(BigNumber(1000000));
+      const lt = BigNumber(+this.appTooltip.priceAmount)
+        .multipliedBy(this.appTooltip.multipliedBy ?? 1).lt(
+          BigNumber(this.appTooltip.lt ?? 0.001),
+        );
       if ((gte || lt) && this.appTooltip.priceAmount != 0) {
         tooltipValue = BigNumber(this.appTooltip.priceAmount)
           .multipliedBy(this.appTooltip.multipliedBy ?? 1)
