@@ -30,9 +30,9 @@ export class TooltipCustomizeDirective {
           BigNumber(10).pow(this.appTooltip.decimal),
         );
       }
-      const gte = BigNumber(+this.appTooltip.priceAmount)
+      const gte = BigNumber(this.appTooltip.priceAmount)
         .multipliedBy(this.appTooltip.multipliedBy ?? 1).gte(1000000);
-      const lt = BigNumber(+this.appTooltip.priceAmount)
+      const lt = BigNumber(this.appTooltip.priceAmount)
         .multipliedBy(this.appTooltip.multipliedBy ?? 1).lt(this.appTooltip.lt ?? 0.001);
       if ((gte || lt) && this.appTooltip.priceAmount != 0) {
         tooltipValue = BigNumber(this.appTooltip.priceAmount)
