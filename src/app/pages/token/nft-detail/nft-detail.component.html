@@ -170,8 +170,9 @@
                   [value]="nftDetail?.owner"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [url]="nftDetail?.owner?.length > lengthNormalAddress ? 'contracts' : 'account'"
-                  [maxCharacter]="11"></app-name-tag>
+                  [linkRouter]="[(nftDetail?.owner | isContract) ? '/contracts' : '/account', nftDetail?.owner]"
+                  [maxCharacter]="11">
+                </app-name-tag>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -179,7 +180,7 @@
               <div class="d-flex align-items-center position-relative">
                 <app-name-tag
                   [value]="nftDetail?.contract_address"
-                  [url]="'contracts'"
+                  [linkRouter]="['/contracts', nftDetail?.contract_address]"
                   [fullText]="true"
                   [widthAuto]="true"
                   [iconVerify]="nftDetail['verification_status'] === ContractVerifyType.Verified"
@@ -193,8 +194,9 @@
                   [value]="nftDetail?.creator"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [url]="nftDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"
-                  [maxCharacter]="11"></app-name-tag>
+                  [linkRouter]="[(nftDetail?.creator | isContract) ? '/contracts' : '/account', nftDetail?.creator]"
+                  [maxCharacter]="11">
+                </app-name-tag>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -366,14 +368,18 @@
                   </ng-container>
                   <ng-container *ngIf="!data[template.matColumnDef]?.startsWith('Null')">
                     <app-name-tag
-                      [url]="data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account'"
-                      [value]="data[template.matColumnDef]"
-                      [isTokenDetail]="true"
                       *ngIf="
                         data.modeExecute !== modeExecuteTransaction.Burn &&
                         data.modeExecute !== modeExecuteTransaction.UnEquip &&
                         data[template.matColumnDef]
-                      "></app-name-tag>
+                      "
+                      [value]="data[template.matColumnDef]"
+                      [linkRouter]="[
+                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                        data[template.matColumnDef]
+                      ]"
+                      [isTokenDetail]="true">
+                    </app-name-tag>
                   </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">

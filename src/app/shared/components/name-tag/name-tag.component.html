@@ -2,31 +2,15 @@
   <ng-container *ngIf="isLink; else displayText">
     <div class="aura-tooltip-contain d-flex align-items-center">
       <a
-        *ngIf="!isHref"
-        [routerLink]="['/' + url, paramUrl || value]"
+        [routerLink]="linkRouter"
+        [queryParams]="linkParams"
         class="text--primary break-all d-flex"
-        [ngClass]="[
-          isBox && !(paramUrl || value | nameTagTooltipPipe) ? 'box-name-tag' : '',
-          widthAuto ? 'w-auto' : '',
-          (paramUrl || value | isPrivateNameTag) ? 'private-name-tag' : ''
-        ]"
-        [class.aura-tooltip-object]="!(paramUrl || value | nameTagTooltipPipe)">
-        <ng-container [ngTemplateOutlet]="contentData"></ng-container>
-      </a>
-      <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
-      </app-tooltip-customize>
-    </div>
-    <div class="aura-tooltip-contain d-flex align-items-center">
-      <a
-        *ngIf="isHref"
-        [href]="url + value"
-        class="text--primary break-all d-flex"
-        [ngClass]="[
-          isBox && !(paramUrl || value | nameTagTooltipPipe) ? 'box-name-tag' : '',
-          widthAuto ? 'w-auto' : '',
-          (paramUrl || value | isPrivateNameTag) ? 'private-name-tag' : ''
-        ]"
-        [class.aura-tooltip-object]="!(paramUrl || value | nameTagTooltipPipe)">
+        [ngClass]="{
+          'box-name-tag': isBox && !(paramUrl || value | nameTagTooltipPipe),
+          'w-auto': widthAuto,
+          'private-name-tag': (paramUrl || value | isPrivateNameTag),
+          'aura-tooltip-object': !(paramUrl || value | nameTagTooltipPipe)
+        }">
         <ng-container [ngTemplateOutlet]="contentData"></ng-container>
       </a>
       <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">

@@ -5,7 +5,7 @@ import { MAX_LENGTH_NAME_TAG, NULL_ADDRESS, STORAGE_KEYS } from 'src/app/core/co
 import { ENameTag, EScreen } from 'src/app/core/constants/account.enum';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-name-tag',
@@ -16,13 +16,15 @@ import { Router } from '@angular/router';
 export class NameTagComponent implements OnInit {
   nullAddress = NULL_ADDRESS;
   @Input() value = '';
-  @Input() url = 'account';
+  // @Input() url = 'account';
+  @Input() linkRouter: string | any[] = ['/account', this.value];
+  @Input() linkParams: Params;
   @Input() fullText = false;
   @Input() fullTextMob = false;
   @Input() isLink = true;
   @Input() isBox = true;
   @Input() param = '';
-  @Input() isHref = false;
+  // @Input() isHref = false;
   @Input() iconContract = false;
   @Input() iconVerify = false;
   @Input() paramUrl = '';

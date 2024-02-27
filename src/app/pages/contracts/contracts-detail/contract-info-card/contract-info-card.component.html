@@ -65,7 +65,11 @@
             <app-name-tag
               [value]="contractDetail?.creator"
               [widthAuto]="true"
-              [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
+              [linkRouter]="[
+                (contractDetail?.creator | isContract) ? '/contracts' : '/account',
+                contractDetail?.creator
+              ]">
+            </app-name-tag>
           </span>
           at txn
           <a

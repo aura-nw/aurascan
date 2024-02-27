@@ -106,7 +106,8 @@
                           [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress"
                           [isShorterText]="breakpoint.value.matches"
-                          [url]="(data.from | isContract) ? 'contracts' : 'account'"></app-name-tag>
+                          [linkRouter]="[(data.from | isContract) ? '/contracts' : '/account', data.from]">
+                        </app-name-tag>
                       </div>
                       <div class="text-start d-flex align-items-center justify-content-between">
                         <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block mr-lg-2">
@@ -118,7 +119,8 @@
                           [iconContract]="data.to | isContract"
                           [value]="data.to || nullAddress"
                           [isShorterText]="breakpoint.value.matches"
-                          [url]="(data.to | isContract) ? 'contracts' : 'account'"></app-name-tag>
+                          [linkRouter]="[(data.to | isContract) ? '/contracts' : '/account', data.to]">
+                        </app-name-tag>
                       </div>
                     </div>
                   </ng-container>
@@ -195,7 +197,8 @@
                           [value]="data?.cw721_contract?.smart_contract?.address"
                           [iconContract]="true"
                           [isShorterText]="breakpoint.value.matches"
-                          [url]="'contracts'"></app-name-tag>
+                          [linkRouter]="['/contracts', data?.cw721_contract?.smart_contract?.address]">
+                        </app-name-tag>
                       </div>
                     </ng-container>
 
@@ -210,7 +213,8 @@
                           [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress"
                           [isShorterText]="breakpoint.value.matches"
-                          [url]="(data.from | isContract) ? 'contracts' : 'account'"></app-name-tag>
+                          [linkRouter]="[(data.from | isContract) ? '/contracts' : '/account', data.from]">
+                        </app-name-tag>
                       </div>
                       <div class="d-flex align-items-center justify-content-between justify-content-lg-start">
                         <span class="caption fw-normal text--gray-4 mr-3 transfer-address-label d-inline-block">
@@ -222,7 +226,7 @@
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [value]="data.to || nullAddress"
                           [isShorterText]="breakpoint.value.matches"
-                          [url]="(data.to | isContract) ? 'contracts' : 'account'"></app-name-tag>
+                          [linkRouter]="[(data.to | isContract) ? '/contracts' : '/account', data.to]"></app-name-tag>
                       </div>
                     </div>
                     <ng-container *ngIf="!breakpoint.value.matches">

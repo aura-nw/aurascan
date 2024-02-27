@@ -9,11 +9,12 @@
             <app-name-tag
               class="msg-item"
               [value]="value || dataLink?.data"
-              [url]="dataLink?.url || '/account'"
+              [linkRouter]="[dataLink?.url || '/account', value || dataLink?.data]"
               [fullText]="true"
               [paramUrl]="dataLink?.data || value"
               [fullTextMob]="true"
-              [widthAuto]="true"></app-name-tag>
+              [widthAuto]="true">
+            </app-name-tag>
           </ng-container>
           <ng-container *ngIf="!dataLink.nameTag">
             <a
@@ -31,16 +32,16 @@
     </ng-container>
     <ng-container [ngSwitch]="pipeType" *ngIf="!dataLink">
       <ng-container *ngSwitchCase="pipeTypeData.Number">
-        {{ (value | mask : 'separator.6') || '-' }}
+        {{ (value | mask: 'separator.6') || '-' }}
       </ng-container>
       <ng-container *ngSwitchCase="pipeTypeData.BalanceOf">
-        {{ value > 0 ? (value | balance : denom.decimals | mask : 'separator.6') : '-' }}
+        {{ value > 0 ? (value | balance: denom.decimals | mask: 'separator.6') : '-' }}
       </ng-container>
       <ng-container *ngSwitchCase="pipeTypeData.Json">
         <pre id="json" class="raw-content text--white px-4" [innerHtml]="value | appJson"></pre>
       </ng-container>
       <ng-container *ngSwitchCase="pipeTypeData.Percent">
-        {{ value == '-' ? value : (value | percent : number2Digit) }}
+        {{ value == '-' ? value : (value | percent: number2Digit) }}
       </ng-container>
       <ng-container *ngSwitchDefault>{{ value || '-' }}</ng-container>
       <ng-container *ngIf="denom?.display && value !== '-'">
