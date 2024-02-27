@@ -4,13 +4,13 @@
   padding: var(--spacer-4);
   // padding-bottom: 0;
   margin-bottom: var(--spacer-4);
-  overflow: hidden;
+  // overflow: hidden;
   & > * {
     color: var(--aura-white);
   }
   .card__content {
     &.show {
-      transition: all 0.35s ease-in-out;
+      transition: all .35s ease-in-out;
       max-height: 900px;
       padding-bottom: var(--spacer-4);
     }
