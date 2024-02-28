@@ -44,6 +44,10 @@ export interface IConfiguration {
   image: {
     validator: string;
     assets: string;
+    banner: {
+      src: string;
+      url: string;
+    }[];
   };
   api: {
     backend: string;
@@ -115,6 +119,10 @@ export class EnvironmentService {
 
   get imageUrl() {
     return _.get(this.configValue, 'image.assets');
+  }
+
+  get banner() {
+    return _.get(this.configValue, 'image.banner');
   }
 
   get ipfsDomain() {
