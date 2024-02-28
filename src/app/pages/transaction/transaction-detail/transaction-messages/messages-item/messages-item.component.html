@@ -9,7 +9,7 @@
             <app-name-tag
               class="msg-item"
               [value]="value || dataLink?.data"
-              [linkRouter]="[dataLink?.url || '/account', value || dataLink?.data]"
+              [linkRouter]="[dataLink?.url || '/account', dataLink?.data || value]"
               [fullText]="true"
               [paramUrl]="dataLink?.data || value"
               [fullTextMob]="true"
