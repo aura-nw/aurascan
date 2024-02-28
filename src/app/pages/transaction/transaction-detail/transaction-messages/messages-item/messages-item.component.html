@@ -11,7 +11,7 @@
               [value]="value || dataLink?.data"
               [linkRouter]="[dataLink?.url || '/account', dataLink?.data || value]"
               [fullText]="true"
-              [paramUrl]="dataLink?.data || value"
+              [addressOnly]="dataLink?.data || value"
               [fullTextMob]="true"
               [widthAuto]="true">
             </app-name-tag>

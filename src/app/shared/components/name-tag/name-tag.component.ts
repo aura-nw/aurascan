@@ -16,6 +16,7 @@ import { Params, Router } from '@angular/router';
 export class NameTagComponent implements OnInit {
   nullAddress = NULL_ADDRESS;
   @Input() value = '';
+  @Input() addressOnly = '';
   @Input() linkRouter: string | any[] = ['/account', this.value];
   @Input() linkParams: Params;
   @Input() isEnableRouter = true;
@@ -24,8 +25,6 @@ export class NameTagComponent implements OnInit {
   @Input() param = '';
   @Input() iconContract = false;
   @Input() isVerified = false;
-  @Input() paramUrl = '';
-  @Input() extendUrl = false;
   @Input() widthAuto = false;
   @Input() maxCharacter = 12;
   @Input() isShorterText = false;
@@ -33,7 +32,6 @@ export class NameTagComponent implements OnInit {
   @Input() screen = EScreen.Account;
   @Input() tooltipPosition: 'tooltip--left' | 'tooltip--right' | 'tooltip--below' | null = null;
 
-  extendUrlLink = '';
   ENameTag = ENameTag;
   EScreen = EScreen;
   maxLengthNameTag = MAX_LENGTH_NAME_TAG;
@@ -46,10 +44,6 @@ export class NameTagComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.extendUrl) {
-      this.extendUrlLink = this.nameTagService.findUrlByAddress(this.value || this.paramUrl);
-    }
-
     if (this.isShorterText) {
       this.maxCharacter = 6;
     }
