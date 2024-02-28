@@ -74,28 +74,27 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
     });
   }
 
-  ngOnInit(): void {
-  }
-
   hoverAction(element, tooltipParent) {
-    let elementObj = element.getBoundingClientRect();
-    let tooltipObj = tooltipParent.getBoundingClientRect();
-    let tooltipY = elementObj.top - (tooltipObj.height + 16);
+    const offset = 16;
+    let elementBounding = element.getBoundingClientRect();
+    let tooltipBounding = tooltipParent.getBoundingClientRect();
+    // set tooltip position top
+    let marginTopValue = elementBounding.top - (tooltipBounding.height + offset);
 
     tooltipParent.style.position = 'fixed';
-    tooltipParent.style.top = tooltipY + 'px';
+    tooltipParent.style.top = marginTopValue + 'px';
     tooltipParent.style.zIndex = '9999999';
     switch (tooltipParent.className) {
       case 'tooltip--left':
-        tooltipParent.style.left = elementObj.right + 'px';
+        tooltipParent.style.left = elementBounding.right + 'px';
         tooltipParent.style.transform = 'translate(calc(-100% - 32px), -2px)';
         break;
       case 'tooltip--right':
-        tooltipParent.style.left = elementObj.left + 'px';
+        tooltipParent.style.left = elementBounding.left + 'px';
         tooltipParent.style.transform = 'translate(0, -2px)';
         break;
       default:
-        tooltipParent.style.left = elementObj.left + elementObj.width / 2 + 'px';
+        tooltipParent.style.left = elementBounding.left + elementBounding.width / 2 + 'px';
         tooltipParent.style.transform = 'translate(-50%, -2px)';
         break;
     }

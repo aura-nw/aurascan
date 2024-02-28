@@ -1,17 +1,17 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import axios from 'axios';
-import { formatDistanceToNowStrict } from 'date-fns';
+import {formatDistanceToNowStrict} from 'date-fns';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
-import { DATEFORMAT, STORAGE_KEYS } from '../constants/common.constant';
-import { EnvironmentService } from '../data-services/environment.service';
-import { formatTimeInWords, formatWithSchema } from '../helpers/date';
-import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
+import {Observable} from 'rxjs';
+import {DATEFORMAT, STORAGE_KEYS} from '../constants/common.constant';
+import {EnvironmentService} from '../data-services/environment.service';
+import {formatTimeInWords, formatWithSchema} from '../helpers/date';
+import {isAddress, isContract, isValidBench32Address} from '../utils/common/validation';
 import local from '../utils/storage/local';
-import { LCD_COSMOS } from '../constants/url.constant';
+import {LCD_COSMOS} from '../constants/url.constant';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.coins;
@@ -90,7 +90,8 @@ export class CommonService {
           let temp = value?.match(/\d+/g)[0];
           value = value?.replace(temp, '');
         }
-      } catch {}
+      } catch {
+      }
       let temp = value.slice(value.indexOf('ibc'));
       result = listTokenIBC?.find((k) => k.denom === temp) || {
         display: value,
@@ -113,16 +114,16 @@ export class CommonService {
   showToolTip(element) {
     const parent = element.parentNode;
     const tooltip = element.nextSibling;
-    const getOffset = (el) => {
+    const offset = ((el) => {
       const rect = el.getBoundingClientRect();
       return {
         left: rect.left + window.scrollX + rect.width / 2,
         top: rect.top,
       };
-    };
+    })(parent);
     if (tooltip) {
-      tooltip.style.top = getOffset(parent).top + 'px';
-      tooltip.style.left = getOffset(parent).left + 'px';
+      tooltip.style.top = offset.top + 'px';
+      tooltip.style.left = offset.left + 'px';
     }
 
     if (element.classList.contains('disabled-hover')) {
