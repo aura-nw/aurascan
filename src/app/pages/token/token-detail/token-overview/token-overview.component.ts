@@ -63,10 +63,10 @@ export class TokenOverviewComponent implements OnInit {
       }
     }
 
-    this.tokenDetail['supplyAmount'] = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
-    this.tokenDetail['supplyValue'] = new BigNumber(this.tokenDetail['supplyAmount'])
-      .multipliedBy(this.tokenDetail?.price || 0)
-      .toFixed();
+    // this.tokenDetail['supplyAmount'] = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
+    // this.tokenDetail['supplyValue'] = new BigNumber(this.tokenDetail['supplyAmount'])
+    //   .multipliedBy(this.tokenDetail?.price || 0)
+    //   .toFixed();
   }
 
   getTotalHolder() {
@@ -97,8 +97,8 @@ export class TokenOverviewComponent implements OnInit {
       (k) => k.coin_id === this.environmentService.coingecko?.ids[0],
     );
 
-    const supplyAmount = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
-    const supplyValue = new BigNumber(supplyAmount).multipliedBy(nativeToken?.current_price).toFixed();
+    // const supplyAmount = getBalance(this.tokenDetail.totalSupply, this.tokenDetail.decimals);
+    // const supplyValue = new BigNumber(supplyAmount).multipliedBy(nativeToken?.current_price).toFixed();
 
     const dataNative = local.getItem<any>(STORAGE_KEYS.DATA_NATIVE);
     let changePercent = 0;
@@ -111,8 +111,6 @@ export class TokenOverviewComponent implements OnInit {
       ...this.tokenDetail,
       price: nativeToken?.current_price || this.tokenDetail.price,
       change: nativeToken?.price_change_percentage_24h,
-      supplyAmount,
-      supplyValue,
       holder: dataNative.tokenHolderStatistics[dataNative.tokenHolderStatistics?.length - 1]?.totalHolder,
       isHolderUp: changePercent >= 0,
       holderChange: Math.abs(changePercent),

@@ -1,12 +1,10 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { filter, forkJoin, take } from 'rxjs';
-import { DATEFORMAT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { ETokenCoinTypeBE } from 'src/app/core/constants/token.constant';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -35,77 +33,119 @@ export class TokenDetailComponent implements OnInit {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private contractService: ContractService,
-    private datePipe: DatePipe,
     private ibcService: IBCService,
   ) {}
 
   ngOnInit(): void {
     const paramData = this.router.snapshot.paramMap.get('contractAddress');
-    if (paramData?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
-      this.contractAddress = paramData;
-      if (this.router.snapshot.url[0]?.path === 'token') {
-        this.getTokenDetail();
-      } else {
-        this.getTokenDetailNFT();
-      }
+    this.contractAddress = paramData;
+
+    if (this.router.snapshot.url[0]?.path !== 'token') {
+      this.getTokenDetailNFT();
     } else {
-      //check is native coin
-      if (paramData === this.chainInfo?.currencies[0].coinMinimalDenom) {
-        this.getDataNative();
-      } else {
-        this.getDataCoin(paramData);
-      }
+      this.getTokenDetail();
     }
+    //   if (this.router.snapshot.url[0]?.path === 'token') {
+    //     this.getTokenDetail();
+    //   } else {
+    //     this.getTokenDetailNFT();
+    //   }
+    // } else {
+    //   //check is native coin
+    //   if (paramData === this.chainInfo?.currencies[0].coinMinimalDenom) {
+    //     this.getDataNative();
+    //   } else {
+    //     this.getDataCoin(paramData);
+    //   }
+    // }
   }
 
   getTokenDetail(): void {
     let now = new Date();
     now.setDate(now.getDate() - 1);
-    this.tokenService
-      .getTokenDetail(this.contractAddress, this.datePipe.transform(now, DATEFORMAT.DATE_ONLY))
-      .subscribe({
-        next: (res) => {
-          const data = _.get(res, `smart_contract`);
-          if (data.length > 0) {
-            this.tokenService.tokensMarket$
-              .pipe(
-                filter((data) => _.isArray(data)),
-                take(1),
-              )
-              .subscribe((item) => {
-                const tokenMarket = item.find((token) => token.contract_address === data[0].address);
+    this.tokenService.getTokenDetail(this.contractAddress).subscribe({
+      next: (token) => {
+        // const tokenMarket = item.length > 0 ? item[0] : null;
+        // token.contract_address = token.address;
+        // token.name = tokenMarket?.name || token.cw20_contract.name;
+        // token.symbol = tokenMarket?.symbol || token.cw20_contract.symbol;
+        // token.decimals = token.cw20_contract.decimal;
+        // token.type = this.contractType.CW20;
+        // token.max_total_supply = tokenMarket?.max_supply || 0;
+        // token.price = tokenMarket?.current_price || 0;
+        // token.verify_status = tokenMarket?.verify_status || '';
+        // token.verify_text = tokenMarket?.verify_text || '';
+        // token.modeToken = EModeToken.CWToken;
+        // token.price_change_percentage_24h = tokenMarket?.price_change_percentage_24h || 0;
+        // token.contract_verification = token.code?.code_id_verifications[0]?.verification_status;
+        // token.totalSupply = token.cw20_contract.total_supply;
+        let type;
+        let modeToken;
+        switch (token.type) {
+          case ETokenCoinTypeBE.NATIVE:
+            modeToken = EModeToken.Native;
+            break;
+          case ETokenCoinTypeBE.CW20:
+            type = ContractRegisterType.CW20;
+            modeToken = EModeToken.CWToken;
+            break;
+          case ETokenCoinTypeBE.IBC:
+            modeToken = EModeToken.IBCCoin;
+            break;
+        }
 
-                const token = data[0];
-                // const tokenMarket = item.length > 0 ? item[0] : null;
-                token.contract_address = token.address;
-                token.name = tokenMarket?.name || token.cw20_contract.name;
-                token.symbol = tokenMarket?.symbol || token.cw20_contract.symbol;
-                token.decimals = token.cw20_contract.decimal;
-                token.type = this.contractType.CW20;
-                token.max_total_supply = tokenMarket?.max_supply || 0;
-                token.price = tokenMarket?.current_price || 0;
-                token.verify_status = tokenMarket?.verify_status || '';
-                token.verify_text = tokenMarket?.verify_text || '';
-                token.modeToken = EModeToken.CWToken;
-                token.price_change_percentage_24h = tokenMarket?.price_change_percentage_24h || 0;
-                token.contract_verification = token.code?.code_id_verifications[0]?.verification_status;
-                token.totalSupply = token.cw20_contract.total_supply;
-                this.tokenDetail = token;
-              });
-          }
-        },
-        error: (e) => {
-          if (e.name === TIMEOUT_ERROR) {
-            this.errTxt = e.message;
-          } else {
-            this.errTxt = e.status + ' ' + e.statusText;
-          }
-          this.loading = false;
-        },
-        complete: () => {
-          this.loading = false;
-        },
-      });
+        const holder =
+          token?.tokenHolderStatistics?.length > 0
+            ? token?.tokenHolderStatistics?.[token?.tokenHolderStatistics?.length - 1]?.totalHolder
+            : 0;
+        let changePercent = 0;
+        if (
+          token.tokenHolderStatistics?.length > 1 &&
+          token.tokenHolderStatistics[0]?.totalHolder > 0 &&
+          token.tokenHolderStatistics[1]?.totalHolder > 0
+        ) {
+          changePercent =
+            (token.tokenHolderStatistics[1].totalHolder * 100) / token.tokenHolderStatistics[0].totalHolder - 100;
+        }
+
+        this.tokenDetail = {
+          ...token,
+          type,
+          modeToken,
+          holder,
+          isHolderUp: changePercent >= 0,
+          holderChange: Math.abs(changePercent),
+          supplyAmount: token.totalSupply,
+          price: token.currentPrice,
+          decimals: token.decimal,
+          symbol: modeToken === EModeToken.Native ? this.chainInfo?.currencies[0].coinDenom : token.symbol,
+        };
+
+        // const data = _.get(res, `smart_contract`);
+        // if (data.length > 0) {
+        //   this.tokenService.tokensMarket$
+        //     .pipe(
+        //       filter((data) => _.isArray(data)),
+        //       take(1),
+        //     )
+        //     .subscribe((item) => {
+        //       const tokenMarket = item.find((token) => token.contract_address === data[0].address);
+
+        //     });
+        // }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   getTokenDetailNFT(): void {
