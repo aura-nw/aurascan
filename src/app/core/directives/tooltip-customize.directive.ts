@@ -1,10 +1,10 @@
-import {Directive, ElementRef, Input, OnDestroy} from '@angular/core';
+import {Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
 import BigNumber from 'bignumber.js';
 
 @Directive({
   selector: '[appTooltip]',
 })
-export class TooltipCustomizeDirective implements OnDestroy {
+export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
   @Input() appTooltip: string | { priceAmount: any; multipliedBy?: number; decimal?: number; lt?: number };
   @Input() classTooltip: string;
   @Input() disableTooltipHover: boolean = false;
@@ -15,12 +15,7 @@ export class TooltipCustomizeDirective implements OnDestroy {
     this.element = this.elRef.nativeElement;
   }
 
-  ngOnDestroy(): void {
-    this.element.removeEventListener('mouseenter', () => {
-    });
-  }
-
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
     if (!this.element || !this.appTooltip) return;
     // check show up conditional
     let tooltipValue: any = '';
@@ -72,6 +67,14 @@ export class TooltipCustomizeDirective implements OnDestroy {
     if (!this.disableTooltipHover) {
       this.element.addEventListener('mouseenter', () => this.hoverAction(this.element, tooltipParent));
     }
+  }
+
+  ngOnDestroy(): void {
+    this.element.removeEventListener('mouseenter', () => {
+    });
+  }
+
+  ngOnInit(): void {
   }
 
   hoverAction(element, tooltipParent) {
