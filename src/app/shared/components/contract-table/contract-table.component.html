@@ -44,7 +44,9 @@
                           [value]="data[template.matColumnDef]"
                           [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
                           [iconContract]="data[template.matColumnDef] | isContract"
-                          [isLink]="data[template.matColumnDef] !== contractInfo?.contractsAddress"></app-name-tag>
+                          [isEnableRouter]="
+                            data[template.matColumnDef] !== contractInfo?.contractsAddress
+                          "></app-name-tag>
                       </ng-container>
                       <ng-container *ngIf="!template.isNameTag">
                         <a

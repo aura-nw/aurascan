@@ -101,7 +101,7 @@
                           From
                         </span>
                         <app-name-tag
-                          [isLink]="!!data.from"
+                          [isEnableRouter]="!!data.from"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress"
@@ -114,7 +114,7 @@
                           To
                         </span>
                         <app-name-tag
-                          [isLink]="!!data.to"
+                          [isEnableRouter]="!!data.to"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [iconContract]="data.to | isContract"
                           [value]="data.to || nullAddress"
@@ -193,7 +193,7 @@
                         </div>
                         <app-name-tag
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
-                          [isLink]="true"
+                          [isEnableRouter]="true"
                           [value]="data?.cw721_contract?.smart_contract?.address"
                           [iconContract]="true"
                           [isShorterText]="breakpoint.value.matches"
@@ -208,7 +208,7 @@
                           From
                         </span>
                         <app-name-tag
-                          [isLink]="!!data.from"
+                          [isEnableRouter]="!!data.from"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress"
@@ -221,7 +221,7 @@
                           To
                         </span>
                         <app-name-tag
-                          [isLink]="!!data.to"
+                          [isEnableRouter]="!!data.to"
                           [iconContract]="data.to | isContract"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [value]="data.to || nullAddress"

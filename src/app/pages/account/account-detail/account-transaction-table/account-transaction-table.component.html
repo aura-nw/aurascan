@@ -473,7 +473,7 @@
                               (item.toAddress || currentAddress | isContract) ? '/contracts' : '/account',
                               item.toAddress || currentAddress
                             ]"
-                            [isLink]="
+                            [isEnableRouter]="
                               !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                               item.fromAddress !== currentAddress
                             ">
@@ -523,7 +523,7 @@
                                 item.toAddress || currentAddress
                               ]"
                               [iconContract]="item.toAddress || currentAddress | isContract"
-                              [isLink]="
+                              [isEnableRouter]="
                                 !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                                 item.toAddress !== currentAddress
                               ">
@@ -572,7 +572,7 @@
                               [linkRouter]="['/contracts', item.toAddress || currentAddress]"
                               [isShorterText]="true"
                               [value]="item.contractAddress"
-                              [isLink]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
+                              [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                           </div>
                         </div>
                       </div>

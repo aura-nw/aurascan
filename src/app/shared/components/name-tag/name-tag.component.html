@@ -1,12 +1,12 @@
 <section class="d-inline-flex name-tag-content" *ngIf="mode == ENameTag.Normal">
-  <ng-container *ngIf="isLink; else displayText">
+  <ng-container *ngIf="isEnableRouter; else displayText">
     <div class="aura-tooltip-contain d-flex align-items-center">
       <a
         [routerLink]="linkRouter"
         [queryParams]="linkParams"
         class="text--primary break-all d-flex"
         [ngClass]="{
-          'box-name-tag': isBox && !(paramUrl || value | nameTagTooltipPipe),
+          'box-name-tag': !(paramUrl || value | nameTagTooltipPipe),
           'w-auto': widthAuto,
           'private-name-tag': (paramUrl || value | isPrivateNameTag),
           'aura-tooltip-object': !(paramUrl || value | nameTagTooltipPipe)
@@ -18,7 +18,7 @@
     </div>
     <div
       class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex align-items-center"
-      [class.align-items-center]="isBox && !(paramUrl || value | nameTagTooltipPipe)">
+      [class.align-items-center]="!(paramUrl || value | nameTagTooltipPipe)">
       <button
         class="button button--xxs px-1 aura-tooltip-object disabled-hover"
         #tooltip
@@ -34,12 +34,12 @@
     <div class="aura-tooltip-contain">
       <span
         class="break-all"
-        [ngClass]="[
-          isBox && !(paramUrl || value | nameTagTooltipPipe) ? 'box-name-tag' : '',
-          widthAuto ? 'w-auto' : '',
-          (paramUrl || value | isPrivateNameTag) ? 'private-name-tag' : ''
-        ]"
-        [class.aura-tooltip-object]="!(paramUrl || value | nameTagTooltipPipe)">
+        [ngClass]="{
+          'box-name-tag': !(paramUrl || value | nameTagTooltipPipe),
+          'w-auto': widthAuto,
+          'private-name-tag': (paramUrl || value | isPrivateNameTag),
+          'aura-tooltip-object': !(paramUrl || value | nameTagTooltipPipe)
+        }">
         <ng-container *ngIf="!fullText">
           <img
             [src]="'assets/images/icons/token-contract.svg' | imageS3"
@@ -68,7 +68,7 @@
     <div
       class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex"
       *ngIf="(paramUrl || value) !== nullAddress"
-      [class.align-items-center]="isBox && !(paramUrl || value | nameTagTooltipPipe)">
+      [class.align-items-center]="!(paramUrl || value | nameTagTooltipPipe)">
       <button
         class="button button--xxs px-1 aura-tooltip-object disabled-hover"
         #tooltip
@@ -82,25 +82,25 @@
 
   <ng-template #contentData>
     <img
+      *ngIf="iconContract"
       [src]="'assets/images/icons/token-contract.svg' | imageS3"
-      *ngIf="isTokenDetail && (value | isContract)"
-      alt=""
+      alt="token-contract"
       [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       width="16px"
       height="16px" />
-    <img
+    <!-- <img
       [src]="'assets/images/icons/token-contract.svg' | imageS3"
       [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       width="16px"
       height="16px"
-      *ngIf="iconContract" />
+      *ngIf="iconContract" /> -->
     <img
       [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
       [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       alt="contract_verification"
       width="16px"
       height="16px"
-      *ngIf="iconVerify" />
+      *ngIf="isVerified" />
     <ng-container *ngIf="!fullText">
       <ng-container [ngTemplateOutlet]="displayNameTag"></ng-container>
     </ng-container>

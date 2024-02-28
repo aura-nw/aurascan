@@ -166,7 +166,7 @@
                             [value]="data[template.matColumnDef]"
                             [linkRouter]="['/tokens', linkToken, linkAddress]"
                             [linkParams]="{ a: data[template.matColumnDef] }"
-                            [isTokenDetail]="true"
+                            [iconContract]="data[template.matColumnDef] | isContract"
                             [maxCharacter]="15">
                           </app-name-tag>
                         </ng-container>
@@ -193,18 +193,13 @@
                   <ng-container *ngSwitchCase="'to_address'">
                     <div [style.min-width]="'210px'">
                       <app-name-tag
-                        *ngIf="!data[template.matColumnDef]?.startsWith('Null') && data[template.matColumnDef]"
+                        *ngIf="data[template.matColumnDef]"
                         [value]="data[template.matColumnDef]"
-                        [isTokenDetail]="true"
+                        [iconContract]="data[template.matColumnDef] | isContract"
                         [maxCharacter]="15"
+                        [isEnableRouter]="!data[template.matColumnDef]?.startsWith('Null')"
                         [linkRouter]="['/tokens', linkToken, linkAddress]"
                         [linkParams]="{ a: data[template.matColumnDef] }">
-                      </app-name-tag>
-                      <app-name-tag
-                        *ngIf="data[template.matColumnDef]?.startsWith('Null')"
-                        [value]="data[template.matColumnDef]"
-                        [isLink]="false"
-                        [isTokenDetail]="true">
                       </app-name-tag>
                       <span *ngIf="!data[template.matColumnDef]"> - </span>
                     </div>

@@ -183,7 +183,7 @@
                   [linkRouter]="['/contracts', nftDetail?.contract_address]"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [iconVerify]="nftDetail['verification_status'] === ContractVerifyType.Verified"
+                  [isVerified]="nftDetail['verification_status'] === ContractVerifyType.Verified"
                   [maxCharacter]="11"></app-name-tag>
               </div>
             </div>
@@ -339,16 +339,15 @@
                         !data[template.matColumnDef]?.startsWith('Null')
                       ">
                       <app-name-tag
+                        *ngIf="data[template.matColumnDef]"
                         [value]="data[template.matColumnDef]"
-                        [isTokenDetail]="true"
-                        *ngIf="
-                          data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
-                        "></app-name-tag>
-                      <app-name-tag
-                        [value]="data[template.matColumnDef]"
-                        [isTokenDetail]="true"
-                        *ngIf="data.modeExecute === modeExecuteTransaction.Mint"
-                        [isLink]="false"></app-name-tag>
+                        [linkRouter]="[
+                          (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                          data[template.matColumnDef]
+                        ]"
+                        [iconContract]="data[template.matColumnDef] | isContract"
+                        [isEnableRouter]="data.modeExecute !== modeExecuteTransaction.Mint">
+                      </app-name-tag>
                     </ng-container>
                   </div>
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
@@ -378,7 +377,7 @@
                         (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
                         data[template.matColumnDef]
                       ]"
-                      [isTokenDetail]="true">
+                      [iconContract]="data[template.matColumnDef] | isContract">
                     </app-name-tag>
                   </ng-container>
                 </ng-container>
