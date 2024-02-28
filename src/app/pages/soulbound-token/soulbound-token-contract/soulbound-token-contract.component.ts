@@ -10,11 +10,11 @@ import { SB_TYPE, SOUL_BOUND_TYPE } from 'src/app/core/constants/soulbound.const
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
 
 @Component({
   selector: 'app-soulbound-token-contract',
@@ -60,15 +60,16 @@ export class SoulboundTokenContractComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
         // check change wallet
-        if (this.currentAddress && this.currentAddress !== wallet.bech32Address) {
+        if (this.currentAddress && this.currentAddress !== wallet.address) {
           this.router.navigate(['/accountbound']);
+          return;
         }
 
         this.contractAddress = this.route.snapshot.paramMap.get('address');
-        this.currentAddress = this.walletService.wallet?.bech32Address;
+        this.currentAddress = wallet.address;
         this.getListToken();
       } else {
         this.router.navigate(['/accountbound']);
