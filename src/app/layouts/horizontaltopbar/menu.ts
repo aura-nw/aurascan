@@ -1,9 +1,10 @@
-import { EFeature } from 'src/app/core/models/common.model';
-import { MenuItem } from './menu.model';
+import {EFeature} from 'src/app/core/models/common.model';
+import {MenuItem} from './menu.model';
 
 export enum MenuName {
   Dashboard = 'Dashboard',
-  Transaction = 'Transaction',
+  Transaction = 'AURA Transactions',
+  EvmTransaction = 'EVM Transactions',
   Proposal = 'Proposal',
   Validator = 'Validator',
   Block = 'Block',
@@ -46,27 +47,34 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 2,
+        label: 'MENUITEMS.EVM_TRANSACTION',
+        icon: 'file-text',
+        link: '/evm-transaction',
+        name: MenuName.EvmTransaction,
+      },
+      {
+        id: 3,
         label: 'MENUITEMS.VALIDATORS',
         icon: 'graph',
         link: '/validators',
         name: MenuName.Validator,
       },
       {
-        id: 3,
+        id: 4,
         label: 'MENUITEMS.PROPOSAL',
         icon: 'envelope-open',
         link: '/votings',
         name: MenuName.Proposal,
       },
       {
-        id: 4,
+        id: 5,
         label: 'MENUITEMS.BLOCKS',
         icon: 'stack',
         link: '/blocks',
         name: MenuName.Block,
       },
       {
-        id: 5,
+        id: 6,
         label: 'MENUITEMS.IBC-RELAYER',
         icon: 'ph ph-intersect',
         link: '/ibc-relayer',
@@ -208,27 +216,34 @@ export const MENU_MOB: MenuItem[] = [
       },
       {
         id: 2,
+        label: 'MENUITEMS.EVM_TRANSACTION',
+        icon: 'file-text',
+        link: '/evm-transaction',
+        name: MenuName.EvmTransaction,
+      },
+      {
+        id: 3,
         label: 'MENUITEMS.VALIDATORS',
         icon: 'graph',
         link: '/validators',
         name: MenuName.Validator,
       },
       {
-        id: 3,
+        id: 4,
         label: 'MENUITEMS.PROPOSAL',
         icon: 'envelope-open',
         link: '/votings',
         name: MenuName.Proposal,
       },
       {
-        id: 4,
+        id: 5,
         label: 'MENUITEMS.BLOCKS',
         icon: 'stack',
         link: '/blocks',
         name: MenuName.Block,
       },
       {
-        id: 5,
+        id: 6,
         label: 'MENUITEMS.IBC-RELAYER',
         icon: 'ph ph-intersect',
         link: '/ibc-relayer',

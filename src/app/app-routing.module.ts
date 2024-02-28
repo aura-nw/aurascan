@@ -1,9 +1,9 @@
-import { inject, NgModule } from '@angular/core';
-import { Router, RouterModule, Routes, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
-import { EnvironmentService } from './core/data-services/environment.service';
-import { EFeature } from './core/models/common.model';
-import { LayoutComponent } from './layouts/layout.component';
+import {inject, NgModule} from '@angular/core';
+import {Router, RouterModule, Routes, UrlTree} from '@angular/router';
+import {Observable} from 'rxjs';
+import {EnvironmentService} from './core/data-services/environment.service';
+import {EFeature} from './core/models/common.model';
+import {LayoutComponent} from './layouts/layout.component';
 
 export const isEnabled = (
   functionNames: string,
@@ -44,6 +44,10 @@ const routes: Routes = [
       {
         path: 'transaction',
         loadChildren: () => import('./pages/transaction/transaction.module').then((m) => m.TransactionModule),
+      },
+      {
+        path: 'evm-transaction',
+        loadChildren: () => import('./pages/evm-transaction/evm-transaction.module').then((m) => m.EvmTransactionModule),
       },
       {
         path: 'votings',
@@ -124,11 +128,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/schema-viewer/schema-viewer.module').then((m) => m.SchemaViewerModule),
     pathMatch: 'full',
   },
-  { path: '**', redirectTo: '' },
+  {path: '**', redirectTo: ''},
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
+  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
