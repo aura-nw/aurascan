@@ -12,11 +12,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { exportStatisticChart } from 'src/app/core/helpers/export';
 import { StatisticService } from 'src/app/core/services/statistic.service';
-import {
-  CHART_CONFIG,
-  STATISTIC_AREA_SERIES_CHART_OPTIONS,
-  STATISTIC_CHART_DETAIL_OPTIONS,
-} from 'src/app/pages/dashboard/dashboard-chart-options';
+import { CHART_CONFIG } from 'src/app/pages/dashboard/dashboard-chart-options';
 
 @Component({
   selector: 'app-chart-detail',
@@ -48,6 +44,8 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   toolTipMargin = 15;
 
   chainName = this.env.chainName;
+  minValue = 0;
+  maxValue = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -96,8 +94,58 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
 
   // config chart
   initChart() {
-    this.chart = createChart(document.getElementById('dailyChart'), STATISTIC_CHART_DETAIL_OPTIONS);
-    this.areaSeries = this.chart.addAreaSeries(STATISTIC_AREA_SERIES_CHART_OPTIONS);
+    this.chart = createChart(document.getElementById('dailyChart'), {
+      height: 300,
+      crosshair: {
+        horzLine: {
+          visible: false,
+        },
+      },
+      layout: {
+        backgroundColor: '#24262e',
+        textColor: '#868a97',
+      },
+      grid: {
+        vertLines: {
+          color: '#363843',
+        },
+        horzLines: {
+          color: '#363843',
+        },
+      },
+      leftPriceScale: {
+        visible: true,
+        mode: 1,
+        autoScale: true,
+        scaleMargins: {
+          top: 0.3,
+          bottom: 0.3,
+        },
+      },
+      rightPriceScale: {
+        visible: false,
+      },
+      timeScale: {
+        timeVisible: true,
+        secondsVisible: true,
+        minBarSpacing: 0,
+      },
+    });
+    this.areaSeries = this.chart.addAreaSeries({
+      lineColor: '#2CB1F5',
+      topColor: 'rgba(44, 177, 245, 0.2)',
+      bottomColor: 'rgba(44, 177, 245, 0.08)',
+      priceFormat: {
+        precision: 0,
+        minMove: 1,
+      },
+      autoscaleInfoProvider: () => ({
+        priceRange: {
+          minValue: this.minValue,
+          maxValue: this.maxValue,
+        },
+      }),
+    });
     if (this.chartType !== 'unique-addresses')
       this.areaSeries.applyOptions({
         topColor: 'rgba(136,198,203,0)',
@@ -209,6 +257,9 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
             default:
               break;
           }
+          this.maxValue = Math.max(...dataX);
+          this.minValue = Math.min(...dataX);
+
           dataY = res.daily_statistics.map((data) => data.date);
           this.maxAmountDate = formatDate(dayMax, 'dd/MM/yyyy', 'en-US');
           this.minAmountDate = formatDate(dayMin, 'dd/MM/yyyy', 'en-US');

@@ -46,48 +46,6 @@ export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'
   },
 };
 
-export const STATISTIC_CHART_DETAIL_OPTIONS: DeepPartial<ChartOptions> = {
-  height: 300,
-  crosshair: {
-    horzLine: {
-      visible: false,
-    },
-  },
-  layout: {
-    backgroundColor: '#24262e',
-    textColor: '#868a97',
-  },
-  grid: {
-    vertLines: {
-      color: '#363843',
-    },
-    horzLines: {
-      color: '#363843',
-    },
-  },
-  leftPriceScale: {
-    visible: true,
-  },
-  rightPriceScale: {
-    visible: false,
-  },
-  timeScale: {
-    timeVisible: true,
-    secondsVisible: true,
-    minBarSpacing: 0,
-  },
-};
-
-export const STATISTIC_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'] = {
-  lineColor: '#2CB1F5',
-  topColor: 'rgba(44, 177, 245, 0.2)',
-  bottomColor: 'rgba(44, 177, 245, 0.08)',
-  priceFormat: {
-    precision: 0,
-    minMove: 1,
-  },
-};
-
 export const CHART_CONFIG: {
   [key: string]: {
     initRange: number;
