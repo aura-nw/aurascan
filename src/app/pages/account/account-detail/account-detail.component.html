@@ -58,10 +58,10 @@
         </div>
         <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
-          <app-name-tag [value]="currentAddress" [mode]="ENameTag.Public"></app-name-tag>
+          <app-name-tag [value]="currentAddress" [mode]="ENameTag.Public" [fullText]="true"></app-name-tag>
 
           <div class="mt-2">
-            <app-name-tag [value]="currentAddress" [mode]="ENameTag.Private"></app-name-tag>
+            <app-name-tag [value]="currentAddress" [mode]="ENameTag.Private" [fullText]="true"></app-name-tag>
           </div>
 
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">

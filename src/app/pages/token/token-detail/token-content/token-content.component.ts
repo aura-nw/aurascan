@@ -6,12 +6,12 @@ import BigNumber from 'bignumber.js';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import local from 'src/app/core/utils/storage/local';
-import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
+import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { EModeToken, TokenTab } from '../../../../core/constants/token.enum';
-import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-token-content',
@@ -188,7 +188,10 @@ export class TokenContentComponent implements OnInit {
     try {
       if (this.tokenDetail.isNFTContract) {
         this.countBalanceNFT(address);
-      } else if (this.contractAddress) {
+      } else if (
+        this.contractAddress &&
+        this.tokenDetail.modeToken !== ETokenCoinType.IBC
+      ) {
         const data = await client.queryContractSmart(this.contractAddress, queryData);
         this.infoSearch['balance'] = data?.balance;
         this.infoSearch['value'] = new BigNumber(data?.balance)

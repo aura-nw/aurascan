@@ -9,24 +9,24 @@
     </button>
     <button
       class="button button-pill button-flat body-02 caption-mob"
-      [class.active]="filterType.includes(ETokenCoinType.NATIVE)"
-      (click)="filterToken(ETokenCoinType.NATIVE)">
+      [class.active]="filterType.includes(ETokenCoinTypeBE.NATIVE)"
+      (click)="filterToken(ETokenCoinTypeBE.NATIVE)">
       {{ ETokenCoinType.NATIVE }}
     </button>
     <button
       class="button button-pill button-flat body-02 caption-mob"
-      [class.active]="filterType.includes(ETokenCoinType.IBC)"
-      (click)="filterToken(ETokenCoinType.IBC)">
+      [class.active]="filterType.includes(ETokenCoinTypeBE.IBC)"
+      (click)="filterToken(ETokenCoinTypeBE.IBC)">
       {{ ETokenCoinType.IBC }}
     </button>
     <button
       class="button button-pill button-flat body-02 caption-mob"
-      [class.active]="filterType.includes(ETokenCoinType.CW20)"
-      (click)="filterToken(ETokenCoinType.CW20)">
+      [class.active]="filterType.includes(ETokenCoinTypeBE.CW20)"
+      (click)="filterToken(ETokenCoinTypeBE.CW20)">
       {{ ETokenCoinType.CW20 }}
     </button>
   </div>
-  <form class="aura-form single-input-field search-form" #searchForm *ngIf="!isMobileMatched">
+  <form class="aura-form single-input-field search-form" #searchForm *ngIf="!environmentService.isMobile">
     <div class="input-group">
       <input
         type="text"
@@ -53,7 +53,7 @@
   <div class="card mt-4 mt-lg-5">
     <div class="card-body">
       <!-- search form mobile -->
-      <form class="aura-form single-input-field search-form mb-3" #searchFormMob *ngIf="isMobileMatched">
+      <form class="aura-form single-input-field search-form mb-3" #searchFormMob *ngIf="environmentService.isMobile">
         <div class="input-group px-2">
           <input
             type="text"
@@ -84,9 +84,8 @@
         </div>
       </div>
       <!-- Table -->
-      <app-loading-sprint *ngIf="isLoadingTable"></app-loading-sprint>
-      <ng-container *ngIf="!isLoadingTable">
-        <div class="table-responsive table-token mt-4" *ngIf="!isMobileMatched">
+      <div class="table-responsive table-token mt-4" *ngIf="pageData?.length > 0; else noValues">
+        <ng-container *ngIf="!environmentService.isMobile">
           <table
             mat-table
             matSort
@@ -121,8 +120,8 @@
                         width="18"
                         height="18"
                         class="ml-1 mb-1 aura-tooltip-object"
-                        *ngIf="element.verify_status === 'VERIFIED'" />
-                      <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
+                        *ngIf="element.verifyStatus === 'VERIFIED'" />
+                      <app-tooltip-customize [content]="element.verifyText || 'Verified by Aura Network'">
                       </app-tooltip-customize>
                     </div>
                   </div>
@@ -234,10 +233,11 @@
               </td>
             </tr>
           </table>
-        </div>
-        <ng-container *ngIf="isMobileMatched">
+        </ng-container>
+
+        <ng-container *ngIf="environmentService.isMobile">
           <div class="mt-4" *ngIf="pageData?.length > 0 && !isLoadingTable; else noValues">
-            <div class="token-card border-radius--sm py-3 px-3 mb-2" *ngFor="let data of dataSourceMobile">
+            <div class="token-card border-radius--sm py-3 px-3 mb-2" *ngFor="let data of dataSource?.data">
               <div class="d-flex align-items-center flex-shrink-0">
                 <img class="rounded-circle" [appImg]="data.image" width="18" height="18" />
                 <div class="ml-3 d-flex align-items-center">
@@ -254,8 +254,8 @@
                       width="18"
                       height="18"
                       class="ml-1 mb-1 aura-tooltip-object"
-                      *ngIf="data.verify_status === 'VERIFIED'" />
-                    <app-tooltip-customize [content]="data.verify_text || 'Verified by Aura Network'">
+                      *ngIf="data.verifyStatus === 'VERIFIED'" />
+                    <app-tooltip-customize [content]="data.verifyText || 'Verified by Aura Network'">
                     </app-tooltip-customize>
                   </div>
                 </div>
@@ -308,21 +308,23 @@
             </div>
           </div>
         </ng-container>
-        <div class="d-flex justify-content-center justify-content-md-end mb-lg-0 mb-4">
-          <app-paginator
-            [length]="pageData.length"
-            [pageSize]="pageData.pageSize"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="pageEvent($event)">
-          </app-paginator>
-        </div>
-      </ng-container>
+      </div>
+      <div class="d-flex justify-content-center justify-content-md-end mb-lg-0 mb-4">
+        <app-paginator
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
+      </div>
+
       <!-- No data -->
       <ng-template #noValues>
+        <app-loading-sprint *ngIf="isLoadingTable"></app-loading-sprint>
         <app-table-no-data [textNull]="errTxt" *ngIf="!isLoadingTable"></app-table-no-data>
       </ng-template>
     </div>
   </div>
 </ng-container>
-<ng-template #noData> <span class="{{ isMobileMatched ? 'text--white' : '' }}">-</span></ng-template>
-<ng-template #zeroValue> <span class="{{ isMobileMatched ? 'text--white' : '' }}">$0.00</span></ng-template>
+<ng-template #noData> <span class="{{ environmentService.isMobile ? 'text--white' : '' }}">-</span></ng-template>
+<ng-template #zeroValue> <span class="{{ environmentService.isMobile ? 'text--white' : '' }}">$0.00</span></ng-template>

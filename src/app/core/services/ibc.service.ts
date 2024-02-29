@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import axios from 'axios';
 import { LCD_COSMOS } from '../constants/url.constant';
+import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class IBCService extends CommonService {
@@ -363,7 +364,9 @@ export class IBCService extends CommonService {
   }
 
   getChannelInfoByDenom(denomHash: string) {
-    return axios.get(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`).catch(() => null);
+    return this.http
+      .get<any>(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`)
+      .pipe(catchError((_) => of([])));
   }
 
   getDenomTotalHolder(denomHash: string) {
