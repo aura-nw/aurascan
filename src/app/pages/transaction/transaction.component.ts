@@ -1,10 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TableTemplate} from '../../../app/core/models/common.model';
-import {TransactionService} from '../../../app/core/services/transaction.service';
-import {convertDataTransactionSimple} from '../../../app/global/global';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
+import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { convertDataTransaction } from 'src/app/global/global';
 
 @Component({
   selector: 'app-transaction',
@@ -12,70 +15,128 @@ import {convertDataTransactionSimple} from '../../../app/global/global';
   styleUrls: ['./transaction.component.scss'],
 })
 export class TransactionComponent implements OnInit {
-  templates: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash'},
-    {matColumnDef: 'type', headerCellDef: 'Type'},
-    {matColumnDef: 'status', headerCellDef: 'Result'},
-    {matColumnDef: 'fee', headerCellDef: 'Fee'},
-    {matColumnDef: 'height', headerCellDef: 'Height'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
-  ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any> = new MatTableDataSource();
-  dataTx: any[];
-
-  pageSize = 20;
-  loading = true;
+  txHash = '';
+  transaction = null;
+  codeTransaction = CodeTransaction;
+  isRawData = false;
+  errorMessage = '';
   errTxt = null;
+  TAB = [
+    {
+      id: 0,
+      value: 'SUMMARY',
+    },
+    {
+      id: 1,
+      value: 'JSON',
+    },
+  ];
 
+  chainId = this.environmentService.chainId;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  loading = true;
+  seeLess = false;
+  isDisplayMore = false;
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private transactionService: TransactionService,
-    private environmentService: EnvironmentService,
-  ) {
-  }
+    public commonService: CommonService,
+    private mappingErrorService: MappingErrorService,
+    public environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
-    this.getListTx();
-  }
-
-  getListTx(): void {
-    const payload = {
-      limit: this.pageSize,
-    };
-    this.transactionService.getListTx(payload).subscribe({
-      next: (res) => {
-        if (res?.transaction?.length > 0) {
-          const txs = convertDataTransactionSimple(res, this.coinInfo);
-          if (this.dataSource.data.length > 0) {
-            this.dataSource.data = [...this.dataSource.data, ...txs];
-          } else {
-            this.dataSource.data = [...txs];
-          }
-          this.dataTx = txs;
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
-  }
-
-  checkAmountValue(amount: number, txHash: string) {
-    if (amount === 0) {
-      return '-';
-    } else {
-      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
+    this.txHash = this.route.snapshot.paramMap.get('id');
+    if (!this.txHash || this.txHash === 'null') {
+      this.router.navigate(['/']);
     }
+    this.getDetail();
+  }
+
+  getDetail(): void {
+    if (this.txHash?.length === LENGTH_CHARACTER.TRANSACTION) {
+      const payload = {
+        limit: 1,
+        hash: this.txHash,
+      };
+      this.transactionService.getListTxDetail(payload).subscribe({
+        next: (res) => {
+          if (res?.transaction?.length > 0) {
+            const linkS3 = _.get(res, 'transaction[0].data.linkS3');
+            if (linkS3?.length > 0) {
+              this.commonService.getRawData(linkS3).subscribe((data) => {
+                res.transaction[0]['data'] = data;
+                this.handleLoadData(res);
+              });
+            } else {
+              this.handleLoadData(res);
+            }
+          } else {
+            setTimeout(() => {
+              this.getDetail();
+            }, 10000);
+          }
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loading = false;
+        },
+        complete: () => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
+        },
+      });
+    } else {
+      this.loading = false;
+    }
+  }
+
+  handleLoadData(res) {
+    const txs = convertDataTransaction(res, this.coinInfo);
+    if (txs?.length === 0) {
+      this.loading = false;
+      return;
+    }
+
+    this.transaction = txs[0];
+    this.transaction = {
+      ...this.transaction,
+      chainid: this.chainId,
+      gas_used: _.get(res, 'transaction[0].gas_used'),
+      gas_wanted: _.get(res, 'transaction[0].gas_wanted'),
+      raw_log: _.get(res, 'transaction[0].data.tx_response.raw_log'),
+      type: this.transaction.typeOrigin,
+    };
+
+    if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
+      const lengthValue = 7.1;
+      const maxHeightContent = 3;
+      this.errorMessage = this.transaction.raw_log;
+      this.errorMessage = this.mappingErrorService.checkMappingErrorTxDetail(this.errorMessage, this.transaction.code);
+
+      // get height error box
+      setTimeout(() => {
+        const lengthChar = document.getElementById('contentError')?.innerText?.length;
+        const widthContent = document.getElementById('contentError')?.offsetWidth;
+
+        // cal width text/content
+        if (lengthChar * lengthValue > widthContent * maxHeightContent) {
+          this.isDisplayMore = true;
+        }
+      }, 500);
+    }
+    this.loading = false;
+  }
+
+  changeType(type: boolean): void {
+    this.isRawData = type;
   }
 }

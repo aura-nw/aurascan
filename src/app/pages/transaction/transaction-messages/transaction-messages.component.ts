@@ -2,22 +2,22 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import * as _ from 'lodash';
 import * as Long from 'long';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { ProposalService } from 'src/app/core/services/proposal.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { DATEFORMAT } from '../../../../core/constants/common.constant';
-import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
-import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
+import { DATEFORMAT } from 'src/app/core/constants/common.constant';
+import { PROPOSAL_VOTE } from 'src/app/core/constants/proposal.constant';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import {
   CodeTransaction,
   pipeTypeData,
   TRANSACTION_TYPE_ENUM,
   TypeTransaction,
-} from '../../../../core/constants/transaction.enum';
-import { formatWithSchema } from '../../../../core/helpers/date';
+} from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { formatWithSchema } from 'src/app/core/helpers/date';
+import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { ProposalService } from 'src/app/core/services/proposal.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-transaction-messages',
