@@ -9,6 +9,7 @@ import { LCD_COSMOS } from '../constants/url.constant';
 import { CoingeckoService } from '../data-services/coingecko.service';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { ETokenCoinTypeBE } from '../constants/token.constant';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -411,78 +412,11 @@ export class TokenService extends CommonService {
   }
 
   getCoinData() {
-    this.http
-      .get<any>(`${this.apiUrl}/assets/token-market`)
-      .pipe(
-        switchMap((res: any[]) => {
-          if (res?.length === 0) {
-            return of(null);
-          }
-
-          const tokensFiltered = res.filter((token) => token.coinId);
-
-          // get price native token
-          const nativeToken = tokensFiltered?.find((k) => k.coinId === this.environmentService.coingecko?.ids[0]);
-          this.nativePrice$.next(nativeToken?.currentPrice);
-
-          const coinsId = tokensFiltered.map((coin: { coinId: string }) => coin.coinId);
-
-          const nativeTokenId = this.environmentService.coingecko.ids[0];
-
-          if (!coinsId.includes(nativeTokenId)) {
-            coinsId.push(nativeTokenId);
-          }
-
-          if (coinsId?.length > 0) {
-            return forkJoin({
-              tokensMarket: of(tokensFiltered),
-              coinMarkets: this.getCoinMarkets(coinsId),
-            });
-          }
-
-          return forkJoin({
-            tokensMarket: of(tokensFiltered),
-            coinMarkets: of(null),
-          });
-        }),
-        map((data) => {
-          if (data) {
-            const { coinMarkets, tokensMarket } = data;
-
-            return tokensMarket.map((token) => {
-              if (!token.coinId) {
-                return token;
-              }
-
-              const coin = coinMarkets.find((item) => item.id === token.coinId);
-
-              if (!coin) {
-                return token;
-              }
-
-              return {
-                ...token,
-                coin_id: coin.coinId,
-                market_cap: coin.market_cap,
-                max_supply: coin.max_supply,
-                current_price: coin.currentPrice,
-                price_change_percentage_24h: coin.priceChangePercentage24h,
-                total_volume: coin.total_volume,
-                circulating_supply: coin.circulating_supply,
-                fully_diluted_valuation: coin.fully_diluted_valuation,
-              };
-            });
-          }
-          return [];
-        }),
-      )
-      .subscribe((res) => {
-        this.tokensMarket$.next(res);
-      });
-  }
-
-  getCoinMarkets(coinsId: string[]): Observable<any[]> {
-    return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
+    this.http.get<any>(`${this.apiUrl}/assets/token-market`).subscribe((res) => {
+      let nativeToken = res?.find((k) => k.coinId === this.environmentService.coingecko?.ids[0]);
+      this.nativePrice$.next(nativeToken?.currentPrice);
+      this.tokensMarket$.next(res);
+    });
   }
 
   getListTransactionTokenIBC(payload: {

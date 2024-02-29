@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { catchError, filter, forkJoin, map, of, take } from 'rxjs';
-import { COIN_TOKEN_TYPE, TOKEN_ID_GET_PRICE } from '../constants/common.constant';
+import { filter, forkJoin, map, take } from 'rxjs';
+import { COIN_TOKEN_TYPE } from '../constants/common.constant';
+import { ETokenCoinTypeBE } from '../constants/token.constant';
 import { TokenService } from '../services/token.service';
 import { balanceOf, getBalance } from '../utils/common/parsing';
 import { ApiAccountService } from './api-account.service';
@@ -86,11 +87,11 @@ export class ApiCw20TokenService {
     return tokens
       .map((item): Partial<IAsset> => {
         const coinMarket = coinsMarkets.find(
-          (coin) => coin.contract_address === item.cw20_contract.smart_contract.address,
+          (coin) => coin.type === ETokenCoinTypeBE.CW20 && coin.denom === item.cw20_contract.smart_contract.address,
         );
 
         const amount = getBalance(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals);
-        const value = new BigNumber(amount).multipliedBy(coinMarket?.current_price || 0);
+        const value = new BigNumber(amount).multipliedBy(coinMarket?.currentPrice || 0);
 
         return {
           name: coinMarket?.name || item?.cw20_contract?.name,
@@ -100,12 +101,12 @@ export class ApiCw20TokenService {
           max_total_supply: item?.cw20_contract?.total_supply,
           contract_address: item?.cw20_contract?.smart_contract?.address || '-',
           balance: item?.amount,
-          price: coinMarket?.current_price || 0,
-          price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
+          price: coinMarket?.currentPrice || 0,
+          price_change_percentage_24h: coinMarket?.priceChangePercentage24h || 0,
           type: COIN_TOKEN_TYPE.CW20,
           value: value.toFixed(),
-          verify_status: coinMarket?.verify_status || '',
-          verify_text: coinMarket?.verify_text || '',
+          verify_status: coinMarket?.verifyStatus || '',
+          verify_text: coinMarket?.verifyText || '',
         };
       })
       .sort((item1, item2) => {
@@ -128,13 +129,13 @@ export class ApiCw20TokenService {
       image: this.currencies.coinImageUrl,
       contract_address: '-',
       balance: account.data.total,
-      price: coinMarket?.current_price || 0,
-      price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
-      value: account.data.total * coinMarket?.current_price || 0,
-      max_total_supply: coinMarket?.max_total_supply || 0,
+      price: coinMarket?.currentPrice || 0,
+      price_change_percentage_24h: coinMarket?.priceChangePercentage24h || 0,
+      value: account.data.total * coinMarket?.currentPrice || 0,
+      max_total_supply: coinMarket?.max_total_supply || coinMarket?.totalSupply || 0,
       type: COIN_TOKEN_TYPE.NATIVE,
-      verify_status: coinMarket?.verify_status || 'VERIFIED',
-      verify_text: coinMarket?.verify_text || 'Verified by Aura Network',
+      verify_status: coinMarket?.verifyStatus || 'VERIFIED',
+      verify_text: coinMarket?.verifyText || 'Verified by Aura Network',
     };
   }
 
@@ -145,7 +146,7 @@ export class ApiCw20TokenService {
           .map((item): Partial<IAsset> => {
             const coinMarket = coinsMarkets.find((coin) => item.denom === coin.denom);
             const amount = getBalance(item?.amount, item?.cw20_contract?.decimal || this.currencies.coinDecimals);
-            const value = new BigNumber(amount).multipliedBy(coinMarket?.current_price || 0);
+            const value = new BigNumber(amount).multipliedBy(coinMarket?.currentPrice || 0);
             return coinMarket
               ? {
                   name: coinMarket?.name,
@@ -156,12 +157,12 @@ export class ApiCw20TokenService {
                   max_total_supply: 0,
                   contract_address: '-',
                   balance: balanceOf(item.amount, this.currencies.coinDecimals),
-                  price: coinMarket?.current_price || 0,
-                  price_change_percentage_24h: coinMarket?.price_change_percentage_24h || 0,
+                  price: coinMarket?.currentPrice || 0,
+                  price_change_percentage_24h: coinMarket?.priceChangePercentage24h || 0,
                   value: value.toFixed(),
                   type: COIN_TOKEN_TYPE.IBC,
-                  verify_status: coinMarket?.verify_status || '',
-                  verify_text: coinMarket?.verify_text || '',
+                  verify_status: coinMarket?.verifyStatus || '',
+                  verify_text: coinMarket?.verifyText || '',
                 }
               : null;
           })
