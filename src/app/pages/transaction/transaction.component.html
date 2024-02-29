@@ -82,6 +82,7 @@
         <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
           <app-card-mob-simple
             *ngFor="let data of dataTx"
+            [dataCard]="data"
             [title]="{
               size: 'md',
               titleClass: 'h6-mob',

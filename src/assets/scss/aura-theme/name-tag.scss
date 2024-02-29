@@ -61,6 +61,10 @@
       border-right: 15px solid var(--aura-black);
       border-bottom: 13px solid transparent;
     }
+
+    .after-gray &:after {
+      border-right: 15px solid var(--aura-gray-10);
+    }
   }
 }
 

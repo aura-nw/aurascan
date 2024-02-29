@@ -25,11 +25,12 @@
             <app-name-tag
               [iconContract]="textSearch | isContract"
               [value]="textSearch"
-              [url]="(textSearch | isContract) ? '/contracts' : '/account'"
+              [linkRouter]="[(textSearch | isContract) ? '/contracts' : '/account', textSearch]"
               [fullText]="true"
               [widthAuto]="true"
               [maxCharacter]="30"
-              [tooltipPosition]="'tooltip--right'"></app-name-tag>
+              [tooltipPosition]="'tooltip--right'">
+            </app-name-tag>
           </div>
         </div>
         <div

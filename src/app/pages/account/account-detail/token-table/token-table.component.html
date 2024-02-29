@@ -142,7 +142,8 @@
                     [value]="element.contract_address"
                     *ngIf="element.contract_address !== '-'"
                     [iconContract]="true"
-                    [url]="'contracts'"></app-name-tag>
+                    [linkRouter]="['/contracts', element.contract_address]">
+                  </app-name-tag>
                   <span *ngIf="element.contract_address === '-'">-</span>
                 </div>
               </td>

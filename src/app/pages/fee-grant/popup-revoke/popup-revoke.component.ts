@@ -7,6 +7,7 @@ import { MsgRevokeAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 @Component({
   selector: 'app-popup-revoke',
   templateUrl: './popup-revoke.component.html',
@@ -52,7 +53,8 @@ export class PopupRevokeComponent implements OnInit {
         this.closeDialog(result.transactionHash);
       })
       .catch((error) => {
-        if (error?.message != 'Request rejected') {
+        const _error = parseError(error);
+        if (_error?.code != undefined) {
           this.toastr.error(error);
         }
       });

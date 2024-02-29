@@ -15,6 +15,7 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 import { AbtRejectPopupComponent } from 'src/app/pages/soulbound-token/abt-reject-popup/abt-reject-popup.component';
 
 @Component({
@@ -173,7 +174,8 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
           }
         })
         .catch((error) => {
-          if (!error.toString().includes('Request rejected')) {
+          const _error = parseError(error);
+          if (_error?.code !== undefined) {
             this.toastr.error(msgError);
           }
 

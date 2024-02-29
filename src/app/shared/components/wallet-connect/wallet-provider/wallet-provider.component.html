@@ -54,10 +54,7 @@
 
       <ng-template #qrCode>
         <div class="flex-grow-1 w-100 d-flex align-items-center">
-          <app-qrcode
-            class="w-100"
-            [qrdata]="currentChainWallet?.qrUrl"
-            [imageSrc]="wcLogo"></app-qrcode>
+          <app-qrcode class="w-100" [qrdata]="currentChainWallet?.qrUrl" [imageSrc]="wcLogo"></app-qrcode>
         </div>
       </ng-template>
     </div>
