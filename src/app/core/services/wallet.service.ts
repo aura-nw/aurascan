@@ -148,7 +148,7 @@ export class WalletService implements OnDestroy {
   }
 
   getWalletRepo() {
-    return this._walletManager.getWalletRepo(this._chain.chain_id);
+    return this._walletManager.getWalletRepo(this._chain.chain_name);
   }
 
   connect(

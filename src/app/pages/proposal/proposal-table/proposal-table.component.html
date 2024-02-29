@@ -36,7 +36,7 @@
                   <ng-container *ngIf="template.isNameTag">
                     <app-name-tag
                       [value]="data[template.matColumnDef]"
-                      [url]="template.isUrl"
+                      [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
                       [tooltipPosition]="'tooltip--right'"></app-name-tag>
                   </ng-container>
                   <ng-container *ngIf="!template.isNameTag">

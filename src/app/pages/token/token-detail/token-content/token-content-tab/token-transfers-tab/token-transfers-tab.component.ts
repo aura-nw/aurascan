@@ -82,6 +82,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   contractAddress: string;
   EModeToken = EModeToken;
   destroyed$ = new Subject<void>();
+  linkAddress: string;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -97,7 +98,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
+    this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.typeContract = this.tokenDetail?.type;
     this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       this.keyWord = params?.a || '';

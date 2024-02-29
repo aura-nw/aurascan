@@ -40,11 +40,6 @@
   th.mat-header-cell:nth-child(8) {
     min-width: 80px;
   }
-  .box-name-tag {
-    &:after {
-      border-right: 15px solid var(--aura-gray-10) !important;
-    }
-  }
 }
 
 .box-watch-list {

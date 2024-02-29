@@ -22,7 +22,8 @@
               [value]="codeIdDetail.creator"
               [fullText]="true"
               [maxCharacter]="13"
-              [url]="codeIdDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
+              [linkRouter]="[(codeIdDetail?.creator | isContract) ? '/contracts' : '/account', codeIdDetail?.creator]">
+            </app-name-tag>
           </div>
         </div>
         <div class="row mt-2">
