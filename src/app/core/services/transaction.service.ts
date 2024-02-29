@@ -149,13 +149,13 @@ export class TransactionService extends CommonService {
     const operationsDoc = `    
     query queryTransaction(  
       $limit: Int = 100
-      $value: String = null
       $heightGT: Int = null
       $heightLT: Int = null
       $hash: String = null
       $height: Int = null
       $actionEq: String = null
       $actionNEq: String = null
+      $id: Int = null
     ) {
       ${this.envDB} {
         transaction(
@@ -164,7 +164,7 @@ export class TransactionService extends CommonService {
             hash: { _eq: $hash }
             height: { _eq: $height }
             smart_contract_events: {
-              smart_contract: { address: { _eq: $value } }
+              smart_contract: { id: { _eq: $id } }
               _and: [
                 { action: { _eq: $actionEq } }
                 { action: { _nlike: $actionNEq } }
@@ -196,13 +196,13 @@ export class TransactionService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload.limit,
-          value: payload.value,
           heightGT: null,
           heightLT: payload.heightLT,
           hash: payload.hash,
           height: null,
           actionEq: payload.actionEq,
           actionNEq: payload.actionNEq,
+          id: payload.id
         },
         operationName: 'queryTransaction',
       })
